@@ -77,14 +77,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.green.withAlpha(20),
+                  color: AppColorTokens.of(context).success.withAlpha(20),
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   'AA',
                   style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Colors.green,
+                    color: AppColorTokens.of(context).success,
                   ),
                 ),
               ),
@@ -264,10 +264,12 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: isSponsored ? Colors.green.withAlpha(15) : _itemBg,
+        color: isSponsored
+            ? AppColorTokens.of(context).success.withAlpha(15)
+            : _itemBg,
         borderRadius: AppRadius.brMd,
         border: isSponsored
-            ? Border.all(color: Colors.green.withAlpha(30))
+            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
             : null,
       ),
       child: Column(
@@ -322,7 +324,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
         style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
-          color: isSponsored ? Colors.green : _mainText,
+          color: isSponsored ? AppColorTokens.of(context).success : _mainText,
         ),
       );
     }
@@ -346,7 +348,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
-        disabledBackgroundColor: Colors.grey,
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: Text(
         S.of(context).g_key_48,

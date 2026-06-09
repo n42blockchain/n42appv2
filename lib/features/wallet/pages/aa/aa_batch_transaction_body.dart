@@ -258,7 +258,7 @@ class AABatchTransactionBody extends StatelessWidget {
               onPressed: onClearAll,
               child: Text(
                 S.of(context).g_key_batch_clear_all,
-                style: const TextStyle(color: Colors.red),
+                style: TextStyle(color: AppColorTokens.of(context).danger),
               ),
             ),
           ],
@@ -312,11 +312,11 @@ class AABatchTransactionBody extends StatelessWidget {
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: isSponsored
-            ? Colors.green.withAlpha(15)
+            ? AppColorTokens.of(context).success.withAlpha(15)
             : _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
         border: isSponsored
-            ? Border.all(color: Colors.green.withAlpha(30))
+            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
             : null,
       ),
       child: Column(
@@ -367,7 +367,7 @@ class AABatchTransactionBody extends StatelessWidget {
           fontSize: ScreenUtil().setSp(26),
           fontWeight: FontWeight.w600,
           color: isSponsored
-              ? Colors.green
+              ? AppColorTokens.of(context).success
               : _themeColor(context, AppThemeKeys.mainTextColor),
         ),
       );
@@ -383,12 +383,18 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildEstimateErrorRow(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 16),
+        Icon(
+          Icons.warning_amber_rounded,
+          color: AppColorTokens.of(context).warning,
+          size: 16,
+        ),
         SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             estimateError!,
-            style: AppTypography.captionSm.copyWith(color: Colors.orange),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).warning,
+            ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
           ),
@@ -420,7 +426,7 @@ class AABatchTransactionBody extends StatelessWidget {
             foregroundColor: Colors.white,
             padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
-            disabledBackgroundColor: Colors.grey,
+            disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
           ),
           child: isSending
               ? Row(

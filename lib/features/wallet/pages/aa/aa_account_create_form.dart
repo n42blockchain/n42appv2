@@ -187,14 +187,16 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                               vertical: 2.w,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey.withAlpha(30),
+                              color: AppColorTokens.of(
+                                context,
+                              ).textTertiary.withAlpha(30),
                               borderRadius: BorderRadius.circular(6.w),
                             ),
                             child: Text(
                               S.of(context).g_key_aa_coming_soon,
                               style: TextStyle(
                                 fontSize: 18.sp,
-                                color: Colors.grey,
+                                color: AppColorTokens.of(context).textTertiary,
                               ),
                             ),
                           ),
@@ -280,12 +282,19 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     if (addressError != null) {
       return Row(
         children: [
-          Icon(Icons.error_outline, size: 20.w, color: Colors.red),
+          Icon(
+            Icons.error_outline,
+            size: 20.w,
+            color: AppColorTokens.of(context).danger,
+          ),
           SizedBox(width: 8.w),
           Expanded(
             child: Text(
               addressError!,
-              style: TextStyle(fontSize: 22.sp, color: Colors.red),
+              style: TextStyle(
+                fontSize: 22.sp,
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ),
           TextButton(
@@ -330,22 +339,23 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   }
 
   Widget _buildInfoSection() {
+    final warning = AppColorTokens.of(context).warning;
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: Colors.amber.withAlpha(20),
+        color: warning.withAlpha(20),
         borderRadius: BorderRadius.circular(12.w),
-        border: Border.all(color: Colors.amber.withAlpha(40)),
+        border: Border.all(color: warning.withAlpha(40)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, size: 22.w, color: Colors.amber[700]),
+          Icon(Icons.info_outline, size: 22.w, color: warning),
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
               S.of(context).g_key_aa_deployment_note,
-              style: TextStyle(fontSize: 22.sp, color: Colors.amber[700]),
+              style: TextStyle(fontSize: 22.sp, color: warning),
             ),
           ),
         ],
@@ -366,7 +376,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.w),
         ),
-        disabledBackgroundColor: Colors.grey,
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: isCreating
           ? SizedBox(

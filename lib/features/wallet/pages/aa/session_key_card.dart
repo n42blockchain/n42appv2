@@ -45,7 +45,7 @@ class SessionKeyCard extends StatelessWidget {
         color: AppColorTokens.of(context).bgSurface,
         borderRadius: AppRadius.brMd,
         border: Border.all(
-          color: sessionKeyStatusColor(keyData.status).withAlpha(40),
+          color: sessionKeyStatusColor(context, keyData.status).withAlpha(40),
         ),
       ),
       child: Column(
@@ -132,7 +132,7 @@ class SessionKeyCard extends StatelessWidget {
   }
 
   Widget _buildStatusChip(BuildContext context) {
-    final color = sessionKeyStatusColor(keyData.status);
+    final color = sessionKeyStatusColor(context, keyData.status);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space4,
@@ -225,7 +225,9 @@ class SessionKeyCard extends StatelessWidget {
             context,
             Icons.timer,
             sessionKeyFormatRemainingTime(keyData.remainingTime),
-            keyData.remainingTime.inDays < 3 ? Colors.orange : null,
+            keyData.remainingTime.inDays < 3
+                ? AppColorTokens.of(context).warning
+                : null,
           ),
         if (keyData.spendingLimit != null && keyData.spendingToken != null)
           _buildChip(
@@ -270,7 +272,8 @@ class SessionKeyCard extends StatelessWidget {
 
   Widget _buildSpendingProgress(BuildContext context) {
     final pct = keyData.usagePercentage;
-    final color = pct > 0.8 ? Colors.orange : Colors.green;
+    final c = AppColorTokens.of(context);
+    final color = pct > 0.8 ? c.warning : c.success;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -300,7 +303,7 @@ class SessionKeyCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(4)),
           child: LinearProgressIndicator(
             value: pct,
-            backgroundColor: Colors.grey.withAlpha(30),
+            backgroundColor: c.textTertiary.withAlpha(30),
             valueColor: AlwaysStoppedAnimation(color),
             minHeight: ScreenUtil().setWidth(8),
           ),
@@ -335,8 +338,8 @@ class SessionKeyCard extends StatelessWidget {
             icon: const Icon(Icons.block, size: 18),
             label: Text(S.of(context).g_key_aa_revoke),
             style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.red,
-              side: const BorderSide(color: Colors.red),
+              foregroundColor: AppColorTokens.of(context).danger,
+              side: BorderSide(color: AppColorTokens.of(context).danger),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brSm),
             ),
           ),
@@ -363,7 +366,9 @@ class SessionKeyCard extends StatelessWidget {
               Navigator.pop(ctx);
               onRevoke?.call();
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(
+              foregroundColor: AppColorTokens.of(ctx).danger,
+            ),
             child: Text(S.of(ctx).g_key_aa_revoke),
           ),
         ],
@@ -377,11 +382,14 @@ class SessionKeyCard extends StatelessWidget {
 // ════════════════════════════════════════════════════════════════════════════
 
 /// Maps [SessionKeyStatus] to a display colour.
-Color sessionKeyStatusColor(SessionKeyStatus status) => switch (status) {
-  SessionKeyStatus.active => Colors.green,
-  SessionKeyStatus.expired => Colors.orange,
-  SessionKeyStatus.revoked => Colors.red,
-};
+Color sessionKeyStatusColor(BuildContext context, SessionKeyStatus status) {
+  final c = AppColorTokens.of(context);
+  return switch (status) {
+    SessionKeyStatus.active => c.success,
+    SessionKeyStatus.expired => c.warning,
+    SessionKeyStatus.revoked => c.danger,
+  };
+}
 
 /// Returns a localised label for [status].
 String sessionKeyStatusLabel(BuildContext context, SessionKeyStatus status) =>

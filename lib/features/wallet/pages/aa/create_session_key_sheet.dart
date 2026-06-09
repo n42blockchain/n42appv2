@@ -78,19 +78,19 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       switch (preset) {
         SessionKeyPermission.transfer => (
           label: S.of(context).g_key_aa_session_preset_transfer,
-          riskColor: Colors.green,
+          riskColor: AppColorTokens.of(context).success,
         ),
         SessionKeyPermission.contractCall => (
           label: S.of(context).g_key_aa_session_preset_contract,
-          riskColor: Colors.orange,
+          riskColor: AppColorTokens.of(context).warning,
         ),
         SessionKeyPermission.full => (
           label: S.of(context).g_key_aa_session_preset_full,
-          riskColor: Colors.red,
+          riskColor: AppColorTokens.of(context).danger,
         ),
         SessionKeyPermission.approve => (
           label: S.of(context).g_key_aa_approve,
-          riskColor: Colors.orange,
+          riskColor: AppColorTokens.of(context).warning,
         ),
       };
 
@@ -212,7 +212,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           width: ScreenUtil().setWidth(40),
           height: ScreenUtil().setWidth(4),
           decoration: BoxDecoration(
-            color: Colors.grey.withAlpha(50),
+            color: AppColorTokens.of(context).textTertiary.withAlpha(50),
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -276,6 +276,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
   Widget _buildExpiryChips() {
     final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
+    final c = AppColorTokens.of(context);
 
     return Wrap(
       spacing: ScreenUtil().setWidth(10),
@@ -291,10 +292,10 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             decoration: BoxDecoration(
               color: isSelected
                   ? blueColor.withAlpha(25)
-                  : Colors.grey.withAlpha(15),
+                  : c.textTertiary.withAlpha(15),
               borderRadius: AppRadius.brMd,
               border: Border.all(
-                color: isSelected ? blueColor : Colors.grey.withAlpha(40),
+                color: isSelected ? blueColor : c.border.withAlpha(40),
                 width: isSelected ? 2 : 1,
               ),
             ),
@@ -325,7 +326,9 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             style: ElevatedButton.styleFrom(
               backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
-              disabledBackgroundColor: Colors.grey.withAlpha(50),
+              disabledBackgroundColor: AppColorTokens.of(
+                context,
+              ).textTertiary.withAlpha(50),
               padding: EdgeInsets.symmetric(
                 vertical: AppSpacing.space4,
               ),
@@ -400,7 +403,9 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                 ? S.of(context).g_key_aa_session_create_success
                 : S.of(context).g_key_aa_session_create_failed,
           ),
-          backgroundColor: ok ? Colors.green : Colors.red,
+          backgroundColor: ok
+              ? AppColorTokens.of(context).success
+              : AppColorTokens.of(context).danger,
         ),
       );
     }

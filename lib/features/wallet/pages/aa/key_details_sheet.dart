@@ -31,7 +31,7 @@ class KeyDetailsSheet extends StatelessWidget {
               width: ScreenUtil().setWidth(40),
               height: ScreenUtil().setWidth(4),
               decoration: BoxDecoration(
-                color: Colors.grey.withAlpha(50),
+                color: AppColorTokens.of(context).textTertiary.withAlpha(50),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),

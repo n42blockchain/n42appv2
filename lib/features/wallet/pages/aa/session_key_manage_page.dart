@@ -125,7 +125,9 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
               ? S.of(context).g_key_aa_revoked
               : S.of(context).g_key_aa_session_create_failed,
         ),
-        backgroundColor: ok ? Colors.green : Colors.red,
+        backgroundColor: ok
+            ? AppColorTokens.of(context).success
+            : AppColorTokens.of(context).danger,
       ),
     );
   }
@@ -238,19 +240,19 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
               _buildStatItem(
                 activeKeys.length.toString(),
                 s.g_key_aa_active,
-                Colors.green,
+                AppColorTokens.of(context).success,
               ),
               SizedBox(width: su.setWidth(16)),
               _buildStatItem(
                 expiredKeys.length.toString(),
                 s.g_key_aa_expired,
-                Colors.orange,
+                AppColorTokens.of(context).warning,
               ),
               SizedBox(width: su.setWidth(16)),
               _buildStatItem(
                 revokedKeys.length.toString(),
                 s.g_key_aa_revoked_status,
-                Colors.red,
+                AppColorTokens.of(context).danger,
               ),
             ],
           ),

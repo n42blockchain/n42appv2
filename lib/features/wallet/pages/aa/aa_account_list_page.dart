@@ -181,13 +181,16 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     );
   }
 
-  Color _statusColor(SmartAccountState? status) => switch (status) {
-    null => AppColorTokens.of(context).brand,
-    SmartAccountState.deployed => Colors.green,
-    SmartAccountState.notDeployed => Colors.grey,
-    SmartAccountState.deploying => Colors.orange,
-    SmartAccountState.error => Colors.red,
-  };
+  Color _statusColor(SmartAccountState? status) {
+    final c = AppColorTokens.of(context);
+    return switch (status) {
+      null => c.brand,
+      SmartAccountState.deployed => c.success,
+      SmartAccountState.notDeployed => c.textTertiary,
+      SmartAccountState.deploying => c.warning,
+      SmartAccountState.error => c.danger,
+    };
+  }
 
   Widget _buildStatusChip(SmartAccountState? status, String label) {
     final chipColor = _statusColor(status);

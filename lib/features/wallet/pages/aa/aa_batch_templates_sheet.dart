@@ -179,7 +179,11 @@ class _TemplateItem extends StatelessWidget {
           ),
           IconButton(
             onPressed: onDelete,
-            icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+            icon: Icon(
+              Icons.delete_outline,
+              color: AppColorTokens.of(context).danger,
+              size: 20,
+            ),
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(
               maxWidth: ScreenUtil().setWidth(36),

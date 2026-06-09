@@ -65,7 +65,9 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(msg),
-          backgroundColor: isDeployed ? Colors.green : null,
+          backgroundColor: isDeployed
+              ? AppColorTokens.of(context).success
+              : null,
         ),
       );
     } catch (e) {

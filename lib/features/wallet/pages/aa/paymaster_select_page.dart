@@ -196,7 +196,9 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               Icon(
                 isCurrentChainSupported ? Icons.check_circle : Icons.cancel,
                 size: ScreenUtil().setWidth(20),
-                color: isCurrentChainSupported ? Colors.green : Colors.red,
+                color: isCurrentChainSupported
+                    ? AppColorTokens.of(context).success
+                    : AppColorTokens.of(context).danger,
               ),
               SizedBox(width: AppSpacing.space2),
               Flexible(
@@ -234,7 +236,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
           decoration: BoxDecoration(
             color: isCurrent
                 ? blueColor.withAlpha(30)
-                : Colors.grey.withAlpha(20),
+                : AppColorTokens.of(context).textTertiary.withAlpha(20),
             borderRadius: AppRadius.brSm,
             border: isCurrent
                 ? Border.all(color: blueColor.withAlpha(80))
@@ -284,7 +286,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             Icon(
               Icons.error_outline,
               size: ScreenUtil().setWidth(64),
-              color: Colors.red,
+              color: AppColorTokens.of(context).danger,
             ),
             SizedBox(height: AppSpacing.space4),
             Text(
@@ -420,14 +422,14 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(30),
+        color: AppColorTokens.of(context).success.withAlpha(30),
         borderRadius: AppRadius.brSm,
       ),
       child: Text(
         S.of(context).g_key_aa_free,
         style: AppTypography.captionSm.copyWith(
           fontWeight: FontWeight.w600,
-          color: Colors.green,
+          color: AppColorTokens.of(context).success,
         ),
       ),
     );
@@ -437,7 +439,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   Color _getSelectedColor() => switch (_selectedOption.type) {
     PaymasterType.none => _themeColor(AppThemeKeys.mainBlueColor),
-    PaymasterType.sponsored => Colors.green,
+    PaymasterType.sponsored => AppColorTokens.of(context).success,
     PaymasterType.erc20 => Colors.purple,
   };
 

@@ -181,7 +181,9 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     bool isLoading = false,
   }) {
     final isDisabled = onTap == null && !isLoading;
-    final effectiveColor = isDisabled ? Colors.grey : color;
+    final effectiveColor = isDisabled
+        ? AppColorTokens.of(context).textTertiary
+        : color;
 
     return GestureDetector(
       onTap: onTap,
@@ -216,7 +218,9 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               label,
               style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: isDisabled ? Colors.grey : _mainText,
+                color: isDisabled
+                    ? AppColorTokens.of(context).textTertiary
+                    : _mainText,
               ),
             ),
           ],

@@ -135,12 +135,17 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
       );
 
       if (mounted) {
-        _showSnackBar(S.of(context).g_key_aa_account_created, Colors.green);
+        _showSnackBar(
+          S.of(context).g_key_aa_account_created,
+          AppColorTokens.of(context).success,
+        );
         completedWithExit = true;
         Navigator.pop(context, account);
       }
     } catch (e) {
-      if (mounted) _showSnackBar(e.toString(), Colors.red);
+      if (mounted) {
+        _showSnackBar(e.toString(), AppColorTokens.of(context).danger);
+      }
     } finally {
       if (mounted && !completedWithExit) {
         setState(() => isCreating = false);

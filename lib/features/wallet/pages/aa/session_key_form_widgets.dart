@@ -97,12 +97,12 @@ class _TokenChips extends StatelessWidget {
             decoration: BoxDecoration(
               color: isSelected
                   ? const Color(0xFF8B5CF6).withAlpha(25)
-                  : Colors.grey.withAlpha(15),
+                  : AppColorTokens.of(context).textTertiary.withAlpha(15),
               borderRadius: AppRadius.brSm,
               border: Border.all(
                 color: isSelected
                     ? const Color(0xFF8B5CF6)
-                    : Colors.grey.withAlpha(40),
+                    : AppColorTokens.of(context).border.withAlpha(40),
               ),
             ),
             child: Text(
@@ -206,14 +206,14 @@ class SessionKeyRiskSummary extends StatelessWidget {
                 Icon(
                   Icons.warning_amber,
                   size: ScreenUtil().setWidth(18),
-                  color: Colors.red,
+                  color: AppColorTokens.of(context).danger,
                 ),
                 SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     S.of(context).g_key_aa_session_risk_warning,
                     style: AppTypography.captionSm.copyWith(
-                      color: Colors.red,
+                      color: AppColorTokens.of(context).danger,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

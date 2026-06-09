@@ -255,7 +255,9 @@ extension _AAHomePageWidgets on _AAHomePageState {
           color: _itemBgColor(),
           borderRadius: BorderRadius.circular(sw(16)),
           border: Border.all(
-            color: isDisabled ? Colors.grey.withAlpha(30) : color.withAlpha(40),
+            color: isDisabled
+                ? AppColorTokens.of(context).textTertiary.withAlpha(30)
+                : color.withAlpha(40),
           ),
         ),
         child: Opacity(

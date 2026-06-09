@@ -26,19 +26,19 @@ class SessionKeyPresetCards extends StatelessWidget {
   ) => switch (preset) {
     SessionKeyPermission.transfer => (
       label: S.of(context).g_key_aa_session_preset_transfer,
-      riskColor: Colors.green,
+      riskColor: AppColorTokens.of(context).success,
     ),
     SessionKeyPermission.contractCall => (
       label: S.of(context).g_key_aa_session_preset_contract,
-      riskColor: Colors.orange,
+      riskColor: AppColorTokens.of(context).warning,
     ),
     SessionKeyPermission.full => (
       label: S.of(context).g_key_aa_session_preset_full,
-      riskColor: Colors.red,
+      riskColor: AppColorTokens.of(context).danger,
     ),
     SessionKeyPermission.approve => (
       label: S.of(context).g_key_aa_approve,
-      riskColor: Colors.orange,
+      riskColor: AppColorTokens.of(context).warning,
     ),
   };
 
@@ -121,7 +121,9 @@ class _PresetCard extends StatelessWidget {
               : AppColorTokens.of(context).bgBase,
           borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: isSelected ? cardColor : Colors.grey.withAlpha(30),
+            color: isSelected
+                ? cardColor
+                : AppColorTokens.of(context).border.withAlpha(30),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -131,12 +133,20 @@ class _PresetCard extends StatelessWidget {
             _buildHeader(context, cardColor, isSelected),
             SizedBox(height: AppSpacing.space4),
             ...can.map(
-              (c) =>
-                  _bullet(context, c, Icons.check_circle_outline, Colors.green),
+              (c) => _bullet(
+                context,
+                c,
+                Icons.check_circle_outline,
+                AppColorTokens.of(context).success,
+              ),
             ),
             ...cannot.map(
-              (c) =>
-                  _bullet(context, c, Icons.remove_circle_outline, Colors.red),
+              (c) => _bullet(
+                context,
+                c,
+                Icons.remove_circle_outline,
+                AppColorTokens.of(context).danger,
+              ),
             ),
             if (isHighRisk) _buildHighRiskWarning(context),
           ],
@@ -200,12 +210,13 @@ class _PresetCard extends StatelessWidget {
   }
 
   Widget _buildHighRiskWarning(BuildContext context) {
+    final danger = AppColorTokens.of(context).danger;
     return Padding(
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
       child: Container(
         padding: EdgeInsets.all(AppSpacing.space2),
         decoration: BoxDecoration(
-          color: Colors.red.withAlpha(15),
+          color: danger.withAlpha(15),
           borderRadius: AppRadius.brSm,
         ),
         child: Row(
@@ -213,13 +224,13 @@ class _PresetCard extends StatelessWidget {
             Icon(
               Icons.warning_amber,
               size: ScreenUtil().setWidth(18),
-              color: Colors.red,
+              color: danger,
             ),
             SizedBox(width: AppSpacing.space2),
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_risk_warning,
-                style: AppTypography.captionSm.copyWith(color: Colors.red),
+                style: AppTypography.captionSm.copyWith(color: danger),
               ),
             ),
           ],
