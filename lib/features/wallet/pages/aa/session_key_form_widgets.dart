@@ -232,7 +232,12 @@ class SessionKeyRiskSummary extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(icon, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
+          Text(
+            icon,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(

@@ -66,18 +66,16 @@ class ASTMiningBoard extends StatelessWidget {
                     children: [
                       Text(
                         "$astNum",
-                        style: TextStyle(
+                        style: AppTypography.displayLg.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
-                          fontSize: ScreenUtil().setSp(104),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       Text(
                         CoinType.N.name,
-                        style: TextStyle(
+                        style: AppTypography.headline.copyWith(
                           color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
-                          fontSize: ScreenUtil().setSp(32),
                         ),
                       ),
                     ],

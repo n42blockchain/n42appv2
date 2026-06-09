@@ -153,9 +153,8 @@ class MiningDataBroad extends StatelessWidget {
               padding: EdgeInsets.all(AppSpacing.space4),
               child: Text(
                 tipsText ?? '',
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
-                  fontSize: ScreenUtil().setSp(24),
                   height: 1.4,
                 ),
               ),

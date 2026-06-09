@@ -23,10 +23,9 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
     child: Center(
       child: Text(
         protocol.chainSymbol.substring(0, 1),
-        style: TextStyle(
+        style: AppTypography.bodyStrong.copyWith(
           color: Colors.white,
           fontWeight: FontWeight.w600,
-          fontSize: ScreenUtil().setSp(28),
         ),
       ),
     ),

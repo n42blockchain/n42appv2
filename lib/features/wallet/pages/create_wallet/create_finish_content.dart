@@ -20,8 +20,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(56.0),
+        style: AppTypography.displayLg.copyWith(
           color: _themeColor(AppThemeKeys.mainTextColor.name),
           fontWeight: FontWeight.w600,
         ),
@@ -58,8 +57,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(60.0)),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28.0),
+          style: AppTypography.body.copyWith(
             color: blueColor,
             decoration: TextDecoration.underline,
             decorationColor: blueColor,

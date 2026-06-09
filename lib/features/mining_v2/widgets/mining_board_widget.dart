@@ -58,9 +58,8 @@ class MiningBoardWidget extends StatelessWidget {
             ),
             child: Text(
               S.of(context).g_mining_key_62, // "Entry"
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: Colors.white,
-                fontSize: ScreenUtil().setSp(28),
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0.5,
               ),
@@ -115,9 +114,8 @@ class MiningBoardWidget extends StatelessWidget {
                 children: [
                   Text(
                     "$nNum",
-                    style: TextStyle(
+                    style: AppTypography.displayLg.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(80),
                       fontWeight: FontWeight.w600,
                       height: 1.0,
                     ),
@@ -125,10 +123,9 @@ class MiningBoardWidget extends StatelessWidget {
                   SizedBox(width: AppSpacing.space2),
                   Text(
                     CoinType.N.name,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
                       fontWeight: FontWeight.w600,
-                      fontSize: ScreenUtil().setSp(28),
                     ),
                   ),
                 ],

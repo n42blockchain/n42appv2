@@ -162,9 +162,8 @@ class _ShareMiningState extends State<ShareMining>
                             opacity: _fadeAnimation,
                             child: Text(
                               "Congratulations!",
-                              style: TextStyle(
+                              style: AppTypography.titleLg.copyWith(
                                 color: AppColorTokens.of(context).textPrimary,
-                                fontSize: ScreenUtil().setSp(44),
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.5,
                               ),
@@ -187,12 +186,11 @@ class _ShareMiningState extends State<ShareMining>
                               child: Text(
                                 _generateTipsContent(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: AppTypography.body.copyWith(
                                   color: AppColorTokens.of(
                                     context,
                                   ).textSubtitle,
                                   height: 1.5,
-                                  fontSize: ScreenUtil().setSp(28),
                                 ),
                               ),
                             ),
@@ -239,11 +237,10 @@ class _ShareMiningState extends State<ShareMining>
                                       child: Text(
                                         S.of(context).g_mining_key61,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
+                                        style: AppTypography.body.copyWith(
                                           color: AppColorTokens.of(
                                             context,
                                           ).brand,
-                                          fontSize: ScreenUtil().setSp(28),
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),

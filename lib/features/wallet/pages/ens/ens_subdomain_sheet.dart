@@ -221,8 +221,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
       ),
       child: Text(
         '$label.${widget.parentName}',
-        style: TextStyle(
-          fontSize: su.setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: widget.domainChain.color,
         ),
@@ -242,10 +241,9 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         errorText: _labelError,
         border: OutlineInputBorder(borderRadius: AppRadius.brMd),
         suffixText: '.${widget.parentName}',
-        suffixStyle: TextStyle(
+        suffixStyle: AppTypography.caption.copyWith(
           color: widget.domainChain.color,
           fontWeight: FontWeight.w500,
-          fontSize: ScreenUtil().setSp(22),
         ),
       ),
     );
@@ -261,7 +259,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         errorText: _ownerError,
         border: OutlineInputBorder(borderRadius: AppRadius.brMd),
       ),
-      style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+      style: AppTypography.caption,
     );
   }
 

@@ -111,9 +111,8 @@ class MiningRiskCard extends StatelessWidget {
                 SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_mining_key_75,
-                  style: TextStyle(
+                  style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
-                    fontSize: ScreenUtil().setSp(22),
                     height: 1.4,
                   ),
                   maxLines: 2,

@@ -140,9 +140,8 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
             children: [
               Text(
                 S.of(context).g_token_m_key_3,
-                style: TextStyle(
+                style: AppTypography.headline.copyWith(
                   color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: su.setSp(32.0),
                 ),
               ),
               InkWell(
@@ -152,9 +151,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                   children: [
                     Text(
                       _currentNetworkLabel,
-                      style: TextStyle(
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w400,
                         color: _color(AppThemeKeys.mainBlueColor),
-                        fontSize: su.setSp(30.0),
                       ),
                     ),
                     Icon(
@@ -289,8 +288,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).search,
-                style: TextStyle(
-                  fontSize: su.setSp(26.0),
+                style: AppTypography.bodySm.copyWith(
                   color: _color(AppThemeKeys.mainButtonTextColor),
                 ),
               ),

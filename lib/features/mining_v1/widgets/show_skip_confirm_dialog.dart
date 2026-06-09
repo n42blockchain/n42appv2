@@ -47,9 +47,9 @@ class SkipDialogView extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: AppTypography.titleLg.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(44),
+                fontWeight: FontWeight.w400,
               ),
             ),
             SizedBox(height: AppSpacing.space12),
@@ -86,10 +86,9 @@ class SkipDialogView extends StatelessWidget {
                         child: Center(
                           child: Text(
                             S.of(context).g_key_79,
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: AppColorTokens.of(context).brand,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
                         ),
@@ -111,10 +110,9 @@ class SkipDialogView extends StatelessWidget {
                         child: Center(
                           child: Text(
                             S.of(context).g_key_78,
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
                         ),

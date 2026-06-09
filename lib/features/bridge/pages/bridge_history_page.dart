@@ -287,8 +287,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
           Expanded(
             child: Text(
               _shortenHash(hash),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 color: blueColor,
                 decoration: TextDecoration.underline,
               ),

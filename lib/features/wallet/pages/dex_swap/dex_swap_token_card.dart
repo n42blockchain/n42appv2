@@ -67,19 +67,19 @@ class DexTokenCard extends StatelessWidget {
     if (controller != null) {
       return TextField(
         controller: controller,
-        style: TextStyle(
+        style: AppTypography.titleLg.copyWith(
           color: AppColorTokens.of(context).textItem,
-          fontSize: ScreenUtil().setSp(44),
+          fontWeight: FontWeight.w400,
         ),
         keyboardType: const TextInputType.numberWithOptions(decimal: true),
         decoration: InputDecoration(
           hintText: '0.00',
-          hintStyle: TextStyle(
+          hintStyle: AppTypography.titleLg.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.textFieldHintColor.name,
             ),
-            fontSize: ScreenUtil().setSp(44),
+            fontWeight: FontWeight.w400,
           ),
           border: InputBorder.none,
           isCollapsed: true,
@@ -89,9 +89,9 @@ class DexTokenCard extends StatelessWidget {
     }
     return Text(
       amountReadOnly ?? '—',
-      style: TextStyle(
+      style: AppTypography.titleLg.copyWith(
         color: AppColorTokens.of(context).textItem,
-        fontSize: ScreenUtil().setSp(44),
+        fontWeight: FontWeight.w400,
       ),
     );
   }

@@ -103,8 +103,7 @@ class _CsvImportPageState extends State<CsvImportPage>
         maxLines: null,
         expands: true,
         textAlignVertical: TextAlignVertical.top,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
+        style: AppTypography.caption.copyWith(
           fontFamily: 'monospace',
           color: mainText,
           height: 1.6,
@@ -115,8 +114,7 @@ class _CsvImportPageState extends State<CsvImportPage>
               'address,amount,memo\n'
               '0x1234...5678,1.0,Alice\n'
               '0xabcd...efgh,2.5,Bob',
-          hintStyle: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          hintStyle: AppTypography.caption.copyWith(
             color: subText.withValues(alpha: 0.6),
             height: 1.6,
           ),

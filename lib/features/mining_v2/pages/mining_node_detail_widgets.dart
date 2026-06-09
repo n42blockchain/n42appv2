@@ -80,11 +80,10 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
           SizedBox(height: AppSpacing.space4),
           Text(
             value,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color:
                   valueColor ??
                   _themeColor(context, AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
             ),
             maxLines: 1,
@@ -144,10 +143,9 @@ mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
       trailing: Flexible(
         child: Text(
           value,
-          style: TextStyle(
+          style: AppTypography.caption.copyWith(
             color:
                 valueColor ?? _themeColor(context, AppThemeKeys.mainTextColor),
-            fontSize: ScreenUtil().setSp(24),
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.end,

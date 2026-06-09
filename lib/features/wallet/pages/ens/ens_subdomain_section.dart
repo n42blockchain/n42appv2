@@ -121,7 +121,7 @@ class EnsSubdomainSection extends StatelessWidget {
             SizedBox(height: scr.setWidth(8)),
             Text(
               S.of(context).g_key_ens_subdomain_empty,
-              style: TextStyle(fontSize: scr.setSp(24), color: subtitleColor),
+              style: AppTypography.caption.copyWith(color: subtitleColor),
             ),
           ],
         ),
@@ -194,8 +194,7 @@ class _SubdomainItem extends StatelessWidget {
               children: [
                 Text(
                   sub.fullName,
-                  style: TextStyle(
-                    fontSize: scr.setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w500,
                     color: mainTextColor,
                   ),
@@ -203,8 +202,7 @@ class _SubdomainItem extends StatelessWidget {
                 if (sub.owner.isNotEmpty)
                   Text(
                     '${sub.owner.substring(0, 6)}...${sub.owner.substring(sub.owner.length - 4)}',
-                    style: TextStyle(
-                      fontSize: scr.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                       fontFamily: 'monospace',
                     ),

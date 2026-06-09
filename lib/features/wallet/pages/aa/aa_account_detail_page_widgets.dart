@@ -87,8 +87,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                       SizedBox(height: AppSpacing.space2),
                       Text(
                         widget.account.address,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           fontFamily: 'monospace',
                           color: _mainText,
                         ),

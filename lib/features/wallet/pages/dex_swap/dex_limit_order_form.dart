@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
@@ -290,7 +289,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             child: ChoiceChip(
               label: Text(
                 e.key,
-                style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                style: AppTypography.caption,
               ),
               selected: _expiresIn == e.value,
               onSelected: (_) => setState(() => _expiresIn = e.value),

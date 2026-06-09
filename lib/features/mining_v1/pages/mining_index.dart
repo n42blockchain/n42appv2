@@ -143,9 +143,7 @@ class _MiningIndexState extends State<MiningIndex>
               labelStyle: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w500,
               ),
-              unselectedLabelStyle: TextStyle(
-                fontSize: ScreenUtil().setSp(26.0),
-              ),
+              unselectedLabelStyle: AppTypography.bodySm,
               labelColor: AppColorTokens.of(context).textPrimary,
               unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
               tabs: List.generate(tabs.length, (i) {

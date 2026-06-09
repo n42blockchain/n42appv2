@@ -62,8 +62,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     ),
                     Text(
                       widget.account.shortAddress,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         fontFamily: 'monospace',
                         color: _subText,
                       ),

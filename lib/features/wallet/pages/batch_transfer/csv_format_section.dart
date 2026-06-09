@@ -57,8 +57,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
             Expanded(
               child: Text(
                 S.of(context).g_key_batch_csv_format,
-                style: TextStyle(
-                  fontSize: scr.setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: blue,
                 ),
@@ -83,7 +82,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   ) {
     final gap6 = SizedBox(height: scr.setWidth(6));
     final gap12 = SizedBox(height: scr.setWidth(12));
-    final bodyStyle = TextStyle(fontSize: scr.setSp(22), color: subText);
+    final bodyStyle = AppTypography.caption.copyWith(color: subText);
     final fieldStyle = bodyStyle.copyWith(
       fontFamily: 'monospace',
       fontWeight: FontWeight.w600,
@@ -149,8 +148,8 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
               '0x1234567890123456789012345678901234567890,1.5,Alice\n'
               '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd,2.0,Bob\n'
               '0x9876543210987654321098765432109876543210,0.5,',
-              style: TextStyle(
-                fontSize: scr.setSp(20),
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w400,
                 fontFamily: 'monospace',
                 color: subText,
                 height: 1.6,
@@ -204,8 +203,7 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   Widget _docSectionTitle(String title, Color color, ScreenUtil scr) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: scr.setSp(24),
+      style: AppTypography.caption.copyWith(
         fontWeight: FontWeight.w600,
         color: color,
       ),
@@ -257,7 +255,10 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
     return OutlinedButton.icon(
       onPressed: onTap,
       icon: Icon(icon, size: scr.setWidth(20)),
-      label: Text(label, style: TextStyle(fontSize: scr.setSp(20))),
+      label: Text(
+        label,
+        style: AppTypography.captionSm.copyWith(fontWeight: FontWeight.w400),
+      ),
       style: OutlinedButton.styleFrom(
         foregroundColor: blue,
         side: BorderSide(color: blue.withValues(alpha: 0.4)),

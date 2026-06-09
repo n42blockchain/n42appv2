@@ -130,8 +130,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
       child: Text(
         S.of(context).g_key_wallet_c39,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(50),
+        style: AppTypography.displayLg.copyWith(
           color: AppColorTokens.of(context).textPrimary,
           fontWeight: FontWeight.w600,
         ),
@@ -245,8 +244,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
               },
               child: Text(
                 S.of(context).g_key_wallet_c18,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28.0),
+                style: AppTypography.body.copyWith(
                   color: AppColorTokens.of(context).brand,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColorTokens.of(context).brand,

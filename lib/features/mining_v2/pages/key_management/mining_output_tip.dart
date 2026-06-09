@@ -59,8 +59,7 @@ class MiningOutputTip extends StatelessWidget {
               SizedBox(height: AppSpacing.space12),
               Text(
                 S.of(context).g_mining_key_90,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(40),
+                style: AppTypography.titleLg.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
                   height: 1.3,
@@ -167,8 +166,7 @@ class MiningOutputTip extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               height: 1.5,
               color: AppColorTokens.of(context).textPrimary,
             ),

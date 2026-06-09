@@ -81,7 +81,7 @@ class DexSlippageRow extends StatelessWidget {
           child: Text(
             S.of(context).g_key_dex_slippage_label,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+            style: AppTypography.caption.copyWith(color: subText),
           ),
         ),
         SizedBox(width: AppSpacing.space4),
@@ -294,7 +294,7 @@ class DexPriceChart extends StatelessWidget {
         child: Center(
           child: Text(
             tokenInSymbol == null ? s.g_key_dex_select_token : 'No chart data',
-            style: TextStyle(color: subText, fontSize: ScreenUtil().setSp(24)),
+            style: AppTypography.caption.copyWith(color: subText),
           ),
         ),
       );

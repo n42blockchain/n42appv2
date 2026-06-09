@@ -171,8 +171,7 @@ class _SplashPageState extends State<SplashPage>
               child: Center(
                 child: Text(
                   'N42',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(60),
+                  style: AppTypography.displayLg.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -188,8 +187,7 @@ class _SplashPageState extends State<SplashPage>
   Widget _buildTitle() {
     return Text(
       'N42 Wallet',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(48),
+      style: AppTypography.displayLg.copyWith(
         fontWeight: FontWeight.w600,
         color: Colors.white,
         letterSpacing: 2,
@@ -246,8 +244,7 @@ class _SplashTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taglineStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(44),
+    final taglineStyle = AppTypography.titleLg.copyWith(
       fontWeight: FontWeight.w600,
       color: const Color(0xFF80DEEA),
       letterSpacing: 1.0,

@@ -108,8 +108,8 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
       color: AppColorTokens.of(context).textPrimary,
       fontWeight: FontWeight.w600,
     );
-    final spacerStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(10),
+    final spacerStyle = AppTypography.captionSm.copyWith(
+      fontWeight: FontWeight.w400,
       color: AppColorTokens.of(context).textItem,
     );
     final repeatedStyles = [

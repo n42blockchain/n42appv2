@@ -152,8 +152,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               Text(
                 'Sign in with your social account to create a secure MPC wallet. '
                 'Your private key is split into encrypted shares — no seed phrase to lose.',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   color: subColor,
                   height: 1.5,
                 ),
@@ -210,8 +209,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                     Expanded(
                       child: Text(
                         'Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: subColor,
                           height: 1.4,
                         ),

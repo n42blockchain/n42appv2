@@ -404,10 +404,9 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
       child: Center(
         child: Text(
           validator.name.substring(0, 1).toUpperCase(),
-          style: TextStyle(
+          style: AppTypography.caption.copyWith(
             color: Colors.white,
             fontWeight: FontWeight.w600,
-            fontSize: ScreenUtil().setSp(24),
           ),
         ),
       ),
@@ -420,7 +419,6 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     String value,
     Color color,
   ) {
-    final sp20 = ScreenUtil().setSp(20);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space2,
@@ -435,13 +433,15 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
         children: [
           Text(
             label,
-            style: TextStyle(fontSize: sp20, color: _subtitleColor()),
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
+              color: _subtitleColor(),
+            ),
           ),
           SizedBox(width: AppSpacing.space2),
           Text(
             value,
-            style: TextStyle(
-              fontSize: sp20,
+            style: AppTypography.captionSm.copyWith(
               fontWeight: FontWeight.w600,
               color: color,
             ),

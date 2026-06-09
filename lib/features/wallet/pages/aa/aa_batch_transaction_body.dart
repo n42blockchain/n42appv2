@@ -225,8 +225,7 @@ class AABatchTransactionBody extends StatelessWidget {
             SizedBox(height: AppSpacing.space2),
             Text(
               S.of(context).g_key_aa_add_first_operation,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(
                   context,
                   AppThemeKeys.itemSubtitleTextColor,
@@ -363,8 +362,7 @@ class AABatchTransactionBody extends StatelessWidget {
     if (estimatedTotalGas != null) {
       return Text(
         isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: isSponsored
               ? AppColorTokens.of(context).success

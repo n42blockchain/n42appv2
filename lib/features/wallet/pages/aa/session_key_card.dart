@@ -185,8 +185,7 @@ class SessionKeyCard extends StatelessWidget {
             SizedBox(width: AppSpacing.space2),
             Text(
               keyData.shortAddress,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontFamily: 'monospace',
                 color: AppColorTokens.of(context).textPrimary,
               ),

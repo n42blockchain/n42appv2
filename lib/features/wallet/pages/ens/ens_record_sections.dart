@@ -55,8 +55,7 @@ class EnsAddressSection extends StatelessWidget {
                     )
                   : null,
             ),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontFamily: 'monospace',
             ),
             onChanged: (_) => onChanged(),
@@ -122,7 +121,7 @@ class _RecordField extends StatelessWidget {
             vertical: AppSpacing.space4,
           ),
         ),
-        style: TextStyle(fontSize: ScreenUtil().setSp(26)),
+        style: AppTypography.bodySm,
       ),
     );
   }

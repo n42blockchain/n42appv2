@@ -279,8 +279,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         children: [
           Text(
             '${widget.name}.eth',
-            style: TextStyle(
-              fontSize: su.setSp(40),
+            style: AppTypography.titleLg.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -297,7 +296,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               SizedBox(width: su.setWidth(6)),
               Text(
                 '${widget.years} $yearLabel',
-                style: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+                style: AppTypography.bodySm.copyWith(color: subtitleColor),
               ),
             ],
           ),

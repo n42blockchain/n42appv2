@@ -59,8 +59,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
   Widget _buildPopularSection() {
     final su = ScreenUtil();
     final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
-    final TextStyle sectionTitle = TextStyle(
-      fontSize: su.setSp(26),
+    final TextStyle sectionTitle = AppTypography.bodySm.copyWith(
       fontWeight: FontWeight.w600,
       color: subtitleColor,
     );
@@ -159,16 +158,15 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
               children: [
                 Text(
                   sym,
-                  style: TextStyle(
-                    fontSize: su.setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
                 ),
                 Text(
                   chainName,
-                  style: TextStyle(
-                    fontSize: su.setSp(20),
+                  style: AppTypography.captionSm.copyWith(
+                    fontWeight: FontWeight.w400,
                     color: subtitleColor,
                   ),
                 ),

@@ -96,11 +96,10 @@ class DexQuoteCard extends StatelessWidget {
   Widget _countdownText(BuildContext context, S s) {
     return Text(
       s.g_key_dex_quote_expires(secsLeft.toString()),
-      style: TextStyle(
+      style: AppTypography.caption.copyWith(
         color: secsLeft <= 10
             ? _colorRed
             : AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-        fontSize: ScreenUtil().setSp(22),
       ),
     );
   }

@@ -96,10 +96,10 @@ class _ShareMiningState extends State<ShareMining> {
                   child: Text(
                     _generateTipsContent(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
                       height: 1.2,
-                      fontSize: ScreenUtil().setSp(30),
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),

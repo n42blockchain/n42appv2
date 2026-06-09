@@ -254,7 +254,6 @@ class _AddressBookListState extends State<AddressBookList>
   Widget _buildSearchBar(Color mainText, Color blueColor, Color itemBg) {
     final radius = BorderRadius.circular(ScreenUtil().setWidth(50));
     final defaultSide = BorderSide(color: mainText.withValues(alpha: 0.15));
-    final fontSize = ScreenUtil().setSp(28);
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -263,7 +262,7 @@ class _AddressBookListState extends State<AddressBookList>
       ),
       child: TextField(
         controller: _searchCtrl,
-        style: TextStyle(color: mainText, fontSize: fontSize),
+        style: AppTypography.body.copyWith(color: mainText),
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
@@ -271,9 +270,8 @@ class _AddressBookListState extends State<AddressBookList>
             color: mainText.withValues(alpha: 0.4),
           ),
           hintText: S.of(context).search,
-          hintStyle: TextStyle(
+          hintStyle: AppTypography.body.copyWith(
             color: mainText.withValues(alpha: 0.35),
-            fontSize: fontSize,
           ),
           suffixIcon: _searchCtrl.text.isNotEmpty
               ? IconButton(

@@ -58,9 +58,9 @@ class GroupConfirm extends StatelessWidget {
               S.of(context).g_mining_key_114,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
+              style: AppTypography.titleLg.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setSp(44),
+                fontWeight: FontWeight.w400,
               ),
             ),
             SizedBox(height: ScreenUtil().setWidth(54)),
@@ -97,10 +97,9 @@ class GroupConfirm extends StatelessWidget {
                         child: Center(
                           child: Text(
                             S.of(context).g_key_79,
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: AppColorTokens.of(context).brand,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
                         ),
@@ -126,10 +125,9 @@ class GroupConfirm extends StatelessWidget {
                         child: Center(
                           child: Text(
                             S.of(context).g_key_78,
-                            style: TextStyle(
+                            style: AppTypography.headline.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
-                              fontSize: ScreenUtil().setSp(30),
                             ),
                           ),
                         ),

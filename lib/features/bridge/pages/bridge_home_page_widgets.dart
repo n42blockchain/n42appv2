@@ -321,8 +321,7 @@ mixin BridgeHomeWidgetsMixin
                     alignment: Alignment.center,
                     child: Text(
                       '$pct%',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: selected
                             ? FontWeight.w600
                             : FontWeight.normal,

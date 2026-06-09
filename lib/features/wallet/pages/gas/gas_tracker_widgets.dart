@@ -458,7 +458,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         ),
         child: Text(
           S.of(context).g_key_113, // "Delete"
-          style: TextStyle(fontSize: ScreenUtil().setSp(28)),
+          style: AppTypography.body,
         ),
       ),
     );

@@ -53,9 +53,8 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
             ? _buildSearchField(scr)
             : Text(
                 S.of(context).g_key_address_6,
-                style: TextStyle(
+                style: AppTypography.headline.copyWith(
                   color: AppColorTokens.of(context).textPrimary,
-                  fontSize: scr.setSp(32.0),
                 ),
               ),
         centerTitle: true,
@@ -92,14 +91,14 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
         vertical: scr.setWidth(16.0),
         horizontal: scr.setWidth(24.0),
       ),
-      style: TextStyle(
+      style: AppTypography.headline.copyWith(
+        fontWeight: FontWeight.w400,
         color: AppColorTokens.of(context).textPrimary,
-        fontSize: scr.setSp(32.0),
       ),
       placeholder: S.of(context).g_key_address_7,
-      placeholderStyle: TextStyle(
+      placeholderStyle: AppTypography.headline.copyWith(
+        fontWeight: FontWeight.w400,
         color: const Color(0xffcccccc),
-        fontSize: scr.setSp(32.0),
       ),
       controller: controller,
       inputFormatters: [LengthLimitingTextInputFormatter(32)],
@@ -142,9 +141,9 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   children: [
                     Text(
                       coin['name'] ?? '',
-                      style: TextStyle(
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w400,
                         color: AppColorTokens.of(context).textPrimary,
-                        fontSize: scr.setSp(32.0),
                       ),
                     ),
                     SizedBox(height: scr.setWidth(20.0)),

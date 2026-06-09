@@ -314,7 +314,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
                 SizedBox(width: AppSpacing.space4),
                 Text(
                   s.g_key_hw_trezor_connecting,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(28)),
+                  style: AppTypography.body,
                 ),
               ],
             )

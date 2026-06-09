@@ -268,8 +268,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                             ),
                             child: Text(
                               badge,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(16),
+                              style: AppTypography.captionSm.copyWith(
                                 fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 letterSpacing: 0.5,

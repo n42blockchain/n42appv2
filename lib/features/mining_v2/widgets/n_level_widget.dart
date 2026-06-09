@@ -98,9 +98,8 @@ class NLevelWidget extends StatelessWidget {
                 children: [
                   Text(
                     "$nNum",
-                    style: TextStyle(
+                    style: AppTypography.displayLg.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontSize: ScreenUtil().setSp(72),
                       fontWeight: FontWeight.w600,
                       height: 1.0,
                     ),
@@ -110,10 +109,9 @@ class NLevelWidget extends StatelessWidget {
                     padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
                     child: Text(
                       CoinType.N.name,
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: AppColorTokens.of(context).textPrimary,
                         fontWeight: FontWeight.w600,
-                        fontSize: ScreenUtil().setSp(24),
                       ),
                     ),
                   ),

@@ -119,9 +119,8 @@ mixin _MiningFullNodeV2WidgetsMixin
           Expanded(
             child: Text(
               S.of(context).g_mining_key46,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: AppColorTokens.of(context).textSubtitle,
-                fontSize: ScreenUtil().setSp(24),
                 height: 1.4,
               ),
             ),
@@ -290,9 +289,8 @@ mixin _MiningFullNodeV2WidgetsMixin
                 Expanded(
                   child: Text(
                     S.of(context).g_mining_key_78,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: Colors.white,
-                      fontSize: ScreenUtil().setSp(28),
                       fontWeight: FontWeight.w500,
                       height: 1.4,
                     ),
