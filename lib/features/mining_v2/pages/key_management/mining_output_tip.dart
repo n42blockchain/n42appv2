@@ -35,8 +35,12 @@ class MiningOutputTip extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFFFFB74D).withValues(alpha: 0.2),
-                        const Color(0xFFFF9800).withValues(alpha: 0.1),
+                        AppColorTokens.of(
+                          context,
+                        ).warning.withValues(alpha: 0.2),
+                        AppColorTokens.of(
+                          context,
+                        ).warning.withValues(alpha: 0.1),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -47,7 +51,7 @@ class MiningOutputTip extends StatelessWidget {
                     child: Icon(
                       Icons.shield_outlined,
                       size: ScreenUtil().setWidth(56),
-                      color: const Color(0xFFFF9800),
+                      color: AppColorTokens.of(context).warning,
                     ),
                   ),
                 ),
@@ -69,7 +73,9 @@ class MiningOutputTip extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isDark
                       ? Colors.white.withValues(alpha: 0.04)
-                      : Colors.grey.withValues(alpha: 0.04),
+                      : AppColorTokens.of(
+                          context,
+                        ).textTertiary.withValues(alpha: 0.04),
                   borderRadius: AppRadius.brMd,
                   border: Border.all(
                     color: isDark
@@ -106,7 +112,7 @@ class MiningOutputTip extends StatelessWidget {
                       context,
                       Icons.warning_amber_rounded,
                       S.of(context).g_mining_key_94,
-                      const Color(0xFFEF5350),
+                      AppColorTokens.of(context).danger,
                     ),
                   ],
                 ),

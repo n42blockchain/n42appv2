@@ -218,14 +218,14 @@ class _HardwareWalletAccountsPageState
             content: Text(
               S.of(context).g_key_hw_account_added(account.shortAddress),
             ),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColorTokens.of(context).success,
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).g_key_hw_account_already_imported),
-            backgroundColor: Colors.orange,
+            backgroundColor: AppColorTokens.of(context).warning,
           ),
         );
       }
@@ -234,7 +234,7 @@ class _HardwareWalletAccountsPageState
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).g_key_hw_import_failed(e.toString())),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }

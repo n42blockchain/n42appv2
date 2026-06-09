@@ -69,12 +69,12 @@ class _HWDeviceInfoCard extends StatelessWidget {
             width: su.setWidth(48),
             height: su.setWidth(48),
             decoration: BoxDecoration(
-              color: Colors.green.withAlpha(30),
+              color: AppColorTokens.of(context).success.withAlpha(30),
               borderRadius: BorderRadius.circular(su.setWidth(12)),
             ),
             child: Icon(
               Icons.check_circle,
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
               size: su.setWidth(28),
             ),
           ),
@@ -93,7 +93,10 @@ class _HWDeviceInfoCard extends StatelessWidget {
                 ),
                 Text(
                   S.of(context).g_key_hw_connected,
-                  style: TextStyle(fontSize: su.setSp(24), color: Colors.green),
+                  style: TextStyle(
+                    fontSize: su.setSp(24),
+                    color: AppColorTokens.of(context).success,
+                  ),
                 ),
               ],
             ),
@@ -358,7 +361,7 @@ class _HWAccountItem extends StatelessWidget {
                 onPressed: () => onUse(account),
                 icon: Icon(
                   Icons.add_circle_outline,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                   size: su.setWidth(28),
                 ),
               ),

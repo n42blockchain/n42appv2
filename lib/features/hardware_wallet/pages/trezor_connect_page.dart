@@ -103,11 +103,20 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
 
               // 状态信息
               if (_statusMessage != null) ...[
-                _buildStatusRow(context, _statusMessage!, Colors.blue),
+                _buildStatusRow(
+                  context,
+                  _statusMessage!,
+                  AppColorTokens.of(context).brand,
+                ),
                 SizedBox(height: AppSpacing.space4),
               ],
               if (_errorMessage != null) ...[
-                _buildStatusRow(context, _errorMessage!, Colors.red),
+                _buildStatusRow(
+                  context,
+                  _errorMessage!,
+                  AppColorTokens.of(context).danger,
+                  isError: true,
+                ),
                 SizedBox(height: AppSpacing.space4),
               ],
 
@@ -135,14 +144,11 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
         decoration: BoxDecoration(
           color: itemBg.withAlpha(_isConnecting ? 200 : 255),
           borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
-          border: Border.all(
-            color: _isConnecting ? Colors.blue : blueColor,
-            width: 2,
-          ),
+          border: Border.all(color: blueColor, width: 2),
           boxShadow: _isConnecting
               ? [
                   BoxShadow(
-                    color: Colors.blue.withAlpha(60),
+                    color: blueColor.withAlpha(60),
                     blurRadius: 20,
                     spreadRadius: 4,
                   ),
@@ -241,7 +247,12 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
     );
   }
 
-  Widget _buildStatusRow(BuildContext context, String message, Color color) {
+  Widget _buildStatusRow(
+    BuildContext context,
+    String message,
+    Color color, {
+    bool isError = false,
+  }) {
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
@@ -259,7 +270,7 @@ class _TrezorConnectPageState extends State<TrezorConnectPage>
             )
           else
             Icon(
-              color == Colors.red ? Icons.error_outline : Icons.check_circle,
+              isError ? Icons.error_outline : Icons.check_circle,
               color: color,
               size: ScreenUtil().setWidth(24),
             ),

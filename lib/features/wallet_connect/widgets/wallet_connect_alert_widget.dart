@@ -397,13 +397,13 @@ class _WalletConnectAlertWidgetState
       final IconData tagIcon;
       switch (_toAddressLabel!.riskLevel) {
         case 'danger':
-          tagColor = const Color(0xFFF44336);
+          tagColor = AppColorTokens.of(context).danger;
           tagIcon = Icons.dangerous_outlined;
         case 'caution':
-          tagColor = const Color(0xFFFF9800);
+          tagColor = AppColorTokens.of(context).warning;
           tagIcon = Icons.warning_amber_outlined;
         default:
-          tagColor = const Color(0xFF4CAF50);
+          tagColor = AppColorTokens.of(context).success;
           tagIcon = Icons.verified_outlined;
       }
       items.add(
@@ -454,6 +454,8 @@ class _WalletConnectAlertWidgetState
       final isNew = _contractCreatorInfo!.isNewContract;
       final ageDays = _contractCreatorInfo!.contractAgeDays;
       final creatorAddr = _contractCreatorInfo!.creatorAddress ?? '';
+      final c = AppColorTokens.of(context);
+      final contractAccent = isNew ? c.warning : c.brand;
 
       items.add(
         Container(
@@ -463,10 +465,10 @@ class _WalletConnectAlertWidgetState
             vertical: su.setWidth(10),
           ),
           decoration: BoxDecoration(
-            color: (isNew ? Colors.orange : Colors.blue).withAlpha(15),
+            color: contractAccent.withAlpha(15),
             borderRadius: BorderRadius.circular(su.setWidth(12)),
             border: Border.all(
-              color: (isNew ? Colors.orange : Colors.blue).withAlpha(40),
+              color: contractAccent.withAlpha(40),
             ),
           ),
           child: Column(
@@ -477,7 +479,7 @@ class _WalletConnectAlertWidgetState
                   Icon(
                     Icons.code,
                     size: su.setWidth(28),
-                    color: isNew ? Colors.orange : Colors.blue,
+                    color: contractAccent,
                   ),
                   SizedBox(width: su.setWidth(8)),
                   Text(
@@ -519,7 +521,7 @@ class _WalletConnectAlertWidgetState
                     style: TextStyle(
                       fontSize: su.setSp(22),
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange,
+                      color: AppColorTokens.of(context).warning,
                     ),
                   ),
                 ),

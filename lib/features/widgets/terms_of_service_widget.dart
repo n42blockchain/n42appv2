@@ -131,7 +131,9 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
         width: ScreenUtil().setWidth(120),
         height: ScreenUtil().setWidth(120),
         decoration: BoxDecoration(
-          color: isDark ? Colors.grey[800] : Colors.white,
+          color: isDark
+            ? AppColorTokens.of(context).textTertiary
+            : Colors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(

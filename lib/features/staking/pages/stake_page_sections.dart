@@ -92,17 +92,18 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   // ── Unbonding warning ───────────────────────────────────────────────────
 
   Widget _buildUnbondingWarning(BuildContext context) {
+    final c = AppColorTokens.of(context);
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.orange.withAlpha(20),
+        color: c.warning.withAlpha(20),
         borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           Icon(
             Icons.info_outline,
-            color: Colors.orange,
+            color: c.warning,
             size: ScreenUtil().setWidth(36),
           ),
           SizedBox(width: AppSpacing.space4),
@@ -113,7 +114,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                   .g_key_stake_unbonding_warning(
                     widget.protocol.unbondingPeriodDays.toString(),
                   ),
-              style: AppTypography.caption.copyWith(color: Colors.orange[800]),
+              style: AppTypography.caption.copyWith(color: c.warning),
             ),
           ),
         ],
@@ -183,7 +184,10 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               color: AppColorTokens.of(context).bgSurface,
               borderRadius: AppRadius.brMd,
               border: isSelected
-                  ? Border.all(color: Colors.orange, width: 2)
+                  ? Border.all(
+                      color: AppColorTokens.of(context).warning,
+                      width: 2,
+                    )
                   : null,
             ),
             child: Row(
@@ -212,7 +216,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 if (isSelected)
                   Icon(
                     Icons.check_circle,
-                    color: Colors.orange,
+                    color: AppColorTokens.of(context).warning,
                     size: ScreenUtil().setWidth(36),
                   ),
               ],
@@ -317,7 +321,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                     pct.$1,
                     style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange,
+                      color: AppColorTokens.of(context).warning,
                     ),
                   ),
                 ),

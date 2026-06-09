@@ -45,9 +45,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               Navigator.pop(context);
               // 配对成功，提示用户
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Keystone paired successfully'),
-                  backgroundColor: Colors.green,
+                SnackBar(
+                  content: const Text('Keystone paired successfully'),
+                  backgroundColor: AppColorTokens.of(context).success,
                 ),
               );
             }
@@ -83,7 +83,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               ? s.g_key_hw_current_app_label(app.name)
               : s.g_key_hw_no_app_open,
         ),
-        backgroundColor: app != null ? Colors.green : Colors.orange,
+        backgroundColor: app != null
+            ? AppColorTokens.of(context).success
+            : AppColorTokens.of(context).warning,
       ),
     );
   }
@@ -140,7 +142,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorMessage!),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }
@@ -173,7 +175,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             },
             child: Text(
               s.g_key_hw_remove,
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColorTokens.of(context).danger),
             ),
           ),
         ],
@@ -249,7 +251,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
         children: [
           Icon(
             Icons.check_circle,
-            color: Colors.green,
+            color: AppColorTokens.of(context).success,
             size: ScreenUtil().setWidth(24),
           ),
           SizedBox(width: AppSpacing.space2),

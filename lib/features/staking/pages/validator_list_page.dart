@@ -346,8 +346,8 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         Container(
                           width: ScreenUtil().setWidth(12),
                           height: ScreenUtil().setWidth(12),
-                          decoration: const BoxDecoration(
-                            color: Colors.green,
+                          decoration: BoxDecoration(
+                            color: AppColorTokens.of(context).success,
                             shape: BoxShape.circle,
                           ),
                         ),
@@ -367,14 +367,14 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
                         context,
                         'APY',
                         '${validator.apy.toStringAsFixed(1)}%',
-                        Colors.green,
+                        AppColorTokens.of(context).success,
                       ),
                       SizedBox(width: AppSpacing.space2),
                       _buildInfoChip(
                         context,
                         'Fee',
                         '${validator.commission.toStringAsFixed(1)}%',
-                        Colors.orange,
+                        AppColorTokens.of(context).warning,
                       ),
                     ],
                   ),
@@ -457,5 +457,6 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
     3: Color(0xFFCD7F32), // Bronze
   };
 
-  Color _getRankColor(int rank) => _rankColors[rank] ?? Colors.grey;
+  Color _getRankColor(int rank) =>
+      _rankColors[rank] ?? AppColorTokens.of(context).textTertiary;
 }

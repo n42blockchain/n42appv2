@@ -235,7 +235,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                 background: Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(right: su.setWidth(30.0)),
-                  color: Colors.red,
+                  color: AppColorTokens.of(context).danger,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 onDismissed: (_) => deleteHistory(item),

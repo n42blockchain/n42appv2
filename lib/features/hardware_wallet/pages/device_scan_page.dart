@@ -292,8 +292,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                           margin: EdgeInsets.only(right: su.setWidth(2)),
                           decoration: BoxDecoration(
                             color: index < device.signalStrength
-                                ? Colors.green
-                                : Colors.grey.withAlpha(50),
+                                ? AppColorTokens.of(context).success
+                                : AppColorTokens.of(
+                                    context,
+                                  ).textTertiary.withAlpha(50),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         );
@@ -340,7 +342,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           onPressed: provider.isScanning ? _stopScan : _startScan,
           style: ElevatedButton.styleFrom(
             backgroundColor: provider.isScanning
-                ? Colors.orange
+                ? AppColorTokens.of(context).warning
                 : _blueColor(context),
             padding: EdgeInsets.symmetric(vertical: su.setWidth(18)),
             shape: RoundedRectangleBorder(
@@ -376,14 +378,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Connected to ${device.name}'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColorTokens.of(context).success,
         ),
       );
     } else if (provider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorMessage!),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }

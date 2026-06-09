@@ -125,6 +125,7 @@ mixin _StakeLogicMixin on State<StakePage> {
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
     final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+    final successColor = AppColorTokens.of(context).success;
 
     setState(() {
       _isLoading = true;
@@ -140,7 +141,10 @@ mixin _StakeLogicMixin on State<StakePage> {
       if (result != null && result.success) {
         if (!mounted) return;
         messenger.showSnackBar(
-          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(txPreparedMsg),
+            backgroundColor: successColor,
+          ),
         );
       } else {
         setState(() {
@@ -193,6 +197,7 @@ mixin _StakeLogicMixin on State<StakePage> {
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
     final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+    final successColor = AppColorTokens.of(context).success;
 
     setState(() {
       _isLoading = true;
@@ -211,7 +216,10 @@ mixin _StakeLogicMixin on State<StakePage> {
 
       if (result != null && result.success) {
         messenger.showSnackBar(
-          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(txPreparedMsg),
+            backgroundColor: successColor,
+          ),
         );
         // 解质押成功后刷新仓位列表
         setState(() => _selectedPosition = null);

@@ -263,7 +263,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
           style: TextStyle(
             fontSize: su.setSp(26),
             fontWeight: FontWeight.w600,
-            color: valueColor ?? Colors.green,
+            color: valueColor ?? AppColorTokens.of(context).success,
           ),
         ),
       ],

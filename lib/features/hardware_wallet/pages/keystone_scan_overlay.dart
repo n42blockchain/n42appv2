@@ -148,7 +148,7 @@ class _KeystoneScanErrorCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.red.shade900.withAlpha(230),
+        color: AppColorTokens.of(context).danger.withAlpha(230),
         borderRadius: AppRadius.brMd,
       ),
       child: Column(

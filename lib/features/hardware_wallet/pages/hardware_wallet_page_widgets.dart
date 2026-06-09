@@ -24,13 +24,14 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
       AppThemeKeys.itemSubtitleTextColor,
     );
     final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
+    final successColor = AppColorTokens.of(context).success;
 
     return Container(
       padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isConnected
-              ? [Colors.green.shade600, Colors.green.shade400]
+              ? [successColor, successColor]
               : [itemBgColor, itemBgColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
@@ -189,7 +190,12 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
-        border: isConnected ? Border.all(color: Colors.green, width: 2) : null,
+        border: isConnected
+            ? Border.all(
+                color: AppColorTokens.of(context).success,
+                width: 2,
+              )
+            : null,
       ),
       child: Row(
         children: [
@@ -235,13 +241,15 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                           vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withAlpha(30),
+                          color: AppColorTokens.of(
+                            context,
+                          ).success.withAlpha(30),
                           borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           s.g_key_hw_connected,
                           style: AppTypography.captionSm.copyWith(
-                            color: Colors.green,
+                            color: AppColorTokens.of(context).success,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -275,7 +283,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             ),
             IconButton(
               onPressed: () => _showDeleteDialog(context, s, provider, device),
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              icon: Icon(
+                Icons.delete_outline,
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ],
         ],

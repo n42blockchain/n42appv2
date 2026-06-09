@@ -203,7 +203,8 @@ class MiningBoardWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: (isDark ? Colors.white : Colors.grey).withValues(alpha: 0.03),
+        color: (isDark ? Colors.white : AppColorTokens.of(context).textTertiary)
+            .withValues(alpha: 0.03),
         borderRadius: AppRadius.brMd,
       ),
       child: Column(
@@ -308,13 +309,15 @@ class MiningBoardWidget extends StatelessWidget {
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF4CAF50).withValues(alpha: 0.15),
+                    color: AppColorTokens.of(
+                      context,
+                    ).success.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
                     Icons.check,
                     size: ScreenUtil().setWidth(16),
-                    color: const Color(0xFF4CAF50),
+                    color: AppColorTokens.of(context).success,
                   ),
                 ),
               ],

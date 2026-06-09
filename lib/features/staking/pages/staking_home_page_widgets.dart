@@ -172,7 +172,7 @@ mixin StakingHomePageWidgetsMixin
           stakingTag(
             context: context,
             label: S.of(context).g_key_stake_liquid_tag,
-            color: Colors.green,
+            color: AppColorTokens.of(context).success,
           ),
       ],
     );
@@ -188,16 +188,18 @@ mixin StakingHomePageWidgetsMixin
             ? SizedBox(
                 width: ScreenUtil().setWidth(20),
                 height: ScreenUtil().setWidth(20),
-                child: const CircularProgressIndicator(
+                child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                  valueColor: AlwaysStoppedAnimation<Color>(
+                    AppColorTokens.of(context).success,
+                  ),
                 ),
               )
             : Text(
                 '${(liveApys[protocol.id] ?? protocol.apy).toStringAsFixed(1)}%',
                 style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                 ),
               ),
         Text(
@@ -290,7 +292,10 @@ mixin StakingHomePageWidgetsMixin
         color: _themeColor(AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
         border: isUnbonding
-            ? Border.all(color: Colors.orange.withAlpha(100), width: 1)
+            ? Border.all(
+                color: AppColorTokens.of(context).warning.withAlpha(100),
+                width: 1,
+              )
             : null,
       ),
       child: Column(
@@ -337,14 +342,18 @@ mixin StakingHomePageWidgetsMixin
           label: isUnbonding
               ? S.of(context).g_key_stake_unbonding
               : S.of(context).g_key_stake_active,
-          color: isUnbonding ? Colors.orange : Colors.green,
+          color: isUnbonding
+              ? AppColorTokens.of(context).warning
+              : AppColorTokens.of(context).success,
         ),
         const Spacer(),
         Flexible(
           child: Text(
             '${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}',
             overflow: TextOverflow.ellipsis,
-            style: AppTypography.bodySm.copyWith(color: Colors.green),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).success,
+            ),
           ),
         ),
       ],
@@ -393,7 +402,7 @@ mixin StakingHomePageWidgetsMixin
                 ),
                 style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                 ),
               ),
             ],
@@ -403,13 +412,14 @@ mixin StakingHomePageWidgetsMixin
   }
 
   Widget _buildUnbondingBadge(BuildContext context, StakingPosition position) {
+    final c = AppColorTokens.of(context);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space4,
         vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: Colors.orange.withAlpha(20),
+        color: c.warning.withAlpha(20),
         borderRadius: AppRadius.brSm,
       ),
       child: Row(
@@ -418,7 +428,7 @@ mixin StakingHomePageWidgetsMixin
           Icon(
             Icons.hourglass_bottom,
             size: ScreenUtil().setWidth(28),
-            color: Colors.orange,
+            color: c.warning,
           ),
           SizedBox(width: AppSpacing.space2),
           Flexible(
@@ -429,7 +439,7 @@ mixin StakingHomePageWidgetsMixin
                     position.unbondingDaysLeft.toString(),
                   ),
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.caption.copyWith(color: Colors.orange),
+              style: AppTypography.caption.copyWith(color: c.warning),
             ),
           ),
         ],

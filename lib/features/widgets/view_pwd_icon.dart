@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class ViewPwdIcon extends StatefulWidget {
   final VoidCallback onTap;
@@ -22,7 +23,7 @@ class _ViewPwdIconState extends State<ViewPwdIcon> {
     final Widget xianshi = Image.asset(
       'assets/login/icon_denglu_xianshi.png',
       color: Theme.of(context).brightness == Brightness.light
-          ? Colors.grey
+          ? AppColorTokens.of(context).textTertiary
           : Colors.white,
       width: ScreenUtil().setWidth(34),
     );

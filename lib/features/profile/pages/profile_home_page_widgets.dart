@@ -91,7 +91,7 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                             vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green,
+                            color: AppColorTokens.of(context).success,
                             borderRadius: AppRadius.brSm,
                           ),
                           child: Text(

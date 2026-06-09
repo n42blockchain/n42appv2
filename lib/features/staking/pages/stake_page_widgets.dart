@@ -312,24 +312,25 @@ mixin _StakeViewsMixin
   // ── Shared sub-widgets ──────────────────────────────────────────────────
 
   Widget _buildErrorBanner(BuildContext context) {
+    final c = AppColorTokens.of(context);
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.red.withAlpha(20),
+        color: c.danger.withAlpha(20),
         borderRadius: AppRadius.brSm,
       ),
       child: Row(
         children: [
           Icon(
             Icons.error_outline,
-            color: Colors.red,
+            color: c.danger,
             size: ScreenUtil().setWidth(32),
           ),
           SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               _errorMessage,
-              style: AppTypography.caption.copyWith(color: Colors.red),
+              style: AppTypography.caption.copyWith(color: c.danger),
             ),
           ),
         ],

@@ -118,7 +118,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Wallet Management',
         'Manage your wallets',
         Icons.account_balance_wallet,
-        Colors.blue,
+        AppColorTokens.of(context).brand,
         () => _navigateToWalletManagement(context),
       ),
       _buildMenuItem(
@@ -135,7 +135,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Address Book',
         'Saved addresses',
         Icons.contacts,
-        Colors.green,
+        AppColorTokens.of(context).success,
         () => _navigateToAddressBook(context),
       ),
       _buildMenuItem(
@@ -143,7 +143,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Transaction History',
         'View all transactions',
         Icons.history,
-        Colors.orange,
+        AppColorTokens.of(context).warning,
         () => _navigateToTransactionHistory(context),
       ),
     ]);
@@ -156,7 +156,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Security Settings',
         'Protect your wallet',
         Icons.security,
-        Colors.red,
+        AppColorTokens.of(context).danger,
         () => _navigateToSecuritySettings(context),
       ),
       _buildMenuItem(
@@ -164,7 +164,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Backup Wallet',
         'Backup your recovery phrase',
         Icons.backup,
-        Colors.amber,
+        AppColorTokens.of(context).warning,
         () => _navigateToBackupWallet(context),
       ),
       _buildMenuItem(
@@ -199,7 +199,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Currency',
         'Display currency',
         Icons.attach_money,
-        Colors.green,
+        AppColorTokens.of(context).success,
         () => _navigateToCurrencySettings(context),
         trailing: Text(
           'USD',
@@ -234,7 +234,7 @@ class ProfileHomePage extends ConsumerWidget {
         'Rate Us',
         'Love the app? Rate us!',
         Icons.star_outline,
-        Colors.amber,
+        AppColorTokens.of(context).warning,
         () => _rateApp(context),
       ),
       _buildMenuItem(
@@ -242,7 +242,7 @@ class ProfileHomePage extends ConsumerWidget {
         'About N42',
         'Version 2.0.0',
         Icons.info_outline,
-        Colors.grey,
+        AppColorTokens.of(context).textTertiary,
         () => _navigateToAbout(context),
       ),
     ]);
