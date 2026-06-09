@@ -158,7 +158,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
     final apyStr = '${liveApyValue.toStringAsFixed(1)}% APY';
     final color = chainColor(protocol.chainType);
     final hasPendingRewards = position.pendingRewards > BigInt.zero;
-    final borderColor = isUnbonding ? Colors.orange : blue;
+    final borderColor = isUnbonding ? AppColorTokens.of(context).warning : blue;
 
     return Container(
       margin: EdgeInsets.only(bottom: su.setWidth(12)),
@@ -169,7 +169,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
         border: Border.all(color: borderColor.withAlpha(50)),
         boxShadow: [
           BoxShadow(
-            color: (isUnbonding ? Colors.orange : color).withAlpha(18),
+            color: (isUnbonding ? AppColorTokens.of(context).warning : color).withAlpha(18),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -222,14 +222,14 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                           vertical: su.setWidth(2),
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.orange.withAlpha(30),
+                          color: AppColorTokens.of(context).warning.withAlpha(30),
                           borderRadius: BorderRadius.circular(su.setWidth(8)),
                         ),
                         child: Text(
                           'Unbonding',
                           style: TextStyle(
                             fontSize: su.setSp(18),
-                            color: Colors.orange,
+                            color: AppColorTokens.of(context).warning,
                           ),
                         ),
                       ),
@@ -245,7 +245,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                     '+${formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}',
                     style: TextStyle(
                       fontSize: su.setSp(20),
-                      color: Colors.green,
+                      color: AppColorTokens.of(context).success,
                     ),
                   ),
               ],
@@ -269,7 +269,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
               if (!isUnbonding)
                 Text(
                   apyStr,
-                  style: TextStyle(fontSize: su.setSp(22), color: Colors.green),
+                  style: TextStyle(fontSize: su.setSp(22), color: AppColorTokens.of(context).success),
                 ),
             ],
           ),
@@ -393,7 +393,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 vertical: su.setWidth(6),
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
+                color: AppColorTokens.of(context).success.withAlpha(20),
                 borderRadius: BorderRadius.circular(su.setWidth(8)),
               ),
               child: Text(
@@ -401,7 +401,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                 style: TextStyle(
                   fontSize: su.setSp(24),
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                 ),
               ),
             ),

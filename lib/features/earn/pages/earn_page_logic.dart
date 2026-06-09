@@ -138,12 +138,12 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        backgroundColor: isDark ?  Color(0xFF1E1E1E) : Colors.white,
         title: Row(
           children: [
             Icon(
               Icons.local_fire_department_rounded,
-              color: Colors.orange,
+              color: AppColorTokens.of(context).warning,
               size: 28,
             ),
             const SizedBox(width: 8),

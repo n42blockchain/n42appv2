@@ -65,16 +65,16 @@ mixin BridgeHomeSectionsMixin
 
     // 标签优先级：RECOMMENDED > FASTEST > CHEAPEST
     String? tagLabel;
-    Color tagColor = Colors.grey;
+    Color tagColor = AppColorTokens.of(context).textTertiary;
     if (route.isRecommended) {
       tagLabel = S.of(context).g_key_bridge_recommended;
-      tagColor = Colors.green;
+      tagColor = AppColorTokens.of(context).success;
     } else if (route.isFastest) {
       tagLabel = S.of(context).g_key_bridge_fastest;
-      tagColor = Colors.orange;
+      tagColor = AppColorTokens.of(context).warning;
     } else if (route.isCheapest) {
       tagLabel = S.of(context).g_key_bridge_cheapest;
-      tagColor = Colors.blue;
+      tagColor = AppColorTokens.of(context).info;
     }
 
     // 路由使用的协议名称（step 聚合）

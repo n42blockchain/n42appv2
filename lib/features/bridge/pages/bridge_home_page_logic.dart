@@ -36,8 +36,8 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
     final isSuccess = newStatus == BridgeTransactionStatus.completed;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration: const Duration(seconds: 6),
-        backgroundColor: isSuccess ? Colors.green : Colors.red,
+        duration:  Duration(seconds: 6),
+        backgroundColor: isSuccess ? AppColorTokens.of(context).success : AppColorTokens.of(context).danger,
         content: Row(
           children: [
             Icon(
@@ -95,7 +95,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).g_key_bridge_tx_pending),
-            backgroundColor: Colors.orange,
+            backgroundColor: AppColorTokens.of(context).warning,
             duration: const Duration(seconds: 3),
           ),
         );
@@ -271,7 +271,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                         title: Text(token.symbol),
                         subtitle: Text(token.name),
                         trailing: isSelected
-                            ? const Icon(Icons.check, color: Colors.green)
+                            ?  Icon(Icons.check, color: AppColorTokens.of(context).success)
                             : null,
                         onTap: () => Navigator.pop(context, token),
                       );
