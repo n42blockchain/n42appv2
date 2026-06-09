@@ -198,10 +198,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
   ) {
     final baseFee = _gasEstimate.baseFee;
     final l10n = S.of(context);
+    final c = AppColorTokens.of(context);
     if (baseFee == null) {
       return (
         text: l10n.g_key_gas_network_normal,
-        color: Colors.green,
+        color: c.success,
         icon: Icons.check_circle,
       );
     }
@@ -209,20 +210,20 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     if (baseFeeGwei < BigInt.from(GasConstants.networkIdleThresholdGwei)) {
       return (
         text: l10n.g_key_gas_network_idle,
-        color: Colors.green,
+        color: c.success,
         icon: Icons.check_circle,
       );
     }
     if (baseFeeGwei < BigInt.from(GasConstants.networkBusyThresholdGwei)) {
       return (
         text: l10n.g_key_gas_network_normal,
-        color: Colors.orange,
+        color: c.warning,
         icon: Icons.info,
       );
     }
     return (
       text: l10n.g_key_gas_network_busy,
-      color: Colors.red,
+      color: c.danger,
       icon: Icons.warning,
     );
   }

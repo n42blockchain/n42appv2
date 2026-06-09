@@ -94,10 +94,11 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
 
   Widget _priceImpactRow(DexQuoteModel q) {
     final impact = q.priceImpactNum;
+    final c = AppColorTokens.of(context);
     final valueColor = switch (impact) {
-      >= 3.0 => Colors.red,
-      >= 1.0 => Colors.orange,
-      _ => AppColorTokens.of(context).textPrimary,
+      >= 3.0 => c.danger,
+      >= 1.0 => c.warning,
+      _ => c.textPrimary,
     };
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),

@@ -169,6 +169,7 @@ class _FailedBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     final w6 = su.setWidth(6);
+    final warningColor = AppColorTokens.of(context).warning;
 
     return Padding(
       padding: EdgeInsets.only(top: w6, left: su.setWidth(4)),
@@ -176,14 +177,14 @@ class _FailedBanner extends StatelessWidget {
         children: [
           Icon(
             Icons.warning_amber_rounded,
-            color: Colors.orange,
+            color: warningColor,
             size: su.setWidth(20),
           ),
           SizedBox(width: w6),
           Expanded(
             child: Text(
               message,
-              style: TextStyle(fontSize: su.setSp(22), color: Colors.orange),
+              style: TextStyle(fontSize: su.setSp(22), color: warningColor),
             ),
           ),
         ],

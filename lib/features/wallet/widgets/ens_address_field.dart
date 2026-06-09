@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
@@ -299,11 +300,14 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
         // 外部错误信息（父组件传入）
         if (widget.errorText?.isNotEmpty == true)
-          _buildHintText(widget.errorText!, Colors.red),
+          _buildHintText(widget.errorText!, AppColorTokens.of(context).danger),
 
         // ENS 解析失败信息
         if (_status == EnsResolveStatus.failed && _resolveResult?.error != null)
-          _buildHintText(_resolveResult!.error!, Colors.orange),
+          _buildHintText(
+            _resolveResult!.error!,
+            AppColorTokens.of(context).warning,
+          ),
       ],
     );
   }
@@ -315,7 +319,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       case EnsResolveStatus.resolved:
         return _successColor;
       case EnsResolveStatus.failed:
-        return Colors.orange;
+        return AppColorTokens.of(context).warning;
       case EnsResolveStatus.idle:
         return defaultColor.withValues(alpha: 0.3);
     }
@@ -353,7 +357,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       ),
       EnsResolveStatus.failed => Icon(
         Icons.warning_amber_rounded,
-        color: Colors.orange,
+        color: AppColorTokens.of(context).warning,
         size: iconSize,
       ),
       EnsResolveStatus.idle => const SizedBox.shrink(),

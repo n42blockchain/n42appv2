@@ -53,11 +53,11 @@ class EnsConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final mainTextColor = AppColorTokens.of(context).textPrimary;
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final bgColor = AppColorTokens.of(context).bgSurface;
     final blueColor = AppColorTokens.of(context).brand;
+    final warningColor = AppColorTokens.of(context).warning;
     const successGreen = Color(0xFF4CAF50);
 
     return AlertDialog(
@@ -158,7 +158,7 @@ class EnsConfirmDialog extends StatelessWidget {
                 suffixLength: 8,
               ),
               icon: Icons.account_balance_wallet_outlined,
-              iconColor: isDark ? Colors.orange : Colors.deepOrange,
+              iconColor: warningColor,
               textColor: mainTextColor,
               subtitleColor: subtitleColor,
               onCopy: () => _copyToClipboard(context, resolvedAddress),
@@ -170,16 +170,16 @@ class EnsConfirmDialog extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
-                color: Colors.orange.withValues(alpha: 0.1),
+                color: warningColor.withValues(alpha: 0.1),
                 borderRadius: AppRadius.brMd,
-                border: Border.all(color: Colors.orange.withValues(alpha: 0.3)),
+                border: Border.all(color: warningColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
                     Icons.warning_amber_rounded,
-                    color: Colors.orange,
+                    color: warningColor,
                     size: ScreenUtil().setWidth(28),
                   ),
                   SizedBox(width: AppSpacing.space2),
@@ -188,9 +188,7 @@ class EnsConfirmDialog extends StatelessWidget {
                       S.of(context).g_key_ens_warning,
                       style: TextStyle(
                         fontSize: ScreenUtil().setSp(22),
-                        color: isDark
-                            ? Colors.orange.shade200
-                            : Colors.orange.shade800,
+                        color: warningColor,
                         height: 1.4,
                       ),
                     ),

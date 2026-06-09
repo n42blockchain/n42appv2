@@ -253,11 +253,12 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   }
 
   Widget buildNetworkStatus(double? gasPrice) {
+    final c = AppColorTokens.of(context);
     final (statusText, statusColor) = switch (gasPrice) {
-      null => ('...', Colors.grey),
-      < 20 => (S.of(context).g_key_gas_network_idle, Colors.green),
-      < 50 => (S.of(context).g_key_gas_network_normal, Colors.orange),
-      _ => (S.of(context).g_key_gas_network_busy, Colors.red),
+      null => ('...', c.textTertiary),
+      < 20 => (S.of(context).g_key_gas_network_idle, c.success),
+      < 50 => (S.of(context).g_key_gas_network_normal, c.warning),
+      _ => (S.of(context).g_key_gas_network_busy, c.danger),
     };
 
     return Container(
@@ -287,14 +288,15 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
   Widget buildGasPredictionCard() {
     final su = ScreenUtil();
-    final textColor = AppColorTokens.of(context).textPrimary;
+    final c = AppColorTokens.of(context);
+    final textColor = c.textPrimary;
 
     return Container(
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppColorTokens.of(context).bgSurface,
+        color: c.bgSurface,
         borderRadius: BorderRadius.circular(su.setWidth(16)),
-        border: Border.all(color: Colors.orange.withAlpha(50), width: 1),
+        border: Border.all(color: c.warning.withAlpha(50), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,7 +306,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               Icon(
                 Icons.auto_graph,
                 size: su.setWidth(36),
-                color: Colors.orange,
+                color: c.warning,
               ),
               SizedBox(width: su.setWidth(8)),
               Text(
@@ -335,13 +337,13 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   ),
                   SizedBox(width: su.setWidth(12)),
                   if (pred.low != null)
-                    _predBadge('Slow', pred.low!, Colors.green, su),
+                    _predBadge('Slow', pred.low!, c.success, su),
                   SizedBox(width: su.setWidth(8)),
                   if (pred.medium != null)
-                    _predBadge('Avg', pred.medium!, Colors.orange, su),
+                    _predBadge('Avg', pred.medium!, c.warning, su),
                   SizedBox(width: su.setWidth(8)),
                   if (pred.high != null)
-                    _predBadge('Fast', pred.high!, Colors.red, su),
+                    _predBadge('Fast', pred.high!, c.danger, su),
                 ],
               ),
             );

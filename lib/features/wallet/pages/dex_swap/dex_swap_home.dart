@@ -397,7 +397,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(S.of(context).g_key_dex_approval_success),
-        backgroundColor: const Color(0xFF4CAF50),
+        backgroundColor: AppColorTokens.of(context).success,
       ),
     );
   }
@@ -608,6 +608,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── Gas-free toggle widget ─────────────────────────────────────────────────
 
   Widget _buildGasFreeToggle() {
+    final c = AppColorTokens.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Row(
@@ -615,14 +616,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           Icon(
             Icons.local_gas_station_outlined,
             size: 18,
-            color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+            color: _gasFreeEnabled ? c.success : c.textTertiary,
           ),
           SizedBox(width: AppSpacing.space2),
           Text(
             'Gas-free Swap',
             style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
-              color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+              color: _gasFreeEnabled ? c.success : c.textTertiary,
             ),
           ),
           const Spacer(),
@@ -631,7 +632,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             child: Switch.adaptive(
               value: _gasFreeEnabled,
               onChanged: (v) => setState(() => _gasFreeEnabled = v),
-              activeTrackColor: const Color(0xFF4CAF50),
+              activeTrackColor: c.success,
             ),
           ),
         ],

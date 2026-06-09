@@ -140,7 +140,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           trailing: Container(
             padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
               borderRadius: BorderRadius.circular(sw(6)),
             ),
             child: Text(

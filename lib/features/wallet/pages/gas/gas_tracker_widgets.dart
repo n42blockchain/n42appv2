@@ -327,7 +327,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   label: S.of(context).g_key_gas_alert_below,
                   icon: Icons.arrow_downward,
                   selected: _alertBelow,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                   onTap: () {
                     if (_saving) return;
                     setState(() => _alertBelow = true);
@@ -340,7 +340,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   label: S.of(context).g_key_gas_alert_above,
                   icon: Icons.arrow_upward,
                   selected: !_alertBelow,
-                  color: Colors.red,
+                  color: AppColorTokens.of(context).danger,
                   onTap: () {
                     if (_saving) return;
                     setState(() => _alertBelow = false);
@@ -453,7 +453,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: TextButton(
         onPressed: _saving ? null : _remove,
         style: TextButton.styleFrom(
-          foregroundColor: Colors.red,
+          foregroundColor: AppColorTokens.of(context).danger,
           shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(

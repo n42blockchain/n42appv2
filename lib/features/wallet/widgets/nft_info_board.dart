@@ -404,6 +404,7 @@ class NftInfoBoard extends StatelessWidget {
   }
 
   Widget _buildBurnButton(BuildContext context) {
+    final dangerColor = AppColorTokens.of(context).danger;
     return InkWell(
       onTap: burnTap,
       borderRadius: AppRadius.brMd,
@@ -413,16 +414,16 @@ class NftInfoBoard extends StatelessWidget {
           horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
-          color: Colors.red.withAlpha(15),
+          color: dangerColor.withAlpha(15),
           borderRadius: AppRadius.brMd,
-          border: Border.all(color: Colors.red.withAlpha(50), width: 1),
+          border: Border.all(color: dangerColor.withAlpha(50), width: 1),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.local_fire_department,
-              color: Colors.red,
+              color: dangerColor,
               size: ScreenUtil().setWidth(32),
             ),
             SizedBox(width: AppSpacing.space2),
@@ -432,7 +433,7 @@ class NftInfoBoard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.red,
+                  color: dangerColor,
                 ),
               ),
             ),

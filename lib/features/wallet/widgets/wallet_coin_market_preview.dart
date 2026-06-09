@@ -86,7 +86,8 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final blueColor = AppColorTokens.of(context).brand;
     final isUp = widget.priceChange24h >= 0;
-    final trendColor = isUp ? Colors.green : Colors.red;
+    final c = AppColorTokens.of(context);
+    final trendColor = isUp ? c.success : c.danger;
 
     return GestureDetector(
       onTap: _navigateToMarketCoinInfo,

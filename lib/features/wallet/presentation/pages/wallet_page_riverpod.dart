@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// Example: Wallet Page using Riverpod
@@ -106,7 +107,7 @@ class _BalanceCard extends StatelessWidget {
                 '\$0.00',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey,
+                  color: AppColorTokens.of(context).textTertiary,
                 ),
               ),
             ),
@@ -152,7 +153,11 @@ class _CoinListSection extends StatelessWidget {
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: AppColorTokens.of(context).danger,
+              ),
               const SizedBox(height: 16),
               Text('Failed to load coins: $error'),
               const SizedBox(height: 16),
@@ -194,7 +199,9 @@ class _CoinListItem extends StatelessWidget {
             '\$${coin.balanceUsd.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 12,
-              color: isPositive ? Colors.green : Colors.red,
+              color: isPositive
+                  ? AppColorTokens.of(context).success
+                  : AppColorTokens.of(context).danger,
             ),
           ),
         ],
@@ -232,9 +239,19 @@ class _CoinListSkeleton extends StatelessWidget {
       children: List.generate(
         5,
         (index) => ListTile(
-          leading: const CircleAvatar(backgroundColor: Colors.grey),
-          title: Container(height: 16, width: 80, color: Colors.grey[300]),
-          subtitle: Container(height: 12, width: 120, color: Colors.grey[200]),
+          leading: CircleAvatar(
+            backgroundColor: AppColorTokens.of(context).textTertiary,
+          ),
+          title: Container(
+            height: 16,
+            width: 80,
+            color: AppColorTokens.of(context).textTertiary.withAlpha(77),
+          ),
+          subtitle: Container(
+            height: 12,
+            width: 120,
+            color: AppColorTokens.of(context).textTertiary.withAlpha(51),
+          ),
         ),
       ),
     );
@@ -256,7 +273,11 @@ class _WalletErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 64, color: Colors.red),
+            Icon(
+              Icons.error_outline,
+              size: 64,
+              color: AppColorTokens.of(context).danger,
+            ),
             const SizedBox(height: 16),
             Text(
               'Failed to load wallet',
@@ -266,9 +287,9 @@ class _WalletErrorWidget extends StatelessWidget {
             Text(
               error.toString(),
               textAlign: TextAlign.center,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: AppColorTokens.of(context).textTertiary,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -296,16 +317,16 @@ class _EmptyWalletWidget extends StatelessWidget {
           Icon(
             Icons.account_balance_wallet_outlined,
             size: 80,
-            color: Colors.grey[400],
+            color: AppColorTokens.of(context).textTertiary,
           ),
           const SizedBox(height: 16),
           Text('No Wallet Yet', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
           Text(
             'Create or import a wallet to get started',
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: Colors.grey),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              color: AppColorTokens.of(context).textTertiary,
+            ),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(

@@ -95,15 +95,16 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
   Widget _buildOrderCard(DexLimitOrderModel order) {
     final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = AppColorTokens.of(context).textSubtitle;
-    final blueColor = AppColorTokens.of(context).brand;
+    final c = AppColorTokens.of(context);
+    final blueColor = c.brand;
 
     final statusColor = switch (order.status) {
       0 => blueColor,
-      1 => Colors.orange,
-      2 => const Color(0xFF4CAF50),
-      3 => Colors.grey,
-      4 => Colors.grey,
-      _ => Colors.grey,
+      1 => c.warning,
+      2 => c.success,
+      3 => c.textTertiary,
+      4 => c.textTertiary,
+      _ => c.textTertiary,
     };
 
     final expiryDate = DateTime.fromMillisecondsSinceEpoch(
@@ -189,8 +190,8 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                     ? null
                     : () => _cancelOrder(order),
                 style: OutlinedButton.styleFrom(
-                  foregroundColor: Colors.redAccent,
-                  side: const BorderSide(color: Colors.redAccent),
+                  foregroundColor: c.danger,
+                  side: BorderSide(color: c.danger),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

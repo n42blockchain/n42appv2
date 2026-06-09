@@ -153,7 +153,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               S.of(ctx).g_key_78, // Confirm
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColorTokens.of(ctx).danger),
             ),
           ),
         ],

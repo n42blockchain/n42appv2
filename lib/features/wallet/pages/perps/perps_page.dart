@@ -208,8 +208,8 @@ class _PerpsPageState extends State<PerpsPage>
                 style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w500,
                   color: isPositive
-                      ? const Color(0xFF22C55E)
-                      : const Color(0xFFEF4444),
+                      ? AppColorTokens.of(context).success
+                      : AppColorTokens.of(context).danger,
                 ),
               ),
             ],
@@ -238,6 +238,7 @@ class _PerpsPageState extends State<PerpsPage>
       itemBuilder: (context, index) {
         final p = _positions[index];
         final isProfitable = p.unrealizedPnl >= 0;
+        final c = AppColorTokens.of(context);
         return Container(
           margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
           padding: EdgeInsets.all(AppSpacing.space4),
@@ -255,20 +256,16 @@ class _PerpsPageState extends State<PerpsPage>
                       vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
-                      color:
-                          (p.isLong
-                                  ? const Color(0xFF22C55E)
-                                  : const Color(0xFFEF4444))
-                              .withValues(alpha: 0.15),
+                      color: (p.isLong ? c.success : c.danger).withValues(
+                        alpha: 0.15,
+                      ),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       '${p.sideLabel} ${p.leverage.toStringAsFixed(1)}x',
                       style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: p.isLong
-                            ? const Color(0xFF22C55E)
-                            : const Color(0xFFEF4444),
+                        color: p.isLong ? c.success : c.danger,
                       ),
                     ),
                   ),
@@ -288,17 +285,13 @@ class _PerpsPageState extends State<PerpsPage>
                         '${isProfitable ? '+' : ''}\$${p.unrealizedPnl.toStringAsFixed(2)}',
                         style: AppTypography.bodySm.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: isProfitable
-                              ? const Color(0xFF22C55E)
-                              : const Color(0xFFEF4444),
+                          color: isProfitable ? c.success : c.danger,
                         ),
                       ),
                       Text(
                         '${isProfitable ? '+' : ''}${p.pnlPercentage.toStringAsFixed(2)}%',
                         style: AppTypography.caption.copyWith(
-                          color: isProfitable
-                              ? const Color(0xFF22C55E)
-                              : const Color(0xFFEF4444),
+                          color: isProfitable ? c.success : c.danger,
                         ),
                       ),
                     ],
@@ -365,7 +358,9 @@ class _PerpsPageState extends State<PerpsPage>
           dense: true,
           leading: Icon(
             o.isBuy ? Icons.arrow_upward : Icons.arrow_downward,
-            color: o.isBuy ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+            color: o.isBuy
+                ? AppColorTokens.of(context).success
+                : AppColorTokens.of(context).danger,
             size: 20,
           ),
           title: Text(
@@ -381,7 +376,11 @@ class _PerpsPageState extends State<PerpsPage>
             ),
           ),
           trailing: IconButton(
-            icon: const Icon(Icons.close, size: 18, color: Colors.red),
+            icon: Icon(
+              Icons.close,
+              size: 18,
+              color: AppColorTokens.of(context).danger,
+            ),
             onPressed: () {
               // TODO: Cancel order
             },
