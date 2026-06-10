@@ -152,6 +152,13 @@ dependencies:
   livekit_client: ^2.7.0
   # get_it 用于从 n42_chat 注册的全局 GetIt.instance 取 Matrix 仓库（接口未导出）
   get_it: ^9.2.1
+  # n42_chat 的原生插件传递依赖提升为直接依赖：git 依赖的传递解析会静默丢弃它们，
+  # 显式声明以保证 host 端（含 flutter test）能编译 chat 的 voip/加密/人脸模糊代码。
+  # flutter_callkit_incoming 钉 3.0.0：3.1.x（2026-05 末发布）移除了 n42_chat
+  # voip 代码使用的 CallKitParams.textAccept/textDecline，全新解析会漂到 3.1.x 而编译失败。
+  flutter_callkit_incoming: 3.0.0
+  flutter_vodozemac: ^0.5.0
+  google_mlkit_face_detection: ^0.13.0
 
 # Override: flutter_secure_storage 10.x needed for compatibility with
 # matrix_dart_sdk which pins an older version via vodozemac dependency chain
