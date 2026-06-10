@@ -114,10 +114,8 @@ class MiningBoardWidget extends StatelessWidget {
                 children: [
                   Text(
                     "$nNum",
-                    style: AppTypography.displayLg.copyWith(
+                    style: AppTypography.displayXl.copyWith(
                       color: AppColorTokens.of(context).textPrimary,
-                      fontWeight: FontWeight.w600,
-                      height: 1.0,
                     ),
                   ),
                   SizedBox(width: AppSpacing.space2),

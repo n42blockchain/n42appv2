@@ -36,7 +36,7 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
     final isSuccess = newStatus == BridgeTransactionStatus.completed;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        duration:  Duration(seconds: 6),
+        duration: const Duration(seconds: 6),
         backgroundColor: isSuccess ? AppColorTokens.of(context).success : AppColorTokens.of(context).danger,
         content: Row(
           children: [

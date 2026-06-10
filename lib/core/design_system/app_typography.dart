@@ -7,6 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 /// 颜色按需 `.copyWith(color: AppColorTokens.of(context).textPrimary)`。
 /// 字重仅用 w400 / w500 / w600，字体族跟随系统。括号内为 375 基准等效 dp。
 abstract final class AppTypography {
+  static TextStyle get displayXl => TextStyle(
+    fontSize: 72.sp, // ≈36dp 英雄数字 / 大 Logo（挖矿等级、节点数等强展示）
+    fontWeight: FontWeight.w600,
+    height: 1.0,
+    letterSpacing: -0.5,
+  );
+
   static TextStyle get displayLg => TextStyle(
     fontSize: 48.sp, // ≈24dp 资产总额、开屏大数字
     fontWeight: FontWeight.w600,
