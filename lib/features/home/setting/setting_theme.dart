@@ -72,11 +72,42 @@ class SettingTheme extends ConsumerWidget {
     final isDefault =
         currentAccent.toARGB32() == ThemeAdapter.defaultAccent.toARGB32();
 
+    final currentStyle = AppStylePresets.match(currentAccent, currentMode);
+
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_126),
       body: ListView(
         children: [
+          // ── Style preset section ──────────────────────────────────────
+          _SectionHeader(
+            title: S.of(context).g_theme_style,
+            subtitle: currentStyle == null
+                ? S.of(context).g_theme_style_custom
+                : currentStyle.name,
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+            child: Wrap(
+              spacing: AppSpacing.space4,
+              runSpacing: AppSpacing.space4,
+              children: AppStylePresets.all.map((preset) {
+                return _StylePresetCard(
+                  preset: preset,
+                  selected: currentStyle?.id == preset.id,
+                  onTap: () {
+                    ref
+                        .read(accentColorProvider.notifier)
+                        .setAccent(preset.accent);
+                    ref.read(themeModeProvider.notifier).setTheme(preset.mode);
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          SizedBox(height: AppSpacing.space8),
+
           // ── Theme mode section ────────────────────────────────────────
+          _SectionHeader(title: S.of(context).g_theme_mode),
           ...List.generate(_themeOptions.length, (index) {
             final option = _themeOptions[index];
             return _ThemeItem(
@@ -166,6 +197,164 @@ class SettingTheme extends ConsumerWidget {
           ),
           SizedBox(height: AppSpacing.space6),
         ],
+      ),
+    );
+  }
+}
+
+// ── Section header ────────────────────────────────────────────────────────
+
+class _SectionHeader extends StatelessWidget {
+  final String title;
+  final String? subtitle;
+
+  const _SectionHeader({required this.title, this.subtitle});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space4,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: AppTypography.headline.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
+          ),
+          if (subtitle != null)
+            Flexible(
+              child: Text(
+                subtitle!,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).brand,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Style preset card ─────────────────────────────────────────────────────
+
+class _StylePresetCard extends StatelessWidget {
+  final StylePreset preset;
+  final bool selected;
+  final VoidCallback onTap;
+
+  const _StylePresetCard({
+    required this.preset,
+    required this.selected,
+    required this.onTap,
+  });
+
+  IconData get _modeIcon => switch (preset.mode) {
+    ThemeMode.dark => Icons.dark_mode_rounded,
+    ThemeMode.light => Icons.light_mode_rounded,
+    ThemeMode.system => Icons.brightness_auto_rounded,
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final c = AppColorTokens.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: AppMotion.fast,
+        width: ScreenUtil().setWidth(328),
+        padding: EdgeInsets.all(AppSpacing.space4),
+        decoration: BoxDecoration(
+          color: c.bgSurface,
+          borderRadius: AppRadius.brLg,
+          border: Border.all(
+            color: selected ? preset.accent : c.border,
+            width: selected ? 2 : 1,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 品牌色预览：强调底 + 模式图标 + mini CTA 暗示
+            Container(
+              height: ScreenUtil().setWidth(96),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [preset.accent, preset.accent.withAlpha(180)],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: AppRadius.brMd,
+              ),
+              padding: EdgeInsets.all(AppSpacing.space4),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        _modeIcon,
+                        color: Colors.white,
+                        size: ScreenUtil().setWidth(28),
+                      ),
+                      const Spacer(),
+                      if (selected)
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                          size: ScreenUtil().setWidth(30),
+                        ),
+                    ],
+                  ),
+                  const Spacer(),
+                  // mini 按钮 + 文本条，暗示该色驱动全 App CTA/强调
+                  Row(
+                    children: [
+                      Container(
+                        width: ScreenUtil().setWidth(64),
+                        height: ScreenUtil().setWidth(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: AppRadius.brPill,
+                        ),
+                      ),
+                      SizedBox(width: AppSpacing.space2),
+                      Container(
+                        width: ScreenUtil().setWidth(40),
+                        height: ScreenUtil().setWidth(20),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withAlpha(90),
+                          borderRadius: AppRadius.brPill,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: AppSpacing.space4),
+            Text(
+              preset.name,
+              style: AppTypography.bodyStrong.copyWith(color: c.textPrimary),
+            ),
+            SizedBox(height: AppSpacing.space2),
+            Text(
+              preset.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.captionSm.copyWith(color: c.textSubtitle),
+            ),
+          ],
+        ),
       ),
     );
   }

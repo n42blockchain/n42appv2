@@ -10104,6 +10104,26 @@ class S {
     );
   }
 
+  /// `Style`
+  String get g_theme_style {
+    return Intl.message('Style', name: 'g_theme_style', desc: '', args: []);
+  }
+
+  /// `Custom`
+  String get g_theme_style_custom {
+    return Intl.message(
+      'Custom',
+      name: 'g_theme_style_custom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get g_theme_mode {
+    return Intl.message('Appearance', name: 'g_theme_mode', desc: '', args: []);
+  }
+
   /// `Invite Code`
   String get g_referral_invite_code {
     return Intl.message(

@@ -2620,6 +2620,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Reset to default",
     ),
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Appearance"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Style"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("Custom"),
     "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Anyone can create a token, including creating fake versions of existing tokens. Always research a token before importing it.",

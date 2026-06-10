@@ -1849,6 +1849,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_6": MessageLookupByLibrary.simpleMessage("再試一次"),
     "g_theme_accent_color": MessageLookupByLibrary.simpleMessage("強調色"),
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage("重設為預設值"),
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("外觀"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("風格"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("自訂"),
     "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "任何人都可以建立代幣，包括冒充現有代幣的假代幣。匯入前請務必自行做好研究。",
