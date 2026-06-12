@@ -119,25 +119,30 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     final reg = Regular();
     final s = S.of(context);
 
-    if (name.isEmpty || name.length > 30)
+    if (name.isEmpty || name.length > 30) {
       return _setFieldError((v) => nameErrorMessage = v, s.g_token_m_key_1(30));
-    if (mKey.isEmpty || mKey.length > 10)
+    }
+    if (mKey.isEmpty || mKey.length > 10) {
       return _setFieldError(
         (v) => symbolErrorMessage = v,
         s.g_token_m_key_1(10),
       );
+    }
     if (!reg.regularNums(chainIdStr) ||
         chainIdStr.length > 10 ||
         int.parse(chainIdStr) <= 0) {
       return _setFieldError((v) => chainIdErrorMessage = v, s.g_token_m_key_21);
     }
-    if (!reg.regularNums(decimalStr))
+    if (!reg.regularNums(decimalStr)) {
       return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_21);
+    }
     final decimal = int.parse(decimalStr);
-    if (decimal < 0 || decimal > 18)
+    if (decimal < 0 || decimal > 18) {
       return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_2);
-    if (!isURL(rpcStr))
+    }
+    if (!isURL(rpcStr)) {
       return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
+    }
     return true;
   }
 
@@ -326,7 +331,9 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                         color: AppColorTokens.of(context).dangerBg,
                         child: Text(
                           errorMessage,
-                          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+                          style: AppTypography.body.copyWith(
+                            color: AppColorTokens.of(context).danger,
+                          ),
                         ),
                       ),
                     SizedBox(height: ScreenUtil().setWidth(148)),

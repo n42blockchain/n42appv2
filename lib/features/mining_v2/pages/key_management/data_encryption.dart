@@ -101,8 +101,9 @@ Future<Map<String, dynamic>> decryptSecret({
   required String encryptedData,
   required String password,
 }) async {
-  if (encryptedData.isEmpty)
+  if (encryptedData.isEmpty) {
     throw ArgumentError('encryptedData must not be empty');
+  }
   if (password.isEmpty) throw ArgumentError('password must not be empty');
 
   try {

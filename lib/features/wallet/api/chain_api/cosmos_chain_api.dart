@@ -84,10 +84,12 @@ class CosmosChainApi {
         enableRetry: false,
       );
       final txResp = data['tx_response'] as Map<String, dynamic>?;
-      if (txResp == null)
+      if (txResp == null) {
         return MessageModel.error()..data = data['message'] ?? 'no tx_response';
-      if ((txResp['code'] as int? ?? 0) != 0)
+      }
+      if ((txResp['code'] as int? ?? 0) != 0) {
         return MessageModel.error()..data = txResp['raw_log'];
+      }
       return MessageModel()..data = txResp['txhash'];
     } catch (e) {
       return MessageModel.error()..data = e.toString();

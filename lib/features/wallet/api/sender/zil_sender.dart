@@ -85,8 +85,9 @@ class ZilSender implements ChainSender {
     if (networkIdMM.error) return SendResult.fail(networkIdMM.data?.toString());
 
     final latestBlockMM = await zilApi.getLatestTxBlock();
-    if (latestBlockMM.error)
+    if (latestBlockMM.error) {
       return SendResult.fail(latestBlockMM.data?.toString());
+    }
     final version =
         (latestBlockMM.data as Map<String, dynamic>)['header']['Version']
             as int;

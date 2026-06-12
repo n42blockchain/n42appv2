@@ -92,8 +92,9 @@ class _WalletConnectAlertWidgetState
   Future<void> _runSimulation() async {
     final coinType = widget.actionDataMap['coinType'] as String? ?? '';
     if (coinType.isEmpty) {
-      if (mounted)
+      if (mounted) {
         setState(() => _simResult = TxSimulationResult.unavailable());
+      }
       return;
     }
 
@@ -465,9 +466,7 @@ class _WalletConnectAlertWidgetState
           decoration: BoxDecoration(
             color: contractAccent.withAlpha(15),
             borderRadius: BorderRadius.circular(su.setWidth(12)),
-            border: Border.all(
-              color: contractAccent.withAlpha(40),
-            ),
+            border: Border.all(color: contractAccent.withAlpha(40)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

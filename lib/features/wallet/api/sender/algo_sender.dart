@@ -103,8 +103,9 @@ class AlgoSender implements ChainSender {
       );
     }
 
-    if (rValue['result'] != true)
+    if (rValue['result'] != true) {
       return SendResult.fail(S.current.g_key_wallet_m6);
+    }
     final Uint8List signBytes = hexToBytes(rValue['signHash'] as String);
 
     final sendMm =

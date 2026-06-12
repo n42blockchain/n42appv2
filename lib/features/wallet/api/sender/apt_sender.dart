@@ -77,12 +77,14 @@ class AptSender implements ChainSender {
 
     // Get account sequence and ledger timestamp
     final sequenceNumber = await aptApi.getAccountInfo(params.fromAddress);
-    if (sequenceNumber.error)
+    if (sequenceNumber.error) {
       return SendResult.fail(sequenceNumber.data?.toString());
+    }
 
     final ledgerTimestamp = await aptApi.getServiceInfo();
-    if (ledgerTimestamp.error)
+    if (ledgerTimestamp.error) {
       return SendResult.fail(ledgerTimestamp.data?.toString());
+    }
     final lt = (ledgerTimestamp.data as int) ~/ 1000000 + 60;
 
     final chainId = params.chainConfig?['baseInfo']?['chainId'] as int? ?? 1;

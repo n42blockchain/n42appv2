@@ -77,8 +77,9 @@ class BatchOperation {
       if (amount == null || amount! <= BigInt.zero) return false;
     }
     // ERC-20 操作需要合约地址
-    if (type == BatchOperationType.approve && tokenAddress == null)
+    if (type == BatchOperationType.approve && tokenAddress == null) {
       return false;
+    }
     // custom 操作需要 calldata
     if (type == BatchOperationType.custom &&
         (customData == null || customData!.isEmpty)) {

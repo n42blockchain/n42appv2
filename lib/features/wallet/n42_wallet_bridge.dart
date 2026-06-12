@@ -132,8 +132,9 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final provider = _provider;
-      if (provider == null)
+      if (provider == null) {
         return TransferResult.failure('Wallet not connected');
+      }
 
       // Find CoinModel matching the token symbol
       CoinModel? coinModel;

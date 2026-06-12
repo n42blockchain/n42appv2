@@ -45,8 +45,9 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       });
       if (cIndex != -1) {
         chainModel = wap.coinModels[cIndex];
-        if (chainModel != null)
+        if (chainModel != null) {
           await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+        }
         if (!mounted) return;
         setState(() {});
       }

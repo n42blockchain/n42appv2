@@ -132,8 +132,9 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
     final m = widget.transationRecordModel;
     // Only EVM chains with a valid model support eth_call simulation
     if (bt != 'Ethereum' || m == null) {
-      if (mounted)
+      if (mounted) {
         setState(() => _simResult = TxSimulationResult.unavailable());
+      }
       return;
     }
 

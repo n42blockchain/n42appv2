@@ -82,8 +82,9 @@ class CreateBTCTX {
 
     for (int i = 0; i < input.length; i++) {
       final int charIndex = alphabet.indexOf(input[i]);
-      if (charIndex == -1)
+      if (charIndex == -1) {
         throw ArgumentError('Invalid Base58 character: ${input[i]}');
+      }
       num = num * BigInt.from(58) + BigInt.from(charIndex);
     }
 

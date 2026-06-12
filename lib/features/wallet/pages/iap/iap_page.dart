@@ -96,10 +96,11 @@ class _IapPageState extends State<IapPage> {
           );
         }
       } else if (p.status == PurchaseStatus.error) {
-        if (mounted)
+        if (mounted) {
           ToastUtils.showError(
             S.of(context).g_iap_failed(p.error?.message ?? ''),
           );
+        }
       } else if (p.status == PurchaseStatus.canceled) {
         if (mounted) ToastUtils.show(S.of(context).g_iap_cancelled);
       }
@@ -378,9 +379,9 @@ class _IapPageState extends State<IapPage> {
                         end: Alignment.bottomRight,
                       ),
                 color: isPending
-                    ? AppColorTokens.of(context).textTertiary.withValues(
-                        alpha: 0.3,
-                      )
+                    ? AppColorTokens.of(
+                        context,
+                      ).textTertiary.withValues(alpha: 0.3)
                     : null,
                 borderRadius: AppRadius.brMd,
               ),

@@ -49,10 +49,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
       final mnemonic = await secureStorage.getMnemonic(walletId);
       if (mnemonic != null && mnemonic.isNotEmpty) {
         wallet.mnemonic = mnemonic;
-        if (kDebugMode)
+        if (kDebugMode) {
           debugPrint(
             'WalletActionProvider: Restored mnemonic for wallet $walletId',
           );
+        }
       }
     }
   }

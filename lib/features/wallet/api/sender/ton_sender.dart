@@ -80,8 +80,9 @@ class TonSender implements ChainSender {
 
     // Get seqno
     final sequenceNumber = await tonApi.getSeqnoTon(params.fromAddress);
-    if (sequenceNumber.error)
+    if (sequenceNumber.error) {
       return SendResult.fail(sequenceNumber.data?.toString());
+    }
 
     final expireAt =
         DateTime.now()

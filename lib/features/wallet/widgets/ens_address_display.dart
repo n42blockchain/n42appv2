@@ -152,8 +152,9 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         return;
       }
       _markResolved(ensName: knownName);
-      if (widget.showAvatar)
+      if (widget.showAvatar) {
         _fetchAvatar(knownName, requestId, address, coinType);
+      }
       return;
     }
 

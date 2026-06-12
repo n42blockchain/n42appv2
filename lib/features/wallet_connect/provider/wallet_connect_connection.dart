@@ -376,8 +376,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     // EIP-155 (Ethereum): use web3client
     final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
-      if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name)
+      if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) {
         return false;
+      }
       final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
           .toString();
       return id == chainId;
