@@ -58,18 +58,6 @@ class AppPushUtils {
   static DateTime? _lastHandledChatTapAt;
   static bool _isFlushing = false;
 
-  /// 返回设备的令牌Token
-  /// Returns the default FCM token for this device.
-  static Future<String?> getToken() async {
-    String? token = await FirebaseMessaging.instance.getToken();
-    return token;
-  }
-
-  static Future<String?> getAPNsToken() async {
-    String? token = await FirebaseMessaging.instance.getAPNSToken();
-    return token;
-  }
-
   /// 初始化
   static Future<void> init() async {
     ///订阅主题 服务器可以向订阅主题的一部分人发送通知
@@ -123,7 +111,7 @@ class AppPushUtils {
     var ios = const DarwinInitializationSettings(requestAlertPermission: true);
 
     // flutter_local_notifications 20.0.0 使用命名参数
-    FlutterLocalNotificationsPlugin().initialize(
+    flutterLocalNotificationsPlugin.initialize(
       settings: InitializationSettings(android: android, iOS: ios),
       onDidReceiveNotificationResponse: (NotificationResponse details) {
         String? payload = details.payload;
@@ -160,173 +148,165 @@ class AppPushUtils {
       //首次安装应用 同意之后 也会执行这里的逻辑
     }
 
-    ///前台消息
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      AppLogger.d(
-        'AppPush',
-        'foreground message: id=${message.messageId} type=${message.messageType} '
-            'senderId=${message.senderId} from=${message.from} '
-            'collapseKey=${message.collapseKey} ttl=${message.ttl} '
-            'sentTime=${message.sentTime} category=${message.category} '
-            'notification=${message.notification?.toMap()} data=${message.data}',
-      );
-
-      try {
-        // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
-        if (isChatPushPayload(message.data)) {
-          AppLogger.d(
-            'AppPush',
-            'chat/Matrix notification — handled by n42_chat plugin',
-          );
-          return;
-        }
-
-        // 新设备登录通知 — 前台直接通过 EventBus 弹窗，不走通知栏
-        final dataType = message.data['type'];
-        if (dataType == 'device_login') {
-          await _handleDeviceLoginNotification(message.data);
-          return;
-        }
-
-        final jsonStr = json.encode(message.data);
-        if (message.notification != null) {
-          // 去重必须先于 badge 递增：FCM at-least-once 重发同一条消息时
-          // 不应重复加角标，也不应重复弹通知。
-          final dedupKey = message.messageId;
-          if (dedupKey != null &&
-              !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
-            AppLogger.d(
-              'AppPush',
-              'skipping duplicate foreground notification ($dedupKey)',
-            );
-            return;
-          }
-          _updateBadgeCount();
-          //消息类型
-          String nType = message.data['type'] ?? '';
-          //不弹窗 normal_followed关注,normal_transaction_failed交易失败
-          if (nType == "normal_followed" ||
-              nType == "normal_transaction_failed" ||
-              nType == "market_nft_sell_to_consumer" ||
-              nType == "auction_nft_sell_to_consumer" ||
-              nType == "auction_nft_bid_to_consumer" ||
-              nType == "normal_trending") {
-          } else {
-            RemoteNotification? notification = message.notification;
-
-            if (notification != null) {
-              // 通知 ID 取 messageId 稳定哈希：万一重复展示时原地
-              // 覆盖而非在通知栏叠加（去重已在上方完成）。
-              final dedupKey = message.messageId;
-              flutterLocalNotificationsPlugin.show(
-                id: dedupKey != null
-                    ? PushDedupStore.notificationIdForKey(dedupKey)
-                    : notification.hashCode,
-                title: notification.title,
-                body: notification.body,
-                notificationDetails: NotificationDetails(
-                  android: AndroidNotificationDetails(
-                    channel.id,
-                    channel.name,
-                    channelDescription: channel.description,
-                    color: Colors.black,
-                  ),
-                  iOS: const DarwinNotificationDetails(
-                    presentAlert: true,
-                    presentBadge: true,
-                    presentSound: true,
-                  ),
-                ),
-                payload: jsonStr,
-              );
-            }
-          }
-        }
-      } catch (err) {
-        AppLogger.w('AppPush', 'foreground message parse failed: $err');
-      }
-    });
-
-    ///后台消息
+    // ---- 消息与点击的统一接线（注册顺序无业务含义） ----
+    FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-    ///点击后台消息打开App
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      AppLogger.d(
-        'AppPush',
-        'opened from background: notification=${message.notification?.toMap()} '
-            'data=${message.data}',
-      );
-
-      if (isMatrixCallPayload(message.data)) {
-        AppLogger.d(
-          'AppPush',
-          'call notification tap — letting CallKit/sync handle the call flow',
-        );
-        return;
-      }
-      final roomId = extractChatRoomId(message.data);
-      if (roomId != null) {
-        AppLogger.d(
-          'AppPush',
-          'chat/Matrix notification tap — delegating to n42_chat',
-        );
-        _queuePendingChatNotification(
-          roomId: roomId,
-          eventId: extractChatEventId(message.data),
-        );
-        // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后会调用 flushPendingChatNotification
-        if (N42Chat.isInitialized) {
-          unawaited(flushPendingChatNotification());
-        }
-        return;
-      }
-
-      /// 打开对应的页面
-      _PushNavigation.handleMessage(message.data);
-    });
-
-    ///应用从终止状态打开
-    var m = await FirebaseMessaging.instance.getInitialMessage();
-    if (m != null) {
-      AppLogger.d(
-        'AppPush',
-        'cold-start from notification: title=${m.notification?.title} '
-            'notification=${m.notification?.toMap()} data=${m.data}',
-      );
-      if (isMatrixCallPayload(m.data)) {
-        AppLogger.d(
-          'AppPush',
-          'cold-start call notification — letting CallKit/sync handle the call flow',
-        );
-        return;
-      }
-      final roomId = extractChatRoomId(m.data);
-      if (roomId != null) {
-        AppLogger.d(
-          'AppPush',
-          'cold-start chat notification — delegating to n42_chat',
-        );
-        _queuePendingChatNotification(
-          roomId: roomId,
-          eventId: extractChatEventId(m.data),
-        );
-        return;
-      }
-      _PushNavigation.handleMessage(m.data);
-    }
-
-    //token更新监听
+    FirebaseMessaging.onMessageOpenedApp.listen(_onNotificationOpenedApp);
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       AppLogger.d('AppPush', 'firebase messaging token updated: $newToken');
-      bindUserPushToken(newToken);
       // Matrix Pusher 的 token 轮换由 n42_chat 插件内部的
       // FirebaseMessaging.onTokenRefresh 监听统一处理，宿主侧不重复注册。
     });
+
+    // 冷启动消息放在最后处理：它内部的 return 不得截断上面的接线。
+    await _handleColdStartMessage();
   }
 
-  //绑定用户推送的token
-  static Future<void> bindUserPushToken(dynamic newToken) async {}
+  /// 前台静默的消息类型（仅计角标、不弹通知栏）。
+  static const Set<String> _foregroundSilentTypes = {
+    'normal_followed',
+    'normal_transaction_failed',
+    'market_nft_sell_to_consumer',
+    'auction_nft_sell_to_consumer',
+    'auction_nft_bid_to_consumer',
+    'normal_trending',
+  };
+
+  /// FCM 前台消息：chat 消息让位给 n42_chat 的监听，宿主只处理自有推送。
+  static Future<void> _onForegroundMessage(RemoteMessage message) async {
+    AppLogger.d(
+      'AppPush',
+      'foreground message: id=${message.messageId} type=${message.messageType} '
+          'senderId=${message.senderId} from=${message.from} '
+          'collapseKey=${message.collapseKey} ttl=${message.ttl} '
+          'sentTime=${message.sentTime} category=${message.category} '
+          'notification=${message.notification?.toMap()} data=${message.data}',
+    );
+
+    try {
+      // Matrix chat 推送（含 room_id 或 type 为 m.call.*）由 n42_chat 插件处理
+      if (isChatPushPayload(message.data)) {
+        AppLogger.d(
+          'AppPush',
+          'chat/Matrix notification — handled by n42_chat plugin',
+        );
+        return;
+      }
+
+      // 新设备登录通知 — 前台直接通过 EventBus 弹窗，不走通知栏。
+      // 同样按 messageId 去重，FCM 重发时不重复弹窗。
+      final dataType = message.data['type'];
+      if (dataType == 'device_login') {
+        final dedupKey = message.messageId;
+        if (dedupKey != null &&
+            !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
+          return;
+        }
+        await _handleDeviceLoginNotification(message.data);
+        return;
+      }
+
+      if (message.notification == null) return;
+
+      // 去重必须先于 badge 递增：FCM at-least-once 重发同一条消息时
+      // 不应重复加角标，也不应重复弹通知。
+      final dedupKey = message.messageId;
+      if (dedupKey != null &&
+          !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
+        AppLogger.d(
+          'AppPush',
+          'skipping duplicate foreground notification ($dedupKey)',
+        );
+        return;
+      }
+      _updateBadgeCount();
+
+      final nType = message.data['type'] ?? '';
+      if (_foregroundSilentTypes.contains(nType)) return;
+
+      final notification = message.notification!;
+      flutterLocalNotificationsPlugin.show(
+        // 通知 ID 取 messageId 稳定哈希：万一重复展示时原地覆盖
+        // 而非在通知栏叠加（去重已在上方完成）。
+        id: dedupKey != null
+            ? PushDedupStore.notificationIdForKey(dedupKey)
+            : notification.hashCode,
+        title: notification.title,
+        body: notification.body,
+        notificationDetails: NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            color: Colors.black,
+          ),
+          iOS: const DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
+        ),
+        payload: json.encode(message.data),
+      );
+    } catch (err) {
+      AppLogger.w('AppPush', 'foreground message parse failed: $err');
+    }
+  }
+
+  /// 点击系统通知打开 App（后台 → 前台）。
+  static void _onNotificationOpenedApp(RemoteMessage message) {
+    AppLogger.d(
+      'AppPush',
+      'opened from background: notification=${message.notification?.toMap()} '
+          'data=${message.data}',
+    );
+    _routeRemoteNotificationTap(message.data);
+  }
+
+  /// 应用从终止状态被通知拉起。
+  static Future<void> _handleColdStartMessage() async {
+    final m = await FirebaseMessaging.instance.getInitialMessage();
+    if (m == null) return;
+    AppLogger.d(
+      'AppPush',
+      'cold-start from notification: title=${m.notification?.title} '
+          'notification=${m.notification?.toMap()} data=${m.data}',
+    );
+    _routeRemoteNotificationTap(m.data);
+  }
+
+  /// FCM 系统通知点击的统一路由（onMessageOpenedApp 与冷启动共用，
+  /// 保证两条 tap 路径的分流规则永远一致）：
+  ///   1. m.call.* → CallKit / sync 自行接管，宿主不动作；
+  ///   2. 带 room_id → 排队交给 n42_chat（未初始化时等 flush）；
+  ///   3. 其余 → 宿主页面导航。
+  static void _routeRemoteNotificationTap(Map<String, dynamic> data) {
+    if (isMatrixCallPayload(data)) {
+      AppLogger.d(
+        'AppPush',
+        'call notification tap — letting CallKit/sync handle the call flow',
+      );
+      return;
+    }
+    final roomId = extractChatRoomId(data);
+    if (roomId != null) {
+      AppLogger.d(
+        'AppPush',
+        'chat/Matrix notification tap — delegating to n42_chat',
+      );
+      _queuePendingChatNotification(
+        roomId: roomId,
+        eventId: extractChatEventId(data),
+      );
+      // 若 N42Chat 已初始化则立即跳转；否则等 initN42Chat 完成后
+      // 调用 flushPendingChatNotification。
+      if (N42Chat.isInitialized) {
+        unawaited(flushPendingChatNotification());
+      }
+      return;
+    }
+    _PushNavigation.handleMessage(data);
+  }
 
   ///前台通知点击
   static void _onSelectNotification(String? payload) {
@@ -687,48 +667,4 @@ class AppPushUtils {
     }
   }
 
-  //显示本地通知 test
-  static Future<void> showLocalNotifications() async {
-    var androidDetails = AndroidNotificationDetails(
-      'nftWallet_channelId', //id可以随意一点
-      ///这个会显示在手机设置 通知管理 app 通知设置列表中 不要瞎写
-      // '重要通知',
-      "channelName",
-
-      ///通知的级别
-      importance: Importance.max,
-      priority: Priority.high,
-
-      // icon: ''//可以单独设置每次发送通知的图标
-
-      //显示进度条 3个参数必须同时设置
-      // progress: 19,
-      // maxProgress: 100,
-      // showProgress: true
-
-      //是否播放声音
-      playSound: true,
-    );
-
-    // ios的通知
-    const String darwinNotificationCategoryPlain = 'plainCategory';
-    DarwinNotificationDetails iosNotificationDetails =
-        DarwinNotificationDetails(
-          categoryIdentifier: darwinNotificationCategoryPlain,
-          presentSound: true,
-          presentAlert: true,
-          presentBadge: true,
-        );
-    var notificationDetails = NotificationDetails(
-      android: androidDetails,
-      iOS: iosNotificationDetails,
-    );
-    // flutter_local_notifications 20.0.0 使用命名参数
-    flutterLocalNotificationsPlugin.show(
-      id: 100,
-      title: "测试推送",
-      body: "你收到了一条消息",
-      notificationDetails: notificationDetails,
-    );
-  }
 }
