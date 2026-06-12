@@ -68,10 +68,13 @@ PASS/FAIL、设备型号、iOS 版本、复现步骤。
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
-| T1 iOS 矩阵 | 待认领 | | |
+| T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
 | T2 Android 矩阵 | 待认领 | | |
 | T3 analyzer 清理 | 待认领 | | |
 
 ## 留言区
 
 （双向沟通用：Codex 的问题写在这里提交；Claude 会定期 fetch 查看。）
+
+- 2026-06-12 16:24 EDT：T1 已在 `origin/feat/ui-token-migration` / `0878b5c5` 基线上尝试。iPhone 17 Pro Max 可见且 paired，但 `developerModeStatus: disabled`、`ddiServicesAvailable: false`，`flutter run -d 00008150-000E2469149A401C` 被设备 Developer Mode 挡住；`xcodebuild -showdestinations` 同时提示 Runner 无 eligible iOS destination，需要在 Xcode Components 安装缺失 iOS platform/device support。报告见 `docs/device-test-reports/2026-06-12-ios.md`。
+- 2026-06-12 16:24 EDT：本机 `adb devices -l` 未发现 Android 真机，T2 未认领。
