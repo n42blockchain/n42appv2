@@ -98,6 +98,11 @@ level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`
   - `mining/`, `mining_v1/`, `mining_v2/` — Mining protocol versions. The
     `features/mining/` layer is a Clean-Arch bridge wrapping
     `MiningV2Provider` (exposed through `miningRepositoryProvider`).
+    **Both v1 and v2 are live**: a user-facing switch in
+    `setting_home_page.dart` (`miningUseV2Provider`) selects which page
+    the home tab renders. New mining features go into v2 only; v1 is
+    maintenance-only until the product decision to remove the switch
+    (tracked in `docs/CLEANUP_PLAN.md` stage 5).
   - `browser/` — DApp browser with JS bridge, WebView integration.
   - `auth/` — Authentication flows. Login state is read/written through
     `AppGlobals.userInfo` and `currentUserProvider` (a never-wired
@@ -172,9 +177,12 @@ Features communicate through:
 
 - `lib/features/wallet/models/coin_config_view.dart` — `CoinConfigView` is a
   typed overlay over the dynamic `CoinModel.coin` map (`coin['xxx']` accesses
-  appear ~770 times across the codebase against 38 keys). New code can use
-  `cm.config.coinType` / `.decimals` / `.pathForAddrType('legacy')` instead of
-  raw map indexing; old call sites are unchanged.
+  appear ~796 times across the codebase against 38 keys).
+- **RULE: new or modified code MUST NOT add `coin['...']` string indexing** —
+  use `cm.config.coinType` / `.decimals` / `.pathForAddrType('legacy')` etc.
+  Legacy call sites are being migrated in batches per
+  `docs/CLEANUP_PLAN.md` stage 4; when you touch a line that contains
+  `coin['...']`, migrate that access as part of your change.
 
 ## Git Operations
 

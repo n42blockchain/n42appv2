@@ -58,8 +58,14 @@ class AppPushUtils {
   static DateTime? _lastHandledChatTapAt;
   static bool _isFlushing = false;
 
-  /// 初始化
+  static bool _initialized = false;
+
+  /// 初始化（幂等：重复调用直接返回，防止 listener 双注册与
+  /// FlutterLocalNotificationsPlugin 点击回调被重复 initialize 覆盖）
   static Future<void> init() async {
+    if (_initialized) return;
+    _initialized = true;
+
     ///订阅主题 服务器可以向订阅主题的一部分人发送通知
     // await FirebaseMessaging.instance.subscribeToTopic('主题');
 

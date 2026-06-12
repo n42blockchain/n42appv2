@@ -23,6 +23,8 @@ import 'package:n42_wallet/features/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42_wallet/features/wallet/aa/utils/user_op_hash.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+import 'package:n42_wallet/features/wallet/utils/transfer_serializer.dart';
 import 'package:web3dart/web3dart.dart';
 
 import 'transfer_handler.dart';
@@ -103,11 +105,19 @@ class AATransferHandler extends BaseTransferHandler {
 
   @override
   Future<MessageModel> transfer(TransferParams params) async {
-    try {
-      if (params is! AATransferParams) {
-        return createError('Invalid parameters: AATransferParams required');
-      }
+    if (params is! AATransferParams) {
+      return createError('Invalid parameters: AATransferParams required');
+    }
+    // 同一智能账户的转账串行化：nonce 从查询到广播之间没有链上互斥，
+    // 并发构建（快速双击/自动重试）会拿到同一 nonce 并各自广播（双花）。
+    return TransferSerializer.run(
+      '${params.chainSymbol}:${params.smartAccount.address}',
+      () => _transferSerialized(params),
+    );
+  }
 
+  Future<MessageModel> _transferSerialized(AATransferParams params) async {
+    try {
       if (!AAConfig.isChainSupported(normalizeSymbol(params.chainSymbol))) {
         return createError(S.current.g_key_wallet_m1(params.chainSymbol));
       }
@@ -158,11 +168,29 @@ class AATransferHandler extends BaseTransferHandler {
           },
         );
       }
-    } on AAError catch (e) {
-      AppLogger.w('AATransferHandler', 'error: $e');
+    } on ReceiptTimeoutError catch (e) {
+      // UserOp 已成功提交给 bundler，超时只是没等到回执——交易很可能
+      // 仍会上链。绝不能报告为「失败」：用户重试会用同一 nonce 构建
+      // 第二笔，造成双花或 nonce 冲突。
+      AppLogger.w(
+        'AATransferHandler',
+        'receipt timeout, userOp may still land: ${e.userOpHash}',
+      );
+      return createError(
+        'Transaction submitted and awaiting confirmation. '
+        'Do NOT resend — check the transaction status first.',
+        data: {'userOpHash': e.userOpHash, 'isPending': true},
+      );
+    } on AAError catch (e, s) {
+      AppLogger.e('AATransferHandler', 'AA error', error: e, stackTrace: s);
       return createError(e.message, data: e.details);
-    } catch (e) {
-      AppLogger.w('AATransferHandler', 'unexpected error: $e');
+    } catch (e, s) {
+      AppLogger.e(
+        'AATransferHandler',
+        'unexpected error',
+        error: e,
+        stackTrace: s,
+      );
       return createError(e.toString());
     }
   }
@@ -189,7 +217,7 @@ class AATransferHandler extends BaseTransferHandler {
       // ERC20 transfer
       final transferData = CalldataBuilder.buildErc20Transfer(
         to: params.toAddress,
-        amount: _parseValue(params.value, params.token?['decimals'] ?? 18),
+        amount: _parseValue(params.value, _tokenDecimals(params)),
       );
       callData = CalldataBuilder.buildExecute(
         target: params.contractAddress,
@@ -304,14 +332,27 @@ class AATransferHandler extends BaseTransferHandler {
 
       final result = await ethApi.ethCallRaw(chainConfig.entryPoint, data);
 
-      if (result.error || result.data == null) return BigInt.zero;
+      // 查询失败必须中止构建：静默退回 0 会构造一个 nonce 错误的
+      // UserOp——轻则被 bundler 以 nonce-too-low 拒绝，重则在新账户
+      // 边界场景下与历史 nonce=0 的操作冲突。
+      if (result.error || result.data == null) {
+        throw UserOperationBuildError(
+          'Failed to fetch account nonce from EntryPoint',
+          details: result.data?.toString(),
+        );
+      }
       final hex = result.data.toString().replaceFirst('0x', '');
       return (hex.isNotEmpty && hex != '0')
           ? BigInt.parse(hex, radix: 16)
           : BigInt.zero;
+    } on AAError {
+      rethrow;
     } catch (e) {
-      AppLogger.w('AATransferHandler', 'error getting nonce: $e');
-      return BigInt.zero;
+      AppLogger.e('AATransferHandler', 'error getting nonce: $e');
+      throw UserOperationBuildError(
+        'Failed to fetch account nonce',
+        details: e.toString(),
+      );
     }
   }
 
@@ -345,12 +386,28 @@ class AATransferHandler extends BaseTransferHandler {
     return (maxFeePerGas: maxFee, maxPriorityFeePerGas: priorityFee);
   }
 
-  /// Parse value to BigInt
-  BigInt _parseValue(double value, int decimals) {
-    final multiplier = BigInt.from(10).pow(decimals);
-    final valueBigInt = BigInt.from((value * 1e18).round());
-    return valueBigInt * multiplier ~/ BigInt.from(1e18.round());
+  /// 解析 ERC20 token 的 decimals：动态 map 中可能是 int 或 String，
+  /// 字段缺失/不可解析时必须报错而不是默认 18 —— 对 USDC（decimals=6）
+  /// 这类代币，错用 18 意味着金额偏差 12 个数量级。
+  int _tokenDecimals(AATransferParams params) {
+    final raw = params.token?['decimals'];
+    final decimals = switch (raw) {
+      int v => v,
+      String v => int.tryParse(v),
+      _ => null,
+    };
+    if (decimals == null || decimals < 0 || decimals > 36) {
+      throw UserOperationBuildError(
+        'Invalid or missing token decimals for ERC20 transfer',
+        details: 'token=${params.token}',
+      );
+    }
+    return decimals;
   }
+
+  /// Parse value to BigInt（精确十进制移位，见 decimal_amount.dart）
+  BigInt _parseValue(double value, int decimals) =>
+      doubleAmountToBigInt(value, decimals);
 
   static GasEstimation _gasError(String message) => GasEstimation(
     gasLimit: BigInt.zero,

@@ -1,6 +1,15 @@
 /// Builds the JavaScript IIFE that defines `window.ethereum` (EIP-1193).
 ///
-/// Injection strategy:
+/// **Status: designed but not wired (2026-06 audit).** `buildProviderScript`
+/// has zero call sites — no WebView registers the `N42Wallet`
+/// JavaScriptChannel and nothing injects this script, so the in-app DApp
+/// browser currently exposes no `window.ethereum`. DApps connect via
+/// WalletConnect instead. Wiring this up requires: registering the
+/// channel in browser_provider, injecting this script on page start, and
+/// routing messages into DAppRequestHandler (which is fully implemented
+/// and unit-ready). Until then, do not assume in-page provider support.
+///
+/// Injection strategy (when wired):
 ///   1. iOS WKWebView: injected as WKUserScript at document-start time
 ///   2. Android WebView: `runJavaScript` at both onPageStarted + onPageFinished
 ///   3. The IIFE is idempotent — safe to run multiple times

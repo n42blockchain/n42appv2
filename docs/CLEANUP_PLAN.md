@@ -107,8 +107,8 @@ v1 被 30 个外部文件引用、`plugins/flutter_mining` 仅服务 v1——这
 
 | 阶段 | 状态 | 完成时间 |
 |---|---|---|
-| 1 零风险赘肉 | 未开始 | |
-| 2 测试健康 | 部分（通知域已完成；Codex T3 已派发） | |
-| 3 主路径审计 | 部分（通知路径已完成，见 PUSH_NOTIFICATIONS.md） | |
-| 4 coin 迁移 | 未开始（CoinConfigView 已就位） | |
-| 5 mining 收敛 | 未开始（待决策） | |
+| 1 零风险赘肉 | ✅ 完成（contracts/IAuthService 删除 -608 行；benchmark_results 后续更正为 ignore 产物） | 2026-06-12 |
+| 2 测试健康 | ✅ 完成（n42_chat 4 失败修复+发现简体中文缺失真 bug；all_tests.dart 删除；make check；宿主全量绿）。Codex T3 在途 | 2026-06-12 |
+| 3 主路径审计 | ✅ 完成（4 路径 32 项发现：10 修复 / 9 误报 / 13 记录，见 MAIN_PATH_AUDIT.md；通知路径见 PUSH_NOTIFICATIONS.md） | 2026-06-12 |
+| 4 coin 迁移 | 🟡 增量已锁（CLAUDE.md 禁令）；存量 796 处分批进行，机械批次拟派 Codex | |
+| 5 mining 收敛 | ✅ 裁决完成：v1 是活功能（设置页用户开关），不可删；边界已写入 CLAUDE.md；移除开关属产品决策 | 2026-06-12 |

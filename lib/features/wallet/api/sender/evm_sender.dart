@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
+import 'package:n42_wallet/features/wallet/utils/transfer_serializer.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -29,7 +30,16 @@ class EvmSender implements ChainSender {
   final _dataUtils = DataUtils();
 
   @override
-  Future<SendResult> send(SendParams params) async {
+  Future<SendResult> send(SendParams params) {
+    // 同一地址的发送串行化：nonce 从查询（pending tag）到广播之间没有
+    // 互斥，快速双击/自动重试会拿到同一 nonce 各自签名广播（双花）。
+    return TransferSerializer.run(
+      '${params.coinType}:${params.fromAddress}',
+      () => _sendSerialized(params),
+    );
+  }
+
+  Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
     final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
     final chainId = (baseInfo?['chainId'] as int?) ?? 1;
