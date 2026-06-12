@@ -190,6 +190,17 @@ class AppPushUtils {
 
         final jsonStr = json.encode(message.data);
         if (message.notification != null) {
+          // 去重必须先于 badge 递增：FCM at-least-once 重发同一条消息时
+          // 不应重复加角标，也不应重复弹通知。
+          final dedupKey = message.messageId;
+          if (dedupKey != null &&
+              !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
+            AppLogger.d(
+              'AppPush',
+              'skipping duplicate foreground notification ($dedupKey)',
+            );
+            return;
+          }
           _updateBadgeCount();
           //消息类型
           String nType = message.data['type'] ?? '';
@@ -204,18 +215,9 @@ class AppPushUtils {
             RemoteNotification? notification = message.notification;
 
             if (notification != null) {
-              // FCM at-least-once 投递可能重复送达同一条消息，
-              // 按 messageId 去重；通知 ID 取稳定哈希，重复展示时
-              // 原地覆盖而非在通知栏叠加。
+              // 通知 ID 取 messageId 稳定哈希：万一重复展示时原地
+              // 覆盖而非在通知栏叠加（去重已在上方完成）。
               final dedupKey = message.messageId;
-              if (dedupKey != null &&
-                  !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
-                AppLogger.d(
-                  'AppPush',
-                  'skipping duplicate foreground notification ($dedupKey)',
-                );
-                return;
-              }
               flutterLocalNotificationsPlugin.show(
                 id: dedupKey != null
                     ? PushDedupStore.notificationIdForKey(dedupKey)
