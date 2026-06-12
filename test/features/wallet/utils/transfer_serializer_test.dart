@@ -5,8 +5,6 @@
 // 转账串行化回归：同一账户的并发发送必须严格串行（nonce 竞态防双花），
 // 不同账户互不阻塞。
 
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/utils/transfer_serializer.dart';
 
