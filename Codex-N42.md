@@ -89,6 +89,51 @@ PASS/FAIL、设备型号、iOS 版本、复现步骤。
 3. 每批验收：`flutter analyze --no-fatal-infos` 零 issue +
    `flutter test` 全绿 + 该批文件 `grep "coin\['"` 归零。
 
+
+### T4 迁移手册（批次 1 实战经验，逐条遵守）
+
+参考提交：`feat/ui-token-migration` @ `116e92c2`
+（wallet_action_provider.dart，28 处 → 5 处）。先 `git show 116e92c2`
+看一遍真实 diff 再动手。
+
+**第 0 步**：文件里用 `cm.config.*` 前必须
+`import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';`
+—— `config` 是 CoinModel 的 extension getter，漏 import 是 analyzer
+error（批次 1 踩过）。
+
+**替换对照表**（cm 代指任意 CoinModel 变量）：
+
+| 原写法 | 新写法 | 说明 |
+|---|---|---|
+| `cm.coin['coinType']?.toString() ?? ''` | `cm.config.coinType` | 完全等价（缺失→''） |
+| `cm.coin['coinType']`（用作 String） | `cm.config.coinType` | 顺手消除 dynamic |
+| `cm.coin['blockchainType']` | `cm.config.blockchainType` | |
+| `cm.coin['miniName']`（log/展示） | `cm.config.miniName` | |
+| `cm.coin['unit'].toString()` | `cm.config.unit` | |
+| `cm.coin['mKey']` | `cm.config.mKey` | |
+| `cm.coin['decimals']` | `cm.config.decimals` | int，缺失→0 |
+| `cm.coin['isContract'] == true` | `cm.config.isContract` | ✅ 等价（缺失→false） |
+| `cm.coin['contract'] / ['contract_test']` | `cm.config.contract / .contractTest` | |
+| `cm.coin['service'] / ['service_test']` | `cm.config.service / .serviceTest` | 返回非空 String，下游 `!= null` 判断改 `.isNotEmpty` |
+| `cm.coin['icon'] / ['image'] / ['thumb']` | `cm.config.icon / .image / .thumb` | |
+| `cm.coin['coinPrice']` | `cm.config.coinPrice` | double |
+
+**禁止替换的 4 种情况（语义陷阱）**：
+1. **写入**：`cm.coin['xxx'] = value` 一律保留——map 就是存储本体，
+   CoinConfigView 是只读视图。
+2. **显式 false/null 判断**：`cm.coin['isContract'] == false`、
+   `cm.coin['xxx'] == null` 不要替换——config 的 getter 对缺失字段返回
+   默认值（false/''/0），`== false` 在「字段缺失」时语义会反转。
+3. **局部 Map 变量**：`final coin = mainnets[key]; coin['contract']` 这种
+   不是 CoinModel，没有 config，保留。
+4. **拿不准的**：保留原样并在留言区记下 文件:行号，宁可少迁不可改义。
+
+**每批流程**：选 ≤15 个文件 → 替换 → `flutter analyze --no-fatal-infos`
+必须 `No issues found!`（基线已是零）→ `flutter test` 全绿 →
+`grep -c "coin\['" <files>` 记录前后计数写进提交信息 → 提交格式：
+`refactor(<area>): coin migration batch <n> - <files/dir>`，正文写明
+保留了哪些站点及原因（参照 116e92c2 的提交信息）。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -112,3 +157,8 @@ PASS/FAIL、设备型号、iOS 版本、复现步骤。
   device support 组件——等用户操作后请重试。新增 T4（coin 迁移机械
   批次），注意分工边界；基线已更新（含资金路径加固 b3537c9d 与
   n42_chat ref 6d3e6dd），开工前先 fetch。
+- 2026-06-12（Claude）：应用户要求补充了 T4 迁移手册（见上）——含替换
+  对照表、4 种禁止替换的语义陷阱、每批验收流程，全部来自批次 1
+  （116e92c2）的实战。注意基线又前进了：fetch 后从最新
+  `feat/ui-token-migration`（≥116e92c2）开分支，analyzer 基线为零，
+  你的每一批都不允许引入任何 issue。
