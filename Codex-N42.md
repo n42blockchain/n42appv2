@@ -70,7 +70,7 @@ PASS/FAIL、设备型号、iOS 版本、复现步骤。
 |------|------|----------|----------|
 | T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
 | T2 Android 矩阵 | 待认领 | | |
-| T3 analyzer 清理 | 待认领 | | |
+| T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 
 ## 留言区
 
@@ -78,3 +78,4 @@ PASS/FAIL、设备型号、iOS 版本、复现步骤。
 
 - 2026-06-12 16:24 EDT：T1 已在 `origin/feat/ui-token-migration` / `0878b5c5` 基线上尝试。iPhone 17 Pro Max 可见且 paired，但 `developerModeStatus: disabled`、`ddiServicesAvailable: false`，`flutter run -d 00008150-000E2469149A401C` 被设备 Developer Mode 挡住；`xcodebuild -showdestinations` 同时提示 Runner 无 eligible iOS destination，需要在 Xcode Components 安装缺失 iOS platform/device support。报告见 `docs/device-test-reports/2026-06-12-ios.md`。
 - 2026-06-12 16:24 EDT：本机 `adb devices -l` 未发现 Android 真机，T2 未认领。
+- 2026-06-12 16:58 EDT：T3 已完成并推送 `origin/codex/analyzer-cleanup`，提交 `34a8828a`（`test: clear analyzer warnings`）。验收：`flutter analyze --no-fatal-infos` => `No issues found!`；`flutter test --reporter compact` => `All tests passed!`（2989）。本次清理未改通知保护文件，`pubspec.yaml` 仅包含 pre-commit 自动版本号 bump，未改 `n42_chat` ref。
