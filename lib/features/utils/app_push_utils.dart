@@ -20,7 +20,8 @@ import 'package:n42_wallet/features/utils/device_info_util.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:n42_chat/n42_chat.dart' show FirebasePushService, N42Chat;
+import 'package:n42_chat/n42_chat.dart'
+    show FirebasePushService, N42Chat, PushDedupStore;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -93,16 +94,23 @@ class AppPushUtils {
         >()
         ?.createNotificationChannel(channel);
 
-    /// iOS 前台通知展示选项由 n42_chat FirebasePushService 根据用户隐私设置
-    /// 统一管理（在 initialize() 中调用 _applyIOSForegroundPresentationOptions），
-    /// 这里仅设置非 chat 通知的默认值。
-    /// Chat 通知的 alert/badge/sound 选项会在 FirebasePushService 初始化时覆盖。
+    /// iOS 前台统一策略：系统级前台展示（alert/sound）关闭，所有前台
+    /// 通知一律由 onMessage 监听手动弹本地通知。开启 alert 会导致同一条
+    /// APNs 推送「系统横幅 + 本地通知」双显。n42_chat FirebasePushService
+    /// 初始化时会按相同策略覆盖此选项（同样 alert: false）。
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-          alert: true,
+          alert: false,
           badge: true,
-          sound: true,
+          sound: false,
         );
+
+    /// 宿主与 n42_chat 共享同一个 FlutterLocalNotificationsPlugin 单例，
+    /// n42_chat 后初始化会覆盖这里注册的点击回调。注册回退处理器后，
+    /// 非聊天 payload（无 room_id）的本地通知点击会被 n42_chat 转交回来，
+    /// 宿主通知（交易、设备登录）的点击跳转才能保持有效。
+    FirebasePushService.hostFallbackNotificationTapHandler =
+        _onSelectNotification;
 
     // Pixel 6手机上小 图标显示白色小方块
     // 解决方案参考： https://blog.csdn.net/SImple_a/article/details/103594842
@@ -196,8 +204,22 @@ class AppPushUtils {
             RemoteNotification? notification = message.notification;
 
             if (notification != null) {
+              // FCM at-least-once 投递可能重复送达同一条消息，
+              // 按 messageId 去重；通知 ID 取稳定哈希，重复展示时
+              // 原地覆盖而非在通知栏叠加。
+              final dedupKey = message.messageId;
+              if (dedupKey != null &&
+                  !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
+                AppLogger.d(
+                  'AppPush',
+                  'skipping duplicate foreground notification ($dedupKey)',
+                );
+                return;
+              }
               flutterLocalNotificationsPlugin.show(
-                id: notification.hashCode,
+                id: dedupKey != null
+                    ? PushDedupStore.notificationIdForKey(dedupKey)
+                    : notification.hashCode,
                 title: notification.title,
                 body: notification.body,
                 notificationDetails: NotificationDetails(
@@ -311,6 +333,20 @@ class AppPushUtils {
 
       /// 打开对应的页面
       if (payload != null) {
+        // chat 本地通知兜底：n42_chat 完成初始化前（其点击回调尚未覆盖
+        // 本回调）用户点击了聊天通知时，走与 FCM 通知点击相同的
+        // 排队/flush 流程，而不是落进宿主导航。
+        final chatRoute = tryExtractChatRouteFromPayload(payload);
+        if (chatRoute != null) {
+          _queuePendingChatNotification(
+            roomId: chatRoute.roomId,
+            eventId: chatRoute.eventId,
+          );
+          if (N42Chat.isInitialized) {
+            unawaited(flushPendingChatNotification());
+          }
+          return;
+        }
         //逻辑处理
         final map = json.decode(payload);
         AppLogger.d('AppPush', 'parsed payload map: $map');
@@ -376,6 +412,19 @@ class AppPushUtils {
     // 新设备登录通知 — 后台显示系统本地通知
     final dataType = message.data['type'];
     if (dataType == 'device_login') {
+      // FCM 进程重启场景可能重发同一条消息，按 messageId 去重；
+      // 通知 ID 同样由 messageId 派生，不同登录事件各占一条
+      // （旧实现固定用 'device_login'.hashCode，多次登录互相覆盖）。
+      final dedupKey = message.messageId;
+      if (dedupKey != null &&
+          !await PushDedupStore.instance.tryMarkNotified(dedupKey)) {
+        AppLogger.d(
+          'AppPush',
+          'background: duplicate device_login push skipped ($dedupKey)',
+        );
+        return;
+      }
+
       final brand = message.data['device_brand'] ?? '';
       final os = message.data['device_os'] ?? '';
       final deviceName = os.isNotEmpty ? '$brand $os' : brand;
@@ -387,7 +436,9 @@ class AppPushUtils {
       const bgChannelName = 'High Importance Notifications';
 
       await _bgLocalNotifications!.show(
-        id: 'device_login'.hashCode,
+        id: dedupKey != null
+            ? PushDedupStore.notificationIdForKey(dedupKey)
+            : 'device_login'.hashCode,
         title: 'New Device Login',
         body: 'Your account was logged in on $deviceName',
         notificationDetails: const NotificationDetails(
