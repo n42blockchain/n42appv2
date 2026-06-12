@@ -48,8 +48,9 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
         return true;
       });
       chainModel = wap.coinModels[cIndex];
-      if (chainModel != null)
+      if (chainModel != null) {
         await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      }
       if (!mounted) return;
       setState(() {});
     }

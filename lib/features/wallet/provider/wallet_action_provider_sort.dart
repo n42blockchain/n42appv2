@@ -71,8 +71,9 @@ extension WalletActionProviderSort on WalletActionProvider {
     final toAdd = <AggregatedCoinModel>[];
     for (final tokenConfig in AggregatedTokens.all) {
       if (existingAggregatedSymbols.contains(tokenConfig.symbol)) continue;
-      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase()))
+      if (existingTokenSymbols.contains(tokenConfig.symbol.toUpperCase())) {
         continue;
+      }
 
       final aggregatedCoin = AggregatedCoinModel(tokenConfig: tokenConfig);
       _aggregatedCoins.add(aggregatedCoin);

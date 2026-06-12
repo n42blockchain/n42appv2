@@ -258,8 +258,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
   }
 
   void _generateBarTipData() {
-    if (barChartValues.isEmpty || barChartValues.length != kMiningHistoryDays)
+    if (barChartValues.isEmpty || barChartValues.length != kMiningHistoryDays) {
       return;
+    }
 
     final whiteColor = AppThemeUtils.getColorByKey(
       AppGlobals.appContext,

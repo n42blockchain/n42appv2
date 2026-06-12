@@ -51,8 +51,9 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
                 e.privateKey == widget.coinModel.privateKey),
       );
       chainModel = wap.coinModels[cIndex];
-      if (chainModel != null)
+      if (chainModel != null) {
         await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      }
       if (!mounted) return;
       setState(() {});
     }

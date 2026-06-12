@@ -142,17 +142,20 @@ class DAppRequestHandler {
   String? _handleSwitchChain(List<dynamic> params) {
     if (params.isEmpty) throw 'Missing params';
     final chainParam = params[0];
-    if (chainParam is! Map)
+    if (chainParam is! Map) {
       throw {'code': -32602, 'message': 'Invalid chain params'};
+    }
     final chainIdRaw = chainParam['chainId'];
-    if (chainIdRaw is! String)
+    if (chainIdRaw is! String) {
       throw {'code': -32602, 'message': 'Invalid chainId'};
+    }
     final targetChainId = int.tryParse(
       chainIdRaw.replaceFirst('0x', ''),
       radix: 16,
     );
-    if (targetChainId == null)
+    if (targetChainId == null) {
       throw {'code': -32602, 'message': 'Invalid chainId format'};
+    }
 
     for (int i = 0; i < ethCoinModels.length; i++) {
       final cm = ethCoinModels[i];

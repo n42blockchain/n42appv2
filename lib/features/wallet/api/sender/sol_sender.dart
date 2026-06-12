@@ -122,8 +122,9 @@ class SolSender implements ChainSender {
         recipientTokenAddress,
         isTest: params.isTest,
       );
-      if (rdataAccount.error)
+      if (rdataAccount.error) {
         return SendResult.fail(rdataAccount.data?.toString());
+      }
       if (rdataAccount.data == null) recipientTokenAddress = '';
     }
 

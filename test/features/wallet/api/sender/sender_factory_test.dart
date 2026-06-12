@@ -22,7 +22,6 @@ import 'package:n42_wallet/features/wallet/api/sender/dot_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/egld_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/fil_sender.dart';
-import 'package:n42_wallet/features/wallet/api/sender/hbar_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/near_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sol_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sui_sender.dart';
@@ -155,14 +154,16 @@ void main() {
       final sender = factory.getSender('__DEFINITELY_NOT_A_REAL_COIN__');
       expect(sender, isA<ChainSender>());
 
-      final result = await sender.send(const SendParams(
-        coinType: '__DEFINITELY_NOT_A_REAL_COIN__',
-        fromAddress: '',
-        toAddress: '',
-        amount: 0,
-        decimals: 0,
-        path: '',
-      ));
+      final result = await sender.send(
+        const SendParams(
+          coinType: '__DEFINITELY_NOT_A_REAL_COIN__',
+          fromAddress: '',
+          toAddress: '',
+          amount: 0,
+          decimals: 0,
+          path: '',
+        ),
+      );
       expect(result.success, isFalse);
       expect(result.error, isNotNull);
     });

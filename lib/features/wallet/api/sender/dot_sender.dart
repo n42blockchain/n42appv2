@@ -81,8 +81,9 @@ class DotSender implements ChainSender {
     final runtimeVersion = await dotApi.getRuntimeVersion(
       isTest: params.isTest,
     );
-    if (runtimeVersion.error)
+    if (runtimeVersion.error) {
       return SendResult.fail(runtimeVersion.data?.toString());
+    }
 
     final blockHash = await dotApi.getGenesisHash(isTest: params.isTest);
     if (blockHash.error) return SendResult.fail(blockHash.data?.toString());

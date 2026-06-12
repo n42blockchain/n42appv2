@@ -9,6 +9,7 @@ void main() {
         ..isTest = true
         ..coin = <String, dynamic>{
           'coinType': 'N',
+          'blockchainType': 'Ethereum',
           'service_test': 'https://testrpc.n42.world',
         };
 

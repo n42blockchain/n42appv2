@@ -167,8 +167,9 @@ class _ChartHistogramState extends State<ChartHistogram> {
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             if (widget.alertMessageGroups == null ||
-                widget.alertMessageGroups!.isEmpty)
+                widget.alertMessageGroups!.isEmpty) {
               return null;
+            }
             AlertMessageGroup? amg = widget.alertMessageGroups?[group.x];
             if (amg != null) {
               List<TextSpan> spans = [];

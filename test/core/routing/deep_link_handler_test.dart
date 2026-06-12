@@ -86,11 +86,13 @@ void main() {
     test('should not navigate for chat with empty roomId', () async {
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.chat,
-        uri: Uri.parse('n42://chat/'),
-        params: {'roomId': ''},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.chat,
+          uri: Uri.parse('n42://chat/'),
+          params: {'roomId': ''},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       expect(navigatedData, isEmpty);
@@ -99,11 +101,13 @@ void main() {
     test('should not navigate for user with empty userId', () async {
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.user,
-        uri: Uri.parse('n42://user/'),
-        params: {'userId': ''},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.user,
+          uri: Uri.parse('n42://user/'),
+          params: {'userId': ''},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       expect(navigatedData, isEmpty);
@@ -112,23 +116,27 @@ void main() {
     test('should not navigate for group with empty groupId', () async {
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.group,
-        uri: Uri.parse('n42://group/'),
-        params: {'groupId': ''},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.group,
+          uri: Uri.parse('n42://group/'),
+          params: {'groupId': ''},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       expect(navigatedData, isEmpty);
     });
 
-    test('should navigate for friendCard without params check', () async {
+    test('should navigate for friendCard with userId', () async {
       handler.startListening();
 
       final data = DeepLinkData(
         type: DeepLinkType.friendCard,
-        uri: Uri.parse('astraapp://astrawallet.com?type=friendCard'),
-        params: {},
+        uri: Uri.parse(
+          'astraapp://astrawallet.com?type=friendCard&userid=user1',
+        ),
+        params: {'userId': 'user1'},
       );
       fakeService.emitDeepLink(data);
       await Future.delayed(Duration.zero);
@@ -185,11 +193,13 @@ void main() {
     test('should not navigate for unknown type', () async {
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.unknown,
-        uri: Uri.parse('https://example.com'),
-        params: {},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.unknown,
+          uri: Uri.parse('https://example.com'),
+          params: {},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       // Unknown type enters default branch, no onNavigate call
@@ -200,11 +210,13 @@ void main() {
       handler.onNavigate = null;
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.chat,
-        uri: Uri.parse('n42://chat/room1'),
-        params: {'roomId': 'room1'},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.chat,
+          uri: Uri.parse('n42://chat/room1'),
+          params: {'roomId': 'room1'},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       // No crash, no callback called
@@ -214,22 +226,26 @@ void main() {
     test('should cancel previous subscription on re-startListening', () async {
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.chat,
-        uri: Uri.parse('n42://chat/room1'),
-        params: {'roomId': 'room1'},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.chat,
+          uri: Uri.parse('n42://chat/room1'),
+          params: {'roomId': 'room1'},
+        ),
+      );
       await Future.delayed(Duration.zero);
       expect(navigatedData.length, 1);
 
       // Re-start should cancel old subscription and start new
       handler.startListening();
 
-      fakeService.emitDeepLink(DeepLinkData(
-        type: DeepLinkType.group,
-        uri: Uri.parse('n42://group/group1'),
-        params: {'groupId': 'group1'},
-      ));
+      fakeService.emitDeepLink(
+        DeepLinkData(
+          type: DeepLinkType.group,
+          uri: Uri.parse('n42://group/group1'),
+          params: {'groupId': 'group1'},
+        ),
+      );
       await Future.delayed(Duration.zero);
 
       // Should receive only one more, not duplicated

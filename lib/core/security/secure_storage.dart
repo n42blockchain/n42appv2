@@ -37,6 +37,8 @@ class SecureStorage {
       // 注意：encryptedSharedPreferences (Jetpack Security) 在 v11 中已废弃，
       // 库会在首次访问时自动将旧数据迁移到 custom cipher，无需额外配置。
       aOptions: AndroidOptions(
+        // Keep the legacy namespace so existing secure-storage data remains readable.
+        // ignore: deprecated_member_use
         sharedPreferencesName: 'n42_secure_prefs',
         preferencesKeyPrefix: 'n42_',
       ),
@@ -177,7 +179,10 @@ class SecureStorage {
     required String address,
     required String privateKey,
   }) async {
-    await _storage.write(key: '$_keyPrivateKeyPrefix$address', value: privateKey);
+    await _storage.write(
+      key: '$_keyPrivateKeyPrefix$address',
+      value: privateKey,
+    );
   }
 
   /// 获取私钥

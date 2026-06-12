@@ -215,24 +215,33 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         context,
         MaterialPageRoute(
           builder: (context) {
-            if (bt == BlockchainType.Bitcoin.name)
+            if (bt == BlockchainType.Bitcoin.name) {
               return WalletChainSendBtc(coinInfo, toAddress: toAddr);
-            if (bt == BlockchainType.Solana.name)
+            }
+            if (bt == BlockchainType.Solana.name) {
               return WalletChainSendSol(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Algorand.name)
+            }
+            if (bt == BlockchainType.Algorand.name) {
               return WalletChainSendAlgo(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Ripple.name)
+            }
+            if (bt == BlockchainType.Ripple.name) {
               return WalletChainSendXrp(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Filecoin.name)
+            }
+            if (bt == BlockchainType.Filecoin.name) {
               return WalletChainSendFil(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Polkadot.name)
+            }
+            if (bt == BlockchainType.Polkadot.name) {
               return WalletChainSendDot(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Sui.name)
+            }
+            if (bt == BlockchainType.Sui.name) {
               return WalletChainSendSui(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.TheOpenNetwork.name)
+            }
+            if (bt == BlockchainType.TheOpenNetwork.name) {
               return WalletChainSendTon(coinInfo, initialToAddress: toAddr);
-            if (bt == BlockchainType.Aptos.name)
+            }
+            if (bt == BlockchainType.Aptos.name) {
               return WalletChainSendApt(coinInfo, initialToAddress: toAddr);
+            }
             return WalletChainSend(coinInfo, initialToAddress: toAddr);
           },
         ),
@@ -347,9 +356,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 _focusNode.requestFocus();
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space2,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
                 child: Icon(
                   Icons.cancel,
                   size: ScreenUtil().setWidth(36.0),
@@ -364,9 +371,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 _runSearch(waValue);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space4,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
                 height: ScreenUtil().setWidth(60.0),
                 decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(

@@ -21,20 +21,21 @@ abstract class SecureStore {
 }
 
 class FlutterSecureStore implements SecureStore {
-  FlutterSecureStore({
-    FlutterSecureStorage? storage,
-  }) : _storage =
-           storage ??
-           const FlutterSecureStorage(
-             aOptions: AndroidOptions(
-               sharedPreferencesName: 'n42_secure_prefs',
-               preferencesKeyPrefix: 'sp_',
-             ),
-             iOptions: IOSOptions(
-               accessibility: KeychainAccessibility.first_unlock_this_device,
-               accountName: 'n42wallet_prefs',
-             ),
-           );
+  FlutterSecureStore({FlutterSecureStorage? storage})
+    : _storage =
+          storage ??
+          const FlutterSecureStorage(
+            aOptions: AndroidOptions(
+              // Keep the legacy namespace so existing secure preferences remain readable.
+              // ignore: deprecated_member_use
+              sharedPreferencesName: 'n42_secure_prefs',
+              preferencesKeyPrefix: 'sp_',
+            ),
+            iOptions: IOSOptions(
+              accessibility: KeychainAccessibility.first_unlock_this_device,
+              accountName: 'n42wallet_prefs',
+            ),
+          );
 
   final FlutterSecureStorage _storage;
 
@@ -61,9 +62,8 @@ class SecurePreferences {
   SharedPreferences? _prefs;
   final SecureStore _secureStorage;
 
-  SecurePreferences._({
-    SecureStore? secureStorage,
-  }) : _secureStorage = secureStorage ?? FlutterSecureStore();
+  SecurePreferences._({SecureStore? secureStorage})
+    : _secureStorage = secureStorage ?? FlutterSecureStore();
 
   /// 获取单例实例
   static SecurePreferences get instance {
@@ -148,7 +148,8 @@ class SecurePreferences {
   }
 
   /// 获取钱包信息
-  Future<Map<String, dynamic>?> getWalletInfo() => _readSecureJson('walletInfo');
+  Future<Map<String, dynamic>?> getWalletInfo() =>
+      _readSecureJson('walletInfo');
 
   /// 删除钱包信息
   Future<void> removeWalletInfo() async {

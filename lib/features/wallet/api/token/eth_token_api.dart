@@ -244,8 +244,9 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc != null)
+      if (rpc != null) {
         return EthAPI.init(null, rpc, null).getTransactionCount(address);
+      }
       return _postWithErrorCheck('v2/eth/transaction/count', {
         'coin': coinType.toLowerCase(),
         'hex_address': address,
@@ -265,8 +266,9 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc != null)
+      if (rpc != null) {
         return EthAPI.init(null, rpc, null).sendTransaction(signHash);
+      }
       return _postWithErrorCheck('v2/eth/raw/transaction', {
         'coin': coinType,
         'signed_tx': signHash,
@@ -285,8 +287,9 @@ mixin EthTokenApiMixin on TokenApiBase {
     String? rpc,
   }) async {
     try {
-      if (rpc != null)
+      if (rpc != null) {
         return EthAPI.init(null, rpc, null).getTransactionReceipt(txHash);
+      }
       final params = <String, dynamic>{
         'tx_hash': txHash,
         'coin': coinType,

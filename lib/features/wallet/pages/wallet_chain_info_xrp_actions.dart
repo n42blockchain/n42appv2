@@ -76,8 +76,9 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
               MaterialPageRoute(builder: (_) => WalletCoinTokenAdd2(coinModel)),
             );
             if (!mounted) return;
-            if (r)
+            if (r) {
               ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+            }
             Navigator.pop(context);
           },
         ),
@@ -241,10 +242,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
               child: icon,
             ),
             SizedBox(width: AppSpacing.space4),
-            Text(
-              label,
-              style: AppTypography.body.copyWith(color: _blue),
-            ),
+            Text(label, style: AppTypography.body.copyWith(color: _blue)),
           ],
         ),
       ),
@@ -260,18 +258,24 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
             children: [
               Text(
                 '$title:',
-                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                ),
               ),
               Text(
                 value,
-                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textItem),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textItem,
+                ),
               ),
             ],
           ),
           SizedBox(height: AppSpacing.space2),
           Text(
             description,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ),
         ],
       ),
