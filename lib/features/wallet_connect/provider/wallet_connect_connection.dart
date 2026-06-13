@@ -11,6 +11,7 @@ import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
@@ -42,7 +43,7 @@ mixin WalletConnectConnection on ChangeNotifier {
   /// Look up the [CoinModel] for [type] from the loaded chain list.
   /// Returns null when the chain is not configured for the current session.
   CoinModel? coinModelFor(CoinType type) =>
-      coinModels.where((c) => c.coin['coinType'] == type.name).firstOrNull;
+      coinModels.where((c) => c.config.coinType == type.name).firstOrNull;
   WalletConnectState walletConnectState = WalletConnectState.loading;
 
   /// Guard: prevent duplicate WalletKit event subscriptions.
@@ -227,7 +228,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     try {
       final cm = coinModels[coinModelsIndex];
       web3client = web3.Web3Client(
-        cm.isTest ? cm.coin['service_test'] : cm.coin['service'],
+        cm.isTest ? cm.config.serviceTest : cm.config.service,
         Client(),
       );
 
@@ -250,7 +251,7 @@ mixin WalletConnectConnection on ChangeNotifier {
         if (mnemonic != null) {
           pKey = await trustdart.getPrivateKey(
             mnemonic,
-            cm.coin['coinType'],
+            cm.config.coinType,
             getPathWithIndex(cm.coin['path']['legacy'], cm.pathIndex),
           );
         }
@@ -296,7 +297,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Solana: no web3client needed, just locate the coin model
     if (namespace == 'solana') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Solana.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Solana.name,
       );
       if (idx == -1) {
         viewStateDeal(
@@ -312,7 +313,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Tron: no web3client needed, just locate the coin model
     if (namespace == 'tron') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Tron.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Tron.name,
       );
       if (idx == -1) {
         viewStateDeal(
@@ -328,7 +329,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Aptos: no web3client needed
     if (namespace == 'aptos') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Aptos.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Aptos.name,
       );
       if (idx == -1) {
         viewStateDeal(
@@ -344,7 +345,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Sui: no web3client needed
     if (namespace == 'sui') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Sui.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Sui.name,
       );
       if (idx == -1) {
         viewStateDeal(
@@ -360,7 +361,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // NEAR: no web3client needed
     if (namespace == 'near') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Near.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Near.name,
       );
       if (idx == -1) {
         viewStateDeal(
@@ -376,7 +377,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     // EIP-155 (Ethereum): use web3client
     final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
-      if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) {
+      if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
         return false;
       }
       final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
@@ -397,12 +398,12 @@ mixin WalletConnectConnection on ChangeNotifier {
       coinModels = globalWapAdapter.coinModels
           .where(
             (cm) =>
-                cm.coin['blockchainType'] == BlockchainType.Ethereum.name ||
-                cm.coin['blockchainType'] == BlockchainType.Tron.name ||
-                cm.coin['blockchainType'] == BlockchainType.Solana.name ||
-                cm.coin['blockchainType'] == BlockchainType.Aptos.name ||
-                cm.coin['blockchainType'] == BlockchainType.Sui.name ||
-                cm.coin['blockchainType'] == BlockchainType.Near.name,
+                cm.config.blockchainType == BlockchainType.Ethereum.name ||
+                cm.config.blockchainType == BlockchainType.Tron.name ||
+                cm.config.blockchainType == BlockchainType.Solana.name ||
+                cm.config.blockchainType == BlockchainType.Aptos.name ||
+                cm.config.blockchainType == BlockchainType.Sui.name ||
+                cm.config.blockchainType == BlockchainType.Near.name,
           )
           .toList();
 
@@ -411,7 +412,7 @@ mixin WalletConnectConnection on ChangeNotifier {
       if (chainId == -1) {
         // 默认选中第一个 Ethereum 链
         final ethIndex = coinModels.indexWhere(
-          (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+          (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
         );
         setCoinModelsIndex(ethIndex >= 0 ? ethIndex : 0);
         return;
@@ -432,7 +433,7 @@ mixin WalletConnectConnection on ChangeNotifier {
   /// Find a coin model matching the given WalletConnect chain ID string.
   CoinModel? coinModelFind(String chainId) {
     return coinModels.where((element) {
-      final blockchainType = element.coin['blockchainType'];
+      final blockchainType = element.config.blockchainType;
       if (blockchainType == BlockchainType.Ethereum.name) {
         final id = element.isTest
             ? element.coin['chainId_test']

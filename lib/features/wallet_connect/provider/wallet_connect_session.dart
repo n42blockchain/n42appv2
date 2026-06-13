@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
@@ -406,7 +407,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     final initOk = await web3clientInitFromChainId(eventData.chainId);
     if (!initOk) return;
 
-    final networkName = coinModels[coinModelsIndex].coin['name'];
+    final networkName = coinModels[coinModelsIndex].config.name;
 
     switch (eventData.method) {
       // ── Message signing methods ─────────────────────────────────────────
@@ -455,7 +456,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         final trMap = eventData.params![0] as Map<String, dynamic>;
         actionDataMap = {
           "network": networkName,
-          "coinType": coinModels[coinModelsIndex].coin['coinType'] ?? '',
+          "coinType": coinModels[coinModelsIndex].config.coinType,
           "gas": web3.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",
@@ -664,7 +665,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   void _respondEthAccounts(wallet_connect.SessionRequestEvent eventData) {
     final addrs = coinModels
         .where(
-          (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+          (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
         )
         .map((cm) => cm.address?.toString())
         .where((a) => a != null && a.isNotEmpty && a != 'null')
@@ -688,7 +689,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
             : int.tryParse(rawId);
         if (requestedId != null) {
           final idx = coinModels.indexWhere((cm) {
-            if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) {
+            if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
               return false;
             }
             final id =
@@ -777,7 +778,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     final seen = <String>{};
 
     void addIfNew(CoinModel cm, {bool prepend = false}) {
-      final key = '${cm.coin['blockchainType']}:${cm.address}';
+      final key = '${cm.config.blockchainType}:${cm.address}';
       if (seen.add(key)) {
         if (prepend) {
           result.insert(0, cm);
@@ -832,7 +833,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     bool nearRegistered = false;
     for (int i = coinModels.length - 1; i >= 0; i--) {
       final cm = coinModels[i];
-      final blockchainType = cm.coin['blockchainType'];
+      final blockchainType = cm.config.blockchainType;
 
       if (blockchainType == BlockchainType.Ethereum.name) {
         final rawAddr = cm.address;
