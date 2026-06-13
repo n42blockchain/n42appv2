@@ -28,8 +28,8 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   Load load = Load.loading;
 
   Map<String, dynamic> get _coin => widget.coinModel.coin;
-  String get _coinType => _coin['coinType']?.toString() ?? '';
-  bool get _isContract => _coin['isContract'] == true;
+  String get _coinType => widget.coinModel.config.coinType;
+  bool get _isContract => widget.coinModel.config.isContract;
   int get _decimals => (_coin['decimals'] as num?)?.toInt() ?? 18;
 
   Future<void> initData() async {
@@ -42,7 +42,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     if (_isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((e) {
-        if (e.coin['coinType'] != _coinType) return false;
+        if (e.config.coinType != _coinType) return false;
         if (widget.coinModel.privateKey != null) {
           return e.privateKey == widget.coinModel.privateKey;
         }
@@ -107,8 +107,8 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
       };
     } else {
       final contractAddress = widget.coinModel.isTest
-          ? _coin['contract_test']
-          : _coin['contract'];
+          ? widget.coinModel.config.contractTest
+          : widget.coinModel.config.contract;
       final recipientTokenAddress = await Trustdart().getPubKeySOL(
         toAddr,
         contractAddress,
@@ -136,7 +136,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     }
 
     final path = getPathWithIndex(
-      _coin['path'][widget.coinModel.addrType],
+      widget.coinModel.config.pathForAddrType(widget.coinModel.addrType)!,
       widget.coinModel.pathIndex,
     );
     final walletInfo = ref.read(wapBridgeProvider).walletInfo;
@@ -263,8 +263,8 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     }
 
     final contract = widget.coinModel.isTest
-        ? _coin['contract_test']
-        : _coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     final trModel = TransationRecordModel()
       ..address = widget.coinModel.address.toString()
       ..from1 = widget.coinModel.address.toString()
@@ -298,7 +298,7 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
