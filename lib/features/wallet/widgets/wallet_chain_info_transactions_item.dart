@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/security/address_label_service.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_page.dart';
@@ -261,7 +262,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       return;
     }
 
-    final blockchainType = coinModel!.coin['blockchainType'];
+    final blockchainType = coinModel!.config.blockchainType;
     final txHash = transactionModel.txHash;
 
     if (blockchainType == BlockchainType.Ethereum.name) {

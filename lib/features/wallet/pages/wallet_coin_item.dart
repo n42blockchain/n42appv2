@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_xrp.dart';
@@ -48,7 +49,7 @@ class WalletCoinItem extends ConsumerWidget {
       ToastUtils.show(S.of(context).g_key_aa_coming_soon);
       return;
     }
-    final page = coinInfo.coin['coinType'] == CoinType.XRP.name
+    final page = coinInfo.config.coinType == CoinType.XRP.name
         ? WalletChainInfoXRP(coinInfo)
         : WalletChainInfo(coinInfo);
     Navigator.push(context, MaterialPageRoute(builder: (_) => page));
@@ -253,7 +254,7 @@ class _CoinInfo extends StatelessWidget {
               ),
             Expanded(
               child: Text(
-                coinInfo.coin['miniName'] ?? '',
+                coinInfo.config.miniName,
                 style: AppTypography.bodyStrong.copyWith(
                   color: mainText,
                   letterSpacing: 0.3,

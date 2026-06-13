@@ -32,7 +32,7 @@ class ManageChainsPage extends ConsumerWidget {
         itemBuilder: (context, i) {
           final cm = wap.coinModels[i];
           final coinType = cm.config.coinType;
-          final name = cm.coin['name'] as String? ?? coinType;
+          final name = cm.config.name.isNotEmpty ? cm.config.name : coinType;
           final icon = cm.config.icon;
 
           Widget image;

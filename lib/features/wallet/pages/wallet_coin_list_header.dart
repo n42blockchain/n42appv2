@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
@@ -27,8 +28,7 @@ class WalletCoinListHeader extends StatelessWidget {
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;
     }
-    return waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ??
-        '';
+    return waValue.coinModels[waValue.walletInfo.networkIndex].config.name;
   }
 
   @override

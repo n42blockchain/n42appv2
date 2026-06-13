@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -183,10 +184,11 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
     if (text.isEmpty) return;
     final keyword = text.toLowerCase();
     final results = allList.where((e) {
-      final name = (e.coin['name'] ?? '').toString().toLowerCase();
-      final symbol = (e.coin['miniName'] ?? e.coin['coinType'] ?? '')
-          .toString()
-          .toLowerCase();
+      final config = e.config;
+      final name = config.name.toLowerCase();
+      final symbol =
+          (config.miniName.isNotEmpty ? config.miniName : config.coinType)
+              .toLowerCase();
       return name.contains(keyword) || symbol.contains(keyword);
     }).toList();
     if (results.isNotEmpty) {

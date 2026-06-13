@@ -9,6 +9,7 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
@@ -148,7 +149,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       final wap = _walletProvider;
-      wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
+      wap.walletMap[widget.coinModel.config.coinType]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
       await fetchCoinBalance(widget.coinModel, wap);
@@ -205,11 +206,11 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
 
     if (coin['isContract'] == true) {
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.coin['coinType'] == coin['coinType'],
+        (e) => e.config.coinType == coin['coinType'],
       );
       chainCoinModel = wap.coinModels[cIndex];
-      _chainName = chainCoinModel?.coin['name'];
-      _chainSymbol = chainCoinModel?.coin['miniName'];
+      _chainName = chainCoinModel!.config.name;
+      _chainSymbol = chainCoinModel!.config.miniName;
       _tokenName = coin['name'];
       _tokenSymbol = coin['miniName'];
       browserUrl = getBrowserTokenAddress(
@@ -304,7 +305,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             children: [
               WalletChainInfoBoard(
                 address: widget.coinModel.address,
-                coinType: widget.coinModel.coin['coinType'],
+                coinType: widget.coinModel.config.coinType,
                 balanceStr:
                     '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
                 balanceDollarStr: '\$${widget.coinModel.valueString()}',
@@ -330,12 +331,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               ),
               Container(
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSpacing.space4,
-                ),
-                margin: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+                margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Text(
                   S.of(context).g_coin_key_1,
                   style: AppTypography.body.copyWith(

@@ -73,7 +73,9 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       context,
       MaterialPageRoute(
         builder: (context) => BatchTransferPage(
-          chainSymbol: coinModel.coin['miniName'] ?? coinType,
+          chainSymbol: coinModel.config.miniName.isNotEmpty
+              ? coinModel.config.miniName
+              : coinType,
           rpcUrl: rpcUrl,
           chainId: chainId,
           fromAddress: coinModel.address ?? '',
