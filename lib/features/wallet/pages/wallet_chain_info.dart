@@ -93,7 +93,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   CoinModel get coinModel => widget.coinModel;
 
   @override
-  dynamic getCoinModel() => widget.coinModel;
+  CoinModel getCoinModel() => widget.coinModel;
 
   // ── Wallet provider ───────────────────────────────────────────────────────
 

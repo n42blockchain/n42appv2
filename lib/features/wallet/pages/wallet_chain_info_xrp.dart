@@ -89,7 +89,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   CoinModel get coinModel => widget.coinModel;
 
   @override
-  dynamic getCoinModel() => widget.coinModel;
+  CoinModel getCoinModel() => widget.coinModel;
 
   WalletActionProvider get _walletProvider => ref.read(wapBridgeProvider);
 
