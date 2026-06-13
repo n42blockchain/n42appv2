@@ -95,13 +95,22 @@
 | 2 | provider parts（token/market/sort） | 30 迁 / 10 留 | 4a530f73 |
 | 3 | WC connection+session（blockchainType/coinType/service/name） | 23 迁 | 1b9d9784 |
 | 4 | WC connection+signing（path→`pathForAddrType()!`/chainId）→ 两文件 coin-free | 17 迁 | d7d604fc |
+| 5 | send 共享基类 `wallet_chain_send_logic.dart` | 16 迁 / 4 留 | 622dc56a |
+| 6 | send trx logic | 15 迁 / 7 留 | 8f372876 |
+| 7 | send apt logic | 11 迁 / 9 留 | a54cef5e |
+| 8 | send sol logic | 9 迁 / 4 留 | 4045c2bc |
+| 9 | **send/ 剩余全部 36 文件**（引擎辅助，红线行自动跳过） | ~150 迁 | c595e4fd |
+| 10 | send `coinType ?? ''` 后缀补漏 | 16 迁 | 32447865 |
 
-刻意保留（语义陷阱，非遗漏）：provider 写入站点、`== false`/`!= null` 显式判断、
-`miniName ?? coinType` fallback、session 4 处 chainId（`if (id != null)` null sentinel
-+ `as int?` cast——config 的 int-0-on-missing 会破坏 0x1 回退）。
+刻意保留（语义陷阱，非遗漏）：所有 **decimals**（config 缺失返回 0 vs 代码
+`?? 18`，资金红线）、**unit**（config 返回 `''` 非 null，破坏 fallback/ternary）、
+**baseInfo**（无 typed getter）、**chainId**（`if(id!=null)` null sentinel）、
+provider 写入站点、`== false`/`!= null`/`!= true` 显式判断、`?? 'BTC'` 特殊默认、
+局部 `coin` Map 别名变量（非 CoinModel，无 `.config`）。
 
-**剩余资金路径范围 ~421 处，几乎全在 `pages/send/`**（各链转账 logic+widgets，
-最敏感）——逐文件配测试推进，不与 Codex 的展示层 T4 批次重叠。
+**资金路径侧已扫到底**：provider + wallet_connect + `pages/send/` 全部完成。
+`send/` 从 323 → 157，剩余 157 全是上述合理保留（红线 128 + 别名/特殊默认 ~29），
+非遗漏。展示层（market/transactions/nft 等）归 Codex T4。
 
 ## 阶段 5：mining v1/v2 版本收敛（决策先行，不抢跑）
 
