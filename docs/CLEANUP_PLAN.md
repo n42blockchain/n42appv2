@@ -87,6 +87,22 @@
 
 验收：`grep "coin\['" lib` 计数逐批下降至 0，迁移期间不混入逻辑改动。
 
+### 批次进度（Claude 资金路径侧）
+
+| 批次 | 范围 | 站点 | commit |
+|---|---|---|---|
+| 1 | `wallet_action_provider.dart` | 23 迁 / 5 留 | 116e92c2 |
+| 2 | provider parts（token/market/sort） | 30 迁 / 10 留 | 4a530f73 |
+| 3 | WC connection+session（blockchainType/coinType/service/name） | 23 迁 | 1b9d9784 |
+| 4 | WC connection+signing（path→`pathForAddrType()!`/chainId）→ 两文件 coin-free | 17 迁 | d7d604fc |
+
+刻意保留（语义陷阱，非遗漏）：provider 写入站点、`== false`/`!= null` 显式判断、
+`miniName ?? coinType` fallback、session 4 处 chainId（`if (id != null)` null sentinel
++ `as int?` cast——config 的 int-0-on-missing 会破坏 0x1 回退）。
+
+**剩余资金路径范围 ~421 处，几乎全在 `pages/send/`**（各链转账 logic+widgets，
+最敏感）——逐文件配测试推进，不与 Codex 的展示层 T4 批次重叠。
+
 ## 阶段 5：mining v1/v2 版本收敛（决策先行，不抢跑）
 
 v1 被 30 个外部文件引用、`plugins/flutter_mining` 仅服务 v1——这是
