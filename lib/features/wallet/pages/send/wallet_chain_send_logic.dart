@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
@@ -73,10 +74,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<String?> toAddressCheck(String addr);
   void closeKeyboard();
 
-  String get _coinType => coinModel.coin['coinType']?.toString() ?? '';
+  String get _coinType => coinModel.config.coinType;
   String get _blockchainType =>
-      coinModel.coin['blockchainType']?.toString() ?? '';
-  bool get _isContract => coinModel.coin['isContract'] == true;
+      coinModel.config.blockchainType;
+  bool get _isContract => coinModel.config.isContract;
   int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
   bool _ensureChainConfig() {
@@ -96,7 +97,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (_isContract) {
       final wap = ref.read(wapBridgeProvider);
       final idx = wap.coinModels.indexWhere((e) {
-        if (e.coin['coinType'] != _coinType) return false;
+        if (e.config.coinType != _coinType) return false;
         if (coinModel.privateKey != null) {
           return e.privateKey == coinModel.privateKey;
         }
@@ -153,10 +154,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       if (svc != null && svc.isNotEmpty) return svc;
     }
     // 非 EVM 链 / service 为空时：自定义链返回配置 RPC，否则 null（走 N42 API）
-    if (coinModel.coin['custom'] != true) return null;
+    if (!coinModel.config.custom) return null;
     return coinModel.isTest
-        ? coinModel.coin['service_test']
-        : coinModel.coin['service'];
+        ? coinModel.config.serviceTest
+        : coinModel.config.service;
   }
 
   Future<void> getGasPrice() async {
@@ -453,8 +454,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ..coinMiniName = _coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = coinModel.isTest
-          ? coinModel.coin['contract_test']
-          : coinModel.coin['contract']
+          ? coinModel.config.contractTest
+          : coinModel.config.contract
       ..isTest = coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -541,7 +542,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (!isEthContract) return true;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.config.coinType ?? ''));
       return false;
     }
     return true;
@@ -556,15 +557,15 @@ Future<MessageModel> _callGasEstimateApi({
   required BigInt gasPrice,
   required BigInt gaslimit,
 }) async {
-  final coinType = coinModel.coin['coinType']?.toString() ?? '';
+  final coinType = coinModel.config.coinType;
   const noLatestChains = {'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO'};
 
   final decimals = (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
   final weiValue = ethToWeiString(price, decimals);
   final contract = coinModel.isTest
-      ? coinModel.coin['contract_test']
-      : coinModel.coin['contract'];
-  final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
+      ? coinModel.config.contractTest
+      : coinModel.config.contract;
+  final blockchainType = coinModel.config.blockchainType;
   if (coinType.isEmpty || blockchainType.isEmpty) {
     return MessageModel.error()..data = 'Invalid coin configuration';
   }
@@ -582,8 +583,8 @@ Future<MessageModel> _callGasEstimateApi({
   }
 
   final rpc = coinModel.isTest
-      ? coinModel.coin['service_test']
-      : coinModel.coin['service'];
+      ? coinModel.config.serviceTest
+      : coinModel.config.service;
   return EthAPI.init(null, rpc, null).getGasLimit(
     coinModel.address,
     toAddr,
