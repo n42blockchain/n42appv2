@@ -139,7 +139,7 @@ error（批次 1 踩过）。
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
 | T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
-| T2 Android 矩阵 | 进行中：#1/#2 PASS，继续后台场景 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
+| T2 Android 矩阵 | 进行中：#1/#2 PASS，#6 FAIL（active room 后台静默） | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 待认领 | | |
 
@@ -168,6 +168,7 @@ error（批次 1 踩过）。
 - 2026-06-13 16:05 EDT：真人发送端已可用，但本轮是前台列表页向 `test00001 💕` 连发 10 条，不是单条样本。截图确认页面从 `Messages(7)` 到 `Messages(17)`，`test00001 💕` 未读 10；`dumpsys notification` 显示 `ai.n42.www` group summary + 9 条 active 消息记录，文本覆盖 `0,2,3,4,5,6,7,8,9`，logcat 另见 MIUI `CountLimitCoordinator` 移除 1 条。已写入 Android 报告。T2 #1 记 PARTIAL，仍需真人发送端只发 1 条；T2 #6 也需 Home 后台后正好 5 条。
 - 2026-06-13 16:07 EDT：T2 #1 前台列表页单条已 PASS。真人发送端向 `test00001 💕` 发 `hello`，截图确认 `Messages(17)` -> `Messages(18)`、会话未读 11、最新文本 `hello`；`dumpsys notification` 新增 1 条 `ai.n42.www` 消息通知 `id=1094806312` / `android.text=hello`。MIUI 同时因上轮残留通知数量移除旧 `id=1972089726`，不是本条重复。下一步：打开 `test00001 💕` 后发单条测 T2 #2 活跃会话静默。
 - 2026-06-13 16:10 EDT：T2 #2 活跃会话内单条已 PASS。Android 停在 `test00001 💕` 会话内，真人发送端发 `hello test00002`；截图确认消息在会话内可见，`dumpsys notification` 搜索 `hello test00002` 无匹配，active `ai.n42.www` 通知记录从 10 降到 9（旧通知清理），未新增对应通知。下一步：Home 切后台后让真人发送端发正好 5 条，测 T2 #6。
+- 2026-06-13 16:23 EDT：T2 #6 Home 后台 5 条连发判定 FAIL。Android 从 `test00001 💕` 会话退到 Home，pid `15607` 存活、standby bucket 变为 40；真人发送端确认 5 条已发出。后台等待期间 `dumpsys notification` 仍只有旧的 9 条 `ai.n42.www` 记录，logcat 无即时 FCM/Matrix/N42Chat 收消息痕迹；恢复/随后熄屏处理时出现 5 次 `FirebasePushService: Skipping notification for active room !4hoHozx9pToZdUNMGW:m.si46.world`，随后 `[N42Chat] unread count updated: 13`。同机 WhatsApp 后台收消息正常，当前疑点更像 App active room 生命周期/后台态判定未清理，不能简单归因 ROM 通知能力失效。报告已更新。
 - 2026-06-13（Claude）：进度同步与两处 blocker 回应。
   **T4 资金路径侧**已推进 4 批（116e92c2/4a530f73/1b9d9784/d7d604fc），
   `wallet_action_provider`+parts 与 `wallet_connect` connection/signing
