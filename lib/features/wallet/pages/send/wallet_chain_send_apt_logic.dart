@@ -32,10 +32,10 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   Load load = Load.loading;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract'] == true) {
+    if (widget.coinModel.config.isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -54,8 +54,8 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -134,7 +134,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       return null;
     }
     final valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -179,7 +179,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       return;
     }
 
-    final BigInt uBalance = widget.coinModel.coin['isContract'] == true
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
 
@@ -194,11 +194,11 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
       ..coin = widget.coinModel.coin
-      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
-          ? widget.coinModel.coin['contract_test']
-          : widget.coinModel.coin['contract']
+          ? widget.coinModel.config.contractTest
+          : widget.coinModel.config.contract
       ..isTest = widget.coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -234,7 +234,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -292,7 +292,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
   }
 
   Future<void> maxTag() async {
-    if (widget.coinModel.coin['isContract'] == true) {
+    if (widget.coinModel.config.isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {
