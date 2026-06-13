@@ -252,7 +252,7 @@ mixin WalletConnectConnection on ChangeNotifier {
           pKey = await trustdart.getPrivateKey(
             mnemonic,
             cm.config.coinType,
-            getPathWithIndex(cm.coin['path']['legacy'], cm.pathIndex),
+            getPathWithIndex(cm.config.pathForAddrType('legacy')!, cm.pathIndex),
           );
         }
       }
@@ -380,7 +380,7 @@ mixin WalletConnectConnection on ChangeNotifier {
       if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
         return false;
       }
-      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
+      final id = (cm.isTest ? cm.config.chainIdTest : cm.config.chainId)
           .toString();
       return id == chainId;
     });
@@ -420,8 +420,8 @@ mixin WalletConnectConnection on ChangeNotifier {
       // 按指定 chainId 查找匹配项
       final matchIndex = coinModels.indexWhere((cm) {
         final cmChainId = cm.isTest
-            ? cm.coin['chainId_test']
-            : cm.coin['chainId'];
+            ? cm.config.chainIdTest
+            : cm.config.chainId;
         return cmChainId == chainId;
       });
       if (matchIndex != -1) setCoinModelsIndex(matchIndex);
@@ -436,8 +436,8 @@ mixin WalletConnectConnection on ChangeNotifier {
       final blockchainType = element.config.blockchainType;
       if (blockchainType == BlockchainType.Ethereum.name) {
         final id = element.isTest
-            ? element.coin['chainId_test']
-            : element.coin['chainId'];
+            ? element.config.chainIdTest
+            : element.config.chainId;
         return 'eip155:$id' == chainId;
       }
       if (blockchainType == BlockchainType.Tron.name) {
