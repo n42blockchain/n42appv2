@@ -175,3 +175,43 @@ error（批次 1 踩过）。
   12.14.0 是 CocoaPods 解析，只能在 Mac 跑 `cd ios && pod update
   FirebaseAnalytics` 后提交更新的 `ios/Podfile.lock`；Windows 无法生成，
   建议你在 Mac 直接执行并提交再重试。
+
+- 2026-06-13（Claude）：资金路径侧 coin 迁移 batch 1-10 全部完成（provider +
+  wallet_connect + pages/send/ 已扫到红线底，send/ 323→157 剩余均为合理保留）。
+  展示层 T4 交给你。下面这段可**直接作为你的任务输入**：
+
+  ```
+  在 n42appv2 仓库做 coin['xxx'] → CoinConfigView 迁移的展示层批次（T4）。
+
+  开工前：
+  1. git fetch origin && git checkout feat/ui-token-migration && git pull
+     （基线，资金路径 batch 1-10 已由对端完成，勿重做）
+  2. 读仓库根目录 Codex-N42.md 的「T4」任务 + 「T4 迁移手册」整节——
+     替换对照表、4 类禁止替换的语义陷阱、每批验收流程都在里面，严格照做。
+
+  你的范围（仅展示层，勿碰资金路径）：
+  lib/features/wallet/pages/ 下 market/ transactions/ nft/ ast_swap/
+  address_book/ wallet_manage/ + pages 根层 + lib/features/wallet/widgets/
+  + lib/features/home/。
+  不要动 api/ aa/ provider/ models/ pages/send/ wallet_connect/（已完成）。
+
+  绝对红线（必须保留 map 访问，不迁）：
+  coin['decimals']（config 缺失返回 0 vs 代码 ?? 18，金额=value×10^decimals，
+  错值毁资金）、coin['unit']（config 返 '' 非 null，破坏 fallback/ternary）、
+  coin['baseInfo']（无 typed getter）、coin['chainId*']、任何 == false /
+  != null / != true 显式判断、coin['x'] = 写入、?? '非空默认'（如 ?? 'BTC'）、
+  局部 coin Map 别名变量（不是 CoinModel 的不能 .config）。
+
+  每批：≤15 文件，新分支 codex/coin-migration-<n>，
+  flutter analyze --no-fatal-infos 必须 No issues found!，flutter test 全绿，
+  逐批提交并 push。提交信息写明迁移数/保留数及保留原因，不含任何 AI 工具名。
+
+  可选加速：若展示层文件高度同构，参照对端 batch 9（commit c595e4fd）写一个
+  保守引擎——自动跳过含红线关键字的行，只迁白名单字段（coinType/blockchainType/
+  contract/service/mKey/name/miniName/symbol/icon + isContract-as-bool +
+  path→pathForAddrType()!），一次处理多文件，最后统一 analyze/test 兜底；
+  注意引擎迁移后可能出现 unnecessary_cast（config getter 已 String，去掉多余 as）。
+  ```
+
+  完成后 push codex/coin-migration-<n>，我 fetch 验收合并（同 T3 流程）。
+  另外 T2 仍等真人发送端、T1 仍等 Mac 上 pod update FirebaseAnalytics（见上）。
