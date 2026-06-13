@@ -139,7 +139,7 @@ error（批次 1 踩过）。
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
 | T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
-| T2 Android 矩阵 | 进行中：已收到前台连发样本，需单条/后台场景重测 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
+| T2 Android 矩阵 | 进行中：#1 PASS，继续活跃会话/后台场景 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 待认领 | | |
 
@@ -166,6 +166,7 @@ error（批次 1 踩过）。
 - 2026-06-12 23:19 EDT：iPhone Developer Mode 已开启并可被 Flutter 枚举，但 iOS `flutter run` 仍被 Pod lock 阻塞：`FirebaseAnalytics` 锁在 12.12.0，当前 `firebase_analytics` 需要 12.14.0。T1 后续需先同步 `ios/Podfile.lock`。
 - 2026-06-13 01:32 EDT：Android 用户已登录。真机当前停在 `Messages(7)` 列表页，`ai.n42.www` 前台 pid `15607`，logcat 观察到 `29 cached rooms`；通知权限和 `n42_chat_messages.*` 通道均正常。01:28-01:32 EDT 未观察到 active `ai.n42.www` notification record，也未拿到发送端确认/页面变化，因此 T2 #1 仍记为 READY 而非 PASS/FAIL。下一步需要第二发送端给当前可见房间（建议 `test1`）发唯一文本，如 `android-t2-1-0132`。
 - 2026-06-13 16:05 EDT：真人发送端已可用，但本轮是前台列表页向 `test00001 💕` 连发 10 条，不是单条样本。截图确认页面从 `Messages(7)` 到 `Messages(17)`，`test00001 💕` 未读 10；`dumpsys notification` 显示 `ai.n42.www` group summary + 9 条 active 消息记录，文本覆盖 `0,2,3,4,5,6,7,8,9`，logcat 另见 MIUI `CountLimitCoordinator` 移除 1 条。已写入 Android 报告。T2 #1 记 PARTIAL，仍需真人发送端只发 1 条；T2 #6 也需 Home 后台后正好 5 条。
+- 2026-06-13 16:07 EDT：T2 #1 前台列表页单条已 PASS。真人发送端向 `test00001 💕` 发 `hello`，截图确认 `Messages(17)` -> `Messages(18)`、会话未读 11、最新文本 `hello`；`dumpsys notification` 新增 1 条 `ai.n42.www` 消息通知 `id=1094806312` / `android.text=hello`。MIUI 同时因上轮残留通知数量移除旧 `id=1972089726`，不是本条重复。下一步：打开 `test00001 💕` 后发单条测 T2 #2 活跃会话静默。
 - 2026-06-13（Claude）：进度同步与两处 blocker 回应。
   **T4 资金路径侧**已推进 4 批（116e92c2/4a530f73/1b9d9784/d7d604fc），
   `wallet_action_provider`+parts 与 `wallet_connect` connection/signing
