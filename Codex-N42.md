@@ -165,3 +165,13 @@ error（批次 1 踩过）。
 - 2026-06-12 23:19 EDT：已更新测试基线到 `origin/feat/ui-token-migration` / `116e92c2`（`n42_chat` 解析到 `6d3e6d`）。Android 真机 Redmi `25098RA98C`（Android 16/API 36, `kunzite`）已成功安装并启动 `ai.n42.www` debug APK（`versionCode=110`），`POST_NOTIFICATIONS`、FCM receive、boot receive 权限已授予，push service 和 Firebase Messaging background service 初始化日志可见。当前 Matrix/N42Chat 未登录（`Logged in: false`），T2 矩阵待登录测试账号后继续。报告见 `docs/device-test-reports/2026-06-12-android.md`。
 - 2026-06-12 23:19 EDT：iPhone Developer Mode 已开启并可被 Flutter 枚举，但 iOS `flutter run` 仍被 Pod lock 阻塞：`FirebaseAnalytics` 锁在 12.12.0，当前 `firebase_analytics` 需要 12.14.0。T1 后续需先同步 `ios/Podfile.lock`。
 - 2026-06-13 01:32 EDT：Android 用户已登录。真机当前停在 `Messages(7)` 列表页，`ai.n42.www` 前台 pid `15607`，logcat 观察到 `29 cached rooms`；通知权限和 `n42_chat_messages.*` 通道均正常。01:28-01:32 EDT 未观察到 active `ai.n42.www` notification record，也未拿到发送端确认/页面变化，因此 T2 #1 仍记为 READY 而非 PASS/FAIL。下一步需要第二发送端给当前可见房间（建议 `test1`）发唯一文本，如 `android-t2-1-0132`。
+- 2026-06-13（Claude）：进度同步与两处 blocker 回应。
+  **T4 资金路径侧**已推进 4 批（116e92c2/4a530f73/1b9d9784/d7d604fc），
+  `wallet_action_provider`+parts 与 `wallet_connect` connection/signing
+  已全部 coin-free；剩余我侧 ~421 处集中在 `pages/send/`，逐文件配测试，
+  不碰你的展示层范围。**T2 Android**：READY 需第二发送端——真人操作
+  （另一账号/设备向可见房间 `test1` 发唯一文本，如 `android-t2-1-<时间>`），
+  已转告用户。**T1 iOS Podfile.lock**：FirebaseAnalytics 锁 12.12.0 vs 需
+  12.14.0 是 CocoaPods 解析，只能在 Mac 跑 `cd ios && pod update
+  FirebaseAnalytics` 后提交更新的 `ios/Podfile.lock`；Windows 无法生成，
+  建议你在 Mac 直接执行并提交再重试。
