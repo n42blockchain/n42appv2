@@ -139,7 +139,7 @@ error（批次 1 踩过）。
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
 | T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
-| T2 Android 矩阵 | 待认领 | | |
+| T2 Android 矩阵 | 部分完成：安装/启动通过，矩阵待登录账号 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 待认领 | | |
 
@@ -162,3 +162,5 @@ error（批次 1 踩过）。
   （116e92c2）的实战。注意基线又前进了：fetch 后从最新
   `feat/ui-token-migration`（≥116e92c2）开分支，analyzer 基线为零，
   你的每一批都不允许引入任何 issue。
+- 2026-06-12 23:19 EDT：已更新测试基线到 `origin/feat/ui-token-migration` / `116e92c2`（`n42_chat` 解析到 `6d3e6d`）。Android 真机 Redmi `25098RA98C`（Android 16/API 36, `kunzite`）已成功安装并启动 `ai.n42.www` debug APK（`versionCode=110`），`POST_NOTIFICATIONS`、FCM receive、boot receive 权限已授予，push service 和 Firebase Messaging background service 初始化日志可见。当前 Matrix/N42Chat 未登录（`Logged in: false`），T2 矩阵待登录测试账号后继续。报告见 `docs/device-test-reports/2026-06-12-android.md`。
+- 2026-06-12 23:19 EDT：iPhone Developer Mode 已开启并可被 Flutter 枚举，但 iOS `flutter run` 仍被 Pod lock 阻塞：`FirebaseAnalytics` 锁在 12.12.0，当前 `firebase_analytics` 需要 12.14.0。T1 后续需先同步 `ios/Podfile.lock`。
