@@ -72,7 +72,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   }
 
   Future<void> getGasFeeBtc() async {
-    if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
+    if (widget.coinModel.config.coinType == CoinType.BTC.name) {
       if (_fee.loading) return;
       _fee.loading = true;
       setState(() {});
@@ -90,7 +90,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       }
       _fee.loading = false;
     } else {
-      final averageValue = getCoinGas(widget.coinModel.coin['coinType']);
+      final averageValue = getCoinGas(widget.coinModel.config.coinType);
       _fee.averageRate = averageValue;
       _fee.selectedRate = averageValue;
     }
@@ -173,7 +173,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       return;
     }
     final valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return;
@@ -217,7 +217,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_47);
       return;
     }
-    if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
+    if (widget.coinModel.config.coinType == CoinType.BTC.name) {
       if (double.parse(value) < 0.00001) {
         _setAmountError(S.of(context).g_key_135(0.00001));
         return;

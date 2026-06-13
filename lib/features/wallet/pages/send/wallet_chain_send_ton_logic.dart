@@ -62,7 +62,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (_isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != _coinType) return false;
+        if (element.config.coinType != _coinType) return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -311,7 +311,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;

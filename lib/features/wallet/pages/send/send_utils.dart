@@ -10,6 +10,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -168,7 +169,7 @@ Future<void> showAddressPickerSheet(
           context,
           MaterialPageRoute(
             builder: (_) =>
-                AddressBookList(coinName: coinModel.coin['coinType']),
+                AddressBookList(coinName: coinModel.config.coinType),
           ),
         );
         if (!context.mounted) return;

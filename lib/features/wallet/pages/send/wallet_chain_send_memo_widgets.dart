@@ -8,7 +8,7 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] as String? ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toCtrl.text = addr;
             toAddressCheck(addr);
@@ -238,8 +238,8 @@ mixin _MemoSendWidgetsMixin on _MemoSendLogicMixin {
   }
 
   Widget buildFeeRow() {
-    final coinType = widget.coinModel.coin['coinType']?.toString() ?? '';
-    final isContract = widget.coinModel.coin['isContract'] == true;
+    final coinType = widget.coinModel.config.coinType;
+    final isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] as int? ?? 0)
         : (widget.coinModel.coin['decimals'] as int? ?? 0);

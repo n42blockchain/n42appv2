@@ -39,10 +39,10 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -59,8 +59,8 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -151,7 +151,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       };
       final SuiApi suiApi = SuiApi(isTest: widget.coinModel.isTest);
       final String path = getPathWithIndex(
-        widget.coinModel.coin['path'][widget.coinModel.addrType],
+        widget.coinModel.config.pathForAddrType(widget.coinModel.addrType)!,
         widget.coinModel.pathIndex,
       );
       final String mnemonic =
@@ -242,7 +242,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     if (addrList.length == 2) addr = addrList[1];
 
     final bool valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -289,7 +289,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
       return;
     }
 
-    final BigInt uBalance = widget.coinModel.coin['isContract']
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
     if (totalGasPrice > uBalance) {
@@ -307,17 +307,17 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
     trModel.to1 = toAddr;
     trModel.addrType = widget.coinModel.addrType;
     trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
+    trModel.coinMiniName = widget.coinModel.config.coinType;
     trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
     trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     trModel.isTest = widget.coinModel.isTest ? 1 : 0;
     trModel.gasPrice = totalGasPrice;
     trModel.gas = gas.toInt();
     trModel.gasPriceValue = gasPrice;
     trModel.price = transferValue;
-    if (widget.coinModel.coin['blockchainType'] ==
+    if (widget.coinModel.config.blockchainType ==
         BlockchainType.Ethereum.name) {
       trModel.message = noteTextEditingController.text.trim();
     }
@@ -341,7 +341,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -399,11 +399,11 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] !=
+    if (widget.coinModel.config.blockchainType !=
         BlockchainType.Ethereum.name) {
       return true;
     }
-    if (!widget.coinModel.coin['isContract']) return true;
+    if (!widget.coinModel.config.isContract) return true;
 
     final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
@@ -427,7 +427,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
       estimateGasEthLocal();

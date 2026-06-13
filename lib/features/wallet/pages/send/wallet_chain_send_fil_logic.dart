@@ -30,10 +30,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -50,8 +50,8 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -91,13 +91,13 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     final int decimals = widget.coinModel.coin['decimals'] as int;
     final BigInt valueBi = ethToWeiString(value, decimals);
 
-    if (widget.coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
+    if (widget.coinModel.config.blockchainType == BlockchainType.Ripple.name) {
       final BigInt reserve = ethToWeiString("10", decimals);
       if (valueBi + totalGasPrice > widget.coinModel.balance - reserve) {
         return S.of(context).g_key_47;
       }
     } else {
-      if (!widget.coinModel.coin['isContract'] &&
+      if (!widget.coinModel.config.isContract &&
           valueBi + totalGasPrice > widget.coinModel.balance) {
         return S.of(context).g_key_47;
       }
@@ -116,7 +116,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (parts.length == 2) addr = parts[1];
 
     final bool valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     final bool isSelf =
@@ -150,7 +150,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     await estimateGasEthLocal();
     if (errorMessage.isNotEmpty) return _resetLoad();
 
-    final BigInt uBalance = widget.coinModel.coin['isContract']
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
@@ -175,11 +175,11 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
       ..coin = widget.coinModel.coin
-      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
-          ? widget.coinModel.coin['contract_test']
-          : widget.coinModel.coin['contract']
+          ? widget.coinModel.config.contractTest
+          : widget.coinModel.config.contract
       ..isTest = widget.coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -212,7 +212,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (!signTxCheck()) return;
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -285,7 +285,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       final MessageModel ethMessage = await FilApi().getGasLimit(
         widget.coinModel.address,
         toAddr,
-        BigInt.from(getCoinGas(widget.coinModel.coin['coinType'])),
+        BigInt.from(getCoinGas(widget.coinModel.config.coinType)),
         value: ethToWeiString(
           price,
           widget.coinModel.coin['decimals'],

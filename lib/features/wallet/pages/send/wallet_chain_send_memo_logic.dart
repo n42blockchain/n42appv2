@@ -33,11 +33,11 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   Load load = Load.loading;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract'] == true) {
+    if (widget.coinModel.config.isContract) {
       final wap = ref.read(wapBridgeProvider);
-      final coinType = widget.coinModel.coin['coinType'];
+      final coinType = widget.coinModel.config.coinType;
       final idx = wap.coinModels.indexWhere((m) {
-        if (m.coin['coinType'] != coinType) return false;
+        if (m.config.coinType != coinType) return false;
         final pk = widget.coinModel.privateKey;
         return pk == null || m.privateKey == pk;
       });
@@ -51,8 +51,8 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
 
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'] as String? ?? '',
-        contract: widget.coinModel.coin['isContract'] == true,
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     // 非 EVM 链 gas 固定为 gas 单位（无需 gasPrice rpc 查询）
@@ -121,7 +121,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
     final parts = addr.split(':');
     if (parts.length == 2) addr = parts[1];
 
-    final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+    final coinType = widget.coinModel.config.coinType;
     final bool ok = await Trustdart().validateAddress(coinType, addr);
     if (!mounted) return null;
 
@@ -158,7 +158,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       return;
     }
 
-    final BigInt uBalance = widget.coinModel.coin['isContract'] == true
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
 
@@ -174,11 +174,11 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
       ..coin = widget.coinModel.coin
-      ..coinMiniName = widget.coinModel.coin['coinType'] as String? ?? ''
+      ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
-          ? (widget.coinModel.coin['contract_test'] as String? ?? '')
-          : (widget.coinModel.coin['contract'] as String? ?? '')
+          ? (widget.coinModel.config.contractTest)
+          : (widget.coinModel.config.contract)
       ..isTest = widget.coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -211,7 +211,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -276,7 +276,7 @@ mixin _MemoSendLogicMixin on ConsumerState<WalletChainSendMemo> {
   }
 
   void maxTag() {
-    if (widget.coinModel.coin['isContract'] == true) {
+    if (widget.coinModel.config.isContract) {
       valueCtrl.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {

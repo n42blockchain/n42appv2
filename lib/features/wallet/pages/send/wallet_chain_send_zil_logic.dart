@@ -46,7 +46,7 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere(
         (e) =>
-            e.coin['coinType'] == coin['coinType'] &&
+            e.config.coinType == coin['coinType'] &&
             (widget.coinModel.privateKey == null ||
                 e.privateKey == widget.coinModel.privateKey),
       );
@@ -156,7 +156,7 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     if (parts.length == 2) addr = parts[1];
 
     final isValid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -237,7 +237,7 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -308,7 +308,7 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {

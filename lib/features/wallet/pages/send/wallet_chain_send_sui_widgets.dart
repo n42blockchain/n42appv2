@@ -48,7 +48,7 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
   }
 
   Widget noteWidget() {
-    if (widget.coinModel.coin['blockchainType'] ==
+    if (widget.coinModel.config.blockchainType ==
             BlockchainType.Ethereum.name &&
         widget.coinModel.coin['isContract'] == false) {
       return Container(
@@ -253,11 +253,11 @@ mixin _SuiSendWidgetsMixin on _SuiSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final bool isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final String title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final String title = widget.coinModel.config.coinType;
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 

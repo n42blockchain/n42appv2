@@ -53,7 +53,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
 
   Widget noteWidget() {
     final isEthNonContract =
-        widget.coinModel.coin['blockchainType'] ==
+        widget.coinModel.config.blockchainType ==
             BlockchainType.Ethereum.name &&
         widget.coinModel.coin['isContract'] == false;
     if (!isEthNonContract) return const SizedBox();
@@ -217,11 +217,11 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final isContract = widget.coinModel.coin['isContract'] == true;
+    final isContract = widget.coinModel.config.isContract;
     final decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0) as int
         : widget.coinModel.coin['decimals'] as int;
-    final coinType = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final coinType = widget.coinModel.config.coinType;
     final feeText = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
     final sw = ScreenUtil().setWidth;
 

@@ -36,10 +36,10 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   bool algoTokenAdd = true;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -56,8 +56,8 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     showMaxButton = true;
@@ -90,11 +90,11 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     });
     final MessageModel mm =
         await tokenViewApi.getGasPrice(
-          widget.coinModel.coin['blockchainType'],
-          widget.coinModel.coin['coinType'],
+          widget.coinModel.config.blockchainType,
+          widget.coinModel.config.coinType,
           isTest: widget.coinModel.isTest,
           rpc: widget.coinModel.custom
-              ? widget.coinModel.coin['service']
+              ? widget.coinModel.config.service
               : null,
         ) ??
         MessageModel.error();
@@ -135,7 +135,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       value,
       widget.coinModel.coin['decimals'],
     );
-    if (!widget.coinModel.coin['isContract']) {
+    if (!widget.coinModel.config.isContract) {
       if (valueBi + totalGasPrice > widget.coinModel.balance) {
         amountErrorMessage = S.of(context).g_key_47;
         setState(() {});
@@ -158,7 +158,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
       addr = addrList[1];
     }
     final bool valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -216,8 +216,8 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
 
     final AlgoApi algoApi = AlgoApi();
     final String contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     final MessageModel toBalanceMM = await algoApi.getBalance(
       toAddr,
       assetId: contract,
@@ -238,7 +238,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     errorMessage = "";
 
     BigInt uBalance = widget.coinModel.balance;
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       uBalance = chainModel?.balance ?? BigInt.zero;
     }
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
@@ -304,11 +304,11 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
     trModel.to1 = toAddr;
     trModel.addrType = widget.coinModel.addrType;
     trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
+    trModel.coinMiniName = widget.coinModel.config.coinType;
     trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
     trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     trModel.isTest = widget.coinModel.isTest ? 1 : 0;
     trModel.gasPrice = totalGasPrice;
     trModel.gas = gas.toInt();
@@ -320,7 +320,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -391,7 +391,7 @@ mixin _AlgoSendLogicMixin on ConsumerState<WalletChainSendAlgo> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
     } else {

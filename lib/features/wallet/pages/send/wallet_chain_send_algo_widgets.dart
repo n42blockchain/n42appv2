@@ -47,8 +47,8 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
 
   Widget algoAddToken() {
     final String contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     return Container(
       margin: _pageMargin,
       alignment: Alignment.center,
@@ -56,7 +56,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'There is no "${widget.coinModel.coin['miniName']}($contract)" added under your account "${widget.coinModel.address}"',
+            'There is no "${widget.coinModel.config.miniName}($contract)" added under your account "${widget.coinModel.address}"',
             style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.textColorOrange.name)),
             textAlign: TextAlign.center,
           ),
@@ -272,7 +272,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
     final double availableBalance =
         widget.coinModel.balanceDoubleAll() - minBalance;
 
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       return _balanceText(
         '${widget.coinModel.balanceStringAll()} $unit',
         _tc(AppThemeKeys.mainTextColor.name),
@@ -311,11 +311,11 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final bool isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final String title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final String title = widget.coinModel.config.coinType;
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 

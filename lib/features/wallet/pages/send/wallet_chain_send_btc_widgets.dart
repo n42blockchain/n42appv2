@@ -332,7 +332,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   ..address = widget.coinModel.address
                   ..to1 = toTextEditingController.text.trim()
                   ..coin = widget.coinModel.coin
-                  ..coinMiniName = widget.coinModel.coin['coinType']
+                  ..coinMiniName = widget.coinModel.config.coinType
                   ..walletIndex = ref.read(wapBridgeProvider).walletIndex
                   ..price = price
                   ..gasPrice = _fee.totalFees;

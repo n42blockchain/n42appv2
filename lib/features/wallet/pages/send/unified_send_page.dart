@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_profile.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_algo.dart';
@@ -27,7 +28,7 @@ class UnifiedSendPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bt = coinModel.coin['blockchainType'] as String? ?? '';
+    final bt = coinModel.config.blockchainType;
     final profile = resolveSendProfile(bt);
     return switch (profile) {
       SendProfile.evm => WalletChainSend(coinModel),

@@ -24,6 +24,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/non_evm_gas_settings_page.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
@@ -94,7 +95,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.config.miniName}',
       ),
       body: SafeArea(
         child: GestureDetector(

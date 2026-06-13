@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/gas_selector_widget.dart';
@@ -32,9 +33,9 @@ class StandardMinerFeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
-    final coinType = coinModel.coin['coinType']?.toString() ?? '';
-    final isContract = coinModel.coin['isContract'] == true;
+    final blockchainType = coinModel.config.blockchainType;
+    final coinType = coinModel.config.coinType;
+    final isContract = coinModel.config.isContract;
     final isEthereum = blockchainType == BlockchainType.Ethereum.name;
     final isTron = blockchainType == BlockchainType.Tron.name;
 
@@ -131,7 +132,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isContract = coinModel.coin['isContract'] as bool? ?? false;
+    final isContract = coinModel.config.isContract as bool? ?? false;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     final gasExceedsBalance = isContract && totalGasPrice > chainBalance;
 

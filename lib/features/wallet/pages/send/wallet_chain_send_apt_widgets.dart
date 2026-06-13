@@ -190,11 +190,11 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final isContract = widget.coinModel.coin['isContract'] == true;
+    final isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final title = widget.coinModel.config.coinType;
     final feeText = '${toEther(totalGasPrice.toString(), decimals)} $title';
 
     return Column(

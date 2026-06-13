@@ -90,7 +90,7 @@ class _WalletChainSendAptState extends ConsumerState<WalletChainSendApt>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.config.miniName}',
       ),
       body: SafeArea(
         child: GestureDetector(

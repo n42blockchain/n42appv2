@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_settings_page.dart';
@@ -103,7 +104,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   void _onAddressInputChanged() {
     onToAddressInputChanged(
       toTextEditingController.text.trim(),
-      widget.coinModel.coin['coinType'] as String,
+      widget.coinModel.config.coinType,
     );
   }
 
@@ -115,7 +116,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       return null;
     }
 
-    final coinType = widget.coinModel.coin['coinType'] as String;
+    final coinType = widget.coinModel.config.coinType;
     final result = await addressValidator.validateAddress(
       coinType: coinType,
       address: addr,
@@ -136,7 +137,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
           context: context,
           ensName: result.ensName!,
           resolvedAddress: result.resolvedAddress ?? '',
-          tokenSymbol: widget.coinModel.coin['symbol'],
+          tokenSymbol: widget.coinModel.config.symbol,
         );
         if (!confirmed) {
           ensConfirmed = false;
@@ -217,13 +218,13 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       AppThemeUtils.getColorByKey(context, key.name);
 
   bool get _isEvm =>
-      widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name;
+      widget.coinModel.config.blockchainType == BlockchainType.Ethereum.name;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.config.miniName}',
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -242,7 +243,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   Widget _buildScrollContent() {
-    final isContract = widget.coinModel.coin['isContract'] as bool? ?? false;
+    final isContract = widget.coinModel.config.isContract as bool? ?? false;
     return Column(
       children: [
         RecentAddressBar(
