@@ -42,10 +42,10 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
 
   Future<void> initData() async {
     // 判断是否是代币
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -62,8 +62,8 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -126,8 +126,8 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
 
       final gaslimit = BigInt.from(
         getCoinGas(
-          widget.coinModel.coin['coinType'],
-          contract: widget.coinModel.coin['isContract'],
+          widget.coinModel.config.coinType,
+          contract: widget.coinModel.config.isContract,
         ),
       );
       final ethMessage = await TrxApi().getGasEstimateTrx(
@@ -137,8 +137,8 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
         ethToWeiString(price, widget.coinModel.coin['decimals']),
         gaslimit,
         contract: widget.coinModel.isTest
-            ? widget.coinModel.coin['contract_test']
-            : widget.coinModel.coin['contract'],
+            ? widget.coinModel.config.contractTest
+            : widget.coinModel.config.contract,
         isTest: widget.coinModel.isTest,
       );
       if (!mounted) return false;
@@ -219,7 +219,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       addr = parts[1];
     }
     final isValid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -261,7 +261,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       setState(() => load = Load.finish);
       return;
     }
-    final BigInt uBalance = widget.coinModel.coin['isContract']
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
@@ -276,11 +276,11 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
       ..coin = widget.coinModel.coin
-      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
-          ? widget.coinModel.coin['contract_test']
-          : widget.coinModel.coin['contract']
+          ? widget.coinModel.config.contractTest
+          : widget.coinModel.config.contract
       ..isTest = widget.coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -307,7 +307,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
       final baseInfo =
           widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
@@ -378,7 +378,7 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
 
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       valueTextEditingController.text = widget.coinModel.balanceStringAll();
       transferValue = widget.coinModel.balance;
       estimateGasEthLocal();
