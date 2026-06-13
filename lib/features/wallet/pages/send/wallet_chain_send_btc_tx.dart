@@ -159,7 +159,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     if (!mounted) return;
     ref.read(tripBridgeProvider).addUndoneTr(trModel, 0);
     await RecentAddressService.save(
-      widget.coinModel.coin['coinType'] ?? '',
+      widget.coinModel.config.coinType,
       toTextEditingController.text.trim(),
     );
     if (!mounted) return;

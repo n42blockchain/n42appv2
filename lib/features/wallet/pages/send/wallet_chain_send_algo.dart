@@ -75,7 +75,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
         else ...[
           if (isAlgoCoin)
             RecentAddressBar(
-              coinType: widget.coinModel.coin['coinType'] ?? '',
+              coinType: widget.coinModel.config.coinType,
               onSelected: (addr) {
                 toTextEditingController.text = addr;
                 toAddressCheck(addr);

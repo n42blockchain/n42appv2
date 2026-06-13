@@ -203,7 +203,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
                   child: Text(
                     S
                         .of(context)
-                        .g_key_t_29(chainModel?.coin['coinType'] ?? ''),
+                        .g_key_t_29(chainModel?.config.coinType ?? ''),
                     style: AppTypography.caption.copyWith(
                       color: AppColorTokens.of(context).danger,
                     ),

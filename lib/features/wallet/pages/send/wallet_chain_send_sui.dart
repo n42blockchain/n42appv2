@@ -73,7 +73,7 @@ class _WalletChainSendSuiState extends ConsumerState<WalletChainSendSui>
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toTextEditingController.text = addr;
             toAddressCheck(addr);

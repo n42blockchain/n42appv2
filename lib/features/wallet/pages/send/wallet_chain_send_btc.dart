@@ -107,7 +107,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
                   child: Column(
                     children: [
                       RecentAddressBar(
-                        coinType: widget.coinModel.coin['coinType'] ?? '',
+                        coinType: widget.coinModel.config.coinType,
                         onSelected: (addr) {
                           toTextEditingController.text = addr;
                           toAddressCheck(addr);

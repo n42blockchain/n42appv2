@@ -407,7 +407,7 @@ mixin _SuiSendLogicMixin on ConsumerState<WalletChainSendSui> {
 
     final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.config.coinType ?? ""));
       return false;
     }
     return true;

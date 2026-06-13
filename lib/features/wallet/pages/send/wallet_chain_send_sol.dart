@@ -65,7 +65,7 @@ class _WalletChainSendSolState extends ConsumerState<WalletChainSendSol>
   Widget coinTypeWidget() {
     final List<Widget> cChildren = [
       RecentAddressBar(
-        coinType: widget.coinModel.coin['coinType'] ?? '',
+        coinType: widget.coinModel.config.coinType,
         onSelected: (addr) {
           toTextEditingController.text = addr;
           toAddressCheck(addr);
