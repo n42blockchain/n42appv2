@@ -52,7 +52,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     final ordered = <CoinModel>[];
     final remaining = List<CoinModel>.from(_coinModels);
     for (final coinType in walletInfo.chainOrder) {
-      final idx = remaining.indexWhere((cm) => cm.coin['coinType'] == coinType);
+      final idx = remaining.indexWhere((cm) => cm.config.coinType == coinType);
       if (idx != -1) {
         ordered.add(remaining.removeAt(idx));
       }
@@ -68,7 +68,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     final item = _coinModels.removeAt(oldIndex);
     _coinModels.insert(newIndex, item);
     walletInfo.chainOrder = _coinModels
-        .map((m) => m.coin['coinType'] as String? ?? '')
+        .map((m) => m.config.coinType)
         .where((s) => s.isNotEmpty)
         .toList();
     buildCoinModelInfo();
@@ -101,7 +101,7 @@ extension WalletActionProviderToken on WalletActionProvider {
         coinList.add(mm);
 
         // 记录 ETH 的位置
-        if (mm.coin['coinType'] == 'ETH' && ethIndex == -1) {
+        if (mm.config.coinType == 'ETH' && ethIndex == -1) {
           ethIndex = coinList.length; // 记录插入位置（ETH 之后）
         }
       }
@@ -129,7 +129,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     Map<String, dynamic> token,
   ) {
     CoinModel cm = CoinModel.fromMap(token);
-    cm.mainCoinIcon = mainChain.coin['icon'];
+    cm.mainCoinIcon = mainChain.config.icon;
     cm.privateKey = mainChain.privateKey;
     cm.pathIndex = mainChain.pathIndex;
     cm.isTest = mainChain.isTest;
@@ -157,7 +157,7 @@ extension WalletActionProviderToken on WalletActionProvider {
           coinList.add(mm);
 
           // 记录 ETH 的位置
-          if (mm.coin['coinType'] == 'ETH' && ethIndex == -1) {
+          if (mm.config.coinType == 'ETH' && ethIndex == -1) {
             ethIndex = coinList.length;
           }
         }
@@ -219,7 +219,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     _walletInfoLsit[walletIndex] = wInfo;
     saveWalletInfo(walletInfo, walletIndex);
     final cIndex = _coinModels.indexWhere(
-      (e) => e.coin['coinType'] == coinType,
+      (e) => e.config.coinType == coinType,
     );
     _coinModels[cIndex].coin = walletMap[coinType]['baseInfo'];
     _coinModels[cIndex].pathIndex = walletMap[coinType]['pathIndex'];
@@ -227,7 +227,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     _coinModels[cIndex].address = null;
 
     final clIndex = coinList.indexWhere(
-      (e) => e.coin['coinType'] == coinType && e.coin['isContract'] == false,
+      (e) => e.config.coinType == coinType && e.coin['isContract'] == false,
     );
     if (clIndex != -1) {
       coinList[clIndex] = _coinModels[cIndex];
@@ -237,8 +237,8 @@ extension WalletActionProviderToken on WalletActionProvider {
         for (final token in coinList[clIndex].tokens.values) {
           final tIndex = coinList.indexWhere(
             (e) =>
-                e.coin['coinType'] == coinType &&
-                e.coin['contract'] == token['contract'],
+                e.config.coinType == coinType &&
+                e.config.contract == token['contract'],
           );
           if (tIndex != -1) {
             coinList[tIndex] = buildTokenCoinModel(coinList[clIndex], token);
@@ -257,7 +257,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     final cMap = walletMap[mKey];
     if (cMap != null) {
       final index = _coinModels.indexWhere(
-        (e) => e.coin['coinType'] == chainMap['baseInfo']['coinType'],
+        (e) => e.config.coinType == chainMap['baseInfo']['coinType'],
       );
       _coinModels[index].showList = true;
       coinList.add(_coinModels[index]);
@@ -292,7 +292,7 @@ extension WalletActionProviderToken on WalletActionProvider {
       walletMap.remove(mKey);
       for (int i = 0; i < _coinModels.length; i++) {
         CoinModel cm = _coinModels[i];
-        if (cm.coin['mKey'] == mKey) {
+        if (cm.config.mKey == mKey) {
           _coinModels.removeAt(i);
           break;
         }
@@ -302,7 +302,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     }
     for (int i = 0; i < coinList.length; i++) {
       CoinModel cm = coinList[i];
-      if (cm.coin['mKey'] == mKey) {
+      if (cm.config.mKey == mKey) {
         coinList.removeAt(i);
         break;
       }
@@ -355,7 +355,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     saveWalletInfo(walletInfo, walletIndex);
 
     final coinIndex = _coinModels.indexWhere(
-      (e) => e.coin['coinType'] == token['coinType'],
+      (e) => e.config.coinType == token['coinType'],
     );
     CoinModel mm = _coinModels[coinIndex];
     CoinModel cm = CoinModel.fromMap(token);
@@ -364,7 +364,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     cm.addrType = mm.addrType;
     cm.address = mm.address;
     cm.addressType = mm.addressType;
-    cm.mainCoinIcon = mm.coin['icon'];
+    cm.mainCoinIcon = mm.config.icon;
     coinList.add(cm);
     refresh();
   }
@@ -394,8 +394,8 @@ extension WalletActionProviderToken on WalletActionProvider {
 
     saveWalletInfo(walletInfo, walletIndex);
     for (CoinModel cm in coinList) {
-      if (cm.coin['coinType'] == symbolStr) {
-        if (cm.coin['mKey'] == token['contract'].toString().toUpperCase()) {
+      if (cm.config.coinType == symbolStr) {
+        if (cm.config.mKey == token['contract'].toString().toUpperCase()) {
           coinList.remove(cm);
           break;
         }

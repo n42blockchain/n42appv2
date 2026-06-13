@@ -93,7 +93,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
   Future<void> getCoinInfo() async {
     //钱包币列表，默认查询币种的当前价格等基本信息
     final coinSelectPriceKeys = coinList
-        .map((cm) => cm.coin['miniName'].toString().toLowerCase())
+        .map((cm) => cm.config.miniName.toLowerCase())
         .join(',');
 
     // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
@@ -157,8 +157,8 @@ extension WalletActionProviderMarket on WalletActionProvider {
   void getCoinPrice(CoinModel cm) {
     // 使用 unit 作为主要匹配键（与原始实现保持一致）
     // miniName 用于请求，unit 用于匹配响应
-    final unit = cm.coin['unit']?.toString().toLowerCase() ?? '';
-    final miniName = cm.coin['miniName']?.toString().toLowerCase() ?? '';
+    final unit = cm.config.unit.toLowerCase();
+    final miniName = cm.config.miniName.toLowerCase();
 
     // 稳定币使用 CoinGecko 获取的价格
     final stablecoinKey = WalletActionProvider._stablecoins.contains(unit)
@@ -278,20 +278,20 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
   Future<bool> getBalanceTokenAlgoWithCoinModel(CoinModel coinModel) async {
     // address is guaranteed non-null by getBalanceWithCoinModel
-    if (getCoinModelWithCoinType(coinModel.coin['coinType']) == null) {
+    if (getCoinModelWithCoinType(coinModel.config.coinType) == null) {
       coinModel.loadError = true;
       refresh();
       return true;
     }
 
     final contract = coinModel.isTest
-        ? coinModel.coin['contract_test']
-        : coinModel.coin['contract'];
+        ? coinModel.config.contractTest
+        : coinModel.config.contract;
 
     final rBalance =
         await tokenViewApi.getBalance(
           BlockchainType.Algorand.name,
-          coinModel.coin['coinType'],
+          coinModel.config.coinType,
           coinModel.address.toString(),
           contract: contract,
           isTest: coinModel.isTest,
@@ -337,9 +337,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
     String contract = "",
   }) async {
     final idx = coinList.indexWhere((e) {
-      if (e.coin['coinType'] != coinType) return false;
+      if (e.config.coinType != coinType) return false;
       if (contract.isEmpty) return true;
-      final c = e.isTest ? e.coin['contract_test'] : e.coin['contract'];
+      final c = e.isTest ? e.config.contractTest : e.config.contract;
       return c == contract;
     });
     if (idx != -1) {
@@ -368,7 +368,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
       } catch (e) {
         if (kDebugMode) {
           debugPrint(
-            'WalletActionProvider: Error refreshing ${coin.coin['miniName']}: $e',
+            'WalletActionProvider: Error refreshing ${coin.config.miniName}: $e',
           );
         }
       }

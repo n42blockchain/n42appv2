@@ -58,7 +58,7 @@ extension WalletActionProviderSort on WalletActionProvider {
     // 收集 coinList 中所有代币的符号（用于去重）
     final existingTokenSymbols = coinList
         .whereType<CoinModel>()
-        .map((c) => (c.coin['miniName'] ?? '').toString().toUpperCase())
+        .map((c) => c.config.miniName.toUpperCase())
         .where((s) => s.isNotEmpty)
         .toSet();
 
@@ -160,10 +160,10 @@ extension WalletActionProviderSort on WalletActionProvider {
   /// 生成代币置顶的唯一标识 key。
   /// 主链币：coinType；合约代币：coinType_miniName（避免碰撞）。
   String _coinPinKey(CoinModel cm) {
-    final coinType = cm.coin['coinType'] as String? ?? '';
-    final miniName = cm.coin['miniName'] as String? ?? '';
+    final coinType = cm.config.coinType;
+    final miniName = cm.config.miniName;
     if (coinType.isEmpty) return '__invalid__';
-    if (cm.coin['isContract'] == true) return '${coinType}_$miniName';
+    if (cm.config.isContract) return '${coinType}_$miniName';
     return coinType;
   }
 
@@ -212,7 +212,7 @@ extension WalletActionProviderSort on WalletActionProvider {
   /// 切换代币置顶状态；持久化并触发重排 + 通知。
   /// 聚合代币（isAggregated）不允许置顶，调用时会被忽略。
   void togglePinCoin(CoinModel cm) {
-    if (cm.coin['isAggregated'] == true) return;
+    if (cm.config.isAggregated) return;
     final key = _coinPinKey(cm);
     if (key == '__invalid__') return; // 无效代币 key，拒绝操作
 
