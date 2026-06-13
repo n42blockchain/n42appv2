@@ -27,11 +27,11 @@ mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
   void initLogic() {
     addr = widget.coinModel.address.toString();
     isBtcChain =
-        widget.coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+        widget.coinModel.config.blockchainType == BlockchainType.Bitcoin.name;
   }
 
   Future<List<dynamic>> _queryPage(int page) async {
-    final coinKey = widget.coinModel.coin['coinType'] as String;
+    final coinKey = widget.coinModel.config.coinType;
     final contract = resolveCoinContractForNetwork(
       coin: widget.coinModel.coin,
       isTest: widget.coinModel.isTest,

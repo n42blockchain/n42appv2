@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_algo.dart';
@@ -209,7 +210,7 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
 
   Future<void> _navigateForCoin(CoinModel coinInfo) async {
     if (widget.type == 0) {
-      final bt = coinInfo.coin['blockchainType']?.toString() ?? '';
+      final bt = coinInfo.config.blockchainType;
       final toAddr = widget.toAddress;
       await Navigator.push(
         context,
@@ -247,11 +248,11 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         ),
       );
     } else {
-      if (coinInfo.coin['isContract'] == true) {
+      if (coinInfo.config.isContract) {
         final idx = ref
             .read(wapBridgeProvider)
             .coinModels
-            .indexWhere((e) => e.coin['coinType'] == coinInfo.coin['coinType']);
+            .indexWhere((e) => e.config.coinType == coinInfo.config.coinType);
         if (idx < 0) {
           await Navigator.push(
             context,

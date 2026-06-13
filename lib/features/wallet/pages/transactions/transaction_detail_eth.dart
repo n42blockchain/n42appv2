@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_hash_input.dart';
@@ -75,7 +76,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     _txHash = widget.txHash;
     searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       _txHash,
       isTest: widget.coinModel.isTest,
     );
@@ -110,7 +111,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
-            widget.coinModel.coin['coinType'],
+            widget.coinModel.config.coinType,
             _txHash,
             isTest: widget.coinModel.isTest,
           );
@@ -162,7 +163,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     final rData = await fetchEvmTransactionByHash(
       ethAPI,
       txHash: _txHash,
-      coinType: widget.coinModel.coin['coinType'],
+      coinType: widget.coinModel.config.coinType,
       isTest: widget.coinModel.isTest,
     );
     if (rData.error != false) {
@@ -217,7 +218,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     final rData = await fetchEvmTransactionReceipt(
       ethAPI,
       txHash: _txHash,
-      coinType: widget.coinModel.coin['coinType'],
+      coinType: widget.coinModel.config.coinType,
       isTest: widget.coinModel.isTest,
     );
     final requestError = rData.error != false;

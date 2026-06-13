@@ -1,5 +1,6 @@
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:flutter/material.dart';
@@ -30,9 +31,9 @@ class ManageChainsPage extends ConsumerWidget {
         },
         itemBuilder: (context, i) {
           final cm = wap.coinModels[i];
-          final coinType = cm.coin['coinType'] as String? ?? '';
+          final coinType = cm.config.coinType;
           final name = cm.coin['name'] as String? ?? coinType;
-          final icon = cm.coin['icon'] as String? ?? '';
+          final icon = cm.config.icon;
 
           Widget image;
           if (coinType == 'N') {

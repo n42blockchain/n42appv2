@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
@@ -185,12 +186,12 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               child: Container(
                 alignment: Alignment.center,
                 height: ScreenUtil().setWidth(100.0),
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Text(
                   S.of(context).g_key_113,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
             ),
@@ -381,10 +382,10 @@ class _WalletManageState extends ConsumerState<WalletManage> {
       itemBuilder: (context, index) {
         final model = coinList![index];
         return ItemWallet(
-          iconPath: model.coin['icon'] ?? '',
+          iconPath: model.config.icon,
           coinAddress: model.address ?? '',
-          coinType: model.coin['miniName'] ?? '',
-          fullName: model.coin['name'] ?? '',
+          coinType: model.config.miniName,
+          fullName: model.config.name,
           onTap: () async {
             final isEdit = await Navigator.push<bool>(
               context,

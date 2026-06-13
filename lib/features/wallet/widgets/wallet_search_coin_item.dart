@@ -19,8 +19,8 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
         (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
             .toString()
             .trim();
-    final iconUrl = coinInfo.coin['icon']?.toString().trim() ?? '';
-    final isContract = coinInfo.coin['isContract'] == true;
+    final iconUrl = coinInfo.config.icon.trim();
+    final isContract = coinInfo.config.isContract;
     final mainCoinIconUrl = coinInfo.mainCoinIcon?.trim() ?? '';
 
     final Widget image = coinSymbol.isEmpty || iconUrl.isEmpty
@@ -259,6 +259,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
         : AppColorTokens.of(context).danger;
     return Text(
       '${percentage.toStringAsFixed(2)}%',
-      style: AppTypography.caption.copyWith(color: color));
+      style: AppTypography.caption.copyWith(color: color),
+    );
   }
 }

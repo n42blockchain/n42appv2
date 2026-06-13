@@ -20,7 +20,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
             SizedBox(width: AppSpacing.space6),
         itemBuilder: (_, i) {
           final cm = available[i];
-          final ct = cm.coin['coinType'] as String? ?? '';
+          final ct = cm.config.coinType;
           final chipColor = _kChainColors[ct] ?? blueColor;
           final isSelected = ct == coinType;
 
@@ -46,7 +46,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ImageNetWork(
-                    imageUrl: cm.coin['icon'] ?? '',
+                    imageUrl: cm.config.icon,
                     width: ScreenUtil().setWidth(32),
                     height: ScreenUtil().setWidth(32),
                     placeholder: 'assets/img/list_default.png',
