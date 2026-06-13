@@ -2,6 +2,7 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_select_chain.dart';
@@ -99,6 +100,7 @@ class SwapAstPayWidget extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final payConfig = payCoinModel?.config;
     return Row(
       children: [
         Flexible(
@@ -113,7 +115,7 @@ class SwapAstPayWidget extends ConsumerWidget {
         SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
-            '${payCoinModel?.coin['name'] ?? ""}(${payCoinModel?.coin['miniName'] ?? ""})',
+            '${payConfig?.name ?? ""}(${payConfig?.miniName ?? ""})',
             style: AppTypography.body.copyWith(
               color: AppColorTokens.of(context).brand,
             ),

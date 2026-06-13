@@ -15,12 +15,11 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
     final balanceStr = balance >= 1000000000
         ? _regular.getMoneyAbbreviation(balance)
         : _oCcy.format(balance);
+    final config = coinInfo.config;
     final coinSymbol =
-        (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
-            .toString()
-            .trim();
-    final iconUrl = coinInfo.config.icon.trim();
-    final isContract = coinInfo.config.isContract;
+        (config.miniName.isNotEmpty ? config.miniName : config.coinType).trim();
+    final iconUrl = config.icon.trim();
+    final isContract = config.isContract;
     final mainCoinIconUrl = coinInfo.mainCoinIcon?.trim() ?? '';
 
     final Widget image = coinSymbol.isEmpty || iconUrl.isEmpty

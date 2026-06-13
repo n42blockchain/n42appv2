@@ -156,12 +156,12 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
       // 单次遍历同时完成过滤 + 缓存 toLowerCase 结果，避免 sort 阶段重复转换
       final matched = <({CoinModel coin, String sym, String name})>[];
       for (final cm in waValue.coinList) {
-        final sym = (cm.coin['miniName'] ?? cm.coin['coinType'] ?? '')
-            .toString()
-            .trim()
-            .toLowerCase();
-        final name = (cm.coin['name'] ?? cm.coin['coinType'] ?? '')
-            .toString()
+        final config = cm.config;
+        final sym =
+            (config.miniName.isNotEmpty ? config.miniName : config.coinType)
+                .trim()
+                .toLowerCase();
+        final name = (config.name.isNotEmpty ? config.name : config.coinType)
             .trim()
             .toLowerCase();
         if (sym.isEmpty && name.isEmpty) continue;

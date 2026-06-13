@@ -43,7 +43,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
 
   Widget _buildWalletInfo() {
     final isBtc =
-        widget.model.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+        widget.model.config.blockchainType == BlockchainType.Bitcoin.name;
     final pathCount = isBtc
         ? (widget.model.coin['path'] as Map<String, dynamic>).length
         : 1;
@@ -82,12 +82,16 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     return Row(
       children: [
         Text(
-          widget.model.coin['name'] ?? '',
-          style: AppTypography.title.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+          widget.model.config.name,
+          style: AppTypography.title.copyWith(
+            color: _color(AppThemeKeys.mainTextColor),
+          ),
         ),
         Text(
-          " (${widget.model.coin['miniName'] ?? ''})",
-          style: AppTypography.body.copyWith(color: _color(AppThemeKeys.itemSubtitleTextColor)),
+          " (${widget.model.config.miniName})",
+          style: AppTypography.body.copyWith(
+            color: _color(AppThemeKeys.itemSubtitleTextColor),
+          ),
         ),
       ],
     );
@@ -99,7 +103,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         Expanded(
           child: Text(
             "${S.of(context).g_key_address}: ",
-            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+            style: AppTypography.headline.copyWith(
+              color: _color(AppThemeKeys.mainTextColor),
+            ),
           ),
         ),
         if (pathCount > 1)
@@ -111,7 +117,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
                 children: [
                   Text(
                     widget.model.addrType,
-                    style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainBlueColor)),
+                    style: AppTypography.body.copyWith(
+                      color: _color(AppThemeKeys.mainBlueColor),
+                    ),
                   ),
                   Icon(
                     Icons.keyboard_arrow_down_outlined,
@@ -127,7 +135,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   }
 
   Widget _buildPathRow() {
-    final coinInfo = widget.walletInfo.coinInfo![widget.model.coin['coinType']];
+    final coinInfo = widget.walletInfo.coinInfo![widget.model.config.coinType];
     final displayPath = coinPath == null
         ? ""
         : getPathWithIndex(coinPath!, coinInfo['pathIndex'] ?? 0);
@@ -138,13 +146,17 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           child: Text(
             "${S.of(context).g_key_wallet_k53}:",
             overflow: TextOverflow.ellipsis,
-            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+            style: AppTypography.headline.copyWith(
+              color: _color(AppThemeKeys.mainTextColor),
+            ),
           ),
         ),
         Expanded(
           child: Text(
             "($displayPath)",
-            style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+            style: AppTypography.body.copyWith(
+              color: _color(AppThemeKeys.mainTextColor),
+            ),
           ),
         ),
         InkWell(
@@ -174,7 +186,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         itemBuilder: (context, int index) {
           final pIndex = pathList[index] as int;
           final path = getPathWithIndex(
-            widget.model.coin['path'][widget.model.addrType],
+            widget.model.config.pathForAddrType(widget.model.addrType)!,
             pIndex,
           );
           return _buildPathItem(index, pIndex, path);
@@ -251,7 +263,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         children: [
           Text(
             S.of(context).g_key_181,
-            style: AppTypography.headline.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+            style: AppTypography.headline.copyWith(
+              color: _color(AppThemeKeys.mainTextColor),
+            ),
           ),
           Divider(height: ScreenUtil().setWidth(48.0)),
           _buildExportKeystoreRow(),
@@ -280,7 +294,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               child: Text(
                 S.of(context).g_key_ex_keystore,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+                style: AppTypography.body.copyWith(
+                  color: _color(AppThemeKeys.mainTextColor),
+                ),
               ),
             ),
             Icon(
@@ -482,7 +498,9 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               child: Text(
                 S.of(context).g_key_ex_keystore_19,
                 overflow: TextOverflow.ellipsis,
-                style: AppTypography.body.copyWith(color: _color(AppThemeKeys.mainTextColor)),
+                style: AppTypography.body.copyWith(
+                  color: _color(AppThemeKeys.mainTextColor),
+                ),
               ),
             ),
           ],
@@ -511,7 +529,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     }
     final pk = await Trustdart().getPrivateKey(
       mnemonic ?? "",
-      widget.model.coin['coinType'],
+      widget.model.config.coinType,
       coinPath ?? "",
     );
     if (!mounted) return;

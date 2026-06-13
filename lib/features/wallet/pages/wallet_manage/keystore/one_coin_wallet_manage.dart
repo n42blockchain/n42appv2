@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
@@ -61,7 +62,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
 
   /// Shortcut to access the current coin's info map.
   Map<String, dynamic> get _coinInfo =>
-      widget.walletInfo.coinInfo![widget.model.coin['coinType']];
+      widget.walletInfo.coinInfo![widget.model.config.coinType];
 
   @override
   void initState() {
@@ -109,7 +110,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
     if (ref.read(wapBridgeProvider).walletIndex == widget.walletIndex) {
       ref
           .read(wapBridgeProvider)
-          .reBuildCoin(widget.walletInfo, widget.model.coin['coinType']);
+          .reBuildCoin(widget.walletInfo, widget.model.config.coinType);
     }
     Navigator.pop(context, true);
   }
@@ -122,7 +123,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
       if (!mounted) return;
       password ??= widget.walletInfo.password ?? "";
       final keystoreJson = await Trustdart().getKeyStore(
-        widget.model.coin['coinType']!,
+        widget.model.config.coinType,
         getPathWithIndex(coinPath!, _coinInfo['pathIndex'] ?? 0),
         _coinInfo['addrType'],
         password,
@@ -167,7 +168,9 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
             widget.model.address = null;
             await buildCoinWallet(widget.model, ref.read(wapBridgeProvider));
             if (!mounted) return;
-            coinPath = widget.model.coin['path'][widget.model.addrType];
+            coinPath = widget.model.config.pathForAddrType(
+              widget.model.addrType,
+            )!;
             setState(() {});
           }
           Navigator.pop(context);

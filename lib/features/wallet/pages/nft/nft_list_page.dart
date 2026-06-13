@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_detail_page.dart';
@@ -71,7 +72,7 @@ class _NftListPageState extends State<NftListPage> {
       widget.coinModel.address?.toString(),
     );
     final coinType = FeatureAddressUtils.normalize(
-      widget.coinModel.coin['coinType'] as String?,
+      widget.coinModel.config.coinType,
     );
     _loadErrorMessage = null;
 
@@ -124,7 +125,7 @@ class _NftListPageState extends State<NftListPage> {
   }
 
   bool get _hasOrdinals {
-    final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+    final coinType = widget.coinModel.config.coinType;
     return coinType.toUpperCase() == 'BTC';
   }
 

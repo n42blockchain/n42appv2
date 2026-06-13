@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
@@ -175,12 +176,11 @@ class _NetworkCoinItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
+    final config = coinInfo.config;
     final coinSymbol =
-        (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
-            .toString()
-            .trim();
-    final coinName = (coinInfo.coin['name'] ?? coinSymbol).toString().trim();
-    final iconUrl = coinInfo.coin['icon']?.toString().trim() ?? '';
+        (config.miniName.isNotEmpty ? config.miniName : config.coinType).trim();
+    final coinName = (config.name.isNotEmpty ? config.name : coinSymbol).trim();
+    final iconUrl = config.icon.trim();
     final image = coinSymbol == CoinType.N.name || iconUrl.isEmpty
         ? Image.asset('assets/img/ast.png')
         : ImageNetWork(

@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_send_page.dart';
@@ -276,7 +277,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           SingleChildScrollView(
             child: NftInfoBoard(
               address: coinModel.address?.toString(),
-              coinType: coinModel.coin['coinType'] as String?,
+              coinType: coinModel.config.coinType,
               tokenName: nft.name,
               tokenId: nft.tokenId,
               contractAddress: nft.contractAddress,
