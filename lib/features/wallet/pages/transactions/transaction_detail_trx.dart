@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
@@ -61,7 +62,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _txHash = widget.txHash;
     searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       _txHash,
       isTest: widget.coinModel.isTest,
     );
@@ -90,7 +91,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
-            widget.coinModel.coin['coinType'],
+            widget.coinModel.config.coinType,
             _txHash,
             isTest: widget.coinModel.isTest,
           );
@@ -301,7 +302,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Expanded(
             child: TextField(
-              style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -356,7 +359,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
         textAlign: TextAlign.center,
       ),
     );
@@ -373,7 +378,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Text(
             title,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: AppSpacing.space4),
           Row(
@@ -419,7 +426,9 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         children: [
           Text(
             title,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(

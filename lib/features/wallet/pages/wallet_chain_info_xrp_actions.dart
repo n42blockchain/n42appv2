@@ -1,6 +1,7 @@
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
@@ -63,7 +64,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
 
     final bool showAddToken =
         coinModel.privateKey != null &&
-        coinModel.coin['blockchainType'] != BlockchainType.Bitcoin.name &&
+        coinModel.config.blockchainType != BlockchainType.Bitcoin.name &&
         coinModel.coin['isContract'] != true;
     if (showAddToken) {
       items.add(

@@ -1,6 +1,7 @@
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_page.dart';
@@ -37,7 +38,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
   Future<void> handleBatchTransfer() async {
     if (!await ensureWalletBackedUp()) return;
 
-    final coinType = coinModel.coin['coinType'];
+    final coinType = coinModel.config.coinType;
     final isTest = coinModel.isTest;
     final chainConfig = chainUrlMap[coinType];
     final serviceKey = isTest ? 'service_test' : 'service';
@@ -76,10 +77,10 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           rpcUrl: rpcUrl,
           chainId: chainId,
           fromAddress: coinModel.address ?? '',
-          tokenAddress: coinModel.coin['isContract'] == true
-              ? coinModel.coin['contract']
+          tokenAddress: coinModel.config.isContract
+              ? coinModel.config.contract
               : null,
-          tokenSymbol: coinModel.coin['miniName'] ?? '',
+          tokenSymbol: coinModel.config.miniName,
           decimals: coinModel.coin['decimals'] ?? 18,
           balance: coinModel.balance,
           batchTransferProvider: BatchTransferProvider(),
@@ -126,7 +127,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       onTap: () => pushAndClose(BrowserPage(browserUrl)),
     );
     // Batch Transfer — EVM chains only
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+    if (coinModel.config.blockchainType == BlockchainType.Ethereum.name) {
       childs.add(_divider());
       childs.add(
         _buildSheetItem(
@@ -158,7 +159,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     // NFT Gallery
     if (coinModel.coin['isContract'] != true &&
         SimpleHashNftApi.chainMap.containsKey(
-          (coinModel.coin['coinType'] as String? ?? '').toUpperCase(),
+          coinModel.config.coinType.toUpperCase(),
         )) {
       addItem(
         icon: Icon(Icons.collections_outlined, color: _blue, size: sw(40.0)),
@@ -170,8 +171,8 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     // Add Token
     final bool canAddToken =
         coinModel.privateKey == null ||
-        coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
-        coinModel.coin['isContract'] == true;
+        coinModel.config.blockchainType == BlockchainType.Bitcoin.name ||
+        coinModel.config.isContract;
     if (!canAddToken) {
       addItem(
         icon: Image.asset('assets/wallet/addToken.png', color: _blue),
@@ -197,7 +198,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
 
     // Network switch
     const supportedNetworkSwitch = {'N', 'ETH', 'BTC', 'DOT', 'ZIL'};
-    if (supportedNetworkSwitch.contains(coinModel.coin['coinType'])) {
+    if (supportedNetworkSwitch.contains(coinModel.config.coinType)) {
       childs.add(_divider());
       childs.add(_buildNetworkSwitchRow());
     }

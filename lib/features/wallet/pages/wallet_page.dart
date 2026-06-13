@@ -21,6 +21,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
@@ -129,7 +130,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
       final addressByChain = <String, String?>{};
       for (final cm in wap.coinModels) {
-        final coinType = cm.coin['coinType'] as String? ?? '';
+        final coinType = cm.config.coinType;
         final address = cm.address?.toString() ?? '';
         if (coinType.isNotEmpty && address.isNotEmpty) {
           addressByChain.putIfAbsent(coinType, () => address);

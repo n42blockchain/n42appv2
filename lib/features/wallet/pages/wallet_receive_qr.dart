@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -124,12 +125,12 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   /// [displayModel] 用于显示属性（miniName/address），默认同 chainModel。
   void _applyChainData(CoinModel chainModel, {CoinModel? displayModel}) {
     final dm = displayModel ?? chainModel;
-    network = chainModel.coin['name'] ?? '';
-    logoUrl = chainModel.coin['icon'] ?? '';
-    blockchainType = chainModel.coin['blockchainType'] ?? '';
+    network = chainModel.config.name;
+    logoUrl = chainModel.config.icon;
+    blockchainType = chainModel.config.blockchainType;
     // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
-    coinType = chainModel.coin['coinType'] ?? '';
-    symbol = dm.coin['miniName'] ?? '';
+    coinType = chainModel.config.coinType;
+    symbol = dm.config.miniName;
     address = dm.address;
     qrData = address;
   }

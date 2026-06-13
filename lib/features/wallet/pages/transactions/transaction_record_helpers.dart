@@ -1,4 +1,5 @@
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 
 String resolveCoinContractForNetwork({
@@ -28,7 +29,7 @@ TransationRecordModel buildFallbackTransactionRecord(
     ..from1 = address
     ..addrType = coinModel.addrType
     ..coin = coinModel.coin
-    ..coinMiniName = coinModel.coin['coinType'] as String? ?? ''
+    ..coinMiniName = coinModel.config.coinType
     ..walletIndex = walletIndex
     ..contract = resolveCoinContractForNetwork(
       coin: coinModel.coin,

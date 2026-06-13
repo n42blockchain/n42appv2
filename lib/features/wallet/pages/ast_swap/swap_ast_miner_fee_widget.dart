@@ -1,5 +1,6 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -89,7 +90,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
 
   _FeeStrings _buildFeeStrings(BuildContext context, String title) {
     final String blockchainType = _swapFeeString(
-      payCoinModel!.coin['blockchainType'],
+      payCoinModel!.config.blockchainType,
     );
     final int decimals = _swapFeeInt(
       payCoinModel!.coin['decimals'],
