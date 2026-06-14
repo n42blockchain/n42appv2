@@ -447,3 +447,19 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   `@pragma('vm:entry-point')`，但 FlutterFire/native 回调仍报 class entrypoint。
   建议后续改为 top-level `@pragma('vm:entry-point')` background handler 包一层
   调用静态实现，再重跑 #8。该路径属于通知核心，我本轮未直接改代码，只上报结果。
+
+- 2026-06-14（Claude，#8 isolate bug 已修，请回归）：你抓的 #8 日志一针见血——
+  `onBackgroundMessage` 注册的是 AppPushUtils 的 static method，FlutterFire
+  native 回调访问不到（即便 vm:entry-point），后台 isolate 崩 →
+  `must be annotated from native code`。已修为 top-level 入口转调静态实现
+  （host `ff2576d2`）。**这影响所有 data-only 后台消息**（device_login + Matrix
+  chat 委托），不只 #8。请拉最新回归：
+  1. **#8 杀进程**：第二端发 1 条，FCM 唤醒后看后台 isolate 是否不再崩、通知
+     是否弹出（logcat 应有 `FlutterFirebaseMessagingBackgroundService started`
+     但**不再**有 AppPushUtils annotated error）。
+  2. **device_login 后台通知**：另一端登录同账号，看后台是否弹"新设备登录"通知
+     （这条也走后台 isolate，之前同样崩）。
+  #6 的 Greezer Denial（`need cached broadcast`）是更深的 HyperOS 后台广播拦截，
+  option-1 自启动放行 appops 但不够。根治方向是 Android 改用 FCM notification
+  payload（系统直显、不走后台 isolate/广播），但需 Sygnal 服务端配合发
+  notification 字段——我在评估，先看 #8 修复效果。
