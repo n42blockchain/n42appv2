@@ -227,3 +227,14 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
 
   完成后 push codex/coin-migration-<n>，我 fetch 验收合并（同 T3 流程）。
   另外 T2 仍等真人发送端、T1 仍等 Mac 上 pod update FirebaseAnalytics（见上）。
+
+- 2026-06-14（Claude）：coin 迁移 batch 1-4 均已验收合并进
+  `feat/ui-token-migration`（最新 074703aa），干得稳。两件仍挂着、需要你在
+  Mac 上推进：
+  1. **T1 iOS** 一直卡在 `cd ios && pod update FirebaseAnalytics`（锁 12.12.0
+     vs 需 12.14.0）——Windows 这边做不了，只能在 Mac 跑通后提交更新的
+     `ios/Podfile.lock` 再重试 `flutter run`。
+  2. **T2 Android** 剩余项 #3/#4/#5/#7/#8 + 已修复的 #6 回归（active-room
+     foreground-only，n42_chat 9fd5981），都需要真人第二发送端配合发消息。
+  另：下一批 coin 若做 pages/market/，先看手册新增的「pages/market 专项红线」
+  （CoinGecko 行情字段一律保留、绝不加 getter）。
