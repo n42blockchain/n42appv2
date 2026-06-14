@@ -128,6 +128,14 @@ error（批次 1 踩过）。
    不是 CoinModel，没有 config，保留。
 4. **拿不准的**：保留原样并在留言区记下 文件:行号，宁可少迁不可改义。
 
+**⚠️ pages/market/ 专项红线（展示层最后一批，最易踩坑）**：market 文件里
+大量 `coin['...']` 是 CoinGecko **行情数据字段**，不是钱包 coin config——
+`CoinConfigView` 没有也不会有这些 getter，**一律保留 map 访问，绝不为它们
+加 getter**：`price`、`market_cap`、`market_cap_rank`、`total_supply`、
+`circulating_supply`、`kline_default`、`id`、`data`、`coin`。
+market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`、
+`blockchainType`、`coin_gecko_id`（→ `config.coinGeckoId`）；其余红线照旧。
+
 **每批流程**：选 ≤15 个文件 → 替换 → `flutter analyze --no-fatal-infos`
 必须 `No issues found!`（基线已是零）→ `flutter test` 全绿 →
 `grep -c "coin\['" <files>` 记录前后计数写进提交信息 → 提交格式：
