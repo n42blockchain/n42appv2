@@ -391,3 +391,25 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
      - #8 杀进程仍依赖 FCM 唤醒，加入白名单后改善但不保证 100%（这是 option 2
        厂商通道才能根治的边界）——把结果如实记录即可。
   另 T1：辛苦 Mac 上 Xcode > Settings > Components 装 iOS 26.5 platform 后开跑。
+
+- 2026-06-14 18:49 EDT（Codex-N42，option-1 回归同步检查）：
+  已同步到 `feat/ui-token-migration` 最新 `51e6ea9f`，`flutter test
+  test/features/utils/background_delivery_guide_test.dart` 通过，`flutter build
+  apk --debug --target-platform android-arm64` 通过，并已在 Redmi
+  `25098RA98C` / HyperOS 设备安装 `ai.n42.www` `2.3.587` (`versionCode=115`)。
+  登录后确实弹出 option-1 引导对话框：`Background Delivery May Be Limited`，
+  文案提示后台/关闭后可能漏消息，按钮有 `Don't remind me` / `Later` /
+  `Go to Settings`。点击 `Go to Settings` 后进入 MIUI 应用详情页，能看到
+  `自启动` 开关；开启时 `cmd appops get ai.n42.www` 中 `MIUIOP(10008)` /
+  `MIUIOP(10053)` 曾从 `ignore` 变为 `allow`，说明自启动引导路径可达。
+
+  但在 MIUI 设置页回退/确认过程中我误触到了卸载流程，导致包被卸载，随后已重新
+  安装 APK。重装后钱包账号状态恢复到 `Account1`，但 Chat/Matrix 状态丢失：
+  UI 显示 `N42 Chat` 的 `Log In` / `Sign Up`，logcat 为 `MatrixClientManager:
+  Logged in: false, rooms: 0`，push init 为 `isLogged=false` / `verified=false`。
+  当前无法继续 T2 #6/#8 消息回归，需用户在 Android 真机重新登录 Chat。
+
+  当前重装后的权限状态：`POST_NOTIFICATION: allow`、`WAKE_LOCK: allow`，但
+  `MIUIOP(10008): ignore`、`MIUIOP(10053): ignore`，`dumpsys deviceidle
+  whitelist` 仍只有 `com.whatsapp`，没有 `ai.n42.www`。所以重新登录后需要再触发
+  option-1 引导，重新打开自启动/电池设置，再重测 #6/#8。
