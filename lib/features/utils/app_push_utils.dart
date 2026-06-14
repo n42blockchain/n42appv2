@@ -32,6 +32,18 @@ import 'package:permission_handler/permission_handler.dart';
 
 part 'app_push_navigation.dart';
 
+/// FCM 后台消息入口 —— **必须是 top-level 函数**。
+///
+/// FlutterFire 的 native 回调用 PluginUtilities.getCallbackHandle 解析此
+/// 函数，class 的 static method（即便标了 `@pragma('vm:entry-point')`）
+/// 在后台 isolate 中无法被 native 访问。真机实测（Redmi/HyperOS 杀进程
+/// 唤醒）会报 `To access ... AppPushUtils from native code, it must be
+/// annotated` 并使后台 isolate 崩溃、通知不弹（T2 #8）。这里用 top-level
+/// 函数转调静态实现（同 library 可访问 private static）。
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundEntrypoint(RemoteMessage message) =>
+    AppPushUtils._firebaseMessagingBackgroundHandler(message);
+
 late AndroidNotificationChannel channel;
 
 //本地通知插件对象
@@ -157,7 +169,9 @@ class AppPushUtils {
 
     // ---- 消息与点击的统一接线（注册顺序无业务含义） ----
     FirebaseMessaging.onMessage.listen(_onForegroundMessage);
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    // 注册 top-level 入口（见文件顶部 firebaseMessagingBackgroundEntrypoint
+    // 注释：class static method 在后台 isolate 无法被 native 回调访问）。
+    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundEntrypoint);
     FirebaseMessaging.onMessageOpenedApp.listen(_onNotificationOpenedApp);
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       AppLogger.d('AppPush', 'firebase messaging token updated: $newToken');
