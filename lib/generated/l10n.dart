@@ -11039,6 +11039,26 @@ class S {
     );
   }
 
+  /// `Background Delivery May Be Limited`
+  String get push_bg_delivery_dialog_title {
+    return Intl.message(
+      'Background Delivery May Be Limited',
+      name: 'push_bg_delivery_dialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap "Go to Settings" to allow background activity, then enable Autostart for this app.`
+  String get push_bg_delivery_dialog_content {
+    return Intl.message(
+      'This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap "Go to Settings" to allow background activity, then enable Autostart for this app.',
+      name: 'push_bg_delivery_dialog_content',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Notifications Disabled`
   String get push_permission_dialog_title {
     return Intl.message(

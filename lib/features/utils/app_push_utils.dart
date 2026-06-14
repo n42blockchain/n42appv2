@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
+import 'package:n42_wallet/features/utils/background_delivery_guide.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -670,6 +671,71 @@ class AppPushUtils {
       );
     } catch (e) {
       AppLogger.w('AppPush', 'checkAndPromptPermission error: $e');
+    }
+  }
+
+  /// 国产 ROM 后台送达引导：通知权限已开、但厂商 ROM 仍可能在后台/杀进程
+  /// 时压制 FCM data-only（真机实测 HyperOS 不把 app 放进 deviceidle 白名单
+  /// → 不唤醒收消息）。引导用户开启「电池优化白名单」（系统标准请求）+
+  /// 「自启动」（无标准 API，靠文案 + 跳应用设置引导）。
+  ///
+  /// 仅 Android 国产 ROM 触发；已在电池白名单或用户选过"不再提醒"则跳过。
+  static Future<void> checkAndPromptBgDelivery() async {
+    try {
+      if (defaultTargetPlatform != TargetPlatform.android) return;
+
+      final info = await DeviceInfoUtil().getDeviceInfo();
+      final brand = (info?['mobileName'] ?? '').toString();
+      if (!isAggressiveBackgroundRom(brand)) return;
+
+      // 已加入电池优化白名单 → 后台送达已尽力，无需打扰
+      if (await Permission.ignoreBatteryOptimizations.isGranted) return;
+
+      if (await SPUtil().getBgDeliveryGuideDismissed()) return;
+
+      final ctx = AppGlobals.navigatorKey.currentContext;
+      if (ctx == null || !ctx.mounted) return;
+
+      final s = S.of(ctx);
+      // ignore: use_build_context_synchronously
+      await showDialog<void>(
+        context: ctx,
+        barrierDismissible: false,
+        builder: (dialogCtx) => AlertDialog(
+          title: Text(s.push_bg_delivery_dialog_title),
+          content: Text(s.push_bg_delivery_dialog_content),
+          actionsAlignment: MainAxisAlignment.center,
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await SPUtil().setBgDeliveryGuideDismissed(true);
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+              },
+              child: Text(s.push_permission_btn_dismiss),
+            ),
+            TextButton(
+              onPressed: () {
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+              },
+              child: Text(s.push_permission_btn_later),
+            ),
+            TextButton(
+              onPressed: () async {
+                if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
+                // 先发系统标准的电池优化豁免请求（一键），再跳应用设置页
+                // 引导用户开自启动（厂商私有，无标准 API）。
+                try {
+                  await Permission.ignoreBatteryOptimizations.request();
+                } catch (_) {}
+                await openAppSettings();
+              },
+              child: Text(s.push_permission_btn_settings),
+            ),
+          ],
+        ),
+      );
+    } catch (e) {
+      AppLogger.w('AppPush', 'checkAndPromptBgDelivery error: $e');
     }
   }
 

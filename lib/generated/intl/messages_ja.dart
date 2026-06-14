@@ -2216,6 +2216,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "アドレスを入力してください",
     ),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Background Delivery May Be Limited",
+    ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "次から表示しない",
     ),

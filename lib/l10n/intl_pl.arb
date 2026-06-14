@@ -1326,6 +1326,8 @@
       }
     }
   },
+  "push_bg_delivery_dialog_title": "Background Delivery May Be Limited",
+  "push_bg_delivery_dialog_content": "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
   "push_permission_dialog_title": "Powiadomienia wyłączone",
   "push_permission_dialog_content": "Powiadomienia push są wyłączone. Możesz przegapić wiadomości czatu i alerty o przelewach.\n\nWłącz powiadomienia dla tej aplikacji w ustawieniach systemowych.",
   "push_permission_btn_dismiss": "Nie przypominaj",

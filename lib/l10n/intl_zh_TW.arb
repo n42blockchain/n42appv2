@@ -1355,6 +1355,8 @@
   "g_market_30d_change": "30D變化",
   "g_market_depth": "市場深度",
   "g_market_no_chart": "無圖表數據",
+  "push_bg_delivery_dialog_title": "後台訊息可能被限制",
+  "push_bg_delivery_dialog_content": "此裝置會限制後台應用，當應用在後台或關閉時，您可能會錯過聊天訊息與轉帳提醒。\n\n請點「前往設定」允許後台執行，並為本應用開啟「自動啟動」。",
   "push_permission_dialog_title": "推送通知未開啟",
   "push_permission_dialog_content": "您尚未開啟推送通知權限，將無法及時收到聊天訊息和轉帳提醒。\n\n建議前往系統設定為本應用開啟通知權限。",
   "push_permission_btn_dismiss": "不再提醒",

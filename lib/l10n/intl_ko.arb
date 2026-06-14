@@ -1319,6 +1319,8 @@
   "g_market_30d_change": "30D 변경",
   "g_market_depth": "시장 깊이",
   "g_market_no_chart": "차트 데이터 없음",
+  "push_bg_delivery_dialog_title": "Background Delivery May Be Limited",
+  "push_bg_delivery_dialog_content": "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
   "push_permission_dialog_title": "알림이 비활성화됨",
   "push_permission_dialog_content": "푸시 알림이 비활성화되어 있습니다. 채팅 메시지와 이체 알림을 놓칠 수 있습니다.\n\n시스템 설정에서 이 앱의 알림을 활성화하세요.",
   "push_permission_btn_dismiss": "다시 알리지 않기",

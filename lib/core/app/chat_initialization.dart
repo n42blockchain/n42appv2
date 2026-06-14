@@ -502,8 +502,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         previousStatus != AuthStatus.authenticated) {
       unawaited(clearPendingCancelledChatDataPurgeCompat());
       N42Chat.notifyUserChanged();
-      // Chat 登录成功后检查推送权限，未开启则提醒用户
+      // Chat 登录成功后检查推送权限，未开启则提醒用户；
+      // 国产 ROM 另引导开启自启动+电池白名单，否则后台收不到消息。
       AppPushUtils.checkAndPromptPermission();
+      AppPushUtils.checkAndPromptBgDelivery();
       return;
     }
 

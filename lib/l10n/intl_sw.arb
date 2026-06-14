@@ -1319,6 +1319,8 @@
   "g_market_30d_change": "Mabadiliko ya 30D",
   "g_market_depth": "Undani wa Soko",
   "g_market_no_chart": "Hakuna data ya chati",
+  "push_bg_delivery_dialog_title": "Background Delivery May Be Limited",
+  "push_bg_delivery_dialog_content": "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
   "push_permission_dialog_title": "Arifa zimezimwa",
   "push_permission_dialog_content": "Arifa za kusukuma zimezimwa. Unaweza kukosa ujumbe wa mazungumzo na arifa za uhamisho.\n\nTafadhali wezesha arifa kwa programu hii katika mipangilio ya mfumo.",
   "push_permission_btn_dismiss": "Usikumbushe tena",

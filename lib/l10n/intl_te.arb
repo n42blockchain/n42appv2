@@ -1319,6 +1319,8 @@
   "g_market_30d_change": "30D మార్పు",
   "g_market_depth": "మార్కెట్ లోతు",
   "g_market_no_chart": "చార్ట్ డేటా లేదు",
+  "push_bg_delivery_dialog_title": "Background Delivery May Be Limited",
+  "push_bg_delivery_dialog_content": "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
   "push_permission_dialog_title": "నోటిఫికేషన్లు నిలిపివేయబడ్డాయి",
   "push_permission_dialog_content": "పుష్ నోటిఫికేషన్లు నిలిపివేయబడ్డాయి. మీరు చాట్ సందేశాలు మరియు బదిలీ హెచ్చరికలను మిస్ అవుతారు.\n\nసిస్టమ్ సెట్టింగ్‌లలో ఈ యాప్‌కు నోటిఫికేషన్లను ప్రారంభించండి.",
   "push_permission_btn_dismiss": "మళ్ళీ గుర్తుచేయవద్దు",

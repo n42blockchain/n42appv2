@@ -1910,6 +1910,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "personalInformation": MessageLookupByLibrary.simpleMessage("編輯個人資料"),
     "photograph": MessageLookupByLibrary.simpleMessage("照片"),
     "please_input_address": MessageLookupByLibrary.simpleMessage("請輸入地址"),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "此裝置會限制後台應用，當應用在後台或關閉時，您可能會錯過聊天訊息與轉帳提醒。\n\n請點「前往設定」允許後台執行，並為本應用開啟「自動啟動」。",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "後台訊息可能被限制",
+    ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage("不再提醒"),
     "push_permission_btn_later": MessageLookupByLibrary.simpleMessage("稍後再說"),
     "push_permission_btn_settings": MessageLookupByLibrary.simpleMessage("去設定"),
