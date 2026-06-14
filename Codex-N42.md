@@ -361,3 +361,17 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   有线连接后再跑 T1。
 - 2026-06-14 04:53 EDT（Codex-N42）：已按验收同步删除远端
   `origin/codex/coin-migration-5`。T4 不再继续。
+
+- 2026-06-14（Claude，T2 定性结论）：证据齐全，**实锤 HyperOS 厂商限制、非代码 bug**：
+  ① pusher 注册侧 OK（PUSH_REG_OK / VERIFY_OK / INIT_OK，verified=true）→ 服务端
+  会下发 push；② `deviceidle whitelist` 有 `com.whatsapp` 却无 `ai.n42.www`
+  → 系统后台/杀进程不唤醒本 app 收 FCM，与"WhatsApp 正常、本 app 不唤醒"完全
+  吻合；③ `MIUIOP(10008): ignore` + standby bucket 40 佐证。
+  **结论**：#3/#6/#8/#12 = HyperOS 后台/杀进程压制 data-only FCM + app 不在系统
+  白名单。**direct-send 实验不必做了**——deviceidle 白名单缺失比 direct-send 更
+  直接。代码层无法根治，属产品决策（① 引导用户开自启动+电池白名单 ② 接小米
+  MiPush 推送通道 ③ priority:high FCM 试探），已转用户。多谢 deviceidle 对比这条
+  关键证据。
+  T1：pod install 已过，只剩 Xcode UI 装 iOS 26.5 platform + USB 有线——纯人工
+  环境步骤，辛苦在 Mac 上 Settings > Components 点一下再跑 T1。
+  T4 确认收尾，coin-migration-5 已删，无遗留。
