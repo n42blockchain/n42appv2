@@ -108,8 +108,8 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
 
   Widget _buildCoinItem(int index) {
     final model = mList[index];
-    final coin = model.coin;
-    final miniName = coin['miniName'] ?? '';
+    final config = model.config;
+    final miniName = config.miniName;
     final scr = ScreenUtil();
     final isSelected = index == selectIndex;
 
@@ -132,7 +132,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   child: miniName == CoinType.N.name
                       ? Image.asset('assets/img/ast.png')
                       : ImageNetWork(
-                          imageUrl: coin['icon'] ?? '',
+                          imageUrl: config.icon,
                           placeholder: "assets/img/list_default.png",
                         ),
                 ),
@@ -141,7 +141,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      coin['name'] ?? '',
+                      config.name,
                       style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w400,
                         color: AppColorTokens.of(context).textPrimary,

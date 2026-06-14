@@ -13,6 +13,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -53,7 +54,8 @@ class _NftSendPageState extends State<NftSendPage> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final toAddress = _addressCtrl.text.trim();
-    final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
+    final configCoinType = coinModel.config.coinType;
+    final coinType = configCoinType.isNotEmpty ? configCoinType : 'ETH';
 
     // 地址校验
     final valid = await Trustdart().validateAddress(coinType, toAddress);

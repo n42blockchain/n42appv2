@@ -203,27 +203,28 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   void _initData() {
     final wap = _walletProvider;
     final coin = widget.coinModel.coin;
+    final config = widget.coinModel.config;
 
-    if (coin['isContract'] == true) {
+    if (config.isContract) {
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.config.coinType == coin['coinType'],
+        (e) => e.config.coinType == config.coinType,
       );
       chainCoinModel = wap.coinModels[cIndex];
       _chainName = chainCoinModel!.config.name;
       _chainSymbol = chainCoinModel!.config.miniName;
-      _tokenName = coin['name'];
-      _tokenSymbol = coin['miniName'];
+      _tokenName = config.name;
+      _tokenSymbol = config.miniName;
       browserUrl = getBrowserTokenAddress(
-        coin['coinType'],
+        config.coinType,
         widget.coinModel.address,
-        coin['contract'],
+        config.contract,
         isTest: widget.coinModel.isTest,
       );
     } else {
-      _chainName = coin['name'];
-      _chainSymbol = coin['miniName'];
+      _chainName = config.name;
+      _chainSymbol = config.miniName;
       browserUrl = getBrowserAddress(
-        coin['coinType'],
+        config.coinType,
         widget.coinModel.address,
         isTest: widget.coinModel.isTest,
       );

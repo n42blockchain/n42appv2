@@ -60,16 +60,17 @@ class WalletCoinItem extends ConsumerWidget {
     final su = ScreenUtil();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final coin = coinInfo.coin;
+    final config = coinInfo.config;
     final balanceStr = _formatBalance(coinInfo.value);
     final tokenBalanceStr = _formatTokenBalance(coinInfo);
 
     const defaultImg = 'assets/img/list_default.png';
-    final coinIcon = coin['icon'] ?? '';
+    final coinIcon = config.icon;
     final Widget image = coinIcon.isEmpty
         ? Image.asset(defaultImg)
         : ImageNetWork(imageUrl: coinIcon, placeholder: defaultImg);
 
-    final Widget? mainImage = coin['isContract'] == true
+    final Widget? mainImage = config.isContract
         ? ImageNetWork(
             imageUrl: coinInfo.mainCoinIcon ?? '',
             placeholder: defaultImg,
@@ -107,14 +108,14 @@ class WalletCoinItem extends ConsumerWidget {
               onPressed: (_) {
                 if (!canEdit) return;
                 final wap = ref.read(wapBridgeProvider);
-                if (coin['isContract'] == true) {
+                if (config.isContract) {
                   wap.removeWalletChainToken(
                     coin,
-                    symbol: coin['coinType'],
-                    miniName: coin['miniName'],
+                    symbol: config.coinType,
+                    miniName: config.miniName,
                   );
                 } else {
-                  wap.removeWalletChain(coin['mKey'], coin['unit']);
+                  wap.removeWalletChain(config.mKey, coin['unit']);
                 }
               },
               backgroundColor: deleteColor,

@@ -227,30 +227,31 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   void _initData() {
     final cm = widget.coinModel;
     final coin = cm.coin;
-    final isContract = coin['isContract'] == true;
+    final config = cm.config;
+    final isContract = config.isContract;
 
     if (isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.config.coinType == coin['coinType'],
+        (e) => e.config.coinType == config.coinType,
       );
       if (cIndex < 0) return;
       _chainCoinModel = wap.coinModels[cIndex];
       _chainName = _chainCoinModel!.config.name;
       _chainSymbol = _chainCoinModel!.config.miniName;
-      _tokenName = coin['name'];
-      _tokenSymbol = coin['miniName'];
+      _tokenName = config.name;
+      _tokenSymbol = config.miniName;
       browserUrl = getBrowserTokenAddress(
-        coin['coinType'],
+        config.coinType,
         cm.address,
-        coin['contract'],
+        config.contract,
         isTest: cm.isTest,
       );
     } else {
-      _chainName = coin['name'];
-      _chainSymbol = coin['miniName'];
+      _chainName = config.name;
+      _chainSymbol = config.miniName;
       browserUrl = getBrowserAddress(
-        coin['coinType'],
+        config.coinType,
         cm.address,
         isTest: cm.isTest,
       );

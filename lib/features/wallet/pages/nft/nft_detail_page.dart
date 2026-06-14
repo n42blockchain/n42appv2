@@ -167,7 +167,8 @@ class _NftDetailPageState extends State<NftDetailPage> {
     setState(() => _burning = true);
 
     try {
-      final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
+      final configCoinType = coinModel.config.coinType;
+      final coinType = configCoinType.isNotEmpty ? configCoinType : 'ETH';
       final addrType = coinModel.addrType;
       final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;

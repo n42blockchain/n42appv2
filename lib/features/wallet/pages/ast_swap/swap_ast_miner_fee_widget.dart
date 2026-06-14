@@ -38,10 +38,10 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (payCoinModel == null) return const SizedBox.shrink();
 
-    final String title = _swapFeeString(
-      payCoinModel!.coin['coinType'],
-      fallback: CoinType.N.name,
-    );
+    final configCoinType = payCoinModel!.config.coinType;
+    final String title = configCoinType.isNotEmpty
+        ? configCoinType
+        : CoinType.N.name;
     final feeStrings = _buildFeeStrings(context, title);
 
     return Container(

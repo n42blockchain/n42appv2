@@ -56,6 +56,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
   bool get _isMempoolTx => transactionModel is MempoolTxItem;
 
+  String get _coinTypeForEns {
+    final coinType = coinModel?.config.coinType;
+    return coinType == null || coinType.isEmpty ? 'ETH' : coinType;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isMempoolTx) return _buildMempoolTxCard(context);
@@ -161,7 +166,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
               ),
               EnsAddressText(
                 address: _counterpartyAddress(isOut),
-                coinType: coinModel?.coin['coinType'] ?? 'ETH',
+                coinType: _coinTypeForEns,
                 style: AppTypography.bodySm.copyWith(
                   color: AppColorTokens.of(context).textItem,
                 ),

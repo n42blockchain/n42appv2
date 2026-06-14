@@ -62,7 +62,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
           SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: widget.model.address ?? "",
-            coinType: widget.model.coin['coinType'] ?? 'ETH',
+            coinType: _coinTypeForEns,
             style: EnsDisplayStyle.compact,
             showAvatar: true,
             showCopy: true,
@@ -76,6 +76,11 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
         ],
       ),
     );
+  }
+
+  String get _coinTypeForEns {
+    final coinType = widget.model.config.coinType;
+    return coinType.isEmpty ? 'ETH' : coinType;
   }
 
   Widget _buildCoinNameRow() {
