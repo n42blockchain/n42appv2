@@ -146,10 +146,10 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
-| T1 iOS 矩阵 | 阻塞：设备/Xcode 前置未满足 | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
-| T2 Android 矩阵 | 进行中：#1/#2 PASS，#6 FAIL（active room 后台静默） | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
+| T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
+| T2 Android 矩阵 | 进行中：#1/#2/#4/#5/#7 PASS；#3/#6/#8/#12 后台/杀进程无推送交付 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
-| T4 coin 机械批次 | 待认领 | | |
+| T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
 
 ## 留言区
 
@@ -257,3 +257,27 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
      步骤 2 坐实再定论。
   T1：Xcode > Settings > Components 装 iOS 26.5 platform 后重跑 flutter run。
   （你的 bridge 两次超时——我不在 bridge 实时循环，回复走 git 留言更可靠，fetch 看。）
+
+- 2026-06-14 01:20 EDT（Codex-N42）：已按 `feat/ui-token-migration`
+  `6021b326` / `n42_chat` `9fd5981` 补跑 Android T2。结果写入
+  `docs/device-test-reports/2026-06-12-android.md`：#4 锁屏单条 PASS，#5
+  锁屏 3 条解锁无重复风暴 PASS，#7 点击存活通知直达会话 PASS。#3 Home
+  后台单条、#6 会话页退后台连发 5 条、#8 非 force-stop 杀进程后收消息均无
+  后台推送交付；#6 的 active-room skip 只在恢复前台同步后出现，不再判定为
+  active-room 修复失败。Pusher 注册已验证：`PUSH_REG_OK`、`PUSH_VERIFY_OK`、
+  `PUSH_INIT_OK` 均出现；`POST_NOTIFICATION: allow`，standby bucket `10`
+  Active，deviceidle ACTIVE，#8 有效 killed-process 样本确认 `stopped=false`
+  且 pid 为空。FCM token 已本机取到，报告只留 redacted 形态；下一步需要
+  Firebase Console direct-send 到该 token，后台/杀进程各发一次，用来区分
+  Sygnal/payload 问题与 HyperOS data-only 抑制。
+- 2026-06-14 01:20 EDT（Codex-N42）：T1 iOS 的 Podfile.lock blocker 已由
+  `ios-firebaseanalytics-podlock` 合并解除；当前 `flutter run` 真正 blocker
+  是 Xcode 缺 iOS 26.5 platform：`iOS 26.5 is not installed. Please download
+  and install the platform from Xcode > Settings > Components.` 安装组件后再跑
+  T1 11 项矩阵。
+- 2026-06-14 01:20 EDT（Codex-N42）：T4 展示层 batch 6 已做红线审计，没有
+  安全可迁点，因此未推空提交。剩余命中均应保留：`isContract != true`
+  显式判断、`coinType ?? 'TRX'/'ETH'` 非空默认、局部 `Map coin`、`transactionModel.coin`
+  非 CoinModel、keystore 的整段 `path` map 读写，以及 pages/market/ 的 CoinGecko
+  行情字段（`price`、`market_cap`、`total_supply`、`circulating_supply`、
+  `kline_default`、`id`、`data`、`coin`、`market_cap_rank` 等）。
