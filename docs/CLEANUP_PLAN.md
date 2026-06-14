@@ -110,7 +110,16 @@ provider 写入站点、`== false`/`!= null`/`!= true` 显式判断、`?? 'BTC'`
 
 **资金路径侧已扫到底**：provider + wallet_connect + `pages/send/` 全部完成。
 `send/` 从 323 → 157，剩余 157 全是上述合理保留（红线 128 + 别名/特殊默认 ~29），
-非遗漏。展示层（market/transactions/nft 等）归 Codex T4。
+非遗漏。
+
+**展示层（Codex T4）已完成（2026-06-14）**：market/transactions/nft/ast_swap/
+address_book/wallet_manage/widgets/home —— batch 1–5 合并入主线（基线
+`6021b326`），batch 6 审计确认剩余无安全可迁点。剩余白名单 key（name/symbol/
+coinType/coin_gecko_id/coin 等）经抽查全部落在 **market 模块的局部 `coin`
+Map 变量**（CoinGecko 行情数据，非 CoinModel，铁证：存在 `coin['coin']` 这种
+CoinModel 不存在的 key），正确保留。market 行情字段红线（price/market_cap/
+total_supply/circulating_supply/kline_default/id/data/coin/market_cap_rank
+不可迁、不加 getter）已固化进 `Codex-N42.md` T4 手册。
 
 ## 阶段 5：mining v1/v2 版本收敛（决策先行，不抢跑）
 
@@ -135,5 +144,5 @@ v1 被 30 个外部文件引用、`plugins/flutter_mining` 仅服务 v1——这
 | 1 零风险赘肉 | ✅ 完成（contracts/IAuthService 删除 -608 行；benchmark_results 后续更正为 ignore 产物） | 2026-06-12 |
 | 2 测试健康 | ✅ 完成（n42_chat 4 失败修复+发现简体中文缺失真 bug；all_tests.dart 删除；make check；宿主全量绿）。Codex T3 在途 | 2026-06-12 |
 | 3 主路径审计 | ✅ 完成（4 路径 32 项发现：10 修复 / 9 误报 / 13 记录，见 MAIN_PATH_AUDIT.md；通知路径见 PUSH_NOTIFICATIONS.md） | 2026-06-12 |
-| 4 coin 迁移 | 🟡 增量已锁（CLAUDE.md 禁令）；存量 796 处分批进行，机械批次拟派 Codex | |
+| 4 coin 迁移 | ✅ 完成：资金路径侧（Claude batch 1–10）+ 展示层（Codex T4 batch 1–6）全部收尾；剩余全仓 coin['...'] 仅合理保留（红线/行情字段/局部 Map 别名/特殊默认），typo 风险面消除 | 2026-06-14 |
 | 5 mining 收敛 | ✅ 裁决完成：v1 是活功能（设置页用户开关），不可删；边界已写入 CLAUDE.md；移除开关属产品决策 | 2026-06-12 |
