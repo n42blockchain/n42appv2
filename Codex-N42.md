@@ -413,3 +413,37 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   `MIUIOP(10008): ignore`、`MIUIOP(10053): ignore`，`dumpsys deviceidle
   whitelist` 仍只有 `com.whatsapp`，没有 `ai.n42.www`。所以重新登录后需要再触发
   option-1 引导，重新打开自启动/电池设置，再重测 #6/#8。
+
+- 2026-06-14 19:26 EDT（Codex-N42，option-1 #6/#8 回归结果）：
+  用户重新登录并完成设置后，Chat 用户为 `test00002QQ`，pusher 重新注册验证成功：
+  `PUSH_REG_OK` / `PUSH_VERIFY_OK`，`POST_NOTIFICATION: allow`，
+  `MIUIOP(10008): allow`、`MIUIOP(10053): allow`。option-1 引导弹窗仍会在
+  登录后出现，说明触发逻辑正常；但 `dumpsys deviceidle whitelist` 仍没有
+  `ai.n42.www`（标准 Doze 白名单未写入，只有 MIUI 私有自启动 appops 已放行）。
+
+  **T2 #6（会话页 → Home 后台 → 第二端连发 5 条）仍 FAIL**。测试时 App 在
+  `test00001 💕` 会话页按 Home 退后台，进程存活；第二端发 5 条后通知栏
+  `ai.n42.www` 通知数为 0。logcat 抓到每条 FCM 到达系统后被 HyperOS Greezer
+  拦截，5 条消息对应 10 条 receiver denial（FlutterFirebaseMessagingReceiver +
+  FirebaseInstanceIdReceiver），典型日志：
+  `Greezer Denial: sending Intent { act=com.google.android.c2dm.intent.RECEIVE
+  ... pkg=ai.n42.www cmp=ai.n42.www/io.flutter.plugins.firebase.messaging.
+  FlutterFirebaseMessagingReceiver (has extras) }, action:
+  com.google.android.c2dm.intent.RECEIVE from com.google.android.gms
+  ... need cached broadcast`。结论：只开 MIUI 自启动仍不足以放行后台 cached
+  FCM broadcast，#6 没有改善到可用。
+
+  **T2 #8（非 force-stop 杀进程 → 第二端发 1 条）有新代码侧问题**。样本前确认
+  `stopped=false`、`pidof ai.n42.www` 为空、Home 前台、自启动 appops 仍 allow。
+  发消息后进程被 FCM 唤醒到 pid `22099`，说明 killed-process 场景 FCM 可唤醒；
+  但后台 isolate 失败，通知栏 `ai.n42.www` 通知数仍为 0。关键日志：
+  `FlutterFirebaseMessagingBackgroundService started!`
+  随后
+  `ERROR: To access 'package:n42_wallet/features/utils/app_push_utils.dart::
+  AppPushUtils' from native code, it must be annotated.` 以及 Dart runtime error。
+  当前代码在 `lib/features/utils/app_push_utils.dart` 中把
+  `FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler)`
+  注册到 `AppPushUtils` 的 private static method；方法本身有
+  `@pragma('vm:entry-point')`，但 FlutterFire/native 回调仍报 class entrypoint。
+  建议后续改为 top-level `@pragma('vm:entry-point')` background handler 包一层
+  调用静态实现，再重跑 #8。该路径属于通知核心，我本轮未直接改代码，只上报结果。
