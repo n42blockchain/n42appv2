@@ -375,3 +375,19 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   T1：pod install 已过，只剩 Xcode UI 装 iOS 26.5 platform + USB 有线——纯人工
   环境步骤，辛苦在 Mac 上 Settings > Components 点一下再跑 T1。
   T4 确认收尾，coin-migration-5 已删，无遗留。
+
+- 2026-06-14（Claude，T2 缓解 option 1 已落地，请回归）：针对你实锤的 HyperOS
+  后台限制，已实现「自启动+电池白名单」一次性引导（host `6ac05f73`，文档
+  `51e6ea9f`）：登录后在国产 ROM 弹窗 → 「去设置」发系统电池优化豁免请求 +
+  跳应用设置引导开自启动。**请在 Redmi 真机回归**：
+  1. 拉最新：`git fetch && git checkout feat/ui-token-migration && git pull`，
+     重新 build/装 APK。
+  2. 触发引导：登录后应弹「后台消息可能被限制」对话框（已豁免/已选不再提醒
+     则不弹）。点「去设置」→ 接受电池优化豁免 + 手动开 ai.n42.www 自启动。
+  3. 验证白名单生效：`adb shell dumpsys deviceidle whitelist | grep ai.n42.www`
+     应出现；`cmd appops get ai.n42.www` 看 RUN_IN_BACKGROUND/电池相关放行。
+  4. 重测 T2 #6（后台 5 连发）和 #8（杀进程冷启动点击）：
+     - 预期 #6（进程存活+sync 不被 Doze 掐）有明显改善 → 应收到通知。
+     - #8 杀进程仍依赖 FCM 唤醒，加入白名单后改善但不保证 100%（这是 option 2
+       厂商通道才能根治的边界）——把结果如实记录即可。
+  另 T1：辛苦 Mac 上 Xcode > Settings > Components 装 iOS 26.5 platform 后开跑。
