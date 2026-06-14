@@ -88,8 +88,17 @@ n42_chat tap 回调」对同一会话双重打开。
 
 ## 已知限制（代码层无法根治）
 
-- 国产 ROM 杀进程 / 无 GMS 设备：FCM data-only 推送送不到，需厂商推送通道
-  或电池优化白名单引导（产品决策，未实现）。
+- 国产 ROM 杀进程 / 无 GMS 设备：FCM data-only 推送送不到。**2026-06-14
+  真机实锤**（Redmi/HyperOS）：pusher 注册侧 OK（PUSH_REG_OK/VERIFY_OK），
+  但 app 不在 `dumpsys deviceidle whitelist`（同机 WhatsApp 在）→ 系统
+  后台/杀进程不唤醒本 app 收 FCM。属厂商限制，非代码 bug。
+  - **缓解 option 1（已实现 `6ac05f73`）**：`checkAndPromptBgDelivery()` —
+    登录后在国产 ROM（`isAggressiveBackgroundRom()`，11 个品牌）弹一次性
+    引导，发系统电池优化豁免请求 + 跳应用设置引导开自启动；已在白名单/
+    用户"不再提醒"则跳过。**显著改善"后台"（进程存活时 sync 不被 Doze
+    掐断），但"杀进程"仍依赖 FCM 唤醒、不保证 100%。**
+  - **根治 option 2（未做，独立工程）**：接小米 MiPush 等厂商推送通道
+    （或个推/极光聚合推送）。属产品决策。
 - iOS 后台由 APNs 展示的消息，其 event_id 不会进入去重存储，回前台后的
   重复抑制完全依赖 resume 闸门（不变量 5）。
 
