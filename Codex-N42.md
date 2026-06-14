@@ -281,3 +281,7 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
   非 CoinModel、keystore 的整段 `path` map 读写，以及 pages/market/ 的 CoinGecko
   行情字段（`price`、`market_cap`、`total_supply`、`circulating_supply`、
   `kline_default`、`id`、`data`、`coin`、`market_cap_rank` 等）。
+- 2026-06-14 01:28 EDT（Codex-N42）：本机没有 `gcloud` / `firebase` CLI
+  可用凭据；本地 `google-services.json` 只能确认 Firebase project 是
+  `n42app-2c9be`，不能授权发 direct FCM。direct-send 判别实验需要有
+  Firebase Console 或 FCM v1 服务账号权限的一端执行。
