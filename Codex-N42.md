@@ -328,3 +328,36 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
      （`adb logcat | grep -iE "fcm.*token|getToken|registration token"`）。
   有了 VERIFY 结果 + token + 已有证据（#1 前台 PASS=链路通、#3/#6/#8/#12 后台
   不通、同机 WhatsApp 正常），基本可定性为 HyperOS 后台压制 data-only。
+
+- 2026-06-14 04:53 EDT（Codex-N42）：按最新同步补 T2 定性证据。
+  **Pusher 注册侧是 OK**：logcat 有
+  `PUSH_REG_OK`、`PUSH_VERIFY_OK`、`PUSH_INIT_OK`，最近样本：
+  `06-14 01:02:55.964 [PUSH_REG_OK] Pusher registered successfully on attempt 1`，
+  `06-14 01:02:56.098 [PUSH_VERIFY_OK] Pusher verified on server
+  (appId=ai.n42.www.android)`，`06-14 01:02:56.105 [PUSH_INIT_OK] Push service
+  ready (verified=true)`。这说明 Sygnal/pusher 注册和服务端验证链路不是
+  当前 blocker。FCM token 已从设备本地 Firebase shared prefs 取到
+  （logcat 只保留了注册日志，没有完整 token）：`cykCn2WcQgmDiyqwGZi98v:APA91bE_TbLRbiJ6vCeB4i3X86b6ZSiQEtHPrb5nVUc8s6uvd4WUmhQXBSb3x9gyK2hHgNG-2lG0gzXcbtpzlSzJgnWMJHCo-KIRDCrMzQFDY3I1fOzj03g`。
+  对应 project number `579731937625`，本地 project id `n42app-2c9be`。
+  **小米/HyperOS 限制证据**：`cmd appops get ai.n42.www` 显示
+  `POST_NOTIFICATION: allow`、`WAKE_LOCK: allow`，但多个 MIUI 私有权限为
+  `ignore`，其中包含 `MIUIOP(10008): ignore`；`am get-standby-bucket
+  ai.n42.www` 当前为 `40`。`dumpsys deviceidle whitelist` 里有
+  `user,com.whatsapp,10312`，但没有 `ai.n42.www`，这和“WhatsApp 后台正常、
+  本 app 后台/杀进程不唤醒”的现象一致。命令行无法可靠读取“自启动”开关的
+  文字状态；系统确实暴露 `miui.intent.action.OP_AUTO_START` →
+  `com.miui.permcenter.autostart.AutoStartManagementActivity`，已用 adb 打开
+  自启动管理页，但 UI dump 被锁屏/通知栏遮住，仍需人工在手机上确认
+  `ai.n42.www` 的自启动开关。
+- 2026-06-14 04:53 EDT（Codex-N42）：T1 iOS 也复查了一次。
+  `flutter pub get` 通过，`cd ios && pod install` 通过，Flutter 能枚举到
+  `iPhone (wireless)`；但 `flutter run -d 00008150-000E2469149A401C --debug`
+  仍失败，Xcode 继续报：`iOS 26.5 is not installed. Please download and
+  install the platform from Xcode > Settings > Components.` 我尝试了命令行
+  `xcodebuild -prepareDeviceSupport -platform iOS -osVersion 26.5 -modelCode
+  iPhone18,2 -architecture arm64e`，它能 locate 到 iPhone 并开始 `Copying`，
+  但超过 90 秒无进展，已手动结束。下一步仍建议走 Xcode UI：
+  Settings > Components 安装/修复 iOS 26.5 platform/device support，最好 USB
+  有线连接后再跑 T1。
+- 2026-06-14 04:53 EDT（Codex-N42）：已按验收同步删除远端
+  `origin/codex/coin-migration-5`。T4 不再继续。
