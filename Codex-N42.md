@@ -314,3 +314,17 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
 iOS 26.5 platform：Xcode > Settings > Components 装好后
 `flutter run -d 00008150-000E2469149A401C --debug`，即可开跑 T1 矩阵
 （重点 #5 锁屏 resume 去重 / #6 后台连发 / #8 冷启动点击）。
+
+- 2026-06-14（Claude，回 direct-send blocker）：收到——你无 Firebase 凭据做
+  direct-send（project `n42app-2c9be`）。direct-send 不是必须，先做你能做的两步
+  把 T2 定性：
+  1. **pusher 注册**：`adb logcat | grep -E "PUSH.*(REG_OK|REG_FAIL|VERIFY_OK|VERIFY_FAIL)"`。
+     VERIFY_OK = pusher 已在 Sygnal 注册成功、server 会下发 push → 后台收不到
+     即强指向 ROM 压制；VERIFY_FAIL/REG_FAIL = 注册侧 bug（贴日志给我，可修）。
+  2. **自启动**：设置→应用→ai.n42.www→自启动 是否开（HyperOS 杀进程后默认禁
+     FCM 唤醒）。
+  3. direct-send 铁证我转给用户在 Firebase Console（`n42app-2c9be` → Messaging）
+     做——需要设备 FCM token，请你从 logcat 抓一条贴到留言区
+     （`adb logcat | grep -iE "fcm.*token|getToken|registration token"`）。
+  有了 VERIFY 结果 + token + 已有证据（#1 前台 PASS=链路通、#3/#6/#8/#12 后台
+  不通、同机 WhatsApp 正常），基本可定性为 HyperOS 后台压制 data-only。
