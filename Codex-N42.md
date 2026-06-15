@@ -463,3 +463,38 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   option-1 自启动放行 appops 但不够。根治方向是 Android 改用 FCM notification
   payload（系统直显、不走后台 isolate/广播），但需 Sygnal 服务端配合发
   notification 字段——我在评估，先看 #8 修复效果。
+
+- 2026-06-15 02:07 EDT（Codex-N42，#8 top-level handler 回归结果）：
+  已拉 `feat/ui-token-migration` 最新 `ff2576d2`，`flutter pub get` 通过，
+  `flutter build apk --debug --target-platform android-arm64` 通过，并已用
+  `adb install -r -d -t -g` 重装到 Redmi `25098RA98C` / HyperOS 设备
+  `ai.n42.www`。安装后启动一次确认 app init 和 background handler 注册完成，
+  通知权限仍为 `POST_NOTIFICATION: allow`，MIUI 自启动相关
+  `MIUIOP(10008)` / `MIUIOP(10053)` 仍为 `allow`。
+
+  **T2 #8 杀进程回归 PASS**。样本前通过 `run-as ai.n42.www kill -9 <pid>`
+  非 force-stop 杀掉进程，确认 `pidof ai.n42.www` 为空，package
+  `stopped=false` / `notLaunched=false`，设备停在 Home，通知栏基线为 0。
+  第二端向 `test00001 💕` 发 1 条后，FCM 成功唤醒 app 到 pid `28254`，
+  logcat 有：
+  `Start proc 28254:ai.n42.www ... for broadcast ... FlutterFirebaseMessagingReceiver`
+  和 `FlutterFirebaseMessagingBackgroundService started!`，随后后台 isolate
+  正常打印：
+  `[AppPush] background isolate: notification=null data={room_id: !4hoHozx9pToZdUNMGW:m.si46.world, event_id: $zLTh9K5WcQC-ZQlbl7Vjr2CrY0uChaPvnYLpkisH6xE, unread: 7, prio: high}`
+  以及 `[AppPush] background: Matrix/Chat message — delegating to FirebasePushService`。
+  通知栏出现 1 条 `ai.n42.www` 通知，id `1701833081`，channel
+  `n42_chat_messages.default`，title `N42 Chat`，text
+  `You have a new message`。同时 grep `AppPushUtils.*must be annotated` /
+  `must be annotated` / `Dart Error` 均 0 命中，说明 `ff2576d2` 的 top-level
+  entrypoint 修复生效。
+
+  **device_login 后台通知：本次未观察到 push 到达，暂不可判定**。按要求在 app
+  后台、logcat 清空后等待用户从另一端执行登录；用户回报“已操作”。检查结果：
+  进程仍为 `28254`，通知栏仍只有上一条 #8 的 `N42 Chat / You have a new
+  message`，没有 `New Device Login`。logcat 中 grep `device_login` /
+  `New Device Login` / `new device` / `Your account was logged in` 均无命中；
+  也没有新的 `com.google.android.c2dm.intent.RECEIVE ... pkg=ai.n42.www`、
+  `FlutterFirebaseMessagingReceiver` 或 `[AppPush] background isolate` 记录。
+  结论：这次不是后台 handler 崩溃，而是没有看到 device_login FCM 下发到该设备；
+  需要确认 device_login 是否有确定触发条件（同账号新设备登录是否会抑制、是否服务端
+  gated），或给一个可重复触发方式再测。
