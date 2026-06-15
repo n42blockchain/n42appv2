@@ -86,19 +86,37 @@ pusher 不用 `event_id_only`，Sygnal 直接下发完整 alert）。
 宿主侧 `chat_tap_dedup.dart` 提供 8 秒窗口的 tap 去重，防止「FCM tap +
 n42_chat tap 回调」对同一会话双重打开。
 
-## 已知限制（代码层无法根治）
+## 后台送达：真机结论（Redmi/HyperOS，2026-06-14/15）
 
-- 国产 ROM 杀进程 / 无 GMS 设备：FCM data-only 推送送不到。**2026-06-14
-  真机实锤**（Redmi/HyperOS）：pusher 注册侧 OK（PUSH_REG_OK/VERIFY_OK），
-  但 app 不在 `dumpsys deviceidle whitelist`（同机 WhatsApp 在）→ 系统
-  后台/杀进程不唤醒本 app 收 FCM。属厂商限制，非代码 bug。
-  - **缓解 option 1（已实现 `6ac05f73`）**：`checkAndPromptBgDelivery()` —
-    登录后在国产 ROM（`isAggressiveBackgroundRom()`，11 个品牌）弹一次性
-    引导，发系统电池优化豁免请求 + 跳应用设置引导开自启动；已在白名单/
-    用户"不再提醒"则跳过。**显著改善"后台"（进程存活时 sync 不被 Doze
-    掐断），但"杀进程"仍依赖 FCM 唤醒、不保证 100%。**
-  - **根治 option 2（未做，独立工程）**：接小米 MiPush 等厂商推送通道
-    （或个推/极光聚合推送）。属产品决策。
+**关键纠偏**：曾误判为"厂商限制无解"，真机闭环后发现**核心是代码 bug**：
+
+- **#8 杀进程 — 已 PASS（修复 `ff2576d2`）**。`onBackgroundMessage` 原注册
+  `AppPushUtils` 的 class static method，FlutterFire native 回调访问不到
+  （即便 `@pragma('vm:entry-point')`）→ 后台 isolate 崩
+  `must be annotated from native code` → 通知不弹。改为 **top-level 入口函数**
+  转调静态实现后：杀进程下 FCM 成功唤醒（`Start proc ... for broadcast`）、
+  后台 isolate 正常、通知弹出（`N42 Chat / You have a new message`，data-only
+  未解密故通用文案）。**杀进程 FCM 唤醒链路本就是通的，是 isolate 崩溃掩盖了它。**
+
+- **#6 存活后台 — 路径不同，可能仍受 Greezer 限制**。真机数据：杀进程走
+  `Start proc for broadcast`（冷启动 receiver）放行；**存活进程**走
+  `Greezer Denial ... need cached broadcast`（HyperOS 冻结已存活进程的广播）
+  被拦。两条唤醒路径 HyperOS 区别对待。#6 进程存活时消息多走 Matrix sync
+  通道（非 FCM，绕过 Greezer），sync 路径 active-room 静默已修（`9fd5981`），
+  故 #6 大概率改善——以真机重测为准。
+
+- **device_login**：宿主 n42 后端推送（非 Matrix），仅"未见过的 device_id 首次
+  登录"触发；与后台 handler 无关（#8 已证后台 isolate 正常）。
+
+### 缓解 / 根治选项
+
+- **option 1（已实现 `6ac05f73`）**：`checkAndPromptBgDelivery()` 国产 ROM 登录后
+  引导开自启动 + 电池白名单。改善存活后台（sync 不被 Doze 掐），但只开 MIUI
+  自启动 appops **不足以放行 Greezer cached broadcast**（真机实测仍 deny）。
+- **option 2（未做，独立工程）**：Android 改用 FCM **notification payload**
+  （让 Sygnal 发 notification 字段，系统直显、不走后台 isolate/广播 → 绕过
+  Greezer），或接小米 MiPush 等厂商通道。需 Sygnal 服务端配合 + 产品接受
+  E2EE 通用文案。**#8 已 PASS 后优先级下降，视 #6 重测结果再定。**
 - iOS 后台由 APNs 展示的消息，其 event_id 不会进入去重存储，回前台后的
   重复抑制完全依赖 resume 闸门（不变量 5）。
 
