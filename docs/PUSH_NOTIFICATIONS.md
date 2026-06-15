@@ -98,12 +98,19 @@ n42_chat tap 回调」对同一会话双重打开。
   后台 isolate 正常、通知弹出（`N42 Chat / You have a new message`，data-only
   未解密故通用文案）。**杀进程 FCM 唤醒链路本就是通的，是 isolate 崩溃掩盖了它。**
 
-- **#6 存活后台 — 路径不同，可能仍受 Greezer 限制**。真机数据：杀进程走
-  `Start proc for broadcast`（冷启动 receiver）放行；**存活进程**走
-  `Greezer Denial ... need cached broadcast`（HyperOS 冻结已存活进程的广播）
-  被拦。两条唤醒路径 HyperOS 区别对待。#6 进程存活时消息多走 Matrix sync
-  通道（非 FCM，绕过 Greezer），sync 路径 active-room 静默已修（`9fd5981`），
-  故 #6 大概率改善——以真机重测为准。
+- **#6 存活后台 — FAIL，确认 HyperOS 厂商限制（2026-06-15 重测坐实）**。
+  存活进程被 HyperOS 冻结（logcat `UidFrozen` / `procState: 5` /
+  `GOOGLE_C2DM wakeLock disabled: true`）→ FCM cached broadcast 被
+  `Greezer Denial ... need cached broadcast` 拦（5 条消息 → 5×3 denial，GCM
+  `result=CANCELLED`），**app 侧 0 条处理日志**；同时 Matrix sync 也断
+  （`Syncloop failed: Client has not connection to the server`）。消息根本没
+  到达 app，active-room 修复无从执行——**非 app 逻辑错误**。
+  - 对比 #8：杀进程无存活进程 → FCM 触发**冷启动** receiver
+    （`Start proc for broadcast`）放行 ✓；#6 存活进程被冻结 → cached
+    broadcast 拦 ✗。HyperOS 宁可冷启动也不唤醒已冻结的后台进程。
+  - 根治 #6 唯一路 = **option 2（notification payload）**：系统 SystemUI 直显，
+    不投递给 app 进程，app 冻结也不影响。或厂商通道。option 1 的自启动 appops
+    放行不解决冻结（真机 deviceidle whitelist 仍无 ai.n42.www）。
 
 - **device_login**：宿主 n42 后端推送（非 Matrix），仅"未见过的 device_id 首次
   登录"触发；与后台 handler 无关（#8 已证后台 isolate 正常）。
