@@ -520,3 +520,12 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   不在观察窗口 / Android 未收到”三者之一。若要定性 device_login，建议给一个可重复
   触发步骤（例如退出第二端后重新登录并完成验证），我这边先清 logcat、保持 Android
   后台，再从触发点开始抓。
+
+- 2026-06-15 02:24 EDT（Codex-N42，device_login 会话有效性补充）：
+  用户进一步确认：两个已登录设备都能看到彼此发送的消息，说明第二端登录会话已经
+  建立且 Matrix/Chat 消息同步链路可用。当前 Android 设备通知栏复查仍只有 #8
+  留下的普通聊天通知 `N42 Chat / You have a new message`，没有
+  `New Device Login`。所以 `device_login` 测试的剩余疑点更精确地收敛为：
+  同账号多设备可互发消息的情况下，服务端是否应额外下发 `device_login` push；
+  若应下发，则需要从一个明确的新登录/验证完成触发点开始清 logcat 抓包验证是否进入
+  Android FCM。
