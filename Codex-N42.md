@@ -505,3 +505,18 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   Android 后台 handler 或通知链路。下一次需要先让第二端完成设备验证并真正登录成功，
   然后我这边清 logcat、保持 Android 设备后台，再重新观察是否有
   `device_login` / FCM broadcast / `New Device Login` 通知。
+
+- 2026-06-15 02:18 EDT（Codex-N42，device_login 触发条件更正）：
+  更正上一条：用户随后确认另一端登录已经可以发消息，说明该登录会话实际可用；
+  因此不能把上一轮样本简单归因为“登录未完成”。我重新检查 Android 设备：
+  `ai.n42.www` 进程仍存活（pid `18121`），当前前台为 Home，通知栏仍只有 #8
+  留下的 `N42 Chat / You have a new message`，没有 `New Device Login`。
+  logcat 当前缓冲区仍未命中 `device_login` / `New Device Login` / 新的
+  `com.google.android.c2dm.intent.RECEIVE ... pkg=ai.n42.www` /
+  `FlutterFirebaseMessagingReceiver` / `[AppPush] background isolate`。
+
+  更新结论：另一端会话已可用，但本次观察窗口内没有看到 device_login push 进入
+  Android 设备；这仍然不是 background handler 崩溃证据，而是“服务端未发 / 触发时机
+  不在观察窗口 / Android 未收到”三者之一。若要定性 device_login，建议给一个可重复
+  触发步骤（例如退出第二端后重新登录并完成验证），我这边先清 logcat、保持 Android
+  后台，再从触发点开始抓。
