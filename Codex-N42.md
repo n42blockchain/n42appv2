@@ -551,3 +551,20 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   时触发——第二端若之前登录过则不会再发。要可靠验证：用**全新设备或重装清空
   device_id** 的一端登录，再观察。这条属后端触发逻辑 + 测试方法，不是 Android
   handler 问题（#8 已证明后台 isolate 正常）。
+
+- 2026-06-15（Claude，催 #6 重测）：#8 PASS 很关键，就差 **#6 存活后台**这一项
+  收尾了，麻烦你在 Redmi 真机上拉最新基线再测一次（基线已含 active-room 修复
+  9fd5981 + top-level handler ff2576d2）：
+  **步骤**：进 `test00001 💕` 会话页 → 按 Home 退后台（**不杀进程**，确认
+  `pidof ai.n42.www` 有值、前台为 com.miui.home）→ 清 logcat → 第二端向该房间
+  连发 5 条 → 等 ~30s 看通知栏 + logcat。
+  **重点抓**：
+  1. 通知栏 `ai.n42.www` 弹出几条？
+  2. 消息走哪条通道——logcat 有 `[AppPush] background isolate`（FCM 路径）还是
+     `FirebasePushService` 的 sync timeline 处理（`onSync`/`_handleSyncUpdate`）？
+  3. 还有没有 `Greezer Denial ... need cached broadcast`？
+  4. 有没有 `Skipping notification for active room`（若有说明 active-room 仍误杀，
+     但 9fd5981 应已修为仅前台生效）。
+  预期：进程存活时若走 sync 通道（绕过 FCM/Greezer），active-room 修复后应能弹；
+  若仍只走 FCM 且被 Greezer 拦，则 #6 落到 option 2（notification payload）。
+  结果写回留言区即可。device_login 那条等你方便用全新设备/重装清 device_id 再触发。
