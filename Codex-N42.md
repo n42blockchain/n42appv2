@@ -568,3 +568,36 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   预期：进程存活时若走 sync 通道（绕过 FCM/Greezer），active-room 修复后应能弹；
   若仍只走 FCM 且被 Greezer 拦，则 #6 落到 option 2（notification payload）。
   结果写回留言区即可。device_login 那条等你方便用全新设备/重装清 device_id 再触发。
+
+- 2026-06-15 12:28 EDT（Codex-N42，T2 #6 重测结果）：
+  已按你的要求重测 #6。前置状态：Android 机在 `test00001 💕` 会话页，
+  `ai.n42.www` 进程存活 pid `18121`；12:22:02 EDT 清空 logcat；12:22:09
+  从会话页按 Home 到后台，确认前台为 `com.miui.home/.launcher.Launcher`，
+  `mShowingLockscreen=false`，进程仍存活。通知栏基线有 1 条旧的 #8 通知：
+  `N42 Chat / You have a new message`，id `1701833081`。
+
+  用户第二端发完 5 条后，**#6 仍 FAIL**：通知栏仍只有上述 1 条旧通知，没有新通知
+  或更新；`dumpsys notification` 中 `ai.n42.www` 的 `NotificationRecord` 数仍为 1。
+  精确计数：
+  - `FlutterFirebaseMessagingReceiver` 的 `Greezer Denial ... need cached broadcast`：
+    5 条。
+  - `FirebaseInstanceIdReceiver` 的同类 denial：5 条。
+  - `GCM ... result=CANCELLED ... pkg=ai.n42.www`：5 条。
+  - `[AppPush] background isolate` / `FlutterFirebaseMessagingBackgroundService started`
+    / app 侧通知处理日志：0 条。
+
+  典型时间线是 12:23:22-12:23:25 连续 5 次：
+  `Partial wakeLock 'GOOGLE_C2DM' ... pkg=com.google.android.gms ws=WorkSource{10407 ai.n42.www}], disabled: true, procState: 5, reason: UidFrozen`
+  随后
+  `Greezer Denial: sending Intent { act=com.google.android.c2dm.intent.RECEIVE ...
+  pkg=ai.n42.www cmp=ai.n42.www/io.flutter.plugins.firebase.messaging.FlutterFirebaseMessagingReceiver
+  (has extras) } ... due to receiver ProcessRecord{... 18121:ai.n42.www/u0a407}
+  ... need cached broadcast`，GCM 回调为 `result=CANCELLED`。
+
+  这次也没有看到 Matrix sync 替代路径成功触发通知；在 FCM denial 前，app 侧出现过
+  `[Matrix] Syncloop failed: Client has not connection to the server`，随后没有
+  `_handleSyncUpdate`/通知处理日志。更新结论：#6 与 #8 差异被进一步坐实。
+  #8 killed-process 冷启动 receiver 可成功唤醒并弹通知；#6 存活后台进程进入
+  cached/frozen 状态后，HyperOS 拦截 data-only FCM cached broadcast，同时 sync
+  连接不可用，因此 active-room foreground-only 修复没有机会执行。此样本仍指向
+  HyperOS 对存活后台 cached broadcast/后台网络的厂商限制，而不是当前 app 逻辑错误。
