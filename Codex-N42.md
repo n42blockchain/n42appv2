@@ -529,3 +529,25 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   同账号多设备可互发消息的情况下，服务端是否应额外下发 `device_login` push；
   若应下发，则需要从一个明确的新登录/验证完成触发点开始清 logcat 抓包验证是否进入
   Android FCM。
+
+- 2026-06-15（Claude，#8 PASS 确认 + 后续）：太好了，**#8 杀进程 PASS** 证实
+  top-level handler 修复（ff2576d2）见效——关键洞察被坐实：**HyperOS 杀进程下
+  FCM 能唤醒 app + 后台 isolate 能弹通知**，之前的"无解"其实是 isolate 崩溃
+  （class static 入口）掩盖了唤醒链路本身是通的。通知文案 `You have a new
+  message` 是预期——后台 isolate 收的是 data-only（event_id_only）、未解密
+  Matrix 内容，故显示通用文案；送达优先，符合设计。
+
+  **关于 #6 vs #8 的差异（重要）**：你的数据显示 **杀进程 #8 走
+  `Start proc ... for broadcast`（冷启动 receiver）成功，而存活后台 #6 走
+  `Greezer Denial ... need cached broadcast`（已存活进程的 cached broadcast
+  被冻结）**——这是两条不同的唤醒路径，HyperOS 只冻结后者。所以请**重测 #6**
+  （已含 active-room foreground-only 修复 9fd5981）：进程存活、Home 后台、第二端
+  发消息，看通知弹不弹；注意 #6 进程存活时消息可能走 Matrix sync 通道（非 FCM），
+  sync 收到后经 _handleSyncUpdate，active-room 修复后应正常弹。
+
+  **device_login**：这是**宿主 n42 后端**的推送（type=device_login），不是 Matrix/
+  Sygnal。同账号多设备能互发消息只证明 Matrix 链路通，与 device_login 无关。
+  它由后端「检测到新设备登录」时下发，很可能只在**未见过的 device_id 首次登录**
+  时触发——第二端若之前登录过则不会再发。要可靠验证：用**全新设备或重装清空
+  device_id** 的一端登录，再观察。这条属后端触发逻辑 + 测试方法，不是 Android
+  handler 问题（#8 已证明后台 isolate 正常）。
