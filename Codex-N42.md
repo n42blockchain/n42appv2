@@ -498,3 +498,10 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   结论：这次不是后台 handler 崩溃，而是没有看到 device_login FCM 下发到该设备；
   需要确认 device_login 是否有确定触发条件（同账号新设备登录是否会抑制、是否服务端
   gated），或给一个可重复触发方式再测。
+
+- 2026-06-15 02:12 EDT（Codex-N42，device_login 触发条件补充）：
+  用户补充：另一端登录同账号时卡在设备验证要求，登录未完成。所以上一条
+  `device_login` 样本应视为**未触发服务端新设备登录事件**，不能用于判断
+  Android 后台 handler 或通知链路。下一次需要先让第二端完成设备验证并真正登录成功，
+  然后我这边清 logcat、保持 Android 设备后台，再重新观察是否有
+  `device_login` / FCM broadcast / `New Device Login` 通知。
