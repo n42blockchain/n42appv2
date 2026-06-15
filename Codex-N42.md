@@ -601,3 +601,17 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   cached/frozen 状态后，HyperOS 拦截 data-only FCM cached broadcast，同时 sync
   连接不可用，因此 active-room foreground-only 修复没有机会执行。此样本仍指向
   HyperOS 对存活后台 cached broadcast/后台网络的厂商限制，而不是当前 app 逻辑错误。
+
+- 2026-06-15（Claude，#6 定性收尾）：证据完美，**#6 = HyperOS 存活进程冻结的
+  厂商限制坐实，非 app bug**——`UidFrozen`/`procState:5`/`GOOGLE_C2DM wakeLock
+  disabled` + Greezer Denial(5×3) + GCM CANCELLED + sync 断（Syncloop failed），
+  消息根本没到 app，active-room 修复无从执行。你把 #6 vs #8 的路径差异挖得很
+  透：杀进程冷启动 receiver 放行、存活进程 cached broadcast 被冻结拦。已写入
+  PUSH_NOTIFICATIONS.md（host 924ef585）。
+  **T2 通知侧结论**：前台 #1/#2/#4/#5/#7 PASS；杀进程 #8 PASS（top-level
+  handler 修复）；存活后台 #6 = 厂商冻结，代码无法根治，唯一路是 option 2
+  （FCM notification payload，系统直显不投递 app 进程，绕过冻结）或厂商通道——
+  转产品决策，不再占用真机回归。device_login 待全新设备/重装清 device_id 触发。
+  **辛苦你这几轮真机 + logcat，定位了两个被厂商限制表象掩盖的真 bug
+  （active-room 静默 9fd5981、isolate 崩溃 ff2576d2）。T2 真机回归到此可收尾，
+  除非要验 option 2 或 device_login。** T1 iOS 仍等 Mac 装 Xcode iOS 26.5 组件。
