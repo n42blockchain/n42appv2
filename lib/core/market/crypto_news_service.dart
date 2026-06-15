@@ -3,8 +3,11 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:io' show HttpDate;
+
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/network/external_http.dart';
+import 'package:xml/xml.dart' as xml;
 
 // ─── Model ─────────────────────────────────────────────────────────────────
 
@@ -27,35 +30,6 @@ class NewsArticle {
     this.body,
   });
 
-  factory NewsArticle.fromCryptoCompare(Map<String, dynamic> json) {
-    final ts = (json['published_on'] is num)
-        ? (json['published_on'] as num).toInt()
-        : (int.tryParse(json['published_on']?.toString() ?? '') ?? 0);
-
-    // source_info is a nested object; fall back to flat "source" key.
-    String srcName = 'Unknown';
-    final sourceInfo = json['source_info'];
-    if (sourceInfo is Map) {
-      srcName = sourceInfo['name']?.toString() ?? 'Unknown';
-    } else if (json['source'] != null) {
-      srcName = json['source'].toString();
-    }
-
-    final imgRaw = json['imageurl']?.toString() ?? '';
-
-    return NewsArticle(
-      id: json['id']?.toString() ?? '',
-      title: json['title']?.toString() ?? '',
-      url: json['url']?.toString() ?? '',
-      imageUrl: imgRaw.isNotEmpty ? imgRaw : null,
-      sourceName: srcName,
-      publishedAt: ts > 0
-          ? DateTime.fromMillisecondsSinceEpoch(ts * 1000)
-          : DateTime.now(),
-      body: json['body']?.toString(),
-    );
-  }
-
   /// Human-readable time-ago string (English only; i18n handled by the UI layer).
   String timeAgo() {
     final diff = DateTime.now().difference(publishedAt);
@@ -69,18 +43,44 @@ class NewsArticle {
 
 // ─── Service ───────────────────────────────────────────────────────────────
 
-/// Fetches crypto news from CryptoCompare.
+/// Fetches crypto news from public RSS feeds (no API key required).
 ///
-/// API: https://min-api.cryptocompare.com/data/v2/news/?lang=EN&sortOrder=popular
-/// Free tier, no API key required.
+/// 历史：原先用 CryptoCompare `min-api.cryptocompare.com/data/v2/news`，
+/// 但该免费端点在被 CoinDesk/Kraken 收购后改为**强制 API key**（返回 401
+/// `API key required` 且 `Data` 退化为空对象），导致 market 新闻长期空白。
+/// 现改用与 `features/news` 同源的公共 RSS（Cointelegraph / Decrypt），
+/// 输出仍是 [NewsArticle]，调用方（market_page / NewsAggregator）无需改动。
 /// Cache: 15 minutes in memory.
 class CryptoNewsService {
-  static const _url =
-      'https://min-api.cryptocompare.com/data/v2/news/?lang=EN&sortOrder=popular&extraParams=n42wallet';
+  static const List<String> _feeds = [
+    'https://cointelegraph.com/rss',
+    'https://decrypt.co/feed',
+  ];
+
+  static final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 8),
+      receiveTimeout: const Duration(seconds: 12),
+      // RSS 是 XML，明确 plain 避免 dio 把响应当 JSON 解析。
+      responseType: ResponseType.plain,
+      headers: {
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'User-Agent': 'N42Wallet/2.x',
+      },
+    ),
+  );
 
   static List<NewsArticle>? _cached;
   static DateTime? _cachedAt;
   static Future<List<NewsArticle>>? _inflight;
+
+  /// Reset all static state. Test-only.
+  @visibleForTesting
+  static void resetForTest() {
+    _cached = null;
+    _cachedAt = null;
+    _inflight = null;
+  }
 
   static Future<List<NewsArticle>> fetchLatest() async {
     final cachedAt = _cachedAt;
@@ -94,37 +94,101 @@ class CryptoNewsService {
   }
 
   static Future<List<NewsArticle>> _doFetch() async {
-    try {
-      final raw = await ExternalHttp.get(_url)
-          .timeout(const Duration(seconds: 8));
-      final articles = parseLatestResponse(raw, fallback: _cached ?? const []);
-      if (articles.isNotEmpty) {
-        _cached = articles;
-        _cachedAt = DateTime.now();
+    for (final url in _feeds) {
+      try {
+        final resp = await _dio.get<String>(url);
+        final body = resp.data;
+        if (body == null || body.isEmpty) continue;
+        final articles = parseRssArticles(body, fallback: _cached ?? const []);
+        if (articles.isNotEmpty) {
+          _cached = articles;
+          _cachedAt = DateTime.now();
+          return articles;
+        }
+      } catch (e) {
+        _debugLog('CryptoNewsService._fetchFeed($url) error: $e');
       }
-      return articles;
+    }
+    // 全部源失败时返回上次成功缓存（哪怕过期），避免 UI 空白。
+    return _cached ?? const [];
+  }
+
+  /// Parse a standard RSS 2.0 feed into [NewsArticle]s. Returns [fallback]
+  /// when the body isn't parseable or yields no usable items.
+  @visibleForTesting
+  static List<NewsArticle> parseRssArticles(
+    String body, {
+    List<NewsArticle> fallback = const [],
+  }) {
+    try {
+      final doc = xml.XmlDocument.parse(body);
+      final sourceName =
+          _firstText(doc.findAllElements('channel').firstOrNull, 'title');
+      final out = <NewsArticle>[];
+      for (final item in doc.findAllElements('item')) {
+        final title = _firstText(item, 'title');
+        final link = _firstText(item, 'link');
+        if (title.isEmpty || link.isEmpty) continue;
+        final img = _extractImage(item);
+        final pub = _firstText(item, 'pubDate');
+        out.add(NewsArticle(
+          id: link,
+          title: title,
+          url: link,
+          imageUrl: img.isNotEmpty ? img : null,
+          sourceName: sourceName.isNotEmpty ? sourceName : 'Crypto News',
+          publishedAt: _parsePubDate(pub),
+          body: _firstText(item, 'description'),
+        ));
+      }
+      return out.isNotEmpty ? out : fallback;
     } catch (e) {
-      _debugLog('CryptoNewsService.fetchLatest error: $e');
-      return _cached ?? [];
+      _debugLog('CryptoNewsService.parseRssArticles error: $e');
+      return fallback;
     }
   }
 
-  @visibleForTesting
-  static List<NewsArticle> parseLatestResponse(
-    dynamic raw, {
-    List<NewsArticle> fallback = const [],
-  }) {
-    if (raw == null || raw is! Map) return fallback;
-    final data = raw['Data'];
-    if (data is! List) return fallback;
-
-    final articles = data
-        .whereType<Map<dynamic, dynamic>>()
-        .map((m) => NewsArticle.fromCryptoCompare(Map<String, dynamic>.from(m)))
-        .where((a) => a.title.isNotEmpty && a.url.isNotEmpty)
-        .toList();
-    return articles.isNotEmpty ? articles : fallback;
+  static DateTime _parsePubDate(String raw) {
+    if (raw.isEmpty) return DateTime.now();
+    try {
+      return HttpDate.parse(raw); // RFC 822/1123, e.g. "Mon, 15 Jun 2026 ..."
+    } catch (_) {
+      return DateTime.tryParse(raw) ?? DateTime.now();
+    }
   }
+
+  static String _firstText(xml.XmlElement? parent, String name) {
+    if (parent == null) return '';
+    final el = parent.findElements(name).firstOrNull;
+    return el?.innerText.trim() ?? '';
+  }
+
+  /// RSS 无标准 image 字段，按常见实现优先级提取：
+  /// `<media:content>` → `<media:thumbnail>` → image `<enclosure>` →
+  /// `<description>` 内第一张 `<img src>`。
+  static String _extractImage(xml.XmlElement item) {
+    for (final tag in ['media:content', 'media:thumbnail']) {
+      final el = item.findAllElements(tag).firstOrNull;
+      final url = el?.getAttribute('url');
+      if (url != null && url.isNotEmpty) return url;
+    }
+    final encl = item.findElements('enclosure').firstOrNull;
+    final enclType = encl?.getAttribute('type') ?? '';
+    final enclUrl = encl?.getAttribute('url');
+    if (enclUrl != null && enclUrl.isNotEmpty && enclType.startsWith('image/')) {
+      return enclUrl;
+    }
+    final desc = _firstText(item, 'description');
+    if (desc.isNotEmpty) {
+      final m = _imgInDescriptionRe.firstMatch(desc);
+      if (m != null) return m.group(1) ?? '';
+    }
+    return '';
+  }
+
+  static final RegExp _imgInDescriptionRe = RegExp(
+    r'''<img[^>]+src=["']([^"']+)["']''',
+  );
 
   static void _debugLog(String message) {
     if (!kDebugMode) return;
