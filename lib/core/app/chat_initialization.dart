@@ -218,6 +218,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       await flushPendingChatSsoDeepLink();
       await AppPushUtils.flushPendingChatNotification();
 
+      // 宿主接管 chat 外观（明暗模式）：chat 不再用自身存储值覆盖宿主下发，
+      // 明暗模式以宿主设置页为唯一来源。必须在 setThemeMode 之前置位。
+      N42Chat.hostControlsAppearance = true;
       final currentTheme = globalProviderContainer.read(themeModeProvider);
       N42Chat.setThemeMode(currentTheme);
 
