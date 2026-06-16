@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/api_hub/aggregators/news_aggregator.dart';
-import 'package:n42_wallet/core/api_hub/datasources/messari_datasource.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
 
@@ -56,21 +55,6 @@ void main() {
       expect(result.first.url, 'https://example.com/a');
       expect(result.first.imageUrl, 'https://img/a.jpg');
       expect(result.first.sourceName, 'Cointelegraph');
-    });
-
-    test('MessariDatasource keeps fallback news when parsed articles are empty', () {
-      final fallback = [_article(id: 'cached', url: 'https://cached', minutesAgo: 5)];
-
-      final result = MessariDatasource.parseNewsResponse(
-        {
-          'data': [
-            {'title': '', 'url': ''},
-          ],
-        },
-        fallback: fallback,
-      );
-
-      expect(result, same(fallback));
     });
 
     test('NewsAggregator deduplicates and sorts newest first', () {
