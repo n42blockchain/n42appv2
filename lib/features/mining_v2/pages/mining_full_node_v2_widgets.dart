@@ -41,54 +41,58 @@ mixin _MiningFullNodeV2WidgetsMixin
         ? Colors.white.withValues(alpha: 0.08)
         : Colors.black.withValues(alpha: 0.06);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isSelected ? blueColor : idleBorder,
-            width: isSelected ? 2 : 1,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
+            border: Border.all(
+              color: isSelected ? blueColor : idleBorder,
+              width: isSelected ? 2 : 1,
+            ),
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: ScreenUtil().setWidth(60),
-              height: ScreenUtil().setWidth(60),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFFFF9A9E).withValues(alpha: 0.3),
-                    const Color(0xFFFECFEF).withValues(alpha: 0.3),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+          child: Row(
+            children: [
+              Container(
+                width: ScreenUtil().setWidth(60),
+                height: ScreenUtil().setWidth(60),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      const Color(0xFFFF9A9E).withValues(alpha: 0.3),
+                      const Color(0xFFFECFEF).withValues(alpha: 0.3),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
-                borderRadius: AppRadius.brMd,
-              ),
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  width: ScreenUtil().setWidth(36),
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Text(
-                payType,
-                style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).textPrimary,
-                  fontWeight: FontWeight.w500,
+                child: Center(
+                  child: Image.asset(
+                    icon,
+                    width: ScreenUtil().setWidth(36),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
-            ),
-            _buildRadioCircle(isSelected),
-          ],
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Text(
+                  payType,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              _buildRadioCircle(isSelected),
+            ],
+          ),
         ),
       ),
     );
@@ -177,68 +181,71 @@ mixin _MiningFullNodeV2WidgetsMixin
   }) {
     final blueColor = AppColorTokens.of(context).brand;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: EdgeInsets.all(AppSpacing.space4),
-        child: Row(
-          children: [
-            Container(
-              width: ScreenUtil().setWidth(52),
-              height: ScreenUtil().setWidth(52),
-              decoration: BoxDecoration(
-                color: blueColor.withValues(alpha: 0.1),
-                borderRadius: AppRadius.brMd,
-              ),
-              child: Center(
-                child: Image.asset(
-                  icon,
-                  width: ScreenUtil().setWidth(28),
-                  fit: BoxFit.contain,
-                  color: blueColor,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.all(AppSpacing.space4),
+          child: Row(
+            children: [
+              Container(
+                width: ScreenUtil().setWidth(52),
+                height: ScreenUtil().setWidth(52),
+                decoration: BoxDecoration(
+                  color: blueColor.withValues(alpha: 0.1),
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: Center(
+                  child: Image.asset(
+                    icon,
+                    width: ScreenUtil().setWidth(28),
+                    fit: BoxFit.contain,
+                    color: blueColor,
+                  ),
                 ),
               ),
-            ),
-            SizedBox(width: AppSpacing.space4),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    payType,
-                    style: AppTypography.body.copyWith(
-                      color: AppColorTokens.of(context).textPrimary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  if (!isEnough)
-                    Padding(
-                      padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.warning_amber_rounded,
-                            size: ScreenUtil().setWidth(20),
-                            color: AppColorTokens.of(context).danger,
-                          ),
-                          SizedBox(width: AppSpacing.space2),
-                          Flexible(
-                            child: Text(
-                              errTips ?? '',
-                              style: AppTypography.caption.copyWith(
-                                color: AppColorTokens.of(context).danger,
-                              ),
-                            ),
-                          ),
-                        ],
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      payType,
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
-                ],
+                    if (!isEnough)
+                      Padding(
+                        padding: EdgeInsets.only(top: ScreenUtil().setWidth(6)),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.warning_amber_rounded,
+                              size: ScreenUtil().setWidth(20),
+                              color: AppColorTokens.of(context).danger,
+                            ),
+                            SizedBox(width: AppSpacing.space2),
+                            Flexible(
+                              child: Text(
+                                errTips ?? '',
+                                style: AppTypography.caption.copyWith(
+                                  color: AppColorTokens.of(context).danger,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
               ),
-            ),
-            _buildRadioCircle(isSelected),
-          ],
+              _buildRadioCircle(isSelected),
+            ],
+          ),
         ),
       ),
     );
@@ -326,9 +333,7 @@ mixin _MiningFullNodeV2WidgetsMixin
                 backgroundColor: Colors.white,
                 foregroundColor: const Color(0xFFFF6B35),
                 elevation: 0,
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSpacing.space4,
-                ),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                 shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
               ),
               child: Text(

@@ -485,39 +485,43 @@ class _DirectionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final idleColor = AppColorTokens.of(context).textSubtitle;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: selected ? color.withAlpha(30) : Colors.transparent,
-          border: Border.all(
-            color: selected ? color : AppColorTokens.of(context).border,
-            width: selected ? 1.5 : 1,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brSm,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: selected ? color.withAlpha(30) : Colors.transparent,
+            border: Border.all(
+              color: selected ? color : AppColorTokens.of(context).border,
+              width: selected ? 1.5 : 1,
+            ),
+            borderRadius: AppRadius.brSm,
           ),
-          borderRadius: AppRadius.brSm,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: ScreenUtil().setWidth(28),
-              color: selected ? color : idleColor,
-            ),
-            SizedBox(width: AppSpacing.space2),
-            Flexible(
-              child: Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                  color: selected ? color : idleColor,
-                ),
-                overflow: TextOverflow.ellipsis,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: ScreenUtil().setWidth(28),
+                color: selected ? color : idleColor,
               ),
-            ),
-          ],
+              SizedBox(width: AppSpacing.space2),
+              Flexible(
+                child: Text(
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                    color: selected ? color : idleColor,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

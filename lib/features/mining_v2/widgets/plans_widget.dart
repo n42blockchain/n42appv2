@@ -15,88 +15,92 @@ class PlansWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     String title1 = S.of(context).g_mining_key_6;
     String buttonTitle = S.of(context).g_mining_key_7;
-    return GestureDetector(
-      onTap:
-          onTap ??
-          () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MiningPlansV2()),
-            );
-          },
-      child: Container(
-        height: ScreenUtil().setWidth(290),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: <Color>[
-              Color(0xff87A1FF),
-              Color(0xff3C85FF),
-              Color(0xff1976F9),
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-          ),
-          borderRadius: AppRadius.brMd,
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: ScreenUtil().setWidth(48),
-              bottom: ScreenUtil().setWidth(18),
-              right: ScreenUtil().setWidth(26),
-              child: Image.asset('assets/mining/miningv3_coin.png'),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap:
+            onTap ??
+            () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const MiningPlansV2()),
+              );
+            },
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          height: ScreenUtil().setWidth(290),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: <Color>[
+                Color(0xff87A1FF),
+                Color(0xff3C85FF),
+                Color(0xff1976F9),
+              ],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
             ),
-            Positioned(
-              top: ScreenUtil().setWidth(20),
-              bottom: ScreenUtil().setWidth(18),
-              left: ScreenUtil().setWidth(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    width: ScreenUtil().setWidth(400),
-                    margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
-                    child: Text(
-                      title1,
-                      style: AppTypography.body.copyWith(
-                        color: AppThemeUtils.getColorByKey(
+            borderRadius: AppRadius.brMd,
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: ScreenUtil().setWidth(48),
+                bottom: ScreenUtil().setWidth(18),
+                right: ScreenUtil().setWidth(26),
+                child: Image.asset('assets/mining/miningv3_coin.png'),
+              ),
+              Positioned(
+                top: ScreenUtil().setWidth(20),
+                bottom: ScreenUtil().setWidth(18),
+                left: ScreenUtil().setWidth(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: ScreenUtil().setWidth(400),
+                      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
+                      child: Text(
+                        title1,
+                        style: AppTypography.body.copyWith(
+                          color: AppThemeUtils.getColorByKey(
+                            context,
+                            AppThemeKeys.mainWhiteColor.name,
+                          ),
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 4,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      //margin: EdgeInsets.only(top: scr.setWidth(16)),
+                      height: ScreenUtil().setWidth(56),
+                      child: buttonStyle3(
+                        context,
+                        null,
+                        buttonTitle,
+                        AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
                         ),
-                        fontWeight: FontWeight.w600,
+                        AppThemeUtils.getColorByKey(
+                          context,
+                          AppThemeKeys.mainButtonTextColor3.name,
+                        ),
+                        fontSize: ScreenUtil().setSp(22),
+                        borderRadius: ScreenUtil().setWidth(56),
+                        height: ScreenUtil().setWidth(56),
+                        paddingV: ScreenUtil().setWidth(12.0),
+                        paddingH: ScreenUtil().setWidth(32.0),
                       ),
-                      maxLines: 4,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    //margin: EdgeInsets.only(top: scr.setWidth(16)),
-                    height: ScreenUtil().setWidth(56),
-                    child: buttonStyle3(
-                      context,
-                      null,
-                      buttonTitle,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainWhiteColor.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor3.name,
-                      ),
-                      fontSize: ScreenUtil().setSp(22),
-                      borderRadius: ScreenUtil().setWidth(56),
-                      height: ScreenUtil().setWidth(56),
-                      paddingV: ScreenUtil().setWidth(12.0),
-                      paddingH: ScreenUtil().setWidth(32.0),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
