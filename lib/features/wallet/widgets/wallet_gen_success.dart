@@ -39,7 +39,7 @@ Widget _statusView({
         Icon(icon, color: iconColor, size: 36),
         Text(
           title,
-          style: AppTypography.captionSm.copyWith(
+          style: AppTypography.headline.copyWith(
             color: ctx != null
                 ? AppThemeUtils.getColorByKey(
                     ctx,

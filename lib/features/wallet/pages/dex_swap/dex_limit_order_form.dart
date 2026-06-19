@@ -189,7 +189,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
                     )
                   : Text(
                       'Place Limit Order',
-                      style: AppTypography.captionSm.copyWith(
+                      style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -228,7 +228,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             const Spacer(),
             Text(
               token?.symbol ?? 'Select',
-              style: AppTypography.captionSm.copyWith(
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -254,7 +254,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: AppTypography.captionSm.copyWith(
+      style: AppTypography.headline.copyWith(
         fontWeight: FontWeight.w400,
         color: AppColorTokens.of(context).textPrimary,
       ),

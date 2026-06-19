@@ -88,159 +88,163 @@ mixin BridgeHomeSectionsMixin
         : '—';
     final minutes = (route.estimatedSeconds / 60).ceil();
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => provider.selectRoute(route),
-        borderRadius: AppRadius.brMd,
-        child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: AppColorTokens.of(context).bgSurface,
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => provider.selectRoute(route),
           borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: isSelected ? selectedColor : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                if (route.steps.isNotEmpty &&
-                    route.steps.first.toolLogoUri.isNotEmpty)
-                  ClipRRect(
-                    borderRadius: AppRadius.brSm,
-                    child: Image.network(
-                      route.steps.first.toolLogoUri,
-                      width: ScreenUtil().setWidth(32),
-                      height: ScreenUtil().setWidth(32),
-                      errorBuilder: (ctx, err, stack) =>
-                          Icon(Icons.link, size: ScreenUtil().setWidth(32)),
-                    ),
-                  )
-                else
-                  Icon(Icons.link, size: ScreenUtil().setWidth(32)),
-                SizedBox(width: AppSpacing.space2),
-                Expanded(
-                  child: Text(
-                    protocols.isNotEmpty ? protocols : route.id,
-                    style: AppTypography.body.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: AppColorTokens.of(context).textPrimary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (tagLabel != null)
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.space2,
-                      vertical: AppSpacing.space2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: tagColor.withAlpha(30),
-                      borderRadius: AppRadius.brSm,
-                      border: Border.all(color: tagColor),
-                    ),
-                    child: Text(
-                      tagLabel,
-                      style: AppTypography.captionSm.copyWith(
-                        color: tagColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                if (isSelected)
-                  Padding(
-                    padding: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
-                    child: Icon(
-                      Icons.check_circle,
-                      color: selectedColor,
-                      size: ScreenUtil().setWidth(32),
-                    ),
-                  ),
-              ],
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.all(AppSpacing.space4),
+            decoration: BoxDecoration(
+              color: AppColorTokens.of(context).bgSurface,
+              borderRadius: AppRadius.brMd,
+              border: Border.all(
+                color: isSelected ? selectedColor : Colors.transparent,
+                width: 2,
+              ),
             ),
-
-            SizedBox(height: AppSpacing.space4),
-
-            Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        S.of(context).g_key_bridge_estimated_receive,
-                        style: AppTypography.caption.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
+                Row(
+                  children: [
+                    if (route.steps.isNotEmpty &&
+                        route.steps.first.toolLogoUri.isNotEmpty)
+                      ClipRRect(
+                        borderRadius: AppRadius.brSm,
+                        child: Image.network(
+                          route.steps.first.toolLogoUri,
+                          width: ScreenUtil().setWidth(32),
+                          height: ScreenUtil().setWidth(32),
+                          errorBuilder: (ctx, err, stack) =>
+                              Icon(Icons.link, size: ScreenUtil().setWidth(32)),
                         ),
-                      ),
-                      SizedBox(height: AppSpacing.space2),
-                      Text(
-                        '$receiveAmt ${provider.toToken?.symbol ?? ''}',
+                      )
+                    else
+                      Icon(Icons.link, size: ScreenUtil().setWidth(32)),
+                    SizedBox(width: AppSpacing.space2),
+                    Expanded(
+                      child: Text(
+                        protocols.isNotEmpty ? protocols : route.id,
                         style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColorTokens.of(context).textPrimary,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Text(
-                        'Min: $minReceive ${provider.toToken?.symbol ?? ''}',
-                        style: AppTypography.caption.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
+                    ),
+                    if (tagLabel != null)
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space2,
+                          vertical: AppSpacing.space2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: tagColor.withAlpha(30),
+                          borderRadius: AppRadius.brSm,
+                          border: Border.all(color: tagColor),
+                        ),
+                        child: Text(
+                          tagLabel,
+                          style: AppTypography.captionSm.copyWith(
+                            color: tagColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ),
-
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    _infoChip(
-                      context,
-                      Icons.local_gas_station_outlined,
-                      gasCost,
-                    ),
-                    SizedBox(height: AppSpacing.space2),
-                    _infoChip(context, Icons.access_time, '~$minutes min'),
+                    if (isSelected)
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: ScreenUtil().setWidth(8),
+                        ),
+                        child: Icon(
+                          Icons.check_circle,
+                          color: selectedColor,
+                          size: ScreenUtil().setWidth(32),
+                        ),
+                      ),
                   ],
                 ),
-              ],
-            ),
 
-            if (route.steps.length > 1) ...[
-              SizedBox(height: AppSpacing.space4),
-              Wrap(
-                spacing: ScreenUtil().setWidth(8),
-                runSpacing: ScreenUtil().setWidth(4),
-                children: route.steps.map((step) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: AppSpacing.space2,
-                      vertical: AppSpacing.space2,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColorTokens.of(context).bgBase,
-                      borderRadius: AppRadius.brSm,
-                    ),
-                    child: Text(
-                      '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
-                      style: AppTypography.captionSm.copyWith(
-                        color: AppColorTokens.of(context).textSubtitle,
+                SizedBox(height: AppSpacing.space4),
+
+                Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            S.of(context).g_key_bridge_estimated_receive,
+                            style: AppTypography.caption.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.space2),
+                          Text(
+                            '$receiveAmt ${provider.toToken?.symbol ?? ''}',
+                            style: AppTypography.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
+                          ),
+                          Text(
+                            'Min: $minReceive ${provider.toToken?.symbol ?? ''}',
+                            style: AppTypography.caption.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ],
-          ],
-        ),
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        _infoChip(
+                          context,
+                          Icons.local_gas_station_outlined,
+                          gasCost,
+                        ),
+                        SizedBox(height: AppSpacing.space2),
+                        _infoChip(context, Icons.access_time, '~$minutes min'),
+                      ],
+                    ),
+                  ],
+                ),
+
+                if (route.steps.length > 1) ...[
+                  SizedBox(height: AppSpacing.space4),
+                  Wrap(
+                    spacing: ScreenUtil().setWidth(8),
+                    runSpacing: ScreenUtil().setWidth(4),
+                    children: route.steps.map((step) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space2,
+                          vertical: AppSpacing.space2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColorTokens.of(context).bgBase,
+                          borderRadius: AppRadius.brSm,
+                        ),
+                        child: Text(
+                          '${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}',
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ],
+            ),
+          ),
         ),
       ),
     );

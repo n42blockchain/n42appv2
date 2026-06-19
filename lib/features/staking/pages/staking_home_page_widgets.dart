@@ -48,9 +48,7 @@ mixin StakingHomePageWidgetsMixin
         unselectedLabelStyle: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.normal,
         ),
-        labelPadding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space2,
-        ),
+        labelPadding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         tabs: [
           _fittedTab(S.of(context).g_key_stake_protocols),
           _fittedTab(S.of(context).g_key_stake_positions),
@@ -93,62 +91,66 @@ mixin StakingHomePageWidgetsMixin
   }
 
   Widget _buildProtocolCard(BuildContext context, StakingProtocol protocol) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () => navigateToStakePage(context, protocol),
-        borderRadius: AppRadius.brMd,
-        child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-        padding: EdgeInsets.all(AppSpacing.space6),
-        decoration: BoxDecoration(
-          color: _themeColor(AppThemeKeys.itemBgColor),
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => navigateToStakePage(context, protocol),
           borderRadius: AppRadius.brMd,
-        ),
-        child: Row(
-          children: [
-            // 协议 Logo
-            ClipRRect(
-              borderRadius: AppRadius.brLg,
-              child: protocol.logoUri.isNotEmpty
-                  ? Image.network(
-                      protocol.logoUri,
-                      width: ScreenUtil().setWidth(56),
-                      height: ScreenUtil().setWidth(56),
-                      errorBuilder: (ctx, error, stackTrace) =>
-                          stakingDefaultLogo(context, protocol),
-                    )
-                  : stakingDefaultLogo(context, protocol),
+          child: Container(
+            padding: EdgeInsets.all(AppSpacing.space6),
+            decoration: BoxDecoration(
+              color: _themeColor(AppThemeKeys.itemBgColor),
+              borderRadius: AppRadius.brMd,
             ),
-            SizedBox(width: AppSpacing.space4),
-            // 协议信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildProtocolTags(context, protocol),
-                  SizedBox(height: AppSpacing.space2),
-                  Text(
-                    protocol.description,
-                    style: AppTypography.bodySm.copyWith(
-                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+            child: Row(
+              children: [
+                // 协议 Logo
+                ClipRRect(
+                  borderRadius: AppRadius.brLg,
+                  child: protocol.logoUri.isNotEmpty
+                      ? Image.network(
+                          protocol.logoUri,
+                          width: ScreenUtil().setWidth(56),
+                          height: ScreenUtil().setWidth(56),
+                          errorBuilder: (ctx, error, stackTrace) =>
+                              stakingDefaultLogo(context, protocol),
+                        )
+                      : stakingDefaultLogo(context, protocol),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                // 协议信息
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildProtocolTags(context, protocol),
+                      SizedBox(height: AppSpacing.space2),
+                      Text(
+                        protocol.description,
+                        style: AppTypography.bodySm.copyWith(
+                          color: _themeColor(
+                            AppThemeKeys.itemSubtitleTextColor,
+                          ),
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                // APY 和解绑期
+                _buildApyColumn(context, protocol),
+                SizedBox(width: AppSpacing.space2),
+                Icon(
+                  Icons.chevron_right,
+                  color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                ),
+              ],
             ),
-            SizedBox(width: AppSpacing.space4),
-            // APY 和解绑期
-            _buildApyColumn(context, protocol),
-            SizedBox(width: AppSpacing.space2),
-            Icon(
-              Icons.chevron_right,
-              color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-            ),
-          ],
-        ),
+          ),
         ),
       ),
     );

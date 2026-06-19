@@ -158,6 +158,7 @@ class DAppMethodChips extends StatelessWidget {
           child: Text(
             short,
             style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
               color: subColor,
               fontFamily: 'monospace',
             ),

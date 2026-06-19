@@ -128,7 +128,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
             children: [
               Text(
                 '${order.symbolIn} → ${order.symbolOut}',
-                style: AppTypography.captionSm.copyWith(
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
                   color: textColor,
                 ),

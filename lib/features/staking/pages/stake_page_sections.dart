@@ -159,72 +159,74 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Column(
       children: _activePositions.map((pos) {
         final isSelected = _selectedPosition?.id == pos.id;
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-          onTap: () {
-            setState(() {
-              _selectedPosition = isSelected ? null : pos;
-              // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
-              if (!isSelected) {
-                if (widget.protocol.chainType == StakingChainType.cosmos) {
-                  _unstakeAmountController.text = _formatBigInt(
-                    pos.stakedAmount,
-                  );
-                }
-                // 更新 provider 中的 selectedValidator（ATOM 需要）
-                if (pos.validator != null) {
-                  _provider.selectValidator(pos.validator!);
-                }
-              }
-            });
-          },
-          borderRadius: AppRadius.brMd,
-          child: Container(
-            margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-            padding: EdgeInsets.all(AppSpacing.space4),
-            decoration: BoxDecoration(
-              color: AppColorTokens.of(context).bgSurface,
+        return Padding(
+          padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedPosition = isSelected ? null : pos;
+                  // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
+                  if (!isSelected) {
+                    if (widget.protocol.chainType == StakingChainType.cosmos) {
+                      _unstakeAmountController.text = _formatBigInt(
+                        pos.stakedAmount,
+                      );
+                    }
+                    // 更新 provider 中的 selectedValidator（ATOM 需要）
+                    if (pos.validator != null) {
+                      _provider.selectValidator(pos.validator!);
+                    }
+                  }
+                });
+              },
               borderRadius: AppRadius.brMd,
-              border: isSelected
-                  ? Border.all(
-                      color: AppColorTokens.of(context).warning,
-                      width: 2,
-                    )
-                  : null,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        pos.validator?.name ?? widget.protocol.name,
-                        style: AppTypography.body.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: AppColorTokens.of(context).textPrimary,
-                        ),
-                      ),
-                      SizedBox(height: AppSpacing.space2),
-                      Text(
-                        '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
-                        style: AppTypography.caption.copyWith(
-                          color: AppColorTokens.of(context).textSubtitle,
-                        ),
-                      ),
-                    ],
-                  ),
+              child: Container(
+                padding: EdgeInsets.all(AppSpacing.space4),
+                decoration: BoxDecoration(
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: AppRadius.brMd,
+                  border: isSelected
+                      ? Border.all(
+                          color: AppColorTokens.of(context).warning,
+                          width: 2,
+                        )
+                      : null,
                 ),
-                if (isSelected)
-                  Icon(
-                    Icons.check_circle,
-                    color: AppColorTokens.of(context).warning,
-                    size: ScreenUtil().setWidth(36),
-                  ),
-              ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            pos.validator?.name ?? widget.protocol.name,
+                            style: AppTypography.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.space2),
+                          Text(
+                            '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
+                            style: AppTypography.caption.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isSelected)
+                      Icon(
+                        Icons.check_circle,
+                        color: AppColorTokens.of(context).warning,
+                        size: ScreenUtil().setWidth(36),
+                      ),
+                  ],
+                ),
+              ),
             ),
-          ),
           ),
         );
       }).toList(),
@@ -312,9 +314,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 _unstakeAmountController.text = '$intPart.$dispFrac';
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSpacing.space4,
-                ),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(
                   color: AppColorTokens.of(context).bgSurface,

@@ -238,7 +238,8 @@ class SwapAstPayWidget extends ConsumerWidget {
     return Row(
       children: [
         // 余额不足不只靠红色传达：补 error 图标（规范 §5 红线）。
-        if (!hasValidInput) ...[
+        // 仅在已输入金额且无效（真·余额不足）时显示，避免空输入态误报。
+        if (payController.text.isNotEmpty && !hasValidInput) ...[
           Icon(
             Icons.error_outline,
             size: ScreenUtil().setWidth(28),

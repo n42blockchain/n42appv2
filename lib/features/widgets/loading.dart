@@ -22,8 +22,7 @@ class Loading extends StatelessWidget {
             child: Text(
               text ?? "${S.of(context).g_key_106}...",
               overflow: TextOverflow.ellipsis,
-              style: AppTypography.captionSm.copyWith(
-                fontWeight: FontWeight.w400,
+              style: AppTypography.body.copyWith(
                 color: textColor ?? const Color(0xff666666),
               ),
             ),
