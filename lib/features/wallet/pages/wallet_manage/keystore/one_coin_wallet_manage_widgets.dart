@@ -398,7 +398,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     final itemBg = _color(AppThemeKeys.itemBgColor);
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(su.setWidth(16.0)),
+        borderRadius: AppRadius.brMd,
         color: itemBg,
       ),
       child: Column(

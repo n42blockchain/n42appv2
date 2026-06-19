@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/live/presentation/widgets/online_badge.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../prediction/domain/prediction_market.dart';
@@ -185,7 +186,12 @@ class _GoLivePageState extends State<GoLivePage> {
                   ListenableBuilder(
                     listenable: _video.listenable!,
                     builder: (context, _) =>
-                        _OnlineBadge(count: _video.participantCount),
+                        OnlineBadge(
+                          count: _video.participantCount,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: AppSpacing.space4,
+                          ),
+                        ),
                   ),
                 IconButton(
                   icon: const Icon(
@@ -286,43 +292,6 @@ class _RoomIdChip extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _OnlineBadge extends StatelessWidget {
-  const _OnlineBadge({required this.count});
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space6,
-        vertical: AppSpacing.space2,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColorTokens.overlay,
-        borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.remove_red_eye,
-            color: AppColorTokens.onOverlaySecondary,
-            size: 14,
-          ),
-          SizedBox(width: AppSpacing.space2),
-          Text(
-            '$count',
-            style: AppTypography.caption.copyWith(
-              color: AppColorTokens.onOverlayPrimary,
-            ),
-          ),
-        ],
       ),
     );
   }

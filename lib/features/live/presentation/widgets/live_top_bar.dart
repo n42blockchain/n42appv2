@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/live/presentation/widgets/online_badge.dart';
 
 /// 直播间顶部栏：主播头像 + 标题 + 关注 + 在线人数 + 关闭。
 class LiveTopBar extends StatelessWidget {
@@ -71,7 +72,7 @@ class LiveTopBar extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            _OnlineBadge(count: onlineCount),
+            OnlineBadge(count: onlineCount),
             IconButton(
               icon: const Icon(
                 Icons.close,
@@ -120,38 +121,3 @@ class _FollowButton extends StatelessWidget {
   }
 }
 
-class _OnlineBadge extends StatelessWidget {
-  const _OnlineBadge({required this.count});
-  final int count;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space6,
-        vertical: AppSpacing.space2,
-      ),
-      decoration: const BoxDecoration(
-        color: AppColorTokens.overlay,
-        borderRadius: BorderRadius.all(Radius.circular(AppRadius.pill)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(
-            Icons.remove_red_eye,
-            color: AppColorTokens.onOverlaySecondary,
-            size: 14,
-          ),
-          SizedBox(width: AppSpacing.space2),
-          Text(
-            '$count',
-            style: AppTypography.caption.copyWith(
-              color: AppColorTokens.onOverlayPrimary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
