@@ -9,22 +9,22 @@ part of 'hardware_wallet_provider.dart';
 
 /// 返回 coinType 对应的 BIP-44 基础路径（不含最后的 index）
 const _derivationPaths = <String, String>{
-  'ETH':  "m/44'/60'/0'/0/",
-  'BNB':  "m/44'/60'/0'/0/",
-  'MATIC':"m/44'/60'/0'/0/",
+  'ETH': "m/44'/60'/0'/0/",
+  'BNB': "m/44'/60'/0'/0/",
+  'MATIC': "m/44'/60'/0'/0/",
   'AVAX': "m/44'/60'/0'/0/",
-  'FTM':  "m/44'/60'/0'/0/",
-  'OP':   "m/44'/60'/0'/0/",
-  'ARB':  "m/44'/60'/0'/0/",
+  'FTM': "m/44'/60'/0'/0/",
+  'OP': "m/44'/60'/0'/0/",
+  'ARB': "m/44'/60'/0'/0/",
   'BASE': "m/44'/60'/0'/0/",
-  'BTC':  "m/84'/0'/0'/0/",
-  'LTC':  "m/84'/2'/0'/0/",
+  'BTC': "m/84'/0'/0'/0/",
+  'LTC': "m/84'/2'/0'/0/",
   'DOGE': "m/44'/3'/0'/0/",
-  'BCH':  "m/44'/145'/0'/0/",
-  'SOL':  "m/44'/501'/0'/0'/",
+  'BCH': "m/44'/145'/0'/0/",
+  'SOL': "m/44'/501'/0'/0'/",
   'ATOM': "m/44'/118'/0'/0/",
-  'DOT':  "m/44'/354'/0'/0/",
-  'TRX':  "m/44'/195'/0'/0/",
+  'DOT': "m/44'/354'/0'/0/",
+  'TRX': "m/44'/195'/0'/0/",
 };
 
 String _derivationBasePath(String coin) =>
@@ -155,20 +155,15 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
       notifyListeners();
       return true;
     }
-    return connectDevice(BluetoothDeviceInfo(
-      id: device.id,
-      name: device.name,
-      rssi: -50,
-    ));
+    return connectDevice(
+      BluetoothDeviceInfo(id: device.id, name: device.name, rssi: -50),
+    );
   }
 
   Future<bool> _reconnectTrezor(HardwareWalletDevice device) async {
     final result = await _connectWith(() async {
       final connected = await _trezorService.connect();
-      return connected.copyWith(
-        id: device.id,
-        lastConnectedAt: DateTime.now(),
-      );
+      return connected.copyWith(id: device.id, lastConnectedAt: DateTime.now());
     });
     return result != null;
   }
@@ -205,9 +200,7 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
   }
 
   /// 通用地址获取：检查连接状态，调用 [fetch]，处理错误。
-  Future<String?> _getAddress(
-    Future<String?> Function() fetch,
-  ) async {
+  Future<String?> _getAddress(Future<String?> Function() fetch) async {
     if (!isConnected) {
       _errorMessage = 'No device connected';
       notifyListeners();
@@ -226,21 +219,23 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
   Future<String?> getEthereumAddress({
     String derivationPath = "m/44'/60'/0'/0/0",
     bool display = false,
-  }) =>
-      _getAddress(() => _ledgerService.getEthereumAddress(
-            derivationPath: derivationPath,
-            display: display,
-          ));
+  }) => _getAddress(
+    () => _ledgerService.getEthereumAddress(
+      derivationPath: derivationPath,
+      display: display,
+    ),
+  );
 
   /// 获取比特币地址
   Future<String?> getBitcoinAddress({
     String derivationPath = "m/84'/0'/0'/0/0",
     bool display = false,
-  }) =>
-      _getAddress(() => _ledgerService.getBitcoinAddress(
-            derivationPath: derivationPath,
-            display: display,
-          ));
+  }) => _getAddress(
+    () => _ledgerService.getBitcoinAddress(
+      derivationPath: derivationPath,
+      display: display,
+    ),
+  );
 
   /// 删除已保存的设备
   Future<void> removeDevice(String deviceId) async {
@@ -320,9 +315,13 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
             derivationPath: path,
           );
         } else if (isEvm) {
-          address = await _ledgerService.getEthereumAddress(derivationPath: path);
+          address = await _ledgerService.getEthereumAddress(
+            derivationPath: path,
+          );
         } else if (isBtcLike) {
-          address = await _ledgerService.getBitcoinAddress(derivationPath: path);
+          address = await _ledgerService.getBitcoinAddress(
+            derivationPath: path,
+          );
         } else {
           address = await _ledgerService.getChainAddress(
             coinType: coin,
@@ -331,15 +330,20 @@ mixin _HardwareWalletConnectionMixin on ChangeNotifier {
         }
 
         if (address != null) {
-          accounts.add(HardwareWalletAccount(
-            address: address,
-            coinType: coin,
-            derivationPath: path,
-            index: i,
-          ));
+          accounts.add(
+            HardwareWalletAccount(
+              address: address,
+              coinType: coin,
+              derivationPath: path,
+              index: i,
+            ),
+          );
         }
       } catch (e) {
-        AppLogger.w('HardwareWallet', 'failed to load account $i for $coin: $e');
+        AppLogger.w(
+          'HardwareWallet',
+          'failed to load account $i for $coin: $e',
+        );
         break;
       }
     }

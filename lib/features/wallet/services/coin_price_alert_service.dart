@@ -48,16 +48,15 @@ class CoinPriceAlertConfig {
     bool? alertAbove,
     bool? enabled,
     int? lastNotifiedMs,
-  }) =>
-      CoinPriceAlertConfig(
-        coinId: coinId,
-        symbol: symbol,
-        name: name,
-        targetPrice: targetPrice ?? this.targetPrice,
-        alertAbove: alertAbove ?? this.alertAbove,
-        enabled: enabled ?? this.enabled,
-        lastNotifiedMs: lastNotifiedMs ?? this.lastNotifiedMs,
-      );
+  }) => CoinPriceAlertConfig(
+    coinId: coinId,
+    symbol: symbol,
+    name: name,
+    targetPrice: targetPrice ?? this.targetPrice,
+    alertAbove: alertAbove ?? this.alertAbove,
+    enabled: enabled ?? this.enabled,
+    lastNotifiedMs: lastNotifiedMs ?? this.lastNotifiedMs,
+  );
 
   factory CoinPriceAlertConfig.fromJson(Map<String, dynamic> json) =>
       CoinPriceAlertConfig(
@@ -71,14 +70,14 @@ class CoinPriceAlertConfig {
       );
 
   Map<String, dynamic> toJson() => {
-        'coinId': coinId,
-        'symbol': symbol,
-        'name': name,
-        'targetPrice': targetPrice,
-        'alertAbove': alertAbove,
-        'enabled': enabled,
-        'lastNotifiedMs': lastNotifiedMs,
-      };
+    'coinId': coinId,
+    'symbol': symbol,
+    'name': name,
+    'targetPrice': targetPrice,
+    'alertAbove': alertAbove,
+    'enabled': enabled,
+    'lastNotifiedMs': lastNotifiedMs,
+  };
 }
 
 /// 币价到达提醒服务
@@ -116,8 +115,7 @@ class CoinPriceAlertService {
   }
 
   /// 保存所有配置（覆盖写）
-  static Future<void> saveAll(
-      Map<String, CoinPriceAlertConfig> configs) async {
+  static Future<void> saveAll(Map<String, CoinPriceAlertConfig> configs) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final map = configs.map((k, v) => MapEntry(k, v.toJson()));
@@ -146,8 +144,7 @@ class CoinPriceAlertService {
   /// 检查当前价格是否触发提醒阈值，若触发则发送本地通知。
   ///
   /// [currentPrices] – key 为小写 symbol，value 为 USD 价格
-  static Future<void> checkAndNotify(
-      Map<String, double> currentPrices) async {
+  static Future<void> checkAndNotify(Map<String, double> currentPrices) async {
     try {
       final configs = await loadAll();
       if (configs.isEmpty) return;
@@ -232,7 +229,8 @@ class CoinPriceAlertService {
   static String _fmtPrice(double price) {
     if (price >= 1000) return price.toStringAsFixed(2);
     if (price >= 1) return price.toStringAsFixed(4);
-    return price.toStringAsPrecision(4)
+    return price
+        .toStringAsPrecision(4)
         .replaceAll(RegExp(r'0+$'), '')
         .replaceAll(RegExp(r'\.$'), '');
   }

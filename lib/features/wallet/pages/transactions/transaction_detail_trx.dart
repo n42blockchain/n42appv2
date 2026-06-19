@@ -5,9 +5,11 @@ import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
@@ -60,7 +62,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _txHash = widget.txHash;
     searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       _txHash,
       isTest: widget.coinModel.isTest,
     );
@@ -89,7 +91,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
-            widget.coinModel.coin['coinType'],
+            widget.coinModel.config.coinType,
             _txHash,
             isTest: widget.coinModel.isTest,
           );
@@ -241,14 +243,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
           child: Container(
             height: ScreenUtil().setWidth(80),
             width: ScreenUtil().setWidth(80),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
-            child: Icon(
-              Icons.refresh,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
-            ),
+            padding: EdgeInsets.all(AppSpacing.space2),
+            child: Icon(Icons.refresh, color: AppColorTokens.of(context).brand),
           ),
         ),
         errorMessageWidget(),
@@ -295,33 +291,26 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
 
   Widget searchWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       padding: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brSm,
       ),
       height: ScreenUtil().setWidth(72.0),
       child: Row(
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-                fontSize: ScreenUtil().setSp(26.0),
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(10.0),
+                  vertical: AppSpacing.space2,
                 ),
                 hintText: S.of(context).search,
                 border: InputBorder.none,
@@ -340,10 +329,7 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
               height: ScreenUtil().setWidth(60.0),
               child: Icon(
                 Icons.search,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
                 size: ScreenUtil().setWidth(30.0),
               ),
             ),
@@ -361,11 +347,11 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20.0)),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,
@@ -373,12 +359,8 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
         ),
         textAlign: TextAlign.center,
       ),
@@ -386,37 +368,27 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   }
 
   Widget itemWidget(String title, String value, {bool copy = false}) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
                 child: Text(
                   value,
-                  style: TextStyle(
-                    color: blueColor,
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
+                  style: AppTypography.body.copyWith(color: blueColor),
                 ),
               ),
               if (copy)
@@ -446,23 +418,19 @@ class _TransactionDetailTrxState extends State<TransactionDetailTrx> {
   Widget addressItemWidget(String title, String address) {
     if (address.isEmpty) return const SizedBox.shrink();
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: address,
             coinType: widget.coinModel.coin['coinType'] ?? 'TRX',

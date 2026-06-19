@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// App Store / Google Play 内购商品 ID，按需在 App Store Connect 中配置
 const Set<String> _kProductIds = {
@@ -19,7 +20,7 @@ const Set<String> _kProductIds = {
   'ai.n42.www.n.120',
   'ai.n42.www.n.280',
   'ai.n42.www.n.700',
-  'ai.n42.www.n.1600'
+  'ai.n42.www.n.1600',
 };
 
 class IapPage extends StatefulWidget {
@@ -41,10 +42,7 @@ class _IapPageState extends State<IapPage> {
   @override
   void initState() {
     super.initState();
-    _sub = _iap.purchaseStream.listen(
-      _onPurchaseUpdate,
-      onError: (_) {},
-    );
+    _sub = _iap.purchaseStream.listen(_onPurchaseUpdate, onError: (_) {});
     _init();
   }
 
@@ -91,12 +89,18 @@ class _IapPageState extends State<IapPage> {
           p.status == PurchaseStatus.restored) {
         _iap.completePurchase(p);
         if (mounted) {
-          ToastUtils.show(p.status == PurchaseStatus.restored
-              ? S.of(context).g_iap_restored(p.productID)
-              : S.of(context).g_iap_purchased(p.productID));
+          ToastUtils.show(
+            p.status == PurchaseStatus.restored
+                ? S.of(context).g_iap_restored(p.productID)
+                : S.of(context).g_iap_purchased(p.productID),
+          );
         }
       } else if (p.status == PurchaseStatus.error) {
-        if (mounted) ToastUtils.showError(S.of(context).g_iap_failed(p.error?.message ?? ''));
+        if (mounted) {
+          ToastUtils.showError(
+            S.of(context).g_iap_failed(p.error?.message ?? ''),
+          );
+        }
       } else if (p.status == PurchaseStatus.canceled) {
         if (mounted) ToastUtils.show(S.of(context).g_iap_cancelled);
       }
@@ -136,14 +140,8 @@ class _IapPageState extends State<IapPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final textPrimary = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bg = AppColorTokens.of(context).bgBase;
+    final textPrimary = AppColorTokens.of(context).textPrimary;
     final textSecondary = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.mainTextColor3.name,
@@ -159,12 +157,11 @@ class _IapPageState extends State<IapPage> {
               onPressed: _restore,
               child: Text(
                 S.of(context).g_iap_restore,
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.mainButtonBgColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(26),
                 ),
               ),
             ),
@@ -204,11 +201,12 @@ class _IapPageState extends State<IapPage> {
       scrollable = ListView.separated(
         physics: const AlwaysScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(32),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         itemCount: _products.length,
-        separatorBuilder: (context, index) => SizedBox(height: ScreenUtil().setWidth(20)),
+        separatorBuilder: (context, index) =>
+            SizedBox(height: AppSpacing.space4),
         itemBuilder: (context, index) => _buildProductCard(
           _products[index],
           isDark,
@@ -235,7 +233,7 @@ class _IapPageState extends State<IapPage> {
   Widget _buildUnavailable(Color textPrimary, Color textSecondary) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+        padding: EdgeInsets.all(AppSpacing.space16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -244,24 +242,20 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(120),
               color: textSecondary,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             Text(
               S.of(context).g_iap_store_unavailable,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
+              style: AppTypography.body.copyWith(
                 color: textPrimary,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_iap_check_network,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: textSecondary,
-              ),
+              style: AppTypography.caption.copyWith(color: textSecondary),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
             _RetryButton(onTap: _init),
           ],
         ),
@@ -272,7 +266,7 @@ class _IapPageState extends State<IapPage> {
   Widget _buildEmpty(Color textSecondary) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(60)),
+        padding: EdgeInsets.all(AppSpacing.space16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -281,15 +275,12 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(120),
               color: textSecondary,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             Text(
               S.of(context).g_iap_no_products,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                color: textSecondary,
-              ),
+              style: AppTypography.body.copyWith(color: textSecondary),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
             _RetryButton(onTap: _fetchProducts),
           ],
         ),
@@ -304,18 +295,16 @@ class _IapPageState extends State<IapPage> {
     Color textSecondary,
   ) {
     final isPending = _pending.contains(product.id);
-    final cardBg = isDark
-        ? const Color(0xFF1A2236)
-        : Colors.white;
+    final cardBg = isDark ? const Color(0xFF1A2236) : Colors.white;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.08)
-        : Colors.grey.withValues(alpha: 0.15);
+        : AppColorTokens.of(context).border.withValues(alpha: 0.15);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: cardBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: borderColor),
         boxShadow: [
           BoxShadow(
@@ -337,7 +326,7 @@ class _IapPageState extends State<IapPage> {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.diamond_outlined,
@@ -345,7 +334,7 @@ class _IapPageState extends State<IapPage> {
               size: ScreenUtil().setWidth(44),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(24)),
+          SizedBox(width: AppSpacing.space6),
           // 商品信息
           Expanded(
             child: Column(
@@ -353,8 +342,7 @@ class _IapPageState extends State<IapPage> {
               children: [
                 Text(
                   product.title,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: textPrimary,
                   ),
@@ -362,13 +350,10 @@ class _IapPageState extends State<IapPage> {
                   overflow: TextOverflow.ellipsis,
                 ),
                 if (product.description.isNotEmpty) ...[
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     product.description,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: textSecondary,
-                    ),
+                    style: AppTypography.caption.copyWith(color: textSecondary),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -376,14 +361,14 @@ class _IapPageState extends State<IapPage> {
               ],
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           // 价格 + 购买
           GestureDetector(
             onTap: isPending ? null : () => _buy(product),
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 gradient: isPending
@@ -393,8 +378,12 @@ class _IapPageState extends State<IapPage> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                color: isPending ? Colors.grey.withValues(alpha: 0.3) : null,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+                color: isPending
+                    ? AppColorTokens.of(
+                        context,
+                      ).textTertiary.withValues(alpha: 0.3)
+                    : null,
+                borderRadius: AppRadius.brMd,
               ),
               child: isPending
                   ? SizedBox(
@@ -410,16 +399,14 @@ class _IapPageState extends State<IapPage> {
                       children: [
                         Text(
                           product.price,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
-                            fontWeight: FontWeight.bold,
+                          style: AppTypography.caption.copyWith(
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           S.of(context).g_iap_title,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
+                          style: AppTypography.captionSm.copyWith(
                             color: Colors.white.withValues(alpha: 0.85),
                           ),
                         ),
@@ -443,7 +430,7 @@ class _RetryButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(60),
+          horizontal: AppSpacing.space16,
           vertical: ScreenUtil().setWidth(22),
         ),
         decoration: BoxDecoration(
@@ -452,13 +439,12 @@ class _RetryButton extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           S.of(context).g_iap_retry,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: Colors.white,
-            fontSize: ScreenUtil().setSp(26),
             fontWeight: FontWeight.w600,
           ),
         ),

@@ -123,48 +123,72 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "To konto posiada ${value} obiektów, co oznacza dodatkową rezerwę ${value1} XRP.";
 
-  static String m45(value) => "Nieprawidłowy wzór, pozostało ${value} prób";
+  static String m45(message) => "Nie udało się wejść do pokoju\n${message}";
 
-  static String m46(value) => "Nieprawidłowy wzór, pozostała ${value} próba";
+  static String m46(value) => "Nieprawidłowy wzór, pozostało ${value} prób";
 
-  static String m47(value) =>
-      "Pomyślnie skonfigurowałeś ${value} i rozpoczniesz weryfikację z N42Wallet!";
+  static String m47(value) => "Nieprawidłowy wzór, pozostała ${value} próba";
 
   static String m48(value) =>
+      "Pomyślnie skonfigurowałeś ${value} i rozpoczniesz weryfikację z N42Wallet!";
+
+  static String m49(value) =>
       "Dołącz do mojej grupy ${value} na @N42Wallet, aby być wczesnym górnikiem sieci Layer 1 i zdobywać kryptowaluty na telefonie!";
 
-  static String m49(value, value1) =>
+  static String m50(value, value1) =>
       "Czy na pewno chcesz zablokować ${value} N do ${value1}, aby uruchomić węzeł?";
 
-  static String m50(value) => "Import nie powiódł się:${value}";
+  static String m51(value) => "Import nie powiódł się:${value}";
 
-  static String m51(value) =>
+  static String m52(value) =>
       "Aby otrzymać nagrody, wymagane jest saldo stakingowe wynoszące co najmniej ${value}.";
 
-  static String m52(value, value1) =>
+  static String m53(value, value1) =>
       "${value} N co ${value1} wydobytych bloków";
 
-  static String m53(value) => "Musi mieć ${value} znaków";
+  static String m54(value) => "Musi mieć ${value} znaków";
 
-  static String m54(value) => "Niewystarczające saldo ${value}.";
+  static String m55(symbol) => "Kwota (${symbol})";
 
-  static String m55(value) => "${value} w drodze...";
+  static String m56(amount, symbol) => "Saldo: ${amount} ${symbol}";
 
-  static String m56(value) =>
+  static String m57(label) =>
+      "Ogłosić „${label}” zwycięzcą i rozliczyć? Nieodwracalne.";
+
+  static String m58(n) => "${n} min";
+
+  static String m59(n) => "Wynik ${n}";
+
+  static String m60(label, pct) => "${label} wygrywa (${pct}%)";
+
+  static String m61(shares, avg, after) =>
+      "Szac. ${shares} udz. · śr ${avg}% · po ${after}%";
+
+  static String m62(reason) => "Wykup nieudany: ${reason}";
+
+  static String m63(label) => "Wynik: ${label}";
+
+  static String m64(n) => "Sprzedaj ${n}";
+
+  static String m65(value) => "Niewystarczające saldo ${value}.";
+
+  static String m66(value) => "${value} w drodze...";
+
+  static String m67(value) =>
       "${value} wymienione w aplikacji zostanie wkrótce przekazane do Twojego portfela i nie może być sprzedane w tym procesie. Może być używane do uruchomienia węzła.";
 
-  static String m57(value) => "Maks. ${value} znaków";
+  static String m68(value) => "Maks. ${value} znaków";
 
-  static String m58(value) =>
+  static String m69(value) =>
       "Sieć ${value} jest już obsługiwana przez aplikację!";
 
-  static String m59(value) =>
+  static String m70(value) =>
       "Sieć ${value} jest już obsługiwana przez aplikację, czy chcesz ją dodać?";
 
-  static String m60(value) =>
+  static String m71(value) =>
       "Test połączenia z adresem ${value} nie powiódł się!";
 
-  static String m61(value) => "0~${value} znaków";
+  static String m72(value) => "0~${value} znaków";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2206,6 +2230,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Całkowita rezerwa = Rezerwa bazowa + (Liczba posiadanych obiektów × Rezerwa przyrostowa)",
     ),
+    "g_live_enter_room_failed": m45,
+    "g_live_follow": MessageLookupByLibrary.simpleMessage("Obserwuj"),
+    "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
+      "Funkcja obserwowania wkrótce",
+    ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID i Face ID"),
     "g_lock_key16": MessageLookupByLibrary.simpleMessage("Hasło gestowe"),
     "g_lock_key17": MessageLookupByLibrary.simpleMessage("Ustaw hasło gestowe"),
@@ -2218,7 +2247,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Narysuj aktualny gest",
     ),
-    "g_lock_key21": m45,
+    "g_lock_key21": m46,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Zresetuj hasło gestowe",
     ),
@@ -2228,7 +2257,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Dodać hasło portfela?",
     ),
-    "g_lock_key25": m46,
+    "g_lock_key25": m47,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
@@ -2306,12 +2335,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Udostępnij znajomym",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Kontynuuj"),
-    "g_mining_key63": m47,
-    "g_mining_key73": m48,
+    "g_mining_key63": m48,
+    "g_mining_key73": m49,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Właśnie skonfigurowałem węzeł na @N42Wallet i rozpocząłem weryfikację na urządzeniach mobilnych! Dołącz do mnie. Zdecentralizowana przyszłość jest mobilna!",
     ),
-    "g_mining_key76": m49,
+    "g_mining_key76": m50,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Mineralny"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Węzeł"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Sieć"),
@@ -2348,7 +2377,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Nieobsługiwany format zaszyfrowanych danych!",
     ),
-    "g_mining_key_109": m50,
+    "g_mining_key_109": m51,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Nagrody z wczoraj",
     ),
@@ -2364,7 +2393,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Odbiór zajmuje trochę czasu, proszę chwilę poczekać!",
     ),
-    "g_mining_key_116": m51,
+    "g_mining_key_116": m52,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Nagroda kumuluje się codziennie i jest wysyłana do Twojego portfela N tylko gdy osiągnie ~0,5 N.",
     ),
@@ -2450,7 +2479,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 bloków/dzień~15 min",
     ),
-    "g_mining_key_71": m52,
+    "g_mining_key_71": m53,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 sekund na sprawdzenie",
     ),
@@ -2520,7 +2549,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Wprowadź hasło szyfrowania",
     ),
-    "g_mining_key_98": m53,
+    "g_mining_key_98": m54,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Wprowadź hasło ponownie, aby upewnić się, że jest poprawne",
     ),
@@ -2596,6 +2625,78 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "Całkowita wartość",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Dodaj wynik"),
+    "g_pred_amount_input": m55,
+    "g_pred_balance": m56,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Kup"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "Anuluj i zwróć",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Tylko zamknij"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Zamknięte, oczekiwanie na rozstrzygnięcie",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Potwierdź rozstrzygnięcie",
+    ),
+    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Rozpocznij prognozę",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Tworzenie…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Termin"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Kwota musi być większa niż 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Niewystarczające saldo",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Niewystarczające udziały",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Nieprawidłowy wynik",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Rynek zamknięty, handel niedostępny",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Nie znaleziono rynku",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Rynek nierozstrzygnięty, brak wykupu",
+    ),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Co najmniej dwa poprawne wyniki",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Wprowadź pytanie",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Przekroczono poślizg, spróbuj ponownie",
+    ),
+    "g_pred_minutes": m58,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Nie"),
+    "g_pred_outcome_n": m59,
+    "g_pred_outcome_win": m60,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Wyniki"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Wybierz zwycięski wynik do rozliczenia (środki wg wyniku)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("Przetwarzanie…"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Opublikuj"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Pytanie prognozy, np.: Kto wygra tę rundę?",
+    ),
+    "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Rozstrzygnięte"),
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Bez limitu (ręczne zamknięcie)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Tak"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("Pobrane"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "Kod zaproszenia",
@@ -2624,7 +2725,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Poleć przez"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Połączyć"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Błąd pobierania ceny monety.",
     ),
@@ -2636,7 +2737,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Twoja wymiana zostanie wkrótce zrealizowana. Prosimy o cierpliwość.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Koszty uruchomienia węzła: Weryfikacja grupowa 1-49 N Węzeł podstawowy: 50 N Węzeł premium: 100 N Węzeł pro: 500 N.",
     ),
@@ -2652,7 +2753,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nowe saldo"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Płacisz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Data"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Wymiany można przeglądać w odpowiednich eksploratorach sieci (Etherscan, BscScan, TRONSCAN i naszym własnym).",
     ),
@@ -2667,7 +2768,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Przywróć ustawienia domyślne",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Każdy może utworzyć token, w tym fałszywe wersje istniejących tokenów. Zawsze sprawdź token przed jego importem.",
     ),
@@ -2686,9 +2787,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 jednostek"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Dodaj tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Błąd formatu!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Importuj tokeny"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Wszystkie sieci"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2704,6 +2805,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Wysokie Ryzyko"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Bezpieczne"),
     "g_version_later": MessageLookupByLibrary.simpleMessage("Później"),
+    "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
+      "Portfel HD · Mnemonik",
+    ),
+    "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
+      "Pojedynczy łańcuch · Zaimportowano",
+    ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Połączenie utracone. Proszę połączyć ponownie.",
     ),
@@ -2732,6 +2839,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sesja wygasła",
     ),
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Połączone DApps"),
+    "g_xrp_dest_tag_hint": MessageLookupByLibrary.simpleMessage(
+      "Zwykle wymagane przy wysyłce na giełdę",
+    ),
+    "g_xrp_optional": MessageLookupByLibrary.simpleMessage("(Opcjonalne)"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "Połącz",
     ),
@@ -2739,13 +2850,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Hasło"),
     "next": MessageLookupByLibrary.simpleMessage("Dalej"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Edytuj profil",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("Zdjęcie"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Wprowadź adres",
+    ),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Background Delivery May Be Limited",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Nie przypominaj",

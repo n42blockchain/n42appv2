@@ -22,7 +22,10 @@ class XlmSender implements ChainSender {
     final xlmApi = XlmApi();
 
     // Get account info (balance + sequence)
-    final mmAccount = await xlmApi.getAccount(params.fromAddress, isTest: params.isTest);
+    final mmAccount = await xlmApi.getAccount(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmAccount.error) return SendResult.fail(mmAccount.data?.toString());
     final accountData = mmAccount.data as Map<String, dynamic>;
 
@@ -33,7 +36,10 @@ class XlmSender implements ChainSender {
       final bMap = b as Map<String, dynamic>;
       if (bMap['asset_type'] == 'native') {
         final balStr = bMap['balance']?.toString() ?? '0';
-        chainBalance = ethToWeiString(balStr, 7); // XLM uses 7 decimal places (stroops)
+        chainBalance = ethToWeiString(
+          balStr,
+          7,
+        ); // XLM uses 7 decimal places (stroops)
         break;
       }
     }
@@ -43,7 +49,10 @@ class XlmSender implements ChainSender {
     }
 
     const int fee = 100; // base fee in stroops
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), 7); // 1 XLM = 10,000,000 stroops
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      7,
+    ); // 1 XLM = 10,000,000 stroops
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -54,7 +63,8 @@ class XlmSender implements ChainSender {
       valuePrice = valuePrice - feeBig;
       adjustedAmount = toEther(valuePrice.toString(), 7).toDouble();
     }
-    if (valuePrice <= BigInt.zero || BigInt.from(fee) + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        BigInt.from(fee) + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('XLM'));
     }
 
@@ -82,7 +92,10 @@ class XlmSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.XLM.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.XLM.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
@@ -91,7 +104,8 @@ class XlmSender implements ChainSender {
     final sendMm = await xlmApi.sendTransaction(signStr, isTest: params.isTest);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
 
-    final txHash = (sendMm.data as Map<String, dynamic>?)?['hash']?.toString() ??
+    final txHash =
+        (sendMm.data as Map<String, dynamic>?)?['hash']?.toString() ??
         sendMm.data?.toString();
     return SendResult.ok(txHash, actualAmount: adjustedAmount);
   }

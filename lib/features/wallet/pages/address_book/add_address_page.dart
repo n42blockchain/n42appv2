@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -122,16 +123,13 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             onTap: handlerData,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
               ),
               color: Colors.transparent,
               child: Center(
                 child: Text(
                   S.of(context).g_key_115,
-                  style: TextStyle(
-                    color: _themeColor(AppThemeKeys.mainBlueColor),
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainBlueColor)),
                 ),
               ),
             ),
@@ -145,8 +143,8 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   Widget buildContentList(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,10 +153,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           const SizedBox(height: 18),
           Text(
             S.of(context).address_Information,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
           ),
           const SizedBox(height: 10),
           _buildAddressView(context),
@@ -188,7 +183,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       },
       child: containerStyle1(
         context,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
@@ -205,12 +200,12 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
                     height: ScreenUtil().setWidth(50.0),
                     placeholder: "assets/img/list_default.png",
                   ),
-            SizedBox(width: ScreenUtil().setWidth(24.0)),
+            SizedBox(width: AppSpacing.space6),
             Text(
               '$coinFullName ($coinName)',
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: ScreenUtil().setWidth(32.0),
+                fontWeight: FontWeight.w400,
               ),
             ),
             const Spacer(),
@@ -228,7 +223,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
   Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Column(
         children: [
           scanItem(),
@@ -270,7 +265,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
       messageMargin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
       ),
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
@@ -294,7 +289,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         );
       },
       rightWidget2: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -303,10 +298,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
         child: Text(
           S.of(context).g_key_166,
-          style: TextStyle(
-            color: _themeColor(AppThemeKeys.mainWhiteColor),
-            fontSize: ScreenUtil().setSp(26.0),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor)),
         ),
       ),
       rightOnTap2: () async {
@@ -387,5 +379,4 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       }
     }
   }
-
 }

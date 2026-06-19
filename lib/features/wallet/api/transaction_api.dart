@@ -50,8 +50,13 @@ class TransactionApi {
         case 'LTC':
         case 'DASH':
         case 'DOGE':
-          return btcTransactionList(coinMiniName, address,
-              page: page, offset: pageSize, isTest: isTest);
+          return btcTransactionList(
+            coinMiniName,
+            address,
+            page: page,
+            offset: pageSize,
+            isTest: isTest,
+          );
         case 'ETH':
         case 'ETC':
         case 'HT':
@@ -78,19 +83,40 @@ class TransactionApi {
         case 'ARB':
         case 'AURORA':
         case 'METIS':
-          return await commonEthTransactionList(coinMiniName, address,
-              page: page, offset: pageSize, isTest: isTest);
+          return await commonEthTransactionList(
+            coinMiniName,
+            address,
+            page: page,
+            offset: pageSize,
+            isTest: isTest,
+          );
         case 'OKT':
-          return await commonEthTransactionList(coinMiniName, address,
-              page: page, offset: pageSize);
+          return await commonEthTransactionList(
+            coinMiniName,
+            address,
+            page: page,
+            offset: pageSize,
+          );
         case 'SOL':
-          return await solTransactionList(address, page: page, offset: pageSize);
+          return await solTransactionList(
+            address,
+            page: page,
+            offset: pageSize,
+          );
         case 'TRX':
-          return await trxTransactionList(address, page: page, offset: pageSize);
+          return await trxTransactionList(
+            address,
+            page: page,
+            offset: pageSize,
+          );
         case 'DOT':
         case 'KSM':
         case 'ACA':
-          return await dotTransactionList(address, coinMiniName, isTest: isTest);
+          return await dotTransactionList(
+            address,
+            coinMiniName,
+            isTest: isTest,
+          );
         case 'APT':
           return await aptTransactionList(address, isTest: isTest);
         case 'TON':
@@ -144,14 +170,27 @@ class TransactionApi {
         case 'AURORA':
         case 'METIS':
           return await commContractTransactionList(
-              coinMiniName, address, contractAddress,
-              page: page, offset: pageSize, isTest: isTest);
+            coinMiniName,
+            address,
+            contractAddress,
+            page: page,
+            offset: pageSize,
+            isTest: isTest,
+          );
         case 'TRX':
-          return await trxContractTransactionList(address, contractAddress,
-              page: page, offset: pageSize);
+          return await trxContractTransactionList(
+            address,
+            contractAddress,
+            page: page,
+            offset: pageSize,
+          );
         case 'SOL':
           // SOL 合约查询与主链一致
-          return await solTransactionList(address, page: page, offset: pageSize);
+          return await solTransactionList(
+            address,
+            page: page,
+            offset: pageSize,
+          );
         default:
           break;
       }

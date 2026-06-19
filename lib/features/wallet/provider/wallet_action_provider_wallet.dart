@@ -49,7 +49,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
       final mnemonic = await secureStorage.getMnemonic(walletId);
       if (mnemonic != null && mnemonic.isNotEmpty) {
         wallet.mnemonic = mnemonic;
-        if (kDebugMode) debugPrint('WalletActionProvider: Restored mnemonic for wallet $walletId');
+        if (kDebugMode) {
+          debugPrint(
+            'WalletActionProvider: Restored mnemonic for wallet $walletId',
+          );
+        }
       }
     }
   }
@@ -126,11 +130,13 @@ extension WalletActionProviderWallet on WalletActionProvider {
           bool changed = false;
           final canonicalService = canonicalBase['service'];
           final canonicalServiceTest = canonicalBase['service_test'];
-          if (canonicalService != null && storedBase['service'] != canonicalService) {
+          if (canonicalService != null &&
+              storedBase['service'] != canonicalService) {
             storedBase['service'] = canonicalService;
             changed = true;
           }
-          if (canonicalServiceTest != null && storedBase['service_test'] != canonicalServiceTest) {
+          if (canonicalServiceTest != null &&
+              storedBase['service_test'] != canonicalServiceTest) {
             storedBase['service_test'] = canonicalServiceTest;
             changed = true;
           }
@@ -145,7 +151,9 @@ extension WalletActionProviderWallet on WalletActionProvider {
         await saveWalletInfo(_walletInfoLsit[i], i);
       }
       if (kDebugMode) {
-        debugPrint('WalletActionProvider: Synced chains and service URLs to all wallets');
+        debugPrint(
+          'WalletActionProvider: Synced chains and service URLs to all wallets',
+        );
       }
     }
   }
@@ -179,7 +187,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
       // 同步将 mnemonic/privateKey 写入 SecureStorage，防止迁移清除 JSON 后丢失
       if (info.hasMnemonic) {
         final walletId = info.timestamp ?? '${userUUID}_$walletIndex';
-        await SecureStorage().saveMnemonic(walletId: walletId, mnemonic: info.mnemonic!);
+        await SecureStorage().saveMnemonic(
+          walletId: walletId,
+          mnemonic: info.mnemonic!,
+        );
       }
       initWallet(shouldInitCoinInfo: true);
       refresh();

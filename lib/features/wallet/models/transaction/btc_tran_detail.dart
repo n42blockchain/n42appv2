@@ -24,34 +24,34 @@ class BtcTranDetail {
   );
 
   factory BtcTranDetail.fromJson(Map<String, dynamic> json) => BtcTranDetail(
-        json['block_hash'] as String?,
-        json['block_index'] as int,
-        json['hash'] as String,
-        (json['addresses'] as List<dynamic>?)?.map((e) => e as String).toList(),
-        json['total'] as int,
-        json['fees'] as int,
-        json['confirmed'] as String?,
-        json['confirmations'] as int,
-        (json['inputs'] as List<dynamic>?)
-            ?.map((e) => Input.fromJson(e as Map<String, dynamic>))
-            .toList(),
-        (json['outputs'] as List<dynamic>?)
-            ?.map((e) => Output.fromJson(e as Map<String, dynamic>))
-            .toList(),
-      );
+    json['block_hash'] as String?,
+    json['block_index'] as int,
+    json['hash'] as String,
+    (json['addresses'] as List<dynamic>?)?.map((e) => e as String).toList(),
+    json['total'] as int,
+    json['fees'] as int,
+    json['confirmed'] as String?,
+    json['confirmations'] as int,
+    (json['inputs'] as List<dynamic>?)
+        ?.map((e) => Input.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    (json['outputs'] as List<dynamic>?)
+        ?.map((e) => Output.fromJson(e as Map<String, dynamic>))
+        .toList(),
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'block_hash': blockHash,
-        'block_index': blockIndex,
-        'hash': hash,
-        'addresses': addresses,
-        'total': total,
-        'fees': fees,
-        'confirmed': confirmed,
-        'confirmations': confirmations,
-        'inputs': inputs,
-        'outputs': outputs,
-      };
+    'block_hash': blockHash,
+    'block_index': blockIndex,
+    'hash': hash,
+    'addresses': addresses,
+    'total': total,
+    'fees': fees,
+    'confirmed': confirmed,
+    'confirmations': confirmations,
+    'inputs': inputs,
+    'outputs': outputs,
+  };
 }
 
 class Input {
@@ -70,20 +70,20 @@ class Input {
   );
 
   factory Input.fromJson(Map<String, dynamic> json) => Input(
-        json['prev_hash'] as String,
-        json['output_index'] as int,
-        json['script'] as String?,
-        json['output_value'] as int,
-        (json['addresses'] as List<dynamic>).map((e) => e as String).toList(),
-      );
+    json['prev_hash'] as String,
+    json['output_index'] as int,
+    json['script'] as String?,
+    json['output_value'] as int,
+    (json['addresses'] as List<dynamic>).map((e) => e as String).toList(),
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'prev_hash': prevHash,
-        'output_index': outputIndex,
-        'script': script,
-        'output_value': outputValue,
-        'addresses': addresses,
-      };
+    'prev_hash': prevHash,
+    'output_index': outputIndex,
+    'script': script,
+    'output_value': outputValue,
+    'addresses': addresses,
+  };
 }
 
 class Output {
@@ -94,14 +94,14 @@ class Output {
   Output(this.value, this.script, this.addresses);
 
   factory Output.fromJson(Map<String, dynamic> json) => Output(
-        json['value'] as int,
-        json['script'] as String?,
-        (json['addresses'] as List<dynamic>?)?.map((e) => e as String).toList(),
-      );
+    json['value'] as int,
+    json['script'] as String?,
+    (json['addresses'] as List<dynamic>?)?.map((e) => e as String).toList(),
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'value': value,
-        'script': script,
-        'addresses': addresses,
-      };
+    'value': value,
+    'script': script,
+    'addresses': addresses,
+  };
 }

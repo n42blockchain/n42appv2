@@ -203,6 +203,7 @@ enum CoinType {
   HIVE,
   STEEM,
 }
+
 enum BlockchainType {
   Bitcoin,
   Ethereum,

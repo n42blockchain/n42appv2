@@ -10,7 +10,7 @@ import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/trade_entry_sheet_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/portfolio_trade.dart';
 import 'package:n42_wallet/features/wallet/services/portfolio_trade_service.dart';
 
@@ -148,19 +148,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final accentColor = AppColorTokens.of(context).brand;
     final s = S.of(context);
 
     return PopScope(
@@ -198,9 +189,8 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                     Expanded(
                       child: Text(
                         '${s.g_pnl_add_trade} · ${widget.symbol.toUpperCase()}',
-                        style: TextStyle(
-                          fontSize: 30.sp,
-                          fontWeight: FontWeight.w700,
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w600,
                           color: textColor,
                         ),
                       ),
@@ -271,7 +261,9 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                               )
                             : Text(
                                 s.g_pnl_save,
-                                style: TextStyle(fontSize: 24.sp),
+                                style: AppTypography.caption.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                       ),
                     ],
@@ -305,16 +297,22 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                         ),
                         title: Text(
                           '${t.quantity} × \$${_fmt(t.buyPriceUsd)}',
-                          style: TextStyle(fontSize: 26.sp, color: textColor),
+                          style: AppTypography.bodySm.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: textColor,
+                          ),
                         ),
                         subtitle: Text(
                           dateStr,
-                          style: TextStyle(fontSize: 20.sp, color: subColor),
+                          style: AppTypography.captionSm.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: subColor,
+                          ),
                         ),
                         trailing: IconButton(
                           icon: Icon(
                             Icons.delete_outline,
-                            color: const Color(0xFFEF4444),
+                            color: AppColorTokens.of(context).danger,
                             size: 24.sp,
                           ),
                           onPressed: () => _deleteTrade(t),
@@ -367,13 +365,22 @@ class _NumField extends StatelessWidget {
       controller: controller,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
       inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[\d\.]'))],
-      style: TextStyle(color: textColor, fontSize: 26.sp),
+      style: AppTypography.bodySm.copyWith(
+        color: textColor,
+        fontWeight: FontWeight.w400,
+      ),
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
-        labelStyle: TextStyle(color: subColor, fontSize: 22.sp),
+        labelStyle: AppTypography.caption.copyWith(
+          color: subColor,
+          fontWeight: FontWeight.w400,
+        ),
         hintText: hint,
-        hintStyle: TextStyle(color: subColor.withAlpha(100), fontSize: 24.sp),
+        hintStyle: AppTypography.caption.copyWith(
+          color: subColor.withAlpha(100),
+          fontWeight: FontWeight.w400,
+        ),
         filled: true,
         fillColor: subColor.withAlpha(20),
         contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
@@ -381,7 +388,9 @@ class _NumField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.r),
           borderSide: BorderSide.none,
         ),
-        errorStyle: TextStyle(fontSize: 18.sp),
+        errorStyle: AppTypography.captionSm.copyWith(
+          fontWeight: FontWeight.w400,
+        ),
       ),
     );
   }

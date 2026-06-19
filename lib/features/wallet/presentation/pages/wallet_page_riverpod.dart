@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 
 /// Example: Wallet Page using Riverpod
@@ -55,14 +56,10 @@ class WalletPageRiverpod extends ConsumerWidget {
       child: CustomScrollView(
         slivers: [
           // Balance Card
-          SliverToBoxAdapter(
-            child: _BalanceCard(ref: ref),
-          ),
+          SliverToBoxAdapter(child: _BalanceCard(ref: ref)),
 
           // Coin List
-          SliverToBoxAdapter(
-            child: _CoinListSection(ref: ref),
-          ),
+          SliverToBoxAdapter(child: _CoinListSection(ref: ref)),
         ],
       ),
     );
@@ -99,8 +96,8 @@ class _BalanceCard extends StatelessWidget {
               data: (balance) => Text(
                 '\$${balance.toStringAsFixed(2)}',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               loading: () => const SizedBox(
                 height: 40,
@@ -109,9 +106,9 @@ class _BalanceCard extends StatelessWidget {
               error: (_, _) => Text(
                 '\$0.00',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.grey,
-                    ),
+                  fontWeight: FontWeight.w600,
+                  color: AppColorTokens.of(context).textTertiary,
+                ),
               ),
             ),
           ],
@@ -136,9 +133,7 @@ class _CoinListSection extends StatelessWidget {
         if (coins.isEmpty) {
           return const Padding(
             padding: EdgeInsets.all(32),
-            child: Center(
-              child: Text('No coins yet'),
-            ),
+            child: Center(child: Text('No coins yet')),
           );
         }
 
@@ -158,7 +153,11 @@ class _CoinListSection extends StatelessWidget {
           padding: const EdgeInsets.all(32),
           child: Column(
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              Icon(
+                Icons.error_outline,
+                size: 48,
+                color: AppColorTokens.of(context).danger,
+              ),
               const SizedBox(height: 16),
               Text('Failed to load coins: $error'),
               const SizedBox(height: 16),
@@ -185,9 +184,7 @@ class _CoinListItem extends StatelessWidget {
     final isPositive = coin.priceChange24h >= 0;
 
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(coin.iconUrl),
-      ),
+      leading: CircleAvatar(backgroundImage: NetworkImage(coin.iconUrl)),
       title: Text(coin.symbol),
       subtitle: Text(coin.name),
       trailing: Column(
@@ -196,13 +193,15 @@ class _CoinListItem extends StatelessWidget {
         children: [
           Text(
             '${coin.balance.toStringAsFixed(4)} ${coin.symbol}',
-            style: const TextStyle(fontWeight: FontWeight.bold),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
           Text(
             '\$${coin.balanceUsd.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 12,
-              color: isPositive ? Colors.green : Colors.red,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
+              color: isPositive
+                  ? AppColorTokens.of(context).success
+                  : AppColorTokens.of(context).danger,
             ),
           ),
         ],
@@ -240,18 +239,18 @@ class _CoinListSkeleton extends StatelessWidget {
       children: List.generate(
         5,
         (index) => ListTile(
-          leading: const CircleAvatar(
-            backgroundColor: Colors.grey,
+          leading: CircleAvatar(
+            backgroundColor: AppColorTokens.of(context).textTertiary,
           ),
           title: Container(
             height: 16,
             width: 80,
-            color: Colors.grey[300],
+            color: AppColorTokens.of(context).textTertiary.withAlpha(77),
           ),
           subtitle: Container(
             height: 12,
             width: 120,
-            color: Colors.grey[200],
+            color: AppColorTokens.of(context).textTertiary.withAlpha(51),
           ),
         ),
       ),
@@ -264,10 +263,7 @@ class _WalletErrorWidget extends StatelessWidget {
   final Object error;
   final VoidCallback onRetry;
 
-  const _WalletErrorWidget({
-    required this.error,
-    required this.onRetry,
-  });
+  const _WalletErrorWidget({required this.error, required this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -277,10 +273,10 @@ class _WalletErrorWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 64,
-              color: Colors.red,
+              color: AppColorTokens.of(context).danger,
             ),
             const SizedBox(height: 16),
             Text(
@@ -292,8 +288,8 @@ class _WalletErrorWidget extends StatelessWidget {
               error.toString(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.grey,
-                  ),
+                color: AppColorTokens.of(context).textTertiary,
+              ),
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
@@ -321,19 +317,16 @@ class _EmptyWalletWidget extends StatelessWidget {
           Icon(
             Icons.account_balance_wallet_outlined,
             size: 80,
-            color: Colors.grey[400],
+            color: AppColorTokens.of(context).textTertiary,
           ),
           const SizedBox(height: 16),
-          Text(
-            'No Wallet Yet',
-            style: Theme.of(context).textTheme.titleLarge,
-          ),
+          Text('No Wallet Yet', style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 8),
           Text(
             'Create or import a wallet to get started',
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Colors.grey,
-                ),
+              color: AppColorTokens.of(context).textTertiary,
+            ),
           ),
           const SizedBox(height: 24),
           ElevatedButton.icon(
@@ -348,4 +341,3 @@ class _EmptyWalletWidget extends StatelessWidget {
     );
   }
 }
-

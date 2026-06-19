@@ -12,7 +12,10 @@ class ZilApi {
         : 'https://api.zilliqa.com';
   }
 
-  Future<Map<String, dynamic>?> _rpc(String method, List<dynamic> params) async {
+  Future<Map<String, dynamic>?> _rpc(
+    String method,
+    List<dynamic> params,
+  ) async {
     final response = await BaseApi.requestEmptyH.post(
       _baseUrl,
       params: {},
@@ -22,7 +25,8 @@ class ZilApi {
     return response as Map<String, dynamic>?;
   }
 
-  static MessageModel _errorMm(dynamic e) => MessageModel.error()..data = e.toString();
+  static MessageModel _errorMm(dynamic e) =>
+      MessageModel.error()..data = e.toString();
 
   /// Helper: execute RPC and extract result, with optional error message
   Future<MessageModel> _rpcResult(
@@ -37,9 +41,13 @@ class ZilApi {
         return MessageModel()..data = extractor(response['result']);
       }
       if (response != null && response['error'] != null) {
-        return MessageModel()..error = true..data = response['error']['message'] ?? errorMsg;
+        return MessageModel()
+          ..error = true
+          ..data = response['error']['message'] ?? errorMsg;
       }
-      return MessageModel()..error = true..data = errorMsg;
+      return MessageModel()
+        ..error = true
+        ..data = errorMsg;
     } catch (e) {
       return _errorMm(e);
     }
@@ -80,32 +88,52 @@ class ZilApi {
 
   /// Get minimum gas price
   Future<MessageModel> getMinimumGasPrice() async {
-    return _rpcResult('GetMinimumGasPrice', [], (r) => BigInt.parse(r),
-        errorMsg: 'Failed to get gas price');
+    return _rpcResult(
+      'GetMinimumGasPrice',
+      [],
+      (r) => BigInt.parse(r),
+      errorMsg: 'Failed to get gas price',
+    );
   }
 
   /// Get network ID
   Future<MessageModel> getNetworkId() async {
-    return _rpcResult('GetNetworkId', [], (r) => r,
-        errorMsg: 'Failed to get network ID');
+    return _rpcResult(
+      'GetNetworkId',
+      [],
+      (r) => r,
+      errorMsg: 'Failed to get network ID',
+    );
   }
 
   /// Get latest block number
   Future<MessageModel> getLatestTxBlock() async {
-    return _rpcResult('GetLatestTxBlock', [], (r) => {'header': r['header'], 'body': r['body']},
-        errorMsg: 'Failed to get latest block');
+    return _rpcResult(
+      'GetLatestTxBlock',
+      [],
+      (r) => {'header': r['header'], 'body': r['body']},
+      errorMsg: 'Failed to get latest block',
+    );
   }
 
   /// Send signed transaction
   Future<MessageModel> createTransaction(Map<String, dynamic> txParams) async {
-    return _rpcResult('CreateTransaction', [txParams], (r) => r['TranID'],
-        errorMsg: 'Transaction failed');
+    return _rpcResult(
+      'CreateTransaction',
+      [txParams],
+      (r) => r['TranID'],
+      errorMsg: 'Transaction failed',
+    );
   }
 
   /// Get transaction by hash
   Future<MessageModel> getTransaction(String txHash) async {
-    return _rpcResult('GetTransaction', [txHash], (r) => r,
-        errorMsg: 'Transaction not found');
+    return _rpcResult(
+      'GetTransaction',
+      [txHash],
+      (r) => r,
+      errorMsg: 'Transaction not found',
+    );
   }
 
   /// Get transactions for address

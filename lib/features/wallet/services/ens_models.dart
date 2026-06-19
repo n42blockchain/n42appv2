@@ -17,11 +17,7 @@ String _ensJsonString(
   return value.toString();
 }
 
-int _ensJsonInt(
-  Map<String, dynamic> json,
-  String key, {
-  int fallback = 0,
-}) {
+int _ensJsonInt(Map<String, dynamic> json, String key, {int fallback = 0}) {
   final value = json[key];
   if (value is int) return value;
   if (value is num) return value.toInt();
@@ -117,7 +113,9 @@ class EnsPrice {
       years: _ensJsonInt(json, 'years', fallback: 1),
       nameLength: _ensJsonInt(json, 'nameLength'),
       updatedAt: _ensJsonDateTime(json, 'updatedAt') ?? DateTime.now(),
-      usdPrice: json['usdPrice'] == null ? null : _ensJsonDouble(json, 'usdPrice'),
+      usdPrice: json['usdPrice'] == null
+          ? null
+          : _ensJsonDouble(json, 'usdPrice'),
     );
   }
 
@@ -137,7 +135,8 @@ class EnsPrice {
   String get formattedTotalPrice => '${totalPrice.toStringAsFixed(4)} ETH';
 
   /// 获取格式化的年费
-  String get formattedAnnualPrice => '${annualPrice.toStringAsFixed(4)} ETH/year';
+  String get formattedAnnualPrice =>
+      '${annualPrice.toStringAsFixed(4)} ETH/year';
 }
 
 /// ENS 可用性检查结果
@@ -274,7 +273,8 @@ class OwnedEns {
   bool get isExpiringSoon => daysUntilExpiry > 0 && daysUntilExpiry <= 30;
 
   /// 检查是否已过期
-  bool get isExpired => daysUntilExpiry == 0 && DateTime.now().isAfter(expiresAt);
+  bool get isExpired =>
+      daysUntilExpiry == 0 && DateTime.now().isAfter(expiresAt);
 
   /// 获取格式化的过期时间
   String get formattedExpiresAt {
@@ -308,20 +308,21 @@ class SubdomainInfo {
       label: _ensJsonString(json, 'label'),
       fullName: _ensJsonString(json, 'fullName'),
       owner: _ensJsonString(json, 'owner'),
-      resolver: json['resolver'] == null ? null : _ensJsonString(json, 'resolver'),
+      resolver: json['resolver'] == null
+          ? null
+          : _ensJsonString(json, 'resolver'),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'label': label,
-        'fullName': fullName,
-        'owner': owner,
-        'resolver': resolver,
-      };
+    'label': label,
+    'fullName': fullName,
+    'owner': owner,
+    'resolver': resolver,
+  };
 
   /// 地址是否为零地址（即子域名已被删除）
-  bool get isDeleted =>
-      owner == '0x0000000000000000000000000000000000000000';
+  bool get isDeleted => owner == '0x0000000000000000000000000000000000000000';
 }
 
 /// 注册承诺结果

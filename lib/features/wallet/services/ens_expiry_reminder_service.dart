@@ -84,19 +84,18 @@ class EnsExpiryReminderConfig {
   }
 
   Map<String, dynamic> toJson() => {
-        'domainName': domainName,
-        'expiresAtMs': expiresAtMs,
-        'enabled': enabled,
-        'notifyDays': notifyDays,
-        'notifiedDays': notifiedDays,
-      };
+    'domainName': domainName,
+    'expiresAtMs': expiresAtMs,
+    'enabled': enabled,
+    'notifyDays': notifyDays,
+    'notifiedDays': notifiedDays,
+  };
 
   /// 到期时间（DateTime 形式）
   DateTime get expiresAt => DateTime.fromMillisecondsSinceEpoch(expiresAtMs);
 
   /// 距到期天数（负数 = 已过期）
-  int get daysUntilExpiry =>
-      expiresAt.difference(DateTime.now()).inDays;
+  int get daysUntilExpiry => expiresAt.difference(DateTime.now()).inDays;
 }
 
 /// ENS 域名到期提醒服务
@@ -124,19 +123,16 @@ class EnsExpiryReminderService {
       if (raw == null || raw.isEmpty) return {};
       final decoded = jsonDecode(raw);
       if (decoded is! Map) return {};
-      final map = decoded.map(
-        (key, value) => MapEntry(key.toString(), value),
-      );
+      final map = decoded.map((key, value) => MapEntry(key.toString(), value));
       return map.map(
-        (k, v) =>
-            MapEntry(
-              k,
-              EnsExpiryReminderConfig.fromJson(
-                v is Map
-                    ? v.map((key, value) => MapEntry(key.toString(), value))
-                    : const <String, dynamic>{},
-              ),
-            ),
+        (k, v) => MapEntry(
+          k,
+          EnsExpiryReminderConfig.fromJson(
+            v is Map
+                ? v.map((key, value) => MapEntry(key.toString(), value))
+                : const <String, dynamic>{},
+          ),
+        ),
       );
     } catch (e) {
       AppLogger.w('EnsExpiryReminder', 'loadAll error: $e');
@@ -146,7 +142,8 @@ class EnsExpiryReminderService {
 
   /// 持久化所有域名的提醒配置
   static Future<void> saveAll(
-      Map<String, EnsExpiryReminderConfig> configs) async {
+    Map<String, EnsExpiryReminderConfig> configs,
+  ) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final map = configs.map((k, v) => MapEntry(k, v.toJson()));
@@ -225,7 +222,8 @@ class EnsExpiryReminderService {
 
         // 检查各提醒间隔（notifyDays 应降序，如 [30, 7, 1]）
         for (final threshold in config.notifyDays) {
-          if (daysLeft <= threshold && !config.notifiedDays.contains(threshold)) {
+          if (daysLeft <= threshold &&
+              !config.notifiedDays.contains(threshold)) {
             // 触发该阈值的提醒
             await _sendExpiryNotification(config.domainName, daysLeft);
             config = config.copyWith(
@@ -240,9 +238,7 @@ class EnsExpiryReminderService {
         // 已过期（daysLeft < 0）且尚未发过"已过期"通知（用 -1 标记）
         if (daysLeft < 0 && !config.notifiedDays.contains(-1)) {
           await _sendExpiredNotification(config.domainName);
-          config = config.copyWith(
-            notifiedDays: [...config.notifiedDays, -1],
-          );
+          config = config.copyWith(notifiedDays: [...config.notifiedDays, -1]);
           configs[key] = config;
           changed = true;
         }
@@ -278,7 +274,9 @@ class EnsExpiryReminderService {
   );
 
   static Future<void> _sendExpiryNotification(
-      String domainName, int daysLeft) async {
+    String domainName,
+    int daysLeft,
+  ) async {
     try {
       final String body;
       if (daysLeft <= 0) {

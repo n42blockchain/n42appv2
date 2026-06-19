@@ -6,19 +6,17 @@ part of 'wallet_chain_send_dot.dart';
 mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -38,13 +36,11 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               child: Icon(
                 Icons.add,
                 size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
             rightOnTap1: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
           ),
         ],
       ),
@@ -52,23 +48,21 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   }
 
   Widget noteWidget() {
-    if (widget.coinModel.coin['blockchainType'] ==
+    if (widget.coinModel.config.blockchainType ==
             BlockchainType.Ethereum.name &&
         widget.coinModel.coin['isContract'] == false) {
       return Container(
-        margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        margin: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               S.of(context).g_key_wallet_k58,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20.0)),
+            SizedBox(height: AppSpacing.space4),
             textFieldStyle2(
               context,
               controller: noteTextEditingController,
@@ -77,10 +71,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               errorMessage: noteErrorMessage,
               suffix: Text(
                 "${noteTextEditingController.text.length}/100",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                style: AppTypography.captionSm.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
               onEditingComplete: () {
@@ -96,8 +88,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
               },
               maxLines: 2,
               height: ScreenUtil().setWidth(108.0),
-              bgColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              bgColor: AppColorTokens.of(context).bgSurface,
             ),
           ],
         ),
@@ -108,7 +99,7 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
 
   Widget amountWidget() {
     final su = ScreenUtil();
-    final itemBg = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return containerStyle1(
       context,
@@ -126,10 +117,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_44,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: su.setSp(28.0),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -142,7 +131,9 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: su.setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(su.setWidth(16.0))),
+              borderRadius: BorderRadius.all(
+                Radius.circular(su.setWidth(16.0)),
+              ),
               color: itemBg,
             ),
             child: Column(
@@ -153,12 +144,15 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: su.setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
@@ -173,23 +167,29 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   ),
                   bgColor: itemBg,
                   errorMessage: amountErrorMessage,
-                  messageMargin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+                  messageMargin: EdgeInsets.symmetric(
+                    horizontal: su.setWidth(30.0),
+                  ),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: su.setWidth(10.0)),
                     height: su.setWidth(60.0),
-                    padding: EdgeInsets.symmetric(horizontal: su.setWidth(20.0)),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: su.setWidth(20.0),
+                    ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
-                      borderRadius: BorderRadius.all(Radius.circular(su.setWidth(60.0))),
+                      color: AppColorTokens.of(context).brand,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(su.setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: su.setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                       ),
                     ),
                   ),
@@ -210,14 +210,11 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   }
 
   Widget amountBalanceWidget() {
-    final String unit =
-        widget.coinModel.coin['unit'].toString().toUpperCase();
+    final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -235,10 +232,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
       ),
       child: Text(
         addr,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: su.setSp(30.0),
+        style: AppTypography.headline.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -247,11 +242,11 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final bool isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final String title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final String title = widget.coinModel.config.coinType;
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 
@@ -261,8 +256,8 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -271,28 +266,24 @@ mixin _DotSendWidgetsMixin on _DotSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }

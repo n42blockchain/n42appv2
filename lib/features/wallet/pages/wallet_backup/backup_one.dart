@@ -1,9 +1,8 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_two.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -36,7 +35,7 @@ class _BackupOneState extends State<BackupOne> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -47,13 +46,9 @@ class _BackupOneState extends State<BackupOne> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c39,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(50),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.displayLg.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -63,13 +58,9 @@ class _BackupOneState extends State<BackupOne> {
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c40,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -93,41 +84,24 @@ class _BackupOneState extends State<BackupOne> {
                 children: [
                   const Divider(height: 1),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    padding: EdgeInsets.all(AppSpacing.space8),
+                    color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
-                    child: buttonStyle6(
-                      context,
-                      () {
-                        if (showMnemonic && mnemonicWordsList.isNotEmpty) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BackupTwo(
-                                widget.walletInfo,
-                                widget.walletIndex,
-                              ),
-                            ),
-                          );
-                        }
-                      },
-                      S.of(context).g_key_wallet_c43,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        showMnemonic
-                            ? AppThemeKeys.mainButtonBgColor.name
-                            : AppThemeKeys.mainButtonBgColor3.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        showMnemonic
-                            ? AppThemeKeys.mainButtonTextColor.name
-                            : AppThemeKeys.mainButtonTextColor3.name,
-                      ),
-                      false,
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: (showMnemonic && mnemonicWordsList.isNotEmpty)
+                          ? () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BackupTwo(
+                                    widget.walletInfo,
+                                    widget.walletIndex,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                     ),
                   ),
                 ],
@@ -155,23 +129,16 @@ class _BackupOneState extends State<BackupOne> {
         children: [
           Icon(
             Icons.warning_amber,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
             size: ScreenUtil().setWidth(40),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -183,7 +150,7 @@ class _BackupOneState extends State<BackupOne> {
   Widget _buildGridView() {
     if (showMnemonic) {
       return GridView.builder(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         itemCount: mnemonicWordsList.length,
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
@@ -196,22 +163,15 @@ class _BackupOneState extends State<BackupOne> {
         itemBuilder: (context, index) {
           return Container(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              color: AppColorTokens.of(context).bgSurface,
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(
                 mnemonicWordsList[index],
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemTextColor.name,
-                  ),
-                  fontSize: ScreenUtil().setSp(28.0),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textItem,
                 ),
               ),
             ),
@@ -220,10 +180,7 @@ class _BackupOneState extends State<BackupOne> {
       );
     }
 
-    final itemTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemTextColor.name,
-    );
+    final itemTextColor = AppColorTokens.of(context).textItem;
     return InkWell(
       onTap: mnemonicWordsList.isEmpty
           ? null
@@ -231,13 +188,10 @@ class _BackupOneState extends State<BackupOne> {
       child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(400),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -256,19 +210,13 @@ class _BackupOneState extends State<BackupOne> {
               mnemonicWordsList.isEmpty
                   ? walletBackupPhraseUnavailableMessage
                   : S.of(context).g_key_wallet_c44,
-              style: TextStyle(
-                color: itemTextColor,
-                fontSize: ScreenUtil().setSp(30),
-              ),
+              style: AppTypography.body.copyWith(color: itemTextColor),
               textAlign: TextAlign.center,
             ),
             if (mnemonicWordsList.isNotEmpty)
               Text(
                 S.of(context).g_key_wallet_c45,
-                style: TextStyle(
-                  color: itemTextColor,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: itemTextColor),
                 textAlign: TextAlign.center,
               ),
           ],

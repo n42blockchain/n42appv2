@@ -19,20 +19,24 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     final isConnected = provider.isConnected;
     final device = provider.currentDevice;
     final itemBgColor = _themeColor(context, AppThemeKeys.itemBgColor);
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor,
+    );
     final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
+    final successColor = AppColorTokens.of(context).success;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: isConnected
-              ? [Colors.green.shade600, Colors.green.shade400]
+              ? [successColor, successColor]
               : [itemBgColor, itemBgColor],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +48,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                 color: isConnected ? Colors.white : subtitleColor,
                 size: ScreenUtil().setWidth(40),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -53,18 +57,16 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                       isConnected
                           ? s.g_key_hw_connected
                           : s.g_key_hw_not_connected_label,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w600,
                         color: isConnected ? Colors.white : mainTextColor,
                       ),
                     ),
                     if (isConnected && device != null) ...[
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         device.typeDisplayName,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
+                        style: AppTypography.bodySm.copyWith(
                           color: Colors.white70,
                         ),
                       ),
@@ -79,13 +81,10 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     backgroundColor: Colors.white24,
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(20),
-                      vertical: ScreenUtil().setWidth(12),
+                      horizontal: AppSpacing.space4,
+                      vertical: AppSpacing.space4,
                     ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(8)),
-                    ),
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.brSm),
                   ),
                   child: Text(s.g_key_hw_disconnect),
                 ),
@@ -94,9 +93,9 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
 
           // 已连接设备的操作按钮
           if (isConnected && device != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             const Divider(color: Colors.white24),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -108,7 +107,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                   ),
                 ),
                 if (!device.isKeystone) ...[
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: _buildActionButton(
                       context,
@@ -142,25 +141,22 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(12),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           color: Colors.white24,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, color: Colors.white, size: ScreenUtil().setWidth(28)),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.white,
-                ),
+                style: AppTypography.caption.copyWith(color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -183,15 +179,23 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     final isConnected = isCurrentDevice && provider.isConnected;
     final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor);
     final mainTextColor = _themeColor(context, AppThemeKeys.mainTextColor);
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor,
+    );
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: isConnected ? Border.all(color: Colors.green, width: 2) : null,
+        borderRadius: AppRadius.brMd,
+        border: isConnected
+            ? Border.all(
+                color: AppColorTokens.of(context).success,
+                width: 2,
+              )
+            : null,
       ),
       child: Row(
         children: [
@@ -201,7 +205,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
               color: blueColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Icon(
@@ -212,7 +216,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             ),
           ),
 
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
 
           // 设备信息
           Expanded(
@@ -224,8 +228,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     Expanded(
                       child: Text(
                         device.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: mainTextColor,
                         ),
@@ -234,43 +237,37 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
                     if (isConnected)
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(10),
-                          vertical: ScreenUtil().setWidth(4),
+                          horizontal: AppSpacing.space2,
+                          vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.green.withAlpha(30),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(6)),
+                          color: AppColorTokens.of(
+                            context,
+                          ).success.withAlpha(30),
+                          borderRadius: AppRadius.brSm,
                         ),
                         child: Text(
                           s.g_key_hw_connected,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
-                            color: Colors.green,
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.of(context).success,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   device.typeDisplayName,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
                 if (device.lastConnectedAt != null) ...[
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     s.g_key_hw_last_connected(
                       _formatDate(context, s, device.lastConnectedAt!),
                     ),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                   ),
                 ],
               ],
@@ -282,15 +279,14 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
             IconButton(
               onPressed: () =>
                   _connectSavedDevice(context, s, provider, device),
-              icon: Icon(
-                _connectionIcon(device.type),
-                color: blueColor,
-              ),
+              icon: Icon(_connectionIcon(device.type), color: blueColor),
             ),
             IconButton(
-              onPressed: () =>
-                  _showDeleteDialog(context, s, provider, device),
-              icon: const Icon(Icons.delete_outline, color: Colors.red),
+              onPressed: () => _showDeleteDialog(context, s, provider, device),
+              icon: Icon(
+                Icons.delete_outline,
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ],
         ],
@@ -333,21 +329,21 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _buildSectionTitle(context, s.g_key_hw_connect_new_device),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         _buildConnectOption(
           context,
           icon: Icons.bluetooth,
           label: s.g_key_hw_connect_new_ledger,
           onTap: () => _navigateToLedgerScan(context),
         ),
-        SizedBox(height: ScreenUtil().setWidth(10)),
+        SizedBox(height: AppSpacing.space2),
         _buildConnectOption(
           context,
           icon: Icons.usb,
           label: s.g_key_hw_connect_new_trezor,
           onTap: () => _navigateToTrezorConnect(context),
         ),
-        SizedBox(height: ScreenUtil().setWidth(10)),
+        SizedBox(height: AppSpacing.space2),
         _buildConnectOption(
           context,
           icon: Icons.qr_code_scanner,
@@ -369,25 +365,20 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: _themeColor(context, AppThemeKeys.itemBgColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: blueColor.withAlpha(80)),
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: blueColor,
-              size: ScreenUtil().setWidth(32),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            Icon(icon, color: blueColor, size: ScreenUtil().setWidth(32)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w500,
                   color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),

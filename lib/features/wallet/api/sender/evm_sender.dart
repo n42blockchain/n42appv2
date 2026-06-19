@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
+import 'package:n42_wallet/features/wallet/utils/transfer_serializer.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -29,7 +30,16 @@ class EvmSender implements ChainSender {
   final _dataUtils = DataUtils();
 
   @override
-  Future<SendResult> send(SendParams params) async {
+  Future<SendResult> send(SendParams params) {
+    // 同一地址的发送串行化：nonce 从查询（pending tag）到广播之间没有
+    // 互斥，快速双击/自动重试会拿到同一 nonce 各自签名广播（双花）。
+    return TransferSerializer.run(
+      '${params.coinType}:${params.fromAddress}',
+      () => _sendSerialized(params),
+    );
+  }
+
+  Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
     final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
     final chainId = (baseInfo?['chainId'] as int?) ?? 1;
@@ -39,13 +49,15 @@ class EvmSender implements ChainSender {
     // Get token balance if contract transfer
     BigInt balance = BigInt.zero;
     if (isContract) {
-      final mm = await _tokenViewApi.getBalance(
-        BlockchainType.Ethereum.name,
-        coinType,
-        params.fromAddress,
-        contract: params.contractAddress,
-        isTest: params.isTest,
-      ) ?? _errMM();
+      final mm =
+          await _tokenViewApi.getBalance(
+            BlockchainType.Ethereum.name,
+            coinType,
+            params.fromAddress,
+            contract: params.contractAddress,
+            isTest: params.isTest,
+          ) ??
+          _errMM();
       if (mm.error) return SendResult.fail(mm.data?.toString());
       balance = mm.data as BigInt;
       if (balance == BigInt.zero) {
@@ -54,13 +66,15 @@ class EvmSender implements ChainSender {
     }
 
     // Get chain balance for gas
-    final mmchain = await _tokenViewApi.getBalance(
-      BlockchainType.Ethereum.name,
-      coinType,
-      params.fromAddress,
-      contract: '',
-      isTest: params.isTest,
-    ) ?? _errMM();
+    final mmchain =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Ethereum.name,
+          coinType,
+          params.fromAddress,
+          contract: '',
+          isTest: params.isTest,
+        ) ??
+        _errMM();
     if (mmchain.error) return SendResult.fail(mmchain.data?.toString());
     final chainBalance = mmchain.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -68,11 +82,13 @@ class EvmSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Ethereum.name,
-      coinType,
-      isTest: params.isTest,
-    ) ?? _errMM();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Ethereum.name,
+          coinType,
+          isTest: params.isTest,
+        ) ??
+        _errMM();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
 
     final baseFee = mmg.data as BigInt;
@@ -81,7 +97,9 @@ class EvmSender implements ChainSender {
         : baseFee;
 
     // Estimate gas
-    final effectiveDecimals = isContract ? params.tokenDecimals : params.decimals;
+    final effectiveDecimals = isContract
+        ? params.tokenDecimals
+        : params.decimals;
     final estimateMm = await _tokenViewApi.getGasEstimateEthV2(
       params.fromAddress,
       params.toAddress,
@@ -109,13 +127,19 @@ class EvmSender implements ChainSender {
       valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
       if (valuePrice == chainBalance && params.sendMax) {
         valuePrice = valuePrice - totalGasPrice;
-        adjustedValue = toEther(valuePrice.toString(), params.decimals).toDouble();
+        adjustedValue = toEther(
+          valuePrice.toString(),
+          params.decimals,
+        ).toDouble();
       }
       if (adjustedValue < 0 || totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     } else {
-      valuePrice = ethToWeiString(params.amount.toString(), params.tokenDecimals);
+      valuePrice = ethToWeiString(
+        params.amount.toString(),
+        params.tokenDecimals,
+      );
       if (valuePrice > balance) {
         return SendResult.fail(S.current.g_key_wallet_m4);
       }
@@ -151,15 +175,19 @@ class EvmSender implements ChainSender {
       coinType: coinType,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
-    final sendMm = await _tokenViewApi.sendTx(
-      BlockchainType.Ethereum.name,
-      coinType,
-      signStr,
-      netMode: params.isTest ? 'test' : 'main',
-    ) ?? _errMM();
+    final sendMm =
+        await _tokenViewApi.sendTx(
+          BlockchainType.Ethereum.name,
+          coinType,
+          signStr,
+          netMode: params.isTest ? 'test' : 'main',
+        ) ??
+        _errMM();
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedValue);
@@ -184,7 +212,10 @@ class EvmSender implements ChainSender {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
     final amountHex = _dataUtils.bigIntToHex(valuePrice, need0x: false);
-    final chainIdHex = _dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
+    final chainIdHex = _dataUtils.bigIntToHex(
+      BigInt.from(chainId),
+      need0x: false,
+    );
     final gasLimitHex = _dataUtils.bigIntToHex(
       BigInt.from((gasLimit * 1.2).ceil()),
       need0x: false,
@@ -234,7 +265,12 @@ class EvmSender implements ChainSender {
         mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
       );
     } else {
-      signStr = await _trustdart.signTransaction(coinType, path, signMap, pk: privateKey);
+      signStr = await _trustdart.signTransaction(
+        coinType,
+        path,
+        signMap,
+        pk: privateKey,
+      );
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);

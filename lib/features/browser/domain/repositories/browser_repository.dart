@@ -33,7 +33,9 @@ abstract class BrowserRepository {
   Future<Either<Failure, void>> clearHistory();
 
   /// Search history
-  Future<Either<Failure, List<BrowserHistoryEntity>>> searchHistory(String query);
+  Future<Either<Failure, List<BrowserHistoryEntity>>> searchHistory(
+    String query,
+  );
 
   /// Get bookmarks
   Future<Either<Failure, List<BookmarkEntity>>> getBookmarks({
@@ -74,4 +76,3 @@ abstract class BrowserRepository {
   /// Get search suggestions
   Future<Either<Failure, List<String>>> getSearchSuggestions(String query);
 }
-

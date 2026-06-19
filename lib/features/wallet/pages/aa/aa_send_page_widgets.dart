@@ -8,39 +8,31 @@ part of 'aa_send_page.dart';
 mixin _AASendWidgetsMixin on _AASendLogicMixin {
   // ─── Theme helpers ──────────────────────────────────────────────────
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
-  TextStyle _sectionTitleStyle() => TextStyle(
-        fontSize: ScreenUtil().setSp(26),
-        fontWeight: FontWeight.w600,
-        color: _mainText,
-      );
+  TextStyle _sectionTitleStyle() => AppTypography.bodySm.copyWith(
+    fontWeight: FontWeight.w600,
+    color: _mainText,
+  );
 
   // ─── From Section ───────────────────────────────────────────────────
 
   Widget buildFromSection() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      decoration: BoxDecoration(
-        color: _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      padding: EdgeInsets.all(AppSpacing.space4),
+      decoration: BoxDecoration(color: _itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_75,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subText,
-            ),
+            style: AppTypography.caption.copyWith(color: _subText),
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Row(
             children: [
               Container(
@@ -48,8 +40,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
                   color: const Color(0xFF5E97F6).withAlpha(25),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(12)),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Icon(
                   Icons.account_balance_wallet,
@@ -57,23 +48,21 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                   color: const Color(0xFF5E97F6),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.account.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: _mainText,
                       ),
                     ),
                     Text(
                       widget.account.shortAddress,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         fontFamily: 'monospace',
                         color: _subText,
                       ),
@@ -83,20 +72,18 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
               ),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(10),
-                  vertical: ScreenUtil().setWidth(4),
+                  horizontal: AppSpacing.space2,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
-                  color: Colors.green.withAlpha(20),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  color: AppColorTokens.of(context).success.withAlpha(20),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   'AA',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    fontWeight: FontWeight.bold,
-                    color: Colors.green,
+                  style: AppTypography.captionSm.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).success,
                   ),
                 ),
               ),
@@ -114,7 +101,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(S.of(context).g_key_38, style: _sectionTitleStyle()),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         TextField(
           controller: toController,
           focusNode: toFocusNode,
@@ -139,10 +126,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 ),
               ],
             ),
-            border: OutlineInputBorder(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
+            border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           ),
         ),
       ],
@@ -159,7 +143,11 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Flexible(
-              child: Text(S.of(context).g_key_44, overflow: TextOverflow.ellipsis, style: _sectionTitleStyle()),
+              child: Text(
+                S.of(context).g_key_44,
+                overflow: TextOverflow.ellipsis,
+                style: _sectionTitleStyle(),
+              ),
             ),
             Flexible(
               child: Row(
@@ -168,10 +156,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     child: Text(
                       '${S.of(context).g_key_43}: 1.5 $selectedToken',
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: _subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: _subText),
                     ),
                   ),
                   TextButton(
@@ -186,47 +171,42 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [
             Expanded(
               child: TextField(
                 controller: amountController,
                 focusNode: amountFocusNode,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 onChanged: (_) => estimateGas(),
                 decoration: InputDecoration(
                   hintText: '0.0',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
+                  border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                 ),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.headline.copyWith(
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
                 color: _itemBg,
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
                 border: Border.all(color: _subText.withAlpha(30)),
               ),
               child: Row(
                 children: [
                   Text(
                     selectedToken,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                       color: _mainText,
                     ),
@@ -263,7 +243,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         GestureDetector(
           onTap: selectPaymaster,
           child: PaymasterOptionCard(
@@ -281,12 +261,14 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: isSponsored ? Colors.green.withAlpha(15) : _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: isSponsored
+            ? AppColorTokens.of(context).success.withAlpha(15)
+            : _itemBg,
+        borderRadius: AppRadius.brMd,
         border: isSponsored
-            ? Border.all(color: Colors.green.withAlpha(30))
+            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
             : null,
       ),
       child: Column(
@@ -302,14 +284,11 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                       size: ScreenUtil().setWidth(22),
                       color: _subText,
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_estimated_gas,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: _subText,
-                        ),
+                        style: AppTypography.caption.copyWith(color: _subText),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -320,7 +299,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             ],
           ),
           if (isSponsored && estimatedGas != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             GasSponsorshipBadge(
               isSponsored: true,
               savedAmount: formatGasCost(),
@@ -342,26 +321,20 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     if (estimatedGas != null) {
       return Text(
         isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
-          color: isSponsored ? Colors.green : _mainText,
+          color: isSponsored ? AppColorTokens.of(context).success : _mainText,
         ),
       );
     }
-    return Text(
-      '-',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
-        color: _subText,
-      ),
-    );
+    return Text('-', style: AppTypography.bodySm.copyWith(color: _subText));
   }
 
   // ─── Send Button ────────────────────────────────────────────────────
 
   Widget buildSendButton() {
-    final canSend = toController.text.isNotEmpty &&
+    final canSend =
+        toController.text.isNotEmpty &&
         amountController.text.isNotEmpty &&
         estimatedGas != null &&
         !isEstimating &&
@@ -372,20 +345,13 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
       style: ElevatedButton.styleFrom(
         backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
         foregroundColor: Colors.white,
-        padding:
-            EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
-        disabledBackgroundColor: Colors.grey,
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: Text(
         S.of(context).g_key_48,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

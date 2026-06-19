@@ -44,11 +44,9 @@ class XrpApi {
 
   Future<MessageModel> getAccountInfoXrp(String address, bool isTest) async {
     try {
-      final data = await _rpc(
-        'account_info',
-        [{'account': address, 'ledger_index': 'validated'}],
-        isTest,
-      );
+      final data = await _rpc('account_info', [
+        {'account': address, 'ledger_index': 'validated'},
+      ], isTest);
       final result = data['result'] as Map<String, dynamic>;
       if (result['status'] == 'success') {
         final accountData = result['account_data'] as Map<String, dynamic>?;
@@ -79,33 +77,56 @@ class XrpApi {
   }
 
   Future<MessageModel> getGasPriceXrp(bool isTest) async {
-    return _rpcCall('fee', [{}], isTest,
-        (r) => BigInt.parse(r['drops']['minimum_level']));
+    return _rpcCall(
+      'fee',
+      [{}],
+      isTest,
+      (r) => BigInt.parse(r['drops']['minimum_level']),
+    );
   }
 
   Future<MessageModel> getTxInfoXrp(String txHash, bool isTest) async {
-    return _rpcCall('tx', [{'transaction': txHash, 'binary': false}], isTest,
-        (r) => r['meta']['TransactionResult']);
+    return _rpcCall(
+      'tx',
+      [
+        {'transaction': txHash, 'binary': false},
+      ],
+      isTest,
+      (r) => r['meta']['TransactionResult'],
+    );
   }
 
   /// 获取服务器信息（reserve / fee / load factor）
   Future<MessageModel> getServerStateXrp({bool isTest = false}) async {
-    return _rpcCall('server_state', [{'ledger_index': 'current'}], isTest, (r) {
-      final ledger = r['state']['validated_ledger'] as Map<String, dynamic>;
-      return {
-        'reserve_base': ledger['reserve_base'],
-        'reserve_inc': ledger['reserve_inc'],
-        'base_fee': ledger['base_fee'],
-        'load_base': r['state']['load_base'],
-        'load_factor': r['state']['load_factor'],
-      };
-    });
+    return _rpcCall(
+      'server_state',
+      [
+        {'ledger_index': 'current'},
+      ],
+      isTest,
+      (r) {
+        final ledger = r['state']['validated_ledger'] as Map<String, dynamic>;
+        return {
+          'reserve_base': ledger['reserve_base'],
+          'reserve_inc': ledger['reserve_inc'],
+          'base_fee': ledger['base_fee'],
+          'load_base': r['state']['load_base'],
+          'load_factor': r['state']['load_factor'],
+        };
+      },
+    );
   }
 
   /// 获取当前账本信息
   Future<MessageModel> getLedgerXrp({bool isTest = false}) async {
-    return _rpcCall('ledger', [{'ledger_index': 'current'}], isTest,
-        (r) => r['ledger_current_index']);
+    return _rpcCall(
+      'ledger',
+      [
+        {'ledger_index': 'current'},
+      ],
+      isTest,
+      (r) => r['ledger_current_index'],
+    );
   }
 
   /// 获取账户交易记录
@@ -117,7 +138,14 @@ class XrpApi {
   }) async {
     return _rpcCall(
       'account_tx',
-      [{'account': address, 'ledger_index_min': ledgerIndexMin, 'ledger_index_max': -1, 'limit': limit}],
+      [
+        {
+          'account': address,
+          'ledger_index_min': ledgerIndexMin,
+          'ledger_index_max': -1,
+          'limit': limit,
+        },
+      ],
       isTest,
       (r) => r['transactions'],
     );
@@ -126,7 +154,9 @@ class XrpApi {
   /// 广播已签名交易
   Future<MessageModel> sendTxXrp(String signHash, bool isTest) async {
     try {
-      final data = await _rpc('submit', [{'tx_blob': signHash}], isTest);
+      final data = await _rpc('submit', [
+        {'tx_blob': signHash},
+      ], isTest);
       final result = data['result'] as Map<String, dynamic>;
       if (result['status'] == 'success') {
         if (result['engine_result'].toString().startsWith('tes')) {
@@ -141,9 +171,18 @@ class XrpApi {
   }
 
   /// 获取 Hook 合约信息
-  Future<MessageModel> getHookInfo(String address, {bool isTest = false}) async {
-    return _rpcCall('account_objects', [{'account': address, 'type': 'hook'}], isTest,
-        (r) => r['account_objects']);
+  Future<MessageModel> getHookInfo(
+    String address, {
+    bool isTest = false,
+  }) async {
+    return _rpcCall(
+      'account_objects',
+      [
+        {'account': address, 'type': 'hook'},
+      ],
+      isTest,
+      (r) => r['account_objects'],
+    );
   }
 
   /// 获取 AMM 池信息
@@ -151,14 +190,22 @@ class XrpApi {
     Map<String, dynamic> ammInfo, {
     bool isTest = false,
   }) async {
-    return _rpcCall('amm_info', [ammInfo], isTest,
-        (r) => r['amm']);
+    return _rpcCall('amm_info', [ammInfo], isTest, (r) => r['amm']);
   }
 
   /// 获取 Trustline 代币（IOU）信息
-  Future<MessageModel> getTrustline(String address, {bool isTest = false}) async {
-    return _rpcCall('account_lines', [{'account': address}], isTest,
-        (r) => r['lines']);
+  Future<MessageModel> getTrustline(
+    String address, {
+    bool isTest = false,
+  }) async {
+    return _rpcCall(
+      'account_lines',
+      [
+        {'account': address},
+      ],
+      isTest,
+      (r) => r['lines'],
+    );
   }
 
   /// 获取账户交易历史
@@ -167,7 +214,13 @@ class XrpApi {
     int limit = 10,
     bool isTest = false,
   }) async {
-    return _rpcCall('account_tx', [{'account': address, 'limit': limit}], isTest,
-        (r) => r['transactions']);
+    return _rpcCall(
+      'account_tx',
+      [
+        {'account': address, 'limit': limit},
+      ],
+      isTest,
+      (r) => r['transactions'],
+    );
   }
 }

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
@@ -76,12 +76,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               s.g_key_78,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).danger),
             ),
           ),
         ],
@@ -132,10 +127,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   onPressed: _confirmDisconnectAll,
                   icon: Icon(
                     Icons.link_off,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.errorTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).danger,
                     size: ScreenUtil().setWidth(44),
                   ),
                   tooltip: S.of(context).g_wc_disconnect_all,
@@ -146,10 +138,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
       body: entries.isEmpty ? _buildEmptyState() : _buildSessionList(entries),
       floatingActionButton: FloatingActionButton(
         onPressed: _scanNewConnection,
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).brand,
         child: const Icon(Icons.qr_code_scanner, color: Colors.white),
       ),
     );
@@ -163,32 +152,21 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
           Icon(
             Icons.link_off,
             size: ScreenUtil().setWidth(120),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_wc_no_sessions,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_wc_no_sessions_desc,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ],
@@ -201,11 +179,11 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
   ) {
     return ListView.separated(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       itemCount: entries.length,
-      separatorBuilder: (_, _) => SizedBox(height: ScreenUtil().setWidth(16)),
+      separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space4),
       itemBuilder: (context, index) {
         final session = entries[index].value;
         return _buildSessionCard(session);
@@ -224,20 +202,14 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
 
     return InkWell(
       onTap: () => _onSessionTap(session),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      borderRadius: AppRadius.brMd,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ),
+            color: AppColorTokens.of(context).border,
             width: 0.5,
           ),
         ),
@@ -250,7 +222,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
               height: ScreenUtil().setWidth(72),
               margin: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
                 child: iconUrl.isNotEmpty
                     ? ImageNetWork(
                         imageUrl: iconUrl,
@@ -267,33 +239,25 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                   // Name
                   Text(
                     meta.name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   // URL
                   if (meta.url.isNotEmpty)
                     Text(
                       meta.url,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                  SizedBox(height: ScreenUtil().setWidth(10)),
+                  SizedBox(height: AppSpacing.space2),
                   // Chain tags
                   if (chains.isNotEmpty)
                     Wrap(
@@ -302,26 +266,19 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       children: chains.map((chain) {
                         return Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(12),
-                            vertical: ScreenUtil().setWidth(4),
+                            horizontal: AppSpacing.space4,
+                            vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
+                            color: AppColorTokens.of(
                               context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ).withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(8),
-                            ),
+                            ).brand.withValues(alpha: 0.1),
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             chain,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(20),
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
+                            style: AppTypography.captionSm.copyWith(
+                              color: AppColorTokens.of(context).brand,
                             ),
                           ),
                         );
@@ -344,23 +301,16 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
                       );
                     },
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   // Expiry
                   Text(
                     isExpired
                         ? 'Expired'
                         : 'Expires: ${_formatDate(expiryDate)}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: isExpired
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.errorTextColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
+                          ? AppColorTokens.of(context).danger
+                          : AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],
@@ -371,10 +321,7 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
               onPressed: () => _confirmDisconnect(session.topic, meta.name),
               icon: Icon(
                 Icons.link_off,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+                color: AppColorTokens.of(context).danger,
                 size: ScreenUtil().setWidth(40),
               ),
               tooltip: S.of(context).g_connect_key2,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'market_coin_info_helpers.dart';
 
@@ -17,13 +18,12 @@ Widget coinInfoCard(
       right: ScreenUtil().setWidth(30),
     ),
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(30),
-      vertical: ScreenUtil().setWidth(10),
+      horizontal: AppSpacing.space8,
+      vertical: AppSpacing.space2,
     ),
     decoration: BoxDecoration(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      color: AppColorTokens.of(context).bgSurface,
+      borderRadius: AppRadius.brMd,
     ),
     child: title != null
         ? Column(
@@ -44,20 +44,18 @@ Widget coinInfoCard(
 }
 
 Widget coinInfoSectionTitle(BuildContext context, String title) => Text(
-      title,
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name),
-        fontSize: ScreenUtil().setSp(30),
-        fontWeight: FontWeight.w600,
-      ),
-    );
+  title,
+  style: AppTypography.body.copyWith(
+    color: AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.mainButtonBgColor.name,
+    ),
+    fontWeight: FontWeight.w600,
+  ),
+);
 
-TextStyle _labelStyle(BuildContext context) => TextStyle(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name),
-      fontSize: ScreenUtil().setSp(28),
-    );
+TextStyle _labelStyle(BuildContext context) =>
+    AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
 
 /// A label-value row with accent-colored value text.
 Widget coinInfoStatRow(BuildContext context, String label, String value) {
@@ -72,10 +70,11 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
             value,
             textAlign: TextAlign.end,
             maxLines: 2,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name),
-              fontSize: ScreenUtil().setSp(28),
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
             ),
           ),
         ),
@@ -85,8 +84,7 @@ Widget coinInfoStatRow(BuildContext context, String label, String value) {
 }
 
 /// A label-percentage row where value color reflects positive/negative trend.
-Widget coinInfoStatRowColored(
-    BuildContext context, String label, double pct) {
+Widget coinInfoStatRowColored(BuildContext context, String label, double pct) {
   return SizedBox(
     height: ScreenUtil().setWidth(80),
     child: Row(
@@ -95,9 +93,8 @@ Widget coinInfoStatRowColored(
         Text(label, style: _labelStyle(context)),
         Text(
           fmtPct(pct),
-          style: TextStyle(
+          style: AppTypography.body.copyWith(
             color: pctColor(pct, context),
-            fontSize: ScreenUtil().setSp(28),
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -107,21 +104,16 @@ Widget coinInfoStatRowColored(
 }
 
 /// A vertically stacked label/value cell used inside the P&L card.
-Widget pnlStat(
-    String label, String value, Color valueColor, Color labelColor) {
+Widget pnlStat(String label, String value, Color valueColor, Color labelColor) {
   return Expanded(
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(fontSize: ScreenUtil().setSp(20), color: labelColor),
-        ),
-        SizedBox(height: ScreenUtil().setWidth(4)),
+        Text(label, style: AppTypography.captionSm.copyWith(color: labelColor)),
+        SizedBox(height: AppSpacing.space2),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: valueColor,
           ),

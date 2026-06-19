@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
@@ -24,7 +24,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
         : 'up to ${maxApy.toStringAsFixed(1)}% APY';
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      margin: EdgeInsets.all(AppSpacing.space6),
       padding: EdgeInsets.all(ScreenUtil().setWidth(26)),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
@@ -53,21 +53,19 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 child: Text(
                   S.of(context).g_key_earn_total_earnings,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: Colors.white.withAlpha(200),
                   ),
                 ),
               ),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(12),
-                  vertical: ScreenUtil().setWidth(6),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: Colors.white.withAlpha(30),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: earnState.apyLoading
                     ? SizedBox(
@@ -81,14 +79,15 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                     : Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.trending_up,
-                              color: Colors.greenAccent,
-                              size: ScreenUtil().setWidth(20)),
-                          SizedBox(width: ScreenUtil().setWidth(4)),
+                          Icon(
+                            Icons.trending_up,
+                            color: Colors.greenAccent,
+                            size: ScreenUtil().setWidth(20),
+                          ),
+                          SizedBox(width: AppSpacing.space2),
                           Text(
                             apyLabel,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(20),
+                            style: AppTypography.captionSm.copyWith(
                               color: Colors.greenAccent,
                               fontWeight: FontWeight.w600,
                             ),
@@ -98,18 +97,17 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             earnState.positionsLoading
                 ? '...'
                 : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(48),
-              fontWeight: FontWeight.bold,
+            style: AppTypography.displayLg.copyWith(
+              fontWeight: FontWeight.w600,
               color: Colors.white,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               _buildEarningsStat(
@@ -119,7 +117,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                     : '\$${earnState.totalStakedUsd.toStringAsFixed(2)}',
                 Icons.account_balance,
               ),
-              SizedBox(width: ScreenUtil().setWidth(32)),
+              SizedBox(width: AppSpacing.space8),
               _buildEarningsStat(
                 S.of(context).g_key_stake_rewards,
                 earnState.positionsLoading
@@ -138,18 +136,19 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
     return Expanded(
       child: Row(
         children: [
-          Icon(icon,
-              color: Colors.white.withAlpha(180),
-              size: ScreenUtil().setWidth(28)),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Icon(
+            icon,
+            color: Colors.white.withAlpha(180),
+            size: ScreenUtil().setWidth(28),
+          ),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     color: Colors.white.withAlpha(150),
                   ),
                   maxLines: 1,
@@ -157,8 +156,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                 ),
                 Text(
                   value,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
@@ -186,9 +184,12 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
     String? badge,
     VoidCallback? onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Container(
         width: ScreenUtil().setWidth(230),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -196,7 +197,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           boxShadow: [
             BoxShadow(
               color: gradientColors[0].withAlpha(80),
@@ -206,7 +207,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           child: Stack(
             children: [
               // 右上装饰圆
@@ -237,7 +238,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
               // 主内容
               Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -250,29 +251,28 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                           height: ScreenUtil().setWidth(48),
                           decoration: BoxDecoration(
                             color: Colors.white.withAlpha(50),
-                            borderRadius: BorderRadius.circular(
-                                ScreenUtil().setWidth(12)),
+                            borderRadius: AppRadius.brMd,
                           ),
-                          child: Icon(icon,
-                              color: Colors.white,
-                              size: ScreenUtil().setWidth(28)),
+                          child: Icon(
+                            icon,
+                            color: Colors.white,
+                            size: ScreenUtil().setWidth(28),
+                          ),
                         ),
                         if (badge != null)
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(10),
-                              vertical: ScreenUtil().setWidth(4),
+                              horizontal: AppSpacing.space2,
+                              vertical: AppSpacing.space2,
                             ),
                             decoration: BoxDecoration(
                               color: Colors.white.withAlpha(50),
-                              borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(20)),
+                              borderRadius: AppRadius.brMd,
                             ),
                             child: Text(
                               badge,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(16),
-                                fontWeight: FontWeight.bold,
+                              style: AppTypography.captionSm.copyWith(
+                                fontWeight: FontWeight.w600,
                                 color: Colors.white,
                                 letterSpacing: 0.5,
                               ),
@@ -285,19 +285,17 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
                       children: [
                         Text(
                           title,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(28),
-                            fontWeight: FontWeight.bold,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        SizedBox(height: ScreenUtil().setWidth(4)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           subtitle,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(20),
+                          style: AppTypography.captionSm.copyWith(
                             color: Colors.white.withAlpha(200),
                           ),
                           maxLines: 2,
@@ -310,6 +308,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );
@@ -337,24 +336,17 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               height: ScreenUtil().setWidth(72),
               decoration: BoxDecoration(
                 color: color.withAlpha(20),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(20)),
-                border: Border.all(
-                  color: color.withAlpha(40),
-                  width: 1,
-                ),
+                borderRadius: AppRadius.brMd,
+                border: Border.all(color: color.withAlpha(40), width: 1),
               ),
-              child:
-                  Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
+              child: Icon(icon, color: color, size: ScreenUtil().setWidth(34)),
             ),
-            SizedBox(height: ScreenUtil().setWidth(10)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
+              style: AppTypography.captionSm.copyWith(
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

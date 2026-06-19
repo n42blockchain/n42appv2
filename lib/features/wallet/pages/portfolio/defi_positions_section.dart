@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/api_hub/datasources/debank_datasource.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// DeFi positions section for the Portfolio page.
 ///
@@ -43,7 +43,9 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     });
 
     try {
-      final portfolio = await DeBankDatasource.getPortfolio(widget.walletAddress);
+      final portfolio = await DeBankDatasource.getPortfolio(
+        widget.walletAddress,
+      );
       if (mounted) {
         setState(() {
           _portfolio = portfolio;
@@ -81,30 +83,24 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         // Section header
         Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(32),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'DeFi Positions',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Text(
                 fmtUsd(portfolio.totalUsdValue),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ],
@@ -114,7 +110,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         // Category summary chips
         _buildCategorySummary(portfolio),
 
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
 
         // Protocol list
         ...portfolio.protocols.take(10).map((p) => _buildProtocolCard(p)),
@@ -127,11 +123,8 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               },
               child: Text(
                 'View all ${portfolio.protocolCount} protocols',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name,
-                  ),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),
@@ -144,39 +137,58 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     final categories = <_CategoryChip>[];
 
     if (portfolio.lendingValue > 0) {
-      categories.add(_CategoryChip('Lending', portfolio.lendingValue, const Color(0xFF3B82F6)));
+      categories.add(
+        _CategoryChip(
+          'Lending',
+          portfolio.lendingValue,
+          const Color(0xFF3B82F6),
+        ),
+      );
     }
     if (portfolio.lpValue > 0) {
-      categories.add(_CategoryChip('LP', portfolio.lpValue, const Color(0xFF22C55E)));
+      categories.add(
+        _CategoryChip('LP', portfolio.lpValue, const Color(0xFF22C55E)),
+      );
     }
     if (portfolio.stakingValue > 0) {
-      categories.add(_CategoryChip('Staking', portfolio.stakingValue, const Color(0xFF9333EA)));
+      categories.add(
+        _CategoryChip(
+          'Staking',
+          portfolio.stakingValue,
+          const Color(0xFF9333EA),
+        ),
+      );
     }
     if (portfolio.rewardsValue > 0) {
-      categories.add(_CategoryChip('Rewards', portfolio.rewardsValue, const Color(0xFFF97316)));
+      categories.add(
+        _CategoryChip(
+          'Rewards',
+          portfolio.rewardsValue,
+          const Color(0xFFF97316),
+        ),
+      );
     }
 
     if (categories.isEmpty) return const SizedBox.shrink();
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Wrap(
         spacing: ScreenUtil().setWidth(12),
         runSpacing: ScreenUtil().setWidth(8),
         children: categories.map((c) {
           return Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: c.color.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               '${c.label}: ${fmtUsd(c.value)}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: c.color,
                 fontWeight: FontWeight.w500,
               ),
@@ -190,13 +202,13 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
   Widget _buildProtocolCard(ProtocolPosition protocol) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(32),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,7 +218,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             children: [
               if (protocol.logoUrl != null)
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                   child: Image.network(
                     protocol.logoUrl!,
                     width: ScreenUtil().setWidth(36),
@@ -217,28 +229,22 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
                     ),
                   ),
                 ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       protocol.name,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name,
-                        ),
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     Text(
                       protocol.chain.toUpperCase(),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(20),
-                        color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                      style: AppTypography.captionSm.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                   ],
@@ -246,12 +252,9 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               ),
               Text(
                 fmtUsd(protocol.totalUsdValue),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
             ],
@@ -293,22 +296,17 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         children: [
           Text(
             '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
+            style: AppTypography.caption.copyWith(
               color: prefix == '-'
-                  ? const Color(0xFFEF4444)
-                  : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ? AppColorTokens.of(context).danger
+                  : AppColorTokens.of(context).textSubtitle,
             ),
           ),
           const Spacer(),
           Text(
             fmtUsd(token.usdValue),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ],
@@ -318,7 +316,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
 
   Widget _buildLoadingState() {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Center(
         child: Column(
           children: [
@@ -327,14 +325,11 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
               height: ScreenUtil().setWidth(40),
               child: const CircularProgressIndicator(strokeWidth: 2),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               'Loading DeFi positions...',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ],
@@ -345,7 +340,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
 
   Widget _buildErrorState() {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Center(
         child: TextButton.icon(
           onPressed: _loadPositions,

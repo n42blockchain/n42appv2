@@ -77,8 +77,9 @@ class MiningProvider extends ChangeNotifier {
 
   void setWalletIndex(int index) {
     walletIndex = index;
-    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet,
-        intValue: walletIndex));
+    eventBus.fire(
+      EventPublic(EventPublicType.selectMiningWallet, intValue: walletIndex),
+    );
   }
 
   void resetData() {
@@ -133,7 +134,9 @@ class MiningProvider extends ChangeNotifier {
       final WalletActionProvider wap = globalWapAdapter;
       final cInfo = wap.walletInfoLsit[wIndex].coinInfo?[CoinType.N.name];
       if (cInfo == null) {
-        walletIndex = wap.walletInfoLsit.indexWhere((e) => e.mainWallet == true);
+        walletIndex = wap.walletInfoLsit.indexWhere(
+          (e) => e.mainWallet == true,
+        );
         address = await wap.getMainWalletAddressAsync(CoinType.N.name);
       } else {
         walletIndex = wIndex;
@@ -158,7 +161,9 @@ class MiningProvider extends ChangeNotifier {
       final ms = await SPUtil().getMiningStautus();
       final mType = ms?[address]?['miningType'] as String?;
       if (mType != null) {
-        final key = AppConfig.isMainChainMining ? mType.toLowerCase() : '${mType.toLowerCase()}test';
+        final key = AppConfig.isMainChainMining
+            ? mType.toLowerCase()
+            : '${mType.toLowerCase()}test';
         final value = ms?[address]?['miningValue']?[key] as int?;
         if (value != null && value != 0) {
           finalResult = true;
@@ -170,7 +175,9 @@ class MiningProvider extends ChangeNotifier {
         finalResult = await checkAddressIsDepositAst(address ?? "");
         if (finalResult) {
           _miningType = MiningType.N;
-          SPUtil().setMiningStatus(address ?? "", {'miningType': MiningType.N.name});
+          SPUtil().setMiningStatus(address ?? "", {
+            'miningType': MiningType.N.name,
+          });
         }
       }
 

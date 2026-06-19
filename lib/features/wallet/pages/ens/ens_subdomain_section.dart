@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -39,7 +39,7 @@ class EnsSubdomainSection extends StatelessWidget {
         children: [
           _buildTitleRow(context),
           _buildBody(context),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           _buildCreateButton(context),
         ],
       ),
@@ -47,8 +47,8 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildTitleRow(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -57,8 +57,7 @@ class EnsSubdomainSection extends StatelessWidget {
           child: Text(
             S.of(context).g_key_ens_subdomains,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: mainTextColor,
             ),
@@ -108,8 +107,7 @@ class EnsSubdomainSection extends StatelessWidget {
   }
 
   Widget _buildEmptyState(BuildContext context, ScreenUtil scr) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: scr.setWidth(20)),
       child: Center(
@@ -123,10 +121,7 @@ class EnsSubdomainSection extends StatelessWidget {
             SizedBox(height: scr.setWidth(8)),
             Text(
               S.of(context).g_key_ens_subdomain_empty,
-              style: TextStyle(
-                fontSize: scr.setSp(24),
-                color: subtitleColor,
-              ),
+              style: AppTypography.caption.copyWith(color: subtitleColor),
             ),
           ],
         ),
@@ -148,9 +143,7 @@ class EnsSubdomainSection extends StatelessWidget {
       ),
       style: OutlinedButton.styleFrom(
         side: BorderSide(color: domainChain.color.withAlpha(80)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         minimumSize: Size(double.infinity, ScreenUtil().setWidth(80)),
       ),
     );
@@ -173,8 +166,8 @@ class _SubdomainItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final iconSize = scr.setWidth(40);
 
     return Padding(
@@ -201,8 +194,7 @@ class _SubdomainItem extends StatelessWidget {
               children: [
                 Text(
                   sub.fullName,
-                  style: TextStyle(
-                    fontSize: scr.setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w500,
                     color: mainTextColor,
                   ),
@@ -210,8 +202,7 @@ class _SubdomainItem extends StatelessWidget {
                 if (sub.owner.isNotEmpty)
                   Text(
                     '${sub.owner.substring(0, 6)}...${sub.owner.substring(sub.owner.length - 4)}',
-                    style: TextStyle(
-                      fontSize: scr.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                       fontFamily: 'monospace',
                     ),
@@ -227,7 +218,7 @@ class _SubdomainItem extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete_outline, size: 18),
             onPressed: () => onDelete(sub),
-            color: Colors.red.withAlpha(180),
+            color: AppColorTokens.of(context).danger.withAlpha(180),
           ),
         ],
       ),
@@ -243,10 +234,10 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/device_scan_page.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_accounts_page.dart';
@@ -58,30 +59,30 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
           builder: (context, _) {
             final provider = _provider;
             return SingleChildScrollView(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // 连接状态卡片
                   _buildConnectionStatusCard(context, s, provider),
 
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
 
                   // 已保存的设备
                   if (provider.savedDevices.isNotEmpty) ...[
                     _buildSectionTitle(context, s.g_key_hw_saved_devices),
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     ...provider.savedDevices.map(
                       (device) =>
                           _buildSavedDeviceCard(context, s, provider, device),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                   ],
 
                   // 添加新设备按钮
                   _buildAddDeviceSection(context, s),
 
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
 
                   // 支持的设备说明
                   _buildSupportedDevicesInfo(context, s),
@@ -99,11 +100,9 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
   Widget _buildSectionTitle(BuildContext context, String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(30),
-        fontWeight: FontWeight.bold,
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      style: AppTypography.body.copyWith(
+        fontWeight: FontWeight.w600,
+        color: AppColorTokens.of(context).textPrimary,
       ),
     );
   }

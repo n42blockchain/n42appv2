@@ -50,10 +50,12 @@ class PaymasterService {
 
     if (!AAConfig.isChainSupported(symbol)) {
       // Chain not supported → only self-pay available
-      options.add(const PaymasterOption(
-        type: PaymasterType.sponsored,
-        isAvailable: false,
-      ));
+      options.add(
+        const PaymasterOption(
+          type: PaymasterType.sponsored,
+          isAvailable: false,
+        ),
+      );
       return options;
     }
 
@@ -64,21 +66,25 @@ class PaymasterService {
       apiKey: apiKey,
     );
 
-    options.add(PaymasterOption(
-      type: PaymasterType.sponsored,
-      isAvailable: sponsorshipAvailable,
-    ));
+    options.add(
+      PaymasterOption(
+        type: PaymasterType.sponsored,
+        isAvailable: sponsorshipAvailable,
+      ),
+    );
 
     // Add ERC-20 token options from config
     final tokens = AAConfig.getChainTokens(symbol);
     for (final token in tokens) {
-      options.add(PaymasterOption(
-        type: PaymasterType.erc20,
-        tokenSymbol: token.symbol,
-        tokenAddress: token.address,
-        decimals: token.decimals,
-        isAvailable: true,
-      ));
+      options.add(
+        PaymasterOption(
+          type: PaymasterType.erc20,
+          tokenSymbol: token.symbol,
+          tokenAddress: token.address,
+          decimals: token.decimals,
+          isAvailable: true,
+        ),
+      );
     }
 
     return options;
@@ -133,8 +139,10 @@ class PaymasterService {
       if (resultRaw is! String) return false;
 
       // Verify the returned chainId matches what we expect
-      final returnedChainId =
-          int.tryParse(resultRaw.replaceFirst('0x', ''), radix: 16);
+      final returnedChainId = int.tryParse(
+        resultRaw.replaceFirst('0x', ''),
+        radix: 16,
+      );
       return returnedChainId == chainId;
     } catch (e) {
       // Network error → optimistically allow, real error shown at submission

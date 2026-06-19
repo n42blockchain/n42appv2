@@ -216,6 +216,17 @@ class SPUtil {
     await prefs?.setBool(SPkey.pushPermissionDismissed.name, value);
   }
 
+  // 后台送达引导（自启动+电池白名单）：用户是否已选择"不再提醒"
+  Future<bool> getBgDeliveryGuideDismissed() async {
+    await initPrefs();
+    return prefs?.getBool(SPkey.bgDeliveryGuideDismissed.name) ?? false;
+  }
+
+  Future<void> setBgDeliveryGuideDismissed(bool value) async {
+    await initPrefs();
+    await prefs?.setBool(SPkey.bgDeliveryGuideDismissed.name, value);
+  }
+
   // 小额资产隐藏开关（< $1 USD 的代币不在资产列表中显示）
   Future<void> setHideSmallAssets(bool value) async {
     await initPrefs();
@@ -425,4 +436,5 @@ enum SPkey {
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
   smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
   pushPermissionDismissed, // 用户已明确关闭推送权限提醒，不再弹窗
+  bgDeliveryGuideDismissed, // 用户已明确关闭后台送达引导（自启动+电池白名单）
 }

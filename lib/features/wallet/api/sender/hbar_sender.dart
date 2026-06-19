@@ -19,8 +19,9 @@ class HbarSender implements ChainSender {
 
   static const _header = {'Content-Type': 'application/json'};
 
-  String _mirrorNodeBase(bool isTest) =>
-      isTest ? 'https://testnet.mirrornode.hedera.com' : 'https://mainnet.mirrornode.hedera.com';
+  String _mirrorNodeBase(bool isTest) => isTest
+      ? 'https://testnet.mirrornode.hedera.com'
+      : 'https://mainnet.mirrornode.hedera.com';
 
   @override
   Future<SendResult> send(SendParams params) async {
@@ -46,7 +47,10 @@ class HbarSender implements ChainSender {
       const int feeTinybars = 1000000; // 0.01 HBAR
 
       // 1 HBAR = 1e8 tinybars
-      BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+      BigInt valuePrice = ethToWeiString(
+        params.amount.toString(),
+        params.decimals,
+      );
       double adjustedAmount = params.amount;
 
       if (valuePrice == chainBalance && params.sendMax) {
@@ -55,9 +59,13 @@ class HbarSender implements ChainSender {
           return SendResult.fail(S.current.g_key_wallet_m5('HBAR'));
         }
         valuePrice = valuePrice - feeBig;
-        adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+        adjustedAmount = toEther(
+          valuePrice.toString(),
+          params.decimals,
+        ).toDouble();
       }
-      if (valuePrice <= BigInt.zero || BigInt.from(feeTinybars) + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero ||
+          BigInt.from(feeTinybars) + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5('HBAR'));
       }
 
@@ -84,7 +92,10 @@ class HbarSender implements ChainSender {
         );
       } else {
         signStr = await _trustdart.signTransaction(
-          CoinType.HBAR.name, params.path, signMap, pk: params.privateKey!,
+          CoinType.HBAR.name,
+          params.path,
+          signMap,
+          pk: params.privateKey!,
         );
       }
 
@@ -104,7 +115,9 @@ class HbarSender implements ChainSender {
       );
       final txId = (resp as Map<String, dynamic>)['transaction_id']?.toString();
       if (txId == null || txId.isEmpty) {
-        return SendResult.fail(resp['message']?.toString() ?? 'Broadcast failed');
+        return SendResult.fail(
+          resp['message']?.toString() ?? 'Broadcast failed',
+        );
       }
       return SendResult.ok(txId, actualAmount: adjustedAmount);
     } catch (e) {

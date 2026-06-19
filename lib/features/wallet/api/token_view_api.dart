@@ -95,10 +95,7 @@ class TokenViewApi {
   }
 
   /// 获取某笔交易的确认数
-  Future<MessageModel> getTxConfirmation(
-    String coinType,
-    String txHash,
-  ) {
+  Future<MessageModel> getTxConfirmation(String coinType, String txHash) {
     return _request(
       'v1/vipapi/tx/confirmation?coin=${coinType.toLowerCase()}&tx_hash=$txHash',
       successCode: 1,
@@ -121,7 +118,11 @@ class TokenViewApi {
     switch (blockchain) {
       case 'Bitcoin':
         if (isTest) return await BtcApi(test: isTest).getBalance(address);
-        return await getBalanceBtc(coinType, address, returnDouble: returnDouble);
+        return await getBalanceBtc(
+          coinType,
+          address,
+          returnDouble: returnDouble,
+        );
       case 'Ethereum':
         return await getBalanceEth(
           coinType,
@@ -148,7 +149,12 @@ class TokenViewApi {
           isTest: isTest,
         );
       case 'Tezos':
-        return await XtzApi().getBalanceXtz(address, contract, 'balance', isTest);
+        return await XtzApi().getBalanceXtz(
+          address,
+          contract,
+          'balance',
+          isTest,
+        );
       case 'Ripple':
         return await XrpApi().getAccountInfoXrp(address, isTest);
       case 'Cosmos':
@@ -158,7 +164,9 @@ class TokenViewApi {
       case 'Polkadot':
         return await DotApi().getTokens(address, coinType, isTest: isTest);
       case 'Aptos':
-        return await AptApi(isTest: isTest).getBalance(address, contract: contract);
+        return await AptApi(
+          isTest: isTest,
+        ).getBalance(address, contract: contract);
       case 'Sui':
         return await SuiApi(isTest: isTest).getBalanceSui(address);
       case 'TheOpenNetwork':
@@ -193,7 +201,9 @@ class TokenViewApi {
       case 'Algorand':
         return await AlgoApi().sendTx(signHash, isTest: netMode != 'main');
       case 'Zilliqa':
-        return await ZilApi(isTest: netMode != 'main').createTransaction(signHash);
+        return await ZilApi(
+          isTest: netMode != 'main',
+        ).createTransaction(signHash);
     }
     return null;
   }

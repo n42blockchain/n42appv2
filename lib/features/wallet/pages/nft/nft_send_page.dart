@@ -8,11 +8,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -53,7 +54,8 @@ class _NftSendPageState extends State<NftSendPage> {
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final toAddress = _addressCtrl.text.trim();
-    final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
+    final configCoinType = coinModel.config.coinType;
+    final coinType = configCoinType.isNotEmpty ? configCoinType : 'ETH';
 
     // 地址校验
     final valid = await Trustdart().validateAddress(coinType, toAddress);
@@ -120,52 +122,39 @@ class _NftSendPageState extends State<NftSendPage> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_nft_send),
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
 
                 // NFT 简要信息
                 _buildNftInfo(context, textColor, subtitleColor),
 
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
 
                 // 收款地址
                 Text(
                   S.of(context).g_key_38, // To
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 TextFormField(
                   controller: _addressCtrl,
                   decoration: InputDecoration(
                     hintText: S.of(context).g_key_41,
-                    hintStyle: TextStyle(
+                    hintStyle: AppTypography.bodySm.copyWith(
                       color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(26),
                     ),
                     suffixIcon: IconButton(
                       icon: Icon(Icons.paste, color: blueColor),
@@ -177,16 +166,9 @@ class _NftSendPageState extends State<NftSendPage> {
                         }
                       },
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8),
-                      ),
-                    ),
+                    border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                   ),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
-                    color: textColor,
-                  ),
+                  style: AppTypography.bodySm.copyWith(color: textColor),
                   validator: (v) {
                     if (v == null || v.trim().isEmpty) {
                       return S.of(context).g_key_41;
@@ -197,35 +179,24 @@ class _NftSendPageState extends State<NftSendPage> {
 
                 // ERC1155 数量字段
                 if (nft.isErc1155) ...[
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   Text(
                     S.of(context).g_key_nft_quantity,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.body.copyWith(color: subtitleColor),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(10)),
+                  SizedBox(height: AppSpacing.space2),
                   TextFormField(
                     controller: _quantityCtrl,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     decoration: InputDecoration(
                       hintText: '1 ~ ${nft.balance}',
-                      hintStyle: TextStyle(
+                      hintStyle: AppTypography.bodySm.copyWith(
                         color: subtitleColor,
-                        fontSize: ScreenUtil().setSp(26),
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(8),
-                        ),
-                      ),
+                      border: OutlineInputBorder(borderRadius: AppRadius.brSm),
                     ),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: textColor,
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: textColor),
                     validator: (v) {
                       final n = int.tryParse(v ?? '');
                       if (n == null || n <= 0) return S.of(context).g_key_t_43;
@@ -246,24 +217,21 @@ class _NftSendPageState extends State<NftSendPage> {
                     style: ElevatedButton.styleFrom(
                       backgroundColor: blueColor,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(12),
-                        ),
+                        borderRadius: AppRadius.brMd,
                       ),
                     ),
                     child: _sending
                         ? const CircularProgressIndicator(color: Colors.white)
                         : Text(
                             S.of(context).g_key_48, // Send
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(30),
+                            style: AppTypography.body.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(30)),
+                SizedBox(height: AppSpacing.space8),
               ],
             ),
           ),
@@ -277,21 +245,18 @@ class _NftSendPageState extends State<NftSendPage> {
     Color textColor,
     Color subtitleColor,
   ) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: blueColor.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           // 缩略图
           ClipRRect(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
             child: nft.imageUrl != null && nft.imageUrl!.isNotEmpty
                 ? Image.network(
                     nft.imageUrl!,
@@ -303,7 +268,7 @@ class _NftSendPageState extends State<NftSendPage> {
                   )
                 : _imgPlaceholder(blueColor),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           // 名称 + Token ID
           Expanded(
             child: Column(
@@ -311,23 +276,19 @@ class _NftSendPageState extends State<NftSendPage> {
               children: [
                 Text(
                   nft.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${S.of(context).g_key_nft_token_id}: #${nft.tokenId}',
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ],
             ),

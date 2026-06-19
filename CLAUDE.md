@@ -98,10 +98,16 @@ level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`
   - `mining/`, `mining_v1/`, `mining_v2/` — Mining protocol versions. The
     `features/mining/` layer is a Clean-Arch bridge wrapping
     `MiningV2Provider` (exposed through `miningRepositoryProvider`).
+    **Both v1 and v2 are live**: a user-facing switch in
+    `setting_home_page.dart` (`miningUseV2Provider`) selects which page
+    the home tab renders. New mining features go into v2 only; v1 is
+    maintenance-only until the product decision to remove the switch
+    (tracked in `docs/CLEANUP_PLAN.md` stage 5).
   - `browser/` — DApp browser with JS bridge, WebView integration.
-  - `auth/` — Authentication flows. `IAuthService` / `AuthServiceImpl` are
-    **designed but not wired** — production reads/writes login state through
-    `AppGlobals.userInfo` and `currentUserProvider`.
+  - `auth/` — Authentication flows. Login state is read/written through
+    `AppGlobals.userInfo` and `currentUserProvider` (a never-wired
+    `IAuthService`/`AuthServiceImpl` pair was removed in 2026-06 cleanup;
+    recover from git history if a service abstraction is ever needed).
   - `bridge/`, `staking/`, `earn/`, `hardware_wallet/` — DeFi & device features.
   - `home/`, `splash/`, `news/`, `profile/` — top-level screens.
   - `component/`, `widgets/`, `utils/` — shared UI / utility code.
@@ -110,15 +116,15 @@ level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`
 
 - **`shared/`** — Cross-feature abstractions:
   - `domain/entities/` — Shared entities (`SharedWalletInfo`, `MessageModel`).
-  - `domain/services/` — Service interfaces (`IWalletService`, `IMiningService`,
-    `IAuthService`).
+  - `domain/services/` — Service interfaces (`IWalletService`,
+    `IMiningService`).
   - `events/` — EventBus-based `CrossFeatureEvent` subclasses + `EventManager`.
   - `utils/` — `wallet_connect_uri.dart` and other cross-feature helpers.
   - `widgets/` — Shared widgets (e.g., `tips_dialog_3`).
-  - `contracts/` — `IFeatureModule` / `INavigatable` / `IRefreshable` /
-    `IDisposable` / `IAuthenticatable` / `IDataProvider` / `IEventListener`
-    interfaces. **Designed but not adopted** (zero implementors); kept as
-    reference for a potential module-system bootstrap.
+  - (A zero-implementor `contracts/` interface set and its
+    `FeatureInitializer` were removed in the 2026-06 cleanup — see
+    `docs/CLEANUP_PLAN.md`; recover from git history if a module-system
+    bootstrap is revived.)
 
 - **`presentation/themes/`** — Theme configuration and adapters.
 - **`generated/`** — Auto-generated l10n code (do NOT edit manually).
@@ -171,9 +177,12 @@ Features communicate through:
 
 - `lib/features/wallet/models/coin_config_view.dart` — `CoinConfigView` is a
   typed overlay over the dynamic `CoinModel.coin` map (`coin['xxx']` accesses
-  appear ~770 times across the codebase against 38 keys). New code can use
-  `cm.config.coinType` / `.decimals` / `.pathForAddrType('legacy')` instead of
-  raw map indexing; old call sites are unchanged.
+  appear ~796 times across the codebase against 38 keys).
+- **RULE: new or modified code MUST NOT add `coin['...']` string indexing** —
+  use `cm.config.coinType` / `.decimals` / `.pathForAddrType('legacy')` etc.
+  Legacy call sites are being migrated in batches per
+  `docs/CLEANUP_PLAN.md` stage 4; when you touch a line that contains
+  `coin['...']`, migrate that access as part of your change.
 
 ## Git Operations
 

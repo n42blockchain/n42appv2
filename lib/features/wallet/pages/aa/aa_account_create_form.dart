@@ -30,8 +30,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 26.sp,
+      style: AppTypography.bodySm.copyWith(
         fontWeight: FontWeight.w600,
         color: _themeColor(AppThemeKeys.mainTextColor),
       ),
@@ -50,10 +49,10 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             hintText: S.of(context).g_key_aa_account_name_hint,
             prefixIcon: const Icon(Icons.label_outline),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12.w),
+              borderRadius: AppRadius.brMd,
             ),
             contentPadding: EdgeInsets.symmetric(
-              horizontal: 16.w,
+              horizontal: AppSpacing.space4,
               vertical: 14.w,
             ),
           ),
@@ -86,17 +85,14 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.w),
                 decoration: BoxDecoration(
                   color: isSelected ? blueColor : itemBg,
-                  borderRadius: BorderRadius.circular(12.w),
+                  borderRadius: AppRadius.brMd,
                   border: Border.all(
-                    color: isSelected
-                        ? blueColor
-                        : subtitleColor.withAlpha(30),
+                    color: isSelected ? blueColor : subtitleColor.withAlpha(30),
                   ),
                 ),
                 child: Text(
                   chain,
-                  style: TextStyle(
-                    fontSize: 26.sp,
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: isSelected ? Colors.white : textColor,
                   ),
@@ -129,7 +125,8 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
   Widget _buildTypeOption(SmartAccountType type) {
     final isSelected = selectedType == type;
-    final isAvailable = type == SmartAccountType.simpleAccount ||
+    final isAvailable =
+        type == SmartAccountType.simpleAccount ||
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;
     final typeColor = _getTypeColor(type);
@@ -139,15 +136,14 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
 
     return GestureDetector(
       onTap: isAvailable
-          ? () =>
-              (this as _AAAccountCreatePageState)._onTypeChanged(type)
+          ? () => (this as _AAAccountCreatePageState)._onTypeChanged(type)
           : null,
       child: Container(
         margin: EdgeInsets.only(bottom: 12.w),
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected ? typeColor.withAlpha(15) : itemBg,
-          borderRadius: BorderRadius.circular(14.w),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? typeColor : subtitleColor.withAlpha(30),
             width: isSelected ? 2 : 1,
@@ -162,13 +158,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                 height: 44.w,
                 decoration: BoxDecoration(
                   color: typeColor.withAlpha(25),
-                  borderRadius: BorderRadius.circular(12.w),
+                  borderRadius: AppRadius.brMd,
                 ),
-                child: Icon(
-                  _getTypeIcon(type),
-                  size: 24.w,
-                  color: typeColor,
-                ),
+                child: Icon(_getTypeIcon(type), size: 24.w, color: typeColor),
               ),
               SizedBox(width: 14.w),
               Expanded(
@@ -179,28 +171,29 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                       children: [
                         Text(
                           type.displayName,
-                          style: TextStyle(
-                            fontSize: 26.sp,
+                          style: AppTypography.bodySm.copyWith(
                             fontWeight: FontWeight.w600,
                             color: textColor,
                           ),
                         ),
                         if (!isAvailable) ...[
-                          SizedBox(width: 8.w),
+                          SizedBox(width: AppSpacing.space2),
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 8.w,
+                              horizontal: AppSpacing.space2,
                               vertical: 2.w,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.grey.withAlpha(30),
-                              borderRadius: BorderRadius.circular(6.w),
+                              color: AppColorTokens.of(
+                                context,
+                              ).textTertiary.withAlpha(30),
+                              borderRadius: AppRadius.brSm,
                             ),
                             child: Text(
                               S.of(context).g_key_aa_coming_soon,
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                color: Colors.grey,
+                              style: AppTypography.captionSm.copyWith(
+                                fontWeight: FontWeight.w400,
+                                color: AppColorTokens.of(context).textTertiary,
                               ),
                             ),
                           ),
@@ -210,8 +203,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
                     SizedBox(height: 4.w),
                     Text(
                       _getTypeDescription(type),
-                      style: TextStyle(
-                        fontSize: 22.sp,
+                      style: AppTypography.caption.copyWith(
                         color: subtitleColor,
                       ),
                     ),
@@ -233,7 +225,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
         color: blueColor.withAlpha(15),
-        borderRadius: BorderRadius.circular(16.w),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: blueColor.withAlpha(30)),
       ),
       child: Column(
@@ -241,19 +233,18 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         children: [
           Text(
             S.of(context).g_key_aa_preview_address,
-            style: TextStyle(
-              fontSize: 24.sp,
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: _themeColor(AppThemeKeys.mainTextColor),
             ),
           ),
           SizedBox(height: 12.w),
           _buildPreviewAddressContent(),
-          SizedBox(height: 8.w),
+          SizedBox(height: AppSpacing.space2),
           Text(
             S.of(context).g_key_aa_counterfactual_note,
-            style: TextStyle(
-              fontSize: 20.sp,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -278,7 +269,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           Flexible(
             child: Text(
               S.of(context).g_key_aa_address_calculating,
-              style: TextStyle(fontSize: 22.sp, color: subtitleColor),
+              style: AppTypography.caption.copyWith(color: subtitleColor),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -289,17 +280,23 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     if (addressError != null) {
       return Row(
         children: [
-          Icon(Icons.error_outline, size: 20.w, color: Colors.red),
-          SizedBox(width: 8.w),
+          Icon(
+            Icons.error_outline,
+            size: 20.w,
+            color: AppColorTokens.of(context).danger,
+          ),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               addressError!,
-              style: TextStyle(fontSize: 22.sp, color: Colors.red),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
           ),
           TextButton(
-            onPressed: (this as _AAAccountCreatePageState)
-                ._calculatePreviewAddress,
+            onPressed:
+                (this as _AAAccountCreatePageState)._calculatePreviewAddress,
             child: Text(S.of(context).g_key_aa_retry),
           ),
         ],
@@ -312,8 +309,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           Expanded(
             child: Text(
               previewAddress!,
-              style: TextStyle(
-                fontSize: 22.sp,
+              style: AppTypography.caption.copyWith(
                 fontFamily: 'monospace',
                 color: blueColor,
               ),
@@ -339,22 +335,23 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   }
 
   Widget _buildInfoSection() {
+    final warning = AppColorTokens.of(context).warning;
     return Container(
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.amber.withAlpha(20),
-        borderRadius: BorderRadius.circular(12.w),
-        border: Border.all(color: Colors.amber.withAlpha(40)),
+        color: warning.withAlpha(20),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: warning.withAlpha(40)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(Icons.info_outline, size: 22.w, color: Colors.amber[700]),
+          Icon(Icons.info_outline, size: 22.w, color: warning),
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
               S.of(context).g_key_aa_deployment_note,
-              style: TextStyle(fontSize: 22.sp, color: Colors.amber[700]),
+              style: AppTypography.caption.copyWith(color: warning),
             ),
           ),
         ],
@@ -373,9 +370,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 18.w),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16.w),
+          borderRadius: AppRadius.brMd,
         ),
-        disabledBackgroundColor: Colors.grey,
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: isCreating
           ? SizedBox(
@@ -388,7 +385,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
             )
           : Text(
               S.of(context).g_key_aa_create_account,
-              style: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w600),
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
     );
   }

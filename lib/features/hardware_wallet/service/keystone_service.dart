@@ -89,9 +89,7 @@ class KeystoneService {
   HardwareWalletSignResponse parseEthSignature(String urResponse) {
     try {
       final sig = EthSignature.fromUr(urResponse.trim());
-      return HardwareWalletSignResponse.success(
-        signature: sig.signatureHex,
-      );
+      return HardwareWalletSignResponse.success(signature: sig.signatureHex);
     } on UrCodecException catch (e) {
       return HardwareWalletSignResponse.error(
         'Invalid Keystone response: ${e.message}',
@@ -115,7 +113,9 @@ class KeystoneService {
     }
     if (!lower.startsWith('ur:eth-signature')) {
       final typeEnd = lower.indexOf('/', 3);
-      final type = typeEnd > 0 ? lower.substring(3, typeEnd) : lower.substring(3);
+      final type = typeEnd > 0
+          ? lower.substring(3, typeEnd)
+          : lower.substring(3);
       return 'Unexpected UR type: "$type" (expected eth-signature)';
     }
     return null;

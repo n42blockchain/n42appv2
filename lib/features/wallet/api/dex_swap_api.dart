@@ -8,8 +8,8 @@ class DexSwapApi {
   final Map<String, String> _header;
 
   DexSwapApi()
-      : _base = AppConfig.getApiUrlOnline('exchangeHost'),
-        _header = const {'content-type': 'application/json'};
+    : _base = AppConfig.getApiUrlOnline('exchangeHost'),
+      _header = const {'content-type': 'application/json'};
 
   /// GET /v1/dex/tokens?chain=ETH[&q=usdc]
   ///
@@ -67,7 +67,10 @@ class DexSwapApi {
 
   /// POST /v1/dex/commit
   Future<MessageModel> commit(
-      String uuid, String orderId, String txHash) async {
+    String uuid,
+    String orderId,
+    String txHash,
+  ) async {
     try {
       await BaseApi.requestEmptyH.post(
         '$_base/v1/dex/commit',
@@ -82,8 +85,11 @@ class DexSwapApi {
   }
 
   /// GET /v1/dex/history?user={uuid}&page=&size=
-  Future<MessageModel> getHistory(String uuid,
-      {int page = 1, int size = 20}) async {
+  Future<MessageModel> getHistory(
+    String uuid, {
+    int page = 1,
+    int size = 20,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '$_base/v1/dex/history',
@@ -151,8 +157,11 @@ class DexSwapApi {
   }
 
   /// GET /v1/dex/limit — 查询用户限价单列表
-  Future<MessageModel> getLimitOrders(String uuid,
-      {int page = 1, int size = 20}) async {
+  Future<MessageModel> getLimitOrders(
+    String uuid, {
+    int page = 1,
+    int size = 20,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '$_base/v1/dex/limit',
@@ -216,8 +225,9 @@ class DexSwapApi {
   /// Passing [amount] = null sets unlimited approval (uint256.max).
   static String buildApproveCalldata(String spender, {BigInt? amount}) {
     // approve(address,uint256) selector: 0x095ea7b3
-    final amountHex =
-        (amount ?? _maxUint256).toRadixString(16).padLeft(64, '0');
+    final amountHex = (amount ?? _maxUint256)
+        .toRadixString(16)
+        .padLeft(64, '0');
     return '0x095ea7b3${_pad32(spender)}$amountHex';
   }
 

@@ -51,7 +51,9 @@ class AtomStakingApi {
       ..error = false
       ..data = StakingTransactionResponse.success(
         txHash: '',
-        txData: {'messages': [msg]},
+        txData: {
+          'messages': [msg],
+        },
       );
   }
 
@@ -73,9 +75,11 @@ class AtomStakingApi {
         final validatorsList = response['validators'] as List<dynamic>;
 
         final validators = validatorsList.map((v) {
-          final commission = double.tryParse(
-            v['commission']?['commission_rates']?['rate'] ?? '0',
-          ) ?? 0;
+          final commission =
+              double.tryParse(
+                v['commission']?['commission_rates']?['rate'] ?? '0',
+              ) ??
+              0;
 
           // 估算 APY: 基础 APY 约 15%，减去佣金
           final baseApy = 15.0;
@@ -90,7 +94,8 @@ class AtomStakingApi {
                 : '',
             commission: commission * 100, // 转换为百分比
             apy: apy,
-            totalStaked: BigInt.tryParse(v['tokens']?.toString() ?? '0') ?? BigInt.zero,
+            totalStaked:
+                BigInt.tryParse(v['tokens']?.toString() ?? '0') ?? BigInt.zero,
             delegatorCount: 0,
             isActive: v['status'] == 'BOND_STATUS_BONDED',
             uptime: 100.0,
@@ -135,20 +140,27 @@ class AtomStakingApi {
           if (delegation == null || balance == null) continue;
 
           final validatorAddress = delegation['validator_address'] ?? '';
-          final stakedAmount = BigInt.tryParse(balance['amount']?.toString() ?? '0') ?? BigInt.zero;
+          final stakedAmount =
+              BigInt.tryParse(balance['amount']?.toString() ?? '0') ??
+              BigInt.zero;
 
           if (stakedAmount == BigInt.zero) continue;
 
-          positions.add(StakingPosition(
-            id: '${delegatorAddress}_$validatorAddress',
-            protocol: StakingProtocols.atomNative,
-            validator: _placeholderValidator(address: validatorAddress, isActive: true),
-            stakedAmount: stakedAmount,
-            rewardsEarned: BigInt.zero,
-            pendingRewards: BigInt.zero,
-            stakedAt: DateTime.now().subtract(Duration(days: 30)),
-            status: StakingPositionStatus.active,
-          ));
+          positions.add(
+            StakingPosition(
+              id: '${delegatorAddress}_$validatorAddress',
+              protocol: StakingProtocols.atomNative,
+              validator: _placeholderValidator(
+                address: validatorAddress,
+                isActive: true,
+              ),
+              stakedAmount: stakedAmount,
+              rewardsEarned: BigInt.zero,
+              pendingRewards: BigInt.zero,
+              stakedAt: DateTime.now().subtract(Duration(days: 30)),
+              status: StakingPositionStatus.active,
+            ),
+          );
         }
 
         mm.data = positions;
@@ -184,22 +196,31 @@ class AtomStakingApi {
           final entries = u['entries'] as List<dynamic>? ?? [];
 
           for (final entry in entries) {
-            final balance = BigInt.tryParse(entry['balance']?.toString() ?? '0') ?? BigInt.zero;
-            final completionTime = DateTime.tryParse(entry['completion_time'] ?? '');
+            final balance =
+                BigInt.tryParse(entry['balance']?.toString() ?? '0') ??
+                BigInt.zero;
+            final completionTime = DateTime.tryParse(
+              entry['completion_time'] ?? '',
+            );
 
             if (balance == BigInt.zero) continue;
 
-            positions.add(StakingPosition(
-              id: '${delegatorAddress}_${validatorAddress}_unbonding',
-              protocol: StakingProtocols.atomNative,
-              validator: _placeholderValidator(address: validatorAddress, isActive: false),
-              stakedAmount: balance,
-              rewardsEarned: BigInt.zero,
-              pendingRewards: BigInt.zero,
-              stakedAt: DateTime.now().subtract(Duration(days: 30)),
-              unbondingAt: completionTime,
-              status: StakingPositionStatus.unbonding,
-            ));
+            positions.add(
+              StakingPosition(
+                id: '${delegatorAddress}_${validatorAddress}_unbonding',
+                protocol: StakingProtocols.atomNative,
+                validator: _placeholderValidator(
+                  address: validatorAddress,
+                  isActive: false,
+                ),
+                stakedAmount: balance,
+                rewardsEarned: BigInt.zero,
+                pendingRewards: BigInt.zero,
+                stakedAt: DateTime.now().subtract(Duration(days: 30)),
+                unbondingAt: completionTime,
+                status: StakingPositionStatus.unbonding,
+              ),
+            );
           }
         }
 
@@ -256,16 +277,10 @@ class AtomStakingApi {
           }
         }
 
-        mm.data = {
-          'byValidator': rewardsByValidator,
-          'total': totalRewards,
-        };
+        mm.data = {'byValidator': rewardsByValidator, 'total': totalRewards};
         mm.error = false;
       } else {
-        mm.data = {
-          'byValidator': <String, BigInt>{},
-          'total': BigInt.zero,
-        };
+        mm.data = {'byValidator': <String, BigInt>{}, 'total': BigInt.zero};
         mm.error = false;
       }
 
@@ -318,7 +333,8 @@ class AtomStakingApi {
 
       double inflation = 0.15; // 默认 15%
       if (inflationResponse is Map && inflationResponse['inflation'] != null) {
-        inflation = double.tryParse(inflationResponse['inflation'].toString()) ?? 0.15;
+        inflation =
+            double.tryParse(inflationResponse['inflation'].toString()) ?? 0.15;
       }
 
       // 获取质押比例
@@ -330,8 +346,16 @@ class AtomStakingApi {
 
       double stakingRatio = 0.6; // 默认 60%
       if (poolResponse is Map && poolResponse['pool'] != null) {
-        final bonded = BigInt.tryParse(poolResponse['pool']['bonded_tokens']?.toString() ?? '0') ?? BigInt.zero;
-        final notBonded = BigInt.tryParse(poolResponse['pool']['not_bonded_tokens']?.toString() ?? '0') ?? BigInt.zero;
+        final bonded =
+            BigInt.tryParse(
+              poolResponse['pool']['bonded_tokens']?.toString() ?? '0',
+            ) ??
+            BigInt.zero;
+        final notBonded =
+            BigInt.tryParse(
+              poolResponse['pool']['not_bonded_tokens']?.toString() ?? '0',
+            ) ??
+            BigInt.zero;
         final total = bonded + notBonded;
         if (total > BigInt.zero) {
           stakingRatio = bonded.toDouble() / total.toDouble();
@@ -351,11 +375,7 @@ class AtomStakingApi {
     } catch (e) {
       return MessageModel()
         ..error = false
-        ..data = {
-          'inflation': 15.0,
-          'stakingRatio': 60.0,
-          'apy': 15.0,
-        };
+        ..data = {'inflation': 15.0, 'stakingRatio': 60.0, 'apy': 15.0};
     }
   }
 
@@ -430,5 +450,4 @@ class AtomStakingApi {
       return MessageModel.error()..data = e.toString();
     }
   }
-
 }

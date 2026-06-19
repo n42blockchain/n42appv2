@@ -7,8 +7,6 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
   Color _themeColor(AppThemeKeys key) =>
       AppThemeUtils.getColorByKey(context, key.name);
 
-  double get _sp28 => ScreenUtil().setSp(28.0);
-
   Widget toWidget() {
     final sw = ScreenUtil().setWidth;
     return Container(
@@ -18,9 +16,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -56,8 +53,9 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
 
   Widget noteWidget() {
     final isEthNonContract =
-        widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name &&
-            widget.coinModel.coin['isContract'] == false;
+        widget.coinModel.config.blockchainType ==
+            BlockchainType.Ethereum.name &&
+        widget.coinModel.coin['isContract'] == false;
     if (!isEthNonContract) return const SizedBox();
 
     final sw = ScreenUtil().setWidth;
@@ -68,9 +66,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_wallet_k58,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: _sp28,
             ),
           ),
           SizedBox(height: sw(20.0)),
@@ -82,17 +79,15 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
             errorMessage: noteErrorMessage,
             suffix: Text(
               "${noteTextEditingController.text.length}/100",
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20.0),
-                color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-              ),
+              style: AppTypography.captionSm.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
             ),
             onEditingComplete: () {
               FocusScope.of(context).requestFocus(toNode);
             },
             onChanged: (String value) {
-              noteErrorMessage =
-                  value.length > 100 ? S.of(context).nicknameMessage(100) : "";
+              noteErrorMessage = value.length > 100
+                  ? S.of(context).nicknameMessage(100)
+                  : "";
               setState(() {});
             },
             maxLines: 2,
@@ -116,9 +111,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor),
-                    fontSize: _sp28,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -148,12 +142,12 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: _themeColor(AppThemeKeys.textFieldHintColor),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
@@ -162,12 +156,13 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   fontSize: sw(70.0),
                   height: sw(120.0),
                   boxShadow: const BoxShadow(color: Color(0x00000000)),
-                  borderRadius:
-                      BorderRadius.only(topLeft: radius16, topRight: radius16),
+                  borderRadius: BorderRadius.only(
+                    topLeft: radius16,
+                    topRight: radius16,
+                  ),
                   bgColor: _themeColor(AppThemeKeys.itemBgColor),
                   errorMessage: amountErrorMessage,
-                  messageMargin:
-                      EdgeInsets.symmetric(horizontal: sw(30.0)),
+                  messageMargin: EdgeInsets.symmetric(horizontal: sw(30.0)),
                   rightWidget1: Container(
                     margin: EdgeInsets.only(left: sw(10.0)),
                     height: sw(60.0),
@@ -179,19 +174,12 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: _themeColor(AppThemeKeys.mainWhiteColor),
-                      ),
+                      style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor)),
                     ),
                   ),
                   rightOnTap1: maxTag,
                 ),
-                Divider(
-                  height: sw(1.0),
-                  indent: sw(20.0),
-                  endIndent: sw(20.0),
-                ),
+                Divider(height: sw(1.0), indent: sw(20.0), endIndent: sw(20.0)),
                 ownerAddress(),
               ],
             ),
@@ -205,9 +193,8 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
     final unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
+      style: AppTypography.body.copyWith(
         color: _themeColor(AppThemeKeys.mainTextColor),
-        fontSize: _sp28,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -222,10 +209,7 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
       padding: EdgeInsets.symmetric(vertical: sw(20.0), horizontal: sw(30.0)),
       child: Text(
         addr,
-        style: TextStyle(
-          color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.itemSubtitleTextColor)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -233,11 +217,11 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final isContract = widget.coinModel.coin['isContract'] == true;
+    final isContract = widget.coinModel.config.isContract;
     final decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0) as int
         : widget.coinModel.coin['decimals'] as int;
-    final coinType = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final coinType = widget.coinModel.config.coinType;
     final feeText = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
     final sw = ScreenUtil().setWidth;
 
@@ -246,7 +230,10 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
       children: [
         if (isContract)
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: sw(30.0), vertical: sw(8.0)),
+            padding: EdgeInsets.symmetric(
+              horizontal: sw(30.0),
+              vertical: sw(8.0),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -254,17 +241,15 @@ mixin _TrxSendWidgetsMixin on _TrxSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                      fontSize: _sp28,
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(AppThemeKeys.mainButtonBgColor),
-                    fontSize: _sp28,
                   ),
                 ),
               ],

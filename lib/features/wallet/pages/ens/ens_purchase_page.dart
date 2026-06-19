@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_price_card.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens/ens_purchase_step_content.dart';
@@ -217,17 +217,17 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_ens_purchase_title),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // 域名信息卡片
             _buildDomainCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 注册步骤指示器
             EnsRegistrationSteps(currentStep: _currentStep),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 步骤内容
             EnsPurchaseStepContent(
@@ -238,12 +238,12 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               errorMessage: _errorMessage,
               domainName: widget.name,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 价格信息
             if (_currentStep >= 0 && _currentStep < 4)
               EnsPriceCard(price: widget.price),
-            SizedBox(height: ScreenUtil().setWidth(32)),
+            SizedBox(height: AppSpacing.space8),
 
             // 操作按钮
             EnsPurchaseActionButton(
@@ -261,14 +261,8 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
   Widget _buildDomainCard() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final yearLabel = widget.years == 1 ? s.g_key_ens_year : s.g_key_ens_years;
 
     return Container(
@@ -285,13 +279,9 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
         children: [
           Text(
             '${widget.name}.eth',
-            style: TextStyle(
-              fontSize: su.setSp(40),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+            style: AppTypography.titleLg.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           SizedBox(height: su.setWidth(8)),
@@ -306,7 +296,7 @@ class _EnsPurchasePageState extends State<EnsPurchasePage> {
               SizedBox(width: su.setWidth(6)),
               Text(
                 '${widget.years} $yearLabel',
-                style: TextStyle(fontSize: su.setSp(26), color: subtitleColor),
+                style: AppTypography.bodySm.copyWith(color: subtitleColor),
               ),
             ],
           ),

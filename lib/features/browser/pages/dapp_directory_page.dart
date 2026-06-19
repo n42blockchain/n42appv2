@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/browser/data/recommended_dapps.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -38,21 +39,19 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
     final s = S.of(context);
     return switch (cat.key) {
       'popular' => s.g_browser_key25,
-      'dex'     => s.g_browser_key26,
-      'defi'    => s.g_browser_key27,
-      'nft'     => s.g_browser_key28,
-      'bridge'  => s.g_browser_key29,
-      'tools'   => s.g_browser_key30,
-      _         => cat.labelEn,
+      'dex' => s.g_browser_key26,
+      'defi' => s.g_browser_key27,
+      'nft' => s.g_browser_key28,
+      'bridge' => s.g_browser_key29,
+      'tools' => s.g_browser_key30,
+      _ => cat.labelEn,
     };
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_browser_key24,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_browser_key24),
       body: Column(
         children: [
           _buildTabBar(),
@@ -63,16 +62,13 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
   }
 
   Widget _buildTabBar() {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final tabFontSize = ScreenUtil().setSp(28);
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Container(
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
+            color: AppColorTokens.of(context).border,
             width: 0.5,
           ),
         ),
@@ -82,14 +78,11 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
         isScrollable: true,
         tabAlignment: TabAlignment.start,
         labelColor: blueColor,
-        unselectedLabelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
-        labelStyle: TextStyle(
-          fontSize: tabFontSize,
+        unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
+        labelStyle: AppTypography.bodyStrong.copyWith(
           fontWeight: FontWeight.w600,
         ),
-        unselectedLabelStyle: TextStyle(
-          fontSize: tabFontSize,
+        unselectedLabelStyle: AppTypography.body.copyWith(
           fontWeight: FontWeight.normal,
         ),
         indicatorColor: blueColor,
@@ -117,17 +110,14 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
       return Center(
         child: Text(
           'No DApps',
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
-          ),
+          style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
     }
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       itemCount: dapps.length,
       itemBuilder: (context, index) {
@@ -139,51 +129,53 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
   Widget _buildDAppItem(RecommendedDApp dapp) {
     final host = Uri.tryParse(dapp.url)?.host ?? dapp.url;
     final letter = dapp.name.isNotEmpty ? dapp.name[0].toUpperCase() : '?';
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final radius = ScreenUtil().setWidth(20);
 
     return InkWell(
       onTap: () => Navigator.pop(context, dapp.url),
       borderRadius: BorderRadius.circular(radius),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+        margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(radius),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
         ),
         child: Row(
           children: [
             _buildAvatar(letter),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _singleLineText(
                     dapp.name,
-                    fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                    style: AppTypography.headline.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     dapp.description,
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
+                    style: AppTypography.caption.copyWith(
+                      color: subtitleColor,
+                    ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     host,
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.ff888888.name),
+                    style: AppTypography.caption.copyWith(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.ff888888.name,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -205,14 +197,13 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
       height: ScreenUtil().setWidth(80),
       decoration: BoxDecoration(
         color: _colorForLetter(letter),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       alignment: Alignment.center,
       child: Text(
         letter,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
-          fontWeight: FontWeight.bold,
+        style: AppTypography.headline.copyWith(
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
@@ -221,17 +212,11 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
 
   Widget _singleLineText(
     String text, {
-    required double fontSize,
-    required Color color,
-    FontWeight? fontWeight,
+    required TextStyle style,
   }) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        color: color,
-      ),
+      style: style,
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );

@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 功能入口卡片样式
 enum FeatureCardStyle {
@@ -24,7 +24,9 @@ enum FeatureCardStyle {
 
 /// 功能入口卡片
 ///
-/// 用于在各页面展示功能入口，支持多种样式
+/// 用于在各页面展示功能入口，支持多种样式。样式取自设计令牌
+/// （见 `docs/DESIGN_SYSTEM.md`）：字号 `AppTypography`、间距 `AppSpacing`、
+/// 圆角 `AppRadius`、颜色 `AppColorTokens`。
 class FeatureEntryCard extends StatelessWidget {
   final String title;
   final String? subtitle;
@@ -75,17 +77,24 @@ class FeatureEntryCard extends StatelessWidget {
   // Shared helpers
   // ────────────────────────────────────────────────────────────────────────
 
-  /// Resolve icon color, falling back to theme primary blue.
+  /// 可点卡片包装：Material + InkWell 提供按压态，splash 裁到圆角。
+  Widget _tappable({required BorderRadius radius, required Widget child}) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(onTap: onTap, borderRadius: radius, child: child),
+    );
+  }
+
+  /// Resolve icon color, falling back to brand.
   Color _resolvedIconColor(BuildContext context) =>
-      iconColor ??
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      iconColor ?? AppColorTokens.of(context).brand;
 
   /// Rounded-square icon container reused across medium / small / icon styles.
   Widget _buildIconBox(
     BuildContext context, {
     required double size,
     required double iconSize,
-    required double radius,
+    required BorderRadius radius,
     Color? bgColor,
     Color? fgColor,
   }) {
@@ -95,64 +104,58 @@ class FeatureEntryCard extends StatelessWidget {
       height: ScreenUtil().setWidth(size),
       decoration: BoxDecoration(
         color: bgColor ?? color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(radius)),
+        borderRadius: radius,
       ),
       child: Icon(icon, color: color, size: ScreenUtil().setWidth(iconSize)),
     );
   }
 
   /// NEW / HOT badge (only rendered when [isNew] or [isHot] is true).
-  Widget? _buildStatusBadge() {
+  Widget? _buildStatusBadge(BuildContext context) {
     if (!isNew && !isHot) return null;
-    return _buildBadge(
-      isNew ? 'NEW' : 'HOT',
-      isNew ? Colors.green : Colors.orange,
-    );
+    final c = AppColorTokens.of(context);
+    return _buildBadge(isNew ? 'NEW' : 'HOT', isNew ? c.success : c.warning);
   }
 
   // ────────────────────────────────────────────────────────────────────────
   // Card variants
   // ────────────────────────────────────────────────────────────────────────
 
-  /// 大卡片样式 - 适合主要功能展示
+  /// 大卡片样式 - 适合主要功能展示（品牌渐变底，前景固定白）
   Widget _buildLargeCard(BuildContext context) {
-    final bgColor =
-        backgroundColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = backgroundColor ?? AppColorTokens.of(context).brand;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return _tappable(
+      radius: AppRadius.brXl,
+      child: Ink(
         width: double.infinity,
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [bgColor, bgColor.withAlpha(180)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brXl,
           boxShadow: [
             BoxShadow(
               color: bgColor.withAlpha(50),
               blurRadius: 12,
-              offset: Offset(0, 4),
+              offset: const Offset(0, 4),
             ),
           ],
         ),
         child: Row(
           children: [
-            // 图标
             _buildIconBox(
               context,
               size: 64,
               iconSize: 36,
-              radius: 16,
+              radius: AppRadius.brMd,
               bgColor: Colors.white24,
               fgColor: Colors.white,
             ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
-
+            SizedBox(width: AppSpacing.space6),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -161,24 +164,21 @@ class FeatureEntryCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.headline.copyWith(
                           color: Colors.white,
                         ),
                       ),
-                      if (_buildStatusBadge() case final badge?) ...[
-                        SizedBox(width: ScreenUtil().setWidth(8)),
+                      if (_buildStatusBadge(context) case final badge?) ...[
+                        SizedBox(width: AppSpacing.space2),
                         badge,
                       ],
                     ],
                   ),
                   if (subtitle != null) ...[
-                    SizedBox(height: ScreenUtil().setWidth(6)),
+                    SizedBox(height: AppSpacing.space2),
                     Text(
                       subtitle!,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
+                      style: AppTypography.caption.copyWith(
                         color: Colors.white70,
                       ),
                     ),
@@ -186,7 +186,6 @@ class FeatureEntryCard extends StatelessWidget {
                 ],
               ),
             ),
-
             trailing ??
                 Icon(
                   Icons.arrow_forward_ios,
@@ -201,75 +200,58 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 中等卡片样式 - 适合一行2个的布局
   Widget _buildMediumCard(BuildContext context) {
-    final bgColor =
-        backgroundColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final statusBadge = _buildStatusBadge();
+    final c = AppColorTokens.of(context);
+    final bgColor = backgroundColor ?? c.bgSurface;
+    final statusBadge = _buildStatusBadge(context);
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-        decoration: BoxDecoration(
-          color: bgColor,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
+    return _tappable(
+      radius: AppRadius.brXl,
+      child: Ink(
+        padding: EdgeInsets.all(AppSpacing.space6),
+        decoration: BoxDecoration(color: bgColor, borderRadius: AppRadius.brXl),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildIconBox(context, size: 48, iconSize: 28, radius: 12),
+                _buildIconBox(
+                  context,
+                  size: 48,
+                  iconSize: 28,
+                  radius: AppRadius.brMd,
+                ),
                 if (tag != null)
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(10),
-                      vertical: ScreenUtil().setWidth(4),
+                      horizontal: AppSpacing.space4,
+                      vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
-                      color: (tagColor ?? Colors.green).withAlpha(30),
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(8),
-                      ),
+                      color: (tagColor ?? c.success).withAlpha(30),
+                      borderRadius: AppRadius.brSm,
                     ),
                     child: Text(
                       tag!,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(20),
+                      style: AppTypography.captionSm.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: tagColor ?? Colors.green,
+                        color: tagColor ?? c.success,
                       ),
                     ),
                   ),
                 ?statusBadge,
               ],
             ),
-
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: AppTypography.bodyStrong.copyWith(color: c.textPrimary),
             ),
-
             if (subtitle != null) ...[
-              SizedBox(height: ScreenUtil().setWidth(4)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 subtitle!,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
-                ),
+                style: AppTypography.caption.copyWith(color: c.textSecondary),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -282,19 +264,17 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 小卡片样式 - 适合一行3-4个的布局
   Widget _buildSmallCard(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    final c = AppColorTokens.of(context);
+    return _tappable(
+      radius: AppRadius.brLg,
+      child: Ink(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(16),
-          horizontal: ScreenUtil().setWidth(12),
+          vertical: AppSpacing.space4,
+          horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: c.bgSurface,
+          borderRadius: AppRadius.brLg,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -302,44 +282,42 @@ class FeatureEntryCard extends StatelessWidget {
             Stack(
               clipBehavior: Clip.none,
               children: [
-                _buildIconBox(context, size: 48, iconSize: 28, radius: 12),
+                _buildIconBox(
+                  context,
+                  size: 48,
+                  iconSize: 28,
+                  radius: AppRadius.brMd,
+                ),
                 if (badge != null)
                   Positioned(
                     top: -4,
                     right: -4,
                     child: Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(6),
-                        vertical: ScreenUtil().setWidth(2),
+                        horizontal: AppSpacing.space2,
+                        vertical: AppSpacing.space2,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(8),
-                        ),
+                        color: c.danger,
+                        borderRadius: AppRadius.brSm,
                       ),
                       child: Text(
                         badge!,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(16),
+                        style: AppTypography.captionSm.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(10)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: c.textPrimary,
               ),
               textAlign: TextAlign.center,
               maxLines: 1,
@@ -353,25 +331,28 @@ class FeatureEntryCard extends StatelessWidget {
 
   /// 图标卡片样式 - 最紧凑的样式
   Widget _buildIconCard(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _buildIconBox(context, size: 56, iconSize: 32, radius: 14),
-          SizedBox(height: ScreenUtil().setWidth(8)),
-          Text(
-            title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+    final c = AppColorTokens.of(context);
+    return _tappable(
+      radius: AppRadius.brMd,
+      child: Padding(
+        padding: EdgeInsets.all(AppSpacing.space2),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildIconBox(
+              context,
+              size: 56,
+              iconSize: 32,
+              radius: AppRadius.brLg,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+            SizedBox(height: AppSpacing.space2),
+            Text(
+              title,
+              style: AppTypography.caption.copyWith(color: c.textPrimary),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -379,18 +360,14 @@ class FeatureEntryCard extends StatelessWidget {
   Widget _buildBadge(String text, Color color) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(8),
-        vertical: ScreenUtil().setWidth(2),
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
       ),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
-      ),
+      decoration: BoxDecoration(color: color, borderRadius: AppRadius.brSm),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(18),
-          fontWeight: FontWeight.bold,
+        style: AppTypography.captionSm.copyWith(
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),

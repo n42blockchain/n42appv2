@@ -9,7 +9,11 @@ class ApiProviderException implements Exception {
   final int? statusCode;
   final Map<String, dynamic>? responseData;
 
-  const ApiProviderException(this.message, [this.statusCode, this.responseData]);
+  const ApiProviderException(
+    this.message, [
+    this.statusCode,
+    this.responseData,
+  ]);
 
   @override
   String toString() => 'status: $statusCode $message ${responseData ?? ""}';
@@ -32,7 +36,11 @@ class BitcoinApiService implements ApiService {
     Map<String, String> headers = const {'Content-Type': 'application/json'},
     Object? body,
   }) async {
-    final response = await _client.post(Uri.parse(url), headers: headers, body: body);
+    final response = await _client.post(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
     return _readResponse<T>(response);
   }
 

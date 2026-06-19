@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -26,24 +27,20 @@ class GasSponsorshipBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isSponsored) return const SizedBox.shrink();
 
+    final success = AppColorTokens.of(context).success;
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(14),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Colors.green.withAlpha(30),
-            Colors.green.withAlpha(10),
-          ],
+          colors: [success.withAlpha(30), success.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: Colors.green.withAlpha(40),
-        ),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: success.withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -51,19 +48,18 @@ class GasSponsorshipBadge extends StatelessWidget {
           Icon(
             Icons.card_giftcard,
             size: ScreenUtil().setWidth(22),
-            color: Colors.green,
+            color: success,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 S.of(context).g_key_aa_gas_sponsored,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: success,
                 ),
               ),
               if (sponsorName != null || savedAmount != null)
@@ -71,9 +67,8 @@ class GasSponsorshipBadge extends StatelessWidget {
                   sponsorName != null
                       ? '${S.of(context).g_key_aa_by} $sponsorName'
                       : '${S.of(context).g_key_aa_saved} $savedAmount',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(18),
-                    color: Colors.green.withAlpha(180),
+                  style: AppTypography.captionSm.copyWith(
+                    color: success.withAlpha(180),
                   ),
                 ),
             ],
@@ -99,16 +94,17 @@ class GasSponsoredIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!isSponsored) return const SizedBox.shrink();
 
+    final success = AppColorTokens.of(context).success;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(30),
+        color: success.withAlpha(30),
         shape: BoxShape.circle,
       ),
       child: Icon(
         Icons.card_giftcard,
         size: ScreenUtil().setWidth(size),
-        color: Colors.green,
+        color: success,
       ),
     );
   }

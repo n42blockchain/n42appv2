@@ -7,8 +7,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_detail_page.dart';
@@ -67,9 +68,11 @@ class _NftListPageState extends State<NftListPage> {
   }
 
   void _load() {
-    final address = FeatureAddressUtils.normalize(widget.coinModel.address?.toString());
+    final address = FeatureAddressUtils.normalize(
+      widget.coinModel.address?.toString(),
+    );
     final coinType = FeatureAddressUtils.normalize(
-      widget.coinModel.coin['coinType'] as String?,
+      widget.coinModel.config.coinType,
     );
     _loadErrorMessage = null;
 
@@ -80,13 +83,16 @@ class _NftListPageState extends State<NftListPage> {
       return;
     }
 
-    _future = _api.fetchNfts(address, coinType).then((list) {
-      _updateView(() => _nfts = list);
-      return list;
-    }).catchError((error, stackTrace) {
-      _loadErrorMessage = error.toString();
-      throw error;
-    });
+    _future = _api
+        .fetchNfts(address, coinType)
+        .then((list) {
+          _updateView(() => _nfts = list);
+          return list;
+        })
+        .catchError((error, stackTrace) {
+          _loadErrorMessage = error.toString();
+          throw error;
+        });
   }
 
   void _retry() {
@@ -119,16 +125,14 @@ class _NftListPageState extends State<NftListPage> {
   }
 
   bool get _hasOrdinals {
-    final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+    final coinType = widget.coinModel.config.coinType;
     return coinType.toUpperCase() == 'BTC';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_nft_gallery,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_nft_gallery),
       body: Column(
         children: [
           buildSearchBar(context),

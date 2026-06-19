@@ -30,10 +30,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
   Load gasLimitLoad = Load.finish;
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -42,14 +42,16 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
         return true;
       });
       chainModel = wap.coinModels[cIndex];
-      if (chainModel != null) await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      if (chainModel != null) {
+        await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      }
       if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -57,7 +59,11 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
 
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final bool isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final bool isOk = await fetchCoinBalance(
+      widget.coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (!isOk) {
       errorMessage = S.current.g_key_t_44;
@@ -85,13 +91,13 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     final int decimals = widget.coinModel.coin['decimals'] as int;
     final BigInt valueBi = ethToWeiString(value, decimals);
 
-    if (widget.coinModel.coin['blockchainType'] == BlockchainType.Ripple.name) {
+    if (widget.coinModel.config.blockchainType == BlockchainType.Ripple.name) {
       final BigInt reserve = ethToWeiString("10", decimals);
       if (valueBi + totalGasPrice > widget.coinModel.balance - reserve) {
         return S.of(context).g_key_47;
       }
     } else {
-      if (!widget.coinModel.coin['isContract'] &&
+      if (!widget.coinModel.config.isContract &&
           valueBi + totalGasPrice > widget.coinModel.balance) {
         return S.of(context).g_key_47;
       }
@@ -110,7 +116,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (parts.length == 2) addr = parts[1];
 
     final bool valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     final bool isSelf =
@@ -144,7 +150,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     await estimateGasEthLocal();
     if (errorMessage.isNotEmpty) return _resetLoad();
 
-    final BigInt uBalance = widget.coinModel.coin['isContract']
+    final BigInt uBalance = widget.coinModel.config.isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : widget.coinModel.balance;
     if (totalGasPrice > uBalance || widget.coinModel.balance == BigInt.zero) {
@@ -169,11 +175,11 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       ..to1 = toAddr
       ..addrType = widget.coinModel.addrType
       ..coin = widget.coinModel.coin
-      ..coinMiniName = widget.coinModel.coin['coinType']
+      ..coinMiniName = widget.coinModel.config.coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = widget.coinModel.isTest
-          ? widget.coinModel.coin['contract_test']
-          : widget.coinModel.coin['contract']
+          ? widget.coinModel.config.contractTest
+          : widget.coinModel.config.contract
       ..isTest = widget.coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -206,31 +212,35 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
     if (!signTxCheck()) return;
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
-      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final baseInfo =
+          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
       final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
-      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+      final decimals =
+          (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance.getSender(coinType).send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), decimals).toDouble(),
-          decimals: decimals,
-          path: path,
-          sendMax: false,
-          isTest: widget.coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: 0,
-          memo: trModel.message,
-          privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), decimals).toDouble(),
+              decimals: decimals,
+              path: path,
+              sendMax: false,
+              isTest: widget.coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: 0,
+              memo: trModel.message,
+              privateKey: widget.coinModel.privateKey,
+              chainConfig: widget.coinModel.coin,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {
@@ -238,7 +248,10 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(coinType, toTextEditingController.text.trim());
+        await RecentAddressService.save(
+          coinType,
+          toTextEditingController.text.trim(),
+        );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
@@ -272,7 +285,7 @@ mixin _FilSendLogicMixin on ConsumerState<WalletChainSendFil> {
       final MessageModel ethMessage = await FilApi().getGasLimit(
         widget.coinModel.address,
         toAddr,
-        BigInt.from(getCoinGas(widget.coinModel.coin['coinType'])),
+        BigInt.from(getCoinGas(widget.coinModel.config.coinType)),
         value: ethToWeiString(
           price,
           widget.coinModel.coin['decimals'],

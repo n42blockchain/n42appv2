@@ -54,11 +54,7 @@ class GasConstants {
 }
 
 /// Gas 估算速度类型
-enum GasSpeed {
-  slow,
-  standard,
-  fast,
-}
+enum GasSpeed { slow, standard, fast }
 
 /// EIP-1559 Gas 费用数据
 class EIP1559GasFee {
@@ -89,7 +85,9 @@ class EIP1559GasFee {
   /// 从 JSON 创建
   factory EIP1559GasFee.fromJson(Map<String, dynamic> json) {
     return EIP1559GasFee(
-      maxPriorityFeePerGas: BigInt.parse(json['maxPriorityFeePerGas']?.toString() ?? '0'),
+      maxPriorityFeePerGas: BigInt.parse(
+        json['maxPriorityFeePerGas']?.toString() ?? '0',
+      ),
       maxFeePerGas: BigInt.parse(json['maxFeePerGas']?.toString() ?? '0'),
       baseFee: BigInt.parse(json['baseFee']?.toString() ?? '0'),
       estimatedSeconds: json['estimatedSeconds'] ?? 0,
@@ -115,10 +113,7 @@ class LegacyGasFee {
   /// 预估确认时间（秒）
   final int estimatedSeconds;
 
-  LegacyGasFee({
-    required this.gasPrice,
-    required this.estimatedSeconds,
-  });
+  LegacyGasFee({required this.gasPrice, required this.estimatedSeconds});
 
   /// 计算总 gas 费用
   BigInt totalFee(BigInt gasLimit) {
@@ -217,13 +212,17 @@ class GasEstimateModel {
     if (!supportsEIP1559 || baseFeeHistory.isEmpty) {
       // Legacy 模式
       final avgGasPrice = baseFeeHistory.isNotEmpty
-          ? baseFeeHistory.reduce((a, b) => a + b) ~/ BigInt.from(baseFeeHistory.length)
+          ? baseFeeHistory.reduce((a, b) => a + b) ~/
+                BigInt.from(baseFeeHistory.length)
           : BigInt.zero;
 
       return GasEstimateModel(
         supportsEIP1559: false,
         slow: GasOption.legacy(
-          gasPrice: avgGasPrice * BigInt.from(GasConstants.slowMultiplierPercent) ~/ BigInt.from(100),
+          gasPrice:
+              avgGasPrice *
+              BigInt.from(GasConstants.slowMultiplierPercent) ~/
+              BigInt.from(100),
           estimatedSeconds: GasConstants.slowEstimatedSeconds,
         ),
         standard: GasOption.legacy(
@@ -252,7 +251,10 @@ class GasEstimateModel {
     final fastPriorityFee = _percentile(flatRewards, 90);
 
     // 预测下一个区块的基础费（最多增加12.5%）
-    final nextBaseFee = latestBaseFee * BigInt.from(1000 + GasConstants.baseFeeMaxIncreasePermille) ~/ BigInt.from(1000);
+    final nextBaseFee =
+        latestBaseFee *
+        BigInt.from(1000 + GasConstants.baseFeeMaxIncreasePermille) ~/
+        BigInt.from(1000);
 
     return GasEstimateModel(
       supportsEIP1559: true,
@@ -271,7 +273,9 @@ class GasEstimateModel {
       ),
       fast: GasOption.eip1559(
         maxPriorityFeePerGas: fastPriorityFee,
-        maxFeePerGas: nextBaseFee * BigInt.from(GasConstants.fastBaseFeeMutiplier) + fastPriorityFee,
+        maxFeePerGas:
+            nextBaseFee * BigInt.from(GasConstants.fastBaseFeeMutiplier) +
+            fastPriorityFee,
         baseFee: latestBaseFee,
         estimatedSeconds: GasConstants.eip1559FastSeconds,
       ),
@@ -289,7 +293,9 @@ class GasEstimateModel {
       slow: GasOption.fromJson(json['slow']),
       standard: GasOption.fromJson(json['standard']),
       fast: GasOption.fromJson(json['fast']),
-      baseFee: json['baseFee'] != null ? BigInt.parse(json['baseFee'].toString()) : null,
+      baseFee: json['baseFee'] != null
+          ? BigInt.parse(json['baseFee'].toString())
+          : null,
       gasLimit: BigInt.parse(json['gasLimit']?.toString() ?? '21000'),
       chainSymbol: json['chainSymbol'] ?? '',
       decimals: json['decimals'] ?? 18,
@@ -316,7 +322,10 @@ class GasEstimateModel {
 
   static BigInt _percentile(List<BigInt> list, int percentile) {
     if (list.isEmpty) return BigInt.zero;
-    final index = (list.length * percentile / 100).floor().clamp(0, list.length - 1);
+    final index = (list.length * percentile / 100).floor().clamp(
+      0,
+      list.length - 1,
+    );
     return list[index];
   }
 }
@@ -333,7 +342,8 @@ class GasOption {
   bool get isEIP1559 => eip1559 != null;
 
   /// 预估确认时间
-  int get estimatedSeconds => eip1559?.estimatedSeconds ?? legacy?.estimatedSeconds ?? 0;
+  int get estimatedSeconds =>
+      eip1559?.estimatedSeconds ?? legacy?.estimatedSeconds ?? 0;
 
   GasOption._({this.eip1559, this.legacy});
 
@@ -369,7 +379,9 @@ class GasOption {
 
   /// 计算总费用
   BigInt totalFee(BigInt gasLimit) {
-    return eip1559?.totalFee(gasLimit) ?? legacy?.totalFee(gasLimit) ?? BigInt.zero;
+    return eip1559?.totalFee(gasLimit) ??
+        legacy?.totalFee(gasLimit) ??
+        BigInt.zero;
   }
 
   /// 获取用于签名的 gas price（兼容 legacy 系统）

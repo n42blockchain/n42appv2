@@ -124,7 +124,8 @@ class UserOpHasher {
     final paymasterHash = keccak256(userOp.paymasterAndData ?? Uint8List(0));
 
     // v0.8 with EIP-7702 adds an extra field
-    final hasEip7702 = version == EntryPointVersion.v08 &&
+    final hasEip7702 =
+        version == EntryPointVersion.v08 &&
         userOp.eip7702Auth != null &&
         userOp.eip7702Auth!.isNotEmpty;
     final eip7702AuthHash = hasEip7702 ? keccak256(userOp.eip7702Auth!) : null;
@@ -177,7 +178,9 @@ class UserOpHasher {
   /// Convert address to 32-byte representation
   static Uint8List _addressToBytes32(String address) {
     final bytes = Uint8List(32);
-    final addrBytes = hexToBytes(address.replaceFirst('0x', '').padLeft(40, '0'));
+    final addrBytes = hexToBytes(
+      address.replaceFirst('0x', '').padLeft(40, '0'),
+    );
     bytes.setAll(12, addrBytes); // Left-pad with 12 zeros
     return bytes;
   }
@@ -238,10 +241,7 @@ class NonceUtils {
   static BigInt get defaultKey => BigInt.zero;
 
   /// Create a nonce for a specific purpose
-  static BigInt createNonce({
-    required BigInt key,
-    required BigInt sequence,
-  }) {
+  static BigInt createNonce({required BigInt key, required BigInt sequence}) {
     return packNonce(key, sequence);
   }
 

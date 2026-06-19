@@ -29,7 +29,10 @@ class XlmApi {
   }
 
   /// 广播已签名交易（XDR 格式，form-data tx= 字段）
-  Future<MessageModel> sendTransaction(String txXdr, {bool isTest = false}) async {
+  Future<MessageModel> sendTransaction(
+    String txXdr, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.post(
         '${_base(isTest)}/transactions',
@@ -46,7 +49,10 @@ class XlmApi {
   }
 
   /// 查询交易状态
-  Future<MessageModel> getTransaction(String txHash, {bool isTest = false}) async {
+  Future<MessageModel> getTransaction(
+    String txHash, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/transactions/$txHash',

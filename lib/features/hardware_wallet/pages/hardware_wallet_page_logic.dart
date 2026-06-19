@@ -45,9 +45,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               Navigator.pop(context);
               // 配对成功，提示用户
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Keystone paired successfully'),
-                  backgroundColor: Colors.green,
+                SnackBar(
+                  content: const Text('Keystone paired successfully'),
+                  backgroundColor: AppColorTokens.of(context).success,
                 ),
               );
             }
@@ -83,7 +83,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               ? s.g_key_hw_current_app_label(app.name)
               : s.g_key_hw_no_app_open,
         ),
-        backgroundColor: app != null ? Colors.green : Colors.orange,
+        backgroundColor: app != null
+            ? AppColorTokens.of(context).success
+            : AppColorTokens.of(context).warning,
       ),
     );
   }
@@ -140,7 +142,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorMessage!),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }
@@ -158,7 +160,9 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(s.g_key_hw_remove_device),
-        content: SingleChildScrollView(child: Text(s.g_key_hw_remove_device_confirm(device.name))),
+        content: SingleChildScrollView(
+          child: Text(s.g_key_hw_remove_device_confirm(device.name)),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -171,7 +175,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
             },
             child: Text(
               s.g_key_hw_remove,
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColorTokens.of(context).danger),
             ),
           ),
         ],
@@ -183,55 +187,49 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
 
   Widget _buildSupportedDevicesInfo(BuildContext context, S s) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             s.g_key_hw_supported_devices,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           // Ledger 设备
           _buildDeviceInfoRow(context, 'Ledger Nano X', 'Bluetooth'),
           _buildDeviceInfoRow(context, 'Ledger Nano S Plus', 'Bluetooth'),
           _buildDeviceInfoRow(context, 'Ledger Stax', 'Bluetooth'),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           // Trezor 设备
           _buildDeviceInfoRow(context, 'Trezor Model T', 'USB'),
           _buildDeviceInfoRow(context, 'Trezor One', 'USB'),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           // Keystone 设备
           _buildDeviceInfoRow(context, 'Keystone Essential', 'QR (Air-gap)'),
           _buildDeviceInfoRow(context, 'Keystone Pro', 'QR (Air-gap)'),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Icon(
                 Icons.info_outline,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
                 size: ScreenUtil().setWidth(28),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   s.g_key_hw_ble_hint,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ),
@@ -243,43 +241,40 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
   }
 
   Widget _buildDeviceInfoRow(
-      BuildContext context, String name, String connection) {
+    BuildContext context,
+    String name,
+    String connection,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
       child: Row(
         children: [
           Icon(
             Icons.check_circle,
-            color: Colors.green,
+            color: AppColorTokens.of(context).success,
             size: ScreenUtil().setWidth(24),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           const Spacer(),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(10),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space2,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name)
-                  .withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+              color: AppColorTokens.of(context).brand.withAlpha(30),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               connection,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

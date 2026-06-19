@@ -15,8 +15,9 @@ class BtcTxBuilder {
 
   /// 将 txid（小端）+ vout 写入 ByteData，返回写入后的 offset
   int _writeTxidVout(ByteData data, int offset, Map<String, dynamic> input) {
-    final txidBytes =
-        Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
+    final txidBytes = Uint8List.fromList(
+      hex.decode(input['txid']).reversed.toList(),
+    );
     data.buffer.asUint8List().setRange(offset, offset + 32, txidBytes);
     offset += 32;
     data.setUint32(offset, input['vout'] as int, Endian.little);
@@ -77,9 +78,11 @@ class BtcTxBuilder {
     int offset = _writeTxidVout(data, 0, input);
 
     final scriptBytes = Uint8List.fromList(hex.decode(input['scriptPubKey']));
-    data.buffer
-        .asUint8List()
-        .setRange(offset, offset + scriptBytes.length, scriptBytes);
+    data.buffer.asUint8List().setRange(
+      offset,
+      offset + scriptBytes.length,
+      scriptBytes,
+    );
     offset += scriptBytes.length;
 
     data.setUint32(offset, 0xffffffff, Endian.little);
@@ -137,14 +140,17 @@ class BtcTxBuilder {
     // 接收方输出
     data.setUint64(offset, sendAmount, Endian.little);
     offset += 8;
-    final scriptPubKey = _script
-        .getScriptPubKey(Uint8List.fromList(hex.decode(recipientScriptPubkey)));
+    final scriptPubKey = _script.getScriptPubKey(
+      Uint8List.fromList(hex.decode(recipientScriptPubkey)),
+    );
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
     AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
-    data.buffer
-        .asUint8List()
-        .setRange(offset, offset + scriptPubKey.length, scriptPubKey);
+    data.buffer.asUint8List().setRange(
+      offset,
+      offset + scriptPubKey.length,
+      scriptPubKey,
+    );
     offset += scriptPubKey.length;
     AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
 
@@ -155,9 +161,11 @@ class BtcTxBuilder {
       final changeScript = _script.getP2WPKHScript(publicKey);
       data.setUint8(offset, changeScript.length);
       offset += 1;
-      data.buffer
-          .asUint8List()
-          .setRange(offset, offset + changeScript.length, changeScript);
+      data.buffer.asUint8List().setRange(
+        offset,
+        offset + changeScript.length,
+        changeScript,
+      );
       offset += changeScript.length;
     }
     AppLogger.d('BtcTxBuilder', bytesToHex(data.buffer.asUint8List(0, offset)));
@@ -278,11 +286,14 @@ class BtcTxBuilder {
     int off1 = 0, off2 = 0, off3 = 0, off4 = 0;
 
     for (var input in inputs) {
-      final txidBytes =
-          Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
-      hashPrevoutsData.buffer
-          .asUint8List()
-          .setRange(off1, off1 + 32, txidBytes);
+      final txidBytes = Uint8List.fromList(
+        hex.decode(input['txid']).reversed.toList(),
+      );
+      hashPrevoutsData.buffer.asUint8List().setRange(
+        off1,
+        off1 + 32,
+        txidBytes,
+      );
       off1 += 32;
       hashPrevoutsData.setUint32(off1, input['vout'] as int, Endian.little);
       off1 += 4;
@@ -291,9 +302,11 @@ class BtcTxBuilder {
       off2 += 8;
 
       final scriptBytes = Uint8List.fromList(hex.decode(input['scriptPubKey']));
-      hashScriptPubKeysData.buffer
-          .asUint8List()
-          .setRange(off3, off3 + scriptBytes.length, scriptBytes);
+      hashScriptPubKeysData.buffer.asUint8List().setRange(
+        off3,
+        off3 + scriptBytes.length,
+        scriptBytes,
+      );
       off3 += scriptBytes.length;
 
       hashSequencesData.setUint32(off4, 0xffffffff, Endian.little);
@@ -342,12 +355,16 @@ class BtcTxBuilder {
       'inputsAll': inputs.map(createRawInputAll).toList(),
       'outputCount': _uint8(changeAmount > 0 ? 2 : 1),
       'output1': _buildOutput(
-          sendAmount, _script.getScriptPubKeyFromBech32(recipient)),
+        sendAmount,
+        _script.getScriptPubKeyFromBech32(recipient),
+      ),
     };
 
     if (changeAmount > 0) {
       trxMap['output2'] = _buildOutput(
-          changeAmount, _script.getScriptPubKeyFromBech32(fromAddress));
+        changeAmount,
+        _script.getScriptPubKeyFromBech32(fromAddress),
+      );
     }
 
     return trxMap;
@@ -361,9 +378,11 @@ class BtcTxBuilder {
     offset += 8;
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
-    data.buffer
-        .asUint8List()
-        .setRange(offset, offset + scriptPubKey.length, scriptPubKey);
+    data.buffer.asUint8List().setRange(
+      offset,
+      offset + scriptPubKey.length,
+      scriptPubKey,
+    );
     offset += scriptPubKey.length;
     return data.buffer.asUint8List(0, offset);
   }

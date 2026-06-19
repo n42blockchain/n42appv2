@@ -46,10 +46,7 @@ Future<void> purgePendingCancelledChatDataCompat() async {
     await N42Chat.purgeLocalData();
     await prefs.remove(_chatDataPurgePendingKey);
   } catch (e) {
-    AppLogger.w(
-      'ChatLogoutCompat',
-      'purgePendingCancelledChatData failed: $e',
-    );
+    AppLogger.w('ChatLogoutCompat', 'purgePendingCancelledChatData failed: $e');
   }
 }
 

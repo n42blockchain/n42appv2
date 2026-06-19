@@ -7,15 +7,7 @@ library;
 import 'dart:typed_data';
 
 /// MPC 登录方式
-enum MpcLoginType {
-  google,
-  apple,
-  email,
-  phone,
-  twitter,
-  discord,
-  github,
-}
+enum MpcLoginType { google, apple, email, phone, twitter, discord, github }
 
 /// MPC 登录结果
 class MpcLoginResult {
@@ -51,10 +43,7 @@ class MpcSignResult {
   /// 签名的十六进制表示（含 0x 前缀）
   final String signatureHex;
 
-  const MpcSignResult({
-    required this.signature,
-    required this.signatureHex,
-  });
+  const MpcSignResult({required this.signature, required this.signatureHex});
 }
 
 /// MPC Provider 抽象接口

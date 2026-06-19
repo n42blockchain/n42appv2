@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_coin_info.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 迷你市场数据预览卡片 — 嵌入币种详情页 WalletChainInfo
 ///
@@ -22,7 +22,8 @@ class WalletCoinMarketPreview extends StatefulWidget {
   });
 
   @override
-  State<WalletCoinMarketPreview> createState() => _WalletCoinMarketPreviewState();
+  State<WalletCoinMarketPreview> createState() =>
+      _WalletCoinMarketPreviewState();
 }
 
 class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
@@ -81,11 +82,12 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
     if (_loading || _prices.length < 2) return const SizedBox.shrink();
 
     final su = ScreenUtil();
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
     final isUp = widget.priceChange24h >= 0;
-    final trendColor = isUp ? Colors.green : Colors.red;
+    final c = AppColorTokens.of(context);
+    final trendColor = isUp ? c.success : c.danger;
 
     return GestureDetector(
       onTap: _navigateToMarketCoinInfo,
@@ -96,12 +98,9 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
         ),
         padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(su.setWidth(16)),
-          border: Border.all(
-            color: trendColor.withAlpha(40),
-            width: 1,
-          ),
+          border: Border.all(color: trendColor.withAlpha(40), width: 1),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,10 +122,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
               alignment: Alignment.centerRight,
               child: Text(
                 'View Market Data \u2192',
-                style: TextStyle(
-                  fontSize: su.setSp(22),
-                  color: blueColor,
-                ),
+                style: AppTypography.caption.copyWith(color: blueColor),
               ),
             ),
           ],
@@ -162,7 +158,10 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
               color: trendColor,
               barWidth: 1.5,
               dotData: const FlDotData(show: false),
-              belowBarData: BarAreaData(show: true, color: trendColor.withAlpha(20)),
+              belowBarData: BarAreaData(
+                show: true,
+                color: trendColor.withAlpha(20),
+              ),
             ),
           ],
         ),
@@ -183,8 +182,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
       ),
       child: Text(
         '$sign${widget.priceChange24h.toStringAsFixed(2)}%',
-        style: TextStyle(
-          fontSize: su.setSp(24),
+        style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: trendColor,
         ),
@@ -199,21 +197,51 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
     return Row(
       children: [
         if (marketCap != null) ...[
-          _buildMetric('MCap', _formatLargeNumber(marketCap), subtitleColor, textColor, su),
+          _buildMetric(
+            'MCap',
+            _formatLargeNumber(marketCap),
+            subtitleColor,
+            textColor,
+            su,
+          ),
           SizedBox(width: su.setWidth(24)),
         ],
         if (volume24h != null)
-          _buildMetric('24h Vol', _formatLargeNumber(volume24h), subtitleColor, textColor, su),
+          _buildMetric(
+            '24h Vol',
+            _formatLargeNumber(volume24h),
+            subtitleColor,
+            textColor,
+            su,
+          ),
       ],
     );
   }
 
-  Widget _buildMetric(String label, String value, Color labelColor, Color valueColor, ScreenUtil su) {
+  Widget _buildMetric(
+    String label,
+    String value,
+    Color labelColor,
+    Color valueColor,
+    ScreenUtil su,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontSize: su.setSp(20), color: labelColor)),
-        Text(value, style: TextStyle(fontSize: su.setSp(22), fontWeight: FontWeight.w500, color: valueColor)),
+        Text(
+          label,
+          style: AppTypography.captionSm.copyWith(
+            fontWeight: FontWeight.w400,
+            color: labelColor,
+          ),
+        ),
+        Text(
+          value,
+          style: AppTypography.caption.copyWith(
+            fontWeight: FontWeight.w500,
+            color: valueColor,
+          ),
+        ),
       ],
     );
   }
@@ -237,9 +265,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
   void _navigateToMarketCoinInfo() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => MarketCoinInfo(widget.marketInfo),
-      ),
+      MaterialPageRoute(builder: (_) => MarketCoinInfo(widget.marketInfo)),
     );
   }
 }

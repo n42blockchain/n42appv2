@@ -1,7 +1,6 @@
 part of 'mining_v2_provider.dart';
 
 mixin _MiningActionsMixin on _MiningStateMixin {
-
   /// Get all wallets that support N chain (for mining).
   List<MiningWalletInfo> get miningWalletList {
     try {
@@ -12,7 +11,11 @@ mixin _MiningActionsMixin on _MiningStateMixin {
             MiningWalletInfo(
               index: i,
               name: wap.walletInfoLsit[i].walletName ?? 'Account${i + 1}',
-              address: wap.walletInfoLsit[i].coinInfo?[CoinType.N.name]?['address'] ?? '',
+              address:
+                  wap.walletInfoLsit[i].coinInfo?[CoinType
+                      .N
+                      .name]?['address'] ??
+                  '',
               isMainWallet: wap.walletInfoLsit[i].mainWallet,
               hasCoinN: true,
             ),
@@ -35,7 +38,9 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
   /// Set mining wallet by index.
   Future<void> setMiningWalletByIndex(int index) async {
-    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet, intValue: index));
+    eventBus.fire(
+      EventPublic(EventPublicType.selectMiningWallet, intValue: index),
+    );
     notifyListeners();
   }
 
@@ -88,7 +93,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
   }
 
-
   Future<void> getWalletPrivateKey() async {
     try {
       final WalletInfo? wInfo = _getMiningWalletInfo();
@@ -126,7 +130,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
   }
 
-
   Future<void> getNprice(WalletActionProvider wap) async {
     final coinInfo = wap.getCoinPriceWithUnit(CoinType.N.name);
     nPrice = coinInfo?['coinPrice'] ?? 0;
@@ -135,7 +138,8 @@ mixin _MiningActionsMixin on _MiningStateMixin {
   /// 获取钱包中 N 币余额
   Future<void> getWalletNBalance(String add, Map coinInfo) async {
     try {
-      MessageModel rmm = await TokenViewApi().getBalance(
+      MessageModel rmm =
+          await TokenViewApi().getBalance(
             BlockchainType.Ethereum.name,
             CoinType.N.name,
             add,
@@ -146,14 +150,16 @@ mixin _MiningActionsMixin on _MiningStateMixin {
           ) ??
           MessageModel.error();
       if (rmm.error == false) {
-        walletNBalance = toEther(rmm.data.toString(), coinInfo['baseInfo']['decimals']).toDouble();
+        walletNBalance = toEther(
+          rmm.data.toString(),
+          coinInfo['baseInfo']['decimals'],
+        ).toDouble();
       }
       AppLogger.d('MiningActions', 'N coin not found in wallet');
     } catch (e) {
       AppLogger.w('MiningActions', 'error getting wallet N balance: $e');
     }
   }
-
 
   void setDepositTxHash(String txHash) {
     depositTxHash = txHash;
@@ -207,7 +213,9 @@ mixin _MiningActionsMixin on _MiningStateMixin {
 
     if (index == -1) {
       if (value['mnemonicWords'] != "") {
-        final checkMnemonic = await Trustdart().checkMnemonic(value['mnemonicWords']);
+        final checkMnemonic = await Trustdart().checkMnemonic(
+          value['mnemonicWords'],
+        );
         if (checkMnemonic == false) {
           return MessageModel.error()..data = S.current.w_key_12;
         } else {
@@ -273,7 +281,9 @@ mixin _MiningActionsMixin on _MiningStateMixin {
         DataUtils().bigIntToHex(ethToWeiString('$amount', 18)),
       );
       if (rData != null) {
-        MessageModel sendMM = await web3.sendDepositTransaction(jsonDecode(rData));
+        MessageModel sendMM = await web3.sendDepositTransaction(
+          jsonDecode(rData),
+        );
         if (sendMM.error == false) {
           setDepositTxHash(sendMM.data);
           errorMessage = "";
@@ -310,7 +320,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       },
     );
   }
-
 
   Future<void> createExitDepositUnsignedTx() async {
     exitDepositLoad = Load.loading;
@@ -364,7 +373,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     );
   }
 
-
   @override
   void endCheckTxHash() {
     txCheckTimer?.cancel();
@@ -375,7 +383,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     MessageModel rmm = await web3.getTransactionReceipt(txHash);
     return rmm.error;
   }
-
 
   Future<void> runMining() async {
     final String? rData = await mining.runClient(
@@ -392,7 +399,6 @@ mixin _MiningActionsMixin on _MiningStateMixin {
     }
     notifyListeners();
   }
-
 
   Future<String?> _miningCreateGetExitFeeUnsignedTx() async {
     return mining.miningCreateGetExitFeeUnsignedTx();

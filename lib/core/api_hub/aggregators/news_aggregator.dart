@@ -5,12 +5,12 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
-import '../datasources/messari_datasource.dart';
 
 /// Multi-source news aggregator.
 ///
-/// Fetches news from CryptoCompare and Messari in parallel,
-/// merges and deduplicates by URL, then sorts by publish time.
+/// Fetches news from CryptoNewsService (public RSS feeds) and merges/
+/// deduplicates by URL, then sorts by publish time. Messari news source
+/// removed 2026-06 (data.messari.io/api/v1 returns 404).
 class NewsAggregator {
   static List<NewsArticle>? _cache;
   static DateTime? _cachedAt;
@@ -29,7 +29,6 @@ class NewsAggregator {
       // Parallel fetch from both sources
       final results = await Future.wait([
         CryptoNewsService.fetchLatest(),
-        MessariDatasource.fetchNews(),
       ]);
 
       final merged = mergeArticles(

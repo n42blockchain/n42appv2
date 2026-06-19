@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -53,15 +54,12 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
             ? _buildSearchField(scr)
             : Text(
                 S.of(context).g_key_address_6,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: scr.setSp(32.0),
+                style: AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
         centerTitle: true,
-        backgroundColor:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         actions: [
           IconButton(
             onPressed: () {
@@ -72,7 +70,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
               }
             },
             icon: Icon(Icons.search, size: scr.setWidth(48.0)),
-          )
+          ),
         ],
       ),
       body: mList.isEmpty
@@ -87,21 +85,21 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   Widget _buildSearchField(ScreenUtil scr) {
     return CupertinoTextField(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.circular(scr.setWidth(30.0)),
       ),
       padding: EdgeInsets.symmetric(
         vertical: scr.setWidth(16.0),
         horizontal: scr.setWidth(24.0),
       ),
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-        fontSize: scr.setSp(32.0),
+      style: AppTypography.headline.copyWith(
+        fontWeight: FontWeight.w400,
+        color: AppColorTokens.of(context).textPrimary,
       ),
       placeholder: S.of(context).g_key_address_7,
-      placeholderStyle: TextStyle(
+      placeholderStyle: AppTypography.headline.copyWith(
+        fontWeight: FontWeight.w400,
         color: const Color(0xffcccccc),
-        fontSize: scr.setSp(32.0),
       ),
       controller: controller,
       inputFormatters: [LengthLimitingTextInputFormatter(32)],
@@ -110,8 +108,8 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
 
   Widget _buildCoinItem(int index) {
     final model = mList[index];
-    final coin = model.coin;
-    final miniName = coin['miniName'] ?? '';
+    final config = model.config;
+    final miniName = config.miniName;
     final scr = ScreenUtil();
     final isSelected = index == selectIndex;
 
@@ -134,7 +132,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   child: miniName == CoinType.N.name
                       ? Image.asset('assets/img/ast.png')
                       : ImageNetWork(
-                          imageUrl: coin['icon'] ?? '',
+                          imageUrl: config.icon,
                           placeholder: "assets/img/list_default.png",
                         ),
                 ),
@@ -143,20 +141,18 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      coin['name'] ?? '',
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: scr.setSp(32.0),
+                      config.name,
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     SizedBox(height: scr.setWidth(20.0)),
                     Text(
                       miniName,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.itemSubtitleTextColor.name),
-                        fontSize: scr.setWidth(32.0),
+                      style: AppTypography.headline.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],
@@ -166,8 +162,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                   Icon(
                     Icons.check,
                     size: scr.setWidth(48.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                   )
                 else
                   SizedBox(width: scr.setWidth(48.0)),
@@ -177,8 +172,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
             SizedBox(height: scr.setWidth(26.0)),
             Divider(
               height: scr.setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.dividerColor.name),
+              color: AppColorTokens.of(context).border,
             ),
           ],
         ),
@@ -189,15 +183,14 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
   void _searchData(String text) {
     if (text.isEmpty) return;
     final keyword = text.toLowerCase();
-    final results = allList
-        .where((e) {
-          final name = (e.coin['name'] ?? '').toString().toLowerCase();
-          final symbol = (e.coin['miniName'] ?? e.coin['coinType'] ?? '')
-              .toString()
+    final results = allList.where((e) {
+      final config = e.config;
+      final name = config.name.toLowerCase();
+      final symbol =
+          (config.miniName.isNotEmpty ? config.miniName : config.coinType)
               .toLowerCase();
-          return name.contains(keyword) || symbol.contains(keyword);
-        })
-        .toList();
+      return name.contains(keyword) || symbol.contains(keyword);
+    }).toList();
     if (results.isNotEmpty) {
       setState(() {
         mList = results;

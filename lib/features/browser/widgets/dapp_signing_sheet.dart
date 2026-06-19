@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -34,46 +34,38 @@ class DAppSigningSheet extends StatelessWidget {
         Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(30),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 origin,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ],
           ),
         ),
 
-        Divider(
-          height: 1,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.dividerColor.name),
-        ),
+        Divider(height: 1, color: AppColorTokens.of(context).border),
 
         // Scrollable content
         Flexible(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(16),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,14 +79,13 @@ class DAppSigningSheet extends StatelessWidget {
                   if (details['value'] != null && details['value'] != '0x0')
                     _itemWidget(context, 'Value', details['value'].toString()),
                   if (details['data'] != null && details['data'] != '0x')
-                    _itemWidget(context, 'Data',
-                        _truncate(details['data'].toString(), 200)),
+                    _itemWidget(
+                      context,
+                      'Data',
+                      _truncate(details['data'].toString(), 200),
+                    ),
                 ] else ...[
-                  _itemWidget(
-                    context,
-                    'Data',
-                    _formatSignData(details),
-                  ),
+                  _itemWidget(context, 'Data', _formatSignData(details)),
                 ],
               ],
             ),
@@ -111,12 +102,10 @@ class DAppSigningSheet extends StatelessWidget {
             right: ScreenUtil().setWidth(30),
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            color: AppColorTokens.of(context).bgBase,
             border: Border(
               top: BorderSide(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.dividerColor.name),
+                color: AppColorTokens.of(context).border,
                 width: 1,
               ),
             ),
@@ -126,18 +115,21 @@ class DAppSigningSheet extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   height: ScreenUtil().setWidth(88),
-                  child: buttonStyle2(context, () {
-                    Navigator.pop(context, false);
-                  }, s.g_key_79),
+                  child: AppButton(
+                    label: s.g_key_79,
+                    variant: AppButtonVariant.secondary,
+                    onPressed: () => Navigator.pop(context, false),
+                  ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: SizedBox(
                   height: ScreenUtil().setWidth(88),
-                  child: buttonStyle2(context, () {
-                    Navigator.pop(context, true);
-                  }, s.g_key_78),
+                  child: AppButton(
+                    label: s.g_key_78,
+                    onPressed: () => Navigator.pop(context, true),
+                  ),
                 ),
               ),
             ],
@@ -149,25 +141,24 @@ class DAppSigningSheet extends StatelessWidget {
 
   Widget _itemWidget(BuildContext context, String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.ff888888.name),
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(6)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
             maxLines: 10,
             overflow: TextOverflow.ellipsis,

@@ -1,8 +1,7 @@
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -66,20 +65,15 @@ class _EditWalletState extends ConsumerState<EditWallet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_wallet_edit,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_wallet_edit),
       body: SafeArea(
         child: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Column(
             children: [
               Container(
-                margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                margin: EdgeInsets.all(AppSpacing.space8),
+                color: AppColorTokens.of(context).bgSurface,
                 child: CommInput(
                   type: InputFieldType.account,
                   controller: _controller,
@@ -100,20 +94,23 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               Container(
                 height: ScreenUtil().setWidth(148),
                 width: double.infinity,
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                child: buttonStyle2(context, () async {
-                  widget.walletInfo.walletName = resolveEditedWalletName(
-                    input: _controller.text,
-                    existingName: widget.walletInfo.walletName ?? '',
-                    walletIndex: widget.walletIndex,
-                  );
-                  widget.walletInfo.tags = _tags;
-                  await ref
-                      .read(wapBridgeProvider)
-                      .saveWalletInfo(widget.walletInfo, widget.walletIndex);
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop(widget.walletInfo);
-                }, S.of(context).g_key_115),
+                padding: EdgeInsets.all(AppSpacing.space8),
+                child: AppButton(
+                  label: S.of(context).g_key_115,
+                  onPressed: () async {
+                    widget.walletInfo.walletName = resolveEditedWalletName(
+                      input: _controller.text,
+                      existingName: widget.walletInfo.walletName ?? '',
+                      walletIndex: widget.walletIndex,
+                    );
+                    widget.walletInfo.tags = _tags;
+                    await ref
+                        .read(wapBridgeProvider)
+                        .saveWalletInfo(widget.walletInfo, widget.walletIndex);
+                    if (!context.mounted) return;
+                    Navigator.of(context).pop(widget.walletInfo);
+                  },
+                ),
               ),
             ],
           ),
@@ -123,34 +120,24 @@ class _EditWalletState extends ConsumerState<EditWallet> {
   }
 
   Widget _buildTagSection() {
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final subColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             'Tags',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: textColor,
-              fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Current tags
           if (_tags.isNotEmpty)
@@ -158,19 +145,24 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               spacing: 8,
               runSpacing: 6,
               children: _tags
-                  .map((tag) => Chip(
-                        label: Text(tag, style: TextStyle(fontSize: ScreenUtil().setSp(24))),
-                        deleteIcon: Icon(Icons.close, size: 16, color: subColor),
-                        onDeleted: () => _removeTag(tag),
-                        backgroundColor: blueColor.withValues(alpha: 0.1),
-                        side: BorderSide.none,
-                        materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        visualDensity: VisualDensity.compact,
-                      ))
+                  .map(
+                    (tag) => Chip(
+                      label: Text(
+                        tag,
+                        style: AppTypography.caption,
+                      ),
+                      deleteIcon: Icon(Icons.close, size: 16, color: subColor),
+                      onDeleted: () => _removeTag(tag),
+                      backgroundColor: blueColor.withValues(alpha: 0.1),
+                      side: BorderSide.none,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      visualDensity: VisualDensity.compact,
+                    ),
+                  )
                   .toList(),
             ),
 
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Preset tags (only show unselected ones)
           Wrap(
@@ -178,26 +170,25 @@ class _EditWalletState extends ConsumerState<EditWallet> {
             runSpacing: 6,
             children: _presetTags
                 .where((t) => !_tags.contains(t))
-                .map((tag) => ActionChip(
-                      label: Text(
-                        '+ $tag',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: subColor,
-                        ),
-                      ),
-                      onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
-                      backgroundColor: Colors.transparent,
-                      side: BorderSide(color: subColor.withValues(alpha: 0.3)),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                    ))
+                .map(
+                  (tag) => ActionChip(
+                    label: Text(
+                      '+ $tag',
+                      style: AppTypography.caption.copyWith(color: subColor),
+                    ),
+                    onPressed: _tags.length < 5 ? () => _addTag(tag) : null,
+                    backgroundColor: Colors.transparent,
+                    side: BorderSide(color: subColor.withValues(alpha: 0.3)),
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    visualDensity: VisualDensity.compact,
+                  ),
+                )
                 .toList(),
           ),
 
           // Custom tag input
           if (_tags.length < 5) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Row(
               children: [
                 Expanded(
@@ -205,11 +196,10 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                     height: 36,
                     child: TextField(
                       controller: _tagController,
-                      style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                      style: AppTypography.caption,
                       decoration: InputDecoration(
                         hintText: 'Custom tag...',
-                        hintStyle: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
+                        hintStyle: AppTypography.caption.copyWith(
                           color: subColor,
                         ),
                         contentPadding: const EdgeInsets.symmetric(

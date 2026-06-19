@@ -14,13 +14,15 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 /// 用户质押 ETH 后获得 stETH，可以随时在 DEX 交易
 class EthStakingApi {
   /// Lido stETH 合约地址（同时用于质押和余额查询）
-  static const String _lidoContractAddress = '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84';
+  static const String _lidoContractAddress =
+      '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84';
 
   // Lido API 端点
   static const String _lidoStatsApi = 'https://eth-api.lido.fi';
 
   // 零地址推荐人（64 字符零填充）
-  static const String _zeroReferral = '0000000000000000000000000000000000000000000000000000000000000000';
+  static const String _zeroReferral =
+      '0000000000000000000000000000000000000000000000000000000000000000';
 
   static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
@@ -88,7 +90,10 @@ class EthStakingApi {
 
       // ERC20 balanceOf 函数签名
       const balanceOfSelector = '0x70a08231';
-      final paddedAddress = address.toLowerCase().replaceFirst('0x', '').padLeft(64, '0');
+      final paddedAddress = address
+          .toLowerCase()
+          .replaceFirst('0x', '')
+          .padLeft(64, '0');
 
       final response = await _ethCall(rpc, '$balanceOfSelector$paddedAddress');
 
@@ -168,7 +173,7 @@ class EthStakingApi {
             'to': _lidoContractAddress,
             'value': '0x${amount.toRadixString(16)}',
             'data': data,
-          }
+          },
         ],
         'id': 1,
       };
@@ -196,10 +201,7 @@ class EthStakingApi {
 
       return MessageModel()
         ..error = false
-        ..data = StakingTransactionResponse.success(
-          txHash: '',
-          txData: txData,
-        );
+        ..data = StakingTransactionResponse.success(txHash: '', txData: txData);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
@@ -218,7 +220,9 @@ class EthStakingApi {
       }
 
       const selector = '0x7a28fb88'; // getPooledEthByShares
-      final oneStEth = BigInt.from(10).pow(18).toRadixString(16).padLeft(64, '0');
+      final oneStEth = BigInt.from(
+        10,
+      ).pow(18).toRadixString(16).padLeft(64, '0');
 
       final response = await _ethCall(rpc, '$selector$oneStEth');
 

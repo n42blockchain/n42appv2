@@ -47,14 +47,12 @@ class BtcTransactionRecodeModel {
   }
 
   List<String> get inputsAddressList {
-    inputsAddress ??=
-        inputModelsList.expand((im) => im.address).toList();
+    inputsAddress ??= inputModelsList.expand((im) => im.address).toList();
     return inputsAddress!;
   }
 
   List<String> get outputsAddressList {
-    outputsAddress ??=
-        outputModelsList.expand((om) => om.address).toList();
+    outputsAddress ??= outputModelsList.expand((om) => om.address).toList();
     return outputsAddress!;
   }
 
@@ -107,7 +105,9 @@ class BtcTransactionRecodeModel {
 
   // 赋值 gas
   void setGasDouble(double g) {
-    gas = (Decimal.parse(g.toString()) * Decimal.parse('100000000')).toBigInt().toInt();
+    gas = (Decimal.parse(g.toString()) * Decimal.parse('100000000'))
+        .toBigInt()
+        .toInt();
   }
 
   String getTxTimeStr() {
@@ -115,7 +115,19 @@ class BtcTransactionRecodeModel {
       DateTime.fromMillisecondsSinceEpoch(
         txTime.length == 13 ? int.parse(txTime) : int.parse(txTime) * 1000,
       ),
-      [dformat.yyyy, '/', dformat.mm, '/', dformat.dd, ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn],
+      [
+        dformat.yyyy,
+        '/',
+        dformat.mm,
+        '/',
+        dformat.dd,
+        ' ',
+        dformat.am,
+        ' ',
+        dformat.hh,
+        ':',
+        dformat.nn,
+      ],
     );
     return txTimeStr!;
   }
@@ -126,9 +138,11 @@ class BtcTransactionRecodeModel {
     final inputs = jsonDecode(map["input"]) as List<dynamic>;
     final outputs = jsonDecode(map["output"]) as List<dynamic>;
     inputModelsList.addAll(
-        inputs.map((s) => InputModel.fromMap(jsonDecode(s as String))));
+      inputs.map((s) => InputModel.fromMap(jsonDecode(s as String))),
+    );
     outputModelsList.addAll(
-        outputs.map((s) => OutputModel.fromMap(jsonDecode(s as String))));
+      outputs.map((s) => OutputModel.fromMap(jsonDecode(s as String))),
+    );
     trId = map['trId'];
     address = map['address'];
     to1 = map['to1'];
@@ -163,7 +177,9 @@ class BtcTransactionRecodeModel {
       "errorMessage": errorMessage,
       "contract": contract,
       "input": _encodeModels(inputModelsList.map((im) => im.toMap()).toList()),
-      "output": _encodeModels(outputModelsList.map((om) => om.toMap()).toList()),
+      "output": _encodeModels(
+        outputModelsList.map((om) => om.toMap()).toList(),
+      ),
       "coin": json.encode(coin),
       'isTest': isTest,
       'testnetUri': testnetUri,
@@ -174,10 +190,7 @@ class BtcTransactionRecodeModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "trId": trId,
-      ...toMapDb(),
-    };
+    return {"trId": trId, ...toMapDb()};
   }
 
   static String _encodeModels(List<Map<String, dynamic>> models) {
@@ -215,7 +228,9 @@ class InputModel {
     script = map['script'];
     witnessValue = map['witnessValue'];
     lockTime = map['lockTime'];
-    address = (map['address'] as List<dynamic>).map((a) => a.toString()).toList();
+    address = (map['address'] as List<dynamic>)
+        .map((a) => a.toString())
+        .toList();
   }
 
   Map<String, dynamic> toMap() {
@@ -244,16 +259,14 @@ class OutputModel {
   OutputModel({this.price = 0, this.script = ""});
 
   OutputModel.fromMap(Map<String, dynamic> map) {
-    address = (map['address'] as List<dynamic>).map((a) => a.toString()).toList();
+    address = (map['address'] as List<dynamic>)
+        .map((a) => a.toString())
+        .toList();
     price = map['price'];
     script = map['script'];
   }
 
   Map<String, dynamic> toMap() {
-    return {
-      "address": address,
-      "price": price,
-      "script": script,
-    };
+    return {"address": address, "price": price, "script": script};
   }
 }

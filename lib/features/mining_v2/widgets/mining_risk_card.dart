@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
 /// Mining Risk Card Widget
@@ -13,52 +13,52 @@ import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 class MiningRiskCard extends StatelessWidget {
   final MiningV2Provider mpValue;
 
-  const MiningRiskCard({
-    super.key,
-    required this.mpValue,
-  });
+  const MiningRiskCard({super.key, required this.mpValue});
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final scoreValue = double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
-    final riskColor = _getRiskColor(scoreValue);
+    final scoreValue =
+        double.tryParse(mpValue.inactivityScorePercentage) ?? 0.0;
+    final riskColor = _getRiskColor(context, scoreValue);
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 12,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 12,
+                  offset: const Offset(0, 4),
+                ),
+              ],
       ),
       child: Column(
         children: [
           _buildHeader(context, riskColor),
           _buildProgressBars(context, riskColor),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           _buildScoreSection(context, isDark, riskColor),
-          if (mpValue.balanceInBeacon < 32)
-            _buildWarningBanner(context),
+          if (mpValue.balanceInBeacon < 32) _buildWarningBanner(context),
         ],
       ),
     );
   }
 
-  Color _getRiskColor(double scoreValue) {
-    if (scoreValue <= kLowRiskThreshold) return const Color(0xFF4CAF50);
-    if (scoreValue <= kModerateRiskThreshold) return const Color(0xFFFF9800);
-    return const Color(0xFFF44336);
+  Color _getRiskColor(BuildContext context, double scoreValue) {
+    final c = AppColorTokens.of(context);
+    if (scoreValue <= kLowRiskThreshold) return c.success;
+    if (scoreValue <= kModerateRiskThreshold) return c.warning;
+    return c.danger;
   }
 
   Widget _buildHeader(BuildContext context, Color riskColor) {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Row(
         children: [
           Container(
@@ -73,7 +73,7 @@ class MiningRiskCard extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Image.asset(
@@ -83,7 +83,7 @@ class MiningRiskCard extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,13 +92,12 @@ class MiningRiskCard extends StatelessWidget {
                   children: [
                     Text(
                       mpValue.inactivityTitle,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.w700,
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Container(
                       width: ScreenUtil().setWidth(12),
                       height: ScreenUtil().setWidth(12),
@@ -109,12 +108,11 @@ class MiningRiskCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_mining_key_75,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                     height: 1.4,
                   ),
                   maxLines: 2,
@@ -130,13 +128,18 @@ class MiningRiskCard extends StatelessWidget {
 
   Widget _buildProgressBars(BuildContext context, Color riskColor) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       child: Row(
         children: List.generate(3, (index) {
           return Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: index < 2 ? ScreenUtil().setWidth(8) : 0),
-              child: _buildProgressBar(mpValue.inactivityScore[index], riskColor),
+              margin: EdgeInsets.only(
+                right: index < 2 ? ScreenUtil().setWidth(8) : 0,
+              ),
+              child: _buildProgressBar(
+                mpValue.inactivityScore[index],
+                riskColor,
+              ),
             ),
           );
         }),
@@ -149,7 +152,7 @@ class MiningRiskCard extends StatelessWidget {
       height: ScreenUtil().setWidth(12),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: FractionallySizedBox(
         alignment: Alignment.centerLeft,
@@ -161,14 +164,18 @@ class MiningRiskCard extends StatelessWidget {
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+            borderRadius: AppRadius.brSm,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildScoreSection(BuildContext context, bool isDark, Color riskColor) {
+  Widget _buildScoreSection(
+    BuildContext context,
+    bool isDark,
+    Color riskColor,
+  ) {
     return Container(
       margin: EdgeInsets.fromLTRB(
         ScreenUtil().setWidth(24),
@@ -177,14 +184,14 @@ class MiningRiskCard extends StatelessWidget {
         ScreenUtil().setWidth(24),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: isDark
             ? Colors.white.withValues(alpha: 0.04)
             : riskColor.withValues(alpha: 0.06),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -196,14 +203,13 @@ class MiningRiskCard extends StatelessWidget {
                 size: ScreenUtil().setWidth(28),
                 color: riskColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(10)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   S.of(context).g_mining_key_76,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -212,19 +218,18 @@ class MiningRiskCard extends StatelessWidget {
           ),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: riskColor.withValues(alpha: 0.15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Text(
               "${mpValue.inactivityScorePercentage}%",
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: riskColor,
-                fontSize: ScreenUtil().setSp(26),
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -242,27 +247,26 @@ class MiningRiskCard extends StatelessWidget {
         ScreenUtil().setWidth(24),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space4,
         vertical: ScreenUtil().setWidth(26),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name).withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        color: AppColorTokens.of(context).warning.withValues(alpha: 0.2),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           Icon(
             Icons.warning_rounded,
             size: ScreenUtil().setWidth(28),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+            color: AppColorTokens.of(context).warning,
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               S.of(context).g_mining_key_116(32),
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).warning,
                 fontWeight: FontWeight.w500,
               ),
             ),

@@ -11,6 +11,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
@@ -81,10 +82,12 @@ class _AddressBookListState extends State<AddressBookList>
   List<AddressBookModel> get filteredItems => _filteredItems;
 
   @override
-  Future<void> Function(AddressBookModel info) get navigateToEdit => _navigateToEdit;
+  Future<void> Function(AddressBookModel info) get navigateToEdit =>
+      _navigateToEdit;
 
   @override
-  Future<bool> Function(AddressBookModel info) get confirmDelete => _confirmDelete;
+  Future<bool> Function(AddressBookModel info) get confirmDelete =>
+      _confirmDelete;
 
   @override
   Future<void> Function(AddressBookModel info) get deleteItem => _deleteItem;
@@ -174,7 +177,9 @@ class _AddressBookListState extends State<AddressBookList>
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_113),
-        content: SingleChildScrollView(child: Text(info.name ?? info.address ?? '')),
+        content: SingleChildScrollView(
+          child: Text(info.name ?? info.address ?? ''),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -184,7 +189,9 @@ class _AddressBookListState extends State<AddressBookList>
             onPressed: () => Navigator.pop(ctx, true),
             style: TextButton.styleFrom(
               foregroundColor: AppThemeUtils.getColorByKey(
-                  ctx, AppThemeKeys.errorTextColor.name),
+                ctx,
+                AppThemeKeys.errorTextColor.name,
+              ),
             ),
             child: Text(S.of(ctx).g_key_113),
           ),
@@ -206,12 +213,9 @@ class _AddressBookListState extends State<AddressBookList>
 
   @override
   Widget build(BuildContext context) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return Scaffold(
       appBar: AppBarWidget(
@@ -237,8 +241,7 @@ class _AddressBookListState extends State<AddressBookList>
             child: _filteredItems.isEmpty
                 ? const Center(child: EmptyView())
                 : ListView.builder(
-                    padding:
-                        EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
+                    padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
                     itemCount: _filteredItems.length,
                     itemBuilder: (ctx, idx) => buildItem(ctx, idx),
                   ),
@@ -251,16 +254,15 @@ class _AddressBookListState extends State<AddressBookList>
   Widget _buildSearchBar(Color mainText, Color blueColor, Color itemBg) {
     final radius = BorderRadius.circular(ScreenUtil().setWidth(50));
     final defaultSide = BorderSide(color: mainText.withValues(alpha: 0.15));
-    final fontSize = ScreenUtil().setSp(28);
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: TextField(
         controller: _searchCtrl,
-        style: TextStyle(color: mainText, fontSize: fontSize),
+        style: AppTypography.body.copyWith(color: mainText),
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.search,
@@ -268,9 +270,8 @@ class _AddressBookListState extends State<AddressBookList>
             color: mainText.withValues(alpha: 0.4),
           ),
           hintText: S.of(context).search,
-          hintStyle: TextStyle(
+          hintStyle: AppTypography.body.copyWith(
             color: mainText.withValues(alpha: 0.35),
-            fontSize: fontSize,
           ),
           suffixIcon: _searchCtrl.text.isNotEmpty
               ? IconButton(
@@ -283,13 +284,17 @@ class _AddressBookListState extends State<AddressBookList>
                 )
               : null,
           contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(18),
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space4,
           ),
           border: OutlineInputBorder(
-              borderRadius: radius, borderSide: defaultSide),
+            borderRadius: radius,
+            borderSide: defaultSide,
+          ),
           enabledBorder: OutlineInputBorder(
-              borderRadius: radius, borderSide: defaultSide),
+            borderRadius: radius,
+            borderSide: defaultSide,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: radius,
             borderSide: BorderSide(color: blueColor, width: 1.5),

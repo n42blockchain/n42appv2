@@ -61,10 +61,7 @@ extension TokenViewApiNameService on TokenViewApi {
   ///
   /// [address] -- 链地址
   /// [ticker]  -- 地址所属链的代币符号
-  Future<MessageModel> getUdReverseResolve(
-    String address, {
-    String? ticker,
-  }) {
+  Future<MessageModel> getUdReverseResolve(String address, {String? ticker}) {
     final tickerParam = ticker != null ? '&ticker=$ticker' : '';
     return _nsGet('v1/ud/reverse?address=$address$tickerParam');
   }

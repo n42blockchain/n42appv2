@@ -11,7 +11,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class MiningHomePage extends StatefulWidget {
   const MiningHomePage({super.key});
@@ -20,7 +20,8 @@ class MiningHomePage extends StatefulWidget {
   State<MiningHomePage> createState() => _MiningHomePageState();
 }
 
-class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAliveClientMixin{
+class _MiningHomePageState extends State<MiningHomePage>
+    with AutomaticKeepAliveClientMixin {
   StreamSubscription? _eventBusSub;
 
   @override
@@ -28,16 +29,17 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
     super.initState();
     _eventBusSub = eventBus.on().listen((event) {
       if (event is EventPublic && event.type == EventPublicType.selectWallet) {
-        if(event.stringValue=="mainwallet"){
+        if (event.stringValue == "mainwallet") {
           return;
         }
-        if(globalMiningV1.walletIndex!=-1 && event.stringValue=="wallet"){
+        if (globalMiningV1.walletIndex != -1 && event.stringValue == "wallet") {
           return;
         }
-        initData(event.intValue??0);
+        initData(event.intValue ?? 0);
       }
-      if (event is EventPublic && event.type == EventPublicType.selectMiningWallet) {
-        initData(event.intValue??0);
+      if (event is EventPublic &&
+          event.type == EventPublicType.selectMiningWallet) {
+        initData(event.intValue ?? 0);
       }
     });
   }
@@ -47,15 +49,16 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
     _eventBusSub?.cancel();
     super.dispose();
   }
+
   Future<void> initData(int walletIndex) async {
-    AppConfig.isMainChainMining =
-        await SPUtil().getIsMainChainMining() ?? true;
+    AppConfig.isMainChainMining = await SPUtil().getIsMainChainMining() ?? true;
     await MiningUtils.stopMining();
     MiningApi.cleanToken();
     MiningProvider mp = globalMiningV1;
     mp.resetData();
 
     await mp.checkAddressMiningStatus(wIndex: walletIndex);
+
     /// 挖矿逻辑初始化
     await MiningUtils.initEvmSdk();
     MiningUtils.startMining();
@@ -65,9 +68,7 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return SafeArea(
-      child: buildContentView(context),
-    );
+    return SafeArea(child: buildContentView(context));
   }
 
   Widget buildContentView(BuildContext context) {
@@ -79,7 +80,7 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
             !miningModel.isLoadingMiningDeposits) {
           return Center(
             child: Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+              padding: EdgeInsets.all(AppSpacing.space12),
               child: EmptyView(
                 canRefresh: true,
                 onPressed: () async {
@@ -96,6 +97,7 @@ class _MiningHomePageState extends State<MiningHomePage> with AutomaticKeepAlive
       },
     );
   }
+
   @override
   bool get wantKeepAlive => true;
 }

@@ -15,7 +15,10 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
             height: su.setWidth(80),
             width: su.setWidth(80),
             padding: EdgeInsets.all(su.setWidth(10)),
-            child: Icon(Icons.refresh, color: _color(AppThemeKeys.mainBlueColor)),
+            child: Icon(
+              Icons.refresh,
+              color: _color(AppThemeKeys.mainBlueColor),
+            ),
           ),
         ),
         buildErrorMessageWidget(),
@@ -33,11 +36,19 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
     return SingleChildScrollView(
       child: Column(
         children: [
-          buildItemWidget(s.g_key_wallet_k37, transactionInfo?['hash'] ?? "", copy: true),
+          buildItemWidget(
+            s.g_key_wallet_k37,
+            transactionInfo?['hash'] ?? "",
+            copy: true,
+          ),
           divider,
           buildItemWidget(s.g_key_wallet_k33, resultStr),
           divider,
-          buildItemWidget(s.g_key_wallet_k54, transactionInfo?['blockHash'] ?? "", copy: true),
+          buildItemWidget(
+            s.g_key_wallet_k54,
+            transactionInfo?['blockHash'] ?? "",
+            copy: true,
+          ),
           divider,
           buildAddressItemWidget(s.g_key_75, transactionInfo?['from'] ?? ""),
           divider,
@@ -82,15 +93,16 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: _color(AppThemeKeys.mainTextColor),
-                fontSize: su.setSp(26.0),
               ),
               controller: searchEditingController,
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.symmetric(vertical: su.setWidth(10.0)),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: su.setWidth(10.0),
+                ),
                 hintText: S.of(context).search,
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -107,9 +119,11 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
               width: su.setWidth(60.0),
               height: su.setWidth(60.0),
               alignment: Alignment.center,
-              child: Icon(Icons.search,
-                  color: _color(AppThemeKeys.mainBlueColor),
-                  size: su.setWidth(30.0)),
+              child: Icon(
+                Icons.search,
+                color: _color(AppThemeKeys.mainBlueColor),
+                size: su.setWidth(30.0),
+              ),
             ),
           ),
         ],
@@ -122,7 +136,10 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
     final su = ScreenUtil();
     return Container(
       margin: EdgeInsets.only(
-          top: su.setWidth(20.0), left: su.setWidth(30), right: su.setWidth(30)),
+        top: su.setWidth(20.0),
+        left: su.setWidth(30),
+        right: su.setWidth(30),
+      ),
       padding: EdgeInsets.all(su.setWidth(30.0)),
       width: double.infinity,
       alignment: Alignment.center,
@@ -132,8 +149,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: su.setSp(28.0),
+        style: AppTypography.body.copyWith(
           color: _color(AppThemeKeys.errorTextColor),
         ),
         textAlign: TextAlign.center,
@@ -151,8 +167,10 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
       child: Row(
         children: [
           Expanded(
-            child: Text(value,
-                style: TextStyle(color: accent, fontSize: su.setSp(28))),
+            child: Text(
+              value,
+              style: AppTypography.body.copyWith(color: accent),
+            ),
           ),
           if (copy)
             InkWell(
@@ -160,7 +178,9 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
                 ToastUtils.init(context);
                 Clipboard.setData(ClipboardData(text: value));
                 ToastUtils.showFtToast(
-                    child: successViewV1(S.of(context).copy), duration: 3);
+                  child: successViewV1(S.of(context).copy),
+                  duration: 3,
+                );
               },
               child: Container(
                 height: su.setWidth(50),
@@ -191,8 +211,11 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
     );
   }
 
-  Widget _itemContainer(ScreenUtil su,
-      {required String title, required Widget child}) {
+  Widget _itemContainer(
+    ScreenUtil su, {
+    required String title,
+    required Widget child,
+  }) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: su.setWidth(30)),
       padding: EdgeInsets.symmetric(vertical: su.setWidth(10)),
@@ -200,10 +223,12 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title,
-              style: TextStyle(
-                  color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: su.setSp(28))),
+          Text(
+            title,
+            style: AppTypography.body.copyWith(
+              color: _color(AppThemeKeys.mainTextColor),
+            ),
+          ),
           SizedBox(height: su.setWidth(20)),
           child,
         ],

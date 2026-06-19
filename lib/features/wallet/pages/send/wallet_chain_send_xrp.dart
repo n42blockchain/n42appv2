@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -19,7 +20,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -79,14 +80,12 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
         right: ScreenUtil().setWidth(30),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(20.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,
@@ -94,13 +93,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }
@@ -109,7 +102,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toTextEditingController.text = addr;
             toAddressCheck(addr);
@@ -139,27 +132,11 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
           Container(
             padding: EdgeInsets.all(sw(30.0)),
             height: sw(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              isLoading,
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],
@@ -171,7 +148,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
         actions: [
           InkWell(
             onTap: () async {
@@ -179,7 +156,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
                 context,
                 MaterialPageRoute(
                   builder: (_) => AddressBookList(
-                    coinName: widget.coinModel.coin['coinType'],
+                    coinName: widget.coinModel.config.coinType,
                   ),
                 ),
               );
@@ -197,10 +174,7 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
               ),
               child: Image.asset(
                 'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

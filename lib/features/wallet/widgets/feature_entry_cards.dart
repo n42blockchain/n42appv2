@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 part 'feature_entry_cards_items.dart';
@@ -38,8 +38,8 @@ class FeatureEntrySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -61,17 +61,16 @@ class FeatureEntrySection extends StatelessWidget {
                       end: Alignment.bottomCenter,
                       colors: [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
                     ),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+                    borderRadius: AppRadius.brSm,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Flexible(
                   child: Text(
                     S.of(context).g_key_advanced_features,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -87,7 +86,7 @@ class FeatureEntrySection extends StatelessWidget {
             onTap: onEnsTap,
             onRegisterTap: onEnsRegisterTap,
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           // Smart Account Card
           SmartAccountEntryCard(
             hasSmartAccount: hasSmartAccount,
@@ -131,10 +130,10 @@ class FeatureEntryHorizontal extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: ScreenUtil().setWidth(160),
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: ListView(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         children: [
           // ENS 小卡片
           _buildMiniCard(
@@ -149,7 +148,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
             enabled: ensEnabled,
             showBadge: ensName != null,
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           // AA 小卡片
           _buildMiniCard(
             context: context,
@@ -157,14 +156,16 @@ class FeatureEntryHorizontal extends StatelessWidget {
             title: S.of(context).g_key_aa_smart_wallet,
             subtitle: hasSmartAccount
                 ? (isSmartAccountDeployed
-                    ? S.of(context).g_key_aa_ready
-                    : S.of(context).g_key_aa_pending)
+                      ? S.of(context).g_key_aa_ready
+                      : S.of(context).g_key_aa_pending)
                 : S.of(context).g_key_aa_gasless,
             gradientColors: const [Color(0xFFFF6B6B), Color(0xFFFFE66D)],
             onTap: onSmartAccountTap,
             enabled: smartAccountEnabled,
             showBadge: hasSmartAccount,
-            badgeColor: isSmartAccountDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800),
+            badgeColor: isSmartAccountDeployed
+                ? AppColorTokens.of(context).success
+                : AppColorTokens.of(context).warning,
           ),
         ],
       ),
@@ -186,14 +187,16 @@ class FeatureEntryHorizontal extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: ScreenUtil().setWidth(320),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: gradientColors.map((c) => c.withValues(alpha: 0.12)).toList(),
+            colors: gradientColors
+                .map((c) => c.withValues(alpha: 0.12))
+                .toList(),
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: gradientColors[0].withValues(alpha: 0.25),
             width: 1,
@@ -221,7 +224,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         end: Alignment.bottomRight,
                         colors: gradientColors,
                       ),
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(32)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(32),
+                      ),
                     ),
                     child: Icon(
                       icon,
@@ -238,14 +243,14 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         height: ScreenUtil().setWidth(20),
                         decoration: BoxDecoration(
                           color: badgeColor,
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                          borderRadius: AppRadius.brSm,
                           border: Border.all(color: Colors.white, width: 2),
                         ),
                       ),
                     ),
                 ],
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,22 +261,20 @@ class FeatureEntryHorizontal extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: Text(
                         title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
+                        style: AppTypography.caption.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                     FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
                       child: Text(
                         subtitle,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(20),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                        style: AppTypography.captionSm.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),

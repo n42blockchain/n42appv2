@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -185,10 +186,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         appBar: AppBar(
           title: Text(
             S.of(context).g_key_9,
-            style: TextStyle(
-              color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
           ),
           actions: [
             if (load == Load.loading)
@@ -237,9 +235,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
           Expanded(
             child: TextField(
               controller: inputEditingController,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: _sw(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -247,9 +245,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
                 contentPadding: EdgeInsets.symmetric(vertical: _sw(26.0)),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: _sw(30.0),
+                hintStyle: AppTypography.headline.copyWith(
                   color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -273,10 +271,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).search,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: _themeColor(AppThemeKeys.mainButtonTextColor),
-                ),
+                style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainButtonTextColor)),
               ),
             ),
           ),
@@ -315,8 +310,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
 
   Widget _buildCoinItem(Map<String, dynamic> rowValue) {
     final coinName = rowValue['coin_name'].toString();
-    String icon =
-        'https://api.n42.ai/market/v1/r/coinImage/$coinName.png';
+    String icon = 'https://api.n42.ai/market/v1/r/coinImage/$coinName.png';
     if (rowValue['fullname'] == 'LoveCoin') icon = rowValue['icon'];
 
     final imgWidget = rowValue['fullname'] == 'N42'
@@ -350,18 +344,18 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               children: [
                 Text(
                   rowValue['fullname'],
-                  style: TextStyle(
-                    fontSize: _sw(30.0),
+                  style: AppTypography.headline.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor),
                     height: 1.3,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 Text(
                   '$coinName  ',
-                  style: TextStyle(
-                    fontSize: _sw(26.0),
+                  style: AppTypography.bodySm.copyWith(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                     height: 1.3,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],

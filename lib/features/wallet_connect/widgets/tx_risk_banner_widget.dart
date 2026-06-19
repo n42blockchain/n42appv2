@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Displays a compact risk summary banner for a pending transaction.
 ///
@@ -25,16 +26,13 @@ class TxRiskBannerWidget extends StatelessWidget {
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: bannerBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: badgeColor.withAlpha(60),
-          width: 1,
-        ),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: badgeColor.withAlpha(60), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,40 +41,37 @@ class TxRiskBannerWidget extends StatelessWidget {
           // ── Header row: badge + function name ────────────────────────────
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(14),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             child: Row(
               children: [
                 // Risk level badge
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(12),
-                    vertical: ScreenUtil().setWidth(4),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
                     color: badgeColor,
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     badgeText,
-                    style: TextStyle(
+                    style: AppTypography.captionSm.copyWith(
                       color: Colors.white,
-                      fontSize: ScreenUtil().setSp(20),
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 // Function name
                 Expanded(
                   child: Text(
                     analysis.functionName,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -97,8 +92,8 @@ class TxRiskBannerWidget extends StatelessWidget {
             for (final warn in analysis.warnings)
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(20),
-                  vertical: ScreenUtil().setWidth(8),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,12 +103,11 @@ class TxRiskBannerWidget extends StatelessWidget {
                       size: ScreenUtil().setWidth(28),
                       color: badgeColor,
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Expanded(
                       child: Text(
                         warn,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: badgeColor,
                           height: 1.4,
                         ),
@@ -130,14 +124,13 @@ class TxRiskBannerWidget extends StatelessWidget {
               height: ScreenUtil().setWidth(1),
               indent: ScreenUtil().setWidth(20),
               endIndent: ScreenUtil().setWidth(20),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.dividerColor.name),
+              color: AppColorTokens.of(context).border,
             ),
             for (final field in analysis.fields)
               _FieldRow(field: field, badgeColor: badgeColor),
           ],
 
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
         ],
       ),
     );
@@ -147,21 +140,21 @@ class TxRiskBannerWidget extends StatelessWidget {
     switch (analysis.level) {
       case TxRiskLevel.safe:
         return (
-          const Color(0xFF4CAF50), // green
+          AppColorTokens.of(context).success,
           s.g_tx_risk_safe,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.caution:
         return (
-          const Color(0xFFFF9800), // orange
+          AppColorTokens.of(context).warning,
           s.g_tx_risk_caution,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          AppColorTokens.of(context).bgSurface,
         );
       case TxRiskLevel.danger:
         return (
-          const Color(0xFFF44336), // red
+          AppColorTokens.of(context).danger,
           s.g_tx_risk_danger,
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor.name),
+          AppColorTokens.of(context).dangerBg,
         );
     }
   }
@@ -178,8 +171,8 @@ class _FieldRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -188,24 +181,24 @@ class _FieldRow extends StatelessWidget {
             width: ScreenUtil().setWidth(140),
             child: Text(
               field.label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.ff888888.name),
+                  context,
+                  AppThemeKeys.ff888888.name,
+                ),
               ),
             ),
           ),
           Expanded(
             child: Text(
               field.value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: field.isHighlighted
                     ? badgeColor
-                    : AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                fontWeight:
-                    field.isHighlighted ? FontWeight.bold : FontWeight.normal,
+                    : AppColorTokens.of(context).textPrimary,
+                fontWeight: field.isHighlighted
+                    ? FontWeight.w600
+                    : FontWeight.normal,
               ),
               textAlign: TextAlign.right,
               maxLines: 2,

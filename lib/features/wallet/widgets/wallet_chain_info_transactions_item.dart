@@ -1,7 +1,9 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/security/address_label_service.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_page.dart';
@@ -54,6 +56,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
   bool get _isMempoolTx => transactionModel is MempoolTxItem;
 
+  String get _coinTypeForEns {
+    final coinType = coinModel?.config.coinType;
+    return coinType == null || coinType.isEmpty ? 'ETH' : coinType;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isMempoolTx) return _buildMempoolTxCard(context);
@@ -63,16 +70,13 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     return InkWell(
       onTap: () => _onItemTap(context),
       child: Card(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        margin: EdgeInsets.only(bottom: AppSpacing.space8),
+        color: AppColorTokens.of(context).bgSurface,
         elevation: 0,
         child: Container(
           padding: EdgeInsets.symmetric(
-            vertical: ScreenUtil().setWidth(30.0),
-            horizontal: ScreenUtil().setWidth(30.0),
+            vertical: AppSpacing.space8,
+            horizontal: AppSpacing.space8,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,23 +86,19 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
               const Divider(height: 10.0, indent: 0, endIndent: 0),
               // 方向图标 + 地址
               _buildDirectionRow(context, isOut),
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space4),
               // 消息（仅非 BTC 类型）
               if (!_isBtcType && (transactionModel.message ?? "") != "") ...[
                 Text(
                   '${transactionModel.message}',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(26.0),
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                   textAlign: TextAlign.left,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 2,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(20.0)),
+                SizedBox(height: AppSpacing.space4),
               ],
               // 金额 + 状态
               _buildAmountRow(context),
@@ -116,22 +116,15 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       children: [
         Text(
           transactionModel.getTxTimeStr(),
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         const Spacer(),
         Icon(
           Icons.arrow_forward_ios_sharp,
           size: ScreenUtil().setWidth(30.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ],
     );
@@ -150,13 +143,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             ),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(80.0)),
           ),
-          margin: EdgeInsets.only(right: ScreenUtil().setWidth(20.0)),
+          margin: EdgeInsets.only(right: AppSpacing.space4),
           child: Icon(
             isOut ? Icons.arrow_upward : Icons.arrow_downward,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textItem,
           ),
         ),
         Expanded(
@@ -165,26 +155,20 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             children: [
               Text(
                 isOut ? S.of(context).g_key_t_4 : S.of(context).g_key_t_5,
-                style: TextStyle(
+                style: AppTypography.bodyStrong.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     isOut
                         ? AppThemeKeys.errorTextColor.name
                         : AppThemeKeys.rightTextColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(30.0),
-                  fontWeight: FontWeight.bold,
                 ),
               ),
               EnsAddressText(
                 address: _counterpartyAddress(isOut),
-                coinType: coinModel?.coin['coinType'] ?? 'ETH',
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemTextColor.name,
-                  ),
-                  fontSize: ScreenUtil().setSp(26.0),
+                coinType: _coinTypeForEns,
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).textItem,
                 ),
               ),
               _buildAddressLabel(context, _counterpartyAddress(isOut)),
@@ -202,23 +186,15 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
         Expanded(
           child: Text(
             '${transactionModel.priceDouble()} ${transactionModel.coin['unit'].toUpperCase()}',
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
-              fontSize: ScreenUtil().setSp(26.0),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ),
         Text(
           getBuyStateText(transactionModel.state),
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
-            fontSize: ScreenUtil().setSp(28.0),
+          style: AppTypography.body.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -233,16 +209,11 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
         children: [
           Divider(height: ScreenUtil().setWidth(20.0), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+            padding: EdgeInsets.all(AppSpacing.space4),
             alignment: Alignment.centerLeft,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(20.0)),
-              ),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.errorBgColor.name,
-              ),
+              borderRadius: AppRadius.brMd,
+              color: AppColorTokens.of(context).dangerBg,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -252,16 +223,12 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                   width: ScreenUtil().setWidth(30.0),
                   height: ScreenUtil().setWidth(32.0),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10.0)),
+                SizedBox(width: AppSpacing.space2),
                 Text(
                   transactionModel.errorMessage,
                   maxLines: null,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.errorTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(24.0),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).danger,
                   ),
                 ),
               ],
@@ -300,7 +267,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       return;
     }
 
-    final blockchainType = coinModel!.coin['blockchainType'];
+    final blockchainType = coinModel!.config.blockchainType;
     final txHash = transactionModel.txHash;
 
     if (blockchainType == BlockchainType.Ethereum.name) {
@@ -337,34 +304,31 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
     final label = AddressLabelService.getLabel(address);
     if (label == null) return const SizedBox.shrink();
 
+    final tokens = AppColorTokens.of(context);
     final Color tagColor;
     switch (label.riskLevel) {
       case 'danger':
-        tagColor = const Color(0xFFF44336);
+        tagColor = tokens.danger;
       case 'caution':
-        tagColor = const Color(0xFFFF9800);
+        tagColor = tokens.warning;
       default:
-        tagColor = const Color(0xFF4CAF50);
+        tagColor = tokens.success;
     }
 
     return Padding(
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(4)),
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(8),
-          vertical: ScreenUtil().setWidth(2),
+          horizontal: AppSpacing.space2,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: tagColor.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Text(
           label.name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(20),
-            color: tagColor,
-            fontWeight: FontWeight.w500,
-          ),
+          style: AppTypography.captionSm.copyWith(color: tagColor),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -375,25 +339,23 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
   Widget _buildMempoolTxCard(BuildContext context) {
     final tx = transactionModel as MempoolTxItem;
     final su = ScreenUtil();
+    final warn = AppColorTokens.of(context).warning;
     final myAddr = coinModel?.address?.toString().toLowerCase() ?? '';
     final isOut = tx.from.toLowerCase() == myAddr;
     final counterparty = isOut ? tx.to : tx.from;
 
     return Card(
-      margin: EdgeInsets.only(bottom: su.setWidth(30.0)),
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemBgColor.name,
-      ),
+      margin: EdgeInsets.only(bottom: AppSpacing.space8),
+      color: AppColorTokens.of(context).bgSurface,
       elevation: 0,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: su.setWidth(30.0),
-          horizontal: su.setWidth(30.0),
+          vertical: AppSpacing.space8,
+          horizontal: AppSpacing.space8,
         ),
         decoration: BoxDecoration(
-          border: Border.all(color: Colors.orange.withAlpha(60), width: 1),
-          borderRadius: BorderRadius.circular(su.setWidth(12)),
+          border: Border.all(color: warn.withAlpha(60), width: 1),
+          borderRadius: AppRadius.brMd,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,29 +365,25 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: su.setWidth(12),
-                    vertical: su.setWidth(4),
+                    horizontal: AppSpacing.space2,
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.orange.withAlpha(30),
-                    borderRadius: BorderRadius.circular(su.setWidth(8)),
+                    color: warn.withAlpha(30),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     'Mempool',
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange,
+                      color: warn,
                     ),
                   ),
                 ),
                 const Spacer(),
                 Text(
                   'Pending (Mempool)',
-                  style: TextStyle(
-                    fontSize: su.setSp(22),
-                    color: Colors.orange,
-                  ),
+                  style: AppTypography.captionSm.copyWith(color: warn),
                 ),
               ],
             ),
@@ -443,13 +401,10 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(su.setWidth(80.0)),
                   ),
-                  margin: EdgeInsets.only(right: su.setWidth(20.0)),
+                  margin: EdgeInsets.only(right: AppSpacing.space4),
                   child: Icon(
                     isOut ? Icons.arrow_upward : Icons.arrow_downward,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemTextColor.name,
-                    ),
+                    color: AppColorTokens.of(context).textItem,
                   ),
                 ),
                 Expanded(
@@ -460,27 +415,21 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                         isOut
                             ? S.of(context).g_key_t_4
                             : S.of(context).g_key_t_5,
-                        style: TextStyle(
+                        style: AppTypography.bodyStrong.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             isOut
                                 ? AppThemeKeys.errorTextColor.name
                                 : AppThemeKeys.rightTextColor.name,
                           ),
-                          fontSize: su.setSp(30.0),
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
                         counterparty.length > 16
                             ? '${counterparty.substring(0, 8)}...${counterparty.substring(counterparty.length - 8)}'
                             : counterparty,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemTextColor.name,
-                          ),
-                          fontSize: su.setSp(26.0),
+                        style: AppTypography.bodySm.copyWith(
+                          color: AppColorTokens.of(context).textItem,
                         ),
                       ),
                     ],

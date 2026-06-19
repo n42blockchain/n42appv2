@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_account_create_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_account_detail_page.dart';
@@ -108,10 +108,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _navigateToCreate,
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).brand,
         child: const Icon(Icons.add, color: Colors.white),
       ),
     );
@@ -119,12 +116,9 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   Widget _buildFilters() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -149,7 +143,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
               ],
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -176,10 +170,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   }
 
   Widget _buildChainChip(String chain, String label) {
-    final blue = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blue = AppColorTokens.of(context).brand;
     return _buildFilterChip(
       label: label,
       isSelected: _filterChain == chain,
@@ -190,16 +181,16 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     );
   }
 
-  Color _statusColor(SmartAccountState? status) => switch (status) {
-    null => AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    ),
-    SmartAccountState.deployed => Colors.green,
-    SmartAccountState.notDeployed => Colors.grey,
-    SmartAccountState.deploying => Colors.orange,
-    SmartAccountState.error => Colors.red,
-  };
+  Color _statusColor(SmartAccountState? status) {
+    final c = AppColorTokens.of(context);
+    return switch (status) {
+      null => c.brand,
+      SmartAccountState.deployed => c.success,
+      SmartAccountState.notDeployed => c.textTertiary,
+      SmartAccountState.deploying => c.warning,
+      SmartAccountState.error => c.danger,
+    };
+  }
 
   Widget _buildStatusChip(SmartAccountState? status, String label) {
     final chipColor = _statusColor(status);
@@ -221,34 +212,27 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
     required Color selectedTextColor,
     required VoidCallback onTap,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final mainTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: isSelected ? selectedBgColor : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? activeColor : subtitleColor.withAlpha(50),
           ),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
             color: isSelected ? selectedTextColor : mainTextColor,
           ),
@@ -265,20 +249,13 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
           Icon(
             Icons.account_balance_wallet_outlined,
             size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ).withAlpha(100),
+            color: AppColorTokens.of(context).textSubtitle.withAlpha(100),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_no_accounts_filter,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ],
@@ -288,7 +265,7 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
 
   Widget _buildAccountList() {
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       itemCount: _filteredAccounts.length,
       itemBuilder: (context, index) {
         final account = _filteredAccounts[index];

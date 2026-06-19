@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
@@ -11,7 +12,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/keystore
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_4.dart';
@@ -61,7 +62,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
 
   /// Shortcut to access the current coin's info map.
   Map<String, dynamic> get _coinInfo =>
-      widget.walletInfo.coinInfo![widget.model.coin['coinType']];
+      widget.walletInfo.coinInfo![widget.model.config.coinType];
 
   @override
   void initState() {
@@ -109,7 +110,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
     if (ref.read(wapBridgeProvider).walletIndex == widget.walletIndex) {
       ref
           .read(wapBridgeProvider)
-          .reBuildCoin(widget.walletInfo, widget.model.coin['coinType']);
+          .reBuildCoin(widget.walletInfo, widget.model.config.coinType);
     }
     Navigator.pop(context, true);
   }
@@ -122,7 +123,7 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
       if (!mounted) return;
       password ??= widget.walletInfo.password ?? "";
       final keystoreJson = await Trustdart().getKeyStore(
-        widget.model.coin['coinType']!,
+        widget.model.config.coinType,
         getPathWithIndex(coinPath!, _coinInfo['pathIndex'] ?? 0),
         _coinInfo['addrType'],
         password,
@@ -167,20 +168,19 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
             widget.model.address = null;
             await buildCoinWallet(widget.model, ref.read(wapBridgeProvider));
             if (!mounted) return;
-            coinPath = widget.model.coin['path'][widget.model.addrType];
+            coinPath = widget.model.config.pathForAddrType(
+              widget.model.addrType,
+            )!;
             setState(() {});
           }
           Navigator.pop(context);
         },
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           alignment: Alignment.center,
           child: Text(
             key,
-            style: TextStyle(
-              color: textColor,
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: textColor),
           ),
         ),
       );
@@ -219,15 +219,11 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                   Container(
                     height: ScreenUtil().setWidth(148),
                     width: double.infinity,
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
-                    child: buttonStyle2(
-                      context,
-                      saveCoin,
-                      S.of(context).g_key_115,
+                    padding: EdgeInsets.all(AppSpacing.space8),
+                    color: AppColorTokens.of(context).bgBase,
+                    child: AppButton(
+                      label: S.of(context).g_key_115,
+                      onPressed: saveCoin,
                     ),
                   ),
                 ],

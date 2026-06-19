@@ -22,18 +22,9 @@ class _AlertsOverviewSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
 
     return Container(
       decoration: BoxDecoration(
@@ -55,16 +46,15 @@ class _AlertsOverviewSheet extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SheetDragHandle(subtitleText: subtitleText),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_gas_alert,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w600,
               color: mainText,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ...networks.map(
             (n) => _buildNetworkTile(context, n, mainText, subtitleText),
           ),
@@ -84,24 +74,15 @@ class _AlertsOverviewSheet extends StatelessWidget {
     return ListTile(
       contentPadding: EdgeInsets.zero,
       leading: _NetworkIcon(network: n, size: 40, iconSize: 22),
-      title: Text(
-        n.name,
-        style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
-      ),
+      title: Text(n.name, style: AppTypography.body.copyWith(color: mainText)),
       subtitle: hasAlert
           ? Text(
               '${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: n.color,
-              ),
+              style: AppTypography.caption.copyWith(color: n.color),
             )
           : Text(
               '—',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: subtitleText,
-              ),
+              style: AppTypography.caption.copyWith(color: subtitleText),
             ),
       trailing: Icon(
         hasAlert ? Icons.notifications_active : Icons.notifications_none,
@@ -217,26 +198,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.backGroundColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return PopScope(
       canPop: canDismissGasAlertSheet(_saving),
@@ -261,11 +227,11 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _SheetDragHandle(subtitleText: subtitleText),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               _buildTitleRow(context, mainText),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               _buildEnabledToggle(context, itemBg, mainText, blueColor),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               _buildThresholdSection(
                 context,
                 itemBg,
@@ -273,10 +239,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                 mainText,
                 bgColor,
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               _buildSaveButton(context, blueColor),
               if (widget.existing != null) ...[
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 _buildRemoveButton(context),
               ],
             ],
@@ -290,13 +256,12 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     return Row(
       children: [
         _NetworkIcon(network: widget.network, size: 44, iconSize: 24),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             '${widget.network.name} — ${S.of(context).g_key_gas_alert}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
+            style: AppTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
               color: mainText,
             ),
           ),
@@ -313,13 +278,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
   ) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -327,7 +289,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
             child: Text(
               S.of(context).g_key_gas_alert,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(fontSize: ScreenUtil().setSp(28), color: mainText),
+              style: AppTypography.body.copyWith(color: mainText),
             ),
           ),
           Switch(
@@ -348,22 +310,16 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     Color bgColor,
   ) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-      ),
+      padding: EdgeInsets.all(AppSpacing.space4),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_gas_alert_threshold,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -371,20 +327,20 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
                   label: S.of(context).g_key_gas_alert_below,
                   icon: Icons.arrow_downward,
                   selected: _alertBelow,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                   onTap: () {
                     if (_saving) return;
                     setState(() => _alertBelow = true);
                   },
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: _DirectionButton(
                   label: S.of(context).g_key_gas_alert_above,
                   icon: Icons.arrow_upward,
                   selected: !_alertBelow,
-                  color: Colors.red,
+                  color: AppColorTokens.of(context).danger,
                   onTap: () {
                     if (_saving) return;
                     setState(() => _alertBelow = false);
@@ -393,18 +349,14 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _buildThresholdInput(context, subtitleText, mainText, bgColor),
           if (_error.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               _error,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
               ),
             ),
           ],
@@ -420,17 +372,17 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
     Color bgColor,
   ) {
     final borderColor = _error.isNotEmpty
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
-        : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+        ? AppColorTokens.of(context).danger
+        : AppColorTokens.of(context).border;
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: bgColor,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
         border: Border.all(color: borderColor),
       ),
       child: Row(
@@ -445,16 +397,10 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
               ],
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: mainText,
-              ),
+              style: AppTypography.body.copyWith(color: mainText),
               decoration: InputDecoration(
                 hintText: '0',
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: subtitleText,
-                ),
+                hintStyle: AppTypography.body.copyWith(color: subtitleText),
                 border: InputBorder.none,
                 isDense: true,
                 contentPadding: EdgeInsets.zero,
@@ -464,10 +410,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
           ),
           Text(
             'Gwei',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
         ],
       ),
@@ -483,9 +426,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
         style: ElevatedButton.styleFrom(
           backgroundColor: blueColor,
           foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           disabledBackgroundColor: blueColor.withAlpha(120),
         ),
         child: _saving
@@ -499,10 +440,7 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
               )
             : Text(
                 S.of(context).g_key_gas_alert_save,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.w600,
-                ),
+                style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
               ),
       ),
     );
@@ -515,14 +453,12 @@ class _AlertConfigSheetState extends State<_AlertConfigSheet> {
       child: TextButton(
         onPressed: _saving ? null : _remove,
         style: TextButton.styleFrom(
-          foregroundColor: Colors.red,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          foregroundColor: AppColorTokens.of(context).danger,
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(
           S.of(context).g_key_113, // "Delete"
-          style: TextStyle(fontSize: ScreenUtil().setSp(28)),
+          style: AppTypography.body,
         ),
       ),
     );
@@ -548,49 +484,44 @@ class _DirectionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final idleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
-        decoration: BoxDecoration(
-          color: selected ? color.withAlpha(30) : Colors.transparent,
-          border: Border.all(
-            color: selected
-                ? color
-                : AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.dividerColor.name,
-                  ),
-            width: selected ? 1.5 : 1,
+    final idleColor = AppColorTokens.of(context).textSubtitle;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brSm,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: selected ? color.withAlpha(30) : Colors.transparent,
+            border: Border.all(
+              color: selected ? color : AppColorTokens.of(context).border,
+              width: selected ? 1.5 : 1,
+            ),
+            borderRadius: AppRadius.brSm,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              size: ScreenUtil().setWidth(28),
-              color: selected ? color : idleColor,
-            ),
-            SizedBox(width: ScreenUtil().setWidth(6)),
-            Flexible(
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                  color: selected ? color : idleColor,
-                ),
-                overflow: TextOverflow.ellipsis,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: ScreenUtil().setWidth(28),
+                color: selected ? color : idleColor,
               ),
-            ),
-          ],
+              SizedBox(width: AppSpacing.space2),
+              Flexible(
+                child: Text(
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                    color: selected ? color : idleColor,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -612,7 +543,7 @@ class _SheetDragHandle extends StatelessWidget {
         height: ScreenUtil().setWidth(6),
         decoration: BoxDecoration(
           color: subtitleText.withAlpha(60),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(3)),
+          borderRadius: AppRadius.brSm,
         ),
       ),
     );

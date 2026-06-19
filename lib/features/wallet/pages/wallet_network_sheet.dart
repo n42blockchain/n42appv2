@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
-void showNetworkSheet(
-  BuildContext context,
-  WalletActionProvider walletValue,
-) {
+void showNetworkSheet(BuildContext context, WalletActionProvider walletValue) {
   sheetBottom(
     context,
     "",
@@ -30,8 +28,7 @@ BoxDecoration _itemBorderDecoration(BuildContext context) {
     border: Border(
       bottom: BorderSide(
         width: ScreenUtil().setWidth(1.0),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemLineColor.name),
+        color: AppColorTokens.of(context).border,
       ),
     ),
   );
@@ -41,8 +38,7 @@ Widget _buildCheckIcon(BuildContext context) {
   return Icon(
     Icons.check,
     size: ScreenUtil().setWidth(40.0),
-    color: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name),
+    color: AppColorTokens.of(context).brand,
   );
 }
 
@@ -63,11 +59,9 @@ class _NetworkSheetHeader extends StatelessWidget {
             child: Text(
               S.of(context).g_token_m_key_4,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: scr.setSp(32),
-                fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
@@ -75,8 +69,7 @@ class _NetworkSheetHeader extends StatelessWidget {
           IconButton(
             icon: Icon(
               Icons.tune_rounded,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              color: AppColorTokens.of(context).brand,
               size: scr.setWidth(40),
             ),
             tooltip: S.of(context).g_key_manage_chains,
@@ -105,8 +98,7 @@ class _NetworkList extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
       child: ListView.separated(
         itemCount: walletValue.coinModels.length + 1,
-        separatorBuilder: (_, _) =>
-            Divider(height: ScreenUtil().setWidth(1.0)),
+        separatorBuilder: (_, _) => Divider(height: ScreenUtil().setWidth(1.0)),
         itemBuilder: (context, index) {
           if (index == 0) {
             return _NetworkAllItem(
@@ -156,11 +148,9 @@ class _NetworkAllItem extends StatelessWidget {
               child: Text(
                 S.of(context).g_token_m_key_4,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: scr.setSp(30.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -186,11 +176,11 @@ class _NetworkCoinItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scr = ScreenUtil();
-    final coinSymbol = (coinInfo.coin['miniName'] ?? coinInfo.coin['coinType'] ?? '')
-        .toString()
-        .trim();
-    final coinName = (coinInfo.coin['name'] ?? coinSymbol).toString().trim();
-    final iconUrl = coinInfo.coin['icon']?.toString().trim() ?? '';
+    final config = coinInfo.config;
+    final coinSymbol =
+        (config.miniName.isNotEmpty ? config.miniName : config.coinType).trim();
+    final coinName = (config.name.isNotEmpty ? config.name : coinSymbol).trim();
+    final iconUrl = config.icon.trim();
     final image = coinSymbol == CoinType.N.name || iconUrl.isEmpty
         ? Image.asset('assets/img/ast.png')
         : ImageNetWork(
@@ -221,21 +211,18 @@ class _NetworkCoinItem extends StatelessWidget {
                 children: [
                   Text(
                     coinSymbol.isEmpty ? '--' : coinSymbol,
-                    style: TextStyle(
-                      fontSize: scr.setSp(30.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                      fontWeight: FontWeight.w600,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     coinName,
-                    style: TextStyle(
-                      fontSize: scr.setSp(30.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                      fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,

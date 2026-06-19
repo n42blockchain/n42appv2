@@ -6,6 +6,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
@@ -234,7 +235,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(S.of(context).g_key_aa_batch_success),
-            backgroundColor: Colors.green,
+            backgroundColor: AppColorTokens.of(context).success,
           ),
         );
         Navigator.pop(context, true);
@@ -253,7 +254,10 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message), backgroundColor: Colors.red),
+      SnackBar(
+        content: Text(message),
+        backgroundColor: AppColorTokens.of(context).danger,
+      ),
     );
   }
 
@@ -337,7 +341,7 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(S.of(context).g_key_aa_batch_template_saved),
-              backgroundColor: Colors.green,
+              backgroundColor: AppColorTokens.of(context).success,
             ),
           );
         }

@@ -9,7 +9,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/choose_import_coin.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -42,13 +42,9 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
     super.dispose();
   }
 
-  TextStyle _sectionLabelStyle() => TextStyle(
-    color: AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    ),
-    fontWeight: FontWeight.bold,
-    fontSize: ScreenUtil().setSp(32),
+  TextStyle _sectionLabelStyle() => AppTypography.headline.copyWith(
+    color: AppColorTokens.of(context).textPrimary,
+    fontWeight: FontWeight.w600,
   );
 
   Future<void> _pasteFromClipboard() async {
@@ -70,7 +66,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,27 +83,21 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                           onTap: _pasteFromClipboard,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(20.0),
+                              horizontal: AppSpacing.space4,
                             ),
                             height: ScreenUtil().setWidth(60.0),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainBlueColor.name,
-                              ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(20.0)),
-                              ),
+                              color: AppColorTokens.of(context).brand,
+                              borderRadius: AppRadius.brMd,
                             ),
                             child: Text(
                               S.of(context).g_key_166,
-                              style: TextStyle(
+                              style: AppTypography.bodySm.copyWith(
                                 color: AppThemeUtils.getColorByKey(
                                   context,
                                   AppThemeKeys.mainWhiteColor.name,
                                 ),
-                                fontSize: ScreenUtil().setSp(26.0),
                               ),
                             ),
                           ),
@@ -117,21 +107,20 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                     containerStyle1(
                       context,
                       height: ScreenUtil().setWidth(440),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+                      padding: EdgeInsets.all(AppSpacing.space4),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: CommInput(
                         type: InputFieldType.account,
                         hintText: S.of(context).g_key_ex_keystore_17,
                         controller: _keystoreController,
                         maxLines: 30,
-                        style: TextStyle(
+                        style: AppTypography.bodySm.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,
                           ),
-                          fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
                     ),
@@ -143,22 +132,21 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                       context,
                       height: ScreenUtil().setWidth(120),
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20),
+                        horizontal: AppSpacing.space4,
                       ),
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20),
+                        vertical: AppSpacing.space4,
                       ),
                       child: CommInput(
                         type: InputFieldType.password,
                         hintText: S.of(context).g_key_21,
                         controller: _passwordController,
                         maxLines: 1,
-                        style: TextStyle(
+                        style: AppTypography.bodySm.copyWith(
                           color: AppThemeUtils.getColorByKey(
                             context,
                             AppThemeKeys.ff888888.name,
                           ),
-                          fontSize: ScreenUtil().setSp(26),
                         ),
                       ),
                     ),
@@ -179,8 +167,8 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
   Widget _buildChainSelector() {
     return containerStyle1(
       context,
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Container(
@@ -195,22 +183,14 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
               children: [
                 Text(
                   selectChain['baseInfo']['name'],
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemTextColor.name,
-                    ),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textItem,
                   ),
                 ),
                 Text(
                   selectChain['baseInfo']['miniName'],
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemTextColor.name,
-                    ),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textItem,
                   ),
                 ),
               ],
@@ -218,10 +198,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
           ),
           Icon(
             Icons.arrow_forward_ios,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
             size: ScreenUtil().setWidth(30),
           ),
         ],
@@ -248,17 +225,14 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148),
             width: double.infinity,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
-            child: buttonStyle6(
-              context,
-              () async {
-                if (load == Load.loading) return;
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: S.of(context).g_key_78,
+              loading: load == Load.loading,
+              onPressed: () async {
                 FocusScope.of(context).unfocus();
                 final keystoreJson = _keystoreController.text.trim();
                 if (keystoreJson.isEmpty) {
@@ -271,18 +245,6 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                   _passwordController.text,
                 );
               },
-              S.of(context).g_key_78,
-              AppThemeUtils.getColorByKey(
-                context,
-                load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              load == Load.loading,
             ),
           ),
         ],

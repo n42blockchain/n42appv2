@@ -11,12 +11,12 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: selectedChain.color.withAlpha(40)),
       ),
       child: Column(
@@ -29,31 +29,27 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
                 size: ScreenUtil().setWidth(18),
                 color: subtitleColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(6)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_chain,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ),
               const Spacer(),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(10),
-                  vertical: ScreenUtil().setWidth(4),
+                  horizontal: AppSpacing.space2,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: selectedChain.color.withAlpha(20),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
                   selectedChain.suffix,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                  style: AppTypography.captionSm.copyWith(
                     color: selectedChain.color,
                     fontWeight: FontWeight.w500,
                   ),
@@ -61,7 +57,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
@@ -88,12 +84,12 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(14),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: isSelected ? chain.color.withAlpha(25) : Colors.transparent,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+        borderRadius: AppRadius.brSm,
         border: Border.all(
           color: isSelected ? chain.color : subtitleColor.withAlpha(40),
           width: isSelected ? 1.5 : 1,
@@ -107,24 +103,22 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             height: ScreenUtil().setWidth(24),
             decoration: BoxDecoration(
               color: chain.color.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Text(
                 chain.symbol.substring(0, 1),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(16),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.captionSm.copyWith(
+                  fontWeight: FontWeight.w600,
                   color: chain.color,
                 ),
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             chain.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               color: isSelected
                   ? chain.color
@@ -132,7 +126,7 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             ),
           ),
           if (isSelected) ...[
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.check_circle,
               size: ScreenUtil().setWidth(18),
@@ -147,14 +141,14 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
   Widget buildHeaderCard() {
     final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(40), blueColor.withAlpha(15)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -163,37 +157,34 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             height: ScreenUtil().setWidth(56),
             decoration: BoxDecoration(
               color: blueColor.withAlpha(30),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Center(
               child: Text(
                 'ENS',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.caption.copyWith(
+                  fontWeight: FontWeight.w600,
                   color: blueColor,
                 ),
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   S.of(context).g_key_ens_service,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.headline.copyWith(
+                    fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_key_ens_description,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
                   ),
                 ),
@@ -218,13 +209,13 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             onTap: canManageEns ? navigateToSearch : _showUnsupportedSnack,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildActionCard(
             icon: Icons.autorenew_rounded,
             title: S.of(context).g_key_ens_renew,
             subtitle: S.of(context).g_key_ens_renew_desc,
-            color: const Color(0xFF66BB6A),
+            color: AppColorTokens.of(context).success,
             onTap: () {
               if (!canManageEns) {
                 _showUnsupportedSnack();
@@ -255,10 +246,10 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: _themeColor(AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(color: color.withAlpha(40), width: 1),
         ),
         child: Column(
@@ -269,24 +260,22 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               height: ScreenUtil().setWidth(44),
               decoration: BoxDecoration(
                 color: color.withAlpha(25),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Icon(icon, size: ScreenUtil().setWidth(24), color: color),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(4)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               subtitle,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
               ),
               maxLines: 2,
@@ -309,9 +298,8 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               child: Text(
                 S.of(context).g_key_ens_my_domains,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.body.copyWith(
+                  fontWeight: FontWeight.w600,
                   color: _themeColor(AppThemeKeys.mainTextColor.name),
                 ),
               ),
@@ -319,15 +307,14 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             if (ownedNames.isNotEmpty)
               Text(
                 '${ownedNames.length}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         if (isLoading)
           _buildLoadingState()
         else if (errorMessage != null)
@@ -342,35 +329,34 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
 
   Widget _buildLoadingState() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(60)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space16),
       child: const Center(child: CircularProgressIndicator()),
     );
   }
 
   Widget _buildErrorState() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
           Icon(
             Icons.error_outline,
             size: ScreenUtil().setWidth(48),
-            color: Colors.red,
+            color: AppColorTokens.of(context).danger,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             errorMessage!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           TextButton(
             onPressed: loadOwnedNames,
             child: Text(S.of(context).g_swap_key_6),
@@ -385,10 +371,10 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
     final subtitleColor = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     final canManageEns = _hasWalletAddress;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: blueColor.withAlpha(30), width: 1),
       ),
       child: Column(
@@ -398,27 +384,23 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
             size: ScreenUtil().setWidth(64),
             color: subtitleColor.withAlpha(100),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_no_domains,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w500,
               color: _themeColor(AppThemeKeys.mainTextColor.name),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             canManageEns
                 ? S.of(context).g_key_ens_get_started
                 : S.of(context).g_key_bridge_chain_not_supported,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleColor,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           ElevatedButton.icon(
             onPressed: canManageEns ? navigateToSearch : _showUnsupportedSnack,
             icon: const Icon(Icons.search, size: 20),
@@ -427,12 +409,10 @@ mixin _EnsHomeWidgetsMixin on _EnsHomeLogicMixin {
               backgroundColor: blueColor,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(12),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space4,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
           ),
         ],

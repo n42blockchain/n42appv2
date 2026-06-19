@@ -1,7 +1,6 @@
-
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/news/api/news_api.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/features/widgets/base_list.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -33,28 +32,32 @@ class _NewsPageState extends State<NewsPage> {
           ),
           Expanded(
             child: BaseList(
-              buildItem: (BuildContext context, List<dynamic> results, int index) {
-                final Map<String, dynamic> item = results[index];
-                final dateTimeSte = _parsePubDate(item["pubDate"]);
-                final link = item["link"] as String? ?? '';
-                return _buildItem(
-                  item["title"] as String? ?? '',
-                  item["image"] as String? ?? '',
-                  dateTimeSte,
-                  onTap: link.isNotEmpty
-                      ? () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => BrowserPage(link),
-                            ),
-                          );
-                        }
-                      : null,
-                );
-              },
+              buildItem:
+                  (BuildContext context, List<dynamic> results, int index) {
+                    final Map<String, dynamic> item = results[index];
+                    final dateTimeSte = _parsePubDate(item["pubDate"]);
+                    final link = item["link"] as String? ?? '';
+                    return _buildItem(
+                      item["title"] as String? ?? '',
+                      item["image"] as String? ?? '',
+                      dateTimeSte,
+                      onTap: link.isNotEmpty
+                          ? () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => BrowserPage(link),
+                                ),
+                              );
+                            }
+                          : null,
+                    );
+                  },
               getData: (int page, int pageSize) async {
-                final data = await _newsApi.newsList(skip: page, limit: pageSize);
+                final data = await _newsApi.newsList(
+                  skip: page,
+                  limit: pageSize,
+                );
                 if (data["code"] == 200) {
                   return data["data"];
                 }
@@ -86,7 +89,7 @@ class _NewsPageState extends State<NewsPage> {
     GestureTapCallback? onTap,
   }) {
     final gap = ScreenUtil().setWidth(30.0);
-    final radius = BorderRadius.circular(ScreenUtil().setWidth(16.0));
+    final radius = AppRadius.brMd;
 
     return GestureDetector(
       onTap: onTap,
@@ -94,7 +97,7 @@ class _NewsPageState extends State<NewsPage> {
         padding: EdgeInsets.all(gap),
         margin: EdgeInsets.only(bottom: gap, left: gap, right: gap),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: radius,
         ),
         child: Row(
@@ -106,21 +109,17 @@ class _NewsPageState extends State<NewsPage> {
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemTextColor.name),
-                      fontSize: ScreenUtil().setSp(30.0),
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textItem,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(12.0)),
+                  SizedBox(height: AppSpacing.space4),
                   Text(
                     time,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(20.0),
+                    style: AppTypography.captionSm.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],

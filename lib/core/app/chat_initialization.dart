@@ -218,6 +218,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       await flushPendingChatSsoDeepLink();
       await AppPushUtils.flushPendingChatNotification();
 
+      // 宿主接管 chat 外观（明暗模式）：chat 不再用自身存储值覆盖宿主下发，
+      // 明暗模式以宿主设置页为唯一来源。必须在 setThemeMode 之前置位。
+      N42Chat.hostControlsAppearance = true;
       final currentTheme = globalProviderContainer.read(themeModeProvider);
       N42Chat.setThemeMode(currentTheme);
 
@@ -502,8 +505,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         previousStatus != AuthStatus.authenticated) {
       unawaited(clearPendingCancelledChatDataPurgeCompat());
       N42Chat.notifyUserChanged();
-      // Chat 登录成功后检查推送权限，未开启则提醒用户
+      // Chat 登录成功后检查推送权限，未开启则提醒用户；
+      // 国产 ROM 另引导开启自启动+电池白名单，否则后台收不到消息。
       AppPushUtils.checkAndPromptPermission();
+      AppPushUtils.checkAndPromptBgDelivery();
       return;
     }
 

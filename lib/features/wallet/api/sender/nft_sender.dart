@@ -46,13 +46,15 @@ class NftSender implements ChainSender {
     final gas = getCoinGas(coinType, contract: true);
 
     // Chain balance for gas
-    final mmchain = await _tokenViewApi.getBalance(
-      BlockchainType.Ethereum.name,
-      coinType,
-      params.fromAddress,
-      contract: '',
-      isTest: params.isTest,
-    ) ?? _errMM();
+    final mmchain =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Ethereum.name,
+          coinType,
+          params.fromAddress,
+          contract: '',
+          isTest: params.isTest,
+        ) ??
+        _errMM();
     if (mmchain.error) return SendResult.fail(mmchain.data?.toString());
     final chainBalance = mmchain.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -60,11 +62,13 @@ class NftSender implements ChainSender {
     }
 
     // Gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Ethereum.name,
-      coinType,
-      isTest: params.isTest,
-    ) ?? _errMM();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Ethereum.name,
+          coinType,
+          isTest: params.isTest,
+        ) ??
+        _errMM();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
 
     final baseFee = mmg.data as BigInt;
@@ -99,16 +103,20 @@ class NftSender implements ChainSender {
       coinType: coinType,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     // Broadcast
-    final sendMm = await _tokenViewApi.sendTx(
-      BlockchainType.Ethereum.name,
-      coinType,
-      signStr,
-      netMode: params.isTest ? 'test' : 'main',
-    ) ?? _errMM();
+    final sendMm =
+        await _tokenViewApi.sendTx(
+          BlockchainType.Ethereum.name,
+          coinType,
+          signStr,
+          netMode: params.isTest ? 'test' : 'main',
+        ) ??
+        _errMM();
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString());
@@ -132,11 +140,23 @@ class NftSender implements ChainSender {
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
-    final chainIdHex = _dataUtils.bigIntToHex(BigInt.from(chainId), need0x: false);
-    final gasLimitHex = _dataUtils.bigIntToHex(BigInt.from(gasLimit), need0x: false);
+    final chainIdHex = _dataUtils.bigIntToHex(
+      BigInt.from(chainId),
+      need0x: false,
+    );
+    final gasLimitHex = _dataUtils.bigIntToHex(
+      BigInt.from(gasLimit),
+      need0x: false,
+    );
     final amountHex = _dataUtils.bigIntToHex(BigInt.zero, need0x: false);
-    final tokenIdHex = _dataUtils.bigIntToHex(BigInt.parse(tokenId), need0x: false);
-    final trValueHex = _dataUtils.bigIntToHex(BigInt.from(nftQuantity), need0x: false);
+    final tokenIdHex = _dataUtils.bigIntToHex(
+      BigInt.parse(tokenId),
+      need0x: false,
+    );
+    final trValueHex = _dataUtils.bigIntToHex(
+      BigInt.from(nftQuantity),
+      need0x: false,
+    );
 
     // Nonce
     final mmn = await _tokenViewApi.getTransactionCountEth(
@@ -176,7 +196,12 @@ class NftSender implements ChainSender {
         mnemonic: globalWapAdapter.walletInfo.mnemonic ?? '',
       );
     } else {
-      signStr = await _trustdart.signTransaction(coinType, path, signMap, pk: privateKey);
+      signStr = await _trustdart.signTransaction(
+        coinType,
+        path,
+        signMap,
+        pk: privateKey,
+      );
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);

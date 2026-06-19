@@ -154,6 +154,7 @@ class NewsApi {
     return '';
   }
 
-  static final RegExp _imgInDescriptionRe =
-      RegExp(r'''<img[^>]+src=["']([^"']+)["']''');
+  static final RegExp _imgInDescriptionRe = RegExp(
+    r'''<img[^>]+src=["']([^"']+)["']''',
+  );
 }

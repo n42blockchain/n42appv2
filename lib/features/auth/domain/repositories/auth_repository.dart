@@ -68,9 +68,7 @@ abstract class AuthRepository {
   Future<Either<Failure, void>> logout();
 
   /// Delete account
-  Future<Either<Failure, void>> deleteAccount({
-    required String password,
-  });
+  Future<Either<Failure, void>> deleteAccount({required String password});
 
   /// Check if logged in
   Future<bool> isLoggedIn();
@@ -96,10 +94,4 @@ abstract class AuthRepository {
 }
 
 /// Verification Code Type
-enum CodeType {
-  register,
-  login,
-  resetPassword,
-  changeEmail,
-}
-
+enum CodeType { register, login, resetPassword, changeEmail }

@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/evm_transaction_hash_input.dart';
@@ -20,6 +21,7 @@ import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -74,7 +76,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     _txHash = widget.txHash;
     searchEditingController.text = _txHash;
     _explorerUrl = getBrowserTxHash(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       _txHash,
       isTest: widget.coinModel.isTest,
     );
@@ -109,7 +111,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     _explorerUrl = _txHash.isEmpty
         ? ''
         : getBrowserTxHash(
-            widget.coinModel.coin['coinType'],
+            widget.coinModel.config.coinType,
             _txHash,
             isTest: widget.coinModel.isTest,
           );
@@ -161,7 +163,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     final rData = await fetchEvmTransactionByHash(
       ethAPI,
       txHash: _txHash,
-      coinType: widget.coinModel.coin['coinType'],
+      coinType: widget.coinModel.config.coinType,
       isTest: widget.coinModel.isTest,
     );
     if (rData.error != false) {
@@ -216,7 +218,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     final rData = await fetchEvmTransactionReceipt(
       ethAPI,
       txHash: _txHash,
-      coinType: widget.coinModel.coin['coinType'],
+      coinType: widget.coinModel.config.coinType,
       isTest: widget.coinModel.isTest,
     );
     final requestError = rData.error != false;

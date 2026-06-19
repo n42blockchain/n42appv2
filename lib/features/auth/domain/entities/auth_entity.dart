@@ -64,16 +64,16 @@ class UserEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        uuid,
-        email,
-        name,
-        avatar,
-        description,
-        createdAt,
-        hasWallet,
-        googleAuthEnabled,
-        inviteCode,
-      ];
+    uuid,
+    email,
+    name,
+    avatar,
+    description,
+    createdAt,
+    hasWallet,
+    googleAuthEnabled,
+    inviteCode,
+  ];
 }
 
 /// Auth Token Entity
@@ -152,13 +152,12 @@ class SecuritySettingsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        lockEnabled,
-        lockPassword,
-        biometricEnabled,
-        faceIdEnabled,
-        gestureEnabled,
-        gesturePassword,
-        lockTimeout,
-      ];
+    lockEnabled,
+    lockPassword,
+    biometricEnabled,
+    faceIdEnabled,
+    gestureEnabled,
+    gesturePassword,
+    lockTimeout,
+  ];
 }
-

@@ -27,11 +27,13 @@ class HyperliquidService {
   /// Exchange endpoint for order submission (requires EIP-712 signing).
   static const String exchangeUrl = 'https://api.hyperliquid.xyz/exchange';
 
-  static final Dio _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 15),
-    headers: {'Content-Type': 'application/json'},
-  ));
+  static final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 15),
+      headers: {'Content-Type': 'application/json'},
+    ),
+  );
 
   // ==================== Market Data ====================
 
@@ -56,17 +58,22 @@ class HyperliquidService {
         final info = universe[i] as Map<String, dynamic>;
         final ctx = assetCtxs[i] as Map<String, dynamic>;
 
-        markets.add(PerpMarket(
-          symbol: info['name'] as String? ?? '',
-          szDecimals: info['szDecimals'] as int? ?? 2,
-          maxLeverage: info['maxLeverage'] as int? ?? 50,
-          markPrice: double.tryParse(ctx['markPx']?.toString() ?? '') ?? 0,
-          oraclePrice: double.tryParse(ctx['oraclePx']?.toString() ?? '') ?? 0,
-          volume24h: double.tryParse(ctx['dayNtlVlm']?.toString() ?? '') ?? 0,
-          openInterest: double.tryParse(ctx['openInterest']?.toString() ?? '') ?? 0,
-          fundingRate: double.tryParse(ctx['funding']?.toString() ?? '') ?? 0,
-          priceChange24h: double.tryParse(ctx['prevDayPx']?.toString() ?? '') ?? 0,
-        ));
+        markets.add(
+          PerpMarket(
+            symbol: info['name'] as String? ?? '',
+            szDecimals: info['szDecimals'] as int? ?? 2,
+            maxLeverage: info['maxLeverage'] as int? ?? 50,
+            markPrice: double.tryParse(ctx['markPx']?.toString() ?? '') ?? 0,
+            oraclePrice:
+                double.tryParse(ctx['oraclePx']?.toString() ?? '') ?? 0,
+            volume24h: double.tryParse(ctx['dayNtlVlm']?.toString() ?? '') ?? 0,
+            openInterest:
+                double.tryParse(ctx['openInterest']?.toString() ?? '') ?? 0,
+            fundingRate: double.tryParse(ctx['funding']?.toString() ?? '') ?? 0,
+            priceChange24h:
+                double.tryParse(ctx['prevDayPx']?.toString() ?? '') ?? 0,
+          ),
+        );
       }
 
       return markets;
@@ -80,7 +87,9 @@ class HyperliquidService {
   ///
   /// Avoids duplicate requests since both getPositions and getMarginSummary
   /// need the same endpoint.
-  static Future<ClearinghouseState> getClearinghouseState(String address) async {
+  static Future<ClearinghouseState> getClearinghouseState(
+    String address,
+  ) async {
     try {
       final response = await _dio.post(
         _infoUrl,
@@ -107,10 +116,26 @@ class HyperliquidService {
       final marginData = data['marginSummary'] as Map<String, dynamic>?;
       final margin = marginData != null
           ? MarginSummary(
-              accountValue: double.tryParse(marginData['accountValue']?.toString() ?? '') ?? 0,
-              totalMarginUsed: double.tryParse(marginData['totalMarginUsed']?.toString() ?? '') ?? 0,
-              totalNtlPos: double.tryParse(marginData['totalNtlPos']?.toString() ?? '') ?? 0,
-              totalRawUsd: double.tryParse(marginData['totalRawUsd']?.toString() ?? '') ?? 0,
+              accountValue:
+                  double.tryParse(
+                    marginData['accountValue']?.toString() ?? '',
+                  ) ??
+                  0,
+              totalMarginUsed:
+                  double.tryParse(
+                    marginData['totalMarginUsed']?.toString() ?? '',
+                  ) ??
+                  0,
+              totalNtlPos:
+                  double.tryParse(
+                    marginData['totalNtlPos']?.toString() ?? '',
+                  ) ??
+                  0,
+              totalRawUsd:
+                  double.tryParse(
+                    marginData['totalRawUsd']?.toString() ?? '',
+                  ) ??
+                  0,
             )
           : null;
 
@@ -132,10 +157,7 @@ class HyperliquidService {
     try {
       final response = await _dio.post(
         _infoUrl,
-        data: jsonEncode({
-          'type': 'openOrders',
-          'user': address.toLowerCase(),
-        }),
+        data: jsonEncode({'type': 'openOrders', 'user': address.toLowerCase()}),
       );
 
       if (response.data is! List) return [];
@@ -154,10 +176,7 @@ class HyperliquidService {
     try {
       final response = await _dio.post(
         _infoUrl,
-        data: jsonEncode({
-          'type': 'l2Book',
-          'coin': symbol,
-        }),
+        data: jsonEncode({'type': 'l2Book', 'coin': symbol}),
       );
 
       final data = response.data as Map<String, dynamic>?;
@@ -241,7 +260,9 @@ class HyperliquidService {
           'r': reduceOnly,
           't': {
             'limit': {
-              'tif': postOnly ? 'Alo' : 'Gtc', // Add Liquidity Only or Good til Cancel
+              'tif': postOnly
+                  ? 'Alo'
+                  : 'Gtc', // Add Liquidity Only or Good til Cancel
             },
           },
           'p': price.toStringAsFixed(1),
@@ -366,12 +387,15 @@ class PerpPosition {
   factory PerpPosition.fromJson(Map<String, dynamic> json) {
     final szi = double.tryParse(json['szi']?.toString() ?? '') ?? 0;
     final entryPx = double.tryParse(json['entryPx']?.toString() ?? '') ?? 0;
-    final positionValue = double.tryParse(json['positionValue']?.toString() ?? '') ?? 0;
-    final unrealizedPnl = double.tryParse(json['unrealizedPnl']?.toString() ?? '') ?? 0;
+    final positionValue =
+        double.tryParse(json['positionValue']?.toString() ?? '') ?? 0;
+    final unrealizedPnl =
+        double.tryParse(json['unrealizedPnl']?.toString() ?? '') ?? 0;
     final leverage = json['leverage'] as Map<String, dynamic>?;
     final levVal = double.tryParse(leverage?['value']?.toString() ?? '1') ?? 1;
     final liqPx = double.tryParse(json['liquidationPx']?.toString() ?? '') ?? 0;
-    final marginUsed = double.tryParse(json['marginUsed']?.toString() ?? '') ?? 0;
+    final marginUsed =
+        double.tryParse(json['marginUsed']?.toString() ?? '') ?? 0;
 
     return PerpPosition(
       symbol: json['coin'] as String? ?? '',
@@ -461,8 +485,7 @@ class ClearinghouseState {
 
   ClearinghouseState({required this.positions, this.margin});
 
-  factory ClearinghouseState.empty() =>
-      ClearinghouseState(positions: []);
+  factory ClearinghouseState.empty() => ClearinghouseState(positions: []);
 }
 
 /// Account margin summary.

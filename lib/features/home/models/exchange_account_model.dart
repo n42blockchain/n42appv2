@@ -34,14 +34,14 @@ class ExchangeAccountModel {
   }
 
   Map<String, dynamic> toJson() => {
-        'coin': coin,
-        'created': created,
-        'icon': icon,
-        'id': id,
-        'updated': updated,
-        'lock': lock,
-        'over': over,
-        'platform': platform,
-        'coinFullname': coinFullname,
-      };
+    'coin': coin,
+    'created': created,
+    'icon': icon,
+    'id': id,
+    'updated': updated,
+    'lock': lock,
+    'over': over,
+    'platform': platform,
+    'coinFullname': coinFullname,
+  };
 }

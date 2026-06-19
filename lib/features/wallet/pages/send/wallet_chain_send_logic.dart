@@ -17,6 +17,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
@@ -73,10 +74,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<String?> toAddressCheck(String addr);
   void closeKeyboard();
 
-  String get _coinType => coinModel.coin['coinType']?.toString() ?? '';
+  String get _coinType => coinModel.config.coinType;
   String get _blockchainType =>
-      coinModel.coin['blockchainType']?.toString() ?? '';
-  bool get _isContract => coinModel.coin['isContract'] == true;
+      coinModel.config.blockchainType;
+  bool get _isContract => coinModel.config.isContract;
   int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
   bool _ensureChainConfig() {
@@ -96,7 +97,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (_isContract) {
       final wap = ref.read(wapBridgeProvider);
       final idx = wap.coinModels.indexWhere((e) {
-        if (e.coin['coinType'] != _coinType) return false;
+        if (e.config.coinType != _coinType) return false;
         if (coinModel.privateKey != null) {
           return e.privateKey == coinModel.privateKey;
         }
@@ -124,7 +125,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
 
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final isOk = await fetchCoinBalance(coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final isOk = await fetchCoinBalance(
+      coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (isOk != false) return;
     errorMessage = S.current.g_key_t_44;
@@ -140,18 +145,19 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   /// 合约代币无自身 service 时，回退到父链（chainModel）的 RPC。
   String? _resolveRpc() {
     if (_blockchainType == BlockchainType.Ethereum.name) {
-      final source =
-          (_isContract && chainModel != null) ? chainModel!.coin : coinModel.coin;
-      final svc = (coinModel.isTest
-          ? source['service_test']
-          : source['service']) as String?;
+      final source = (_isContract && chainModel != null)
+          ? chainModel!.coin
+          : coinModel.coin;
+      final svc =
+          (coinModel.isTest ? source['service_test'] : source['service'])
+              as String?;
       if (svc != null && svc.isNotEmpty) return svc;
     }
     // 非 EVM 链 / service 为空时：自定义链返回配置 RPC，否则 null（走 N42 API）
-    if (coinModel.coin['custom'] != true) return null;
+    if (!coinModel.config.custom) return null;
     return coinModel.isTest
-        ? coinModel.coin['service_test']
-        : coinModel.coin['service'];
+        ? coinModel.config.serviceTest
+        : coinModel.config.service;
   }
 
   Future<void> getGasPrice() async {
@@ -448,8 +454,8 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       ..coinMiniName = _coinType
       ..walletIndex = ref.read(wapBridgeProvider).walletIndex
       ..contract = coinModel.isTest
-          ? coinModel.coin['contract_test']
-          : coinModel.coin['contract']
+          ? coinModel.config.contractTest
+          : coinModel.config.contract
       ..isTest = coinModel.isTest ? 1 : 0
       ..gasPrice = totalGasPrice
       ..gas = gas.toInt()
@@ -472,34 +478,36 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     bool completedWithExit = false;
     try {
       final addrType = coinModel.addrType;
-      final chainConfig =
-          _isContract ? (chainModel?.coin ?? coinModel.coin) : coinModel.coin;
+      final chainConfig = _isContract
+          ? (chainModel?.coin ?? coinModel.coin)
+          : coinModel.coin;
       final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath =
-          pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
       final nativeDecimals = _isContract
           ? ((chainModel?.coin['decimals'] as num?)?.toInt() ?? 18)
           : _decimals;
 
-      final result = await SenderFactory.instance.getSender(_coinType).send(
-        SendParams(
-          coinType: _coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), _decimals).toDouble(),
-          decimals: nativeDecimals,
-          path: path,
-          sendMax: false,
-          isTest: coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: _isContract ? _decimals : 0,
-          memo: trModel.message,
-          privateKey: coinModel.privateKey,
-          chainConfig: chainConfig,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(_coinType)
+          .send(
+            SendParams(
+              coinType: _coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), _decimals).toDouble(),
+              decimals: nativeDecimals,
+              path: path,
+              sendMax: false,
+              isTest: coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: _isContract ? _decimals : 0,
+              memo: trModel.message,
+              privateKey: coinModel.privateKey,
+              chainConfig: chainConfig,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {
@@ -534,7 +542,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (!isEthContract) return true;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ''));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.config.coinType ?? ''));
       return false;
     }
     return true;
@@ -549,15 +557,15 @@ Future<MessageModel> _callGasEstimateApi({
   required BigInt gasPrice,
   required BigInt gaslimit,
 }) async {
-  final coinType = coinModel.coin['coinType']?.toString() ?? '';
+  final coinType = coinModel.config.coinType;
   const noLatestChains = {'OKT', 'MTR', 'METIS', 'VIC', 'BOBA', 'OP', 'GO'};
 
   final decimals = (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
   final weiValue = ethToWeiString(price, decimals);
   final contract = coinModel.isTest
-      ? coinModel.coin['contract_test']
-      : coinModel.coin['contract'];
-  final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
+      ? coinModel.config.contractTest
+      : coinModel.config.contract;
+  final blockchainType = coinModel.config.blockchainType;
   if (coinType.isEmpty || blockchainType.isEmpty) {
     return MessageModel.error()..data = 'Invalid coin configuration';
   }
@@ -575,8 +583,8 @@ Future<MessageModel> _callGasEstimateApi({
   }
 
   final rpc = coinModel.isTest
-      ? coinModel.coin['service_test']
-      : coinModel.coin['service'];
+      ? coinModel.config.serviceTest
+      : coinModel.config.service;
   return EthAPI.init(null, rpc, null).getGasLimit(
     coinModel.address,
     toAddr,

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/core/constants/app_colors.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -19,8 +19,8 @@ class SettingSysLanguage extends ConsumerWidget {
       appBar: AppBarWidget(text: S.of(context).g_key_149),
       body: ListView.builder(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(16),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space4,
         ),
         itemCount: kSupportedLanguages.length,
         itemBuilder: (context, index) {
@@ -52,91 +52,90 @@ class _LanguageItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemBgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final mainTextColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final itemBgColor = AppColorTokens.of(context).bgSurface;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final subTextColor = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.ff888888.name,
     );
-    const accentColor = AppColors.primaryBlue;
+    final accentColor = AppColorTokens.of(context).brand;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(28),
-        ),
-        decoration: BoxDecoration(
-          color: itemBgColor,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          border: isSelected
-              ? Border.all(color: accentColor, width: 1.5)
-              : null,
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(4),
-              child: Image.asset(
-                lang.icon,
-                width: ScreenUtil().setWidth(48),
-                height: ScreenUtil().setWidth(34),
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(
-                  width: ScreenUtil().setWidth(48),
-                  height: ScreenUtil().setWidth(34),
-                  decoration: BoxDecoration(
-                    color: subTextColor.withAlpha(40),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Icon(
-                    Icons.language,
-                    size: 18,
-                    color: subTextColor,
+    return Padding(
+      padding: EdgeInsets.only(bottom: AppSpacing.space4),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: Ink(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space8,
+            ),
+            decoration: BoxDecoration(
+              color: itemBgColor,
+              borderRadius: AppRadius.brMd,
+              border: isSelected
+                  ? Border.all(color: accentColor, width: 1.5)
+                  : null,
+            ),
+            child: Row(
+              children: [
+                ClipRRect(
+                  borderRadius: AppRadius.brSm,
+                  child: Image.asset(
+                    lang.icon,
+                    width: ScreenUtil().setWidth(48),
+                    height: ScreenUtil().setWidth(34),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, _, _) => Container(
+                      width: ScreenUtil().setWidth(48),
+                      height: ScreenUtil().setWidth(34),
+                      decoration: BoxDecoration(
+                        color: subTextColor.withAlpha(40),
+                        borderRadius: AppRadius.brSm,
+                      ),
+                      child: Icon(
+                        Icons.language,
+                        size: 18,
+                        color: subTextColor,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(24)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    lang.name,
-                    style: TextStyle(
-                      color: mainTextColor,
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.normal,
-                    ),
+                SizedBox(width: AppSpacing.space6),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        lang.name,
+                        style: AppTypography.body.copyWith(
+                          color: mainTextColor,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
+                        ),
+                      ),
+                      SizedBox(height: AppSpacing.space2),
+                      Text(
+                        lang.englishName,
+                        style: AppTypography.caption.copyWith(
+                          color: subTextColor,
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
-                  Text(
-                    lang.englishName,
-                    style: TextStyle(
-                      color: subTextColor,
-                      fontSize: ScreenUtil().setSp(22),
-                    ),
+                ),
+                if (isSelected)
+                  Icon(
+                    Icons.check_circle,
+                    color: accentColor,
+                    size: ScreenUtil().setWidth(42),
                   ),
-                ],
-              ),
+              ],
             ),
-            if (isSelected)
-              Icon(
-                Icons.check_circle,
-                color: accentColor,
-                size: ScreenUtil().setWidth(42),
-              ),
-          ],
+          ),
         ),
       ),
     );

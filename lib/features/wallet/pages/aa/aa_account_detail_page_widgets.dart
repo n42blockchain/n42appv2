@@ -11,17 +11,14 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   // ─── Theme helpers ──────────────────────────────────────────────────
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   Color get _mainText => _themeColor(AppThemeKeys.mainTextColor.name);
   Color get _subText => _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
   Color get _itemBg => _themeColor(AppThemeKeys.itemBgColor.name);
 
-  BoxDecoration _sectionDecoration() => BoxDecoration(
-        color: _itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      );
+  BoxDecoration _sectionDecoration() =>
+      BoxDecoration(color: _itemBg, borderRadius: AppRadius.brMd);
 
   // ─── Account Card ─────────────────────────────────────────────────────
 
@@ -29,40 +26,36 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     final typeColor = _getAccountTypeColor();
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [typeColor.withAlpha(30), typeColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
           Row(
             children: [
               _buildAccountIcon(),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       widget.account.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w600,
                         color: _mainText,
                       ),
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                     Text(
                       widget.account.type.displayName,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: _subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: _subText),
                     ),
                   ],
                 ),
@@ -70,14 +63,14 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               DeploymentStatusIndicator(state: widget.account.state),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+            padding: EdgeInsets.all(AppSpacing.space4),
             decoration: BoxDecoration(
-              color: _themeColor(AppThemeKeys.backGroundColor.name)
-                  .withAlpha(100),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
+              color: _themeColor(
+                AppThemeKeys.backGroundColor.name,
+              ).withAlpha(100),
+              borderRadius: AppRadius.brMd,
             ),
             child: Row(
               children: [
@@ -87,16 +80,14 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     children: [
                       Text(
                         S.of(context).g_key_155,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(20),
+                        style: AppTypography.captionSm.copyWith(
                           color: _subText,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         widget.account.address,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           fontFamily: 'monospace',
                           color: _mainText,
                         ),
@@ -128,7 +119,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
       height: ScreenUtil().setWidth(64),
       decoration: BoxDecoration(
         color: typeColor.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Icon(
@@ -158,7 +149,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             onTap: onSend,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildActionButton(
             icon: Icons.qr_code,
@@ -167,7 +158,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
             onTap: onReceive,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildActionButton(
             icon: Icons.radar,
@@ -189,17 +180,17 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
     bool isLoading = false,
   }) {
     final isDisabled = onTap == null && !isLoading;
-    final effectiveColor = isDisabled ? Colors.grey : color;
+    final effectiveColor = isDisabled
+        ? AppColorTokens.of(context).textTertiary
+        : color;
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(16),
-        ),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: effectiveColor.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: effectiveColor.withAlpha(isDisabled ? 30 : 40),
           ),
@@ -221,13 +212,14 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 size: ScreenUtil().setWidth(28),
                 color: effectiveColor,
               ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: isDisabled ? Colors.grey : _mainText,
+                color: isDisabled
+                    ? AppColorTokens.of(context).textTertiary
+                    : _mainText,
               ),
             ),
           ],
@@ -240,24 +232,35 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   Widget buildDetailsSection() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_aa_account_details,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          _buildDetailRow(S.of(context).g_key_aa_chain_id, widget.account.chainId.toString()),
-          _buildDetailRow(S.of(context).g_key_aa_factory, _shortenAddress(widget.account.factoryAddress)),
-          _buildDetailRow(S.of(context).g_key_aa_owner, _shortenAddress(widget.account.ownerAddress)),
-          _buildDetailRow(S.of(context).g_key_aa_created, _formatDate(widget.account.createdAt)),
+          SizedBox(height: AppSpacing.space4),
+          _buildDetailRow(
+            S.of(context).g_key_aa_chain_id,
+            widget.account.chainId.toString(),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_factory,
+            _shortenAddress(widget.account.factoryAddress),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_owner,
+            _shortenAddress(widget.account.ownerAddress),
+          ),
+          _buildDetailRow(
+            S.of(context).g_key_aa_created,
+            _formatDate(widget.account.createdAt),
+          ),
           if (widget.account.lastActivityAt != null)
             _buildDetailRow(
               S.of(context).g_key_aa_last_activity,
@@ -274,17 +277,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: _subText,
-            ),
-          ),
+          Text(label, style: AppTypography.caption.copyWith(color: _subText)),
           Text(
             value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w500,
               color: _mainText,
             ),
@@ -298,7 +294,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
 
   Widget buildTransactionHistory() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _sectionDecoration(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -310,8 +306,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                 child: Text(
                   S.of(context).g_key_tran_1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _mainText,
                   ),
@@ -323,10 +318,12 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.symmetric(
+                vertical: AppSpacing.space6,
+              ),
               child: Column(
                 children: [
                   Icon(
@@ -334,13 +331,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                     size: ScreenUtil().setWidth(48),
                     color: _subText.withAlpha(100),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(12)),
+                  SizedBox(height: AppSpacing.space4),
                   Text(
                     S.of(context).g_key_132,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: _subText,
-                    ),
+                    style: AppTypography.caption.copyWith(color: _subText),
                   ),
                 ],
               ),

@@ -2,14 +2,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_gen_success.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -112,10 +112,7 @@ class _CreateFinishState extends ConsumerState<CreateFinish>
       },
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.backGroundColor.name,
-          ),
+          backgroundColor: AppColorTokens.of(context).bgBase,
           actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
           leadingWidth: ScreenUtil().setWidth(130.0),
           leading: const SizedBox(),

@@ -4,14 +4,12 @@ import 'package:flutter/services.dart';
 class NativeWebSocketBridge {
   final MethodChannel _methodChannel = const MethodChannel('trustdart_mining');
 
-  final EventChannel _eventChannel =
-  const EventChannel('trustdart_ws_events');
+  final EventChannel _eventChannel = const EventChannel('trustdart_ws_events');
 
   Stream<String>? _stream;
 
   Stream<String> get messages {
-    _stream ??=
-        _eventChannel.receiveBroadcastStream().map((e) => e.toString());
+    _stream ??= _eventChannel.receiveBroadcastStream().map((e) => e.toString());
     return _stream!;
   }
 

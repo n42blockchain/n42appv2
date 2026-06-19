@@ -96,13 +96,17 @@ class WalletInfo {
     coinInfo = json['coinInfo'] as Map<String, dynamic>?;
     coinSort = json['coinSort'] as Map<String, dynamic>;
     networkIndex = json['networkIndex'] as int;
-    pinnedCoins = ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? []).take(200).toList();
+    pinnedCoins =
+        ((json['pinnedCoins'] as List<dynamic>?)?.cast<String>() ?? [])
+            .take(200)
+            .toList();
     chainOrder = ((json['chainOrder'] as List<dynamic>?)?.cast<String>() ?? []);
     tags = ((json['tags'] as List<dynamic>?)?.cast<String>() ?? []);
     isMpc = (json['isMpc'] as bool?) ?? false;
     mpcProvider = json['mpcProvider'] as String?;
     mpcUserId = json['mpcUserId'] as String?;
-    mpcRecoveryFactors = ((json['mpcRecoveryFactors'] as List<dynamic>?)?.cast<String>() ?? []);
+    mpcRecoveryFactors =
+        ((json['mpcRecoveryFactors'] as List<dynamic>?)?.cast<String>() ?? []);
     faceBinding = json['faceBinding'] as bool?;
     mainWallet = json['mainWallet'] as bool;
     watchOnly = (json['watchOnly'] as bool?) ?? false;
@@ -279,7 +283,11 @@ class WalletInfo {
   }
 
   /// Update a smart account's state
-  void updateSmartAccountState(String address, int chainId, SmartAccountState newState) {
+  void updateSmartAccountState(
+    String address,
+    int chainId,
+    SmartAccountState newState,
+  ) {
     final accounts = aaAccountInfo?.smartAccounts[chainId];
     if (accounts == null) return;
 

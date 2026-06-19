@@ -140,14 +140,13 @@ class BatchTransferApi {
           'value': params.totalValue == BigInt.zero
               ? '0x0'
               : '0x${params.totalValue.toRadixString(16)}',
-        }
+        },
       ]);
 
       if (response['result'] != null) {
         final gasLimit = _hexToBigInt(response['result'].toString());
         // 增加 30% 安全边际（批量交易更复杂）
-        final safeGasLimit =
-            gasLimit * BigInt.from(130) ~/ BigInt.from(100);
+        final safeGasLimit = gasLimit * BigInt.from(130) ~/ BigInt.from(100);
         return MessageModel()..data = safeGasLimit;
       }
 
@@ -177,19 +176,20 @@ class BatchTransferApi {
       tokenAddress: tokenAddress,
       items: items,
     );
-    final gasLimit =
-        gasLimitResult.data as BigInt? ?? BigInt.from(500000);
+    final gasLimit = gasLimitResult.data as BigInt? ?? BigInt.from(500000);
 
     // 尝试 EIP-1559
     try {
-      final feeResponse =
-          await _rpcCall(rpcUrl, 'eth_feeHistory', [4, 'latest', <int>[25, 50, 75]]);
+      final feeResponse = await _rpcCall(rpcUrl, 'eth_feeHistory', [
+        4,
+        'latest',
+        <int>[25, 50, 75],
+      ]);
       if (feeResponse['result'] != null) {
         final baseFeeHistory =
             feeResponse['result']['baseFeePerGas'] as List<dynamic>?;
         if (baseFeeHistory != null && baseFeeHistory.isNotEmpty) {
-          final latestBaseFee =
-              _hexToBigInt(baseFeeHistory.last.toString());
+          final latestBaseFee = _hexToBigInt(baseFeeHistory.last.toString());
           final maxPriorityBig = BigInt.from(1500000000); // 1.5 Gwei
           final maxFee = latestBaseFee * BigInt.from(2) + maxPriorityBig;
           return BatchGasEstimate(
@@ -208,11 +208,13 @@ class BatchTransferApi {
 
     // Legacy gas price
     try {
-      final gasPriceResponse =
-          await _rpcCall(rpcUrl, 'eth_gasPrice', <dynamic>[]);
+      final gasPriceResponse = await _rpcCall(
+        rpcUrl,
+        'eth_gasPrice',
+        <dynamic>[],
+      );
       if (gasPriceResponse['result'] != null) {
-        final gasPrice =
-            _hexToBigInt(gasPriceResponse['result'].toString());
+        final gasPrice = _hexToBigInt(gasPriceResponse['result'].toString());
         return BatchGasEstimate(
           gasLimit: gasLimit,
           gasPrice: gasPrice,
@@ -288,8 +290,10 @@ class BatchTransferApi {
   /// 获取 nonce
   Future<int> getNonce(String rpcUrl, String address) async {
     try {
-      final response =
-          await _rpcCall(rpcUrl, 'eth_getTransactionCount', [address, 'pending']);
+      final response = await _rpcCall(rpcUrl, 'eth_getTransactionCount', [
+        address,
+        'pending',
+      ]);
       if (response['result'] != null) {
         return _hexToBigInt(response['result'].toString()).toInt();
       }
@@ -301,10 +305,13 @@ class BatchTransferApi {
 
   /// 广播交易
   Future<MessageModel> broadcastTransaction(
-      String rpcUrl, String signedTx) async {
+    String rpcUrl,
+    String signedTx,
+  ) async {
     try {
-      final response =
-          await _rpcCall(rpcUrl, 'eth_sendRawTransaction', [signedTx]);
+      final response = await _rpcCall(rpcUrl, 'eth_sendRawTransaction', [
+        signedTx,
+      ]);
       if (response['result'] != null) {
         return MessageModel()..data = response['result'].toString();
       } else if (response['error'] != null) {

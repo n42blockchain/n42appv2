@@ -4,15 +4,15 @@ import 'dart:typed_data';
 import 'package:cryptography/cryptography.dart';
 
 /// 加密密钥数据
-/// 
+///
 /// [data] 要加密的数据对象，包含：
 ///   - privateKey: 私钥
 ///   - mnemonicWords: 助记词
 ///   - validator: 验证器对象（包含 privateKey 和 publicKey）
 /// [password] 用户密码，用于派生加密密钥
-/// 
+///
 /// 返回 JSON 格式的加密数据，包含版本、时间戳、KDF 参数、加密参数和密文
-/// 
+///
 /// 数据结构示例：
 /// {
 ///   "privateKey": "",
@@ -36,8 +36,12 @@ Future<String> encryptSecret({
     }
 
     final random = Random.secure();
-    final salt = Uint8List.fromList(List<int>.generate(16, (_) => random.nextInt(256)));
-    final iv = Uint8List.fromList(List<int>.generate(12, (_) => random.nextInt(256)));
+    final salt = Uint8List.fromList(
+      List<int>.generate(16, (_) => random.nextInt(256)),
+    );
+    final iv = Uint8List.fromList(
+      List<int>.generate(12, (_) => random.nextInt(256)),
+    );
 
     final pbkdf2 = Pbkdf2(
       macAlgorithm: Hmac.sha256(),
@@ -64,14 +68,11 @@ Future<String> encryptSecret({
 
       "kdf": {
         "name": "pbkdf2",
-        "params": { "iterations": 150000, "dklen": 32 },
-        "salt": base64Encode(salt)
+        "params": {"iterations": 150000, "dklen": 32},
+        "salt": base64Encode(salt),
       },
 
-      "cipher": {
-        "name": "aes-256-gcm",
-        "iv": base64Encode(iv)
-      },
+      "cipher": {"name": "aes-256-gcm", "iv": base64Encode(iv)},
 
       "ciphertext": base64Encode(encrypted.cipherText),
       "tag": base64Encode(encrypted.mac.bytes),
@@ -83,15 +84,15 @@ Future<String> encryptSecret({
 }
 
 /// 解密密钥数据
-/// 
+///
 /// [encryptedData] 加密后的 JSON 字符串（由 encryptSecret 生成）
 /// [password] 用户密码，用于派生解密密钥
-/// 
+///
 /// 返回解密后的数据对象，包含：
 ///   - privateKey: 私钥
 ///   - mnemonicWords: 助记词
 ///   - validator: 验证器对象（包含 privateKey 和 publicKey）
-/// 
+///
 /// 抛出异常如果：
 /// - 密码错误
 /// - 加密数据格式不正确
@@ -100,7 +101,9 @@ Future<Map<String, dynamic>> decryptSecret({
   required String encryptedData,
   required String password,
 }) async {
-  if (encryptedData.isEmpty) throw ArgumentError('encryptedData must not be empty');
+  if (encryptedData.isEmpty) {
+    throw ArgumentError('encryptedData must not be empty');
+  }
   if (password.isEmpty) throw ArgumentError('password must not be empty');
 
   try {

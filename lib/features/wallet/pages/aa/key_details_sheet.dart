@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 
@@ -15,10 +15,9 @@ class KeyDetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         borderRadius: BorderRadius.vertical(
           top: Radius.circular(ScreenUtil().setWidth(24)),
         ),
@@ -32,40 +31,48 @@ class KeyDetailsSheet extends StatelessWidget {
               width: ScreenUtil().setWidth(40),
               height: ScreenUtil().setWidth(4),
               decoration: BoxDecoration(
-                color: Colors.grey.withAlpha(50),
+                color: AppColorTokens.of(context).textTertiary.withAlpha(50),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_session_details,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           _row(context, S.of(context).g_key_aa_label, keyData.label),
-          _row(context, S.of(context).g_key_aa_permission,
-              _permLabel(context, keyData.permission)),
-          _row(context, S.of(context).g_key_aa_created,
-              _date(keyData.createdAt)),
-          _row(context, S.of(context).g_key_aa_expires,
-              _date(keyData.expiresAt)),
-          _row(context, S.of(context).g_key_aa_transactions,
-              '${keyData.transactionCount ?? 0}'),
+          _row(
+            context,
+            S.of(context).g_key_aa_permission,
+            _permLabel(context, keyData.permission),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_created,
+            _date(keyData.createdAt),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_expires,
+            _date(keyData.expiresAt),
+          ),
+          _row(
+            context,
+            S.of(context).g_key_aa_transactions,
+            '${keyData.transactionCount ?? 0}',
+          ),
           if (keyData.spendingToken != null && keyData.spendingLimit != null)
             _row(
               context,
               S.of(context).g_key_aa_spending_limit,
               '${_formatBigInt(keyData.spendingLimit!, 18)} ${keyData.spendingToken}',
             ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
         ],
       ),
     );
@@ -73,30 +80,22 @@ class KeyDetailsSheet extends StatelessWidget {
 
   Widget _row(BuildContext context, String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           Flexible(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               textAlign: TextAlign.end,
             ),
@@ -113,8 +112,7 @@ class KeyDetailsSheet extends StatelessWidget {
         SessionKeyPermission.approve => S.of(context).g_key_aa_approve,
         SessionKeyPermission.contractCall =>
           S.of(context).g_key_aa_session_preset_contract,
-        SessionKeyPermission.full =>
-          S.of(context).g_key_aa_session_preset_full,
+        SessionKeyPermission.full => S.of(context).g_key_aa_session_preset_full,
       };
 
   static String _date(DateTime d) =>

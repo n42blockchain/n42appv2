@@ -39,7 +39,9 @@ abstract class MiningRepository {
   });
 
   /// Get mining rewards
-  Future<Either<Failure, MiningRewardsEntity>> getMiningRewards(String walletAddress);
+  Future<Either<Failure, MiningRewardsEntity>> getMiningRewards(
+    String walletAddress,
+  );
 
   /// Claim mining rewards
   Future<Either<Failure, String>> claimRewards({
@@ -48,7 +50,9 @@ abstract class MiningRepository {
   });
 
   /// Get mining statistics
-  Future<Either<Failure, MiningStatisticsEntity>> getMiningStatistics(String walletAddress);
+  Future<Either<Failure, MiningStatisticsEntity>> getMiningStatistics(
+    String walletAddress,
+  );
 
   /// Get full node (beacon validator) info by validator public key.
   ///
@@ -58,4 +62,3 @@ abstract class MiningRepository {
   /// Subscribe to mining status updates
   Stream<MiningStatusEntity> get miningStatusStream;
 }
-

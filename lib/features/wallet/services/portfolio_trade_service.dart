@@ -19,8 +19,7 @@ class PortfolioTradeService {
   }
 
   /// All trades for a given [coinId], ordered by buy-time ascending.
-  static Future<List<PortfolioTrade>> getTradesForCoin(
-      String coinId) async {
+  static Future<List<PortfolioTrade>> getTradesForCoin(String coinId) async {
     if (coinId.isEmpty) return [];
     final db = await AppDatabase().database;
     final rows = await db.query(
@@ -41,8 +40,7 @@ class PortfolioTradeService {
   /// All trades across all coins, newest first.
   static Future<List<PortfolioTrade>> getAllTrades() async {
     final db = await AppDatabase().database;
-    final rows =
-        await db.query(_table, orderBy: 'buy_time_ms DESC');
+    final rows = await db.query(_table, orderBy: 'buy_time_ms DESC');
     return rows.map(PortfolioTrade.fromDb).toList();
   }
 }

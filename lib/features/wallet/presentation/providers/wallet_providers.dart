@@ -9,7 +9,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart' show spUtilProvider;
+import 'package:n42_wallet/core/providers/core_providers.dart'
+    show spUtilProvider;
 export 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 

@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -64,8 +65,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
 
     // If face/biometric lock is enabled, require auth before showing page content.
     if (securityMap['face'] == true) {
-      final result =
-          await FaceRecognitionPublic().authenticateWithBiometrics();
+      final result = await FaceRecognitionPublic().authenticateWithBiometrics();
       if (!mounted) return;
       if (result == BiometricAuthResult.success) {
         setState(() => _pageAccessGranted = true);
@@ -107,7 +107,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
       appBar: AppBarWidget(text: S.of(context).s_key_11),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -117,12 +117,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   S.of(context).g_lock_key26,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(30.0),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -132,13 +128,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   bottom: ScreenUtil().setWidth(20.0),
                 ),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemBgColor.name,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(16.0),
-                  ),
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -167,12 +158,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_lock_key27,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),
@@ -189,12 +176,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                               flex: 1,
                               child: Text(
                                 S.of(context).g_lock_key7,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.errorTextColor.name,
-                                  ),
+                                style: AppTypography.body.copyWith(
+                                  color: AppColorTokens.of(context).danger,
                                 ),
                               ),
                             ),
@@ -208,12 +191,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 S.of(context).g_face_5,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ),
+                                style: AppTypography.body.copyWith(
+                                  color: AppColorTokens.of(context).brand,
                                 ),
                               ),
                             ),
@@ -258,12 +237,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_lock_key29,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),
@@ -283,7 +258,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                   context,
                                   MaterialPageRoute(
                                     builder: (_) => GesturePasswordPage(
-                                      oldPassword: securityMap['gesturePwd'] as String,
+                                      oldPassword:
+                                          securityMap['gesturePwd'] as String,
                                     ),
                                   ),
                                 );
@@ -297,12 +273,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                                 S.of(context).g_lock_key22,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontSize: ScreenUtil().setSp(28),
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ),
+                                style: AppTypography.body.copyWith(
+                                  color: AppColorTokens.of(context).brand,
                                 ),
                               ),
                             ),
@@ -347,12 +319,8 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       ),
                       child: Text(
                         S.of(context).g_google_auth_key5,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24.0),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),

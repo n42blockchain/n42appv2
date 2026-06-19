@@ -7,32 +7,31 @@ part of 'profile_home_page.dart';
 
 /// Widget builder methods and navigation for [ProfileHomePage].
 extension _ProfileHomePageWidgets on ProfileHomePage {
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Container(
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              color: AppColorTokens.of(context).bgSurface,
+              borderRadius: AppRadius.brMd,
             ),
             child: Column(children: children),
           ),
@@ -53,9 +52,9 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         child: Row(
           children: [
             // 图标
@@ -64,11 +63,11 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
               height: ScreenUtil().setWidth(48),
               decoration: BoxDecoration(
                 color: color.withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Icon(icon, color: color, size: ScreenUtil().setWidth(28)),
             ),
-            SizedBox(width: ScreenUtil().setWidth(16)),
+            SizedBox(width: AppSpacing.space4),
 
             // 内容
             Expanded(
@@ -79,32 +78,26 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                     children: [
                       Text(
                         title,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w500,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                       if (isNew) ...[
-                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        SizedBox(width: AppSpacing.space2),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: ScreenUtil().setWidth(8),
-                            vertical: ScreenUtil().setWidth(2),
+                            horizontal: AppSpacing.space2,
+                            vertical: AppSpacing.space2,
                           ),
                           decoration: BoxDecoration(
-                            color: Colors.green,
-                            borderRadius:
-                                BorderRadius.circular(ScreenUtil().setWidth(6)),
+                            color: AppColorTokens.of(context).success,
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             'NEW',
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(18),
-                              fontWeight: FontWeight.bold,
+                            style: AppTypography.captionSm.copyWith(
+                              fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
                           ),
@@ -112,15 +105,11 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                       ],
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(2)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],
@@ -130,14 +119,11 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
             // 尾部
             if (trailing != null) ...[
               trailing,
-              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(width: AppSpacing.space2),
             ],
             Icon(
               Icons.chevron_right,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
               size: ScreenUtil().setWidth(28),
             ),
           ],

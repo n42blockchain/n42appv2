@@ -8,6 +8,7 @@ import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
 import 'package:n42_wallet/features/browser/provider/browser_provider.dart';
 import 'package:n42_wallet/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_sheet.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';

@@ -8,6 +8,8 @@
 // three separate `if (roomId != null || dataType.startsWith('m.call.'))`
 // blocks staying in lockstep across the FG / BG / cold-start handlers.
 
+import 'dart:convert';
+
 /// FCM `data` payload keys for chat / Matrix events. Centralized here so
 /// any future backend rename surfaces at one call site instead of being
 /// fanned out across the four push handlers.
@@ -68,4 +70,32 @@ String? extractChatRoomId(Map<String, dynamic> data) {
 String? extractChatEventId(Map<String, dynamic> data) {
   final value = data[pushDataKeyEventId];
   return value is String && value.isNotEmpty ? value : null;
+}
+
+/// Decoded local-notification payload routed to the chat module.
+typedef ChatNotificationRoute = ({String roomId, String? eventId});
+
+/// Decodes a local-notification JSON [payload] and returns the chat
+/// route when it carries a non-empty `room_id`, else null (host-owned
+/// payload or malformed JSON).
+///
+/// Used by the host's local-notification tap handler: before `n42_chat`
+/// finishes initializing, taps on chat local notifications land on the
+/// host callback, and must be queued for the chat module instead of
+/// being fed into host navigation.
+ChatNotificationRoute? tryExtractChatRouteFromPayload(String payload) {
+  Object? decoded;
+  try {
+    decoded = json.decode(payload);
+  } catch (_) {
+    return null;
+  }
+  if (decoded is! Map<String, dynamic>) {
+    return null;
+  }
+  final roomId = extractChatRoomId(decoded);
+  if (roomId == null) {
+    return null;
+  }
+  return (roomId: roomId, eventId: extractChatEventId(decoded));
 }

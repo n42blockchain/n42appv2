@@ -38,10 +38,7 @@ class BridgeChain {
       'key': key,
       'name': name,
       'logoURI': logoUri,
-      'nativeToken': {
-        'symbol': nativeToken,
-        'decimals': nativeDecimals,
-      },
+      'nativeToken': {'symbol': nativeToken, 'decimals': nativeDecimals},
     };
   }
 }
@@ -198,7 +195,8 @@ class BridgeRoute {
   });
 
   factory BridgeRoute.fromJson(Map<String, dynamic> json) {
-    final steps = (json['steps'] as List<dynamic>?)
+    final steps =
+        (json['steps'] as List<dynamic>?)
             ?.map((s) => BridgeRouteStep.fromJson(s as Map<String, dynamic>))
             .toList() ??
         [];
@@ -236,10 +234,7 @@ class BridgeQuoteResponse {
   final List<BridgeRoute> routes;
   final String? error;
 
-  BridgeQuoteResponse({
-    required this.routes,
-    this.error,
-  });
+  BridgeQuoteResponse({required this.routes, this.error});
 
   factory BridgeQuoteResponse.fromJson(Map<String, dynamic> json) {
     if (json['routes'] == null) {
@@ -295,11 +290,7 @@ class BridgeTransactionResponse {
   final Map<String, dynamic>? txData;
   final String? error;
 
-  BridgeTransactionResponse({
-    this.transactionRequest,
-    this.txData,
-    this.error,
-  });
+  BridgeTransactionResponse({this.transactionRequest, this.txData, this.error});
 
   factory BridgeTransactionResponse.fromJson(Map<String, dynamic> json) {
     if (json['transactionRequest'] == null) {
@@ -318,12 +309,7 @@ class BridgeTransactionResponse {
 }
 
 /// 跨链桥交易状态
-enum BridgeTransactionStatus {
-  pending,
-  inProgress,
-  completed,
-  failed,
-}
+enum BridgeTransactionStatus { pending, inProgress, completed, failed }
 
 /// 跨链桥交易记录
 class BridgeTransaction {
@@ -369,7 +355,9 @@ class BridgeTransaction {
       fromAddress: json['fromAddress'] ?? '',
       toAddress: json['toAddress'] ?? '',
       status: BridgeTransactionStatus.values[json['status'] ?? 0],
-      createdAt: DateTime.parse(json['createdAt'] ?? DateTime.now().toIso8601String()),
+      createdAt: DateTime.parse(
+        json['createdAt'] ?? DateTime.now().toIso8601String(),
+      ),
       bridgeTool: json['bridgeTool'],
       destinationTxHash: json['destinationTxHash'],
     );
@@ -441,13 +429,20 @@ class BridgeChainIds {
 
   /// 名称/别名 -> 链 ID 查表
   static const _nameToId = <String, int>{
-    'eth': ethereum, 'ethereum': ethereum,
-    'op': optimism, 'optimism': optimism,
-    'bnb': bsc, 'bsc': bsc,
-    'matic': polygon, 'polygon': polygon,
-    'ftm': fantom, 'fantom': fantom,
-    'arb': arbitrum, 'arbitrum': arbitrum,
-    'avax': avalanche, 'avalanche': avalanche,
+    'eth': ethereum,
+    'ethereum': ethereum,
+    'op': optimism,
+    'optimism': optimism,
+    'bnb': bsc,
+    'bsc': bsc,
+    'matic': polygon,
+    'polygon': polygon,
+    'ftm': fantom,
+    'fantom': fantom,
+    'arb': arbitrum,
+    'arbitrum': arbitrum,
+    'avax': avalanche,
+    'avalanche': avalanche,
     'base': base,
     'linea': linea,
     'scroll': scroll,
@@ -474,6 +469,5 @@ class BridgeChainIds {
       _nameToId[chainName.toLowerCase()];
 
   /// 获取链名称
-  static String getChainName(int chainId) =>
-      _idToName[chainId] ?? 'Unknown';
+  static String getChainName(int chainId) => _idToName[chainId] ?? 'Unknown';
 }

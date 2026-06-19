@@ -8,7 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -21,31 +22,31 @@ part 'wallet_receive_qr_content.dart';
 
 // ─── 各链品牌色（keyed by coinType）──────────────────────────────────────────
 const Map<String, Color> _kChainColors = {
-  'N':     Color(0xFF1E5EFF),
-  'ETH':   Color(0xFF627EEA),
-  'BTC':   Color(0xFFF7931A),
-  'BNB':   Color(0xFFF0B90B),
-  'SOL':   Color(0xFF9945FF),
-  'ARB':   Color(0xFF28A0F0),
-  'OP':    Color(0xFFFF0420),
-  'BASE':  Color(0xFF0052FF),
-  'AVAX':  Color(0xFFE84142),
+  'N': Color(0xFF1E5EFF),
+  'ETH': Color(0xFF627EEA),
+  'BTC': Color(0xFFF7931A),
+  'BNB': Color(0xFFF0B90B),
+  'SOL': Color(0xFF9945FF),
+  'ARB': Color(0xFF28A0F0),
+  'OP': Color(0xFFFF0420),
+  'BASE': Color(0xFF0052FF),
+  'AVAX': Color(0xFFE84142),
   'MATIC': Color(0xFF8247E5),
-  'TON':   Color(0xFF0098EA),
-  'TRX':   Color(0xFFEF0027),
-  'XRP':   Color(0xFF346AA9),
-  'ATOM':  Color(0xFF6F6F76),
-  'DOT':   Color(0xFFE6007A),
-  'FIL':   Color(0xFF0090FF),
-  'SUI':   Color(0xFF6FBCF0),
-  'APT':   Color(0xFF2DC17B),
-  'ALGO':  Color(0xFF1B1B1B),
-  'XTZ':   Color(0xFF2C7DF7),
-  'LTC':   Color(0xFFA6A9AA),
-  'DOGE':  Color(0xFFBA9F33),
-  'NEAR':  Color(0xFF3DC28E),
-  'ZIL':   Color(0xFF29CCC4),
-  'ETC':   Color(0xFF328432),
+  'TON': Color(0xFF0098EA),
+  'TRX': Color(0xFFEF0027),
+  'XRP': Color(0xFF346AA9),
+  'ATOM': Color(0xFF6F6F76),
+  'DOT': Color(0xFFE6007A),
+  'FIL': Color(0xFF0090FF),
+  'SUI': Color(0xFF6FBCF0),
+  'APT': Color(0xFF2DC17B),
+  'ALGO': Color(0xFF1B1B1B),
+  'XTZ': Color(0xFF2C7DF7),
+  'LTC': Color(0xFFA6A9AA),
+  'DOGE': Color(0xFFBA9F33),
+  'NEAR': Color(0xFF3DC28E),
+  'ZIL': Color(0xFF29CCC4),
+  'ETC': Color(0xFF328432),
 };
 
 final _amountInputRegex = RegExp(r'^\d*\.?\d*');
@@ -60,15 +61,15 @@ String _buildQrData({
   if (trimmed.isEmpty) return address;
 
   final prefix = switch (blockchainType) {
-    'Ethereum'       => 'ethereum:$address?value=',
-    'Bitcoin'        => 'bitcoin:$address?amount=',
-    'Solana'         => 'solana:$address?amount=',
+    'Ethereum' => 'ethereum:$address?value=',
+    'Bitcoin' => 'bitcoin:$address?amount=',
+    'Solana' => 'solana:$address?amount=',
     'TheOpenNetwork' => 'ton:transfer/$address?amount=',
-    'Tron'           => 'tron:$address?amount=',
-    'Ripple'         => 'xrpl:$address?amount=',
-    'Cosmos'         => 'cosmos:$address?amount=',
-    'Near'           => 'near:$address?amount=',
-    _                => '$address?amount=',
+    'Tron' => 'tron:$address?amount=',
+    'Ripple' => 'xrpl:$address?amount=',
+    'Cosmos' => 'cosmos:$address?amount=',
+    'Near' => 'near:$address?amount=',
+    _ => '$address?amount=',
   };
   return '$prefix$trimmed';
 }
@@ -89,7 +90,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   String logoUrl = '';
   String network = '';
   String address = '';
-  String coinType = '';       // 主链 coinType（用于颜色标签）
+  String coinType = ''; // 主链 coinType（用于颜色标签）
   String blockchainType = ''; // 主链区块链类型（用于 URI 生成）
   String qrData = '';
 
@@ -124,12 +125,12 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   /// [displayModel] 用于显示属性（miniName/address），默认同 chainModel。
   void _applyChainData(CoinModel chainModel, {CoinModel? displayModel}) {
     final dm = displayModel ?? chainModel;
-    network = chainModel.coin['name'] ?? '';
-    logoUrl = chainModel.coin['icon'] ?? '';
-    blockchainType = chainModel.coin['blockchainType'] ?? '';
+    network = chainModel.config.name;
+    logoUrl = chainModel.config.icon;
+    blockchainType = chainModel.config.blockchainType;
     // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
-    coinType = chainModel.coin['coinType'] ?? '';
-    symbol = dm.coin['miniName'] ?? '';
+    coinType = chainModel.config.coinType;
+    symbol = dm.config.miniName;
     address = dm.address;
     qrData = address;
   }
@@ -171,25 +172,26 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   Future<void> _shareScreenshot() async {
     try {
-      final boundary = previewKey.currentContext!.findRenderObject()
-          as RenderRepaintBoundary;
+      final boundary =
+          previewKey.currentContext!.findRenderObject()
+              as RenderRepaintBoundary;
       final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       if (byteData == null) return;
       final bytes = byteData.buffer.asUint8List();
 
       final tempDir = await getTemporaryDirectory();
-      final file = await File('${tempDir.path}/receive_qr.png')
-          .create(recursive: true);
+      final file = await File(
+        '${tempDir.path}/receive_qr.png',
+      ).create(recursive: true);
       await file.writeAsBytes(bytes);
 
       if (!mounted) return;
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path, mimeType: 'image/png')],
-          subject: S.of(context).g_key_156,   // "Scan to copy address"
-          text: S.of(context).g_key_179,       // "This is my wallet address"
+          subject: S.of(context).g_key_156, // "Scan to copy address"
+          text: S.of(context).g_key_179, // "This is my wallet address"
         ),
       );
     } catch (e) {
@@ -212,8 +214,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   // ─── 链品牌色 ───────────────────────────────────────────────────────────────
 
-  Color get chainColor =>
-      _kChainColors[coinType] ?? const Color(0xFF6C7689);
+  Color get chainColor => _kChainColors[coinType] ?? const Color(0xFF6C7689);
 
   // ─── Build ──────────────────────────────────────────────────────────────────
 
@@ -222,12 +223,9 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     final waValue = ref.watch(wapBridgeProvider);
     final su = ScreenUtil();
 
-    final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = AppColorTokens.of(context).bgBase;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
     final w40 = su.setWidth(40.0);
 
     return Scaffold(
@@ -239,7 +237,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
             child: Container(
               width: w40,
               height: w40,
-              margin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+              margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               child: Icon(Icons.share, size: w40, color: blueColor),
             ),
           ),
@@ -247,12 +245,12 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: su.setWidth(24)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
           child: Column(
             children: [
               // ── 链选择器（不进截图）
               buildChainSelector(waValue.coinModels, blueColor, mainText),
-              SizedBox(height: su.setWidth(20)),
+              SizedBox(height: AppSpacing.space6),
 
               // ── QR 卡片
               buildQrCard(
@@ -263,10 +261,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
               ),
 
               // ── 交互区
-              buildInteractionArea(
-                mainText: mainText,
-                blueColor: blueColor,
-              ),
+              buildInteractionArea(mainText: mainText, blueColor: blueColor),
             ],
           ),
         ),

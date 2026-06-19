@@ -30,9 +30,9 @@ class SmartAccountFactory {
     required String ownerAddress,
     required int chainId,
     AAChainConfig? config,
-  })  : _ownerAddress = ownerAddress.toLowerCase(),
-        _chainId = chainId,
-        _config = config ?? AAConfig.getChainConfig(_chainIdToSymbol(chainId))!;
+  }) : _ownerAddress = ownerAddress.toLowerCase(),
+       _chainId = chainId,
+       _config = config ?? AAConfig.getChainConfig(_chainIdToSymbol(chainId))!;
 
   /// Get the owner address
   String get ownerAddress => _ownerAddress;
@@ -44,9 +44,7 @@ class SmartAccountFactory {
   ///
   /// Uses eth_call to factory.getAddress(owner, salt) via the bundler RPC,
   /// which is the most reliable method.
-  Future<String> calculateSimpleAccountAddress({
-    BigInt? salt,
-  }) async {
+  Future<String> calculateSimpleAccountAddress({BigInt? salt}) async {
     final accountSalt = salt ?? BigInt.zero;
     final rpcUrl = _config.bundlerUrl;
 
@@ -104,7 +102,8 @@ class SmartAccountFactory {
 
       case SmartAccountType.biconomy:
         final helper = BiconomyAccountHelper(
-          factoryAddress: _config.biconomyFactory ?? AAConfig.biconomyNexusFactory,
+          factoryAddress:
+              _config.biconomyFactory ?? AAConfig.biconomyNexusFactory,
           k1ValidatorAddress: AAConfig.biconomyK1Validator,
           entryPointAddress: _config.entryPoint,
         );
@@ -171,7 +170,9 @@ class SmartAccountFactory {
     // Simplified CREATE2-like calculation
     // In production, this should match the factory's getAddress function
 
-    final ownerBytes = hexToBytes(_ownerAddress.replaceFirst('0x', '').padLeft(40, '0'));
+    final ownerBytes = hexToBytes(
+      _ownerAddress.replaceFirst('0x', '').padLeft(40, '0'),
+    );
     final saltBytes = Uint8List(32);
     final saltValueBytes = intToBytes(salt);
     if (saltValueBytes.isNotEmpty) {
@@ -180,7 +181,9 @@ class SmartAccountFactory {
 
     // Combine factory + owner + salt for deterministic address
     final combined = Uint8List(20 + 20 + 32);
-    final factoryBytes = hexToBytes(_config.simpleAccountFactory.replaceFirst('0x', ''));
+    final factoryBytes = hexToBytes(
+      _config.simpleAccountFactory.replaceFirst('0x', ''),
+    );
     combined.setAll(0, factoryBytes);
     combined.setAll(20, ownerBytes);
     combined.setAll(40, saltBytes);

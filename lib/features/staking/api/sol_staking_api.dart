@@ -13,7 +13,8 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 /// Solana 原生质押允许用户将 SOL 委托给验证者
 class SolStakingApi {
   static const String _mainnetRpc = 'https://api.mainnet-beta.solana.com';
-  static const String _stakeProgramId = 'Stake11111111111111111111111111111111111111';
+  static const String _stakeProgramId =
+      'Stake11111111111111111111111111111111111111';
 
   static const Map<String, String> _headers = {
     'Content-Type': 'application/json',
@@ -24,13 +25,11 @@ class SolStakingApi {
   }
 
   /// 构建 JSON-RPC 请求体
-  Map<String, dynamic> _rpcBody(String method, [List<dynamic> params = const []]) {
-    return {
-      'jsonrpc': '2.0',
-      'id': 1,
-      'method': method,
-      'params': params,
-    };
+  Map<String, dynamic> _rpcBody(
+    String method, [
+    List<dynamic> params = const [],
+  ]) {
+    return {'jsonrpc': '2.0', 'id': 1, 'method': method, 'params': params};
   }
 
   /// 执行 JSON-RPC 调用
@@ -47,10 +46,7 @@ class SolStakingApi {
   /// 构建质押交易成功的 MessageModel
   MessageModel _buildTxResponse(Map<String, dynamic> txData) {
     return MessageModel()
-      ..data = StakingTransactionResponse.success(
-        txHash: '',
-        txData: txData,
-      );
+      ..data = StakingTransactionResponse.success(txHash: '', txData: txData);
   }
 
   /// 获取验证者列表
@@ -71,15 +67,18 @@ class SolStakingApi {
 
           return Validator(
             address: v['votePubkey'] ?? '',
-            name: shortenStakingAddress(v['votePubkey'] ?? '',
-                prefixLen: 6, suffixLen: 4),
+            name: shortenStakingAddress(
+              v['votePubkey'] ?? '',
+              prefixLen: 6,
+              suffixLen: 4,
+            ),
             description: 'Solana Validator',
             logoUri: '',
             commission: commission.toDouble(),
             apy: apy,
             totalStaked:
                 BigInt.tryParse(v['activatedStake']?.toString() ?? '0') ??
-                    BigInt.zero,
+                BigInt.zero,
             delegatorCount: 0, // 无法从此 API 获取
             isActive: true,
             uptime: 100.0,
@@ -104,10 +103,7 @@ class SolStakingApi {
           'encoding': 'jsonParsed',
           'filters': [
             {
-              'memcmp': {
-                'offset': 12,
-                'bytes': walletAddress,
-              },
+              'memcmp': {'offset': 12, 'bytes': walletAddress},
             },
           ],
         },
@@ -130,15 +126,15 @@ class SolStakingApi {
 
           final stakeAmount =
               BigInt.tryParse(delegation['stake']?.toString() ?? '0') ??
-                  BigInt.zero;
+              BigInt.zero;
           final validatorAddress = delegation['voter'] ?? '';
 
           // 确定状态
           StakingPositionStatus status;
           DateTime? unbondingAt;
 
-          final deactivationEpochStr =
-              stake['meta']?['deactivationEpoch']?.toString();
+          final deactivationEpochStr = stake['meta']?['deactivationEpoch']
+              ?.toString();
           if (deactivationEpochStr != null) {
             // max uint64 in string form to avoid integer overflow
             if (deactivationEpochStr == '18446744073709551615') {
@@ -152,29 +148,34 @@ class SolStakingApi {
             status = StakingPositionStatus.active;
           }
 
-          positions.add(StakingPosition(
-            id: account['pubkey'] ?? '',
-            protocol: StakingProtocols.solNative,
-            validator: Validator(
-              address: validatorAddress,
-              name: shortenStakingAddress(validatorAddress,
-                  prefixLen: 6, suffixLen: 4),
-              description: '',
-              logoUri: '',
-              commission: 0,
-              apy: 7.0,
-              totalStaked: BigInt.zero,
-              delegatorCount: 0,
-              isActive: true,
-              uptime: 100,
+          positions.add(
+            StakingPosition(
+              id: account['pubkey'] ?? '',
+              protocol: StakingProtocols.solNative,
+              validator: Validator(
+                address: validatorAddress,
+                name: shortenStakingAddress(
+                  validatorAddress,
+                  prefixLen: 6,
+                  suffixLen: 4,
+                ),
+                description: '',
+                logoUri: '',
+                commission: 0,
+                apy: 7.0,
+                totalStaked: BigInt.zero,
+                delegatorCount: 0,
+                isActive: true,
+                uptime: 100,
+              ),
+              stakedAmount: stakeAmount,
+              rewardsEarned: BigInt.zero,
+              pendingRewards: BigInt.zero,
+              stakedAt: DateTime.now().subtract(Duration(days: 30)),
+              unbondingAt: unbondingAt,
+              status: status,
             ),
-            stakedAmount: stakeAmount,
-            rewardsEarned: BigInt.zero,
-            pendingRewards: BigInt.zero,
-            stakedAt: DateTime.now().subtract(Duration(days: 30)),
-            unbondingAt: unbondingAt,
-            status: status,
-          ));
+          );
         }
 
         mm.data = positions;

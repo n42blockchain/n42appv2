@@ -11,6 +11,7 @@ import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
@@ -29,17 +30,20 @@ mixin WalletConnectConnection on ChangeNotifier {
   web3.EthPrivateKey get privateKey {
     final key = _privateKey;
     if (key == null) {
-      throw StateError('Private key not initialized. Call web3clientInit first.');
+      throw StateError(
+        'Private key not initialized. Call web3clientInit first.',
+      );
     }
     return key;
   }
+
   int coinModelsIndex = -1;
   List<CoinModel> coinModels = [];
 
   /// Look up the [CoinModel] for [type] from the loaded chain list.
   /// Returns null when the chain is not configured for the current session.
   CoinModel? coinModelFor(CoinType type) =>
-      coinModels.where((c) => c.coin['coinType'] == type.name).firstOrNull;
+      coinModels.where((c) => c.config.coinType == type.name).firstOrNull;
   WalletConnectState walletConnectState = WalletConnectState.loading;
 
   /// Guard: prevent duplicate WalletKit event subscriptions.
@@ -190,13 +194,15 @@ mixin WalletConnectConnection on ChangeNotifier {
             : uriPath;
 
         final existingPairings = signClient?.core.pairing.getPairings() ?? [];
-        final isMatchingPairing = incomingTopic.isNotEmpty &&
-            existingPairings.any(
-              (p) => p.topic == incomingTopic && p.active,
-            );
+        final isMatchingPairing =
+            incomingTopic.isNotEmpty &&
+            existingPairings.any((p) => p.topic == incomingTopic && p.active);
 
         if (isMatchingPairing) {
-          AppLogger.d('WalletConnect', 'pair: same URI retry, waiting for session_propose');
+          AppLogger.d(
+            'WalletConnect',
+            'pair: same URI retry, waiting for session_propose',
+          );
           notifyListeners();
           return true;
         }
@@ -204,9 +210,13 @@ mixin WalletConnectConnection on ChangeNotifier {
         // Different DApp or stale pairing — prompt user
         final s = wcL10n();
         ToastUtils.show(
-          s?.g_wc_connection_lost ?? 'Please disconnect existing session first.',
+          s?.g_wc_connection_lost ??
+              'Please disconnect existing session first.',
         );
-        AppLogger.w('WalletConnect', 'pair: pairing conflict with different DApp');
+        AppLogger.w(
+          'WalletConnect',
+          'pair: pairing conflict with different DApp',
+        );
         return false;
       }
       await viewStateDeal(WalletConnectState.error, params: e.toString());
@@ -218,7 +228,7 @@ mixin WalletConnectConnection on ChangeNotifier {
     try {
       final cm = coinModels[coinModelsIndex];
       web3client = web3.Web3Client(
-        cm.isTest ? cm.coin['service_test'] : cm.coin['service'],
+        cm.isTest ? cm.config.serviceTest : cm.config.service,
         Client(),
       );
 
@@ -241,8 +251,8 @@ mixin WalletConnectConnection on ChangeNotifier {
         if (mnemonic != null) {
           pKey = await trustdart.getPrivateKey(
             mnemonic,
-            cm.coin['coinType'],
-            getPathWithIndex(cm.coin['path']['legacy'], cm.pathIndex),
+            cm.config.coinType,
+            getPathWithIndex(cm.config.pathForAddrType('legacy')!, cm.pathIndex),
           );
         }
       }
@@ -287,10 +297,13 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Solana: no web3client needed, just locate the coin model
     if (namespace == 'solana') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Solana.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Solana.name,
       );
       if (idx == -1) {
-        viewStateDeal(WalletConnectState.error, params: 'Solana chain not configured');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Solana chain not configured',
+        );
         return false;
       }
       if (coinModelsIndex != idx) setCoinModelsIndex(idx);
@@ -300,10 +313,13 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Tron: no web3client needed, just locate the coin model
     if (namespace == 'tron') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Tron.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Tron.name,
       );
       if (idx == -1) {
-        viewStateDeal(WalletConnectState.error, params: 'Tron chain not configured');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Tron chain not configured',
+        );
         return false;
       }
       if (coinModelsIndex != idx) setCoinModelsIndex(idx);
@@ -313,10 +329,13 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Aptos: no web3client needed
     if (namespace == 'aptos') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Aptos.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Aptos.name,
       );
       if (idx == -1) {
-        viewStateDeal(WalletConnectState.error, params: 'Aptos chain not configured');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Aptos chain not configured',
+        );
         return false;
       }
       if (coinModelsIndex != idx) setCoinModelsIndex(idx);
@@ -326,10 +345,13 @@ mixin WalletConnectConnection on ChangeNotifier {
     // Sui: no web3client needed
     if (namespace == 'sui') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Sui.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Sui.name,
       );
       if (idx == -1) {
-        viewStateDeal(WalletConnectState.error, params: 'Sui chain not configured');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'Sui chain not configured',
+        );
         return false;
       }
       if (coinModelsIndex != idx) setCoinModelsIndex(idx);
@@ -339,10 +361,13 @@ mixin WalletConnectConnection on ChangeNotifier {
     // NEAR: no web3client needed
     if (namespace == 'near') {
       final idx = coinModels.indexWhere(
-        (cm) => cm.coin['blockchainType'] == BlockchainType.Near.name,
+        (cm) => cm.config.blockchainType == BlockchainType.Near.name,
       );
       if (idx == -1) {
-        viewStateDeal(WalletConnectState.error, params: 'NEAR chain not configured');
+        viewStateDeal(
+          WalletConnectState.error,
+          params: 'NEAR chain not configured',
+        );
         return false;
       }
       if (coinModelsIndex != idx) setCoinModelsIndex(idx);
@@ -352,8 +377,10 @@ mixin WalletConnectConnection on ChangeNotifier {
     // EIP-155 (Ethereum): use web3client
     final chainId = chainStr.split(':')[1];
     final chainIndex = coinModels.indexWhere((cm) {
-      if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) return false;
-      final id = (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
+      if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
+        return false;
+      }
+      final id = (cm.isTest ? cm.config.chainIdTest : cm.config.chainId)
           .toString();
       return id == chainId;
     });
@@ -371,12 +398,12 @@ mixin WalletConnectConnection on ChangeNotifier {
       coinModels = globalWapAdapter.coinModels
           .where(
             (cm) =>
-                cm.coin['blockchainType'] == BlockchainType.Ethereum.name ||
-                cm.coin['blockchainType'] == BlockchainType.Tron.name ||
-                cm.coin['blockchainType'] == BlockchainType.Solana.name ||
-                cm.coin['blockchainType'] == BlockchainType.Aptos.name ||
-                cm.coin['blockchainType'] == BlockchainType.Sui.name ||
-                cm.coin['blockchainType'] == BlockchainType.Near.name,
+                cm.config.blockchainType == BlockchainType.Ethereum.name ||
+                cm.config.blockchainType == BlockchainType.Tron.name ||
+                cm.config.blockchainType == BlockchainType.Solana.name ||
+                cm.config.blockchainType == BlockchainType.Aptos.name ||
+                cm.config.blockchainType == BlockchainType.Sui.name ||
+                cm.config.blockchainType == BlockchainType.Near.name,
           )
           .toList();
 
@@ -385,7 +412,7 @@ mixin WalletConnectConnection on ChangeNotifier {
       if (chainId == -1) {
         // 默认选中第一个 Ethereum 链
         final ethIndex = coinModels.indexWhere(
-          (cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name,
+          (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
         );
         setCoinModelsIndex(ethIndex >= 0 ? ethIndex : 0);
         return;
@@ -393,8 +420,8 @@ mixin WalletConnectConnection on ChangeNotifier {
       // 按指定 chainId 查找匹配项
       final matchIndex = coinModels.indexWhere((cm) {
         final cmChainId = cm.isTest
-            ? cm.coin['chainId_test']
-            : cm.coin['chainId'];
+            ? cm.config.chainIdTest
+            : cm.config.chainId;
         return cmChainId == chainId;
       });
       if (matchIndex != -1) setCoinModelsIndex(matchIndex);
@@ -406,21 +433,23 @@ mixin WalletConnectConnection on ChangeNotifier {
   /// Find a coin model matching the given WalletConnect chain ID string.
   CoinModel? coinModelFind(String chainId) {
     return coinModels.where((element) {
-      final blockchainType = element.coin['blockchainType'];
+      final blockchainType = element.config.blockchainType;
       if (blockchainType == BlockchainType.Ethereum.name) {
         final id = element.isTest
-            ? element.coin['chainId_test']
-            : element.coin['chainId'];
+            ? element.config.chainIdTest
+            : element.config.chainId;
         return 'eip155:$id' == chainId;
       }
       if (blockchainType == BlockchainType.Tron.name) {
         return 'tron:0x2b6653dc' == chainId;
       }
       if (blockchainType == BlockchainType.Solana.name) {
-        return chainId == _solanaMainnetChainId || chainId == _solanaDevnetChainId;
+        return chainId == _solanaMainnetChainId ||
+            chainId == _solanaDevnetChainId;
       }
       if (blockchainType == BlockchainType.Aptos.name) {
-        return chainId == _aptosMainnetChainId || chainId == _aptosTestnetChainId;
+        return chainId == _aptosMainnetChainId ||
+            chainId == _aptosTestnetChainId;
       }
       if (blockchainType == BlockchainType.Sui.name) {
         return chainId == _suiMainnetChainId || chainId == _suiTestnetChainId;
@@ -433,8 +462,10 @@ mixin WalletConnectConnection on ChangeNotifier {
   }
 
   /// Solana WalletConnect chain IDs
-  static const String _solanaMainnetChainId = 'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ';
-  static const String _solanaDevnetChainId  = 'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K';
+  static const String _solanaMainnetChainId =
+      'solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ';
+  static const String _solanaDevnetChainId =
+      'solana:8E9rvCKLFQia2Y35HXjjpWzj8weVo44K';
 
   /// Aptos WalletConnect chain IDs
   static const String _aptosMainnetChainId = 'aptos:1';
@@ -454,7 +485,7 @@ mixin WalletConnectConnection on ChangeNotifier {
   /// addresses from the same mnemonic and HD path, so a single accessor
   /// suffices. Returns empty strings if no wallet is registered.
   Future<({String mnemonic, String privateKey})>
-      getCurrentWalletCredentials() async {
+  getCurrentWalletCredentials() async {
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) return (mnemonic: '', privateKey: '');
     return walletService.getCredentials(walletService.miningWalletIndex);

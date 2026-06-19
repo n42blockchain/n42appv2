@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -55,9 +56,13 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
     setState(() {
       _filteredChains = query.isEmpty
           ? available
-          : available.where((chain) =>
-              chain.name.toLowerCase().contains(lowerQuery) ||
-              chain.nativeToken.toLowerCase().contains(lowerQuery)).toList();
+          : available
+                .where(
+                  (chain) =>
+                      chain.name.toLowerCase().contains(lowerQuery) ||
+                      chain.nativeToken.toLowerCase().contains(lowerQuery),
+                )
+                .toList();
     });
   }
 
@@ -72,23 +77,28 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
           children: [
             // 搜索框
             Container(
-              margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+              margin: EdgeInsets.all(AppSpacing.space8),
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.space4,
+              ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: AppColorTokens.of(context).bgSurface,
+                borderRadius: AppRadius.brMd,
               ),
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
                   hintText: S.of(context).g_key_bridge_search_chain,
                   hintStyle: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textFieldHintColor.name),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
                   border: InputBorder.none,
                   prefixIcon: Icon(
                     Icons.search,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                   suffixIcon: _searchController.text.isNotEmpty
                       ? IconButton(
@@ -110,9 +120,8 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   ? Center(
                       child: Text(
                         S.of(context).g_key_132, // No data
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     )
@@ -120,7 +129,8 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                       itemCount: _filteredChains.length,
                       itemBuilder: (context, index) {
                         final chain = _filteredChains[index];
-                        final isSelected = chain.chainId == widget.selectedChain?.chainId;
+                        final isSelected =
+                            chain.chainId == widget.selectedChain?.chainId;
 
                         return _buildChainItem(context, chain, isSelected);
                       },
@@ -137,7 +147,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
       width: ScreenUtil().setWidth(48),
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        color: AppColorTokens.of(context).brand,
         shape: BoxShape.circle,
       ),
       child: Center(
@@ -145,36 +155,38 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
           chain.name.substring(0, 1).toUpperCase(),
           style: const TextStyle(
             color: Colors.white,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600,
           ),
         ),
       ),
     );
   }
 
-  Widget _buildChainItem(BuildContext context, BridgeChain chain, bool isSelected) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Widget _buildChainItem(
+    BuildContext context,
+    BridgeChain chain,
+    bool isSelected,
+  ) {
+    final blueColor = AppColorTokens.of(context).brand;
     return InkWell(
       onTap: () => Navigator.pop(context, chain),
       child: Container(
         margin: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space2,
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
               ? blueColor.withAlpha(30)
-              : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          border: isSelected
-              ? Border.all(color: blueColor, width: 2)
-              : null,
+              : AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
+          border: isSelected ? Border.all(color: blueColor, width: 2) : null,
         ),
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+              borderRadius: AppRadius.brLg,
               child: chain.logoUri.isNotEmpty
                   ? Image.network(
                       chain.logoUri,
@@ -186,7 +198,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                   : _buildChainInitial(context, chain),
             ),
 
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            SizedBox(width: AppSpacing.space4),
 
             Expanded(
               child: Column(
@@ -194,18 +206,16 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
                 children: [
                   Text(
                     chain.name,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    style: AppTypography.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(4)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     chain.nativeToken,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ],

@@ -19,6 +19,7 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -72,7 +73,7 @@ class _TodayMiningPageState extends State<TodayMiningPage>
           },
           childWidget: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
+              horizontal: AppSpacing.space8,
             ),
             child: ListenableBuilder(
               listenable: globalMiningV1,
@@ -84,16 +85,16 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                       Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          SizedBox(height: ScreenUtil().setWidth(18)),
+                          SizedBox(height: AppSpacing.space4),
                           SelectPlan(onTap: null),
-                          SizedBox(height: ScreenUtil().setWidth(10)),
+                          SizedBox(height: AppSpacing.space2),
                         ],
                       ),
                     miningStatusWidget(mpValue),
 
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     dayMiningTimeWidget(mpValue),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     backgroundMiningWidget(mpValue),
                     Row(
                       children: [
@@ -102,7 +103,7 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                           "${lastCycleMiningTimes[0]}:${lastCycleMiningTimes[1]}:${lastCycleMiningTimes[2]}",
                           imagePath: "assets/mining/broad_bg_3.png",
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(20)),
+                        SizedBox(width: AppSpacing.space4),
                         miningDataBroad(
                           S.of(context).g_mining_key_11,
                           "${dataUtils.formatNum(lastCycleRewardsValue, 4)} ${CoinType.N.name}",
@@ -112,7 +113,7 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                         ),
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     Row(
                       children: [
                         miningDataBroad(
@@ -120,7 +121,7 @@ class _TodayMiningPageState extends State<TodayMiningPage>
                           '${dataUtils.doubleFixed(totalValue, 2)} ${CoinType.N.name}',
                           imagePath: "assets/mining/broad_bg_1.png",
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(20)),
+                        SizedBox(width: AppSpacing.space4),
                         miningDataBroad(
                           S.of(context).g_mining_key_14,
                           "\$${NumberFormat("#,##0.0#", "en_US").format((astPrice * totalValue))}",

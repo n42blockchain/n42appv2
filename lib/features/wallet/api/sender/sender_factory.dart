@@ -55,33 +55,34 @@ class SenderFactory {
   ChainSender _createSender(String coinType) {
     final chainConfig = allChainUrlMap[coinType] as Map<String, dynamic>?;
     final baseInfo = chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final blockchainType =
-        baseInfo == null ? '' : CoinConfigView(baseInfo).blockchainType;
+    final blockchainType = baseInfo == null
+        ? ''
+        : CoinConfigView(baseInfo).blockchainType;
 
     return switch (blockchainType) {
-      'Ethereum'       => EvmSender(),
-      'Bitcoin'        => BtcSender(),
-      'Cosmos'         => CosmosSender(),
-      'Solana'         => SolSender(),
-      'Tron'           => TrxSender(),
-      'Polkadot'       => DotSender(),
-      'Aptos'          => AptSender(),
+      'Ethereum' => EvmSender(),
+      'Bitcoin' => BtcSender(),
+      'Cosmos' => CosmosSender(),
+      'Solana' => SolSender(),
+      'Tron' => TrxSender(),
+      'Polkadot' => DotSender(),
+      'Aptos' => AptSender(),
       'TheOpenNetwork' => TonSender(),
-      'Near'           => NearSender(),
-      'Sui'            => SuiSender(),
-      'Ripple'         => XrpSender(),
-      'Algorand'       => AlgoSender(),
-      'Tezos'          => XtzSender(),
-      'Zilliqa'        => ZilSender(),
-      'Filecoin'       => FilSender(),
-      'Stellar'        => XlmSender(),
-      'Cardano'        => AdaSender(),
-      'VeChain'        => VetSender(),
-      'MultiversX'     => EgldSender(),
-      'Hedera'         => HbarSender(),
-      'Starknet'       => StrkSender(),
+      'Near' => NearSender(),
+      'Sui' => SuiSender(),
+      'Ripple' => XrpSender(),
+      'Algorand' => AlgoSender(),
+      'Tezos' => XtzSender(),
+      'Zilliqa' => ZilSender(),
+      'Filecoin' => FilSender(),
+      'Stellar' => XlmSender(),
+      'Cardano' => AdaSender(),
+      'VeChain' => VetSender(),
+      'MultiversX' => EgldSender(),
+      'Hedera' => HbarSender(),
+      'Starknet' => StrkSender(),
       // Fallback: attempt EVM for unknown EVM-like chains
-      _                => _fallbackSender(coinType, blockchainType),
+      _ => _fallbackSender(coinType, blockchainType),
     };
   }
 

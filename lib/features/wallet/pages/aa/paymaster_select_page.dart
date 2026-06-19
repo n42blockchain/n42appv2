@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -148,15 +149,15 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
     final isCurrentChainSupported = AAConfig.isChainSupported(_resolvedSymbol);
 
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(24)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.all(AppSpacing.space6),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(20), blueColor.withAlpha(5)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,12 +169,11 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 size: ScreenUtil().setWidth(28),
                 color: blueColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_gas_payment_options,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor),
                   ),
@@ -182,30 +182,30 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             S.of(context).g_key_aa_paymaster_description,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           // Chain coverage row
           Row(
             children: [
               Icon(
                 isCurrentChainSupported ? Icons.check_circle : Icons.cancel,
                 size: ScreenUtil().setWidth(20),
-                color: isCurrentChainSupported ? Colors.green : Colors.red,
+                color: isCurrentChainSupported
+                    ? AppColorTokens.of(context).success
+                    : AppColorTokens.of(context).danger,
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   '${S.of(context).g_key_aa_paymaster_coverage}: '
                   '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -230,23 +230,22 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         return Container(
           margin: EdgeInsets.only(left: ScreenUtil().setWidth(4)),
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(6),
-            vertical: ScreenUtil().setWidth(2),
+            horizontal: AppSpacing.space2,
+            vertical: AppSpacing.space2,
           ),
           decoration: BoxDecoration(
             color: isCurrent
                 ? blueColor.withAlpha(30)
-                : Colors.grey.withAlpha(20),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                : AppColorTokens.of(context).textTertiary.withAlpha(20),
+            borderRadius: AppRadius.brSm,
             border: isCurrent
                 ? Border.all(color: blueColor.withAlpha(80))
                 : null,
           ),
           child: Text(
             sym,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
-              fontWeight: isCurrent ? FontWeight.w700 : FontWeight.normal,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: isCurrent ? FontWeight.w600 : FontWeight.normal,
               color: isCurrent
                   ? blueColor
                   : _themeColor(AppThemeKeys.itemSubtitleTextColor),
@@ -265,11 +264,10 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_paymaster_checking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -281,25 +279,24 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   Widget _buildError() {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               Icons.error_outline,
               size: ScreenUtil().setWidth(64),
-              color: Colors.red,
+              color: AppColorTokens.of(context).danger,
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_aa_paymaster_load_failed,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             ElevatedButton.icon(
               onPressed: _loadPaymasterOptions,
               icon: const Icon(Icons.refresh),
@@ -313,7 +310,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   Widget _buildOptionsList() {
     return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       itemCount: _availableOptions.length,
       itemBuilder: (context, index) {
         final option = _availableOptions[index];
@@ -334,7 +331,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   Widget _buildConfirmButton() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
         boxShadow: [
@@ -349,7 +346,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
         child: Column(
           children: [
             _buildSelectedPreview(),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -357,19 +354,12 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(16),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(14),
-                    ),
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: Text(
                   S.of(context).g_key_78,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -384,10 +374,10 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   Widget _buildSelectedPreview() {
     final color = _getSelectedColor();
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: color.withAlpha(15),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(30)),
       ),
       child: Row(
@@ -397,22 +387,20 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
             size: ScreenUtil().setWidth(28),
             color: color,
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   S.of(context).g_key_aa_selected,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
+                  style: AppTypography.captionSm.copyWith(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                   ),
                 ),
                 Text(
                   _getSelectedTitle(),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(AppThemeKeys.mainTextColor),
                   ),
@@ -430,19 +418,18 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
   Widget _buildFreeBadge() {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(10),
-        vertical: ScreenUtil().setWidth(4),
+        horizontal: AppSpacing.space2,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        color: AppColorTokens.of(context).success.withAlpha(30),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         S.of(context).g_key_aa_free,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
-          fontWeight: FontWeight.bold,
-          color: Colors.green,
+        style: AppTypography.captionSm.copyWith(
+          fontWeight: FontWeight.w600,
+          color: AppColorTokens.of(context).success,
         ),
       ),
     );
@@ -452,7 +439,7 @@ class _PaymasterSelectPageState extends State<PaymasterSelectPage> {
 
   Color _getSelectedColor() => switch (_selectedOption.type) {
     PaymasterType.none => _themeColor(AppThemeKeys.mainBlueColor),
-    PaymasterType.sponsored => Colors.green,
+    PaymasterType.sponsored => AppColorTokens.of(context).success,
     PaymasterType.erc20 => Colors.purple,
   };
 

@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -150,10 +151,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return Scaffold(
       appBar: AppBarWidget(
@@ -185,18 +183,9 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
   Widget _listWidget() {
     final s = S.of(context);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return NotificationListener<ScrollNotification>(
       onNotification: (notification) {
@@ -233,9 +222,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                   ),
                   child: Text(
                     _dateLabel(item),
-                    style: TextStyle(
+                    style: AppTypography.bodyStrong.copyWith(
                       color: mainText,
-                      fontSize: su.setSp(28.0),
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -246,7 +234,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                 background: Container(
                   alignment: Alignment.centerRight,
                   padding: EdgeInsets.only(right: su.setWidth(30.0)),
-                  color: Colors.red,
+                  color: AppColorTokens.of(context).danger,
                   child: const Icon(Icons.delete, color: Colors.white),
                 ),
                 onDismissed: (_) => deleteHistory(item),
@@ -272,9 +260,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                                 (item.title?.isNotEmpty ?? false)
                                     ? item.title!
                                     : (item.url ?? ''),
-                                style: TextStyle(
+                                style: AppTypography.body.copyWith(
                                   color: mainText,
-                                  fontSize: su.setSp(28.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -282,9 +269,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                               SizedBox(height: su.setWidth(6.0)),
                               Text(
                                 item.url ?? '',
-                                style: TextStyle(
+                                style: AppTypography.caption.copyWith(
                                   color: subtitleColor,
-                                  fontSize: su.setSp(24.0),
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -295,9 +281,8 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
                         SizedBox(width: su.setWidth(10.0)),
                         Text(
                           _timeLabel(item),
-                          style: TextStyle(
+                          style: AppTypography.caption.copyWith(
                             color: subtitleColor,
-                            fontSize: su.setSp(24.0),
                           ),
                         ),
                       ],
@@ -317,7 +302,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
     if (lastPage) {
       child = Text(
         s.g_key_105,
-        style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
+        style: AppTypography.bodySm.copyWith(color: subtitleColor),
       );
     } else {
       final isLoadingMore = loading == Load.loading && historyList.isNotEmpty;
@@ -333,7 +318,7 @@ class _BrowserHistoryPageState extends State<BrowserHistoryPage> {
             ),
           Text(
             s.g_key_106,
-            style: TextStyle(color: subtitleColor, fontSize: su.setSp(26.0)),
+            style: AppTypography.bodySm.copyWith(color: subtitleColor),
           ),
         ],
       );

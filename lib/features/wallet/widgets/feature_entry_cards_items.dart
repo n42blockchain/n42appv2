@@ -23,10 +23,7 @@ BoxDecoration _cardDecoration({
       ],
     ),
     borderRadius: BorderRadius.circular(borderRadius),
-    border: Border.all(
-      color: primaryColor.withValues(alpha: 0.25),
-      width: 1,
-    ),
+    border: Border.all(color: primaryColor.withValues(alpha: 0.25), width: 1),
     boxShadow: [
       BoxShadow(
         color: primaryColor.withValues(alpha: 0.08),
@@ -102,8 +99,8 @@ class EnsEntryCard extends StatelessWidget {
     const ensBlue = Color(0xFF5B8DEF);
     const ensPurple = Color(0xFF8B5CF6);
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
     return GestureDetector(
@@ -140,8 +137,7 @@ class EnsEntryCard extends StatelessWidget {
                 children: [
                   Text(
                     hasEns ? ensName! : S.of(context).g_key_ens_get_your_name,
-                    style: TextStyle(
-                      fontSize: su.setSp(28),
+                    style: AppTypography.bodyStrong.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainText,
                     ),
@@ -151,8 +147,7 @@ class EnsEntryCard extends StatelessWidget {
                     hasEns
                         ? S.of(context).g_key_ens_manage_your_identity
                         : S.of(context).g_key_ens_register_description,
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                     ),
                     maxLines: 2,
@@ -177,9 +172,8 @@ class EnsEntryCard extends StatelessWidget {
     return Center(
       child: Text(
         'ENS',
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          fontWeight: FontWeight.bold,
+        style: AppTypography.caption.copyWith(
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
@@ -212,10 +206,12 @@ class SmartAccountEntryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     const cardRed = Color(0xFFFF6B6B);
     const cardYellow = Color(0xFFFFE66D);
-    final statusColor = isDeployed ? const Color(0xFF4CAF50) : const Color(0xFFFF9800);
+    final statusColor = isDeployed
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).warning;
     final su = ScreenUtil();
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
     return GestureDetector(
@@ -275,8 +271,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                           hasSmartAccount
                               ? S.of(context).g_key_aa_title
                               : S.of(context).g_key_aa_create_account,
-                          style: TextStyle(
-                            fontSize: su.setSp(28),
+                          style: AppTypography.bodyStrong.copyWith(
                             fontWeight: FontWeight.w600,
                             color: mainText,
                           ),
@@ -299,8 +294,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                             isDeployed
                                 ? S.of(context).g_key_aa_deployed
                                 : S.of(context).g_key_aa_not_deployed,
-                            style: TextStyle(
-                              fontSize: su.setSp(16),
+                            style: AppTypography.captionSm.copyWith(
                               color: statusColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -314,8 +308,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                     hasSmartAccount
                         ? _formatAddress(accountAddress ?? '')
                         : S.of(context).g_key_aa_gasless_transactions,
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       color: subtitleColor,
                     ),
                     maxLines: 2,
@@ -327,7 +320,9 @@ class SmartAccountEntryCard extends StatelessWidget {
             _trailingAction(
               size: su.setWidth(56),
               color: cardRed,
-              icon: hasSmartAccount ? Icons.arrow_forward_ios_rounded : Icons.add_rounded,
+              icon: hasSmartAccount
+                  ? Icons.arrow_forward_ios_rounded
+                  : Icons.add_rounded,
               iconSize: su.setWidth(28),
             ),
           ],

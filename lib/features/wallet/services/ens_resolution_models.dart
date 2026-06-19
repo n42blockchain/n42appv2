@@ -73,10 +73,7 @@ class EnsResolutionResult {
   }
 
   factory EnsResolutionResult.failure(String error) {
-    return EnsResolutionResult(
-      success: false,
-      error: error,
-    );
+    return EnsResolutionResult(success: false, error: error);
   }
 }
 
@@ -123,33 +120,26 @@ class EnsProtocolUtils {
   ///
   /// 参考：https://docs.unstoppabledomains.com/getting-started/supported-domains/
   static const udSuffixes = [
-    '.crypto',     // UD 首批 TLD（2019）
-    '.wallet',     // 多链钱包域名（2021）
-    '.bitcoin',    // Bitcoin 生态（2021）
-    '.nft',        // NFT 身份（2022）
+    '.crypto', // UD 首批 TLD（2019）
+    '.wallet', // 多链钱包域名（2021）
+    '.bitcoin', // Bitcoin 生态（2021）
+    '.nft', // NFT 身份（2022）
     '.blockchain', // 通用区块链（2021）
-    '.dao',        // DAO 组织（2022）
-    '.888',        // 吉祥数字（2022）
-    '.zil',        // Zilliqa 生态（迁移到 Polygon L2）
-    '.x',          // 简短域名（2023）
-    '.klever',     // Klever 生态（2022）
-    '.hi',         // HI 金融（2022）
-    '.kresus',     // Kresus 生态（2022）
-    '.manga',      // 动漫文化（2023）
-    '.binanceus',  // Binance US 生态（2022）
-    '.coin',       // 通用代币（2023）
-    '.polygon',    // Polygon 生态（2023）
+    '.dao', // DAO 组织（2022）
+    '.888', // 吉祥数字（2022）
+    '.zil', // Zilliqa 生态（迁移到 Polygon L2）
+    '.x', // 简短域名（2023）
+    '.klever', // Klever 生态（2022）
+    '.hi', // HI 金融（2022）
+    '.kresus', // Kresus 生态（2022）
+    '.manga', // 动漫文化（2023）
+    '.binanceus', // Binance US 生态（2022）
+    '.coin', // 通用代币（2023）
+    '.polygon', // Polygon 生态（2023）
   ];
 
   /// 以太坊 ENS 后缀
-  static const ensSuffixes = [
-    '.eth',
-    '.xyz',
-    '.app',
-    '.luxe',
-    '.kred',
-    '.art',
-  ];
+  static const ensSuffixes = ['.eth', '.xyz', '.app', '.luxe', '.kred', '.art'];
 
   /// 全部支持的域名后缀（用于快速判断）
   static const allSuffixes = [
@@ -176,8 +166,17 @@ class EnsProtocolUtils {
     if (coinType == CoinType.N.name) return true;
     if (coinType == CoinType.ETH.name) return true;
     const evmChains = [
-      'BNB', 'MATIC', 'AVAX', 'FTM', 'OP', 'ARB',
-      'CELO', 'ONE', 'CRO', 'MOVR', 'GLMR',
+      'BNB',
+      'MATIC',
+      'AVAX',
+      'FTM',
+      'OP',
+      'ARB',
+      'CELO',
+      'ONE',
+      'CRO',
+      'MOVR',
+      'GLMR',
     ];
     return evmChains.contains(coinType);
   }
@@ -204,13 +203,13 @@ class EnsProtocolUtils {
     if (coinType == null) return null;
     const tickerMap = {
       'ETH': 'ETH',
-      'N': 'ETH',    // N42 使用 EVM 地址格式
+      'N': 'ETH', // N42 使用 EVM 地址格式
       'BNB': 'BNB',
       'MATIC': 'MATIC',
       'AVAX': 'AVAX',
       'FTM': 'FTM',
-      'OP': 'ETH',   // Optimism 使用 ETH 地址
-      'ARB': 'ETH',  // Arbitrum 使用 ETH 地址
+      'OP': 'ETH', // Optimism 使用 ETH 地址
+      'ARB': 'ETH', // Arbitrum 使用 ETH 地址
       'SOL': 'SOL',
       'BTC': 'BTC',
       'TRX': 'TRX',

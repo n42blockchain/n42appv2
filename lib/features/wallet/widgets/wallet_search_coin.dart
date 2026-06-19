@@ -5,7 +5,9 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_algo.dart';
@@ -90,7 +92,10 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   void _saveToHistory(String keyword) {
     final kw = keyword.trim();
     if (kw.isEmpty || kw.length > 50) return; // 拒绝空或超长关键词
-    final updated = [kw, ..._history.where((e) => e != kw)].take(_maxHistory).toList();
+    final updated = [
+      kw,
+      ..._history.where((e) => e != kw),
+    ].take(_maxHistory).toList();
     if (!mounted) return;
     setState(() => _history = updated);
     // 防抖写入：取消前次定时，重新计时
@@ -151,12 +156,12 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
       // 单次遍历同时完成过滤 + 缓存 toLowerCase 结果，避免 sort 阶段重复转换
       final matched = <({CoinModel coin, String sym, String name})>[];
       for (final cm in waValue.coinList) {
-        final sym = (cm.coin['miniName'] ?? cm.coin['coinType'] ?? '')
-            .toString()
-            .trim()
-            .toLowerCase();
-        final name = (cm.coin['name'] ?? cm.coin['coinType'] ?? '')
-            .toString()
+        final config = cm.config;
+        final sym =
+            (config.miniName.isNotEmpty ? config.miniName : config.coinType)
+                .trim()
+                .toLowerCase();
+        final name = (config.name.isNotEmpty ? config.name : config.coinType)
             .trim()
             .toLowerCase();
         if (sym.isEmpty && name.isEmpty) continue;
@@ -205,25 +210,49 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
 
   Future<void> _navigateForCoin(CoinModel coinInfo) async {
     if (widget.type == 0) {
-      final bt = coinInfo.coin['blockchainType']?.toString() ?? '';
+      final bt = coinInfo.config.blockchainType;
       final toAddr = widget.toAddress;
-      await Navigator.push(context, MaterialPageRoute(builder: (context) {
-        if (bt == BlockchainType.Bitcoin.name) return WalletChainSendBtc(coinInfo, toAddress: toAddr);
-        if (bt == BlockchainType.Solana.name) return WalletChainSendSol(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Algorand.name) return WalletChainSendAlgo(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Ripple.name) return WalletChainSendXrp(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Filecoin.name) return WalletChainSendFil(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Polkadot.name) return WalletChainSendDot(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Sui.name) return WalletChainSendSui(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.TheOpenNetwork.name) return WalletChainSendTon(coinInfo, initialToAddress: toAddr);
-        if (bt == BlockchainType.Aptos.name) return WalletChainSendApt(coinInfo, initialToAddress: toAddr);
-        return WalletChainSend(coinInfo, initialToAddress: toAddr);
-      }));
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            if (bt == BlockchainType.Bitcoin.name) {
+              return WalletChainSendBtc(coinInfo, toAddress: toAddr);
+            }
+            if (bt == BlockchainType.Solana.name) {
+              return WalletChainSendSol(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Algorand.name) {
+              return WalletChainSendAlgo(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Ripple.name) {
+              return WalletChainSendXrp(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Filecoin.name) {
+              return WalletChainSendFil(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Polkadot.name) {
+              return WalletChainSendDot(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Sui.name) {
+              return WalletChainSendSui(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.TheOpenNetwork.name) {
+              return WalletChainSendTon(coinInfo, initialToAddress: toAddr);
+            }
+            if (bt == BlockchainType.Aptos.name) {
+              return WalletChainSendApt(coinInfo, initialToAddress: toAddr);
+            }
+            return WalletChainSend(coinInfo, initialToAddress: toAddr);
+          },
+        ),
+      );
     } else {
-      if (coinInfo.coin['isContract'] == true) {
-        final idx = ref.read(wapBridgeProvider).coinModels.indexWhere(
-          (e) => e.coin['coinType'] == coinInfo.coin['coinType'],
-        );
+      if (coinInfo.config.isContract) {
+        final idx = ref
+            .read(wapBridgeProvider)
+            .coinModels
+            .indexWhere((e) => e.config.coinType == coinInfo.config.coinType);
         if (idx < 0) {
           await Navigator.push(
             context,
@@ -235,7 +264,8 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => WalletReceiveQr(chainCoin, tokenCoinModel: coinInfo),
+            builder: (context) =>
+                WalletReceiveQr(chainCoin, tokenCoinModel: coinInfo),
           ),
         );
       } else {
@@ -267,45 +297,43 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
   Widget _buildSearchBar(WalletActionProvider waValue) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       constraints: BoxConstraints(
         minHeight: ScreenUtil().setWidth(100.0),
         maxHeight: ScreenUtil().setWidth(100.0),
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(ScreenUtil().setWidth(20.0))),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        borderRadius: AppRadius.brMd,
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Row(
         children: [
           Icon(
             Icons.search,
             size: ScreenUtil().setWidth(36.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(width: ScreenUtil().setWidth(8.0)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: TextField(
               controller: _inputCtrl,
               focusNode: _focusNode,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setWidth(30.0),
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(26.0)),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: ScreenUtil().setWidth(26.0),
+                ),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setWidth(30.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                hintStyle: AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -329,13 +357,11 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 _focusNode.requestFocus();
               },
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(8.0)),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
                 child: Icon(
                   Icons.cancel,
                   size: ScreenUtil().setWidth(36.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             )
@@ -346,22 +372,25 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 _runSearch(waValue);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
                 height: ScreenUtil().setWidth(60.0),
                 decoration: BoxDecoration(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainButtonBgColor.name),
+                    context,
+                    AppThemeKeys.mainButtonBgColor.name,
+                  ),
                   borderRadius: BorderRadius.all(
-                      Radius.circular(ScreenUtil().setWidth(60.0))),
+                    Radius.circular(ScreenUtil().setWidth(60.0)),
+                  ),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   S.of(context).search,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26.0),
+                  style: AppTypography.bodySm.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonTextColor.name),
+                      context,
+                      AppThemeKeys.mainButtonTextColor.name,
+                    ),
                   ),
                 ),
               ),

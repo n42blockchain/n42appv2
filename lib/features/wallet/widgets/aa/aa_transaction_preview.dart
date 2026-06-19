@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
 
@@ -82,9 +83,8 @@ class AATransactionPreview extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_202,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.headline.copyWith(
+                    fontWeight: FontWeight.w600,
                     color: _color(context, AppThemeKeys.mainTextColor),
                   ),
                 ),
@@ -107,7 +107,8 @@ class AATransactionPreview extends StatelessWidget {
           _buildGasSection(context),
 
           // 批量操作列表
-          if (data.batchOperations != null && data.batchOperations!.isNotEmpty) ...[
+          if (data.batchOperations != null &&
+              data.batchOperations!.isNotEmpty) ...[
             SizedBox(height: 20.w),
             _buildBatchOperationsSection(context),
           ],
@@ -136,8 +137,8 @@ class AATransactionPreview extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_44,
-            style: TextStyle(
-              fontSize: 24.sp,
+            style: AppTypography.caption.copyWith(
+              fontWeight: FontWeight.w400,
               color: _color(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -148,9 +149,8 @@ class AATransactionPreview extends StatelessWidget {
             children: [
               Text(
                 data.amount,
-                style: TextStyle(
-                  fontSize: 48.sp,
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.displayLg.copyWith(
+                  fontWeight: FontWeight.w600,
                   color: _color(context, AppThemeKeys.mainTextColor),
                 ),
               ),
@@ -159,9 +159,7 @@ class AATransactionPreview extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 6.w),
                 child: Text(
                   data.tokenSymbol,
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.bodyStrong.copyWith(
                     color: blueColor,
                   ),
                 ),
@@ -223,12 +221,15 @@ class AATransactionPreview extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 20.sp, color: subtitleColor),
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w400,
+                color: subtitleColor,
+              ),
             ),
             Text(
               _shortenAddress(address),
-              style: TextStyle(
-                fontSize: 24.sp,
+              style: AppTypography.caption.copyWith(
+                fontWeight: FontWeight.w400,
                 fontFamily: 'monospace',
                 color: _color(context, AppThemeKeys.mainTextColor),
               ),
@@ -242,15 +243,18 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildGasSection(BuildContext context) {
     final sponsored = data.isGasSponsored;
     final subtitleColor = _color(context, AppThemeKeys.itemSubtitleTextColor);
-    final bgFallback =
-        _color(context, AppThemeKeys.backGroundColor).withAlpha(100);
+    final success = AppColorTokens.of(context).success;
+    final bgFallback = _color(
+      context,
+      AppThemeKeys.backGroundColor,
+    ).withAlpha(100);
 
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: sponsored ? Colors.green.withAlpha(20) : bgFallback,
+        color: sponsored ? success.withAlpha(20) : bgFallback,
         borderRadius: BorderRadius.circular(12.w),
-        border: sponsored ? Border.all(color: Colors.green.withAlpha(40)) : null,
+        border: sponsored ? Border.all(color: success.withAlpha(40)) : null,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,14 +264,17 @@ class AATransactionPreview extends StatelessWidget {
               Icon(
                 Icons.local_gas_station,
                 size: 22.w,
-                color: sponsored ? Colors.green : subtitleColor,
+                color: sponsored ? success : subtitleColor,
               ),
               SizedBox(width: 8.w),
               Flexible(
                 child: Text(
                   S.of(context).g_key_t_17,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 24.sp, color: subtitleColor),
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: subtitleColor,
+                  ),
                 ),
               ),
             ],
@@ -279,8 +286,8 @@ class AATransactionPreview extends StatelessWidget {
                   child: Text(
                     data.formattedGasCost,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 24.sp,
+                    style: AppTypography.caption.copyWith(
+                      fontWeight: FontWeight.w400,
                       decoration: TextDecoration.lineThrough,
                       color: subtitleColor,
                     ),
@@ -291,10 +298,9 @@ class AATransactionPreview extends StatelessWidget {
                   child: Text(
                     S.of(context).g_key_aa_free,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                    style: AppTypography.bodySm.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: success,
                     ),
                   ),
                 ),
@@ -303,8 +309,7 @@ class AATransactionPreview extends StatelessWidget {
           else
             Text(
               data.formattedGasCost,
-              style: TextStyle(
-                fontSize: 26.sp,
+              style: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _color(context, AppThemeKeys.mainTextColor),
               ),
@@ -329,8 +334,7 @@ class AATransactionPreview extends StatelessWidget {
         children: [
           Text(
             '${S.of(context).g_key_aa_batch_operations} (${ops.length})',
-            style: TextStyle(
-              fontSize: 24.sp,
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: _color(context, AppThemeKeys.mainTextColor),
             ),
@@ -351,9 +355,8 @@ class AATransactionPreview extends StatelessWidget {
                     child: Center(
                       child: Text(
                         '${i + 1}',
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.captionSm.copyWith(
+                          fontWeight: FontWeight.w600,
                           color: blueColor,
                         ),
                       ),
@@ -363,9 +366,12 @@ class AATransactionPreview extends StatelessWidget {
                   Expanded(
                     child: Text(
                       op,
-                      style: TextStyle(
-                        fontSize: 22.sp,
-                        color: _color(context, AppThemeKeys.itemSubtitleTextColor),
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: _color(
+                          context,
+                          AppThemeKeys.itemSubtitleTextColor,
+                        ),
                       ),
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -381,7 +387,7 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final buttonRadius = BorderRadius.circular(14.w);
     final buttonPadding = EdgeInsets.symmetric(vertical: 16.w);
-    final buttonTextStyle = TextStyle(fontSize: 28.sp, fontWeight: FontWeight.w600);
+    final buttonTextStyle = AppTypography.bodyStrong;
 
     return Row(
       children: [

@@ -6,19 +6,17 @@ part of 'wallet_chain_send_btc.dart';
 mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -42,8 +40,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
             ),
             rightWidget2: buildSendIconBtn(context, Icons.menu_book_outlined),
             rightOnTap2: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
           ),
         ],
       ),
@@ -52,7 +49,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
 
   Widget amountWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Row(
@@ -60,15 +57,13 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -83,10 +78,11 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
                   enabled: toTextFieldEnabel,
                   maxLines: 1,
@@ -115,31 +111,34 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                    horizontal: AppSpacing.space8,
+                  ),
                   rightWidget1: toTextFieldEnabel
                       ? Container(
                           margin: EdgeInsets.only(
-                              left: ScreenUtil().setWidth(10.0)),
+                            left: ScreenUtil().setWidth(10.0),
+                          ),
                           height: ScreenUtil().setWidth(60.0),
                           padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(20.0)),
+                            horizontal: AppSpacing.space4,
+                          ),
                           decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainBlueColor.name),
+                            color: AppColorTokens.of(context).brand,
                             borderRadius: BorderRadius.all(
-                                Radius.circular(ScreenUtil().setWidth(60.0))),
+                              Radius.circular(ScreenUtil().setWidth(60.0)),
+                            ),
                           ),
                           alignment: Alignment.center,
                           child: Text(
                             S.of(context).g_key_197,
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(26.0),
-                              color: AppThemeUtils.getColorByKey(context,
-                                  AppThemeKeys.mainWhiteColor.name),
+                            style: AppTypography.bodySm.copyWith(
+                              color: AppThemeUtils.getColorByKey(
+                                context,
+                                AppThemeKeys.mainWhiteColor.name,
+                              ),
                             ),
                           ),
                         )
@@ -150,8 +149,11 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                         }
                       : null,
                 ),
-                buildUsdEquivalent(context, valueTextEditingController.text,
-                    widget.coinModel.coinPrice),
+                buildUsdEquivalent(
+                  context,
+                  valueTextEditingController.text,
+                  widget.coinModel.coinPrice,
+                ),
                 Divider(
                   height: ScreenUtil().setWidth(1.0),
                   indent: ScreenUtil().setWidth(20.0),
@@ -170,10 +172,8 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit',
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -182,19 +182,18 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
   }
 
   Widget ownerAddress() {
-    final String addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
+    final String addr = dataUtils.addressFarmat(
+      widget.coinModel.address.toString(),
+    );
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -211,23 +210,19 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         : '${flustars.NumUtil.divide(fees, 100000000)} $coinType';
 
     if (_btcFeeModel == null) {
-      return NonEvmFeeCompact(
-        feeText: feesBtc,
-        hasError: false,
-        onTap: null,
-      );
+      return NonEvmFeeCompact(feeText: feesBtc, hasError: false, onTap: null);
     }
 
     final option = _btcFeeModel!.currentOption;
     final totalSat = fees + price;
-    final hasError = totalSat > 0 &&
+    final hasError =
+        totalSat > 0 &&
         widget.coinModel.balanceDoubleAll() < totalSat / 100000000;
 
     return NonEvmFeeCompact(
       feeText: feesBtc,
       speedLabel: _btcSpeedLabel(_btcFeeModel!.selectedSpeed),
-      estimatedTime:
-          GasTrackerApi.formatEstimatedTime(option.estimatedSeconds),
+      estimatedTime: GasTrackerApi.formatEstimatedTime(option.estimatedSeconds),
       rateText: option.feeRate != null
           ? '${option.feeRate} ${option.feeRateUnit ?? "sat/byte"}'
           : null,
@@ -241,14 +236,15 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
     final int gasFeesInt = _fee.totalFees + price;
     final double gasFees = gasFeesInt / 100000000;
     final Color textColor = widget.coinModel.balanceDoubleAll() < gasFees
-        ? AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name)
+        ? AppColorTokens.of(context).danger
         : AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonBgColor.name);
+            context,
+            AppThemeKeys.mainButtonBgColor.name,
+          );
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space2),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -256,20 +252,15 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
             child: Text(
               S.of(context).g_key_nft_141,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(30.0),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
           const Spacer(),
           Text(
             '$gasFees ${widget.coinModel.coin['unit']}',
-            style: TextStyle(
-              color: textColor,
-              fontSize: ScreenUtil().setSp(30.0),
-            ),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
           if (utxoLoad == Load.loading)
             Container(
@@ -292,22 +283,21 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         right: ScreenUtil().setWidth(30.0),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(32.0),
-        vertical: ScreenUtil().setWidth(32.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -322,14 +312,13 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () async {
-                if (load == Load.loading) return;
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              loading: load == Load.loading,
+              onPressed: () async {
                 closeKeyboard();
                 amountCheck();
                 if (amountErrorMessage != '') return;
@@ -343,7 +332,7 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                   ..address = widget.coinModel.address
                   ..to1 = toTextEditingController.text.trim()
                   ..coin = widget.coinModel.coin
-                  ..coinMiniName = widget.coinModel.coin['coinType']
+                  ..coinMiniName = widget.coinModel.config.coinType
                   ..walletIndex = ref.read(wapBridgeProvider).walletIndex
                   ..price = price
                   ..gasPrice = _fee.totalFees;
@@ -361,18 +350,6 @@ mixin _BtcSendWidgetsMixin on _BtcSendTxMixin {
                 if (!mounted) return;
                 if (check == true) signTx(trModel);
               },
-              load == Load.loading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                load == Load.loading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              load == Load.loading,
             ),
           ),
         ],

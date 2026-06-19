@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/aa/provider/batch_template_provider.dart';
 
 /// 批量模板列表底部弹层
@@ -38,10 +39,12 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height * 0.7,
           ),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.all(AppSpacing.space6),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(ScreenUtil().setWidth(24)),
+            ),
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -54,10 +57,9 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                     child: Text(
                       S.of(context).g_key_aa_batch_templates,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(32),
-                        fontWeight: FontWeight.bold,
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                   ),
@@ -67,28 +69,26 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (templates.isEmpty)
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(32)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppSpacing.space8,
+                  ),
                   child: Column(
                     children: [
                       Icon(
                         Icons.bookmarks_outlined,
                         size: ScreenUtil().setWidth(48),
-                        color: AppThemeUtils.getColorByKey(
+                        color: AppColorTokens.of(
                           context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ).withAlpha(80),
+                        ).textSubtitle.withAlpha(80),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(12)),
+                      SizedBox(height: AppSpacing.space4),
                       Text(
                         S.of(context).g_key_aa_batch_no_templates,
                         style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -139,10 +139,13 @@ class _TemplateItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor2.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor2.name,
+        ),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -152,21 +155,16 @@ class _TemplateItem extends StatelessWidget {
               children: [
                 Text(
                   template.name,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${template.operations.length} operations · ${template.chainSymbol}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(22),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -176,14 +174,16 @@ class _TemplateItem extends StatelessWidget {
             onPressed: onLoad,
             child: Text(
               S.of(context).g_key_aa_batch_template_load,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).brand),
             ),
           ),
           IconButton(
             onPressed: onDelete,
-            icon: const Icon(Icons.delete_outline, color: Colors.red, size: 20),
+            icon: Icon(
+              Icons.delete_outline,
+              color: AppColorTokens.of(context).danger,
+              size: 20,
+            ),
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(
               maxWidth: ScreenUtil().setWidth(36),

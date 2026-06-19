@@ -9,19 +9,17 @@ part of 'wallet_chain_send_apt.dart';
 mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
             controller: toTextEditingController,
@@ -41,13 +39,11 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
               child: Icon(
                 Icons.add,
                 size: ScreenUtil().setWidth(50.0),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
             rightOnTap1: searchToAddressWidget,
-            bgColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemBgColor.name),
+            bgColor: AppColorTokens.of(context).bgSurface,
           ),
         ],
       ),
@@ -56,7 +52,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
 
   Widget amountWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Row(
@@ -64,25 +60,21 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name),
+              borderRadius: AppRadius.brMd,
+              color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(
                   color: const Color(0xff101828).withAlpha(13),
@@ -99,13 +91,15 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.textFieldHintColor.name),
+                      context,
+                      AppThemeKeys.textFieldHintColor.name,
+                    ),
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   onChanged: (value) => amountCheck(value: value),
                   onEditingComplete: () {
                     amountCheck();
@@ -118,30 +112,31 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                     topLeft: Radius.circular(ScreenUtil().setWidth(16.0)),
                     topRight: Radius.circular(ScreenUtil().setWidth(16.0)),
                   ),
-                  bgColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemBgColor.name),
+                  bgColor: AppColorTokens.of(context).bgSurface,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                    horizontal: AppSpacing.space8,
+                  ),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                      horizontal: AppSpacing.space4,
+                    ),
                     decoration: BoxDecoration(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: AppColorTokens.of(context).brand,
                       borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                        Radius.circular(ScreenUtil().setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainWhiteColor.name),
+                          context,
+                          AppThemeKeys.mainWhiteColor.name,
+                        ),
                       ),
                     ),
                   ),
@@ -162,14 +157,11 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget amountBalanceWidget() {
-    final String unit =
-        widget.coinModel.coin['unit'].toString().toUpperCase();
+    final String unit = widget.coinModel.coin['unit'].toString().toUpperCase();
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
       ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
@@ -178,19 +170,18 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget ownerAddress() {
-    final String addr =
-        dataUtils.addressFarmat(widget.coinModel.address.toString());
+    final String addr = dataUtils.addressFarmat(
+      widget.coinModel.address.toString(),
+    );
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(20.0),
-        horizontal: ScreenUtil().setWidth(30.0),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       child: Text(
         addr,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -199,11 +190,11 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final isContract = widget.coinModel.coin['isContract'] == true;
+    final isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final title = widget.coinModel.config.coinType;
     final feeText = '${toEther(totalGasPrice.toString(), decimals)} $title';
 
     return Column(
@@ -212,8 +203,8 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -222,28 +213,24 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }
@@ -256,20 +243,19 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -285,23 +271,13 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : S.of(context).g_key_48,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],

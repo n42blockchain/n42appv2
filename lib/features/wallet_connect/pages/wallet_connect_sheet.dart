@@ -7,7 +7,7 @@ import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_widgets_
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// WalletConnect connection sheet displayed as a modal bottom sheet.
 ///
@@ -39,7 +39,8 @@ class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
     super.initState();
     if (widget.uri.isNotEmpty) {
       ref.read(wcpBridgeProvider).pageOpen = true;
-      ref.read(wcpBridgeProvider)
+      ref
+          .read(wcpBridgeProvider)
           .viewStateDeal(WalletConnectState.loading, params: widget.uri);
     }
   }
@@ -78,8 +79,7 @@ class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
       }
     });
 
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name);
+    final bgColor = AppColorTokens.of(context).bgBase;
 
     return Container(
       decoration: BoxDecoration(

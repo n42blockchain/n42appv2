@@ -122,8 +122,10 @@ class _CandlestickPainter extends CustomPainter {
         final srcLen = volumeData.length;
         final denominator = n > 1 ? n - 1 : 1;
         alignedVolumes = List.generate(n, (i) {
-          final srcIdx =
-              ((i / denominator) * (srcLen - 1)).round().clamp(0, srcLen - 1);
+          final srcIdx = ((i / denominator) * (srcLen - 1)).round().clamp(
+            0,
+            srcLen - 1,
+          );
           return volumeData[srcIdx];
         });
       }
@@ -185,7 +187,11 @@ class _CandlestickPainter extends CustomPainter {
         volPaint.color = color.withValues(alpha: 0.45);
         canvas.drawRect(
           Rect.fromLTRB(
-              cx - halfBody, size.height - barH, cx + halfBody, size.height),
+            cx - halfBody,
+            size.height - barH,
+            cx + halfBody,
+            size.height,
+          ),
           volPaint,
         );
       }
@@ -218,7 +224,12 @@ class _CandlestickPainter extends CustomPainter {
   }
 
   void _drawPriceLabels(
-      Canvas canvas, Size size, double chartH, double minP, double maxP) {
+    Canvas canvas,
+    Size size,
+    double chartH,
+    double minP,
+    double maxP,
+  ) {
     const steps = 4;
     for (int i = 0; i <= steps; i++) {
       final ratio = i / steps;

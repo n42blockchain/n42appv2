@@ -1,5 +1,6 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_history_model.dart';
@@ -35,23 +36,24 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_dex_history_title),
       body: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: BaseList(
           firstRefresh: true,
           pageIndex: 1,
           pageSize: 20,
           getData: (int page, int pageSize) async {
             final String uuid = AppGlobals.userInfo?.uuid ?? '';
-            final MessageModel res =
-                await _api.getHistory(uuid, page: page, size: pageSize);
+            final MessageModel res = await _api.getHistory(
+              uuid,
+              page: page,
+              size: pageSize,
+            );
             if (res.error) return [];
             return ((res.data as List?) ?? [])
-                .map((e) =>
-                    DexHistoryModel.fromJson(e as Map<String, dynamic>))
+                .map((e) => DexHistoryModel.fromJson(e as Map<String, dynamic>))
                 .toList();
           },
-          buildItem:
-              (BuildContext context, List<dynamic> results, int index) {
+          buildItem: (BuildContext context, List<dynamic> results, int index) {
             final DexHistoryModel item = results[index] as DexHistoryModel;
             final String timeStr = dformat.formatDate(
               DateTime.fromMillisecondsSinceEpoch(item.createdAt * 1000),
@@ -79,8 +81,7 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
 
             return Container(
               height: ScreenUtil().setWidth(100),
-              margin:
-                  EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
+              margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,20 +89,16 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                     children: [
                       Text(
                         '${item.tokenInSymbol} → ${item.tokenOutSymbol}',
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       const Spacer(),
                       Text(
                         '+${item.amountOut} ${item.tokenOutSymbol}',
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
                     ],
@@ -110,38 +107,34 @@ class _DexSwapHistoryState extends State<DexSwapHistory> {
                     children: [
                       Text(
                         timeStr,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(context,
-                              AppThemeKeys.itemSubtitleTextColor.name),
-                          fontSize: ScreenUtil().setSp(24),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Container(
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(12),
-                          vertical: ScreenUtil().setWidth(4),
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
                           color: statusColor.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(4)),
+                            ScreenUtil().setWidth(4),
+                          ),
                         ),
                         child: Text(
                           item.source,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(context,
-                                AppThemeKeys.itemSubtitleTextColor.name),
-                            fontSize: ScreenUtil().setSp(20),
+                          style: AppTypography.captionSm.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
                           ),
                         ),
                       ),
                       const Spacer(),
                       Text(
                         _statusText(context, item.status),
-                        style: TextStyle(
+                        style: AppTypography.caption.copyWith(
                           color: statusColor,
-                          fontSize: ScreenUtil().setSp(24),
                         ),
                       ),
                     ],

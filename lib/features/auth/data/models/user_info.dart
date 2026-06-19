@@ -99,19 +99,19 @@ class UserInfo {
   /// Check if user is an artist
   bool get isArtist {
     if (_isArtist != null) return _isArtist!;
-    
+
     if (artJson == null || artJson!.isEmpty) {
       _isArtist = false;
       return false;
     }
-    
+
     try {
       Map<String, dynamic>? artData = json.decode(artJson!);
       _isArtist = artData != null && artData['_id'] != null;
     } catch (_) {
       _isArtist = false;
     }
-    
+
     return _isArtist!;
   }
 
@@ -169,4 +169,3 @@ class UserInfo {
     return 'UserInfo(uuid: $uuid, email: $email, name: $name)';
   }
 }
-

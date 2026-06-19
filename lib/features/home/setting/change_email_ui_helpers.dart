@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 /// Stateless UI helpers shared across all change-email step views.
@@ -30,11 +31,11 @@ Widget changeEmailCodeField({
       FilteringTextInputFormatter.digitsOnly,
       LengthLimitingTextInputFormatter(6),
     ],
-    style: TextStyle(
-        fontSize: 24.sp,
-        fontWeight: FontWeight.w700,
-        color: textColor,
-        letterSpacing: 8),
+    style: AppTypography.caption.copyWith(
+      fontWeight: FontWeight.w600,
+      color: textColor,
+      letterSpacing: 8,
+    ),
     decoration: changeEmailInputDeco(
       hint: '------',
       fillColor: fillColor,
@@ -65,8 +66,7 @@ Widget changeEmailResendRow({
           countdown > 0
               ? S.of(context).g_email_resend_countdown(countdown)
               : S.of(context).g_email_resend,
-          style: TextStyle(
-            fontSize: 13.sp,
+          style: AppTypography.captionSm.copyWith(
             color: countdown > 0 ? subColor : accentColor,
             fontWeight: FontWeight.w500,
           ),
@@ -91,18 +91,24 @@ Widget changeEmailPrimaryButton({
         backgroundColor: accentColor,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r)),
+          borderRadius: BorderRadius.circular(12.r),
+        ),
       ),
       child: loading
           ? SizedBox(
               width: 20.w,
               height: 20.h,
               child: const CircularProgressIndicator(
-                  color: Colors.white, strokeWidth: 2),
+                color: Colors.white,
+                strokeWidth: 2,
+              ),
             )
-          : Text(label,
-              style: TextStyle(
-                  fontSize: 16.sp, fontWeight: FontWeight.w600)),
+          : Text(
+              label,
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
     ),
   );
 }
@@ -115,8 +121,13 @@ Widget changeEmailBackButton({
   return Center(
     child: TextButton(
       onPressed: onPressed,
-      child: Text(label,
-          style: TextStyle(color: subColor, fontSize: 13.sp)),
+      child: Text(
+        label,
+        style: AppTypography.captionSm.copyWith(
+          color: subColor,
+          fontWeight: FontWeight.w400,
+        ),
+      ),
     ),
   );
 }
@@ -138,21 +149,22 @@ InputDecoration changeEmailInputDeco({
     suffixIcon: suffixIcon,
     filled: true,
     fillColor: fillColor,
-    contentPadding:
-        EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+    contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
     border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide.none),
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: BorderSide.none,
+    ),
     focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide: BorderSide(color: accentColor, width: 1.5)),
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: BorderSide(color: accentColor, width: 1.5),
+    ),
     errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide:
-            const BorderSide(color: Color(0xFFEF4444), width: 1.5)),
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+    ),
     focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10.r),
-        borderSide:
-            const BorderSide(color: Color(0xFFEF4444), width: 1.5)),
+      borderRadius: BorderRadius.circular(10.r),
+      borderSide: const BorderSide(color: Color(0xFFEF4444), width: 1.5),
+    ),
   );
 }

@@ -16,10 +16,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 class StakingHomePage extends StatefulWidget {
   final Map<StakingChainType, String>? userAddresses;
 
-  const StakingHomePage({
-    super.key,
-    this.userAddresses,
-  });
+  const StakingHomePage({super.key, this.userAddresses});
 
   @override
   State<StakingHomePage> createState() => _StakingHomePageState();
@@ -45,9 +42,7 @@ class _StakingHomePageState extends State<StakingHomePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_stake_title,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_stake_title),
       body: SafeArea(
         child: Column(
           children: [

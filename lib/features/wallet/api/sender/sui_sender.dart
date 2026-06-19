@@ -36,7 +36,10 @@ class SuiSender implements ChainSender {
     final gasLimit = BigInt.from(2000000); // 2M MIST budget
     final totalGas = gasPrice * gasLimit;
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -44,7 +47,10 @@ class SuiSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('SUI'));
       }
       valuePrice = valuePrice - totalGas;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
     if (valuePrice <= BigInt.zero || totalGas + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('SUI'));
@@ -59,7 +65,9 @@ class SuiSender implements ChainSender {
       'fromAddress': params.fromAddress,
       'gasBudget': totalGas.toString(),
       'gasPrice': gasPrice.toString(),
-      'coins': ownedObjects.map((o) => (o as Map<String, dynamic>)['data']?['objectId']).toList(),
+      'coins': ownedObjects
+          .map((o) => (o as Map<String, dynamic>)['data']?['objectId'])
+          .toList(),
     };
 
     String signStr;
@@ -75,7 +83,10 @@ class SuiSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.SUI.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.SUI.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 

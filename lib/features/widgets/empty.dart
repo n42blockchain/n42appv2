@@ -1,14 +1,11 @@
-﻿//@author zhc 2022/3/17 11:29 上午
+//@author zhc 2022/3/17 11:29 上午
 //@description:Loading组件
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-enum EmptyType {
-  noData,
-  netError,
-}
+enum EmptyType { noData, netError }
 
 /// 暂无信息组件 no Data
 /// 默认不带刷新功能 显示no data
@@ -39,32 +36,33 @@ class _EmptyViewState extends State<EmptyView> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (widget.canRefresh)
-              IconButton(
-                  onPressed: widget.onPressed,
-                  icon:  Icon(Icons.wifi_protected_setup_outlined,
-                      size: ScreenUtil().setSp(40), 
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name))),
-            SizedBox(height: ScreenUtil().setWidth(24),),
-            // 替换资源
-            Image.asset(
-              widget.type == EmptyType.noData
-                  ? 'assets/img/noData.png'//'assets/common/message_empty.png'
-                  : "assets/img/network_err.png",
-              width: 77,
-              fit: BoxFit.cover,
-              color: widget.type == EmptyType.noData?null:AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-            ),
-            SizedBox(height: ScreenUtil().setWidth(28),),
-            Text(
-              widget.title ?? S.of(context).g_key_132,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(40),
+            IconButton(
+              onPressed: widget.onPressed,
+              icon: Icon(
+                Icons.wifi_protected_setup_outlined,
+                size: ScreenUtil().setSp(40),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
-          ],
-        ),
-      );
+          SizedBox(height: AppSpacing.space6),
+          // 替换资源
+          Image.asset(
+            widget.type == EmptyType.noData
+                ? 'assets/img/noData.png' //'assets/common/message_empty.png'
+                : "assets/img/network_err.png",
+            width: 77,
+            fit: BoxFit.cover,
+            color: widget.type == EmptyType.noData
+                ? null
+                : AppColorTokens.of(context).textPrimary,
+          ),
+          SizedBox(height: AppSpacing.space8),
+          Text(
+            widget.title ?? S.of(context).g_key_132,
+            style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),
+          ),
+        ],
+      ),
+    );
   }
 }

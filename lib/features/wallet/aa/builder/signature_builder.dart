@@ -51,19 +51,19 @@ class SignatureBuilder {
     final s = bytesToHex(signature.sublist(32, 64));
     final v = signature[64];
 
-    return SignatureComponents(
-      r: r,
-      s: s,
-      v: v,
-    );
+    return SignatureComponents(r: r, s: s, v: v);
   }
 
   /// Combine signature components into bytes
   static Uint8List combineSignature(SignatureComponents components) {
     final result = Uint8List(65);
 
-    final rBytes = hexToBytes(components.r.replaceFirst('0x', '').padLeft(64, '0'));
-    final sBytes = hexToBytes(components.s.replaceFirst('0x', '').padLeft(64, '0'));
+    final rBytes = hexToBytes(
+      components.r.replaceFirst('0x', '').padLeft(64, '0'),
+    );
+    final sBytes = hexToBytes(
+      components.s.replaceFirst('0x', '').padLeft(64, '0'),
+    );
 
     result.setAll(0, rBytes);
     result.setAll(32, sBytes);
@@ -76,7 +76,10 @@ class SignatureBuilder {
   ///
   /// Takes a UserOperation and signature, returns a new UserOperation with
   /// the signature attached.
-  static UserOperation attachSignature(UserOperation userOp, Uint8List signature) {
+  static UserOperation attachSignature(
+    UserOperation userOp,
+    Uint8List signature,
+  ) {
     return userOp.copyWith(signature: signature);
   }
 
@@ -91,7 +94,11 @@ class SignatureBuilder {
   }
 
   /// Get the message to sign as a hex string
-  static String getSignMessage(UserOperation userOp, String entryPoint, BigInt chainId) {
+  static String getSignMessage(
+    UserOperation userOp,
+    String entryPoint,
+    BigInt chainId,
+  ) {
     final hash = userOp.getUserOpHash(entryPoint, chainId);
     return '0x${bytesToHex(hash)}';
   }
@@ -282,7 +289,8 @@ class UserOpTypedData {
         'accountGasLimits': '0x${bytesToHex(userOp.accountGasLimits)}',
         'preVerificationGas': userOp.preVerificationGas.toString(),
         'gasFees': '0x${bytesToHex(userOp.gasFees)}',
-        'paymasterAndData': '0x${bytesToHex(userOp.paymasterAndData ?? Uint8List(0))}',
+        'paymasterAndData':
+            '0x${bytesToHex(userOp.paymasterAndData ?? Uint8List(0))}',
       },
     };
   }

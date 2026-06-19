@@ -5,7 +5,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -24,7 +24,8 @@ class BackupThree extends ConsumerStatefulWidget {
 
 class _BackupThreeState extends ConsumerState<BackupThree> {
   final TextEditingController _uPasswordController = TextEditingController();
-  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController =
+      TextEditingController();
   final FocusNode _uPasswordFocusNode = FocusNode();
   final FocusNode _uPasswordConfirmFocusNode = FocusNode();
   bool _submitting = false;
@@ -55,10 +56,12 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
   }) {
     return Container(
       constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(108.0)),
-      margin: margin ?? EdgeInsets.only(
-        top: ScreenUtil().setWidth(10),
-        bottom: ScreenUtil().setWidth(20),
-      ),
+      margin:
+          margin ??
+          EdgeInsets.only(
+            top: ScreenUtil().setWidth(10),
+            bottom: ScreenUtil().setWidth(20),
+          ),
       width: double.infinity,
       child: textFieldStyle3(
         context,
@@ -70,9 +73,11 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
         keyboardType: TextInputType.visiblePassword,
         textInputAction: textInputAction,
         errorMessage: errorMessage,
-        hintStyle: TextStyle(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
+        hintStyle: AppTypography.body.copyWith(
+          color: AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.hintTextColor.name,
+          ),
         ),
         obscure: obscure,
         rightWidget1: Container(
@@ -82,7 +87,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
           child: Image.asset(
             'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
             width: ScreenUtil().setWidth(34.0),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
         rightOnTap1: onToggleObscure,
@@ -127,7 +132,9 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
         ref.read(wapBridgeProvider).initWallet();
       }
       ToastUtils.show(S.of(context).g_key_185);
-      eventBus.fire(EventPublic(EventPublicType.backup, param: widget.walletInfo));
+      eventBus.fire(
+        EventPublic(EventPublicType.backup, param: widget.walletInfo),
+      );
       completedWithExit = true;
       Navigator.pop(context);
     } catch (e) {
@@ -148,13 +155,16 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     LoginTitle(
                       title: S.of(context).login_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildPasswordField(
@@ -163,12 +173,18 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       hintText: S.of(context).rest_Choose_password,
                       errorMessage: uPasswordErrorMessage,
                       obscure: showPwd1,
-                      onToggleObscure: () => setState(() => showPwd1 = !showPwd1),
-                      onEditingComplete: () => FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode),
+                      onToggleObscure: () =>
+                          setState(() => showPwd1 = !showPwd1),
+                      onEditingComplete: () => FocusScope.of(
+                        context,
+                      ).requestFocus(_uPasswordConfirmFocusNode),
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildPasswordField(
@@ -178,7 +194,8 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                       errorMessage: uPasswordConfirmErrorMessage,
                       obscure: showPwd2,
                       textInputAction: TextInputAction.done,
-                      onToggleObscure: () => setState(() => showPwd2 = !showPwd2),
+                      onToggleObscure: () =>
+                          setState(() => showPwd2 = !showPwd2),
                       onEditingComplete: () => FocusScope.of(context).unfocus(),
                       margin: EdgeInsets.only(top: ScreenUtil().setWidth(10)),
                     ),
@@ -196,15 +213,12 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
-                    child: buttonStyle6(
-                      context,
-                      _onSubmit,
-                      S.of(context).g_key_115,
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      _submitting,
+                    child: AppButton(
+                      label: S.of(context).g_key_115,
+                      onPressed: _onSubmit,
+                      loading: _submitting,
                     ),
                   ),
                 ],

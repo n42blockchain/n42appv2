@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -29,7 +28,7 @@ import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -363,18 +362,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return;
     }
 
-    final approveResult = await SenderFactory.instance.getSender(_chain).send(
-      SendParams(
-        coinType: _chain,
-        fromAddress: _userAddr,
-        toAddress: _tokenIn!.address,
-        amount: 0.0,
-        decimals: 18,
-        path: path,
-        isTest: false,
-        calldata: DexSwapApi.buildApproveCalldata(q.routerAddr, amount: exactAmount),
-      ),
-    );
+    final approveResult = await SenderFactory.instance
+        .getSender(_chain)
+        .send(
+          SendParams(
+            coinType: _chain,
+            fromAddress: _userAddr,
+            toAddress: _tokenIn!.address,
+            amount: 0.0,
+            decimals: 18,
+            path: path,
+            isTest: false,
+            calldata: DexSwapApi.buildApproveCalldata(
+              q.routerAddr,
+              amount: exactAmount,
+            ),
+          ),
+        );
     if (!mounted) return;
 
     if (!approveResult.success) {
@@ -393,7 +397,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(S.of(context).g_key_dex_approval_success),
-        backgroundColor: const Color(0xFF4CAF50),
+        backgroundColor: AppColorTokens.of(context).success,
       ),
     );
   }
@@ -433,18 +437,20 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         });
         return;
       }
-      final swapResult = await SenderFactory.instance.getSender(swapChain).send(
-        SendParams(
-          coinType: swapChain,
-          fromAddress: _userAddr,
-          toAddress: q.routerAddr,
-          amount: 0.0,
-          decimals: 18,
-          path: path,
-          isTest: false,
-          calldata: q.calldata,
-        ),
-      );
+      final swapResult = await SenderFactory.instance
+          .getSender(swapChain)
+          .send(
+            SendParams(
+              coinType: swapChain,
+              fromAddress: _userAddr,
+              toAddress: q.routerAddr,
+              amount: 0.0,
+              decimals: 18,
+              path: path,
+              isTest: false,
+              calldata: q.calldata,
+            ),
+          );
       if (!mounted) return;
       if (!swapResult.success) {
         setState(() {
@@ -491,19 +497,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
     // Add approve call if needed (max uint256)
     if (_needsApproval && _tokenIn != null) {
-      batchCalls.add(ExecuteCall.erc20Approve(
-        token: _tokenIn!.address,
-        spender: quote.routerAddr,
-        amount: _maxUint256,
-      ));
+      batchCalls.add(
+        ExecuteCall.erc20Approve(
+          token: _tokenIn!.address,
+          spender: quote.routerAddr,
+          amount: _maxUint256,
+        ),
+      );
     }
 
     // Add swap call with the DEX calldata
-    batchCalls.add(ExecuteCall(
-      target: quote.routerAddr,
-      value: BigInt.zero,
-      data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
-    ));
+    batchCalls.add(
+      ExecuteCall(
+        target: quote.routerAddr,
+        value: BigInt.zero,
+        data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
+      ),
+    );
 
     final params = AATransferParams(
       chainSymbol: _chain,
@@ -564,8 +574,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── Mode tab widget ────────────────────────────────────────────────────────
 
   Widget _modeTab(String label, bool active) {
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     return GestureDetector(
       onTap: () {
         final newMode = label == 'Limit';
@@ -575,18 +584,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(10),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: active ? blueColor : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
-          border: active ? null : Border.all(color: blueColor.withValues(alpha: 0.3)),
+          border: active
+              ? null
+              : Border.all(color: blueColor.withValues(alpha: 0.3)),
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: active ? Colors.white : blueColor,
           ),
@@ -598,19 +608,22 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── Gas-free toggle widget ─────────────────────────────────────────────────
 
   Widget _buildGasFreeToggle() {
+    final c = AppColorTokens.of(context);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Row(
         children: [
-          Icon(Icons.local_gas_station_outlined,
-              size: 18, color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Icon(
+            Icons.local_gas_station_outlined,
+            size: 18,
+            color: _gasFreeEnabled ? c.success : c.textTertiary,
+          ),
+          SizedBox(width: AppSpacing.space2),
           Text(
             'Gas-free Swap',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
-              color: _gasFreeEnabled ? const Color(0xFF4CAF50) : Colors.grey,
+              color: _gasFreeEnabled ? c.success : c.textTertiary,
             ),
           ),
           const Spacer(),
@@ -619,7 +632,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             child: Switch.adaptive(
               value: _gasFreeEnabled,
               onChanged: (v) => setState(() => _gasFreeEnabled = v),
-              activeTrackColor: const Color(0xFF4CAF50),
+              activeTrackColor: c.success,
             ),
           ),
         ],
@@ -644,16 +657,18 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
             },
             onOpenHistory: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => _isLimitMode
-                  ? const DexLimitOrdersPage()
-                  : const DexSwapHistory()),
+              MaterialPageRoute(
+                builder: (_) => _isLimitMode
+                    ? const DexLimitOrdersPage()
+                    : const DexSwapHistory(),
+              ),
             ),
           ),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -661,88 +676,88 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                 selectedChain: _chain,
                 onChainChanged: _onChainChanged,
               ),
-              SizedBox(height: ScreenUtil().setWidth(12)),
+              SizedBox(height: AppSpacing.space4),
               // Market / Limit mode toggle
               Row(
                 children: [
                   _modeTab('Market', !_isLimitMode),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   _modeTab('Limit', _isLimitMode),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (_isLimitMode)
                 DexLimitOrderForm(chain: _chain)
               else ...[
-              if (_showChart) ...[
-                SizedBox(height: ScreenUtil().setWidth(16)),
-                DexPriceChart(
-                  tokenInSymbol: _tokenIn?.symbol,
-                  chartPrices: _chartPrices,
-                  chartLoading: _chartLoading,
-                  selectedPeriodDays: _chartPeriodDays,
-                  onPeriodChanged: (days) {
-                    setState(() => _chartPeriodDays = days);
-                    _fetchPriceChart();
-                  },
+                if (_showChart) ...[
+                  SizedBox(height: AppSpacing.space4),
+                  DexPriceChart(
+                    tokenInSymbol: _tokenIn?.symbol,
+                    chartPrices: _chartPrices,
+                    chartLoading: _chartLoading,
+                    selectedPeriodDays: _chartPeriodDays,
+                    onPeriodChanged: (days) {
+                      setState(() => _chartPeriodDays = days);
+                      _fetchPriceChart();
+                    },
+                  ),
+                ],
+                SizedBox(height: AppSpacing.space4),
+                DexSlippageRow(
+                  slippageOptions: _slippageOptions,
+                  selectedBps: _slippageBps,
+                  onChanged: _onSlippageChanged,
                 ),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexSlippageRow(
-                slippageOptions: _slippageOptions,
-                selectedBps: _slippageBps,
-                onChanged: _onSlippageChanged,
-              ),
-              if (_canUseGasFree) ...[
-                SizedBox(height: ScreenUtil().setWidth(12)),
-                _buildGasFreeToggle(),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(24)),
-              DexTokenCard(
-                label: s.g_swap_key_3,
-                token: _tokenIn,
-                controller: _amountCtrl,
-                onTokenTap: _selectTokenIn,
-              ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexSwapArrow(onTap: _swapTokenDirection),
-              SizedBox(height: ScreenUtil().setWidth(16)),
-              DexTokenCard(
-                label: s.g_swap_key_4,
-                token: _tokenOut,
-                amountReadOnly: _quote?.amountOut,
-                onTokenTap: _selectTokenOut,
-              ),
-              if (_errorMsg.isNotEmpty) ...[
-                SizedBox(height: ScreenUtil().setWidth(16)),
-                DexErrorBanner(message: _errorMsg),
-              ],
-              if (_quoteLoad == Load.loading) ...[
-                SizedBox(height: ScreenUtil().setWidth(24)),
-                const Center(child: CircularProgressIndicator()),
-              ],
-              if (_quote != null) ...[
-                SizedBox(height: ScreenUtil().setWidth(24)),
-                DexQuoteCard(
-                  quote: _quote!,
-                  secsLeft: _quoteSecsLeft,
+                if (_canUseGasFree) ...[
+                  SizedBox(height: AppSpacing.space4),
+                  _buildGasFreeToggle(),
+                ],
+                SizedBox(height: AppSpacing.space6),
+                DexTokenCard(
+                  label: s.g_swap_key_3,
+                  token: _tokenIn,
+                  controller: _amountCtrl,
+                  onTokenTap: _selectTokenIn,
+                ),
+                SizedBox(height: AppSpacing.space4),
+                DexSwapArrow(onTap: _swapTokenDirection),
+                SizedBox(height: AppSpacing.space4),
+                DexTokenCard(
+                  label: s.g_swap_key_4,
+                  token: _tokenOut,
+                  amountReadOnly: _quote?.amountOut,
+                  onTokenTap: _selectTokenOut,
+                ),
+                if (_errorMsg.isNotEmpty) ...[
+                  SizedBox(height: AppSpacing.space4),
+                  DexErrorBanner(message: _errorMsg),
+                ],
+                if (_quoteLoad == Load.loading) ...[
+                  SizedBox(height: AppSpacing.space6),
+                  const Center(child: CircularProgressIndicator()),
+                ],
+                if (_quote != null) ...[
+                  SizedBox(height: AppSpacing.space6),
+                  DexQuoteCard(
+                    quote: _quote!,
+                    secsLeft: _quoteSecsLeft,
+                    needsApproval: _needsApproval,
+                    exactApprove: _exactApprove,
+                    tokenInSymbol: _tokenIn?.symbol ?? '',
+                    onExactApproveChanged: (exact) =>
+                        setState(() => _exactApprove = exact),
+                  ),
+                ],
+                SizedBox(height: AppSpacing.space12),
+                DexActionButtons(
+                  quote: _quote,
                   needsApproval: _needsApproval,
-                  exactApprove: _exactApprove,
+                  approveLoad: _approveLoad,
+                  swapLoad: _swapLoad,
                   tokenInSymbol: _tokenIn?.symbol ?? '',
-                  onExactApproveChanged: (exact) =>
-                      setState(() => _exactApprove = exact),
+                  onApprove: _executeApprove,
+                  onSwapConfirmed: _executeSwap,
                 ),
-              ],
-              SizedBox(height: ScreenUtil().setWidth(40)),
-              DexActionButtons(
-                quote: _quote,
-                needsApproval: _needsApproval,
-                approveLoad: _approveLoad,
-                swapLoad: _swapLoad,
-                tokenInSymbol: _tokenIn?.symbol ?? '',
-                onApprove: _executeApprove,
-                onSwapConfirmed: _executeSwap,
-              ),
               ], // end else (market mode)
             ],
           ),

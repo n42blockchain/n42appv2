@@ -1,4 +1,5 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,21 +26,15 @@ class ItemMiningNode extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space6,
         ),
-        margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+        margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           color: Colors.transparent,
           border: Border.fromBorderSide(
-            BorderSide(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemLineColor.name,
-              ),
-              width: 1,
-            ),
+            BorderSide(color: AppColorTokens.of(context).border, width: 1),
           ),
         ),
         child: Row(
@@ -51,34 +46,28 @@ class ItemMiningNode extends StatelessWidget {
               children: [
                 Text(
                   countryName,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   nodeAddress,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainGreyColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(12)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   socketUrl,
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
                       context,
                       AppThemeKeys.mainGreyColor.name,
                     ),
-                    fontSize: ScreenUtil().setSp(28),
                   ),
                 ),
               ],
@@ -87,12 +76,9 @@ class ItemMiningNode extends StatelessWidget {
                 ? Icon(
                     Icons.check,
                     size: ScreenUtil().setWidth(48),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ),
+                    color: AppColorTokens.of(context).brand,
                   )
-                : SizedBox(width: ScreenUtil().setWidth(48)),
+                : SizedBox(width: AppSpacing.space12),
           ],
         ),
       ),

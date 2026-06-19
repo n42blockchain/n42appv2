@@ -3,6 +3,7 @@ import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
@@ -111,18 +112,14 @@ class _EditAddressPageState extends State<EditAddressPage> {
           GestureDetector(
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
               ),
               color: Colors.transparent,
               child: Center(
                 child: Text(
                   editStatus ? S.of(context).g_key_115 : S.of(context).Edit,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(32.0),
+                  style: AppTypography.headline.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -159,15 +156,14 @@ class _EditAddressPageState extends State<EditAddressPage> {
           SizedBox(height: ScreenUtil().setWidth(36.0)),
           Text(
             S.of(context).address_Information,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
                 context,
                 AppThemeKeys.ff888888.name,
               ),
-              fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20.0)),
+          SizedBox(height: AppSpacing.space4),
           _buildAddressView(context),
           const Spacer(),
           delete(),
@@ -199,7 +195,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
           : null,
       child: containerStyle1(
         context,
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         height: ScreenUtil().setWidth(88.0),
         child: Row(
           children: [
@@ -220,25 +216,18 @@ class _EditAddressPageState extends State<EditAddressPage> {
                       placeholder: "assets/img/list_default.png",
                     ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(24.0)),
+            SizedBox(width: AppSpacing.space6),
             Text(
               coinName,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-                fontSize: ScreenUtil().setSp(28.0),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             const Spacer(),
             Icon(
               Icons.arrow_forward_ios,
               size: ScreenUtil().setWidth(40.0),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ],
         ),
@@ -249,7 +238,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
   Widget _buildAddressView(BuildContext context) {
     return containerStyle1(
       context,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Column(
         children: [
           scanItem(),
@@ -282,14 +271,11 @@ class _EditAddressPageState extends State<EditAddressPage> {
       },
       boxShadow: _noShadow,
       messageMargin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
       ),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+        color: AppColorTokens.of(context).textPrimary,
         width: ScreenUtil().setWidth(50.0),
         height: ScreenUtil().setWidth(50.0),
       ),
@@ -311,20 +297,16 @@ class _EditAddressPageState extends State<EditAddressPage> {
         height: ScreenUtil().setWidth(60.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          color: AppColorTokens.of(context).brand,
           borderRadius: BorderRadius.all(Radius.circular(60.0)),
         ),
         child: Text(
           S.of(context).g_key_166,
-          style: TextStyle(
+          style: AppTypography.bodySm.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainWhiteColor.name,
             ),
-            fontSize: ScreenUtil().setSp(26.0),
           ),
         ),
       ),
@@ -417,20 +399,16 @@ class _EditAddressPageState extends State<EditAddressPage> {
         height: ScreenUtil().setWidth(80.0),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          color: AppColorTokens.of(context).danger,
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           S.of(context).g_key_113,
-          style: TextStyle(
+          style: AppTypography.headline.copyWith(
             color: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainWhiteColor.name,
             ),
-            fontSize: ScreenUtil().setSp(32.0),
           ),
         ),
       ),

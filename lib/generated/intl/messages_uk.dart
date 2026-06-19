@@ -124,46 +124,70 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "Цей обліковий запис володіє об’єктами ${value}, що означає, що зарезервовано додатковий ${value1} XRP.";
 
-  static String m45(value) => "Невірний ключ, залишилось ${value} спроб";
+  static String m45(message) => "Не вдалося увійти до кімнати\n${message}";
 
-  static String m46(value) => "Невірний ключ, залишилась ${value} спроба";
+  static String m46(value) => "Невірний ключ, залишилось ${value} спроб";
 
-  static String m47(value) =>
-      "Ви успішно налаштували ${value} і почнете перевірку за допомогою N42Wallet!";
+  static String m47(value) => "Невірний ключ, залишилась ${value} спроба";
 
   static String m48(value) =>
+      "Ви успішно налаштували ${value} і почнете перевірку за допомогою N42Wallet!";
+
+  static String m49(value) =>
       "Приєднуйтеся до моєї групи ${value} на @N42Wallet, щоб стати першим майнером ланцюга рівня 1 і отримати криптовалюту на свій телефон!";
 
-  static String m49(value, value1) =>
+  static String m50(value, value1) =>
       "Ви впевнені, що бажаєте заблокувати ${value} N до ${value1} для запуску вузла?";
 
-  static String m50(value) => "Помилка імпорту: ${value}";
+  static String m51(value) => "Помилка імпорту: ${value}";
 
-  static String m51(value) =>
+  static String m52(value) =>
       "Щоб отримати винагороду, потрібен баланс ставки принаймні ${value}.";
 
-  static String m52(value, value1) =>
+  static String m53(value, value1) =>
       "${value} N кожні здобуті блоки ${value1}";
 
-  static String m53(value) => "Має бути ${value} символів";
+  static String m54(value) => "Має бути ${value} символів";
 
-  static String m54(value) => "${value} Недостатній баланс.";
+  static String m55(symbol) => "Сума (${symbol})";
 
-  static String m55(value) => "${value} вхідний...";
+  static String m56(amount, symbol) => "Баланс: ${amount} ${symbol}";
 
-  static String m56(value) =>
+  static String m57(label) =>
+      "Оголосити «${label}» переможцем і розрахувати? Незворотно.";
+
+  static String m58(n) => "${n} хв";
+
+  static String m59(n) => "Результат ${n}";
+
+  static String m60(label, pct) => "${label} перемагає (${pct}%)";
+
+  static String m61(shares, avg, after) =>
+      "Очік. ${shares} часток · сер. ${avg}% · після ${after}%";
+
+  static String m62(reason) => "Помилка погашення: ${reason}";
+
+  static String m63(label) => "Результат: ${label}";
+
+  static String m64(n) => "Продати ${n}";
+
+  static String m65(value) => "${value} Недостатній баланс.";
+
+  static String m66(value) => "${value} вхідний...";
+
+  static String m67(value) =>
       "${value}, замінений у додатку, незабаром буде розповсюджений у ваш гаманець і не може бути проданий через цей процес. Його можна використовувати для запуску вузла.";
 
-  static String m57(value) => "Максимальна кількість символів: ${value}";
+  static String m68(value) => "Максимальна кількість символів: ${value}";
 
-  static String m58(value) => "${value} chain APP вже підтримується!";
+  static String m69(value) => "${value} chain APP вже підтримується!";
 
-  static String m59(value) =>
+  static String m70(value) =>
       "${value} chain APP уже підтримується, хочете додати?";
 
-  static String m60(value) => "Помилка перевірки адреси ${value}!";
+  static String m71(value) => "Помилка перевірки адреси ${value}!";
 
-  static String m61(value) => "0~${value} символів";
+  static String m72(value) => "0~${value} символів";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2218,6 +2242,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Загальний резерв = базовий резерв + (кількість об’єктів власності × додатковий резерв)",
     ),
+    "g_live_enter_room_failed": m45,
+    "g_live_follow": MessageLookupByLibrary.simpleMessage("Стежити"),
+    "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
+      "Функція стеження незабаром",
+    ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage("Touch ID і Face ID"),
     "g_lock_key16": MessageLookupByLibrary.simpleMessage("Графічний пароль"),
     "g_lock_key17": MessageLookupByLibrary.simpleMessage(
@@ -2232,7 +2261,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Намалюйте поточний графічний ключ",
     ),
-    "g_lock_key21": m45,
+    "g_lock_key21": m46,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Скинути графічний пароль",
     ),
@@ -2242,7 +2271,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Додати пароль Wallet?",
     ),
-    "g_lock_key25": m46,
+    "g_lock_key25": m47,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
@@ -2324,12 +2353,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Поділіться з друзями",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Продовжити"),
-    "g_mining_key63": m47,
-    "g_mining_key73": m48,
+    "g_mining_key63": m48,
+    "g_mining_key73": m49,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Я щойно налаштував вузол на @N42Wallet і почав перевірку на мобільних пристроях! Приходь і приєднуйся до мене. Децентралізоване майбутнє – це мобільно!",
     ),
-    "g_mining_key76": m49,
+    "g_mining_key76": m50,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("мінеральні"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Вузол"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Мережа"),
@@ -2364,7 +2393,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Непідтримуваний формат зашифрованих даних!",
     ),
-    "g_mining_key_109": m50,
+    "g_mining_key_109": m51,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Вчорашні нагороди",
     ),
@@ -2380,7 +2409,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Погашення займає деякий час, зачекайте трохи!",
     ),
-    "g_mining_key_116": m51,
+    "g_mining_key_116": m52,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Винагорода накопичується щодня та надсилається на ваш гаманець N лише тоді, коли вона досягає ~0,5 N.",
     ),
@@ -2472,7 +2501,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 блоків/день ~ 15 хв",
     ),
-    "g_mining_key_71": m52,
+    "g_mining_key_71": m53,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 секунд на перевірку",
     ),
@@ -2538,7 +2567,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть пароль для шифрування",
     ),
-    "g_mining_key_98": m53,
+    "g_mining_key_98": m54,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Введіть свій пароль повторно, щоб переконатися, що він правильний",
     ),
@@ -2610,6 +2639,80 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "Загальна вартість",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
+      "Додати результат",
+    ),
+    "g_pred_amount_input": m55,
+    "g_pred_balance": m56,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Купити"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "Скасувати та повернути",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Лише закрити"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Закрито, очікування результату",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Підтвердити розрахунок",
+    ),
+    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
+      "Почати прогноз",
+    ),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Створення…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Дедлайн"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Сума має бути більше 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Недостатньо коштів",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Недостатньо часток",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Недійсний результат",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Ринок закрито, торгівля недоступна",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Ринок не знайдено",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Ринок не розраховано, погашення неможливе",
+    ),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Щонайменше два дійсні результати",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Введіть запитання",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Перевищено прослизання, повторіть",
+    ),
+    "g_pred_minutes": m58,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Ні"),
+    "g_pred_outcome_n": m59,
+    "g_pred_outcome_win": m60,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Результати"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Виберіть переможний результат для розрахунку (виплата за результатом)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("Обробка…"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Опублікувати"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Питання прогнозу, напр.: Хто виграє цей раунд?",
+    ),
+    "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Вирішено"),
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Без обмежень (закрити вручну)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Так"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "Завантажено",
     ),
@@ -2644,7 +2747,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Посилання"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Отримати помилку ціни монети.",
     ),
@@ -2656,7 +2759,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмін буде розповсюджено незабаром. Будь ласка, будьте терплячі.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Витрати на запуск вузла: Групова перевірка 1-49 N Базовий вузол: 50 N Преміум-вузол: 100 N Професійний вузол: 500 N.",
     ),
@@ -2670,7 +2773,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новий баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ви платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Свопи можна переглянути у відповідних дослідниках ланцюгів (Etherscan, BscScan, TRONSCAN і наш власний).",
     ),
@@ -2687,7 +2790,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Скинути до замовчування",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Будь-хто може створити маркер, у тому числі створити підроблені версії існуючих маркерів. Завжди досліджуйте токен перед його імпортом.",
     ),
@@ -2706,9 +2809,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Помилка формату!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Імпорт жетонів"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Всі мережі"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2722,6 +2825,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Високий ризик"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Безпечний"),
     "g_version_later": MessageLookupByLibrary.simpleMessage("Пізніше"),
+    "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
+      "HD-гаманець · Мнемоніка",
+    ),
+    "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
+      "Один ланцюг · Імпортовано",
+    ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "З\'єднання втрачено. Підключіться повторно.",
     ),
@@ -2750,6 +2859,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Сеанс закінчився",
     ),
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage("Підключені DApps"),
+    "g_xrp_dest_tag_hint": MessageLookupByLibrary.simpleMessage(
+      "Зазвичай потрібно при надсиланні на біржу",
+    ),
+    "g_xrp_optional": MessageLookupByLibrary.simpleMessage("(Необов’язково)"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "Посилання",
     ),
@@ -2759,13 +2872,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Електронна пошта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далі"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редагувати профіль",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("Фотографія"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Будь ласка, введіть адресу",
+    ),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Background Delivery May Be Limited",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Більше не нагадувати",

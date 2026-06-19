@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
 class WalletCoinListHeader extends StatelessWidget {
@@ -27,7 +28,7 @@ class WalletCoinListHeader extends StatelessWidget {
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;
     }
-    return waValue.coinModels[waValue.walletInfo.networkIndex].coin['name'] ?? '';
+    return waValue.coinModels[waValue.walletInfo.networkIndex].config.name;
   }
 
   @override
@@ -41,12 +42,11 @@ class WalletCoinListHeader extends StatelessWidget {
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(24),
-            vertical: ScreenUtil().setWidth(18),
+            horizontal: AppSpacing.space6,
+            vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
+            color: AppColorTokens.of(context).bgBase,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(ScreenUtil().setWidth(28)),
               topLeft: Radius.circular(ScreenUtil().setWidth(28)),
@@ -97,8 +97,7 @@ class _TopRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
 
     return Row(
       children: [
@@ -106,11 +105,9 @@ class _TopRow extends StatelessWidget {
           child: Text(
             S.of(context).g_token_m_key_11,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: su.setSp(32),
+            style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ),
@@ -152,8 +149,7 @@ class _TopRow extends StatelessWidget {
               child: Icon(
                 Icons.donut_large_rounded,
                 size: su.setWidth(36),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -178,8 +174,7 @@ class _TopRow extends StatelessWidget {
                 children: [
                   Text(
                     networkLabel,
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w500,
                       color: blueColor,
                     ),
@@ -221,13 +216,13 @@ class _BottomRow extends StatelessWidget {
           sortValue: waValue.walletInfo.coinSort['name'] ?? -1,
           onTap: () => waValue.setCoinSortAssets("name"),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         _SortButton(
           label: S.of(context).g_key_198,
           sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
           onTap: () => waValue.setCoinSortAssets("assets"),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         _SortButton(
           label: '24h%',
           sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
@@ -261,32 +256,29 @@ class _SortButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        borderRadius: AppRadius.brSm,
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(8),
-            vertical: ScreenUtil().setWidth(6),
+            horizontal: AppSpacing.space2,
+            vertical: AppSpacing.space2,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(4)),
+              SizedBox(width: AppSpacing.space2),
               SizedBox(
                 width: ScreenUtil().setWidth(16),
                 height: ScreenUtil().setWidth(16),
                 child: Image.asset(
                   "assets/wallet/assets$sortValue.png",
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ],
@@ -312,10 +304,8 @@ class _ThresholdButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final active = threshold > 0;
     final label = active ? '< \$${threshold.toInt()}' : '< \$';
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final subColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final subColor = AppColorTokens.of(context).textSubtitle;
 
     return GestureDetector(
       onTap: () {
@@ -325,12 +315,14 @@ class _ThresholdButton extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(14),
-          vertical: ScreenUtil().setWidth(6),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
-          color: active ? blueColor.withValues(alpha: 0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          color: active
+              ? blueColor.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: AppRadius.brMd,
           border: active
               ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
               : null,
@@ -348,9 +340,8 @@ class _ThresholdButton extends StatelessWidget {
             SizedBox(width: ScreenUtil().setWidth(5)),
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: active ? blueColor : subColor,
-                fontSize: ScreenUtil().setSp(22),
                 fontWeight: active ? FontWeight.w600 : FontWeight.normal,
               ),
             ),

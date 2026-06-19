@@ -3,9 +3,7 @@
 part of 'mining_node_detail_page.dart';
 
 /// Extracted widget builders and helpers for [MiningNodeDetailPage].
-mixin _MiningNodeDetailWidgets
-    on ConsumerState<MiningNodeDetailPage> {
-
+mixin _MiningNodeDetailWidgets on ConsumerState<MiningNodeDetailPage> {
   Color _themeColor(BuildContext context, AppThemeKeys key) {
     return AppThemeUtils.getColorByKey(context, key.name);
   }
@@ -27,7 +25,7 @@ mixin _MiningNodeDetailWidgets
             value: '${mpValue.balanceInBeacon} ${CoinType.N.name}',
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(16)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _buildInfoCard(
             context,
@@ -35,7 +33,7 @@ mixin _MiningNodeDetailWidgets
             icon: Icons.timer_outlined,
             label: 'Uptime',
             value: '${node.uptimePercentage.toStringAsFixed(1)}%',
-            valueColor: _uptimeColor(node.uptimePercentage),
+            valueColor: _uptimeColor(context, node.uptimePercentage),
           ),
         ),
       ],
@@ -51,7 +49,7 @@ mixin _MiningNodeDetailWidgets
     Color? valueColor,
   }) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _cardDecoration(context, isDark),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,13 +61,15 @@ mixin _MiningNodeDetailWidgets
                 size: ScreenUtil().setWidth(28),
                 color: _themeColor(context, AppThemeKeys.mainBlueColor),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   label,
-                  style: TextStyle(
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-                    fontSize: ScreenUtil().setSp(22),
+                  style: AppTypography.caption.copyWith(
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor,
+                    ),
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -77,14 +77,14 @@ mixin _MiningNodeDetailWidgets
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             value,
-            style: TextStyle(
-              color: valueColor ??
+            style: AppTypography.body.copyWith(
+              color:
+                  valueColor ??
                   _themeColor(context, AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -123,7 +123,7 @@ mixin _MiningNodeDetailWidgets
               context,
               label: S.of(context).g_mining_node_key6,
               value: dateFormat.format(node.expiresAt!),
-              valueColor: const Color(0xFFEB5851),
+              valueColor: AppColorTokens.of(context).danger,
             ),
           ],
         ],
@@ -143,10 +143,9 @@ mixin _MiningNodeDetailWidgets
       trailing: Flexible(
         child: Text(
           value,
-          style: TextStyle(
-            color: valueColor ??
-                _themeColor(context, AppThemeKeys.mainTextColor),
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
+            color:
+                valueColor ?? _themeColor(context, AppThemeKeys.mainTextColor),
             fontWeight: FontWeight.w500,
           ),
           textAlign: TextAlign.end,
@@ -164,17 +163,16 @@ mixin _MiningNodeDetailWidgets
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(18),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [
           Flexible(
             child: Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
-                fontSize: ScreenUtil().setSp(24),
               ),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
@@ -187,44 +185,32 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  Widget _buildWsStatus(BuildContext context, WebSocketState state) => switch (state) {
-    WebSocketState.connected => _wsDot(
-        context, const Color(0xff32D74B), S.of(context).g_mining_node_key3),
-    WebSocketState.reconnecting => _wsDot(
-        context, const Color(0xFFFF9500), S.of(context).g_mining_node_key5),
-    WebSocketState.connecting => SizedBox(
-        width: ScreenUtil().setWidth(20),
-        height: ScreenUtil().setWidth(20),
-        child: CircularProgressIndicator(
-          strokeWidth: 2,
-          color: _themeColor(context, AppThemeKeys.mainBlueColor),
+  Widget _buildWsStatus(BuildContext context, WebSocketState state) =>
+      switch (state) {
+        WebSocketState.connected => AppBadge(
+          label: S.of(context).g_mining_node_key3,
+          tone: AppBadgeTone.success,
+          dot: true,
         ),
-      ),
-    WebSocketState.disconnected => _wsDot(
-        context, const Color(0xffEB5851), S.of(context).g_mining_node_key4),
-  };
-
-  Widget _wsDot(BuildContext context, Color color, String label) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: ScreenUtil().setWidth(10),
-          height: ScreenUtil().setWidth(10),
-          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        WebSocketState.reconnecting => AppBadge(
+          label: S.of(context).g_mining_node_key5,
+          tone: AppBadgeTone.warning,
+          dot: true,
         ),
-        SizedBox(width: ScreenUtil().setWidth(6)),
-        Text(
-          label,
-          style: TextStyle(
-            color: color,
-            fontSize: ScreenUtil().setSp(24),
-            fontWeight: FontWeight.w500,
+        WebSocketState.connecting => SizedBox(
+          width: ScreenUtil().setWidth(20),
+          height: ScreenUtil().setWidth(20),
+          child: CircularProgressIndicator(
+            strokeWidth: 2,
+            color: _themeColor(context, AppThemeKeys.mainBlueColor),
           ),
         ),
-      ],
-    );
-  }
+        WebSocketState.disconnected => AppBadge(
+          label: S.of(context).g_mining_node_key4,
+          tone: AppBadgeTone.danger,
+          dot: true,
+        ),
+      };
 
   Widget _divider(BuildContext context) {
     return Divider(
@@ -236,31 +222,20 @@ mixin _MiningNodeDetailWidgets
   }
 
   Widget _buildRedemptionSection(
-      BuildContext context, MiningV2Provider mpValue) {
+    BuildContext context,
+    MiningV2Provider mpValue,
+  ) {
     // Redemption button: show when activated and not yet requested
     if (mpValue.showRedemption == true && mpValue.redeem == false) {
       final isLoading = mpValue.exitDepositLoad == Load.loading;
       return SizedBox(
         height: ScreenUtil().setWidth(88),
-        child: buttonStyle6(
-          context,
-          () {
+        child: AppButton(
+          label: S.of(context).g_mining_key_77,
+          loading: isLoading,
+          onPressed: () {
             if (!isLoading) _showUnlockDialog(context, mpValue);
           },
-          S.of(context).g_mining_key_77,
-          _themeColor(
-            context,
-            isLoading
-                ? AppThemeKeys.mainButtonBgColor3
-                : AppThemeKeys.mainButtonBgColor,
-          ),
-          _themeColor(
-            context,
-            isLoading
-                ? AppThemeKeys.mainButtonTextColor3
-                : AppThemeKeys.mainButtonTextColor,
-          ),
-          isLoading,
         ),
       );
     }
@@ -281,8 +256,7 @@ mixin _MiningNodeDetailWidgets
   Widget _hintText(BuildContext context, String text) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
+      style: AppTypography.body.copyWith(
         color: _themeColor(context, AppThemeKeys.textColorOrange),
       ),
       textAlign: TextAlign.center,
@@ -332,7 +306,7 @@ mixin _MiningNodeDetailWidgets
   BoxDecoration _cardDecoration(BuildContext context, bool isDark) {
     return BoxDecoration(
       color: _themeColor(context, AppThemeKeys.itemBgColor),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+      borderRadius: AppRadius.brMd,
       border: Border.all(
         color: isDark
             ? Colors.white.withValues(alpha: 0.06)
@@ -351,21 +325,26 @@ mixin _MiningNodeDetailWidgets
     );
   }
 
-  Color _statusColor(NodeStatus status) => switch (status) {
-    NodeStatus.online  => const Color(0xff32D74B),
-    NodeStatus.offline || NodeStatus.error => const Color(0xffEB5851),
-    NodeStatus.syncing => const Color(0xFFFF9500),
-  };
+  Color _statusColor(BuildContext context, NodeStatus status) {
+    final c = AppColorTokens.of(context);
+    return switch (status) {
+      NodeStatus.online => c.success,
+      NodeStatus.offline || NodeStatus.error => c.danger,
+      NodeStatus.syncing => c.warning,
+    };
+  }
 
-  String _statusLabel(BuildContext context, NodeStatus status) => switch (status) {
-    NodeStatus.online  => S.of(context).g_key_193,
-    NodeStatus.offline || NodeStatus.error => S.of(context).g_mining_key_47,
-    NodeStatus.syncing => S.of(context).g_mining_key_102,
-  };
+  String _statusLabel(BuildContext context, NodeStatus status) =>
+      switch (status) {
+        NodeStatus.online => S.of(context).g_key_193,
+        NodeStatus.offline || NodeStatus.error => S.of(context).g_mining_key_47,
+        NodeStatus.syncing => S.of(context).g_mining_key_102,
+      };
 
-  Color _uptimeColor(double pct) {
-    if (pct >= 90) return const Color(0xff32D74B);
-    if (pct >= 60) return const Color(0xFFFF9500);
-    return const Color(0xffEB5851);
+  Color _uptimeColor(BuildContext context, double pct) {
+    final c = AppColorTokens.of(context);
+    if (pct >= 90) return c.success;
+    if (pct >= 60) return c.warning;
+    return c.danger;
   }
 }

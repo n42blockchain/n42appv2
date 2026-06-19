@@ -13,23 +13,16 @@ part of 'stake_page.dart';
 mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildNoWalletHint(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Text(
           S.of(context).g_key_stake_no_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
       ),
@@ -41,50 +34,36 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildLiquidUnstakeView(BuildContext context) {
     return Center(
       child: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(40)),
+        padding: EdgeInsets.all(AppSpacing.space12),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
               Icons.swap_horiz,
               size: ScreenUtil().setWidth(80),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_stake_liquid_staking_label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 children: [
                   TextSpan(
                     text: widget.protocol.liquidTokenSymbol,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                      fontWeight: FontWeight.w600,
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                   const TextSpan(text: ' — '),
@@ -92,37 +71,17 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(30)),
-            ElevatedButton.icon(
+            SizedBox(height: AppSpacing.space8),
+            AppButton(
+              label: S.of(context).g_key_stake_go_to_swap,
+              icon: Icons.swap_horizontal_circle_outlined,
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const DexSwapHome()),
                 );
               },
-              icon: const Icon(Icons.swap_horizontal_circle_outlined, color: Colors.white),
-              label: Text(
-                S.of(context).g_key_stake_go_to_swap,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: Colors.white,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(40),
-                  vertical: ScreenUtil().setWidth(16),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                ),
-              ),
+              expand: false,
             ),
           ],
         ),
@@ -133,29 +92,29 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   // ── Unbonding warning ───────────────────────────────────────────────────
 
   Widget _buildUnbondingWarning(BuildContext context) {
+    final c = AppColorTokens.of(context);
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.orange.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: c.warning.withAlpha(20),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           Icon(
             Icons.info_outline,
-            color: Colors.orange,
+            color: c.warning,
             size: ScreenUtil().setWidth(36),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
-              S.of(context).g_key_stake_unbonding_warning(
-                widget.protocol.unbondingPeriodDays.toString(),
-              ),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: Colors.orange[800],
-              ),
+              S
+                  .of(context)
+                  .g_key_stake_unbonding_warning(
+                    widget.protocol.unbondingPeriodDays.toString(),
+                  ),
+              style: AppTypography.caption.copyWith(color: c.warning),
             ),
           ),
         ],
@@ -169,7 +128,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     if (_loadingPositions) {
       return Center(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           child: const CircularProgressIndicator(strokeWidth: 2),
         ),
       );
@@ -181,18 +140,16 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
 
     if (_activePositions.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
         ),
         child: Center(
           child: Text(
             S.of(context).g_key_stake_no_active_positions,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ),
@@ -202,65 +159,73 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Column(
       children: _activePositions.map((pos) {
         final isSelected = _selectedPosition?.id == pos.id;
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              _selectedPosition = isSelected ? null : pos;
-              // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
-              if (!isSelected) {
-                if (widget.protocol.chainType == StakingChainType.cosmos) {
-                  _unstakeAmountController.text = _formatBigInt(pos.stakedAmount);
-                }
-                // 更新 provider 中的 selectedValidator（ATOM 需要）
-                if (pos.validator != null) {
-                  _provider.selectValidator(pos.validator!);
-                }
-              }
-            });
-          },
-          child: Container(
-            margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
-            padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-            decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-              border: isSelected
-                  ? Border.all(
-                      color: Colors.orange,
-                      width: 2,
-                    )
-                  : null,
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        pos.validator?.name ?? widget.protocol.name,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
-                          fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainTextColor.name),
-                        ),
-                      ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
-                      Text(
-                        '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(24),
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.itemSubtitleTextColor.name),
-                        ),
-                      ),
-                    ],
-                  ),
+        return Padding(
+          padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedPosition = isSelected ? null : pos;
+                  // SOL 解质押是全额解绑；ATOM 可部分解绑，预填最大值
+                  if (!isSelected) {
+                    if (widget.protocol.chainType == StakingChainType.cosmos) {
+                      _unstakeAmountController.text = _formatBigInt(
+                        pos.stakedAmount,
+                      );
+                    }
+                    // 更新 provider 中的 selectedValidator（ATOM 需要）
+                    if (pos.validator != null) {
+                      _provider.selectValidator(pos.validator!);
+                    }
+                  }
+                });
+              },
+              borderRadius: AppRadius.brMd,
+              child: Container(
+                padding: EdgeInsets.all(AppSpacing.space4),
+                decoration: BoxDecoration(
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: AppRadius.brMd,
+                  border: isSelected
+                      ? Border.all(
+                          color: AppColorTokens.of(context).warning,
+                          width: 2,
+                        )
+                      : null,
                 ),
-                if (isSelected)
-                  Icon(Icons.check_circle, color: Colors.orange, size: ScreenUtil().setWidth(36)),
-              ],
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            pos.validator?.name ?? widget.protocol.name,
+                            style: AppTypography.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
+                          ),
+                          SizedBox(height: AppSpacing.space2),
+                          Text(
+                            '${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}',
+                            style: AppTypography.caption.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    if (isSelected)
+                      Icon(
+                        Icons.check_circle,
+                        color: AppColorTokens.of(context).warning,
+                        size: ScreenUtil().setWidth(36),
+                      ),
+                  ],
+                ),
+              ),
             ),
           ),
         );
@@ -272,30 +237,30 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
 
   Widget _buildUnstakeAmountInput(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
           Expanded(
             child: TextField(
               controller: _unstakeAmountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               inputFormatters: [
                 FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
               ],
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
               decoration: InputDecoration(
                 hintText: '0.0',
                 hintStyle: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 border: InputBorder.none,
               ),
@@ -304,10 +269,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
           ),
           Text(
             widget.protocol.chainSymbol,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ],
@@ -333,31 +297,35 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
             child: GestureDetector(
               onTap: () {
                 final decimals = _getDecimals();
-                final scaled = stakedAmount *
+                final scaled =
+                    stakedAmount *
                     BigInt.from((pct.$2 * 1000).round()) ~/
                     BigInt.from(1000);
                 final divisor = BigInt.from(10).pow(decimals);
                 final intPart = scaled ~/ divisor;
-                final fracStr =
-                    scaled.remainder(divisor).abs().toString().padLeft(decimals, '0');
-                final dispFrac =
-                    fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
+                final fracStr = scaled
+                    .remainder(divisor)
+                    .abs()
+                    .toString()
+                    .padLeft(decimals, '0');
+                final dispFrac = fracStr.length > 6
+                    ? fracStr.substring(0, 6)
+                    : fracStr;
                 _unstakeAmountController.text = '$intPart.$dispFrac';
               },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                 margin: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Center(
                   child: Text(
                     pct.$1,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange,
+                      color: AppColorTokens.of(context).warning,
                     ),
                   ),
                 ),
@@ -374,41 +342,15 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
   Widget _buildUnstakeButton(BuildContext context, StakingProvider provider) {
     return SizedBox(
       width: double.infinity,
-      child: ElevatedButton(
+      child: AppButton(
+        label: _selectedPosition == null
+            ? S.of(context).g_key_stake_select_position
+            : S.of(context).g_key_stake_unstake,
+        variant: AppButtonVariant.warning,
+        loading: _isLoading,
         onPressed: (_isLoading || _selectedPosition == null)
             ? null
             : () => _performUnstake(context, provider),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: _selectedPosition != null ? Colors.orange : null,
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
-        ),
-        child: _isLoading
-            ? SizedBox(
-                width: ScreenUtil().setWidth(32),
-                height: ScreenUtil().setWidth(32),
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : Text(
-                _selectedPosition == null
-                    ? S.of(context).g_key_stake_select_position
-                    : S.of(context).g_key_stake_unstake,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: _selectedPosition != null
-                      ? Colors.white
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
-                ),
-              ),
       ),
     );
   }

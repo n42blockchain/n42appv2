@@ -1,8 +1,10 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/widgets/gas_selector_widget.dart';
@@ -31,9 +33,9 @@ class StandardMinerFeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blockchainType = coinModel.coin['blockchainType']?.toString() ?? '';
-    final coinType = coinModel.coin['coinType']?.toString() ?? '';
-    final isContract = coinModel.coin['isContract'] == true;
+    final blockchainType = coinModel.config.blockchainType;
+    final coinType = coinModel.config.coinType;
+    final isContract = coinModel.config.isContract;
     final isEthereum = blockchainType == BlockchainType.Ethereum.name;
     final isTron = blockchainType == BlockchainType.Tron.name;
 
@@ -41,10 +43,8 @@ class StandardMinerFeeWidget extends StatelessWidget {
         ? (chainModel?.coin['decimals'] ?? 0)
         : (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-    var totalGasPriceColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    var totalGasPriceColor = AppColorTokens.of(context).textPrimary;
+    final errorColor = AppColorTokens.of(context).danger;
 
     String totalGasPriceStr;
     String gasPriceStr;
@@ -61,29 +61,36 @@ class StandardMinerFeeWidget extends StatelessWidget {
           '${Decimal.parse(toEther(totalGasPrice.toString(), decimals).toString())}$displayUnit';
       gasPriceStr =
           '${Decimal.parse(toGWei(gasPrice.toString()).toString())}Gwei';
-      gasLimitWidget = _GasLimitRow(label: S.of(context).g_key_101, value: '$gas');
+      gasLimitWidget = _GasLimitRow(
+        label: S.of(context).g_key_101,
+        value: '$gas',
+      );
     } else if (isTron) {
       if (isContract &&
           toEther(totalGasPrice.toString(), decimals).toDouble() >
               (chainModel?.balanceDoubleAll() ?? 0)) {
         totalGasPriceColor = errorColor;
       }
-      totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
+      totalGasPriceStr =
+          '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
-      gasLimitWidget = _GasLimitRow(label: S.of(context).g_key_101, value: '$gas');
+      gasLimitWidget = _GasLimitRow(
+        label: S.of(context).g_key_101,
+        value: '$gas',
+      );
     } else {
-      totalGasPriceStr = '${toEther(totalGasPrice.toString(), decimals)} $coinType';
+      totalGasPriceStr =
+          '${toEther(totalGasPrice.toString(), decimals)} $coinType';
       gasPriceStr = '${toEther(gasPrice.toString(), decimals)} $coinType';
     }
 
     return containerStyle1(
       context,
       alignment: Alignment.center,
-      margin:
-          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Column(
         children: [
@@ -91,15 +98,14 @@ class StandardMinerFeeWidget extends StatelessWidget {
           _FeeRow(
             label: S.of(context).g_key_t_17,
             value: gasPriceStr,
-            valueColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+            valueColor: AppColorTokens.of(context).textPrimary,
           ),
           gasLimitWidget,
           _FeeRow(
             label: S.of(context).g_key_t_16,
             value: totalGasPriceStr,
             valueColor: totalGasPriceColor,
-            topMargin: ScreenUtil().setWidth(30.0),
+            topMargin: AppSpacing.space8,
           ),
         ],
       ),
@@ -126,7 +132,7 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isContract = coinModel.coin['isContract'] as bool? ?? false;
+    final isContract = coinModel.config.isContract as bool? ?? false;
     final chainBalance = chainModel?.balance ?? BigInt.zero;
     final gasExceedsBalance = isContract && totalGasPrice > chainBalance;
 
@@ -136,11 +142,10 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
           containerStyle1(
             context,
             alignment: Alignment.center,
-            margin: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0)),
+            margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(20.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -149,63 +154,58 @@ class AdvancedMinerFeeWidget extends StatelessWidget {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        SizedBox(height: ScreenUtil().setWidth(20.0)),
-        GasSelectorCompact(
-          gasEstimate: gasEstimate,
-          onTap: onGasSettingsTap,
-        ),
+        SizedBox(height: AppSpacing.space4),
+        GasSelectorCompact(gasEstimate: gasEstimate, onTap: onGasSettingsTap),
         if (gasExceedsBalance)
           Container(
             margin: EdgeInsets.only(
-              top: ScreenUtil().setWidth(10.0),
-              left: ScreenUtil().setWidth(30.0),
-              right: ScreenUtil().setWidth(30.0),
+              top: AppSpacing.space2,
+              left: AppSpacing.space8,
+              right: AppSpacing.space8,
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20.0),
-              vertical: ScreenUtil().setWidth(10.0),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.errorBgColor2.name),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                context,
+                AppThemeKeys.errorBgColor2.name,
+              ),
+              borderRadius: AppRadius.brSm,
             ),
             child: Row(
               children: [
                 Icon(
                   Icons.warning_amber,
                   size: ScreenUtil().setWidth(32.0),
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.errorTextColor.name),
+                  color: AppColorTokens.of(context).danger,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10.0)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
-                    S.of(context).g_key_t_29(
-                        chainModel?.coin['coinType'] ?? ''),
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24.0),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.errorTextColor.name),
+                    S
+                        .of(context)
+                        .g_key_t_29(chainModel?.config.coinType ?? ''),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).danger,
                     ),
                   ),
                 ),
@@ -228,27 +228,26 @@ class SendErrorWidget extends StatelessWidget {
     if (message.isEmpty) return const SizedBox.shrink();
     return Container(
       margin: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        left: ScreenUtil().setWidth(30),
-        right: ScreenUtil().setWidth(30),
+        top: AppSpacing.space4,
+        left: AppSpacing.space8,
+        right: AppSpacing.space8,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(16.0))),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         message,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
         ),
       ),
     );
@@ -266,7 +265,7 @@ class _ChainBalanceRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.only(bottom: AppSpacing.space8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -274,21 +273,20 @@ class _ChainBalanceRow extends StatelessWidget {
             child: Text(
               S.of(context).g_key_29,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
+                  context,
+                  AppThemeKeys.mainButtonBgColor.name,
+                ),
               ),
               textAlign: TextAlign.right,
             ),
@@ -324,21 +322,16 @@ class _FeeRow extends StatelessWidget {
             child: Text(
               label,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28.0),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                color: valueColor,
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: valueColor),
               textAlign: TextAlign.right,
             ),
           ),
@@ -349,36 +342,34 @@ class _FeeRow extends StatelessWidget {
 }
 
 class _GasLimitRow extends StatelessWidget {
-  const _GasLimitRow({
-    required this.label,
-    required this.value,
-  });
+  const _GasLimitRow({required this.label, required this.value});
 
   final String label;
   final String value;
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final valueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final fontSize = ScreenUtil().setSp(28.0);
+    final labelColor = AppColorTokens.of(context).textSubtitle;
+    final valueColor = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      margin: EdgeInsets.only(top: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.only(top: AppSpacing.space8),
       alignment: Alignment.center,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-            child: Text(label, overflow: TextOverflow.ellipsis, style: TextStyle(color: labelColor, fontSize: fontSize)),
+            child: Text(
+              label,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.body.copyWith(color: labelColor),
+            ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(color: valueColor, fontSize: fontSize),
+              style: AppTypography.body.copyWith(color: valueColor),
               textAlign: TextAlign.right,
             ),
           ),

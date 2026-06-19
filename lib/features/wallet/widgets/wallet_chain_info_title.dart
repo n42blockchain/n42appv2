@@ -1,8 +1,8 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-class WalletChainInfoTitle extends StatelessWidget {
 
+class WalletChainInfoTitle extends StatelessWidget {
   final Widget? title; //主标题
   final Widget? subtitle; //副标题
   final Widget? rightWidget; //右侧按钮
@@ -17,12 +17,13 @@ class WalletChainInfoTitle extends StatelessWidget {
     required this.rightImgUrl,
     required this.rightTao,
     required this.rightTaoChangeNetworkWidget,
-    super.key});
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+      margin: EdgeInsets.all(AppSpacing.space4),
       alignment: Alignment.topCenter,
       child: Row(
         children: [
@@ -35,8 +36,7 @@ class WalletChainInfoTitle extends StatelessWidget {
               height: ScreenUtil().setWidth(50.0),
               child: Icon(
                 Icons.arrow_back_ios,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
                 size: ScreenUtil().setWidth(40.0),
               ),
             ),
@@ -45,22 +45,17 @@ class WalletChainInfoTitle extends StatelessWidget {
             flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ?title,
-                ?subtitle,
-              ],
+              children: [?title, ?subtitle],
             ),
           ),
-          rightChangeNetworkButton(context,),
-          rightButton(context,),
+          rightChangeNetworkButton(context),
+          rightButton(context),
         ],
       ),
     );
   }
 
-  Widget rightButton(
-      BuildContext context,
-      ) {
+  Widget rightButton(BuildContext context) {
     if (rightImgUrl != null) {
       return InkWell(
         onTap: rightTao,
@@ -70,8 +65,7 @@ class WalletChainInfoTitle extends StatelessWidget {
           padding: EdgeInsets.all(ScreenUtil().setWidth(5.0)),
           child: Image.asset(
             rightImgUrl!,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
       );
@@ -79,7 +73,9 @@ class WalletChainInfoTitle extends StatelessWidget {
       return rightWidget!;
     } else {
       return SizedBox(
-        width: rightTaoChangeNetworkWidget == null ? ScreenUtil().setWidth(50.0) : 0,
+        width: rightTaoChangeNetworkWidget == null
+            ? ScreenUtil().setWidth(50.0)
+            : 0,
       );
     }
   }
@@ -92,4 +88,3 @@ class WalletChainInfoTitle extends StatelessWidget {
     }
   }
 }
-

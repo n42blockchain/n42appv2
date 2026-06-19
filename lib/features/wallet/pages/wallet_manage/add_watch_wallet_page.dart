@@ -1,7 +1,7 @@
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/watch_wallet_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -80,17 +80,16 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w500,
             color: hintColor,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Container(
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+            borderRadius: AppRadius.brMd,
           ),
           child: TextField(
             controller: controller,
@@ -107,8 +106,8 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               ),
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(24),
-                vertical: ScreenUtil().setWidth(20),
+                horizontal: AppSpacing.space6,
+                vertical: AppSpacing.space4,
               ),
             ),
           ),
@@ -119,48 +118,33 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
 
   @override
   Widget build(BuildContext context) {
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
-    final subText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final itemBg = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subText = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
+    final itemBg = AppColorTokens.of(context).bgSurface;
     final s = S.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(
           s.g_key_watch_wallet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(32),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.all(AppSpacing.space6),
               decoration: BoxDecoration(
                 color: blueColor.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Row(
                 children: [
@@ -169,20 +153,17 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                     color: blueColor,
                     size: ScreenUtil().setWidth(40),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(16)),
+                  SizedBox(width: AppSpacing.space4),
                   Expanded(
                     child: Text(
                       s.g_key_watch_wallet_desc,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(24),
-                        color: subText,
-                      ),
+                      style: AppTypography.caption.copyWith(color: subText),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(32)),
+            SizedBox(height: AppSpacing.space8),
             _buildTextField(
               label: 'Name',
               controller: _nameCtrl,
@@ -192,7 +173,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               hintColor: subText,
               bgColor: itemBg,
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildTextField(
               label: 'Address',
               controller: _addressCtrl,
@@ -203,7 +184,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
               bgColor: itemBg,
               maxLines: 2,
             ),
-            SizedBox(height: ScreenUtil().setWidth(48)),
+            SizedBox(height: AppSpacing.space12),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(88),
@@ -211,11 +192,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                 onPressed: _loading ? null : _submit,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blueColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(20),
-                    ),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: _loading
                     ? SizedBox(
@@ -228,8 +205,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
                       )
                     : Text(
                         s.g_key_watch_wallet,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
                         ),

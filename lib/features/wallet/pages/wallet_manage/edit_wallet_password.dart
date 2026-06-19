@@ -5,7 +5,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -80,12 +80,11 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
         hintText: hintText,
         keyboardType: keyboardType,
         textInputAction: TextInputAction.done,
-        hintStyle: TextStyle(
+        hintStyle: AppTypography.body.copyWith(
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.hintTextColor.name,
           ),
-          fontSize: ScreenUtil().setSp(30.0),
         ),
         obscure: obscure,
         errorMessage: errorMessage,
@@ -96,10 +95,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
           child: Image.asset(
             'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
             width: ScreenUtil().setWidth(34.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
         rightOnTap1: onToggleObscure,
@@ -186,7 +182,7 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
               Positioned.fill(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0),
+                    horizontal: AppSpacing.space8,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,21 +262,12 @@ class _EditWalletPasswordState extends ConsumerState<EditWalletPassword> {
                     Divider(height: 1),
                     Container(
                       height: ScreenUtil().setWidth(148.0),
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      padding: EdgeInsets.all(AppSpacing.space8),
                       width: double.infinity,
-                      child: buttonStyle6(
-                        context,
-                        _onSubmit,
-                        S.of(context).g_key_115,
-                        AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainButtonBgColor.name,
-                        ),
-                        AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainButtonTextColor.name,
-                        ),
-                        load == Load.loading,
+                      child: AppButton(
+                        label: S.of(context).g_key_115,
+                        onPressed: _onSubmit,
+                        loading: load == Load.loading,
                       ),
                     ),
                   ],

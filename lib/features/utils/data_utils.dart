@@ -16,7 +16,11 @@ class DataUtils {
     return BigInt.parse(strip.isEmpty ? "0" : strip, radix: 16);
   }
 
-  String bigIntToHex(BigInt value, {bool need0x = true, bool padToEvenLength = false}) {
+  String bigIntToHex(
+    BigInt value, {
+    bool need0x = true,
+    bool padToEvenLength = false,
+  }) {
     var str = value.toRadixString(16);
     if (padToEvenLength && str.length % 2 != 0) {
       str = '0$str';
@@ -43,12 +47,17 @@ class DataUtils {
     final dotIndex = num.toString().lastIndexOf(".");
     final decimals = num.toString().length - dotIndex - 1;
     if (decimals < position) {
-      return num.toStringAsFixed(position).substring(0, dotIndex + position + 1);
+      return num.toStringAsFixed(
+        position,
+      ).substring(0, dotIndex + position + 1);
     }
     return num.toString().substring(0, dotIndex + position + 1);
   }
 
-  String getTimeByTimeStamp(String timeStamp, {String? format = "dd/MM/yyyy HH:mm"}) {
+  String getTimeByTimeStamp(
+    String timeStamp, {
+    String? format = "dd/MM/yyyy HH:mm",
+  }) {
     if (timeStamp.isEmpty) return '';
     final ms = timeStamp.length == 10
         ? int.parse("${timeStamp}000")

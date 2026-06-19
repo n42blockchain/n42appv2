@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/mining_v1/widgets/item_mining_node.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -91,15 +92,15 @@ class _MiningSettingsState extends State<MiningSettings> {
         listenable: globalMiningV1,
         builder: (context, _) {
           return Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: Column(
               children: [
                 _buildSwitchItem(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 _buildNodeSelector(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 if (Platform.isIOS) _buildBgmSelector(),
-                if (Platform.isIOS) SizedBox(height: ScreenUtil().setWidth(40)),
+                if (Platform.isIOS) SizedBox(height: AppSpacing.space12),
                 _buildNetworkSelector(),
               ],
             ),
@@ -109,8 +110,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     );
   }
 
-  Color _mainTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Color _mainTextColor() => AppColorTokens.of(context).textPrimary;
 
   Color _greyColor() =>
       AppThemeUtils.getColorByKey(context, AppThemeKeys.mainGreyColor.name);
@@ -123,10 +123,7 @@ class _MiningSettingsState extends State<MiningSettings> {
           Flexible(
             child: Text(
               S.of(context).g_mining_key82,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                color: _mainTextColor(),
-              ),
+              style: AppTypography.headline.copyWith(color: _mainTextColor()),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -136,7 +133,10 @@ class _MiningSettingsState extends State<MiningSettings> {
               var connectivityResult = await (Connectivity()
                   .checkConnectivity());
               if (!mounted) return;
-              AppLogger.d('MiningSettings', 'connectivityResult: $connectivityResult');
+              AppLogger.d(
+                'MiningSettings',
+                'connectivityResult: $connectivityResult',
+              );
               setState(() {
                 isSwitched = !isSwitched;
                 SPUtil().setMiningOpen(isSwitched);
@@ -162,11 +162,11 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     return wrapItem(
       Padding(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         child: Row(
           children: [
             Expanded(child: label),
-            SizedBox(width: ScreenUtil().setWidth(60)),
+            SizedBox(width: AppSpacing.space16),
             Flexible(
               child: GestureDetector(
                 onTap: onTap,
@@ -176,10 +176,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                     Flexible(
                       child: Text(
                         value,
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: ScreenUtil().setSp(32),
-                        ),
+                        style: AppTypography.headline.copyWith(color: textColor),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -199,10 +196,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     return _buildDropdownRow(
       label: Text(
         S.of(context).g_mining_key83,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
-          color: _mainTextColor(),
-        ),
+        style: AppTypography.headline.copyWith(color: _mainTextColor()),
       ),
       value: currentNode?["name"] ?? '',
       onTap: () => sheetBottom(context, "", _buildNodeList(context)),
@@ -213,10 +207,7 @@ class _MiningSettingsState extends State<MiningSettings> {
     return _buildDropdownRow(
       label: Text(
         S.of(context).g_mining_key34,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32),
-          color: _mainTextColor(),
-        ),
+        style: AppTypography.headline.copyWith(color: _mainTextColor()),
       ),
       value: bgmMusicOptions[backgroundMiningMusic],
       onTap: _showMusicSheet,
@@ -230,17 +221,11 @@ class _MiningSettingsState extends State<MiningSettings> {
         children: [
           Text(
             S.of(context).g_mining_key84,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              color: _mainTextColor(),
-            ),
+            style: AppTypography.headline.copyWith(color: _mainTextColor()),
           ),
           Text(
             S.of(context).g_mining_key85,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: _greyColor(),
-            ),
+            style: AppTypography.body.copyWith(color: _greyColor()),
           ),
         ],
       ),
@@ -286,16 +271,15 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     final labelText = Text(
       label,
-      style: TextStyle(fontSize: ScreenUtil().setSp(30), color: textColor),
-    );
+      style: AppTypography.body.copyWith(color: textColor));
 
     return InkWell(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: AppThemeUtils.getColorByKey(
               context,
@@ -314,16 +298,10 @@ class _MiningSettingsState extends State<MiningSettings> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         labelText,
-                        SizedBox(height: ScreenUtil().setWidth(10)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           subtitle,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
-                          ),
+                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
                         ),
                       ],
                     )
@@ -333,10 +311,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               Icon(
                 Icons.check,
                 size: ScreenUtil().setWidth(48),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
           ],
         ),
@@ -367,7 +342,7 @@ class _MiningSettingsState extends State<MiningSettings> {
               isSelected: backgroundMiningMusic == 0,
               onTap: () => _selectBgmOption(0),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildOptionItem(
               label: bgmMusicOptions[1],
               isSelected: backgroundMiningMusic == 1,
@@ -395,7 +370,7 @@ class _MiningSettingsState extends State<MiningSettings> {
                 Navigator.pop(context);
               },
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildOptionItem(
               label: networkOptions[1],
               isSelected: !AppConfig.isMainChainMining,
@@ -413,15 +388,12 @@ class _MiningSettingsState extends State<MiningSettings> {
   Widget wrapItem(Widget child) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(24),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space6,
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );

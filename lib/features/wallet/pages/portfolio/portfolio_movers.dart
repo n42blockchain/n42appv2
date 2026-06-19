@@ -5,8 +5,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
-import 'package:n42_wallet/features/widgets/image_network.dart' show ImageNetWork;
+import 'package:n42_wallet/features/widgets/image_network.dart'
+    show ImageNetWork;
 
 // ─── Mover row ────────────────────────────────────────────────────────────────
 
@@ -29,8 +31,9 @@ class MoverRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isGainer = records.isNotEmpty && records.first.percentage >= 0;
-    final labelColor =
-        isGainer ? const Color(0xFF22C55E) : const Color(0xFFEF4444);
+    final labelColor = isGainer
+        ? AppColorTokens.of(context).success
+        : AppColorTokens.of(context).danger;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,48 +44,51 @@ class MoverRow extends StatelessWidget {
               isGainer
                   ? Icons.arrow_upward_rounded
                   : Icons.arrow_downward_rounded,
-              size: 13.sp,
+              size: 26.sp,
               color: labelColor,
             ),
-            SizedBox(width: 4.w),
+            SizedBox(width: 8.w),
             Text(
               label,
-              style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w600,
-                  color: labelColor),
+              style: AppTypography.caption.copyWith(
+                fontWeight: FontWeight.w600,
+                color: labelColor,
+              ),
             ),
           ],
         ),
-        SizedBox(height: 6.h),
+        SizedBox(height: 12.h),
         for (final r in records)
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.h),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(24.r),
                   child: r.icon.isNotEmpty
                       ? ImageNetWork(
                           imageUrl: r.icon,
-                          width: 24.w,
-                          height: 24.w,
+                          width: 48.w,
+                          height: 48.w,
                         )
                       : Container(
-                          width: 24.w,
-                          height: 24.w,
+                          width: 48.w,
+                          height: 48.w,
                           color: textColor.withAlpha(30),
-                          child: Icon(Icons.currency_bitcoin,
-                              size: 14.sp, color: textColor.withAlpha(100)),
+                          child: Icon(
+                            Icons.currency_bitcoin,
+                            size: 28.sp,
+                            color: textColor.withAlpha(100),
+                          ),
                         ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 16.w),
                 Text(
                   r.symbol.toUpperCase(),
-                  style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.w600,
-                      color: textColor),
+                  style: AppTypography.bodySm.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
                 ),
                 const Spacer(),
                 Column(
@@ -90,15 +96,16 @@ class MoverRow extends StatelessWidget {
                   children: [
                     Text(
                       '${r.percentage >= 0 ? '+' : ''}${r.percentage.toStringAsFixed(2)}%',
-                      style: TextStyle(
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w600,
-                          color: labelColor),
+                      style: AppTypography.bodySm.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: labelColor,
+                      ),
                     ),
                     Text(
                       fmtUsd(pnlFn(r.value, r.percentage)),
-                      style: TextStyle(
-                          fontSize: 11.sp, color: labelColor.withAlpha(200)),
+                      style: AppTypography.caption.copyWith(
+                        color: labelColor.withAlpha(200),
+                      ),
                     ),
                   ],
                 ),

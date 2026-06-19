@@ -184,10 +184,7 @@ class PaymasterValidity {
   /// Valid until this timestamp (Unix seconds)
   final int validUntil;
 
-  const PaymasterValidity({
-    required this.validAfter,
-    required this.validUntil,
-  });
+  const PaymasterValidity({required this.validAfter, required this.validUntil});
 
   /// Check if currently valid
   bool get isValid {
@@ -212,10 +209,7 @@ class PaymasterValidity {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'validAfter': validAfter,
-      'validUntil': validUntil,
-    };
+    return {'validAfter': validAfter, 'validUntil': validUntil};
   }
 
   /// Create validity for a duration from now

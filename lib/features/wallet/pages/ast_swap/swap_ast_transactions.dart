@@ -1,6 +1,6 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/api/swap_ast_api.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_order_model.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_transaction_detail.dart';
@@ -22,8 +22,17 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
   late final SwapAstApi _swapAstApi = SwapAstApi();
 
   static const _dateFormat = [
-    dformat.yyyy, '/', dformat.mm, '/', dformat.dd,
-    ' ', dformat.am, ' ', dformat.hh, ':', dformat.nn,
+    dformat.yyyy,
+    '/',
+    dformat.mm,
+    '/',
+    dformat.dd,
+    ' ',
+    dformat.am,
+    ' ',
+    dformat.hh,
+    ':',
+    dformat.nn,
   ];
 
   ({IconData icon, String label, Color color}) _orderStateInfo(
@@ -35,47 +44,51 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
       1 => (
         icon: Icons.error,
         label: s.g_swap_key_22,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+        color: AppColorTokens.of(context).danger,
       ),
       2 => (
         icon: Icons.error,
         label: s.g_key_79,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name),
+        color: AppColorTokens.of(context).danger,
       ),
       0 => (
         icon: Icons.info_rounded,
-        label: (order.payTx?.contains("0x") ?? false) ? s.g_swap_key_24 : s.g_swap_key_23,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+        label: (order.payTx?.contains("0x") ?? false)
+            ? s.g_swap_key_24
+            : s.g_swap_key_23,
+        color: AppColorTokens.of(context).warning,
       ),
       5 => (
         icon: Icons.check_circle,
         label: s.g_swap_key_18,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.rightTextColor.name),
+        color: AppColorTokens.of(context).success,
       ),
       _ => (
         icon: Icons.info_rounded,
         label: s.g_swap_key_25,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.textColorOrange.name),
+        color: AppColorTokens.of(context).warning,
       ),
     };
   }
 
   @override
   Widget build(BuildContext context) {
-    final mainTextColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_tran_1),
       body: Padding(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: BaseList(
           firstRefresh: true,
           pageIndex: 1,
           pageSize: 15,
           getData: (int page, int pageSize) async {
             final rData = await _swapAstApi.getNftOrAstOrderList(
-              2, AppGlobals.userInfo?.uuid ?? '',
-              page: page, pageSize: pageSize,
+              2,
+              AppGlobals.userInfo?.uuid ?? '',
+              page: page,
+              pageSize: pageSize,
             );
             if (rData.error) return [];
             final data = rData.data;
@@ -96,25 +109,27 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
               DateTime.fromMillisecondsSinceEpoch(order.created ?? 0),
               _dateFormat,
             );
-            final textStyle = TextStyle(
-              color: mainTextColor,
-              fontSize: ScreenUtil().setSp(28),
-            );
+            final textStyle = AppTypography.body.copyWith(color: mainTextColor);
             return InkWell(
               onTap: () => Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => SwapAstTransactionDetail(order)),
+                MaterialPageRoute(
+                  builder: (_) => SwapAstTransactionDetail(order),
+                ),
               ),
               child: Container(
                 height: ScreenUtil().setWidth(80),
                 width: double.infinity,
-                margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(40)),
+                margin: EdgeInsets.only(bottom: AppSpacing.space12),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       children: [
-                        Text("${order.payCoin ?? 'USDT'}/${CoinType.N.name}", style: textStyle),
+                        Text(
+                          "${order.payCoin ?? 'USDT'}/${CoinType.N.name}",
+                          style: textStyle,
+                        ),
                         Expanded(
                           child: Text(
                             "+${order.orderNum}",
@@ -128,17 +143,26 @@ class _SwapAstTransactionsState extends State<SwapAstTransactions> {
                       children: [
                         Text(
                           timeStr,
-                          style: TextStyle(color: subtitleColor, fontSize: ScreenUtil().setSp(24)),
+                          style: AppTypography.caption.copyWith(
+                            color: subtitleColor,
+                          ),
                         ),
                         Expanded(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Icon(state.icon, color: state.color, size: ScreenUtil().setWidth(30), fill: 0),
-                              SizedBox(width: ScreenUtil().setWidth(4)),
+                              Icon(
+                                state.icon,
+                                color: state.color,
+                                size: ScreenUtil().setWidth(30),
+                                fill: 0,
+                              ),
+                              SizedBox(width: AppSpacing.space2),
                               Text(
                                 state.label,
-                                style: TextStyle(color: state.color, fontSize: ScreenUtil().setSp(24)),
+                                style: AppTypography.caption.copyWith(
+                                  color: state.color,
+                                ),
                               ),
                             ],
                           ),

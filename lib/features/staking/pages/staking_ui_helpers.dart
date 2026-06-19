@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Stateless UI helpers shared across staking home page views.
 
@@ -17,17 +17,15 @@ Widget stakingDefaultLogo(BuildContext context, StakingProtocol protocol) {
     width: ScreenUtil().setWidth(56),
     height: ScreenUtil().setWidth(56),
     decoration: BoxDecoration(
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainBlueColor.name),
+      color: AppColorTokens.of(context).brand,
       shape: BoxShape.circle,
     ),
     child: Center(
       child: Text(
         protocol.chainSymbol.substring(0, 1),
-        style: TextStyle(
+        style: AppTypography.bodyStrong.copyWith(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
-          fontSize: ScreenUtil().setSp(28),
+          fontWeight: FontWeight.w600,
         ),
       ),
     ),
@@ -41,20 +39,14 @@ Widget stakingTag({
 }) {
   return Container(
     padding: EdgeInsets.symmetric(
-      horizontal: ScreenUtil().setWidth(8),
-      vertical: ScreenUtil().setWidth(4),
+      horizontal: AppSpacing.space2,
+      vertical: AppSpacing.space2,
     ),
     decoration: BoxDecoration(
       color: color.withAlpha(30),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+      borderRadius: AppRadius.brSm,
     ),
-    child: Text(
-      label,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(22),
-        color: color,
-      ),
-    ),
+    child: Text(label, style: AppTypography.caption.copyWith(color: color)),
   );
 }
 
@@ -62,32 +54,26 @@ Widget stakingStatsCard(BuildContext context, StakingProvider provider) {
   final stats = provider.getStats();
 
   return Container(
-    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+    padding: EdgeInsets.all(AppSpacing.space6),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
-          AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
-          AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              .withAlpha(180),
+          AppColorTokens.of(context).brand,
+          AppColorTokens.of(context).brand.withAlpha(180),
         ],
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
       ),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+      borderRadius: AppRadius.brMd,
     ),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           S.of(context).g_key_stake_overview,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: Colors.white70,
-          ),
+          style: AppTypography.bodySm.copyWith(color: Colors.white70),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -112,19 +98,12 @@ Widget _stakingStatItem(String label, String value) {
     children: [
       Text(
         value,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(36),
-          fontWeight: FontWeight.bold,
+        style: AppTypography.title.copyWith(
+          fontWeight: FontWeight.w600,
           color: Colors.white,
         ),
       ),
-      Text(
-        label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
-          color: Colors.white70,
-        ),
-      ),
+      Text(label, style: AppTypography.caption.copyWith(color: Colors.white70)),
     ],
   );
 }
@@ -140,48 +119,20 @@ Widget stakingEmptyPositions(
         Icon(
           Icons.savings_outlined,
           size: ScreenUtil().setWidth(80),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textSubtitle,
         ),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
         Text(
           S.of(context).g_key_stake_no_positions_yet,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.body.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
-        ElevatedButton(
+        SizedBox(height: AppSpacing.space4),
+        AppButton(
+          label: S.of(context).g_key_stake_start_staking,
           onPressed: onStartStaking,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(40),
-              vertical: ScreenUtil().setWidth(16),
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
-          ),
-          child: Text(
-            S.of(context).g_key_stake_start_staking,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: Colors.white,
-            ),
-          ),
+          expand: false,
         ),
       ],
     ),
@@ -193,13 +144,9 @@ Widget stakingSectionHeader(BuildContext context, String title) {
     padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
     child: Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
-        fontWeight: FontWeight.bold,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainTextColor.name,
-        ),
+      style: AppTypography.body.copyWith(
+        fontWeight: FontWeight.w600,
+        color: AppColorTokens.of(context).textPrimary,
       ),
     ),
   );

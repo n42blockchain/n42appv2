@@ -2,7 +2,7 @@ import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class WalletSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   const WalletSliverAppBarDelegate({
@@ -23,7 +23,10 @@ class WalletSliverAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
     return SizedBox.expand(child: child);
   }
 
@@ -61,11 +64,8 @@ class WalletPinIconButton extends StatelessWidget {
           isPinned ? Icons.push_pin : Icons.push_pin_outlined,
           size: ScreenUtil().setWidth(30),
           color: isPinned
-              ? AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              : AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name)
-                  .withValues(alpha: 0.35),
+              ? AppColorTokens.of(context).brand
+              : AppColorTokens.of(context).textSubtitle.withValues(alpha: 0.35),
         ),
       ),
     );
@@ -105,14 +105,9 @@ class _WalletCoinListSkeletonState extends State<WalletCoinListSkeleton>
     return AnimatedBuilder(
       animation: _anim,
       builder: (context, _) {
-        final base = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name);
-        final shimmer = Color.lerp(
-              base,
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.dividerColor.name),
-              _anim.value,
-            ) ??
+        final base = AppColorTokens.of(context).bgSurface;
+        final shimmer =
+            Color.lerp(base, AppColorTokens.of(context).border, _anim.value) ??
             base;
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -127,26 +122,23 @@ class _WalletCoinListSkeletonState extends State<WalletCoinListSkeleton>
 }
 
 class WalletSkeletonCoinRow extends StatelessWidget {
-  const WalletSkeletonCoinRow({
-    super.key,
-    required this.shimmerColor,
-  });
+  const WalletSkeletonCoinRow({super.key, required this.shimmerColor});
   final Color shimmerColor;
 
   Widget _shimmerBox(double w, double h, double radius) => Container(
-        width: ScreenUtil().setWidth(w),
-        height: ScreenUtil().setWidth(h),
-        decoration: BoxDecoration(
-          color: shimmerColor,
-          borderRadius: BorderRadius.circular(radius),
-        ),
-      );
+    width: ScreenUtil().setWidth(w),
+    height: ScreenUtil().setWidth(h),
+    decoration: BoxDecoration(
+      color: shimmerColor,
+      borderRadius: BorderRadius.circular(radius),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     final radius = ScreenUtil().setWidth(8);
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -170,7 +162,7 @@ class WalletSkeletonCoinRow extends StatelessWidget {
                     _shimmerBox(60, 22, radius),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(10)),
+                SizedBox(height: AppSpacing.space2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

@@ -63,7 +63,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               child: _KeystoneInfoCard(
                 icon: Icons.qr_code_scanner,
                 message: s.g_key_hw_keystone_scan_xpub_hint,
@@ -72,35 +72,31 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
             Expanded(
               child: Stack(
                 children: [
-                  MobileScanner(
-                    controller: _controller,
-                    onDetect: _onDetected,
-                  ),
+                  MobileScanner(controller: _controller, onDetect: _onDetected),
                   if (_error != null)
                     Positioned(
                       bottom: ScreenUtil().setWidth(40),
                       left: ScreenUtil().setWidth(30),
                       right: ScreenUtil().setWidth(30),
                       child: Container(
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                        padding: EdgeInsets.all(AppSpacing.space4),
                         decoration: BoxDecoration(
-                          color: Colors.red.shade900.withAlpha(220),
-                          borderRadius:
-                              BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          color: AppColorTokens.of(context).danger.withAlpha(
+                            220,
+                          ),
+                          borderRadius: AppRadius.brMd,
                         ),
                         child: Text(
                           _error!,
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(24),
-                            color: Colors.white,
-                          ),
+                          style: AppTypography.caption.copyWith(color: Colors.white),
                           textAlign: TextAlign.center,
                         ),
                       ),
                     ),
                   if (_isProcessing)
                     const Center(
-                        child: CircularProgressIndicator(color: Colors.white)),
+                      child: CircularProgressIndicator(color: Colors.white),
+                    ),
                 ],
               ),
             ),

@@ -32,14 +32,17 @@ class AccountDeployer {
 
   static final BigInt _eip7702VerificationGas = BigInt.from(
     Simple7702GasConstants.authorizationGas +
-    Simple7702GasConstants.signatureValidation,
+        Simple7702GasConstants.signatureValidation,
   );
-  static final BigInt _deploymentGas =
-      BigInt.from(AAConstants.accountDeploymentGas);
-  static final BigInt _preVerificationGas =
-      BigInt.from(AAConstants.defaultPreVerificationGas);
-  static final BigInt _callGasLimit =
-      BigInt.from(AAConstants.defaultCallGasLimit);
+  static final BigInt _deploymentGas = BigInt.from(
+    AAConstants.accountDeploymentGas,
+  );
+  static final BigInt _preVerificationGas = BigInt.from(
+    AAConstants.defaultPreVerificationGas,
+  );
+  static final BigInt _callGasLimit = BigInt.from(
+    AAConstants.defaultCallGasLimit,
+  );
 
   /// Create a factory for a specific chain
   factory AccountDeployer.forChain(
@@ -55,12 +58,18 @@ class AccountDeployer {
 
   /// Create a v0.8 deployer
   factory AccountDeployer.v08(String chainSymbol) {
-    return AccountDeployer.forChain(chainSymbol, version: EntryPointVersion.v08);
+    return AccountDeployer.forChain(
+      chainSymbol,
+      version: EntryPointVersion.v08,
+    );
   }
 
   /// Create a v0.7 deployer (legacy)
   factory AccountDeployer.v07(String chainSymbol) {
-    return AccountDeployer.forChain(chainSymbol, version: EntryPointVersion.v07);
+    return AccountDeployer.forChain(
+      chainSymbol,
+      version: EntryPointVersion.v07,
+    );
   }
 
   /// Get the EntryPoint version
@@ -188,7 +197,8 @@ class AccountDeployer {
     EIP7702Authorization? eip7702Authorization,
   }) {
     // If no call data provided, use a minimal execute call
-    final execData = callData ??
+    final execData =
+        callData ??
         CalldataBuilder.buildExecute(
           target: account.address,
           value: BigInt.zero,
@@ -391,7 +401,9 @@ class DeploymentCostComparison {
     if (eip7702Cost == null || simpleAccountCost.totalCost == BigInt.zero) {
       return 0.0;
     }
-    return (eip7702Savings.toDouble() / simpleAccountCost.totalCost.toDouble()) * 100;
+    return (eip7702Savings.toDouble() /
+            simpleAccountCost.totalCost.toDouble()) *
+        100;
   }
 
   /// Get recommendation
@@ -414,7 +426,9 @@ class DeploymentCostComparison {
     sb.writeln('  SimpleAccount: ${simpleAccountCost.formatCost()} ETH');
     if (eip7702Cost != null) {
       sb.writeln('  EIP-7702: ${eip7702Cost!.formatCost()} ETH');
-      sb.writeln('  Savings: ${(eip7702Savings.toDouble() / 1e18).toStringAsFixed(6)} ETH (${savingsPercentage.toStringAsFixed(1)}%)');
+      sb.writeln(
+        '  Savings: ${(eip7702Savings.toDouble() / 1e18).toStringAsFixed(6)} ETH (${savingsPercentage.toStringAsFixed(1)}%)',
+      );
     }
     sb.writeln('  Recommendation: $recommendation');
     return sb.toString();

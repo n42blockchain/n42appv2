@@ -17,8 +17,10 @@ import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
 /// Contains state fields, APY data loading, amount formatting, and navigation.
 mixin StakingHomePageLogicMixin on State<StakingHomePage> {
   // Evaluated once at compile time; avoids repeated bool.fromEnvironment calls on every build.
-  static const bool dotStakingEnabled =
-      bool.fromEnvironment('FEATURE_DOT_STAKING', defaultValue: false);
+  static const bool dotStakingEnabled = bool.fromEnvironment(
+    'FEATURE_DOT_STAKING',
+    defaultValue: false,
+  );
 
   late TabController tabController;
   late StakingProvider provider;
@@ -97,12 +99,7 @@ mixin StakingHomePageLogicMixin on State<StakingHomePage> {
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
   // 链符号 -> 精度映射
-  static const _chainDecimals = {
-    'ETH': 18,
-    'SOL': 9,
-    'ATOM': 6,
-    'DOT': 10,
-  };
+  static const _chainDecimals = {'ETH': 18, 'SOL': 9, 'ATOM': 6, 'DOT': 10};
 
   String formatAmount(BigInt amount, String symbol) {
     final decimals = _chainDecimals[symbol] ?? 18;
@@ -115,10 +112,8 @@ mixin StakingHomePageLogicMixin on State<StakingHomePage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => StakePage(
-          protocol: protocol,
-          userAddress: userAddress,
-        ),
+        builder: (context) =>
+            StakePage(protocol: protocol, userAddress: userAddress),
       ),
     );
   }

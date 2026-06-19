@@ -1,4 +1,4 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/address_book_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/edit_address_page.dart';
@@ -18,7 +18,7 @@ class AddressEdit extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color:AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           child: Column(
             children: [
               GestureDetector(
@@ -26,36 +26,48 @@ class AddressEdit extends StatelessWidget {
                   /// copy 地址
                   ToastUtils.init(context);
                   Clipboard.setData(ClipboardData(text: info.address ?? ''));
-                  ToastUtils.showFtToast(child:successViewV1(S.of(context).copy),duration: 3);
+                  ToastUtils.showFtToast(
+                    child: successViewV1(S.of(context).copy),
+                    duration: 3,
+                  );
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(34.0)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(34.0),
+                  ),
                   color: Colors.transparent,
-                  child:  Center(
+                  child: Center(
                     child: Text(
                       S.of(context).copyAddress,
-                      style: TextStyle(color:  Color(0xFF448BDF), fontSize: ScreenUtil().setSp(30.0)),
+                      style: AppTypography.body.copyWith(color: Color(0xFF448BDF)),
                     ),
                   ),
                 ),
               ),
               Divider(
                 height: ScreenUtil().setWidth(1.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+                color: AppColorTokens.of(context).border,
               ),
               GestureDetector(
                 onTap: () async {
                   /// edit
-                  await Navigator.pushReplacement(context,MaterialPageRoute(builder: (_)=> EditAddressPage(info: info)));
+                  await Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EditAddressPage(info: info),
+                    ),
+                  );
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(34.0)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: ScreenUtil().setWidth(34.0),
+                  ),
                   color: Colors.transparent,
-                  child:  Center(
+                  child: Center(
                     child: Text(
                       S.of(context).Edit,
-                      style: TextStyle(color: Color(0xFF448BDF), fontSize: ScreenUtil().setSp(30.0)),
+                      style: AppTypography.body.copyWith(color: Color(0xFF448BDF)),
                     ),
                   ),
                 ),
@@ -64,24 +76,20 @@ class AddressEdit extends StatelessWidget {
           ),
         ),
 
-        SizedBox(
-          height: ScreenUtil().setWidth(20.0),
-        ),
+        SizedBox(height: AppSpacing.space4),
         GestureDetector(
           onTap: () {
             Navigator.of(context).pop();
           },
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(34.0)),
-            color:AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+            padding: EdgeInsets.symmetric(
+              vertical: ScreenUtil().setWidth(34.0),
+            ),
+            color: AppColorTokens.of(context).bgSurface,
             child: Center(
               child: Text(
                 S.of(context).g_key_79,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(30.0),
-                ),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
           ),

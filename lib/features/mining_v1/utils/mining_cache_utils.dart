@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class MiningCacheUtils{
+class MiningCacheUtils {
   static Future<String?> getMiningCachePath() async {
     Directory? tempDir;
     if (Platform.isIOS) {
@@ -23,12 +23,11 @@ class MiningCacheUtils{
     return tempDir?.path;
   }
 
-
-
   /// 获取国家code
   /// CN(中国)
   static String? getCountryCode() {
-    final List<Locale> systemLocales = WidgetsBinding.instance.platformDispatcher.locales;
+    final List<Locale> systemLocales =
+        WidgetsBinding.instance.platformDispatcher.locales;
     String? isoCountryCode = systemLocales.first.countryCode;
     AppLogger.d('MiningCache', 'isoCountryCode: $isoCountryCode');
     return isoCountryCode;

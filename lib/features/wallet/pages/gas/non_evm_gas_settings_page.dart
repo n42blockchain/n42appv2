@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Non-EVM chain Gas settings page.
 ///
@@ -22,10 +21,7 @@ import 'package:n42_wallet/features/widgets/button_widget.dart';
 class NonEvmGasSettingsPage extends StatefulWidget {
   final NonEvmFeeModel feeModel;
 
-  const NonEvmGasSettingsPage({
-    super.key,
-    required this.feeModel,
-  });
+  const NonEvmGasSettingsPage({super.key, required this.feeModel});
 
   @override
   State<NonEvmGasSettingsPage> createState() => _NonEvmGasSettingsPageState();
@@ -51,8 +47,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
       selectedSpeed: widget.feeModel.selectedSpeed,
     );
     if (_feeModel.isEditable) {
-      _customRateCtrl.text =
-          _feeModel.currentOption.feeRate?.toString() ?? '';
+      _customRateCtrl.text = _feeModel.currentOption.feeRate?.toString() ?? '';
     }
   }
 
@@ -67,8 +62,7 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
       _isCustom = false;
       _customRateError = '';
       if (_feeModel.isEditable) {
-        _customRateCtrl.text =
-            _getOption(speed).feeRate?.toString() ?? '';
+        _customRateCtrl.text = _getOption(speed).feeRate?.toString() ?? '';
       }
     });
   }
@@ -91,27 +85,24 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
   void _confirm() {
     if (_isCustom && _customRateError.isNotEmpty) return;
 
-    Navigator.pop(context, NonEvmGasResult(
-      feeModel: _feeModel,
-      customFeeRate: _isCustom ? int.tryParse(_customRateCtrl.text) : null,
-    ));
+    Navigator.pop(
+      context,
+      NonEvmGasResult(
+        feeModel: _feeModel,
+        customFeeRate: _isCustom ? int.tryParse(_customRateCtrl.text) : null,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
 
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_gas_settings,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_gas_settings),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -120,37 +111,38 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  SizedBox(height: ScreenUtil().setWidth(20)),
+                  SizedBox(height: AppSpacing.space4),
                   NonEvmFeeSelector(
                     feeModel: _feeModel,
                     onSpeedChanged: _onSpeedChanged,
                     showDetails: true,
                   ),
                   if (_feeModel.isEditable) ...[
-                    SizedBox(height: ScreenUtil().setWidth(20)),
-                    _buildCustomRateSection(context,
-                        blueColor: blueColor,
-                        mainText: mainText,
-                        subtitleText: subtitleText,
-                        itemBg: itemBg),
+                    SizedBox(height: AppSpacing.space4),
+                    _buildCustomRateSection(
+                      context,
+                      blueColor: blueColor,
+                      mainText: mainText,
+                      subtitleText: subtitleText,
+                      itemBg: itemBg,
+                    ),
                   ],
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                 ],
               ),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(30),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space8,
             ),
             child: SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(88),
-              child: buttonStyle2(
-                context,
-                _confirm,
-                S.of(context).g_key_78,
+              child: AppButton(
+                label: S.of(context).g_key_78,
+                onPressed: _confirm,
               ),
             ),
           ),
@@ -166,49 +158,47 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
     required Color subtitleText,
     required Color itemBg,
   }) {
-    final feeRateUnit =
-        _feeModel.currentOption.feeRateUnit ?? 'sat/byte';
+    final feeRateUnit = _feeModel.currentOption.feeRateUnit ?? 'sat/byte';
     final borderColor = _customRateError.isNotEmpty
-        ? AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name)
-        : AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+        ? AppColorTokens.of(context).danger
+        : AppColorTokens.of(context).border;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-      ),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.tune, size: ScreenUtil().setWidth(36), color: blueColor),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              Icon(
+                Icons.tune,
+                size: ScreenUtil().setWidth(36),
+                color: blueColor,
+              ),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_gas_custom,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
                     color: mainText,
                   ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              color: AppColorTokens.of(context).bgBase,
+              borderRadius: AppRadius.brMd,
               border: Border.all(color: borderColor),
             ),
             child: Row(
@@ -218,14 +208,10 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                     controller: _customRateCtrl,
                     keyboardType: TextInputType.number,
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
-                      color: mainText,
-                    ),
+                    style: AppTypography.body.copyWith(color: mainText),
                     decoration: InputDecoration(
                       hintText: S.of(context).g_key_t_43,
-                      hintStyle: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      hintStyle: AppTypography.bodySm.copyWith(
                         color: subtitleText,
                       ),
                       border: InputBorder.none,
@@ -240,33 +226,25 @@ class _NonEvmGasSettingsPageState extends State<NonEvmGasSettingsPage> {
                 ),
                 Text(
                   feeRateUnit,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
               ],
             ),
           ),
           if (_customRateError.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               _customRateError,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.errorTextColor.name),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
               ),
             ),
           ],
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             '${S.of(context).g_key_t_37}: '
             '${_feeModel.standard.feeRate ?? '-'} $feeRateUnit',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleText,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleText),
           ),
         ],
       ),
@@ -282,11 +260,7 @@ class NonEvmGasResult {
   final NonEvmFeeModel feeModel;
   final int? customFeeRate;
 
-  int? get effectiveFeeRate =>
-      customFeeRate ?? feeModel.currentOption.feeRate;
+  int? get effectiveFeeRate => customFeeRate ?? feeModel.currentOption.feeRate;
 
-  const NonEvmGasResult({
-    required this.feeModel,
-    this.customFeeRate,
-  });
+  const NonEvmGasResult({required this.feeModel, this.customFeeRate});
 }

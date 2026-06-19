@@ -26,7 +26,9 @@ class CalldataBuilder {
     required Uint8List data,
   }) {
     // Function selector: execute(address,uint256,bytes) = 0xb61d27f6
-    final selector = hexToBytes(AAConstants.executeSelector.replaceFirst('0x', ''));
+    final selector = hexToBytes(
+      AAConstants.executeSelector.replaceFirst('0x', ''),
+    );
 
     // Encode parameters
     final targetEncoded = _encodeAddress(target);
@@ -60,7 +62,9 @@ class CalldataBuilder {
     }
 
     // Function selector: executeBatch(address[],uint256[],bytes[]) = 0x47e1da2a
-    final selector = hexToBytes(AAConstants.executeBatchSelector.replaceFirst('0x', ''));
+    final selector = hexToBytes(
+      AAConstants.executeBatchSelector.replaceFirst('0x', ''),
+    );
 
     // Encode arrays
     final targets = calls.map((c) => c.target).toList();
@@ -79,7 +83,12 @@ class CalldataBuilder {
     final datasOffset = valuesOffset + BigInt.from(valuesEncoded.length);
 
     // Build result
-    final totalSize = 4 + headerSize + targetsEncoded.length + valuesEncoded.length + datasEncoded.length;
+    final totalSize =
+        4 +
+        headerSize +
+        targetsEncoded.length +
+        valuesEncoded.length +
+        datasEncoded.length;
     final result = Uint8List(totalSize);
     var offset = 0;
 
@@ -115,7 +124,11 @@ class CalldataBuilder {
     required String to,
     required BigInt amount,
   }) {
-    return _encodeAddressUint256Call(AAConstants.erc20TransferSelector, to, amount);
+    return _encodeAddressUint256Call(
+      AAConstants.erc20TransferSelector,
+      to,
+      amount,
+    );
   }
 
   /// Build ERC20 approve call data
@@ -125,7 +138,11 @@ class CalldataBuilder {
     required String spender,
     required BigInt amount,
   }) {
-    return _encodeAddressUint256Call(AAConstants.erc20ApproveSelector, spender, amount);
+    return _encodeAddressUint256Call(
+      AAConstants.erc20ApproveSelector,
+      spender,
+      amount,
+    );
   }
 
   // ==================== Factory Functions ====================
@@ -137,7 +154,11 @@ class CalldataBuilder {
     required String owner,
     required BigInt salt,
   }) {
-    return _encodeAddressUint256Call(AAConstants.createAccountSelector, owner, salt);
+    return _encodeAddressUint256Call(
+      AAConstants.createAccountSelector,
+      owner,
+      salt,
+    );
   }
 
   /// Build getAddress call data for SimpleAccountFactory
@@ -147,7 +168,11 @@ class CalldataBuilder {
     required String owner,
     required BigInt salt,
   }) {
-    return _encodeAddressUint256Call(AAConstants.getAddressSelector, owner, salt);
+    return _encodeAddressUint256Call(
+      AAConstants.getAddressSelector,
+      owner,
+      salt,
+    );
   }
 
   // ==================== EntryPoint Functions ====================
@@ -155,11 +180,12 @@ class CalldataBuilder {
   /// Build getNonce call data for EntryPoint
   ///
   /// Encodes: getNonce(address sender, uint192 key)
-  static Uint8List buildGetNonce({
-    required String sender,
-    BigInt? key,
-  }) {
-    return _encodeAddressUint256Call(AAConstants.getNonceSelector, sender, key ?? BigInt.zero);
+  static Uint8List buildGetNonce({required String sender, BigInt? key}) {
+    return _encodeAddressUint256Call(
+      AAConstants.getNonceSelector,
+      sender,
+      key ?? BigInt.zero,
+    );
   }
 
   // ==================== Init Code ====================
@@ -185,7 +211,11 @@ class CalldataBuilder {
   /// Encode a call with selector(address, uint256) pattern
   ///
   /// Common pattern used by ERC20 transfer/approve, factory createAccount/getAddress, etc.
-  static Uint8List _encodeAddressUint256Call(String selectorHex, String address, BigInt value) {
+  static Uint8List _encodeAddressUint256Call(
+    String selectorHex,
+    String address,
+    BigInt value,
+  ) {
     final selector = hexToBytes(selectorHex.replaceFirst('0x', ''));
     final result = Uint8List(4 + 64);
     result.setAll(0, selector);
@@ -362,11 +392,7 @@ class ExecuteCall {
 
   /// Create an ETH transfer call
   factory ExecuteCall.ethTransfer(String to, BigInt amount) {
-    return ExecuteCall(
-      target: to,
-      value: amount,
-      data: Uint8List(0),
-    );
+    return ExecuteCall(target: to, value: amount, data: Uint8List(0));
   }
 
   /// Create an ERC20 transfer call

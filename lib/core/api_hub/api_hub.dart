@@ -15,11 +15,8 @@ export 'models/defi_protocol.dart';
 export 'models/url_threat.dart';
 
 // Datasources
-export 'datasources/coincap_datasource.dart';
 export 'datasources/coinpaprika_datasource.dart';
-export 'datasources/cryptocompare_price_datasource.dart';
 export 'datasources/coinlore_datasource.dart';
-export 'datasources/messari_datasource.dart';
 export 'datasources/defillama_datasource.dart';
 export 'datasources/urlhaus_datasource.dart';
 

@@ -1,5 +1,6 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -17,49 +18,57 @@ Future<void> alertWidget(BuildContext context) async {
             children: [
               Text(
                 S.of(context).g_swap_key_20(CoinType.N.name),
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(40)
+                style: AppTypography.titleLg.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60), vertical: ScreenUtil().setWidth(40)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.space16,
+                  vertical: AppSpacing.space12,
+                ),
                 child: Image.asset(
                   "assets/home/swap/medal.png",
                   fit: BoxFit.cover,
                   height: ScreenUtil().setWidth(120),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
               Text(
                 S.of(context).g_swap_key_19,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(24)
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
                 maxLines: 2,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
+              SizedBox(height: AppSpacing.space12),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pop(context);
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.space8,
+                  ),
                   height: ScreenUtil().setWidth(88),
                   width: double.infinity,
                   alignment: Alignment.center,
                   child: Text(
                     S.of(context).g_swap_key_18,
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      fontSize: ScreenUtil().setSp(30),
+                    style: AppTypography.body.copyWith(
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainButtonTextColor.name,
+                      ),
                     ),
                   ),
                 ),

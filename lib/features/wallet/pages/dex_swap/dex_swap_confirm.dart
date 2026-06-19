@@ -1,8 +1,7 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -42,20 +41,25 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
   Widget _summaryCard() {
     final q = widget.quote;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color:
-            AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
-          _row(S.of(context).g_key_dex_you_pay,
-              '${q.amountIn} ${q.tokenInSymbol}'),
-          _row(S.of(context).g_key_dex_you_receive,
-              '${q.amountOut} ${q.tokenOutSymbol}'),
-          _row(S.of(context).g_key_dex_min_received,
-              '${q.minAmountOut} ${q.tokenOutSymbol}'),
+          _row(
+            S.of(context).g_key_dex_you_pay,
+            '${q.amountIn} ${q.tokenInSymbol}',
+          ),
+          _row(
+            S.of(context).g_key_dex_you_receive,
+            '${q.amountOut} ${q.tokenOutSymbol}',
+          ),
+          _row(
+            S.of(context).g_key_dex_min_received,
+            '${q.minAmountOut} ${q.tokenOutSymbol}',
+          ),
           _priceImpactRow(q),
           _row(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
           _row(S.of(context).g_key_dex_best_source, q.source),
@@ -67,24 +71,20 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
 
   Widget _row(String label, String value) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Text(
             label,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ],
@@ -94,33 +94,31 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
 
   Widget _priceImpactRow(DexQuoteModel q) {
     final impact = q.priceImpactNum;
+    final c = AppColorTokens.of(context);
     final valueColor = switch (impact) {
-      >= 3.0 => Colors.red,
-      >= 1.0 => Colors.orange,
-      _ => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      >= 3.0 => c.danger,
+      >= 1.0 => c.warning,
+      _ => c.textPrimary,
     };
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Flexible(
             child: Text(
               S.of(context).g_key_dex_price_impact,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
           const Spacer(),
           Text(
             q.priceImpact,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: valueColor,
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: impact >= 1.0 ? FontWeight.bold : FontWeight.normal,
+              fontWeight: impact >= 1.0 ? FontWeight.w600 : FontWeight.normal,
             ),
           ),
         ],
@@ -134,31 +132,27 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       child: Row(
         children: [
           Expanded(
-            child: buttonStyle5(
-              context,
-              () => Navigator.pop(context, null),
-              S.of(context).g_key_79,
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainWhiteColor.name),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor3.name),
+            child: AppButton(
+              label: S.of(context).g_key_79,
+              variant: AppButtonVariant.secondary,
+              onPressed: () => Navigator.pop(context, null),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(30)),
+          SizedBox(width: AppSpacing.space8),
           Expanded(
-            child: buttonStyle2(
-              context,
-              () async {
+            child: AppButton(
+              label: S.of(context).g_key_78,
+              onPressed: () async {
                 final nav = Navigator.of(context);
                 final bool? verified = await nav.push(
                   MaterialPageRoute(
-                      builder: (_) => WalletSecurityVerification()),
+                    builder: (_) => WalletSecurityVerification(),
+                  ),
                 );
                 if (verified == true) {
                   nav.pop(true);
                 }
               },
-              S.of(context).g_key_78,
             ),
           ),
         ],

@@ -8,6 +8,8 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/features/wallet/api/transaction_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_sync_utils.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/btc_tran_detail.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/common_response_item_model.dart';
@@ -47,12 +49,12 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     load = loadType;
     try {
       final coinModel = getCoinModel();
+      final config = coinModel.config;
       final addr = coinModel.address?.toString() ?? '';
-      final coinKey = coinModel.coin['coinType'];
-      final contract = coinModel.coin['contract'];
+      final coinKey = config.coinType;
+      final contract = config.contract;
 
-      final isBtc =
-          coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+      final isBtc = config.blockchainType == BlockchainType.Bitcoin.name;
       final List<dynamic> txList = isBtc
           ? await db.selectBtcTransationRecord(
               AppGlobals.userInfo?.uuid ?? '',
@@ -87,9 +89,10 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
   Future<void> getTransactionDataNetwork(Load loadType) async {
     final coinModel = getCoinModel();
+    final config = coinModel.config;
     final addr = coinModel.address.toString();
-    final coinKey = coinModel.coin['coinType'];
-    final contract = coinModel.coin['contract'];
+    final coinKey = config.coinType;
+    final contract = config.contract;
 
     final api = TransactionApi();
     final MessageModel mm = contract == ''
@@ -102,7 +105,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
           );
 
     if (mm.error == false) {
-      final blockchainType = coinModel.coin['blockchainType'];
+      final blockchainType = config.blockchainType;
       switch (blockchainType) {
         case 'Ethereum':
           await getTransactionDataNetworkEth(mm.data);
@@ -133,8 +136,8 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     'SOL': 'sol',
   };
 
-  Future<void> _fetchMempoolTxs(dynamic coinModel) async {
-    final coinType = coinModel.coin['coinType']?.toString() ?? '';
+  Future<void> _fetchMempoolTxs(CoinModel coinModel) async {
+    final coinType = coinModel.config.coinType;
     final tvChain = _mempoolChainMap[coinType.toUpperCase()];
     if (tvChain == null) return;
 
@@ -197,7 +200,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
       // TRX: skip records whose contract doesn't match
       if (!isEth &&
-          coinModel.coin['contract'].toString().toUpperCase() !=
+          coinModel.config.contract.toUpperCase() !=
               (cri.contractAddress ?? '').toUpperCase()) {
         continue;
       }
@@ -249,7 +252,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         trm.to1 = '';
         trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
         trm.txHash = cri.hash;
-        trm.coinMiniName = coinModel.coin['coinType'];
+        trm.coinMiniName = coinModel.config.coinType;
         trm.isTest = coinModel.isTest ? 1 : 0;
         syncBtcRecordFromDetail(trm, cri);
         await db.insertBtcTransactionRecord(trm);
@@ -294,14 +297,14 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
         trm.from1 = (cri.src ?? '').toLowerCase();
         trm.to1 = (cri.dst ?? '').toLowerCase();
         trm.price = BigInt.from(cri.lamport ?? 0);
-        trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
+        trm.contract = coinModel.config.contract.toLowerCase();
         trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
         trm.txHash = hash;
         trm.gasPrice = BigInt.from(cri.fee ?? 0);
         trm.gas = 0;
         trm.txTime = (cri.blockTime ?? 0).toString();
         trm.state = (cri.status == 'Success') ? 1 : 0;
-        trm.coinMiniName = coinModel.coin['coinType'];
+        trm.coinMiniName = coinModel.config.coinType;
         trm.isTest = coinModel.isTest ? 1 : 0;
         await db.insertTransationRecord(trm);
         isEdit = true;
@@ -383,7 +386,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
   }
 
   TransationRecordModel _buildTxRecord(
-    dynamic coinModel,
+    CoinModel coinModel,
     CommonResponseItemModel cri,
     String hash,
   ) {
@@ -399,14 +402,14 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
       cri.value,
       coinModel.coin['decimals'] as int? ?? 18,
     );
-    trm.contract = (coinModel.coin['contract'] ?? '').toLowerCase();
+    trm.contract = coinModel.config.contract.toLowerCase();
     trm.walletIndex = ref.read(wapBridgeProvider).walletIndex;
     trm.txHash = hash;
     trm.gasPrice = BigInt.tryParse(cri.gasPrice ?? '0') ?? BigInt.zero;
     trm.gas = int.tryParse(cri.gas ?? '0') ?? 0;
     trm.txTime = cri.timeStamp ?? '0';
     trm.state = cri.normalizedState;
-    trm.coinMiniName = coinModel.coin['coinType'];
+    trm.coinMiniName = coinModel.config.coinType;
     trm.isTest = coinModel.isTest ? 1 : 0;
     return trm;
   }
@@ -425,7 +428,7 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
 
   bool _syncExistingTxRecord(
     TransationRecordModel trm,
-    dynamic coinModel,
+    CoinModel coinModel,
     CommonResponseItemModel cri, {
     required bool isEth,
   }) {
@@ -504,5 +507,5 @@ mixin WalletChainInfoSyncMixin<T extends ConsumerStatefulWidget>
     }
   }
 
-  dynamic getCoinModel();
+  CoinModel getCoinModel();
 }

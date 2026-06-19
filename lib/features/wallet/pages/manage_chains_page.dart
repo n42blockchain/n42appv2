@@ -1,5 +1,6 @@
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:flutter/material.dart';
@@ -18,26 +19,21 @@ class ManageChainsPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           S.of(context).g_key_manage_chains,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
         ),
         centerTitle: true,
       ),
       body: ReorderableListView.builder(
-        padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(12),
-        ),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         itemCount: wap.coinModels.length,
         onReorder: (oldIndex, newIndex) {
           wap.reorderChain(oldIndex, newIndex);
         },
         itemBuilder: (context, i) {
           final cm = wap.coinModels[i];
-          final coinType = cm.coin['coinType'] as String? ?? '';
-          final name = cm.coin['name'] as String? ?? coinType;
-          final icon = cm.coin['icon'] as String? ?? '';
+          final coinType = cm.config.coinType;
+          final name = cm.config.name.isNotEmpty ? cm.config.name : coinType;
+          final icon = cm.config.icon;
 
           Widget image;
           if (coinType == 'N') {
@@ -64,8 +60,8 @@ class ManageChainsPage extends ConsumerWidget {
           return ListTile(
             key: ValueKey(coinType),
             contentPadding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(24),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space2,
             ),
             leading: Row(
               mainAxisSize: MainAxisSize.min,
@@ -77,38 +73,29 @@ class ManageChainsPage extends ConsumerWidget {
                     child: Icon(
                       Icons.drag_handle_rounded,
                       size: ScreenUtil().setWidth(36),
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.itemSubtitleTextColor.name),
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
                 ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-                  child: image,
-                ),
+                ClipRRect(borderRadius: AppRadius.brMd, child: image),
               ],
             ),
             title: Text(
               coinType,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
+              style: AppTypography.body.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             subtitle: Text(
               name,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
             trailing: Switch(
               value: cm.showList,
-              activeThumbColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              activeThumbColor: AppColorTokens.of(context).brand,
               onChanged: (_) => wap.toggleChainVisibility(cm),
             ),
           );

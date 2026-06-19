@@ -113,15 +113,15 @@ class BrowserSettingsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        searchEngine,
-        blockAds,
-        blockTrackers,
-        enableJavascript,
-        enableCookies,
-        saveHistory,
-        defaultUserAgent,
-        desktopMode,
-      ];
+    searchEngine,
+    blockAds,
+    blockTrackers,
+    enableJavascript,
+    enableCookies,
+    saveHistory,
+    defaultUserAgent,
+    desktopMode,
+  ];
 }
 
 /// Tab Entity
@@ -163,4 +163,3 @@ class TabEntity extends Equatable {
   @override
   List<Object?> get props => [id, url, title, favicon, isActive, createdAt];
 }
-

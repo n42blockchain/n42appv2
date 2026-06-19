@@ -15,6 +15,7 @@ late final TransactionRecordItemProvider globalTripInstance;
 /// Usage:
 /// - `ref.read(tripBridgeProvider)` replaces `Provider.of<TRIP>(context, listen: false)`
 /// - `ref.watch(tripBridgeProvider)` replaces `Consumer<TRIP>`
-final tripBridgeProvider = ChangeNotifierProvider<TransactionRecordItemProvider>((ref) {
-  return globalTripInstance;
-});
+final tripBridgeProvider =
+    ChangeNotifierProvider<TransactionRecordItemProvider>((ref) {
+      return globalTripInstance;
+    });

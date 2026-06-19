@@ -27,7 +27,9 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
     super.initState();
     if (widget.uri != "") {
       ref.read(wcpBridgeProvider).pageOpen = true;
-      ref.read(wcpBridgeProvider).viewStateDeal(WalletConnectState.loading, params: widget.uri);
+      ref
+          .read(wcpBridgeProvider)
+          .viewStateDeal(WalletConnectState.loading, params: widget.uri);
     }
   }
 
@@ -50,9 +52,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
   Widget build(BuildContext context) {
     final connectV2 = ref.watch(wcpBridgeProvider);
     return Scaffold(
-      appBar: AppBarWidget(
-        text: connectV2.metadata?.name ?? "Wallet Connect",
-      ),
+      appBar: AppBarWidget(text: connectV2.metadata?.name ?? "Wallet Connect"),
       body: SafeArea(
         child: Stack(
           children: [
@@ -64,5 +64,4 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
       ),
     );
   }
-
 }

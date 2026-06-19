@@ -29,38 +29,48 @@ class SolSender implements ChainSender {
 
     // Get SOL balance (and token balance if applicable)
     BigInt balance;
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Solana.name,
-      '',
-      params.fromAddress,
-      contract: params.contractAddress,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Solana.name,
+          '',
+          params.fromAddress,
+          contract: params.contractAddress,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     balance = mmb.data as BigInt;
 
     if (balance == BigInt.zero) {
-      return SendResult.fail(isContract ? S.current.g_key_wallet_m4 : S.current.g_key_wallet_m5('SOL'));
+      return SendResult.fail(
+        isContract
+            ? S.current.g_key_wallet_m4
+            : S.current.g_key_wallet_m5('SOL'),
+      );
     }
 
     // Get native SOL balance for gas
     BigInt chainBalance = balance;
     if (isContract) {
-      final mmchain = await _tokenViewApi.getBalance(
-        BlockchainType.Solana.name,
-        '',
-        params.fromAddress,
-        contract: '',
-      ) ?? MessageModel.error();
+      final mmchain =
+          await _tokenViewApi.getBalance(
+            BlockchainType.Solana.name,
+            '',
+            params.fromAddress,
+            contract: '',
+          ) ??
+          MessageModel.error();
       if (mmchain.error) return SendResult.fail(mmchain.data?.toString());
       chainBalance = mmchain.data as BigInt;
     }
 
     // Gas price
-    final mmgas = await _tokenViewApi.getGasPrice(
-      BlockchainType.Solana.name,
-      CoinType.SOL.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmgas =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Solana.name,
+          CoinType.SOL.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmgas.error) return SendResult.fail(mmgas.data?.toString());
     final gasPrice = mmgas.data as BigInt;
     final totalGasPrice = gasPrice * BigInt.from(gas);
@@ -75,13 +85,20 @@ class SolSender implements ChainSender {
           return SendResult.fail(S.current.g_key_wallet_m5('SOL'));
         }
         valuePrice = valuePrice - totalGasPrice;
-        adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+        adjustedAmount = toEther(
+          valuePrice.toString(),
+          params.decimals,
+        ).toDouble();
       }
-      if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+      if (valuePrice <= BigInt.zero ||
+          totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5('SOL'));
       }
     } else {
-      valuePrice = ethToWeiString(params.amount.toString(), params.tokenDecimals);
+      valuePrice = ethToWeiString(
+        params.amount.toString(),
+        params.tokenDecimals,
+      );
       if (totalGasPrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5('SOL'));
       }
@@ -94,12 +111,20 @@ class SolSender implements ChainSender {
     final solApi = SolApi();
     String recipientTokenAddress = '';
     if (isContract) {
-      recipientTokenAddress = await _trustdart.getPubKeySOL(params.toAddress, params.contractAddress);
+      recipientTokenAddress = await _trustdart.getPubKeySOL(
+        params.toAddress,
+        params.contractAddress,
+      );
       if (recipientTokenAddress.isEmpty) {
         return const SendResult.fail('Failed to get token account');
       }
-      final rdataAccount = await solApi.getAccountInfo(recipientTokenAddress, isTest: params.isTest);
-      if (rdataAccount.error) return SendResult.fail(rdataAccount.data?.toString());
+      final rdataAccount = await solApi.getAccountInfo(
+        recipientTokenAddress,
+        isTest: params.isTest,
+      );
+      if (rdataAccount.error) {
+        return SendResult.fail(rdataAccount.data?.toString());
+      }
       if (rdataAccount.data == null) recipientTokenAddress = '';
     }
 
@@ -149,7 +174,10 @@ class SolSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.SOL.name, params.path, txData, pk: params.privateKey!,
+        CoinType.SOL.name,
+        params.path,
+        txData,
+        pk: params.privateKey!,
       );
     }
 
@@ -161,7 +189,9 @@ class SolSender implements ChainSender {
       coinType: CoinType.SOL.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     final sendMm = await solApi.sendTransaction(signStr, isTest: params.isTest);

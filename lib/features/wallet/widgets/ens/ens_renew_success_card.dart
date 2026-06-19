@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 import 'package:n42_wallet/features/wallet/services/ens_expiry_reminder_service.dart';
 
@@ -61,66 +61,63 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(color: Colors.green.withAlpha(50)),
+        color: AppColorTokens.of(context).success.withAlpha(20),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(
+          color: AppColorTokens.of(context).success.withAlpha(50),
+        ),
       ),
       child: Column(
         children: [
-          Icon(Icons.check_circle, size: ScreenUtil().setWidth(64), color: Colors.green),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          Icon(
+            Icons.check_circle,
+            size: ScreenUtil().setWidth(64),
+            color: AppColorTokens.of(context).success,
+          ),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_renew_success,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+            style: AppTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).success,
             ),
           ),
           if (widget.renewResult.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               '${S.of(context).g_key_ens_new_expiry}: ${_formatDate(widget.renewResult.newExpiresAt!)}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ],
           if (widget.renewResult.txHash != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: AppColorTokens.of(context).success.withAlpha(20),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 'Tx: ${_shortenHash(widget.renewResult.txHash!)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ),
           ],
           // 到期提醒开关
           if (widget.renewResult.newExpiresAt != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(20)),
-            Divider(color: Colors.green.withAlpha(50)),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space4),
+            Divider(color: AppColorTokens.of(context).success.withAlpha(50)),
+            SizedBox(height: AppSpacing.space2),
             Row(
               children: [
                 Expanded(
@@ -129,24 +126,16 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                     children: [
                       Text(
                         S.of(context).g_key_ens_reminder_enable,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
+                        style: AppTypography.bodySm.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textPrimary,
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(4)),
+                      SizedBox(height: AppSpacing.space2),
                       Text(
                         S.of(context).g_key_ens_reminder_hint,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                        style: AppTypography.caption.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ],
@@ -154,10 +143,7 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                 ),
                 Switch(
                   value: _reminderEnabled,
-                  activeThumbColor: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  activeThumbColor: AppColorTokens.of(context).brand,
                   onChanged: _reminderSaving ? null : _toggleReminder,
                 ),
               ],

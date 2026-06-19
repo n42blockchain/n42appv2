@@ -73,16 +73,16 @@ class MiningSessionEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        walletAddress,
-        planId,
-        startTime,
-        endTime,
-        status,
-        earnedRewards,
-        rewardTokenSymbol,
-        miningPower,
-      ];
+    id,
+    walletAddress,
+    planId,
+    startTime,
+    endTime,
+    status,
+    earnedRewards,
+    rewardTokenSymbol,
+    miningPower,
+  ];
 }
 
 /// Mining Session Status
@@ -157,17 +157,17 @@ class MiningPlanEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        description,
-        stakeAmount,
-        stakeTokenSymbol,
-        dailyRewardRate,
-        minDurationDays,
-        maxDurationDays,
-        isAvailable,
-        tierLevel,
-      ];
+    id,
+    name,
+    description,
+    stakeAmount,
+    stakeTokenSymbol,
+    dailyRewardRate,
+    minDurationDays,
+    maxDurationDays,
+    isAvailable,
+    tierLevel,
+  ];
 }
 
 /// Mining Reward Entity
@@ -205,14 +205,14 @@ class MiningRewardEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        sessionId,
-        amount,
-        tokenSymbol,
-        timestamp,
-        isClaimed,
-        claimTxHash,
-      ];
+    id,
+    sessionId,
+    amount,
+    tokenSymbol,
+    timestamp,
+    isClaimed,
+    claimTxHash,
+  ];
 }
 
 /// Full Node Entity
@@ -259,23 +259,18 @@ class FullNodeEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        status,
-        uptimePercentage,
-        totalRewards,
-        activatedAt,
-        expiresAt,
-      ];
+    id,
+    name,
+    status,
+    uptimePercentage,
+    totalRewards,
+    activatedAt,
+    expiresAt,
+  ];
 }
 
 /// Node Status
-enum NodeStatus {
-  online,
-  offline,
-  syncing,
-  error,
-}
+enum NodeStatus { online, offline, syncing, error }
 
 /// Mining Status Entity
 ///
@@ -301,7 +296,12 @@ class MiningStatusEntity extends Equatable {
   });
 
   @override
-  List<Object?> get props => [isActive, currentSession, totalPower, lastUpdated];
+  List<Object?> get props => [
+    isActive,
+    currentSession,
+    totalPower,
+    lastUpdated,
+  ];
 }
 
 /// Mining Rewards Entity
@@ -333,12 +333,12 @@ class MiningRewardsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        totalEarned,
-        claimableAmount,
-        claimedAmount,
-        tokenSymbol,
-        rewards,
-      ];
+    totalEarned,
+    claimableAmount,
+    claimedAmount,
+    tokenSymbol,
+    rewards,
+  ];
 }
 
 /// Mining Statistics Entity
@@ -378,13 +378,12 @@ class MiningStatisticsEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        totalSessions,
-        totalActiveDays,
-        averageDailyRewards,
-        bestDailyRewards,
-        totalRewards,
-        tokenSymbol,
-        miningStartDate,
-      ];
+    totalSessions,
+    totalActiveDays,
+    averageDailyRewards,
+    bestDailyRewards,
+    totalRewards,
+    tokenSymbol,
+    miningStartDate,
+  ];
 }
-

@@ -2,6 +2,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -77,19 +78,19 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       switch (preset) {
         SessionKeyPermission.transfer => (
           label: S.of(context).g_key_aa_session_preset_transfer,
-          riskColor: Colors.green,
+          riskColor: AppColorTokens.of(context).success,
         ),
         SessionKeyPermission.contractCall => (
           label: S.of(context).g_key_aa_session_preset_contract,
-          riskColor: Colors.orange,
+          riskColor: AppColorTokens.of(context).warning,
         ),
         SessionKeyPermission.full => (
           label: S.of(context).g_key_aa_session_preset_full,
-          riskColor: Colors.red,
+          riskColor: AppColorTokens.of(context).danger,
         ),
         SessionKeyPermission.approve => (
           label: S.of(context).g_key_aa_approve,
-          riskColor: Colors.orange,
+          riskColor: AppColorTokens.of(context).warning,
         ),
       };
 
@@ -130,7 +131,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               child: ListView(
                 controller: scrollController,
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(24),
+                  horizontal: AppSpacing.space6,
                 ),
                 children: _buildFormBody(context),
               ),
@@ -155,7 +156,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
     return [
       _buildSectionHeader('1. ${S.of(context).g_key_aa_session_select_preset}'),
-      SizedBox(height: ScreenUtil().setWidth(12)),
+      SizedBox(height: AppSpacing.space4),
       SessionKeyPresetCards(
         selected: _preset,
         onChanged: (p) => setState(() {
@@ -163,20 +164,20 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           _riskConfirmed = false;
         }),
       ),
-      SizedBox(height: ScreenUtil().setWidth(24)),
+      SizedBox(height: AppSpacing.space6),
       _buildSectionHeader('2. ${S.of(context).g_key_aa_session_dapp_label}'),
-      SizedBox(height: ScreenUtil().setWidth(12)),
+      SizedBox(height: AppSpacing.space4),
       _buildLabelField(),
-      SizedBox(height: ScreenUtil().setWidth(24)),
+      SizedBox(height: AppSpacing.space6),
       _buildSectionHeader('3. ${S.of(context).g_key_aa_session_expiry}'),
-      SizedBox(height: ScreenUtil().setWidth(12)),
+      SizedBox(height: AppSpacing.space4),
       _buildExpiryChips(),
       if (_preset == SessionKeyPermission.transfer) ...[
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
         _buildSectionHeader(
           '4. ${S.of(context).g_key_aa_session_amount_limit}',
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         SessionKeyAmountLimit(
           amountCtrl: _amountCtrl,
           selectedToken: _amountToken,
@@ -185,7 +186,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           onTokenChanged: (t) => setState(() => _amountToken = t),
         ),
       ],
-      SizedBox(height: ScreenUtil().setWidth(24)),
+      SizedBox(height: AppSpacing.space6),
       SessionKeyRiskSummary(
         preset: _preset,
         dappLabel: dappStr,
@@ -194,12 +195,12 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
         riskColor: info.riskColor,
         spendingLimitLine: spendingLine,
       ),
-      SizedBox(height: ScreenUtil().setWidth(16)),
+      SizedBox(height: AppSpacing.space4),
       SessionKeyConfirmCheckbox(
         value: _riskConfirmed,
         onChanged: (v) => setState(() => _riskConfirmed = v ?? false),
       ),
-      SizedBox(height: ScreenUtil().setWidth(24)),
+      SizedBox(height: AppSpacing.space6),
     ];
   }
 
@@ -211,7 +212,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           width: ScreenUtil().setWidth(40),
           height: ScreenUtil().setWidth(4),
           decoration: BoxDecoration(
-            color: Colors.grey.withAlpha(50),
+            color: AppColorTokens.of(context).textTertiary.withAlpha(50),
             borderRadius: BorderRadius.circular(2),
           ),
         ),
@@ -222,17 +223,16 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
   Widget _buildTitle(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [
           Expanded(
             child: Text(
               S.of(context).g_key_aa_create_session,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
               ),
             ),
@@ -249,9 +249,8 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
   Widget _buildSectionHeader(String title) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
-        fontWeight: FontWeight.w700,
+      style: AppTypography.bodySm.copyWith(
+        fontWeight: FontWeight.w600,
         color: _themeColor(AppThemeKeys.mainTextColor.name),
       ),
     );
@@ -264,12 +263,10 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
       decoration: InputDecoration(
         hintText: S.of(context).g_key_aa_session_dapp_hint,
         prefixIcon: const Icon(Icons.label_outline),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
       ),
       textInputAction: TextInputAction.done,
@@ -279,6 +276,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
 
   Widget _buildExpiryChips() {
     final blueColor = _themeColor(AppThemeKeys.mainBlueColor.name);
+    final c = AppColorTokens.of(context);
 
     return Wrap(
       spacing: ScreenUtil().setWidth(10),
@@ -288,23 +286,22 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
           onTap: () => setState(() => _expiry = opt.duration),
           child: Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(10),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: isSelected
                   ? blueColor.withAlpha(25)
-                  : Colors.grey.withAlpha(15),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  : c.textTertiary.withAlpha(15),
+              borderRadius: AppRadius.brMd,
               border: Border.all(
-                color: isSelected ? blueColor : Colors.grey.withAlpha(40),
+                color: isSelected ? blueColor : c.border.withAlpha(40),
                 width: isSelected ? 2 : 1,
               ),
             ),
             child: Text(
               _expiryI18n(opt.duration),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? blueColor
@@ -320,7 +317,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
   Widget _buildCreateButton() {
     final canCreate = _riskConfirmed && !_isSaving;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: SafeArea(
         child: SizedBox(
           width: double.infinity,
@@ -329,13 +326,13 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             style: ElevatedButton.styleFrom(
               backgroundColor: _themeColor(AppThemeKeys.mainBlueColor.name),
               foregroundColor: Colors.white,
-              disabledBackgroundColor: Colors.grey.withAlpha(50),
+              disabledBackgroundColor: AppColorTokens.of(
+                context,
+              ).textTertiary.withAlpha(50),
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(16),
+                vertical: AppSpacing.space4,
               ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: _isSaving
                 ? SizedBox(
@@ -348,8 +345,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                   )
                 : Text(
                     S.of(context).g_key_aa_create_session,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -407,7 +403,9 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
                 ? S.of(context).g_key_aa_session_create_success
                 : S.of(context).g_key_aa_session_create_failed,
           ),
-          backgroundColor: ok ? Colors.green : Colors.red,
+          backgroundColor: ok
+              ? AppColorTokens.of(context).success
+              : AppColorTokens.of(context).danger,
         ),
       );
     }

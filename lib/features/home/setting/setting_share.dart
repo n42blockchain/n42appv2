@@ -14,10 +14,10 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/home/widgets/share_list.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
@@ -89,11 +89,7 @@ class _SettingShareState extends State<SettingShare> {
       await SharePlus.instance.share(
         ShareParams(
           files: [
-            XFile.fromData(
-              pngBytes,
-              name: "invite.png",
-              mimeType: "image/png",
-            ),
+            XFile.fromData(pngBytes, name: "invite.png", mimeType: "image/png"),
           ],
           text:
               "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}",
@@ -109,19 +105,21 @@ class _SettingShareState extends State<SettingShare> {
     sheetBottom(
       context,
       "",
-      ShareList(callBack: (int shareType) {
-        if (shareType == 0) {
-          _shareScreenshot();
-        } else {
-          SharePlus.instance.share(
-            ShareParams(
-              text:
-                  "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
-              subject: AppConfig.apiUrl['n42Browser'],
-            ),
-          );
-        }
-      }),
+      ShareList(
+        callBack: (int shareType) {
+          if (shareType == 0) {
+            _shareScreenshot();
+          } else {
+            SharePlus.instance.share(
+              ShareParams(
+                text:
+                    "${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr",
+                subject: AppConfig.apiUrl['n42Browser'],
+              ),
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -149,8 +147,7 @@ class _SettingShareState extends State<SettingShare> {
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_share_v3_key_2,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32),
+                        style: AppTypography.headline.copyWith(
                           color: _color(AppThemeKeys.mainTextColor),
                         ),
                       ),
@@ -180,12 +177,11 @@ class _SettingShareState extends State<SettingShare> {
                 children: [
                   Divider(height: ScreenUtil().setWidth(1)),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     height: ScreenUtil().setWidth(148.0),
-                    child: buttonStyle2(
-                      context,
-                      _share,
-                      S.of(context).g_share_v2_key_5,
+                    child: AppButton(
+                      label: S.of(context).g_share_v2_key_5,
+                      onPressed: _share,
                     ),
                   ),
                 ],
@@ -200,27 +196,39 @@ class _SettingShareState extends State<SettingShare> {
   Widget _buildStatsRow(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(12.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space6,
       ),
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(24.0),
-        horizontal: ScreenUtil().setWidth(8.0),
+        vertical: AppSpacing.space6,
+        horizontal: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        borderRadius: AppRadius.brMd,
         color: _color(AppThemeKeys.itemBgColor),
       ),
       child: Row(
         children: [
-          _buildStatsCell(context, S.of(context).g_referral_invited,
-              inviteeTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_downloaded,
-              inviteeTotalDown.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_mining,
-              miningTotal.toString()),
-          _buildStatsCell(context, S.of(context).g_referral_reward,
-              rewardTotal.toStringAsFixed(2)),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_invited,
+            inviteeTotal.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_downloaded,
+            inviteeTotalDown.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_mining,
+            miningTotal.toString(),
+          ),
+          _buildStatsCell(
+            context,
+            S.of(context).g_referral_reward,
+            rewardTotal.toStringAsFixed(2),
+          ),
         ],
       ),
     );
@@ -232,18 +240,15 @@ class _SettingShareState extends State<SettingShare> {
         children: [
           Text(
             value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.bold,
+            style: AppTypography.headline.copyWith(
               color: _color(AppThemeKeys.mainTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(4.0)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             label,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20.0),
+            style: AppTypography.captionSm.copyWith(
               color: _color(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -255,33 +260,30 @@ class _SettingShareState extends State<SettingShare> {
   Widget _buildCopyableRow(String label, String value) {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+        borderRadius: AppRadius.brMd,
         color: _color(AppThemeKeys.itemBgColor),
       ),
       child: Row(
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26.0),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textItem,
             ),
           ),
           Expanded(
             child: Text(
               value,
               textAlign: TextAlign.end,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26.0),
+              style: AppTypography.bodySm.copyWith(
                 color: _color(AppThemeKeys.itemTextColor),
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16.0)),
+          SizedBox(width: AppSpacing.space4),
           InkWell(
             onTap: () => _copyToClipboard(value),
             child: Icon(
@@ -302,7 +304,7 @@ class _SettingShareState extends State<SettingShare> {
         color: _color(AppThemeKeys.backGroundColor),
         child: Column(
           children: [
-            SizedBox(height: ScreenUtil().setWidth(30)),
+            SizedBox(height: AppSpacing.space8),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -311,12 +313,11 @@ class _SettingShareState extends State<SettingShare> {
                   width: ScreenUtil().setWidth(60),
                   height: ScreenUtil().setWidth(60),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(20)),
+                SizedBox(width: AppSpacing.space6),
                 Text(
                   AppConfig.apiUrl['n42Browser'],
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _color(AppThemeKeys.mainTextColor),
-                    fontSize: ScreenUtil().setSp(30),
                   ),
                 ),
               ],
@@ -324,37 +325,31 @@ class _SettingShareState extends State<SettingShare> {
             Container(
               alignment: Alignment.centerLeft,
               margin: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
-                vertical: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
+                vertical: AppSpacing.space8,
               ),
               child: Text(
                 S.of(context).g_share_v3_key_6,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30.0),
-                  fontWeight: FontWeight.bold,
+                style: AppTypography.headline.copyWith(
                   color: _color(AppThemeKeys.mainTextColor),
                 ),
               ),
             ),
             _buildCopyableRow(S.of(context).g_share_v3_key_7, linkStr),
-            SizedBox(height: ScreenUtil().setWidth(30.0)),
+            SizedBox(height: AppSpacing.space8),
             _buildCopyableRow(
               S.of(context).g_share_v3_key_8,
               AppGlobals.userInfo?.inviteCode ?? "",
             ),
             Container(
-              padding:
-                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(70)),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space16),
               alignment: Alignment.center,
               child: Container(
                 width: 240,
                 height: 240,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: _color(AppThemeKeys.itemLineColor),
-                  ),
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(40.0)),
+                  border: Border.all(color: _color(AppThemeKeys.itemLineColor)),
+                  borderRadius: BorderRadius.circular(AppRadius.sheet),
                   color: _color(AppThemeKeys.mainWhiteColor),
                 ),
                 clipBehavior: Clip.hardEdge,

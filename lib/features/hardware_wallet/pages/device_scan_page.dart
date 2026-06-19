@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_models.dart';
 import 'package:n42_wallet/features/hardware_wallet/provider/hardware_wallet_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -24,16 +24,13 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   late AnimationController _animationController;
 
   /// 常用主题色快捷方法
-  Color _blueColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color _blueColor(BuildContext context) => AppColorTokens.of(context).brand;
 
-  Color _subtitleColor(BuildContext context) => AppThemeUtils.getColorByKey(
-    context,
-    AppThemeKeys.itemSubtitleTextColor.name,
-  );
+  Color _subtitleColor(BuildContext context) =>
+      AppColorTokens.of(context).textSubtitle;
 
   Color _textColor(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      AppColorTokens.of(context).textPrimary;
 
   @override
   void initState() {
@@ -171,11 +168,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
 
           Text(
             isScanning ? 'Searching for devices...' : 'Search complete',
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.w600,
-              color: _textColor(context),
-            ),
+            style: AppTypography.headline.copyWith(color: _textColor(context)),
           ),
 
           SizedBox(height: su.setWidth(8)),
@@ -184,8 +177,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
             isScanning
                 ? 'Make sure your Ledger is unlocked and Bluetooth is enabled'
                 : '${provider.discoveredDevices.length} device(s) found',
-            style: TextStyle(
-              fontSize: su.setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _subtitleColor(context),
             ),
             textAlign: TextAlign.center,
@@ -220,7 +212,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
               provider.isScanning
                   ? 'Looking for devices...'
                   : 'No devices found',
-              style: TextStyle(fontSize: su.setSp(28), color: subtitle),
+              style: AppTypography.body.copyWith(color: subtitle),
             ),
           ],
         ),
@@ -253,10 +245,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
         margin: EdgeInsets.only(bottom: su.setWidth(12)),
         padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(su.setWidth(12)),
         ),
         child: Row(
@@ -281,9 +270,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                 children: [
                   Text(
                     device.name,
-                    style: TextStyle(
-                      fontSize: su.setSp(28),
-                      fontWeight: FontWeight.w600,
+                    style: AppTypography.bodyStrong.copyWith(
                       color: _textColor(context),
                     ),
                   ),
@@ -298,8 +285,10 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                           margin: EdgeInsets.only(right: su.setWidth(2)),
                           decoration: BoxDecoration(
                             color: index < device.signalStrength
-                                ? Colors.green
-                                : Colors.grey.withAlpha(50),
+                                ? AppColorTokens.of(context).success
+                                : AppColorTokens.of(
+                                    context,
+                                  ).textTertiary.withAlpha(50),
                             borderRadius: BorderRadius.circular(2),
                           ),
                         );
@@ -307,8 +296,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
                       SizedBox(width: su.setWidth(8)),
                       Text(
                         device.isLedger ? 'Ledger Device' : 'Unknown',
-                        style: TextStyle(
-                          fontSize: su.setSp(24),
+                        style: AppTypography.caption.copyWith(
                           color: _subtitleColor(context),
                         ),
                       ),
@@ -346,7 +334,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           onPressed: provider.isScanning ? _stopScan : _startScan,
           style: ElevatedButton.styleFrom(
             backgroundColor: provider.isScanning
-                ? Colors.orange
+                ? AppColorTokens.of(context).warning
                 : _blueColor(context),
             padding: EdgeInsets.symmetric(vertical: su.setWidth(18)),
             shape: RoundedRectangleBorder(
@@ -355,11 +343,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
           ),
           child: Text(
             provider.isScanning ? 'Stop Scanning' : 'Scan Again',
-            style: TextStyle(
-              fontSize: su.setSp(30),
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-            ),
+            style: AppTypography.headline.copyWith(color: Colors.white),
           ),
         ),
       ),
@@ -382,14 +366,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Connected to ${device.name}'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColorTokens.of(context).success,
         ),
       );
     } else if (provider.errorMessage != null) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(provider.errorMessage!),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }

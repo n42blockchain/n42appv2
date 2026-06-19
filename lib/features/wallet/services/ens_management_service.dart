@@ -136,7 +136,10 @@ extension EnsManagementService on EnsRegistrationService {
   /// 批量设置文本记录
   ///
   /// [name] - ENS 名称，[records] - 记录键值对
-  Future<MessageModel> setTextRecords(String name, Map<String, String> records) {
+  Future<MessageModel> setTextRecords(
+    String name,
+    Map<String, String> records,
+  ) {
     return _postTxHash(
       'v1/ens/update-records',
       {'name': normalizeName(name), 'records': records},
@@ -254,10 +257,7 @@ extension EnsManagementService on EnsRegistrationService {
   Future<MessageModel> deleteSubdomain(String parent, String label) {
     return _postTxHash(
       'v1/ens/delete-subdomain',
-      {
-        'parent': normalizeName(parent),
-        'label': label.toLowerCase().trim(),
-      },
+      {'parent': normalizeName(parent), 'label': label.toLowerCase().trim()},
       fallbackError: 'Delete subdomain failed',
       debugLabel: 'ENS delete subdomain',
     );

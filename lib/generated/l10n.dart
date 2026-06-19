@@ -10104,6 +10104,26 @@ class S {
     );
   }
 
+  /// `Style`
+  String get g_theme_style {
+    return Intl.message('Style', name: 'g_theme_style', desc: '', args: []);
+  }
+
+  /// `Custom`
+  String get g_theme_style_custom {
+    return Intl.message(
+      'Custom',
+      name: 'g_theme_style_custom',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance`
+  String get g_theme_mode {
+    return Intl.message('Appearance', name: 'g_theme_mode', desc: '', args: []);
+  }
+
   /// `Invite Code`
   String get g_referral_invite_code {
     return Intl.message(
@@ -11019,6 +11039,26 @@ class S {
     );
   }
 
+  /// `Background Delivery May Be Limited`
+  String get push_bg_delivery_dialog_title {
+    return Intl.message(
+      'Background Delivery May Be Limited',
+      name: 'push_bg_delivery_dialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap "Go to Settings" to allow background activity, then enable Autostart for this app.`
+  String get push_bg_delivery_dialog_content {
+    return Intl.message(
+      'This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap "Go to Settings" to allow background activity, then enable Autostart for this app.',
+      name: 'push_bg_delivery_dialog_content',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Notifications Disabled`
   String get push_permission_dialog_title {
     return Intl.message(
@@ -11167,6 +11207,421 @@ class S {
   /// `Retry`
   String get g_iap_retry {
     return Intl.message('Retry', name: 'g_iap_retry', desc: '', args: []);
+  }
+
+  /// `Start Prediction`
+  String get g_pred_create_title {
+    return Intl.message(
+      'Start Prediction',
+      name: 'g_pred_create_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prediction question, e.g. Who wins this round?`
+  String get g_pred_q_hint {
+    return Intl.message(
+      'Prediction question, e.g. Who wins this round?',
+      name: 'g_pred_q_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outcomes`
+  String get g_pred_outcomes {
+    return Intl.message(
+      'Outcomes',
+      name: 'g_pred_outcomes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Outcome {n}`
+  String g_pred_outcome_n(Object n) {
+    return Intl.message(
+      'Outcome $n',
+      name: 'g_pred_outcome_n',
+      desc: '',
+      args: [n],
+    );
+  }
+
+  /// `Add outcome`
+  String get g_pred_add_outcome {
+    return Intl.message(
+      'Add outcome',
+      name: 'g_pred_add_outcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deadline`
+  String get g_pred_deadline {
+    return Intl.message(
+      'Deadline',
+      name: 'g_pred_deadline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unlimited (manual close)`
+  String get g_pred_unlimited {
+    return Intl.message(
+      'Unlimited (manual close)',
+      name: 'g_pred_unlimited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{n} min`
+  String g_pred_minutes(Object n) {
+    return Intl.message('$n min', name: 'g_pred_minutes', desc: '', args: [n]);
+  }
+
+  /// `Creating…`
+  String get g_pred_creating {
+    return Intl.message(
+      'Creating…',
+      name: 'g_pred_creating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Publish`
+  String get g_pred_publish {
+    return Intl.message('Publish', name: 'g_pred_publish', desc: '', args: []);
+  }
+
+  /// `Please enter a question`
+  String get g_pred_err_question {
+    return Intl.message(
+      'Please enter a question',
+      name: 'g_pred_err_question',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At least two valid outcomes`
+  String get g_pred_err_outcomes {
+    return Intl.message(
+      'At least two valid outcomes',
+      name: 'g_pred_err_outcomes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Yes`
+  String get g_pred_yes {
+    return Intl.message('Yes', name: 'g_pred_yes', desc: '', args: []);
+  }
+
+  /// `No`
+  String get g_pred_no {
+    return Intl.message('No', name: 'g_pred_no', desc: '', args: []);
+  }
+
+  /// `Balance: {amount} {symbol}`
+  String g_pred_balance(Object amount, Object symbol) {
+    return Intl.message(
+      'Balance: $amount $symbol',
+      name: 'g_pred_balance',
+      desc: '',
+      args: [amount, symbol],
+    );
+  }
+
+  /// `Amount ({symbol})`
+  String g_pred_amount_input(Object symbol) {
+    return Intl.message(
+      'Amount ($symbol)',
+      name: 'g_pred_amount_input',
+      desc: '',
+      args: [symbol],
+    );
+  }
+
+  /// `Est. {shares} shares · avg {avg}% · after {after}%`
+  String g_pred_quote_info(Object shares, Object avg, Object after) {
+    return Intl.message(
+      'Est. $shares shares · avg $avg% · after $after%',
+      name: 'g_pred_quote_info',
+      desc: '',
+      args: [shares, avg, after],
+    );
+  }
+
+  /// `Processing…`
+  String get g_pred_processing {
+    return Intl.message(
+      'Processing…',
+      name: 'g_pred_processing',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Buy`
+  String get g_pred_buy {
+    return Intl.message('Buy', name: 'g_pred_buy', desc: '', args: []);
+  }
+
+  /// `Sell {n}`
+  String g_pred_sell_n(Object n) {
+    return Intl.message('Sell $n', name: 'g_pred_sell_n', desc: '', args: [n]);
+  }
+
+  /// `Closed, awaiting resolution`
+  String get g_pred_closed_waiting {
+    return Intl.message(
+      'Closed, awaiting resolution',
+      name: 'g_pred_closed_waiting',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resolved`
+  String get g_pred_resolved {
+    return Intl.message(
+      'Resolved',
+      name: 'g_pred_resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pick the winning outcome to settle (funds paid by result)`
+  String get g_pred_pick_winner {
+    return Intl.message(
+      'Pick the winning outcome to settle (funds paid by result)',
+      name: 'g_pred_pick_winner',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{label} wins ({pct}%)`
+  String g_pred_outcome_win(Object label, Object pct) {
+    return Intl.message(
+      '$label wins ($pct%)',
+      name: 'g_pred_outcome_win',
+      desc: '',
+      args: [label, pct],
+    );
+  }
+
+  /// `Result: {label}`
+  String g_pred_result_label(Object label) {
+    return Intl.message(
+      'Result: $label',
+      name: 'g_pred_result_label',
+      desc: '',
+      args: [label],
+    );
+  }
+
+  /// `Close only`
+  String get g_pred_close_only {
+    return Intl.message(
+      'Close only',
+      name: 'g_pred_close_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel & refund`
+  String get g_pred_cancel_refund {
+    return Intl.message(
+      'Cancel & refund',
+      name: 'g_pred_cancel_refund',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm resolution`
+  String get g_pred_confirm_resolve {
+    return Intl.message(
+      'Confirm resolution',
+      name: 'g_pred_confirm_resolve',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Declare “{label}” the winner and settle? This cannot be undone.`
+  String g_pred_confirm_resolve_msg(Object label) {
+    return Intl.message(
+      'Declare “$label” the winner and settle? This cannot be undone.',
+      name: 'g_pred_confirm_resolve_msg',
+      desc: '',
+      args: [label],
+    );
+  }
+
+  /// `Follow`
+  String get g_live_follow {
+    return Intl.message('Follow', name: 'g_live_follow', desc: '', args: []);
+  }
+
+  /// `Follow coming soon`
+  String get g_live_follow_wip {
+    return Intl.message(
+      'Follow coming soon',
+      name: 'g_live_follow_wip',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to enter room\n{message}`
+  String g_live_enter_room_failed(Object message) {
+    return Intl.message(
+      'Failed to enter room\n$message',
+      name: 'g_live_enter_room_failed',
+      desc: '',
+      args: [message],
+    );
+  }
+
+  /// `HD Wallet · Mnemonic`
+  String get g_wallet_group_hd {
+    return Intl.message(
+      'HD Wallet · Mnemonic',
+      name: 'g_wallet_group_hd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Single-Chain · Imported`
+  String get g_wallet_group_single {
+    return Intl.message(
+      'Single-Chain · Imported',
+      name: 'g_wallet_group_single',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `(Optional)`
+  String get g_xrp_optional {
+    return Intl.message(
+      '(Optional)',
+      name: 'g_xrp_optional',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usually required when sending to an exchange`
+  String get g_xrp_dest_tag_hint {
+    return Intl.message(
+      'Usually required when sending to an exchange',
+      name: 'g_xrp_dest_tag_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid outcome`
+  String get g_pred_err_invalid_outcome {
+    return Intl.message(
+      'Invalid outcome',
+      name: 'g_pred_err_invalid_outcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market closed, trading unavailable`
+  String get g_pred_err_market_closed {
+    return Intl.message(
+      'Market closed, trading unavailable',
+      name: 'g_pred_err_market_closed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Amount must be greater than 0`
+  String get g_pred_err_amount_low {
+    return Intl.message(
+      'Amount must be greater than 0',
+      name: 'g_pred_err_amount_low',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient balance`
+  String get g_pred_err_insufficient_balance {
+    return Intl.message(
+      'Insufficient balance',
+      name: 'g_pred_err_insufficient_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Slippage exceeded, please retry`
+  String get g_pred_err_slippage {
+    return Intl.message(
+      'Slippage exceeded, please retry',
+      name: 'g_pred_err_slippage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Insufficient shares`
+  String get g_pred_err_insufficient_shares {
+    return Intl.message(
+      'Insufficient shares',
+      name: 'g_pred_err_insufficient_shares',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market not resolved, cannot redeem`
+  String get g_pred_err_not_resolved {
+    return Intl.message(
+      'Market not resolved, cannot redeem',
+      name: 'g_pred_err_not_resolved',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market not found`
+  String get g_pred_err_market_not_found {
+    return Intl.message(
+      'Market not found',
+      name: 'g_pred_err_market_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Redeem failed: {reason}`
+  String g_pred_redeem_failed(Object reason) {
+    return Intl.message(
+      'Redeem failed: $reason',
+      name: 'g_pred_redeem_failed',
+      desc: '',
+      args: [reason],
+    );
   }
 }
 

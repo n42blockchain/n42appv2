@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 
@@ -21,29 +21,30 @@ class SessionKeyPresetCards extends StatelessWidget {
   });
 
   static ({String label, Color riskColor}) _presetInfo(
-      BuildContext context, SessionKeyPermission preset) =>
-      switch (preset) {
-        SessionKeyPermission.transfer => (
-          label: S.of(context).g_key_aa_session_preset_transfer,
-          riskColor: Colors.green,
-        ),
-        SessionKeyPermission.contractCall => (
-          label: S.of(context).g_key_aa_session_preset_contract,
-          riskColor: Colors.orange,
-        ),
-        SessionKeyPermission.full => (
-          label: S.of(context).g_key_aa_session_preset_full,
-          riskColor: Colors.red,
-        ),
-        SessionKeyPermission.approve => (
-          label: S.of(context).g_key_aa_approve,
-          riskColor: Colors.orange,
-        ),
-      };
+    BuildContext context,
+    SessionKeyPermission preset,
+  ) => switch (preset) {
+    SessionKeyPermission.transfer => (
+      label: S.of(context).g_key_aa_session_preset_transfer,
+      riskColor: AppColorTokens.of(context).success,
+    ),
+    SessionKeyPermission.contractCall => (
+      label: S.of(context).g_key_aa_session_preset_contract,
+      riskColor: AppColorTokens.of(context).warning,
+    ),
+    SessionKeyPermission.full => (
+      label: S.of(context).g_key_aa_session_preset_full,
+      riskColor: AppColorTokens.of(context).danger,
+    ),
+    SessionKeyPermission.approve => (
+      label: S.of(context).g_key_aa_approve,
+      riskColor: AppColorTokens.of(context).warning,
+    ),
+  };
 
   @override
   Widget build(BuildContext context) {
-    final gap = SizedBox(height: ScreenUtil().setWidth(12));
+    final gap = SizedBox(height: AppSpacing.space4);
     final s = S.of(context);
 
     return Column(
@@ -113,15 +114,16 @@ class _PresetCard extends StatelessWidget {
       onTap: () => onChanged(preset),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
               ? cardColor.withAlpha(18)
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              : AppColorTokens.of(context).bgBase,
+          borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: isSelected ? cardColor : Colors.grey.withAlpha(30),
+            color: isSelected
+                ? cardColor
+                : AppColorTokens.of(context).border.withAlpha(30),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -129,9 +131,23 @@ class _PresetCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildHeader(context, cardColor, isSelected),
-            SizedBox(height: ScreenUtil().setWidth(12)),
-            ...can.map((c) => _bullet(context, c, Icons.check_circle_outline, Colors.green)),
-            ...cannot.map((c) => _bullet(context, c, Icons.remove_circle_outline, Colors.red)),
+            SizedBox(height: AppSpacing.space4),
+            ...can.map(
+              (c) => _bullet(
+                context,
+                c,
+                Icons.check_circle_outline,
+                AppColorTokens.of(context).success,
+              ),
+            ),
+            ...cannot.map(
+              (c) => _bullet(
+                context,
+                c,
+                Icons.remove_circle_outline,
+                AppColorTokens.of(context).danger,
+              ),
+            ),
             if (isHighRisk) _buildHighRiskWarning(context),
           ],
         ),
@@ -147,7 +163,7 @@ class _PresetCard extends StatelessWidget {
           height: ScreenUtil().setWidth(40),
           decoration: BoxDecoration(
             color: cardColor.withAlpha(25),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Icon(
             sessionKeyPermissionIcon(preset),
@@ -155,67 +171,66 @@ class _PresetCard extends StatelessWidget {
             color: cardColor,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             presetInfo.label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              fontWeight: FontWeight.w700,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+            style: AppTypography.bodySm.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ),
         Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(8),
+            horizontal: AppSpacing.space2,
             vertical: ScreenUtil().setWidth(3),
           ),
           decoration: BoxDecoration(
             color: presetInfo.riskColor.withAlpha(20),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Text(
             riskLabel,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(18),
+            style: AppTypography.captionSm.copyWith(
               fontWeight: FontWeight.w600,
               color: presetInfo.riskColor,
             ),
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         if (isSelected)
-          Icon(Icons.check_circle,
-              size: ScreenUtil().setWidth(22), color: cardColor),
+          Icon(
+            Icons.check_circle,
+            size: ScreenUtil().setWidth(22),
+            color: cardColor,
+          ),
       ],
     );
   }
 
   Widget _buildHighRiskWarning(BuildContext context) {
+    final danger = AppColorTokens.of(context).danger;
     return Padding(
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.all(AppSpacing.space2),
         decoration: BoxDecoration(
-          color: Colors.red.withAlpha(15),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+          color: danger.withAlpha(15),
+          borderRadius: AppRadius.brSm,
         ),
         child: Row(
           children: [
-            Icon(Icons.warning_amber,
-                size: ScreenUtil().setWidth(18), color: Colors.red),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            Icon(
+              Icons.warning_amber,
+              size: ScreenUtil().setWidth(18),
+              color: danger,
+            ),
+            SizedBox(width: AppSpacing.space2),
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_risk_warning,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(20),
-                  color: Colors.red,
-                ),
+                style: AppTypography.captionSm.copyWith(color: danger),
               ),
             ),
           ],
@@ -225,23 +240,23 @@ class _PresetCard extends StatelessWidget {
   }
 
   Widget _bullet(
-      BuildContext context, String text, IconData icon, Color color) {
+    BuildContext context,
+    String text,
+    IconData icon,
+    Color color,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(6)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: ScreenUtil().setWidth(16), color: color),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),

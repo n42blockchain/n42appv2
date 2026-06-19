@@ -58,12 +58,14 @@ class BtcSender implements ChainSender {
       allValue = params.sendMax;
     } else {
       // Fetch balance and UTXOs from scratch
-      final mmb = await _tokenViewApi.getBalance(
-        BlockchainType.Bitcoin.name,
-        coinType,
-        fromAddress,
-        isTest: isTestNet,
-      ) ?? MessageModel.error();
+      final mmb =
+          await _tokenViewApi.getBalance(
+            BlockchainType.Bitcoin.name,
+            coinType,
+            fromAddress,
+            isTest: isTestNet,
+          ) ??
+          MessageModel.error();
       if (mmb.error) return SendResult.fail(mmb.data?.toString());
       final balance = mmb.data as BigInt;
       if (balance == BigInt.zero) {
@@ -72,18 +74,34 @@ class BtcSender implements ChainSender {
       allValue = balance == valuePrice && params.sendMax;
       final List<Map<String, dynamic>> utxos = [];
       final mmutxo = await _getUTXO(
-        coinType, params.amount, fromAddress, utxos, 0,
-        averageValue, 1000, 1, allValue, isTest: isTestNet,
+        coinType,
+        params.amount,
+        fromAddress,
+        utxos,
+        0,
+        averageValue,
+        1000,
+        1,
+        allValue,
+        isTest: isTestNet,
       );
       if (mmutxo.error) return SendResult.fail(mmutxo.data?.toString());
-      collectedUtxos = List<Map<String, dynamic>>.from(mmutxo.data['utxo'] as List);
+      collectedUtxos = List<Map<String, dynamic>>.from(
+        mmutxo.data['utxo'] as List,
+      );
     }
 
     // Calculate byte size and fees (uses real toAddress for accuracy)
     final byteSize = await _getSignByteSize(
-      coinType, params.path, collectedUtxos, valuePrice,
-      averageValue, fromAddress, params.toAddress,
-      max: allValue, privateKey: params.privateKey,
+      coinType,
+      params.path,
+      collectedUtxos,
+      valuePrice,
+      averageValue,
+      fromAddress,
+      params.toAddress,
+      max: allValue,
+      privateKey: params.privateKey,
     );
     final byteSizeFees = byteSize * averageValue;
 
@@ -96,7 +114,10 @@ class BtcSender implements ChainSender {
       adjustedAmount = params.amount - feeInBtc;
     } else {
       final totalUtxoValue = BigInt.from(
-        collectedUtxos.fold<int>(0, (s, u) => s + int.parse(u['value'] as String)),
+        collectedUtxos.fold<int>(
+          0,
+          (s, u) => s + int.parse(u['value'] as String),
+        ),
       );
       if (BigInt.from(byteSizeFees) + valuePrice > totalUtxoValue) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
@@ -127,7 +148,10 @@ class BtcSender implements ChainSender {
     String signStr;
     if (params.privateKey?.isNotEmpty ?? false) {
       signStr = await _trustdart.signTransaction(
-        coinType, params.path, btcTxMap, pk: params.privateKey!,
+        coinType,
+        params.path,
+        btcTxMap,
+        pk: params.privateKey!,
       );
     } else {
       if (!AppGlobals.appContext.mounted) {
@@ -149,16 +173,20 @@ class BtcSender implements ChainSender {
       coinType: coinType,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     // Broadcast
-    final sendMm = await _tokenViewApi.sendTx(
-      BlockchainType.Bitcoin.name,
-      coinType,
-      signStr,
-      netMode: params.isTest ? 'test' : 'main',
-    ) ?? MessageModel.error();
+    final sendMm =
+        await _tokenViewApi.sendTx(
+          BlockchainType.Bitcoin.name,
+          coinType,
+          signStr,
+          netMode: params.isTest ? 'test' : 'main',
+        ) ??
+        MessageModel.error();
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
     return SendResult.ok(sendMm.data?.toString(), actualAmount: adjustedAmount);
@@ -189,7 +217,12 @@ class BtcSender implements ChainSender {
     final bool lastPage = unspents.length < (pageSize * pageNum);
 
     final mmutxoC = await _calculateGasFee(
-      value, unspents, utxos, input2Price, gasFee, isTest: isTest,
+      value,
+      unspents,
+      utxos,
+      input2Price,
+      gasFee,
+      isTest: isTest,
     );
     if (!mmutxoC.error) return mmutxoC;
 
@@ -198,10 +231,16 @@ class BtcSender implements ChainSender {
       return mmutxoC;
     }
     return _getUTXO(
-      coinType, value, address,
+      coinType,
+      value,
+      address,
       (mmutxoC.data['utxo'] as List).cast<Map<String, dynamic>>(),
       mmutxoC.data['inputPrice'] as int,
-      gasFee, pageSize, pageNum + 1, allValue, isTest: isTest,
+      gasFee,
+      pageSize,
+      pageNum + 1,
+      allValue,
+      isTest: isTest,
     );
   }
 
@@ -219,9 +258,12 @@ class BtcSender implements ChainSender {
       final u = item as Map<String, dynamic>;
       if (isTest) {
         if (u['hex'] == null) {
-          final utxoTx = await BtcApi(test: true).getUTXOTxid(u['txid'] as String);
+          final utxoTx = await BtcApi(
+            test: true,
+          ).getUTXOTxid(u['txid'] as String);
           if (!utxoTx.error) {
-            u['hex'] = (utxoTx.data as Map)['vout']?[u['vout']]?['scriptpubkey'];
+            u['hex'] =
+                (utxoTx.data as Map)['vout']?[u['vout']]?['scriptpubkey'];
           }
         }
         final amount = u['value'] as int;
@@ -233,7 +275,10 @@ class BtcSender implements ChainSender {
           'script': u['hex'],
         });
       } else {
-        final amount = ethToWeiString(double.parse(u['value'].toString()).toString(), 8);
+        final amount = ethToWeiString(
+          double.parse(u['value'].toString()).toString(),
+          8,
+        );
         input2Price += amount.toInt();
         utxos.add({
           'txid': u['txid'],
@@ -281,7 +326,10 @@ class BtcSender implements ChainSender {
       );
     } else {
       signByteSize = await _trustdart.signTransactionMaxValue(
-        coinType, '', btcTxMap, pk: privateKey,
+        coinType,
+        '',
+        btcTxMap,
+        pk: privateKey,
       );
     }
     return signByteSize.isEmpty ? 0 : int.parse(signByteSize);

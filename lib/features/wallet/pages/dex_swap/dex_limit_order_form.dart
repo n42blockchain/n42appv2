@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_token_select.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 /// 限价单表单组件
@@ -106,9 +105,9 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     _priceCtrl.clear();
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Limit order created'),
-        backgroundColor: Color(0xFF4CAF50),
+      SnackBar(
+        content: const Text('Limit order created'),
+        backgroundColor: AppColorTokens.of(context).success,
       ),
     );
   }
@@ -118,7 +117,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     final s = S.of(context);
 
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -128,7 +127,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             token: _tokenIn,
             onTap: _selectTokenIn,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Amount input
           _buildInput(
@@ -137,7 +136,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // Token Out
           _buildTokenRow(
@@ -145,25 +144,26 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             token: _tokenOut,
             onTap: _selectTokenOut,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           // Limit price input
           _buildInput(
             controller: _priceCtrl,
-            label: 'Limit Price (${_tokenOut?.symbol ?? "?"} per ${_tokenIn?.symbol ?? "?"})',
+            label:
+                'Limit Price (${_tokenOut?.symbol ?? "?"} per ${_tokenIn?.symbol ?? "?"})',
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // Expiry selector
           _buildExpiryRow(),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
 
           // Error
           if (_errorMsg.isNotEmpty) ...[
             DexErrorBanner(message: _errorMsg),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
           ],
 
           // Submit button
@@ -172,21 +172,27 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
             child: ElevatedButton(
               onPressed: _canSubmit ? _submit : null,
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
+                backgroundColor: AppColorTokens.of(context).brand,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               child: _submitLoad == Load.loading
                   ? const SizedBox(
                       width: 20,
                       height: 20,
                       child: CircularProgressIndicator(
-                          strokeWidth: 2, color: Colors.white),
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
                     )
-                  : const Text('Place Limit Order',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                  : Text(
+                      'Place Limit Order',
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
             ),
           ),
         ],
@@ -203,35 +209,36 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+          color: AppColorTokens.of(context).bgSurface,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
-            Text(label,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: 13)),
+            Text(
+              label,
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
             const Spacer(),
             Text(
               token?.symbol ?? 'Select',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTypography.headline.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
             const SizedBox(width: 4),
-            Icon(Icons.chevron_right,
-                size: 20,
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name)),
+            Icon(
+              Icons.chevron_right,
+              size: 20,
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
           ],
         ),
       ),
@@ -247,16 +254,18 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: TextStyle(
-        fontSize: 16,
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+      style: AppTypography.headline.copyWith(
+        fontWeight: FontWeight.w400,
+        color: AppColorTokens.of(context).textPrimary,
       ),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        contentPadding:
-            EdgeInsets.symmetric(horizontal: 14, vertical: ScreenUtil().setWidth(14)),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 14,
+          vertical: AppSpacing.space4,
+        ),
       ),
     );
   }
@@ -264,29 +273,32 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
   Widget _buildExpiryRow() {
     return Row(
       children: [
-        Text('Expires in: ',
-            style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
-                fontSize: 13)),
+        Text(
+          'Expires in: ',
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         const Spacer(),
-        ..._expiryOptions.entries.map((e) => Padding(
-              padding: const EdgeInsets.only(left: 6),
-              child: ChoiceChip(
-                label: Text(e.key, style: TextStyle(fontSize: ScreenUtil().setSp(24))),
-                selected: _expiresIn == e.value,
-                onSelected: (_) => setState(() => _expiresIn = e.value),
-                selectedColor: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                labelStyle: TextStyle(
-                  color: _expiresIn == e.value ? Colors.white : null,
-                  fontSize: ScreenUtil().setSp(24),
-                ),
-                side: BorderSide.none,
-                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
+        ..._expiryOptions.entries.map(
+          (e) => Padding(
+            padding: const EdgeInsets.only(left: 6),
+            child: ChoiceChip(
+              label: Text(
+                e.key,
+                style: AppTypography.caption,
               ),
-            )),
+              selected: _expiresIn == e.value,
+              onSelected: (_) => setState(() => _expiresIn = e.value),
+              selectedColor: AppColorTokens.of(context).brand,
+              labelStyle: AppTypography.caption.copyWith(color: _expiresIn == e.value ? Colors.white : null),
+              side: BorderSide.none,
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              visualDensity: VisualDensity.compact,
+            ),
+          ),
+        ),
       ],
     );
   }

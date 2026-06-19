@@ -1,3 +1,4 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -5,7 +6,6 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:decimal/decimal.dart' as dec;
@@ -41,14 +41,12 @@ class SwapAstPriceWidget extends StatelessWidget {
     return Container(
       height: ScreenUtil().setWidth(100),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
       child: Text(
         text,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
-          fontSize: ScreenUtil().setSp(30),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -59,19 +57,16 @@ class SwapAstPriceWidget extends StatelessWidget {
 class SwapAstPercentWidget extends StatelessWidget {
   final void Function(int percent) onPercentTap;
 
-  const SwapAstPercentWidget({
-    super.key,
-    required this.onPercentTap,
-  });
+  const SwapAstPercentWidget({super.key, required this.onPercentTap});
 
   @override
   Widget build(BuildContext context) {
     final double itemWidth =
         (MediaQuery.of(context).size.width - ScreenUtil().setWidth(60)) / 4;
     return Container(
-      height: ScreenUtil().setWidth(80),
+      height: ScreenUtil().setWidth(88),
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
@@ -79,18 +74,21 @@ class SwapAstPercentWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, int index) {
           final int percent = 25 * (4 - index);
-          return InkWell(
-            onTap: () => onPercentTap(percent),
-            child: Container(
-              height: ScreenUtil().setWidth(80),
-              width: itemWidth,
-              alignment: Alignment.center,
-              child: Text(
-                "$percent%",
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name),
-                  fontSize: ScreenUtil().setSp(30),
+          // Material 包裹使按压 splash 在透明背景上可见；高 88.w(=44dp) 满足触控红线。
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => onPercentTap(percent),
+              borderRadius: AppRadius.brSm,
+              child: Container(
+                height: ScreenUtil().setWidth(88),
+                width: itemWidth,
+                alignment: Alignment.center,
+                child: Text(
+                  "$percent%",
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).brand,
+                  ),
                 ),
               ),
             ),
@@ -115,22 +113,31 @@ class SwapAstCheckWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       width: double.infinity,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          InkWell(
-            onTap: onToggle,
-            child: SizedBox(
-              height: ScreenUtil().setWidth(60),
-              width: ScreenUtil().setWidth(60),
-              child: Icon(
-                readStatement ? Icons.check_box_outlined : Icons.check_box_outline_blank,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  readStatement ? AppThemeKeys.mainBlueColor.name : AppThemeKeys.dividerColor.name,
+          // Material + 圆形 splash 让按压可见；触控区抬到 88.w(=44dp) 满足红线。
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onToggle,
+              customBorder: const CircleBorder(),
+              child: SizedBox(
+                height: ScreenUtil().setWidth(88),
+                width: ScreenUtil().setWidth(88),
+                child: Icon(
+                  readStatement
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank,
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    readStatement
+                        ? AppThemeKeys.mainBlueColor.name
+                        : AppThemeKeys.dividerColor.name,
+                  ),
                 ),
               ),
             ),
@@ -142,10 +149,8 @@ class SwapAstCheckWidget extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               text: TextSpan(
                 text: S.of(context).g_swap_key_16,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
                 children: [
                   WidgetSpan(
@@ -164,11 +169,9 @@ class SwapAstCheckWidget extends StatelessWidget {
                       },
                       child: Text(
                         S.of(context).g_swap_key_17,
-                        style: TextStyle(
+                        style: AppTypography.caption.copyWith(
                           decoration: TextDecoration.underline,
-                          color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.mainBlueColor.name),
-                          fontSize: ScreenUtil().setSp(24),
+                          color: AppColorTokens.of(context).brand,
                         ),
                       ),
                     ),
@@ -199,28 +202,20 @@ class SwapAstPreviewButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isLoading = load == Load.loading;
-    final bgColorKey = isLoading
-        ? AppThemeKeys.mainButtonBgColor3.name
-        : AppThemeKeys.mainButtonBgColor.name;
 
     return Positioned(
       left: 0,
       right: 0,
       bottom: ScreenUtil().setWidth(36.0),
       child: Container(
-        padding:
-            EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: AppSpacing.pageHorizontal,
         height: ScreenUtil().setWidth(88.0),
         child: load == Load.error
-            ? buttonStyle2(context, onRetry, S.of(context).g_swap_key_6)
-            : buttonStyle6(
-                context,
-                onPreview,
-                S.of(context).g_swap_key_5,
-                AppThemeUtils.getColorByKey(context, bgColorKey),
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
-                isLoading,
+            ? AppButton(label: S.of(context).g_swap_key_6, onPressed: onRetry)
+            : AppButton(
+                label: S.of(context).g_swap_key_5,
+                onPressed: onPreview,
+                loading: isLoading,
               ),
       ),
     );

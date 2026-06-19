@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Paymaster 类型
 enum PaymasterType {
@@ -25,6 +25,7 @@ class PaymasterOption {
   final PaymasterType type;
   final String? tokenSymbol;
   final String? tokenAddress;
+
   /// Token decimals for ERC-20 paymaster (e.g. 6 for USDC/USDT, 18 for DAI)
   final int? decimals;
   final double? exchangeRate; // 1 ETH = X token
@@ -68,24 +69,18 @@ class PaymasterOptionCard extends StatelessWidget {
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected
-              ? _getOptionColor().withAlpha(20)
-              : AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              ? _getOptionColor(context).withAlpha(20)
+              : AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected
-                ? _getOptionColor()
+                ? _getOptionColor(context)
                 : isDisabled
-                    ? Colors.grey.withAlpha(30)
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ).withAlpha(30),
+                ? AppColorTokens.of(context).border.withAlpha(30)
+                : AppColorTokens.of(context).textSubtitle.withAlpha(30),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -95,7 +90,7 @@ class PaymasterOptionCard extends StatelessWidget {
             children: [
               // 图标
               _buildIcon(context),
-              SizedBox(width: ScreenUtil().setWidth(14)),
+              SizedBox(width: AppSpacing.space4),
 
               // 内容
               Expanded(
@@ -106,33 +101,30 @@ class PaymasterOptionCard extends StatelessWidget {
                       children: [
                         Text(
                           _getTitle(context),
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(26),
+                          style: AppTypography.bodySm.copyWith(
                             fontWeight: FontWeight.w600,
                             color: isDisabled
-                                ? Colors.grey
-                                : AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name,
-                                  ),
+                                ? AppColorTokens.of(context).textTertiary
+                                : AppColorTokens.of(context).textPrimary,
                           ),
                         ),
                         if (option.type == PaymasterType.sponsored) ...[
-                          SizedBox(width: ScreenUtil().setWidth(8)),
+                          SizedBox(width: AppSpacing.space2),
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(8),
-                              vertical: ScreenUtil().setWidth(2),
+                              horizontal: AppSpacing.space2,
+                              vertical: AppSpacing.space2,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withAlpha(30),
-                              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                              color: AppColorTokens.of(
+                                context,
+                              ).success.withAlpha(30),
+                              borderRadius: AppRadius.brSm,
                             ),
                             child: Text(
                               S.of(context).g_key_aa_free,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(18),
-                                color: Colors.green,
+                              style: AppTypography.captionSm.copyWith(
+                                color: AppColorTokens.of(context).success,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -140,19 +132,15 @@ class PaymasterOptionCard extends StatelessWidget {
                         ],
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                     Text(
                       isDisabled && option.unavailableReason != null
                           ? option.unavailableReason!
                           : _getSubtitle(context),
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         color: isDisabled
-                            ? Colors.grey
-                            : AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.itemSubtitleTextColor.name,
-                              ),
+                            ? AppColorTokens.of(context).textTertiary
+                            : AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                   ],
@@ -164,7 +152,7 @@ class PaymasterOptionCard extends StatelessWidget {
                 Icon(
                   Icons.check_circle,
                   size: ScreenUtil().setWidth(28),
-                  color: _getOptionColor(),
+                  color: _getOptionColor(context),
                 ),
             ],
           ),
@@ -180,14 +168,11 @@ class PaymasterOptionCard extends StatelessWidget {
     switch (option.type) {
       case PaymasterType.none:
         icon = Icons.account_balance_wallet;
-        color = AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        );
+        color = AppColorTokens.of(context).brand;
         break;
       case PaymasterType.sponsored:
         icon = Icons.card_giftcard;
-        color = Colors.green;
+        color = AppColorTokens.of(context).success;
         break;
       case PaymasterType.erc20:
         icon = Icons.token;
@@ -200,13 +185,9 @@ class PaymasterOptionCard extends StatelessWidget {
       height: ScreenUtil().setWidth(48),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
-      child: Icon(
-        icon,
-        size: ScreenUtil().setWidth(28),
-        color: color,
-      ),
+      child: Icon(icon, size: ScreenUtil().setWidth(28), color: color),
     );
   }
 
@@ -238,12 +219,12 @@ class PaymasterOptionCard extends StatelessWidget {
     }
   }
 
-  Color _getOptionColor() {
+  Color _getOptionColor(BuildContext context) {
     switch (option.type) {
       case PaymasterType.none:
-        return const Color(0xFF5E97F6);
+        return AppColorTokens.of(context).brand;
       case PaymasterType.sponsored:
-        return Colors.green;
+        return AppColorTokens.of(context).success;
       case PaymasterType.erc20:
         return Colors.purple;
     }

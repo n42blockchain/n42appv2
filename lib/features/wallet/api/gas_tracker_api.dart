@@ -87,7 +87,8 @@ class GasTrackerApi {
       final unit = info['unit'] as String;
 
       final gasLimit =
-          customGasLimit ?? BigInt.from(getCoinGas(coinType, contract: isContract));
+          customGasLimit ??
+          BigInt.from(getCoinGas(coinType, contract: isContract));
       final supportsEIP1559 = get1559WithChainSymbol(coinType);
 
       if (supportsEIP1559) {
@@ -144,8 +145,11 @@ class GasTrackerApi {
       // 解析 reward（优先费历史）
       final rewardList =
           (feeHistory['reward'] as List<dynamic>?)
-              ?.map((e) =>
-                  (e as List<dynamic>).map((r) => _hexToBigInt(r.toString())).toList())
+              ?.map(
+                (e) => (e as List<dynamic>)
+                    .map((r) => _hexToBigInt(r.toString()))
+                    .toList(),
+              )
               .toList() ??
           [];
 
@@ -244,17 +248,16 @@ class GasTrackerApi {
     String rpc,
     int blockCount,
     List<int> rewardPercentiles,
-  ) =>
-      _callRpc(rpc, {
-        'jsonrpc': '2.0',
-        'method': 'eth_feeHistory',
-        'params': [
-          '0x${blockCount.toRadixString(16)}',
-          'latest',
-          rewardPercentiles,
-        ],
-        'id': 1,
-      });
+  ) => _callRpc(rpc, {
+    'jsonrpc': '2.0',
+    'method': 'eth_feeHistory',
+    'params': [
+      '0x${blockCount.toRadixString(16)}',
+      'latest',
+      rewardPercentiles,
+    ],
+    'id': 1,
+  });
 
   /// 调用 eth_gasPrice RPC，result 转为 BigInt
   Future<MessageModel> _callEthGasPrice(String rpc) async {
@@ -314,8 +317,9 @@ class GasTrackerApi {
 
   /// 将十六进制字符串转换为 BigInt
   BigInt _hexToBigInt(String hex) {
-    final clean =
-        (hex.startsWith('0x') || hex.startsWith('0X')) ? hex.substring(2) : hex;
+    final clean = (hex.startsWith('0x') || hex.startsWith('0X'))
+        ? hex.substring(2)
+        : hex;
     if (clean.isEmpty) return BigInt.zero;
     return BigInt.parse(clean, radix: 16);
   }

@@ -46,41 +46,51 @@ class CommonResponseItemModel {
       ..hash = explorerString(map, const ['hash', 'txid'])
       ..nonce = explorerString(map, const ['nonce'])
       ..blockHash = explorerString(map, const ['blockHash'])
-      ..transactionIndex = explorerString(map, const ['transactionIndex', 'index'])
+      ..transactionIndex = explorerString(map, const [
+        'transactionIndex',
+        'index',
+      ])
       ..from = explorerString(map, const ['from'])
       ..to = explorerString(map, const ['to'])
       ..value = explorerString(map, const ['value', 'tokenValue'])
       ..gas = explorerString(map, const ['gas', 'gasLimit', 'gaslimit'])
       ..gasPrice = explorerString(map, const ['gasPrice', 'gas_price'])
       ..isError = explorerString(map, const ['isError', 'error'])
-      ..txreceiptStatus = explorerString(map, const ['txreceipt_status', 'status'])
+      ..txreceiptStatus = explorerString(map, const [
+        'txreceipt_status',
+        'status',
+      ])
       ..input = explorerString(map, const ['input'])
-      ..contractAddress = explorerString(map, const ['contractAddress', 'tokenAddr', 'token'])
+      ..contractAddress = explorerString(map, const [
+        'contractAddress',
+        'tokenAddr',
+        'token',
+      ])
       ..cumulativeGasUsed = explorerString(map, const ['cumulativeGasUsed'])
       ..gasUsed = explorerString(map, const ['gasUsed', 'gasused'])
       ..confirmations = explorerString(map, const ['confirmations']);
   }
 
   Map<String, dynamic> toJson() => {
-        'blockNumber': blockNumber,
-        'timeStamp': timeStamp,
-        'hash': hash,
-        'nonce': nonce,
-        'blockHash': blockHash,
-        'transactionIndex': transactionIndex,
-        'from': from,
-        'to': to,
-        'value': value,
-        'gas': gas,
-        'gasPrice': gasPrice,
-        'isError': isError,
-        'txreceipt_status': txreceiptStatus,
-        'input': input,
-        'contractAddress': contractAddress,
-        'cumulativeGasUsed': cumulativeGasUsed,
-        'gasUsed': gasUsed,
-        'confirmations': confirmations,
-      };
+    'blockNumber': blockNumber,
+    'timeStamp': timeStamp,
+    'hash': hash,
+    'nonce': nonce,
+    'blockHash': blockHash,
+    'transactionIndex': transactionIndex,
+    'from': from,
+    'to': to,
+    'value': value,
+    'gas': gas,
+    'gasPrice': gasPrice,
+    'isError': isError,
+    'txreceipt_status': txreceiptStatus,
+    'input': input,
+    'contractAddress': contractAddress,
+    'cumulativeGasUsed': cumulativeGasUsed,
+    'gasUsed': gasUsed,
+    'confirmations': confirmations,
+  };
 
   static String? _normalizedFlag(String? value) {
     if (value == null) return null;

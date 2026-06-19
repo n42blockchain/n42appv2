@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -29,30 +29,28 @@ class EnsQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final tokens = AppColorTokens.of(context);
+    final blueColor = tokens.brand;
     return Row(
       children: [
         Expanded(
           child: _ActionButton(
             icon: Icons.autorenew,
             label: S.of(context).g_key_ens_renew,
-            color: const Color(0xFF66BB6A),
+            color: tokens.success,
             onTap: onRenew,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _ActionButton(
             icon: Icons.star,
             label: S.of(context).g_key_ens_set_primary,
-            color: const Color(0xFFFFA726),
+            color: tokens.warning,
             onTap: onSetPrimary,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: _ActionButton(
             icon: Icons.content_copy,
@@ -82,15 +80,16 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDisabled = onTap == null;
+    final c = AppColorTokens.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: isDisabled ? Colors.grey.withAlpha(20) : color.withAlpha(20),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: isDisabled ? c.textTertiary.withAlpha(20) : color.withAlpha(20),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: isDisabled ? Colors.grey.withAlpha(30) : color.withAlpha(40),
+            color: isDisabled ? c.border : color.withAlpha(40),
           ),
         ),
         child: Column(
@@ -98,20 +97,14 @@ class _ActionButton extends StatelessWidget {
             Icon(
               icon,
               size: ScreenUtil().setWidth(28),
-              color: isDisabled ? Colors.grey : color,
+              color: isDisabled ? c.textTertiary : color,
             ),
-            SizedBox(height: ScreenUtil().setWidth(6)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: isDisabled
-                    ? Colors.grey
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainTextColor.name,
-                      ),
+                color: isDisabled ? c.textTertiary : c.textPrimary,
               ),
             ),
           ],

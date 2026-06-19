@@ -1,5 +1,6 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,12 +36,11 @@ class TaskValueBar extends StatelessWidget {
               padding: EdgeInsets.only(left: ScreenUtil().setWidth(48)),
               child: Text(
                 S.current.g_key_wallet_k54,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.mainWhiteColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(30),
                 ),
                 textAlign: TextAlign.left,
               ),
@@ -51,12 +51,11 @@ class TaskValueBar extends StatelessWidget {
             child: Text(
               // "Reward",
               S.of(context).g_mining_key_48,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.mainWhiteColor.name,
                 ),
-                fontSize: ScreenUtil().setSp(30),
               ),
               textAlign: TextAlign.center,
             ),
@@ -68,12 +67,11 @@ class TaskValueBar extends StatelessWidget {
               child: Text(
                 // "Time",
                 S.of(context).g_key_wallet_k25,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.mainWhiteColor.name,
                   ),
-                  fontSize: ScreenUtil().setSp(30),
                 ),
                 textAlign: TextAlign.right,
               ),

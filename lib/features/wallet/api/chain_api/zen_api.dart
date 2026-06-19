@@ -44,7 +44,10 @@ class ZenApi {
   }
 
   /// 广播已签名交易（raw hex）
-  Future<MessageModel> sendTransaction(String rawTxHex, {bool isTest = false}) async {
+  Future<MessageModel> sendTransaction(
+    String rawTxHex, {
+    bool isTest = false,
+  }) async {
     final url = '${_base(isTest)}tx/send';
     try {
       final response = await http.post(
@@ -64,7 +67,10 @@ class ZenApi {
   }
 
   /// 查询交易详情
-  Future<MessageModel> getTransaction(String txId, {bool isTest = false}) async {
+  Future<MessageModel> getTransaction(
+    String txId, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}tx/$txId',
@@ -79,7 +85,10 @@ class ZenApi {
   }
 
   /// 估算手续费（返回 ZEN/KB，nbBlocks=目标确认块数）
-  Future<MessageModel> estimateFee({int nbBlocks = 2, bool isTest = false}) async {
+  Future<MessageModel> estimateFee({
+    int nbBlocks = 2,
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}utils/estimatefee',

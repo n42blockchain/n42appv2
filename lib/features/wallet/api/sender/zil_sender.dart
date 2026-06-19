@@ -33,12 +33,14 @@ class ZilSender implements ChainSender {
     final zilApi = ZilApi(isTest: params.isTest);
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Zilliqa.name,
-      CoinType.ZIL.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Zilliqa.name,
+          CoinType.ZIL.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -46,16 +48,21 @@ class ZilSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Zilliqa.name,
-      CoinType.ZIL.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Zilliqa.name,
+          CoinType.ZIL.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -63,9 +70,13 @@ class ZilSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5(coinType));
     }
 
@@ -74,8 +85,12 @@ class ZilSender implements ChainSender {
     if (networkIdMM.error) return SendResult.fail(networkIdMM.data?.toString());
 
     final latestBlockMM = await zilApi.getLatestTxBlock();
-    if (latestBlockMM.error) return SendResult.fail(latestBlockMM.data?.toString());
-    final version = (latestBlockMM.data as Map<String, dynamic>)['header']['Version'] as int;
+    if (latestBlockMM.error) {
+      return SendResult.fail(latestBlockMM.data?.toString());
+    }
+    final version =
+        (latestBlockMM.data as Map<String, dynamic>)['header']['Version']
+            as int;
 
     final balanceMM = await zilApi.getBalance(params.fromAddress, nonce: true);
     int nonce = 0;
@@ -85,7 +100,8 @@ class ZilSender implements ChainSender {
         return SendResult.fail(errStr);
       }
     } else {
-      nonce = ((balanceMM.data as Map<String, dynamic>)['nonce'] as int? ?? 0) + 1;
+      nonce =
+          ((balanceMM.data as Map<String, dynamic>)['nonce'] as int? ?? 0) + 1;
     }
 
     final signMap = <String, dynamic>{
@@ -112,13 +128,17 @@ class ZilSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        coinType, params.path, signMap, pk: params.privateKey!,
+        coinType,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
 
-    final Map<String, dynamic> signedData = json.decode(signStr) as Map<String, dynamic>;
+    final Map<String, dynamic> signedData =
+        json.decode(signStr) as Map<String, dynamic>;
     final txParams = <String, dynamic>{
       'version': signedData['version'],
       'nonce': signedData['nonce'],

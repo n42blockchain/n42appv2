@@ -14,7 +14,6 @@ import 'package:n42_wallet/features/mining_v1/widgets/group_confrim.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
@@ -24,7 +23,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -82,7 +81,8 @@ class _FullNodePageState extends State<FullNodePage>
             Positioned.fill(
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30)),
+                  horizontal: AppSpacing.space8,
+                ),
                 child: Column(
                   children: [
                     Expanded(
@@ -92,13 +92,9 @@ class _FullNodePageState extends State<FullNodePage>
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_38,
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30)),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(30)),
+                          SizedBox(height: AppSpacing.space8),
                           _buildPayMethod(
                             "assets/mining/pay_ast.png",
                             S.of(context).g_mining_key_40,
@@ -109,30 +105,20 @@ class _FullNodePageState extends State<FullNodePage>
                               });
                             },
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
-                          Divider(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemLineColor.name),
-                          ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
+                          Divider(color: AppColorTokens.of(context).border),
+                          SizedBox(height: AppSpacing.space6),
                           Text(
                             S.of(context).g_mining_key46,
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(26)),
+                            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_39,
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(30)),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(24)),
+                          SizedBox(height: AppSpacing.space6),
                           _buildPayMethods(),
                         ],
                       ),
@@ -156,24 +142,11 @@ class _FullNodePageState extends State<FullNodePage>
                   Container(
                     width: double.infinity,
                     height: ScreenUtil().setWidth(148),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    child: buttonStyle6(
-                      context,
-                      () async {
-                        await _handleConfirmTap();
-                      },
-                      S.of(context).g_key_78,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        load == Load.loading
-                            ? AppThemeKeys.mainButtonBgColor3.name
-                            : AppThemeKeys.mainButtonBgColor.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor.name,
-                      ),
-                      load == Load.loading,
+                    padding: EdgeInsets.all(AppSpacing.space8),
+                    child: AppButton(
+                      label: S.of(context).g_key_78,
+                      onPressed: () => _handleConfirmTap(),
+                      loading: load == Load.loading,
                     ),
                   ),
                 ],
@@ -187,9 +160,9 @@ class _FullNodePageState extends State<FullNodePage>
 
   String _resolveAppBarTitle(BuildContext context) {
     final levelLabel = switch (widget.astNum) {
-      50  => S.of(context).g_mining_key_62,
+      50 => S.of(context).g_mining_key_62,
       100 => S.of(context).g_mining_key_61,
-      _   => S.of(context).g_mining_key_63,
+      _ => S.of(context).g_mining_key_63,
     };
     return '${S.current.g_mining_key_37}:$levelLabel';
   }

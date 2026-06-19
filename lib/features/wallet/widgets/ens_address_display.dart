@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
@@ -152,7 +152,9 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         return;
       }
       _markResolved(ensName: knownName);
-      if (widget.showAvatar) _fetchAvatar(knownName, requestId, address, coinType);
+      if (widget.showAvatar) {
+        _fetchAvatar(knownName, requestId, address, coinType);
+      }
       return;
     }
 
@@ -229,21 +231,30 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    final mainTextColor = widget.textColor ??
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = widget.subtitleColor ??
-        AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name);
+    final mainTextColor =
+        widget.textColor ?? AppColorTokens.of(context).textPrimary;
+    final subtitleColor =
+        widget.subtitleColor ?? AppColorTokens.of(context).textSubtitle;
     final fontSize = widget.fontSize ?? ScreenUtil().setSp(26);
     final avatarSize = widget.avatarSize ?? ScreenUtil().setWidth(36);
 
     switch (widget.style) {
       case EnsDisplayStyle.compact:
-        return _buildCompact(mainTextColor, subtitleColor, fontSize, avatarSize);
+        return _buildCompact(
+          mainTextColor,
+          subtitleColor,
+          fontSize,
+          avatarSize,
+        );
       case EnsDisplayStyle.full:
         return _buildFull(mainTextColor, subtitleColor, fontSize, avatarSize);
       case EnsDisplayStyle.detailed:
-        return _buildDetailed(mainTextColor, subtitleColor, fontSize, avatarSize);
+        return _buildDetailed(
+          mainTextColor,
+          subtitleColor,
+          fontSize,
+          avatarSize,
+        );
       case EnsDisplayStyle.addressOnly:
         return _buildAddressOnly(mainTextColor, fontSize);
     }
@@ -274,7 +285,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         children: [
           if (widget.showAvatar && _ensName != null) ...[
             _buildAvatar(avatarSize),
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
           ],
           Flexible(
             child: _isLoading
@@ -284,8 +295,9 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                     style: TextStyle(
                       fontSize: fontSize,
                       color: _ensName != null ? textColor : subtitleColor,
-                      fontWeight:
-                          _ensName != null ? FontWeight.w600 : FontWeight.normal,
+                      fontWeight: _ensName != null
+                          ? FontWeight.w600
+                          : FontWeight.normal,
                     ),
                     maxLines: widget.maxLines,
                     overflow: TextOverflow.ellipsis,
@@ -310,7 +322,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
         children: [
           if (widget.showAvatar) ...[
             _buildAvatar(avatarSize),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
           ],
           Expanded(
             child: Column(
@@ -330,7 +342,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(2)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     AddressValidator.getAddressPreview(widget.address),
                     style: TextStyle(
@@ -375,20 +387,16 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
     return GestureDetector(
       onTap: widget.onTap,
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemBgColor.name)
-              .withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(
-            color: subtitleColor.withValues(alpha: 0.2),
-          ),
+          color: AppColorTokens.of(context).bgSurface.withValues(alpha: 0.5),
+          borderRadius: AppRadius.brMd,
+          border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
         ),
         child: Row(
           children: [
             _buildAvatar(avatarSize * 1.2),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -401,15 +409,15 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                         Icon(
                           Icons.verified,
                           size: fontSize,
-                          color: const Color(0xFF4CAF50),
+                          color: AppColorTokens.of(context).success,
                         ),
-                        SizedBox(width: ScreenUtil().setWidth(4)),
+                        SizedBox(width: AppSpacing.space2),
                         Expanded(
                           child: Text(
                             _ensName!,
                             style: TextStyle(
                               fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w600,
                               color: textColor,
                             ),
                             maxLines: 1,
@@ -418,7 +426,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
                         ),
                       ],
                     ),
-                    SizedBox(height: ScreenUtil().setWidth(4)),
+                    SizedBox(height: AppSpacing.space2),
                   ],
                   SelectableText(
                     widget.address,
@@ -476,31 +484,30 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
   }
 
   Widget _buildAvatar(double size) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     final initial = _ensName?.isNotEmpty == true
         ? _ensName![0].toUpperCase()
         : (widget.address.length > 2 ? widget.address[2].toUpperCase() : '?');
     final radius = BorderRadius.circular(size / 2);
 
     Widget defaultAvatar() => Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            color: blueColor.withValues(alpha: 0.2),
-            borderRadius: radius,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: blueColor.withValues(alpha: 0.2),
+        borderRadius: radius,
+      ),
+      child: Center(
+        child: Text(
+          initial,
+          style: TextStyle(
+            fontSize: size * 0.5,
+            fontWeight: FontWeight.w600,
+            color: blueColor,
           ),
-          child: Center(
-            child: Text(
-              initial,
-              style: TextStyle(
-                fontSize: size * 0.5,
-                fontWeight: FontWeight.bold,
-                color: blueColor,
-              ),
-            ),
-          ),
-        );
+        ),
+      ),
+    );
 
     if (_avatarUrl == null) return defaultAvatar();
 
@@ -523,7 +530,7 @@ class _EnsAddressDisplayState extends State<EnsAddressDisplay> {
       child: CircularProgressIndicator(
         strokeWidth: 2,
         valueColor: AlwaysStoppedAnimation<Color>(
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          AppColorTokens.of(context).brand,
         ),
       ),
     );
