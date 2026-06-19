@@ -203,7 +203,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
                         errors[index],
-                        style: TextStyle(fontSize: 12, color: c.danger),
+                        style: AppTypography.caption.copyWith(color: c.danger),
                       ),
                     ),
                   ),
@@ -211,7 +211,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 if (errors.length > 5)
                   Text(
                     '… and ${errors.length - 5} more issues',
-                    style: TextStyle(fontSize: 12, color: c.textTertiary),
+                    style: AppTypography.caption.copyWith(color: c.textTertiary),
                   ),
               ],
             ),

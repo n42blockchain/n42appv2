@@ -150,9 +150,9 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
                     SizedBox(height: scr.setWidth(20.0)),
                     Text(
                       miniName,
-                      style: TextStyle(
+                      style: AppTypography.headline.copyWith(
                         color: AppColorTokens.of(context).textSubtitle,
-                        fontSize: scr.setWidth(32.0),
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ],

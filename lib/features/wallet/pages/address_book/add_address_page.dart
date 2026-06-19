@@ -203,9 +203,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
             SizedBox(width: AppSpacing.space6),
             Text(
               '$coinFullName ($coinName)',
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: ScreenUtil().setWidth(32.0),
+                fontWeight: FontWeight.w400,
               ),
             ),
             const Spacer(),

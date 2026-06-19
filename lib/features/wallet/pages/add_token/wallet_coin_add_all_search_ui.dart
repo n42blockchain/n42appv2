@@ -257,17 +257,16 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
               children: [
                 Text(
                   fullname,
-                  style: TextStyle(
-                    fontSize: su.setWidth(30.0),
+                  style: AppTypography.headline.copyWith(
                     color: mainText,
                     height: 1.3,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 RichText(
                   text: TextSpan(
                     text: '$symbol  ',
-                    style: TextStyle(
-                      fontSize: su.setWidth(26.0),
+                    style: AppTypography.bodySm.copyWith(
                       color: AppColorTokens.of(context).textSubtitle,
                       height: 1.3,
                     ),
@@ -276,8 +275,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
                         TextSpan(
                           text:
                               '${rowValue['chain_name']}(${rowValue['rules']})',
-                          style: TextStyle(
-                            fontSize: su.setWidth(26.0),
+                          style: AppTypography.bodySm.copyWith(
                             color: buttonBg,
                             height: 1.3,
                           ),

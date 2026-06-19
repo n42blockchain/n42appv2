@@ -319,9 +319,9 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
             child: TextField(
               controller: _inputCtrl,
               focusNode: _focusNode,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
-                fontSize: ScreenUtil().setWidth(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -331,9 +331,9 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
                 ),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setWidth(30.0),
+                hintStyle: AppTypography.headline.copyWith(
                   color: AppColorTokens.of(context).textSubtitle,
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,

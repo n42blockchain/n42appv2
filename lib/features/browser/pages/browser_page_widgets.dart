@@ -33,9 +33,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
               controller: bValue.titleEditingController,
               focusNode: bValue.titleFocusNode,
               height: sw(80.0),
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: _mainTextColor(),
-                fontSize: sw(26.0),
                 fontWeight: bValue.titleFocusNode?.hasFocus ?? false
                     ? FontWeight.w600
                     : FontWeight.normal,
@@ -106,7 +105,6 @@ extension _BrowserPageWidgets on _BrowserPageState {
 
   Widget _buildTabCountButton(BrowserProvider bValue) {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
 
     return InkWell(
       onTap: () {
@@ -123,7 +121,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
         ),
         child: Text(
           "${bValue.wvcList.length}",
-          style: TextStyle(fontSize: sp(20.0), color: _mainTextColor()),
+          style: AppTypography.captionSm.copyWith(color: _mainTextColor()),
         ),
       ),
     );
@@ -278,7 +276,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
             },
             child: Text(
               S.of(context).g_browser_key16,
-              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
+              style: AppTypography.bodySm.copyWith(
+                color: _mainTextColor(),
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
           _tabToolbarItem(
@@ -301,7 +302,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
             },
             child: Text(
               S.of(context).g_browser_key17,
-              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
+              style: AppTypography.bodySm.copyWith(
+                color: _mainTextColor(),
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],

@@ -74,9 +74,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               children: [
                 Expanded(
                   child: TextField(
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontWeight: FontWeight.w400,
                     ),
                     controller: toTextEditingController,
                     focusNode: toNode,

@@ -51,9 +51,9 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             children: [
               Expanded(
                 child: TextField(
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: mainText,
-                    fontSize: su.setWidth(30.0),
+                    fontWeight: FontWeight.w400,
                   ),
                   controller: controller,
                   focusNode: focusNode,

@@ -253,8 +253,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           child: Builder(
             builder: (ctx) => Text(
               S.of(ctx).g_key_nft_no_video_support,
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTypography.caption.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   ctx,
                   AppThemeKeys.itemSubtitleTextColor.name,

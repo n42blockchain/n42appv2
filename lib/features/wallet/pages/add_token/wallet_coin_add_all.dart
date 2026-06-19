@@ -249,9 +249,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
           Expanded(
             child: TextField(
               controller: inputEditingController,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _color(AppThemeKeys.mainTextColor),
-                fontSize: su.setWidth(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -261,9 +261,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                 ),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: su.setWidth(30.0),
+                hintStyle: AppTypography.headline.copyWith(
                   color: _color(AppThemeKeys.itemSubtitleTextColor),
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -343,13 +343,12 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
           ),
           child: Text(
             label,
-            style: TextStyle(
+            style: AppTypography.headline.copyWith(
               color: _color(
                 selected
                     ? AppThemeKeys.mainBlueColor
                     : AppThemeKeys.mainTextColor,
               ),
-              fontSize: su.setWidth(30.0),
               fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),

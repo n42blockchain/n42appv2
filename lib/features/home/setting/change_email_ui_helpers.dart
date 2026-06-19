@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 /// Stateless UI helpers shared across all change-email step views.
@@ -30,8 +31,7 @@ Widget changeEmailCodeField({
       FilteringTextInputFormatter.digitsOnly,
       LengthLimitingTextInputFormatter(6),
     ],
-    style: TextStyle(
-      fontSize: 24.sp,
+    style: AppTypography.caption.copyWith(
       fontWeight: FontWeight.w600,
       color: textColor,
       letterSpacing: 8,
@@ -66,8 +66,7 @@ Widget changeEmailResendRow({
           countdown > 0
               ? S.of(context).g_email_resend_countdown(countdown)
               : S.of(context).g_email_resend,
-          style: TextStyle(
-            fontSize: 13.sp,
+          style: AppTypography.captionSm.copyWith(
             color: countdown > 0 ? subColor : accentColor,
             fontWeight: FontWeight.w500,
           ),
@@ -106,7 +105,9 @@ Widget changeEmailPrimaryButton({
             )
           : Text(
               label,
-              style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
     ),
   );
@@ -122,7 +123,10 @@ Widget changeEmailBackButton({
       onPressed: onPressed,
       child: Text(
         label,
-        style: TextStyle(color: subColor, fontSize: 13.sp),
+        style: AppTypography.captionSm.copyWith(
+          color: subColor,
+          fontWeight: FontWeight.w400,
+        ),
       ),
     ),
   );

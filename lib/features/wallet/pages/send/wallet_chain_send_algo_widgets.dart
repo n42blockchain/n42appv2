@@ -101,9 +101,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               children: [
                 Expanded(
                   child: TextField(
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontWeight: FontWeight.w400,
                     ),
                     controller: toTextEditingController,
                     focusNode: toNode,

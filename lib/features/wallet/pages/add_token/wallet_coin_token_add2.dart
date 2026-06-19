@@ -235,9 +235,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
           Expanded(
             child: TextField(
               controller: inputEditingController,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor),
-                fontSize: _sw(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
@@ -245,9 +245,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
                 contentPadding: EdgeInsets.symmetric(vertical: _sw(26.0)),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: _sw(30.0),
+                hintStyle: AppTypography.headline.copyWith(
                   color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -344,18 +344,18 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               children: [
                 Text(
                   rowValue['fullname'],
-                  style: TextStyle(
-                    fontSize: _sw(30.0),
+                  style: AppTypography.headline.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor),
                     height: 1.3,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 Text(
                   '$coinName  ',
-                  style: TextStyle(
-                    fontSize: _sw(26.0),
+                  style: AppTypography.bodySm.copyWith(
                     color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
                     height: 1.3,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],

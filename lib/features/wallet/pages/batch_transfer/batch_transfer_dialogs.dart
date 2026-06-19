@@ -71,7 +71,7 @@ class BatchConfirmDialog extends StatelessWidget {
                   Expanded(
                     child: Text(
                       S.of(context).importantNotice,
-                      style: TextStyle(fontSize: 12, color: contentColor),
+                      style: AppTypography.caption.copyWith(color: contentColor),
                     ),
                   ),
                 ],
@@ -271,7 +271,7 @@ class BatchHelpDialog extends StatelessWidget {
           children: [
             Text(
               S.of(context).g_key_batch_send_multiple,
-              style: TextStyle(fontSize: 14, color: textColor),
+              style: AppTypography.body.copyWith(color: textColor),
             ),
             const SizedBox(height: 16),
             Text(
@@ -288,9 +288,8 @@ class BatchHelpDialog extends StatelessWidget {
               ),
               child: Text(
                 'address,amount,memo\n0x123...,1.5,Note 1\n0xabc...,2.0,Note 2',
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
-                  fontSize: 12,
                   color: textColor,
                 ),
               ),

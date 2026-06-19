@@ -48,10 +48,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
           Expanded(
             child: Text(
               symbol,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(30.0),
+              style: AppTypography.headline.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
                 height: 1.3,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),

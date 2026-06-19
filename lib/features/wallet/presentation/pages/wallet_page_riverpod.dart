@@ -197,8 +197,8 @@ class _CoinListItem extends StatelessWidget {
           ),
           Text(
             '\$${coin.balanceUsd.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: 12,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
               color: isPositive
                   ? AppColorTokens.of(context).success
                   : AppColorTokens.of(context).danger,
