@@ -18,42 +18,45 @@ class NavSettingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: callback,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space8,
-          vertical: AppSpacing.space6,
-        ),
-        child: Row(
-          children: [
-            Image.asset(
-              path,
-              width: ScreenUtil().setWidth(44),
-              height: ScreenUtil().setWidth(44),
-              fit: BoxFit.contain,
-              color: imgColor,
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
-                child: Text(
-                  action,
-                  style: AppTypography.body.copyWith(
-                    color: AppColorTokens.of(context).textPrimary,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: callback,
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space6,
+          ),
+          child: Row(
+            children: [
+              Image.asset(
+                path,
+                width: ScreenUtil().setWidth(44),
+                height: ScreenUtil().setWidth(44),
+                fit: BoxFit.contain,
+                color: imgColor,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
+                  child: Text(
+                    action,
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                 ),
               ),
-            ),
-            Icon(
-              Icons.arrow_forward_ios_sharp,
-              size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.ff888888.name,
+              Icon(
+                Icons.arrow_forward_ios_sharp,
+                size: ScreenUtil().setWidth(24),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  AppThemeKeys.ff888888.name,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

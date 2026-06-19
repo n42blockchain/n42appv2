@@ -44,11 +44,14 @@ extension _BrowserPageTabs on _BrowserPageState {
           size: ScreenUtil().setWidth(50),
         ),
       ),
-      child: GestureDetector(
-        onTap: () {
-          bValue.wListShow(index);
-        },
-        child: AnimatedContainer(
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () {
+            bValue.wListShow(index);
+          },
+          borderRadius: AppRadius.brLg,
+          child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           decoration: BoxDecoration(
             borderRadius: AppRadius.brLg,
@@ -79,6 +82,7 @@ extension _BrowserPageTabs on _BrowserPageState {
               _buildTabCardHeader(bValue, index, isActive, title, host, letter),
             ],
           ),
+        ),
         ),
       ),
     );

@@ -163,33 +163,41 @@ class SettingTheme extends ConsumerWidget {
               runSpacing: AppSpacing.space4,
               children: _presetAccents.map((color) {
                 final selected = color.toARGB32() == currentAccent.toARGB32();
-                return GestureDetector(
-                  onTap: () =>
-                      ref.read(accentColorProvider.notifier).setAccent(color),
-                  child: AnimatedContainer(
-                    duration: AppMotion.fast,
-                    width: ScreenUtil().setWidth(60),
-                    height: ScreenUtil().setWidth(60),
-                    decoration: BoxDecoration(
-                      color: color,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: selected ? Colors.white : Colors.transparent,
-                        width: 3,
+                return Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    onTap: () =>
+                        ref.read(accentColorProvider.notifier).setAccent(color),
+                    customBorder: const CircleBorder(),
+                    child: AnimatedContainer(
+                      duration: AppMotion.fast,
+                      width: ScreenUtil().setWidth(60),
+                      height: ScreenUtil().setWidth(60),
+                      decoration: BoxDecoration(
+                        color: color,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: selected ? Colors.white : Colors.transparent,
+                          width: 3,
+                        ),
+                        boxShadow: selected
+                            ? [
+                                BoxShadow(
+                                  color: color.withAlpha(120),
+                                  blurRadius: 8,
+                                  spreadRadius: 2,
+                                ),
+                              ]
+                            : null,
                       ),
-                      boxShadow: selected
-                          ? [
-                              BoxShadow(
-                                color: color.withAlpha(120),
-                                blurRadius: 8,
-                                spreadRadius: 2,
-                              ),
-                            ]
+                      child: selected
+                          ? const Icon(
+                              Icons.check,
+                              color: Colors.white,
+                              size: 22,
+                            )
                           : null,
                     ),
-                    child: selected
-                        ? const Icon(Icons.check, color: Colors.white, size: 22)
-                        : null,
                   ),
                 );
               }).toList(),
@@ -267,93 +275,97 @@ class _StylePresetCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: AppMotion.fast,
-        width: ScreenUtil().setWidth(328),
-        padding: EdgeInsets.all(AppSpacing.space4),
-        decoration: BoxDecoration(
-          color: c.bgSurface,
-          borderRadius: AppRadius.brLg,
-          border: Border.all(
-            color: selected ? preset.accent : c.border,
-            width: selected ? 2 : 1,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brLg,
+        child: AnimatedContainer(
+          duration: AppMotion.fast,
+          width: ScreenUtil().setWidth(328),
+          padding: EdgeInsets.all(AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: c.bgSurface,
+            borderRadius: AppRadius.brLg,
+            border: Border.all(
+              color: selected ? preset.accent : c.border,
+              width: selected ? 2 : 1,
+            ),
           ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 品牌色预览：强调底 + 模式图标 + mini CTA 暗示
-            Container(
-              height: ScreenUtil().setWidth(96),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [preset.accent, preset.accent.withAlpha(180)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // 品牌色预览：强调底 + 模式图标 + mini CTA 暗示
+              Container(
+                height: ScreenUtil().setWidth(96),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [preset.accent, preset.accent.withAlpha(180)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: AppRadius.brMd,
                 ),
-                borderRadius: AppRadius.brMd,
-              ),
-              padding: EdgeInsets.all(AppSpacing.space4),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        _modeIcon,
-                        color: Colors.white,
-                        size: ScreenUtil().setWidth(28),
-                      ),
-                      const Spacer(),
-                      if (selected)
+                padding: EdgeInsets.all(AppSpacing.space4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
                         Icon(
-                          Icons.check_circle,
+                          _modeIcon,
                           color: Colors.white,
-                          size: ScreenUtil().setWidth(30),
+                          size: ScreenUtil().setWidth(28),
                         ),
-                    ],
-                  ),
-                  const Spacer(),
-                  // mini 按钮 + 文本条，暗示该色驱动全 App CTA/强调
-                  Row(
-                    children: [
-                      Container(
-                        width: ScreenUtil().setWidth(64),
-                        height: ScreenUtil().setWidth(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: AppRadius.brPill,
+                        const Spacer(),
+                        if (selected)
+                          Icon(
+                            Icons.check_circle,
+                            color: Colors.white,
+                            size: ScreenUtil().setWidth(30),
+                          ),
+                      ],
+                    ),
+                    const Spacer(),
+                    // mini 按钮 + 文本条，暗示该色驱动全 App CTA/强调
+                    Row(
+                      children: [
+                        Container(
+                          width: ScreenUtil().setWidth(64),
+                          height: ScreenUtil().setWidth(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: AppRadius.brPill,
+                          ),
                         ),
-                      ),
-                      SizedBox(width: AppSpacing.space2),
-                      Container(
-                        width: ScreenUtil().setWidth(40),
-                        height: ScreenUtil().setWidth(20),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withAlpha(90),
-                          borderRadius: AppRadius.brPill,
+                        SizedBox(width: AppSpacing.space2),
+                        Container(
+                          width: ScreenUtil().setWidth(40),
+                          height: ScreenUtil().setWidth(20),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withAlpha(90),
+                            borderRadius: AppRadius.brPill,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: AppSpacing.space4),
-            Text(
-              preset.name,
-              style: AppTypography.bodyStrong.copyWith(color: c.textPrimary),
-            ),
-            SizedBox(height: AppSpacing.space2),
-            Text(
-              preset.description,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: AppTypography.captionSm.copyWith(color: c.textSubtitle),
-            ),
-          ],
+              SizedBox(height: AppSpacing.space4),
+              Text(
+                preset.name,
+                style: AppTypography.bodyStrong.copyWith(color: c.textPrimary),
+              ),
+              SizedBox(height: AppSpacing.space2),
+              Text(
+                preset.description,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.captionSm.copyWith(color: c.textSubtitle),
+              ),
+            ],
+          ),
         ),
       ),
     );

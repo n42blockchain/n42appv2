@@ -88,9 +88,12 @@ mixin BridgeHomeSectionsMixin
         : '—';
     final minutes = (route.estimatedSeconds / 60).ceil();
 
-    return GestureDetector(
-      onTap: () => provider.selectRoute(route),
-      child: AnimatedContainer(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => provider.selectRoute(route),
+        borderRadius: AppRadius.brMd,
+        child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
         padding: EdgeInsets.all(AppSpacing.space4),
@@ -237,6 +240,7 @@ mixin BridgeHomeSectionsMixin
               ),
             ],
           ],
+        ),
         ),
       ),
     );

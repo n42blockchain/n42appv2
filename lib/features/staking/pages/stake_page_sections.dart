@@ -159,7 +159,9 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
     return Column(
       children: _activePositions.map((pos) {
         final isSelected = _selectedPosition?.id == pos.id;
-        return GestureDetector(
+        return Material(
+          color: Colors.transparent,
+          child: InkWell(
           onTap: () {
             setState(() {
               _selectedPosition = isSelected ? null : pos;
@@ -177,6 +179,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
               }
             });
           },
+          borderRadius: AppRadius.brMd,
           child: Container(
             margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
             padding: EdgeInsets.all(AppSpacing.space4),
@@ -221,6 +224,7 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                   ),
               ],
             ),
+          ),
           ),
         );
       }).toList(),

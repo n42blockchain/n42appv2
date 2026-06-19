@@ -184,9 +184,12 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
     String? badge,
     VoidCallback? onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brMd,
+        child: Container(
         width: ScreenUtil().setWidth(230),
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -305,6 +308,7 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
               ),
             ],
           ),
+        ),
         ),
       ),
     );

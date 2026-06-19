@@ -40,37 +40,40 @@ extension on _PersonalSettingState {
   }
 
   Widget buildInviteCodeRow() {
-    return InkWell(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const SettingShare()),
-      ),
-      child: _buildInfoRowContainer(
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(userInfo?.inviteCode ?? '', style: _subtitleStyle),
-            ),
-            GestureDetector(
-              onTap: () {
-                Clipboard.setData(
-                  ClipboardData(text: userInfo?.inviteCode ?? ''),
-                );
-                ToastUtils.showSuccess(S.of(context).copy);
-              },
-              child: Icon(
-                Icons.copy,
-                color: _blueColor,
-                size: ScreenUtil().setSp(32.0),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SettingShare()),
+        ),
+        child: _buildInfoRowContainer(
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(userInfo?.inviteCode ?? '', style: _subtitleStyle),
               ),
-            ),
-            SizedBox(width: AppSpacing.space2),
-            Icon(
-              Icons.chevron_right,
-              color: _subtitleColor,
-              size: ScreenUtil().setSp(36.0),
-            ),
-          ],
+              GestureDetector(
+                onTap: () {
+                  Clipboard.setData(
+                    ClipboardData(text: userInfo?.inviteCode ?? ''),
+                  );
+                  ToastUtils.showSuccess(S.of(context).copy);
+                },
+                child: Icon(
+                  Icons.copy,
+                  color: _blueColor,
+                  size: ScreenUtil().setSp(32.0),
+                ),
+              ),
+              SizedBox(width: AppSpacing.space2),
+              Icon(
+                Icons.chevron_right,
+                color: _subtitleColor,
+                size: ScreenUtil().setSp(36.0),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -83,25 +83,29 @@ extension _NftListPageWidgets on _NftListPageState {
         itemBuilder: (context, i) {
           final (type, label) = filters[i];
           final selected = _filter == type;
-          return GestureDetector(
-            onTap: () => _updateView(() => _filter = type),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-                vertical: AppSpacing.space2,
-              ),
-              decoration: BoxDecoration(
-                color: selected ? accentColor : accentColor.withAlpha(20),
-                borderRadius: AppRadius.brMd,
-              ),
-              child: Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                  color: selected
-                      ? Colors.white
-                      : AppColorTokens.of(context).textPrimary,
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => _updateView(() => _filter = type),
+              borderRadius: AppRadius.brMd,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 150),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
+                ),
+                decoration: BoxDecoration(
+                  color: selected ? accentColor : accentColor.withAlpha(20),
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: Text(
+                  label,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+                    color: selected
+                        ? Colors.white
+                        : AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
             ),
@@ -115,25 +119,28 @@ extension _NftListPageWidgets on _NftListPageState {
     final su = ScreenUtil();
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return Center(
-      child: GestureDetector(
-        onTap: _retry,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.refresh,
-              size: su.setWidth(60),
-              color: AppColorTokens.of(context).brand,
-            ),
-            SizedBox(height: su.setWidth(16)),
-            Text(
-              _loadErrorMessage?.isNotEmpty == true
-                  ? _loadErrorMessage!
-                  : S.of(context).g_key_nft_error_retry,
-              style: AppTypography.body.copyWith(color: subtitleColor),
-              textAlign: TextAlign.center,
-            ),
-          ],
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: _retry,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.refresh,
+                size: su.setWidth(60),
+                color: AppColorTokens.of(context).brand,
+              ),
+              SizedBox(height: su.setWidth(16)),
+              Text(
+                _loadErrorMessage?.isNotEmpty == true
+                    ? _loadErrorMessage!
+                    : S.of(context).g_key_nft_error_retry,
+                style: AppTypography.body.copyWith(color: subtitleColor),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

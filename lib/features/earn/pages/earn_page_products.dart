@@ -325,9 +325,12 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
     final subtitle = AppColorTokens.of(context).textSubtitle;
     final itemBg = AppColorTokens.of(context).bgSurface;
 
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(su.setWidth(16)),
+        child: Container(
         padding: EdgeInsets.all(su.setWidth(16)),
         decoration: BoxDecoration(
           color: itemBg,
@@ -388,6 +391,7 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
             SizedBox(width: su.setWidth(8)),
             Icon(Icons.chevron_right, color: subtitle),
           ],
+        ),
         ),
       ),
     );

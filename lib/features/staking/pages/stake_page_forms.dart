@@ -21,9 +21,12 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
     final mainText = AppColorTokens.of(context).textPrimary;
     final su = ScreenUtil();
 
-    return GestureDetector(
-      onTap: () => _navigateToValidatorList(context, provider),
-      child: Container(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _navigateToValidatorList(context, provider),
+        borderRadius: BorderRadius.circular(su.setWidth(12)),
+        child: Container(
         padding: EdgeInsets.all(su.setWidth(20)),
         decoration: BoxDecoration(
           color: itemBg,
@@ -69,6 +72,7 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
             ],
             Icon(Icons.chevron_right, color: subtitleColor),
           ],
+        ),
         ),
       ),
     );

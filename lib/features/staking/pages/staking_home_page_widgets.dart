@@ -93,9 +93,12 @@ mixin StakingHomePageWidgetsMixin
   }
 
   Widget _buildProtocolCard(BuildContext context, StakingProtocol protocol) {
-    return GestureDetector(
-      onTap: () => navigateToStakePage(context, protocol),
-      child: Container(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => navigateToStakePage(context, protocol),
+        borderRadius: AppRadius.brMd,
+        child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
         padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
@@ -145,6 +148,7 @@ mixin StakingHomePageWidgetsMixin
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
             ),
           ],
+        ),
         ),
       ),
     );
