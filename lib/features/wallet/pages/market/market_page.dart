@@ -514,9 +514,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
             children: [
               Text(
                 'Markets',
-                style: TextStyle(
-                  fontSize: 32.sp,
-                  //fontWeight: FontWeight.w600,
+                style: AppTypography.headline.copyWith(
                   color: textColor,
                   letterSpacing: -0.5,
                 ),
@@ -572,13 +570,11 @@ class _MarketPageState extends ConsumerState<MarketPage>
           dividerColor: dividerColor,
           isScrollable: true,
           tabAlignment: TabAlignment.start,
-          labelStyle: TextStyle(
-            fontSize: 24.sp,
+          labelStyle: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             letterSpacing: 0.2,
           ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 24.sp,
+          unselectedLabelStyle: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w400,
           ),
           tabs: [

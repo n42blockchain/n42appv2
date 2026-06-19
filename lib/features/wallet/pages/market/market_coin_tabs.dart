@@ -110,10 +110,16 @@ class _SearchTab extends StatelessWidget {
           child: TextField(
             controller: controller,
             onChanged: onChanged,
-            style: TextStyle(color: textColor, fontSize: 24.sp),
+            style: AppTypography.caption.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w400,
+            ),
             decoration: InputDecoration(
               hintText: S.of(context).g_market_search_hint,
-              hintStyle: TextStyle(color: subColor, fontSize: 24.sp),
+              hintStyle: AppTypography.caption.copyWith(
+                color: subColor,
+                fontWeight: FontWeight.w400,
+              ),
               prefixIcon: Icon(Icons.search, color: subColor, size: 26.sp),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(

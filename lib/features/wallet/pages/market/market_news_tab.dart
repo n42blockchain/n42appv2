@@ -91,8 +91,7 @@ class _NewsCard extends StatelessWidget {
                         article.title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 24.sp,
+                        style: AppTypography.caption.copyWith(
                           fontWeight: FontWeight.w500,
                           color: textColor,
                           height: 1.35,
@@ -106,8 +105,8 @@ class _NewsCard extends StatelessWidget {
                               article.sourceName,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                fontSize: 18.sp,
+                              style: AppTypography.captionSm.copyWith(
+                                fontWeight: FontWeight.w400,
                                 color: subColor,
                               ),
                             ),
@@ -116,15 +115,18 @@ class _NewsCard extends StatelessWidget {
                             padding: EdgeInsets.symmetric(horizontal: 6.w),
                             child: Text(
                               '·',
-                              style: TextStyle(
-                                fontSize: 18.sp,
+                              style: AppTypography.captionSm.copyWith(
+                                fontWeight: FontWeight.w400,
                                 color: subColor,
                               ),
                             ),
                           ),
                           Text(
                             article.timeAgo(),
-                            style: TextStyle(fontSize: 18.sp, color: subColor),
+                            style: AppTypography.captionSm.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: subColor,
+                            ),
                           ),
                         ],
                       ),

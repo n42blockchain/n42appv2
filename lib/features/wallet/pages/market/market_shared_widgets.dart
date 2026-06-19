@@ -134,8 +134,7 @@ class _CoinTile extends StatelessWidget {
                           ),
                           child: Text(
                             '#$_rank',
-                            style: TextStyle(
-                              fontSize: 16.sp,
+                            style: AppTypography.captionSm.copyWith(
                               color: subColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -146,8 +145,7 @@ class _CoinTile extends StatelessWidget {
                       Flexible(
                         child: Text(
                           _name,
-                          style: TextStyle(
-                            fontSize: 24.sp,
+                          style: AppTypography.caption.copyWith(
                             fontWeight: FontWeight.w600,
                             color: textColor,
                             letterSpacing: -0.2,
@@ -160,8 +158,8 @@ class _CoinTile extends StatelessWidget {
                   SizedBox(height: 3.h),
                   Text(
                     _symbol.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 20.sp,
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
                       color: subColor,
                       letterSpacing: 0.3,
                     ),
@@ -176,8 +174,7 @@ class _CoinTile extends StatelessWidget {
                 children: [
                   Text(
                     _price > 0 ? '\$${_formatPrice(_price)}' : '--',
-                    style: TextStyle(
-                      fontSize: 24.sp,
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
@@ -194,8 +191,7 @@ class _CoinTile extends StatelessWidget {
                     ),
                     child: Text(
                       '${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%',
-                      style: TextStyle(
-                        fontSize: 20.sp,
+                      style: AppTypography.captionSm.copyWith(
                         color: pctColor,
                         fontWeight: FontWeight.w600,
                       ),
@@ -275,7 +271,10 @@ class _EmptyState extends StatelessWidget {
           Text(
             message,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 24.sp, color: subColor),
+            style: AppTypography.caption.copyWith(
+              fontWeight: FontWeight.w400,
+              color: subColor,
+            ),
           ),
         ],
       ),
@@ -323,12 +322,16 @@ class _FearGreedBadge extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(level.emoji, style: TextStyle(fontSize: 16.sp)),
+              Text(
+                level.emoji,
+                style: AppTypography.captionSm.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
               SizedBox(width: 4.w),
               Text(
                 data.classification,
-                style: TextStyle(
-                  fontSize: 18.sp,
+                style: AppTypography.captionSm.copyWith(
                   color: color,
                   fontWeight: FontWeight.w600,
                 ),
@@ -342,8 +345,7 @@ class _FearGreedBadge extends StatelessWidget {
                 ),
                 child: Text(
                   '${data.value}',
-                  style: TextStyle(
-                    fontSize: 16.sp,
+                  style: AppTypography.captionSm.copyWith(
                     color: color,
                     fontWeight: FontWeight.w600,
                   ),
@@ -355,8 +357,8 @@ class _FearGreedBadge extends StatelessWidget {
         SizedBox(width: 6.w),
         Text(
           'Fear & Greed',
-          style: TextStyle(
-            fontSize: 16.sp,
+          style: AppTypography.captionSm.copyWith(
+            fontWeight: FontWeight.w400,
             color: AppColorTokens.of(context).textPrimary.withAlpha(90),
           ),
         ),

@@ -98,7 +98,9 @@ class _AAAccountDetailPageState extends ConsumerState<AAAccountDetailPage>
               const SizedBox(height: 12),
               SelectableText(
                 address,
-                style: const TextStyle(fontSize: 12),
+                style: AppTypography.captionSm.copyWith(
+                  fontWeight: FontWeight.w400,
+                ),
                 textAlign: TextAlign.center,
               ),
             ],

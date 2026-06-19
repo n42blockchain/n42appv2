@@ -19,10 +19,9 @@ extension _AAHomePageWidgets on _AAHomePageState {
 
   Widget buildHeaderCard() {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
 
     return Container(
-      padding: EdgeInsets.all(sw(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -32,7 +31,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(sw(20)),
+        borderRadius: AppRadius.brLg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +43,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                 height: sw(56),
                 decoration: BoxDecoration(
                   color: _kAccentColor.withAlpha(30),
-                  borderRadius: BorderRadius.circular(sw(16)),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Center(
                   child: Icon(
@@ -54,15 +53,14 @@ extension _AAHomePageWidgets on _AAHomePageState {
                   ),
                 ),
               ),
-              SizedBox(width: sw(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       S.of(context).g_key_aa_smart_accounts,
-                      style: TextStyle(
-                        fontSize: sp(32),
+                      style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                         color: _mainTextColor(),
                       ),
@@ -70,8 +68,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                     SizedBox(height: sw(4)),
                     Text(
                       S.of(context).g_key_aa_description,
-                      style: TextStyle(
-                        fontSize: sp(24),
+                      style: AppTypography.caption.copyWith(
                         color: _subtitleTextColor(),
                       ),
                     ),
@@ -111,7 +108,6 @@ extension _AAHomePageWidgets on _AAHomePageState {
     Color color,
   ) {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
 
     return Padding(
       padding: EdgeInsets.only(bottom: sw(12)),
@@ -131,8 +127,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    fontSize: sp(24),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _mainTextColor(),
                   ),
@@ -140,8 +135,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                 SizedBox(height: sw(2)),
                 Text(
                   desc,
-                  style: TextStyle(
-                    fontSize: sp(22),
+                  style: AppTypography.caption.copyWith(
                     color: _subtitleTextColor(),
                   ),
                 ),
@@ -194,7 +188,6 @@ extension _AAHomePageWidgets on _AAHomePageState {
 
   Widget buildAdvancedFeatures() {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
     final canUseAa = _hasOwnerAddress;
 
     return Column(
@@ -202,8 +195,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
       children: [
         Text(
           S.of(context).g_key_advanced_features,
-          style: TextStyle(
-            fontSize: sp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: _mainTextColor(),
           ),
@@ -235,7 +227,6 @@ extension _AAHomePageWidgets on _AAHomePageState {
   }) {
     final isDisabled = onTap == null;
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
 
     return GestureDetector(
       onTap: isDisabled
@@ -253,7 +244,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
         padding: EdgeInsets.all(sw(20)),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(sw(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isDisabled
                 ? AppColorTokens.of(context).textTertiary.withAlpha(30)
@@ -274,16 +265,16 @@ extension _AAHomePageWidgets on _AAHomePageState {
               SizedBox(height: sw(12)),
               Text(
                 title,
-                style: TextStyle(
-                  fontSize: sp(28),
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.bodyStrong.copyWith(
                   color: _mainTextColor(),
                 ),
               ),
               SizedBox(height: sw(4)),
               Text(
                 subtitle,
-                style: TextStyle(fontSize: sp(22), color: _subtitleTextColor()),
+                style: AppTypography.caption.copyWith(
+                  color: _subtitleTextColor(),
+                ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -295,9 +286,6 @@ extension _AAHomePageWidgets on _AAHomePageState {
   }
 
   Widget buildAccountsSection() {
-    final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -308,8 +296,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
               child: Text(
                 S.of(context).g_key_aa_my_accounts,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: sp(30),
+                style: AppTypography.headline.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _mainTextColor(),
                 ),
@@ -322,7 +309,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
               ),
           ],
         ),
-        SizedBox(height: sw(16)),
+        SizedBox(height: AppSpacing.space4),
         if (!_hasOwnerAddress)
           buildUnsupportedState()
         else if (accounts.isEmpty)
@@ -335,12 +322,11 @@ extension _AAHomePageWidgets on _AAHomePageState {
 
   Widget buildUnsupportedState() {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
     return Container(
-      padding: EdgeInsets.all(sw(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _itemBgColor(),
-        borderRadius: BorderRadius.circular(sw(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: _kOrange.withAlpha(40)),
       ),
       child: Row(
@@ -355,7 +341,9 @@ extension _AAHomePageWidgets on _AAHomePageState {
           Expanded(
             child: Text(
               S.of(context).g_key_bridge_chain_not_supported,
-              style: TextStyle(fontSize: sp(24), color: _subtitleTextColor()),
+              style: AppTypography.caption.copyWith(
+                color: _subtitleTextColor(),
+              ),
             ),
           ),
         ],
@@ -365,7 +353,6 @@ extension _AAHomePageWidgets on _AAHomePageState {
 
   Widget buildEmptyState() {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
     final steps = [
       S.of(context).g_key_aa_onboard_step1,
       S.of(context).g_key_aa_onboard_step2,
@@ -373,10 +360,10 @@ extension _AAHomePageWidgets on _AAHomePageState {
     ];
 
     return Container(
-      padding: EdgeInsets.all(sw(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _itemBgColor(),
-        borderRadius: BorderRadius.circular(sw(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: _kAccentColor.withAlpha(30)),
       ),
       child: Column(
@@ -384,13 +371,11 @@ extension _AAHomePageWidgets on _AAHomePageState {
         children: [
           Text(
             S.of(context).g_key_aa_no_accounts,
-            style: TextStyle(
-              fontSize: sp(28),
-              fontWeight: FontWeight.w600,
+            style: AppTypography.bodyStrong.copyWith(
               color: _mainTextColor(),
             ),
           ),
-          SizedBox(height: sw(16)),
+          SizedBox(height: AppSpacing.space4),
           for (var i = 0; i < steps.length; i++)
             Padding(
               padding: EdgeInsets.only(bottom: sw(12)),
@@ -406,8 +391,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                     child: Center(
                       child: Text(
                         '${i + 1}',
-                        style: TextStyle(
-                          fontSize: sp(20),
+                        style: AppTypography.captionSm.copyWith(
                           fontWeight: FontWeight.w600,
                           color: _kAccentColor,
                         ),
@@ -418,8 +402,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
                   Expanded(
                     child: Text(
                       steps[i],
-                      style: TextStyle(
-                        fontSize: sp(24),
+                      style: AppTypography.caption.copyWith(
                         color: _subtitleTextColor(),
                       ),
                     ),

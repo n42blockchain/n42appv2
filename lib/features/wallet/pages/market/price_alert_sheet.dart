@@ -200,8 +200,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         S
                             .of(context)
                             .g_alert_title(widget.symbol.toUpperCase()),
-                        style: TextStyle(
-                          fontSize: 17.sp,
+                        style: AppTypography.captionSm.copyWith(
                           fontWeight: FontWeight.w600,
                           color: textColor,
                         ),
@@ -212,9 +211,9 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           onPressed: _saving ? null : _delete,
                           child: Text(
                             S.of(context).g_alert_remove,
-                            style: TextStyle(
+                            style: AppTypography.captionSm.copyWith(
+                              fontWeight: FontWeight.w400,
                               color: AppColorTokens.of(context).danger,
-                              fontSize: 13.sp,
                             ),
                           ),
                         ),
@@ -229,14 +228,20 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           .g_alert_current_price(
                             formatMarketPriceDisplay(widget.currentPrice),
                           ),
-                      style: TextStyle(fontSize: 12.sp, color: subColor),
+                      style: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                     ),
                   ],
                   SizedBox(height: 20.h),
 
                   Text(
                     S.of(context).g_alert_direction,
-                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: subColor,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   Row(
@@ -264,7 +269,10 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   Text(
                     S.of(context).g_alert_target_price,
-                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: subColor,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   TextField(
@@ -277,16 +285,21 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         RegExp(r'^\d*\.?\d{0,8}'),
                       ),
                     ],
-                    style: TextStyle(
-                      fontSize: 18.sp,
+                    style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                     decoration: InputDecoration(
                       prefixText: '\$ ',
-                      prefixStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      prefixStyle: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                       hintText: '0.00',
-                      hintStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      hintStyle: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                       filled: true,
                       fillColor: AppThemeUtils.getColorByKey(
                         context,
@@ -314,7 +327,10 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         child: Text(
                           S.of(context).g_alert_enable,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14.sp, color: textColor),
+                          style: AppTypography.captionSm.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: textColor,
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -353,8 +369,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                               _existing != null
                                   ? S.of(context).g_alert_update
                                   : S.of(context).g_alert_set,
-                              style: TextStyle(
-                                fontSize: 16.sp,
+                              style: AppTypography.captionSm.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -403,8 +418,7 @@ class _DirectionChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 13.sp,
+          style: AppTypography.captionSm.copyWith(
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             color: selected ? accentColor : textColor.withAlpha(153),
           ),

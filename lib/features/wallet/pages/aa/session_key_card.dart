@@ -39,7 +39,7 @@ class SessionKeyCard extends StatelessWidget {
     final permColor = sessionKeyPermissionColor(keyData.permission);
 
     return Container(
-      margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.only(bottom: AppSpacing.space4),
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: AppColorTokens.of(context).bgSurface,

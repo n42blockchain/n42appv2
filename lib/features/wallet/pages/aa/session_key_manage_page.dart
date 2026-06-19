@@ -181,7 +181,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     final su = ScreenUtil();
 
     return Container(
-      margin: EdgeInsets.all(su.setWidth(24)),
+      margin: EdgeInsets.all(AppSpacing.space6),
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -189,7 +189,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(su.setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +201,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
                 height: su.setWidth(48),
                 decoration: BoxDecoration(
                   color: _accentColor.withAlpha(25),
-                  borderRadius: BorderRadius.circular(su.setWidth(14)),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Icon(
                   Icons.key,
@@ -232,7 +232,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
               ),
             ],
           ),
-          SizedBox(height: su.setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               _buildStatItem(
@@ -240,13 +240,13 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
                 s.g_key_aa_active,
                 AppColorTokens.of(context).success,
               ),
-              SizedBox(width: su.setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               _buildStatItem(
                 expiredKeys.length.toString(),
                 s.g_key_aa_expired,
                 AppColorTokens.of(context).warning,
               ),
-              SizedBox(width: su.setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               _buildStatItem(
                 revokedKeys.length.toString(),
                 s.g_key_aa_revoked_status,
@@ -269,7 +269,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         ),
         decoration: BoxDecoration(
           color: color.withAlpha(20),
-          borderRadius: BorderRadius.circular(su.setWidth(10)),
+          borderRadius: AppRadius.brSm,
         ),
         child: Column(
           children: [
@@ -299,19 +299,18 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
     List<SessionKeyData> expiredKeys,
     List<SessionKeyData> revokedKeys,
   ) {
-    final su = ScreenUtil();
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: su.setWidth(24)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       decoration: BoxDecoration(
         color: _themeColor(AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(su.setWidth(12)),
+        borderRadius: AppRadius.brMd,
       ),
       child: TabBar(
         controller: _tabController,
         isScrollable: true,
         indicator: BoxDecoration(
           color: blueColor,
-          borderRadius: BorderRadius.circular(su.setWidth(10)),
+          borderRadius: AppRadius.brSm,
         ),
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
@@ -369,7 +368,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
             size: su.setWidth(64),
             color: subtitleColor.withAlpha(100),
           ),
-          SizedBox(height: su.setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_no_session_keys,
             style: AppTypography.body.copyWith(color: subtitleColor),
