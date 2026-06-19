@@ -66,15 +66,14 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           icon: Icon(
             Icons.arrow_back_ios_rounded,
             color: textColor,
-            size: 20.sp,
+            size: 40.sp,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           S.of(context).g_portfolio_title,
-          style: TextStyle(
+          style: AppTypography.title.copyWith(
             color: textColor,
-            fontSize: 18.sp,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -83,7 +82,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       body: records.isEmpty
           ? _buildEmpty(context, textColor)
           : SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+              padding: EdgeInsets.symmetric(horizontal: 32.w, vertical: 24.h),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -96,7 +95,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     textColor,
                     accentColor,
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 32.h),
                   _buildPieSection(
                     context,
                     valuedRecords,
@@ -105,14 +104,14 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     textColor,
                     accentColor,
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 32.h),
                   _buildMoversSection(
                     context,
                     valuedRecords,
                     itemBg,
                     textColor,
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 32.h),
                   _buildHoldingsList(
                     context,
                     records,
@@ -121,7 +120,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     textColor,
                     accentColor,
                   ),
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 64.h),
                 ],
               ),
             ),
@@ -135,13 +134,16 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         children: [
           Icon(
             Icons.donut_large_outlined,
-            size: 64.sp,
+            size: 128.sp,
             color: textColor.withAlpha(80),
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 24.h),
           Text(
             S.of(context).g_portfolio_no_assets,
-            style: TextStyle(fontSize: 15.sp, color: textColor.withAlpha(128)),
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w400,
+              color: textColor.withAlpha(128),
+            ),
           ),
         ],
       ),
@@ -172,7 +174,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
             icon: Icons.account_balance_wallet_outlined,
           ),
         ),
-        SizedBox(width: 12.w),
+        SizedBox(width: 24.w),
         Expanded(
           child: SummaryCard(
             label: S.of(context).g_portfolio_24h,
@@ -209,11 +211,10 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _sectionTitle(S.of(context).g_portfolio_allocation, textColor),
-            SizedBox(height: 16.h),
+            SizedBox(height: 32.h),
             Text(
               S.of(context).g_portfolio_no_assets,
-              style: TextStyle(
-                fontSize: 13.sp,
+              style: AppTypography.bodySm.copyWith(
                 color: textColor.withAlpha(160),
               ),
             ),
@@ -233,10 +234,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       return PieChartSectionData(
         value: pct,
         color: color,
-        radius: isTouched ? 70.r : 56.r,
+        radius: isTouched ? 140.r : 112.r,
         title: isTouched ? '${pct.toStringAsFixed(1)}%' : '',
-        titleStyle: TextStyle(
-          fontSize: 12.sp,
+        titleStyle: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: Colors.white,
           shadows: const [Shadow(blurRadius: 4, color: Colors.black26)],
@@ -272,9 +272,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _sectionTitle(S.of(context).g_portfolio_allocation, textColor),
-          SizedBox(height: 16.h),
+          SizedBox(height: 32.h),
           SizedBox(
-            height: 220.h,
+            height: 440.h,
             child: Row(
               children: [
                 // Donut chart
@@ -286,7 +286,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                       PieChart(
                         PieChartData(
                           sections: sections,
-                          centerSpaceRadius: 52.r,
+                          centerSpaceRadius: 104.r,
                           sectionsSpace: 2,
                           pieTouchData: PieTouchData(
                             touchCallback:
@@ -319,7 +319,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     ],
                   ),
                 ),
-                SizedBox(width: 12.w),
+                SizedBox(width: 24.w),
                 // Legend
                 Expanded(
                   flex: 4,
@@ -373,15 +373,16 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         children: [
           Text(
             highlighted.symbol.toUpperCase(),
-            style: TextStyle(
-              fontSize: 13.sp,
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: textColor,
             ),
           ),
           Text(
             fmtUsd(highlighted.value),
-            style: TextStyle(fontSize: 11.sp, color: textColor.withAlpha(178)),
+            style: AppTypography.caption.copyWith(
+              color: textColor.withAlpha(178),
+            ),
           ),
         ],
       );
@@ -391,12 +392,13 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
       children: [
         Text(
           S.of(context).g_portfolio_pie_total,
-          style: TextStyle(fontSize: 12.sp, color: textColor.withAlpha(153)),
+          style: AppTypography.caption.copyWith(
+            color: textColor.withAlpha(153),
+          ),
         ),
         Text(
           fmtUsd(totalValue),
-          style: TextStyle(
-            fontSize: 13.sp,
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: textColor,
           ),
@@ -412,9 +414,9 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     return Container(
       decoration: BoxDecoration(
         color: itemBg,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(32.r),
       ),
-      padding: EdgeInsets.all(16.w),
+      padding: EdgeInsets.all(32.w),
       child: child,
     );
   }
@@ -423,8 +425,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
   Widget _sectionTitle(String title, Color textColor) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: 15.sp,
+      style: AppTypography.headline.copyWith(
         fontWeight: FontWeight.w600,
         color: textColor,
       ),
@@ -467,7 +468,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _sectionTitle(S.of(context).g_portfolio_movers, textColor),
-          SizedBox(height: 12.h),
+          SizedBox(height: 24.h),
           if (gainers.isNotEmpty)
             MoverRow(
               label: S.of(context).g_portfolio_gainers,
@@ -477,7 +478,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
               textColor: textColor,
             ),
           if (losers.isNotEmpty) ...[
-            SizedBox(height: 10.h),
+            SizedBox(height: 20.h),
             MoverRow(
               label: S.of(context).g_portfolio_losers,
               records: losers,
@@ -507,7 +508,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _sectionTitle(S.of(context).g_portfolio_all_holdings, textColor),
-          SizedBox(height: 8.h),
+          SizedBox(height: 16.h),
           for (var i = 0; i < records.length; i++) ...[
             HoldingRow(
               record: records[i],
@@ -528,7 +529,7 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                 height: 1,
                 thickness: 0.5,
                 color: textColor.withAlpha(20),
-                indent: 48.w,
+                indent: 96.w,
               ),
           ],
         ],

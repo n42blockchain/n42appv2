@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── Summary card ─────────────────────────────────────────────────────────────
 
@@ -31,32 +32,30 @@ class SummaryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
+      padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 28.h),
       decoration: BoxDecoration(
         color: itemBg,
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(32.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(icon, size: 15.sp, color: valueColor),
-              SizedBox(width: 5.w),
+              Icon(icon, size: 30.sp, color: valueColor),
+              SizedBox(width: 10.w),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12.sp,
+                style: AppTypography.caption.copyWith(
                   color: textColor.withAlpha(153),
                 ),
               ),
             ],
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 12.h),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 17.sp,
+            style: AppTypography.title.copyWith(
               fontWeight: FontWeight.w600,
               color: valueColor,
             ),
@@ -66,8 +65,7 @@ class SummaryCard extends StatelessWidget {
           if (subValue != null)
             Text(
               subValue!,
-              style: TextStyle(
-                fontSize: 12.sp,
+              style: AppTypography.caption.copyWith(
                 color: valueColor.withAlpha(200),
               ),
             ),
@@ -98,21 +96,20 @@ class LegendItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 3.h),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       child: Row(
         children: [
           Container(
-            width: 10.w,
-            height: 10.h,
+            width: 20.w,
+            height: 20.h,
             decoration: BoxDecoration(color: color, shape: BoxShape.circle),
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 12.w),
           Expanded(
             child: Text(
               symbol,
-              style: TextStyle(
-                fontSize: 12.sp,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+              style: AppTypography.caption.copyWith(
+                fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                 color: isActive ? textColor : textColor.withAlpha(178),
               ),
               overflow: TextOverflow.ellipsis,
@@ -120,8 +117,7 @@ class LegendItem extends StatelessWidget {
           ),
           Text(
             '${pct.toStringAsFixed(1)}%',
-            style: TextStyle(
-              fontSize: 11.sp,
+            style: AppTypography.caption.copyWith(
               color: isActive ? textColor : textColor.withAlpha(128),
             ),
           ),

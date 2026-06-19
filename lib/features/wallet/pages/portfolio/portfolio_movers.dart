@@ -44,50 +44,48 @@ class MoverRow extends StatelessWidget {
               isGainer
                   ? Icons.arrow_upward_rounded
                   : Icons.arrow_downward_rounded,
-              size: 13.sp,
+              size: 26.sp,
               color: labelColor,
             ),
-            SizedBox(width: 4.w),
+            SizedBox(width: 8.w),
             Text(
               label,
-              style: TextStyle(
-                fontSize: 12.sp,
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: labelColor,
               ),
             ),
           ],
         ),
-        SizedBox(height: 6.h),
+        SizedBox(height: 12.h),
         for (final r in records)
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 4.h),
+            padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12.r),
+                  borderRadius: BorderRadius.circular(24.r),
                   child: r.icon.isNotEmpty
                       ? ImageNetWork(
                           imageUrl: r.icon,
-                          width: 24.w,
-                          height: 24.w,
+                          width: 48.w,
+                          height: 48.w,
                         )
                       : Container(
-                          width: 24.w,
-                          height: 24.w,
+                          width: 48.w,
+                          height: 48.w,
                           color: textColor.withAlpha(30),
                           child: Icon(
                             Icons.currency_bitcoin,
-                            size: 14.sp,
+                            size: 28.sp,
                             color: textColor.withAlpha(100),
                           ),
                         ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 16.w),
                 Text(
                   r.symbol.toUpperCase(),
-                  style: TextStyle(
-                    fontSize: 13.sp,
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: textColor,
                   ),
@@ -98,16 +96,14 @@ class MoverRow extends StatelessWidget {
                   children: [
                     Text(
                       '${r.percentage >= 0 ? '+' : ''}${r.percentage.toStringAsFixed(2)}%',
-                      style: TextStyle(
-                        fontSize: 13.sp,
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: labelColor,
                       ),
                     ),
                     Text(
                       fmtUsd(pnlFn(r.value, r.percentage)),
-                      style: TextStyle(
-                        fontSize: 11.sp,
+                      style: AppTypography.caption.copyWith(
                         color: labelColor.withAlpha(200),
                       ),
                     ),
