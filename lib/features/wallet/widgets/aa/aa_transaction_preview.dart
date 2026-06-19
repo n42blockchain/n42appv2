@@ -83,8 +83,7 @@ class AATransactionPreview extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_202,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 32.sp,
+                  style: AppTypography.headline.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _color(context, AppThemeKeys.mainTextColor),
                   ),
@@ -138,8 +137,8 @@ class AATransactionPreview extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_44,
-            style: TextStyle(
-              fontSize: 24.sp,
+            style: AppTypography.caption.copyWith(
+              fontWeight: FontWeight.w400,
               color: _color(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
@@ -150,8 +149,7 @@ class AATransactionPreview extends StatelessWidget {
             children: [
               Text(
                 data.amount,
-                style: TextStyle(
-                  fontSize: 48.sp,
+                style: AppTypography.displayLg.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _color(context, AppThemeKeys.mainTextColor),
                 ),
@@ -161,9 +159,7 @@ class AATransactionPreview extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 6.w),
                 child: Text(
                   data.tokenSymbol,
-                  style: TextStyle(
-                    fontSize: 28.sp,
-                    fontWeight: FontWeight.w600,
+                  style: AppTypography.bodyStrong.copyWith(
                     color: blueColor,
                   ),
                 ),
@@ -225,12 +221,15 @@ class AATransactionPreview extends StatelessWidget {
           children: [
             Text(
               label,
-              style: TextStyle(fontSize: 20.sp, color: subtitleColor),
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w400,
+                color: subtitleColor,
+              ),
             ),
             Text(
               _shortenAddress(address),
-              style: TextStyle(
-                fontSize: 24.sp,
+              style: AppTypography.caption.copyWith(
+                fontWeight: FontWeight.w400,
                 fontFamily: 'monospace',
                 color: _color(context, AppThemeKeys.mainTextColor),
               ),
@@ -272,7 +271,10 @@ class AATransactionPreview extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_t_17,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 24.sp, color: subtitleColor),
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: FontWeight.w400,
+                    color: subtitleColor,
+                  ),
                 ),
               ),
             ],
@@ -284,8 +286,8 @@ class AATransactionPreview extends StatelessWidget {
                   child: Text(
                     data.formattedGasCost,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 24.sp,
+                    style: AppTypography.caption.copyWith(
+                      fontWeight: FontWeight.w400,
                       decoration: TextDecoration.lineThrough,
                       color: subtitleColor,
                     ),
@@ -296,8 +298,7 @@ class AATransactionPreview extends StatelessWidget {
                   child: Text(
                     S.of(context).g_key_aa_free,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 26.sp,
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: success,
                     ),
@@ -308,8 +309,7 @@ class AATransactionPreview extends StatelessWidget {
           else
             Text(
               data.formattedGasCost,
-              style: TextStyle(
-                fontSize: 26.sp,
+              style: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
                 color: _color(context, AppThemeKeys.mainTextColor),
               ),
@@ -334,8 +334,7 @@ class AATransactionPreview extends StatelessWidget {
         children: [
           Text(
             '${S.of(context).g_key_aa_batch_operations} (${ops.length})',
-            style: TextStyle(
-              fontSize: 24.sp,
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: _color(context, AppThemeKeys.mainTextColor),
             ),
@@ -356,8 +355,7 @@ class AATransactionPreview extends StatelessWidget {
                     child: Center(
                       child: Text(
                         '${i + 1}',
-                        style: TextStyle(
-                          fontSize: 18.sp,
+                        style: AppTypography.captionSm.copyWith(
                           fontWeight: FontWeight.w600,
                           color: blueColor,
                         ),
@@ -368,8 +366,8 @@ class AATransactionPreview extends StatelessWidget {
                   Expanded(
                     child: Text(
                       op,
-                      style: TextStyle(
-                        fontSize: 22.sp,
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w400,
                         color: _color(
                           context,
                           AppThemeKeys.itemSubtitleTextColor,
@@ -389,10 +387,7 @@ class AATransactionPreview extends StatelessWidget {
   Widget _buildActionButtons(BuildContext context) {
     final buttonRadius = BorderRadius.circular(14.w);
     final buttonPadding = EdgeInsets.symmetric(vertical: 16.w);
-    final buttonTextStyle = TextStyle(
-      fontSize: 28.sp,
-      fontWeight: FontWeight.w600,
-    );
+    final buttonTextStyle = AppTypography.bodyStrong;
 
     return Row(
       children: [

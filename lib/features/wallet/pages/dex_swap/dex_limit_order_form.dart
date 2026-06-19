@@ -187,10 +187,9 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
                         color: Colors.white,
                       ),
                     )
-                  : const Text(
+                  : Text(
                       'Place Limit Order',
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: AppTypography.captionSm.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -221,16 +220,15 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
           children: [
             Text(
               label,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: AppColorTokens.of(context).textSubtitle,
-                fontSize: 13,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const Spacer(),
             Text(
               token?.symbol ?? 'Select',
-              style: TextStyle(
-                fontSize: 16,
+              style: AppTypography.captionSm.copyWith(
                 fontWeight: FontWeight.w600,
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -256,8 +254,8 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     return TextField(
       controller: controller,
       keyboardType: keyboardType,
-      style: TextStyle(
-        fontSize: 16,
+      style: AppTypography.captionSm.copyWith(
+        fontWeight: FontWeight.w400,
         color: AppColorTokens.of(context).textPrimary,
       ),
       decoration: InputDecoration(
@@ -277,9 +275,9 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
       children: [
         Text(
           'Expires in: ',
-          style: TextStyle(
+          style: AppTypography.caption.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
-            fontSize: 13,
+            fontWeight: FontWeight.w400,
           ),
         ),
         const Spacer(),

@@ -68,7 +68,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
       children: [
         Text(
           S.of(ctx).g_key_filter,
-          style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w600),
+          style: AppTypography.captionSm.copyWith(fontWeight: FontWeight.w600),
         ),
         const Spacer(),
         TextButton(
@@ -82,7 +82,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   Widget _sectionLabel(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+      style: AppTypography.captionSm.copyWith(fontWeight: FontWeight.w600),
     );
   }
 
@@ -188,7 +188,12 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
         SizedBox(height: 4.h),
         ListTile(
           contentPadding: EdgeInsets.zero,
-          title: Text(dateText, style: TextStyle(fontSize: 14.sp)),
+          title: Text(
+            dateText,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           trailing: Icon(Icons.calendar_today_outlined, size: 20.r),
           onTap: () async {
             final range = await showDateRangePicker(

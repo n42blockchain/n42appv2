@@ -105,8 +105,7 @@ class DAppSecurityBadge extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 22.sp,
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: color,
                 ),
@@ -114,8 +113,8 @@ class DAppSecurityBadge extends StatelessWidget {
               if (showReason && info.reason != null)
                 Text(
                   info.reason!,
-                  style: TextStyle(
-                    fontSize: 18.sp,
+                  style: AppTypography.captionSm.copyWith(
+                    fontWeight: FontWeight.w400,
                     color: color.withAlpha(200),
                   ),
                 ),
@@ -158,8 +157,7 @@ class DAppMethodChips extends StatelessWidget {
           ),
           child: Text(
             short,
-            style: TextStyle(
-              fontSize: 18.sp,
+            style: AppTypography.captionSm.copyWith(
               color: subColor,
               fontFamily: 'monospace',
             ),

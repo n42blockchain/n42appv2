@@ -180,9 +180,8 @@ class _FilterBadge extends StatelessWidget {
       alignment: Alignment.center,
       child: Text(
         '$count',
-        style: const TextStyle(
+        style: AppTypography.captionSm.copyWith(
           color: Colors.white,
-          fontSize: 10,
           fontWeight: FontWeight.w600,
         ),
       ),

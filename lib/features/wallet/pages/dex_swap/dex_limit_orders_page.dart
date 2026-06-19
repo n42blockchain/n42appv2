@@ -128,8 +128,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
             children: [
               Text(
                 '${order.symbolIn} → ${order.symbolOut}',
-                style: TextStyle(
-                  fontSize: 16,
+                style: AppTypography.captionSm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: textColor,
                 ),
@@ -143,8 +142,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                 ),
                 child: Text(
                   order.statusLabel,
-                  style: TextStyle(
-                    fontSize: 12,
+                  style: AppTypography.caption.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w600,
                   ),
@@ -202,9 +200,11 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                         height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const Text(
+                    : Text(
                         'Cancel Order',
-                        style: TextStyle(fontSize: 13),
+                        style: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
               ),
             ),
@@ -224,9 +224,21 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
       child: Row(
         children: [
-          Text(label, style: TextStyle(fontSize: 12, color: subColor)),
+          Text(
+            label,
+            style: AppTypography.caption.copyWith(
+              color: subColor,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
           const Spacer(),
-          Text(value, style: TextStyle(fontSize: 12, color: textColor)),
+          Text(
+            value,
+            style: AppTypography.caption.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
         ],
       ),
     );
