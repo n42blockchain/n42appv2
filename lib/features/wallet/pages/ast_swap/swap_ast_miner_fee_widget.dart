@@ -1,3 +1,4 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
@@ -82,6 +83,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             value: feeStrings.totalGasPriceStr,
             valueColor: feeStrings.totalGasPriceColor,
             topMargin: true,
+            showWarningIcon: feeStrings.insufficient,
           ),
         ],
       ),
@@ -97,6 +99,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       fallback: 18,
     );
     Color totalGasPriceColor = AppColorTokens.of(context).textPrimary;
+    bool insufficient = false;
 
     if (blockchainType == BlockchainType.Ethereum.name) {
       final String unit = _swapFeeString(
@@ -105,6 +108,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       );
       if (totalGasPrice > payCoinModel!.balance) {
         totalGasPriceColor = AppColorTokens.of(context).danger;
+        insufficient = true;
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -113,6 +117,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             '${dec.Decimal.parse(toGWei(gasPrice.toString()).toString())}Gwei',
         totalGasPriceColor: totalGasPriceColor,
         gasLimitStr: gas.toString(),
+        insufficient: insufficient,
       );
     }
 
@@ -120,6 +125,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
       if (toEther(totalGasPrice.toString(), decimals).toDouble() >
           payCoinModel!.balanceDoubleAll()) {
         totalGasPriceColor = AppColorTokens.of(context).danger;
+        insufficient = true;
       }
       return _FeeStrings(
         totalGasPriceStr:
@@ -128,6 +134,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             '${dec.Decimal.parse(toEther(gasPrice.toString(), decimals).toString())} $title',
         totalGasPriceColor: totalGasPriceColor,
         gasLimitStr: gas.toString(),
+        insufficient: insufficient,
       );
     }
 
@@ -145,6 +152,7 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
     required String value,
     Color? valueColor,
     bool topMargin = false,
+    bool showWarningIcon = false,
   }) {
     return Container(
       alignment: Alignment.center,
@@ -161,6 +169,15 @@ class SwapAstMinerFeeWidget extends StatelessWidget {
             ),
           ),
           const Spacer(),
+          // 余额不足不只靠红色：补 error 图标（规范 §5 红线）。
+          if (showWarningIcon) ...[
+            Icon(
+              Icons.error_outline,
+              size: ScreenUtil().setWidth(28),
+              color: valueColor ?? AppColorTokens.of(context).danger,
+            ),
+            SizedBox(width: AppSpacing.space2),
+          ],
           Text(
             value,
             style: AppTypography.bodyStrong.copyWith(
@@ -178,11 +195,13 @@ class _FeeStrings {
   final String gasPriceStr;
   final Color totalGasPriceColor;
   final String? gasLimitStr;
+  final bool insufficient;
 
   const _FeeStrings({
     required this.totalGasPriceStr,
     required this.gasPriceStr,
     required this.totalGasPriceColor,
     this.gasLimitStr,
+    this.insufficient = false,
   });
 }

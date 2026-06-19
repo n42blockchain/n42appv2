@@ -237,6 +237,15 @@ class SwapAstPayWidget extends ConsumerWidget {
 
     return Row(
       children: [
+        // 余额不足不只靠红色传达：补 error 图标（规范 §5 红线）。
+        if (!hasValidInput) ...[
+          Icon(
+            Icons.error_outline,
+            size: ScreenUtil().setWidth(28),
+            color: balanceColor,
+          ),
+          SizedBox(width: AppSpacing.space2),
+        ],
         Flexible(
           child: Text(
             "${S.of(context).g_key_29}:$balanceText",

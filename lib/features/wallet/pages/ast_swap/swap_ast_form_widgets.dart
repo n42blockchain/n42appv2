@@ -64,7 +64,7 @@ class SwapAstPercentWidget extends StatelessWidget {
     final double itemWidth =
         (MediaQuery.of(context).size.width - ScreenUtil().setWidth(60)) / 4;
     return Container(
-      height: ScreenUtil().setWidth(80),
+      height: ScreenUtil().setWidth(88),
       width: double.infinity,
       margin: AppSpacing.pageHorizontal,
       alignment: Alignment.center,
@@ -74,16 +74,21 @@ class SwapAstPercentWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, int index) {
           final int percent = 25 * (4 - index);
-          return InkWell(
-            onTap: () => onPercentTap(percent),
-            child: Container(
-              height: ScreenUtil().setWidth(80),
-              width: itemWidth,
-              alignment: Alignment.center,
-              child: Text(
-                "$percent%",
-                style: AppTypography.body.copyWith(
-                  color: AppColorTokens.of(context).brand,
+          // Material 包裹使按压 splash 在透明背景上可见；高 88.w(=44dp) 满足触控红线。
+          return Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => onPercentTap(percent),
+              borderRadius: AppRadius.brSm,
+              child: Container(
+                height: ScreenUtil().setWidth(88),
+                width: itemWidth,
+                alignment: Alignment.center,
+                child: Text(
+                  "$percent%",
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).brand,
+                  ),
                 ),
               ),
             ),
@@ -114,20 +119,25 @@ class SwapAstCheckWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          InkWell(
-            onTap: onToggle,
-            child: SizedBox(
-              height: ScreenUtil().setWidth(60),
-              width: ScreenUtil().setWidth(60),
-              child: Icon(
-                readStatement
-                    ? Icons.check_box_outlined
-                    : Icons.check_box_outline_blank,
-                color: AppThemeUtils.getColorByKey(
-                  context,
+          // Material + 圆形 splash 让按压可见；触控区抬到 88.w(=44dp) 满足红线。
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onToggle,
+              customBorder: const CircleBorder(),
+              child: SizedBox(
+                height: ScreenUtil().setWidth(88),
+                width: ScreenUtil().setWidth(88),
+                child: Icon(
                   readStatement
-                      ? AppThemeKeys.mainBlueColor.name
-                      : AppThemeKeys.dividerColor.name,
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank,
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    readStatement
+                        ? AppThemeKeys.mainBlueColor.name
+                        : AppThemeKeys.dividerColor.name,
+                  ),
                 ),
               ),
             ),
