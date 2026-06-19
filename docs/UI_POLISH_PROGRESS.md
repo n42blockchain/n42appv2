@@ -31,6 +31,27 @@
 | `profile` / 设置 | ⬜ 待办 | | | |
 | `n42_chat`（独立 repo） | ⬜ 待办 | | | **须在 n42_chat repo 改并发版**；对齐品牌色、消 `isDark?:` 三元、补间距/圆角常量 |
 
+## 2026-06-19 收尾批次（分支 feat/ui-token-migration）
+
+**Phase 1 · 令牌盲区补齐（字阶）完成**。前几轮 codemod 的盲区/长尾清理：
+- **aa 子树**（`wallet/pages/aa/`，全 codemod 盲区）：fontSize→AppTypography + `BorderRadius.circular(N.w)`→AppRadius + 安全间距→AppSpacing（5 文件实改）；身份/会话类型识别色板 + 品牌 accent（含 `0xFFFF9800` 批操作橙，**非 warning**）保留。
+- **字阶长尾**：market(38)、dex_swap+transactions+aa_transaction_preview(25)、dapp_security_badge+loading(4)、send/add_token/batch_transfer/address_book/nft/home/browser/widgets(29) 的裸 `TextStyle(fontSize)`→`AppTypography.<role>.copyWith`（保字重：显式字重原样搬入；role 默认 w500/w600 的正文/提示类补 w400；28+w600→bodyStrong）。
+- **合理保留**：组件参数式 fontSize（`button_widget`/`text_field_widget`/各链自定义输入框/`EnsAddressDisplay`/`buttonStyle3` 的 `fontSize:` 形参）、candlestick 轴标 `fontSize:9`、toast 库参数、market 注释死代码、send 金额大字段 `setWidth(70)`（11 链一致，有意保留）。
+- **待 Phase 4 截图核对**：`wallet/pages/portfolio/` 用反常小字号（10–18.sp，仅及标准一半），映射到 captionSm(20) 近翻倍、可能撑破紧凑行——延后到双主题/130% QA 阶段连同布局一起判断，不盲迁。
+- 全程 `flutter analyze lib` 0 错 0 警；3 个提交（aa+market / dex_swap+tx+widgets / send+add_token+home+browser）。
+
+**Phase 2 · 组件收敛**（2026-06-19）：
+- **tips_dialog → AppDialog**：实查发现**已基本达成**——`tipsDialog1/2/6/7` 已委托 `AppDialog`，`tipsDialog3` 是透明通用宿主（`AlertDialog` 包 child），`tips_dialog_4` 已全令牌化，4 个自定义 child（create_two 助记词 / keystore 密码 / device_login / phishing）均令牌合规。**结论**：强塞安全敏感流程进 AppDialog = 高风险零视觉收益，**不做**；仅清 keystore 动态圆角残留。
+- **重复徽章**：`live` 的 `_OnlineBadge`（live_top_bar + go_live_page 各一份）抽为共享 `OnlineBadge`（`live/presentation/widgets/online_badge.dart`），**保留固定叠层色**（§2.7：叠层徽章不用随主题 AppBadge）。
+- **buttonStyle3 残留（3 处）保留 + 记录理由**：`plans_widget`/`select_plan` 是品牌渐变卡上的白色 CTA 样式标签（卡片本身可点，§2.7 边界不套 AppBadge）；`today_mining` 是 v1（maintenance-only）的 tonal 软按钮，`AppButton` 无 tonal 变体、强转会改视觉身份。
+- **⬜ 输入框收敛（2b）建议延后**：`CommInput` / `textFieldStyle2/3`（20+ 调用）已令牌合规、工作正常、用于密码/keystore/发送等安全敏感流程；收敛纯属去重（非红线），需大改 `AppTextField`（缺 prefix/maxLength/message 双轨/多 action），回归风险高、收益不可见。**待产品/用户决策是否投入**。
+
+**Phase 3 · 可用性/交互态**（2026-06-19，swap 核心红线）：
+- `swap_ast_form_widgets`：百分比快速填充按钮 + 条款复选框 → 包 `Material(transparent)` 使按压 splash 在透明背景可见 + 触控区抬到 88.w(=44dp)（§2.6）。条款链接为内联文本链接（下划线+品牌色 affordance）保留。
+- §5 红线「状态不只靠颜色」：`swap_ast_pay_widget` 余额不足、`swap_ast_miner_fee_widget` 矿工费不足 → 红字旁补 `error_outline` 图标。
+- `swap_ast_transaction_detail` 各状态本已有图标（error/info/check_circle）+ 色，§5 已满足，颜色走主题键解析（重映射有视觉变化风险）保留。
+- **⬜ 延后**：`_MaxButton`/加号按钮按压态（被 ~20 链 send 表单共享、点击经 textFieldStyle2 `rightOnTap1` 契约，改动风险铺全链、收益小）；AppBar 图标触控区。
+
 ## features/live 整改明细（2026-06-01）
 
 **关键设计决策**：直播间叠层组件（top bar / 弹幕 / 侧栏 / 预测卡 / 开播页）永远浮在视频上，是**强制深色语境**——用 `AppColorTokens` 的**固定叠层色**（`overlay` / `onOverlayPrimary` / `brandOnOverlay` 等 static const），不能随 app 主题变（否则亮色主题下叠层文字变黑、视频上不可见）。普通页（直播广场）与模态（下注/开预测/开奖 sheet）用**随主题色**（实例 getter）。
