@@ -52,6 +52,10 @@
 - `swap_ast_transaction_detail` 各状态本已有图标（error/info/check_circle）+ 色，§5 已满足，颜色走主题键解析（重映射有视觉变化风险）保留。
 - **⬜ 延后**：`_MaxButton`/加号按钮按压态（被 ~20 链 send 表单共享、点击经 textFieldStyle2 `rightOnTap1` 契约，改动风险铺全链、收益小）；AppBar 图标触控区。
 
+**全 app 可用性扫描整改**（2026-06-19，Phase 3 扩展）：Explore 子代理全模块扫描「透明 InkWell / 裸 GestureDetector 卡片 / <44dp 触控」，确认 23 处真问题（已排除 Material 子树内的合规 InkWell）。**已整改 18 处**（统一模式 `Material(transparent)+InkWell`，borderRadius 对齐内部圆角，AnimatedContainer 原样作 child）：home 设置（主题色点/预设卡/导航项/邀请码行）、nft 筛选 chip/重试、staking 卡×3、bridge 路由卡、earn 产品/功能卡、browser 标签卡、mining 计划卡/支付选项、gas 方向卡、token 发现横幅。**有意跳过**：`wallet_coin_item`（InkWell 包 Slidable，加 Material 风险高/收益仅 ripple）；各处 <44dp 小图标关闭/pin 按钮（密集工具栏触控区扩大易破坏布局，单独评估）。3 波并行子代理 + 逐目录 analyze。
+
+**portfolio 模块整模块 2× 放大**（2026-06-19）：发现 portfolio 整模块按 ~半比例编写（AppBar 标题 18sp/9dp、正文 10-14sp、图标 32w/16dp，对照 750 设计基准应翻倍），在屏上过小、与全 app 不一致。**均匀 2×**（字号→AppTypography 角色、`.w/.h/.r` 尺寸字面值翻倍）使比例不变、回到设计基准。新增 `test/screenshots/portfolio_overflow_test.dart`：最坏数据（超长 symbol/大金额）行在 360 窄屏双主题断言无 RenderFlex 溢出（6/6 通过；Expanded/ellipsis 兜底有效）。light 截图确认放大后字阶清晰、比例正常。
+
 ## features/live 整改明细（2026-06-01）
 
 **关键设计决策**：直播间叠层组件（top bar / 弹幕 / 侧栏 / 预测卡 / 开播页）永远浮在视频上，是**强制深色语境**——用 `AppColorTokens` 的**固定叠层色**（`overlay` / `onOverlayPrimary` / `brandOnOverlay` 等 static const），不能随 app 主题变（否则亮色主题下叠层文字变黑、视频上不可见）。普通页（直播广场）与模态（下注/开预测/开奖 sheet）用**随主题色**（实例 getter）。
