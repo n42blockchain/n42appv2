@@ -20,7 +20,9 @@ NewsArticle _article({
 void main() {
   group('news and market resilience helpers', () {
     test('CryptoNewsService keeps fallback when RSS body is invalid', () {
-      final fallback = [_article(id: 'cached', url: 'https://cached', minutesAgo: 5)];
+      final fallback = [
+        _article(id: 'cached', url: 'https://cached', minutesAgo: 5),
+      ];
 
       final result = CryptoNewsService.parseRssArticles(
         'not-xml',
@@ -57,6 +59,26 @@ void main() {
       expect(result.first.sourceName, 'Cointelegraph');
     });
 
+    test('CryptoNewsService prefers item source over channel source', () {
+      const rss = '''
+<rss version="2.0">
+  <channel>
+    <title>Aggregated Crypto News</title>
+    <item>
+      <title>BTC update</title>
+      <link>https://example.com/btc</link>
+      <pubDate>Mon, 15 Jun 2026 12:00:00 GMT</pubDate>
+      <source url="https://example.com">Example Wire</source>
+    </item>
+  </channel>
+</rss>''';
+
+      final result = CryptoNewsService.parseRssArticles(rss);
+
+      expect(result, hasLength(1));
+      expect(result.first.sourceName, 'Example Wire');
+    });
+
     test('NewsAggregator deduplicates and sorts newest first', () {
       final older = _article(id: '1', url: 'https://same', minutesAgo: 10);
       final newer = _article(id: '2', url: 'https://same', minutesAgo: 1);
@@ -73,12 +95,14 @@ void main() {
     });
 
     test('NewsAggregator returns fallback when all sources are empty', () {
-      final fallback = [_article(id: 'cached', url: 'https://cached', minutesAgo: 5)];
+      final fallback = [
+        _article(id: 'cached', url: 'https://cached', minutesAgo: 5),
+      ];
 
-      final merged = NewsAggregator.mergeArticles(
-        const [[], []],
-        fallback: fallback,
-      );
+      final merged = NewsAggregator.mergeArticles(const [
+        [],
+        [],
+      ], fallback: fallback);
 
       expect(merged, same(fallback));
     });
@@ -90,10 +114,9 @@ void main() {
         updatedAt: DateTime.now(),
       );
 
-      final result = FearGreedService.parseResponse(
-        {'unexpected': []},
-        fallback: fallback,
-      );
+      final result = FearGreedService.parseResponse({
+        'unexpected': [],
+      }, fallback: fallback);
 
       expect(result, same(fallback));
     });

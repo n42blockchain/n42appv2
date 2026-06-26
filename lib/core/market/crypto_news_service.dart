@@ -7,6 +7,7 @@ import 'dart:io' show HttpDate;
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/market/crypto_news_feeds.dart';
 import 'package:xml/xml.dart' as xml;
 
 // ─── Model ─────────────────────────────────────────────────────────────────
@@ -48,14 +49,11 @@ class NewsArticle {
 /// 历史：原先用 CryptoCompare `min-api.cryptocompare.com/data/v2/news`，
 /// 但该免费端点在被 CoinDesk/Kraken 收购后改为**强制 API key**（返回 401
 /// `API key required` 且 `Data` 退化为空对象），导致 market 新闻长期空白。
-/// 现改用与 `features/news` 同源的公共 RSS（Cointelegraph / Decrypt），
-/// 输出仍是 [NewsArticle]，调用方（market_page / NewsAggregator）无需改动。
+/// 现改用与 `features/news` 同源的多公共 RSS 源并合并结果，输出仍是
+/// [NewsArticle]，调用方（market_page / NewsAggregator）无需改动。
 /// Cache: 15 minutes in memory.
 class CryptoNewsService {
-  static const List<String> _feeds = [
-    'https://cointelegraph.com/rss',
-    'https://decrypt.co/feed',
-  ];
+  static const List<String> _feeds = CryptoNewsFeeds.urls;
 
   static final Dio _dio = Dio(
     BaseOptions(
@@ -94,23 +92,48 @@ class CryptoNewsService {
   }
 
   static Future<List<NewsArticle>> _doFetch() async {
-    for (final url in _feeds) {
-      try {
-        final resp = await _dio.get<String>(url);
-        final body = resp.data;
-        if (body == null || body.isEmpty) continue;
-        final articles = parseRssArticles(body, fallback: _cached ?? const []);
-        if (articles.isNotEmpty) {
-          _cached = articles;
-          _cachedAt = DateTime.now();
-          return articles;
-        }
-      } catch (e) {
-        _debugLog('CryptoNewsService._fetchFeed($url) error: $e');
-      }
+    final results = await Future.wait(_feeds.map(_fetchFeed));
+    final articles = mergeArticles(results);
+    if (articles.isNotEmpty) {
+      _cached = articles;
+      _cachedAt = DateTime.now();
+      return articles;
     }
     // 全部源失败时返回上次成功缓存（哪怕过期），避免 UI 空白。
     return _cached ?? const [];
+  }
+
+  static Future<List<NewsArticle>> _fetchFeed(String url) async {
+    try {
+      final resp = await _dio.get<String>(url);
+      final body = resp.data;
+      if (body == null || body.isEmpty) return const [];
+      return parseRssArticles(body);
+    } catch (e) {
+      _debugLog('CryptoNewsService._fetchFeed($url) error: $e');
+      return const [];
+    }
+  }
+
+  static List<NewsArticle> mergeArticles(
+    List<List<NewsArticle>> results, {
+    List<NewsArticle> fallback = const [],
+  }) {
+    final newestByUrl = <String, NewsArticle>{};
+    for (final list in results) {
+      for (final article in list) {
+        if (article.url.isEmpty) continue;
+        final existing = newestByUrl[article.url];
+        if (existing == null ||
+            article.publishedAt.isAfter(existing.publishedAt)) {
+          newestByUrl[article.url] = article;
+        }
+      }
+    }
+
+    final deduplicated = newestByUrl.values.toList();
+    deduplicated.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
+    return deduplicated.isNotEmpty ? deduplicated.take(80).toList() : fallback;
   }
 
   /// Parse a standard RSS 2.0 feed into [NewsArticle]s. Returns [fallback]
@@ -122,8 +145,10 @@ class CryptoNewsService {
   }) {
     try {
       final doc = xml.XmlDocument.parse(body);
-      final sourceName =
-          _firstText(doc.findAllElements('channel').firstOrNull, 'title');
+      final sourceName = _firstText(
+        doc.findAllElements('channel').firstOrNull,
+        'title',
+      );
       final out = <NewsArticle>[];
       for (final item in doc.findAllElements('item')) {
         final title = _firstText(item, 'title');
@@ -131,15 +156,17 @@ class CryptoNewsService {
         if (title.isEmpty || link.isEmpty) continue;
         final img = _extractImage(item);
         final pub = _firstText(item, 'pubDate');
-        out.add(NewsArticle(
-          id: link,
-          title: title,
-          url: link,
-          imageUrl: img.isNotEmpty ? img : null,
-          sourceName: sourceName.isNotEmpty ? sourceName : 'Crypto News',
-          publishedAt: _parsePubDate(pub),
-          body: _firstText(item, 'description'),
-        ));
+        out.add(
+          NewsArticle(
+            id: link,
+            title: title,
+            url: link,
+            imageUrl: img.isNotEmpty ? img : null,
+            sourceName: _itemSourceName(item, sourceName),
+            publishedAt: _parsePubDate(pub),
+            body: _firstText(item, 'description'),
+          ),
+        );
       }
       return out.isNotEmpty ? out : fallback;
     } catch (e) {
@@ -163,6 +190,12 @@ class CryptoNewsService {
     return el?.innerText.trim() ?? '';
   }
 
+  static String _itemSourceName(xml.XmlElement item, String channelSource) {
+    final itemSource = _firstText(item, 'source');
+    if (itemSource.isNotEmpty) return itemSource;
+    return channelSource.isNotEmpty ? channelSource : 'Crypto News';
+  }
+
   /// RSS 无标准 image 字段，按常见实现优先级提取：
   /// `<media:content>` → `<media:thumbnail>` → image `<enclosure>` →
   /// `<description>` 内第一张 `<img src>`。
@@ -175,7 +208,9 @@ class CryptoNewsService {
     final encl = item.findElements('enclosure').firstOrNull;
     final enclType = encl?.getAttribute('type') ?? '';
     final enclUrl = encl?.getAttribute('url');
-    if (enclUrl != null && enclUrl.isNotEmpty && enclType.startsWith('image/')) {
+    if (enclUrl != null &&
+        enclUrl.isNotEmpty &&
+        enclType.startsWith('image/')) {
       return enclUrl;
     }
     final desc = _firstText(item, 'description');

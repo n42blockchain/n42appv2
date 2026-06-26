@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:n42_wallet/core/market/crypto_news_feeds.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:xml/xml.dart' as xml;
 
@@ -7,10 +8,7 @@ import 'package:xml/xml.dart' as xml;
 /// Returns the legacy `{code:200, data:[{title,image,pubDate,link}]}`
 /// shape so the existing BaseList consumer in NewsPage doesn't change.
 class NewsApi {
-  static const List<String> _feeds = [
-    'https://cointelegraph.com/rss',
-    'https://decrypt.co/feed',
-  ];
+  static const List<String> _feeds = CryptoNewsFeeds.urls;
 
   static final Dio _dio = Dio(
     BaseOptions(
@@ -68,13 +66,12 @@ class NewsApi {
   }
 
   Future<List<Map<String, dynamic>>> _doFetch() async {
-    for (final url in _feeds) {
-      final items = await _fetchFeed(url);
-      if (items.isNotEmpty) {
-        _cached = items;
-        _cachedAt = DateTime.now();
-        return items;
-      }
+    final results = await Future.wait(_feeds.map(_fetchFeed));
+    final items = mergeItems(results);
+    if (items.isNotEmpty) {
+      _cached = items;
+      _cachedAt = DateTime.now();
+      return items;
     }
     // 全部源失败时返回上次成功的缓存（哪怕已过期），避免 UI 空白。
     return _cached ?? const [];
@@ -96,6 +93,21 @@ class NewsApi {
   /// `{title, image, pubDate, link}` schema expected by NewsPage.
   @visibleForTesting
   static List<Map<String, dynamic>> parseRss(String body) => _parseRss(body);
+
+  @visibleForTesting
+  static List<Map<String, dynamic>> mergeItems(
+    List<List<Map<String, dynamic>>> results,
+  ) {
+    final byLink = <String, Map<String, dynamic>>{};
+    for (final list in results) {
+      for (final item in list) {
+        final link = item['link'] as String? ?? '';
+        if (link.isEmpty) continue;
+        byLink.putIfAbsent(link, () => item);
+      }
+    }
+    return byLink.values.take(120).toList();
+  }
 
   static List<Map<String, dynamic>> _parseRss(String body) {
     try {

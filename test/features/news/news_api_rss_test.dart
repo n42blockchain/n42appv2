@@ -98,5 +98,25 @@ void main() {
       expect(items, hasLength(1));
       expect(items[0]['image'], '');
     });
+
+    test('mergeItems 合并多个源并按 link 去重', () {
+      final items = NewsApi.mergeItems([
+        [
+          {'title': 'A', 'link': 'https://example.com/a'},
+          {'title': 'B', 'link': 'https://example.com/b'},
+        ],
+        [
+          {'title': 'A duplicate', 'link': 'https://example.com/a'},
+          {'title': 'C', 'link': 'https://example.com/c'},
+        ],
+      ]);
+
+      expect(items.map((e) => e['link']), [
+        'https://example.com/a',
+        'https://example.com/b',
+        'https://example.com/c',
+      ]);
+      expect(items.first['title'], 'A');
+    });
   });
 }
