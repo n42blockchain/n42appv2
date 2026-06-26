@@ -26,12 +26,9 @@ class NewsAggregator {
     }
 
     try {
-      // Parallel fetch from both sources
-      final results = await Future.wait([
-        CryptoNewsService.fetchLatest(),
-      ]);
+      final results = await Future.wait([CryptoNewsService.fetchLatest()]);
 
-      final merged = mergeArticles(
+      final merged = CryptoNewsService.mergeArticles(
         results,
         fallback: _cache ?? const [],
       );
@@ -46,27 +43,10 @@ class NewsAggregator {
     }
   }
 
-  @visibleForTesting
   static List<NewsArticle> mergeArticles(
     List<List<NewsArticle>> results, {
     List<NewsArticle> fallback = const [],
-  }) {
-    final newestByUrl = <String, NewsArticle>{};
-    for (final list in results) {
-      for (final article in list) {
-        if (article.url.isEmpty) continue;
-        final existing = newestByUrl[article.url];
-        if (existing == null ||
-            article.publishedAt.isAfter(existing.publishedAt)) {
-          newestByUrl[article.url] = article;
-        }
-      }
-    }
-
-    final deduplicated = newestByUrl.values.toList();
-    deduplicated.sort((a, b) => b.publishedAt.compareTo(a.publishedAt));
-    return deduplicated.isNotEmpty ? deduplicated : fallback;
-  }
+  }) => CryptoNewsService.mergeArticles(results, fallback: fallback);
 
   static void _debugLog(String message) {
     if (!kDebugMode) return;
