@@ -285,6 +285,18 @@ class N42ChatConfig {
   /// 是否将 [giphyBaseUrl] 视为代理端点。
   final bool giphyUseProxyEndpoint;
 
+  /// Tenor API Key
+  ///
+  /// Optional fallback GIF provider. Direct mode requires a key; proxy mode can
+  /// use [proxyAuthToken].
+  final String? tenorApiKey;
+
+  /// Tenor API Base URL.
+  final String tenorBaseUrl;
+
+  /// Whether [tenorBaseUrl] points at a proxy endpoint.
+  final bool tenorUseProxyEndpoint;
+
   /// Google Translate API Key
   ///
   /// 用于消息翻译功能。从 Google Cloud Console 获取
@@ -482,6 +494,9 @@ class N42ChatConfig {
     this.giphyApiKey,
     this.giphyBaseUrl = 'https://api.giphy.com/v1/gifs',
     this.giphyUseProxyEndpoint = false,
+    this.tenorApiKey,
+    this.tenorBaseUrl = 'https://tenor.googleapis.com/v2',
+    this.tenorUseProxyEndpoint = false,
     this.googleTranslateApiKey,
     this.googleSpeechApiKey,
     this.azureSpeechApiKey,
@@ -557,6 +572,9 @@ class N42ChatConfig {
     Object? giphyApiKey = _copyWithUndefined,
     String? giphyBaseUrl,
     bool? giphyUseProxyEndpoint,
+    Object? tenorApiKey = _copyWithUndefined,
+    String? tenorBaseUrl,
+    bool? tenorUseProxyEndpoint,
     Object? googleTranslateApiKey = _copyWithUndefined,
     Object? googleSpeechApiKey = _copyWithUndefined,
     Object? azureSpeechApiKey = _copyWithUndefined,
@@ -685,6 +703,13 @@ class N42ChatConfig {
       giphyBaseUrl: giphyBaseUrl ?? this.giphyBaseUrl,
       giphyUseProxyEndpoint:
           giphyUseProxyEndpoint ?? this.giphyUseProxyEndpoint,
+      tenorApiKey: _nullableCopyWithValue<String>(
+        tenorApiKey,
+        this.tenorApiKey,
+      ),
+      tenorBaseUrl: tenorBaseUrl ?? this.tenorBaseUrl,
+      tenorUseProxyEndpoint:
+          tenorUseProxyEndpoint ?? this.tenorUseProxyEndpoint,
       googleTranslateApiKey: _nullableCopyWithValue<String>(
         googleTranslateApiKey,
         this.googleTranslateApiKey,
