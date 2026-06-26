@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/services/recent_address_service.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -32,14 +33,11 @@ Widget buildSendIconBtn(BuildContext context, IconData icon) {
   return Container(
     width: ScreenUtil().setWidth(50.0),
     height: ScreenUtil().setWidth(50.0),
-    padding: EdgeInsets.all(ScreenUtil().setWidth(6.0)),
+    padding: EdgeInsets.all(AppSpacing.space2),
     child: Icon(
       icon,
       size: ScreenUtil().setWidth(38.0),
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainBlueColor.name,
-      ),
+      color: AppColorTokens.of(context).brand,
     ),
   );
 }
@@ -63,13 +61,7 @@ Widget buildUsdEquivalent(
     ),
     child: Text(
       '≈ $usdStr',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(24),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemSubtitleTextColor.name,
-        ),
-      ),
+      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
     ),
   );
 }
@@ -123,10 +115,7 @@ Future<void> showAddressPickerSheet(
   }
 
   final scanAction = onScanQR ?? defaultScanQR;
-  final blueColor = AppThemeUtils.getColorByKey(
-    context,
-    AppThemeKeys.mainBlueColor.name,
-  );
+  final blueColor = AppColorTokens.of(context).brand;
   final divider = Divider(
     height: ScreenUtil().setWidth(1),
     indent: 0,
@@ -156,10 +145,7 @@ Future<void> showAddressPickerSheet(
             Expanded(
               child: Text(
                 label,
-                style: TextStyle(
-                  color: blueColor,
-                  fontSize: ScreenUtil().setSp(30),
-                ),
+                style: AppTypography.body.copyWith(color: blueColor),
               ),
             ),
           ],
@@ -183,7 +169,7 @@ Future<void> showAddressPickerSheet(
           context,
           MaterialPageRoute(
             builder: (_) =>
-                AddressBookList(coinName: coinModel.coin['coinType']),
+                AddressBookList(coinName: coinModel.config.coinType),
           ),
         );
         if (!context.mounted) return;
@@ -220,11 +206,7 @@ Future<void> showAddressPickerSheet(
     divider,
   ];
 
-  sheetBottom(
-    context,
-    S.of(context).g_key_108,
-    Column(children: childs),
-  );
+  sheetBottom(context, S.of(context).g_key_108, Column(children: childs));
 }
 
 /// Recent address quick-select bar above the address input field.
@@ -285,7 +267,7 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
               child: ActionChip(
                 label: Text(
                   label,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+                  style: AppTypography.caption,
                 ),
                 onPressed: () => widget.onSelected(entry.address),
               ),

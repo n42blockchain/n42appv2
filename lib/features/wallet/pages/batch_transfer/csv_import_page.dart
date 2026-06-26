@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 part 'csv_validation.dart';
 part 'csv_format_section.dart';
@@ -50,17 +50,15 @@ class _CsvImportPageState extends State<CsvImportPage>
 
   void _updateStats() {
     final lines = _filterDataLines(_textController.text);
-    final dataLines =
-        lines.isNotEmpty && _isHeaderLine(lines[0])
-            ? lines.skip(1).toList()
-            : lines;
+    final dataLines = lines.isNotEmpty && _isHeaderLine(lines[0])
+        ? lines.skip(1).toList()
+        : lines;
     setState(() => _validLineCount = dataLines.length);
   }
 
   @override
   Widget build(BuildContext context) {
-    final blue = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final blue = AppColorTokens.of(context).brand;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).g_key_batch_import_csv),
@@ -69,7 +67,11 @@ class _CsvImportPageState extends State<CsvImportPage>
             onPressed: _hasContent ? _importData : null,
             child: Text(
               S.of(context).g_key_batch_done,
-              style: TextStyle(color: _hasContent ? blue : Colors.grey),
+              style: TextStyle(
+                color: _hasContent
+                    ? blue
+                    : AppColorTokens.of(context).textTertiary,
+              ),
             ),
           ),
         ],
@@ -85,18 +87,15 @@ class _CsvImportPageState extends State<CsvImportPage>
   }
 
   Widget _buildInputSection() {
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
-    final subText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final subText = AppColorTokens.of(context).textSubtitle;
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
       decoration: BoxDecoration(
         color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: subText.withValues(alpha: 0.2)),
       ),
       child: TextField(
@@ -104,39 +103,35 @@ class _CsvImportPageState extends State<CsvImportPage>
         maxLines: null,
         expands: true,
         textAlignVertical: TextAlignVertical.top,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(24),
+        style: AppTypography.caption.copyWith(
           fontFamily: 'monospace',
           color: mainText,
           height: 1.6,
         ),
         decoration: InputDecoration(
-          hintText: '# Comments start with #\n'
+          hintText:
+              '# Comments start with #\n'
               'address,amount,memo\n'
               '0x1234...5678,1.0,Alice\n'
               '0xabcd...efgh,2.5,Bob',
-          hintStyle: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          hintStyle: AppTypography.caption.copyWith(
             color: subText.withValues(alpha: 0.6),
             height: 1.6,
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+          contentPadding: EdgeInsets.all(AppSpacing.space4),
         ),
       ),
     );
   }
 
   Widget _buildBottomBar() {
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
-    final subText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blue = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final subText = AppColorTokens.of(context).textSubtitle;
+    final blue = AppColorTokens.of(context).brand;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: itemBg,
         boxShadow: [
@@ -156,21 +151,15 @@ class _CsvImportPageState extends State<CsvImportPage>
               children: [
                 Text(
                   'Recipients: $_validLineCount',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subText),
                 ),
                 Text(
                   'Token: ${widget.tokenSymbol}',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subText,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subText),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
 
             Row(
               children: [
@@ -180,7 +169,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                     child: Text(S.of(context).g_key_batch_clear_all),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
@@ -191,7 +180,8 @@ class _CsvImportPageState extends State<CsvImportPage>
                       backgroundColor: blue,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(
-                          vertical: ScreenUtil().setWidth(16)),
+                        vertical: AppSpacing.space4,
+                      ),
                     ),
                     child: Text(
                       'Import $_validLineCount ${S.of(context).g_key_batch_recipients}',
@@ -205,5 +195,4 @@ class _CsvImportPageState extends State<CsvImportPage>
       ),
     );
   }
-
 }

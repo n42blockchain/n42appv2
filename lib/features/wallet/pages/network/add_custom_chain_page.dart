@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Page to add a custom EVM chain.
 ///
@@ -122,24 +123,17 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       appBar: AppBar(
         title: Text(
           'Add Custom Network',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Form(
           key: _formKey,
           child: Column(
@@ -161,17 +155,15 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   SizedBox(
                     height: ScreenUtil().setWidth(88),
                     child: ElevatedButton(
                       onPressed: _lookingUp ? null : _lookupChain,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name,
-                        ),
+                        backgroundColor: AppColorTokens.of(context).brand,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          borderRadius: AppRadius.brMd,
                         ),
                       ),
                       child: _lookingUp
@@ -179,13 +171,13 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                               width: ScreenUtil().setWidth(32),
                               height: ScreenUtil().setWidth(32),
                               child: const CircularProgressIndicator(
-                                strokeWidth: 2, color: Colors.white,
+                                strokeWidth: 2,
+                                color: Colors.white,
                               ),
                             )
                           : Text(
                               'Lookup',
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(26),
+                              style: AppTypography.bodySm.copyWith(
                                 color: Colors.white,
                               ),
                             ),
@@ -194,7 +186,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 ],
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Network Name
               _buildLabel('Network Name'),
@@ -204,7 +196,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // RPC URL + validate
               _buildLabel('RPC URL'),
@@ -221,29 +213,27 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                       },
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(12)),
+                  SizedBox(width: AppSpacing.space4),
                   SizedBox(
                     height: ScreenUtil().setWidth(88),
                     child: ElevatedButton(
                       onPressed: _validateRpc,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: _rpcStatus == 'valid'
-                            ? Colors.green
+                            ? AppColorTokens.of(context).success
                             : _rpcStatus == 'invalid'
-                                ? Colors.red
-                                : AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.itemBgColor.name,
-                                  ),
+                            ? AppColorTokens.of(context).danger
+                            : AppColorTokens.of(context).bgSurface,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+                          borderRadius: AppRadius.brMd,
                         ),
                       ),
                       child: Icon(
                         _rpcStatus == 'valid'
                             ? Icons.check
                             : _rpcStatus == 'invalid'
-                                ? Icons.close
-                                : Icons.wifi,
+                            ? Icons.close
+                            : Icons.wifi,
                         color: _rpcStatus != null ? Colors.white : null,
                         size: ScreenUtil().setWidth(36),
                       ),
@@ -252,7 +242,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 ],
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Currency Symbol
               _buildLabel('Currency Symbol'),
@@ -262,7 +252,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 validator: (v) => (v == null || v.isEmpty) ? 'Required' : null,
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Block Explorer (optional)
               _buildLabel('Block Explorer URL (optional)'),
@@ -271,27 +261,28 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 hint: 'https://explorer.celo.org',
               ),
 
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
 
               // Error
               if (_error != null)
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+                  padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: Colors.red.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    color: AppColorTokens.of(context).danger.withValues(
+                      alpha: 0.1,
+                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     _error!,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
-                      color: Colors.red,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).danger,
                     ),
                   ),
                 ),
 
-              SizedBox(height: ScreenUtil().setWidth(32)),
+              SizedBox(height: AppSpacing.space8),
 
               // Submit
               SizedBox(
@@ -300,19 +291,14 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
                 child: ElevatedButton(
                   onPressed: _loading ? null : _submit,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainBlueColor.name,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                    ),
+                    backgroundColor: AppColorTokens.of(context).brand,
+                    shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                   ),
                   child: _loading
                       ? const CircularProgressIndicator(color: Colors.white)
                       : Text(
                           'Add Network',
-                          style: TextStyle(
-                            fontSize: ScreenUtil().setSp(30),
+                          style: AppTypography.body.copyWith(
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                           ),
@@ -331,12 +317,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w500,
-          color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -352,42 +335,35 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
       controller: controller,
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(28),
-        color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name,
-        ),
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
       ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
-        ),
+        hintStyle: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         filled: true,
-        fillColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name,
-        ),
+        fillColor: AppColorTokens.of(context).bgSurface,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBorderColor.name,
+              context,
+              AppThemeKeys.itemBorderColor.name,
             ),
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           borderSide: BorderSide(
             color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemBorderColor.name,
+              context,
+              AppThemeKeys.itemBorderColor.name,
             ),
           ),
         ),
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(16),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
       ),
     );

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
@@ -63,7 +64,7 @@ class EnsAddressField extends StatefulWidget {
 
   /// ENS 解析状态变化回调
   final void Function(EnsResolveStatus status, EnsResolutionResult? result)?
-      onEnsStatusChanged;
+  onEnsStatusChanged;
 
   const EnsAddressField({
     super.key,
@@ -96,7 +97,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   static const _debounceDelay = Duration(milliseconds: 500);
 
   /// ENS 解析成功颜色
-  static const _successColor = Color(0xFF4CAF50);
+  Color get _successColor => AppColorTokens.of(context).success;
 
   @override
   void initState() {
@@ -141,7 +142,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     // 检查是否是 ENS 名称
     if (EnsService.isEnsName(text)) {
       _updateStatus(EnsResolveStatus.resolving, null);
-      _debounceTimer = Timer(_debounceDelay, () => _resolveEns(text, requestId));
+      _debounceTimer = Timer(
+        _debounceDelay,
+        () => _resolveEns(text, requestId),
+      );
     } else {
       _updateStatus(EnsResolveStatus.idle, null);
       // 验证普通地址
@@ -181,8 +185,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
     if (result.success && result.address != null) {
       // 检查是否自转
-      if (result.address!.toLowerCase() ==
-          widget.senderAddress.toLowerCase()) {
+      if (result.address!.toLowerCase() == widget.senderAddress.toLowerCase()) {
         _updateStatus(
           EnsResolveStatus.failed,
           EnsResolutionResult.failure(S.current.g_key_ens_self_transfer),
@@ -242,8 +245,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     widget.onEnsStatusChanged?.call(status, result);
   }
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
 
   @override
   Widget build(BuildContext context) {
@@ -268,16 +270,12 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
           child: TextField(
             controller: widget.controller,
             focusNode: widget.focusNode,
-            style: TextStyle(
-              fontSize: su.setSp(28),
-              color: mainTextColor,
-            ),
+            style: AppTypography.body.copyWith(color: mainTextColor),
             decoration: InputDecoration(
               labelText: widget.labelText,
               hintText: widget.hintText ?? 'Address or ENS name',
-              hintStyle: TextStyle(
+              hintStyle: AppTypography.bodySm.copyWith(
                 color: subtitleColor,
-                fontSize: su.setSp(26),
               ),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: su.setWidth(16),
@@ -301,11 +299,14 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
 
         // 外部错误信息（父组件传入）
         if (widget.errorText?.isNotEmpty == true)
-          _buildHintText(widget.errorText!, Colors.red),
+          _buildHintText(widget.errorText!, AppColorTokens.of(context).danger),
 
         // ENS 解析失败信息
         if (_status == EnsResolveStatus.failed && _resolveResult?.error != null)
-          _buildHintText(_resolveResult!.error!, Colors.orange),
+          _buildHintText(
+            _resolveResult!.error!,
+            AppColorTokens.of(context).warning,
+          ),
       ],
     );
   }
@@ -317,7 +318,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       case EnsResolveStatus.resolved:
         return _successColor;
       case EnsResolveStatus.failed:
-        return Colors.orange;
+        return AppColorTokens.of(context).warning;
       case EnsResolveStatus.idle:
         return defaultColor.withValues(alpha: 0.3);
     }
@@ -329,7 +330,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
       padding: EdgeInsets.only(top: su.setWidth(8), left: su.setWidth(4)),
       child: Text(
         text,
-        style: TextStyle(fontSize: su.setSp(22), color: color),
+        style: AppTypography.caption.copyWith(color: color),
       ),
     );
   }
@@ -341,23 +342,23 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     final iconSize = su.setWidth(28);
     final Widget indicator = switch (_status) {
       EnsResolveStatus.resolving => SizedBox(
-          width: su.setWidth(24),
-          height: su.setWidth(24),
-          child: CircularProgressIndicator(
-            strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation<Color>(blueColor),
-          ),
+        width: su.setWidth(24),
+        height: su.setWidth(24),
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          valueColor: AlwaysStoppedAnimation<Color>(blueColor),
         ),
+      ),
       EnsResolveStatus.resolved => Icon(
-          Icons.check_circle,
-          color: _successColor,
-          size: iconSize,
-        ),
+        Icons.check_circle,
+        color: _successColor,
+        size: iconSize,
+      ),
       EnsResolveStatus.failed => Icon(
-          Icons.warning_amber_rounded,
-          color: Colors.orange,
-          size: iconSize,
-        ),
+        Icons.warning_amber_rounded,
+        color: AppColorTokens.of(context).warning,
+        size: iconSize,
+      ),
       EnsResolveStatus.idle => const SizedBox.shrink(),
     };
 
@@ -393,9 +394,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
         decoration: BoxDecoration(
           color: _successColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(su.setWidth(8)),
-          border: Border.all(
-            color: _successColor.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: _successColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -411,16 +410,14 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                 children: [
                   Text(
                     S.of(context).g_key_ens_resolved_address,
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: subtitleColor,
                     ),
                   ),
                   SizedBox(height: su.setWidth(2)),
                   Text(
                     shortAddr,
-                    style: TextStyle(
-                      fontSize: su.setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -444,8 +441,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
                 ),
                 child: Text(
                   _resolveResult!.sourceChain!,
-                  style: TextStyle(
-                    fontSize: su.setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),
@@ -481,10 +477,10 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
   }
 
   Widget _verifiedIcon() => Icon(
-        Icons.verified,
-        color: _successColor,
-        size: ScreenUtil().setWidth(24),
-      );
+    Icons.verified,
+    color: _successColor,
+    size: ScreenUtil().setWidth(24),
+  );
 
   void _copyAddress(String address) {
     Clipboard.setData(ClipboardData(text: address));

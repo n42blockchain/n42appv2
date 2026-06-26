@@ -36,8 +36,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       return;
     }
     if (rows.length > 200) {
-      _showSnack(S.of(context).g_key_batch_max_recipients(200),
-          color: Colors.orange);
+      _showSnack(
+        S.of(context).g_key_batch_max_recipients(200),
+        color: AppColorTokens.of(context).warning,
+      );
       return;
     }
 
@@ -51,7 +53,8 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
       if (parts.length < 2) {
         errors.add(
-            '${S.of(context).g_key_batch_invalid_address(lineNum)}: missing fields');
+          '${S.of(context).g_key_batch_invalid_address(lineNum)}: missing fields',
+        );
         continue;
       }
 
@@ -103,14 +106,17 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
   static final _evmAddressRegex = RegExp(r'^0x[a-fA-F0-9]{40}$');
 
   bool _isValidAmount(String amount) {
-    final value = double.tryParse(amount.replaceAll(',', '').replaceAll(' ', ''));
+    final value = double.tryParse(
+      amount.replaceAll(',', '').replaceAll(' ', ''),
+    );
     return value != null && value > 0;
   }
 
   void _clearInput() => _textController.clear();
 
   void _copyTemplate() {
-    const template = '# Batch transfer template\n'
+    const template =
+        '# Batch transfer template\n'
         '# Columns: address, amount, memo(optional)\n'
         'address,amount,memo\n'
         '0x1234567890123456789012345678901234567890,1.5,Payment 1\n'
@@ -149,23 +155,29 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       }
     } catch (e) {
       if (!mounted) return;
-      _showSnack('Failed to read file: $e', color: Colors.red);
+      _showSnack(
+        'Failed to read file: $e',
+        color: AppColorTokens.of(context).danger,
+      );
     }
   }
 
   void _showValidationDialog(
-      int validCount, List<String> errors, String rawContent) {
-    final blue = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    int validCount,
+    List<String> errors,
+    String rawContent,
+  ) {
+    final c = AppColorTokens.of(context);
+    final blue = c.brand;
 
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.warning_amber, color: Colors.orange),
-            SizedBox(width: 8),
-            Text('Validation Issues'),
+            Icon(Icons.warning_amber, color: c.warning),
+            const SizedBox(width: 8),
+            const Text('Validation Issues'),
           ],
         ),
         content: SizedBox(
@@ -177,8 +189,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
               children: [
                 Text('Found $validCount valid, ${errors.length} issue(s).'),
                 const SizedBox(height: 12),
-                const Text('Issues:',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Issues:',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
                 const SizedBox(height: 6),
                 ConstrainedBox(
                   constraints: const BoxConstraints(maxHeight: 180),
@@ -189,8 +203,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                       padding: const EdgeInsets.only(bottom: 4),
                       child: Text(
                         errors[index],
-                        style: const TextStyle(
-                            fontSize: 12, color: Colors.red),
+                        style: AppTypography.caption.copyWith(color: c.danger),
                       ),
                     ),
                   ),
@@ -198,7 +211,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 if (errors.length > 5)
                   Text(
                     '… and ${errors.length - 5} more issues',
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    style: AppTypography.caption.copyWith(color: c.textTertiary),
                   ),
               ],
             ),

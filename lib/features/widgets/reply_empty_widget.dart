@@ -1,5 +1,5 @@
-﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,31 +17,36 @@ class ReplyEmptyWidget extends StatelessWidget {
             child: IntrinsicHeight(
               child: Container(
                 decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemBgColor.name),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(ScreenUtil().setWidth(4)),
-                      topRight: Radius.circular(ScreenUtil().setWidth(16)),
-                      bottomLeft: Radius.circular(ScreenUtil().setWidth(4)),
-                      bottomRight: Radius.circular(ScreenUtil().setWidth(16)),
-                    )),
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(ScreenUtil().setWidth(4)),
+                    topRight: Radius.circular(ScreenUtil().setWidth(16)),
+                    bottomLeft: Radius.circular(ScreenUtil().setWidth(4)),
+                    bottomRight: Radius.circular(ScreenUtil().setWidth(16)),
+                  ),
+                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                          color: Color(0xff104B9E),
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(ScreenUtil().setWidth(4)),
-                              bottomLeft: Radius.circular(ScreenUtil().setWidth(4)))),
+                        color: Color(0xff104B9E),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(ScreenUtil().setWidth(4)),
+                          bottomLeft: Radius.circular(ScreenUtil().setWidth(4)),
+                        ),
+                      ),
                       width: 4,
                     ),
                     Expanded(
-                        child: Padding(
-                          padding:
-                          EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(14), vertical: ScreenUtil().setWidth(14)),
-                          child: _buildMessageView(context),
-                        ))
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space4,
+                        ),
+                        child: _buildMessageView(context),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -59,11 +64,7 @@ class ReplyEmptyWidget extends StatelessWidget {
         Text(
           "[${S.of(context).g_chat_key_67}]",
           maxLines: 2,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
-            fontSize: ScreenUtil().setSp(28),
-          ),
+          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
           overflow: TextOverflow.ellipsis,
         ),
       ],

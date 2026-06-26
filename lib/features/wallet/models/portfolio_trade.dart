@@ -6,12 +6,12 @@
 /// A single buy-trade record stored in the local SQLite database.
 class PortfolioTrade {
   final int? id;
-  final String coinId;      // CoinGecko ID (e.g. 'bitcoin')
-  final String symbol;      // lowercase ticker (e.g. 'btc')
-  final String name;        // display name (e.g. 'Bitcoin')
-  final double quantity;    // amount purchased
+  final String coinId; // CoinGecko ID (e.g. 'bitcoin')
+  final String symbol; // lowercase ticker (e.g. 'btc')
+  final String name; // display name (e.g. 'Bitcoin')
+  final double quantity; // amount purchased
   final double buyPriceUsd; // USD price per coin at purchase
-  final int buyTimeMs;      // epoch milliseconds
+  final int buyTimeMs; // epoch milliseconds
 
   const PortfolioTrade({
     this.id,
@@ -36,17 +36,16 @@ class PortfolioTrade {
   }
 
   Map<String, dynamic> toMapDb() => {
-        if (id != null) 'id': id,
-        'coin_id': coinId,
-        'symbol': symbol,
-        'name': name,
-        'quantity': quantity,
-        'buy_price_usd': buyPriceUsd,
-        'buy_time_ms': buyTimeMs,
-      };
+    if (id != null) 'id': id,
+    'coin_id': coinId,
+    'symbol': symbol,
+    'name': name,
+    'quantity': quantity,
+    'buy_price_usd': buyPriceUsd,
+    'buy_time_ms': buyTimeMs,
+  };
 
-  DateTime get buyTime =>
-      DateTime.fromMillisecondsSinceEpoch(buyTimeMs);
+  DateTime get buyTime => DateTime.fromMillisecondsSinceEpoch(buyTimeMs);
 
   static double _toDouble(dynamic v, [double fallback = 0.0]) {
     if (v is num) return v.toDouble();
@@ -71,8 +70,7 @@ class CoinPnlSummary {
 
   double get avgCost => totalQty > 0 ? totalCost / totalQty : 0.0;
 
-  double pnlUsd(double currentPrice) =>
-      (currentPrice - avgCost) * totalQty;
+  double pnlUsd(double currentPrice) => (currentPrice - avgCost) * totalQty;
 
   double pnlPct(double currentPrice) =>
       avgCost > 0 ? (currentPrice - avgCost) / avgCost * 100 : 0.0;

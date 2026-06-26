@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
@@ -39,10 +40,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   ];
 
   /// TRON methods registered for WalletConnect session handling.
-  static const _tronMethods = [
-    "tron_signTransaction",
-    "tron_signMessage",
-  ];
+  static const _tronMethods = ["tron_signTransaction", "tron_signMessage"];
 
   /// Solana methods registered for WalletConnect session handling.
   static const _solanaMethods = [
@@ -154,7 +152,10 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     try {
       // Log ALL raw incoming relay messages for debugging
       signClient!.core.relayClient.onRelayClientMessage.subscribe((args) {
-        AppLogger.d('WalletConnect', 'relayMessage topic=${args.topic} message=${args.message}');
+        AppLogger.d(
+          'WalletConnect',
+          'relayMessage topic=${args.topic} message=${args.message}',
+        );
       });
       signClient!.core.relayClient.onRelayClientDisconnect.subscribe((_) {
         AppLogger.d('WalletConnect', 'relay disconnected');
@@ -176,7 +177,9 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
   /// Subscribe to session-level WalletKit events (proposal, request, delete, etc.).
   void _subscribeSessionEvents() {
-    signClient!.onSessionProposal.subscribe((wallet_connect.SessionProposalEvent? args) async {
+    signClient!.onSessionProposal.subscribe((
+      wallet_connect.SessionProposalEvent? args,
+    ) async {
       if (args == null) {
         viewStateDeal(WalletConnectState.error, params: "Error");
         return;
@@ -185,10 +188,22 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       metadata = args.params.proposer.metadata;
 
       // Debug: log what the DApp is requesting
-      AppLogger.d('WalletConnect', 'requiredNamespaces: ${args.params.requiredNamespaces}');
-      AppLogger.d('WalletConnect', 'optionalNamespaces: ${args.params.optionalNamespaces}');
-      AppLogger.d('WalletConnect', 'sessionProperties: ${args.params.sessionProperties}');
-      AppLogger.d('WalletConnect', 'proposer metadata: ${args.params.proposer.metadata}');
+      AppLogger.d(
+        'WalletConnect',
+        'requiredNamespaces: ${args.params.requiredNamespaces}',
+      );
+      AppLogger.d(
+        'WalletConnect',
+        'optionalNamespaces: ${args.params.optionalNamespaces}',
+      );
+      AppLogger.d(
+        'WalletConnect',
+        'sessionProperties: ${args.params.sessionProperties}',
+      );
+      AppLogger.d(
+        'WalletConnect',
+        'proposer metadata: ${args.params.proposer.metadata}',
+      );
 
       final resolvedModels = _resolveChains(
         args.params.optionalNamespaces,
@@ -207,8 +222,12 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       final accountsSui = <String>[];
       final accountsNear = <String>[];
       _registerChainHandlers(
-        accounts, accountsTron, accountsSolana,
-        accountsAptos, accountsSui, accountsNear,
+        accounts,
+        accountsTron,
+        accountsSolana,
+        accountsAptos,
+        accountsSui,
+        accountsNear,
       );
 
       namespace = {};
@@ -276,13 +295,21 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       viewStateDeal(WalletConnectState.selectChain);
     });
 
-    signClient!.onSessionRequest.subscribe((wallet_connect.SessionRequestEvent? args) async {
-      AppLogger.d('WalletConnect', 'onSessionRequest: method=${args?.method} chainId=${args?.chainId} params=${args?.params}');
+    signClient!.onSessionRequest.subscribe((
+      wallet_connect.SessionRequestEvent? args,
+    ) async {
+      AppLogger.d(
+        'WalletConnect',
+        'onSessionRequest: method=${args?.method} chainId=${args?.chainId} params=${args?.params}',
+      );
       if (args != null) setActionDataMap(args);
     });
 
     signClient!.onSessionDelete.subscribe((args) async {
-      AppLogger.d('WalletConnect', 'onSessionDelete: topic=${args.topic} dAppTopic=$dAppTopic');
+      AppLogger.d(
+        'WalletConnect',
+        'onSessionDelete: topic=${args.topic} dAppTopic=$dAppTopic',
+      );
       if (disconnectingByUser) return;
       if (dAppTopic != null && dAppTopic == args.topic) {
         final s = wcL10n();
@@ -293,8 +320,13 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       }
     });
 
-    signClient!.onSessionProposalError.subscribe((wallet_connect.SessionProposalErrorEvent? args) async {
-      viewStateDeal(WalletConnectState.error, params: args?.error.message ?? "Error");
+    signClient!.onSessionProposalError.subscribe((
+      wallet_connect.SessionProposalErrorEvent? args,
+    ) async {
+      viewStateDeal(
+        WalletConnectState.error,
+        params: args?.error.message ?? "Error",
+      );
     });
 
     signClient!.onSessionExpire.subscribe((args) async {
@@ -305,16 +337,22 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       }
     });
 
-    signClient!.onProposalExpire.subscribe((wallet_connect.SessionProposalEvent? args) async {
+    signClient!.onProposalExpire.subscribe((
+      wallet_connect.SessionProposalEvent? args,
+    ) async {
       final s = wcL10n();
-      viewStateDeal(WalletConnectState.error,
-          params: s?.g_wc_proposal_timeout ?? 'Connection request timed out');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: s?.g_wc_proposal_timeout ?? 'Connection request timed out',
+      );
     });
   }
 
   // ── Request dispatch ──────────────────────────────────────────────────────
 
-  Future<void> setActionDataMap(wallet_connect.SessionRequestEvent eventData) async {
+  Future<void> setActionDataMap(
+    wallet_connect.SessionRequestEvent eventData,
+  ) async {
     // ── Auto-respond to stateless RPC calls (no UI, no web3 client needed) ──
     // DApps like Uniswap call these immediately after session establishment to
     // validate the connection. Rejecting them causes "connection failed" errors.
@@ -339,11 +377,17 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     }
 
     if (eventData.params == null) {
-      viewStateDeal(WalletConnectState.error, params: 'Invalid request: params is null');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Invalid request: params is null',
+      );
       return;
     }
     if (coinModelsIndex < 0 || coinModelsIndex >= coinModels.length) {
-      viewStateDeal(WalletConnectState.error, params: 'No valid chain selected');
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'No valid chain selected',
+      );
       return;
     }
 
@@ -363,7 +407,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     final initOk = await web3clientInitFromChainId(eventData.chainId);
     if (!initOk) return;
 
-    final networkName = coinModels[coinModelsIndex].coin['name'];
+    final networkName = coinModels[coinModelsIndex].config.name;
 
     switch (eventData.method) {
       // ── Message signing methods ─────────────────────────────────────────
@@ -374,8 +418,11 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
       case "eth_signTypedData_v4":
         final params = (eventData.params! as List).cast<String>();
         if (params.length < 2) {
-          viewStateDeal(WalletConnectState.error,
-              params: 'Invalid ${eventData.method} params: expected 2, got ${params.length}');
+          viewStateDeal(
+            WalletConnectState.error,
+            params:
+                'Invalid ${eventData.method} params: expected 2, got ${params.length}',
+          );
           return;
         }
         // personal_sign: data at [0], address at [1] (reversed from eth_sign)
@@ -409,7 +456,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         final trMap = eventData.params![0] as Map<String, dynamic>;
         actionDataMap = {
           "network": networkName,
-          "coinType": coinModels[coinModelsIndex].coin['coinType'] ?? '',
+          "coinType": coinModels[coinModelsIndex].config.coinType,
           "gas": web3.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",
@@ -443,7 +490,8 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         actionDataMap = _buildMessageData(
           networkName,
           params["address"] as String? ?? '',
-          params["message"] as String? ?? (params["fullMessage"] as String? ?? ''),
+          params["message"] as String? ??
+              (params["fullMessage"] as String? ?? ''),
         );
         viewStateDeal(WalletConnectState.messageSignOK);
 
@@ -455,7 +503,8 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
           "coinType": CoinType.APT.name,
           "from": '',
           "to": '',
-          "data": params["encodedTransaction"] as String? ??
+          "data":
+              params["encodedTransaction"] as String? ??
               (params["transaction"] as String? ?? ''),
           "value": "0",
           "gas": "0",
@@ -481,7 +530,8 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
           "coinType": CoinType.SUI.name,
           "from": '',
           "to": '',
-          "data": params["transactionBlock"] as String? ??
+          "data":
+              params["transactionBlock"] as String? ??
               (params["transaction"] as String? ?? ''),
           "value": "0",
           "gas": "0",
@@ -517,13 +567,23 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   }
 
   /// Parse and dispatch a TRON transaction request.
-  void _parseTronTransaction(wallet_connect.SessionRequestEvent eventData, String networkName) {
+  void _parseTronTransaction(
+    wallet_connect.SessionRequestEvent eventData,
+    String networkName,
+  ) {
     final rawTronParams = eventData.params;
-    if (rawTronParams == null || rawTronParams is! Map || !rawTronParams.containsKey('transaction')) {
-      viewStateDeal(WalletConnectState.error, params: 'Invalid TRON transaction: missing params');
+    if (rawTronParams == null ||
+        rawTronParams is! Map ||
+        !rawTronParams.containsKey('transaction')) {
+      viewStateDeal(
+        WalletConnectState.error,
+        params: 'Invalid TRON transaction: missing params',
+      );
       return;
     }
-    final trMap = Map<String, dynamic>.from(rawTronParams['transaction'] as Map);
+    final trMap = Map<String, dynamic>.from(
+      rawTronParams['transaction'] as Map,
+    );
     final tronInnerTx = trMap['transaction'] as Map<String, dynamic>? ?? {};
     final tronRawData = tronInnerTx['raw_data'] as Map<String, dynamic>? ?? {};
     final tronContractRaw = tronRawData['contract'];
@@ -533,15 +593,19 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     if (tronContractRaw is List && tronContractRaw.isNotEmpty) {
       final item = tronContractRaw[0] as Map<String, dynamic>;
       tronContractType = item['type'] as String? ?? '';
-      tronContractValue = (item['parameter']?['value'] as Map<String, dynamic>?) ?? {};
+      tronContractValue =
+          (item['parameter']?['value'] as Map<String, dynamic>?) ?? {};
     } else if (tronContractRaw is Map<String, dynamic>) {
       tronContractType = tronContractRaw['type'] as String? ?? '';
-      tronContractValue = (tronContractRaw['parameter']?['value'] as Map<String, dynamic>?) ?? {};
+      tronContractValue =
+          (tronContractRaw['parameter']?['value'] as Map<String, dynamic>?) ??
+          {};
     }
 
     final tronOwnerAddr = tronContractValue['owner_address'] as String? ?? '';
     final tronToAddr = tronContractValue['to_address'] as String? ?? '';
-    final tronContractAddr = tronContractValue['contract_address'] as String? ?? '';
+    final tronContractAddr =
+        tronContractValue['contract_address'] as String? ?? '';
     final tronFeeLimit = tronRawData['fee_limit'] as int? ?? 0;
     final isTrc20 = tronContractType == 'TriggerSmartContract';
 
@@ -557,7 +621,11 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   }
 
   /// Build a standard message-sign action data map.
-  Map<String, dynamic> _buildMessageData(String network, String address, String data) {
+  Map<String, dynamic> _buildMessageData(
+    String network,
+    String address,
+    String data,
+  ) {
     return {
       "network": network,
       "from": address,
@@ -596,7 +664,9 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   /// Respond with the list of EVM addresses in the current session.
   void _respondEthAccounts(wallet_connect.SessionRequestEvent eventData) {
     final addrs = coinModels
-        .where((cm) => cm.coin['blockchainType'] == BlockchainType.Ethereum.name)
+        .where(
+          (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
+        )
         .map((cm) => cm.address?.toString())
         .where((a) => a != null && a.isNotEmpty && a != 'null')
         .cast<String>()
@@ -606,7 +676,9 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
   /// Handle wallet_switchEthereumChain: update active chain if supported,
   /// otherwise reject with EIP-1193 error code 4902.
-  void _handleSwitchEthereumChain(wallet_connect.SessionRequestEvent eventData) {
+  void _handleSwitchEthereumChain(
+    wallet_connect.SessionRequestEvent eventData,
+  ) {
     try {
       final params = eventData.params;
       if (params is List && params.isNotEmpty) {
@@ -617,12 +689,12 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
             : int.tryParse(rawId);
         if (requestedId != null) {
           final idx = coinModels.indexWhere((cm) {
-            if (cm.coin['blockchainType'] != BlockchainType.Ethereum.name) {
+            if (cm.config.blockchainType != BlockchainType.Ethereum.name) {
               return false;
             }
-            final id = (cm.isTest
-                    ? cm.coin['chainId_test']
-                    : cm.coin['chainId']) as int?;
+            final id =
+                (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
+                    as int?;
             return id == requestedId;
           });
           if (idx != -1) {
@@ -664,7 +736,10 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         ),
       );
     } catch (e) {
-      AppLogger.w('WalletConnect', 'error responding to ${eventData.method}: $e');
+      AppLogger.w(
+        'WalletConnect',
+        'error responding to ${eventData.method}: $e',
+      );
     }
   }
 
@@ -703,7 +778,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     final seen = <String>{};
 
     void addIfNew(CoinModel cm, {bool prepend = false}) {
-      final key = '${cm.coin['blockchainType']}:${cm.address}';
+      final key = '${cm.config.blockchainType}:${cm.address}';
       if (seen.add(key)) {
         if (prepend) {
           result.insert(0, cm);
@@ -758,14 +833,15 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     bool nearRegistered = false;
     for (int i = coinModels.length - 1; i >= 0; i--) {
       final cm = coinModels[i];
-      final blockchainType = cm.coin['blockchainType'];
+      final blockchainType = cm.config.blockchainType;
 
       if (blockchainType == BlockchainType.Ethereum.name) {
         final rawAddr = cm.address;
         if (rawAddr == null) continue; // Skip chains without a derived address
         final addr = rawAddr.toString();
         if (addr.isEmpty || addr == 'null') continue;
-        final chainId = "eip155:${cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']}";
+        final chainId =
+            "eip155:${cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId']}";
         accounts.add("$chainId:$addr");
         for (final method in _ethMethods) {
           signClient!.registerRequestHandler(chainId: chainId, method: method);
@@ -776,42 +852,66 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         final addr = cm.address.toString();
         accountsTron.add("$tronChainId:$addr");
         for (final method in _tronMethods) {
-          signClient!.registerRequestHandler(chainId: tronChainId, method: method);
+          signClient!.registerRequestHandler(
+            chainId: tronChainId,
+            method: method,
+          );
         }
         signClient!.registerAccount(chainId: tronChainId, accountAddress: addr);
-      } else if (blockchainType == BlockchainType.Solana.name && !solanaRegistered) {
+      } else if (blockchainType == BlockchainType.Solana.name &&
+          !solanaRegistered) {
         const solanaChainId = "solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ";
         final addr = cm.address.toString();
         accountsSolana.add("$solanaChainId:$addr");
         for (final method in _solanaMethods) {
-          signClient!.registerRequestHandler(chainId: solanaChainId, method: method);
+          signClient!.registerRequestHandler(
+            chainId: solanaChainId,
+            method: method,
+          );
         }
-        signClient!.registerAccount(chainId: solanaChainId, accountAddress: addr);
+        signClient!.registerAccount(
+          chainId: solanaChainId,
+          accountAddress: addr,
+        );
         solanaRegistered = true;
-      } else if (blockchainType == BlockchainType.Aptos.name && !aptosRegistered) {
+      } else if (blockchainType == BlockchainType.Aptos.name &&
+          !aptosRegistered) {
         const aptosChainId = "aptos:1";
         final addr = cm.address.toString();
         accountsAptos.add("$aptosChainId:$addr");
         for (final method in _aptosMethods) {
-          signClient!.registerRequestHandler(chainId: aptosChainId, method: method);
+          signClient!.registerRequestHandler(
+            chainId: aptosChainId,
+            method: method,
+          );
         }
-        signClient!.registerAccount(chainId: aptosChainId, accountAddress: addr);
+        signClient!.registerAccount(
+          chainId: aptosChainId,
+          accountAddress: addr,
+        );
         aptosRegistered = true;
       } else if (blockchainType == BlockchainType.Sui.name && !suiRegistered) {
         const suiChainId = "sui:mainnet";
         final addr = cm.address.toString();
         accountsSui.add("$suiChainId:$addr");
         for (final method in _suiMethods) {
-          signClient!.registerRequestHandler(chainId: suiChainId, method: method);
+          signClient!.registerRequestHandler(
+            chainId: suiChainId,
+            method: method,
+          );
         }
         signClient!.registerAccount(chainId: suiChainId, accountAddress: addr);
         suiRegistered = true;
-      } else if (blockchainType == BlockchainType.Near.name && !nearRegistered) {
+      } else if (blockchainType == BlockchainType.Near.name &&
+          !nearRegistered) {
         const nearChainId = "near:mainnet";
         final addr = cm.address.toString();
         accountsNear.add("$nearChainId:$addr");
         for (final method in _nearMethods) {
-          signClient!.registerRequestHandler(chainId: nearChainId, method: method);
+          signClient!.registerRequestHandler(
+            chainId: nearChainId,
+            method: method,
+          );
         }
         signClient!.registerAccount(chainId: nearChainId, accountAddress: addr);
         nearRegistered = true;

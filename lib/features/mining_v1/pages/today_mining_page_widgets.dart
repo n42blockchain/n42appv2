@@ -16,15 +16,12 @@ mixin _WidgetsMixin on _LogicMixin {
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
+                horizontal: AppSpacing.space8,
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: AppColorTokens.of(context).bgSurface,
+                borderRadius: AppRadius.brMd,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,12 +32,8 @@ mixin _WidgetsMixin on _LogicMixin {
                         child: Text(
                           S.of(context).g_mining_key_5,
                           maxLines: 2,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(24),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
                           ),
                         ),
                       ),
@@ -50,31 +43,31 @@ mixin _WidgetsMixin on _LogicMixin {
                         margin: EdgeInsets.only(
                           left: ScreenUtil().setWidth(10),
                         ),
-                        padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+                        padding: EdgeInsets.all(AppSpacing.space2),
                         decoration: BoxDecoration(
                           color: isActive
-                              ? const Color.fromRGBO(50, 215, 75, 0.2)
-                              : const Color.fromRGBO(235, 88, 81, 0.2),
-                          borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(16),
-                          ),
+                              ? AppColorTokens.of(
+                                  context,
+                                ).success.withValues(alpha: 0.2)
+                              : AppColorTokens.of(
+                                  context,
+                                ).danger.withValues(alpha: 0.2),
+                          borderRadius: AppRadius.brMd,
                         ),
                         child: Container(
                           height: ScreenUtil().setWidth(16),
                           width: ScreenUtil().setWidth(16),
                           decoration: BoxDecoration(
                             color: isActive
-                                ? const Color(0xff32D74B)
-                                : const Color(0xffEB5851),
-                            borderRadius: BorderRadius.circular(
-                              ScreenUtil().setWidth(16),
-                            ),
+                                ? AppColorTokens.of(context).success
+                                : AppColorTokens.of(context).danger,
+                            borderRadius: AppRadius.brMd,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -84,12 +77,8 @@ mixin _WidgetsMixin on _LogicMixin {
                               ? S.current.g_key_193
                               : S.current.g_mining_key_47,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(32),
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textItem,
                           ),
                         ),
                       ),
@@ -141,15 +130,12 @@ mixin _WidgetsMixin on _LogicMixin {
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30),
+                horizontal: AppSpacing.space8,
                 vertical: ScreenUtil().setWidth(26),
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                color: AppColorTokens.of(context).bgSurface,
+                borderRadius: AppRadius.brMd,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,25 +143,17 @@ mixin _WidgetsMixin on _LogicMixin {
                 children: [
                   Text(
                     S.of(context).g_mining_key38,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(30)),
+                  SizedBox(height: AppSpacing.space8),
                   Text(
                     mpValue.miningType == null
                         ? "0 ${CoinType.N.name}"
                         : '$currDepositsOfValue ${CoinType.N.name}',
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemTextColor.name,
-                      ),
-                      fontSize: ScreenUtil().setSp(32),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textItem,
                     ),
                   ),
                 ],
@@ -190,15 +168,12 @@ mixin _WidgetsMixin on _LogicMixin {
   Widget dayMiningTimeWidget(MiningProvider mpValue) {
     return Container(
       padding: EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(18),
-        horizontal: ScreenUtil().setWidth(30),
+        vertical: AppSpacing.space4,
+        horizontal: AppSpacing.space8,
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -211,16 +186,12 @@ mixin _WidgetsMixin on _LogicMixin {
             flex: 1,
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
+                horizontal: AppSpacing.space4,
               ),
               child: Text(
                 S.of(context).g_mining_key_8,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemTextColor.name,
-                  ),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).textItem,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -237,18 +208,12 @@ mixin _WidgetsMixin on _LogicMixin {
   }
 
   Widget showTimeWidget(String hh, String mm, String ss) {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     final borderColor = AppThemeUtils.getColorByKey(
       context,
       AppThemeKeys.timeBorderColor.name,
     );
-    final textStyle = TextStyle(
-      color: blueColor,
-      fontSize: ScreenUtil().setSp(26),
-    );
+    final textStyle = AppTypography.bodySm.copyWith(color: blueColor);
 
     Widget timeBox(String value) {
       return Container(
@@ -256,14 +221,14 @@ mixin _WidgetsMixin on _LogicMixin {
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: borderColor),
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.all(AppSpacing.space2),
         child: Text(value, style: textStyle),
       );
     }
 
     Widget separator() {
       return Padding(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         child: Text(":", style: textStyle),
       );
     }
@@ -290,11 +255,8 @@ mixin _WidgetsMixin on _LogicMixin {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
         ),
         padding: EdgeInsets.fromLTRB(
           ScreenUtil().setWidth(30),
@@ -314,12 +276,11 @@ mixin _WidgetsMixin on _LogicMixin {
                     child: Text(
                       titleText,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.ff888888.name,
                         ),
-                        fontSize: ScreenUtil().setSp(22),
                       ),
                     ),
                   ),
@@ -342,26 +303,19 @@ mixin _WidgetsMixin on _LogicMixin {
                           borderRadius: BorderRadius.circular(
                             ScreenUtil().setWidth(50),
                           ),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemBgColor.name,
-                          ),
+                          color: AppColorTokens.of(context).bgSurface,
                         ),
                         margin: EdgeInsets.symmetric(
                           horizontal: ScreenUtil().setWidth(100),
                         ),
                         padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(28),
-                          vertical: ScreenUtil().setWidth(30),
+                          horizontal: AppSpacing.space8,
+                          vertical: AppSpacing.space8,
                         ),
                         child: Text(
                           tipsText ?? '',
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(24),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
                           ),
                         ),
                       ),
@@ -374,12 +328,8 @@ mixin _WidgetsMixin on _LogicMixin {
               children: [
                 Text(
                   value,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
                 Image.asset(

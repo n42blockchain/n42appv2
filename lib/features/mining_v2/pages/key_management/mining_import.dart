@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -9,7 +9,7 @@ import 'package:n42_wallet/features/mining_v2/pages/key_management/file_import.d
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
@@ -23,7 +23,8 @@ class MiningImport extends ConsumerStatefulWidget {
 }
 
 class _MiningImportState extends ConsumerState<MiningImport> {
-  final TextEditingController _encryptedDataController = TextEditingController();
+  final TextEditingController _encryptedDataController =
+      TextEditingController();
   final FocusNode _encryptedDataFocusNode = FocusNode();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
@@ -42,6 +43,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     super.initState();
     //_encryptedDataController.text='{"version":"1","timestamp":"2026-01-06T06:17:27.242127Z","kdf":{"name":"pbkdf2","params":{"iterations":150000,"dklen":32},"salt":"tsYiFXiXMvEYZooGWPgttA=="},"cipher":{"name":"aes-256-gcm","iv":"bS/oYySmQN06y8V6"},"ciphertext":"QTdTjLDB50YcTW+rBObQoKDBlvTYBIv6lNR4TgdHdSI4Mq4yvsrcgBgyIDCsTkMMthpz3QHO21yplLBtZQcz6K60arMrTWV0AkREiDxw3bH6/dsa5l+qTV7ridijom8dwSUGKSMYLEYzRAwSdx2L7HPoG8ImvQZZiwhm+sTzmLQ/TH47zpS7UzeMVrKLCmh2tTxuPzR0DO7LmQvLRz8JlaX29mvLmeIEKpLTTne9pC8QAySjc7LutjsBPSEekxRYUFTGNhykkn4ahAMZjbiFGVJTyvnly4VDPDA4BfILW+444HmQrVuy+BJX6z4g69r62HsFGic5TmwhVo66/Eh6PFLqR+OXsae7WfKezozrmCJsWrsVeyozu53kRK9rWFUMaZgDKX60ymzx4TyM1O4zCDCv1sN/luS3xinOtkm3wqMR79C4Xx5tMo3I46ODrUArrb8RRAOBHZbEewX3RynDfnqgnMY++q7NA0is","tag":"4UX62Xy5HPal1AtekQFQIQ=="}';
   }
+
   @override
   void dispose() {
     _encryptedDataController.dispose();
@@ -73,7 +75,8 @@ class _MiningImportState extends ConsumerState<MiningImport> {
 
       bool isMining = true;
       final bvRmm = await MiningApi.init().getBeaconValidator(
-          secretMap['validator']['publicKey']);
+        secretMap['validator']['publicKey'],
+      );
       if (bvRmm.error == false) {
         final eTimestamp = bvRmm.data?['exit_timestamp'] ?? 0;
         if (eTimestamp != 0) isMining = false;
@@ -81,7 +84,8 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       secretMap['isMining'] = isMining;
 
       if (!mounted) return;
-      final rmm = await ref.read(miningBridgeProvider)
+      final rmm = await ref
+          .read(miningBridgeProvider)
           .setMiningDataImport(secretMap, password);
       if (!mounted) return;
 
@@ -189,14 +193,13 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       }
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_mining_key_82,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_mining_key_82),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -223,19 +226,13 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   Widget _buildTitleWidget(String title, {Widget? rightWidget}) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
           Expanded(
             child: Text(
               title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
           ?rightWidget,
@@ -252,7 +249,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
           text: S.of(context).g_key_166,
           onTap: _pasteFromClipboard,
         ),
-        SizedBox(width: ScreenUtil().setWidth(20)),
+        SizedBox(width: AppSpacing.space4),
         _buildActionButton(
           text: S.of(context).g_mining_key_111,
           onTap: _importFromFile,
@@ -269,16 +266,10 @@ class _MiningImportState extends ConsumerState<MiningImport> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         child: Text(
           text,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(32),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
-          ),
+          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
         ),
       ),
     );
@@ -324,7 +315,7 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         child: Image.asset(
           'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
           width: ScreenUtil().setWidth(34.0),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         ),
       ),
       rightOnTap1: () => setState(() => obscure = !obscure),
@@ -334,25 +325,21 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   /// 构建错误信息显示
   Widget _buildErrorMessage() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(_fieldSpacing)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(
+        vertical: ScreenUtil().setWidth(_fieldSpacing),
+      ),
+      padding: EdgeInsets.all(AppSpacing.space4),
       width: double.infinity,
       decoration: BoxDecoration(
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Text(
         _errorMessage,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
-          fontSize: ScreenUtil().setSp(28),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }
@@ -360,28 +347,19 @@ class _MiningImportState extends ConsumerState<MiningImport> {
   /// 构建导入按钮
   Widget _buildImportButton() {
     final isLoading = _load == Load.loading;
-    return SafeArea(child: Container(
-      height: ScreenUtil().setWidth(88),
-      width: double.infinity,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-      child: buttonStyle6(
-        context,
-        _importPrivateKey,
-        isLoading ? S.of(context).g_mining_key_113 : S.of(context).g_token_m_key_9,
-        AppThemeUtils.getColorByKey(
-          context,
-          isLoading
-              ? AppThemeKeys.mainButtonBgColor3.name
-              : AppThemeKeys.mainButtonBgColor.name,
+    return SafeArea(
+      child: Container(
+        height: ScreenUtil().setWidth(88),
+        width: double.infinity,
+        margin: EdgeInsets.all(AppSpacing.space8),
+        child: AppButton(
+          label: isLoading
+              ? S.of(context).g_mining_key_113
+              : S.of(context).g_token_m_key_9,
+          loading: isLoading,
+          onPressed: _importPrivateKey,
         ),
-        AppThemeUtils.getColorByKey(
-          context,
-          isLoading
-              ? AppThemeKeys.mainButtonTextColor3.name
-              : AppThemeKeys.mainButtonTextColor.name,
-        ),
-        isLoading,
       ),
-    ));
+    );
   }
 }

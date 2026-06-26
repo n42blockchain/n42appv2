@@ -1,7 +1,6 @@
 part of 'create_finish.dart';
 
 mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
-
   // 以下字段由 _CreateFinishState 声明，mixin 通过 abstract getter 访问
   Load get load;
   bool get exportKeystore;
@@ -11,21 +10,19 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   bool get _isImport =>
       widget.createMetod == "Import" || widget.createMetod == "PrivateKey";
 
-  Color _themeColor(String key) =>
-      AppThemeUtils.getColorByKey(context, key);
+  Color _themeColor(String key) => AppThemeUtils.getColorByKey(context, key);
   Widget _titleText(String text, {TextAlign? textAlign}) {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(56.0),
+        style: AppTypography.displayLg.copyWith(
           color: _themeColor(AppThemeKeys.mainTextColor.name),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         textAlign: textAlign,
       ),
@@ -36,15 +33,14 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
     return Container(
       alignment: Alignment.center,
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Text(
         text,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(32.0),
+        style: AppTypography.headline.copyWith(
           color: _themeColor(colorKey ?? AppThemeKeys.mainTextColor6.name),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         textAlign: textAlign ?? TextAlign.center,
       ),
@@ -61,8 +57,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(60.0)),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28.0),
+          style: AppTypography.body.copyWith(
             color: blueColor,
             decoration: TextDecoration.underline,
             decorationColor: blueColor,
@@ -88,10 +83,10 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
             Divider(height: 1, indent: 0, endIndent: 0),
             Container(
               height: ScreenUtil().setWidth(148.0),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               width: double.infinity,
               color: _themeColor(AppThemeKeys.backGroundColor.name),
-              child: buttonStyle2(context, onPressed, buttonLabel),
+              child: AppButton(label: buttonLabel, onPressed: onPressed),
             ),
             ?linkButton,
           ],
@@ -120,7 +115,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
 
     final dotCount = _isImport ? 2 : 4;
     final dotWidth = _isImport ? 144.0 : 88.0;
-    final gap = SizedBox(width: ScreenUtil().setWidth(20.0));
+    final gap = SizedBox(width: AppSpacing.space4);
 
     return Container(
       alignment: Alignment.center,
@@ -139,14 +134,16 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(width),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+        borderRadius: AppRadius.brSm,
         color: _themeColor(AppThemeKeys.mainBlueColor.name),
       ),
     );
   }
 
   Widget _visibleLayer(bool visible, Widget child) {
-    return Positioned.fill(child: Visibility(visible: visible, child: child));
+    return Positioned.fill(
+      child: Visibility(visible: visible, child: child),
+    );
   }
 
   Widget _buildMainContent() {
@@ -157,16 +154,15 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
           Column(
             children: [
               Container(
-                margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                margin: EdgeInsets.all(AppSpacing.space8),
                 alignment: Alignment.center,
                 child: Text(
                   _isImport
                       ? S.of(context).g_key_wallet_c13
                       : S.of(context).g_key_wallet_c14,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(40.0),
+                  style: AppTypography.titleLg.copyWith(
                     color: _themeColor(AppThemeKeys.mainTextColor.name),
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -204,10 +200,8 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
           ),
         _bottomButtonBar(
           buttonLabel: S.of(context).g_key_wallet_c17,
-          onPressed: () => Navigator.popUntil(
-            context,
-            ModalRoute.withName(pageName),
-          ),
+          onPressed: () =>
+              Navigator.popUntil(context, ModalRoute.withName(pageName)),
           linkButton: widget.createMetod == "Create"
               ? _bottomLinkButton(
                   S.of(context).g_key_wallet_c24,
@@ -227,7 +221,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
         Container(
           height: ScreenUtil().setWidth(160.0),
           width: ScreenUtil().setWidth(160.0),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           decoration: BoxDecoration(
             color: _themeColor(AppThemeKeys.mainButtonBgColor3.name),
             borderRadius: BorderRadius.circular(ScreenUtil().setWidth(80.0)),
@@ -252,9 +246,7 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
                     width: ScreenUtil().setWidth(48.0),
                     decoration: BoxDecoration(
                       color: _themeColor(AppThemeKeys.backGroundColor.name),
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(24.0),
-                      ),
+                      borderRadius: AppRadius.brLg,
                     ),
                     alignment: Alignment.center,
                     child: Image.asset(
@@ -307,10 +299,9 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
   }
 
   Widget _buildExportKeystoreContent() {
-    final hintStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(32.0),
+    final hintStyle = AppTypography.headline.copyWith(
       color: _themeColor(AppThemeKeys.mainTextColor7.name),
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
     final s = S.of(context);
 
@@ -327,18 +318,25 @@ mixin _CreateFinishContentMixin on ConsumerState<CreateFinish> {
               Container(
                 alignment: Alignment.center,
                 margin: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
-                  vertical: ScreenUtil().setWidth(20.0),
+                  horizontal: AppSpacing.space8,
+                  vertical: AppSpacing.space4,
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [s.g_key_wallet_c27, s.g_key_wallet_c28, s.g_key_wallet_c29]
-                      .map((text) => Text(
-                            text,
-                            style: hintStyle,
-                            textAlign: TextAlign.center,
-                          ))
-                      .toList(),
+                  children:
+                      [
+                            s.g_key_wallet_c27,
+                            s.g_key_wallet_c28,
+                            s.g_key_wallet_c29,
+                          ]
+                          .map(
+                            (text) => Text(
+                              text,
+                              style: hintStyle,
+                              textAlign: TextAlign.center,
+                            ),
+                          )
+                          .toList(),
                 ),
               ),
               SizedBox(height: ScreenUtil().setWidth(248)),

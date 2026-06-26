@@ -1,7 +1,7 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class NLevelWidget extends StatelessWidget {
@@ -12,22 +12,24 @@ class NLevelWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        boxShadow: isDark ? null : [
-          BoxShadow(
-            color: Colors.black.withValues(alpha:0.04),
-            blurRadius: 16,
-            offset: const Offset(0, 4),
-          ),
-        ],
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        boxShadow: isDark
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 16,
+                  offset: const Offset(0, 4),
+                ),
+              ],
         border: Border.all(
-          color: isDark 
-              ? Colors.white.withValues(alpha:0.06) 
-              : Colors.black.withValues(alpha:0.04),
+          color: isDark
+              ? Colors.white.withValues(alpha: 0.06)
+              : Colors.black.withValues(alpha: 0.04),
           width: 1,
         ),
       ),
@@ -39,8 +41,8 @@ class NLevelWidget extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.6),
+                  AppColorTokens.of(context).brand,
+                  AppColorTokens.of(context).brand.withValues(alpha: 0.6),
                 ],
                 begin: Alignment.centerLeft,
                 end: Alignment.centerRight,
@@ -52,7 +54,7 @@ class NLevelWidget extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             child: _buildBoard(context),
           ),
         ],
@@ -63,7 +65,7 @@ class NLevelWidget extends StatelessWidget {
   Widget _buildBoard(BuildContext context) {
     const String bigImage = "assets/mining/ast_50.png";
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -73,21 +75,18 @@ class NLevelWidget extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: [
-                const Color(0xFF4FACFE).withValues(alpha:0.12),
-                const Color(0xFF00F2FE).withValues(alpha:0.08),
+                const Color(0xFF4FACFE).withValues(alpha: 0.12),
+                const Color(0xFF00F2FE).withValues(alpha: 0.08),
               ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+            borderRadius: AppRadius.brMd,
           ),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
-          child: Image.asset(
-            bigImage,
-            fit: BoxFit.contain,
-          ),
+          padding: EdgeInsets.all(AppSpacing.space4),
+          child: Image.asset(bigImage, fit: BoxFit.contain),
         ),
-        SizedBox(width: ScreenUtil().setWidth(24)),
+        SizedBox(width: AppSpacing.space6),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,38 +98,36 @@ class NLevelWidget extends StatelessWidget {
                 children: [
                   Text(
                     "$nNum",
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(72),
-                      fontWeight: FontWeight.w700,
-                      height: 1.0,
+                    style: AppTypography.displayXl.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(6)),
+                  SizedBox(width: AppSpacing.space2),
                   Padding(
                     padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(4)),
                     child: Text(
                       CoinType.N.name,
-                      style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
                         fontWeight: FontWeight.w600,
-                        fontSize: ScreenUtil().setSp(24),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(14),
-                  vertical: ScreenUtil().setWidth(10),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
-                  color: isDark 
-                      ? Colors.white.withValues(alpha:0.06)
-                      : AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.06),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.06)
+                      : AppColorTokens.of(
+                          context,
+                        ).brand.withValues(alpha: 0.06),
+                  borderRadius: AppRadius.brSm,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -139,8 +136,8 @@ class NLevelWidget extends StatelessWidget {
                       width: ScreenUtil().setWidth(26),
                       height: ScreenUtil().setWidth(26),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+                        color: AppColorTokens.of(context).brand,
+                        borderRadius: AppRadius.brSm,
                       ),
                       child: Center(
                         child: Image.asset(
@@ -150,23 +147,21 @@ class NLevelWidget extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             S.of(context).g_mining_unlock_period,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-                              fontSize: ScreenUtil().setSp(18),
+                            style: AppTypography.captionSm.copyWith(
+                              color: AppColorTokens.of(context).textSubtitle,
                             ),
                           ),
                           Text(
                             S.of(context).g_mining_unlockable_anytime,
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                              fontSize: ScreenUtil().setSp(20),
+                            style: AppTypography.captionSm.copyWith(
+                              color: AppColorTokens.of(context).textPrimary,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

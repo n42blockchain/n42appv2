@@ -46,10 +46,10 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   };
 
   Future<void> initData() async {
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != widget.coinModel.coin['coinType']) {
+        if (element.config.coinType != widget.coinModel.config.coinType) {
           return false;
         }
         if (widget.coinModel.privateKey != null) {
@@ -58,14 +58,16 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
         return true;
       });
       chainModel = wap.coinModels[cIndex];
-      if (chainModel != null) await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      if (chainModel != null) {
+        await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      }
       if (!mounted) return;
       setState(() {});
     }
     gas = BigInt.from(
       getCoinGas(
-        widget.coinModel.coin['coinType'],
-        contract: widget.coinModel.coin['isContract'],
+        widget.coinModel.config.coinType,
+        contract: widget.coinModel.config.isContract,
       ),
     );
     await getBalance();
@@ -81,7 +83,11 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     setState(() {
       load = Load.loading;
     });
-    final bool isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final bool isOk = await fetchCoinBalance(
+      widget.coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (!isOk) {
       load = Load.finish;
@@ -110,8 +116,8 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     final TokenViewApi tokenViewApi = TokenViewApi();
     final MessageModel mm =
         await tokenViewApi.getGasPrice(
-          widget.coinModel.coin['blockchainType'],
-          widget.coinModel.coin['coinType'],
+          widget.coinModel.config.blockchainType,
+          widget.coinModel.config.coinType,
           isTest: widget.coinModel.isTest,
         ) ??
         MessageModel.error();
@@ -176,7 +182,7 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
       addr = addrList[1];
     }
     final bool valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return null;
@@ -290,11 +296,11 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     trModel.to1 = toAddr;
     trModel.addrType = widget.coinModel.addrType;
     trModel.coin = widget.coinModel.coin;
-    trModel.coinMiniName = widget.coinModel.coin['coinType'];
+    trModel.coinMiniName = widget.coinModel.config.coinType;
     trModel.walletIndex = ref.read(wapBridgeProvider).walletIndex;
     trModel.contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     trModel.isTest = widget.coinModel.isTest ? 1 : 0;
     trModel.gasPrice = totalGasPrice;
     trModel.gas = gas.toInt();
@@ -316,31 +322,35 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     try {
       const coinType = 'XRP';
       final addrType = widget.coinModel.addrType;
-      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final baseInfo =
+          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
       final basePath = pathMap?[addrType]?.toString() ?? "m/44'/144'/0'/0/0";
       final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
-      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 6;
+      final decimals =
+          (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 6;
       final destTag = (trModel.other as RippleTrModel?)?.destinationTag;
 
-      final result = await SenderFactory.instance.getSender(coinType).send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), decimals).toDouble(),
-          decimals: decimals,
-          path: path,
-          sendMax: false,
-          isTest: widget.coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: 0,
-          memo: trModel.message,
-          privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
-          destinationTag: destTag,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), decimals).toDouble(),
+              decimals: decimals,
+              path: path,
+              sendMax: false,
+              isTest: widget.coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: 0,
+              memo: trModel.message,
+              privateKey: widget.coinModel.privateKey,
+              chainConfig: widget.coinModel.coin,
+              destinationTag: destTag,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {
@@ -348,7 +358,10 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(coinType, toTextEditingController.text.trim());
+        await RecentAddressService.save(
+          coinType,
+          toTextEditingController.text.trim(),
+        );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;
@@ -367,15 +380,15 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
   }
 
   bool signTxCheck() {
-    if (widget.coinModel.coin['blockchainType'] !=
+    if (widget.coinModel.config.blockchainType !=
         BlockchainType.Ethereum.name) {
       return true;
     }
-    if (!widget.coinModel.coin['isContract']) return true;
+    if (!widget.coinModel.config.isContract) return true;
 
     final BigInt chainBalance = chainModel?.balance ?? BigInt.zero;
     if (chainBalance == BigInt.zero || totalGasPrice > chainBalance) {
-      ToastUtils.show(S.current.g_key_t_29(chainModel?.coin['coinType'] ?? ""));
+      ToastUtils.show(S.current.g_key_t_29(chainModel?.config.coinType ?? ""));
       return false;
     }
     return true;

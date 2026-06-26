@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -64,35 +65,34 @@ class EnsSearchResultView extends StatelessWidget {
   }
 
   Widget _buildInitialState(BuildContext context) {
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         children: [
-          SizedBox(height: ScreenUtil().setWidth(60)),
+          SizedBox(height: AppSpacing.space16),
           Icon(
             Icons.search_rounded,
             size: ScreenUtil().setWidth(80),
             color: subtitleColor.withAlpha(80),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_search_prompt,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: subtitleColor,
-            ),
+            style: AppTypography.body.copyWith(color: subtitleColor),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_min_length,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: subtitleColor.withAlpha(150),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(40)),
+          SizedBox(height: AppSpacing.space12),
           _buildSuggestions(context),
         ],
       ),
@@ -101,7 +101,14 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildSuggestions(BuildContext context) {
     // Web3 / N42 ecosystem oriented suggestions as search starters
-    final suggestions = ['n42user', 'web3', 'builder', 'trader', 'hodler', 'degen'];
+    final suggestions = [
+      'n42user',
+      'web3',
+      'builder',
+      'trader',
+      'hodler',
+      'degen',
+    ];
     final blueColor = _themeColor(context, AppThemeKeys.mainBlueColor.name);
 
     return Column(
@@ -109,13 +116,12 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           S.of(context).g_key_ens_suggestions,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Wrap(
           spacing: ScreenUtil().setWidth(12),
           runSpacing: ScreenUtil().setWidth(12),
@@ -124,20 +130,17 @@ class EnsSearchResultView extends StatelessWidget {
               onTap: () => onSuggestionTap(name),
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(10),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: _themeColor(context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: AppRadius.brMd,
                   border: Border.all(color: blueColor.withAlpha(30)),
                 ),
                 child: Text(
                   '$name.eth',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: blueColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: blueColor),
                 ),
               ),
             );
@@ -153,12 +156,14 @@ class EnsSearchResultView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_checking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: _themeColor(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
           ),
         ],
@@ -174,18 +179,20 @@ class EnsSearchResultView extends StatelessWidget {
           Icon(
             Icons.error_outline,
             size: ScreenUtil().setWidth(64),
-            color: Colors.red,
+            color: AppColorTokens.of(context).danger,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             availabilityResult!.error!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: _themeColor(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           ElevatedButton(
             onPressed: onRetry,
             child: Text(S.of(context).g_swap_key_6),
@@ -197,35 +204,35 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildAvailableState(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildAvailabilityCard(context, isAvailable: true),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _buildYearsSelector(context),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           if (isLoadingPrice)
             const Center(child: CircularProgressIndicator())
           else if (priceInfo != null)
             EnsPriceCard(price: priceInfo!),
-          SizedBox(height: ScreenUtil().setWidth(32)),
+          SizedBox(height: AppSpacing.space8),
           ElevatedButton(
             onPressed: onRegisterTap,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _themeColor(context, AppThemeKeys.mainBlueColor.name),
-              foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+              backgroundColor: _themeColor(
+                context,
+                AppThemeKeys.mainBlueColor.name,
               ),
+              foregroundColor: Colors.white,
+              padding: EdgeInsets.symmetric(
+                vertical: AppSpacing.space4,
+              ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(
               S.of(context).g_key_ens_register_now,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -235,21 +242,23 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildUnavailableState(BuildContext context) {
     return SingleChildScrollView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           _buildAvailabilityCard(context, isAvailable: false),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           if (availabilityResult!.ownerAddress != null ||
               availabilityResult!.expiresAt != null)
             _buildUnavailableDetails(context),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_try_another,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.bodySm.copyWith(
+              color: _themeColor(
+                context,
+                AppThemeKeys.itemSubtitleTextColor.name,
+              ),
             ),
             textAlign: TextAlign.center,
           ),
@@ -258,13 +267,17 @@ class EnsSearchResultView extends StatelessWidget {
     );
   }
 
-  Widget _buildAvailabilityCard(BuildContext context, {required bool isAvailable}) {
-    final statusColor = isAvailable ? Colors.green : Colors.red;
+  Widget _buildAvailabilityCard(
+    BuildContext context, {
+    required bool isAvailable,
+  }) {
+    final c = AppColorTokens.of(context);
+    final statusColor = isAvailable ? c.success : c.danger;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: statusColor.withAlpha(50)),
       ),
       child: Row(
@@ -274,26 +287,27 @@ class EnsSearchResultView extends StatelessWidget {
             size: ScreenUtil().setWidth(48),
             color: statusColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   '$searchQuery.eth',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                    fontWeight: FontWeight.bold,
-                    color: _themeColor(context, AppThemeKeys.mainTextColor.name),
+                  style: AppTypography.headline.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.mainTextColor.name,
+                    ),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   isAvailable
                       ? S.of(context).g_key_ens_available
                       : S.of(context).g_key_ens_unavailable,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w500,
                   ),
@@ -308,10 +322,10 @@ class EnsSearchResultView extends StatelessWidget {
 
   Widget _buildUnavailableDetails(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -341,15 +355,16 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
-            color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name),
+          style: AppTypography.bodySm.copyWith(
+            color: _themeColor(
+              context,
+              AppThemeKeys.itemSubtitleTextColor.name,
+            ),
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w500,
             color: _themeColor(context, AppThemeKeys.mainTextColor.name),
           ),
@@ -368,13 +383,12 @@ class EnsSearchResultView extends StatelessWidget {
       children: [
         Text(
           S.of(context).g_key_ens_registration_period,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
             color: mainTextColor,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [
             for (var i = 0; i < yearOptions.length; i++) ...[
@@ -404,25 +418,25 @@ class EnsSearchResultView extends StatelessWidget {
     required Color mainTextColor,
   }) {
     final itemBgColor = _themeColor(context, AppThemeKeys.itemBgColor.name);
-    final subtitleColor = _themeColor(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = _themeColor(
+      context,
+      AppThemeKeys.itemSubtitleTextColor.name,
+    );
     return GestureDetector(
       onTap: () => onYearsChanged(years),
       child: Container(
-        margin: EdgeInsets.only(
-          right: isLast ? 0 : ScreenUtil().setWidth(12),
-        ),
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(14)),
+        margin: EdgeInsets.only(right: isLast ? 0 : ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
           color: isSelected ? blueColor : itemBgColor,
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isSelected ? blueColor : subtitleColor.withAlpha(50),
           ),
         ),
         child: Text(
           '$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
             color: isSelected ? Colors.white : mainTextColor,
           ),

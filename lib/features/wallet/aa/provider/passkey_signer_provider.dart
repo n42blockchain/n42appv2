@@ -76,7 +76,9 @@ class PasskeySignerProvider extends ChangeNotifier {
       );
 
       // 3. Encode as on-chain verifiable signature
-      final signature = PasskeySignatureBuilder.formatPasskeySignature(authResult);
+      final signature = PasskeySignatureBuilder.formatPasskeySignature(
+        authResult,
+      );
 
       // 4. Attach to UserOperation
       return SignatureBuilder.attachSignature(userOp, signature);
@@ -108,7 +110,9 @@ class PasskeySignerProvider extends ChangeNotifier {
 }
 
 /// Riverpod provider for PasskeySignerProvider.
-final passkeySignerProvider = ChangeNotifierProvider<PasskeySignerProvider>((ref) {
+final passkeySignerProvider = ChangeNotifierProvider<PasskeySignerProvider>((
+  ref,
+) {
   final secureStorage = SecureStorage();
   final passkeyService = PasskeyService(secureStorage);
   final provider = PasskeySignerProvider(passkeyService);

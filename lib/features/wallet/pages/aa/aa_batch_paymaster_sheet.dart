@@ -5,7 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';
 
 /// Paymaster 选择底部弹层
@@ -23,16 +23,15 @@ class PaymasterSelectionSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = [
-      PaymasterOption.none,
-      PaymasterOption.sponsored,
-    ];
+    final options = [PaymasterOption.none, PaymasterOption.sponsored];
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(ScreenUtil().setWidth(24)),
+        ),
       ),
       child: SafeArea(
         child: Column(
@@ -41,13 +40,12 @@ class PaymasterSelectionSheet extends StatelessWidget {
           children: [
             Text(
               'Paymaster',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             ...options.map((option) {
               final isSelected = option.type == selected.type;
               return GestureDetector(
@@ -56,15 +54,21 @@ class PaymasterSelectionSheet extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
                   decoration: isSelected
                       ? BoxDecoration(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                          border: Border.all(color: const Color(0xFFFF9800), width: 2),
+                          borderRadius: AppRadius.brMd,
+                          border: Border.all(
+                            color: const Color(0xFFFF9800),
+                            width: 2,
+                          ),
                         )
                       : null,
-                  child: PaymasterOptionCard(option: option, isSelected: isSelected),
+                  child: PaymasterOptionCard(
+                    option: option,
+                    isSelected: isSelected,
+                  ),
                 ),
               );
             }),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
           ],
         ),
       ),

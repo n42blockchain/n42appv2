@@ -2,8 +2,7 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -63,74 +62,75 @@ class _ShareMiningState extends State<ShareMining> {
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(
-                    "assets/mining/group_share_bg.png",
-                  ))),
+            image: DecorationImage(
+              image: AssetImage("assets/mining/group_share_bg.png"),
+            ),
+          ),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+            ),
             child: Column(
               children: [
-                SizedBox(height: ScreenUtil().setWidth(60) + MediaQuery.of(context).padding.top),
+                SizedBox(
+                  height:
+                      ScreenUtil().setWidth(60) +
+                      MediaQuery.of(context).padding.top,
+                ),
                 Image.asset(
                   "assets/mining/medal_star.png",
                   width: ScreenUtil().setWidth(170),
                   fit: BoxFit.cover,
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
                 SizedBox(height: ScreenUtil().setWidth(100)),
                 Text(
                   "Congratulations!",
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30)),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.space12,
+                  ),
                   child: Text(
                     _generateTipsContent(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        height: 1.2,
-                        fontSize: ScreenUtil().setSp(30)),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                      height: 1.2,
+                      fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
                 Expanded(
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          SharePlus.instance.share(
-                            ShareParams(
-                              text: generateShareText(),
-                              subject: AppConfig.apiUrl['n42Browser'],
-                            ),
-                          );
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.share,
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainBlueColor.name),
-                            ),
-                            SizedBox(height: ScreenUtil().setWidth(24)),
-                            Text(
-                              S.of(context).g_mining_key61,
-                              style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                      context, AppThemeKeys.mainBlueColor.name),
-                                  fontSize: ScreenUtil().setSp(30)),
-                            ),
-                          ],
-                        ),
+                  child: Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        SharePlus.instance.share(
+                          ShareParams(
+                            text: generateShareText(),
+                            subject: AppConfig.apiUrl['n42Browser'],
+                          ),
+                        );
+                      },
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.share,
+                            color: AppColorTokens.of(context).brand,
+                          ),
+                          SizedBox(height: AppSpacing.space6),
+                          Text(
+                            S.of(context).g_mining_key61,
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
+                          ),
+                        ],
                       ),
-                    )),
+                    ),
+                  ),
+                ),
                 Divider(
                   height: ScreenUtil().setWidth(1),
                   indent: 0,
@@ -140,16 +140,24 @@ class _ShareMiningState extends State<ShareMining> {
                   child: Container(
                     height: ScreenUtil().setWidth(88),
                     width: double.infinity,
-                    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30),),
-                    child: buttonStyle2(context, () async {
-                      if (widget.fromType == 2) {
-                        globalMiningV1.setMiningType(MiningType.N);
-                      }
-                      globalMiningV1.setDepositsEnable(true);
-                      eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
-                      eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
-                      Navigator.pop(context, true);
-                    }, S.of(context).g_mining_key62,
+                    margin: EdgeInsets.symmetric(
+                      vertical: AppSpacing.space8,
+                    ),
+                    child: AppButton(
+                      label: S.of(context).g_mining_key62,
+                      onPressed: () {
+                        if (widget.fromType == 2) {
+                          globalMiningV1.setMiningType(MiningType.N);
+                        }
+                        globalMiningV1.setDepositsEnable(true);
+                        eventBus.fire(
+                          EventPublic(EventPublicType.refreshMiningData),
+                        );
+                        eventBus.fire(
+                          EventPublic(EventPublicType.selectMiningplansPop),
+                        );
+                        Navigator.pop(context, true);
+                      },
                     ),
                   ),
                 ),

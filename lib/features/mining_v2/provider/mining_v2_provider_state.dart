@@ -90,7 +90,9 @@ mixin _MiningStateMixin on ChangeNotifier {
   Future<void> getMiningWithdrawalsDaily() async {}
   void startWithdrawalTimer() {}
   void endWithdrawalTimer() {}
-  void starBeaconValidatorTimer({int waitSeconds = kBeaconValidatorWaitSeconds}) {}
+  void starBeaconValidatorTimer({
+    int waitSeconds = kBeaconValidatorWaitSeconds,
+  }) {}
   void endBeaconValidatorTimer() {}
   Future<void> connectWebSocket({
     required String wsUrl,

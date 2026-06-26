@@ -5,10 +5,10 @@
 
 /// 支持的 Staking 链类型
 enum StakingChainType {
-  ethereum,  // Lido stETH
-  solana,    // 原生质押
-  cosmos,    // ATOM 原生质押
-  polkadot,  // DOT 原生质押
+  ethereum, // Lido stETH
+  solana, // 原生质押
+  cosmos, // ATOM 原生质押
+  polkadot, // DOT 原生质押
 }
 
 /// Staking 协议信息
@@ -22,8 +22,8 @@ class StakingProtocol {
   final double apy;
   final double minStakeAmount;
   final int unbondingPeriodDays;
-  final bool isLiquid;  // 是否为流动性质押
-  final String? liquidTokenSymbol;  // 流动性质押代币符号 (如 stETH)
+  final bool isLiquid; // 是否为流动性质押
+  final String? liquidTokenSymbol; // 流动性质押代币符号 (如 stETH)
   final String? contractAddress;
 
   const StakingProtocol({
@@ -85,12 +85,12 @@ class Validator {
   final String name;
   final String description;
   final String logoUri;
-  final double commission;  // 佣金比例 (0-100)
+  final double commission; // 佣金比例 (0-100)
   final double apy;
   final BigInt totalStaked;
   final int delegatorCount;
   final bool isActive;
-  final double uptime;  // 正常运行时间 (0-100)
+  final double uptime; // 正常运行时间 (0-100)
 
   const Validator({
     required this.address,
@@ -113,7 +113,9 @@ class Validator {
       logoUri: json['logoUri'] ?? json['logo'] ?? '',
       commission: (json['commission'] ?? 0).toDouble(),
       apy: (json['apy'] ?? 0).toDouble(),
-      totalStaked: BigInt.tryParse(json['totalStaked']?.toString() ?? '0') ?? BigInt.zero,
+      totalStaked:
+          BigInt.tryParse(json['totalStaked']?.toString() ?? '0') ??
+          BigInt.zero,
       delegatorCount: json['delegatorCount'] ?? 0,
       isActive: json['isActive'] ?? json['status'] == 'BOND_STATUS_BONDED',
       uptime: (json['uptime'] ?? 100).toDouble(),
@@ -164,12 +166,24 @@ class StakingPosition {
     return StakingPosition(
       id: json['id'] ?? '',
       protocol: StakingProtocol.fromJson(json['protocol'] ?? {}),
-      validator: json['validator'] != null ? Validator.fromJson(json['validator']) : null,
-      stakedAmount: BigInt.tryParse(json['stakedAmount']?.toString() ?? '0') ?? BigInt.zero,
-      rewardsEarned: BigInt.tryParse(json['rewardsEarned']?.toString() ?? '0') ?? BigInt.zero,
-      pendingRewards: BigInt.tryParse(json['pendingRewards']?.toString() ?? '0') ?? BigInt.zero,
-      stakedAt: DateTime.tryParse(json['stakedAt']?.toString() ?? '') ?? DateTime.now(),
-      unbondingAt: json['unbondingAt'] != null ? DateTime.tryParse(json['unbondingAt'].toString()) : null,
+      validator: json['validator'] != null
+          ? Validator.fromJson(json['validator'])
+          : null,
+      stakedAmount:
+          BigInt.tryParse(json['stakedAmount']?.toString() ?? '0') ??
+          BigInt.zero,
+      rewardsEarned:
+          BigInt.tryParse(json['rewardsEarned']?.toString() ?? '0') ??
+          BigInt.zero,
+      pendingRewards:
+          BigInt.tryParse(json['pendingRewards']?.toString() ?? '0') ??
+          BigInt.zero,
+      stakedAt:
+          DateTime.tryParse(json['stakedAt']?.toString() ?? '') ??
+          DateTime.now(),
+      unbondingAt: json['unbondingAt'] != null
+          ? DateTime.tryParse(json['unbondingAt'].toString())
+          : null,
       status: StakingPositionStatus.values.firstWhere(
         (e) => e.name == json['status'],
         orElse: () => StakingPositionStatus.active,
@@ -207,19 +221,19 @@ class StakingPosition {
 
 /// 质押仓位状态
 enum StakingPositionStatus {
-  active,     // 活跃质押中
-  unbonding,  // 解绑中
-  completed,  // 解绑完成
-  withdrawn,  // 已提取
+  active, // 活跃质押中
+  unbonding, // 解绑中
+  completed, // 解绑完成
+  withdrawn, // 已提取
 }
 
 /// 质押操作类型
 enum StakingActionType {
-  stake,       // 质押
-  unstake,     // 解质押
-  claim,       // 领取奖励
-  restake,     // 复投（领取并再质押）
-  redelegate,  // 重新委托（换验证者）
+  stake, // 质押
+  unstake, // 解质押
+  claim, // 领取奖励
+  restake, // 复投（领取并再质押）
+  redelegate, // 重新委托（换验证者）
 }
 
 /// Staking 交易响应
@@ -248,10 +262,7 @@ class StakingTransactionResponse {
   }
 
   factory StakingTransactionResponse.error(String error) {
-    return StakingTransactionResponse(
-      success: false,
-      error: error,
-    );
+    return StakingTransactionResponse(success: false, error: error);
   }
 }
 
@@ -282,7 +293,11 @@ class StakingStats {
 /// 缩短地址显示的工具方法
 ///
 /// [prefixLen] 前缀长度，[suffixLen] 后缀长度
-String shortenStakingAddress(String address, {int prefixLen = 8, int suffixLen = 6}) {
+String shortenStakingAddress(
+  String address, {
+  int prefixLen = 8,
+  int suffixLen = 6,
+}) {
   final minLen = prefixLen + suffixLen + 3; // 3 for '...'
   if (address.length <= minLen) return address;
   return '${address.substring(0, prefixLen)}...${address.substring(address.length - suffixLen)}';
@@ -296,10 +311,11 @@ class StakingProtocols {
     description: 'Liquid staking for Ethereum. Stake ETH and receive stETH.',
     chainType: StakingChainType.ethereum,
     chainSymbol: 'ETH',
-    logoUri: 'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
+    logoUri:
+        'https://tokens.1inch.io/0xae7ab96520de3a18e5e111b5eaab095312d7fe84.png',
     apy: 4.0,
     minStakeAmount: 0.0001,
-    unbondingPeriodDays: 0,  // Lido 是流动性质押，无锁定期
+    unbondingPeriodDays: 0, // Lido 是流动性质押，无锁定期
     isLiquid: true,
     liquidTokenSymbol: 'stETH',
     contractAddress: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
@@ -311,7 +327,8 @@ class StakingProtocols {
     description: 'Native Solana staking with validators.',
     chainType: StakingChainType.solana,
     chainSymbol: 'SOL',
-    logoUri: 'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
+    logoUri:
+        'https://raw.githubusercontent.com/solana-labs/token-list/main/assets/mainnet/So11111111111111111111111111111111111111112/logo.png',
     apy: 7.0,
     minStakeAmount: 0.01,
     unbondingPeriodDays: 2,
@@ -323,7 +340,8 @@ class StakingProtocols {
     description: 'Native ATOM staking with Cosmos Hub validators.',
     chainType: StakingChainType.cosmos,
     chainSymbol: 'ATOM',
-    logoUri: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
+    logoUri:
+        'https://raw.githubusercontent.com/cosmos/chain-registry/master/cosmoshub/images/atom.png',
     apy: 15.0,
     minStakeAmount: 0.001,
     unbondingPeriodDays: 21,
@@ -335,7 +353,8 @@ class StakingProtocols {
     description: 'Native DOT staking with Polkadot validators.',
     chainType: StakingChainType.polkadot,
     chainSymbol: 'DOT',
-    logoUri: 'https://raw.githubusercontent.com/polkadot-js/apps/master/packages/apps/public/polkadot-circle.svg',
+    logoUri:
+        'https://raw.githubusercontent.com/polkadot-js/apps/master/packages/apps/public/polkadot-circle.svg',
     apy: 12.0,
     minStakeAmount: 1.0,
     unbondingPeriodDays: 28,

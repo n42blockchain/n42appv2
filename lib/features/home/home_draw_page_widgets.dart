@@ -26,29 +26,20 @@ extension on _HomeDrawPageState {
     final isLoggedIn = isChatLoggedIn || isWalletLoggedIn;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ).withValues(alpha: 0.1),
-            AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ).withValues(alpha: 0.05),
+            AppColorTokens.of(context).brand.withValues(alpha: 0.1),
+            AppColorTokens.of(context).brand.withValues(alpha: 0.05),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withValues(alpha: 0.1),
+          color: AppColorTokens.of(context).brand.withValues(alpha: 0.1),
           width: 1,
         ),
       ),
@@ -68,10 +59,9 @@ extension on _HomeDrawPageState {
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppThemeUtils.getColorByKey(
+                        color: AppColorTokens.of(
                           context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ).withValues(alpha: 0.2),
+                        ).brand.withValues(alpha: 0.2),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -84,7 +74,7 @@ extension on _HomeDrawPageState {
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: GestureDetector(
                   onTap: _openChat,
@@ -100,41 +90,29 @@ extension on _HomeDrawPageState {
                                   : S.of(context).g_key_login,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                  context,
-                                  AppThemeKeys.mainTextColor.name,
-                                ),
-                                fontWeight: FontWeight.w600,
-                                fontSize: ScreenUtil().setSp(32),
+                              style: AppTypography.headline.copyWith(
+                                color: AppColorTokens.of(context).textPrimary,
                                 letterSpacing: 0.3,
                               ),
                             ),
                           ),
                           if (isChatOnlySession) ...[
-                            SizedBox(width: ScreenUtil().setWidth(8)),
+                            SizedBox(width: AppSpacing.space2),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(10),
-                                vertical: ScreenUtil().setWidth(4),
+                                horizontal: AppSpacing.space2,
+                                vertical: AppSpacing.space2,
                               ),
                               decoration: BoxDecoration(
-                                color: AppThemeUtils.getColorByKey(
+                                color: AppColorTokens.of(
                                   context,
-                                  AppThemeKeys.mainBlueColor.name,
-                                ).withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(
-                                  ScreenUtil().setWidth(999),
-                                ),
+                                ).brand.withValues(alpha: 0.12),
+                                borderRadius: AppRadius.brPill,
                               ),
                               child: Text(
                                 S.of(context).g_key_squad,
-                                style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(
-                                    context,
-                                    AppThemeKeys.mainBlueColor.name,
-                                  ),
-                                  fontSize: ScreenUtil().setSp(18),
+                                style: AppTypography.captionSm.copyWith(
+                                  color: AppColorTokens.of(context).brand,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -143,17 +121,13 @@ extension on _HomeDrawPageState {
                         ],
                       ),
                       if (isLoggedIn) ...[
-                        SizedBox(height: ScreenUtil().setWidth(6)),
+                        SizedBox(height: AppSpacing.space2),
                         Text(
                           displayEmail,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.itemSubtitleTextColor.name,
-                            ),
-                            fontSize: ScreenUtil().setSp(24),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
                           ),
                         ),
                       ],
@@ -163,20 +137,17 @@ extension on _HomeDrawPageState {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           GestureDetector(
             onTap: _openChat,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
-                vertical: ScreenUtil().setWidth(12),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
+                color: AppColorTokens.of(context).brand,
+                borderRadius: AppRadius.brLg,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -186,13 +157,12 @@ extension on _HomeDrawPageState {
                     size: ScreenUtil().setWidth(20),
                     color: Colors.white,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Flexible(
                     child: Text(
                       S.of(context).g_home_key9,
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: Colors.white,
-                        fontSize: ScreenUtil().setSp(24),
                         fontWeight: FontWeight.w500,
                       ),
                       overflow: TextOverflow.ellipsis,
@@ -216,7 +186,7 @@ extension on _HomeDrawPageState {
     final showChatEntry = !showWalletLogout && isChatLoggedIn;
 
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -244,33 +214,21 @@ extension on _HomeDrawPageState {
               Scaffold.of(context).closeDrawer();
             }
           },
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           child: Container(
             padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(16),
-              horizontal: ScreenUtil().setWidth(20),
+              vertical: AppSpacing.space4,
+              horizontal: AppSpacing.space4,
             ),
             decoration: BoxDecoration(
               color: showWalletLogout
-                  ? AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.errorTextColor.name,
-                    ).withValues(alpha: 0.1)
-                  : AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainBlueColor.name,
-                    ).withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                  ? AppColorTokens.of(context).danger.withValues(alpha: 0.1)
+                  : AppColorTokens.of(context).brand.withValues(alpha: 0.1),
+              borderRadius: AppRadius.brMd,
               border: Border.all(
                 color: showWalletLogout
-                    ? AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.errorTextColor.name,
-                      ).withValues(alpha: 0.3)
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ).withValues(alpha: 0.3),
+                    ? AppColorTokens.of(context).danger.withValues(alpha: 0.3)
+                    : AppColorTokens.of(context).brand.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -281,16 +239,10 @@ extension on _HomeDrawPageState {
                   showWalletLogout ? Icons.logout_rounded : Icons.chat_rounded,
                   size: ScreenUtil().setWidth(24),
                   color: showWalletLogout
-                      ? AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.errorTextColor.name,
-                        )
-                      : AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                      ? AppColorTokens.of(context).danger
+                      : AppColorTokens.of(context).brand,
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Flexible(
                   child: Text(
                     showWalletLogout
@@ -298,18 +250,10 @@ extension on _HomeDrawPageState {
                         : showChatEntry
                         ? S.of(context).g_key_squad
                         : S.of(context).g_key_login,
-                    style: TextStyle(
+                    style: AppTypography.bodyStrong.copyWith(
                       color: showWalletLogout
-                          ? AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.errorTextColor.name,
-                            )
-                          : AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ),
-                      fontSize: ScreenUtil().setSp(28),
-                      fontWeight: FontWeight.w600,
+                          ? AppColorTokens.of(context).danger
+                          : AppColorTokens.of(context).brand,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

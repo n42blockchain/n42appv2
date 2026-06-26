@@ -123,45 +123,69 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "يمتلك هذا الحساب كائنات ${value}، مما يعني أنه تم حجز ${value1} XRP إضافي.";
 
-  static String m45(value) => "نمط غير صحيح، ${value} محاولات متبقية";
+  static String m45(message) => "فشل الدخول إلى الغرفة\n${message}";
 
-  static String m46(value) => "نمط غير صحيح، ${value} محاولة متبقية";
+  static String m46(value) => "نمط غير صحيح، ${value} محاولات متبقية";
 
-  static String m47(value) =>
-      "لقد نجحت في إعداد ${value} وستبدأ في التحقق باستخدام N42Wallet!";
+  static String m47(value) => "نمط غير صحيح، ${value} محاولة متبقية";
 
   static String m48(value) =>
+      "لقد نجحت في إعداد ${value} وستبدأ في التحقق باستخدام N42Wallet!";
+
+  static String m49(value) =>
       "انضم إلى مجموعتي ${value} على @N42Wallet لتكون من أوائل عمال التعدين لسلسلة الطبقة الأولى، واحصل على العملات المشفرة على هاتفك!";
 
-  static String m49(value, value1) =>
+  static String m50(value, value1) =>
       "هل أنت متأكد أنك تريد قفل ${value} N حتى ${value1} لتشغيل العقدة؟";
 
-  static String m50(value) => "فشل الاستيراد: ${value}";
+  static String m51(value) => "فشل الاستيراد: ${value}";
 
-  static String m51(value) =>
+  static String m52(value) =>
       "مطلوب رصيد مساحي لا يقل عن ${value} لكسب المكافآت.";
 
-  static String m52(value, value1) => "${value} N يتم تعدين كل كتل ${value1}";
+  static String m53(value, value1) => "${value} N يتم تعدين كل كتل ${value1}";
 
-  static String m53(value) => "يجب أن يكون هناك أحرف ${value}";
+  static String m54(value) => "يجب أن يكون هناك أحرف ${value}";
 
-  static String m54(value) => "${value} رصيد غير كافي.";
+  static String m55(symbol) => "المبلغ (${symbol})";
 
-  static String m55(value) => "${value} واردة...";
+  static String m56(amount, symbol) => "الرصيد: ${amount} ${symbol}";
 
-  static String m56(value) =>
+  static String m57(label) =>
+      "إعلان «${label}» فائزًا والتسوية؟ لا يمكن التراجع.";
+
+  static String m58(n) => "${n} دقيقة";
+
+  static String m59(n) => "النتيجة ${n}";
+
+  static String m60(label, pct) => "${label} يفوز (${pct}%)";
+
+  static String m61(shares, avg, after) =>
+      "تقدير ${shares} حصة · متوسط ${avg}% · بعد ${after}%";
+
+  static String m62(reason) => "فشل الاسترداد: ${reason}";
+
+  static String m63(label) => "النتيجة: ${label}";
+
+  static String m64(n) => "بيع ${n}";
+
+  static String m65(value) => "${value} رصيد غير كافي.";
+
+  static String m66(value) => "${value} واردة...";
+
+  static String m67(value) =>
       "سيتم توزيع ${value} داخل التطبيق قريبًا على محفظتك ولا يمكن بيعه عبر هذه العملية. يمكن استخدامه لتشغيل العقدة.";
 
-  static String m57(value) => "الحد الأقصى لعدد الأحرف ${value}";
+  static String m68(value) => "الحد الأقصى لعدد الأحرف ${value}";
 
-  static String m58(value) => "تطبيق سلسلة ${value} مدعوم بالفعل!";
+  static String m69(value) => "تطبيق سلسلة ${value} مدعوم بالفعل!";
 
-  static String m59(value) =>
+  static String m70(value) =>
       "تطبيق سلسلة ${value} مدعوم بالفعل، هل تريد إضافته؟";
 
-  static String m60(value) => "فشل رابط اختبار العنوان ${value}!";
+  static String m71(value) => "فشل رابط اختبار العنوان ${value}!";
 
-  static String m61(value) => "0~${value} أحرف";
+  static String m72(value) => "0~${value} أحرف";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2092,6 +2116,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "إجمالي الاحتياطي = الاحتياطي الأساسي + (عدد الأشياء المملوكة × الاحتياطي المتزايد)",
     ),
+    "g_live_enter_room_failed": m45,
+    "g_live_follow": MessageLookupByLibrary.simpleMessage("متابعة"),
+    "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
+      "ميزة المتابعة قريبًا",
+    ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage(
       "معرف اللمس ومعرف الوجه",
     ),
@@ -2108,7 +2137,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "ارسم الإيماءة الحالية",
     ),
-    "g_lock_key21": m45,
+    "g_lock_key21": m46,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "إعادة تعيين كلمة مرور الإيماءات",
     ),
@@ -2118,7 +2147,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "إضافة كلمة مرور المحفظة؟",
     ),
-    "g_lock_key25": m46,
+    "g_lock_key25": m47,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
@@ -2194,12 +2223,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_mining_key61": MessageLookupByLibrary.simpleMessage("شارك مع الأصدقاء"),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("متابعة"),
-    "g_mining_key63": m47,
-    "g_mining_key73": m48,
+    "g_mining_key63": m48,
+    "g_mining_key73": m49,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "لقد قمت للتو بإعداد عقدة على @N42Wallet وبدأت عملية التحقق على الأجهزة المحمولة! تعال وانضم إلي. المستقبل اللامركزي متنقل!",
     ),
-    "g_mining_key76": m49,
+    "g_mining_key76": m50,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("المعدنية"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("عقدة"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("الشبكة"),
@@ -2234,7 +2263,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "تنسيق البيانات المشفرة غير معتمد!",
     ),
-    "g_mining_key_109": m50,
+    "g_mining_key_109": m51,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("مكافآت الأمس"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "البيانات المشفرة",
@@ -2250,7 +2279,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "يستغرق الاسترداد بعض الوقت، يرجى الانتظار لحظة!",
     ),
-    "g_mining_key_116": m51,
+    "g_mining_key_116": m52,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "تتراكم المكافأة يوميًا ولا يتم إرسالها إلى محفظة N الخاصة بك إلا عندما تصل إلى 0.5 N تقريبًا.",
     ),
@@ -2326,7 +2355,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 قطعة / يوم ~ 15 دقيقة",
     ),
-    "g_mining_key_71": m52,
+    "g_mining_key_71": m53,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 ثانية لكل شيك",
     ),
@@ -2384,7 +2413,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "الرجاء إدخال كلمة المرور التشفير",
     ),
-    "g_mining_key_98": m53,
+    "g_mining_key_98": m54,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "الرجاء إعادة إدخال كلمة المرور الخاصة بك للتأكد من صحتها",
     ),
@@ -2456,6 +2485,76 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "القيمة الإجمالية",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("إضافة نتيجة"),
+    "g_pred_amount_input": m55,
+    "g_pred_balance": m56,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("شراء"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "إلغاء واسترداد",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("إغلاق فقط"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "مغلق، بانتظار التسوية",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "تأكيد التسوية",
+    ),
+    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage("بدء التوقع"),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("جارٍ الإنشاء…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("الموعد النهائي"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "يجب أن يكون المبلغ أكبر من 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "الرصيد غير كافٍ",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "حصص غير كافية",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "نتيجة غير صالحة",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "السوق مغلق، التداول غير متاح",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "السوق غير موجود",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "السوق لم يُسوَّ، لا يمكن الاسترداد",
+    ),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "نتيجتان صالحتان على الأقل",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "الرجاء إدخال سؤال",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "تجاوز الانزلاق، حاول مجددًا",
+    ),
+    "g_pred_minutes": m58,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("لا"),
+    "g_pred_outcome_n": m59,
+    "g_pred_outcome_win": m60,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("النتائج"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "اختر النتيجة الفائزة للتسوية (تُدفع الأموال حسب النتيجة)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("جارٍ المعالجة…"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("نشر"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "سؤال التوقع، مثل: من يفوز بهذه الجولة؟",
+    ),
+    "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("تمت التسوية"),
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "غير محدود (إغلاق يدوي)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("نعم"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage("تم التنزيل"),
     "g_referral_invite_code": MessageLookupByLibrary.simpleMessage(
       "رمز الدعوة",
@@ -2486,7 +2585,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("الرجوع عبر"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("رابط"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("كود"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "الحصول على خطأ في سعر العملة.",
     ),
@@ -2498,7 +2597,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "سيتم توزيع مبادلة الخاص بك قريبا. يرجى التحلي بالصبر.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "تكاليف تشغيل العقدة: التحقق من المجموعة 1-49 N العقدة الأساسية: 50 N العقدة المميزة: 100 N العقدة الاحترافية: 500 N.",
     ),
@@ -2510,7 +2609,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("توازن جديد"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("أنت تدفع"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("التاريخ"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "يمكن الاطلاع على المقايضات على مستكشفات السلسلة ذات الصلة (Etherscan، وBscScan، وTRONSCAN، ومستكشفاتنا).",
     ),
@@ -2523,7 +2622,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "إعادة التعيين إلى الوضع الافتراضي",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "يمكن لأي شخص إنشاء رمز مميز، بما في ذلك إنشاء إصدارات مزيفة من الرموز المميزة الموجودة. ابحث دائمًا عن الرمز المميز قبل استيراده.",
     ),
@@ -2540,9 +2639,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0 ~ 18 وحدة"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("إضافة الرموز"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("خطأ في التنسيق!"),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("رموز الاستيراد"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("جميع الشبكات"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("رمز مخصص"),
@@ -2556,6 +2655,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("مخاطر عالية"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("آمنة"),
     "g_version_later": MessageLookupByLibrary.simpleMessage("في وقت لاحق"),
+    "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
+      "محفظة HD · عبارة استرجاع",
+    ),
+    "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
+      "سلسلة واحدة · مستورد",
+    ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "تم فقدان الاتصال. يرجى إعادة الاتصال.",
     ),
@@ -2584,6 +2689,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage(
       "التطبيقات اللامركزية المتصلة",
     ),
+    "g_xrp_dest_tag_hint": MessageLookupByLibrary.simpleMessage(
+      "مطلوب عادة عند الإرسال إلى منصة تداول",
+    ),
+    "g_xrp_optional": MessageLookupByLibrary.simpleMessage("(اختياري)"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "رابط",
     ),
@@ -2591,13 +2700,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "login_password": MessageLookupByLibrary.simpleMessage("كلمة المرور"),
     "next": MessageLookupByLibrary.simpleMessage("التالي"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "تحرير الملف الشخصي",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("صورة فوتوغرافية"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "الرجاء إدخال العنوان",
+    ),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Background Delivery May Be Limited",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "لا تذكرني",

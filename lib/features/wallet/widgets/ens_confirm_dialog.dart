@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 
 /// ENS 确认对话框
@@ -53,29 +53,23 @@ class EnsConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    const successGreen = Color(0xFF4CAF50);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final blueColor = AppColorTokens.of(context).brand;
+    final warningColor = AppColorTokens.of(context).warning;
+    final successGreen = AppColorTokens.of(context).success;
 
     return AlertDialog(
       backgroundColor: bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       title: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(10)),
+            padding: EdgeInsets.all(AppSpacing.space2),
             decoration: BoxDecoration(
               color: blueColor.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              borderRadius: AppRadius.brMd,
             ),
             child: Icon(
               Icons.verified_user_rounded,
@@ -83,13 +77,12 @@ class EnsConfirmDialog extends StatelessWidget {
               size: ScreenUtil().setWidth(32),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               S.of(context).g_key_ens_confirm_title,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
                 color: mainTextColor,
               ),
             ),
@@ -103,13 +96,11 @@ class EnsConfirmDialog extends StatelessWidget {
           children: [
             // ENS 检测提示
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
                 color: successGreen.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                border: Border.all(
-                  color: successGreen.withValues(alpha: 0.3),
-                ),
+                borderRadius: AppRadius.brMd,
+                border: Border.all(color: successGreen.withValues(alpha: 0.3)),
               ),
               child: Row(
                 children: [
@@ -118,12 +109,11 @@ class EnsConfirmDialog extends StatelessWidget {
                     color: successGreen,
                     size: ScreenUtil().setWidth(28),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Expanded(
                     child: Text(
                       S.of(context).g_key_ens_detected,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26),
+                      style: AppTypography.bodySm.copyWith(
                         fontWeight: FontWeight.w600,
                         color: successGreen,
                       ),
@@ -132,7 +122,7 @@ class EnsConfirmDialog extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
 
             // ENS 名称
             _buildInfoRow(
@@ -145,7 +135,7 @@ class EnsConfirmDialog extends StatelessWidget {
               subtitleColor: subtitleColor,
               onCopy: () => _copyToClipboard(context, ensName),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
 
             // 箭头指示
             Center(
@@ -155,7 +145,7 @@ class EnsConfirmDialog extends StatelessWidget {
                 size: ScreenUtil().setWidth(32),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
 
             // 解析后的地址
             _buildInfoRow(
@@ -168,41 +158,36 @@ class EnsConfirmDialog extends StatelessWidget {
                 suffixLength: 8,
               ),
               icon: Icons.account_balance_wallet_outlined,
-              iconColor: isDark ? Colors.orange : Colors.deepOrange,
+              iconColor: warningColor,
               textColor: mainTextColor,
               subtitleColor: subtitleColor,
               onCopy: () => _copyToClipboard(context, resolvedAddress),
               showFullAddress: true,
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
 
             // 安全警告
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
-                color: Colors.orange.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-                border: Border.all(
-                  color: Colors.orange.withValues(alpha: 0.3),
-                ),
+                color: warningColor.withValues(alpha: 0.1),
+                borderRadius: AppRadius.brMd,
+                border: Border.all(color: warningColor.withValues(alpha: 0.3)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Icon(
                     Icons.warning_amber_rounded,
-                    color: Colors.orange,
+                    color: warningColor,
                     size: ScreenUtil().setWidth(28),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(10)),
+                  SizedBox(width: AppSpacing.space2),
                   Expanded(
                     child: Text(
                       S.of(context).g_key_ens_warning,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: isDark
-                            ? Colors.orange.shade200
-                            : Colors.orange.shade800,
+                      style: AppTypography.caption.copyWith(
+                        color: warningColor,
                         height: 1.4,
                       ),
                     ),
@@ -219,16 +204,13 @@ class EnsConfirmDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(false),
           style: TextButton.styleFrom(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(24),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space4,
             ),
           ),
           child: Text(
             S.of(context).g_key_79, // Cancel
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: subtitleColor,
-            ),
+            style: AppTypography.body.copyWith(color: subtitleColor),
           ),
         ),
         // 确认按钮
@@ -238,23 +220,18 @@ class EnsConfirmDialog extends StatelessWidget {
             backgroundColor: blueColor,
             foregroundColor: Colors.white,
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(24),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space4,
             ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-            ),
+            shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
           ),
           child: Text(
             S.of(context).g_key_ens_confirm_send,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
       ],
-      actionsPadding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      actionsPadding: EdgeInsets.all(AppSpacing.space4),
     );
   }
 
@@ -271,33 +248,22 @@ class EnsConfirmDialog extends StatelessWidget {
     bool showFullAddress = false,
   }) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(14)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name)
-            .withValues(alpha: 0.5),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: subtitleColor.withValues(alpha: 0.2),
-        ),
+        color: AppColorTokens.of(context).bgBase.withValues(alpha: 0.5),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: subtitleColor.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(
-                icon,
-                color: iconColor,
-                size: ScreenUtil().setWidth(24),
-              ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              Icon(icon, color: iconColor, size: ScreenUtil().setWidth(24)),
+              SizedBox(width: AppSpacing.space2),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: subtitleColor,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
               const Spacer(),
               GestureDetector(
@@ -310,22 +276,20 @@ class EnsConfirmDialog extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           SelectableText(
             displayValue ?? value,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
               color: textColor,
               fontFamily: 'monospace',
             ),
           ),
           if (showFullAddress && displayValue != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(4)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(18),
+              style: AppTypography.captionSm.copyWith(
                 color: subtitleColor,
                 fontFamily: 'monospace',
               ),
@@ -354,10 +318,7 @@ class EnsConfirmDialog extends StatelessWidget {
 class EnsResolvingDialog extends StatelessWidget {
   final String ensName;
 
-  const EnsResolvingDialog({
-    super.key,
-    required this.ensName,
-  });
+  const EnsResolvingDialog({super.key, required this.ensName});
 
   /// 显示 ENS 解析加载对话框
   static void show(BuildContext context, String ensName) {
@@ -375,21 +336,16 @@ class EnsResolvingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return AlertDialog(
       backgroundColor: bgColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       content: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -401,20 +357,18 @@ class EnsResolvingDialog extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(blueColor),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               Text(
                 S.of(context).g_key_ens_resolving,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
+                style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: mainTextColor,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 ensName,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   color: blueColor,
                   fontFamily: 'monospace',
                 ),

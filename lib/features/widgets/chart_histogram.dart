@@ -1,5 +1,5 @@
-﻿import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -11,13 +11,14 @@ class ChartHistogram extends StatefulWidget {
   final BarChartModel barChartModel; //柱状图数据
   final bool isLoading;
 
-  const ChartHistogram(
-      {required this.titleModel,
-        required this.barChartModel,
-        required this.bottomTitle,
-        this.alertMessageGroups,
-        this.isLoading = false,
-        super.key});
+  const ChartHistogram({
+    required this.titleModel,
+    required this.barChartModel,
+    required this.bottomTitle,
+    this.alertMessageGroups,
+    this.isLoading = false,
+    super.key,
+  });
 
   @override
   State<StatefulWidget> createState() => _ChartHistogramState();
@@ -32,11 +33,8 @@ class _ChartHistogramState extends State<ChartHistogram> {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color:
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius:
-        BorderRadius.circular(ScreenUtil().setWidth(16)),
-
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,10 +47,9 @@ class _ChartHistogramState extends State<ChartHistogram> {
             ),
             child: Text(
               S.of(context).g_mining_key_86,
-              style: TextStyle(
-                color:AppThemeUtils.getColorByKey(context,AppThemeKeys.itemTextColor.name),
-                fontSize: ScreenUtil().setSp(32),
-                fontWeight: FontWeight.w700,
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textItem,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -62,7 +59,10 @@ class _ChartHistogramState extends State<ChartHistogram> {
             child: Stack(
               children: <Widget>[
                 Padding(
-                  padding: EdgeInsets.only(top: ScreenUtil().setWidth(32),bottom: ScreenUtil().setWidth(24)),
+                  padding: EdgeInsets.only(
+                    top: ScreenUtil().setWidth(32),
+                    bottom: ScreenUtil().setWidth(24),
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
@@ -72,9 +72,7 @@ class _ChartHistogramState extends State<ChartHistogram> {
                           style: widget.titleModel.titleStyle,
                         ),
                       if (widget.titleModel.title != null)
-                        SizedBox(
-                          height: widget.titleModel.tsSpace,
-                        ),
+                        SizedBox(height: widget.titleModel.tsSpace),
                       if (widget.titleModel.subtitle != null)
                         Text(
                           widget.titleModel.subtitle!,
@@ -82,43 +80,43 @@ class _ChartHistogramState extends State<ChartHistogram> {
                         ),
                       if (widget.titleModel.subtitle != null ||
                           widget.titleModel.title != null)
-                        SizedBox(
-                          height: widget.titleModel.bottomSpace,
-                        ),
+                        SizedBox(height: widget.titleModel.bottomSpace),
                       Expanded(
-                        child: BarChart(
-                          mainBarData(),
-                          duration: animDuration,
-                        ),
+                        child: BarChart(mainBarData(), duration: animDuration),
                       ),
                     ],
                   ),
                 ),
 
-                if(widget.isLoading)
-                  Center(child: Padding(
-                    padding:  EdgeInsets.only(bottom: ScreenUtil().setWidth(24)),
-                    child:  CupertinoActivityIndicator(animating: true, radius: ScreenUtil().setWidth(24)),
-                  ))
-
+                if (widget.isLoading)
+                  Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        bottom: ScreenUtil().setWidth(24),
+                      ),
+                      child: CupertinoActivityIndicator(
+                        animating: true,
+                        radius: ScreenUtil().setWidth(24),
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),
         ],
       ),
-
     );
   }
 
   BarChartGroupData makeGroupData(
-      int x,
-      double y,
-      Color barColor,
-      Color barColorFg,
-      double width, {
-        bool isTouched = false,
-        List<int> showTooltips = const [],
-      }) {
+    int x,
+    double y,
+    Color barColor,
+    Color barColorFg,
+    double width, {
+    bool isTouched = false,
+    List<int> showTooltips = const [],
+  }) {
     return BarChartGroupData(
       x: x,
       barRods: [
@@ -128,7 +126,10 @@ class _ChartHistogramState extends State<ChartHistogram> {
           width: width,
           borderSide: isTouched
               ? BorderSide(
-              color: widget.barChartModel.touchColor.withAlpha((0.5 * 255).round()))
+                  color: widget.barChartModel.touchColor.withAlpha(
+                    (0.5 * 255).round(),
+                  ),
+                )
               : BorderSide(color: widget.barChartModel.touchColor, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
@@ -149,7 +150,11 @@ class _ChartHistogramState extends State<ChartHistogram> {
           ? model.fgColorMax!
           : model.fgColor;
       return makeGroupData(
-        i, value, model.bgColor, fg, model.width,
+        i,
+        value,
+        model.bgColor,
+        fg,
+        model.width,
         isTouched: i == touchedIndex,
       );
     });
@@ -161,7 +166,10 @@ class _ChartHistogramState extends State<ChartHistogram> {
         touchTooltipData: BarTouchTooltipData(
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            if(widget.alertMessageGroups == null || widget.alertMessageGroups!.isEmpty) return null;
+            if (widget.alertMessageGroups == null ||
+                widget.alertMessageGroups!.isEmpty) {
+              return null;
+            }
             AlertMessageGroup? amg = widget.alertMessageGroups?[group.x];
             if (amg != null) {
               List<TextSpan> spans = [];
@@ -170,15 +178,13 @@ class _ChartHistogramState extends State<ChartHistogram> {
                 if (i != amg.titles.length - 1) {
                   text = "$text\n";
                 }
-                spans.add(
-                  TextSpan(
-                    text: text,
-                    style: amg.styles[i],
-                  ),
-                );
+                spans.add(TextSpan(text: text, style: amg.styles[i]));
               }
-              return BarTooltipItem('${amg.titles[0]}\n', amg.styles[0],
-                  children: spans);
+              return BarTooltipItem(
+                '${amg.titles[0]}\n',
+                amg.styles[0],
+                children: spans,
+              );
             }
             return null;
           },
@@ -197,12 +203,8 @@ class _ChartHistogramState extends State<ChartHistogram> {
       ),
       titlesData: FlTitlesData(
         show: true,
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
@@ -210,15 +212,9 @@ class _ChartHistogramState extends State<ChartHistogram> {
             reservedSize: 38,
           ),
         ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-          ),
-        ),
+        leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       ),
-      borderData: FlBorderData(
-        show: false,
-      ),
+      borderData: FlBorderData(show: false),
       barGroups: showingGroups(),
       gridData: FlGridData(show: false),
     );
@@ -228,11 +224,15 @@ class _ChartHistogramState extends State<ChartHistogram> {
     //value = index
     Widget text;
     if (value.toInt() == widget.bottomTitle.specialIndex) {
-      text = Text(widget.bottomTitle.titles[value.toInt()],
-          style: widget.bottomTitle.specialStyle ?? widget.bottomTitle.style);
+      text = Text(
+        widget.bottomTitle.titles[value.toInt()],
+        style: widget.bottomTitle.specialStyle ?? widget.bottomTitle.style,
+      );
     } else {
-      text = Text(widget.bottomTitle.titles[value.toInt()],
-          style: widget.bottomTitle.style);
+      text = Text(
+        widget.bottomTitle.titles[value.toInt()],
+        style: widget.bottomTitle.style,
+      );
     }
     return SideTitleWidget(
       meta: meta,
@@ -255,12 +255,13 @@ class BottomTitle {
   int specialIndex; //特殊标题索引
   TextStyle? specialStyle; //特殊标题样式
   double space; //标题与柱状图的间隔
-  BottomTitle(
-      {required this.titles,
-        required this.style,
-        this.specialIndex = -1,
-        this.specialStyle,
-        this.space = 15});
+  BottomTitle({
+    required this.titles,
+    required this.style,
+    this.specialIndex = -1,
+    this.specialStyle,
+    this.space = 15,
+  });
 }
 
 class BarChartModel {
@@ -295,11 +296,12 @@ class TitleModel {
   TextStyle? subtitleStyle;
   double tsSpace; //主标题和副标题之间的间隔
   double bottomSpace; //副标题和图标之间的间隔
-  TitleModel(
-      {this.title,
-        this.subtitle,
-        this.titleStyle,
-        this.subtitleStyle,
-        this.tsSpace = 4,
-        this.bottomSpace = 30});
+  TitleModel({
+    this.title,
+    this.subtitle,
+    this.titleStyle,
+    this.subtitleStyle,
+    this.tsSpace = 4,
+    this.bottomSpace = 30,
+  });
 }

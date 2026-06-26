@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/hyperliquid_service.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Perpetual futures trading page — Hyperliquid integration.
 ///
@@ -72,17 +72,12 @@ class _PerpsPageState extends State<PerpsPage>
       appBar: AppBar(
         title: Text(
           'Perpetuals',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
         actions: [
           IconButton(
@@ -92,15 +87,9 @@ class _PerpsPageState extends State<PerpsPage>
         ],
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ),
-          labelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
-          unselectedLabelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          indicatorColor: AppColorTokens.of(context).brand,
+          labelColor: AppColorTokens.of(context).textPrimary,
+          unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
           tabs: [
             Tab(text: 'Markets (${_markets.length})'),
             Tab(text: 'Positions (${_positions.length})'),
@@ -108,9 +97,7 @@ class _PerpsPageState extends State<PerpsPage>
           ],
         ),
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : Column(
@@ -137,19 +124,26 @@ class _PerpsPageState extends State<PerpsPage>
   Widget _buildMarginBar(MarginSummary margin) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(24),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
       ),
-      color: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name,
-      ),
+      color: AppColorTokens.of(context).bgSurface,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _buildMarginItem('Account', '\$${margin.accountValue.toStringAsFixed(2)}'),
-          _buildMarginItem('Used', '\$${margin.totalMarginUsed.toStringAsFixed(2)}'),
+          _buildMarginItem(
+            'Account',
+            '\$${margin.accountValue.toStringAsFixed(2)}',
+          ),
+          _buildMarginItem(
+            'Used',
+            '\$${margin.totalMarginUsed.toStringAsFixed(2)}',
+          ),
           _buildMarginItem('Free', '\$${margin.freeMargin.toStringAsFixed(2)}'),
-          _buildMarginItem('Util', '${margin.marginUtilization.toStringAsFixed(1)}%'),
+          _buildMarginItem(
+            'Util',
+            '${margin.marginUtilization.toStringAsFixed(1)}%',
+          ),
         ],
       ),
     );
@@ -160,21 +154,15 @@ class _PerpsPageState extends State<PerpsPage>
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(20),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -183,7 +171,7 @@ class _PerpsPageState extends State<PerpsPage>
 
   Widget _buildMarketsList() {
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _markets.length,
       itemBuilder: (context, index) {
         final m = _markets[index];
@@ -192,21 +180,15 @@ class _PerpsPageState extends State<PerpsPage>
           dense: true,
           title: Text(
             '${m.symbol}-PERP',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           subtitle: Text(
             'Vol: \$${_formatCompact(m.volume24h)} · OI: \$${_formatCompact(m.openInterest)}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           trailing: Column(
@@ -215,20 +197,18 @@ class _PerpsPageState extends State<PerpsPage>
             children: [
               Text(
                 '\$${m.markPrice.toStringAsFixed(2)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
               Text(
                 '${isPositive ? '+' : ''}${m.priceChangePct.toStringAsFixed(2)}%',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: isPositive ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+                  color: isPositive
+                      ? AppColorTokens.of(context).success
+                      : AppColorTokens.of(context).danger,
                 ),
               ),
             ],
@@ -246,27 +226,24 @@ class _PerpsPageState extends State<PerpsPage>
       return Center(
         child: Text(
           'No open positions',
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
-          ),
+          style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _positions.length,
       itemBuilder: (context, index) {
         final p = _positions[index];
         final isProfitable = p.unrealizedPnl >= 0;
+        final c = AppColorTokens.of(context);
         return Container(
           margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
-          padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           decoration: BoxDecoration(
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+            color: AppColorTokens.of(context).bgSurface,
+            borderRadius: AppRadius.brMd,
           ),
           child: Column(
             children: [
@@ -274,32 +251,29 @@ class _PerpsPageState extends State<PerpsPage>
                 children: [
                   Container(
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(12),
-                      vertical: ScreenUtil().setWidth(4),
+                      horizontal: AppSpacing.space4,
+                      vertical: AppSpacing.space2,
                     ),
                     decoration: BoxDecoration(
-                      color: (p.isLong ? const Color(0xFF22C55E) : const Color(0xFFEF4444))
-                          .withValues(alpha: 0.15),
+                      color: (p.isLong ? c.success : c.danger).withValues(
+                        alpha: 0.15,
+                      ),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
                       '${p.sideLabel} ${p.leverage.toStringAsFixed(1)}x',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: p.isLong ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+                        color: p.isLong ? c.success : c.danger,
                       ),
                     ),
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     p.symbol,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(28),
+                    style: AppTypography.body.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name,
-                      ),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                   const Spacer(),
@@ -308,34 +282,34 @@ class _PerpsPageState extends State<PerpsPage>
                     children: [
                       Text(
                         '${isProfitable ? '+' : ''}\$${p.unrealizedPnl.toStringAsFixed(2)}',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(26),
-                          fontWeight: FontWeight.w700,
-                          color: isProfitable
-                              ? const Color(0xFF22C55E)
-                              : const Color(0xFFEF4444),
+                        style: AppTypography.bodySm.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: isProfitable ? c.success : c.danger,
                         ),
                       ),
                       Text(
                         '${isProfitable ? '+' : ''}${p.pnlPercentage.toStringAsFixed(2)}%',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
-                          color: isProfitable
-                              ? const Color(0xFF22C55E)
-                              : const Color(0xFFEF4444),
+                        style: AppTypography.caption.copyWith(
+                          color: isProfitable ? c.success : c.danger,
                         ),
                       ),
                     ],
                   ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildPosDetail('Size', p.size.abs().toStringAsFixed(4)),
-                  _buildPosDetail('Entry', '\$${p.entryPrice.toStringAsFixed(2)}'),
-                  _buildPosDetail('Liq', '\$${p.liquidationPrice.toStringAsFixed(2)}'),
+                  _buildPosDetail(
+                    'Entry',
+                    '\$${p.entryPrice.toStringAsFixed(2)}',
+                  ),
+                  _buildPosDetail(
+                    'Liq',
+                    '\$${p.liquidationPrice.toStringAsFixed(2)}',
+                  ),
                 ],
               ),
             ],
@@ -350,20 +324,14 @@ class _PerpsPageState extends State<PerpsPage>
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(20),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],
@@ -375,17 +343,13 @@ class _PerpsPageState extends State<PerpsPage>
       return Center(
         child: Text(
           'No open orders',
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
-          ),
+          style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
     }
 
     return ListView.builder(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.all(AppSpacing.space2),
       itemCount: _orders.length,
       itemBuilder: (context, index) {
         final o = _orders[index];
@@ -393,29 +357,29 @@ class _PerpsPageState extends State<PerpsPage>
           dense: true,
           leading: Icon(
             o.isBuy ? Icons.arrow_upward : Icons.arrow_downward,
-            color: o.isBuy ? const Color(0xFF22C55E) : const Color(0xFFEF4444),
+            color: o.isBuy
+                ? AppColorTokens.of(context).success
+                : AppColorTokens.of(context).danger,
             size: 20,
           ),
           title: Text(
             '${o.sideLabel} ${o.symbol} × ${o.size}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name,
-              ),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           subtitle: Text(
             'Limit \$${o.price.toStringAsFixed(2)}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name,
-              ),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           trailing: IconButton(
-            icon: const Icon(Icons.close, size: 18, color: Colors.red),
+            icon: Icon(
+              Icons.close,
+              size: 18,
+              color: AppColorTokens.of(context).danger,
+            ),
             onPressed: () {
               // TODO: Cancel order
             },

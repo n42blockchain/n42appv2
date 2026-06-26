@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -72,7 +73,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Load ENS price failed: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       }
@@ -106,7 +107,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(data?.error ?? S.of(context).g_key_error_3),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       } else if (data.newExpiresAt != null) {
@@ -121,7 +122,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('ENS renew failed: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
     }
@@ -132,13 +133,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_ens_renew),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // 域名信息卡片
             _buildDomainCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             // 续费成功后显示结果
             if (_renewResult?.success == true) ...[
@@ -146,24 +147,24 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 ensName: widget.ownedEns.name,
                 renewResult: _renewResult!,
               ),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
             ],
 
             // 续费期限选择
             if (_renewResult?.success != true) ...[
               _buildYearsSelector(),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // 价格信息
               if (_isLoadingPrice)
                 const Center(child: CircularProgressIndicator())
               else if (_priceInfo != null)
                 EnsPriceCard(price: _priceInfo!),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
 
               // 新到期时间预览
               if (_priceInfo != null) _buildExpiryPreview(),
-              SizedBox(height: ScreenUtil().setWidth(32)),
+              SizedBox(height: AppSpacing.space8),
             ],
 
             // 操作按钮
@@ -176,12 +177,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
 
   Widget _buildDomainCard() {
     final ens = widget.ownedEns;
+    final c = AppColorTokens.of(context);
     final (statusColor, statusIcon, baseColor) = switch ((
       ens.isExpired,
       ens.isExpiringSoon,
     )) {
-      (true, _) => (Colors.red, Icons.error, Colors.red),
-      (_, true) => (Colors.orange, Icons.warning, Colors.orange),
+      (true, _) => (c.danger, Icons.error, c.danger),
+      (_, true) => (c.warning, Icons.warning, c.warning),
       _ => (
         _color(AppThemeKeys.itemSubtitleTextColor),
         Icons.access_time,
@@ -190,26 +192,25 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     };
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [baseColor.withAlpha(30), baseColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
           Text(
             ens.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(36),
-              fontWeight: FontWeight.bold,
+            style: AppTypography.title.copyWith(
+              fontWeight: FontWeight.w600,
               color: _color(AppThemeKeys.mainTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -218,17 +219,14 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 size: ScreenUtil().setWidth(20),
                 color: statusColor,
               ),
-              SizedBox(width: ScreenUtil().setWidth(6)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   ens.isExpired
                       ? S.of(context).g_key_ens_expired
                       : '${S.of(context).g_key_ens_expires}: ${ens.formattedExpiresAt}',
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: statusColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: statusColor),
                 ),
               ),
             ],
@@ -244,13 +242,12 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       children: [
         Text(
           S.of(context).g_key_ens_extend_period,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
             color: _color(AppThemeKeys.mainTextColor),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(16)),
+        SizedBox(height: AppSpacing.space4),
         Row(
           children: [1, 2, 3, 5].map((years) {
             final isSelected = _selectedYears == years;
@@ -262,7 +259,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                     right: years != 5 ? ScreenUtil().setWidth(12) : 0,
                   ),
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(16),
+                    vertical: AppSpacing.space4,
                   ),
                   decoration: BoxDecoration(
                     color: _color(
@@ -270,9 +267,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                           ? AppThemeKeys.mainBlueColor
                           : AppThemeKeys.itemBgColor,
                     ),
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(12),
-                    ),
+                    borderRadius: AppRadius.brMd,
                     border: Border.all(
                       color: isSelected
                           ? _color(AppThemeKeys.mainBlueColor)
@@ -283,8 +278,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   ),
                   child: Text(
                     '+$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(26),
+                    style: AppTypography.bodySm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: isSelected
                           ? Colors.white
@@ -306,11 +300,13 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
     final newExpiry = currentExpiry.add(Duration(days: _selectedYears * 365));
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: Colors.green.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: Border.all(color: Colors.green.withAlpha(40)),
+        color: AppColorTokens.of(context).success.withAlpha(20),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(
+          color: AppColorTokens.of(context).success.withAlpha(40),
+        ),
       ),
       child: Column(
         children: [
@@ -321,27 +317,25 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 child: Text(
                   S.of(context).g_key_ens_current_expiry,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: _color(AppThemeKeys.itemSubtitleTextColor),
                   ),
                 ),
               ),
               Text(
                 _formatDate(currentExpiry),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
                   color: _color(AppThemeKeys.mainTextColor),
                 ),
               ),
             ],
           ),
           Padding(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
             child: Icon(
               Icons.arrow_downward,
               size: ScreenUtil().setWidth(24),
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
             ),
           ),
           Row(
@@ -351,19 +345,17 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                 child: Text(
                   S.of(context).g_key_ens_new_expiry,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: Colors.green,
+                    color: AppColorTokens.of(context).success,
                   ),
                 ),
               ),
               Text(
                 _formatDate(newExpiry),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green,
+                  color: AppColorTokens.of(context).success,
                 ),
               ),
             ],
@@ -378,19 +370,14 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       return ElevatedButton(
         onPressed: () => Navigator.pop(context, true),
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.green,
+          backgroundColor: AppColorTokens.of(context).success,
           foregroundColor: Colors.white,
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-          ),
+          padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: Text(
           S.of(context).g_swap_key_18,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            fontWeight: FontWeight.w600,
-          ),
+          style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
         ),
       );
     }
@@ -400,11 +387,9 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       style: ElevatedButton.styleFrom(
         backgroundColor: _color(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
-        disabledBackgroundColor: Colors.grey,
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+        disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: _isRenewing
           ? SizedBox(
@@ -417,10 +402,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
             )
           : Text(
               S.of(context).g_key_ens_confirm_renew,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
     );
   }

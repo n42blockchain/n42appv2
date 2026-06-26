@@ -6,9 +6,10 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/aa/aa.dart' hide PaymasterType;
 import 'package:n42_wallet/features/wallet/pages/aa/paymaster_select_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/aa_transaction_preview.dart';
@@ -45,35 +46,33 @@ class _AASendPageState extends State<AASendPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_48,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_48),
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // 发送方信息
                 buildFromSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // 接收方地址
                 buildToSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // 金额输入
                 buildAmountSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // Paymaster 选择
                 buildPaymasterSection(),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
 
                 // Gas 估算
                 buildGasSection(),
-                SizedBox(height: ScreenUtil().setWidth(32)),
+                SizedBox(height: AppSpacing.space8),
 
                 // 发送按钮
                 buildSendButton(),
@@ -83,9 +82,7 @@ class _AASendPageState extends State<AASendPage>
           if (isSending)
             Container(
               color: Colors.black.withAlpha(50),
-              child: const Center(
-                child: CircularProgressIndicator(),
-              ),
+              child: const Center(child: CircularProgressIndicator()),
             ),
         ],
       ),

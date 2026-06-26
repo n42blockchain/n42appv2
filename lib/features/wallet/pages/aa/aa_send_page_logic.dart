@@ -102,9 +102,9 @@ mixin _AASendLogicMixin on State<AASendPage> {
   void showTransactionPreview() {
     final toAddress = toController.text.trim();
     if (!_addrRegex.hasMatch(toAddress)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context).g_key_t_50)),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_t_50)));
       return;
     }
     final amount = double.tryParse(amountController.text.trim()) ?? 0.0;
@@ -145,7 +145,7 @@ mixin _AASendLogicMixin on State<AASendPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).g_key_140),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColorTokens.of(context).success,
         ),
       );
 

@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── InfoCard ────────────────────────────────────────────────────────────────
 
@@ -25,12 +25,13 @@ class BatchInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final success = AppColorTokens.of(context).success;
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.all(AppSpacing.space4),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -40,18 +41,16 @@ class BatchInfoCard extends StatelessWidget {
               children: [
                 Text(
                   'Token: $tokenSymbol',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   '${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -60,23 +59,26 @@ class BatchInfoCard extends StatelessWidget {
           if (supportsMulticall)
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(10),
-                vertical: ScreenUtil().setWidth(4),
+                horizontal: AppSpacing.space2,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(30),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: success.withAlpha(30),
+                borderRadius: AppRadius.brSm,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.flash_on, color: Colors.green, size: ScreenUtil().setWidth(20)),
-                  SizedBox(width: ScreenUtil().setWidth(4)),
+                  Icon(
+                    Icons.flash_on,
+                    color: success,
+                    size: ScreenUtil().setWidth(20),
+                  ),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     'Multicall',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
-                      color: Colors.green,
+                    style: AppTypography.captionSm.copyWith(
+                      color: success,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -113,24 +115,23 @@ class BatchAddItemForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_batch_add_recipient,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           TextField(
             controller: addressController,
@@ -143,14 +144,16 @@ class BatchAddItemForm extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           Row(
             children: [
               Expanded(
                 child: TextField(
                   controller: amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: InputDecoration(
                     hintText: '0.0',
                     labelText: 'Amount',
@@ -158,7 +161,7 @@ class BatchAddItemForm extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: TextField(
                   controller: memoController,
@@ -170,7 +173,7 @@ class BatchAddItemForm extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
 
           SizedBox(
             width: double.infinity,

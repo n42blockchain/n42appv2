@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 解析地址编辑区块
 class EnsAddressSection extends StatelessWidget {
@@ -31,18 +31,19 @@ class EnsAddressSection extends StatelessWidget {
             title: S.of(context).g_key_ens_resolved_address,
             onSave: onSave,
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           TextField(
             controller: controller,
             decoration: InputDecoration(
               hintText: '0x...',
-              prefixIcon: const Icon(Icons.account_balance_wallet_outlined, size: 20),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              prefixIcon: const Icon(
+                Icons.account_balance_wallet_outlined,
+                size: 20,
               ),
+              border: OutlineInputBorder(borderRadius: AppRadius.brMd),
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(16),
-                vertical: ScreenUtil().setWidth(14),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
@@ -54,8 +55,7 @@ class EnsAddressSection extends StatelessWidget {
                     )
                   : null,
             ),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontFamily: 'monospace',
             ),
             onChanged: (_) => onChanged(),
@@ -89,11 +89,11 @@ class EnsTextRecordsSection extends StatelessWidget {
             title: S.of(context).g_key_ens_text_records,
             onSave: onSave,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
-          ...recordKeys.map((key) => _RecordField(
-                recordKey: key,
-                controller: controllers[key]!,
-              )),
+          SizedBox(height: AppSpacing.space4),
+          ...recordKeys.map(
+            (key) =>
+                _RecordField(recordKey: key, controller: controllers[key]!),
+          ),
         ],
       ),
     );
@@ -115,40 +115,38 @@ class _RecordField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: _labelFor(recordKey),
           prefixIcon: Icon(_iconFor(recordKey), size: 20),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
+          border: OutlineInputBorder(borderRadius: AppRadius.brMd),
           contentPadding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(14),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
           ),
         ),
-        style: TextStyle(fontSize: ScreenUtil().setSp(26)),
+        style: AppTypography.bodySm,
       ),
     );
   }
 
   static String _labelFor(String key) => switch (key) {
-        'email' => 'Email',
-        'url' => 'Website',
-        'com.twitter' => 'Twitter / X',
-        'com.github' => 'GitHub',
-        'com.discord' => 'Discord',
-        'org.telegram' => 'Telegram',
-        'description' => 'Description',
-        _ => key,
-      };
+    'email' => 'Email',
+    'url' => 'Website',
+    'com.twitter' => 'Twitter / X',
+    'com.github' => 'GitHub',
+    'com.discord' => 'Discord',
+    'org.telegram' => 'Telegram',
+    'description' => 'Description',
+    _ => key,
+  };
 
   static IconData _iconFor(String key) => switch (key) {
-        'email' => Icons.email_outlined,
-        'url' => Icons.link,
-        'com.twitter' => Icons.alternate_email,
-        'com.github' => Icons.code,
-        'com.discord' => Icons.chat_bubble_outline,
-        'org.telegram' => Icons.send_outlined,
-        'description' => Icons.description_outlined,
-        _ => Icons.text_fields,
-      };
+    'email' => Icons.email_outlined,
+    'url' => Icons.link,
+    'com.twitter' => Icons.alternate_email,
+    'com.github' => Icons.code,
+    'com.discord' => Icons.chat_bubble_outline,
+    'org.telegram' => Icons.send_outlined,
+    'description' => Icons.description_outlined,
+    _ => Icons.text_fields,
+  };
 }
 
 class _SectionCard extends StatelessWidget {
@@ -159,10 +157,10 @@ class _SectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: child,
     );
@@ -182,19 +180,12 @@ class _SectionHeader extends StatelessWidget {
       children: [
         Text(
           title,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        TextButton(
-          onPressed: onSave,
-          child: Text(S.of(context).g_key_115),
-        ),
+        TextButton(onPressed: onSave, child: Text(S.of(context).g_key_115)),
       ],
     );
   }

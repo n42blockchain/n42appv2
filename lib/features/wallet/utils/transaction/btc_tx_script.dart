@@ -19,14 +19,17 @@ class BtcTxScript {
   /// 解析 Bech32 地址（bc1... / tb1...），返回对应的 scriptPubKey
   Uint8List getScriptPubKeyFromBech32(String bech32Address) {
     final P2wpkhAddress p2wpkhAddress = P2wpkhAddress.fromAddress(
-        address: bech32Address, network: BitcoinNetwork.testnet);
+      address: bech32Address,
+      network: BitcoinNetwork.testnet,
+    );
     return Uint8List.fromList(p2wpkhAddress.toScriptPubKey().toBytes());
   }
 
   /// 从压缩公钥计算 P2WPKH scriptPubKey（0x00 + 0x14 + RIPEMD160(SHA256(pubKey))）
   Uint8List getP2WPKHScript(Uint8List publicKey) {
-    final Uint8List sha256Hash =
-        Uint8List.fromList(sha256.convert(publicKey).bytes);
+    final Uint8List sha256Hash = Uint8List.fromList(
+      sha256.convert(publicKey).bytes,
+    );
     final Uint8List pubKeyHash = _ripemd160Hash(sha256Hash);
 
     final BytesBuilder script = BytesBuilder();
@@ -43,9 +46,11 @@ class BtcTxScript {
 
   /// 将原始交易字节与 witness 签名序列化为最终交易
   Uint8List serializeTransaction(
-      Uint8List rawTx, List<Uint8List> signatures, Uint8List publicKey) {
-    final ByteData data =
-        ByteData(rawTx.length + (signatures.length * 180));
+    Uint8List rawTx,
+    List<Uint8List> signatures,
+    Uint8List publicKey,
+  ) {
+    final ByteData data = ByteData(rawTx.length + (signatures.length * 180));
     int offset = 0;
 
     data.buffer.asUint8List().setRange(0, rawTx.length, rawTx);
@@ -66,7 +71,10 @@ class BtcTxScript {
       data.setUint8(offset, publicKey.length);
       offset += 1;
       data.buffer.asUint8List().setRange(
-          offset, offset + publicKey.length, publicKey);
+        offset,
+        offset + publicKey.length,
+        publicKey,
+      );
       offset += publicKey.length;
     }
 

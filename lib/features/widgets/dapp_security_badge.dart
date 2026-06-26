@@ -4,10 +4,10 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 // ─── Icon helper ─────────────────────────────────────────────────────────
 
@@ -53,8 +53,7 @@ class DAppSecurityIcon extends StatelessWidget {
     if (info == null) {
       return Icon(
         Icons.search,
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name),
+        color: AppColorTokens.of(context).brand,
         size: size.sp,
       );
     }
@@ -106,8 +105,7 @@ class DAppSecurityBadge extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 22.sp,
+                style: AppTypography.caption.copyWith(
                   fontWeight: FontWeight.w600,
                   color: color,
                 ),
@@ -115,8 +113,8 @@ class DAppSecurityBadge extends StatelessWidget {
               if (showReason && info.reason != null)
                 Text(
                   info.reason!,
-                  style: TextStyle(
-                    fontSize: 18.sp,
+                  style: AppTypography.captionSm.copyWith(
+                    fontWeight: FontWeight.w400,
                     color: color.withAlpha(200),
                   ),
                 ),
@@ -139,12 +137,12 @@ class DAppMethodChips extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (methods.isEmpty) return const SizedBox.shrink();
-    final subColor = AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name)
-        .withAlpha(153);
+    final subColor = AppColorTokens.of(context).textPrimary.withAlpha(153);
 
     // Show at most 4 chips to avoid overflow
-    final shown = methods.length > 4 ? methods.sublist(methods.length - 4) : methods;
+    final shown = methods.length > 4
+        ? methods.sublist(methods.length - 4)
+        : methods;
 
     return Wrap(
       spacing: 6.w,
@@ -159,8 +157,8 @@ class DAppMethodChips extends StatelessWidget {
           ),
           child: Text(
             short,
-            style: TextStyle(
-              fontSize: 18.sp,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
               color: subColor,
               fontFamily: 'monospace',
             ),

@@ -1,29 +1,30 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
-Future<bool?> showGroupConfirmDialog(BuildContext context, int num,
-    String lockDate, GestureTapCallback? sureCall) async {
+Future<bool?> showGroupConfirmDialog(
+  BuildContext context,
+  int num,
+  String lockDate,
+  GestureTapCallback? sureCall,
+) async {
   return await showDialog(
     context: context,
     barrierDismissible: false,
     builder: (_) => AlertDialog(
       contentPadding: const EdgeInsets.all(0),
       //这是宽度沾满宽度
-      insetPadding: EdgeInsets.all(ScreenUtil().setWidth(28)),
+      insetPadding: EdgeInsets.all(AppSpacing.space8),
       //设置圆角
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24))),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brLg),
       content: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(24)),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.backGroundColor.name)),
-          child: GroupConfirm(
-            num: num,
-            lockDate: lockDate,
-            sureCall: sureCall,
-          )),
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.brLg,
+          color: AppColorTokens.of(context).bgBase,
+        ),
+        child: GroupConfirm(num: num, lockDate: lockDate, sureCall: sureCall),
+      ),
     ),
   );
 }
@@ -33,52 +34,43 @@ class GroupConfirm extends StatelessWidget {
   final String lockDate;
   final GestureTapCallback? sureCall;
 
-  const GroupConfirm(
-      {super.key, required this.num, required this.lockDate, this.sureCall});
+  const GroupConfirm({
+    super.key,
+    required this.num,
+    required this.lockDate,
+    this.sureCall,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(44)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              height: ScreenUtil().setWidth(80),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(80)),
             Image.asset(
               'assets/img/ast_nft.png',
               width: ScreenUtil().setWidth(160),
               fit: BoxFit.cover,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(80),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(80)),
             Text(
               "Confirmation",
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(44)),
+              style: AppTypography.titleLg.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(54),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(54)),
             Text(
               // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
               S.of(context).g_mining_key76(num.toString(), lockDate),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(28)),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(90),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(90)),
             SizedBox(
               height: ScreenUtil().setWidth(88),
               child: Row(
@@ -91,25 +83,22 @@ class GroupConfirm extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.itemBgColor.name),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
+                          color: AppColorTokens.of(context).bgSurface,
+                          borderRadius: AppRadius.brSm,
+                        ),
                         child: Center(
                           child: Text(
                             S.of(context).g_key_79,
-                            style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(
-                                    context, AppThemeKeys.mainBlueColor.name),
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(30)),
+                            style: AppTypography.headline.copyWith(
+                              color: AppColorTokens.of(context).brand,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(
-                    width: ScreenUtil().setWidth(30),
-                  ),
+                  SizedBox(width: AppSpacing.space8),
                   Expanded(
                     child: InkWell(
                       onTap: () {
@@ -118,27 +107,25 @@ class GroupConfirm extends StatelessWidget {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainBlueColor.name),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
+                          color: AppColorTokens.of(context).brand,
+                          borderRadius: AppRadius.brSm,
+                        ),
                         child: Center(
                           child: Text(
                             S.of(context).g_key_78,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: ScreenUtil().setSp(30)),
+                            style: AppTypography.headline.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
-            SizedBox(
-              height: ScreenUtil().setWidth(54),
-            ),
+            SizedBox(height: ScreenUtil().setWidth(54)),
           ],
         ),
       ),

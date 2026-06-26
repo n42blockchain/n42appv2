@@ -17,7 +17,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart'
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 part 'home_draw_page_widgets.dart';
 
@@ -64,10 +64,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
         bottomRight: Radius.circular(ScreenUtil().setWidth(24)),
       ),
       child: Container(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
+        color: AppColorTokens.of(context).bgBase,
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,8 +72,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
               // 顶部操作栏
               Padding(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(8),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 child: Row(
                   children: [
@@ -85,10 +82,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       width: ScreenUtil().setWidth(44),
                       height: ScreenUtil().setWidth(44),
                       decoration: BoxDecoration(
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemBgColor.name,
-                        ),
+                        color: AppColorTokens.of(context).bgSurface,
                         borderRadius: BorderRadius.circular(
                           ScreenUtil().setWidth(22),
                         ),
@@ -101,19 +95,16 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                         icon: Icon(
                           Icons.close_rounded,
                           size: ScreenUtil().setWidth(24),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.itemSubtitleTextColor.name,
-                          ),
+                          color: AppColorTokens.of(context).textSubtitle,
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               buildUserAccount(currentUser),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               Expanded(
                 child: ListView(
                   padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
@@ -152,7 +143,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     // 安全与设置分组
                     _sectionTitle(S.of(context).g_key_94),
                     _menuItem(
@@ -175,7 +166,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(12)),
+                    SizedBox(height: AppSpacing.space4),
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
                     _menuItem(
@@ -205,7 +196,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                       },
                     ),
 
-                    SizedBox(height: ScreenUtil().setWidth(20)),
+                    SizedBox(height: AppSpacing.space4),
                     // 登录/退出按钮
                     buildLoginLogoutButton(currentUser),
                   ],
@@ -228,32 +219,27 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
       color: Colors.transparent,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         child: Container(
           margin: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(4),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
           ),
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(16),
-            vertical: ScreenUtil().setWidth(16),
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
           ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          ),
+          decoration: BoxDecoration(borderRadius: AppRadius.brMd),
           child: Row(
             children: [
               Container(
                 width: ScreenUtil().setWidth(44),
                 height: ScreenUtil().setWidth(44),
                 decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(
+                  color: AppColorTokens.of(
                     context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(12),
-                  ),
+                  ).brand.withValues(alpha: 0.1),
+                  borderRadius: AppRadius.brMd,
                 ),
                 alignment: Alignment.center,
                 child: Image.asset(
@@ -261,22 +247,15 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                   width: ScreenUtil().setWidth(24),
                   height: ScreenUtil().setWidth(24),
                   fit: BoxFit.contain,
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(16)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Text(
                   actionName,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -287,10 +266,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                 Icon(
                   Icons.chevron_right_rounded,
                   size: ScreenUtil().setWidth(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
             ],
           ),
@@ -309,12 +285,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
       ),
       child: Text(
         title.toUpperCase(),
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemSubtitleTextColor.name,
-          ),
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
           fontWeight: FontWeight.w600,
           letterSpacing: 1.2,
         ),

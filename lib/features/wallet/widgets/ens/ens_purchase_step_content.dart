@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 购买页各注册步骤的内容区域
@@ -32,59 +32,72 @@ class EnsPurchaseStepContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => switch (currentStep) {
-        0 => _buildInitialContent(context),
-        1 => _buildProgressContent(
-            context,
-            title: S.of(context).g_key_ens_committing,
-            subtitle: S.of(context).g_key_ens_please_wait,
-          ),
-        2 => _buildWaitingContent(context),
-        3 => _buildProgressContent(
-            context,
-            title: S.of(context).g_key_ens_registering,
-            subtitle: S.of(context).g_key_ens_finalizing,
-          ),
-        4 => _buildSuccessContent(context),
-        -1 => _buildErrorContent(context),
-        _ => const SizedBox.shrink(),
-      };
+    0 => _buildInitialContent(context),
+    1 => _buildProgressContent(
+      context,
+      title: S.of(context).g_key_ens_committing,
+      subtitle: S.of(context).g_key_ens_please_wait,
+    ),
+    2 => _buildWaitingContent(context),
+    3 => _buildProgressContent(
+      context,
+      title: S.of(context).g_key_ens_registering,
+      subtitle: S.of(context).g_key_ens_finalizing,
+    ),
+    4 => _buildSuccessContent(context),
+    -1 => _buildErrorContent(context),
+    _ => const SizedBox.shrink(),
+  };
 
   // ── Theme helpers ──────────────────────────────────────────────────────
   Color _mainText(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+      AppColorTokens.of(context).textPrimary;
   Color _subtitle(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-  Color _blue(BuildContext context) =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+      AppColorTokens.of(context).textSubtitle;
+  Color _blue(BuildContext context) => AppColorTokens.of(context).brand;
 
   /// Shared container decoration used by most step content builders.
-  BoxDecoration _stepDecoration(BuildContext context, {Color? color, Color? borderColor}) =>
-      BoxDecoration(
-        color: color ?? AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        border: borderColor != null ? Border.all(color: borderColor) : null,
-      );
+  BoxDecoration _stepDecoration(
+    BuildContext context, {
+    Color? color,
+    Color? borderColor,
+  }) => BoxDecoration(
+    color: color ?? AppColorTokens.of(context).bgSurface,
+    borderRadius: AppRadius.brMd,
+    border: borderColor != null ? Border.all(color: borderColor) : null,
+  );
 
   // ── Step 0: Initial ────────────────────────────────────────────────────
   Widget _buildInitialContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _stepDecoration(context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_ens_registration_info,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText(context),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          _buildInfoRow(context, Icons.security, S.of(context).g_key_ens_two_step_process),
-          _buildInfoRow(context, Icons.timer, S.of(context).g_key_ens_wait_time_info),
-          _buildInfoRow(context, Icons.warning_amber_rounded, S.of(context).g_key_ens_keep_app_open),
+          SizedBox(height: AppSpacing.space4),
+          _buildInfoRow(
+            context,
+            Icons.security,
+            S.of(context).g_key_ens_two_step_process,
+          ),
+          _buildInfoRow(
+            context,
+            Icons.timer,
+            S.of(context).g_key_ens_wait_time_info,
+          ),
+          _buildInfoRow(
+            context,
+            Icons.warning_amber_rounded,
+            S.of(context).g_key_ens_keep_app_open,
+          ),
         ],
       ),
     );
@@ -92,16 +105,16 @@ class EnsPurchaseStepContent extends StatelessWidget {
 
   Widget _buildInfoRow(BuildContext context, IconData icon, String text) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: ScreenUtil().setWidth(24), color: _blue(context)),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+              style: AppTypography.caption.copyWith(color: _subtitle(context)),
             ),
           ),
         ],
@@ -116,24 +129,23 @@ class EnsPurchaseStepContent extends StatelessWidget {
     required String subtitle,
   }) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(context),
       child: Column(
         children: [
           const CircularProgressIndicator(),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: _mainText(context),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             subtitle,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
           ),
         ],
       ),
@@ -152,7 +164,7 @@ class EnsPurchaseStepContent extends StatelessWidget {
     final textColor = _mainText(context);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(context),
       child: Column(
         children: [
@@ -171,9 +183,8 @@ class EnsPurchaseStepContent extends StatelessWidget {
                 Center(
                   child: Text(
                     '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.headline.copyWith(
+                      fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                   ),
@@ -181,19 +192,18 @@ class EnsPurchaseStepContent extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           Text(
             S.of(context).g_key_ens_waiting,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
               color: textColor,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             S.of(context).g_key_ens_wait_explanation,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -204,44 +214,46 @@ class EnsPurchaseStepContent extends StatelessWidget {
   // ── Step 4: Success ────────────────────────────────────────────────────
   Widget _buildSuccessContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
-        color: Colors.green.withAlpha(20),
-        borderColor: Colors.green.withAlpha(50),
+        color: AppColorTokens.of(context).success.withAlpha(20),
+        borderColor: AppColorTokens.of(context).success.withAlpha(50),
       ),
       child: Column(
         children: [
-          Icon(Icons.check_circle, size: ScreenUtil().setWidth(80), color: Colors.green),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          Icon(
+            Icons.check_circle,
+            size: ScreenUtil().setWidth(80),
+            color: AppColorTokens.of(context).success,
+          ),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_success,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
-              color: Colors.green,
+            style: AppTypography.headline.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).success,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             '$domainName.eth ${S.of(context).g_key_ens_is_yours}',
-            style: TextStyle(fontSize: ScreenUtil().setSp(26), color: _mainText(context)),
+            style: AppTypography.bodySm.copyWith(color: _mainText(context)),
           ),
           if (registerResult?.txHash != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(12),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
-                color: Colors.green.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: AppColorTokens.of(context).success.withAlpha(20),
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 'Tx: ${_shortenHash(registerResult!.txHash!)}',
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
                   color: _subtitle(context),
                 ),
@@ -256,28 +268,31 @@ class EnsPurchaseStepContent extends StatelessWidget {
   // ── Step -1: Error ─────────────────────────────────────────────────────
   Widget _buildErrorContent(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: _stepDecoration(
         context,
-        color: Colors.red.withAlpha(20),
-        borderColor: Colors.red.withAlpha(50),
+        color: AppColorTokens.of(context).danger.withAlpha(20),
+        borderColor: AppColorTokens.of(context).danger.withAlpha(50),
       ),
       child: Column(
         children: [
-          Icon(Icons.error, size: ScreenUtil().setWidth(64), color: Colors.red),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          Icon(
+            Icons.error,
+            size: ScreenUtil().setWidth(64),
+            color: AppColorTokens.of(context).danger,
+          ),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_ens_failed,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
+            style: AppTypography.body.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).danger,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             errorMessage ?? S.of(context).g_key_error_3,
-            style: TextStyle(fontSize: ScreenUtil().setSp(24), color: _subtitle(context)),
+            style: AppTypography.caption.copyWith(color: _subtitle(context)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -314,7 +329,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_key_ens_start_registration,
           onPressed: onStart,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         );
 
       case 1:
@@ -324,7 +339,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_key_ens_processing,
           onPressed: null,
-          color: Colors.grey,
+          color: AppColorTokens.of(context).textTertiary,
         );
 
       case 4:
@@ -332,7 +347,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_swap_key_18,
           onPressed: onDone,
-          color: Colors.green,
+          color: AppColorTokens.of(context).success,
         );
 
       case -1:
@@ -340,7 +355,7 @@ class EnsPurchaseActionButton extends StatelessWidget {
           context,
           label: S.of(context).g_swap_key_6,
           onPressed: onRetry,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         );
 
       default:
@@ -359,17 +374,12 @@ class EnsPurchaseActionButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         foregroundColor: Colors.white,
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-        ),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(30),
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
       ),
     );
   }

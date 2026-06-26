@@ -69,12 +69,17 @@ class LedgerApduUtils {
 
   /// 序列化 BIP32 派生路径: m/44'/60'/0'/0/0
   static Uint8List serializeDerivationPath(String path) {
-    final components = path.split('/').where((c) => c.isNotEmpty && c != 'm').toList();
+    final components = path
+        .split('/')
+        .where((c) => c.isNotEmpty && c != 'm')
+        .toList();
     final result = <int>[components.length];
 
     for (final component in components) {
       final hardened = component.endsWith("'");
-      final numStr = hardened ? component.substring(0, component.length - 1) : component;
+      final numStr = hardened
+          ? component.substring(0, component.length - 1)
+          : component;
       var value = int.parse(numStr);
       if (hardened) {
         value += 0x80000000;
@@ -104,7 +109,9 @@ class LedgerApduUtils {
   static Uint8List? handleApduStatusCode(int sw, Uint8List result) {
     switch (sw) {
       case 0x9000:
-        return result.length > 2 ? result.sublist(0, result.length - 2) : Uint8List(0);
+        return result.length > 2
+            ? result.sublist(0, result.length - 2)
+            : Uint8List(0);
       case 0x6985:
       case 0x5501:
         throw HardwareWalletError(
@@ -130,7 +137,8 @@ class LedgerApduUtils {
       case 0x6D00:
         throw HardwareWalletError(
           code: HardwareWalletError.appNotOpen,
-          message: 'Instruction not supported. Check that the correct app is open',
+          message:
+              'Instruction not supported. Check that the correct app is open',
         );
       case 0x6E00:
         throw HardwareWalletError(
@@ -138,7 +146,10 @@ class LedgerApduUtils {
           message: 'Class not supported. Wrong app may be open',
         );
       default:
-        AppLogger.w('LedgerAPDU', 'unrecognized SW 0x${sw.toRadixString(16).padLeft(4, '0')}');
+        AppLogger.w(
+          'LedgerAPDU',
+          'unrecognized SW 0x${sw.toRadixString(16).padLeft(4, '0')}',
+        );
         return result;
     }
   }
@@ -169,7 +180,10 @@ class LedgerApduUtils {
   static List<Uint8List> splitIntoChunks(Uint8List data, int chunkSize) {
     return [
       for (var i = 0; i < data.length; i += chunkSize)
-        data.sublist(i, i + chunkSize < data.length ? i + chunkSize : data.length),
+        data.sublist(
+          i,
+          i + chunkSize < data.length ? i + chunkSize : data.length,
+        ),
     ];
   }
 

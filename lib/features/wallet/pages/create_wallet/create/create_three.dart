@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet/models/mess_mnemonic_words_item.dart'
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_password.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -56,10 +56,7 @@ class _CreateThreeState extends State<CreateThree> {
     return Container(
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-        color: color,
-      ),
+      decoration: BoxDecoration(borderRadius: AppRadius.brSm, color: color),
     );
   }
 
@@ -69,7 +66,7 @@ class _CreateThreeState extends State<CreateThree> {
     final inactiveColor = _tc(AppThemeKeys.dividerColor.name);
     final bgColor = _tc(AppThemeKeys.backGroundColor.name);
     final mainText = _tc(AppThemeKeys.mainTextColor.name);
-    final gap = SizedBox(width: ScreenUtil().setWidth(20.0));
+    final gap = SizedBox(width: AppSpacing.space4);
 
     return Scaffold(
       appBar: AppBar(
@@ -95,19 +92,19 @@ class _CreateThreeState extends State<CreateThree> {
             Positioned.fill(
               child: SingleChildScrollView(
                 padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(30.0)),
+                  horizontal: AppSpacing.space8,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c8,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(40.0),
+                        style: AppTypography.titleLg.copyWith(
                           color: mainText,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -115,15 +112,12 @@ class _CreateThreeState extends State<CreateThree> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(60.0),
+                        horizontal: AppSpacing.space16,
                         vertical: ScreenUtil().setWidth(50.0),
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c12,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(32.0),
-                          color: mainText,
-                        ),
+                        style: AppTypography.headline.copyWith(color: mainText),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -144,29 +138,23 @@ class _CreateThreeState extends State<CreateThree> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
                     color: bgColor,
-                    child: buttonStyle6(
-                      context,
-                      () async {
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: () {
                         if (isCanClick) {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (_) =>
-                                    CreatePassword(widget.wInfo)),
+                              builder: (_) => CreatePassword(widget.wInfo),
+                            ),
                           );
                         } else {
                           ToastUtils.show(S.of(context).g_key_mnemonic);
                         }
                       },
-                      S.of(context).g_key_wallet_c43,
-                      _tc(isCanClick
-                          ? AppThemeKeys.mainButtonBgColor.name
-                          : AppThemeKeys.mainButtonBgColor3.name),
-                      _tc(AppThemeKeys.mainButtonTextColor.name),
-                      false,
                     ),
                   ),
                 ],
@@ -179,7 +167,7 @@ class _CreateThreeState extends State<CreateThree> {
   }
 
   Widget _buildUserHandList() {
-    final borderRadius = BorderRadius.circular(ScreenUtil().setWidth(8.0));
+    final borderRadius = AppRadius.brSm;
 
     return GridView.builder(
       itemCount: messMnemonicWordsList.length,
@@ -214,9 +202,8 @@ class _CreateThreeState extends State<CreateThree> {
                 child: Text(
                   item.word,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: _tc(AppThemeKeys.mainButtonTextColor.name),
-                    fontSize: ScreenUtil().setSp(32.0),
                   ),
                 ),
               ),
@@ -227,13 +214,15 @@ class _CreateThreeState extends State<CreateThree> {
                 right: 0,
                 child: Transform.translate(
                   offset: Offset(
-                      ScreenUtil().setWidth(10.0),
-                      ScreenUtil().setWidth(10.0) * -1),
+                    ScreenUtil().setWidth(10.0),
+                    ScreenUtil().setWidth(10.0) * -1,
+                  ),
                   child: GestureDetector(
                     onTap: () {
                       messMnemonicWordsList
-                          .firstWhere((e) => e.index == item.index)
-                          .isSelected = false;
+                              .firstWhere((e) => e.index == item.index)
+                              .isSelected =
+                          false;
                       userHandList.removeAt(index);
                       setState(() {});
                     },
@@ -241,14 +230,13 @@ class _CreateThreeState extends State<CreateThree> {
                       width: ScreenUtil().setWidth(36.0),
                       height: ScreenUtil().setWidth(36.0),
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            ScreenUtil().setWidth(18.0)),
+                        borderRadius: AppRadius.brMd,
                         color: Colors.white,
                       ),
                       child: Icon(
                         Icons.cancel,
                         size: ScreenUtil().setWidth(36.0),
-                        color: Colors.red,
+                        color: AppColorTokens.of(context).danger,
                       ),
                     ),
                   ),
@@ -262,7 +250,7 @@ class _CreateThreeState extends State<CreateThree> {
 
   Widget _buildGridView() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: messMnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -275,10 +263,10 @@ class _CreateThreeState extends State<CreateThree> {
       itemBuilder: (context, index) {
         final item = messMnemonicWordsList[index];
         final borderColor = item.isSelected
-            ? Colors.blueAccent
+            ? AppColorTokens.of(context).brand
             : _tc(AppThemeKeys.mainGreyColor.name);
         final textColor = item.isSelected
-            ? Colors.blueAccent
+            ? AppColorTokens.of(context).brand
             : _tc(AppThemeKeys.ff444444.name);
 
         return GestureDetector(
@@ -295,17 +283,13 @@ class _CreateThreeState extends State<CreateThree> {
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: borderColor, width: 1),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(
                 item.word,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: textColor,
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
+                style: AppTypography.headline.copyWith(color: textColor),
               ),
             ),
           ),

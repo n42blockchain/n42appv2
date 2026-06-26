@@ -9,8 +9,8 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
     final status = (!showRedemption2 && exitTimestamp != 0)
         ? NodeStatus.offline
         : showRedemption
-            ? (miningStatus ? NodeStatus.online : NodeStatus.offline)
-            : NodeStatus.syncing;
+        ? (miningStatus ? NodeStatus.online : NodeStatus.offline)
+        : NodeStatus.syncing;
 
     final inactivityPct = double.tryParse(inactivityScorePercentage) ?? 0.0;
     return FullNodeEntity(
@@ -67,7 +67,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
   }
 
   @override
-  void starBeaconValidatorTimer({int waitSeconds = kBeaconValidatorWaitSeconds}) {
+  void starBeaconValidatorTimer({
+    int waitSeconds = kBeaconValidatorWaitSeconds,
+  }) {
     if (beaconValidatorTimer != null) return;
     beaconValidatorTimer = Timer(Duration(seconds: waitSeconds), () {
       getBeaconValidator();
@@ -83,7 +85,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
 
   @override
   Future<void> getBeaconValidator() async {
-    MessageModel rmm = await mining.getBeaconValidator(miningKeypart?['publicKey'] ?? "");
+    MessageModel rmm = await mining.getBeaconValidator(
+      miningKeypart?['publicKey'] ?? "",
+    );
     if (rmm.error == false) {
       inactivityScore = [0, 0, 0];
       balanceInBeacon = toEther(
@@ -114,7 +118,8 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         for (int i = 0; i < 3; i++) {
           if (iscore - (i + 1) * kInactivityScoreSegmentSize <= 0) {
             inactivityScore[i] =
-                (iscore - (i) * kInactivityScoreSegmentSize) / kInactivityScoreSegmentSize;
+                (iscore - (i) * kInactivityScoreSegmentSize) /
+                kInactivityScoreSegmentSize;
             break;
           } else {
             inactivityScore[i] = 1;
@@ -129,7 +134,8 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         starBeaconValidatorTimer();
       } else {
         activationTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
-        final int currentTimestamp = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        final int currentTimestamp =
+            DateTime.now().millisecondsSinceEpoch ~/ 1000;
         final int readyTimestamp = timestamp + kMiningCycleSeconds;
         if (readyTimestamp > currentTimestamp) {
           showRedemption = false;
@@ -193,7 +199,7 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         address ?? "",
       );
       if (rmm.error == false) {
-          taskList = rmm.data;
+        taskList = rmm.data;
         final List<String> todayStr = _getTimeFormat(today);
         final List<String> yesterdayStr = _getTimeFormat(yesterday);
 
@@ -211,7 +217,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         startWithdrawalTimer();
       }
 
-      MessageModel rmms = await mining.getMiningWithdrawalsDailySummary(address ?? "");
+      MessageModel rmms = await mining.getMiningWithdrawalsDailySummary(
+        address ?? "",
+      );
       if (rmms.error == false) {
         miningTotalRevenue = toEther(rmms.data, 18).toDouble();
       }
@@ -250,20 +258,18 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
   }
 
   void _generateBarTipData() {
-    if (barChartValues.isEmpty || barChartValues.length != kMiningHistoryDays) return;
+    if (barChartValues.isEmpty || barChartValues.length != kMiningHistoryDays) {
+      return;
+    }
 
     final whiteColor = AppThemeUtils.getColorByKey(
       AppGlobals.appContext,
       AppThemeKeys.mainWhiteColor.name,
     );
-    final normalStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(20),
+    final normalStyle = AppTypography.captionSm.copyWith(color: whiteColor);
+    final boldStyle = AppTypography.caption.copyWith(
       color: whiteColor,
-    );
-    final boldStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(22),
-      color: whiteColor,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w600,
     );
 
     barChartAlertMessageList = [];

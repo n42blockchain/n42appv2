@@ -10,18 +10,6 @@ part of 'wallet_coin_add_all.dart';
 /// Form-field widgets (addressWidget, symbolWidget, decimalWidget,
 /// _buildContractStateWidget) are in wallet_coin_add_all_import_form_ui.dart.
 extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
-  Color _btnBgColor() => AppThemeUtils.getColorByKey(
-        context,
-        load == Load.loading
-            ? AppThemeKeys.mainButtonBgColor3.name
-            : AppThemeKeys.mainButtonBgColor.name,
-      );
-
-  Color _btnTextColor() => AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainButtonTextColor.name,
-      );
-
   Widget coinListTokenWidget() {
     if (coinlistToken.isEmpty || showImportWidget) {
       return importTokenWidget();
@@ -31,12 +19,13 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
         Expanded(
           child: ListView.separated(
             itemCount: coinlistToken.length,
-            itemBuilder: (context, int index) => coinItemToken(coinlistToken[index]),
+            itemBuilder: (context, int index) =>
+                coinItemToken(coinlistToken[index]),
             separatorBuilder: (context, int index) => Divider(
               height: 1,
               indent: 0,
               endIndent: 0,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+              color: AppColorTokens.of(context).border,
             ),
           ),
         ),
@@ -59,10 +48,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
           Expanded(
             child: Text(
               symbol,
-              style: TextStyle(
-                fontSize: ScreenUtil().setWidth(30.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
                 height: 1.3,
+                fontWeight: FontWeight.w400,
               ),
             ),
           ),
@@ -77,12 +66,15 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             InkWell(
               onTap: () => removeCustomerCoinToken(rowValue),
               child: Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 width: ScreenUtil().setWidth(80.0),
                 height: ScreenUtil().setWidth(80.0),
                 child: Icon(
                   Icons.remove,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
+                  color: AppThemeUtils.getColorByKey(
+                    context,
+                    AppThemeKeys.mainButtonBgColor.name,
+                  ),
                 ),
               ),
             ),
@@ -99,17 +91,17 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   decoration: BoxDecoration(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.errorBgColor2.name),
-                    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.errorBgColor2.name,
+                    ),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     S.of(context).g_token_m_key_10,
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(24.0),
-                    ),
+                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
                     textAlign: TextAlign.center,
                   ),
                 ),
@@ -121,12 +113,7 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             ),
           ),
         ),
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          child: importButtonWidget(),
-        ),
+        Positioned(left: 0, right: 0, bottom: 0, child: importButtonWidget()),
       ],
     );
   }
@@ -135,13 +122,10 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
     return SizedBox(
       height: ScreenUtil().setWidth(88.0),
       width: double.infinity,
-      child: buttonStyle6(
-        context,
-        () => updateView(() => showImportWidget = true),
-        S.of(context).g_key_159,
-        _btnBgColor(),
-        _btnTextColor(),
-        load == Load.loading,
+      child: AppButton(
+        label: S.of(context).g_key_159,
+        onPressed: () => updateView(() => showImportWidget = true),
+        loading: load == Load.loading,
       ),
     );
   }
@@ -158,27 +142,22 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
             Expanded(
               child: SizedBox(
                 height: btnH,
-                child: buttonStyle5(
-                  context,
-                  () => updateView(() => showImportWidget = false),
-                  S.of(context).g_key_79,
-                  _btnBgColor(),
-                  _btnTextColor(),
+                child: AppButton(
+                  label: S.of(context).g_key_79,
+                  variant: AppButtonVariant.secondary,
+                  onPressed: () => updateView(() => showImportWidget = false),
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(30.0)),
+            SizedBox(width: AppSpacing.space8),
           ],
           Expanded(
             child: SizedBox(
               height: btnH,
-              child: buttonStyle6(
-                context,
-                importButton,
-                S.of(context).g_token_m_key_9,
-                _btnBgColor(),
-                _btnTextColor(),
-                isLoading,
+              child: AppButton(
+                label: S.of(context).g_token_m_key_9,
+                onPressed: importButton,
+                loading: isLoading,
               ),
             ),
           ),

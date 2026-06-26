@@ -49,16 +49,22 @@ class SocialRecoveryService {
     final errors = <String>[];
 
     if (config.guardians.length < minGuardians) {
-      errors.add('At least $minGuardians guardians required (have ${config.guardians.length})');
+      errors.add(
+        'At least $minGuardians guardians required (have ${config.guardians.length})',
+      );
     }
     if (config.guardians.length > maxGuardians) {
-      errors.add('Maximum $maxGuardians guardians allowed (have ${config.guardians.length})');
+      errors.add(
+        'Maximum $maxGuardians guardians allowed (have ${config.guardians.length})',
+      );
     }
     if (config.threshold < 1) {
       errors.add('Threshold must be at least 1');
     }
     if (config.threshold > config.guardians.length) {
-      errors.add('Threshold (${config.threshold}) cannot exceed guardian count (${config.guardians.length})');
+      errors.add(
+        'Threshold (${config.threshold}) cannot exceed guardian count (${config.guardians.length})',
+      );
     }
     if (config.timeLockSeconds < 3600) {
       errors.add('Time-lock must be at least 1 hour');
@@ -78,10 +84,7 @@ class SocialRecoveryService {
       }
     }
 
-    return RecoveryValidation(
-      isValid: errors.isEmpty,
-      errors: errors,
-    );
+    return RecoveryValidation(isValid: errors.isEmpty, errors: errors);
   }
 
   /// Build the calldata to install the social recovery module on a smart account.
@@ -95,9 +98,7 @@ class SocialRecoveryService {
   }) {
     // ABI encode the guardian configuration
     // initData: abi.encode(address[] guardians, uint256 threshold, uint256 timeLock)
-    final guardianAddresses = config.guardians
-        .map((g) => g.address)
-        .toList();
+    final guardianAddresses = config.guardians.map((g) => g.address).toList();
 
     // Simplified ABI encoding — in production use proper ABI encoder
     final encoded = _abiEncodeRecoveryConfig(
@@ -253,11 +254,11 @@ class RecoveryConfig {
   }
 
   Map<String, dynamic> toJson() => {
-        'guardians': guardians.map((g) => g.toJson()).toList(),
-        'threshold': threshold,
-        'timeLockSeconds': timeLockSeconds,
-        'ownerAddress': ownerAddress,
-      };
+    'guardians': guardians.map((g) => g.toJson()).toList(),
+    'threshold': threshold,
+    'timeLockSeconds': timeLockSeconds,
+    'ownerAddress': ownerAddress,
+  };
 }
 
 /// A guardian for social recovery.
@@ -293,11 +294,11 @@ class Guardian {
   }
 
   Map<String, dynamic> toJson() => {
-        'address': address,
-        'label': label,
-        'source': source.name,
-        'addedAt': addedAt.toIso8601String(),
-      };
+    'address': address,
+    'label': label,
+    'source': source.name,
+    'addedAt': addedAt.toIso8601String(),
+  };
 }
 
 /// How a guardian was discovered/added.
@@ -366,8 +367,5 @@ class RecoveryValidation {
   final bool isValid;
   final List<String> errors;
 
-  const RecoveryValidation({
-    required this.isValid,
-    required this.errors,
-  });
+  const RecoveryValidation({required this.isValid, required this.errors});
 }

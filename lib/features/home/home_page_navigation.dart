@@ -5,14 +5,8 @@ part of 'home_page.dart';
 extension on _HomePageState {
   /// iPad 横屏侧边导航栏
   Widget buildNavigationRail(int currentIndex) {
-    final selectedColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final unselectedColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final selectedColor = AppColorTokens.of(context).brand;
+    final unselectedColor = AppColorTokens.of(context).textPrimary;
 
     return NavigationRail(
       selectedIndex: currentIndex,
@@ -27,10 +21,7 @@ extension on _HomePageState {
           _navigateToChat();
         }
       },
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemBgColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgSurface,
       selectedIconTheme: IconThemeData(color: selectedColor),
       unselectedIconTheme: IconThemeData(color: unselectedColor),
       labelType: NavigationRailLabelType.all,
@@ -231,16 +222,10 @@ extension on _HomePageState {
         border: Border(
           top: BorderSide(
             width: borderWidth,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.dividerColor.name,
-            ).withAlpha(80),
+            color: AppColorTokens.of(context).border.withAlpha(80),
           ),
         ),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
           BoxShadow(
             color: isDark
@@ -271,10 +256,9 @@ extension on _HomePageState {
     final width = MediaQuery.of(context).size.width / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
-    final unselectedColor = AppThemeUtils.getColorByKey(
+    final unselectedColor = AppColorTokens.of(
       context,
-      AppThemeKeys.mainTextColor.name,
-    ).withAlpha(100);
+    ).textPrimary.withAlpha(100);
 
     return InkWell(
       onTap: _navigateToChat,
@@ -290,8 +274,8 @@ extension on _HomePageState {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(18),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               child: Image.asset(
                 imagePath,
@@ -332,14 +316,10 @@ extension on _HomePageState {
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
     final isSelected = currentIndex == index;
 
-    final selectedColor = AppThemeUtils.getColorByKey(
+    final selectedColor = AppColorTokens.of(context).brand;
+    final unselectedColor = AppColorTokens.of(
       context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final unselectedColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    ).withAlpha(100);
+    ).textPrimary.withAlpha(100);
 
     return InkWell(
       onTap: () {
@@ -360,14 +340,14 @@ extension on _HomePageState {
               duration: const Duration(milliseconds: 200),
               curve: Curves.easeInOut,
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(18),
-                vertical: ScreenUtil().setWidth(6),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: isSelected
                     ? selectedColor.withAlpha(22)
                     : Colors.transparent,
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                borderRadius: AppRadius.brMd,
               ),
               child: Image.asset(
                 imagePath,

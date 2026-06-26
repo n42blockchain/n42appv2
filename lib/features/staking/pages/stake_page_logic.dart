@@ -54,7 +54,10 @@ mixin _StakeLogicMixin on State<StakePage> {
     if (!mounted) return;
     setState(() => _loadingPositions = true);
 
-    await _provider.loadUserPositions(widget.userAddress!, widget.protocol.chainType);
+    await _provider.loadUserPositions(
+      widget.userAddress!,
+      widget.protocol.chainType,
+    );
 
     if (!mounted) return;
     setState(() {
@@ -84,7 +87,10 @@ mixin _StakeLogicMixin on State<StakePage> {
 
   // ── Navigation ──────────────────────────────────────────────────────────
 
-  Future<void> _navigateToValidatorList(BuildContext context, StakingProvider provider) async {
+  Future<void> _navigateToValidatorList(
+    BuildContext context,
+    StakingProvider provider,
+  ) async {
     final selectedValidator = await Navigator.push<Validator>(
       context,
       MaterialPageRoute(
@@ -103,7 +109,10 @@ mixin _StakeLogicMixin on State<StakePage> {
 
   // ── Stake / Unstake actions ─────────────────────────────────────────────
 
-  Future<void> _performStake(BuildContext context, StakingProvider provider) async {
+  Future<void> _performStake(
+    BuildContext context,
+    StakingProvider provider,
+  ) async {
     if (widget.userAddress == null || widget.userAddress!.isEmpty) {
       setState(() {
         _errorMessage = S.of(context).g_key_stake_no_wallet;
@@ -116,6 +125,7 @@ mixin _StakeLogicMixin on State<StakePage> {
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
     final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+    final successColor = AppColorTokens.of(context).success;
 
     setState(() {
       _isLoading = true;
@@ -131,7 +141,10 @@ mixin _StakeLogicMixin on State<StakePage> {
       if (result != null && result.success) {
         if (!mounted) return;
         messenger.showSnackBar(
-          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(txPreparedMsg),
+            backgroundColor: successColor,
+          ),
         );
       } else {
         setState(() {
@@ -151,7 +164,10 @@ mixin _StakeLogicMixin on State<StakePage> {
     }
   }
 
-  Future<void> _performUnstake(BuildContext context, StakingProvider provider) async {
+  Future<void> _performUnstake(
+    BuildContext context,
+    StakingProvider provider,
+  ) async {
     if (widget.userAddress == null || widget.userAddress!.isEmpty) {
       setState(() => _errorMessage = S.of(context).g_key_stake_no_wallet);
       return;
@@ -168,7 +184,9 @@ mixin _StakeLogicMixin on State<StakePage> {
       final amtText = _unstakeAmountController.text;
       unstakeAmount = _parseAmountToBigInt(amtText, _getDecimals());
       if (unstakeAmount == BigInt.zero) {
-        setState(() => _errorMessage = S.of(context).g_key_stake_amount_unstake);
+        setState(
+          () => _errorMessage = S.of(context).g_key_stake_amount_unstake,
+        );
         return;
       }
     } else {
@@ -179,6 +197,7 @@ mixin _StakeLogicMixin on State<StakePage> {
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
     final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+    final successColor = AppColorTokens.of(context).success;
 
     setState(() {
       _isLoading = true;
@@ -197,7 +216,10 @@ mixin _StakeLogicMixin on State<StakePage> {
 
       if (result != null && result.success) {
         messenger.showSnackBar(
-          SnackBar(content: Text(txPreparedMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(txPreparedMsg),
+            backgroundColor: successColor,
+          ),
         );
         // 解质押成功后刷新仓位列表
         setState(() => _selectedPosition = null);
@@ -244,7 +266,11 @@ mixin _StakeLogicMixin on State<StakePage> {
     final decimals = _getDecimals();
     final divisor = BigInt.from(10).pow(decimals);
     final intPart = amount ~/ divisor;
-    final fracStr = amount.remainder(divisor).abs().toString().padLeft(decimals, '0');
+    final fracStr = amount
+        .remainder(divisor)
+        .abs()
+        .toString()
+        .padLeft(decimals, '0');
     final dispFrac = fracStr.length > 6 ? fracStr.substring(0, 6) : fracStr;
     // 去掉尾部多余 0
     final trimmed = dispFrac.replaceAll(RegExp(r'0+$'), '');

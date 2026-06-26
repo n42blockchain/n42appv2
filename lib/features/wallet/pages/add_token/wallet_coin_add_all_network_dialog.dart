@@ -4,7 +4,9 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
   void showChangeNetwork() {
     if (load == Load.loading) return;
 
-    final itemCount = importType == 0 ? netChains.length + 1 : chainsToken.length;
+    final itemCount = importType == 0
+        ? netChains.length + 1
+        : chainsToken.length;
 
     sheetBottom(
       context,
@@ -12,14 +14,16 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
       Column(
         children: [
           Container(
-            constraints: BoxConstraints(maxHeight: ScreenUtil().setWidth(600.0)),
+            constraints: BoxConstraints(
+              maxHeight: ScreenUtil().setWidth(600.0),
+            ),
             child: ListView.separated(
               itemCount: itemCount,
               separatorBuilder: (context, index) => Divider(
                 height: 0.1,
                 indent: 0,
                 endIndent: 0,
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+                color: AppColorTokens.of(context).border,
               ),
               itemBuilder: (context, int index) {
                 if (importType == 0 && index == 0) {
@@ -47,10 +51,9 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
             child: Text(
               S.of(context).g_token_m_key_4,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(30.0),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -74,13 +77,17 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
 
     if (coinInfo == null) return const SizedBox.shrink();
 
-    final baseInfo = (coinInfo['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
-    final coinSymbol =
-        (baseInfo['miniName'] ?? baseInfo['coinType'] ?? '').toString().trim();
+    final baseInfo =
+        (coinInfo['baseInfo'] as Map?)?.cast<String, dynamic>() ?? const {};
+    final coinSymbol = (baseInfo['miniName'] ?? baseInfo['coinType'] ?? '')
+        .toString()
+        .trim();
     final coinName = (baseInfo['name'] ?? coinSymbol).toString().trim();
     final iconUrl = baseInfo['icon']?.toString().trim() ?? '';
     final isN42 = coinSymbol == CoinType.N.name;
-    final symbolStr = isN42 ? CoinType.N.name : (coinSymbol.isEmpty ? '--' : coinSymbol);
+    final symbolStr = isN42
+        ? CoinType.N.name
+        : (coinSymbol.isEmpty ? '--' : coinSymbol);
     final nameStr = isN42 ? "N42" : coinName;
     final image = isN42
         ? Image.asset('assets/img/ast.png')
@@ -102,7 +109,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
             height: ScreenUtil().setWidth(52.0),
             child: image,
           ),
-          SizedBox(width: ScreenUtil().setWidth(10.0)),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,18 +117,15 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
               children: [
                 Text(
                   symbolStr,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30.0),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   nameStr,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30.0),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -133,19 +137,22 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
     );
   }
 
-  Widget _networkRowWrapper({required VoidCallback onTap, required Widget child}) {
+  Widget _networkRowWrapper({
+    required VoidCallback onTap,
+    required Widget child,
+  }) {
     return InkWell(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical: ScreenUtil().setWidth(30.0),
-          horizontal: ScreenUtil().setWidth(20.0),
+          vertical: AppSpacing.space8,
+          horizontal: AppSpacing.space4,
         ),
         decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
               width: ScreenUtil().setWidth(1.0),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemLineColor.name),
+              color: AppColorTokens.of(context).border,
             ),
           ),
         ),
@@ -158,7 +165,7 @@ extension _WalletCoinAddAllNetworkDialog on _WalletCoinAddAllState {
     return Icon(
       Icons.check,
       size: ScreenUtil().setWidth(40.0),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+      color: AppColorTokens.of(context).brand,
     );
   }
 }

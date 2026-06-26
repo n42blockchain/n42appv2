@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
@@ -129,13 +130,16 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         messenger.showSnackBar(
           SnackBar(
             content: Text(result.data?.toString() ?? errorFallback),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       } else {
         nav.pop();
         messenger.showSnackBar(
-          SnackBar(content: Text(successMsg), backgroundColor: Colors.green),
+          SnackBar(
+            content: Text(successMsg),
+            backgroundColor: AppColorTokens.of(context).success,
+          ),
         );
         widget.onCreated();
       }
@@ -143,7 +147,10 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
       if (!mounted) return;
       setState(() => _creating = false);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(e.toString()),
+          backgroundColor: AppColorTokens.of(context).danger,
+        ),
       );
     }
   }
@@ -157,21 +164,21 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
           bottom: MediaQuery.of(context).viewInsets.bottom,
         ),
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+          padding: EdgeInsets.all(AppSpacing.space6),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _buildHeader(context),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               _buildPreview(context),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               _buildLabelField(context),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               _buildOwnerField(context),
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               _buildCreateButton(context),
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
             ],
           ),
         ),
@@ -187,10 +194,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
           child: Text(
             S.of(context).g_key_ens_subdomain_create,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(32),
-              fontWeight: FontWeight.bold,
-            ),
+            style: AppTypography.headline.copyWith(fontWeight: FontWeight.w600),
           ),
         ),
         IconButton(
@@ -217,8 +221,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
       ),
       child: Text(
         '$label.${widget.parentName}',
-        style: TextStyle(
-          fontSize: su.setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: widget.domainChain.color,
         ),
@@ -236,14 +239,11 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         labelText: S.of(context).g_key_ens_subdomain_label,
         hintText: S.of(context).g_key_ens_subdomain_label_hint,
         errorText: _labelError,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
         suffixText: '.${widget.parentName}',
-        suffixStyle: TextStyle(
+        suffixStyle: AppTypography.caption.copyWith(
           color: widget.domainChain.color,
           fontWeight: FontWeight.w500,
-          fontSize: ScreenUtil().setSp(22),
         ),
       ),
     );
@@ -257,11 +257,9 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         labelText: S.of(context).g_key_ens_subdomain_owner,
         hintText: S.of(context).g_key_ens_subdomain_owner_hint,
         errorText: _ownerError,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        border: OutlineInputBorder(borderRadius: AppRadius.brMd),
       ),
-      style: TextStyle(fontSize: ScreenUtil().setSp(24)),
+      style: AppTypography.caption,
     );
   }
 
@@ -272,9 +270,7 @@ class _EnsCreateSubdomainSheetState extends State<EnsCreateSubdomainSheet> {
         onPressed: _creating ? null : _onCreate,
         style: ElevatedButton.styleFrom(
           backgroundColor: widget.domainChain.color,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-          ),
+          shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         ),
         child: _creating
             ? const SizedBox(

@@ -50,7 +50,9 @@ class CustomChainService {
   static Future<CustomChain> addChain(CustomChain chain) async {
     // Validate chain ID is not a built-in chain
     if (_builtInChainIds.contains(chain.chainId)) {
-      throw CustomChainException('Chain ID ${chain.chainId} is a built-in chain');
+      throw CustomChainException(
+        'Chain ID ${chain.chainId} is a built-in chain',
+      );
     }
 
     // Check for duplicates
@@ -92,10 +94,12 @@ class CustomChainService {
   /// Validate an RPC endpoint by calling eth_chainId and checking the result.
   static Future<bool> validateRpc(String rpcUrl, int expectedChainId) async {
     try {
-      final dio = Dio(BaseOptions(
-        connectTimeout: const Duration(seconds: 5),
-        receiveTimeout: const Duration(seconds: 5),
-      ));
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 5),
+          receiveTimeout: const Duration(seconds: 5),
+        ),
+      );
 
       final response = await dio.post(
         rpcUrl,
@@ -127,10 +131,12 @@ class CustomChainService {
   static Future<ChainlistInfo?> lookupChain(int chainId) async {
     try {
       if (_chainlistCache == null) {
-        final dio = Dio(BaseOptions(
-          connectTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 15),
-        ));
+        final dio = Dio(
+          BaseOptions(
+            connectTimeout: const Duration(seconds: 10),
+            receiveTimeout: const Duration(seconds: 15),
+          ),
+        );
         final response = await dio.get(_chainlistApi);
         if (response.data is List) {
           _chainlistCache = (response.data as List<dynamic>)
@@ -146,7 +152,8 @@ class CustomChainService {
 
       if (match == null || match.isEmpty) return null;
 
-      final rpcs = (match['rpc'] as List<dynamic>?)
+      final rpcs =
+          (match['rpc'] as List<dynamic>?)
               ?.map((r) => r.toString())
               .where((r) => r.startsWith('https://'))
               .where((r) => !r.contains('\${'))
@@ -238,15 +245,15 @@ class CustomChain {
   }
 
   Map<String, dynamic> toJson() => {
-        'chainId': chainId,
-        'name': name,
-        'rpcUrl': rpcUrl,
-        'symbol': symbol,
-        'decimals': decimals,
-        'explorerUrl': explorerUrl,
-        'iconUrl': iconUrl,
-        'addedAt': addedAt.toIso8601String(),
-      };
+    'chainId': chainId,
+    'name': name,
+    'rpcUrl': rpcUrl,
+    'symbol': symbol,
+    'decimals': decimals,
+    'explorerUrl': explorerUrl,
+    'iconUrl': iconUrl,
+    'addedAt': addedAt.toIso8601String(),
+  };
 
   CustomChain copyWith({
     int? chainId,

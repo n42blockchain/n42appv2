@@ -96,7 +96,9 @@ abstract class BaseTransferHandler implements TransferHandler {
   }) async {
     final gasLimit = BigInt.from(getCoinGas(coinType, contract: hasContract));
     final mmg = await tokenViewApi.getGasPrice(
-      blockchainType, coinType, isTest: isTest,
+      blockchainType,
+      coinType,
+      isTest: isTest,
     );
     if (mmg == null || mmg.error) {
       return GasEstimation(
@@ -127,11 +129,11 @@ abstract class BaseTransferHandler implements TransferHandler {
 
   /// Return a not-implemented GasEstimation for stub handlers
   GasEstimation notImplementedGas() => GasEstimation(
-        gasLimit: BigInt.zero,
-        gasPrice: BigInt.zero,
-        totalFee: BigInt.zero,
-        errorMessage: 'Not implemented',
-      );
+    gasLimit: BigInt.zero,
+    gasPrice: BigInt.zero,
+    totalFee: BigInt.zero,
+    errorMessage: 'Not implemented',
+  );
 
   @override
   Future<MessageModel> transferFromModel({

@@ -10,7 +10,9 @@ import 'package:web3dart/web3dart.dart';
 
 class FilApi {
   Future<MessageModel> getBalance(String address, {bool isTest = false}) async {
-    final result = await baseRPC('Filecoin.WalletBalance', [address], isTest: isTest);
+    final result = await baseRPC('Filecoin.WalletBalance', [
+      address,
+    ], isTest: isTest);
     final mm = resultToMessageModel(result);
     if (mm.error == false) mm.data = BigInt.parse(mm.data.toString());
     return mm;
@@ -24,7 +26,9 @@ class FilApi {
   }
 
   Future<MessageModel> getNonce(String address, {bool isTest = false}) async {
-    final result = await baseRPC('Filecoin.MpoolGetNonce', [address], isTest: isTest);
+    final result = await baseRPC('Filecoin.MpoolGetNonce', [
+      address,
+    ], isTest: isTest);
     final mm = resultToMessageModel(result);
     if (mm.error == false) mm.data = mm.data.toString();
     return mm;
@@ -63,7 +67,12 @@ class FilApi {
     Map<String, dynamic> pMap = json.decode(txHash);
     pMap['Message']['Nonce'] = (pMap['Message']['Nonce'] as int);
     return resultToMessageModel(
-      await baseRPC('Filecoin.MpoolPush', [pMap], isTest: isTest, enableRetry: false),
+      await baseRPC(
+        'Filecoin.MpoolPush',
+        [pMap],
+        isTest: isTest,
+        enableRetry: false,
+      ),
     );
   }
 
@@ -74,7 +83,12 @@ class FilApi {
     bool enableRetry = true,
   }) async {
     try {
-      final postData = {'jsonrpc': '2.0', 'method': method, 'params': value, 'id': AppGlobals.nextId};
+      final postData = {
+        'jsonrpc': '2.0',
+        'method': method,
+        'params': value,
+        'id': AppGlobals.nextId,
+      };
       final data = await BaseApi.requestEmptyH.post(
         RequestUrl().getUrl2('FIL', 'rpc', isTest: isTest),
         params: {},
@@ -85,22 +99,27 @@ class FilApi {
         final errorMsg = data['error'] is Map
             ? (data['error']['message']?.toString() ?? 'RPC error')
             : data['error']?.toString() ?? 'RPC error';
-        return Result.failure(AppError.blockchain(
-          errorMsg,
-          code: 'FIL_RPC_ERROR',
-          originalError: data['error'],
-        ));
+        return Result.failure(
+          AppError.blockchain(
+            errorMsg,
+            code: 'FIL_RPC_ERROR',
+            originalError: data['error'],
+          ),
+        );
       }
       return Result.success(data['result']);
     } catch (e, st) {
       // BaseHttp converts DioException to a localized String upstream.
-      return Result.failure(AppError.network(e.toString(), originalError: e, stackTrace: st));
+      return Result.failure(
+        AppError.network(e.toString(), originalError: e, stackTrace: st),
+      );
     }
   }
 
   Future<MessageModel> getMessageInfo(String mId, {bool isTest = false}) async {
     try {
-      final url = '${RequestUrl().getUrl2("FIL", "api", isTest: isTest)}message/$mId';
+      final url =
+          '${RequestUrl().getUrl2("FIL", "api", isTest: isTest)}message/$mId';
       final data = await BaseApi.requestEmptyH.get(url, params: {});
       final mm = MessageModel();
       if ((data['receipt']['exitCode'] ?? -1) != 0) {

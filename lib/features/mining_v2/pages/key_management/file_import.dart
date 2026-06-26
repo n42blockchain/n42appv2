@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 
-class FileImport{
+class FileImport {
   Future<String> fileImport() async {
     final result = await FilePicker.platform.pickFiles();
     if (result != null) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -6,23 +7,20 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'splash_variants.dart';
 
 /// 启动页面
-/// 
+///
 /// 显示应用 Logo 和加载动画，在后台完成初始化
 class SplashPage extends StatefulWidget {
   final Future<void> Function()? onInit;
   final VoidCallback onComplete;
 
-  const SplashPage({
-    super.key,
-    this.onInit,
-    required this.onComplete,
-  });
+  const SplashPage({super.key, this.onInit, required this.onComplete});
 
   @override
   State<SplashPage> createState() => _SplashPageState();
 }
 
-class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateMixin {
+class _SplashPageState extends State<SplashPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
@@ -35,30 +33,30 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-    
+
     // 设置动画 - 快速启动
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800),
     );
-    
+
     _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
       ),
     );
-    
+
     _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
       CurvedAnimation(
         parent: _animationController,
         curve: const Interval(0.0, 0.5, curve: Curves.easeOutBack),
       ),
     );
-    
+
     // 开始动画
     _animationController.forward();
-    
+
     // 执行初始化
     _initialize();
   }
@@ -107,10 +105,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF1A237E),
-              Color(0xFF0D1B2A),
-            ],
+            colors: [Color(0xFF1A237E), Color(0xFF0D1B2A)],
           ),
         ),
         child: SafeArea(
@@ -130,9 +125,9 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
               children: [
                 const Spacer(flex: 2),
                 _buildLogo(),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
                 _buildTitle(),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 _SplashTagline(variant: _variant),
                 const Spacer(flex: 2),
                 _buildLoadingIndicator(),
@@ -176,9 +171,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
               child: Center(
                 child: Text(
                   'N42',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(60),
-                    fontWeight: FontWeight.bold,
+                  style: AppTypography.displayLg.copyWith(
+                    fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
@@ -193,9 +187,8 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
   Widget _buildTitle() {
     return Text(
       'N42 Wallet',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(48),
-        fontWeight: FontWeight.bold,
+      style: AppTypography.displayLg.copyWith(
+        fontWeight: FontWeight.w600,
         color: Colors.white,
         letterSpacing: 2,
       ),
@@ -216,7 +209,7 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
             valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF4FC3F7)),
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
       ],
     );
   }
@@ -227,20 +220,14 @@ class _SplashPageState extends State<SplashPage> with SingleTickerProviderStateM
       children: [
         Text(
           _loadingText,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: Colors.white.withValues(alpha: 0.6),
-          ),
+          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.6)),
         ),
-        SizedBox(height: ScreenUtil().setWidth(60)),
+        SizedBox(height: AppSpacing.space16),
         Text(
           '\u00a9 2021-2026 N42 Inc.',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: Colors.white.withValues(alpha: 0.4),
-          ),
+          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.4)),
         ),
-        SizedBox(height: ScreenUtil().setWidth(40)),
+        SizedBox(height: AppSpacing.space12),
       ],
     );
   }
@@ -257,8 +244,7 @@ class _SplashTagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final taglineStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(44),
+    final taglineStyle = AppTypography.titleLg.copyWith(
       fontWeight: FontWeight.w600,
       color: const Color(0xFF80DEEA),
       letterSpacing: 1.0,
@@ -273,7 +259,7 @@ class _SplashTagline extends StatelessWidget {
     ];
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
       child: Text.rich(
         TextSpan(children: labelSpans),
         textAlign: TextAlign.center,

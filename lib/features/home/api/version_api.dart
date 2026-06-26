@@ -10,15 +10,12 @@ class VersionApi {
   final Map<String, String> header;
 
   VersionApi()
-      : url = AppConfig.getApiUrlOnline('userInfoHost'),
-        header = const {'content-type': 'application/json'};
+    : url = AppConfig.getApiUrlOnline('userInfoHost'),
+      header = const {'content-type': 'application/json'};
 
   /// 最新版本信息
   Future<VersionInfoModel?> getVersionInfo() async {
-    final params = {
-      'source': 'app',
-      'app': Platform.isIOS ? 'ios' : 'android',
-    };
+    final params = {'source': 'app', 'app': Platform.isIOS ? 'ios' : 'android'};
     try {
       final data = await BaseApi.requestEmptyH.get(
         '$url/v1/r/static/app/version',

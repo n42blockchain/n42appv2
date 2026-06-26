@@ -1,4 +1,4 @@
-.PHONY: run run-android run-ios test setup build-android build-ipa
+.PHONY: run run-android run-ios test check setup build-android build-ipa
 
 # ── Daily development ──────────────────────────────────────────────────────────
 
@@ -20,6 +20,11 @@ run-ios:
 ## run unit tests with auto build-number bump
 test:
 	@./scripts/bump_version.sh
+	flutter test
+
+# 提交前守门：静态分析零 error + 全量测试（不 bump 版本号）
+check:
+	flutter analyze --no-fatal-infos
 	flutter test
 
 # ── Release builds ─────────────────────────────────────────────────────────────

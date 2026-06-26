@@ -70,7 +70,10 @@ class CosmosChainApi {
   }
 
   /// 广播已签名交易（明确禁用重试，防止双发）
-  Future<MessageModel> sendTx(String txBytes, {String mode = 'BROADCAST_MODE_SYNC'}) async {
+  Future<MessageModel> sendTx(
+    String txBytes, {
+    String mode = 'BROADCAST_MODE_SYNC',
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.post(
         '${_base}cosmos/tx/v1beta1/txs',
@@ -81,8 +84,12 @@ class CosmosChainApi {
         enableRetry: false,
       );
       final txResp = data['tx_response'] as Map<String, dynamic>?;
-      if (txResp == null) return MessageModel.error()..data = data['message'] ?? 'no tx_response';
-      if ((txResp['code'] as int? ?? 0) != 0) return MessageModel.error()..data = txResp['raw_log'];
+      if (txResp == null) {
+        return MessageModel.error()..data = data['message'] ?? 'no tx_response';
+      }
+      if ((txResp['code'] as int? ?? 0) != 0) {
+        return MessageModel.error()..data = txResp['raw_log'];
+      }
       return MessageModel()..data = txResp['txhash'];
     } catch (e) {
       return MessageModel.error()..data = e.toString();

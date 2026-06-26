@@ -12,13 +12,14 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,7 +67,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
   }
 
   Widget coinTypeWidget() {
-    final isAlgoCoin = widget.coinModel.coin['coinType'] == CoinType.ALGO.name;
+    final isAlgoCoin = widget.coinModel.config.coinType == CoinType.ALGO.name;
     return Column(
       children: [
         if (isAlgoCoin && !algoTokenAdd)
@@ -74,7 +75,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
         else ...[
           if (isAlgoCoin)
             RecentAddressBar(
-              coinType: widget.coinModel.coin['coinType'] ?? '',
+              coinType: widget.coinModel.config.coinType,
               onSelected: (addr) {
                 toTextEditingController.text = addr;
                 toAddressCheck(addr);
@@ -98,26 +99,26 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        borderRadius: AppRadius.brSm,
         color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorBgColor2.name),
+          context,
+          AppThemeKeys.errorBgColor2.name,
+        ),
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.errorTextColor.name),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }
 
   Widget sendButtonWidget() {
-    final title = algoTokenAdd ? S.of(context).g_key_48 : S.of(context).g_key_159;
+    final title = algoTokenAdd
+        ? S.of(context).g_key_48
+        : S.of(context).g_key_159;
     final isLoading = load == Load.loading;
     return Positioned(
       left: 0,
@@ -127,23 +128,15 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              () => algoTokenAdd ? sendTransaction() : sendTransactionAlgoTokenEdit(true),
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: title,
+              onPressed: () => algoTokenAdd
+                  ? sendTransaction()
+                  : sendTransactionAlgoTokenEdit(true),
+              loading: isLoading,
             ),
           ),
         ],
@@ -155,7 +148,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -163,9 +156,7 @@ class _WalletChainSendAlgoState extends ConsumerState<WalletChainSendAlgo>
           child: Stack(
             children: [
               Positioned.fill(
-                child: SingleChildScrollView(
-                  child: coinTypeWidget(),
-                ),
+                child: SingleChildScrollView(child: coinTypeWidget()),
               ),
               sendButtonWidget(),
             ],

@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 搜索输入栏
@@ -31,9 +31,9 @@ class EnsSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: AppColorTokens.of(context).bgSurface,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(10),
@@ -51,9 +51,8 @@ class EnsSearchBar extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(8)),
               child: Text(
                 S.of(context).g_key_ens_invalid_name,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(22),
-                  color: Colors.red,
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).danger,
                 ),
               ),
             ),
@@ -65,57 +64,40 @@ class EnsSearchBar extends StatelessWidget {
   Widget _buildInputRow(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgBase,
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: focusNode.hasFocus
-              ? AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                )
+              ? AppColorTokens.of(context).brand
               : Colors.transparent,
           width: 2,
         ),
       ),
       child: Row(
         children: [
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Icon(
             Icons.search,
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textSubtitle,
             size: ScreenUtil().setWidth(28),
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: TextField(
               controller: controller,
               focusNode: focusNode,
               onChanged: onChanged,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_ens_search_hint,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setSp(28),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                hintStyle: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(
-                  vertical: ScreenUtil().setWidth(16),
+                  vertical: AppSpacing.space4,
                 ),
               ),
             ),
@@ -123,29 +105,22 @@ class EnsSearchBar extends StatelessWidget {
           // .eth 后缀标签
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ).withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              color: AppColorTokens.of(context).brand.withAlpha(20),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               '.eth',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 fontWeight: FontWeight.w600,
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
         ],
       ),
     );

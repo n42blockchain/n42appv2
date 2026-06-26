@@ -18,7 +18,10 @@ class AdaSender implements ChainSender {
   final _trustdart = Trustdart();
 
   /// Blockfrost project_id — obtained from chain config or environment.
-  static const _projectId = String.fromEnvironment('BLOCKFROST_PROJECT_ID', defaultValue: '');
+  static const _projectId = String.fromEnvironment(
+    'BLOCKFROST_PROJECT_ID',
+    defaultValue: '',
+  );
 
   @override
   Future<SendResult> send(SendParams params) async {
@@ -28,7 +31,10 @@ class AdaSender implements ChainSender {
     final adaApi = AdaApi(projectId: _projectId);
 
     // Get address info (lovelace balance)
-    final mmAddr = await adaApi.getAddressInfo(params.fromAddress, isTest: params.isTest);
+    final mmAddr = await adaApi.getAddressInfo(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmAddr.error) return SendResult.fail(mmAddr.data?.toString());
     final addrData = mmAddr.data as Map<String, dynamic>;
 
@@ -48,13 +54,19 @@ class AdaSender implements ChainSender {
     }
 
     // Get UTxOs
-    final mmUtxos = await adaApi.getAddressUtxos(params.fromAddress, isTest: params.isTest);
+    final mmUtxos = await adaApi.getAddressUtxos(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmUtxos.error) return SendResult.fail(mmUtxos.data?.toString());
     final utxos = mmUtxos.data as List<dynamic>;
 
     // Estimated fee (174000 lovelace minimum fee)
     const int estimatedFee = 174000;
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals); // decimals=6 for ADA
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    ); // decimals=6 for ADA
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -63,9 +75,13 @@ class AdaSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('ADA'));
       }
       valuePrice = valuePrice - feeBig;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || BigInt.from(estimatedFee) + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        BigInt.from(estimatedFee) + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('ADA'));
     }
 
@@ -100,7 +116,10 @@ class AdaSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.ADA.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.ADA.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 

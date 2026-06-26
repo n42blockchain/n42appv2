@@ -5,18 +5,15 @@
 
 import 'package:flutter/foundation.dart';
 import '../models/coin_price.dart';
-import '../datasources/coincap_datasource.dart';
 import '../datasources/coinpaprika_datasource.dart';
-import '../datasources/cryptocompare_price_datasource.dart';
 import '../datasources/coinlore_datasource.dart';
-import '../datasources/messari_datasource.dart';
 
 /// Multi-source price aggregator with serial fallback chain.
 ///
-/// Fallback order:
-/// ```
-/// CoinCap → CoinPaprika → CryptoCompare → CoinLore → Messari
-/// ```
+/// Fallback order: CoinPaprika → CoinLore.
+///
+/// 注：CoinCap / CryptoCompare / Messari 于 2026-06 移除——免费端点被收购后
+/// 改为强制 API key（401）或端点迁移下线（404/停用），实测确认失效。
 ///
 /// - Serial attempts: first source that returns data wins (saves quota).
 /// - Each source has an independent 8s timeout.
@@ -31,11 +28,8 @@ class MarketDataAggregator {
   /// Datasource fetch functions in fallback order.
   static final List<Future<Map<String, CoinPrice>> Function(List<String>)>
       _sources = [
-    CoinCapDatasource.getPrices,
     CoinPaprikaDatasource.getPrices,
-    CryptoComparePriceDatasource.getPrices,
     CoinLoreDatasource.getPrices,
-    MessariDatasource.getPrices,
   ];
 
   /// Fetch prices for the given uppercase [symbols] using fallback chain.

@@ -27,8 +27,9 @@ extension _BatchTransferEncoding on BatchTransferApi {
       offsets.add(_padLeft(currentOffset.toRadixString(16), 64));
 
       final structure = StringBuffer()
-        ..write(_padLeft(
-            item.toAddress.toLowerCase().replaceFirst('0x', ''), 64)) // target
+        ..write(
+          _padLeft(item.toAddress.toLowerCase().replaceFirst('0x', ''), 64),
+        ) // target
         ..write(_padLeft('0', 64)) // allowFailure = false
         ..write(_padLeft(item.amount.toRadixString(16), 64)) // value
         ..write(_padLeft('80', 64)) // callData offset (4 * 32 = 0x80)
@@ -53,7 +54,9 @@ extension _BatchTransferEncoding on BatchTransferApi {
   /// aggregate3(Call3[] calldata calls)
   /// Call3: { target, allowFailure, callData }
   String _buildErc20MulticallData(
-      String tokenAddress, List<BatchTransferItem> items) {
+    String tokenAddress,
+    List<BatchTransferItem> items,
+  ) {
     const selector = '0x82ad56cb';
     final result = StringBuffer(selector)
       ..write(_padLeft('20', 64)) // 数组偏移
@@ -72,8 +75,9 @@ extension _BatchTransferEncoding on BatchTransferApi {
       final paddedLength = ((callDataHex.length + 63) ~/ 64) * 64;
 
       final call = StringBuffer()
-        ..write(_padLeft(
-            tokenAddress.toLowerCase().replaceFirst('0x', ''), 64)) // target
+        ..write(
+          _padLeft(tokenAddress.toLowerCase().replaceFirst('0x', ''), 64),
+        ) // target
         ..write(_padLeft('0', 64)) // allowFailure = false
         ..write(_padLeft('60', 64)) // callData offset (0x60 = 96)
         ..write(_padLeft(callDataBytes.toRadixString(16), 64)) // length

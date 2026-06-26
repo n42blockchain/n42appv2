@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
@@ -73,28 +74,28 @@ class AABatchTransactionBody extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+              padding: EdgeInsets.all(AppSpacing.space6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   _buildInfoCard(context),
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                   _buildOperationsList(context),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   _buildAddButton(context),
                   if (operations.isNotEmpty) ...[
-                    SizedBox(height: ScreenUtil().setWidth(16)),
+                    SizedBox(height: AppSpacing.space4),
                     _buildSaveTemplateButton(context),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                     _buildPaymasterSection(context),
-                    SizedBox(height: ScreenUtil().setWidth(24)),
+                    SizedBox(height: AppSpacing.space6),
                     _buildGasSection(context),
                     if (estimateError != null) ...[
-                      SizedBox(height: ScreenUtil().setWidth(8)),
+                      SizedBox(height: AppSpacing.space2),
                       _buildEstimateErrorRow(context),
                     ],
                   ],
-                  SizedBox(height: ScreenUtil().setWidth(24)),
+                  SizedBox(height: AppSpacing.space6),
                 ],
               ),
             ),
@@ -107,7 +108,7 @@ class AABatchTransactionBody extends StatelessWidget {
 
   Widget _buildInfoCard(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
@@ -117,20 +118,23 @@ class AABatchTransactionBody extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.layers, size: ScreenUtil().setWidth(28), color: const Color(0xFFFF9800)),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              Icon(
+                Icons.layers,
+                size: ScreenUtil().setWidth(28),
+                color: const Color(0xFFFF9800),
+              ),
+              SizedBox(width: AppSpacing.space4),
               Flexible(
                 child: Text(
                   S.of(context).g_key_aa_batch_transaction,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: _themeColor(context, AppThemeKeys.mainTextColor),
                   ),
@@ -139,17 +143,24 @@ class AABatchTransactionBody extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_aa_batch_description,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          _buildFeatureRow(context, Icons.savings, S.of(context).g_key_aa_batch_save_gas),
-          _buildFeatureRow(context, Icons.bolt, S.of(context).g_key_aa_batch_atomic),
+          SizedBox(height: AppSpacing.space4),
+          _buildFeatureRow(
+            context,
+            Icons.savings,
+            S.of(context).g_key_aa_batch_save_gas,
+          ),
+          _buildFeatureRow(
+            context,
+            Icons.bolt,
+            S.of(context).g_key_aa_batch_atomic,
+          ),
         ],
       ),
     );
@@ -160,13 +171,16 @@ class AABatchTransactionBody extends StatelessWidget {
       padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(6)),
       child: Row(
         children: [
-          Icon(icon, size: ScreenUtil().setWidth(18), color: const Color(0xFFFF9800)),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Icon(
+            icon,
+            size: ScreenUtil().setWidth(18),
+            color: const Color(0xFFFF9800),
+          ),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
               overflow: TextOverflow.ellipsis,
@@ -180,13 +194,15 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildOperationsList(BuildContext context) {
     if (operations.isEmpty) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(32)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _themeColor(context, AppThemeKeys.itemBgColor),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
           border: Border.all(
-            color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                .withAlpha(30),
+            color: _themeColor(
+              context,
+              AppThemeKeys.itemSubtitleTextColor,
+            ).withAlpha(30),
           ),
         ),
         child: Column(
@@ -194,24 +210,26 @@ class AABatchTransactionBody extends StatelessWidget {
             Icon(
               Icons.add_circle_outline,
               size: ScreenUtil().setWidth(56),
-              color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                  .withAlpha(100),
+              color: _themeColor(
+                context,
+                AppThemeKeys.itemSubtitleTextColor,
+              ).withAlpha(100),
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_key_aa_no_operations,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
                 color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(4)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               S.of(context).g_key_aa_add_first_operation,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor)
-                    .withAlpha(150),
+              style: AppTypography.caption.copyWith(
+                color: _themeColor(
+                  context,
+                  AppThemeKeys.itemSubtitleTextColor,
+                ).withAlpha(150),
               ),
             ),
           ],
@@ -229,8 +247,7 @@ class AABatchTransactionBody extends StatelessWidget {
               child: Text(
                 '${S.of(context).g_key_aa_operations} (${operations.length})',
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: _themeColor(context, AppThemeKeys.mainTextColor),
                 ),
@@ -240,12 +257,12 @@ class AABatchTransactionBody extends StatelessWidget {
               onPressed: onClearAll,
               child: Text(
                 S.of(context).g_key_batch_clear_all,
-                style: const TextStyle(color: Colors.red),
+                style: TextStyle(color: AppColorTokens.of(context).danger),
               ),
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(12)),
+        SizedBox(height: AppSpacing.space4),
         for (int i = 0; i < operations.length; i++)
           BatchOperationItem(
             operation: operations[i],
@@ -262,10 +279,8 @@ class AABatchTransactionBody extends StatelessWidget {
       icon: const Icon(Icons.add),
       label: Text(S.of(context).g_key_aa_add_operation),
       style: OutlinedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        ),
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       ),
     );
   }
@@ -285,10 +300,7 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildPaymasterSection(BuildContext context) {
     return GestureDetector(
       onTap: onShowPaymaster,
-      child: PaymasterOptionCard(
-        option: selectedPaymaster,
-        isSelected: true,
-      ),
+      child: PaymasterOptionCard(option: selectedPaymaster, isSelected: true),
     );
   }
 
@@ -296,13 +308,15 @@ class AABatchTransactionBody extends StatelessWidget {
     final isSponsored = selectedPaymaster.type == PaymasterType.sponsored;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: isSponsored
-            ? Colors.green.withAlpha(15)
+            ? AppColorTokens.of(context).success.withAlpha(15)
             : _themeColor(context, AppThemeKeys.itemBgColor),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: isSponsored ? Border.all(color: Colors.green.withAlpha(30)) : null,
+        borderRadius: AppRadius.brMd,
+        border: isSponsored
+            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
+            : null,
       ),
       child: Column(
         children: [
@@ -313,9 +327,11 @@ class AABatchTransactionBody extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_aa_total_gas,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
+                  style: AppTypography.caption.copyWith(
+                    color: _themeColor(
+                      context,
+                      AppThemeKeys.itemSubtitleTextColor,
+                    ),
                   ),
                 ),
               ),
@@ -323,8 +339,11 @@ class AABatchTransactionBody extends StatelessWidget {
             ],
           ),
           if (isSponsored && estimatedTotalGas != null) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
-            GasSponsorshipBadge(isSponsored: true, savedAmount: formatGasCost()),
+            SizedBox(height: AppSpacing.space2),
+            GasSponsorshipBadge(
+              isSponsored: true,
+              savedAmount: formatGasCost(),
+            ),
           ],
         ],
       ),
@@ -343,19 +362,17 @@ class AABatchTransactionBody extends StatelessWidget {
     if (estimatedTotalGas != null) {
       return Text(
         isSponsored ? S.of(context).g_key_aa_free : formatGasCost(),
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
           fontWeight: FontWeight.w600,
           color: isSponsored
-              ? Colors.green
+              ? AppColorTokens.of(context).success
               : _themeColor(context, AppThemeKeys.mainTextColor),
         ),
       );
     }
     return Text(
       '-',
-      style: TextStyle(
-        fontSize: ScreenUtil().setSp(26),
+      style: AppTypography.bodySm.copyWith(
         color: _themeColor(context, AppThemeKeys.itemSubtitleTextColor),
       ),
     );
@@ -364,14 +381,17 @@ class AABatchTransactionBody extends StatelessWidget {
   Widget _buildEstimateErrorRow(BuildContext context) {
     return Row(
       children: [
-        const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 16),
-        SizedBox(width: ScreenUtil().setWidth(6)),
+        Icon(
+          Icons.warning_amber_rounded,
+          color: AppColorTokens.of(context).warning,
+          size: 16,
+        ),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             estimateError!,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(20),
-              color: Colors.orange,
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).warning,
             ),
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -385,7 +405,7 @@ class AABatchTransactionBody extends StatelessWidget {
     final canSend = operations.isNotEmpty && !isEstimating && !isSending;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         color: _themeColor(context, AppThemeKeys.itemBgColor),
         boxShadow: [
@@ -402,11 +422,9 @@ class AABatchTransactionBody extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFFFF9800),
             foregroundColor: Colors.white,
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(18)),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-            ),
-            disabledBackgroundColor: Colors.grey,
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+            shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+            disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
           ),
           child: isSending
               ? Row(
@@ -420,12 +438,11 @@ class AABatchTransactionBody extends StatelessWidget {
                         valueColor: AlwaysStoppedAnimation(Colors.white),
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(10)),
+                    SizedBox(width: AppSpacing.space2),
                     Flexible(
                       child: Text(
                         S.of(context).g_key_aa_batch_submitting,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(28),
+                        style: AppTypography.body.copyWith(
                           fontWeight: FontWeight.w600,
                         ),
                         overflow: TextOverflow.ellipsis,
@@ -435,8 +452,7 @@ class AABatchTransactionBody extends StatelessWidget {
                 )
               : Text(
                   '${S.of(context).g_key_aa_execute_batch} (${operations.length})',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
                 ),

@@ -6,6 +6,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_purchase_page.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
@@ -101,7 +102,7 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('ENS search failed: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       }
@@ -128,7 +129,7 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Load ENS price failed: $e'),
-            backgroundColor: Colors.red,
+            backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
       }

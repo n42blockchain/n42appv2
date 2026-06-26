@@ -10,12 +10,7 @@
 /// 已移除的历史条目：
 /// - KLAY   : Klaytn 升级为 Kaia（2024）后已支持 1559
 /// - METIS  : Metis 已升级支持 1559
-const _noEip1559Chains = {
-  'GO',
-  'OKT',
-  'KCS',
-  'VIC',
-  'ETC',
-};
+const _noEip1559Chains = {'GO', 'OKT', 'KCS', 'VIC', 'ETC'};
 
-bool get1559WithChainSymbol(String symbol) => !_noEip1559Chains.contains(symbol);
+bool get1559WithChainSymbol(String symbol) =>
+    !_noEip1559Chains.contains(symbol);

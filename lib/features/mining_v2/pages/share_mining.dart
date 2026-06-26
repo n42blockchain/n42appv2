@@ -1,6 +1,6 @@
-﻿import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,18 +12,20 @@ class ShareMining extends StatefulWidget {
   final String? groupName;
   final String? groupId;
 
-  const ShareMining(
-      {super.key,
-        this.fromType = 0,
-        this.astValue,
-        this.groupName,
-        this.groupId});
+  const ShareMining({
+    super.key,
+    this.fromType = 0,
+    this.astValue,
+    this.groupName,
+    this.groupId,
+  });
 
   @override
   State<ShareMining> createState() => _ShareMiningState();
 }
 
-class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStateMixin {
+class _ShareMiningState extends State<ShareMining>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
@@ -75,7 +77,7 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    
+
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -97,11 +99,13 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                 Expanded(
                   child: Center(
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(40)),
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space12,
+                      ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(height: ScreenUtil().setWidth(40)),
+                          SizedBox(height: AppSpacing.space12),
                           AnimatedBuilder(
                             animation: _animationController,
                             builder: (context, child) {
@@ -115,8 +119,12 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                     decoration: BoxDecoration(
                                       gradient: LinearGradient(
                                         colors: [
-                                          const Color(0xFFFFD700).withValues(alpha:0.2),
-                                          const Color(0xFFFFA500).withValues(alpha:0.1),
+                                          const Color(
+                                            0xFFFFD700,
+                                          ).withValues(alpha: 0.2),
+                                          const Color(
+                                            0xFFFFA500,
+                                          ).withValues(alpha: 0.1),
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -124,7 +132,9 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                       shape: BoxShape.circle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFFFD700).withValues(alpha:0.3),
+                                          color: const Color(
+                                            0xFFFFD700,
+                                          ).withValues(alpha: 0.3),
                                           blurRadius: 30,
                                           spreadRadius: 5,
                                         ),
@@ -135,8 +145,11 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                         "assets/mining/medal_star.png",
                                         width: ScreenUtil().setWidth(120),
                                         fit: BoxFit.contain,
-                                        color: isDark ? Colors.white : AppThemeUtils.getColorByKey(
-                                            context, AppThemeKeys.mainTextColor.name),
+                                        color: isDark
+                                            ? Colors.white
+                                            : AppColorTokens.of(
+                                                context,
+                                              ).textPrimary,
                                       ),
                                     ),
                                   ),
@@ -149,40 +162,40 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                             opacity: _fadeAnimation,
                             child: Text(
                               "Congratulations!",
-                              style: TextStyle(
-                                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                                fontSize: ScreenUtil().setSp(44),
-                                fontWeight: FontWeight.w700,
+                              style: AppTypography.titleLg.copyWith(
+                                color: AppColorTokens.of(context).textPrimary,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0.5,
                               ),
                             ),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(30)),
+                          SizedBox(height: AppSpacing.space8),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(30),
-                                vertical: ScreenUtil().setWidth(20),
+                                horizontal: AppSpacing.space8,
+                                vertical: AppSpacing.space4,
                               ),
                               decoration: BoxDecoration(
                                 color: isDark
-                                    ? Colors.white.withValues(alpha:0.06)
-                                    : Colors.black.withValues(alpha:0.03),
-                                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+                                    ? Colors.white.withValues(alpha: 0.06)
+                                    : Colors.black.withValues(alpha: 0.03),
+                                borderRadius: AppRadius.brMd,
                               ),
                               child: Text(
                                 _generateTipsContent(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                                style: AppTypography.body.copyWith(
+                                  color: AppColorTokens.of(
+                                    context,
+                                  ).textSubtitle,
                                   height: 1.5,
-                                  fontSize: ScreenUtil().setSp(28),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(height: ScreenUtil().setWidth(60)),
+                          SizedBox(height: AppSpacing.space16),
                           FadeTransition(
                             opacity: _fadeAnimation,
                             child: GestureDetector(
@@ -196,14 +209,18 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                               },
                               child: Container(
                                 padding: EdgeInsets.symmetric(
-                                  horizontal: ScreenUtil().setWidth(40),
-                                  vertical: ScreenUtil().setWidth(20),
+                                  horizontal: AppSpacing.space12,
+                                  vertical: AppSpacing.space4,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.1),
-                                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+                                  color: AppColorTokens.of(
+                                    context,
+                                  ).brand.withValues(alpha: 0.1),
+                                  borderRadius: AppRadius.brXl,
                                   border: Border.all(
-                                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha:0.3),
+                                    color: AppColorTokens.of(
+                                      context,
+                                    ).brand.withValues(alpha: 0.3),
                                     width: 1,
                                   ),
                                 ),
@@ -212,17 +229,18 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                                   children: [
                                     Icon(
                                       Icons.share_outlined,
-                                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+                                      color: AppColorTokens.of(context).brand,
                                       size: ScreenUtil().setWidth(36),
                                     ),
-                                    SizedBox(width: ScreenUtil().setWidth(12)),
+                                    SizedBox(width: AppSpacing.space4),
                                     Flexible(
                                       child: Text(
                                         S.of(context).g_mining_key61,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                                          fontSize: ScreenUtil().setSp(28),
+                                        style: AppTypography.body.copyWith(
+                                          color: AppColorTokens.of(
+                                            context,
+                                          ).brand,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
@@ -240,37 +258,24 @@ class _ShareMiningState extends State<ShareMining> with SingleTickerProviderStat
                 Container(
                   height: 1,
                   color: isDark
-                      ? Colors.white.withValues(alpha:0.08)
-                      : Colors.black.withValues(alpha:0.06),
+                      ? Colors.white.withValues(alpha: 0.08)
+                      : Colors.black.withValues(alpha: 0.06),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: SizedBox(
                     width: double.infinity,
-                    child: ElevatedButton(
+                    child: AppButton(
+                      label: S.of(context).g_mining_key62,
                       onPressed: () {
-                        eventBus.fire(EventPublic(EventPublicType.refreshMiningData));
-                        eventBus.fire(EventPublic(EventPublicType.selectMiningplansPop));
+                        eventBus.fire(
+                          EventPublic(EventPublicType.refreshMiningData),
+                        );
+                        eventBus.fire(
+                          EventPublic(EventPublicType.selectMiningplansPop),
+                        );
                         Navigator.pop(context, true);
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                        foregroundColor: Colors.white,
-                        elevation: 0,
-                        padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                        ),
-                      ),
-                      child: Text(
-                        S.of(context).g_mining_key62,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
                     ),
                   ),
                 ),

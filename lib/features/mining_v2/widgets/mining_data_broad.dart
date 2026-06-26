@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/custom_popup_menu_wrap.dart';
 
 /// Mining Data Broad Widget
@@ -33,8 +33,8 @@ class MiningDataBroad extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
           border: Border.all(
             color: accentColor.withValues(alpha: isDark ? 0.12 : 0.08),
             width: 1,
@@ -47,13 +47,13 @@ class MiningDataBroad extends StatelessWidget {
             ),
           ],
         ),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildTitleRow(context, accentColor, iconData),
-            SizedBox(height: ScreenUtil().setWidth(14)),
+            SizedBox(height: AppSpacing.space4),
             _buildValueRow(context),
           ],
         ),
@@ -63,22 +63,39 @@ class MiningDataBroad extends StatelessWidget {
 
   (Color, IconData) _getAccentColorAndIcon(BuildContext context) {
     if (titleText.contains('Today') || titleText.toLowerCase().contains('今日')) {
-      return (const Color(0xFF4CAF50), Icons.today_outlined); // Green - today rewards
-    } else if (titleText.contains('Yesterday') || titleText.contains('Last') || titleText.toLowerCase().contains('昨日')) {
-      return (const Color(0xFFFF9800), Icons.history_outlined); // Orange - yesterday rewards
-    } else if (titleText.contains('Total') || titleText.toLowerCase().contains('总')) {
-      return (const Color(0xFF2196F3), Icons.account_balance_outlined); // Blue - total rewards
-    } else if (titleText.contains('Value') || titleText.toLowerCase().contains('价值')) {
-      return (const Color(0xFF9C27B0), Icons.attach_money_outlined); // Purple - value
-    } else {
       return (
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-        Icons.analytics_outlined,
-      );
+        const Color(0xFF4CAF50),
+        Icons.today_outlined,
+      ); // Green - today rewards
+    } else if (titleText.contains('Yesterday') ||
+        titleText.contains('Last') ||
+        titleText.toLowerCase().contains('昨日')) {
+      return (
+        const Color(0xFFFF9800),
+        Icons.history_outlined,
+      ); // Orange - yesterday rewards
+    } else if (titleText.contains('Total') ||
+        titleText.toLowerCase().contains('总')) {
+      return (
+        const Color(0xFF2196F3),
+        Icons.account_balance_outlined,
+      ); // Blue - total rewards
+    } else if (titleText.contains('Value') ||
+        titleText.toLowerCase().contains('价值')) {
+      return (
+        const Color(0xFF9C27B0),
+        Icons.attach_money_outlined,
+      ); // Purple - value
+    } else {
+      return (AppColorTokens.of(context).brand, Icons.analytics_outlined);
     }
   }
 
-  Widget _buildTitleRow(BuildContext context, Color accentColor, IconData iconData) {
+  Widget _buildTitleRow(
+    BuildContext context,
+    Color accentColor,
+    IconData iconData,
+  ) {
     return Row(
       children: [
         Container(
@@ -86,7 +103,7 @@ class MiningDataBroad extends StatelessWidget {
           height: ScreenUtil().setWidth(32),
           decoration: BoxDecoration(
             color: accentColor.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Icon(
             iconData,
@@ -94,15 +111,14 @@ class MiningDataBroad extends StatelessWidget {
             color: accentColor,
           ),
         ),
-        SizedBox(width: ScreenUtil().setWidth(8)),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
             titleText,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(20),
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -112,17 +128,17 @@ class MiningDataBroad extends StatelessWidget {
             key: ValueKey(titleText),
             verticalMargin: ScreenUtil().setWidth(24),
             defView: Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(4)),
+              padding: EdgeInsets.all(AppSpacing.space2),
               child: Icon(
                 Icons.info_outline_rounded,
                 size: ScreenUtil().setWidth(18),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
             menuItemView: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+                borderRadius: AppRadius.brMd,
+                color: AppColorTokens.of(context).bgSurface,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.12),
@@ -131,13 +147,14 @@ class MiningDataBroad extends StatelessWidget {
                   ),
                 ],
               ),
-              margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(50)),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(18)),
+              margin: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(50),
+              ),
+              padding: EdgeInsets.all(AppSpacing.space4),
               child: Text(
                 tipsText ?? '',
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                   height: 1.4,
                 ),
               ),
@@ -150,10 +167,9 @@ class MiningDataBroad extends StatelessWidget {
   Widget _buildValueRow(BuildContext context) {
     return Text(
       value,
-      style: TextStyle(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28),
-        fontWeight: FontWeight.w700,
+      style: AppTypography.body.copyWith(
+        color: AppColorTokens.of(context).textPrimary,
+        fontWeight: FontWeight.w600,
       ),
       overflow: TextOverflow.ellipsis,
       maxLines: 1,

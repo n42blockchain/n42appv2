@@ -32,9 +32,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
           content: SingleChildScrollView(
             child: Text(
               S.current.g_mining_key20,
-              style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name)),
+              style: TextStyle(color: AppColorTokens.of(context).textPrimary),
             ),
           ),
           actions: <Widget>[
@@ -82,11 +80,9 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             alignment: Alignment.centerLeft,
             child: Text(
               S.of(context).g_key_16,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(36.0),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.title.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -94,15 +90,14 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             height: ScreenUtil().setWidth(1),
             indent: 0,
             endIndent: 0,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
+            color: AppColorTokens.of(context).border,
           ),
           Container(
             constraints: BoxConstraints(
               maxHeight: ScreenUtil().setWidth(500.0),
             ),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
+              horizontal: AppSpacing.space8,
             ),
             child: ListView.builder(
               itemCount: walletList.length,
@@ -136,21 +131,19 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
                                 wInfo.isMainWallet
                                     ? S.of(context).g_key_14
                                     : S.of(context).g_key_6,
-                                style: TextStyle(
+                                style: AppTypography.title.copyWith(
                                   color: walletColor,
-                                  fontSize: ScreenUtil().setSp(36.0),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
                             ),
-                            SizedBox(width: ScreenUtil().setWidth(20.0)),
+                            SizedBox(width: AppSpacing.space4),
                             Flexible(
                               child: Text(
                                 wInfo.name,
-                                style: TextStyle(
+                                style: AppTypography.title.copyWith(
                                   color: walletColor,
-                                  fontSize: ScreenUtil().setSp(36.0),
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,

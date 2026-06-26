@@ -7,13 +7,13 @@ import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/fil_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -21,7 +21,8 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,7 +70,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toTextEditingController.text = addr;
             toAddressCheck(addr);
@@ -88,7 +89,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
         actions: [
           InkWell(
             onTap: () async {
@@ -96,7 +97,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
                 context,
                 MaterialPageRoute(
                   builder: (_) => AddressBookList(
-                    coinName: widget.coinModel.coin['coinType'],
+                    coinName: widget.coinModel.config.coinType,
                   ),
                 ),
               );
@@ -112,10 +113,7 @@ class _WalletChainSendFilState extends ConsumerState<WalletChainSendFil>
               ),
               child: Image.asset(
                 'assets/wallet/addressBook.png',
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainBlueColor.name,
-                ),
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

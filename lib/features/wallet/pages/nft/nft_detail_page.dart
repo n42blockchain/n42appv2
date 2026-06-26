@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_send_page.dart';
@@ -140,7 +142,9 @@ class _NftDetailPageState extends State<NftDetailPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_nft_burn_title),
-        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_nft_burn_confirm)),
+        content: SingleChildScrollView(
+          child: Text(S.of(ctx).g_key_nft_burn_confirm),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -150,7 +154,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               S.of(ctx).g_key_78, // Confirm
-              style: const TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColorTokens.of(ctx).danger),
             ),
           ),
         ],
@@ -163,7 +167,8 @@ class _NftDetailPageState extends State<NftDetailPage> {
     setState(() => _burning = true);
 
     try {
-      final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
+      final configCoinType = coinModel.config.coinType;
+      final coinType = configCoinType.isNotEmpty ? configCoinType : 'ETH';
       final addrType = coinModel.addrType;
       final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
@@ -248,8 +253,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           child: Builder(
             builder: (ctx) => Text(
               S.of(ctx).g_key_nft_no_video_support,
-              style: TextStyle(
-                fontSize: 12,
+              style: AppTypography.caption.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   ctx,
                   AppThemeKeys.itemSubtitleTextColor.name,
@@ -273,7 +277,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           SingleChildScrollView(
             child: NftInfoBoard(
               address: coinModel.address?.toString(),
-              coinType: coinModel.coin['coinType'] as String?,
+              coinType: coinModel.config.coinType,
               tokenName: nft.name,
               tokenId: nft.tokenId,
               contractAddress: nft.contractAddress,
@@ -297,10 +301,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
               color: Colors.black.withAlpha(80),
               child: Center(
                 child: CircularProgressIndicator(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainBlueColor.name,
-                  ),
+                  color: AppColorTokens.of(context).brand,
                 ),
               ),
             ),

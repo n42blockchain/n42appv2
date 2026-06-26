@@ -2,6 +2,13 @@
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
+//
+// **Status: designed but not wired (2026-06 audit).** DAppSecurityService /
+// DAppPermissionsTracker have no production call sites — the signing flow
+// (DAppRequestHandler) never calls check(), so the security-level scoring
+// is dormant. PhishingDetector IS live on browser navigation; this service
+// was meant to grade DApp origins at signing time. Wire it inside
+// DAppRequestHandler when the JS bridge lands (see ethereum_provider.dart).
 
 import 'dart:convert';
 

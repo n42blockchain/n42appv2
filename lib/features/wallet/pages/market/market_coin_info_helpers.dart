@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── period selector constants ─────────────────────────────────────────────
 // Both arrays must stay in sync (enforced by assert in initState).
@@ -109,8 +110,5 @@ List<Widget> withDividers(BuildContext context, List<Widget> items) {
 Widget coinInfoDivider(BuildContext context) => Divider(
   height: ScreenUtil().setWidth(1),
   thickness: 0.5,
-  color: AppThemeUtils.getColorByKey(
-    context,
-    AppThemeKeys.itemSubtitleTextColor.name,
-  ).withValues(alpha: 0.15),
+  color: AppColorTokens.of(context).textSubtitle.withValues(alpha: 0.15),
 );

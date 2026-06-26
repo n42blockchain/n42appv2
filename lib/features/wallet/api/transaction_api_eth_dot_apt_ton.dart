@@ -39,18 +39,14 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       final proxyChain = !isTest ? _proxyExplorerChain(miniName) : null;
       final requestUrl = proxyChain == null
           ? '${hostUrl}module=account&action=txlist&address=$address'
-              '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc'
-              '${endBlock != null ? '&endblock=$endBlock' : ''}'
+                '&startblock=$fromBlock&page=$page&offset=$offset&sort=desc'
+                '${endBlock != null ? '&endblock=$endBlock' : ''}'
           : ProxyConfig.explorerTxlist(proxyChain);
       final data = await BaseApi.requestEmptyH.get(
         requestUrl,
         params: proxyChain == null
             ? {}
-            : {
-                'address': address,
-                'page': '$page',
-                'size': '$offset',
-              },
+            : {'address': address, 'page': '$page', 'size': '$offset'},
         header: header,
       );
       final items = extractExplorerItems(data);
@@ -90,8 +86,8 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       final proxyChain = !isTest ? _proxyExplorerChain(name) : null;
       final requestUrl = proxyChain == null
           ? '${hostUrl}module=account&action=tokentx&address=$address'
-              '&contractaddress=$contractAddress&startblock=$fromBlock'
-              '&endblock=$endBlock&page=$page&offset=$offset&sort=desc'
+                '&contractaddress=$contractAddress&startblock=$fromBlock'
+                '&endblock=$endBlock&page=$page&offset=$offset&sort=desc'
           : ProxyConfig.explorerTokentx(proxyChain);
       final data = await BaseApi.requestEmptyH.get(
         requestUrl,
@@ -156,8 +152,9 @@ extension TransactionApiEthDotAptTon on TransactionApi {
             ..from = e['from'] as String? ?? ''
             ..to = e['to'] as String? ?? ''
             ..value = _parseToSmallestUnit(
-                    e['amount'] as String? ?? '0', decimals)
-                .toString()
+              e['amount'] as String? ?? '0',
+              decimals,
+            ).toString()
             ..timeStamp = (e['block_timestamp'] as int?)?.toString() ?? '0'
             ..txreceiptStatus = (e['success'] == true) ? '1' : '0'
             ..gas = '0'
@@ -192,8 +189,11 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         return mm;
       }
       final url = '${rpcUrl}accounts/$address/transactions?limit=25';
-      final data =
-          await BaseApi.requestEmptyH.get(url, params: {}, header: header);
+      final data = await BaseApi.requestEmptyH.get(
+        url,
+        params: {},
+        header: header,
+      );
       if (data is List) {
         mm.data = data
             .map<CommonResponseItemModel?>((e) {
@@ -218,7 +218,8 @@ extension TransactionApiEthDotAptTon on TransactionApi {
                 ..timeStamp = (tsMicro ~/ 1000000).toString()
                 ..txreceiptStatus = (e['success'] == true) ? '1' : '0'
                 ..gas = gasUsed.toString()
-                ..gasPrice = (gasUsed * gasUnitPrice).toString() // octas
+                ..gasPrice = (gasUsed * gasUnitPrice)
+                    .toString() // octas
                 ..contractAddress = '';
             })
             .whereType<CommonResponseItemModel>()
@@ -251,8 +252,11 @@ extension TransactionApiEthDotAptTon on TransactionApi {
         return mm;
       }
       final url = '${rpcUrl}getTransactions?address=$address&limit=20';
-      final data =
-          await BaseApi.requestEmptyH.get(url, params: {}, header: header);
+      final data = await BaseApi.requestEmptyH.get(
+        url,
+        params: {},
+        header: header,
+      );
       if (data != null && data['ok'] == true) {
         final txList = data['result'] as List? ?? [];
         mm.data = txList
@@ -265,10 +269,16 @@ extension TransactionApiEthDotAptTon on TransactionApi {
                   ..hash = txId?['hash'] as String? ?? ''
                   ..from = inMsg['source'] as String? ?? ''
                   ..to = inMsg['destination'] as String? ?? address
-                  ..value = inMsg['value']?.toString() ?? '0' // nanoTON
-                  ..timeStamp = e['utime']?.toString() ?? '0' // Unix seconds
+                  ..value =
+                      inMsg['value']?.toString() ??
+                      '0' // nanoTON
+                  ..timeStamp =
+                      e['utime']?.toString() ??
+                      '0' // Unix seconds
                   ..txreceiptStatus = '1'
-                  ..gasPrice = e['fee']?.toString() ?? '0' // nanoTON
+                  ..gasPrice =
+                      e['fee']?.toString() ??
+                      '0' // nanoTON
                   ..gas = '0'
                   ..contractAddress = '';
               } catch (_) {
@@ -298,8 +308,7 @@ extension TransactionApiEthDotAptTon on TransactionApi {
       final parts = amount.split('.');
       final intPart = BigInt.parse(parts[0].isEmpty ? '0' : parts[0]);
       final fracRaw = parts.length > 1 ? parts[1] : '';
-      final fracPadded =
-          fracRaw.padRight(decimals, '0').substring(0, decimals);
+      final fracPadded = fracRaw.padRight(decimals, '0').substring(0, decimals);
       final fracPart = BigInt.parse(fracPadded);
       return intPart * BigInt.from(10).pow(decimals) + fracPart;
     } catch (_) {

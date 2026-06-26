@@ -5,22 +5,21 @@
 
 /// DEX chain label → backend chain value → app-internal coinType for RPC calls.
 const List<Map<String, String>> kDexSupportedChains = [
-  {'label': 'ETH',     'value': 'ETH',     'coinType': 'ETH'},
-  {'label': 'BSC',     'value': 'BSC',     'coinType': 'BNB'},
+  {'label': 'ETH', 'value': 'ETH', 'coinType': 'ETH'},
+  {'label': 'BSC', 'value': 'BSC', 'coinType': 'BNB'},
   {'label': 'Polygon', 'value': 'POLYGON', 'coinType': 'MATIC'},
-  {'label': 'ARB',     'value': 'ARB',     'coinType': 'ARB'},
-  {'label': 'OP',      'value': 'OP',      'coinType': 'OP'},
-  {'label': 'BASE',    'value': 'BASE',    'coinType': 'BASE'},
-  {'label': 'SOL',     'value': 'SOL',     'coinType': 'SOL'},
+  {'label': 'ARB', 'value': 'ARB', 'coinType': 'ARB'},
+  {'label': 'OP', 'value': 'OP', 'coinType': 'OP'},
+  {'label': 'BASE', 'value': 'BASE', 'coinType': 'BASE'},
+  {'label': 'SOL', 'value': 'SOL', 'coinType': 'SOL'},
 ];
 
 /// Lookup coinType for a given DEX chain value.
 String dexCoinTypeForChain(String dexChain) {
-  return kDexSupportedChains
-      .firstWhere(
-        (c) => c['value'] == dexChain,
-        orElse: () => {'coinType': dexChain},
-      )['coinType']!;
+  return kDexSupportedChains.firstWhere(
+    (c) => c['value'] == dexChain,
+    orElse: () => {'coinType': dexChain},
+  )['coinType']!;
 }
 
 /// Seconds before a fetched quote is considered stale and auto-refreshed.
@@ -68,25 +67,25 @@ BigInt dexToWei(String amount, int decimals) {
 /// Symbol → CoinGecko ID mapping for common DeFi tokens.
 /// Used to fetch price chart data. Unmapped tokens show no chart.
 const Map<String, String> kDexSymbolToGeckoId = {
-  'ETH':   'ethereum',
-  'WETH':  'weth',
-  'BTC':   'bitcoin',
-  'WBTC':  'wrapped-bitcoin',
-  'BNB':   'binancecoin',
+  'ETH': 'ethereum',
+  'WETH': 'weth',
+  'BTC': 'bitcoin',
+  'WBTC': 'wrapped-bitcoin',
+  'BNB': 'binancecoin',
   'MATIC': 'matic-network',
-  'SOL':   'solana',
-  'USDC':  'usd-coin',
-  'USDT':  'tether',
-  'DAI':   'dai',
-  'ARB':   'arbitrum',
-  'OP':    'optimism',
-  'LINK':  'chainlink',
-  'UNI':   'uniswap',
-  'AAVE':  'aave',
-  'CRV':   'curve-dao-token',
-  'MKR':   'maker',
-  'SNX':   'synthetix-network-token',
-  'PEPE':  'pepe',
-  'SHIB':  'shiba-inu',
-  'DOGE':  'dogecoin',
+  'SOL': 'solana',
+  'USDC': 'usd-coin',
+  'USDT': 'tether',
+  'DAI': 'dai',
+  'ARB': 'arbitrum',
+  'OP': 'optimism',
+  'LINK': 'chainlink',
+  'UNI': 'uniswap',
+  'AAVE': 'aave',
+  'CRV': 'curve-dao-token',
+  'MKR': 'maker',
+  'SNX': 'synthetix-network-token',
+  'PEPE': 'pepe',
+  'SHIB': 'shiba-inu',
+  'DOGE': 'dogecoin',
 };

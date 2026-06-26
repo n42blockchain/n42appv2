@@ -1,9 +1,8 @@
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -109,7 +108,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             onTap: _deleting ? null : deleteCollection,
             child: Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
+                horizontal: AppSpacing.space8,
               ),
               height: ScreenUtil().setWidth(40.0),
               child: _deleting
@@ -118,19 +117,10 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
                       width: ScreenUtil().setWidth(24.0),
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.mainBlueColor.name,
-                        ),
+                        color: AppColorTokens.of(context).brand,
                       ),
                     )
-                  : Icon(
-                      Icons.delete,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
-                    ),
+                  : Icon(Icons.delete, color: AppColorTokens.of(context).brand),
             ),
           ),
         ],
@@ -170,8 +160,8 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
   }) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,13 +170,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               label,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28.0),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
-              ),
+              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
             ),
           ),
           Container(
@@ -194,21 +178,11 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             padding: EdgeInsets.only(left: ScreenUtil().setWidth(32.0)),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(20.0)),
-              ),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemBgColor.name,
-              ),
+              borderRadius: AppRadius.brMd,
+              color: AppColorTokens.of(context).bgSurface,
             ),
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.mainTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).textPrimary),
               controller: controller,
               focusNode: focusNode,
               textInputAction: TextInputAction.next,
@@ -228,13 +202,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           if (errorMessage.isNotEmpty)
             Text(
               errorMessage,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorTextColor.name,
-                ),
-                fontSize: ScreenUtil().setSp(24.0),
-              ),
+              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
             ),
         ],
       ),
@@ -272,12 +240,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
     return Container(
       height: ScreenUtil().setWidth(148.0),
       width: double.infinity,
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.backGroundColor.name,
-      ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-      child: buttonStyle2(context, _saveUrl, S.of(context).g_key_115),
+      color: AppColorTokens.of(context).bgBase,
+      padding: EdgeInsets.all(AppSpacing.space8),
+      child: AppButton(label: S.of(context).g_key_115, onPressed: _saveUrl),
     );
   }
 }

@@ -1,27 +1,24 @@
 part of 'wallet_security_verification.dart';
 
 /// Common input text style used across all verification sections.
-TextStyle _inputTextStyle(BuildContext context) => TextStyle(
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-      fontSize: ScreenUtil().setSp(28.0),
-    );
+TextStyle _inputTextStyle(BuildContext context) => AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
 
 /// Common hint text style used across all verification sections.
-TextStyle _hintTextStyle(BuildContext context) => TextStyle(
-      fontSize: ScreenUtil().setSp(28.0),
-      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
-    );
+TextStyle _hintTextStyle(BuildContext context) => AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
 
 /// Common InputDecoration with no borders.
-InputDecoration _noBorderDecoration(BuildContext context, String hintText, {String? counterText}) =>
-    InputDecoration(
-      hintText: hintText,
-      hintStyle: _hintTextStyle(context),
-      border: InputBorder.none,
-      errorBorder: InputBorder.none,
-      focusedBorder: InputBorder.none,
-      counterText: counterText,
-    );
+InputDecoration _noBorderDecoration(
+  BuildContext context,
+  String hintText, {
+  String? counterText,
+}) => InputDecoration(
+  hintText: hintText,
+  hintStyle: _hintTextStyle(context),
+  border: InputBorder.none,
+  errorBorder: InputBorder.none,
+  focusedBorder: InputBorder.none,
+  counterText: counterText,
+);
 
 class _WalletPasswordSection extends StatelessWidget {
   const _WalletPasswordSection({
@@ -45,12 +42,12 @@ class _WalletPasswordSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_key_t_32),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (showPasswordInput) ...[
             _buildInput(context),
             _ErrorMessage(pwdErrorMessage),
@@ -60,7 +57,7 @@ class _WalletPasswordSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetupPassword,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -68,7 +65,7 @@ class _WalletPasswordSection extends StatelessWidget {
 
   Widget _buildInput(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       child: Row(
         children: [
@@ -78,7 +75,10 @@ class _WalletPasswordSection extends StatelessWidget {
               obscureText: obscure,
               controller: pwdController,
               textInputAction: TextInputAction.done,
-              decoration: _noBorderDecoration(context, S.of(context).g_key_t_35),
+              decoration: _noBorderDecoration(
+                context,
+                S.of(context).g_key_t_35,
+              ),
               maxLines: 1,
               onEditingComplete: onEditingComplete,
             ),
@@ -118,12 +118,12 @@ class _FaceSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_lock_key1),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (enabled) ...[
             _buildFaceRow(context),
             _ErrorMessage(faceErrorMessage),
@@ -133,7 +133,7 @@ class _FaceSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -147,7 +147,7 @@ class _FaceSection extends StatelessWidget {
     };
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       height: ScreenUtil().setWidth(100.0),
       child: Row(
@@ -155,8 +155,8 @@ class _FaceSection extends StatelessWidget {
           Expanded(
             child: Text(
               statusText,
-              style: _inputTextStyle(context).copyWith(
-                fontSize: ScreenUtil().setSp(24.0),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
             ),
           ),
@@ -200,12 +200,12 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_google_auth_key1),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (widget.enabled) ...[
             _buildInput(context),
             _ErrorMessage(widget.errorMessage),
@@ -215,22 +215,19 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: widget.onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
   }
 
   Widget _buildInput(BuildContext context) {
-    final Color mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final Color mainText = AppColorTokens.of(context).textPrimary;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color mainBlue = AppColorTokens.of(context).brand;
 
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(32.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       decoration: _inputBoxDecoration(context),
       height: ScreenUtil().setWidth(100.0),
       child: Row(
@@ -239,14 +236,17 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
             child: widget.verified
                 ? Row(
                     children: [
-                      Icon(Icons.check_circle,
-                          color: mainBlue,
-                          size: ScreenUtil().setWidth(36.0)),
-                      SizedBox(width: ScreenUtil().setWidth(10.0)),
+                      Icon(
+                        Icons.check_circle,
+                        color: mainBlue,
+                        size: ScreenUtil().setWidth(36.0),
+                      ),
+                      SizedBox(width: AppSpacing.space2),
                       Text(
                         S.of(context).g_lock_key5,
-                        style:
-                            _inputTextStyle(context).copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                        style: AppTypography.bodySm.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                     ],
                   )
@@ -254,19 +254,15 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
                     controller: _ctrl,
                     keyboardType: TextInputType.number,
                     maxLength: 6,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setSp(28.0),
                       letterSpacing: 4,
                     ),
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       counterText: '',
                       hintText: S.of(context).g_google_auth_key4,
-                      hintStyle: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
-                        color: subtitleColor,
-                      ),
+                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
                     ),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onSubmitted: widget.onVerify,
@@ -305,12 +301,12 @@ class _GestureSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _SectionLabel(S.of(context).g_lock_key16),
-          SizedBox(height: ScreenUtil().setWidth(10.0)),
+          SizedBox(height: AppSpacing.space2),
           if (enabled) ...[
             _buildGestureArea(context),
             _ErrorMessage(gestureErrorMessage),
@@ -320,7 +316,7 @@ class _GestureSection extends StatelessWidget {
               buttonLabel: S.of(context).google_verification_message10,
               onSetup: onSetup,
             ),
-          SizedBox(height: ScreenUtil().setWidth(40.0)),
+          SizedBox(height: AppSpacing.space12),
         ],
       ),
     );
@@ -332,24 +328,20 @@ class _GestureSection extends StatelessWidget {
     final double bigWidth = identifySize / 2;
     final double miniWidth = identifySize / 4;
 
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final Color errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color bgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final Color mainBlue = AppColorTokens.of(context).brand;
+    final Color errorColor = AppColorTokens.of(context).danger;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color bgColor = AppColorTokens.of(context).bgSurface;
 
     final List<int>? answer = gestureCheck == 1
         ? null
         : gesturePwd.isNotEmpty
-            ? gesturePwd.split(',').map(int.parse).toList()
-            : null;
+        ? gesturePwd.split(',').map(int.parse).toList()
+        : null;
 
     return Container(
       decoration: _inputBoxDecoration(context),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       child: Column(
         children: [
           if (gestureCheck == 1)
@@ -357,14 +349,17 @@ class _GestureSection extends StatelessWidget {
               height: ScreenUtil().setWidth(60.0),
               child: Row(
                 children: [
-                  Icon(Icons.check_circle,
-                      color: mainBlue,
-                      size: ScreenUtil().setWidth(40.0)),
-                  SizedBox(width: ScreenUtil().setWidth(10.0)),
+                  Icon(
+                    Icons.check_circle,
+                    color: mainBlue,
+                    size: ScreenUtil().setWidth(40.0),
+                  ),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     S.of(context).g_lock_key5,
-                    style: _inputTextStyle(context)
-                        .copyWith(fontSize: ScreenUtil().setSp(26.0)),
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                 ],
               ),
@@ -377,72 +372,79 @@ class _GestureSection extends StatelessWidget {
                 child: KeyedSubtree(
                   key: ValueKey(gestureCheck),
                   child: GesturePasswordWidget(
-                  size: gridSize,
-                  lineColor: mainBlue,
-                  errorLineColor: errorColor,
-                  singleLineCount: 3,
-                  identifySize: identifySize,
-                  minLength: 4,
-                  hitShowMilliseconds: 40,
-                  answer: answer,
-                  color: bgColor,
-                  normalItem: Container(
-                    height: miniWidth,
-                    width: miniWidth,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(miniWidth)),
-                      color: subtitleColor,
-                    ),
-                  ),
-                  selectedItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
+                    size: gridSize,
+                    lineColor: mainBlue,
+                    errorLineColor: errorColor,
+                    singleLineCount: 3,
+                    identifySize: identifySize,
+                    minLength: 4,
+                    hitShowMilliseconds: 40,
+                    answer: answer,
+                    color: bgColor,
+                    normalItem: Container(
                       height: miniWidth,
+                      width: miniWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: mainBlue,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(miniWidth),
+                        ),
+                        color: subtitleColor,
                       ),
                     ),
-                  ),
-                  hitItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: mainBlue.withAlpha((0.5 * 255).round()),
-                    ),
-                  ),
-                  errorItem: Container(
-                    width: bigWidth,
-                    height: bigWidth,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.all(Radius.circular(bigWidth)),
-                      color: errorColor.withAlpha((0.5 * 255).round()),
-                    ),
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: miniWidth,
-                      height: miniWidth,
+                    selectedItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(miniWidth)),
-                        color: errorColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: mainBlue,
+                        ),
                       ),
                     ),
+                    hitItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: mainBlue.withAlpha((0.5 * 255).round()),
+                      ),
+                    ),
+                    errorItem: Container(
+                      width: bigWidth,
+                      height: bigWidth,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(bigWidth),
+                        ),
+                        color: errorColor.withAlpha((0.5 * 255).round()),
+                      ),
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: miniWidth,
+                        height: miniWidth,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(miniWidth),
+                          ),
+                          color: errorColor,
+                        ),
+                      ),
+                    ),
+                    onComplete: (data) => onComplete(data.join(',')),
                   ),
-                  onComplete: (data) => onComplete(data.join(',')),
-                ),
                 ),
               ),
             ),

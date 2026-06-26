@@ -3,7 +3,7 @@ import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_task_list_utils.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/nav_show_data_item.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
@@ -63,7 +63,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
           Row(
             children: [
               RoundRefreshIcon(refreshData: () => initData()),
-              SizedBox(width: ScreenUtil().setWidth(24)),
+              SizedBox(width: AppSpacing.space6),
             ],
           ),
         ],
@@ -82,37 +82,22 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                     children: [
                       Text(
                         widget.astValue,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
-                          fontSize: ScreenUtil().setSp(36),
-                        ),
+                        style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Text(
                         CoinType.N.name,
-                        style: TextStyle(
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
-                          fontSize: ScreenUtil().setSp(28),
-                        ),
+                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                       ),
                     ],
                   ),
 
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Divider(
                     height: 1,
                     endIndent: 1,
                     indent: 1,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemLineColor.name,
-                    ),
+                    color: AppColorTokens.of(context).border,
                   ),
                   //展示数据
                   NavShowDataItem(
@@ -159,10 +144,7 @@ class _TaskDetailPageState extends State<TaskDetailPage> {
                           child: Icon(
                             Icons.copy,
                             size: ScreenUtil().setWidth(36),
-                            color: AppThemeUtils.getColorByKey(
-                              context,
-                              AppThemeKeys.mainBlueColor.name,
-                            ),
+                            color: AppColorTokens.of(context).brand,
                           ),
                         ),
                       ),

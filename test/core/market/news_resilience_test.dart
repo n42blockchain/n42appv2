@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/api_hub/aggregators/news_aggregator.dart';
-import 'package:n42_wallet/core/api_hub/datasources/messari_datasource.dart';
 import 'package:n42_wallet/core/market/crypto_news_service.dart';
 import 'package:n42_wallet/core/market/fear_greed_service.dart';
 
@@ -20,30 +19,42 @@ NewsArticle _article({
 
 void main() {
   group('news and market resilience helpers', () {
-    test('CryptoNewsService keeps fallback articles when response is invalid', () {
+    test('CryptoNewsService keeps fallback when RSS body is invalid', () {
       final fallback = [_article(id: 'cached', url: 'https://cached', minutesAgo: 5)];
 
-      final result = CryptoNewsService.parseLatestResponse(
-        {'unexpected': []},
+      final result = CryptoNewsService.parseRssArticles(
+        'not-xml',
         fallback: fallback,
       );
 
       expect(result, same(fallback));
     });
 
-    test('MessariDatasource keeps fallback news when parsed articles are empty', () {
-      final fallback = [_article(id: 'cached', url: 'https://cached', minutesAgo: 5)];
+    test('CryptoNewsService parses RSS items into NewsArticles', () {
+      const rss = '''
+<rss version="2.0">
+  <channel>
+    <title>Cointelegraph</title>
+    <item>
+      <title>BTC hits new high</title>
+      <link>https://example.com/a</link>
+      <pubDate>Mon, 15 Jun 2026 12:00:00 GMT</pubDate>
+      <media:content url="https://img/a.jpg" xmlns:media="http://x"/>
+    </item>
+    <item>
+      <title>Missing link is skipped</title>
+      <link></link>
+    </item>
+  </channel>
+</rss>''';
 
-      final result = MessariDatasource.parseNewsResponse(
-        {
-          'data': [
-            {'title': '', 'url': ''},
-          ],
-        },
-        fallback: fallback,
-      );
+      final result = CryptoNewsService.parseRssArticles(rss);
 
-      expect(result, same(fallback));
+      expect(result.length, 1);
+      expect(result.first.title, 'BTC hits new high');
+      expect(result.first.url, 'https://example.com/a');
+      expect(result.first.imageUrl, 'https://img/a.jpg');
+      expect(result.first.sourceName, 'Cointelegraph');
     });
 
     test('NewsAggregator deduplicates and sorts newest first', () {

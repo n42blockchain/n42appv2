@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_account_create_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_account_detail_page.dart';
@@ -75,7 +75,9 @@ class _AAHomePageState extends State<AAHomePage> {
 
   void navigateToCreateAccount() {
     if (!_requireOwnerAddress()) return;
-    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((_) {
+    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((
+      _,
+    ) {
       if (!mounted) return;
       _loadAccounts();
     });
@@ -128,26 +130,23 @@ class _AAHomePageState extends State<AAHomePage> {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_aa_title),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             buildHeaderCard(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildFeatureCards(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildAdvancedFeatures(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             buildAccountsSection(),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: navigateToCreateAccount,
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).brand,
         icon: const Icon(Icons.add, color: Colors.white),
         label: Text(
           S.of(context).g_key_aa_create_account,

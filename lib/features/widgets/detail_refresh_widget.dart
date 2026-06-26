@@ -1,17 +1,19 @@
-﻿
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 
 typedef GetData = Future<void> Function();
+
 class DetailRefreshWidget extends StatefulWidget {
   final EasyRefreshController? refreshController;
   final GetData callback;
   final Widget childWidget;
-  const DetailRefreshWidget({this.refreshController,
+  const DetailRefreshWidget({
+    this.refreshController,
     required this.callback,
     required this.childWidget,
-    super.key});
+    super.key,
+  });
 
   @override
   State<DetailRefreshWidget> createState() => _DetailRefreshWidgetState();
@@ -23,7 +25,12 @@ class _DetailRefreshWidgetState extends State<DetailRefreshWidget> {
   @override
   void initState() {
     super.initState();
-    _refreshController = widget.refreshController ?? EasyRefreshController(controlFinishLoad: true,controlFinishRefresh: true);
+    _refreshController =
+        widget.refreshController ??
+        EasyRefreshController(
+          controlFinishLoad: true,
+          controlFinishRefresh: true,
+        );
   }
 
   @override
@@ -37,22 +44,30 @@ class _DetailRefreshWidgetState extends State<DetailRefreshWidget> {
   @override
   Widget build(BuildContext context) {
     return EasyRefresh(
-        //firstRefresh: false,
-        refreshOnStart:true,
-        controller: _refreshController,
-        //canRefreshAfterNoMore:true,
-        //canLoadAfterNoMore:true,
-        //enableControlFinishLoad: true,
-        //enableControlFinishRefresh: true,
-        header: MaterialHeader(
-            backgroundColor: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonBgColor.name),
-            valueColor:  AlwaysStoppedAnimation(AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainButtonTextColor.name))),
-        onRefresh: () async {
-          handRefresh();
-        },
-        child: widget.childWidget);
+      //firstRefresh: false,
+      refreshOnStart: true,
+      controller: _refreshController,
+      //canRefreshAfterNoMore:true,
+      //canLoadAfterNoMore:true,
+      //enableControlFinishLoad: true,
+      //enableControlFinishRefresh: true,
+      header: MaterialHeader(
+        backgroundColor: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.mainButtonBgColor.name,
+        ),
+        valueColor: AlwaysStoppedAnimation(
+          AppThemeUtils.getColorByKey(
+            context,
+            AppThemeKeys.mainButtonTextColor.name,
+          ),
+        ),
+      ),
+      onRefresh: () async {
+        handRefresh();
+      },
+      child: widget.childWidget,
+    );
   }
 
   void handRefresh() async {

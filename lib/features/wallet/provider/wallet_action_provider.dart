@@ -19,6 +19,7 @@ import 'package:n42_wallet/features/wallet/api/market_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
@@ -41,9 +42,9 @@ part 'wallet_action_provider_market.dart';
 String? resolveBalanceRpcOverride(CoinModel coinModel) {
   // For EVM chains with a configured RPC, bypass the N42 API to avoid
   // 5xx errors for coin types it doesn't recognise (e.g. XDAI, PLUME).
-  if (coinModel.coin['blockchainType'] != 'Ethereum') return null;
+  if (coinModel.config.blockchainType != 'Ethereum') return null;
 
-  final coinType = coinModel.coin['coinType']?.toString() ?? '';
+  final coinType = coinModel.config.coinType;
   final canonical = chainUrlMap[coinType];
 
   final String? svc;
@@ -52,15 +53,14 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
     final baseInfo = canonical['baseInfo'];
     svc = baseInfo is Map
         ? (coinModel.isTest ? baseInfo['service_test'] : baseInfo['service'])
-            ?.toString()
-            .trim()
+              ?.toString()
+              .trim()
         : null;
   } else {
     // 自定义链：从存储数据取
     svc = (coinModel.isTest
-            ? coinModel.coin['service_test']
-            : coinModel.coin['service'])
-        ?.toString()
+            ? coinModel.config.serviceTest
+            : coinModel.config.service)
         .trim();
   }
 
@@ -71,7 +71,6 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 class WalletActionProvider extends ChangeNotifier
     with SafeChangeNotifierMixin
     implements ICoinModelWalletAccess {
-
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -163,8 +162,8 @@ class WalletActionProvider extends ChangeNotifier
 
   /// 安全地更新 walletMap 中的数据
   void _safeUpdateWalletMap(CoinModel coinModel) {
-    final coinType = coinModel.coin['coinType'];
-    if (coinType == null || walletMap.isEmpty) return;
+    final coinType = coinModel.config.coinType;
+    if (coinType.isEmpty || walletMap.isEmpty) return;
 
     final chainData = walletMap[coinType];
     if (chainData == null) return;
@@ -181,20 +180,20 @@ class WalletActionProvider extends ChangeNotifier
               testnets.isNotEmpty &&
               testnets[0]['testnetContract'] != null) {
             walletMap[coinType]['testnets'][0]['testnetContract'][coinModel
-                    .coin['mKey']] =
+                    .config.mKey] =
                 coinModel.coin;
           }
         } else {
           final mainnets = chainData['mainnets'];
           if (mainnets != null) {
-            walletMap[coinType]['mainnets'][coinModel.coin['mKey']] =
+            walletMap[coinType]['mainnets'][coinModel.config.mKey] =
                 coinModel.coin;
           }
         }
       }
     } catch (e) {
       debugPrint(
-        'WalletActionProvider: Error updating walletMap for ${coinModel.coin['miniName']}: $e',
+        'WalletActionProvider: Error updating walletMap for ${coinModel.config.miniName}: $e',
       );
     }
   }
@@ -286,7 +285,7 @@ class WalletActionProvider extends ChangeNotifier
     CoinModel? returnCM;
     if (contract == "") {
       for (CoinModel cm in _coinModels) {
-        String cmCoinType = cm.coin['coinType'].toString().toLowerCase();
+        String cmCoinType = cm.config.coinType.toLowerCase();
         if (cmCoinType == coinKey) {
           returnCM = cm;
           break;
@@ -322,7 +321,7 @@ class WalletActionProvider extends ChangeNotifier
 
   //返回 coinType 的主链 coinmodel
   CoinModel? getCoinModelWithCoinType(String coinType) {
-    final index = _coinModels.indexWhere((e) => e.coin['coinType'] == coinType);
+    final index = _coinModels.indexWhere((e) => e.config.coinType == coinType);
     return index != -1 ? _coinModels[index] : null;
   }
 
@@ -331,10 +330,7 @@ class WalletActionProvider extends ChangeNotifier
     String symbols = "ETH,BNB,TRX,OKT",
   }) {
     final symbolList = symbols.split(",");
-    return [
-      for (final symbol in symbolList)
-        ?getCoinModelWithCoinType(symbol),
-    ];
+    return [for (final symbol in symbolList) ?getCoinModelWithCoinType(symbol)];
   }
 
   /// 聚合代币列表 (USDT, USDC)
@@ -419,32 +415,33 @@ class WalletActionProvider extends ChangeNotifier
   Future<bool> getBalanceWithCoinModel(CoinModel coinModel) async {
     if (coinModel.address == null) {
       debugPrint(
-        'WalletActionProvider: Skipping balance fetch for ${coinModel.coin['miniName']} - address is null',
+        'WalletActionProvider: Skipping balance fetch for ${coinModel.config.miniName} - address is null',
       );
       coinModel.loadError = true;
       return true;
     }
 
     // ALGO tokens have a separate fetch path; exit early before address/contract resolution.
-    if (coinModel.coin['isContract'] == true &&
-        coinModel.coin['coinType'] == CoinType.ALGO.name) {
+    if (coinModel.config.isContract &&
+        coinModel.config.coinType == CoinType.ALGO.name) {
       return await getBalanceTokenAlgoWithCoinModel(coinModel);
     }
 
     String address = coinModel.address.toString();
-    if (coinModel.coin['coinType'] == CoinType.BCH.name) {
-      address = getAddress(coinModel.coin['coinType'], addrType: 'legacy');
+    if (coinModel.config.coinType == CoinType.BCH.name) {
+      address = getAddress(coinModel.config.coinType, addrType: 'legacy');
     }
 
-    final String contract = coinModel.coin['isContract'] == true
+    final String contract = coinModel.config.isContract
         ? (coinModel.isTest
-            ? coinModel.coin['contract_test']
-            : coinModel.coin['contract'])
+              ? coinModel.config.contractTest
+              : coinModel.config.contract)
         : '';
 
-    final MessageModel mm = await tokenViewApi.getBalance(
-          coinModel.coin['blockchainType'],
-          coinModel.coin['coinType'],
+    final MessageModel mm =
+        await tokenViewApi.getBalance(
+          coinModel.config.blockchainType,
+          coinModel.config.coinType,
           address,
           contract: contract,
           isTest: coinModel.isTest,
@@ -456,7 +453,7 @@ class WalletActionProvider extends ChangeNotifier
 
     if (mm.error) {
       debugPrint(
-        'WalletActionProvider: Balance fetch failed for ${coinModel.coin['miniName']}, using cached balance',
+        'WalletActionProvider: Balance fetch failed for ${coinModel.config.miniName}, using cached balance',
       );
       _safeUpdateWalletMap(coinModel);
       applyCachedBalance(coinModel);
@@ -465,7 +462,7 @@ class WalletActionProvider extends ChangeNotifier
     }
 
     final BigInt balance;
-    final String coinType = coinModel.coin['coinType'];
+    final String coinType = coinModel.config.coinType;
     if (coinType == CoinType.ALGO.name) {
       balance = mm.data['balance'] as BigInt;
       coinModel.other = AlgoModel.fromMinBalance(mm.data['minBalance']);
@@ -489,7 +486,7 @@ class WalletActionProvider extends ChangeNotifier
 
   /// 从市场数据更新 coinModel 的价格信息
   void _applyMarketPrice(CoinModel coinModel) {
-    final coinInfo = getCoinPriceWithUnit(coinModel.coin['unit'].toString());
+    final coinInfo = getCoinPriceWithUnit(coinModel.config.unit);
     if (coinInfo == null) return;
     coinModel.coin['percentage'] = coinInfo['percentage'];
     coinModel.coin['coinPrice'] = coinModel.isTest

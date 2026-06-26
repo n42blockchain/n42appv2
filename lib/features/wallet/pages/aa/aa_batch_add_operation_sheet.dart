@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -75,7 +75,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     final amountWei = ethToWeiString(amount.toString(), 18);
     final isCustom = _selectedType == BatchOperationType.custom;
 
-    final isErc20 = _selectedType == BatchOperationType.transfer &&
+    final isErc20 =
+        _selectedType == BatchOperationType.transfer &&
         !_ethLikeTokens.contains(_selectedToken) &&
         _tokenAddressController.text.trim().isNotEmpty;
 
@@ -86,7 +87,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       type: _selectedType,
       targetAddress: to,
       tokenSymbol: isCustom ? null : _selectedToken,
-      tokenAddress: needsTokenAddress ? _tokenAddressController.text.trim() : null,
+      tokenAddress: needsTokenAddress
+          ? _tokenAddressController.text.trim()
+          : null,
       amount: isCustom ? null : amountWei,
       decimals: isCustom ? null : decimals,
       customData: isCustom ? _calldataController.text.trim() : null,
@@ -99,12 +102,16 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.vertical(top: Radius.circular(ScreenUtil().setWidth(24))),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(ScreenUtil().setWidth(24)),
+          ),
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -113,15 +120,14 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
             children: [
               Text(
                 S.of(context).g_key_aa_add_operation,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  fontWeight: FontWeight.bold,
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                style: AppTypography.headline.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(20)),
+              SizedBox(height: AppSpacing.space4),
               _buildTypeSelector(context),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               TextField(
                 controller: _toController,
                 decoration: InputDecoration(
@@ -132,10 +138,10 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                 ),
                 onChanged: (_) => setState(() => _toError = null),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
               if (_selectedType != BatchOperationType.custom) ...[
                 _buildTokenSelector(context),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 if (!_ethLikeTokens.contains(_selectedToken) ||
                     _selectedType == BatchOperationType.approve) ...[
                   TextField(
@@ -146,11 +152,13 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                       border: OutlineInputBorder(),
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                 ],
                 TextField(
                   controller: _amountController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
                   decoration: InputDecoration(
                     labelText: S.of(context).g_key_44,
                     hintText: '0.0',
@@ -172,17 +180,19 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                   ),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(24)),
+              SizedBox(height: AppSpacing.space6),
               ElevatedButton(
                 onPressed: _add,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppSpacing.space4,
+                  ),
                   backgroundColor: const Color(0xFFFF9800),
                   foregroundColor: Colors.white,
                 ),
                 child: Text(S.of(context).g_key_159),
               ),
-              SizedBox(height: ScreenUtil().setWidth(16)),
+              SizedBox(height: AppSpacing.space4),
             ],
           ),
         ),
@@ -196,12 +206,11 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       children: [
         Text(
           'Type',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         Wrap(
           spacing: ScreenUtil().setWidth(8),
           children: BatchOperationType.values.map((type) {
@@ -211,9 +220,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
               selected: isSelected,
               onSelected: (_) => setState(() => _selectedType = type),
               selectedColor: const Color(0xFFFF9800),
-              labelStyle: TextStyle(
+              labelStyle: AppTypography.caption.copyWith(
                 color: isSelected ? Colors.white : null,
-                fontSize: ScreenUtil().setSp(22),
               ),
             );
           }).toList(),
@@ -230,7 +238,9 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
         labelText: 'Token',
         border: OutlineInputBorder(),
       ),
-      items: tokens.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
+      items: tokens
+          .map((t) => DropdownMenuItem(value: t, child: Text(t)))
+          .toList(),
       onChanged: (v) {
         if (v != null) setState(() => _selectedToken = v);
       },

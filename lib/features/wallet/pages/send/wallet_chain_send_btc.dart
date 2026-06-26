@@ -24,6 +24,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/non_evm_fee_model.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/non_evm_gas_settings_page.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
@@ -36,11 +37,11 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 part 'wallet_chain_send_btc_logic.dart';
 part 'wallet_chain_send_btc_tx.dart';
@@ -94,7 +95,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.config.miniName}',
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -106,7 +107,7 @@ class _WalletChainSendBtcState extends ConsumerState<WalletChainSendBtc>
                   child: Column(
                     children: [
                       RecentAddressBar(
-                        coinType: widget.coinModel.coin['coinType'] ?? '',
+                        coinType: widget.coinModel.config.coinType,
                         onSelected: (addr) {
                           toTextEditingController.text = addr;
                           toAddressCheck(addr);

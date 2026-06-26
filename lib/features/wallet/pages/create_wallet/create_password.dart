@@ -7,7 +7,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_finish.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -25,7 +25,8 @@ class CreatePassword extends ConsumerStatefulWidget {
 class _CreatePasswordState extends ConsumerState<CreatePassword> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _uPasswordController = TextEditingController();
-  final TextEditingController _uPasswordConfirmController = TextEditingController();
+  final TextEditingController _uPasswordConfirmController =
+      TextEditingController();
   final FocusNode _uPasswordFocusNode = FocusNode();
   final FocusNode _titleFocusNode = FocusNode();
   final FocusNode _uPasswordConfirmFocusNode = FocusNode();
@@ -37,7 +38,8 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
 
   @override
   void initState() {
-    widget.wInfo.walletName = "Account${ref.read(wapBridgeProvider).walletInfoLsit.length + 1}";
+    widget.wInfo.walletName =
+        "Account${ref.read(wapBridgeProvider).walletInfoLsit.length + 1}";
     _titleController.text = widget.wInfo.walletName ?? "";
     super.initState();
   }
@@ -58,17 +60,19 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
       height: ScreenUtil().setWidth(10.0),
       width: ScreenUtil().setWidth(88.0),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10.0)),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        borderRadius: AppRadius.brSm,
+        color: AppColorTokens.of(context).brand,
       ),
     );
   }
 
-  Widget _stepGap() => SizedBox(width: ScreenUtil().setWidth(20.0));
+  Widget _stepGap() => SizedBox(width: AppSpacing.space4);
 
-  TextStyle _hintStyle() => TextStyle(
-    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.hintTextColor.name),
-    fontSize: ScreenUtil().setSp(30.0),
+  TextStyle _hintStyle() => AppTypography.body.copyWith(
+    color: AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.hintTextColor.name,
+    ),
   );
 
   Widget _buildPasswordToggle(bool obscure) {
@@ -79,7 +83,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
       child: Image.asset(
         'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
         width: ScreenUtil().setWidth(34.0),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        color: AppColorTokens.of(context).brand,
       ),
     );
   }
@@ -109,7 +113,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         title: Container(
           alignment: Alignment.center,
           child: Row(
@@ -117,9 +121,7 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
             children: titleChild,
           ),
         ),
-        actions: [
-          SizedBox(width: ScreenUtil().setWidth(130.0)),
-        ],
+        actions: [SizedBox(width: ScreenUtil().setWidth(130.0))],
         leadingWidth: ScreenUtil().setWidth(130.0),
       ),
       body: SafeArea(
@@ -127,32 +129,38 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppSpacing.space8,
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                      margin: EdgeInsets.all(AppSpacing.space8),
                       alignment: Alignment.center,
                       child: Text(
                         S.of(context).g_key_wallet_c47,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(40.0),
-                          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.titleLg.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
                     LoginTitle(
                       title: S.of(context).g_key_wallet_c48,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildFieldContainer(
                       child: textFieldStyle3(
                         context,
                         onEditingComplete: () {
-                          FocusScope.of(context).requestFocus(_uPasswordFocusNode);
+                          FocusScope.of(
+                            context,
+                          ).requestFocus(_uPasswordFocusNode);
                         },
                         height: ScreenUtil().setWidth(108.0),
                         maxLengths: AppConfig.walletNameMaxLength,
@@ -167,14 +175,19 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                     ),
                     LoginTitle(
                       title: S.of(context).login_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildFieldContainer(
                       child: textFieldStyle3(
                         context,
                         onEditingComplete: () {
-                          FocusScope.of(context).requestFocus(_uPasswordConfirmFocusNode);
+                          FocusScope.of(
+                            context,
+                          ).requestFocus(_uPasswordConfirmFocusNode);
                         },
                         height: ScreenUtil().setWidth(108.0),
                         controller: _uPasswordController,
@@ -195,7 +208,10 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                     ),
                     LoginTitle(
                       title: S.of(context).rest_Confirm_password,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor10.name),
+                      color: AppThemeUtils.getColorByKey(
+                        context,
+                        AppThemeKeys.mainTextColor10.name,
+                      ),
                       must: true,
                     ),
                     _buildFieldContainer(
@@ -236,15 +252,16 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                   const Divider(height: 1, indent: 0, endIndent: 0),
                   Container(
                     height: ScreenUtil().setWidth(148.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                    padding: EdgeInsets.all(AppSpacing.space8),
                     width: double.infinity,
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.backGroundColor.name),
-                    child: buttonStyle6(
-                      context,
-                      () async {
+                    color: AppColorTokens.of(context).bgBase,
+                    child: AppButton(
+                      label: S.of(context).g_key_115,
+                      onPressed: () async {
                         final wName = _titleController.text.trim();
                         final password = _uPasswordController.text.trim();
-                        final rPassword = _uPasswordConfirmController.text.trim();
+                        final rPassword = _uPasswordConfirmController.text
+                            .trim();
 
                         String titleErr = "", pwdErr = "", confirmErr = "";
                         if (wName.isEmpty) {
@@ -263,8 +280,11 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                         uPasswordErrorMessage = pwdErr;
                         uPasswordConfirmErrorMessage = confirmErr;
 
-                        final firstError = [titleErr, pwdErr, confirmErr]
-                            .firstWhere((e) => e.isNotEmpty, orElse: () => "");
+                        final firstError = [
+                          titleErr,
+                          pwdErr,
+                          confirmErr,
+                        ].firstWhere((e) => e.isNotEmpty, orElse: () => "");
                         if (firstError.isNotEmpty) {
                           ToastUtils.show(firstError);
                           setState(() {});
@@ -283,10 +303,6 @@ class _CreatePasswordState extends ConsumerState<CreatePassword> {
                           ),
                         );
                       },
-                      S.of(context).g_key_115,
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonTextColor.name),
-                      false,
                     ),
                   ),
                 ],

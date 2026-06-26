@@ -6,10 +6,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,9 +41,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_bridge_history,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_bridge_history),
       body: ListenableBuilder(
         listenable: widget.provider,
         builder: (context, _) {
@@ -57,7 +55,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
             onRefresh: _onRefresh,
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+              padding: EdgeInsets.all(AppSpacing.space8),
               itemCount: transactions.length,
               itemBuilder: (context, index) {
                 return _buildTransactionCard(context, transactions[index]);
@@ -70,8 +68,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   Widget _buildEmpty(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: ListView(
@@ -87,13 +84,10 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
                   size: ScreenUtil().setWidth(80),
                   color: subtitleColor,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   S.of(context).g_key_132,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                 ),
               ],
             ),
@@ -103,26 +97,21 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     );
   }
 
-  Widget _buildTransactionCard(
-    BuildContext context,
-    BridgeTransaction tx,
-  ) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+  Widget _buildTransactionCard(BuildContext context, BridgeTransaction tx) {
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
     final hasBridgeTool = tx.bridgeTool?.isNotEmpty == true;
     final hasDestTx = tx.destinationTxHash?.isNotEmpty == true;
-    final isPending = tx.status == BridgeTransactionStatus.pending ||
+    final isPending =
+        tx.status == BridgeTransactionStatus.pending ||
         tx.status == BridgeTransactionStatus.inProgress;
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,38 +123,35 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
               _buildStatusBadge(context, tx.status),
               Text(
                 _dateFormat.format(tx.createdAt),
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: subtitleColor,
-                ),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
             ],
           ),
 
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 源 → 目标
           _buildTransferRow(context, tx),
 
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 桥接协议
           if (hasBridgeTool) ...[
             Row(
               children: [
-                Icon(Icons.link,
-                    size: ScreenUtil().setWidth(28), color: subtitleColor),
-                SizedBox(width: ScreenUtil().setWidth(6)),
+                Icon(
+                  Icons.link,
+                  size: ScreenUtil().setWidth(28),
+                  color: subtitleColor,
+                ),
+                SizedBox(width: AppSpacing.space2),
                 Text(
                   tx.bridgeTool!,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(10)),
+            SizedBox(height: AppSpacing.space2),
           ],
 
           // 源链 tx hash（可点击跳转浏览器）
@@ -178,7 +164,7 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
           // 目标链 tx hash（完成后才有）
           if (hasDestTx) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _buildTxHashRow(
               context,
               label: 'Dest',
@@ -189,29 +175,24 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
           // 进行中时显示手动刷新按钮
           if (isPending) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Align(
               alignment: Alignment.centerRight,
               child: InkWell(
                 onTap: () => widget.provider.checkTransactionStatus(tx),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(8)),
+                borderRadius: AppRadius.brSm,
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(16),
-                    vertical: ScreenUtil().setWidth(8),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
                   ),
                   decoration: BoxDecoration(
                     color: blueColor,
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     S.of(context).g_key_bridge_refresh,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(22),
-                      color: Colors.white,
-                    ),
+                    style: AppTypography.caption.copyWith(color: Colors.white),
                   ),
                 ),
               ),
@@ -237,12 +218,10 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
 
         // 箭头
         Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
           child: Icon(
             Icons.arrow_forward,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
             size: ScreenUtil().setWidth(32),
           ),
         ),
@@ -267,26 +246,20 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String amountText,
     required CrossAxisAlignment alignment,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainColor = AppColorTokens.of(context).textPrimary;
     return Column(
       crossAxisAlignment: alignment,
       children: [
         Text(
           chainName,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: subtitleColor,
-          ),
+          style: AppTypography.caption.copyWith(color: subtitleColor),
         ),
-        SizedBox(height: ScreenUtil().setWidth(4)),
+        SizedBox(height: AppSpacing.space2),
         Text(
           amountText,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
-            fontWeight: FontWeight.bold,
+          style: AppTypography.body.copyWith(
+            fontWeight: FontWeight.w600,
             color: mainColor,
           ),
         ),
@@ -301,26 +274,20 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
     required String hash,
     required int chainId,
   }) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final blueColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final blueColor = AppColorTokens.of(context).brand;
     return GestureDetector(
       onTap: () => _openExplorer(chainId, hash),
       child: Row(
         children: [
           Text(
             '$label: ',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: subtitleColor,
-            ),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
           ),
           Expanded(
             child: Text(
               _shortenHash(hash),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 color: blueColor,
                 decoration: TextDecoration.underline,
               ),
@@ -338,44 +305,45 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   }
 
   Widget _buildStatusBadge(
-      BuildContext context, BridgeTransactionStatus status) {
+    BuildContext context,
+    BridgeTransactionStatus status,
+  ) {
     final s = S.of(context);
-    final (Color color, String text, IconData icon) = switch (status) {
-      BridgeTransactionStatus.pending => (Colors.orange, s.g_key_bridge_status_pending, Icons.hourglass_empty),
-      BridgeTransactionStatus.inProgress => (Colors.blue, s.g_key_bridge_status_in_progress, Icons.sync),
-      BridgeTransactionStatus.completed => (Colors.green, s.g_key_bridge_status_completed, Icons.check_circle),
-      BridgeTransactionStatus.failed => (Colors.red, s.g_key_bridge_status_failed, Icons.error),
+    final (AppBadgeTone tone, String text, IconData icon) = switch (status) {
+      BridgeTransactionStatus.pending => (
+        AppBadgeTone.warning,
+        s.g_key_bridge_status_pending,
+        Icons.hourglass_empty,
+      ),
+      BridgeTransactionStatus.inProgress => (
+        AppBadgeTone.info,
+        s.g_key_bridge_status_in_progress,
+        Icons.sync,
+      ),
+      BridgeTransactionStatus.completed => (
+        AppBadgeTone.success,
+        s.g_key_bridge_status_completed,
+        Icons.check_circle,
+      ),
+      BridgeTransactionStatus.failed => (
+        AppBadgeTone.danger,
+        s.g_key_bridge_status_failed,
+        Icons.error,
+      ),
     };
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
-      ),
-      decoration: BoxDecoration(
-        color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (status == BridgeTransactionStatus.inProgress)
-            _SpinningIcon(icon: icon, color: color,
-                size: ScreenUtil().setWidth(24))
-          else
-            Icon(icon, color: color, size: ScreenUtil().setWidth(24)),
-          SizedBox(width: ScreenUtil().setWidth(6)),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
+    if (status == BridgeTransactionStatus.inProgress) {
+      return AppBadge(
+        label: text,
+        tone: tone,
+        leading: _SpinningIcon(
+          icon: icon,
+          color: AppColorTokens.of(context).info,
+          size: 14,
+        ),
+      );
+    }
+    return AppBadge(label: text, tone: tone, icon: icon);
   }
 
   // ─── 工具方法 ─────────────────────────────────────────────────────────────
@@ -388,26 +356,16 @@ class _BridgeHistoryPageState extends State<BridgeHistoryPage> {
   /// 根据 chainId 返回区块链浏览器 URL
   String _explorerUrl(int chainId, String txHash) {
     final base = switch (chainId) {
-      BridgeChainIds.ethereum =>
-        'https://etherscan.io/tx',
-      BridgeChainIds.bsc =>
-        'https://bscscan.com/tx',
-      BridgeChainIds.polygon =>
-        'https://polygonscan.com/tx',
-      BridgeChainIds.arbitrum =>
-        'https://arbiscan.io/tx',
-      BridgeChainIds.optimism =>
-        'https://optimistic.etherscan.io/tx',
-      BridgeChainIds.avalanche =>
-        'https://snowtrace.io/tx',
-      BridgeChainIds.base =>
-        'https://basescan.org/tx',
-      BridgeChainIds.linea =>
-        'https://lineascan.build/tx',
-      BridgeChainIds.scroll =>
-        'https://scrollscan.com/tx',
-      BridgeChainIds.zksync =>
-        'https://explorer.zksync.io/tx',
+      BridgeChainIds.ethereum => 'https://etherscan.io/tx',
+      BridgeChainIds.bsc => 'https://bscscan.com/tx',
+      BridgeChainIds.polygon => 'https://polygonscan.com/tx',
+      BridgeChainIds.arbitrum => 'https://arbiscan.io/tx',
+      BridgeChainIds.optimism => 'https://optimistic.etherscan.io/tx',
+      BridgeChainIds.avalanche => 'https://snowtrace.io/tx',
+      BridgeChainIds.base => 'https://basescan.org/tx',
+      BridgeChainIds.linea => 'https://lineascan.build/tx',
+      BridgeChainIds.scroll => 'https://scrollscan.com/tx',
+      BridgeChainIds.zksync => 'https://explorer.zksync.io/tx',
       _ => 'https://etherscan.io/tx',
     };
     return '$base/$txHash';
@@ -428,8 +386,11 @@ class _SpinningIcon extends StatefulWidget {
   final IconData icon;
   final Color color;
   final double size;
-  const _SpinningIcon(
-      {required this.icon, required this.color, required this.size});
+  const _SpinningIcon({
+    required this.icon,
+    required this.color,
+    required this.size,
+  });
 
   @override
   State<_SpinningIcon> createState() => _SpinningIconState();

@@ -98,11 +98,10 @@ class TrezorService {
     required String derivationPath,
     required String psbtHex,
   }) async {
-    return _invokeSign(
-      'trezor_signBtcTx',
-      {'derivationPath': derivationPath, 'psbtHex': psbtHex},
-      signatureKey: 'signedPsbtHex',
-    );
+    return _invokeSign('trezor_signBtcTx', {
+      'derivationPath': derivationPath,
+      'psbtHex': psbtHex,
+    }, signatureKey: 'signedPsbtHex');
   }
 
   /// Sign a Solana transaction.
@@ -174,7 +173,10 @@ class TrezorService {
     String signatureKey = 'signature',
   }) async {
     try {
-      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(method, args);
+      final result = await _channel.invokeMethod<Map<dynamic, dynamic>>(
+        method,
+        args,
+      );
       if (result == null) {
         return HardwareWalletSignResponse.error('No signature returned');
       }

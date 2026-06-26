@@ -88,11 +88,15 @@ extension TokenViewApiEth on TokenViewApi {
       };
     }
 
-    return _ethPost(path, params, onSuccess: (data) {
-      String result = data['result'];
-      if (result == '0x') result = '0x0';
-      return hexToInt(result);
-    });
+    return _ethPost(
+      path,
+      params,
+      onSuccess: (data) {
+        String result = data['result'];
+        if (result == '0x') result = '0x0';
+        return hexToInt(result);
+      },
+    );
   }
 
   /// 获取 ETH 类某地址的所有代币余额
@@ -127,8 +131,11 @@ extension TokenViewApiEth on TokenViewApi {
 
   /// ETH 预估 gas（低级接口，直接传 params map）
   Future<MessageModel> getGasEstimateEth(Map<String, dynamic> params) async {
-    return _ethPost('v2/eth/estimate/gas', params,
-        onSuccess: _parseRpcHexResult);
+    return _ethPost(
+      'v2/eth/estimate/gas',
+      params,
+      onSuccess: _parseRpcHexResult,
+    );
   }
 
   /// ETH 预估 gas（高级接口）
@@ -145,8 +152,13 @@ extension TokenViewApiEth on TokenViewApi {
   }) async {
     if (coinType == CoinType.TRX.name) {
       return await TrxApi().getGasEstimateTrx(
-        from, to, gasPrice, value, gas,
-        contract: contract, isTest: isTest,
+        from,
+        to,
+        gasPrice,
+        value,
+        gas,
+        contract: contract,
+        isTest: isTest,
       );
     }
 
@@ -171,11 +183,12 @@ extension TokenViewApiEth on TokenViewApi {
     // 合约调用：构建 transfer calldata
     if (contract.isNotEmpty) {
       final toAddress = strip0x(to);
-      final methodId = bytesToHex(keccakAscii('transfer(address,uint256)'))
-          .substring(0, 8)
-          .toLowerCase();
+      final methodId = bytesToHex(
+        keccakAscii('transfer(address,uint256)'),
+      ).substring(0, 8).toLowerCase();
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
-      params['data'] = '0x${methodId}000000000000000000000000$toAddress$valueHex';
+      params['data'] =
+          '0x${methodId}000000000000000000000000$toAddress$valueHex';
     } else if (data.isNotEmpty) {
       params['data'] = data;
     }
@@ -201,8 +214,11 @@ extension TokenViewApiEth on TokenViewApi {
       'net_mode': netMode,
       'tag': 'pending',
     };
-    return _ethPost('v2/eth/transaction/count', params,
-        onSuccess: _parseRpcHexResult);
+    return _ethPost(
+      'v2/eth/transaction/count',
+      params,
+      onSuccess: _parseRpcHexResult,
+    );
   }
 
   // ── 广播交易 ────────────────────────────────────────────────────────────────
@@ -222,8 +238,11 @@ extension TokenViewApiEth on TokenViewApi {
       'signed_tx': signHash,
       'net_mode': netMode,
     };
-    return _ethPost('v2/eth/raw/transaction', params,
-        onSuccess: _parseRpcStringResult);
+    return _ethPost(
+      'v2/eth/raw/transaction',
+      params,
+      onSuccess: _parseRpcStringResult,
+    );
   }
 
   // ── 交易收据 ────────────────────────────────────────────────────────────────
@@ -243,9 +262,13 @@ extension TokenViewApiEth on TokenViewApi {
       'coin': coinType,
       'net_mode': isTest ? 'test' : 'main',
     };
-    return _ethPost('v2/eth/transaction/receipt', params, onSuccess: (data) {
-      return data;
-    });
+    return _ethPost(
+      'v2/eth/transaction/receipt',
+      params,
+      onSuccess: (data) {
+        return data;
+      },
+    );
   }
 
   // ── Gas Price ───────────────────────────────────────────────────────────────
@@ -259,11 +282,7 @@ extension TokenViewApiEth on TokenViewApi {
     if (rpc != null) {
       return await EthAPI.init(null, rpc, null).getGasPrice();
     }
-    final params = {
-      'coin': coinType,
-      'net_mode': isTest ? 'test' : 'main',
-    };
-    return _ethPost('v2/eth/gas/price', params,
-        onSuccess: _parseRpcHexResult);
+    final params = {'coin': coinType, 'net_mode': isTest ? 'test' : 'main'};
+    return _ethPost('v2/eth/gas/price', params, onSuccess: _parseRpcHexResult);
   }
 }

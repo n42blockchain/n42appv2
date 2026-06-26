@@ -5,7 +5,6 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -18,6 +17,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -27,7 +27,8 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:web3dart/web3dart.dart';
@@ -71,7 +72,7 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toTextEditingController.text = addr;
             toAddressCheck(addr);
@@ -99,27 +100,13 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              isLoading,
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: title,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],
@@ -131,7 +118,7 @@ class _WalletChainSendTonState extends ConsumerState<WalletChainSendTon>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
       ),
       body: SafeArea(
         child: GestureDetector(

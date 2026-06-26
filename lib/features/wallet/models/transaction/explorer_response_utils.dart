@@ -1,9 +1,6 @@
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
-String? explorerString(
-  Map<String, dynamic> map,
-  Iterable<String> keys,
-) {
+String? explorerString(Map<String, dynamic> map, Iterable<String> keys) {
   for (final key in keys) {
     final value = map[key];
     if (value == null) {

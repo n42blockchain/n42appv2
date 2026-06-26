@@ -50,7 +50,8 @@ class MiningRepositoryImpl implements MiningRepository {
     return const MiningPlanEntity(
       id: 'standard',
       name: 'Standard Mining',
-      description: 'Stake 32 N to participate in beacon-chain consensus mining.',
+      description:
+          'Stake 32 N to participate in beacon-chain consensus mining.',
       stakeAmount: 32,
       stakeTokenSymbol: 'N',
       dailyRewardRate: 0,
@@ -91,7 +92,9 @@ class MiningRepositoryImpl implements MiningRepository {
   }
 
   @override
-  Future<Either<Failure, MiningPlanEntity?>> getMiningPlan(String planId) async {
+  Future<Either<Failure, MiningPlanEntity?>> getMiningPlan(
+    String planId,
+  ) async {
     if (planId == 'standard') return Right(_standardPlan());
     return const Right(null);
   }
@@ -102,26 +105,34 @@ class MiningRepositoryImpl implements MiningRepository {
     required String walletAddress,
   }) async {
     if (_v2.depositsEnable == true) {
-      return Right(MiningSessionEntity(
-        id: 'active-${walletAddress.hashCode}',
-        walletAddress: walletAddress,
-        planId: planId,
-        startTime: DateTime.now(),
-        status: MiningSessionStatus.active,
-        earnedRewards: _v2.miningTotalRevenue,
-        rewardTokenSymbol: 'N',
-        miningPower: _v2.balanceInBeacon,
-      ));
+      return Right(
+        MiningSessionEntity(
+          id: 'active-${walletAddress.hashCode}',
+          walletAddress: walletAddress,
+          planId: planId,
+          startTime: DateTime.now(),
+          status: MiningSessionStatus.active,
+          earnedRewards: _v2.miningTotalRevenue,
+          rewardTokenSymbol: 'N',
+          miningPower: _v2.balanceInBeacon,
+        ),
+      );
     }
     return const Left(
-      ServerFailure(message: 'Mining not active. Use MiningV2Provider.createDepositUnsignedTx().'),
+      ServerFailure(
+        message:
+            'Mining not active. Use MiningV2Provider.createDepositUnsignedTx().',
+      ),
     );
   }
 
   @override
   Future<Either<Failure, void>> stopMining(String sessionId) async {
     return const Left(
-      ServerFailure(message: 'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.'),
+      ServerFailure(
+        message:
+            'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.',
+      ),
     );
   }
 
@@ -132,7 +143,10 @@ class MiningRepositoryImpl implements MiningRepository {
     int limit = 20,
   }) async {
     try {
-      final all = [for (var i = 0; i < _v2.taskList.length; i++) _sessionFromDailyWithdrawal(i)];
+      final all = [
+        for (var i = 0; i < _v2.taskList.length; i++)
+          _sessionFromDailyWithdrawal(i),
+      ];
       final start = (page - 1) * limit;
       if (start >= all.length) return const Right([]);
       return Right(all.sublist(start, (start + limit).clamp(0, all.length)));
@@ -143,13 +157,16 @@ class MiningRepositoryImpl implements MiningRepository {
 
   @override
   Future<Either<Failure, MiningRewardsEntity>> getMiningRewards(
-      String walletAddress) async {
-    return Right(MiningRewardsEntity(
-      totalEarned: _v2.miningTotalRevenue,
-      claimableAmount: 0,
-      claimedAmount: _v2.miningTotalRevenue,
-      tokenSymbol: 'N',
-    ));
+    String walletAddress,
+  ) async {
+    return Right(
+      MiningRewardsEntity(
+        totalEarned: _v2.miningTotalRevenue,
+        claimableAmount: 0,
+        claimedAmount: _v2.miningTotalRevenue,
+        tokenSymbol: 'N',
+      ),
+    );
   }
 
   @override
@@ -158,25 +175,31 @@ class MiningRepositoryImpl implements MiningRepository {
     required String amount,
   }) async {
     return const Left(
-      ServerFailure(message: 'N chain rewards are distributed automatically; no manual claim needed.'),
+      ServerFailure(
+        message:
+            'N chain rewards are distributed automatically; no manual claim needed.',
+      ),
     );
   }
 
   @override
   Future<Either<Failure, MiningStatisticsEntity>> getMiningStatistics(
-      String walletAddress) async {
+    String walletAddress,
+  ) async {
     final days = _v2.taskList.length;
-    return Right(MiningStatisticsEntity(
-      totalSessions: days,
-      totalActiveDays: days,
-      averageDailyRewards:
-          days > 0 ? _v2.miningTotalRevenue / days : 0,
-      bestDailyRewards: _v2.todayCycleRewardsValue > _v2.yesterdayCycleRewardsValue
-          ? _v2.todayCycleRewardsValue
-          : _v2.yesterdayCycleRewardsValue,
-      totalRewards: _v2.miningTotalRevenue,
-      tokenSymbol: 'N',
-    ));
+    return Right(
+      MiningStatisticsEntity(
+        totalSessions: days,
+        totalActiveDays: days,
+        averageDailyRewards: days > 0 ? _v2.miningTotalRevenue / days : 0,
+        bestDailyRewards:
+            _v2.todayCycleRewardsValue > _v2.yesterdayCycleRewardsValue
+            ? _v2.todayCycleRewardsValue
+            : _v2.yesterdayCycleRewardsValue,
+        totalRewards: _v2.miningTotalRevenue,
+        tokenSymbol: 'N',
+      ),
+    );
   }
 
   @override
@@ -191,23 +214,26 @@ class MiningRepositoryImpl implements MiningRepository {
       final status = (!_v2.showRedemption2 && _v2.exitTimestamp != 0)
           ? NodeStatus.offline
           : _v2.showRedemption
-              ? (_v2.miningStatus ? NodeStatus.online : NodeStatus.offline)
-              : NodeStatus.syncing;
+          ? (_v2.miningStatus ? NodeStatus.online : NodeStatus.offline)
+          : NodeStatus.syncing;
 
-      final inactivityPct = double.tryParse(_v2.inactivityScorePercentage) ?? 0.0;
+      final inactivityPct =
+          double.tryParse(_v2.inactivityScorePercentage) ?? 0.0;
       final uptimePercentage = (100.0 - inactivityPct).clamp(0.0, 100.0);
 
-      return Right(FullNodeEntity(
-        id: targetPubKey,
-        name: 'Beacon Validator',
-        status: status,
-        uptimePercentage: uptimePercentage,
-        totalRewards: _v2.miningTotalRevenue,
-        activatedAt: _v2.activationTime ?? DateTime.now(),
-        expiresAt: _v2.exitTimestamp > 0
-            ? DateTime.fromMillisecondsSinceEpoch(_v2.exitTimestamp * 1000)
-            : null,
-      ));
+      return Right(
+        FullNodeEntity(
+          id: targetPubKey,
+          name: 'Beacon Validator',
+          status: status,
+          uptimePercentage: uptimePercentage,
+          totalRewards: _v2.miningTotalRevenue,
+          activatedAt: _v2.activationTime ?? DateTime.now(),
+          expiresAt: _v2.exitTimestamp > 0
+              ? DateTime.fromMillisecondsSinceEpoch(_v2.exitTimestamp * 1000)
+              : null,
+        ),
+      );
     } catch (e) {
       return Left(ServerFailure(message: 'getFullNode failed: $e'));
     }

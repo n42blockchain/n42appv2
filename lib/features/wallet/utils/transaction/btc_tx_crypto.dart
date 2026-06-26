@@ -35,8 +35,7 @@ class BtcTxCrypto {
 
   /// 双重 SHA256 哈希
   Uint8List doubleSha256(Uint8List data) {
-    return Uint8List.fromList(
-        sha256.convert(sha256.convert(data).bytes).bytes);
+    return Uint8List.fromList(sha256.convert(sha256.convert(data).bytes).bytes);
   }
 
   /// 单次 SHA256 哈希
@@ -51,13 +50,14 @@ class BtcTxCrypto {
     final SecureRandom secureRandom = _secureRandom();
 
     final ParametersWithRandom privateKeyParams = ParametersWithRandom(
-        PrivateKeyParameter<ECPrivateKey>(ecPrivateKey), secureRandom);
+      PrivateKeyParameter<ECPrivateKey>(ecPrivateKey),
+      secureRandom,
+    );
 
     final Signer signer = ECDSASigner(SHA256Digest());
     signer.init(true, privateKeyParams);
 
-    ECSignature signature =
-        signer.generateSignature(txHash) as ECSignature;
+    ECSignature signature = signer.generateSignature(txHash) as ECSignature;
 
     // Bitcoin 规定 s 必须小于 n/2（低 s 值规范化）
     final BigInt nDiv2 = curve.n >> 1;
@@ -101,8 +101,9 @@ class BtcTxCrypto {
 
   /// BigInt 转最小字节列表（去除前导零，保留至少 1 字节）
   List<int> _bigIntToBytes(BigInt value) {
-    final Uint8List bytes =
-        Uint8List.fromList(hex.decode(value.toRadixString(16).padLeft(64, '0')));
+    final Uint8List bytes = Uint8List.fromList(
+      hex.decode(value.toRadixString(16).padLeft(64, '0')),
+    );
     final result = bytes.skipWhile((b) => b == 0).toList();
     return result.isEmpty ? [0] : result;
   }

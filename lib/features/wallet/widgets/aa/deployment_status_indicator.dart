@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
@@ -23,28 +24,25 @@ class DeploymentStatusIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: _getStatusColor().withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
-        border: Border.all(
-          color: _getStatusColor().withAlpha(40),
-        ),
+        color: _getStatusColor(context).withAlpha(20),
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: _getStatusColor(context).withAlpha(40)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          _buildStatusIcon(),
+          _buildStatusIcon(context),
           if (showLabel) ...[
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            SizedBox(width: AppSpacing.space2),
             Text(
               _getStatusText(context),
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w500,
-                color: _getStatusColor(),
+                color: _getStatusColor(context),
               ),
             ),
           ],
@@ -53,13 +51,13 @@ class DeploymentStatusIndicator extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusIcon() {
+  Widget _buildStatusIcon(BuildContext context) {
     switch (state) {
       case SmartAccountState.notDeployed:
         return Icon(
           Icons.radio_button_unchecked,
           size: ScreenUtil().setWidth(18),
-          color: _getStatusColor(),
+          color: _getStatusColor(context),
         );
       case SmartAccountState.deploying:
         return SizedBox(
@@ -67,34 +65,35 @@ class DeploymentStatusIndicator extends StatelessWidget {
           height: ScreenUtil().setWidth(18),
           child: CircularProgressIndicator(
             strokeWidth: 2,
-            valueColor: AlwaysStoppedAnimation(_getStatusColor()),
+            valueColor: AlwaysStoppedAnimation(_getStatusColor(context)),
           ),
         );
       case SmartAccountState.deployed:
         return Icon(
           Icons.check_circle,
           size: ScreenUtil().setWidth(18),
-          color: _getStatusColor(),
+          color: _getStatusColor(context),
         );
       case SmartAccountState.error:
         return Icon(
           Icons.error,
           size: ScreenUtil().setWidth(18),
-          color: _getStatusColor(),
+          color: _getStatusColor(context),
         );
     }
   }
 
-  Color _getStatusColor() {
+  Color _getStatusColor(BuildContext context) {
+    final c = AppColorTokens.of(context);
     switch (state) {
       case SmartAccountState.notDeployed:
-        return Colors.grey;
+        return c.textTertiary;
       case SmartAccountState.deploying:
-        return Colors.orange;
+        return c.warning;
       case SmartAccountState.deployed:
-        return Colors.green;
+        return c.success;
       case SmartAccountState.error:
-        return Colors.red;
+        return c.danger;
     }
   }
 

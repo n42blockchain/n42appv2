@@ -8,10 +8,15 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class DotApi {
   /// 获取余额
-  Future<MessageModel> getTokens(String address, String coinType, {bool isTest = false}) async {
+  Future<MessageModel> getTokens(
+    String address,
+    String coinType, {
+    bool isTest = false,
+  }) async {
     try {
       final mm = MessageModel();
-      final url = '${RequestUrl().getUrl2(coinType, "api", isTest: isTest)}api/scan/account/tokens';
+      final url =
+          '${RequestUrl().getUrl2(coinType, "api", isTest: isTest)}api/scan/account/tokens';
       final data = await BaseApi.requestEmptyH.post(
         url,
         params: {},
@@ -40,7 +45,11 @@ class DotApi {
   /// GenesisHash=0 和 BlockHash=null
   Future<MessageModel> getGenesisHash({int? index, bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC('chain_getBlockHash', index == null ? [] : [index], isTest: isTest),
+      await baseRPC(
+        'chain_getBlockHash',
+        index == null ? [] : [index],
+        isTest: isTest,
+      ),
     );
   }
 
@@ -66,7 +75,12 @@ class DotApi {
   /// 发送交易（明确禁用重试，防止双发）
   Future<MessageModel> submitTxHash(String hash, {bool isTest = false}) async {
     return resultToMessageModel(
-      await baseRPC('author_submitExtrinsic', [hash], isTest: isTest, enableRetry: false),
+      await baseRPC(
+        'author_submitExtrinsic',
+        [hash],
+        isTest: isTest,
+        enableRetry: false,
+      ),
     );
   }
 
@@ -100,16 +114,20 @@ class DotApi {
         final errorMsg = data['error'] is Map
             ? (data['error']['message']?.toString() ?? 'RPC error')
             : data['error']?.toString() ?? 'RPC error';
-        return Result.failure(AppError.blockchain(
-          errorMsg,
-          code: 'DOT_RPC_ERROR',
-          originalError: data['error'],
-        ));
+        return Result.failure(
+          AppError.blockchain(
+            errorMsg,
+            code: 'DOT_RPC_ERROR',
+            originalError: data['error'],
+          ),
+        );
       }
       return Result.success(data['result']);
     } catch (e, st) {
       // BaseHttp converts DioException to a localized String upstream.
-      return Result.failure(AppError.network(e.toString(), originalError: e, stackTrace: st));
+      return Result.failure(
+        AppError.network(e.toString(), originalError: e, stackTrace: st),
+      );
     }
   }
 }

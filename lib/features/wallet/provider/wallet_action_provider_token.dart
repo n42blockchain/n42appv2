@@ -3,13 +3,14 @@ part of 'wallet_action_provider.dart';
 /// Token & chain management: build coin models, add/remove chains/tokens,
 /// and coin list operations.
 extension WalletActionProviderToken on WalletActionProvider {
-
   /// 从链配置中提取 token map（test 取 testnetContract，main 取 mainnets）。
   /// 仅当 tokens 非空时返回，否则返回空 Map。
   Map<String, dynamic> _extractTokens(Map<dynamic, dynamic> chainConfig) {
     final Map<dynamic, dynamic> raw;
     if (chainConfig['isTest'] == true) {
-      raw = chainConfig['testnets'][0]['testnetContract'] as Map<dynamic, dynamic>;
+      raw =
+          chainConfig['testnets'][0]['testnetContract']
+              as Map<dynamic, dynamic>;
     } else {
       raw = chainConfig['mainnets'] as Map<dynamic, dynamic>;
     }
@@ -22,19 +23,19 @@ extension WalletActionProviderToken on WalletActionProvider {
     if (_walletInfoLsit.isEmpty) return;
     final keys = walletMap.keys.toList();
 
-    _coinModels=[];
+    _coinModels = [];
     for (final key in keys) {
       final chain = walletMap[key];
       chain['showList'] ??= true;
       CoinModel cm = CoinModel.fromMap(chain['baseInfo']);
-      cm.showList=chain['showList'];
-      cm.isTest=chain['isTest'];
-      cm.addrType=chain['addrType'];
-      cm.custom=chain['baseInfo']['custom']??false;
-      cm.pathIndex=chain['pathIndex'] ?? 0;
+      cm.showList = chain['showList'];
+      cm.isTest = chain['isTest'];
+      cm.addrType = chain['addrType'];
+      cm.custom = chain['baseInfo']['custom'] ?? false;
+      cm.pathIndex = chain['pathIndex'] ?? 0;
       final tokens = _extractTokens(chain);
       if (tokens.isNotEmpty) cm.tokens = tokens;
-      cm.privateKey=walletInfo.privateKey;
+      cm.privateKey = walletInfo.privateKey;
       _coinModels.add(cm);
     }
     _applyChainOrder();
@@ -51,7 +52,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     final ordered = <CoinModel>[];
     final remaining = List<CoinModel>.from(_coinModels);
     for (final coinType in walletInfo.chainOrder) {
-      final idx = remaining.indexWhere((cm) => cm.coin['coinType'] == coinType);
+      final idx = remaining.indexWhere((cm) => cm.config.coinType == coinType);
       if (idx != -1) {
         ordered.add(remaining.removeAt(idx));
       }
@@ -67,7 +68,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     final item = _coinModels.removeAt(oldIndex);
     _coinModels.insert(newIndex, item);
     walletInfo.chainOrder = _coinModels
-        .map((m) => m.coin['coinType'] as String? ?? '')
+        .map((m) => m.config.coinType)
         .where((s) => s.isNotEmpty)
         .toList();
     buildCoinModelInfo();
@@ -88,7 +89,7 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   Future<void> buildCoinModelInfo() async {
-    coinList=[];
+    coinList = [];
     _aggregatedCoins = [];
     int ethIndex = -1; // 记录 ETH 的位置，用于后续插入聚合代币
 
@@ -96,15 +97,15 @@ extension WalletActionProviderToken on WalletActionProvider {
       CoinModel mm = _coinModels[i];
       await buildCoinWallet(mm, this);
       applyCachedBalance(mm);
-      if(mm.showList){
+      if (mm.showList) {
         coinList.add(mm);
 
         // 记录 ETH 的位置
-        if (mm.coin['coinType'] == 'ETH' && ethIndex == -1) {
+        if (mm.config.coinType == 'ETH' && ethIndex == -1) {
           ethIndex = coinList.length; // 记录插入位置（ETH 之后）
         }
       }
-      for(final token in mm.tokens.values){
+      for (final token in mm.tokens.values) {
         coinList.add(buildTokenCoinModel(mm, token));
       }
       refresh();
@@ -123,41 +124,44 @@ extension WalletActionProviderToken on WalletActionProvider {
     addCoinRefreshMap();
   }
 
-  CoinModel buildTokenCoinModel(CoinModel mainChain,Map<String,dynamic> token){
-    CoinModel cm=CoinModel.fromMap(token);
-    cm.mainCoinIcon=mainChain.coin['icon'];
-    cm.privateKey=mainChain.privateKey;
-    cm.pathIndex=mainChain.pathIndex;
-    cm.isTest=mainChain.isTest;
-    cm.addrType=mainChain.addrType;
-    cm.custom=mainChain.custom;
+  CoinModel buildTokenCoinModel(
+    CoinModel mainChain,
+    Map<String, dynamic> token,
+  ) {
+    CoinModel cm = CoinModel.fromMap(token);
+    cm.mainCoinIcon = mainChain.config.icon;
+    cm.privateKey = mainChain.privateKey;
+    cm.pathIndex = mainChain.pathIndex;
+    cm.isTest = mainChain.isTest;
+    cm.addrType = mainChain.addrType;
+    cm.custom = mainChain.custom;
     //ProviderUtil.walletActionProvider().getCoinPrice(cm);
-    cm.address=mainChain.address;
-    cm.addressType=mainChain.addressType;
+    cm.address = mainChain.address;
+    cm.addressType = mainChain.addressType;
     applyCachedBalance(cm);
     return cm;
   }
 
   //加载指定network的币
   Future<void> buildCoinModelInfoWithCoin() async {
-    coinList=[];
+    coinList = [];
     _aggregatedCoins = [];
     int ethIndex = -1; // 记录 ETH 的位置
 
-    if(walletInfo.networkIndex==-1){
+    if (walletInfo.networkIndex == -1) {
       for (int i = 0; i < _coinModels.length; i++) {
         CoinModel mm = _coinModels[i];
         await buildCoinWallet(mm, this);
-        if(mm.showList){
+        if (mm.showList) {
           applyCachedBalance(mm);
           coinList.add(mm);
 
           // 记录 ETH 的位置
-          if (mm.coin['coinType'] == 'ETH' && ethIndex == -1) {
+          if (mm.config.coinType == 'ETH' && ethIndex == -1) {
             ethIndex = coinList.length;
           }
         }
-        for(final token in mm.tokens.values){
+        for (final token in mm.tokens.values) {
           coinList.add(buildTokenCoinModel(mm, token));
         }
         refresh();
@@ -170,20 +174,20 @@ extension WalletActionProviderToken on WalletActionProvider {
       _syncPinnedState();
       _applyPriorityOrder();
       _elevatePinnedToTop();
-    }
-    else{
+    } else {
       CoinModel mm = _coinModels[walletInfo.networkIndex];
-      if(mm.showList){
+      if (mm.showList) {
         applyCachedBalance(mm);
         coinList.add(mm);
       }
-      for(final token in mm.tokens.values){
+      for (final token in mm.tokens.values) {
         coinList.add(buildTokenCoinModel(mm, token));
       }
       _syncPinnedState();
     }
     // 排序时保持优先级（如果有自定义排序，之后会覆盖）
-    if (walletInfo.coinSort['assets'] == -1 && walletInfo.coinSort['name'] == -1) {
+    if (walletInfo.coinSort['assets'] == -1 &&
+        walletInfo.coinSort['name'] == -1) {
       _applyPriorityOrder();
       _elevatePinnedToTop();
     } else {
@@ -195,43 +199,49 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   //保存币的排序缓存
-  Future<void> saveCoinSort()async{
-    saveWalletInfo(walletInfo,walletIndex);
+  Future<void> saveCoinSort() async {
+    saveWalletInfo(walletInfo, walletIndex);
   }
 
-  void setNetworkIndex(int value){
-    if(walletInfo.networkIndex==value)return;
-    walletInfo.networkIndex=value;
-    if(walletInfo.networkIndex==-1){
+  void setNetworkIndex(int value) {
+    if (walletInfo.networkIndex == value) return;
+    walletInfo.networkIndex = value;
+    if (walletInfo.networkIndex == -1) {
       buildCoinModelInfo();
-    }else{
+    } else {
       buildCoinModelInfoWithCoin();
     }
     saveWalletInfo(walletInfo, walletIndex);
   }
 
   //重新加载当前钱包的 某个 coin
-  Future<void> reBuildCoin(WalletInfo wInfo,String coinType)async{
-    _walletInfoLsit[walletIndex]=wInfo;
+  Future<void> reBuildCoin(WalletInfo wInfo, String coinType) async {
+    _walletInfoLsit[walletIndex] = wInfo;
     saveWalletInfo(walletInfo, walletIndex);
-    final cIndex = _coinModels.indexWhere((e) => e.coin['coinType'] == coinType);
-    _coinModels[cIndex].coin=walletMap[coinType]['baseInfo'];
-    _coinModels[cIndex].pathIndex=walletMap[coinType]['pathIndex'];
-    _coinModels[cIndex].addrType=walletMap[coinType]['addrType'];
-    _coinModels[cIndex].address=null;
+    final cIndex = _coinModels.indexWhere(
+      (e) => e.config.coinType == coinType,
+    );
+    _coinModels[cIndex].coin = walletMap[coinType]['baseInfo'];
+    _coinModels[cIndex].pathIndex = walletMap[coinType]['pathIndex'];
+    _coinModels[cIndex].addrType = walletMap[coinType]['addrType'];
+    _coinModels[cIndex].address = null;
 
-    final clIndex = coinList.indexWhere((e) =>
-      e.coin['coinType'] == coinType && e.coin['isContract'] == false);
-    if(clIndex !=-1){
-      coinList[clIndex]=_coinModels[cIndex];
+    final clIndex = coinList.indexWhere(
+      (e) => e.config.coinType == coinType && e.coin['isContract'] == false,
+    );
+    if (clIndex != -1) {
+      coinList[clIndex] = _coinModels[cIndex];
       buildCoinWallet(coinList[clIndex], this);
       applyCachedBalance(coinList[clIndex]);
-      if(coinList[clIndex].tokens.isNotEmpty){
-        for(final token in coinList[clIndex].tokens.values){
-          final tIndex = coinList.indexWhere((e) =>
-            e.coin['coinType'] == coinType && e.coin['contract'] == token['contract']);
-          if(tIndex != -1){
-            coinList[tIndex]=buildTokenCoinModel(coinList[clIndex], token);
+      if (coinList[clIndex].tokens.isNotEmpty) {
+        for (final token in coinList[clIndex].tokens.values) {
+          final tIndex = coinList.indexWhere(
+            (e) =>
+                e.config.coinType == coinType &&
+                e.config.contract == token['contract'],
+          );
+          if (tIndex != -1) {
+            coinList[tIndex] = buildTokenCoinModel(coinList[clIndex], token);
           }
         }
       }
@@ -242,33 +252,33 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   //添加主链币
-  Future<void> addWalletChain(Map<String,dynamic> chainMap)async{
+  Future<void> addWalletChain(Map<String, dynamic> chainMap) async {
     final mKey = chainMap['baseInfo']['mKey'];
     final cMap = walletMap[mKey];
-    if(cMap != null){
-      final index = _coinModels.indexWhere((e) =>
-        e.coin['coinType'] == chainMap['baseInfo']['coinType']);
-      _coinModels[index].showList=true;
+    if (cMap != null) {
+      final index = _coinModels.indexWhere(
+        (e) => e.config.coinType == chainMap['baseInfo']['coinType'],
+      );
+      _coinModels[index].showList = true;
       coinList.add(_coinModels[index]);
       getCoinPrice(coinList.last);
       applyCachedBalance(coinList.last);
-      cMap['showList']=chainMap['showList'];
-      walletMap[mKey]=cMap;
-    }
-    else{
+      cMap['showList'] = chainMap['showList'];
+      walletMap[mKey] = cMap;
+    } else {
       CoinModel cm = CoinModel.fromMap(chainMap['baseInfo']);
-      cm.showList=chainMap['showList'];
-      cm.isTest=chainMap['isTest'];
-      cm.custom=chainMap['baseInfo']['custom']??false;
-      cm.addrType=chainMap['addrType'];
-      cm.pathIndex=chainMap['pathIndex'] ?? 0;
+      cm.showList = chainMap['showList'];
+      cm.isTest = chainMap['isTest'];
+      cm.custom = chainMap['baseInfo']['custom'] ?? false;
+      cm.addrType = chainMap['addrType'];
+      cm.pathIndex = chainMap['pathIndex'] ?? 0;
       final tokens = _extractTokens(chainMap);
       if (tokens.isNotEmpty) cm.tokens = tokens;
       _coinModels.add(cm);
       coinList.add(cm);
       getCoinPrice(cm);
       applyCachedBalance(cm);
-      walletMap[mKey]=chainMap;
+      walletMap[mKey] = chainMap;
     }
     refresh();
     await saveWalletInfo(walletInfo, walletIndex);
@@ -276,23 +286,23 @@ extension WalletActionProviderToken on WalletActionProvider {
 
   //将币从当前钱包中移除
   //mKey 币的 map key值
-  void removeWalletChain(String mKey,String unit){
-    int tokenCount=walletMap[mKey]['mainnets'].length;
-    if(tokenCount==0){
+  void removeWalletChain(String mKey, String unit) {
+    int tokenCount = walletMap[mKey]['mainnets'].length;
+    if (tokenCount == 0) {
       walletMap.remove(mKey);
-      for(int i=0;i<_coinModels.length;i++){
-        CoinModel cm=_coinModels[i];
-        if(cm.coin['mKey']==mKey){
+      for (int i = 0; i < _coinModels.length; i++) {
+        CoinModel cm = _coinModels[i];
+        if (cm.config.mKey == mKey) {
           _coinModels.removeAt(i);
           break;
         }
       }
-    }else{
-      walletMap[mKey]['showList']=false;
+    } else {
+      walletMap[mKey]['showList'] = false;
     }
-    for(int i=0;i<coinList.length;i++){
-      CoinModel cm=coinList[i];
-      if(cm.coin['mKey']==mKey){
+    for (int i = 0; i < coinList.length; i++) {
+      CoinModel cm = coinList[i];
+      if (cm.config.mKey == mKey) {
         coinList.removeAt(i);
         break;
       }
@@ -309,79 +319,83 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   //添加代币
-  void addWalletChainToken(Map<String,dynamic> token){
-    String symbolStr=token['coinType'].toString().toUpperCase();
-    Map<dynamic,dynamic>t;
-    if(walletMap[symbolStr]['isTest']){
-      t= walletMap[symbolStr]['testnets'][0]['testnetContract'];
-      if(t.isEmpty){
-        walletMap[symbolStr]['testnets'][0]['testnetContract']={
-          '${token['mKey']}':token,
+  void addWalletChainToken(Map<String, dynamic> token) {
+    String symbolStr = token['coinType'].toString().toUpperCase();
+    Map<dynamic, dynamic> t;
+    if (walletMap[symbolStr]['isTest']) {
+      t = walletMap[symbolStr]['testnets'][0]['testnetContract'];
+      if (t.isEmpty) {
+        walletMap[symbolStr]['testnets'][0]['testnetContract'] = {
+          '${token['mKey']}': token,
         };
-      }else{
-        Map<String,dynamic>tokens= walletMap[symbolStr]['testnets'][0]['testnetContract'];
-        final t=tokens[token['mKey']];
-        if(t == null){
-          tokens[token['mKey']]=token;
-        }else{
+      } else {
+        Map<String, dynamic> tokens =
+            walletMap[symbolStr]['testnets'][0]['testnetContract'];
+        final t = tokens[token['mKey']];
+        if (t == null) {
+          tokens[token['mKey']] = token;
+        } else {
           return;
         }
       }
-    }
-    else{
-      t= walletMap[symbolStr]['mainnets'];
-      if(t.isEmpty){
-        walletMap[symbolStr]['mainnets']={
-          '${token['mKey']}':token,
-        };
-      }else{
-        Map<String,dynamic> tokens= walletMap[symbolStr]['mainnets'];
-        final t=tokens[token['mKey']];
-        if(t == null){
-          tokens[token['mKey']]=token;
-        }else{
+    } else {
+      t = walletMap[symbolStr]['mainnets'];
+      if (t.isEmpty) {
+        walletMap[symbolStr]['mainnets'] = {'${token['mKey']}': token};
+      } else {
+        Map<String, dynamic> tokens = walletMap[symbolStr]['mainnets'];
+        final t = tokens[token['mKey']];
+        if (t == null) {
+          tokens[token['mKey']] = token;
+        } else {
           return;
         }
       }
     }
     saveWalletInfo(walletInfo, walletIndex);
 
-    final coinIndex = _coinModels.indexWhere((e) =>
-      e.coin['coinType'] == token['coinType']);
-    CoinModel mm=_coinModels[coinIndex];
-    CoinModel cm=CoinModel.fromMap(token);
-    cm.pathIndex=mm.pathIndex;
-    cm.isTest=mm.isTest;
-    cm.addrType=mm.addrType;
-    cm.address=mm.address;
-    cm.addressType=mm.addressType;
-    cm.mainCoinIcon=mm.coin['icon'];
+    final coinIndex = _coinModels.indexWhere(
+      (e) => e.config.coinType == token['coinType'],
+    );
+    CoinModel mm = _coinModels[coinIndex];
+    CoinModel cm = CoinModel.fromMap(token);
+    cm.pathIndex = mm.pathIndex;
+    cm.isTest = mm.isTest;
+    cm.addrType = mm.addrType;
+    cm.address = mm.address;
+    cm.addressType = mm.addressType;
+    cm.mainCoinIcon = mm.config.icon;
     coinList.add(cm);
     refresh();
   }
 
   //将代币从当前钱包中移除
-  void removeWalletChainToken(Map<String,dynamic> token,{String? symbol,String? miniName}){
+  void removeWalletChainToken(
+    Map<String, dynamic> token, {
+    String? symbol,
+    String? miniName,
+  }) {
     final symbolStr = (symbol ?? token['symbol']).toString().toUpperCase();
-    Map<String,dynamic>tokens;
-    if(walletMap[symbolStr]['isTest']){
-      tokens= walletMap[symbolStr]['testnets'][0]['testnetContract'];
-    }else{
-      tokens= walletMap[symbolStr]['mainnets'];
+    Map<String, dynamic> tokens;
+    if (walletMap[symbolStr]['isTest']) {
+      tokens = walletMap[symbolStr]['testnets'][0]['testnetContract'];
+    } else {
+      tokens = walletMap[symbolStr]['mainnets'];
     }
     tokens.remove(token['contract'].toString().toUpperCase());
 
     // 清理该合约代币对应的置顶记录
-    final tokenMiniName = (miniName ?? token['miniName']?.toString() ?? '').toUpperCase();
+    final tokenMiniName = (miniName ?? token['miniName']?.toString() ?? '')
+        .toUpperCase();
     if (tokenMiniName.isNotEmpty) {
       walletInfo.pinnedCoins.remove('${symbolStr}_$tokenMiniName');
       _lastSyncFingerprint = ''; // 使缓存失效，下次强制重同步
     }
 
     saveWalletInfo(walletInfo, walletIndex);
-    for(CoinModel cm in coinList){
-      if(cm.coin['coinType']==symbolStr){
-        if(cm.coin['mKey']==token['contract'].toString().toUpperCase()){
+    for (CoinModel cm in coinList) {
+      if (cm.config.coinType == symbolStr) {
+        if (cm.config.mKey == token['contract'].toString().toUpperCase()) {
           coinList.remove(cm);
           break;
         }

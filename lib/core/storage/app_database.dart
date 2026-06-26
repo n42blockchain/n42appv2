@@ -24,6 +24,8 @@ class AppDatabase {
   /// 安全存储实例
   static const FlutterSecureStorage _secureStorage = FlutterSecureStorage(
     aOptions: AndroidOptions(
+      // Keep the legacy namespace so existing database keys remain readable.
+      // ignore: deprecated_member_use
       sharedPreferencesName: 'n42_db_secure',
       preferencesKeyPrefix: 'db_',
     ),
@@ -81,7 +83,9 @@ class AppDatabase {
     // 生成新的 256 位密钥 (32 字节 -> 64 字符十六进制)
     final random = Random.secure();
     final keyBytes = List<int>.generate(32, (_) => random.nextInt(256));
-    final newKey = keyBytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+    final newKey = keyBytes
+        .map((b) => b.toRadixString(16).padLeft(2, '0'))
+        .join();
 
     // 安全存储密钥
     await _secureStorage.write(key: _dbKeyStorageKey, value: newKey);
@@ -174,7 +178,9 @@ class AppDatabase {
       final backupPath = '$legacyPath.backup';
       await File(legacyPath).rename(backupPath);
 
-      _debugLog('Migration completed. Legacy database backed up to: $backupPath');
+      _debugLog(
+        'Migration completed. Legacy database backed up to: $backupPath',
+      );
     } catch (e) {
       _debugLog('Migration failed: $e');
       // 如果迁移失败，删除可能部分创建的加密数据库

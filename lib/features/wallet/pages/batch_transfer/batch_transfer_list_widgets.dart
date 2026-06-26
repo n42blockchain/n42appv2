@@ -6,9 +6,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/batch_transfer_model.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 转账列表（含空状态提示）
 class BatchTransferList extends StatelessWidget {
@@ -30,8 +30,8 @@ class BatchTransferList extends StatelessWidget {
     }
     return ListView.builder(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       itemCount: provider.items.length,
       itemBuilder: (context, index) {
@@ -55,17 +55,16 @@ class BatchTransferList extends StatelessWidget {
           Icon(
             Icons.list_alt,
             size: ScreenUtil().setWidth(80),
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_batch_recipients,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           TextButton.icon(
             onPressed: onImportCsv,
             icon: const Icon(Icons.upload_file),
@@ -102,25 +101,25 @@ class BatchTransferListItem extends StatelessWidget {
       background: Container(
         alignment: Alignment.centerRight,
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(20)),
-        color: Colors.red,
+        color: AppColorTokens.of(context).danger,
         child: const Icon(Icons.delete, color: Colors.white),
       ),
       onDismissed: (_) => onDismiss(),
       child: Container(
         margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(8)),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(10)),
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brSm,
           border: Border.all(
-            color: batchStatusColor(item.status).withAlpha(50),
+            color: batchStatusColor(context, item.status).withAlpha(50),
             width: 1,
           ),
         ),
         child: Row(
           children: [
             _buildIndexBadge(context),
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space4),
             _buildAddressColumn(context),
             _buildAmountColumn(context),
           ],
@@ -134,16 +133,15 @@ class BatchTransferListItem extends StatelessWidget {
       width: ScreenUtil().setWidth(32),
       height: ScreenUtil().setWidth(32),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withAlpha(30),
+        color: AppColorTokens.of(context).brand.withAlpha(30),
         shape: BoxShape.circle,
       ),
       child: Center(
         child: Text(
           '${index + 1}',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
+          style: AppTypography.caption.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+            color: AppColorTokens.of(context).brand,
           ),
         ),
       ),
@@ -157,18 +155,16 @@ class BatchTransferListItem extends StatelessWidget {
         children: [
           Text(
             shortenAddress(item.toAddress),
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
           if (item.memo != null && item.memo!.isNotEmpty)
             Text(
               item.memo!,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
         ],
@@ -182,10 +178,9 @@ class BatchTransferListItem extends StatelessWidget {
       children: [
         Text(
           '${formatAmount(item.amount)} $tokenSymbol',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         BatchStatusBadge(status: item.status),
@@ -202,20 +197,14 @@ class BatchStatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = batchStatusColor(status);
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(6),
-        vertical: ScreenUtil().setWidth(2),
-      ),
-      decoration: BoxDecoration(
-        color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(4)),
-      ),
-      child: Text(
-        batchStatusText(context, status),
-        style: TextStyle(fontSize: ScreenUtil().setSp(18), color: color),
-      ),
+    return AppBadge(
+      label: batchStatusText(context, status),
+      tone: switch (status) {
+        BatchTransferStatus.pending => AppBadgeTone.neutral,
+        BatchTransferStatus.processing => AppBadgeTone.info,
+        BatchTransferStatus.success => AppBadgeTone.success,
+        BatchTransferStatus.failed => AppBadgeTone.danger,
+      },
     );
   }
 }
@@ -227,12 +216,15 @@ String shortenAddress(String address) {
   return '${address.substring(0, 8)}...${address.substring(address.length - 6)}';
 }
 
-Color batchStatusColor(BatchTransferStatus status) => switch (status) {
-  BatchTransferStatus.pending => Colors.grey,
-  BatchTransferStatus.processing => Colors.blue,
-  BatchTransferStatus.success => Colors.green,
-  BatchTransferStatus.failed => Colors.red,
-};
+Color batchStatusColor(BuildContext context, BatchTransferStatus status) {
+  final c = AppColorTokens.of(context);
+  return switch (status) {
+    BatchTransferStatus.pending => c.textTertiary,
+    BatchTransferStatus.processing => c.brand,
+    BatchTransferStatus.success => c.success,
+    BatchTransferStatus.failed => c.danger,
+  };
+}
 
 String batchStatusText(BuildContext context, BatchTransferStatus status) =>
     switch (status) {

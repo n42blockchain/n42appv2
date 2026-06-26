@@ -5,7 +5,7 @@ import 'package:n42_wallet/features/mining_v1/pages/task_detail_page.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/task_item.dart';
 import 'package:n42_wallet/features/mining_v1/widgets/task_value_bar.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/base_list.dart';
@@ -43,10 +43,7 @@ class _MiningTaskListState extends State<MiningTaskList> {
             topLeft: Radius.circular(ScreenUtil().setWidth(16)),
             topRight: Radius.circular(ScreenUtil().setWidth(16)),
           ),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.itemBgColor.name,
-          ),
+          color: AppColorTokens.of(context).bgSurface,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

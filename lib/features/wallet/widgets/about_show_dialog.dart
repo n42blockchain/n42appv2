@@ -1,9 +1,10 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
-void aboutShowDialog(BuildContext context,String aboutStr,String title){
+void aboutShowDialog(BuildContext context, String aboutStr, String title) {
   showModalBottomSheet(
     isScrollControlled: true,
     shape: RoundedRectangleBorder(
@@ -13,9 +14,9 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
       ),
     ),
     context: context,
-    builder: (BuildContext context){
+    builder: (BuildContext context) {
       return Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height / 1.2,
         ),
@@ -27,25 +28,27 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
               children: [
                 Text(
                   title,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(30.0),
+                  style: AppTypography.body.copyWith(
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.mainButtonBgColor.name,
+                    ),
                   ),
                 ),
                 InkWell(
-                  onTap: (){
+                  onTap: () {
                     Navigator.pop(context);
                   },
                   child: Container(
                     width: ScreenUtil().setWidth(50.0),
                     height: ScreenUtil().setWidth(50.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(10.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Icon(Icons.close),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(30.0),),
+            SizedBox(height: AppSpacing.space8),
             Expanded(
               flex: 1,
               child: SingleChildScrollView(
@@ -53,15 +56,14 @@ void aboutShowDialog(BuildContext context,String aboutStr,String title){
                   text: HTML.toTextSpan(
                     context,
                     aboutStr,
-                    defaultTextStyle: TextStyle(
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(26.0),
+                    defaultTextStyle: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
                       // etc etc
                     ),
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );

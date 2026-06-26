@@ -1,6 +1,7 @@
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_token_add2.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_page.dart';
@@ -17,6 +18,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Action sheet mixin for WalletChainInfo.
 /// Provides the bottom sheet with Send / Receive / Explorer / Buy / Sell /
@@ -36,7 +38,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
   Future<void> handleBatchTransfer() async {
     if (!await ensureWalletBackedUp()) return;
 
-    final coinType = coinModel.coin['coinType'];
+    final coinType = coinModel.config.coinType;
     final isTest = coinModel.isTest;
     final chainConfig = chainUrlMap[coinType];
     final serviceKey = isTest ? 'service_test' : 'service';
@@ -71,14 +73,16 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       context,
       MaterialPageRoute(
         builder: (context) => BatchTransferPage(
-          chainSymbol: coinModel.coin['miniName'] ?? coinType,
+          chainSymbol: coinModel.config.miniName.isNotEmpty
+              ? coinModel.config.miniName
+              : coinType,
           rpcUrl: rpcUrl,
           chainId: chainId,
           fromAddress: coinModel.address ?? '',
-          tokenAddress: coinModel.coin['isContract'] == true
-              ? coinModel.coin['contract']
+          tokenAddress: coinModel.config.isContract
+              ? coinModel.config.contract
               : null,
-          tokenSymbol: coinModel.coin['miniName'] ?? '',
+          tokenSymbol: coinModel.config.miniName,
           decimals: coinModel.coin['decimals'] ?? 18,
           balance: coinModel.balance,
           batchTransferProvider: BatchTransferProvider(),
@@ -125,7 +129,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       onTap: () => pushAndClose(BrowserPage(browserUrl)),
     );
     // Batch Transfer — EVM chains only
-    if (coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name) {
+    if (coinModel.config.blockchainType == BlockchainType.Ethereum.name) {
       childs.add(_divider());
       childs.add(
         _buildSheetItem(
@@ -139,14 +143,13 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           trailing: Container(
             padding: EdgeInsets.symmetric(horizontal: sw(8), vertical: sw(2)),
             decoration: BoxDecoration(
-              color: Colors.green,
+              color: AppColorTokens.of(context).success,
               borderRadius: BorderRadius.circular(sw(6)),
             ),
             child: Text(
               'NEW',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(18),
-                fontWeight: FontWeight.bold,
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
             ),
@@ -158,7 +161,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     // NFT Gallery
     if (coinModel.coin['isContract'] != true &&
         SimpleHashNftApi.chainMap.containsKey(
-          (coinModel.coin['coinType'] as String? ?? '').toUpperCase(),
+          coinModel.config.coinType.toUpperCase(),
         )) {
       addItem(
         icon: Icon(Icons.collections_outlined, color: _blue, size: sw(40.0)),
@@ -170,8 +173,8 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     // Add Token
     final bool canAddToken =
         coinModel.privateKey == null ||
-        coinModel.coin['blockchainType'] == BlockchainType.Bitcoin.name ||
-        coinModel.coin['isContract'] == true;
+        coinModel.config.blockchainType == BlockchainType.Bitcoin.name ||
+        coinModel.config.isContract;
     if (!canAddToken) {
       addItem(
         icon: Image.asset('assets/wallet/addToken.png', color: _blue),
@@ -197,7 +200,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
 
     // Network switch
     const supportedNetworkSwitch = {'N', 'ETH', 'BTC', 'DOT', 'ZIL'};
-    if (supportedNetworkSwitch.contains(coinModel.coin['coinType'])) {
+    if (supportedNetworkSwitch.contains(coinModel.config.coinType)) {
       childs.add(_divider());
       childs.add(_buildNetworkSwitchRow());
     }
@@ -250,13 +253,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
                   child: Image.asset(asset, color: color),
                 ),
                 SizedBox(width: sw(20.0)),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: color,
-                    fontSize: ScreenUtil().setSp(30.0),
-                  ),
-                ),
+                Text(label, style: AppTypography.body.copyWith(color: color)),
               ],
             ),
           ),
@@ -288,8 +285,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     );
   }
 
-  Color get _blue =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+  Color get _blue => AppColorTokens.of(context).brand;
 
   Divider _divider() =>
       Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0);
@@ -310,13 +306,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           children: [
             SizedBox(width: sw(40.0), height: sw(40.0), child: icon),
             SizedBox(width: sw(20.0)),
-            Text(
-              label,
-              style: TextStyle(
-                color: _blue,
-                fontSize: ScreenUtil().setSp(30.0),
-              ),
-            ),
+            Text(label, style: AppTypography.body.copyWith(color: _blue)),
             if (trailing != null) ...[SizedBox(width: sw(10.0)), trailing],
           ],
         ),

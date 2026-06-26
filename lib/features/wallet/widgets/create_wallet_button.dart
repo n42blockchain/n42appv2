@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/create_mpc_wallet.dart';
 import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_cloud_backup.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/add_watch_wallet_page.dart';
@@ -33,10 +33,10 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final mainText = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
-    final dividerColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final dividerColor = AppColorTokens.of(context).border;
     final s = S.of(context);
 
     final fullDivider = Divider(
@@ -62,10 +62,9 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           alignment: Alignment.centerLeft,
           child: Text(
             s.g_key_wallet_c32,
-            style: TextStyle(
+            style: AppTypography.title.copyWith(
               color: mainText,
-              fontSize: ScreenUtil().setSp(36.0),
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -78,9 +77,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           subtitle: s.g_key_wallet_c33,
           blueColor: blueColor,
           subtitleColor: subtitleText,
-          onTap: () => _navigateAndCallback(
-            Navigator.pushNamed(context, '/CreateOne'),
-          ),
+          onTap: () =>
+              _navigateAndCallback(Navigator.pushNamed(context, '/CreateOne')),
         ),
         indentedDivider,
 
@@ -92,9 +90,9 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const CreateMpcWallet()),
-            ),
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => const CreateMpcWallet())),
           ),
         ),
         indentedDivider,
@@ -106,9 +104,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           subtitle: s.w_key_8,
           blueColor: blueColor,
           subtitleColor: subtitleText,
-          onTap: () => _navigateAndCallback(
-            Navigator.pushNamed(context, '/ImportOne'),
-          ),
+          onTap: () =>
+              _navigateAndCallback(Navigator.pushNamed(context, '/ImportOne')),
         ),
         indentedDivider,
 
@@ -120,9 +117,9 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
-            Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => ImportKeystore()),
-            ),
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (_) => ImportKeystore())),
           ),
         ),
         indentedDivider,
@@ -185,34 +182,24 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(20),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space4,
         ),
         child: Row(
           children: [
-            Icon(
-              icon,
-              color: blueColor,
-              size: ScreenUtil().setWidth(50),
-            ),
-            SizedBox(width: ScreenUtil().setWidth(20)),
+            Icon(icon, color: blueColor, size: ScreenUtil().setWidth(50)),
+            SizedBox(width: AppSpacing.space4),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: TextStyle(
-                      color: blueColor,
-                      fontSize: ScreenUtil().setSp(36),
-                    ),
+                    style: AppTypography.title.copyWith(color: blueColor),
                   ),
                   Text(
                     subtitle,
-                    style: TextStyle(
-                      color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(26),
-                    ),
+                    style: AppTypography.bodySm.copyWith(color: subtitleColor),
                   ),
                 ],
               ),

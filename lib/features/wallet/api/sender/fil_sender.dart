@@ -25,7 +25,10 @@ class FilSender implements ChainSender {
     final filApi = FilApi();
 
     // Get balance
-    final mmb = await filApi.getBalance(params.fromAddress, isTest: params.isTest);
+    final mmb = await filApi.getBalance(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -33,11 +36,17 @@ class FilSender implements ChainSender {
     }
 
     // Get gas params
-    final mmNonce = await filApi.getNonce(params.fromAddress, isTest: params.isTest);
+    final mmNonce = await filApi.getNonce(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmNonce.error) return SendResult.fail(mmNonce.data?.toString());
     final nonce = mmNonce.data.toString();
 
-    final valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    final valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
 
     final mmGas = await filApi.getGasLimit(
       params.fromAddress,
@@ -63,7 +72,10 @@ class FilSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('FIL'));
       }
       sendValue = sendValue - totalGas;
-      adjustedAmount = toEther(sendValue.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        sendValue.toString(),
+        params.decimals,
+      ).toDouble();
     }
     if (sendValue <= BigInt.zero || totalGas + sendValue > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('FIL'));
@@ -74,8 +86,14 @@ class FilSender implements ChainSender {
       'toAddress': params.toAddress,
       'nonce': nonce,
       'gasLimit': gasLimit,
-      'gasFeeCap': _dataUtils.bigIntToHex(BigInt.parse(gasFeeCap), need0x: false),
-      'gasPremium': _dataUtils.bigIntToHex(BigInt.parse(gasPremium), need0x: false),
+      'gasFeeCap': _dataUtils.bigIntToHex(
+        BigInt.parse(gasFeeCap),
+        need0x: false,
+      ),
+      'gasPremium': _dataUtils.bigIntToHex(
+        BigInt.parse(gasPremium),
+        need0x: false,
+      ),
     };
 
     String signStr;
@@ -91,7 +109,10 @@ class FilSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.FIL.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.FIL.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
@@ -103,7 +124,9 @@ class FilSender implements ChainSender {
       coinType: CoinType.FIL.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     final sendMm = await filApi.sendTx(signStr, isTest: params.isTest);

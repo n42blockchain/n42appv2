@@ -3,13 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Displays a fetched DEX quote with route, price-impact, gas, min-received,
 /// a countdown until the quote expires, optional high-impact warning, and an
 /// ERC-20 approval notice with unlimited/exact toggle.
 class DexQuoteCard extends StatelessWidget {
-  static const _colorRed = Color(0xFFF44336);
-  static const _colorOrange = Color(0xFFFF9800);
   const DexQuoteCard({
     super.key,
     required this.quote,
@@ -39,9 +38,9 @@ class DexQuoteCard extends StatelessWidget {
   // ── Derived values ──────────────────────────────────────────────────────
 
   Color _impactColor(BuildContext context) => switch (quote.priceImpactNum) {
-    >= 3.0 => _colorRed,
-    >= 1.0 => _colorOrange,
-    _      => AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+    >= 3.0 => AppColorTokens.of(context).danger,
+    >= 1.0 => AppColorTokens.of(context).warning,
+    _ => AppColorTokens.of(context).textPrimary,
   };
 
   // ── Build ───────────────────────────────────────────────────────────────
@@ -52,11 +51,10 @@ class DexQuoteCard extends StatelessWidget {
     final impactColor = _impactColor(context);
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
@@ -73,14 +71,17 @@ class DexQuoteCard extends StatelessWidget {
             valueColor: impactColor,
           ),
           _rowWidget(context, s.g_key_dex_gas_estimate, quote.gasEstimate),
-          _rowWidget(context, s.g_key_dex_min_received,
-              '${quote.minAmountOut} ${quote.tokenOutSymbol}'),
+          _rowWidget(
+            context,
+            s.g_key_dex_min_received,
+            '${quote.minAmountOut} ${quote.tokenOutSymbol}',
+          ),
           if (quote.priceImpactNum >= 3.0) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _highImpactBanner(context, s),
           ],
           if (needsApproval) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             _approvalBanner(context, s),
           ],
         ],
@@ -93,39 +94,37 @@ class DexQuoteCard extends StatelessWidget {
   Widget _countdownText(BuildContext context, S s) {
     return Text(
       s.g_key_dex_quote_expires(secsLeft.toString()),
-      style: TextStyle(
+      style: AppTypography.caption.copyWith(
         color: secsLeft <= 10
-            ? _colorRed
-            : AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.ff888888.name),
-        fontSize: ScreenUtil().setSp(22),
+            ? AppColorTokens.of(context).danger
+            : AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
       ),
     );
   }
 
   Widget _highImpactBanner(BuildContext context, S s) {
+    final dangerColor = AppColorTokens.of(context).danger;
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: _colorRed.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        color: dangerColor.withAlpha(20),
+        borderRadius: AppRadius.brSm,
       ),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_rounded,
-              color: _colorRed,
-              size: ScreenUtil().setWidth(28)),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Icon(
+            Icons.warning_amber_rounded,
+            color: dangerColor,
+            size: ScreenUtil().setWidth(28),
+          ),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               s.g_key_dex_price_impact_high(quote.priceImpact),
-              style: TextStyle(
-                color: _colorRed,
-                fontSize: ScreenUtil().setSp(22),
-              ),
+              style: AppTypography.caption.copyWith(color: dangerColor),
             ),
           ),
         ],
@@ -134,36 +133,36 @@ class DexQuoteCard extends StatelessWidget {
   }
 
   Widget _approvalBanner(BuildContext context, S s) {
+    final warningColor = AppColorTokens.of(context).warning;
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: _colorOrange.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        color: warningColor.withAlpha(20),
+        borderRadius: AppRadius.brSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.lock_outline,
-                  color: _colorOrange,
-                  size: ScreenUtil().setWidth(28)),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              Icon(
+                Icons.lock_outline,
+                color: warningColor,
+                size: ScreenUtil().setWidth(28),
+              ),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   s.g_key_dex_approve_required(tokenInSymbol),
-                  style: TextStyle(
-                    color: _colorOrange,
-                    fontSize: ScreenUtil().setSp(22),
-                  ),
+                  style: AppTypography.caption.copyWith(color: warningColor),
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
           Row(
             children: [
               _approveChip(
@@ -172,7 +171,7 @@ class DexQuoteCard extends StatelessWidget {
                 selected: !exactApprove,
                 onTap: () => onExactApproveChanged(false),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               _approveChip(
                 context,
                 label: s.g_key_dex_approve_exact,
@@ -182,12 +181,11 @@ class DexQuoteCard extends StatelessWidget {
             ],
           ),
           if (!exactApprove) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Text(
               s.g_key_dex_approve_unlimited_info,
-              style: TextStyle(
-                color: _colorOrange.withValues(alpha: 0.75),
-                fontSize: ScreenUtil().setSp(20),
+              style: AppTypography.captionSm.copyWith(
+                color: warningColor.withValues(alpha: 0.75),
               ),
             ),
           ],
@@ -202,32 +200,29 @@ class DexQuoteCard extends StatelessWidget {
     required bool selected,
     required VoidCallback onTap,
   }) {
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final warningColor = AppColorTokens.of(context).warning;
     return GestureDetector(
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(16),
-          vertical: ScreenUtil().setWidth(6),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         decoration: BoxDecoration(
           color: selected
-              ? _colorOrange.withValues(alpha: 0.2)
+              ? warningColor.withValues(alpha: 0.2)
               : Colors.transparent,
           border: Border.all(
-            color: selected
-                ? _colorOrange
-                : mainText.withValues(alpha: 0.25),
+            color: selected ? warningColor : mainText.withValues(alpha: 0.25),
             width: 1.0,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: selected ? _colorOrange : mainText,
-            fontSize: ScreenUtil().setSp(22),
+          style: AppTypography.caption.copyWith(
+            color: selected ? warningColor : mainText,
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
@@ -243,36 +238,31 @@ class DexQuoteCard extends StatelessWidget {
     Widget? trailing,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Text(
             label,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           if (trailing != null) ...[
-            SizedBox(width: ScreenUtil().setWidth(8)),
+            SizedBox(width: AppSpacing.space2),
             trailing,
           ],
           const Spacer(),
           Text(
             value,
-            style: TextStyle(
-              color: valueColor ??
-                  AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
-              fontWeight:
-                  valueColor != null ? FontWeight.w600 : FontWeight.normal,
+            style: AppTypography.bodySm.copyWith(
+              color: valueColor ?? AppColorTokens.of(context).textPrimary,
+              fontWeight: valueColor != null
+                  ? FontWeight.w600
+                  : FontWeight.normal,
             ),
           ),
         ],
       ),
     );
   }
-
 }

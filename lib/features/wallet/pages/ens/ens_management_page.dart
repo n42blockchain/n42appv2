@@ -4,8 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
@@ -65,7 +65,6 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     'description',
   ];
 
-
   @override
   void initState() {
     super.initState();
@@ -94,7 +93,8 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     super.dispose();
   }
 
-  bool _isValidAddress(String addr) => FeatureAddressUtils.isValidEvmAddress(addr);
+  bool _isValidAddress(String addr) =>
+      FeatureAddressUtils.isValidEvmAddress(addr);
 
   void _copyToClipboard(String text) {
     Clipboard.setData(ClipboardData(text: text));
@@ -124,19 +124,19 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       if (mounted) {
         setState(() => _isLoading = false);
         if (!result.error) {
-          _showSnack(successMessage, bg: Colors.green);
+          _showSnack(successMessage, bg: AppColorTokens.of(context).success);
           onSuccess?.call();
         } else {
           _showSnack(
             result.data?.toString() ?? S.of(context).g_key_error_3,
-            bg: Colors.red,
+            bg: AppColorTokens.of(context).danger,
           );
         }
       }
     } catch (e) {
       if (mounted) {
         setState(() => _isLoading = false);
-        _showSnack(e.toString(), bg: Colors.red);
+        _showSnack(e.toString(), bg: AppColorTokens.of(context).danger);
       }
     }
   }
@@ -156,7 +156,10 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
   Future<void> _saveResolvedAddress() async {
     final addr = _resolvedAddressController.text.trim();
     if (addr.isNotEmpty && !_isValidAddress(addr)) {
-      _showSnack(S.of(context).g_key_ens_invalid_address, bg: Colors.red);
+      _showSnack(
+        S.of(context).g_key_ens_invalid_address,
+        bg: AppColorTokens.of(context).danger,
+      );
       return;
     }
     await _runWithLoading(
@@ -204,7 +207,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
     } catch (e) {
       if (mounted) {
         setState(() => _subdomainsLoading = false);
-        _showSnack(e.toString(), bg: Colors.red);
+        _showSnack(e.toString(), bg: AppColorTokens.of(context).danger);
       }
     }
   }
@@ -226,7 +229,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(S.of(ctx).g_key_ens_subdomain_delete),
-        content: SingleChildScrollView(child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm)),
+        content: SingleChildScrollView(
+          child: Text(S.of(ctx).g_key_ens_subdomain_delete_confirm),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
@@ -234,7 +239,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColorTokens.of(ctx).danger,
+            ),
             child: Text(
               S.of(ctx).g_key_ens_subdomain_delete,
               style: const TextStyle(color: Colors.white),
@@ -269,15 +276,15 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                 children: [
                   Text(
                     S.of(ctx).g_key_ens_transfer_warning,
-                    style: TextStyle(
-                      color: Colors.orange,
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(ctx).warning,
                     ),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(16)),
+                  SizedBox(height: AppSpacing.space4),
                   TextField(
                     controller: controller,
-                    onChanged: (_) => setDialogState(() => validationError = null),
+                    onChanged: (_) =>
+                        setDialogState(() => validationError = null),
                     decoration: InputDecoration(
                       labelText: S.of(ctx).g_key_ens_new_owner,
                       hintText: '0x...',
@@ -298,13 +305,16 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   final addr = controller.text.trim();
                   if (!_isValidAddress(addr)) {
                     setDialogState(
-                      () => validationError = S.of(ctx).g_key_ens_invalid_address,
+                      () =>
+                          validationError = S.of(ctx).g_key_ens_invalid_address,
                     );
                     return;
                   }
                   Navigator.pop(ctx, true);
                 },
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColorTokens.of(ctx).danger,
+                ),
                 child: Text(
                   S.of(ctx).g_key_ens_transfer,
                   style: const TextStyle(color: Colors.white),
@@ -338,7 +348,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -346,7 +356,7 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   ownedEns: widget.ownedEns,
                   domainChain: _domainChain,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(20)),
+                SizedBox(height: AppSpacing.space4),
                 EnsQuickActions(
                   ownedEns: widget.ownedEns,
                   domainChain: _domainChain,
@@ -356,19 +366,19 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                       : _setPrimaryName,
                   onCopy: () => _copyToClipboard(widget.ownedEns.name),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsAddressSection(
                   controller: _resolvedAddressController,
                   onSave: _saveResolvedAddress,
                   onChanged: () => setState(() {}),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsTextRecordsSection(
                   controllers: _recordControllers,
                   recordKeys: _commonRecordKeys,
                   onSave: _saveTextRecords,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsSubdomainSection(
                   subdomains: _subdomains,
                   isLoading: _subdomainsLoading,
@@ -378,9 +388,9 @@ class _EnsManagementPageState extends State<EnsManagementPage> {
                   onCopy: (sub) => _copyToClipboard(sub.fullName),
                   onDelete: _deleteSubdomain,
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 EnsAdvancedSection(onTransfer: _showTransferDialog),
-                SizedBox(height: ScreenUtil().setWidth(40)),
+                SizedBox(height: AppSpacing.space12),
               ],
             ),
           ),

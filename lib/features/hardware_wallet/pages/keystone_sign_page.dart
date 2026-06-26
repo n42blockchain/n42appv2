@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/hardware_wallet/service/keystone_service.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -146,25 +146,20 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
           _step == _SignStep.showRequest
               ? s.g_key_hw_keystone_connect_title
               : s.g_key_hw_keystone_scan_response_title,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(30),
-            fontWeight: FontWeight.bold,
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainTextColor.name),
+          style: AppTypography.body.copyWith(
+            fontWeight: FontWeight.w600,
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+          color: AppColorTokens.of(context).textPrimary,
         ),
         elevation: 0,
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: SafeArea(
         child: _step == _SignStep.showRequest
             ? _buildRequestStep(context, s)
@@ -177,7 +172,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
 
   Widget _buildRequestStep(BuildContext context, S s) {
     return Padding(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -185,34 +180,25 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
             icon: Icons.qr_code_scanner,
             message: s.g_key_hw_keystone_scan_request_hint,
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
-          Expanded(
-            child: Center(
-              child: _buildQrCode(),
-            ),
-          ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
+          Expanded(child: Center(child: _buildQrCode())),
+          SizedBox(height: AppSpacing.space6),
           ElevatedButton(
             onPressed: _proceedToScan,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
+              backgroundColor: AppColorTokens.of(context).brand,
               foregroundColor: Colors.white,
-              padding:
-                  EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+              padding: EdgeInsets.symmetric(
+                vertical: AppSpacing.space4,
               ),
+              shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(
               s.g_key_hw_keystone_tap_to_scan,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.body.copyWith(fontWeight: FontWeight.w600),
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
         ],
       ),
     );
@@ -220,10 +206,10 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
 
   Widget _buildQrCode() {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         boxShadow: [
           BoxShadow(
             color: Colors.black.withAlpha(30),
@@ -256,7 +242,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+          padding: EdgeInsets.all(AppSpacing.space4),
           child: _KeystoneInfoCard(
             icon: Icons.camera_alt,
             message: s.g_key_hw_keystone_scan_response_hint,

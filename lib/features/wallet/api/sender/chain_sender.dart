@@ -7,27 +7,28 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 /// Parameters for a transfer operation.
 class SendParams {
-  final String coinType;        // e.g. 'ETH', 'BNB', 'SOL'
+  final String coinType; // e.g. 'ETH', 'BNB', 'SOL'
   final String fromAddress;
   final String toAddress;
-  final double amount;          // decimal amount
-  final int decimals;           // coin decimals
-  final String path;            // derivation path
-  final bool sendMax;           // deduct fee from amount
+  final double amount; // decimal amount
+  final int decimals; // coin decimals
+  final String path; // derivation path
+  final bool sendMax; // deduct fee from amount
   final bool isTest;
   final String contractAddress; // empty = native transfer
-  final int tokenDecimals;      // token decimals if contractAddress non-empty
+  final int tokenDecimals; // token decimals if contractAddress non-empty
   final String? memo;
-  final String? calldata;       // raw hex calldata (DEX approve/swap), bypasses memo encoding
-  final String? privateKey;     // null = use wallet mnemonic
+  final String?
+  calldata; // raw hex calldata (DEX approve/swap), bypasses memo encoding
+  final String? privateKey; // null = use wallet mnemonic
   final Map<String, dynamic>? chainConfig; // full chain config from chainUrlMap
-  final int? destinationTag;    // XRP destination tag (exchange deposits)
-  final String? nftTokenId;     // ERC721/1155 token ID
-  final String? nftStandard;    // 'ERC721' | 'ERC1155'
-  final int? nftQuantity;       // ERC1155 transfer quantity (default 1)
+  final int? destinationTag; // XRP destination tag (exchange deposits)
+  final String? nftTokenId; // ERC721/1155 token ID
+  final String? nftStandard; // 'ERC721' | 'ERC1155'
+  final int? nftQuantity; // ERC1155 transfer quantity (default 1)
   // BTC-family optimisation: when provided, BtcSender skips the corresponding
   // network round-trips (fee-rate API / UTXO fetch) that the UI already made.
-  final int? btcFeeRate;        // sat/byte; skips fee-rate API query
+  final int? btcFeeRate; // sat/byte; skips fee-rate API query
   final List<Map<String, dynamic>>? prebuiltUtxos; // skips UTXO fetch
 
   const SendParams({
@@ -62,12 +63,12 @@ class SendResult {
   final String? error;
 
   const SendResult.ok(this.txHash, {this.actualAmount})
-      : success = true,
-        error = null;
+    : success = true,
+      error = null;
   const SendResult.fail(this.error)
-      : success = false,
-        txHash = null,
-        actualAmount = null;
+    : success = false,
+      txHash = null,
+      actualAmount = null;
 
   /// Convert to legacy MessageModel for compatibility.
   MessageModel toMessageModel() {

@@ -26,13 +26,18 @@ class VetSender implements ChainSender {
     final vetApi = VetApi();
 
     // Get account balance
-    final mmAccount = await vetApi.getAccount(params.fromAddress, isTest: params.isTest);
+    final mmAccount = await vetApi.getAccount(
+      params.fromAddress,
+      isTest: params.isTest,
+    );
     if (mmAccount.error) return SendResult.fail(mmAccount.data?.toString());
     final accountData = mmAccount.data as Map<String, dynamic>;
 
     // VET balance is in hex (wei)
     final balanceHex = accountData['balance']?.toString() ?? '0x0';
-    final chainBalance = _dataUtils.hexToBigInt(balanceHex.startsWith('0x') ? balanceHex.substring(2) : balanceHex);
+    final chainBalance = _dataUtils.hexToBigInt(
+      balanceHex.startsWith('0x') ? balanceHex.substring(2) : balanceHex,
+    );
 
     if (chainBalance == BigInt.zero) {
       return SendResult.fail(S.current.g_key_wallet_m5('VET'));
@@ -49,7 +54,10 @@ class VetSender implements ChainSender {
     const int gasLimit = 21000;
     // VTHO cost = gasLimit * gasPriceCoef. At coef=0, minimal cost from energy.
     // For native VET transfer, no explicit fee from VET balance (paid in VTHO).
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice > chainBalance) {
@@ -71,11 +79,7 @@ class VetSender implements ChainSender {
       'blockRef': blockRef,
       'expiration': 32,
       'clauses': [
-        {
-          'to': params.toAddress,
-          'value': valueHex,
-          'data': '0x',
-        }
+        {'to': params.toAddress, 'value': valueHex, 'data': '0x'},
       ],
       'gasPriceCoef': 0,
       'nonce': Random().nextInt(0xFFFFFFFF),
@@ -94,7 +98,10 @@ class VetSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.VET.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.VET.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
@@ -103,7 +110,8 @@ class VetSender implements ChainSender {
     final sendMm = await vetApi.sendTransaction(signStr, isTest: params.isTest);
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());
 
-    final txId = (sendMm.data as Map<String, dynamic>?)?['id']?.toString() ??
+    final txId =
+        (sendMm.data as Map<String, dynamic>?)?['id']?.toString() ??
         sendMm.data?.toString();
     return SendResult.ok(txId, actualAmount: adjustedAmount);
   }

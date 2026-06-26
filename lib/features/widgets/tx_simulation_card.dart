@@ -1,6 +1,7 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/tx_simulation_result.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -25,30 +26,30 @@ class TxSimulationCard extends StatelessWidget {
     return switch (result.status) {
       TxSimStatus.simulating => _SimulatingCard(label: s.g_key_sim_simulating),
       TxSimStatus.success => _StatusCard(
-          icon: Icons.check_circle_outline,
-          color: const Color(0xFF4CAF50),
-          label: s.g_key_sim_success,
-          // Show gas estimate when available — helps users judge tx complexity
-          detail: result.gasEstimate != null
-              ? s.g_key_sim_gas_estimate(_formatGas(result.gasEstimate!))
-              : null,
-          detailSelectable: false,
-        ),
+        icon: Icons.check_circle_outline,
+        color: AppColorTokens.of(context).success,
+        label: s.g_key_sim_success,
+        // Show gas estimate when available — helps users judge tx complexity
+        detail: result.gasEstimate != null
+            ? s.g_key_sim_gas_estimate(_formatGas(result.gasEstimate!))
+            : null,
+        detailSelectable: false,
+      ),
       TxSimStatus.reverted => _StatusCard(
-          icon: Icons.cancel_outlined,
-          color: const Color(0xFFF44336),
-          label: s.g_key_sim_reverted,
-          // Full revert reason — no truncation; selectable so users can copy
-          detail: result.revertReason != null
-              ? s.g_key_sim_reverted_reason(result.revertReason!)
-              : null,
-          detailSelectable: true,
-        ),
+        icon: Icons.cancel_outlined,
+        color: AppColorTokens.of(context).danger,
+        label: s.g_key_sim_reverted,
+        // Full revert reason — no truncation; selectable so users can copy
+        detail: result.revertReason != null
+            ? s.g_key_sim_reverted_reason(result.revertReason!)
+            : null,
+        detailSelectable: true,
+      ),
       TxSimStatus.unavailable => _StatusCard(
-          icon: Icons.info_outline,
-          color: const Color(0xFFFF9800),
-          label: s.g_key_sim_unavailable,
-        ),
+        icon: Icons.info_outline,
+        color: AppColorTokens.of(context).warning,
+        label: s.g_key_sim_unavailable,
+      ),
     };
   }
 
@@ -77,16 +78,13 @@ class _SimulatingCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
-          width: 1,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: AppColorTokens.of(context).border, width: 1),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -102,8 +100,8 @@ class _SimulatingCard extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(20),
-              vertical: ScreenUtil().setWidth(12),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space4,
             ),
             child: Row(
               children: [
@@ -112,18 +110,20 @@ class _SimulatingCard extends StatelessWidget {
                   height: ScreenUtil().setWidth(26),
                   child: const CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Color(0xFF9E9E9E)),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      Color(0xFF9E9E9E),
+                    ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.ff888888.name),
+                        context,
+                        AppThemeKeys.ff888888.name,
+                      ),
                     ),
                   ),
                 ),
@@ -158,21 +158,18 @@ class _StatusCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(10),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-        border: Border.all(
-          color: color.withAlpha(80),
-          width: 1,
-        ),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+        border: Border.all(color: color.withAlpha(80), width: 1),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(14),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -182,12 +179,11 @@ class _StatusCard extends StatelessWidget {
             Row(
               children: [
                 Icon(icon, size: ScreenUtil().setWidth(32), color: color),
-                SizedBox(width: ScreenUtil().setWidth(10)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     label,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: color,
                     ),
@@ -198,25 +194,25 @@ class _StatusCard extends StatelessWidget {
 
             // ── Detail row (gas estimate / revert reason) ─────────────────
             if (detail != null) ...[
-              SizedBox(height: ScreenUtil().setWidth(8)),
+              SizedBox(height: AppSpacing.space2),
               Padding(
                 padding: EdgeInsets.only(left: ScreenUtil().setWidth(42)),
                 child: detailSelectable
                     // SelectableText lets users long-press and copy the reason
                     ? SelectableText(
                         detail!,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: color,
                           height: 1.45,
                         ),
                       )
                     : Text(
                         detail!,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22),
+                        style: AppTypography.caption.copyWith(
                           color: AppThemeUtils.getColorByKey(
-                              context, AppThemeKeys.ff888888.name),
+                            context,
+                            AppThemeKeys.ff888888.name,
+                          ),
                           height: 1.45,
                         ),
                       ),

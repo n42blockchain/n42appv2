@@ -101,7 +101,10 @@ class NonEvmFeeModel {
     String feeRateUnit = 'sat/byte',
   }) {
     // 慢速：80%（≥1），标准：100%，快速：150%
-    final slowRate = (averageRateSatPerByte * 0.8).ceil().clamp(1, averageRateSatPerByte);
+    final slowRate = (averageRateSatPerByte * 0.8).ceil().clamp(
+      1,
+      averageRateSatPerByte,
+    );
     final standardRate = averageRateSatPerByte;
     final fastRate = (averageRateSatPerByte * 1.5).ceil();
 

@@ -5,7 +5,6 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
@@ -14,6 +13,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -23,7 +23,8 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/widgets/non_evm_fee_selector.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 
 part 'wallet_chain_send_memo_logic.dart';
@@ -65,22 +66,16 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo>
 
   @override
   Widget build(BuildContext context) {
-    final miniName =
-        (widget.coinModel.coin['miniName'] as String? ?? '').toUpperCase();
+    final miniName = (widget.coinModel.config.miniName)
+        .toUpperCase();
     return Scaffold(
-      appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} $miniName',
-      ),
+      appBar: AppBarWidget(text: '${S.of(context).g_key_37} $miniName'),
       body: SafeArea(
         child: GestureDetector(
           onTap: closeKeyboard,
           child: Stack(
             children: [
-              Positioned.fill(
-                child: SingleChildScrollView(
-                  child: buildForm(),
-                ),
-              ),
+              Positioned.fill(child: SingleChildScrollView(child: buildForm())),
               buildSendButton(),
             ],
           ),

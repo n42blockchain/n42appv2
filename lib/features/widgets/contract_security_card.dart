@@ -4,10 +4,10 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/security/goplus_security_result.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 /// GoPlus 合约安全评分卡片
 ///
@@ -20,18 +20,18 @@ class ContractSecurityCard extends StatelessWidget {
   final GoplusSecurityResult? _result;
 
   const ContractSecurityCard.loading({super.key})
-      : _state = _State.loading,
-        _result = null;
+    : _state = _State.loading,
+      _result = null;
 
   const ContractSecurityCard.result({
     super.key,
     required GoplusSecurityResult result,
-  })  : _state = _State.result,
-        _result = result;
+  }) : _state = _State.result,
+       _result = result;
 
   const ContractSecurityCard.unavailable({super.key})
-      : _state = _State.unavailable,
-        _result = null;
+    : _state = _State.unavailable,
+      _result = null;
 
   @override
   Widget build(BuildContext context) {
@@ -49,13 +49,12 @@ class ContractSecurityCard extends StatelessWidget {
   Widget _buildLoading(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -64,19 +63,16 @@ class ContractSecurityCard extends StatelessWidget {
             height: ScreenUtil().setWidth(18),
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Flexible(
             child: Text(
               S.of(context).g_key_security_goplus_checking,
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemSubtitleTextColor.name),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -95,12 +91,12 @@ class ContractSecurityCard extends StatelessWidget {
 
     switch (level) {
       case GoplusRiskLevel.safe:
-        color = const Color(0xFF4CAF50);
+        color = AppColorTokens.of(context).success;
         icon = Icons.verified_outlined;
         title = S.of(context).g_key_security_goplus_safe;
         break;
       case GoplusRiskLevel.caution:
-        color = const Color(0xFFFFA726);
+        color = AppColorTokens.of(context).warning;
         icon = Icons.warning_amber_outlined;
         title = S.of(context).g_key_security_goplus_caution;
         break;
@@ -113,12 +109,12 @@ class ContractSecurityCard extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(16),
-        vertical: ScreenUtil().setWidth(12),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(80)),
       ),
       child: Column(
@@ -127,13 +123,12 @@ class ContractSecurityCard extends StatelessWidget {
           Row(
             children: [
               Icon(icon, size: ScreenUtil().setWidth(20), color: color),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Flexible(
                 child: Text(
                   title,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(26),
+                  style: AppTypography.bodySm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: color,
                   ),
@@ -143,17 +138,15 @@ class ContractSecurityCard extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_security_goplus_powered_by,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(20),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.captionSm.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ),
             ],
           ),
           if (result.risks.isNotEmpty) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Wrap(
               spacing: ScreenUtil().setWidth(6),
               runSpacing: ScreenUtil().setWidth(4),
@@ -174,17 +167,16 @@ class ContractSecurityCard extends StatelessWidget {
         : const Color(0xFFFFA726);
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space2,
         vertical: ScreenUtil().setWidth(3),
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(30),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(6)),
+        borderRadius: AppRadius.brSm,
       ),
       child: Text(
         risk.label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
           color: color,
           fontWeight: FontWeight.w500,
         ),

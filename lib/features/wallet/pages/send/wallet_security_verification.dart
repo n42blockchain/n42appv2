@@ -15,9 +15,9 @@ import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/edit_wallet_password.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
-import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 part 'wallet_security_verification_widgets.dart';
 part 'wallet_security_verification_sections.dart';
@@ -285,14 +285,11 @@ class _WalletSecurityVerificationState
               onTap: pushSetting,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
+                  horizontal: AppSpacing.space8,
                 ),
                 child: Image.asset(
                   'assets/img/Setting.png',
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                  color: AppColorTokens.of(context).textPrimary,
                   width: ScreenUtil().setWidth(40.0),
                   height: ScreenUtil().setWidth(40.0),
                 ),
@@ -305,7 +302,7 @@ class _WalletSecurityVerificationState
             children: [
               Positioned.fill(
                 child: SingleChildScrollView(
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+                  padding: EdgeInsets.all(AppSpacing.space8),
                   child: Column(children: _buildVerificationWidgets()),
                 ),
               ),

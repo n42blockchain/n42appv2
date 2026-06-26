@@ -1,13 +1,13 @@
-﻿import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 /// Home Top Bar - Migrated to Riverpod
-/// 
+///
 /// Common app bar for main pages with user avatar and notification badge
 class AppHomeTopBar extends ConsumerStatefulWidget {
   final GestureTapCallback? onLeftImageClick;
@@ -46,23 +46,20 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         children: [
           // 标题绝对居中于整个顶部栏
           Center(
-            child: widget.titleChild ?? (widget.isText
-                ? Text(
-                    widget.title ?? '',
-                    style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(32.0),
-                    ),
-                  )
-                : Image.asset(
-                    'assets/images/ast_nft.png',
-                    width: ScreenUtil().setWidth(64.0),
-                    height: ScreenUtil().setWidth(64.0),
-                    fit: BoxFit.cover,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                  )),
+            child:
+                widget.titleChild ??
+                (widget.isText
+                    ? Text(
+                        widget.title ?? '',
+                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                      )
+                    : Image.asset(
+                        'assets/images/ast_nft.png',
+                        width: ScreenUtil().setWidth(64.0),
+                        height: ScreenUtil().setWidth(64.0),
+                        fit: BoxFit.cover,
+                        color: AppColorTokens.of(context).textPrimary,
+                      )),
           ),
           // 左右两侧按钮叠加在标题上方
           Row(
@@ -108,7 +105,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
         child: Image.asset(
           widget.onLeftImageUri ?? "",
           width: ScreenUtil().setWidth(44),
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
         ),
       ),
     );

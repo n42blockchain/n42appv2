@@ -77,7 +77,8 @@ class AggregatedCoinModel extends CoinModel {
   }
 
   /// 支持的链列表
-  List<String> get supportedChains => tokenConfig.chains.map((c) => c.chainSymbol).toList();
+  List<String> get supportedChains =>
+      tokenConfig.chains.map((c) => c.chainSymbol).toList();
 
   AggregatedCoinModel({required this.tokenConfig}) {
     // 初始化 coin 基本信息
@@ -118,7 +119,11 @@ class AggregatedCoinModel extends CoinModel {
   }
 
   /// 更新某条链的余额
-  void updateChainBalance(String chainSymbol, BigInt newBalance, String address) {
+  void updateChainBalance(
+    String chainSymbol,
+    BigInt newBalance,
+    String address,
+  ) {
     final config = tokenConfig.chains
         .where((c) => c.chainSymbol == chainSymbol)
         .firstOrNull;
@@ -154,11 +159,14 @@ class AggregatedCoinModel extends CoinModel {
   }
 
   /// 查询单链代币余额
-  Future<BigInt> _fetchTokenBalance(ChainTokenConfig config, String address) async {
+  Future<BigInt> _fetchTokenBalance(
+    ChainTokenConfig config,
+    String address,
+  ) async {
     return switch (config.rules) {
-      'SPL'   => _fetchSplTokenBalance(config, address),
+      'SPL' => _fetchSplTokenBalance(config, address),
       'TRC20' => _fetchTrc20Balance(config, address),
-      _       => _fetchErc20Balance(config, address),
+      _ => _fetchErc20Balance(config, address),
     };
   }
 
@@ -166,7 +174,10 @@ class AggregatedCoinModel extends CoinModel {
   static const Duration _httpTimeout = Duration(seconds: 10);
 
   /// ERC20 余额查询
-  Future<BigInt> _fetchErc20Balance(ChainTokenConfig config, String address) async {
+  Future<BigInt> _fetchErc20Balance(
+    ChainTokenConfig config,
+    String address,
+  ) async {
     final httpClient = http.Client();
     final client = Web3Client(config.rpcUrl, httpClient);
     try {
@@ -179,11 +190,13 @@ class AggregatedCoinModel extends CoinModel {
       );
 
       final balanceFunction = contract.function('balanceOf');
-      final result = await client.call(
-        contract: contract,
-        function: balanceFunction,
-        params: [EthereumAddress.fromHex(address)],
-      ).timeout(_httpTimeout);
+      final result = await client
+          .call(
+            contract: contract,
+            function: balanceFunction,
+            params: [EthereumAddress.fromHex(address)],
+          )
+          .timeout(_httpTimeout);
 
       return result[0] as BigInt;
     } finally {
@@ -193,22 +206,27 @@ class AggregatedCoinModel extends CoinModel {
   }
 
   /// SPL Token 余额查询 (Solana)
-  Future<BigInt> _fetchSplTokenBalance(ChainTokenConfig config, String address) async {
+  Future<BigInt> _fetchSplTokenBalance(
+    ChainTokenConfig config,
+    String address,
+  ) async {
     try {
-      final response = await http.post(
-        Uri.parse(config.rpcUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'jsonrpc': '2.0',
-          'id': 1,
-          'method': 'getTokenAccountsByOwner',
-          'params': [
-            address,
-            {'mint': config.contract},
-            {'encoding': 'jsonParsed'},
-          ],
-        }),
-      ).timeout(_httpTimeout);
+      final response = await http
+          .post(
+            Uri.parse(config.rpcUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'jsonrpc': '2.0',
+              'id': 1,
+              'method': 'getTokenAccountsByOwner',
+              'params': [
+                address,
+                {'mint': config.contract},
+                {'encoding': 'jsonParsed'},
+              ],
+            }),
+          )
+          .timeout(_httpTimeout);
 
       final data = jsonDecode(response.body) as Map<String, dynamic>?;
       if (data == null) return BigInt.zero;
@@ -218,31 +236,40 @@ class AggregatedCoinModel extends CoinModel {
       if (accounts == null || accounts.isEmpty) return BigInt.zero;
 
       final account = accounts[0] as Map<String, dynamic>?;
-      final accountData = account?['account']?['data']?['parsed']?['info']?['tokenAmount'];
+      final accountData =
+          account?['account']?['data']?['parsed']?['info']?['tokenAmount'];
       if (accountData == null) return BigInt.zero;
 
-      return BigInt.tryParse(accountData['amount']?.toString() ?? '0') ?? BigInt.zero;
+      return BigInt.tryParse(accountData['amount']?.toString() ?? '0') ??
+          BigInt.zero;
     } catch (e) {
       return BigInt.zero;
     }
   }
 
   /// TRC20 余额查询 (Tron)
-  Future<BigInt> _fetchTrc20Balance(ChainTokenConfig config, String address) async {
+  Future<BigInt> _fetchTrc20Balance(
+    ChainTokenConfig config,
+    String address,
+  ) async {
     try {
-      final base = config.rpcUrl.endsWith('/') ? config.rpcUrl.substring(0, config.rpcUrl.length - 1) : config.rpcUrl;
+      final base = config.rpcUrl.endsWith('/')
+          ? config.rpcUrl.substring(0, config.rpcUrl.length - 1)
+          : config.rpcUrl;
       final apiUrl = '$base/wallet/triggerconstantcontract';
 
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'owner_address': address,
-          'contract_address': config.contract,
-          'function_selector': 'balanceOf(address)',
-          'parameter': address.replaceFirst('T', '').padLeft(64, '0'),
-        }),
-      ).timeout(_httpTimeout);
+      final response = await http
+          .post(
+            Uri.parse(apiUrl),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'owner_address': address,
+              'contract_address': config.contract,
+              'function_selector': 'balanceOf(address)',
+              'parameter': address.replaceFirst('T', '').padLeft(64, '0'),
+            }),
+          )
+          .timeout(_httpTimeout);
 
       final data = jsonDecode(response.body) as Map<String, dynamic>?;
       if (data == null) return BigInt.zero;

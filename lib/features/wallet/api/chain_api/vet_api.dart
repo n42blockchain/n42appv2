@@ -44,7 +44,10 @@ class VetApi {
   }
 
   /// 广播已签名交易（raw 为十六进制编码的 RLP 交易）
-  Future<MessageModel> sendTransaction(String rawTx, {bool isTest = false}) async {
+  Future<MessageModel> sendTransaction(
+    String rawTx, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.post(
         '${_base(isTest)}/transactions',
@@ -61,7 +64,10 @@ class VetApi {
   }
 
   /// 查询交易回执（confirmed + reverted 状态）
-  Future<MessageModel> getTransactionReceipt(String txId, {bool isTest = false}) async {
+  Future<MessageModel> getTransactionReceipt(
+    String txId, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/transactions/$txId/receipt',
@@ -76,7 +82,10 @@ class VetApi {
   }
 
   /// 查询交易详情
-  Future<MessageModel> getTransaction(String txId, {bool isTest = false}) async {
+  Future<MessageModel> getTransaction(
+    String txId, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/transactions/$txId',
@@ -99,7 +108,9 @@ class VetApi {
       final data = await BaseApi.requestEmptyH.post(
         '${_base(isTest)}/accounts/*',
         params: {},
-        data: {'clauses': [clause]},
+        data: {
+          'clauses': [clause],
+        },
         defaultReturn: false,
         header: _header,
       );

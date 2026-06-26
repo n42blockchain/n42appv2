@@ -111,7 +111,10 @@ class WalletConnectProvider
                 sessionProperties: args.params.sessionProperties,
               )
               .then((value) async {
-                AppLogger.d('WalletConnect', 'approveSession OK topic=${value.topic}');
+                AppLogger.d(
+                  'WalletConnect',
+                  'approveSession OK topic=${value.topic}',
+                );
                 dAppTopic = value.topic;
                 viewStateDeal(WalletConnectState.connect);
               })
@@ -147,7 +150,10 @@ class WalletConnectProvider
   void showAlertWidget() {
     final ctx = AppGlobals.navigatorKey.currentContext;
     if (ctx == null || metadata == null || actionDataMap == null) {
-      AppLogger.w('WalletConnect', 'cannot show alert: context or data is null');
+      AppLogger.w(
+        'WalletConnect',
+        'cannot show alert: context or data is null',
+      );
       return;
     }
     sheetBottom(ctx, "", WalletConnectAlertWidget(metadata!, actionDataMap!));

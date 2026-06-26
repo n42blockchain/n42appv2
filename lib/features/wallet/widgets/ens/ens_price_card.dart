@@ -6,30 +6,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
 /// ENS 价格显示卡片
 class EnsPriceCard extends StatelessWidget {
   final EnsPrice price;
 
-  const EnsPriceCard({
-    super.key,
-    required this.price,
-  });
+  const EnsPriceCard({super.key, required this.price});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
         border: Border.all(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ).withAlpha(30),
+          color: AppColorTokens.of(context).brand.withAlpha(30),
         ),
       ),
       child: Column(
@@ -37,16 +31,12 @@ class EnsPriceCard extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_key_ens_price_breakdown,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(26),
+            style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           // 基础价格
           _buildPriceRow(
@@ -54,7 +44,7 @@ class EnsPriceCard extends StatelessWidget {
             S.of(context).g_key_ens_base_price,
             '${price.basePrice.toStringAsFixed(4)} ETH',
           ),
-          SizedBox(height: ScreenUtil().setWidth(10)),
+          SizedBox(height: AppSpacing.space2),
 
           // 年费
           _buildPriceRow(
@@ -64,12 +54,9 @@ class EnsPriceCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: Divider(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.itemSubtitleTextColor.name,
-              ).withAlpha(30),
+              color: AppColorTokens.of(context).textSubtitle.withAlpha(30),
             ),
           ),
 
@@ -81,13 +68,9 @@ class EnsPriceCard extends StatelessWidget {
                 child: Text(
                   S.of(context).g_key_ens_total,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -96,24 +79,16 @@ class EnsPriceCard extends StatelessWidget {
                 children: [
                   Text(
                     price.formattedTotalPrice,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold,
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainBlueColor.name,
-                      ),
+                    style: AppTypography.body.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                   if (price.usdPrice != null)
                     Text(
                       '≈ \$${price.usdPrice!.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: AppThemeUtils.getColorByKey(
-                          context,
-                          AppThemeKeys.itemSubtitleTextColor.name,
-                        ),
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
                       ),
                     ),
                 ],
@@ -123,29 +98,28 @@ class EnsPriceCard extends StatelessWidget {
 
           // 名称长度定价提示
           if (price.nameLength <= 4) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
-                color: Colors.orange.withAlpha(20),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: AppColorTokens.of(context).warning.withAlpha(20),
+                borderRadius: AppRadius.brSm,
               ),
               child: Row(
                 children: [
                   Icon(
                     Icons.info_outline,
                     size: ScreenUtil().setWidth(20),
-                    color: Colors.orange,
+                    color: AppColorTokens.of(context).warning,
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Expanded(
                     child: Text(
                       price.nameLength == 3
                           ? S.of(context).g_key_ens_premium_name
                           : S.of(context).g_key_ens_standard_name,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(22),
-                        color: Colors.orange,
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).warning,
                       ),
                     ),
                   ),
@@ -164,22 +138,14 @@ class EnsPriceCard extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         Text(
           value,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(24),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainTextColor.name,
-            ),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
       ],

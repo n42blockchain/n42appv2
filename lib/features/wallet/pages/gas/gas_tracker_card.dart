@@ -7,16 +7,16 @@ part of 'gas_tracker_page.dart';
 
 extension _GasTrackerCardBuilders on _GasTrackerPageState {
   Widget buildHeader() {
-    final blueColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final blueColor = AppColorTokens.of(context).brand;
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [blueColor.withAlpha(30), blueColor.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Row(
         children: [
@@ -25,27 +25,23 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
             size: ScreenUtil().setWidth(48),
             color: blueColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   S.of(context).g_key_gas_realtime_prices,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    fontWeight: FontWeight.bold,
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
+                  style: AppTypography.body.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(4)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   S.of(context).g_key_gas_auto_refresh('15'),
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -60,15 +56,14 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
     final data = _gasData[network.symbol];
     final history = _history[network.symbol] ?? [];
     final hasAlert = _alertConfigs[network.symbol]?.enabled ?? false;
-    final subtitleColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: network.color.withAlpha(50), width: 1),
       ),
       child: Column(
@@ -77,24 +72,23 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           Row(
             children: [
               _NetworkIcon(network: network, size: 44, iconSize: 24),
-              SizedBox(width: ScreenUtil().setWidth(12)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       network.name,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(28),
+                      style: AppTypography.body.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
+                        color: AppColorTokens.of(context).textPrimary,
                       ),
                     ),
                     Text(
                       network.symbol,
-                      style: TextStyle(
-                          fontSize: ScreenUtil().setSp(22), color: subtitleColor),
+                      style: AppTypography.caption.copyWith(
+                        color: subtitleColor,
+                      ),
                     ),
                   ],
                 ),
@@ -102,39 +96,50 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               GestureDetector(
                 onTap: () => _showAlertSheet(network),
                 child: Icon(
-                  hasAlert ? Icons.notifications_active : Icons.notifications_none,
+                  hasAlert
+                      ? Icons.notifications_active
+                      : Icons.notifications_none,
                   size: ScreenUtil().setWidth(36),
                   color: hasAlert ? network.color : subtitleColor,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               buildNetworkStatus(data?.gasPrice),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           if (data != null) ...[
-            buildGasRow(S.of(context).g_key_t_17,
-                '${data.gasPrice.toStringAsFixed(2)} Gwei', network.color),
+            buildGasRow(
+              S.of(context).g_key_t_17,
+              '${data.gasPrice.toStringAsFixed(2)} Gwei',
+              network.color,
+            ),
             if (data.baseFee != null)
-              buildGasRow(S.of(context).g_key_gas_base_fee,
-                  '${data.baseFee!.toStringAsFixed(2)} Gwei', network.color.withAlpha(180)),
+              buildGasRow(
+                S.of(context).g_key_gas_base_fee,
+                '${data.baseFee!.toStringAsFixed(2)} Gwei',
+                network.color.withAlpha(180),
+              ),
             if (data.priorityFee != null)
               buildGasRow(
-                  S.of(context).g_key_gas_priority_fee,
-                  '${data.priorityFee!.toStringAsFixed(2)} Gwei',
-                  network.color.withAlpha(180)),
+                S.of(context).g_key_gas_priority_fee,
+                '${data.priorityFee!.toStringAsFixed(2)} Gwei',
+                network.color.withAlpha(180),
+              ),
           ] else
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(8)),
+                padding: EdgeInsets.symmetric(
+                  vertical: AppSpacing.space2,
+                ),
                 child: Text(
                   S.of(context).g_key_106,
-                  style: TextStyle(fontSize: ScreenUtil().setSp(24), color: subtitleColor),
+                  style: AppTypography.caption.copyWith(color: subtitleColor),
                 ),
               ),
             ),
           if (history.length >= 3) ...[
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space4),
             buildSparkline(history, network),
           ],
           buildMempoolIndicator(network.symbol),
@@ -147,35 +152,37 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
     final minY = history.reduce((a, b) => a < b ? a : b);
     final maxY = history.reduce((a, b) => a > b ? a : b);
     final padding = (maxY - minY) * 0.1 + 0.5;
-    final subtitleColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
-            Icon(Icons.show_chart, size: ScreenUtil().setWidth(28), color: subtitleColor),
-            SizedBox(width: ScreenUtil().setWidth(6)),
+            Icon(
+              Icons.show_chart,
+              size: ScreenUtil().setWidth(28),
+              color: subtitleColor,
+            ),
+            SizedBox(width: AppSpacing.space2),
             Flexible(
               child: Text(
                 S.of(context).g_key_gas_price_trend,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: ScreenUtil().setSp(22), color: subtitleColor),
+                style: AppTypography.caption.copyWith(color: subtitleColor),
               ),
             ),
             const Spacer(),
             Text(
               '${history.last.toStringAsFixed(1)} Gwei',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: network.color,
               ),
             ),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(8)),
+        SizedBox(height: AppSpacing.space2),
         SizedBox(
           height: ScreenUtil().setWidth(80),
           child: LineChart(
@@ -198,7 +205,10 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
                   color: network.color,
                   barWidth: 2,
                   dotData: const FlDotData(show: false),
-                  belowBarData: BarAreaData(show: true, color: network.color.withAlpha(25)),
+                  belowBarData: BarAreaData(
+                    show: true,
+                    color: network.color.withAlpha(25),
+                  ),
                 ),
               ],
             ),
@@ -216,25 +226,22 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
           Container(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(4),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: color.withAlpha(20),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(24),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: color,
               ),
@@ -246,27 +253,27 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
   }
 
   Widget buildNetworkStatus(double? gasPrice) {
+    final c = AppColorTokens.of(context);
     final (statusText, statusColor) = switch (gasPrice) {
-      null => ('...', Colors.grey),
-      < 20 => (S.of(context).g_key_gas_network_idle, Colors.green),
-      < 50 => (S.of(context).g_key_gas_network_normal, Colors.orange),
-      _ => (S.of(context).g_key_gas_network_busy, Colors.red),
+      null => ('...', c.textTertiary),
+      < 20 => (S.of(context).g_key_gas_network_idle, c.success),
+      < 50 => (S.of(context).g_key_gas_network_normal, c.warning),
+      _ => (S.of(context).g_key_gas_network_busy, c.danger),
     };
 
     return Container(
       constraints: BoxConstraints(maxWidth: ScreenUtil().setWidth(140)),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: statusColor.withAlpha(20),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Text(
         statusText,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
+        style: AppTypography.caption.copyWith(
           fontWeight: FontWeight.w600,
           color: statusColor,
         ),
@@ -281,27 +288,30 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
   Widget buildGasPredictionCard() {
     final su = ScreenUtil();
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final c = AppColorTokens.of(context);
+    final textColor = c.textPrimary;
 
     return Container(
       padding: EdgeInsets.all(su.setWidth(20)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
+        color: c.bgSurface,
         borderRadius: BorderRadius.circular(su.setWidth(16)),
-        border: Border.all(color: Colors.orange.withAlpha(50), width: 1),
+        border: Border.all(color: c.warning.withAlpha(50), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.auto_graph, size: su.setWidth(36), color: Colors.orange),
+              Icon(
+                Icons.auto_graph,
+                size: su.setWidth(36),
+                color: c.warning,
+              ),
               SizedBox(width: su.setWidth(8)),
               Text(
                 'Next Block Gas Prediction',
-                style: TextStyle(
-                  fontSize: su.setSp(28),
-                  fontWeight: FontWeight.w600,
+                style: AppTypography.bodyStrong.copyWith(
                   color: textColor,
                 ),
               ),
@@ -315,13 +325,22 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
               padding: EdgeInsets.only(bottom: su.setWidth(8)),
               child: Row(
                 children: [
-                  Text(symbol, style: TextStyle(fontSize: su.setSp(24), fontWeight: FontWeight.w600, color: textColor)),
+                  Text(
+                    symbol,
+                    style: AppTypography.caption.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: textColor,
+                    ),
+                  ),
                   SizedBox(width: su.setWidth(12)),
-                  if (pred.low != null) _predBadge('Slow', pred.low!, Colors.green, su),
+                  if (pred.low != null)
+                    _predBadge('Slow', pred.low!, c.success, su),
                   SizedBox(width: su.setWidth(8)),
-                  if (pred.medium != null) _predBadge('Avg', pred.medium!, Colors.orange, su),
+                  if (pred.medium != null)
+                    _predBadge('Avg', pred.medium!, c.warning, su),
                   SizedBox(width: su.setWidth(8)),
-                  if (pred.high != null) _predBadge('Fast', pred.high!, Colors.red, su),
+                  if (pred.high != null)
+                    _predBadge('Fast', pred.high!, c.danger, su),
                 ],
               ),
             );
@@ -333,14 +352,20 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
   Widget _predBadge(String label, double value, Color color, ScreenUtil su) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(10), vertical: su.setWidth(4)),
+      padding: EdgeInsets.symmetric(
+        horizontal: su.setWidth(10),
+        vertical: su.setWidth(4),
+      ),
       decoration: BoxDecoration(
         color: color.withAlpha(20),
         borderRadius: BorderRadius.circular(su.setWidth(6)),
       ),
       child: Text(
         '$label: ${value.toStringAsFixed(1)}',
-        style: TextStyle(fontSize: su.setSp(20), fontWeight: FontWeight.w600, color: color),
+        style: AppTypography.captionSm.copyWith(
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
       ),
     );
   }
@@ -352,23 +377,29 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
     if (data == null) return const SizedBox.shrink();
 
     final su = ScreenUtil();
-    final subtitleColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     return Padding(
       padding: EdgeInsets.only(top: su.setWidth(8)),
       child: Row(
         children: [
-          Icon(Icons.pending_actions, size: su.setWidth(28), color: subtitleColor),
+          Icon(
+            Icons.pending_actions,
+            size: su.setWidth(28),
+            color: subtitleColor,
+          ),
           SizedBox(width: su.setWidth(6)),
           Text(
             'Mempool',
-            style: TextStyle(fontSize: su.setSp(22), color: subtitleColor),
+            style: AppTypography.caption.copyWith(color: subtitleColor),
           ),
           SizedBox(width: su.setWidth(8)),
           if (data.pendingCount != null)
             Text(
               '${_formatCount(data.pendingCount!)} pending',
-              style: TextStyle(fontSize: su.setSp(22), color: data.congestionColor),
+              style: AppTypography.caption.copyWith(
+                color: data.congestionColor,
+              ),
             ),
           const Spacer(),
           Container(
@@ -409,13 +440,11 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
 
   Widget buildFooter() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(8)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
       child: Text(
         S.of(context).g_key_gas_footer,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
         ),
         textAlign: TextAlign.center,
       ),

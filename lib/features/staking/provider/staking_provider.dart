@@ -11,12 +11,7 @@ import 'package:n42_wallet/features/staking/api/sol_staking_api.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 
 /// Staking 状态枚举
-enum StakingState {
-  initial,
-  loading,
-  loaded,
-  error,
-}
+enum StakingState { initial, loading, loaded, error }
 
 /// Staking Provider
 ///
@@ -57,12 +52,14 @@ class StakingProvider extends ChangeNotifier {
   List<StakingProtocol> get supportedProtocols => StakingProtocols.all;
 
   /// 获取用户所有活跃仓位
-  List<StakingPosition> get activePositions =>
-      _positions.where((p) => p.status == StakingPositionStatus.active).toList();
+  List<StakingPosition> get activePositions => _positions
+      .where((p) => p.status == StakingPositionStatus.active)
+      .toList();
 
   /// 获取用户所有解绑中的仓位
-  List<StakingPosition> get unbondingPositions =>
-      _positions.where((p) => p.status == StakingPositionStatus.unbonding).toList();
+  List<StakingPosition> get unbondingPositions => _positions
+      .where((p) => p.status == StakingPositionStatus.unbonding)
+      .toList();
 
   /// 计算总质押价值
   BigInt get totalStakedValue {
@@ -115,13 +112,15 @@ class StakingProvider extends ChangeNotifier {
 
         case StakingChainType.solana:
           _validators = _extractList<Validator>(
-              await _solApi.getValidators(limit: 100));
+            await _solApi.getValidators(limit: 100),
+          );
           _tryUpdateApy(await _solApi.getEstimatedApy());
           break;
 
         case StakingChainType.cosmos:
           _validators = _extractList<Validator>(
-              await _atomApi.getValidators(limit: 100));
+            await _atomApi.getValidators(limit: 100),
+          );
           _tryUpdateApy(await _atomApi.getInflationAndApy(), mapKey: 'apy');
           break;
 
@@ -139,7 +138,10 @@ class StakingProvider extends ChangeNotifier {
   }
 
   /// 加载用户质押仓位
-  Future<void> loadUserPositions(String address, StakingChainType chainType) async {
+  Future<void> loadUserPositions(
+    String address,
+    StakingChainType chainType,
+  ) async {
     _state = StakingState.loading;
     notifyListeners();
 
@@ -154,22 +156,26 @@ class StakingProvider extends ChangeNotifier {
 
         case StakingChainType.solana:
           _positions = _extractList<StakingPosition>(
-              await _solApi.getStakeAccounts(address));
+            await _solApi.getStakeAccounts(address),
+          );
           break;
 
         case StakingChainType.cosmos:
           final allPositions = <StakingPosition>[
             ..._extractList<StakingPosition>(
-                await _atomApi.getDelegations(address)),
+              await _atomApi.getDelegations(address),
+            ),
             ..._extractList<StakingPosition>(
-                await _atomApi.getUnbondingDelegations(address)),
+              await _atomApi.getUnbondingDelegations(address),
+            ),
           ];
 
           // 获取待领取奖励并更新仓位
           final rewardsResult = await _atomApi.getDelegationRewards(address);
           if (!rewardsResult.error && rewardsResult.data != null) {
             final rewardsData = rewardsResult.data as Map<String, dynamic>;
-            final byValidator = rewardsData['byValidator'] as Map<String, BigInt>;
+            final byValidator =
+                rewardsData['byValidator'] as Map<String, BigInt>;
 
             for (var position in allPositions) {
               if (position.validator != null &&
@@ -182,7 +188,8 @@ class StakingProvider extends ChangeNotifier {
                   validator: position.validator,
                   stakedAmount: position.stakedAmount,
                   rewardsEarned: position.rewardsEarned,
-                  pendingRewards: byValidator[position.validator!.address] ?? BigInt.zero,
+                  pendingRewards:
+                      byValidator[position.validator!.address] ?? BigInt.zero,
                   stakedAt: position.stakedAt,
                   unbondingAt: position.unbondingAt,
                   status: position.status,
@@ -208,7 +215,9 @@ class StakingProvider extends ChangeNotifier {
   }
 
   /// 加载所有链的用户仓位
-  Future<void> loadAllUserPositions(Map<StakingChainType, String> addresses) async {
+  Future<void> loadAllUserPositions(
+    Map<StakingChainType, String> addresses,
+  ) async {
     _state = StakingState.loading;
     notifyListeners();
 
@@ -230,15 +239,24 @@ class StakingProvider extends ChangeNotifier {
             break;
 
           case StakingChainType.solana:
-            allPositions.addAll(_extractList<StakingPosition>(
-                await _solApi.getStakeAccounts(address)));
+            allPositions.addAll(
+              _extractList<StakingPosition>(
+                await _solApi.getStakeAccounts(address),
+              ),
+            );
             break;
 
           case StakingChainType.cosmos:
-            allPositions.addAll(_extractList<StakingPosition>(
-                await _atomApi.getDelegations(address)));
-            allPositions.addAll(_extractList<StakingPosition>(
-                await _atomApi.getUnbondingDelegations(address)));
+            allPositions.addAll(
+              _extractList<StakingPosition>(
+                await _atomApi.getDelegations(address),
+              ),
+            );
+            allPositions.addAll(
+              _extractList<StakingPosition>(
+                await _atomApi.getUnbondingDelegations(address),
+              ),
+            );
             break;
 
           case StakingChainType.polkadot:
@@ -327,7 +345,9 @@ class StakingProvider extends ChangeNotifier {
           return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
-          return StakingTransactionResponse.error('DOT staking not yet implemented');
+          return StakingTransactionResponse.error(
+            'DOT staking not yet implemented',
+          );
       }
     } catch (e) {
       return StakingTransactionResponse.error(e.toString());
@@ -367,7 +387,9 @@ class StakingProvider extends ChangeNotifier {
           return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
-          return StakingTransactionResponse.error('DOT unstaking not yet implemented');
+          return StakingTransactionResponse.error(
+            'DOT unstaking not yet implemented',
+          );
       }
     } catch (e) {
       return StakingTransactionResponse.error(e.toString());
@@ -404,7 +426,9 @@ class StakingProvider extends ChangeNotifier {
           return _extractTxResponse(result);
 
         case StakingChainType.polkadot:
-          return StakingTransactionResponse.error('DOT claim not yet implemented');
+          return StakingTransactionResponse.error(
+            'DOT claim not yet implemented',
+          );
       }
     } catch (e) {
       return StakingTransactionResponse.error(e.toString());
@@ -414,8 +438,14 @@ class StakingProvider extends ChangeNotifier {
   /// 获取质押统计
   StakingStats getStats() {
     final activePos = activePositions;
-    final totalStaked = activePos.fold(BigInt.zero, (sum, p) => sum + p.stakedAmount);
-    final totalRewards = activePos.fold(BigInt.zero, (sum, p) => sum + p.pendingRewards);
+    final totalStaked = activePos.fold(
+      BigInt.zero,
+      (sum, p) => sum + p.stakedAmount,
+    );
+    final totalRewards = activePos.fold(
+      BigInt.zero,
+      (sum, p) => sum + p.pendingRewards,
+    );
     final totalApy = activePos.fold(0.0, (sum, p) => sum + p.protocol.apy);
 
     return StakingStats(

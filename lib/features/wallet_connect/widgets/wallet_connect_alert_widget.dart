@@ -8,7 +8,7 @@ import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/tx_simulation_card.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +27,11 @@ class WalletConnectAlertWidget extends ConsumerStatefulWidget {
   final wallet_connect.PairingMetadata metadata;
   final Map<String, dynamic> actionDataMap;
 
-  const WalletConnectAlertWidget(this.metadata, this.actionDataMap, {super.key});
+  const WalletConnectAlertWidget(
+    this.metadata,
+    this.actionDataMap, {
+    super.key,
+  });
 
   @override
   ConsumerState<WalletConnectAlertWidget> createState() =>
@@ -60,7 +64,10 @@ class _WalletConnectAlertWidgetState
     final chain = _coinTypeToChain(coinType);
     if (chain == null) return;
 
-    final info = await const TokenViewEnhancedApi().getContractCreator(chain, toAddr);
+    final info = await const TokenViewEnhancedApi().getContractCreator(
+      chain,
+      toAddr,
+    );
     if (mounted && info != null && (info.creatorAddress?.isNotEmpty ?? false)) {
       setState(() => _contractCreatorInfo = info);
     }
@@ -73,18 +80,21 @@ class _WalletConnectAlertWidgetState
     }
   }
 
-  static String? _coinTypeToChain(String coinType) => switch (coinType.toUpperCase()) {
-    'ETH' || 'N' => 'eth',
-    'BNB' => 'bnb',
-    'BASE' => 'base',
-    'TRX' => 'trx',
-    _ => null,
-  };
+  static String? _coinTypeToChain(String coinType) =>
+      switch (coinType.toUpperCase()) {
+        'ETH' || 'N' => 'eth',
+        'BNB' => 'bnb',
+        'BASE' => 'base',
+        'TRX' => 'trx',
+        _ => null,
+      };
 
   Future<void> _runSimulation() async {
     final coinType = widget.actionDataMap['coinType'] as String? ?? '';
     if (coinType.isEmpty) {
-      if (mounted) setState(() => _simResult = TxSimulationResult.unavailable());
+      if (mounted) {
+        setState(() => _simResult = TxSimulationResult.unavailable());
+      }
       return;
     }
 
@@ -128,7 +138,8 @@ class _WalletConnectAlertWidgetState
       );
     } else {
       // Message sign — try EIP-712 typed data analysis
-      riskAnalysis = TxRiskAnalyzer.analyzeTypedData(
+      riskAnalysis =
+          TxRiskAnalyzer.analyzeTypedData(
             widget.actionDataMap['data'] as String?,
           ) ??
           const TxRiskAnalysis(
@@ -199,13 +210,11 @@ class _WalletConnectAlertWidgetState
             width: ScreenUtil().setWidth(60),
             placeholder: 'assets/img/list_default.png',
           ),
-          SizedBox(width: ScreenUtil().setWidth(10)),
+          SizedBox(width: AppSpacing.space2),
           Text(
             widget.metadata.name,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
         ],
@@ -221,14 +230,12 @@ class _WalletConnectAlertWidgetState
       height: ScreenUtil().setWidth(60),
       width: double.infinity,
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Text(
         isTransaction ? s.s_key_3 : s.g_connect_key12,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+        style: AppTypography.body.copyWith(
           fontWeight: FontWeight.w600,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
     );
@@ -260,7 +267,9 @@ class _WalletConnectAlertWidgetState
     for (var i = 0; i < fields.length; i++) {
       if (i > 0) children.add(_divider(context));
       final (label, key) = fields[i];
-      children.add(_itemWidget(context, label, widget.actionDataMap[key] ?? ''));
+      children.add(
+        _itemWidget(context, label, widget.actionDataMap[key] ?? ''),
+      );
     }
     return Column(children: children);
   }
@@ -304,14 +313,9 @@ class _WalletConnectAlertWidgetState
         right: ScreenUtil().setWidth(30),
       ),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.backGroundColor.name),
+        color: AppColorTokens.of(context).bgBase,
         border: Border(
-          top: BorderSide(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.dividerColor.name),
-            width: 1,
-          ),
+          top: BorderSide(color: AppColorTokens.of(context).border, width: 1),
         ),
       ),
       child: Row(
@@ -319,14 +323,18 @@ class _WalletConnectAlertWidgetState
           Expanded(
             child: SizedBox(
               height: ScreenUtil().setWidth(88),
-              child: buttonStyle2(context, onCancel, cancelLabel),
+              child: AppButton(
+                label: cancelLabel,
+                variant: AppButtonVariant.secondary,
+                onPressed: onCancel,
+              ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: SizedBox(
               height: ScreenUtil().setWidth(88),
-              child: buttonStyle2(context, onConfirm, confirmLabel),
+              child: AppButton(label: confirmLabel, onPressed: onConfirm),
             ),
           ),
         ],
@@ -337,38 +345,36 @@ class _WalletConnectAlertWidgetState
   // ── Shared helpers ────────────────────────────────────────────────────────────
 
   Widget _divider(BuildContext context) => Divider(
-        height: ScreenUtil().setWidth(1),
-        indent: ScreenUtil().setWidth(30),
-        endIndent: ScreenUtil().setWidth(30),
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.dividerColor.name),
-      );
+    height: ScreenUtil().setWidth(1),
+    indent: ScreenUtil().setWidth(30),
+    endIndent: ScreenUtil().setWidth(30),
+    color: AppColorTokens.of(context).border,
+  );
 
   Widget _itemWidget(BuildContext context, String title, String value) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.ff888888.name),
+                context,
+                AppThemeKeys.ff888888.name,
+              ),
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainTextColor.name),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
               ),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
@@ -392,13 +398,13 @@ class _WalletConnectAlertWidgetState
       final IconData tagIcon;
       switch (_toAddressLabel!.riskLevel) {
         case 'danger':
-          tagColor = const Color(0xFFF44336);
+          tagColor = AppColorTokens.of(context).danger;
           tagIcon = Icons.dangerous_outlined;
         case 'caution':
-          tagColor = const Color(0xFFFF9800);
+          tagColor = AppColorTokens.of(context).warning;
           tagIcon = Icons.warning_amber_outlined;
         default:
-          tagColor = const Color(0xFF4CAF50);
+          tagColor = AppColorTokens.of(context).success;
           tagIcon = Icons.verified_outlined;
       }
       items.add(
@@ -422,15 +428,16 @@ class _WalletConnectAlertWidgetState
                   children: [
                     Text(
                       _toAddressLabel!.name,
-                      style: TextStyle(
-                        fontSize: su.setSp(24),
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w600,
                         color: tagColor,
                       ),
                     ),
                     Text(
                       _toAddressLabel!.category.toUpperCase(),
-                      style: TextStyle(fontSize: su.setSp(20), color: tagColor.withAlpha(180)),
+                      style: AppTypography.captionSm.copyWith(
+                        color: tagColor.withAlpha(180),
+                      ),
                     ),
                   ],
                 ),
@@ -446,6 +453,8 @@ class _WalletConnectAlertWidgetState
       final isNew = _contractCreatorInfo!.isNewContract;
       final ageDays = _contractCreatorInfo!.contractAgeDays;
       final creatorAddr = _contractCreatorInfo!.creatorAddress ?? '';
+      final c = AppColorTokens.of(context);
+      final contractAccent = isNew ? c.warning : c.brand;
 
       items.add(
         Container(
@@ -455,9 +464,9 @@ class _WalletConnectAlertWidgetState
             vertical: su.setWidth(10),
           ),
           decoration: BoxDecoration(
-            color: (isNew ? Colors.orange : Colors.blue).withAlpha(15),
+            color: contractAccent.withAlpha(15),
             borderRadius: BorderRadius.circular(su.setWidth(12)),
-            border: Border.all(color: (isNew ? Colors.orange : Colors.blue).withAlpha(40)),
+            border: Border.all(color: contractAccent.withAlpha(40)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -467,15 +476,14 @@ class _WalletConnectAlertWidgetState
                   Icon(
                     Icons.code,
                     size: su.setWidth(28),
-                    color: isNew ? Colors.orange : Colors.blue,
+                    color: contractAccent,
                   ),
                   SizedBox(width: su.setWidth(8)),
                   Text(
                     'Contract Info',
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                      color: AppColorTokens.of(context).textPrimary,
                     ),
                   ),
                 ],
@@ -484,17 +492,19 @@ class _WalletConnectAlertWidgetState
               if (creatorAddr.isNotEmpty)
                 Text(
                   'Creator: ${creatorAddr.length > 16 ? '${creatorAddr.substring(0, 8)}...${creatorAddr.substring(creatorAddr.length - 8)}' : creatorAddr}',
-                  style: TextStyle(
-                    fontSize: su.setSp(22),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               if (ageDays != null)
                 Text(
-                  'Age: ${ageDays >= 365 ? '${(ageDays / 365).toStringAsFixed(1)} years' : ageDays >= 30 ? '${(ageDays / 30).toStringAsFixed(0)} months' : '$ageDays days'}',
-                  style: TextStyle(
-                    fontSize: su.setSp(22),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  'Age: ${ageDays >= 365
+                      ? '${(ageDays / 365).toStringAsFixed(1)} years'
+                      : ageDays >= 30
+                      ? '${(ageDays / 30).toStringAsFixed(0)} months'
+                      : '$ageDays days'}',
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               if (isNew)
@@ -502,10 +512,9 @@ class _WalletConnectAlertWidgetState
                   padding: EdgeInsets.only(top: su.setWidth(6)),
                   child: Text(
                     '⚠ New contract (< 7 days), proceed with caution',
-                    style: TextStyle(
-                      fontSize: su.setSp(22),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: Colors.orange,
+                      color: AppColorTokens.of(context).warning,
                     ),
                   ),
                 ),

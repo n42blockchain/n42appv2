@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_background.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 
@@ -14,10 +14,7 @@ import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 class BackgroundMiningWidget extends StatelessWidget {
   final MiningV2Provider mpValue;
 
-  const BackgroundMiningWidget({
-    super.key,
-    required this.mpValue,
-  });
+  const BackgroundMiningWidget({super.key, required this.mpValue});
 
   @override
   Widget build(BuildContext context) {
@@ -29,32 +26,34 @@ class BackgroundMiningWidget extends StatelessWidget {
     final isEnabled = mpValue.depositsEnable == true;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(20)),
       decoration: BoxDecoration(
         gradient: isEnabled
             ? LinearGradient(
                 colors: [
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.08),
-                  AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.02),
+                  AppColorTokens.of(context).brand.withValues(alpha: 0.08),
+                  AppColorTokens.of(context).brand.withValues(alpha: 0.02),
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
             : null,
-        color: isEnabled ? null : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        color: isEnabled ? null : AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
         border: Border.all(
           color: isEnabled
-              ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.2)
-              : (isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.04)),
+              ? AppColorTokens.of(context).brand.withValues(alpha: 0.2)
+              : (isDark
+                    ? Colors.white.withValues(alpha: 0.06)
+                    : Colors.black.withValues(alpha: 0.04)),
           width: 1,
         ),
       ),
       child: Row(
         children: [
           _buildIcon(context),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           _buildTitleSection(context, isEnabled),
           _buildLaunchButton(context, isEnabled, isDark),
         ],
@@ -67,8 +66,8 @@ class BackgroundMiningWidget extends StatelessWidget {
       width: ScreenUtil().setWidth(72),
       height: ScreenUtil().setWidth(72),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(18)),
+        color: AppColorTokens.of(context).brand.withValues(alpha: 0.12),
+        borderRadius: AppRadius.brMd,
       ),
       child: Center(
         child: Image.asset(
@@ -87,22 +86,20 @@ class BackgroundMiningWidget extends StatelessWidget {
         children: [
           Text(
             S.of(context).g_mining_key_9,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
-              color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(6)),
+          SizedBox(height: AppSpacing.space2),
           Text(
             isEnabled
                 ? S.of(context).g_key_mining_available
                 : S.of(context).g_key_mining_requires_staking,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
+            style: AppTypography.caption.copyWith(
               color: isEnabled
-                  ? AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name)
-                  : AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ? AppColorTokens.of(context).brand
+                  : AppColorTokens.of(context).textSubtitle,
             ),
           ),
         ],
@@ -122,37 +119,40 @@ class BackgroundMiningWidget extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: isEnabled ? () => MiningBackground().backgroundStart() : null,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
+        borderRadius: AppRadius.brXl,
         child: Container(
           padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(28),
-            vertical: ScreenUtil().setWidth(14),
+            horizontal: AppSpacing.space8,
+            vertical: AppSpacing.space4,
           ),
           decoration: BoxDecoration(
             gradient: isEnabled
                 ? LinearGradient(
                     colors: [
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
-                      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.85),
+                      AppColorTokens.of(context).brand,
+                      AppColorTokens.of(context).brand.withValues(alpha: 0.85),
                     ],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   )
                 : null,
             color: isEnabled ? null : disabledBgColor,
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-            boxShadow: isEnabled ? [
-              BoxShadow(
-                color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name).withValues(alpha: 0.3),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ] : null,
+            borderRadius: AppRadius.brXl,
+            boxShadow: isEnabled
+                ? [
+                    BoxShadow(
+                      color: AppColorTokens.of(
+                        context,
+                      ).brand.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
           ),
           child: Text(
             S.of(context).g_key_wallet_c4,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(24),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
               color: isEnabled ? Colors.white : disabledTextColor,
             ),

@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/provider/mining_v2_provider.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/detail_refresh_widget.dart';
 
 part 'mining_node_detail_widgets.dart';
@@ -37,9 +37,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_mining_node_key1,
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_mining_node_key1),
       body: SafeArea(
         child: DetailRefreshWidget(
           callback: () async {
@@ -47,8 +45,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
           },
           childWidget: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30),
-              vertical: ScreenUtil().setWidth(20),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space4,
             ),
             child: node == null
                 ? _buildEmpty(context)
@@ -56,13 +54,13 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       _buildStatusHeader(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: AppSpacing.space4),
                       _buildTwoColumnCards(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(20)),
+                      SizedBox(height: AppSpacing.space4),
                       _buildInfoList(context, mpValue, node, isDark),
-                      SizedBox(height: ScreenUtil().setWidth(24)),
+                      SizedBox(height: AppSpacing.space6),
                       _buildRedemptionSection(context, mpValue),
-                      SizedBox(height: ScreenUtil().setWidth(60)),
+                      SizedBox(height: AppSpacing.space16),
                     ],
                   ),
           ),
@@ -77,14 +75,14 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
     FullNodeEntity node,
     bool isDark,
   ) {
-    final badgeColor = _statusColor(node.status);
+    final badgeColor = _statusColor(context, node.status);
     final pubKey = node.id;
     final shortKey = pubKey.length > 12
         ? '${pubKey.substring(0, 8)}...${pubKey.substring(pubKey.length - 6)}'
         : pubKey;
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: _cardDecoration(context, isDark),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,12 +91,12 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
             children: [
               Container(
                 padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(16),
-                  vertical: ScreenUtil().setWidth(6),
+                  horizontal: AppSpacing.space4,
+                  vertical: AppSpacing.space2,
                 ),
                 decoration: BoxDecoration(
                   color: badgeColor.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+                  borderRadius: AppRadius.brMd,
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -111,12 +109,11 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                         shape: BoxShape.circle,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(8)),
+                    SizedBox(width: AppSpacing.space2),
                     Text(
                       _statusLabel(context, node.status),
-                      style: TextStyle(
+                      style: AppTypography.caption.copyWith(
                         color: badgeColor,
-                        fontSize: ScreenUtil().setSp(22),
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -126,25 +123,21 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               const Spacer(),
               Text(
                 node.name,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemSubtitleTextColor.name),
-                  fontSize: ScreenUtil().setSp(22),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Flexible(
                 flex: 0,
                 child: Text(
                   '${S.of(context).g_mining_node_key2}: ',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
@@ -153,10 +146,8 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
               Expanded(
                 child: Text(
                   shortKey,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w500,
                   ),
                   maxLines: 1,
@@ -173,8 +164,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                   child: Icon(
                     Icons.copy_outlined,
                     size: ScreenUtil().setWidth(32),
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainBlueColor.name),
+                    color: AppColorTokens.of(context).brand,
                   ),
                 ),
               ),
@@ -186,8 +176,7 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
   }
 
   Widget _buildEmpty(BuildContext context) {
-    final subColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
+    final subColor = AppColorTokens.of(context).textSubtitle;
     return SizedBox(
       height: ScreenUtil().setWidth(400),
       child: Center(
@@ -207,16 +196,13 @@ class _MiningNodeDetailPageState extends ConsumerState<MiningNodeDetailPage>
                 color: subColor.withValues(alpha: 0.5),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(20)),
+            SizedBox(height: AppSpacing.space4),
             Text(
               S.of(context).g_mining_key_47,
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: subColor,
-                fontSize: ScreenUtil().setSp(24),
-              ),
+              style: AppTypography.caption.copyWith(color: subColor),
             ),
           ],
         ),

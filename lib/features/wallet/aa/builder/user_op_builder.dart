@@ -25,9 +25,13 @@ class UserOpBuilder {
   BigInt? _nonce;
   Uint8List? _initCode;
   Uint8List? _callData;
-  BigInt _verificationGasLimit = BigInt.from(AAConstants.defaultVerificationGasLimit);
+  BigInt _verificationGasLimit = BigInt.from(
+    AAConstants.defaultVerificationGasLimit,
+  );
   BigInt _callGasLimit = BigInt.from(AAConstants.defaultCallGasLimit);
-  BigInt _preVerificationGas = BigInt.from(AAConstants.defaultPreVerificationGas);
+  BigInt _preVerificationGas = BigInt.from(
+    AAConstants.defaultPreVerificationGas,
+  );
   BigInt _maxPriorityFeePerGas = BigInt.zero;
   BigInt _maxFeePerGas = BigInt.zero;
   Uint8List? _paymasterAndData;
@@ -83,7 +87,10 @@ class UserOpBuilder {
   }
 
   /// Set init code from factory address and call data
-  UserOpBuilder setInitCodeFromFactory(String factoryAddress, Uint8List factoryCallData) {
+  UserOpBuilder setInitCodeFromFactory(
+    String factoryAddress,
+    Uint8List factoryCallData,
+  ) {
     final factoryBytes = hexToBytes(factoryAddress.replaceFirst('0x', ''));
     _initCode = Uint8List(factoryBytes.length + factoryCallData.length);
     _initCode!.setAll(0, factoryBytes);
@@ -113,7 +120,10 @@ class UserOpBuilder {
     required String to,
     required BigInt amount,
   }) {
-    final transferData = CalldataBuilder.buildErc20Transfer(to: to, amount: amount);
+    final transferData = CalldataBuilder.buildErc20Transfer(
+      to: to,
+      amount: amount,
+    );
     _callData = CalldataBuilder.buildExecute(
       target: tokenAddress,
       value: BigInt.zero,
@@ -234,7 +244,8 @@ class UserOpBuilder {
     if (_callData!.length > AAConstants.maxCalldataSize) {
       throw UserOperationBuildError(
         'Call data exceeds maximum size',
-        details: 'Max: ${AAConstants.maxCalldataSize}, Got: ${_callData!.length}',
+        details:
+            'Max: ${AAConstants.maxCalldataSize}, Got: ${_callData!.length}',
       );
     }
   }
@@ -248,7 +259,10 @@ class UserOpBuilder {
       nonce: _nonce!,
       initCode: _initCode,
       callData: _callData!,
-      accountGasLimits: PackedGasLimits.pack(_verificationGasLimit, _callGasLimit),
+      accountGasLimits: PackedGasLimits.pack(
+        _verificationGasLimit,
+        _callGasLimit,
+      ),
       preVerificationGas: _preVerificationGas,
       gasFees: PackedGasFees.pack(_maxPriorityFeePerGas, _maxFeePerGas),
       paymasterAndData: _paymasterAndData,
@@ -282,7 +296,10 @@ class UserOpBuilder {
         nonce: _nonce!,
         initCode: _initCode,
         callData: _callData!,
-        accountGasLimits: PackedGasLimits.pack(_verificationGasLimit, _callGasLimit),
+        accountGasLimits: PackedGasLimits.pack(
+          _verificationGasLimit,
+          _callGasLimit,
+        ),
         preVerificationGas: _preVerificationGas,
         gasFees: PackedGasFees.pack(_maxPriorityFeePerGas, _maxFeePerGas),
         paymasterAndData: _paymasterAndData,
@@ -344,11 +361,7 @@ class UserOpFactory {
       ..setSenderFromAccount(account)
       ..setNonce(nonce)
       ..setInitCode(initCode)
-      ..setErc20Transfer(
-        tokenAddress: tokenAddress,
-        to: to,
-        amount: amount,
-      )
+      ..setErc20Transfer(tokenAddress: tokenAddress, to: to, amount: amount)
       ..setGasFees(
         maxFeePerGas: maxFeePerGas,
         maxPriorityFeePerGas: maxPriorityFeePerGas,

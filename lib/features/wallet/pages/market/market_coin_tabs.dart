@@ -8,6 +8,7 @@ part of 'market_page.dart';
 class _TrendingTab extends StatelessWidget {
   final List<Map<String, dynamic>> coins;
   final bool loading;
+
   /// When true, [coins] come from N42 backend (watchlist-format fields).
   final bool isFallback;
   final List<String> watchlistSymbols;
@@ -60,7 +61,8 @@ class _TrendingTab extends StatelessWidget {
             coin: coin,
             source: source,
             inWatchlist: watchlistSymbols.contains(symbol),
-            alertActive: priceAlerts.containsKey(coinId) &&
+            alertActive:
+                priceAlerts.containsKey(coinId) &&
                 (priceAlerts[coinId]?.enabled ?? false),
             onTap: () => onTap(coin),
             onToggleWatchlist: onToggleWatchlist,
@@ -97,10 +99,8 @@ class _SearchTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final itemBgColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
+    final itemBgColor = AppColorTokens.of(context).bgSurface;
     final subColor = textColor.withAlpha(153);
 
     return Column(
@@ -110,16 +110,20 @@ class _SearchTab extends StatelessWidget {
           child: TextField(
             controller: controller,
             onChanged: onChanged,
-            style: TextStyle(color: textColor, fontSize: 24.sp),
+            style: AppTypography.caption.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.w400,
+            ),
             decoration: InputDecoration(
               hintText: S.of(context).g_market_search_hint,
-              hintStyle: TextStyle(color: subColor, fontSize: 24.sp),
-              prefixIcon:
-                  Icon(Icons.search, color: subColor, size: 26.sp),
+              hintStyle: AppTypography.caption.copyWith(
+                color: subColor,
+                fontWeight: FontWeight.w400,
+              ),
+              prefixIcon: Icon(Icons.search, color: subColor, size: 26.sp),
               suffixIcon: controller.text.isNotEmpty
                   ? IconButton(
-                      icon: Icon(Icons.clear,
-                          color: subColor, size: 24.sp),
+                      icon: Icon(Icons.clear, color: subColor, size: 24.sp),
                       onPressed: () {
                         controller.clear();
                         onChanged('');
@@ -129,7 +133,9 @@ class _SearchTab extends StatelessWidget {
               filled: true,
               fillColor: itemBgColor,
               contentPadding: EdgeInsets.symmetric(
-                  horizontal: 16.w, vertical: 12.h),
+                horizontal: 16.w,
+                vertical: 12.h,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16.r),
                 borderSide: BorderSide.none,
@@ -145,10 +151,7 @@ class _SearchTab extends StatelessWidget {
   Widget _buildBody(BuildContext context) {
     if (loading) return const Center(child: CircularProgressIndicator());
     if (controller.text.trim().isEmpty) {
-      return _EmptyState(
-        icon: Icons.search,
-        message: 'Search for a coin',
-      );
+      return _EmptyState(icon: Icons.search, message: 'Search for a coin');
     }
     if (results.isEmpty) {
       return _EmptyState(
@@ -161,14 +164,14 @@ class _SearchTab extends StatelessWidget {
       itemCount: results.length,
       itemBuilder: (_, i) {
         final coin = results[i];
-        final symbol =
-            (coin['symbol'] ?? '').toString().toLowerCase();
+        final symbol = (coin['symbol'] ?? '').toString().toLowerCase();
         final coinId = coin['id']?.toString() ?? '';
         return _CoinTile(
           coin: coin,
           source: _CoinSource.search,
           inWatchlist: watchlistSymbols.contains(symbol),
-          alertActive: priceAlerts.containsKey(coinId) &&
+          alertActive:
+              priceAlerts.containsKey(coinId) &&
               (priceAlerts[coinId]?.enabled ?? false),
           onTap: () => onTap(coin),
           onToggleWatchlist: onToggleWatchlist,
@@ -216,14 +219,14 @@ class _WatchlistTab extends StatelessWidget {
         itemCount: coins.length,
         itemBuilder: (_, i) {
           final coin = coins[i];
-          final symbol =
-              (coin['coin'] ?? '').toString().toLowerCase();
+          final symbol = (coin['coin'] ?? '').toString().toLowerCase();
           final coinId = coin['coin_gecko_id']?.toString() ?? '';
           return _CoinTile(
             coin: coin,
             source: _CoinSource.watchlist,
             inWatchlist: symbols.contains(symbol),
-            alertActive: priceAlerts.containsKey(coinId) &&
+            alertActive:
+                priceAlerts.containsKey(coinId) &&
                 (priceAlerts[coinId]?.enabled ?? false),
             onTap: () => onTap(coin),
             onToggleWatchlist: onToggleWatchlist,

@@ -4,9 +4,8 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 高级操作区块（转移所有权等）
 class EnsAdvancedSection extends StatelessWidget {
@@ -17,29 +16,28 @@ class EnsAdvancedSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_ens_advanced,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ListTile(
             contentPadding: EdgeInsets.zero,
-            leading: const Icon(Icons.swap_horiz, color: Colors.red),
+            leading: Icon(
+              Icons.swap_horiz,
+              color: AppColorTokens.of(context).danger,
+            ),
             title: Text(S.of(context).g_key_ens_transfer),
             subtitle: Text(S.of(context).g_key_ens_transfer_desc),
             trailing: const Icon(Icons.chevron_right),

@@ -35,7 +35,9 @@ class StartMining implements UseCase<MiningSessionEntity, StartMiningParams> {
   StartMining(this._miningRepository, this._walletService);
 
   @override
-  Future<Either<Failure, MiningSessionEntity>> call(StartMiningParams params) async {
+  Future<Either<Failure, MiningSessionEntity>> call(
+    StartMiningParams params,
+  ) async {
     // Validate wallet exists
     final wallet = _walletService.getWalletByAddress(params.walletAddress);
     if (wallet == null) {
@@ -55,10 +57,7 @@ class StartMiningParams extends Equatable {
   final String planId;
   final String walletAddress;
 
-  const StartMiningParams({
-    required this.planId,
-    required this.walletAddress,
-  });
+  const StartMiningParams({required this.planId, required this.walletAddress});
 
   @override
   List<Object?> get props => [planId, walletAddress];
@@ -124,12 +123,8 @@ class ClaimRewardsParams extends Equatable {
   final String walletAddress;
   final String amount;
 
-  const ClaimRewardsParams({
-    required this.walletAddress,
-    required this.amount,
-  });
+  const ClaimRewardsParams({required this.walletAddress, required this.amount});
 
   @override
   List<Object?> get props => [walletAddress, amount];
 }
-

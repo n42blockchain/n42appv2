@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -8,6 +9,7 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/unified_send_page.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
@@ -91,7 +93,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   CoinModel get coinModel => widget.coinModel;
 
   @override
-  dynamic getCoinModel() => widget.coinModel;
+  CoinModel getCoinModel() => widget.coinModel;
 
   // ── Wallet provider ───────────────────────────────────────────────────────
 
@@ -172,7 +174,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       final wap = ref.read(wapBridgeProvider);
-      wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
+      wap.walletMap[widget.coinModel.config.coinType]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
       await fetchCoinBalance(widget.coinModel, wap);
@@ -225,30 +227,31 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   void _initData() {
     final cm = widget.coinModel;
     final coin = cm.coin;
-    final isContract = coin['isContract'] == true;
+    final config = cm.config;
+    final isContract = config.isContract;
 
     if (isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.coin['coinType'] == coin['coinType'],
+        (e) => e.config.coinType == config.coinType,
       );
       if (cIndex < 0) return;
       _chainCoinModel = wap.coinModels[cIndex];
-      _chainName = _chainCoinModel?.coin['name'];
-      _chainSymbol = _chainCoinModel?.coin['miniName'];
-      _tokenName = coin['name'];
-      _tokenSymbol = coin['miniName'];
+      _chainName = _chainCoinModel!.config.name;
+      _chainSymbol = _chainCoinModel!.config.miniName;
+      _tokenName = config.name;
+      _tokenSymbol = config.miniName;
       browserUrl = getBrowserTokenAddress(
-        coin['coinType'],
+        config.coinType,
         cm.address,
-        coin['contract'],
+        config.contract,
         isTest: cm.isTest,
       );
     } else {
-      _chainName = coin['name'];
-      _chainSymbol = coin['miniName'];
+      _chainName = config.name;
+      _chainSymbol = config.miniName;
       browserUrl = getBrowserAddress(
-        coin['coinType'],
+        config.coinType,
         cm.address,
         isTest: cm.isTest,
       );
@@ -282,18 +285,14 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
           children: [
             Text(
               '$_chainSymbol ($_chainName)',
-              style: TextStyle(
-                color: textColor,
-                fontSize: su.setSp(32.0),
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.title.copyWith(color: textColor),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: TextStyle(color: textColor, fontSize: su.setSp(24.0)),
+                style: AppTypography.caption.copyWith(color: textColor),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -306,8 +305,8 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               width: su.setWidth(40.0),
               height: su.setWidth(40.0),
               margin: EdgeInsets.only(
-                right: su.setWidth(40.0),
-                left: su.setWidth(20.0),
+                right: AppSpacing.space8,
+                left: AppSpacing.space4,
               ),
               child: Image.asset(
                 'assets/wallet/w_actions.png',
@@ -335,7 +334,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             children: [
               WalletChainInfoBoard(
                 address: cm.address,
-                coinType: cm.coin['coinType'],
+                coinType: cm.config.coinType,
                 balanceStr:
                     '${cm.balanceStringAll()}${cm.coin['unit'].toString().toUpperCase()}',
                 balanceDollarStr: '\$${cm.valueString()}',
@@ -375,20 +374,19 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
   Widget _buildTransactionHeader() {
     final su = ScreenUtil();
     final cm = widget.coinModel;
-    final isEth = cm.coin['blockchainType'] == BlockchainType.Ethereum.name;
+    final isEth = cm.config.blockchainType == BlockchainType.Ethereum.name;
 
     return Container(
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.symmetric(vertical: su.setWidth(20.0)),
-      margin: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       child: Row(
         children: [
           Expanded(
             child: Text(
               S.of(context).g_coin_key_1,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: _themeColor(AppThemeKeys.mainTextColor.name),
-                fontSize: su.setSp(30.0),
               ),
             ),
           ),
@@ -425,12 +423,12 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
 
     final su = ScreenUtil();
     final cm = widget.coinModel;
-    final isBtc = cm.coin['blockchainType'] == BlockchainType.Bitcoin.name;
+    final isBtc = cm.config.blockchainType == BlockchainType.Bitcoin.name;
 
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {
@@ -449,8 +447,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
-                style: TextStyle(
-                  fontSize: su.setSp(30.0),
+                style: AppTypography.body.copyWith(
                   color: _themeColor(AppThemeKeys.mainBlueColor.name),
                 ),
               ),

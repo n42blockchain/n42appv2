@@ -27,7 +27,10 @@ class XrpSender implements ChainSender {
     final xrpApi = XrpApi();
 
     // Check destination account activation
-    final mmDest = await xrpApi.getAccountInfoXrp(params.toAddress, params.isTest);
+    final mmDest = await xrpApi.getAccountInfoXrp(
+      params.toAddress,
+      params.isTest,
+    );
     if (mmDest.error) {
       return SendResult.fail(S.current.g_key_t_45(params.toAddress));
     }
@@ -37,12 +40,14 @@ class XrpSender implements ChainSender {
     }
 
     // Get balance
-    final mmb = await _tokenViewApi.getBalance(
-      BlockchainType.Ripple.name,
-      CoinType.XRP.name,
-      params.fromAddress,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmb =
+        await _tokenViewApi.getBalance(
+          BlockchainType.Ripple.name,
+          CoinType.XRP.name,
+          params.fromAddress,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -50,17 +55,22 @@ class XrpSender implements ChainSender {
     }
 
     // Get gas price
-    final mmg = await _tokenViewApi.getGasPrice(
-      BlockchainType.Ripple.name,
-      CoinType.XRP.name,
-      isTest: false,
-    ) ?? MessageModel.error();
+    final mmg =
+        await _tokenViewApi.getGasPrice(
+          BlockchainType.Ripple.name,
+          CoinType.XRP.name,
+          isTest: false,
+        ) ??
+        MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
     final gasPrice = mmg.data as BigInt;
     final gas = getCoinGas(CoinType.XRP.name, contract: false);
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amount.toString(),
+      params.decimals,
+    );
     double adjustedAmount = params.amount;
 
     if (valuePrice == chainBalance && params.sendMax) {
@@ -68,14 +78,21 @@ class XrpSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5('XRP'));
       }
       valuePrice = valuePrice - totalGasPrice;
-      adjustedAmount = toEther(valuePrice.toString(), params.decimals).toDouble();
+      adjustedAmount = toEther(
+        valuePrice.toString(),
+        params.decimals,
+      ).toDouble();
     }
-    if (valuePrice <= BigInt.zero || totalGasPrice + valuePrice > chainBalance) {
+    if (valuePrice <= BigInt.zero ||
+        totalGasPrice + valuePrice > chainBalance) {
       return SendResult.fail(S.current.g_key_wallet_m5('XRP'));
     }
 
     // Get sequence
-    final mmSeq = await xrpApi.getAccountInfoXrp(params.fromAddress, params.isTest);
+    final mmSeq = await xrpApi.getAccountInfoXrp(
+      params.fromAddress,
+      params.isTest,
+    );
     if (mmSeq.error) return SendResult.fail(mmSeq.data?.toString());
     final sequence = (mmSeq.data as Map<String, dynamic>)['sequence'] ?? 0;
 
@@ -93,7 +110,8 @@ class XrpSender implements ChainSender {
       'txType': 'XRP',
       'issuer': '',
       'currency': '',
-      if (params.destinationTag != null) 'destinationTag': params.destinationTag,
+      if (params.destinationTag != null)
+        'destinationTag': params.destinationTag,
     };
 
     final wi = globalWapAdapter.walletInfo;
@@ -111,7 +129,10 @@ class XrpSender implements ChainSender {
       );
     } else {
       signStr = await _trustdart.signTransaction(
-        CoinType.XRP.name, params.path, signMap, pk: params.privateKey!,
+        CoinType.XRP.name,
+        params.path,
+        signMap,
+        pk: params.privateKey!,
       );
     }
 
@@ -123,7 +144,9 @@ class XrpSender implements ChainSender {
       coinType: CoinType.XRP.name,
     );
     if (!sigResult.isValid) {
-      return SendResult.fail(sigResult.errorMessage ?? 'Signature validation failed');
+      return SendResult.fail(
+        sigResult.errorMessage ?? 'Signature validation failed',
+      );
     }
 
     final sendMm = await xrpApi.sendTxXrp(signStr, params.isTest);

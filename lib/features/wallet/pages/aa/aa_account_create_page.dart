@@ -4,10 +4,11 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/aa/account/smart_account_factory.dart';
 import 'package:n42_wallet/features/wallet/aa/core/aa_config.dart';
 import 'package:n42_wallet/features/wallet/aa/models/smart_account.dart';
@@ -134,12 +135,17 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
       );
 
       if (mounted) {
-        _showSnackBar(S.of(context).g_key_aa_account_created, Colors.green);
+        _showSnackBar(
+          S.of(context).g_key_aa_account_created,
+          AppColorTokens.of(context).success,
+        );
         completedWithExit = true;
         Navigator.pop(context, account);
       }
     } catch (e) {
-      if (mounted) _showSnackBar(e.toString(), Colors.red);
+      if (mounted) {
+        _showSnackBar(e.toString(), AppColorTokens.of(context).danger);
+      }
     } finally {
       if (mounted && !completedWithExit) {
         setState(() => isCreating = false);
@@ -152,20 +158,20 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_aa_create_account),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildLabelInput(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildChainSelector(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildTypeSelector(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildPreviewSection(),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
             _buildInfoSection(),
-            SizedBox(height: ScreenUtil().setWidth(32)),
+            SizedBox(height: AppSpacing.space8),
             _buildCreateButton(),
           ],
         ),

@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_crypto.dart';
 import 'package:n42_wallet/features/wallet/utils/wallet_backup_payload.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/comm_input.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:share_plus/share_plus.dart';
@@ -151,21 +151,21 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   Widget _buildBody(List<WalletInfo> wallets) {
     return SingleChildScrollView(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 警告
           _buildWarningBanner(),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
 
           // 钱包列表选择
           _label('Select Wallets to Backup'),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           ...List.generate(wallets.length, (i) => _walletTile(wallets[i], i)),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
 
           // 密码
           _label('Backup Password'),
@@ -184,26 +184,19 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           // 错误
           if (_error.isNotEmpty) ...[
             Container(
-              padding: EdgeInsets.all(ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.all(AppSpacing.space4),
               decoration: BoxDecoration(
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.errorBgColor.name,
-                ),
-                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+                color: AppColorTokens.of(context).dangerBg,
+                borderRadius: AppRadius.brSm,
               ),
               child: Text(
                 _error,
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.errorTextColor.name,
-                  ),
-                  fontSize: ScreenUtil().setSp(26),
+                style: AppTypography.bodySm.copyWith(
+                  color: AppColorTokens.of(context).danger,
                 ),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
           ],
 
           SizedBox(height: ScreenUtil().setWidth(160)),
@@ -213,10 +206,10 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   }
 
   Widget _buildWarningBanner() => Container(
-    padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+    padding: EdgeInsets.all(AppSpacing.space6),
     decoration: BoxDecoration(
       color: const Color(0xFFFFF3CD),
-      borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+      borderRadius: AppRadius.brMd,
       border: Border.all(color: const Color(0xFFFFD700), width: 1),
     ),
     child: Row(
@@ -227,16 +220,15 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           color: Color(0xFFD4A017),
           size: 20,
         ),
-        SizedBox(width: ScreenUtil().setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
             'This backup contains your private keys / mnemonics. '
             'wallet passwords and wallet settings. '
             'Keep the backup file and password safe. '
             'Never share them with anyone.',
-            style: TextStyle(
+            style: AppTypography.caption.copyWith(
               color: const Color(0xFF856404),
-              fontSize: ScreenUtil().setSp(24),
             ),
           ),
         ),
@@ -258,8 +250,8 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
       context,
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(20),
-        vertical: ScreenUtil().setWidth(16),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space4,
       ),
       child: Row(
         children: [
@@ -268,45 +260,31 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
             decoration: BoxDecoration(
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ).withValues(alpha: 0.1),
+              color: AppColorTokens.of(context).brand.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               wallet.hasMnemonic ? Icons.vpn_key : Icons.key,
               size: ScreenUtil().setWidth(24),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
-          SizedBox(width: ScreenUtil().setWidth(16)),
+          SizedBox(width: AppSpacing.space4),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   wallet.walletName ?? 'Wallet ${index + 1}',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(30),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   wallet.hasMnemonic ? 'Mnemonic wallet' : 'Private key wallet',
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.itemSubtitleTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -314,10 +292,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           ),
           Checkbox(
             value: isSelected,
-            activeColor: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.mainBlueColor.name,
-            ),
+            activeColor: AppColorTokens.of(context).brand,
             onChanged: (_) => _toggleSelection(index),
           ),
         ],
@@ -332,29 +307,24 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
   }) => containerStyle1(
     context,
     height: ScreenUtil().setWidth(120),
-    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
-    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(16)),
+    padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+    margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
     child: CommInput(
       type: InputFieldType.password,
       hintText: hintText,
       controller: controller,
       maxLines: 1,
-      style: TextStyle(
+      style: AppTypography.bodySm.copyWith(
         color: AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name),
-        fontSize: ScreenUtil().setSp(26),
       ),
     ),
   );
 
   Widget _label(String text) => Text(
     text,
-    style: TextStyle(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.mainTextColor.name,
-      ),
-      fontWeight: FontWeight.bold,
-      fontSize: ScreenUtil().setSp(32),
+    style: AppTypography.headline.copyWith(
+      color: AppColorTokens.of(context).textPrimary,
+      fontWeight: FontWeight.w600,
     ),
   );
 
@@ -363,30 +333,14 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     children: [
       Divider(height: ScreenUtil().setWidth(1)),
       Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         height: ScreenUtil().setWidth(148),
         width: double.infinity,
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.backGroundColor.name,
-        ),
-        child: buttonStyle6(
-          context,
-          () {
-            if (_load != Load.loading) _export();
-          },
-          'Create & Save Backup',
-          AppThemeUtils.getColorByKey(
-            context,
-            _load == Load.loading
-                ? AppThemeKeys.mainButtonBgColor3.name
-                : AppThemeKeys.mainButtonBgColor.name,
-          ),
-          AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainButtonTextColor.name,
-          ),
-          _load == Load.loading,
+        color: AppColorTokens.of(context).bgBase,
+        child: AppButton(
+          label: 'Create & Save Backup',
+          onPressed: () => _export(),
+          loading: _load == Load.loading,
         ),
       ),
     ],

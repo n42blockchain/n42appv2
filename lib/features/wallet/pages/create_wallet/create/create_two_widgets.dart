@@ -11,11 +11,9 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   List get mnemonicWordsList;
   String get mnemonicWords;
 
-  Color _itemBgColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
+  Color _itemBgColor() => AppColorTokens.of(context).bgSurface;
 
-  Color _itemTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name);
+  Color _itemTextColor() => AppColorTokens.of(context).textItem;
 
   Widget buildGridView() {
     return showMnemonic ? _buildMnemonicGrid() : _buildRevealPlaceholder();
@@ -23,7 +21,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
 
   Widget _buildMnemonicGrid() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: mnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -37,16 +35,13 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
         return Container(
           decoration: BoxDecoration(
             color: _itemBgColor(),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Center(
             child: Text(
               mnemonicWordsList[index],
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: _itemTextColor(),
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: _itemTextColor()),
             ),
           ),
         );
@@ -55,19 +50,16 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   }
 
   Widget _buildRevealPlaceholder() {
-    final textStyle = TextStyle(
-      color: _itemTextColor(),
-      fontSize: ScreenUtil().setSp(30),
-    );
+    final textStyle = AppTypography.body.copyWith(color: _itemTextColor());
     return InkWell(
       onTap: () => setState(() => showMnemonic = true),
       child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(400),
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -93,14 +85,13 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
   }
 
   Future<void> showSkipWidget() async {
-    final mainTextColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
     final child = Center(
       child: Container(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         decoration: BoxDecoration(
           color: _itemBgColor(),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16.0)),
+          borderRadius: AppRadius.brMd,
         ),
         constraints: BoxConstraints(
           minHeight: ScreenUtil().setWidth(472.0),
@@ -111,8 +102,7 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
           children: [
             Text(
               "${S.of(context).g_key_wallet_c18}?",
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(32.0),
+              style: AppTypography.headline.copyWith(
                 color: mainTextColor,
                 fontWeight: FontWeight.w600,
               ),
@@ -124,34 +114,26 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_key_wallet_c19,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(26.0),
-                  color: mainTextColor,
-                ),
+                style: AppTypography.bodySm.copyWith(color: mainTextColor),
                 textAlign: TextAlign.center,
               ),
             ),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: buttonStyle2(
-                context,
-                () => Navigator.pop(context, true),
-                S.of(context).g_mining_key62,
+              child: AppButton(
+                label: S.of(context).g_mining_key62,
+                onPressed: () => Navigator.pop(context, true),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(30.0)),
+            SizedBox(height: AppSpacing.space8),
             SizedBox(
               width: double.infinity,
               height: ScreenUtil().setWidth(80.0),
-              child: buttonStyle5(
-                context,
-                () => Navigator.pop(context, false),
-                S.of(context).g_key_79,
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonBgColor3.name),
-                AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
+              child: AppButton(
+                label: S.of(context).g_key_79,
+                variant: AppButtonVariant.secondary,
+                onPressed: () => Navigator.pop(context, false),
               ),
             ),
           ],
@@ -164,7 +146,9 @@ mixin _CreateTwoWidgetsMixin on State<CreateTwo> {
       widget.wInfo.mnemonic = mnemonicWords;
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => CreateFinish(wInfo: widget.wInfo)),
+        MaterialPageRoute(
+          builder: (context) => CreateFinish(wInfo: widget.wInfo),
+        ),
       );
     }
   }

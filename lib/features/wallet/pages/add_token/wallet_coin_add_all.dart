@@ -11,7 +11,7 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -32,7 +32,7 @@ part 'wallet_coin_add_all_network_dialog.dart';
 class WalletCoinAddAll extends ConsumerStatefulWidget {
   final String? coinType;
   final String seachStr;
-  const WalletCoinAddAll(this.seachStr,{this.coinType,super.key});
+  const WalletCoinAddAll(this.seachStr, {this.coinType, super.key});
 
   @override
   ConsumerState<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
@@ -65,9 +65,19 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
   String networkNameToken = "";
 
   static const _popularSymbolSet = {
-    'USDT', 'USDC', 'DAI', 'WBTC', 'WETH',
-    'UNI', 'LINK', 'AAVE', 'SHIB', 'PEPE',
-    'ARB', 'OP', 'MATIC',
+    'USDT',
+    'USDC',
+    'DAI',
+    'WBTC',
+    'WETH',
+    'UNI',
+    'LINK',
+    'AAVE',
+    'SHIB',
+    'PEPE',
+    'ARB',
+    'OP',
+    'MATIC',
   };
   List<dynamic> _popularTokens = [];
 
@@ -130,9 +140,8 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
             children: [
               Text(
                 S.of(context).g_token_m_key_3,
-                style: TextStyle(
+                style: AppTypography.headline.copyWith(
                   color: _color(AppThemeKeys.mainTextColor),
-                  fontSize: su.setSp(32.0),
                 ),
               ),
               InkWell(
@@ -142,9 +151,9 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                   children: [
                     Text(
                       _currentNetworkLabel,
-                      style: TextStyle(
+                      style: AppTypography.headline.copyWith(
+                        fontWeight: FontWeight.w400,
                         color: _color(AppThemeKeys.mainBlueColor),
-                        fontSize: su.setSp(30.0),
                       ),
                     ),
                     Icon(
@@ -169,7 +178,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
                     ? CircularProgressIndicator()
                     : SizedBox(),
               ),
-            )
+            ),
           ],
         ),
         body: SafeArea(
@@ -240,20 +249,21 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
           Expanded(
             child: TextField(
               controller: inputEditingController,
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _color(AppThemeKeys.mainTextColor),
-                fontSize: su.setWidth(30.0),
+                fontWeight: FontWeight.w400,
               ),
               textInputAction: TextInputAction.search,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: su.setWidth(26.0)),
+                contentPadding: EdgeInsets.symmetric(
+                  vertical: su.setWidth(26.0),
+                ),
                 isCollapsed: true,
                 hintText: S.of(context).g_key_163,
-                hintStyle: TextStyle(
-                  fontSize: su.setWidth(30.0),
+                hintStyle: AppTypography.headline.copyWith(
                   color: _color(AppThemeKeys.itemSubtitleTextColor),
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
@@ -278,8 +288,7 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).search,
-                style: TextStyle(
-                  fontSize: su.setSp(26.0),
+                style: AppTypography.bodySm.copyWith(
                   color: _color(AppThemeKeys.mainButtonTextColor),
                 ),
               ),
@@ -324,19 +333,22 @@ class _WalletCoinAddAllState extends ConsumerState<WalletCoinAddAll> {
             border: Border(
               bottom: BorderSide(
                 width: su.setWidth(2.0),
-                color: _color(selected
-                    ? AppThemeKeys.mainBlueColor
-                    : AppThemeKeys.itemLineColor),
+                color: _color(
+                  selected
+                      ? AppThemeKeys.mainBlueColor
+                      : AppThemeKeys.itemLineColor,
+                ),
               ),
             ),
           ),
           child: Text(
             label,
-            style: TextStyle(
-              color: _color(selected
-                  ? AppThemeKeys.mainBlueColor
-                  : AppThemeKeys.mainTextColor),
-              fontSize: su.setWidth(30.0),
+            style: AppTypography.headline.copyWith(
+              color: _color(
+                selected
+                    ? AppThemeKeys.mainBlueColor
+                    : AppThemeKeys.mainTextColor,
+              ),
               fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             ),
           ),

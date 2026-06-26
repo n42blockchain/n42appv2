@@ -42,8 +42,7 @@ class MiningChannel {
   Future<String?> runClient(Map<String, dynamic> params) =>
       _invoke('MiningRunClient', params);
 
-  Future<String?> stopClient() =>
-      _invoke('MiningStopClient');
+  Future<String?> stopClient() => _invoke('MiningStopClient');
 
   // ---------------------------------------------------------------------------
   // iOS LiveActivity (mining background indicator)
@@ -51,7 +50,8 @@ class MiningChannel {
 
   Future<MessageModel> liveActivityStart() async {
     try {
-      final int type = await globalProviderContainer
+      final int type =
+          await globalProviderContainer
               .read(spUtilProvider)
               .getBackgroundMiningMusic() ??
           0;

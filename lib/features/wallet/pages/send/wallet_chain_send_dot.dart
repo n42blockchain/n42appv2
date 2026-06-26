@@ -12,13 +12,14 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -70,7 +71,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
   Widget coinTypeWidget() {
     final List<Widget> cChildren = [
       RecentAddressBar(
-        coinType: widget.coinModel.coin['coinType'] ?? '',
+        coinType: widget.coinModel.config.coinType,
         onSelected: (addr) {
           toTextEditingController.text = addr;
           toAddressCheck(addr);
@@ -95,14 +96,12 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
         right: ScreenUtil().setWidth(30),
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(30.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space8,
       ),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
+        borderRadius: AppRadius.brMd,
         color: AppThemeUtils.getColorByKey(
           context,
           AppThemeKeys.errorBgColor2.name,
@@ -110,13 +109,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.errorTextColor.name,
-          ),
-        ),
+        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
       ),
     );
   }
@@ -132,27 +125,13 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
-            color: AppThemeUtils.getColorByKey(
-              context,
-              AppThemeKeys.backGroundColor.name,
-            ),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading ? '${S.of(context).g_key_106}...' : title,
-              AppThemeUtils.getColorByKey(
-                context,
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainButtonTextColor.name,
-              ),
-              isLoading,
+            color: AppColorTokens.of(context).bgBase,
+            child: AppButton(
+              label: title,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],
@@ -164,7 +143,7 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: "${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}",
+        text: "${S.of(context).g_key_37} ${widget.coinModel.config.miniName}",
       ),
       body: SafeArea(
         child: GestureDetector(

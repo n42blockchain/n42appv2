@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
@@ -16,7 +17,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/one_coin
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_manage_flags_utils.dart';
 import 'package:n42_wallet/features/wallet/widgets/item_wallet.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
@@ -130,26 +131,17 @@ class _WalletManageState extends ConsumerState<WalletManage> {
           ctx,
           AppThemeKeys.mainBlueColor.name,
         );
-        final actionStyle = TextStyle(
-          color: blueColor,
-          fontSize: ScreenUtil().setSp(28.0),
-        );
+        final actionStyle = AppTypography.body.copyWith(color: blueColor);
 
         return AlertDialog(
           title: Text(
             s.g_face_3,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(32.0),
-            ),
+            style: AppTypography.headline.copyWith(color: mainText),
           ),
           content: SingleChildScrollView(
             child: Text(
               s.g_key_192,
-              style: TextStyle(
-                color: mainText,
-                fontSize: ScreenUtil().setSp(28.0),
-              ),
+              style: AppTypography.body.copyWith(color: mainText),
             ),
           ),
           actions: [
@@ -194,17 +186,11 @@ class _WalletManageState extends ConsumerState<WalletManage> {
               child: Container(
                 alignment: Alignment.center,
                 height: ScreenUtil().setWidth(100.0),
-                padding: EdgeInsets.symmetric(
-                  horizontal: ScreenUtil().setWidth(30.0),
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Text(
                   S.of(context).g_key_113,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
-                    fontSize: ScreenUtil().setSp(30.0),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                 ),
               ),
@@ -271,22 +257,22 @@ class _WalletManageState extends ConsumerState<WalletManage> {
                     child: Container(
                       height: ScreenUtil().setWidth(148.0),
                       width: double.infinity,
-                      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
-                      color: AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.backGroundColor.name,
+                      padding: EdgeInsets.all(AppSpacing.space8),
+                      color: AppColorTokens.of(context).bgBase,
+                      child: AppButton(
+                        label: S.of(context).g_key_15,
+                        onPressed: () async {
+                          final mm = ref
+                              .read(wapBridgeProvider)
+                              .setMainWallet(widget.walletIndex);
+                          if (!context.mounted) return;
+                          if (mm.error) {
+                            ToastUtils.show(mm.data);
+                          } else {
+                            Navigator.pop(context, true);
+                          }
+                        },
                       ),
-                      child: buttonStyle2(context, () async {
-                        final mm = ref
-                            .read(wapBridgeProvider)
-                            .setMainWallet(widget.walletIndex);
-                        if (!context.mounted) return;
-                        if (mm.error) {
-                          ToastUtils.show(mm.data);
-                        } else {
-                          Navigator.pop(context, true);
-                        }
-                      }, S.of(context).g_key_15),
                     ),
                   ),
               ],
@@ -295,25 +281,22 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   }
 
   BoxDecoration get _tileDecoration => BoxDecoration(
-    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-    borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+    color: AppColorTokens.of(context).bgSurface,
+    borderRadius: AppRadius.brSm,
   );
 
   EdgeInsets get _tileMargin => EdgeInsets.symmetric(
-    horizontal: ScreenUtil().setWidth(30.0),
-    vertical: ScreenUtil().setWidth(10.0),
+    horizontal: AppSpacing.space8,
+    vertical: AppSpacing.space2,
   );
 
   EdgeInsets get _tilePadding => EdgeInsets.symmetric(
-    vertical: ScreenUtil().setWidth(20.0),
-    horizontal: ScreenUtil().setWidth(30.0),
+    vertical: AppSpacing.space4,
+    horizontal: AppSpacing.space8,
   );
 
   Widget _walletName(BuildContext context, String title, String value) {
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return InkWell(
       onTap: () async {
@@ -338,24 +321,18 @@ class _WalletManageState extends ConsumerState<WalletManage> {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: mainText,
-                fontSize: ScreenUtil().setSp(32.0),
-              ),
+              style: AppTypography.headline.copyWith(color: mainText),
             ),
             Expanded(
               child: Text(
                 value,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: mainText),
                 textAlign: TextAlign.right,
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(20.0)),
+            SizedBox(width: AppSpacing.space4),
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(30.0),
@@ -368,10 +345,7 @@ class _WalletManageState extends ConsumerState<WalletManage> {
   }
 
   Widget _itemWidget(String title, VoidCallback onTap) {
-    final mainText = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final mainText = AppColorTokens.of(context).textPrimary;
 
     return InkWell(
       onTap: onTap,
@@ -384,13 +358,10 @@ class _WalletManageState extends ConsumerState<WalletManage> {
             Expanded(
               child: Text(
                 title,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(32.0),
-                ),
+                style: AppTypography.headline.copyWith(color: mainText),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(10.0)),
+            SizedBox(width: AppSpacing.space2),
             Icon(
               Icons.arrow_forward_ios_sharp,
               size: ScreenUtil().setWidth(30.0),
@@ -411,10 +382,10 @@ class _WalletManageState extends ConsumerState<WalletManage> {
       itemBuilder: (context, index) {
         final model = coinList![index];
         return ItemWallet(
-          iconPath: model.coin['icon'] ?? '',
+          iconPath: model.config.icon,
           coinAddress: model.address ?? '',
-          coinType: model.coin['miniName'] ?? '',
-          fullName: model.coin['name'] ?? '',
+          coinType: model.config.miniName,
+          fullName: model.config.name,
           onTap: () async {
             final isEdit = await Navigator.push<bool>(
               context,

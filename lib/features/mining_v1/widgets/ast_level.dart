@@ -1,5 +1,5 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -13,13 +13,13 @@ class AstLevel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color:
-          AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-          borderRadius: BorderRadius.circular(
-              ScreenUtil().setWidth(16))),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
+      ),
       padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(40)),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space12,
+      ),
       child: _buildBoard(context),
     );
   }
@@ -27,9 +27,9 @@ class AstLevel extends StatelessWidget {
   Widget _buildBoard(BuildContext context) {
     final bigImage = "assets/mining/ast_$astNum.png";
     final levelText = switch (astNum) {
-      50  => S.of(context).g_mining_key_62,
+      50 => S.of(context).g_mining_key_62,
       100 => S.of(context).g_mining_key_61,
-      _   => S.of(context).g_mining_key_63,
+      _ => S.of(context).g_mining_key_63,
     };
     final times = astNum == 50 ? "70" : "15";
     return Column(
@@ -48,58 +48,50 @@ class AstLevel extends StatelessWidget {
                 children: [
                   Text(
                     levelText,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(32)),
+                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         "$astNum",
-                        style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontSize: ScreenUtil().setSp(104),
-                            fontWeight: FontWeight.bold),
+                        style: AppTypography.displayLg.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Text(
                         CoinType.N.name,
-                        style: TextStyle(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainTextColor.name),
-                            fontWeight: FontWeight.bold,
-                            fontSize: ScreenUtil().setSp(32)),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),
-                  SizedBox(height: ScreenUtil().setWidth(40)),
+                  SizedBox(height: AppSpacing.space12),
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Container(
                         decoration: BoxDecoration(
-                            color: AppThemeUtils.getColorByKey(
-                                context, AppThemeKeys.mainBlueColor.name),
-                            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8))),
+                          color: AppColorTokens.of(context).brand,
+                          borderRadius: AppRadius.brSm,
+                        ),
                         padding: const EdgeInsets.all(4),
                         child: Image.asset(
                           "assets/mining/lock.png",
                           width: ScreenUtil().setWidth(20),
                         ),
                       ),
-                      SizedBox(width: ScreenUtil().setWidth(12)),
+                      SizedBox(width: AppSpacing.space4),
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
-                          style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                  context, AppThemeKeys.mainTextColor.name),
-                              fontSize:ScreenUtil().setSp(24)),
+                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ],
@@ -111,9 +103,17 @@ class AstLevel extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildTag(context, "assets/mining/icon_full_node.png", S.of(context).g_mining_key_64),
-            SizedBox(width: ScreenUtil().setWidth(32)),
-            _buildTag(context, "assets/mining/lock_time.png", "$times ${S.of(context).g_mining_key_65}"),
+            _buildTag(
+              context,
+              "assets/mining/icon_full_node.png",
+              S.of(context).g_mining_key_64,
+            ),
+            SizedBox(width: AppSpacing.space8),
+            _buildTag(
+              context,
+              "assets/mining/lock_time.png",
+              "$times ${S.of(context).g_mining_key_65}",
+            ),
           ],
         ),
       ],
@@ -123,16 +123,13 @@ class AstLevel extends StatelessWidget {
   Widget _buildTag(BuildContext context, String iconAsset, String label) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final tagBg = isDark ? const Color(0xff373739) : const Color(0xffEDEFF2);
-    final textColor = AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+    final textColor = AppColorTokens.of(context).textPrimary;
 
     return Container(
-      decoration: BoxDecoration(
-        color: tagBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(30)),
-      ),
+      decoration: BoxDecoration(color: tagBg, borderRadius: AppRadius.brXl),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(6),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -143,10 +140,10 @@ class AstLevel extends StatelessWidget {
             fit: BoxFit.cover,
             color: textColor,
           ),
-          SizedBox(width: ScreenUtil().setWidth(12)),
+          SizedBox(width: AppSpacing.space4),
           Text(
             label,
-            style: TextStyle(color: textColor, fontSize: ScreenUtil().setSp(24)),
+            style: AppTypography.caption.copyWith(color: textColor),
           ),
         ],
       ),

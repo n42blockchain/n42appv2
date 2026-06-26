@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -134,10 +133,7 @@ class Web3AuthMpcProvider implements MpcProvider {
     _ensureLoggedIn();
     final creds = _getCredentials(_privateKey!);
     final sig = creds.signPersonalMessageToUint8List(messageHash);
-    return MpcSignResult(
-      signature: sig,
-      signatureHex: '0x${bytesToHex(sig)}',
-    );
+    return MpcSignResult(signature: sig, signatureHex: '0x${bytesToHex(sig)}');
   }
 
   @override
@@ -147,10 +143,7 @@ class Web3AuthMpcProvider implements MpcProvider {
     // transaction. We sign the hash with secp256k1.
     final creds = _getCredentials(_privateKey!);
     final sig = creds.signPersonalMessageToUint8List(serializedTx);
-    return MpcSignResult(
-      signature: sig,
-      signatureHex: '0x${bytesToHex(sig)}',
-    );
+    return MpcSignResult(signature: sig, signatureHex: '0x${bytesToHex(sig)}');
   }
 
   @override
@@ -195,7 +188,8 @@ class Web3AuthMpcProvider implements MpcProvider {
 
   String _buildLoginHint(MpcLoginType type, TorusUserInfo? userInfo) {
     final label = type.name[0].toUpperCase() + type.name.substring(1);
-    final detail = userInfo?.email ?? userInfo?.name ?? userInfo?.verifierId ?? '';
+    final detail =
+        userInfo?.email ?? userInfo?.name ?? userInfo?.verifierId ?? '';
     return detail.isNotEmpty ? '$label: $detail' : label;
   }
 

@@ -16,11 +16,11 @@ class DexTokenModel {
   });
 
   factory DexTokenModel.fromJson(Map<String, dynamic> json) => DexTokenModel(
-        address: json['address'] as String? ?? '',
-        symbol: json['symbol'] as String? ?? '',
-        name: json['name'] as String? ?? '',
-        logoUri: json['logo_uri'] as String? ?? '',
-        decimals: json['decimals'] as int? ?? 18,
-        chain: json['chain'] as String? ?? '',
-      );
+    address: json['address'] as String? ?? '',
+    symbol: json['symbol'] as String? ?? '',
+    name: json['name'] as String? ?? '',
+    logoUri: json['logo_uri'] as String? ?? '',
+    decimals: json['decimals'] as int? ?? 18,
+    chain: json['chain'] as String? ?? '',
+  );
 }

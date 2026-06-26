@@ -9,6 +9,7 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_history_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
@@ -24,6 +25,7 @@ import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -87,7 +89,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   CoinModel get coinModel => widget.coinModel;
 
   @override
-  dynamic getCoinModel() => widget.coinModel;
+  CoinModel getCoinModel() => widget.coinModel;
 
   WalletActionProvider get _walletProvider => ref.read(wapBridgeProvider);
 
@@ -147,7 +149,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   Future<void> changeNet(bool isTest, Load loadType) async {
     try {
       final wap = _walletProvider;
-      wap.walletMap[widget.coinModel.coin['coinType']]['isTest'] = isTest;
+      wap.walletMap[widget.coinModel.config.coinType]['isTest'] = isTest;
       widget.coinModel.isTest = isTest;
       await wap.saveWalletInfo(wap.walletInfo, wap.walletIndex);
       await fetchCoinBalance(widget.coinModel, wap);
@@ -201,27 +203,28 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
   void _initData() {
     final wap = _walletProvider;
     final coin = widget.coinModel.coin;
+    final config = widget.coinModel.config;
 
-    if (coin['isContract'] == true) {
+    if (config.isContract) {
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.coin['coinType'] == coin['coinType'],
+        (e) => e.config.coinType == config.coinType,
       );
       chainCoinModel = wap.coinModels[cIndex];
-      _chainName = chainCoinModel?.coin['name'];
-      _chainSymbol = chainCoinModel?.coin['miniName'];
-      _tokenName = coin['name'];
-      _tokenSymbol = coin['miniName'];
+      _chainName = chainCoinModel!.config.name;
+      _chainSymbol = chainCoinModel!.config.miniName;
+      _tokenName = config.name;
+      _tokenSymbol = config.miniName;
       browserUrl = getBrowserTokenAddress(
-        coin['coinType'],
+        config.coinType,
         widget.coinModel.address,
-        coin['contract'],
+        config.contract,
         isTest: widget.coinModel.isTest,
       );
     } else {
-      _chainName = coin['name'];
-      _chainSymbol = coin['miniName'];
+      _chainName = config.name;
+      _chainSymbol = config.miniName;
       browserUrl = getBrowserAddress(
-        coin['coinType'],
+        config.coinType,
         widget.coinModel.address,
         isTest: widget.coinModel.isTest,
       );
@@ -252,10 +255,9 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
           children: [
             Text(
               '$_chainSymbol ($_chainName)',
-              style: TextStyle(
+              style: AppTypography.headline.copyWith(
                 color: _tc(AppThemeKeys.mainTextColor.name),
-                fontSize: ScreenUtil().setSp(32.0),
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w600,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -263,9 +265,8 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             if (_tokenSymbol != null)
               Text(
                 '$_tokenSymbol($_tokenName)',
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: _tc(AppThemeKeys.mainTextColor.name),
-                  fontSize: ScreenUtil().setSp(24.0),
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -303,49 +304,44 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
             controller: _scrollController,
             padding: EdgeInsets.zero,
             children: [
-                    WalletChainInfoBoard(
-                      address: widget.coinModel.address,
-                      coinType: widget.coinModel.coin['coinType'],
-                      balanceStr:
-                          '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
-                      balanceDollarStr: '\$${widget.coinModel.valueString()}',
-                      marketValueStr: '\$${widget.coinModel.coinPriceString()}',
-                      lockAmountStr:
-                          '${toEther((widget.coinModel.other?.getLockAmount ?? 0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
-                      xmlLockInfoTap: showXMLLockAmountWidget,
-                      sendTap: () async => handleSend(),
-                      receiveTap: () async => handleReceive(),
-                      browserTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrowserPage(browserUrl),
-                          ),
-                        );
-                      },
+              WalletChainInfoBoard(
+                address: widget.coinModel.address,
+                coinType: widget.coinModel.config.coinType,
+                balanceStr:
+                    '${widget.coinModel.balanceStringAll()} ${widget.coinModel.coin['unit'].toString().toUpperCase()}',
+                balanceDollarStr: '\$${widget.coinModel.valueString()}',
+                marketValueStr: '\$${widget.coinModel.coinPriceString()}',
+                lockAmountStr:
+                    '${toEther((widget.coinModel.other?.getLockAmount ?? 0).toString(), widget.coinModel.coin['decimals'])} ${CoinType.XRP.name}',
+                xmlLockInfoTap: showXMLLockAmountWidget,
+                sendTap: () async => handleSend(),
+                receiveTap: () async => handleReceive(),
+                browserTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BrowserPage(browserUrl),
                     ),
-                    Divider(
-                      height: ScreenUtil().setWidth(1),
-                      endIndent: 0,
-                      indent: 0,
-                    ),
-                    Container(
-                      alignment: Alignment.centerLeft,
-                      padding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(20.0),
-                      ),
-                      margin: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(30.0),
-                      ),
-                      child: Text(
-                        S.of(context).g_coin_key_1,
-                        style: TextStyle(
-                          color: _tc(AppThemeKeys.mainTextColor.name),
-                          fontSize: ScreenUtil().setSp(30.0),
-                        ),
-                      ),
-                    ),
-                    _transactionsWidget(),
+                  );
+                },
+              ),
+              Divider(
+                height: ScreenUtil().setWidth(1),
+                endIndent: 0,
+                indent: 0,
+              ),
+              Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+                margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+                child: Text(
+                  S.of(context).g_coin_key_1,
+                  style: AppTypography.body.copyWith(
+                    color: _tc(AppThemeKeys.mainTextColor.name),
+                  ),
+                ),
+              ),
+              _transactionsWidget(),
             ],
           ),
         ),
@@ -361,7 +357,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: transactionList.length + 1,
       itemBuilder: (context, int index) {
         if (index == transactionList.length) {
@@ -381,8 +377,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
               alignment: Alignment.center,
               child: Text(
                 S.of(context).g_mining_key_49,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(30.0),
+                style: AppTypography.body.copyWith(
                   color: _tc(AppThemeKeys.mainBlueColor.name),
                 ),
               ),

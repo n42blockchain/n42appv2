@@ -6,6 +6,7 @@ import 'package:n42_wallet/core/security/totp_util.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 /// Google Authenticator 绑定页面
@@ -29,7 +30,8 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
   void initState() {
     super.initState();
     _secret = TotpUtil.generateSecret();
-    final account = AppGlobals.currentUserEmail ?? AppGlobals.userInfo?.uuid ?? 'user';
+    final account =
+        AppGlobals.currentUserEmail ?? AppGlobals.userInfo?.uuid ?? 'user';
     _otpAuthUri = TotpUtil.buildOtpAuthUri(secret: _secret, account: account);
   }
 
@@ -50,44 +52,35 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    final Color mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final Color subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final Color itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final Color mainBlue =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    final Color errorColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.errorTextColor.name);
+    final Color mainText = AppColorTokens.of(context).textPrimary;
+    final Color subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final Color itemBg = AppColorTokens.of(context).bgSurface;
+    final Color mainBlue = AppColorTokens.of(context).brand;
+    final Color errorColor = AppColorTokens.of(context).danger;
 
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_google_auth_key1),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+          padding: EdgeInsets.all(AppSpacing.space8),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space4),
               // 说明文字
               Text(
                 S.of(context).g_google_auth_key2,
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: mainText),
               ),
-              SizedBox(height: ScreenUtil().setWidth(30.0)),
+              SizedBox(height: AppSpacing.space8),
               // QR 码
               Center(
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12.0)),
+                    borderRadius: AppRadius.brMd,
                   ),
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(16.0)),
+                  padding: EdgeInsets.all(AppSpacing.space4),
                   child: QrImageView(
                     data: _otpAuthUri,
                     version: QrVersions.auto,
@@ -96,7 +89,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space4),
               // 手动输入密钥折叠区
               GestureDetector(
                 onTap: () => setState(() => _showManualKey = !_showManualKey),
@@ -104,10 +97,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   children: [
                     Text(
                       S.of(context).g_google_auth_key3,
-                      style: TextStyle(
-                        color: mainBlue,
-                        fontSize: ScreenUtil().setSp(26.0),
-                      ),
+                      style: AppTypography.bodySm.copyWith(color: mainBlue),
                     ),
                     Icon(
                       _showManualKey
@@ -120,7 +110,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 ),
               ),
               if (_showManualKey) ...[
-                SizedBox(height: ScreenUtil().setWidth(12.0)),
+                SizedBox(height: AppSpacing.space4),
                 GestureDetector(
                   onTap: () {
                     Clipboard.setData(ClipboardData(text: _secret));
@@ -134,69 +124,64 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   child: Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(24.0),
-                      vertical: ScreenUtil().setWidth(18.0),
+                      horizontal: AppSpacing.space6,
+                      vertical: AppSpacing.space4,
                     ),
                     decoration: BoxDecoration(
                       color: itemBg,
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                      borderRadius: AppRadius.brSm,
                     ),
                     child: Row(
                       children: [
                         Expanded(
                           child: Text(
                             _secret,
-                            style: TextStyle(
+                            style: AppTypography.bodySm.copyWith(
                               color: mainText,
-                              fontSize: ScreenUtil().setSp(26.0),
                               letterSpacing: 2,
                               fontFamily: 'monospace',
                             ),
                           ),
                         ),
-                        Icon(Icons.copy,
-                            color: subtitleColor,
-                            size: ScreenUtil().setWidth(36.0)),
+                        Icon(
+                          Icons.copy,
+                          color: subtitleColor,
+                          size: ScreenUtil().setWidth(36.0),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(40.0)),
+              SizedBox(height: AppSpacing.space12),
               // 验证码输入
               Text(
                 S.of(context).g_google_auth_key4,
-                style: TextStyle(
-                  color: subtitleColor,
-                  fontSize: ScreenUtil().setSp(26.0),
-                ),
+                style: AppTypography.bodySm.copyWith(color: subtitleColor),
               ),
-              SizedBox(height: ScreenUtil().setWidth(12.0)),
+              SizedBox(height: AppSpacing.space4),
               Container(
                 decoration: BoxDecoration(
                   color: itemBg,
-                  borderRadius:
-                      BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+                  borderRadius: AppRadius.brSm,
                 ),
-                padding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(24.0)),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 child: TextField(
                   controller: _codeController,
                   keyboardType: TextInputType.number,
                   maxLength: 6,
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: mainText,
-                    fontSize: ScreenUtil().setSp(32.0),
+                    fontWeight: FontWeight.w400,
                     letterSpacing: 6,
                   ),
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     counterText: '',
                     hintText: '000000',
-                    hintStyle: TextStyle(
+                    hintStyle: AppTypography.headline.copyWith(
                       color: subtitleColor,
-                      fontSize: ScreenUtil().setSp(32.0),
+                      fontWeight: FontWeight.w400,
                       letterSpacing: 6,
                     ),
                   ),
@@ -210,16 +195,13 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 ),
               ),
               if (_errorMessage.isNotEmpty) ...[
-                SizedBox(height: ScreenUtil().setWidth(8.0)),
+                SizedBox(height: AppSpacing.space2),
                 Text(
                   _errorMessage,
-                  style: TextStyle(
-                    color: errorColor,
-                    fontSize: ScreenUtil().setSp(24.0),
-                  ),
+                  style: AppTypography.caption.copyWith(color: errorColor),
                 ),
               ],
-              SizedBox(height: ScreenUtil().setWidth(60.0)),
+              SizedBox(height: AppSpacing.space16),
               // 确认按钮
               SizedBox(
                 width: double.infinity,
@@ -229,21 +211,23 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: mainBlue,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ScreenUtil().setWidth(44.0)),
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(44.0),
+                      ),
                     ),
                   ),
                   child: Text(
                     S.of(context).g_key_78,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainButtonTextColor.name),
-                      fontSize: ScreenUtil().setSp(30.0),
+                        context,
+                        AppThemeKeys.mainButtonTextColor.name,
+                      ),
                     ),
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(40.0)),
+              SizedBox(height: AppSpacing.space12),
             ],
           ),
         ),

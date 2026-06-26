@@ -44,19 +44,26 @@ mixin _MiningFullNodeV2LogicMixin on ConsumerState<MiningFullNodeV2> {
 
       int pathIndex = astMap['pathIndex'] ?? 0;
       final path = getPathWithIndex(
-          astMap["baseInfo"]["path"]["legacy"], pathIndex);
+        astMap["baseInfo"]["path"]["legacy"],
+        pathIndex,
+      );
 
       Trustdart trustdart = Trustdart();
       var addressMap = await trustdart.generateAddress(
-          CoinType.N.name, path, 'legacy',
-          mnemonic: credentials.mnemonic, pk: credentials.privateKey);
+        CoinType.N.name,
+        path,
+        'legacy',
+        mnemonic: credentials.mnemonic,
+        pk: credentials.privateKey,
+      );
       final astAddress = addressMap['legacy'];
 
       final bool isTest = astMap['isTest'] == true;
       final String rpc = isTest
           ? (astMap['baseInfo']['service_test'] ?? '')
           : (astMap['baseInfo']['service'] ?? '');
-      MessageModel mm = await _tokenViewApi.getBalance(
+      MessageModel mm =
+          await _tokenViewApi.getBalance(
             BlockchainType.Ethereum.name,
             CoinType.N.name,
             astAddress ?? '',

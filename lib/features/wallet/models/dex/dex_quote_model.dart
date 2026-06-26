@@ -31,11 +31,14 @@ class DexQuoteModel {
     required this.chain,
   });
 
-  factory DexQuoteModel.fromJson(Map<String, dynamic> json,
-      {int slippageBps = 50}) {
+  factory DexQuoteModel.fromJson(
+    Map<String, dynamic> json, {
+    int slippageBps = 50,
+  }) {
     final amountOut = json['amount_out'] as String? ?? '';
     final minOut =
-        json['min_amount_out'] as String? ?? _calcMinOut(amountOut, slippageBps);
+        json['min_amount_out'] as String? ??
+        _calcMinOut(amountOut, slippageBps);
     return DexQuoteModel(
       orderId: json['order_id'] as String? ?? '',
       tokenInSymbol: json['token_in_symbol'] as String? ?? '',

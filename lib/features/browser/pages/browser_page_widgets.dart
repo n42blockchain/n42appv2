@@ -2,8 +2,7 @@ part of 'browser_page.dart';
 
 /// UI widget builders for BrowserPage.
 extension _BrowserPageWidgets on _BrowserPageState {
-  Color _mainTextColor() =>
-      AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
+  Color _mainTextColor() => AppColorTokens.of(context).textPrimary;
 
   Widget _buildBrowserContent() {
     final bValue = ref.watch(browserNotifierProvider);
@@ -34,11 +33,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
               controller: bValue.titleEditingController,
               focusNode: bValue.titleFocusNode,
               height: sw(80.0),
-              style: TextStyle(
+              style: AppTypography.bodySm.copyWith(
                 color: _mainTextColor(),
-                fontSize: sw(26.0),
                 fontWeight: bValue.titleFocusNode?.hasFocus ?? false
-                    ? FontWeight.bold
+                    ? FontWeight.w600
                     : FontWeight.normal,
               ),
               leftWidget: _buildSecurityIcon(bValue),
@@ -107,7 +105,6 @@ extension _BrowserPageWidgets on _BrowserPageState {
 
   Widget _buildTabCountButton(BrowserProvider bValue) {
     final sw = ScreenUtil().setWidth;
-    final sp = ScreenUtil().setSp;
 
     return InkWell(
       onTap: () {
@@ -124,7 +121,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
         ),
         child: Text(
           "${bValue.wvcList.length}",
-          style: TextStyle(fontSize: sp(20.0), color: _mainTextColor()),
+          style: AppTypography.captionSm.copyWith(color: _mainTextColor()),
         ),
       ),
     );
@@ -225,8 +222,7 @@ extension _BrowserPageWidgets on _BrowserPageState {
           if (Platform.isAndroid)
             _toolbarIconButton(
               Icons.explore,
-              onTap: () =>
-                  _navigateAndLoad(bValue, const DAppDirectoryPage()),
+              onTap: () => _navigateAndLoad(bValue, const DAppDirectoryPage()),
             ),
           _toolbarAssetButton(
             "setting",
@@ -242,7 +238,8 @@ extension _BrowserPageWidgets on _BrowserPageState {
               bValue.getBrowserSetting();
             },
           ),
-          if (ref.watch(wcpBridgeProvider).walletConnectState == WalletConnectState.connect)
+          if (ref.watch(wcpBridgeProvider).walletConnectState ==
+              WalletConnectState.connect)
             _buildWalletConnectButton(),
         ],
       ),
@@ -279,7 +276,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
             },
             child: Text(
               S.of(context).g_browser_key16,
-              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
+              style: AppTypography.bodySm.copyWith(
+                color: _mainTextColor(),
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
           _tabToolbarItem(
@@ -302,7 +302,10 @@ extension _BrowserPageWidgets on _BrowserPageState {
             },
             child: Text(
               S.of(context).g_browser_key17,
-              style: TextStyle(fontSize: sp(26.0), color: _mainTextColor()),
+              style: AppTypography.bodySm.copyWith(
+                color: _mainTextColor(),
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],

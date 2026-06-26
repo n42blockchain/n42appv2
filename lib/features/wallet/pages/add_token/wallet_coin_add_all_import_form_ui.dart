@@ -32,7 +32,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
       children: [
         Text(
           label,
-          style: TextStyle(color: mainText, fontSize: su.setSp(28.0)),
+          style: AppTypography.body.copyWith(color: mainText),
         ),
         Container(
           alignment: Alignment.center,
@@ -51,9 +51,9 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             children: [
               Expanded(
                 child: TextField(
-                  style: TextStyle(
+                  style: AppTypography.headline.copyWith(
                     color: mainText,
-                    fontSize: su.setWidth(30.0),
+                    fontWeight: FontWeight.w400,
                   ),
                   controller: controller,
                   focusNode: focusNode,
@@ -83,9 +83,8 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             alignment: Alignment.centerLeft,
             child: Text(
               errorMessage,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: _formColor(AppThemeKeys.errorTextColor.name),
-                fontSize: su.setSp(24.0),
               ),
             ),
           ),
@@ -155,8 +154,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
                   alignment: Alignment.center,
                   child: Text(
                     S.of(context).g_key_166,
-                    style: TextStyle(
-                      fontSize: su.setSp(26.0),
+                    style: AppTypography.bodySm.copyWith(
                       color: _formColor(AppThemeKeys.mainWhiteColor.name),
                     ),
                   ),
@@ -177,7 +175,6 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
     final su = ScreenUtil();
     final double iconSize = su.setWidth(28);
     final double gap = su.setWidth(10);
-    final double fontSize = su.setSp(24);
 
     final content = switch (_contractState) {
       'loading' => Row(
@@ -193,8 +190,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
           SizedBox(width: su.setWidth(12)),
           Text(
             'Looking up token info…',
-            style: TextStyle(
-              fontSize: fontSize,
+            style: AppTypography.caption.copyWith(
               color: _formColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
           ),
@@ -202,12 +198,18 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
       ),
       'found' => Row(
         children: [
-          Icon(Icons.check_circle_outline, color: Colors.green, size: iconSize),
+          Icon(
+            Icons.check_circle_outline,
+            color: AppColorTokens.of(context).success,
+            size: iconSize,
+          ),
           SizedBox(width: gap),
           Expanded(
             child: Text(
               'Token found: $_contractHint',
-              style: TextStyle(fontSize: fontSize, color: Colors.green),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).success,
+              ),
             ),
           ),
         ],
@@ -221,7 +223,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             Expanded(
               child: Text(
                 'Token not found in list — fill symbol & decimals manually',
-                style: TextStyle(fontSize: fontSize, color: orange),
+                style: AppTypography.caption.copyWith(color: orange),
               ),
             ),
           ],
@@ -251,7 +253,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
 
   Widget decimalWidget() {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space8),
       child: _formField(
         label: S.of(context).g_token_m_key_8,
         controller: decimalEditingController,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -10,6 +11,7 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_settings_page.dart';
@@ -24,7 +26,6 @@ import 'package:n42_wallet/features/wallet/utils/validation/address_validator.da
 import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_confirm_dialog.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -103,7 +104,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   void _onAddressInputChanged() {
     onToAddressInputChanged(
       toTextEditingController.text.trim(),
-      widget.coinModel.coin['coinType'] as String,
+      widget.coinModel.config.coinType,
     );
   }
 
@@ -115,7 +116,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       return null;
     }
 
-    final coinType = widget.coinModel.coin['coinType'] as String;
+    final coinType = widget.coinModel.config.coinType;
     final result = await addressValidator.validateAddress(
       coinType: coinType,
       address: addr,
@@ -136,7 +137,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
           context: context,
           ensName: result.ensName!,
           resolvedAddress: result.resolvedAddress ?? '',
-          tokenSymbol: widget.coinModel.coin['symbol'],
+          tokenSymbol: widget.coinModel.config.symbol,
         );
         if (!confirmed) {
           ensConfirmed = false;
@@ -147,7 +148,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       AppLogger.d(
         'WalletChainSend',
         'ENS resolved: ${result.ensName} → '
-        '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
+            '${AddressValidator.getAddressPreview(result.resolvedAddress ?? "")}',
       );
     }
 
@@ -217,13 +218,13 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       AppThemeUtils.getColorByKey(context, key.name);
 
   bool get _isEvm =>
-      widget.coinModel.coin['blockchainType'] == BlockchainType.Ethereum.name;
+      widget.coinModel.config.blockchainType == BlockchainType.Ethereum.name;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(
-        text: '${S.of(context).g_key_37} ${widget.coinModel.coin['miniName']}',
+        text: '${S.of(context).g_key_37} ${widget.coinModel.config.miniName}',
       ),
       body: SafeArea(
         child: GestureDetector(
@@ -242,11 +243,11 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   }
 
   Widget _buildScrollContent() {
-    final isContract = widget.coinModel.coin['isContract'] as bool? ?? false;
+    final isContract = widget.coinModel.config.isContract as bool? ?? false;
     return Column(
       children: [
         RecentAddressBar(
-          coinType: widget.coinModel.coin['coinType'] ?? '',
+          coinType: widget.coinModel.config.coinType,
           onSelected: (addr) {
             toTextEditingController.text = addr;
             toAddressCheck(addr);
@@ -322,22 +323,13 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
         children: [
           Divider(height: sw(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(sw(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: sw(148.0),
             color: _themeColor(AppThemeKeys.backGroundColor),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              _themeColor(
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3
-                    : AppThemeKeys.mainButtonBgColor,
-              ),
-              _themeColor(AppThemeKeys.mainButtonTextColor),
-              isLoading,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],

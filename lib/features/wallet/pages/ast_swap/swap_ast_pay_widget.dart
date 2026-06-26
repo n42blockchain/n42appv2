@@ -1,6 +1,8 @@
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_select_chain.dart';
@@ -59,15 +61,18 @@ class SwapAstPayWidget extends ConsumerWidget {
 
     return Container(
       margin: EdgeInsets.fromLTRB(
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(30),
-        ScreenUtil().setWidth(20),
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space8,
+        AppSpacing.space4,
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor4.name),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8)),
+        color: AppThemeUtils.getColorByKey(
+          context,
+          AppThemeKeys.itemBgColor4.name,
+        ),
+        borderRadius: AppRadius.brSm,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -75,14 +80,17 @@ class SwapAstPayWidget extends ConsumerWidget {
           _buildHeader(context),
           _buildInputRow(context),
           if (payCoinModel == null && youPay != null)
-            _buildAddRow(context, ref,
+            _buildAddRow(
+              context,
+              ref,
               label: S.of(context).g_swap_key_14(youPay?.payChain ?? ""),
               coinName: youPay?.payChain ?? "",
             ),
-          if (payCoinModel != null)
-            _buildBalanceRow(context, balanceColor),
+          if (payCoinModel != null) _buildBalanceRow(context, balanceColor),
           if (payCoinModel != null && token == null)
-            _buildAddRow(context, ref,
+            _buildAddRow(
+              context,
+              ref,
               label: S.of(context).g_swap_key_14(youPay?.payCoin ?? ""),
               coinName: youPay?.payCoin ?? "",
             ),
@@ -92,27 +100,24 @@ class SwapAstPayWidget extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context) {
+    final payConfig = payCoinModel?.config;
     return Row(
       children: [
         Flexible(
           child: Text(
             S.of(context).g_swap_key_3,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemTextColor.name),
-              fontSize: ScreenUtil().setSp(30),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textItem,
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        SizedBox(width: AppSpacing.space2),
         Expanded(
           child: Text(
-            '${payCoinModel?.coin['name'] ?? ""}(${payCoinModel?.coin['miniName'] ?? ""})',
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name),
-              fontSize: ScreenUtil().setSp(30),
+            '${payConfig?.name ?? ""}(${payConfig?.miniName ?? ""})',
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).brand,
             ),
             textAlign: TextAlign.right,
           ),
@@ -129,28 +134,30 @@ class SwapAstPayWidget extends ConsumerWidget {
         children: [
           Expanded(
             child: TextField(
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemTextColor.name),
-                fontSize: ScreenUtil().setWidth(50.0),
+              style: AppTypography.displayLg.copyWith(
+                color: AppColorTokens.of(context).textItem,
               ),
               controller: payController,
               focusNode: payNode,
               textInputAction: TextInputAction.next,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: InputDecoration(
                 hintText: S.of(context).g_key_44,
-                hintStyle: TextStyle(
-                  fontSize: ScreenUtil().setWidth(50.0),
+                hintStyle: AppTypography.displayLg.copyWith(
                   color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.textFieldHintColor.name),
+                    context,
+                    AppThemeKeys.textFieldHintColor.name,
+                  ),
                 ),
                 border: InputBorder.none,
                 errorBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 isCollapsed: true,
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(10.0)),
+                  vertical: AppSpacing.space2,
+                ),
               ),
               maxLines: 1,
               onChanged: onPayChanged,
@@ -178,7 +185,7 @@ class SwapAstPayWidget extends ConsumerWidget {
       },
       child: Container(
         width: ScreenUtil().setWidth(200),
-        margin: EdgeInsets.only(left: ScreenUtil().setWidth(20)),
+        margin: EdgeInsets.only(left: AppSpacing.space4),
         child: Row(
           children: [
             SizedBox(
@@ -192,10 +199,8 @@ class SwapAstPayWidget extends ConsumerWidget {
             Expanded(
               child: Text(
                 youPay?.payCoin ?? "",
-                style: TextStyle(
-                  color: AppThemeUtils.getColorByKey(
-                      context, AppThemeKeys.itemTextColor.name),
-                  fontSize: ScreenUtil().setSp(30),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textItem,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -207,7 +212,9 @@ class SwapAstPayWidget extends ConsumerWidget {
               child: Icon(
                 Icons.arrow_forward_ios,
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.itemBorderColor.name),
+                  context,
+                  AppThemeKeys.itemBorderColor.name,
+                ),
                 size: ScreenUtil().setWidth(40),
               ),
             ),
@@ -219,20 +226,32 @@ class SwapAstPayWidget extends ConsumerWidget {
 
   Widget _buildBalanceRow(BuildContext context, Color balanceColor) {
     final double balance = youPay?.balance ?? 0;
-    final String balanceText = regular.formartNumDouble(
-      dec.Decimal.parse(balance.toString()).toDouble(),
-      14,
-      isCrop: true,
-      isFill0: false,
-    ).toString();
+    final String balanceText = regular
+        .formartNumDouble(
+          dec.Decimal.parse(balance.toString()).toDouble(),
+          14,
+          isCrop: true,
+          isFill0: false,
+        )
+        .toString();
 
     return Row(
       children: [
+        // 余额不足不只靠红色传达：补 error 图标（规范 §5 红线）。
+        // 仅在已输入金额且无效（真·余额不足）时显示，避免空输入态误报。
+        if (payController.text.isNotEmpty && !hasValidInput) ...[
+          Icon(
+            Icons.error_outline,
+            size: ScreenUtil().setWidth(28),
+            color: balanceColor,
+          ),
+          SizedBox(width: AppSpacing.space2),
+        ],
         Flexible(
           child: Text(
             "${S.of(context).g_key_29}:$balanceText",
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(color: balanceColor, fontSize: ScreenUtil().setSp(26)),
+            style: AppTypography.bodySm.copyWith(color: balanceColor),
           ),
         ),
         if (youPay?.load == Load.loading)
@@ -255,41 +274,45 @@ class SwapAstPayWidget extends ConsumerWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.errorTextColor.name),
-            fontSize: ScreenUtil().setSp(26),
+          style: AppTypography.bodySm.copyWith(
+            color: AppColorTokens.of(context).danger,
           ),
         ),
         InkWell(
           onTap: () async {
             onCloseKeyboard();
-            final r = await Navigator.push<bool>(
+            final r =
+                await Navigator.push<bool>(
                   context,
                   MaterialPageRoute(builder: (_) => WalletCoinAddAll(coinName)),
                 ) ??
                 false;
             if (!context.mounted) return;
             if (r) {
-              await ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
+              await ref
+                  .read(wapBridgeProvider)
+                  .initWallet(shouldInitCoinInfo: true);
               onAddToken();
             }
           },
           child: Container(
             height: ScreenUtil().setWidth(50),
-            padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20)),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainButtonBgColor.name),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50)),
+                context,
+                AppThemeKeys.mainButtonBgColor.name,
+              ),
+              borderRadius: AppRadius.brPill,
             ),
             child: Text(
               S.of(context).g_key_wallet_k47,
-              style: TextStyle(
+              style: AppTypography.captionSm.copyWith(
                 color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainButtonTextColor.name),
-                fontSize: ScreenUtil().setSp(22),
+                  context,
+                  AppThemeKeys.mainButtonTextColor.name,
+                ),
               ),
             ),
           ),

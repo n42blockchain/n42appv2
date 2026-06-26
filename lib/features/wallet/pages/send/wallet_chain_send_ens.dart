@@ -7,7 +7,7 @@ import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// ENS 解析状态管理 mixin，供 _WalletChainSendState 混入。
 ///
@@ -28,10 +28,7 @@ mixin EnsResolveMixin<T extends StatefulWidget> on State<T> {
   bool isEnsSupported(String coinType) => EnsService.chainSupportsEns(coinType);
 
   /// 地址输入变化回调，防抖 500ms 后触发解析
-  void onToAddressInputChanged(
-    String text,
-    String coinType,
-  ) {
+  void onToAddressInputChanged(String text, String coinType) {
     if (!isEnsSupported(coinType)) return;
 
     ensDebounceTimer?.cancel();
@@ -57,11 +54,16 @@ mixin EnsResolveMixin<T extends StatefulWidget> on State<T> {
   }
 
   Future<void> _resolveEnsRealtime(String ensName, String coinType) async {
-    final result = await ensService.resolveName(ensName, preferredChain: coinType);
+    final result = await ensService.resolveName(
+      ensName,
+      preferredChain: coinType,
+    );
     if (!mounted) return;
     final resolved = result.success && result.address != null;
     setState(() {
-      ensStatus = resolved ? EnsResolveStatus.resolved : EnsResolveStatus.failed;
+      ensStatus = resolved
+          ? EnsResolveStatus.resolved
+          : EnsResolveStatus.failed;
       ensResult = result;
     });
   }
@@ -90,27 +92,28 @@ class EnsStatusBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainTextColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
+    final mainTextColor = AppColorTokens.of(context).textPrimary;
+    final blueColor = AppColorTokens.of(context).brand;
 
     return switch (status) {
       EnsResolveStatus.idle => const SizedBox.shrink(),
       EnsResolveStatus.resolving => _ResolvingBanner(
-          subtitleColor: subtitleColor, blueColor: blueColor),
+        subtitleColor: subtitleColor,
+        blueColor: blueColor,
+      ),
       EnsResolveStatus.failed => _FailedBanner(
-          message: result?.error ?? S.of(context).g_key_t_50),
-      EnsResolveStatus.resolved => result?.address != null
-          ? _ResolvedBanner(
-              result: result!,
-              subtitleColor: subtitleColor,
-              mainTextColor: mainTextColor,
-              blueColor: blueColor,
-            )
-          : const SizedBox.shrink(),
+        message: result?.error ?? S.of(context).g_key_t_50,
+      ),
+      EnsResolveStatus.resolved =>
+        result?.address != null
+            ? _ResolvedBanner(
+                result: result!,
+                subtitleColor: subtitleColor,
+                mainTextColor: mainTextColor,
+                blueColor: blueColor,
+              )
+            : const SizedBox.shrink(),
     };
   }
 }
@@ -146,10 +149,7 @@ class _ResolvingBanner extends StatelessWidget {
           Flexible(
             child: Text(
               S.of(context).g_key_ens_resolving,
-              style: TextStyle(
-                fontSize: su.setSp(22),
-                color: subtitleColor,
-              ),
+              style: AppTypography.caption.copyWith(color: subtitleColor),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
@@ -169,21 +169,22 @@ class _FailedBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     final w6 = su.setWidth(6);
+    final warningColor = AppColorTokens.of(context).warning;
 
     return Padding(
       padding: EdgeInsets.only(top: w6, left: su.setWidth(4)),
       child: Row(
         children: [
-          Icon(Icons.warning_amber_rounded,
-              color: Colors.orange, size: su.setWidth(20)),
+          Icon(
+            Icons.warning_amber_rounded,
+            color: warningColor,
+            size: su.setWidth(20),
+          ),
           SizedBox(width: w6),
           Expanded(
             child: Text(
               message,
-              style: TextStyle(
-                fontSize: su.setSp(22),
-                color: Colors.orange,
-              ),
+              style: AppTypography.caption.copyWith(color: warningColor),
             ),
           ),
         ],
@@ -215,7 +216,7 @@ class _ResolvedBanner extends StatelessWidget {
       prefixLength: 6,
       suffixLength: 4,
     );
-    const successColor = Color(0xFF4CAF50);
+    final successColor = AppColorTokens.of(context).success;
 
     return GestureDetector(
       onTap: () {
@@ -237,9 +238,7 @@ class _ResolvedBanner extends StatelessWidget {
         decoration: BoxDecoration(
           color: successColor.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(w8),
-          border: Border.all(
-            color: successColor.withValues(alpha: 0.3),
-          ),
+          border: Border.all(color: successColor.withValues(alpha: 0.3)),
         ),
         child: Row(
           children: [
@@ -256,15 +255,13 @@ class _ResolvedBanner extends StatelessWidget {
                 children: [
                   Text(
                     S.of(context).g_key_ens_resolved_address,
-                    style: TextStyle(
-                      fontSize: su.setSp(20),
+                    style: AppTypography.captionSm.copyWith(
                       color: subtitleColor,
                     ),
                   ),
                   Text(
                     shortAddr,
-                    style: TextStyle(
-                      fontSize: su.setSp(24),
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: mainTextColor,
                       fontFamily: 'monospace',
@@ -285,8 +282,7 @@ class _ResolvedBanner extends StatelessWidget {
                 ),
                 child: Text(
                   result.sourceChain!,
-                  style: TextStyle(
-                    fontSize: su.setSp(18),
+                  style: AppTypography.captionSm.copyWith(
                     fontWeight: FontWeight.w600,
                     color: blueColor,
                   ),

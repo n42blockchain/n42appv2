@@ -20,7 +20,9 @@ class DeviceInfoUtil {
       final iosInfo = await deviceInfo.iosInfo;
       return {
         "mobileModel": DataUtils().formatNum(
-            double.parse(iosInfo.systemVersion), 1),
+          double.parse(iosInfo.systemVersion),
+          1,
+        ),
         "mobileName": "Apple",
         "os": iosInfo.systemName,
       };

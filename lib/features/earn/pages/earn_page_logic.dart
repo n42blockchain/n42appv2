@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_home.dart';
@@ -41,16 +41,20 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
         atomPrice = cm.coinPrice ?? 0.0;
       }
     }
-    ref.read(earnProvider.notifier).updateCoinPrices(
-      ethPrice: ethPrice,
-      solPrice: solPrice,
-      atomPrice: atomPrice,
-    );
-    ref.read(earnProvider.notifier).loadPositions(
-      ethAddress: ethAddr,
-      solAddress: solAddr,
-      atomAddress: atomAddr,
-    );
+    ref
+        .read(earnProvider.notifier)
+        .updateCoinPrices(
+          ethPrice: ethPrice,
+          solPrice: solPrice,
+          atomPrice: atomPrice,
+        );
+    ref
+        .read(earnProvider.notifier)
+        .loadPositions(
+          ethAddress: ethAddr,
+          solAddress: solAddr,
+          atomAddress: atomAddr,
+        );
   }
 
   String get walletAddress {
@@ -99,60 +103,53 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
         width: ScreenUtil().setWidth(48),
         height: ScreenUtil().setWidth(48),
         decoration: BoxDecoration(
-          color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainBlueColor.name)
-              .withAlpha(25),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+          color: AppColorTokens.of(context).brand.withAlpha(25),
+          borderRadius: AppRadius.brMd,
         ),
         child: Icon(
           icon,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainBlueColor.name),
+          color: AppColorTokens.of(context).brand,
           size: ScreenUtil().setWidth(26),
         ),
       ),
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28),
+        style: AppTypography.body.copyWith(
           fontWeight: FontWeight.w600,
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name),
+          color: AppColorTokens.of(context).textPrimary,
         ),
       ),
       subtitle: Text(
         subtitle,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(22),
-          color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name),
+        style: AppTypography.caption.copyWith(
+          color: AppColorTokens.of(context).textSubtitle,
         ),
       ),
       trailing: Icon(
         Icons.chevron_right,
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
+        color: AppColorTokens.of(context).textSubtitle,
       ),
       onTap: onTap,
     );
   }
 
   void showBurnNftTip(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        backgroundColor: AppColorTokens.of(context).bgElevated,
         title: Row(
           children: [
-            Icon(Icons.local_fire_department_rounded,
-                color: Colors.orange, size: 28),
+            Icon(
+              Icons.local_fire_department_rounded,
+              color: AppColorTokens.of(context).warning,
+              size: 28,
+            ),
             const SizedBox(width: 8),
             Expanded(
               child: Text(
                 S.of(context).g_key_nft_burn_title,
-                style: TextStyle(
-                    color: isDark ? Colors.white : Colors.black87),
+                style: TextStyle(color: AppColorTokens.of(context).textPrimary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -167,8 +164,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             '${S.of(context).g_key_burn_nft_step2}\n'
             '${S.of(context).g_key_burn_nft_step3}\n'
             '${S.of(context).g_key_burn_nft_step4}',
-            style: TextStyle(
-                color: isDark ? Colors.white70 : Colors.black87),
+            style: TextStyle(color: AppColorTokens.of(context).textSecondary),
           ),
         ),
         actions: [
@@ -176,10 +172,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             onPressed: () => Navigator.pop(ctx),
             child: Text(
               S.of(context).g_key_burn_got_it,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).brand),
             ),
           ),
         ],
@@ -204,7 +197,10 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
 
   /// 将最小单位 BigInt 按链精度换算，格式化为可读字符串（最多 6 位有效小数）
   String formatBigIntForChain(
-      BigInt raw, StakingChainType chainType, String symbol) {
+    BigInt raw,
+    StakingChainType chainType,
+    String symbol,
+  ) {
     if (raw == BigInt.zero) return '0 $symbol';
     final amount = EarnState.tokenAmount(raw, chainType);
     final formatted = amount

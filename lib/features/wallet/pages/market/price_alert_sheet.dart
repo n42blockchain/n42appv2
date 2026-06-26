@@ -11,6 +11,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/market/price_alert_sheet_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 
 /// 价格到达提醒配置底部弹窗
@@ -151,23 +152,11 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemBgColor.name,
-    );
-    final textColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainTextColor.name,
-    );
+    final bgColor = AppColorTokens.of(context).bgSurface;
+    final textColor = AppColorTokens.of(context).textPrimary;
     final subColor = textColor.withAlpha(153);
-    final accentColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
-    final dividerColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.dividerColor.name,
-    );
+    final accentColor = AppColorTokens.of(context).brand;
+    final dividerColor = AppColorTokens.of(context).border;
     final bottomPad = MediaQuery.of(context).viewInsets.bottom;
 
     return PopScope(
@@ -211,9 +200,8 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         S
                             .of(context)
                             .g_alert_title(widget.symbol.toUpperCase()),
-                        style: TextStyle(
-                          fontSize: 17.sp,
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.captionSm.copyWith(
+                          fontWeight: FontWeight.w600,
                           color: textColor,
                         ),
                       ),
@@ -223,9 +211,9 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           onPressed: _saving ? null : _delete,
                           child: Text(
                             S.of(context).g_alert_remove,
-                            style: TextStyle(
-                              color: const Color(0xFFEF4444),
-                              fontSize: 13.sp,
+                            style: AppTypography.captionSm.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: AppColorTokens.of(context).danger,
                             ),
                           ),
                         ),
@@ -240,14 +228,20 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           .g_alert_current_price(
                             formatMarketPriceDisplay(widget.currentPrice),
                           ),
-                      style: TextStyle(fontSize: 12.sp, color: subColor),
+                      style: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                     ),
                   ],
                   SizedBox(height: 20.h),
 
                   Text(
                     S.of(context).g_alert_direction,
-                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: subColor,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   Row(
@@ -275,7 +269,10 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   Text(
                     S.of(context).g_alert_target_price,
-                    style: TextStyle(fontSize: 13.sp, color: subColor),
+                    style: AppTypography.captionSm.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: subColor,
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   TextField(
@@ -288,16 +285,21 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         RegExp(r'^\d*\.?\d{0,8}'),
                       ),
                     ],
-                    style: TextStyle(
-                      fontSize: 18.sp,
+                    style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                     decoration: InputDecoration(
                       prefixText: '\$ ',
-                      prefixStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      prefixStyle: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                       hintText: '0.00',
-                      hintStyle: TextStyle(fontSize: 18.sp, color: subColor),
+                      hintStyle: AppTypography.captionSm.copyWith(
+                        fontWeight: FontWeight.w400,
+                        color: subColor,
+                      ),
                       filled: true,
                       fillColor: AppThemeUtils.getColorByKey(
                         context,
@@ -325,7 +327,10 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         child: Text(
                           S.of(context).g_alert_enable,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14.sp, color: textColor),
+                          style: AppTypography.captionSm.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: textColor,
+                          ),
                         ),
                       ),
                       const Spacer(),
@@ -364,8 +369,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                               _existing != null
                                   ? S.of(context).g_alert_update
                                   : S.of(context).g_alert_set,
-                              style: TextStyle(
-                                fontSize: 16.sp,
+                              style: AppTypography.captionSm.copyWith(
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -414,8 +418,7 @@ class _DirectionChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: 13.sp,
+          style: AppTypography.captionSm.copyWith(
             fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
             color: selected ? accentColor : textColor.withAlpha(153),
           ),

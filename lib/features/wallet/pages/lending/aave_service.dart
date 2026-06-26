@@ -27,12 +27,12 @@ class AaveService {
 
   /// Aave V3 Pool contract addresses by chain ID.
   static const Map<int, String> poolAddresses = {
-    1: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2',     // Ethereum
-    137: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',    // Polygon
-    42161: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',  // Arbitrum
-    10: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',     // Optimism
-    8453: '0xA238Dd80C259a72e81d7e4664a9801593F98d1c5',   // Base
-    43114: '0x794a61358D6845594F94dc1DB02A252b5b4814aD',  // Avalanche
+    1: '0x87870Bca3F3fD6335C3F4ce8392D69350B4fA4E2', // Ethereum
+    137: '0x794a61358D6845594F94dc1DB02A252b5b4814aD', // Polygon
+    42161: '0x794a61358D6845594F94dc1DB02A252b5b4814aD', // Arbitrum
+    10: '0x794a61358D6845594F94dc1DB02A252b5b4814aD', // Optimism
+    8453: '0xA238Dd80C259a72e81d7e4664a9801593F98d1c5', // Base
+    43114: '0x794a61358D6845594F94dc1DB02A252b5b4814aD', // Avalanche
   };
 
   /// Aave V3 UI Pool Data Provider addresses (for reading reserve data).
@@ -165,13 +165,17 @@ class AaveService {
     if (subgraphUrl == null) return [];
 
     try {
-      final dio = Dio(BaseOptions(
-        connectTimeout: const Duration(seconds: 10),
-        receiveTimeout: const Duration(seconds: 15),
-      ));
+      final dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 10),
+          receiveTimeout: const Duration(seconds: 15),
+        ),
+      );
 
-      final response = await dio.post(subgraphUrl, data: {
-        'query': '''
+      final response = await dio.post(
+        subgraphUrl,
+        data: {
+          'query': '''
           {
             reserves(where: { isActive: true }) {
               id
@@ -190,7 +194,8 @@ class AaveService {
             }
           }
         ''',
-      });
+        },
+      );
 
       final reserves = response.data['data']?['reserves'] as List<dynamic>?;
       if (reserves == null) return [];
@@ -256,8 +261,12 @@ class AaveReserve {
 
   factory AaveReserve.fromSubgraph(Map<String, dynamic> json) {
     // Aave rates are in RAY (1e27), convert to APY percentage
-    final liquidityRate = BigInt.tryParse(json['liquidityRate']?.toString() ?? '0') ?? BigInt.zero;
-    final borrowRate = BigInt.tryParse(json['variableBorrowRate']?.toString() ?? '0') ?? BigInt.zero;
+    final liquidityRate =
+        BigInt.tryParse(json['liquidityRate']?.toString() ?? '0') ??
+        BigInt.zero;
+    final borrowRate =
+        BigInt.tryParse(json['variableBorrowRate']?.toString() ?? '0') ??
+        BigInt.zero;
     final ray = BigInt.from(10).pow(27);
 
     final supplyApy = liquidityRate.toDouble() / ray.toDouble() * 100;
@@ -269,9 +278,15 @@ class AaveReserve {
       underlyingAsset: json['underlyingAsset'] as String? ?? '',
       supplyApy: supplyApy,
       borrowApy: borrowApy,
-      totalLiquidityUsd: double.tryParse(json['totalLiquidity']?.toString() ?? '0') ?? 0,
-      availableLiquidityUsd: double.tryParse(json['availableLiquidity']?.toString() ?? '0') ?? 0,
-      totalBorrowedUsd: double.tryParse(json['totalCurrentVariableDebt']?.toString() ?? '0') ?? 0,
+      totalLiquidityUsd:
+          double.tryParse(json['totalLiquidity']?.toString() ?? '0') ?? 0,
+      availableLiquidityUsd:
+          double.tryParse(json['availableLiquidity']?.toString() ?? '0') ?? 0,
+      totalBorrowedUsd:
+          double.tryParse(
+            json['totalCurrentVariableDebt']?.toString() ?? '0',
+          ) ??
+          0,
       decimals: json['decimals'] as int? ?? 18,
     );
   }

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import 'session_key_models.dart';
 
@@ -37,41 +37,32 @@ class SessionKeyAmountLimit extends StatelessWidget {
               child: TextFormField(
                 controller: amountCtrl,
                 enabled: !noLimit,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 decoration: InputDecoration(
                   hintText: S.of(context).g_key_aa_session_amount_hint,
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(12)),
-                  ),
+                  border: OutlineInputBorder(borderRadius: AppRadius.brMd),
                   contentPadding: EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(16),
-                    vertical: ScreenUtil().setWidth(14),
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space4,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: ScreenUtil().setWidth(12)),
-            _TokenChips(
-              selected: selectedToken,
-              onChanged: onTokenChanged,
-            ),
+            SizedBox(width: AppSpacing.space4),
+            _TokenChips(selected: selectedToken, onChanged: onTokenChanged),
           ],
         ),
-        SizedBox(height: ScreenUtil().setWidth(10)),
+        SizedBox(height: AppSpacing.space2),
         Row(
           children: [
             Checkbox(value: noLimit, onChanged: onNoLimitChanged),
             Expanded(
               child: Text(
                 S.of(context).g_key_aa_session_amount_limit,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.itemSubtitleTextColor.name,
-                  ),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
                 ),
                 overflow: TextOverflow.ellipsis,
               ),
@@ -100,32 +91,27 @@ class _TokenChips extends StatelessWidget {
           child: Container(
             margin: EdgeInsets.only(left: ScreenUtil().setWidth(6)),
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(12),
-              vertical: ScreenUtil().setWidth(8),
+              horizontal: AppSpacing.space4,
+              vertical: AppSpacing.space2,
             ),
             decoration: BoxDecoration(
               color: isSelected
                   ? const Color(0xFF8B5CF6).withAlpha(25)
-                  : Colors.grey.withAlpha(15),
-              borderRadius:
-                  BorderRadius.circular(ScreenUtil().setWidth(10)),
+                  : AppColorTokens.of(context).textTertiary.withAlpha(15),
+              borderRadius: AppRadius.brSm,
               border: Border.all(
                 color: isSelected
                     ? const Color(0xFF8B5CF6)
-                    : Colors.grey.withAlpha(40),
+                    : AppColorTokens.of(context).border.withAlpha(40),
               ),
             ),
             child: Text(
               t,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
+              style: AppTypography.caption.copyWith(
                 fontWeight: FontWeight.w600,
                 color: isSelected
                     ? const Color(0xFF8B5CF6)
-                    : AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.itemSubtitleTextColor.name,
-                      ),
+                    : AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -162,10 +148,10 @@ class SessionKeyRiskSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.all(AppSpacing.space4),
       decoration: BoxDecoration(
         color: riskColor.withAlpha(10),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(14)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: riskColor.withAlpha(30)),
       ),
       child: Column(
@@ -173,48 +159,61 @@ class SessionKeyRiskSummary extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(Icons.shield_outlined,
-                  size: ScreenUtil().setWidth(20), color: riskColor),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              Icon(
+                Icons.shield_outlined,
+                size: ScreenUtil().setWidth(20),
+                color: riskColor,
+              ),
+              SizedBox(width: AppSpacing.space2),
               Expanded(
                 child: Text(
                   S.of(context).g_key_aa_permission,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
-                    fontWeight: FontWeight.w700,
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.mainTextColor.name,
-                    ),
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).textPrimary,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12)),
-          _row(context, '🏷️',
-              '${S.of(context).g_key_aa_session_dapp_label}: $dappLabel'),
-          _row(context, '⏱️',
-              '${S.of(context).g_key_aa_session_expiry}: $expiryLabel'),
-          _row(context, '🔑',
-              '${S.of(context).g_key_aa_permission}: $permissionLabel'),
+          SizedBox(height: AppSpacing.space4),
+          _row(
+            context,
+            '🏷️',
+            '${S.of(context).g_key_aa_session_dapp_label}: $dappLabel',
+          ),
+          _row(
+            context,
+            '⏱️',
+            '${S.of(context).g_key_aa_session_expiry}: $expiryLabel',
+          ),
+          _row(
+            context,
+            '🔑',
+            '${S.of(context).g_key_aa_permission}: $permissionLabel',
+          ),
           if (spendingLimitLine != null)
-            _row(context, '💰',
-                '${S.of(context).g_key_aa_session_amount_limit}: $spendingLimitLine'),
+            _row(
+              context,
+              '💰',
+              '${S.of(context).g_key_aa_session_amount_limit}: $spendingLimitLine',
+            ),
           if (preset == SessionKeyPermission.full) ...[
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
             Row(
               children: [
-                Icon(Icons.warning_amber,
-                    size: ScreenUtil().setWidth(18), color: Colors.red),
-                SizedBox(width: ScreenUtil().setWidth(6)),
+                Icon(
+                  Icons.warning_amber,
+                  size: ScreenUtil().setWidth(18),
+                  color: AppColorTokens.of(context).danger,
+                ),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     S.of(context).g_key_aa_session_risk_warning,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(20),
-                      color: Colors.red,
+                    style: AppTypography.captionSm.copyWith(
+                      color: AppColorTokens.of(context).danger,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -233,17 +232,18 @@ class SessionKeyRiskSummary extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(icon, style: TextStyle(fontSize: ScreenUtil().setSp(20))),
-          SizedBox(width: ScreenUtil().setWidth(8)),
+          Text(
+            icon,
+            style: AppTypography.captionSm.copyWith(
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+          SizedBox(width: AppSpacing.space2),
           Expanded(
             child: Text(
               text,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ),
@@ -274,10 +274,7 @@ class SessionKeyConfirmCheckbox extends StatelessWidget {
         Checkbox(
           value: value,
           onChanged: onChanged,
-          activeColor: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
+          activeColor: AppColorTokens.of(context).brand,
         ),
         Expanded(
           child: GestureDetector(
@@ -286,12 +283,8 @@ class SessionKeyConfirmCheckbox extends StatelessWidget {
               padding: EdgeInsets.only(top: ScreenUtil().setWidth(12)),
               child: Text(
                 S.of(context).g_key_aa_session_confirm_risk,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(24),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
             ),

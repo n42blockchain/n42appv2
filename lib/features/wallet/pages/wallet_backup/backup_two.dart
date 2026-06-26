@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_three.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -89,7 +89,7 @@ class _BackupTwoState extends State<BackupTwo> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+                padding: EdgeInsets.all(AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -97,16 +97,13 @@ class _BackupTwoState extends State<BackupTwo> {
                       alignment: Alignment.center,
                       width: double.infinity,
                       margin: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(30),
+                        vertical: AppSpacing.space8,
                       ),
                       child: Text(
                         S.of(context).g_key_wallet_c12,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(50.0),
-                          color: AppThemeUtils.getColorByKey(
-                            context,
-                            AppThemeKeys.mainTextColor.name,
-                          ),
+                        style: AppTypography.displayLg.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
@@ -126,27 +123,12 @@ class _BackupTwoState extends State<BackupTwo> {
                 children: [
                   const Divider(height: 1),
                   Container(
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                    color: AppThemeUtils.getColorByKey(
-                      context,
-                      AppThemeKeys.backGroundColor.name,
-                    ),
+                    padding: EdgeInsets.all(AppSpacing.space8),
+                    color: AppColorTokens.of(context).bgBase,
                     height: ScreenUtil().setWidth(148),
-                    child: buttonStyle6(
-                      context,
-                      _onConfirmTap,
-                      S.of(context).g_key_wallet_c43,
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        isCanClick
-                            ? AppThemeKeys.mainButtonBgColor.name
-                            : AppThemeKeys.mainButtonBgColor3.name,
-                      ),
-                      AppThemeUtils.getColorByKey(
-                        context,
-                        AppThemeKeys.mainButtonTextColor.name,
-                      ),
-                      false,
+                    child: AppButton(
+                      label: S.of(context).g_key_wallet_c43,
+                      onPressed: _onConfirmTap,
                     ),
                   ),
                 ],
@@ -180,7 +162,7 @@ class _BackupTwoState extends State<BackupTwo> {
           context,
           AppThemeKeys.itemBgColor8.name,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+        borderRadius: AppRadius.brSm,
       ),
     );
   }
@@ -197,18 +179,17 @@ class _BackupTwoState extends State<BackupTwo> {
               context,
               AppThemeKeys.mainButtonBgColor.name,
             ),
-            borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+            borderRadius: AppRadius.brSm,
           ),
           child: Center(
             child: Text(
               item.word,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTypography.body.copyWith(
                 color: AppThemeUtils.getColorByKey(
                   context,
                   AppThemeKeys.mainButtonTextColor.name,
                 ),
-                fontSize: ScreenUtil().setSp(28.0),
               ),
             ),
           ),
@@ -228,15 +209,13 @@ class _BackupTwoState extends State<BackupTwo> {
                   width: ScreenUtil().setWidth(36.0),
                   height: ScreenUtil().setWidth(36.0),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(18.0),
-                    ),
+                    borderRadius: AppRadius.brMd,
                     color: Colors.white,
                   ),
                   child: Icon(
                     Icons.cancel,
                     size: ScreenUtil().setWidth(36.0),
-                    color: Colors.red,
+                    color: AppColorTokens.of(context).danger,
                   ),
                 ),
               ),
@@ -248,7 +227,7 @@ class _BackupTwoState extends State<BackupTwo> {
 
   Widget _buildGridView() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       itemCount: messMnemonicWordsList.length,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -262,27 +241,26 @@ class _BackupTwoState extends State<BackupTwo> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: item.isSelected
-                    ? Colors.blueAccent
+                    ? AppColorTokens.of(context).brand
                     : AppThemeUtils.getColorByKey(
                         context,
                         AppThemeKeys.mainGreyColor.name,
                       ),
                 width: 1,
               ),
-              borderRadius: BorderRadius.circular(ScreenUtil().setWidth(8.0)),
+              borderRadius: AppRadius.brSm,
             ),
             child: Center(
               child: Text(
                 item.word,
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: AppTypography.body.copyWith(
                   color: item.isSelected
-                      ? Colors.blueAccent
+                      ? AppColorTokens.of(context).brand
                       : AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.ff444444.name,
                         ),
-                  fontSize: ScreenUtil().setSp(28.0),
                 ),
               ),
             ),

@@ -7,14 +7,19 @@ class AptApi {
   final String url;
 
   AptApi({bool isTest = false})
-      : url = RequestUrl().getUrl2(CoinType.APT.name, 'rpc', isTest: isTest);
+    : url = RequestUrl().getUrl2(CoinType.APT.name, 'rpc', isTest: isTest);
 
-  Future<MessageModel> getBalance(String address, {String contract = '', String tokenName = ''}) async {
+  Future<MessageModel> getBalance(
+    String address, {
+    String contract = '',
+    String tokenName = '',
+  }) async {
     try {
       final coinType = contract == ''
           ? '0x1::aptos_coin::AptosCoin'
           : '$contract::celer_coin_manager::$tokenName';
-      final uri = '${url}accounts/$address/balance/0x1::coin::CoinStore<$coinType>';
+      final uri =
+          '${url}accounts/$address/balance/0x1::coin::CoinStore<$coinType>';
       final data = await BaseApi.requestEmptyH.get(uri, params: {});
       return MessageModel()..data = BigInt.from(data);
     } catch (e) {
@@ -24,7 +29,10 @@ class AptApi {
 
   Future<MessageModel> getGasPrice() async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${url}estimate_gas_price', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${url}estimate_gas_price',
+        params: {},
+      );
       return MessageModel()..data = BigInt.from(data['gas_estimate']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -33,7 +41,10 @@ class AptApi {
 
   Future<MessageModel> getAccountInfo(String address) async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${url}accounts/$address', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${url}accounts/$address',
+        params: {},
+      );
       return MessageModel()..data = int.parse(data['sequence_number']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();
@@ -42,7 +53,10 @@ class AptApi {
 
   Future<MessageModel> getServiceInfo() async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${url}ledger/info', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${url}ledger/info',
+        params: {},
+      );
       return MessageModel()..data = int.parse(data['ledger_timestamp']);
     } catch (e) {
       return MessageModel.error()..data = e.toString();

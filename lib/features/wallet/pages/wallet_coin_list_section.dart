@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart'
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class WalletCoinListSliver extends StatelessWidget {
   const WalletCoinListSliver({
@@ -30,7 +31,8 @@ class WalletCoinListSliver extends StatelessWidget {
   final VoidCallback onShowAllTap;
 
   /// 由 State 提供，负责构建单个代币行 Widget
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -68,15 +70,17 @@ class _CoinListBody extends StatelessWidget {
   final VoidCallback onDiscoveryDismiss;
   final VoidCallback onDiscoveryAdded;
   final VoidCallback onShowAllTap;
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
-    final bgColor = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name);
+    final bgColor = AppColorTokens.of(context).bgBase;
     final displayList = smallAssetsThreshold > 0
-        ? waValue.coinList.where((c) => c.value >= smallAssetsThreshold).toList()
+        ? waValue.coinList
+              .where((c) => c.value >= smallAssetsThreshold)
+              .toList()
         : waValue.coinList;
     final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 
@@ -99,8 +103,7 @@ class _CoinListBody extends StatelessWidget {
               onDismiss: onDiscoveryDismiss,
               onAdded: onDiscoveryAdded,
             ),
-          if (waValue.loadBalance == Load.loading)
-            _LoadingBanner(su: su),
+          if (waValue.loadBalance == Load.loading) _LoadingBanner(su: su),
           if (showSkeleton) const WalletCoinListSkeleton(),
           if (!showSkeleton && displayList.isEmpty)
             Container(
@@ -130,16 +133,16 @@ class _LoadingBanner extends StatelessWidget {
       height: su.setWidth(60.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.textColorOrange.name),
+        color: AppColorTokens.of(context).warning,
         borderRadius: BorderRadius.circular(su.setWidth(8)),
       ),
       child: Text(
         S.of(context).g_key_208,
-        style: TextStyle(
-          fontSize: su.setSp(24),
+        style: AppTypography.caption.copyWith(
           color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainWhiteColor.name),
+            context,
+            AppThemeKeys.mainWhiteColor.name,
+          ),
         ),
       ),
     );
@@ -161,57 +164,64 @@ class _DiscoveryBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blueColor =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name);
-    return GestureDetector(
-      onTap: () async {
-        final added = await Navigator.push<bool>(
-          context,
-          MaterialPageRoute(
-            builder: (_) => TokenDiscoveryPage(tokens: discoveredTokens),
-          ),
-        );
-        if (added == true) onAdded();
-      },
-      child: Container(
-        margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
-        padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(24),
-          vertical: ScreenUtil().setWidth(14),
-        ),
-        decoration: BoxDecoration(
-          color: blueColor.withValues(alpha: 0.10),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-          border: Border.all(color: blueColor.withValues(alpha: 0.30)),
-        ),
-        child: Row(
-          children: [
-            Icon(Icons.manage_search_rounded,
-                color: blueColor, size: ScreenUtil().setWidth(36)),
-            SizedBox(width: ScreenUtil().setWidth(12)),
-            Expanded(
-              child: Text(
-                S.of(context).g_key_token_discovery_banner(count),
-                style: TextStyle(
+    final blueColor = AppColorTokens.of(context).brand;
+    return Padding(
+      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () async {
+            final added = await Navigator.push<bool>(
+              context,
+              MaterialPageRoute(
+                builder: (_) => TokenDiscoveryPage(tokens: discoveredTokens),
+              ),
+            );
+            if (added == true) onAdded();
+          },
+          borderRadius: AppRadius.brMd,
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space6,
+              vertical: AppSpacing.space4,
+            ),
+            decoration: BoxDecoration(
+              color: blueColor.withValues(alpha: 0.10),
+              borderRadius: AppRadius.brMd,
+              border: Border.all(color: blueColor.withValues(alpha: 0.30)),
+            ),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.manage_search_rounded,
                   color: blueColor,
-                  fontSize: ScreenUtil().setSp(26),
-                  fontWeight: FontWeight.w500,
+                  size: ScreenUtil().setWidth(36),
                 ),
-              ),
-            ),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: onDismiss,
-              child: Padding(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(8)),
-                child: Icon(
-                  Icons.close_rounded,
-                  color: blueColor.withValues(alpha: 0.70),
-                  size: ScreenUtil().setWidth(30),
+                SizedBox(width: AppSpacing.space4),
+                Expanded(
+                  child: Text(
+                    S.of(context).g_key_token_discovery_banner(count),
+                    style: AppTypography.bodySm.copyWith(
+                      color: blueColor,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-              ),
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: onDismiss,
+                  child: Padding(
+                    padding: EdgeInsets.all(AppSpacing.space2),
+                    child: Icon(
+                      Icons.close_rounded,
+                      color: blueColor.withValues(alpha: 0.70),
+                      size: ScreenUtil().setWidth(30),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -219,17 +229,18 @@ class _DiscoveryBanner extends StatelessWidget {
 }
 
 class _CoinListView extends StatelessWidget {
-  const _CoinListView({
-    required this.list,
-    required this.coinItemBuilder,
-  });
+  const _CoinListView({required this.list, required this.coinItemBuilder});
 
   final List<dynamic> list;
-  final Widget Function(CoinModel coin, String key, String group) coinItemBuilder;
+  final Widget Function(CoinModel coin, String key, String group)
+  coinItemBuilder;
 
   @override
   Widget build(BuildContext context) {
-    final pinnedCount = list.cast<CoinModel>().takeWhile((c) => c.isPinned).length;
+    final pinnedCount = list
+        .cast<CoinModel>()
+        .takeWhile((c) => c.isPinned)
+        .length;
 
     final needsDivider = pinnedCount > 0 && pinnedCount < list.length;
     final itemCount = list.length + (needsDivider ? 1 : 0);
@@ -243,10 +254,14 @@ class _CoinListView extends StatelessWidget {
         if (needsDivider && index == pinnedCount) {
           return const _PinnedDivider();
         }
-        final coinIndex =
-            (needsDivider && index > pinnedCount) ? index - 1 : index;
+        final coinIndex = (needsDivider && index > pinnedCount)
+            ? index - 1
+            : index;
         return coinItemBuilder(
-            list[coinIndex] as CoinModel, "c$coinIndex", "coin_list");
+          list[coinIndex] as CoinModel,
+          "c$coinIndex",
+          "coin_list",
+        );
       },
     );
   }
@@ -257,23 +272,20 @@ class _PinnedDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name);
+    final color = AppColorTokens.of(context).border;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(4)),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         children: [
           Expanded(child: Divider(height: 1, color: color)),
           Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(12)),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
             child: Text(
               S.of(context).g_key_coin_list_separator,
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.itemSubtitleTextColor.name)
-                    .withValues(alpha: 0.6),
+              style: AppTypography.captionSm.copyWith(
+                color: AppColorTokens.of(
+                  context,
+                ).textSubtitle.withValues(alpha: 0.6),
               ),
             ),
           ),
@@ -298,27 +310,22 @@ class _AllHiddenHint extends StatelessWidget {
           Icon(
             Icons.visibility_off_outlined,
             size: ScreenUtil().setWidth(60),
-            color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.itemSubtitleTextColor.name),
+            color: AppColorTokens.of(context).textSubtitle,
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             S.of(context).g_key_coin_list_all_hidden,
-            style: TextStyle(
-              color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(28),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           GestureDetector(
             onTap: onShowAll,
             child: Text(
               S.of(context).g_key_coin_list_show_all,
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                    context, AppThemeKeys.mainBlueColor.name),
-                fontSize: ScreenUtil().setSp(26),
+              style: AppTypography.bodySm.copyWith(
+                color: AppColorTokens.of(context).brand,
               ),
             ),
           ),

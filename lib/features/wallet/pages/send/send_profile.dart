@@ -32,8 +32,7 @@ SendProfile resolveSendProfile(String blockchainType) {
     'ICON' ||
     'IOST' ||
     'Ark' ||
-    'Hive' =>
-      SendProfile.memo,
+    'Hive' => SendProfile.memo,
     _ => SendProfile.evm,
   };
 }

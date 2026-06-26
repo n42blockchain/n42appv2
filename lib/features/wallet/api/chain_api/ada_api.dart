@@ -15,14 +15,17 @@ class AdaApi {
       RequestUrl().getUrl2(_coinType.name, 'rpc', isTest: isTest);
 
   Map<String, String> get _header => {
-        'Content-Type': 'application/json',
-        'project_id': projectId,
-      };
+    'Content-Type': 'application/json',
+    'project_id': projectId,
+  };
 
   static MessageModel _err(dynamic e) => MessageModel.error()..data = e;
 
   /// 获取地址信息（余额，单位 lovelace，1 ADA = 1,000,000 lovelace）
-  Future<MessageModel> getAddressInfo(String address, {bool isTest = false}) async {
+  Future<MessageModel> getAddressInfo(
+    String address, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/addresses/$address',
@@ -37,7 +40,10 @@ class AdaApi {
   }
 
   /// 获取地址 UTxO 列表（构造交易所需）
-  Future<MessageModel> getAddressUtxos(String address, {bool isTest = false}) async {
+  Future<MessageModel> getAddressUtxos(
+    String address, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/addresses/$address/utxos',
@@ -52,17 +58,17 @@ class AdaApi {
   }
 
   /// 广播已签名交易（CBOR 编码，Base16/hex 字符串）
-  Future<MessageModel> sendTransaction(String txCborHex, {bool isTest = false}) async {
+  Future<MessageModel> sendTransaction(
+    String txCborHex, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.post(
         '${_base(isTest)}/tx/submit',
         params: {},
         data: txCborHex,
         defaultReturn: false,
-        header: {
-          'Content-Type': 'application/cbor',
-          'project_id': projectId,
-        },
+        header: {'Content-Type': 'application/cbor', 'project_id': projectId},
         enableRetry: false,
       );
       return MessageModel()..data = data;
@@ -72,7 +78,10 @@ class AdaApi {
   }
 
   /// 查询交易详情
-  Future<MessageModel> getTransaction(String txHash, {bool isTest = false}) async {
+  Future<MessageModel> getTransaction(
+    String txHash, {
+    bool isTest = false,
+  }) async {
     try {
       final data = await BaseApi.requestEmptyH.get(
         '${_base(isTest)}/txs/$txHash',

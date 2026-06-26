@@ -126,10 +126,7 @@ extension TokenViewApiBtc on TokenViewApi {
       if (isTest) {
         return await BtcApi(test: isTest).sendTxHttp(signHash);
       }
-      final params = {
-        'coin': coinType.toLowerCase(),
-        'tx_hash': signHash,
-      };
+      final params = {'coin': coinType.toLowerCase(), 'tx_hash': signHash};
       final a = await BaseApi.requestEmptyH.post(
         '${url}v1/vipapi/onchainwallet/rawtransaction',
         params: params,

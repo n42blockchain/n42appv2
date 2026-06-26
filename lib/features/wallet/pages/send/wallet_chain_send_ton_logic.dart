@@ -62,7 +62,7 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
     if (_isContract) {
       final WalletActionProvider wap = ref.read(wapBridgeProvider);
       final int cIndex = wap.coinModels.indexWhere((element) {
-        if (element.coin['coinType'] != _coinType) return false;
+        if (element.config.coinType != _coinType) return false;
         if (widget.coinModel.privateKey != null) {
           return element.privateKey == widget.coinModel.privateKey;
         }
@@ -75,7 +75,9 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         return;
       }
       chainModel = wap.coinModels[cIndex];
-      if (chainModel != null) await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      if (chainModel != null) {
+        await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
+      }
       if (!mounted) return;
       setState(() {});
     }
@@ -86,7 +88,11 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
 
   Future<void> getBalance() async {
     setState(() => load = Load.loading);
-    final bool isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider), getToken: false);
+    final bool isOk = await fetchCoinBalance(
+      widget.coinModel,
+      ref.read(wapBridgeProvider),
+      getToken: false,
+    );
     if (!mounted) return;
     if (!isOk) {
       errorMessage = S.current.g_key_t_44;
@@ -305,31 +311,35 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
   Future<void> signTx(TransationRecordModel trModel) async {
     bool completedWithExit = false;
     try {
-      final coinType = widget.coinModel.coin['coinType'] as String? ?? '';
+      final coinType = widget.coinModel.config.coinType;
       final addrType = widget.coinModel.addrType;
-      final baseInfo = widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final baseInfo =
+          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
       final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
       final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
-      final decimals = (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
+      final decimals =
+          (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
-      final result = await SenderFactory.instance.getSender(coinType).send(
-        SendParams(
-          coinType: coinType,
-          fromAddress: trModel.from1,
-          toAddress: trModel.to1,
-          amount: toEther(trModel.price.toString(), decimals).toDouble(),
-          decimals: decimals,
-          path: path,
-          sendMax: false,
-          isTest: widget.coinModel.isTest,
-          contractAddress: trModel.contract,
-          tokenDecimals: 0,
-          memo: trModel.message,
-          privateKey: widget.coinModel.privateKey,
-          chainConfig: widget.coinModel.coin,
-        ),
-      );
+      final result = await SenderFactory.instance
+          .getSender(coinType)
+          .send(
+            SendParams(
+              coinType: coinType,
+              fromAddress: trModel.from1,
+              toAddress: trModel.to1,
+              amount: toEther(trModel.price.toString(), decimals).toDouble(),
+              decimals: decimals,
+              path: path,
+              sendMax: false,
+              isTest: widget.coinModel.isTest,
+              contractAddress: trModel.contract,
+              tokenDecimals: 0,
+              memo: trModel.message,
+              privateKey: widget.coinModel.privateKey,
+              chainConfig: widget.coinModel.coin,
+            ),
+          );
 
       if (!mounted) return;
       if (result.success) {
@@ -337,7 +347,10 @@ mixin _TonSendLogicMixin on ConsumerState<WalletChainSendTon> {
         trModel.trId = await AppDatabase().insertTransationRecord(trModel);
         if (!mounted) return;
         ref.read(tripBridgeProvider).addUndoneTr(trModel, 1);
-        await RecentAddressService.save(coinType, toTextEditingController.text.trim());
+        await RecentAddressService.save(
+          coinType,
+          toTextEditingController.text.trim(),
+        );
         if (!mounted) return;
         ToastUtils.show(S.current.g_key_nft_41);
         completedWithExit = true;

@@ -53,7 +53,10 @@ class TokenViewEnhancedApi {
   // ── Pending Transactions ────────────────────────────────
 
   /// 查询地址在 Mempool 中的 pending 交易
-  Future<List<MempoolTxItem>> getPendingTxs(String chain, String address) async {
+  Future<List<MempoolTxItem>> getPendingTxs(
+    String chain,
+    String address,
+  ) async {
     try {
       final raw = await ExternalHttp.get(
         '${ProxyConfig.tokenviewPendingTx}?chain=${Uri.encodeComponent(chain)}&address=${Uri.encodeComponent(address)}',
@@ -74,7 +77,10 @@ class TokenViewEnhancedApi {
   // ── Contract Creator ────────────────────────────────────
 
   /// 获取合约创建者信息
-  Future<ContractCreatorInfo?> getContractCreator(String chain, String address) async {
+  Future<ContractCreatorInfo?> getContractCreator(
+    String chain,
+    String address,
+  ) async {
     try {
       final raw = await ExternalHttp.get(
         '${ProxyConfig.tokenviewContractCreator}?chain=${Uri.encodeComponent(chain)}&address=${Uri.encodeComponent(address)}',
@@ -94,15 +100,13 @@ class TokenViewEnhancedApi {
   /// All chain latest block heights (cached 15s on server)
   Future<Map<String, int>?> getChainHeights() async {
     try {
-      final raw = await ExternalHttp.get(
-        ProxyConfig.tokenviewChainHeights,
-      );
+      final raw = await ExternalHttp.get(ProxyConfig.tokenviewChainHeights);
       if (raw == null || raw is! Map) return null;
       final data = raw['data'];
       if (data == null || data is! Map) return null;
-      return Map<String, dynamic>.from(data).map(
-        (key, value) => MapEntry(key, toIntSafe(value) ?? 0),
-      );
+      return Map<String, dynamic>.from(
+        data,
+      ).map((key, value) => MapEntry(key, toIntSafe(value) ?? 0));
     } catch (e) {
       AppLogger.w('TokenViewEnhanced', 'getChainHeights error: $e');
       return null;
@@ -218,7 +222,12 @@ class GasNextBlockPrediction {
   final double? high;
   final int? pendingTxCount;
 
-  const GasNextBlockPrediction({this.low, this.medium, this.high, this.pendingTxCount});
+  const GasNextBlockPrediction({
+    this.low,
+    this.medium,
+    this.high,
+    this.pendingTxCount,
+  });
 
   factory GasNextBlockPrediction.fromJson(Map<String, dynamic> json) {
     return GasNextBlockPrediction(
@@ -235,7 +244,11 @@ class MempoolCongestion {
   final int? queuedCount;
   final String? congestionLevel;
 
-  const MempoolCongestion({this.pendingCount, this.queuedCount, this.congestionLevel});
+  const MempoolCongestion({
+    this.pendingCount,
+    this.queuedCount,
+    this.congestionLevel,
+  });
 
   factory MempoolCongestion.fromJson(Map<String, dynamic> json) {
     final pending = toIntSafe(json['pendingCount'] ?? json['pending']);
@@ -304,20 +317,28 @@ class ContractCreatorInfo {
   final String? txHash;
   final String? creationTime;
 
-  const ContractCreatorInfo({this.creatorAddress, this.txHash, this.creationTime});
+  const ContractCreatorInfo({
+    this.creatorAddress,
+    this.txHash,
+    this.creationTime,
+  });
 
   factory ContractCreatorInfo.fromJson(Map<String, dynamic> json) {
     return ContractCreatorInfo(
-      creatorAddress: (json['creator'] ?? json['contractCreator'] ?? '').toString(),
+      creatorAddress: (json['creator'] ?? json['contractCreator'] ?? '')
+          .toString(),
       txHash: (json['txHash'] ?? json['creationTxHash'] ?? '').toString(),
-      creationTime: (json['creationTime'] ?? json['timestamp'] ?? '').toString(),
+      creationTime: (json['creationTime'] ?? json['timestamp'] ?? '')
+          .toString(),
     );
   }
 
   /// 合约年龄（天数），null 表示无法计算
   int? get contractAgeDays {
     if (creationTime == null || creationTime!.isEmpty) return null;
-    final ts = int.tryParse(creationTime!) ?? DateTime.tryParse(creationTime!)?.millisecondsSinceEpoch;
+    final ts =
+        int.tryParse(creationTime!) ??
+        DateTime.tryParse(creationTime!)?.millisecondsSinceEpoch;
     if (ts == null) return null;
     final created = DateTime.fromMillisecondsSinceEpoch(
       ts > 1e12 ? ts.toInt() : ts * 1000,

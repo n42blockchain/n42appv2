@@ -12,8 +12,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     final subtitleText = _themeColor(AppThemeKeys.itemSubtitleTextColor.name);
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(8.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -22,46 +22,33 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             children: [
               Text(
                 'Destination Tag',
-                style: TextStyle(
-                  color: mainText,
-                  fontSize: ScreenUtil().setSp(28.0),
-                ),
+                style: AppTypography.body.copyWith(color: mainText),
               ),
-              SizedBox(width: ScreenUtil().setWidth(8)),
+              SizedBox(width: AppSpacing.space2),
               Text(
-                '（可选）',
-                style: TextStyle(
-                  color: subtitleText,
-                  fontSize: ScreenUtil().setSp(24.0),
-                ),
+                S.of(context).g_xrp_optional,
+                style: AppTypography.caption.copyWith(color: subtitleText),
               ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(12.0)),
+          SizedBox(height: AppSpacing.space4),
           TextField(
             controller: destTagCtrl,
             focusNode: destTagNode,
             keyboardType: TextInputType.number,
             inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: mainText),
             decoration: InputDecoration(
-              hintText: '转账到交易所时通常必填',
-              hintStyle: TextStyle(
-                color: subtitleText,
-                fontSize: ScreenUtil().setSp(24.0),
-              ),
+              hintText: S.of(context).g_xrp_dest_tag_hint,
+              hintStyle: AppTypography.caption.copyWith(color: subtitleText),
               filled: true,
               fillColor: _themeColor(AppThemeKeys.itemBgColor.name),
               contentPadding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20.0),
-                vertical: ScreenUtil().setWidth(16.0),
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space4,
               ),
               border: OutlineInputBorder(
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(10.0)),
+                borderRadius: AppRadius.brSm,
                 borderSide: BorderSide.none,
               ),
             ),
@@ -73,15 +60,14 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   Widget toWidget() {
     return Container(
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(28.0),
             ),
           ),
           textFieldStyle2(
@@ -118,7 +104,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     final itemBgColor = _themeColor(AppThemeKeys.itemBgColor.name);
     return containerStyle1(
       context,
-      margin: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      margin: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         children: [
           Padding(
@@ -132,14 +118,13 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 Flexible(
                   child: Text(
                     S.of(context).g_key_44,
-                    style: TextStyle(
+                    style: AppTypography.body.copyWith(
                       color: _themeColor(AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(20.0)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(child: amountBalanceWidget()),
               ],
             ),
@@ -147,8 +132,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Container(
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(16.0))),
+              borderRadius: AppRadius.brMd,
               color: itemBgColor,
             ),
             child: Column(
@@ -159,12 +143,10 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   controller: valueTextEditingController,
                   focusNode: valueNode,
                   hintText: S.of(context).g_key_44,
-                  hintStyle: TextStyle(
-                    fontSize: ScreenUtil().setSp(54.0),
+                  hintStyle: AppTypography.displayLg.copyWith(
                     color: _themeColor(AppThemeKeys.textFieldHintColor.name),
                   ),
-                  keyboardType:
-                      TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   onChanged: (value) {
                     amountCheck(value: value);
                   },
@@ -182,23 +164,24 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   bgColor: itemBgColor,
                   errorMessage: amountErrorMessage,
                   messageMargin: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(30.0)),
+                    horizontal: AppSpacing.space8,
+                  ),
                   rightWidget1: Container(
-                    margin:
-                        EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
+                    margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
                     height: ScreenUtil().setWidth(60.0),
                     padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(20.0)),
+                      horizontal: AppSpacing.space4,
+                    ),
                     decoration: BoxDecoration(
                       color: _themeColor(AppThemeKeys.mainBlueColor.name),
                       borderRadius: BorderRadius.all(
-                          Radius.circular(ScreenUtil().setWidth(60.0))),
+                        Radius.circular(ScreenUtil().setWidth(60.0)),
+                      ),
                     ),
                     alignment: Alignment.center,
                     child: Text(
                       S.of(context).g_key_197,
-                      style: TextStyle(
-                        fontSize: ScreenUtil().setSp(26.0),
+                      style: AppTypography.bodySm.copyWith(
                         color: _themeColor(AppThemeKeys.mainWhiteColor.name),
                       ),
                     ),
@@ -222,10 +205,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
   Widget _balanceLine(String label, String value, String colorKey) {
     return Text(
       '$label:$value',
-      style: TextStyle(
-        color: _themeColor(colorKey),
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: _themeColor(colorKey)),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -233,13 +213,11 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   Widget amountBalanceWidget() {
     final String unit = widget.coinModel.coin['unit'];
-    if (widget.coinModel.coin['blockchainType'] !=
-        BlockchainType.Ripple.name) {
+    if (widget.coinModel.config.blockchainType != BlockchainType.Ripple.name) {
       return Text(
         '${widget.coinModel.balanceStringAll()} $unit',
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: _themeColor(AppThemeKeys.mainTextColor.name),
-          fontSize: ScreenUtil().setSp(28.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -255,14 +233,21 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _balanceLine(S.of(context).g_key_29,
-            '${dec.Decimal.parse(tBalance.toString())} $unit',
-            AppThemeKeys.mainBlueColor.name),
-        _balanceLine(S.of(context).g_key_xml_0,
-            '$lockValue $unit', AppThemeKeys.errorTextColor.name),
-        _balanceLine(S.of(context).g_key_43,
-            '${dec.Decimal.parse(uBalance.toString())} $unit',
-            AppThemeKeys.rightTextColor.name),
+        _balanceLine(
+          S.of(context).g_key_29,
+          '${dec.Decimal.parse(tBalance.toString())} $unit',
+          AppThemeKeys.mainBlueColor.name,
+        ),
+        _balanceLine(
+          S.of(context).g_key_xml_0,
+          '$lockValue $unit',
+          AppThemeKeys.errorTextColor.name,
+        ),
+        _balanceLine(
+          S.of(context).g_key_43,
+          '${dec.Decimal.parse(uBalance.toString())} $unit',
+          AppThemeKeys.rightTextColor.name,
+        ),
       ],
     );
   }
@@ -271,14 +256,13 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
   Widget ownerAddress() {
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30.0),
-        vertical: ScreenUtil().setWidth(20.0),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
       child: Text(
         widget.coinModel.address.toString(),
-        style: TextStyle(
+        style: AppTypography.body.copyWith(
           color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
         ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
@@ -288,11 +272,11 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
 
   /// Displays the network fee for XRP / XRP token transfers.
   Widget minerFeeWidgetRippleXRP() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final bool isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final String title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final String title = widget.coinModel.config.coinType;
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 
@@ -302,8 +286,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         if (isContract)
           Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(30.0),
-              vertical: ScreenUtil().setWidth(8.0),
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -312,26 +296,23 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                   child: Text(
                     S.of(context).g_key_29,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-                      fontSize: ScreenUtil().setSp(28.0),
+                    style: AppTypography.body.copyWith(
+                      color: _themeColor(
+                        AppThemeKeys.itemSubtitleTextColor.name,
+                      ),
                     ),
                   ),
                 ),
                 Text(
                   '${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}',
-                  style: TextStyle(
+                  style: AppTypography.body.copyWith(
                     color: _themeColor(AppThemeKeys.mainButtonBgColor.name),
-                    fontSize: ScreenUtil().setSp(28.0),
                   ),
                 ),
               ],
             ),
           ),
-        NonEvmFeeCompact(
-          feeText: feeText,
-          onTap: null,
-        ),
+        NonEvmFeeCompact(feeText: feeText, onTap: null),
       ],
     );
   }
@@ -347,10 +328,9 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         left: ScreenUtil().setWidth(30.0),
         right: ScreenUtil().setWidth(30.0),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        borderRadius:
-            BorderRadius.all(Radius.circular(ScreenUtil().setWidth(8.0))),
+        borderRadius: AppRadius.brSm,
         color: _themeColor(AppThemeKeys.itemBgColor.name),
       ),
       child: Column(
@@ -361,10 +341,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
               Expanded(
                 child: Text(
                   S.of(context).g_key_t_46,
-                  style: TextStyle(
-                    color: buttonColor,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: buttonColor),
                 ),
               ),
               InkWell(
@@ -374,13 +351,12 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    vertical: ScreenUtil().setWidth(10.0),
-                    horizontal: ScreenUtil().setWidth(20.0),
+                    vertical: AppSpacing.space2,
+                    horizontal: AppSpacing.space4,
                   ),
                   decoration: BoxDecoration(
                     color: buttonColor,
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(10.0)),
+                    borderRadius: const BorderRadius.all(Radius.circular(10.0)),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -395,9 +371,8 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
                         child: Text(
                           S.of(context).g_key_t_47,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
+                          style: AppTypography.caption.copyWith(
                             color: whiteColor,
-                            fontSize: ScreenUtil().setSp(24.0),
                           ),
                         ),
                       ),
@@ -409,32 +384,27 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           ),
           Text(
             S.of(context).g_key_t_46,
-            style: TextStyle(
+            style: AppTypography.caption.copyWith(
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor.name),
-              fontSize: ScreenUtil().setSp(24.0),
             ),
           ),
           Padding(
-            padding:
-                EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            padding: EdgeInsets.symmetric(
+              vertical: AppSpacing.space4,
+            ),
             child: Text(
               accountXrp['account'],
-              style: TextStyle(
-                color: buttonColor,
-                fontSize: ScreenUtil().setSp(24.0),
-              ),
+              style: AppTypography.caption.copyWith(color: buttonColor),
             ),
           ),
           Text(
             accountXrp['error'],
-            style: TextStyle(
+            style: AppTypography.caption.copyWith(
               color: _themeColor(AppThemeKeys.errorTextColor.name),
-              fontSize: ScreenUtil().setSp(22.0),
             ),
           ),
         ],
       ),
     );
   }
-
 }

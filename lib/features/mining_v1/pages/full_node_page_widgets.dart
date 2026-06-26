@@ -35,8 +35,8 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Row(
           children: [
@@ -49,10 +49,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
             Expanded(
               child: Text(
                 payType,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(30)),
+                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
             _buildRadioDot(isSelected),
@@ -74,8 +71,8 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
       onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(30),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         child: Row(
           children: [
@@ -92,17 +89,13 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
                 children: [
                   Text(
                     payType,
-                    style: TextStyle(
-                        color: AppThemeUtils.getColorByKey(
-                            context, AppThemeKeys.mainTextColor.name),
-                        fontSize: ScreenUtil().setSp(30)),
+                    style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                   ),
                   if (!isEnough)
                     Text(
                       errTips ?? '',
-                      style: TextStyle(
-                        color: const Color(0xffEB5851),
-                        fontSize: ScreenUtil().setSp(20),
+                      style: AppTypography.captionSm.copyWith(
+                        color: AppColorTokens.of(context).danger,
                       ),
                     ),
                 ],
@@ -126,8 +119,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
         border: Border.all(
           color: isSelected
               ? Colors.transparent
-              : AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.mainTextColor.name),
+              : AppColorTokens.of(context).textPrimary,
           width: 1.0,
         ),
       ),

@@ -22,14 +22,10 @@ String _formatMarketPrice(
 }) {
   if (price <= 0) return '0.00';
   if (price >= 1000) {
-    return useGrouping
-        ? _fmtGrouped2.format(price)
-        : price.toStringAsFixed(2);
+    return useGrouping ? _fmtGrouped2.format(price) : price.toStringAsFixed(2);
   }
   if (price >= 1) {
-    return useGrouping
-        ? _fmtGrouped4.format(price)
-        : price.toStringAsFixed(4);
+    return useGrouping ? _fmtGrouped4.format(price) : price.toStringAsFixed(4);
   }
 
   final decimals = _resolveSmallPriceDecimals(

@@ -76,12 +76,15 @@ class CreateBTCTX {
 
   /// Base58 解码
   Uint8List base58Decode(String input) {
-    const String alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
+    const String alphabet =
+        '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
     BigInt num = BigInt.zero;
 
     for (int i = 0; i < input.length; i++) {
       final int charIndex = alphabet.indexOf(input[i]);
-      if (charIndex == -1) throw ArgumentError('Invalid Base58 character: ${input[i]}');
+      if (charIndex == -1) {
+        throw ArgumentError('Invalid Base58 character: ${input[i]}');
+      }
       num = num * BigInt.from(58) + BigInt.from(charIndex);
     }
 
@@ -128,7 +131,9 @@ class CreateBTCTX {
 
     // 处理输入
     for (var input in inputs) {
-      final Uint8List txidBytes = Uint8List.fromList(hex.decode(input['txid']).reversed.toList());
+      final Uint8List txidBytes = Uint8List.fromList(
+        hex.decode(input['txid']).reversed.toList(),
+      );
       data.buffer.asUint8List().setRange(offset, offset + 32, txidBytes);
       offset += 32;
       data.setUint32(offset, input['vout'], Endian.little);
@@ -150,10 +155,16 @@ class CreateBTCTX {
     // 发送金额和 scriptPubKey
     data.setUint64(offset, sendAmount, Endian.little);
     offset += 8;
-    final Uint8List scriptPubKey = getScriptPubKey(Uint8List.fromList(hex.decode(recipientScriptPubkey)));
+    final Uint8List scriptPubKey = getScriptPubKey(
+      Uint8List.fromList(hex.decode(recipientScriptPubkey)),
+    );
     data.setUint8(offset, scriptPubKey.length);
     offset += 1;
-    data.buffer.asUint8List().setRange(offset, offset + scriptPubKey.length, scriptPubKey);
+    data.buffer.asUint8List().setRange(
+      offset,
+      offset + scriptPubKey.length,
+      scriptPubKey,
+    );
     offset += scriptPubKey.length;
 
     // 找零
@@ -163,7 +174,11 @@ class CreateBTCTX {
       final Uint8List changeScript = getP2WPKHScript(publicKey);
       data.setUint8(offset, changeScript.length);
       offset += 1;
-      data.buffer.asUint8List().setRange(offset, offset + changeScript.length, changeScript);
+      data.buffer.asUint8List().setRange(
+        offset,
+        offset + changeScript.length,
+        changeScript,
+      );
       offset += changeScript.length;
     }
 
@@ -182,7 +197,11 @@ class CreateBTCTX {
     return Uint8List.fromList([0x00, 0x20, ...witnessScriptHash]);
   }
 
-  Uint8List serializeTransaction(Uint8List rawTx, List<Uint8List> signatures, Uint8List publicKey) {
+  Uint8List serializeTransaction(
+    Uint8List rawTx,
+    List<Uint8List> signatures,
+    Uint8List publicKey,
+  ) {
     final ByteData data = ByteData(rawTx.length + (signatures.length * 180));
     int offset = 0;
 
@@ -204,7 +223,11 @@ class CreateBTCTX {
 
       data.setUint8(offset, publicKey.length);
       offset += 1;
-      data.buffer.asUint8List().setRange(offset, offset + publicKey.length, publicKey);
+      data.buffer.asUint8List().setRange(
+        offset,
+        offset + publicKey.length,
+        publicKey,
+      );
       offset += publicKey.length;
     }
 

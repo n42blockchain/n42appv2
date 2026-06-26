@@ -4,7 +4,7 @@ import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 
 import 'package:n42_wallet/features/auth/data/models/user_info.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -54,10 +54,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
     border: Border(
       bottom: BorderSide(
         width: ScreenUtil().setWidth(1.0),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemLineColor.name,
-        ),
+        color: AppColorTokens.of(context).border,
       ),
     ),
   );
@@ -67,12 +64,8 @@ class _PersonalSettingState extends State<PersonalSetting> {
       padding: EdgeInsets.only(top: ScreenUtil().setWidth(40.0)),
       child: Text(
         text,
-        style: TextStyle(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainBlueColor.name,
-          ),
-          fontSize: ScreenUtil().setSp(30.0),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).brand,
         ),
       ),
     );
@@ -89,9 +82,7 @@ class _PersonalSettingState extends State<PersonalSetting> {
         children: [
           Positioned.fill(
             child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(30.0),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

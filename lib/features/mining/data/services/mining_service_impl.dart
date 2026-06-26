@@ -25,7 +25,9 @@ class MiningServiceImpl implements IMiningService {
 
   MiningStatus _status = MiningStatus.idle;
   String? _miningWalletAddress;
-  SharedMiningInfo _miningInfo = const SharedMiningInfo(status: MiningStatus.idle);
+  SharedMiningInfo _miningInfo = const SharedMiningInfo(
+    status: MiningStatus.idle,
+  );
 
   StreamSubscription? _walletEventSubscription;
 
@@ -47,7 +49,9 @@ class MiningServiceImpl implements IMiningService {
     }
 
     _v2Listener = () {
-      final newStatus = v2.miningStatus ? MiningStatus.mining : MiningStatus.idle;
+      final newStatus = v2.miningStatus
+          ? MiningStatus.mining
+          : MiningStatus.idle;
       updateStatus(newStatus);
       updateMiningInfo(
         status: newStatus,
@@ -87,7 +91,7 @@ class MiningServiceImpl implements IMiningService {
     // Handle wallet change - mining might need to update its state
     if (_miningWalletAddress != newAddress) {
       _miningWalletAddress = newAddress;
-      
+
       // If mining was active, we might need to update
       if (isMining && newAddress != null) {
         _updateMiningInfo();
@@ -157,4 +161,3 @@ class MiningServiceImpl implements IMiningService {
     _v2Listener = null;
   }
 }
-

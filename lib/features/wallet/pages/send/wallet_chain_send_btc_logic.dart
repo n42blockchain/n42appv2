@@ -4,18 +4,18 @@ part of 'wallet_chain_send_btc.dart';
 class _BtcFee {
   bool loading;
   bool error;
-  int averageRate;  // API-fetched sat/byte
+  int averageRate; // API-fetched sat/byte
   int selectedRate; // user-selected sat/byte
-  int totalFees;    // computed fee in satoshis
-  int maxPrice;     // satoshis in "send max" mode; 0 = not max
+  int totalFees; // computed fee in satoshis
+  int maxPrice; // satoshis in "send max" mode; 0 = not max
 
   _BtcFee()
-      : loading = false,
-        error = false,
-        averageRate = 5,
-        selectedRate = 5,
-        totalFees = 0,
-        maxPrice = 0;
+    : loading = false,
+      error = false,
+      averageRate = 5,
+      selectedRate = 5,
+      totalFees = 0,
+      maxPrice = 0;
 }
 
 /// Business logic mixin for [_WalletChainSendBtcState].
@@ -30,8 +30,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   TokenViewApi get tokenViewApi => _logicTokenViewApi ??= TokenViewApi();
 
   final TextEditingController toTextEditingController = TextEditingController();
-  final TextEditingController valueTextEditingController = TextEditingController();
-  final TextEditingController byteFeeTextEditingController = TextEditingController();
+  final TextEditingController valueTextEditingController =
+      TextEditingController();
+  final TextEditingController byteFeeTextEditingController =
+      TextEditingController();
   final FocusNode toNode = FocusNode();
   final FocusNode valueNode = FocusNode();
   final FocusNode byteFeeNode = FocusNode();
@@ -70,7 +72,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
   }
 
   Future<void> getGasFeeBtc() async {
-    if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
+    if (widget.coinModel.config.coinType == CoinType.BTC.name) {
       if (_fee.loading) return;
       _fee.loading = true;
       setState(() {});
@@ -88,7 +90,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       }
       _fee.loading = false;
     } else {
-      final averageValue = getCoinGas(widget.coinModel.coin['coinType']);
+      final averageValue = getCoinGas(widget.coinModel.config.coinType);
       _fee.averageRate = averageValue;
       _fee.selectedRate = averageValue;
     }
@@ -99,7 +101,9 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
 
   void _buildBtcFeeModel() {
     final coinType = widget.coinModel.coin['coinType']?.toString() ?? 'BTC';
-    final unit = (widget.coinModel.coin['unit'] ?? coinType).toString().toUpperCase();
+    final unit = (widget.coinModel.coin['unit'] ?? coinType)
+        .toString()
+        .toUpperCase();
     const estBytes = 250;
     _btcFeeModel = NonEvmFeeModel.forBtcLike(
       averageRateSatPerByte: _fee.averageRate,
@@ -137,7 +141,10 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
 
   Future<void> getBalance() async {
     try {
-      final isOk = await fetchCoinBalance(widget.coinModel, ref.read(wapBridgeProvider));
+      final isOk = await fetchCoinBalance(
+        widget.coinModel,
+        ref.read(wapBridgeProvider),
+      );
       if (!mounted) return;
       if (isOk == false) {
         load = Load.finish;
@@ -166,7 +173,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       return;
     }
     final valid = await Trustdart().validateAddress(
-      widget.coinModel.coin['coinType'],
+      widget.coinModel.config.coinType,
       addr,
     );
     if (!mounted) return;
@@ -210,7 +217,7 @@ mixin _BtcSendLogicMixin on ConsumerState<WalletChainSendBtc> {
       _setAmountError(S.of(context).g_key_47);
       return;
     }
-    if (widget.coinModel.coin['coinType'] == CoinType.BTC.name) {
+    if (widget.coinModel.config.coinType == CoinType.BTC.name) {
       if (double.parse(value) < 0.00001) {
         _setAmountError(S.of(context).g_key_135(0.00001));
         return;

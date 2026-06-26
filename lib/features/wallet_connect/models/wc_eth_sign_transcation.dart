@@ -22,16 +22,16 @@ class WCEthSignTransaction {
     this.value,
     this.data,
   });
-  WCEthSignTransaction.fromJson(Map<String,dynamic> json){
-    from= json['from'] as String?;
-    to= json['to'] as String?;
-    nonce= json['nonce'] as String?;
-    gasPrice= json['gasPrice'] as String?;
-    maxFeePerGas= json['maxFeePerGas'] as String?;
-    maxPriorityFeePerGas= json['maxPriorityFeePerGas'] as String?;
-    gas= json['gas'] as String?;
-    gasLimit= json['gasLimit'] as String?;
-    value= json['value'] as String?;
-    data= json['data'] as String?;
+  WCEthSignTransaction.fromJson(Map<String, dynamic> json) {
+    from = json['from'] as String?;
+    to = json['to'] as String?;
+    nonce = json['nonce'] as String?;
+    gasPrice = json['gasPrice'] as String?;
+    maxFeePerGas = json['maxFeePerGas'] as String?;
+    maxPriorityFeePerGas = json['maxPriorityFeePerGas'] as String?;
+    gas = json['gas'] as String?;
+    gasLimit = json['gasLimit'] as String?;
+    value = json['value'] as String?;
+    data = json['data'] as String?;
   }
 }

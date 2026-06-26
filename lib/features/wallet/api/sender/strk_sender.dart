@@ -10,8 +10,7 @@ import 'chain_sender.dart';
 /// Full support requires the StarkNet.dart SDK.
 class StrkSender implements ChainSender {
   @override
-  Future<SendResult> send(SendParams params) async =>
-      const SendResult.fail(
-        'Starknet transfer: requires StarkNet.dart SDK, not yet implemented',
-      );
+  Future<SendResult> send(SendParams params) async => const SendResult.fail(
+    'Starknet transfer: requires StarkNet.dart SDK, not yet implemented',
+  );
 }

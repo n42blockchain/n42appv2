@@ -4,9 +4,12 @@ import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 class AtomApi {
-  static const Map<String, String> _jsonHeader = {'Content-Type': 'application/json'};
+  static const Map<String, String> _jsonHeader = {
+    'Content-Type': 'application/json',
+  };
 
-  String _uri() => RequestUrl().getUrl2(CoinType.ATOM.name, 'api', isTest: false);
+  String _uri() =>
+      RequestUrl().getUrl2(CoinType.ATOM.name, 'api', isTest: false);
 
   /// Helper: GET a Cosmos REST endpoint, extract [field] from response
   Future<MessageModel> _getEndpoint(String path, String field) async {
@@ -53,7 +56,10 @@ class AtomApi {
 
   //cosmos/bank/v1beta1/denoms_metadata/
   Future<MessageModel> getMetadata(String denom) async {
-    return _getEndpoint('cosmos/bank/v1beta1/denoms_metadata/$denom', 'metadata');
+    return _getEndpoint(
+      'cosmos/bank/v1beta1/denoms_metadata/$denom',
+      'metadata',
+    );
   }
 
   //cosmos/tx/v1beta1/txs/
@@ -72,7 +78,9 @@ class AtomApi {
         header: _jsonHeader,
       );
       return MessageModel()
-        ..data = data['tx_response'] == null ? data['message'] : data['tx_response']['txhash'];
+        ..data = data['tx_response'] == null
+            ? data['message']
+            : data['tx_response']['txhash'];
     } catch (e) {
       return MessageModel.error()..data = e;
     }

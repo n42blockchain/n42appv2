@@ -1,16 +1,16 @@
 //walletList中使用 - Part 3: ADA, VET, XLM, HBAR, EGLD, BCH, INJ, OSMO, TIA, S, HYPE, BERA, RON, STRK, SEI
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 
-Map<String,dynamic> walletChainConfigsPart3={
+Map<String, dynamic> walletChainConfigsPart3 = {
   // 36. ADA - Cardano
-  CoinType.ADA.name:<String,dynamic>{
-    "showList":true,
+  CoinType.ADA.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Cardano",
       "coinType": "ADA",
       "icon": "https://www.n42.ai/static/ada.png",
@@ -24,9 +24,7 @@ Map<String,dynamic> walletChainConfigsPart3={
       "percentage": 0.0,
       "isContract": false,
       "mKey": "ADA",
-      "path": {
-        "legacy": "m/1852'/1815'/0'/0/0"
-      },
+      "path": {"legacy": "m/1852'/1815'/0'/0/0"},
       "service": "https://cardano-mainnet.blockfrost.io/api/v0",
       "service_test": "https://cardano-preprod.blockfrost.io/api/v0",
       "chainId": 1,
@@ -34,26 +32,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": false,
-      "rules": ""
+      "rules": "",
     },
     "mainnetChainID": 1,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "https://cardano-preprod.blockfrost.io/api/v0", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "https://cardano-preprod.blockfrost.io/api/v0",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 37. VET - VeChain
-  CoinType.VET.name:<String,dynamic>{
-    "showList":true,
+  CoinType.VET.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "VeChain",
       "coinType": "VET",
       "icon": "https://www.n42.ai/static/vet.png",
@@ -67,9 +72,7 @@ Map<String,dynamic> walletChainConfigsPart3={
       "percentage": 0.0,
       "isContract": false,
       "mKey": "VET",
-      "path": {
-        "legacy": "m/44'/818'/0'/0/0"
-      },
+      "path": {"legacy": "m/44'/818'/0'/0/0"},
       "service": "https://mainnet.veblocks.net",
       "service_test": "https://testnet.veblocks.net",
       "chainId": 0,
@@ -77,26 +80,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "VIP180"
+      "rules": "VIP180",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "https://testnet.veblocks.net", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "https://testnet.veblocks.net",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 38. XLM - Stellar
-  CoinType.XLM.name:<String,dynamic>{
-    "showList":true,
+  CoinType.XLM.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Stellar",
       "coinType": "XLM",
       "icon": "https://www.n42.ai/static/xlm.png",
@@ -110,9 +120,7 @@ Map<String,dynamic> walletChainConfigsPart3={
       "percentage": 0.0,
       "isContract": false,
       "mKey": "XLM",
-      "path": {
-        "legacy": "m/44'/148'/0'"
-      },
+      "path": {"legacy": "m/44'/148'/0'"},
       "service": "https://horizon.stellar.org",
       "service_test": "https://horizon-testnet.stellar.org",
       "chainId": 0,
@@ -120,26 +128,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": ""
+      "rules": "",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "https://horizon-testnet.stellar.org", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "https://horizon-testnet.stellar.org",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 39. HBAR - Hedera
-  CoinType.HBAR.name:<String,dynamic>{
-    "showList":true,
+  CoinType.HBAR.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "HBAR",
       "icon": "https://cryptologos.cc/logos/hedera-hbar-logo.png",
@@ -161,26 +176,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 295,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 40. EGLD - MultiversX
-  CoinType.EGLD.name:<String,dynamic>{
-    "showList":true,
+  CoinType.EGLD.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "MultiversX",
       "coinType": "EGLD",
       "icon": "https://www.n42.ai/static/egld.png",
@@ -194,9 +216,7 @@ Map<String,dynamic> walletChainConfigsPart3={
       "percentage": 0.0,
       "isContract": false,
       "mKey": "EGLD",
-      "path": {
-        "legacy": "m/44'/508'/0'/0/0"
-      },
+      "path": {"legacy": "m/44'/508'/0'/0/0"},
       "service": "https://gateway.multiversx.com",
       "service_test": "https://devnet-gateway.multiversx.com",
       "chainId": 1,
@@ -204,26 +224,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": false,
-      "rules": "ESDT"
+      "rules": "ESDT",
     },
     "mainnetChainID": 1,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "https://devnet-gateway.multiversx.com", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "https://devnet-gateway.multiversx.com",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 41. BCH - Bitcoin Cash
-  CoinType.BCH.name:<String,dynamic>{
-    "showList":true,
+  CoinType.BCH.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Bitcoin",
       "coinType": "BCH",
       "icon": "https://cryptologos.cc/logos/bitcoin-cash-bch-logo.png",
@@ -237,9 +264,7 @@ Map<String,dynamic> walletChainConfigsPart3={
       "percentage": 0.0,
       "isContract": false,
       "mKey": "BCH",
-      "path": {
-        "legacy": "m/44'/145'/0'/0/0"
-      },
+      "path": {"legacy": "m/44'/145'/0'/0/0"},
       "service": "",
       "service_test": "",
       "chainId": 0,
@@ -247,26 +272,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": ""
+      "rules": "",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 42. INJ - Injective
-  CoinType.INJ.name:<String,dynamic>{
-    "showList":true,
+  CoinType.INJ.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Cosmos",
       "coinType": "INJ",
       "icon": "https://cryptologos.cc/logos/injective-inj-logo.png",
@@ -289,26 +321,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract_test": "",
       "canEdit": true,
       "rules": "",
-      "bech32Prefix": "inj"
+      "bech32Prefix": "inj",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 43. OSMO - Osmosis
-  CoinType.OSMO.name:<String,dynamic>{
-    "showList":true,
+  CoinType.OSMO.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Cosmos",
       "coinType": "OSMO",
       "icon": "https://cryptologos.cc/logos/osmosis-osmo-logo.png",
@@ -331,26 +370,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract_test": "",
       "canEdit": true,
       "rules": "",
-      "bech32Prefix": "osmo"
+      "bech32Prefix": "osmo",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 44. TIA - Celestia
-  CoinType.TIA.name:<String,dynamic>{
-    "showList":true,
+  CoinType.TIA.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Cosmos",
       "coinType": "TIA",
       "icon": "https://cryptologos.cc/logos/celestia-tia-logo.png",
@@ -373,26 +419,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract_test": "",
       "canEdit": true,
       "rules": "",
-      "bech32Prefix": "celestia"
+      "bech32Prefix": "celestia",
     },
     "mainnetChainID": 0,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 45. S - Sonic
-  CoinType.S.name:<String,dynamic>{
-    "showList":true,
+  CoinType.S.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "S",
       "icon": "https://cryptologos.cc/logos/sonic-s-logo.png",
@@ -414,26 +467,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 146,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 46. HYPE - Hyperliquid
-  CoinType.HYPE.name:<String,dynamic>{
-    "showList":true,
+  CoinType.HYPE.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "HYPE",
       "icon": "https://cryptologos.cc/logos/hyperliquid-hype-logo.png",
@@ -455,26 +515,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 998,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 47. BERA - Berachain
-  CoinType.BERA.name:<String,dynamic>{
-    "showList":true,
+  CoinType.BERA.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "BERA",
       "icon": "https://cryptologos.cc/logos/berachain-bera-logo.png",
@@ -496,26 +563,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 80094,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 48. RON - Ronin
-  CoinType.RON.name:<String,dynamic>{
-    "showList":true,
+  CoinType.RON.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "RON",
       "icon": "https://cryptologos.cc/logos/ronin-ron-logo.png",
@@ -537,26 +611,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 2020,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 49. STRK - Starknet
-  CoinType.STRK.name:<String,dynamic>{
-    "showList":true,
+  CoinType.STRK.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Starknet",
       "coinType": "STRK",
       "icon": "https://cryptologos.cc/logos/starknet-strk-logo.png",
@@ -580,26 +661,33 @@ Map<String,dynamic> walletChainConfigsPart3={
       "canEdit": true,
       "rules": "ERC20",
       "starknetChainId": "SN_MAIN",
-      "starknetChainId_test": "SN_SEPOLIA"
+      "starknetChainId_test": "SN_SEPOLIA",
     },
     "mainnetChainID": "23448594291968334",
     "testnetChainID": "1536727068981429685",
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "https://starknet-sepolia.public.blastapi.io", "testnetChainID": "1536727068981429685", "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "https://starknet-sepolia.public.blastapi.io",
+        "testnetChainID": "1536727068981429685",
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 
   // 50. SEI - Sei
-  CoinType.SEI.name:<String,dynamic>{
-    "showList":true,
+  CoinType.SEI.name: <String, dynamic>{
+    "showList": true,
     "isTest": false,
     "supportTest": false,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
-    "baseInfo": <String,dynamic>{
+    "baseInfo": <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "SEI",
       "icon": "https://cryptologos.cc/logos/sei-sei-logo.png",
@@ -621,14 +709,21 @@ Map<String,dynamic> walletChainConfigsPart3={
       "contract": "",
       "contract_test": "",
       "canEdit": true,
-      "rules": "ERC20"
+      "rules": "ERC20",
     },
     "mainnetChainID": 1329,
     "testnetChainID": 0,
     "testnetIndex": 0,
-    "testnets": [{"testnetWS": "", "testnetRPC": "", "testnetChainID": 0, "testnetContract": <String,dynamic>{}}],
-    "mainnets": <String,dynamic>{},
+    "testnets": [
+      {
+        "testnetWS": "",
+        "testnetRPC": "",
+        "testnetChainID": 0,
+        "testnetContract": <String, dynamic>{},
+      },
+    ],
+    "mainnets": <String, dynamic>{},
     "mainnetContract": {},
-    "testnetContract": {}
+    "testnetContract": {},
   },
 };

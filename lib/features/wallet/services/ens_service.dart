@@ -51,7 +51,7 @@ class EnsService {
   static const ensSuffixes = EnsProtocolUtils.allSuffixes;
 
   EnsService({TokenViewApi? tokenViewApi})
-      : _tokenViewApi = tokenViewApi ?? TokenViewApi();
+    : _tokenViewApi = tokenViewApi ?? TokenViewApi();
 
   // ── 公开静态工具方法 ──────────────────────────────────────────────────────
 
@@ -106,7 +106,7 @@ class EnsService {
 
         case DomainProtocol.unstoppableDomains:
           result = await _resolveWithUd(normalized, preferredChain);
-          // UD 解析失败时不再 fallback（防止用户误解）
+        // UD 解析失败时不再 fallback（防止用户误解）
 
         case DomainProtocol.ens:
         case DomainProtocol.unknown:
@@ -359,17 +359,15 @@ class EnsService {
 
   // ── 私有：各协议反向解析 ────────────────────────────────────────────────
 
-  Future<String?> _reverseResolveN42(String address) =>
-      _fetchStringResult(
-        () => _tokenViewApi.getN42ReverseResolve(address),
-        'N42 reverse',
-      );
+  Future<String?> _reverseResolveN42(String address) => _fetchStringResult(
+    () => _tokenViewApi.getN42ReverseResolve(address),
+    'N42 reverse',
+  );
 
-  Future<String?> _reverseResolveEns(String address) =>
-      _fetchStringResult(
-        () => _tokenViewApi.getEnsReverseResolve(address),
-        'ENS reverse',
-      );
+  Future<String?> _reverseResolveEns(String address) => _fetchStringResult(
+    () => _tokenViewApi.getEnsReverseResolve(address),
+    'ENS reverse',
+  );
 
   Future<String?> _reverseResolveUd(String address, String coinType) {
     final ticker = EnsProtocolUtils.coinTypeToUdTicker(coinType);
@@ -379,19 +377,17 @@ class EnsService {
     );
   }
 
-  Future<String?> _reverseResolveSns(String address) =>
-      _fetchStringResult(
-        () => _tokenViewApi.getSnsReverseResolve(address),
-        'SNS reverse',
-      );
+  Future<String?> _reverseResolveSns(String address) => _fetchStringResult(
+    () => _tokenViewApi.getSnsReverseResolve(address),
+    'SNS reverse',
+  );
 
   // ── 私有：头像 ────────────────────────────────────────────────────────────
 
-  Future<String?> _fetchEnsAvatar(String domainName) =>
-      _fetchStringResult(
-        () => _tokenViewApi.getEnsAvatar(domainName),
-        'avatar fetch',
-      );
+  Future<String?> _fetchEnsAvatar(String domainName) => _fetchStringResult(
+    () => _tokenViewApi.getEnsAvatar(domainName),
+    'avatar fetch',
+  );
 
   // ── 私有：缓存操作 ────────────────────────────────────────────────────────
 
@@ -415,8 +411,7 @@ class EnsService {
     return true;
   }
 
-  void _addToCache<T>(
-      Map<String, _CacheEntry<T>> cache, String key, T value) {
+  void _addToCache<T>(Map<String, _CacheEntry<T>> cache, String key, T value) {
     cache[key] = _CacheEntry(value, DateTime.now().add(_cacheDuration));
   }
 }

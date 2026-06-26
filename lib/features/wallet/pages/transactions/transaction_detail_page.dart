@@ -1,4 +1,4 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
@@ -42,28 +42,24 @@ class TransactionDetailPage extends StatefulWidget {
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
-  TextStyle _labelStyle() => TextStyle(
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name),
-        fontSize: ScreenUtil().setSp(30),
-      );
+  TextStyle _labelStyle() => AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
 
   EdgeInsets get _itemPadding => EdgeInsets.symmetric(
-        vertical: ScreenUtil().setWidth(16),
-        horizontal: ScreenUtil().setWidth(24),
-      );
+    vertical: AppSpacing.space4,
+    horizontal: AppSpacing.space6,
+  );
 
-  Widget _divider() => Divider(
-        height: ScreenUtil().setWidth(1),
-        endIndent: 0,
-        indent: 0,
-      );
+  Widget _divider() =>
+      Divider(height: ScreenUtil().setWidth(1), endIndent: 0, indent: 0);
 
   @override
   Widget build(BuildContext context) {
     final explorerUrl = (widget.coinType != null && widget.txHash != null)
-        ? getBrowserTxHash(widget.coinType!, widget.txHash!,
-            isTest: widget.isTest)
+        ? getBrowserTxHash(
+            widget.coinType!,
+            widget.txHash!,
+            isTest: widget.isTest,
+          )
         : '';
     final s = S.of(context);
     return Scaffold(
@@ -83,7 +79,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             : null,
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+        padding: EdgeInsets.all(AppSpacing.space8),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -110,7 +106,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title ?? "", style: _labelStyle()),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           EnsAddressDisplay(
             address: address,
             coinType: widget.coinType ?? 'ETH',
@@ -119,7 +115,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
             showCopy: true,
             fontSize: ScreenUtil().setSp(28),
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _divider(),
         ],
       ),
@@ -134,7 +130,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title ?? "", style: _labelStyle()),
-          SizedBox(height: ScreenUtil().setWidth(12)),
+          SizedBox(height: AppSpacing.space4),
           Row(
             children: [
               Expanded(
@@ -142,11 +138,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   content,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name),
-                    fontSize: ScreenUtil().setSp(28),
-                  ),
+                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
               ),
               if (copy)
@@ -161,14 +153,13 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                     height: ScreenUtil().setWidth(50),
                     child: Icon(
                       Icons.copy,
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainBlueColor.name),
+                      color: AppColorTokens.of(context).brand,
                     ),
                   ),
                 ),
             ],
           ),
-          SizedBox(height: ScreenUtil().setWidth(24)),
+          SizedBox(height: AppSpacing.space6),
           _divider(),
         ],
       ),

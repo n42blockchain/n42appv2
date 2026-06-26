@@ -15,11 +15,12 @@ import 'package:wallet/wallet.dart' as wallet_types;
 
 /// Callback to show a signing confirmation dialog.
 /// Returns `true` if the user approved, `false` if rejected.
-typedef DAppSigningCallback = Future<bool> Function({
-  required String origin,
-  required String method,
-  required Map<String, dynamic> details,
-});
+typedef DAppSigningCallback =
+    Future<bool> Function({
+      required String origin,
+      required String method,
+      required Map<String, dynamic> details,
+    });
 
 class DAppRequestHandler {
   final List<CoinModel> ethCoinModels;
@@ -32,10 +33,8 @@ class DAppRequestHandler {
   /// Set by BrowserPage so signing dialogs show the actual requesting site.
   String dappOrigin = 'DApp';
 
-  DAppRequestHandler({
-    required this.ethCoinModels,
-    int initialChainIndex = 0,
-  }) : _selectedChainIndex = initialChainIndex;
+  DAppRequestHandler({required this.ethCoinModels, int initialChainIndex = 0})
+    : _selectedChainIndex = initialChainIndex;
 
   /// Currently selected chain's hex chain ID (e.g. "0x1")
   String get chainIdHex {
@@ -99,7 +98,9 @@ class DAppRequestHandler {
 
       case 'eth_sign':
         // eth_sign is dangerous (signs arbitrary data) — reject by default
-        throw Exception('eth_sign is disabled for security reasons. Use personal_sign instead.');
+        throw Exception(
+          'eth_sign is disabled for security reasons. Use personal_sign instead.',
+        );
 
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
@@ -141,15 +142,26 @@ class DAppRequestHandler {
   String? _handleSwitchChain(List<dynamic> params) {
     if (params.isEmpty) throw 'Missing params';
     final chainParam = params[0];
-    if (chainParam is! Map) throw {'code': -32602, 'message': 'Invalid chain params'};
+    if (chainParam is! Map) {
+      throw {'code': -32602, 'message': 'Invalid chain params'};
+    }
     final chainIdRaw = chainParam['chainId'];
-    if (chainIdRaw is! String) throw {'code': -32602, 'message': 'Invalid chainId'};
-    final targetChainId = int.tryParse(chainIdRaw.replaceFirst('0x', ''), radix: 16);
-    if (targetChainId == null) throw {'code': -32602, 'message': 'Invalid chainId format'};
+    if (chainIdRaw is! String) {
+      throw {'code': -32602, 'message': 'Invalid chainId'};
+    }
+    final targetChainId = int.tryParse(
+      chainIdRaw.replaceFirst('0x', ''),
+      radix: 16,
+    );
+    if (targetChainId == null) {
+      throw {'code': -32602, 'message': 'Invalid chainId format'};
+    }
 
     for (int i = 0; i < ethCoinModels.length; i++) {
       final cm = ethCoinModels[i];
-      final cmChainId = cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'];
+      final cmChainId = cm.isTest
+          ? cm.coin['chainId_test']
+          : cm.coin['chainId'];
       if (cmChainId == targetChainId) {
         _selectedChainIndex = i;
         _web3client?.dispose();
@@ -183,14 +195,19 @@ class DAppRequestHandler {
     final encodedMessage = _isValidHex(stripped)
         ? web3.hexToBytes(stripped)
         : Uint8List.fromList(utf8.encode(rawData));
-    final signedData = privateKey.signPersonalMessageToUint8List(encodedMessage);
+    final signedData = privateKey.signPersonalMessageToUint8List(
+      encodedMessage,
+    );
     return bytesToHex(signedData, include0x: true);
   }
 
   // eth_sign intentionally removed — dangerous method that signs arbitrary data.
   // DApps should use personal_sign or eth_signTypedData instead.
 
-  Future<String> _handleSignTypedData(String method, List<dynamic> params) async {
+  Future<String> _handleSignTypedData(
+    String method,
+    List<dynamic> params,
+  ) async {
     if (params.length < 2) throw 'Invalid params';
     final requestedAddress = (params[0] as String).toLowerCase();
     if (requestedAddress != address.toLowerCase()) {
@@ -210,7 +227,9 @@ class DAppRequestHandler {
     final Map<String, dynamic> typedData = json.decode(jsonData);
     final typedMessage = TypedMessage.fromJson(typedData);
 
-    final version = method.contains('v3') ? TypedDataVersion.v3 : TypedDataVersion.v4;
+    final version = method.contains('v3')
+        ? TypedDataVersion.v3
+        : TypedDataVersion.v4;
     final hash = hashTypedData(typedData: typedMessage, version: version);
     final signature = web3.sign(hash, privateKey.privateKey);
 
@@ -228,7 +247,9 @@ class DAppRequestHandler {
 
     // Validate the from address matches our wallet to prevent spoofing
     final txFrom = (txMap['from'] as String?)?.toLowerCase();
-    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+    if (txFrom != null &&
+        txFrom.isNotEmpty &&
+        txFrom != address.toLowerCase()) {
       throw {'code': -32602, 'message': 'From address does not match wallet'};
     }
 
@@ -257,7 +278,9 @@ class DAppRequestHandler {
 
     // Validate the from address matches our wallet to prevent spoofing
     final txFrom = (txMap['from'] as String?)?.toLowerCase();
-    if (txFrom != null && txFrom.isNotEmpty && txFrom != address.toLowerCase()) {
+    if (txFrom != null &&
+        txFrom.isNotEmpty &&
+        txFrom != address.toLowerCase()) {
       throw {'code': -32602, 'message': 'From address does not match wallet'};
     }
 
@@ -311,11 +334,7 @@ class DAppRequestHandler {
     required Map<String, dynamic> details,
   }) {
     if (onSigningRequest == null) return Future.value(false);
-    return onSigningRequest!(
-      origin: origin,
-      method: method,
-      details: details,
-    );
+    return onSigningRequest!(origin: origin, method: method, details: details);
   }
 
   Future<web3.EthPrivateKey> _getPrivateKey() async {

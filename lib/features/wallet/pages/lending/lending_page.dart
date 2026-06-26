@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/lending/aave_service.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// Lending page — in-wallet Aave V3 supply and borrow interface.
 ///
@@ -62,38 +62,25 @@ class _LendingPageState extends State<LendingPage>
       appBar: AppBar(
         title: Text(
           'Aave V3 Lending',
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(34),
+          style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.backGroundColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).bgBase,
         elevation: 0,
         bottom: TabBar(
           controller: _tabController,
-          indicatorColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ),
-          labelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainTextColor.name,
-          ),
-          unselectedLabelColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.itemSubtitleTextColor.name,
-          ),
+          indicatorColor: AppColorTokens.of(context).brand,
+          labelColor: AppColorTokens.of(context).textPrimary,
+          unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
           tabs: const [
             Tab(text: 'Supply'),
             Tab(text: 'Borrow'),
           ],
         ),
       ),
-      backgroundColor: AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.backGroundColor.name,
-      ),
+      backgroundColor: AppColorTokens.of(context).bgBase,
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : TabBarView(
@@ -112,17 +99,17 @@ class _LendingPageState extends State<LendingPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.info_outline, size: 48, color: Colors.grey),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            Icon(
+              Icons.info_outline,
+              size: 48,
+              color: AppColorTokens.of(context).textTertiary,
+            ),
+            SizedBox(height: AppSpacing.space4),
             Text(
               AaveService.isAvailable(widget.chainId)
                   ? 'No markets available'
                   : 'Aave V3 not available on this chain',
-              style: TextStyle(
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name,
-                ),
-              ),
+              style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
             ),
           ],
         ),
@@ -132,7 +119,7 @@ class _LendingPageState extends State<LendingPage>
     return RefreshIndicator(
       onRefresh: _loadReserves,
       child: ListView.builder(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(16)),
+        padding: EdgeInsets.all(AppSpacing.space4),
         itemCount: _reserves.length,
         itemBuilder: (context, index) {
           final reserve = _reserves[index];
@@ -145,56 +132,45 @@ class _LendingPageState extends State<LendingPage>
   Widget _buildReserveCard(AaveReserve reserve, {required bool isSupply}) {
     final apy = isSupply ? reserve.supplyApy : reserve.borrowApy;
     final apyColor = isSupply
-        ? const Color(0xFF22C55E) // green for supply
-        : const Color(0xFFF97316); // orange for borrow
+        ? AppColorTokens.of(context).success // green for supply
+        : AppColorTokens.of(context).warning; // orange for borrow
 
     return Container(
       margin: EdgeInsets.only(bottom: ScreenUtil().setWidth(12)),
       decoration: BoxDecoration(
-        color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemBgColor.name,
-        ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        color: AppColorTokens.of(context).bgSurface,
+        borderRadius: AppRadius.brMd,
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(20),
-          vertical: ScreenUtil().setWidth(8),
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
         ),
         leading: CircleAvatar(
-          backgroundColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainBlueColor.name,
-          ).withValues(alpha: 0.1),
+          backgroundColor: AppColorTokens.of(
+            context,
+          ).brand.withValues(alpha: 0.1),
           child: Text(
             reserve.symbol.length > 3
                 ? reserve.symbol.substring(0, 3)
                 : reserve.symbol,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(22),
+            style: AppTypography.caption.copyWith(
               fontWeight: FontWeight.w600,
-              color: AppThemeUtils.getColorByKey(
-                context, AppThemeKeys.mainBlueColor.name,
-              ),
+              color: AppColorTokens.of(context).brand,
             ),
           ),
         ),
         title: Text(
           reserve.symbol,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(28),
+          style: AppTypography.body.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainTextColor.name,
-            ),
+            color: AppColorTokens.of(context).textPrimary,
           ),
         ),
         subtitle: Text(
           reserve.name,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(22),
-            color: AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.itemSubtitleTextColor.name,
-            ),
+          style: AppTypography.caption.copyWith(
+            color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
         trailing: Column(
@@ -203,19 +179,15 @@ class _LendingPageState extends State<LendingPage>
           children: [
             Text(
               '${apy.toStringAsFixed(2)}%',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(28),
-                fontWeight: FontWeight.w700,
+              style: AppTypography.body.copyWith(
+                fontWeight: FontWeight.w600,
                 color: apyColor,
               ),
             ),
             Text(
               isSupply ? 'Supply APY' : 'Borrow APR',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(20),
-                color: AppThemeUtils.getColorByKey(
-                  context, AppThemeKeys.itemSubtitleTextColor.name,
-                ),
+              style: AppTypography.captionSm.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
               ),
             ),
           ],

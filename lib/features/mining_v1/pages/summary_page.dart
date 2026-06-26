@@ -1,4 +1,3 @@
-
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
@@ -13,6 +12,7 @@ import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/utils/toast_utils.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -73,57 +73,40 @@ class _SummaryPageState extends State<SummaryPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: ScreenUtil().setWidth(18),
-                ),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   S.of(context).g_mining_key_58,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(44),
-                ),
+                SizedBox(height: AppSpacing.space12),
                 // 柱状图展示历史7天挖矿数据
                 buildBarChart(context),
-                SizedBox(
-                  height: ScreenUtil().setWidth(44),
-                ),
+                SizedBox(height: AppSpacing.space12),
                 Text(
                   // "Summary"
                   S.current.g_mining_key_19,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(44),
-                ),
+                SizedBox(height: AppSpacing.space12),
                 buildSummaryCard(context),
-                SizedBox(
-                  height: ScreenUtil().setWidth(44),
-                ),
+                SizedBox(height: AppSpacing.space12),
                 Text(
                   // "Reward History"
                   S.current.g_mining_key_34,
-                  style: TextStyle(
-                      color: AppThemeUtils.getColorByKey(
-                          context, AppThemeKeys.mainTextColor.name),
-                      fontSize: ScreenUtil().setSp(30),
-                      fontWeight: FontWeight.bold),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                SizedBox(
-                  height: ScreenUtil().setWidth(44),
-                ),
+                SizedBox(height: AppSpacing.space12),
                 buildRewardHistory(context),
-                SizedBox(
-                  height: ScreenUtil().setWidth(120),
-                )
+                SizedBox(height: ScreenUtil().setWidth(120)),
               ],
             ),
           ),

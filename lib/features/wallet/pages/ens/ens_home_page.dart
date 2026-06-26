@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_search_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_management_page.dart';
@@ -56,10 +57,7 @@ class _EnsHomePageState extends State<EnsHomePage>
       body: RefreshIndicator(onRefresh: loadOwnedNames, child: _buildContent()),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: _hasWalletAddress ? navigateToSearch : _showUnsupportedSnack,
-        backgroundColor: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.mainBlueColor.name,
-        ),
+        backgroundColor: AppColorTokens.of(context).brand,
         icon: const Icon(Icons.search, color: Colors.white),
         label: Text(
           S.of(context).g_key_ens_search,
@@ -73,19 +71,19 @@ class _EnsHomePageState extends State<EnsHomePage>
 
   Widget _buildContent() {
     return ListView(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       children: [
         // 链选择器
         buildChainSelector(),
-        SizedBox(height: ScreenUtil().setWidth(20)),
+        SizedBox(height: AppSpacing.space4),
 
         // 顶部说明卡片
         buildHeaderCard(),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
 
         // 功能快捷入口
         buildQuickActions(),
-        SizedBox(height: ScreenUtil().setWidth(24)),
+        SizedBox(height: AppSpacing.space6),
 
         // 已拥有的域名列表
         buildOwnedNamesSection(),

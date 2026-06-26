@@ -3,5 +3,5 @@ enum MiningType {
   NFT, // 购买nft挖矿
   FUJI_NFT, //FUJI NFT挖矿
   GROUP, //组团挖矿
-  NONE //没开启挖矿
+  NONE, //没开启挖矿
 }

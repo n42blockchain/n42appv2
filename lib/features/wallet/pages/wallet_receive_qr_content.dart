@@ -2,7 +2,10 @@ part of 'wallet_receive_qr.dart';
 
 extension _WalletReceiveQrContent on _WalletReceiveQrState {
   Widget buildChainSelector(
-      List<CoinModel> chains, Color blueColor, Color mainText) {
+    List<CoinModel> chains,
+    Color blueColor,
+    Color mainText,
+  ) {
     // 过滤掉地址为空的链（通常代表还未初始化）
     final available = chains.where((c) => c.address.isNotEmpty).toList();
     if (available.length <= 1) return const SizedBox.shrink();
@@ -11,24 +14,22 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       height: ScreenUtil().setWidth(72),
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(40)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
         itemCount: available.length,
         separatorBuilder: (context, index) =>
-            SizedBox(width: ScreenUtil().setWidth(12)),
+            SizedBox(width: AppSpacing.space6),
         itemBuilder: (_, i) {
           final cm = available[i];
-          final ct = cm.coin['coinType'] as String? ?? '';
+          final ct = cm.config.coinType;
           final chipColor = _kChainColors[ct] ?? blueColor;
           final isSelected = ct == coinType;
 
-          return GestureDetector(
+          return InkWell(
             onTap: () => _switchChain(cm),
+            borderRadius: AppRadius.brPill,
             child: AnimatedContainer(
-              duration: const Duration(milliseconds: 180),
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(20),
-              ),
+              duration: AppMotion.fast,
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
               decoration: BoxDecoration(
                 color: isSelected
                     ? chipColor.withValues(alpha: 0.12)
@@ -39,26 +40,24 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                       : mainText.withValues(alpha: 0.2),
                   width: isSelected ? 1.5 : 1.0,
                 ),
-                borderRadius:
-                    BorderRadius.circular(ScreenUtil().setWidth(36)),
+                borderRadius: AppRadius.brPill,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ImageNetWork(
-                    imageUrl: cm.coin['icon'] ?? '',
+                    imageUrl: cm.config.icon,
                     width: ScreenUtil().setWidth(32),
                     height: ScreenUtil().setWidth(32),
                     placeholder: 'assets/img/list_default.png',
                   ),
-                  SizedBox(width: ScreenUtil().setWidth(8)),
+                  SizedBox(width: AppSpacing.space2),
                   Text(
                     ct,
-                    style: TextStyle(
+                    style: AppTypography.caption.copyWith(
                       color: isSelected ? chipColor : mainText,
-                      fontSize: ScreenUtil().setSp(24),
                       fontWeight: isSelected
-                          ? FontWeight.w700
+                          ? FontWeight.w600
                           : FontWeight.w400,
                     ),
                   ),
@@ -82,8 +81,8 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       child: Container(
         color: bgColor,
         padding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(40),
-          vertical: ScreenUtil().setWidth(24),
+          horizontal: AppSpacing.space12,
+          vertical: AppSpacing.space6,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -97,46 +96,39 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                   height: ScreenUtil().setWidth(60.0),
                   placeholder: 'assets/img/list_default.png',
                 ),
-                SizedBox(width: ScreenUtil().setWidth(16)),
+                SizedBox(width: AppSpacing.space4),
                 Expanded(
                   child: Text(
                     network,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
-                    style: TextStyle(
-                      color: mainText,
-                      fontSize: ScreenUtil().setSp(38.0),
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: AppTypography.title.copyWith(color: mainText),
                   ),
                 ),
               ],
             ),
-            SizedBox(height: ScreenUtil().setWidth(16)),
+            SizedBox(height: AppSpacing.space4),
 
             Container(
               padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(28),
-                vertical: ScreenUtil().setWidth(8),
+                horizontal: AppSpacing.space8,
+                vertical: AppSpacing.space2,
               ),
               decoration: BoxDecoration(
                 color: chainColor.withValues(alpha: 0.12),
-                border:
-                    Border.all(color: chainColor, width: 1.2),
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(40)),
+                border: Border.all(color: chainColor, width: 1.2),
+                borderRadius: AppRadius.brPill,
               ),
               child: Text(
                 coinType,
-                style: TextStyle(
+                style: AppTypography.caption.copyWith(
                   color: chainColor,
-                  fontSize: ScreenUtil().setSp(24),
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0.4,
                 ),
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(40)),
+            SizedBox(height: AppSpacing.space12),
 
             Container(
               width: ScreenUtil().setWidth(360.0),
@@ -145,19 +137,17 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
                 color: Colors.white,
                 border: Border.all(
                   width: 1.0,
-                  color: const Color(0xFFE4E4E4),
+                  color: AppColorTokens.of(context).border,
                 ),
-                borderRadius: BorderRadius.circular(
-                    ScreenUtil().setWidth(30.0)),
+                borderRadius: AppRadius.brXl,
               ),
               child: QrImageView(
-                padding: EdgeInsets.all(
-                    ScreenUtil().setWidth(20.0)),
+                padding: EdgeInsets.all(AppSpacing.space4),
                 data: qrData,
                 version: QrVersions.auto,
               ),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             EnsAddressDisplay(
               address: address,
@@ -167,27 +157,22 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
               showCopy: false,
               fontSize: ScreenUtil().setSp(26.0),
             ),
-            SizedBox(height: ScreenUtil().setWidth(24)),
+            SizedBox(height: AppSpacing.space6),
 
             Text(
               S.of(context).g_app_share_key_1,
-              style: TextStyle(
+              style: AppTypography.caption.copyWith(
                 color: mainText.withValues(alpha: 0.55),
-                fontSize: ScreenUtil().setSp(24.0),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: ScreenUtil().setWidth(12)),
+            SizedBox(height: AppSpacing.space6),
 
             Text(
               S.of(context).g_app_share_key_2,
-              style: TextStyle(
-                color: blueColor,
-                fontSize: ScreenUtil().setSp(28.0),
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.bodyStrong.copyWith(color: blueColor),
             ),
-            SizedBox(height: ScreenUtil().setWidth(8)),
+            SizedBox(height: AppSpacing.space2),
           ],
         ),
       ),
@@ -198,19 +183,15 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     required Color mainText,
     required Color blueColor,
   }) {
-    final btnRadius = BorderRadius.circular(ScreenUtil().setWidth(16));
-    final btnPadding =
-        EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(28));
-    final btnTextStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(32),
-      fontWeight: FontWeight.w600,
-    );
+    final btnRadius = AppRadius.brMd;
+    final btnPadding = EdgeInsets.symmetric(vertical: AppSpacing.space8);
+    final btnTextStyle = AppTypography.headline;
     final iconSize = ScreenUtil().setWidth(36);
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(60),
-        vertical: ScreenUtil().setWidth(24),
+        horizontal: AppSpacing.space16,
+        vertical: AppSpacing.space6,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -227,7 +208,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
               textStyle: btnTextStyle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(20)),
+          SizedBox(height: AppSpacing.space6),
 
           OutlinedButton.icon(
             onPressed: shareLink,
@@ -241,17 +222,16 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
               textStyle: btnTextStyle,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(36)),
+          SizedBox(height: AppSpacing.space8),
 
           Text(
             '${S.of(context).g_key_44} ($symbol)',
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: mainText,
-              fontSize: ScreenUtil().setSp(28),
               fontWeight: FontWeight.w500,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
 
           _buildAmountField(mainText: mainText, blueColor: blueColor),
         ],
@@ -263,24 +243,18 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     required Color mainText,
     required Color blueColor,
   }) {
-    final radius = BorderRadius.circular(ScreenUtil().setWidth(16));
-    const defaultSide = BorderSide(color: Color(0xFFE4E4E4));
-    final fontSize = ScreenUtil().setSp(28);
+    final radius = AppRadius.brMd;
+    final defaultSide = BorderSide(color: AppColorTokens.of(context).border);
+    final textStyle = AppTypography.body.copyWith(color: mainText);
 
     return TextField(
       controller: amountCtrl,
-      keyboardType:
-          const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(_amountInputRegex),
-      ],
-      style: TextStyle(color: mainText, fontSize: fontSize),
+      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+      inputFormatters: [FilteringTextInputFormatter.allow(_amountInputRegex)],
+      style: textStyle,
       decoration: InputDecoration(
         hintText: '0.0',
-        hintStyle: TextStyle(
-          color: mainText.withValues(alpha: 0.35),
-          fontSize: fontSize,
-        ),
+        hintStyle: textStyle.copyWith(color: mainText.withValues(alpha: 0.35)),
         suffixIcon: amountCtrl.text.isNotEmpty
             ? IconButton(
                 icon: Icon(
@@ -292,13 +266,17 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
               )
             : null,
         contentPadding: EdgeInsets.symmetric(
-          horizontal: ScreenUtil().setWidth(28),
-          vertical: ScreenUtil().setWidth(22),
+          horizontal: AppSpacing.space8,
+          vertical: AppSpacing.space6,
         ),
         border: OutlineInputBorder(
-            borderRadius: radius, borderSide: defaultSide),
+          borderRadius: radius,
+          borderSide: defaultSide,
+        ),
         enabledBorder: OutlineInputBorder(
-            borderRadius: radius, borderSide: defaultSide),
+          borderRadius: radius,
+          borderSide: defaultSide,
+        ),
         focusedBorder: OutlineInputBorder(
           borderRadius: radius,
           borderSide: BorderSide(color: blueColor, width: 1.5),

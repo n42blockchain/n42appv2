@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/browser/models/browser_collection_model.dart
 import 'package:n42_wallet/features/browser/pages/browser_collection_info.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
@@ -106,13 +107,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   TextStyle _subtitleStyle(BuildContext context) {
-    return TextStyle(
-      color: AppThemeUtils.getColorByKey(
-        context,
-        AppThemeKeys.itemSubtitleTextColor.name,
-      ),
-      fontSize: ScreenUtil().setSp(26.0),
-    );
+    return AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle);
   }
 
   @override
@@ -148,7 +143,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
         return false;
       },
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         itemCount: collectionList.length + 1,
         itemBuilder: (context, int index) {
           if (index == collectionList.length) {
@@ -197,20 +192,15 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
             },
             child: Container(
               margin: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(20.0),
+                vertical: AppSpacing.space4,
               ),
               padding: EdgeInsets.symmetric(
-                vertical: ScreenUtil().setWidth(20.0),
-                horizontal: ScreenUtil().setWidth(30.0),
+                vertical: AppSpacing.space4,
+                horizontal: AppSpacing.space8,
               ),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(
-                  Radius.circular(ScreenUtil().setWidth(20.0)),
-                ),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemBgColor.name,
-                ),
+                borderRadius: AppRadius.brMd,
+                color: AppColorTokens.of(context).bgSurface,
               ),
               child: Row(
                 children: [
@@ -222,24 +212,18 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                       children: [
                         Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: ScreenUtil().setWidth(6.0),
+                            vertical: AppSpacing.space2,
                           ),
                           child: Text(
                             bcm.name ?? "",
-                            style: TextStyle(
-                              color: AppThemeUtils.getColorByKey(
-                                context,
-                                AppThemeKeys.mainTextColor.name,
-                              ),
-                              fontSize: ScreenUtil().setSp(28.0),
-                            ),
+                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            vertical: ScreenUtil().setWidth(6.0),
+                            vertical: AppSpacing.space2,
                           ),
                           child: Text(
                             bcm.url ?? "",
@@ -252,7 +236,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           visible: (bcm.desc ?? "").isNotEmpty,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                              vertical: ScreenUtil().setWidth(6.0),
+                              vertical: AppSpacing.space2,
                             ),
                             child: Text(
                               bcm.desc ?? "",
@@ -282,7 +266,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           ),
                         ),
                       ),
-                      SizedBox(height: ScreenUtil().setWidth(10.0)),
+                      SizedBox(height: AppSpacing.space2),
                       InkWell(
                         onTap: () => _navigateToInfo(bcm, index),
                         child: SizedBox(

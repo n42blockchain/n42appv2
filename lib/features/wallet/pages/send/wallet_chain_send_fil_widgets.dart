@@ -7,7 +7,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
   /// Theme color shortcut
   Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
 
-  EdgeInsets get _pageMargin => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+  EdgeInsets get _pageMargin => EdgeInsets.all(AppSpacing.space8);
 
   /// Pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
@@ -16,7 +16,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
@@ -26,10 +26,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26.0),
-            color: _tc(AppThemeKeys.mainWhiteColor.name),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
         ),
       ),
     );
@@ -42,10 +39,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: TextStyle(
-          color: _tc(AppThemeKeys.errorTextColor.name),
-          fontSize: ScreenUtil().setSp(24.0),
-        ),
+        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }
@@ -61,10 +55,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: mainText),
           ),
           Container(
             alignment: Alignment.center,
@@ -74,9 +65,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
             ),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -85,9 +74,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               children: [
                 Expanded(
                   child: TextField(
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontWeight: FontWeight.w400,
                     ),
                     controller: toTextEditingController,
                     focusNode: toNode,
@@ -100,7 +89,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10.0),
+                        vertical: AppSpacing.space2,
                       ),
                     ),
                     maxLines: 1,
@@ -115,7 +104,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Image.asset(
                       "assets/wallet/scan.png",
                       color: _tc(AppThemeKeys.mainBlueColor.name),
@@ -157,14 +146,11 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: mainText,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -174,11 +160,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(10.0),
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             child: Column(
@@ -241,10 +225,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: TextStyle(
-        color: _tc(AppThemeKeys.mainTextColor.name),
-        fontSize: ScreenUtil().setSp(28.0),
-      ),
+      style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -257,10 +238,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: TextStyle(
-          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -284,20 +262,15 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         left: ScreenUtil().setWidth(30),
         right: ScreenUtil().setWidth(30),
       ),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+      padding: EdgeInsets.all(AppSpacing.space8),
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(8.0)),
-        ),
+        borderRadius: AppRadius.brSm,
         color: _tc(AppThemeKeys.errorBgColor2.name),
       ),
       child: Text(
         errorMessage,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(28.0),
-          color: _tc(AppThemeKeys.errorTextColor.name),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }
@@ -312,22 +285,13 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         children: [
           Divider(height: ScreenUtil().setWidth(1), indent: 0, endIndent: 0),
           Container(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(30.0)),
+            padding: EdgeInsets.all(AppSpacing.space8),
             height: ScreenUtil().setWidth(148.0),
             color: _tc(AppThemeKeys.backGroundColor.name),
-            child: buttonStyle6(
-              context,
-              sendTransaction,
-              isLoading
-                  ? '${S.of(context).g_key_106}...'
-                  : S.of(context).g_key_48,
-              _tc(
-                isLoading
-                    ? AppThemeKeys.mainButtonBgColor3.name
-                    : AppThemeKeys.mainButtonBgColor.name,
-              ),
-              _tc(AppThemeKeys.mainButtonTextColor.name),
-              isLoading,
+            child: AppButton(
+              label: S.of(context).g_key_48,
+              onPressed: sendTransaction,
+              loading: isLoading,
             ),
           ),
         ],

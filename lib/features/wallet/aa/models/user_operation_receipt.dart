@@ -79,7 +79,8 @@ class UserOperationReceipt {
       receipt: TransactionReceiptInfo.fromJson(
         json['receipt'] as Map<String, dynamic>,
       ),
-      logs: (json['logs'] as List<dynamic>?)
+      logs:
+          (json['logs'] as List<dynamic>?)
               ?.map((e) => UserOperationLog.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
@@ -236,7 +237,8 @@ class UserOperationLog {
       blockNumber: _parseBigInt(json['blockNumber']),
       address: json['address'] as String? ?? '',
       data: json['data'] as String? ?? '0x',
-      topics: (json['topics'] as List<dynamic>?)
+      topics:
+          (json['topics'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           [],

@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/home/models/version_info_model.dart';
 import 'package:n42_wallet/features/home/widgets/check_version_alert.dart';
 import 'package:n42_wallet/features/home/widgets/nav_setting_item.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,17 +77,15 @@ class _AboutAppState extends State<AboutApp> {
       appBar: AppBarWidget(text: S.of(context).s_key_10),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(
-            horizontal: ScreenUtil().setWidth(30.0),
-          ),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
           child: Column(
             children: [
               _buildVersion(),
-              SizedBox(height: ScreenUtil().setWidth(20.0)),
+              SizedBox(height: AppSpacing.space6),
               _buildWebsiteSection(),
-              SizedBox(height: ScreenUtil().setWidth(30.0)),
+              SizedBox(height: AppSpacing.space8),
               _buildSocialSection(),
-              SizedBox(height: ScreenUtil().setWidth(30.0)),
+              SizedBox(height: AppSpacing.space8),
             ],
           ),
         ),
@@ -97,15 +96,10 @@ class _AboutAppState extends State<AboutApp> {
   Widget _buildNavContainer({required List<Widget> children}) {
     return Container(
       alignment: Alignment.centerLeft,
-      margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(10.0)),
+      margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(16.0)),
-        ),
-        color: AppThemeUtils.getColorByKey(
-          context,
-          AppThemeKeys.itemBgColor.name,
-        ),
+        borderRadius: AppRadius.brMd,
+        color: AppColorTokens.of(context).bgSurface,
       ),
       child: Column(children: children),
     );
@@ -124,10 +118,7 @@ class _AboutAppState extends State<AboutApp> {
   }
 
   Widget _buildSocialSection() {
-    final blueColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final blueColor = AppColorTokens.of(context).brand;
     final s = S.of(context);
 
     final socialLinks = [
@@ -170,8 +161,8 @@ class _AboutAppState extends State<AboutApp> {
   Widget _buildVersion() {
     return Container(
       padding: EdgeInsets.only(
-        top: ScreenUtil().setWidth(20.0),
-        bottom: ScreenUtil().setWidth(40.0),
+        top: AppSpacing.space6,
+        bottom: AppSpacing.space12,
       ),
       child: Row(
         children: [
@@ -180,32 +171,27 @@ class _AboutAppState extends State<AboutApp> {
             width: ScreenUtil().setWidth(102.0),
             fit: BoxFit.cover,
           ),
-          SizedBox(width: ScreenUtil().setWidth(16.0)),
+          SizedBox(width: AppSpacing.space4),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 AppConfig.apiUrl['n42Browser'],
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32.0),
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.mainTextColor.name,
-                  ),
+                style: AppTypography.headline.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(6.0)),
+              SizedBox(height: AppSpacing.space2),
               Text(
                 "v ${appVersion ?? ""}",
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(28.0),
+                style: AppTypography.body.copyWith(
                   color: AppThemeUtils.getColorByKey(
                     context,
                     AppThemeKeys.ff888888.name,
                   ),
                 ),
               ),
-              SizedBox(height: ScreenUtil().setWidth(6.0)),
+              SizedBox(height: AppSpacing.space2),
               _buildNewVersionIndicator(),
             ],
           ),
@@ -218,17 +204,16 @@ class _AboutAppState extends State<AboutApp> {
     if (!findNewVersion) {
       return Text(
         S.of(context).g_key_v_k4,
-        style: TextStyle(
+        style: AppTypography.bodySm.copyWith(
           color: AppThemeUtils.getColorByKey(
             context,
             AppThemeKeys.ff888888.name,
           ),
-          fontSize: ScreenUtil().setSp(26),
         ),
       );
     }
 
-    return GestureDetector(
+    return InkWell(
       onTap: () {
         showDialog(
           barrierDismissible: true,
@@ -244,9 +229,8 @@ class _AboutAppState extends State<AboutApp> {
       },
       child: Text(
         "${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})",
-        style: TextStyle(
-          color: Colors.blueAccent,
-          fontSize: ScreenUtil().setSp(26),
+        style: AppTypography.bodySm.copyWith(
+          color: AppColorTokens.of(context).brand,
         ),
       ),
     );

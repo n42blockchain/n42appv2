@@ -21,7 +21,7 @@ class TransactionStateResolver {
   final TokenViewApi _tokenViewApi;
 
   TransactionStateResolver({TokenViewApi? tokenViewApi})
-      : _tokenViewApi = tokenViewApi ?? TokenViewApi();
+    : _tokenViewApi = tokenViewApi ?? TokenViewApi();
 
   /// 根据区块链类型查询 [trm] 的上链状态。
   Future<int> resolveState(TransationRecordModel trm) async {

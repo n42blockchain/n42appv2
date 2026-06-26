@@ -11,7 +11,8 @@ class NftModel {
   final String? description;
   final String contractAddress;
   final String tokenId;
-  final String nftType; // 'ERC721' | 'ERC1155' | 'NonFungibleToken'(SOL) | 'INSCRIPTION'(BTC)
+  final String
+  nftType; // 'ERC721' | 'ERC1155' | 'NonFungibleToken'(SOL) | 'INSCRIPTION'(BTC)
   final int balance; // ERC1155 可能 > 1
   final String chain; // SimpleHash chain slug
   final String? openseaUrl;
@@ -55,12 +56,14 @@ class NftModel {
 
     // 图片 URL：优先使用 previews，再用 image_url
     final previews = json['previews'] as Map<String, dynamic>?;
-    final imageUrl = previews?['image_small_url'] as String? ??
+    final imageUrl =
+        previews?['image_small_url'] as String? ??
         previews?['image_medium_url'] as String? ??
         json['image_url'] as String?;
 
     // 动画/视频 URL
-    final animationUrl = json['animation_url'] as String? ??
+    final animationUrl =
+        json['animation_url'] as String? ??
         (json['extra_metadata'] as Map?)?['animation_original_url'] as String?;
 
     // NFT 类型
@@ -114,14 +117,16 @@ class NftModel {
     if (extraMetadata != null) {
       final rawNum = extraMetadata['inscription_number'];
       if (rawNum != null) {
-        inscriptionNumber =
-            rawNum is int ? rawNum : int.tryParse(rawNum.toString());
+        inscriptionNumber = rawNum is int
+            ? rawNum
+            : int.tryParse(rawNum.toString());
       }
     }
 
     return NftModel(
       nftId: json['nft_id'] as String? ?? '',
-      name: json['name'] as String? ??
+      name:
+          json['name'] as String? ??
           collectionName ??
           'NFT #${json['token_id']}',
       imageUrl: imageUrl,
@@ -163,8 +168,8 @@ class NftModel {
     final formatted = val < 0.0001
         ? val.toStringAsExponential(2)
         : val < 1
-            ? val.toStringAsFixed(4)
-            : val.toStringAsFixed(3);
+        ? val.toStringAsFixed(4)
+        : val.toStringAsFixed(3);
     return sym.isNotEmpty ? '$formatted $sym' : formatted;
   }
 }

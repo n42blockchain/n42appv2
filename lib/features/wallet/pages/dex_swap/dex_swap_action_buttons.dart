@@ -3,9 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_confirm.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
 /// The bottom action area of the DEX swap form.
 ///
@@ -48,56 +47,49 @@ class DexActionButtons extends StatelessWidget {
 
     if (needsApproval && hasQuote) {
       return _sizedButton(
-        context,
-        onTap: approveLoad == Load.finish ? onApprove : () {},
+        onTap: approveLoad == Load.finish ? onApprove : null,
         label: approveLoad == Load.loading
             ? s.g_key_dex_approving
             : s.g_key_dex_approve_required(tokenInSymbol),
-        bgColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.textColorOrange.name),
-        textColor: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.mainButtonTextColor.name),
+        variant: AppButtonVariant.warning,
         isLoading: approveLoad == Load.loading,
       );
     }
 
     return _sizedButton(
-      context,
       onTap: hasQuote && !loading
           ? () async {
               FocusScope.of(context).unfocus();
               final bool? confirmed = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(
-                    builder: (_) => DexSwapConfirm(quote: quote!)),
+                  builder: (_) => DexSwapConfirm(quote: quote!),
+                ),
               );
               if (confirmed == true) onSwapConfirmed();
             }
-          : () {},
+          : null,
       label: s.g_key_dex_swap_btn,
-      bgColor: hasQuote && !loading
-          ? AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonBgColor.name)
-          : AppThemeUtils.getColorByKey(
-              context, AppThemeKeys.mainButtonBgColor3.name),
-      textColor: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainButtonTextColor.name),
+      variant: AppButtonVariant.primary,
       isLoading: loading,
     );
   }
 
-  Widget _sizedButton(
-    BuildContext context, {
-    required VoidCallback onTap,
+  Widget _sizedButton({
+    required VoidCallback? onTap,
     required String label,
-    required Color bgColor,
-    required Color textColor,
+    required AppButtonVariant variant,
     required bool isLoading,
   }) {
     return SizedBox(
       height: ScreenUtil().setWidth(88),
       width: double.infinity,
-      child: buttonStyle6(context, onTap, label, bgColor, textColor, isLoading),
+      child: AppButton(
+        label: label,
+        onPressed: onTap,
+        variant: variant,
+        loading: isLoading,
+      ),
     );
   }
 }

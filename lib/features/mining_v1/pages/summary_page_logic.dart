@@ -58,14 +58,17 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
       setState(() => isLoading7DayData = true);
       epochList = await MiningApi.generateRewardsArray();
       if (epochList.isNotEmpty) {
-        final list = await MiningApi.getMiningBarChartData(astAddress ?? '',
-            currEpochNum: epochList.last);
+        final list = await MiningApi.getMiningBarChartData(
+          astAddress ?? '',
+          currEpochNum: epochList.last,
+        );
         final items = list?["items"];
         if (items != null && items is List) {
           barValues = epochList.map((epoch) {
             final item = items.firstWhere(
-                (v) => v["epoch"] == epoch,
-                orElse: () => -1);
+              (v) => v["epoch"] == epoch,
+              orElse: () => -1,
+            );
             return item != -1 ? (item["verify_count"] as int).toDouble() : 0.0;
           }).toList();
         }
@@ -98,34 +101,33 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   void generateBarTipData() {
     if (barValues.length != 7) return;
 
-    final subtitleStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(20),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemSubtitleTextColor.name),
+    final subtitleStyle = AppTypography.captionSm.copyWith(
+      color: AppColorTokens.of(context).textSubtitle,
     );
-    final boldStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(22),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.mainTextColor.name),
-      fontWeight: FontWeight.bold,
+    final boldStyle = AppTypography.caption.copyWith(
+      color: AppColorTokens.of(context).textPrimary,
+      fontWeight: FontWeight.w600,
     );
-    final spacerStyle = TextStyle(
-      fontSize: ScreenUtil().setSp(10),
-      color: AppThemeUtils.getColorByKey(
-          context, AppThemeKeys.itemTextColor.name),
+    final spacerStyle = AppTypography.captionSm.copyWith(
+      fontWeight: FontWeight.w400,
+      color: AppColorTokens.of(context).textItem,
     );
     final repeatedStyles = [
-      subtitleStyle, boldStyle, spacerStyle,
-      subtitleStyle, boldStyle, spacerStyle,
-      subtitleStyle, boldStyle,
+      subtitleStyle,
+      boldStyle,
+      spacerStyle,
+      subtitleStyle,
+      boldStyle,
+      spacerStyle,
+      subtitleStyle,
+      boldStyle,
     ];
 
     alertMessageList = [];
     final stackAstNum = globalMiningV1.depositsNum;
     for (final element in barValues) {
       final timeData = formatElapsedTime((element * 8).toInt());
-      final value =
-          computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
+      final value = computeRewardsValueByTaskNum(element.toInt(), stackAstNum);
       alertMessageList.add(
         AlertMessageGroup(
           titles: [
@@ -142,13 +144,16 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   double computeRewardsValueByTaskNum(int taskNum, int astStackNum) {
-    final (int cap, double rate) = switch ((globalMiningV1.miningType, astStackNum)) {
+    final (int cap, double rate) = switch ((
+      globalMiningV1.miningType,
+      astStackNum,
+    )) {
       (MiningType.FUJI_NFT, 2000) => (50, 0.0066666666666),
-      (MiningType.FUJI_NFT, 800)  => (50, 0.002),
-      (MiningType.FUJI_NFT, _)    => (50, 0.0005),
-      (_, 50)                      => (500, 0.000025),
-      (_, 100)                     => (100, 0.000333333333333334),
-      _                            => (100, 0.002083333333333334),
+      (MiningType.FUJI_NFT, 800) => (50, 0.002),
+      (MiningType.FUJI_NFT, _) => (50, 0.0005),
+      (_, 50) => (500, 0.000025),
+      (_, 100) => (100, 0.000333333333333334),
+      _ => (100, 0.002083333333333334),
     };
     return taskNum >= cap ? cap * rate : taskNum * rate;
   }
@@ -181,7 +186,8 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   Future<void> getLockTime(String address) async {
     try {
       final lockTime = await MiningApi.lockTime(address);
-      isCanUnlock = DateTime.now().millisecondsSinceEpoch ~/ 1000 >
+      isCanUnlock =
+          DateTime.now().millisecondsSinceEpoch ~/ 1000 >
           int.parse("${lockTime[0]}");
       lockTimeStr = dataUtils.getTimeByTimeStamp("${lockTime[0]}");
       AppLogger.d('SummaryPage', 'lockTime: $lockTimeStr');
@@ -197,7 +203,9 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     try {
       final format = DateFormat("dd/MM/yyyy HH:mm");
       final currentDateTime = format.parse(lockTime);
-      final desDays = globalMiningV1.miningType == MiningType.FUJI_NFT ? 90 : 365;
+      final desDays = globalMiningV1.miningType == MiningType.FUJI_NFT
+          ? 90
+          : 365;
       final stakeDate = currentDateTime.subtract(Duration(days: desDays));
       return "${stakeDate.day.toString().padLeft(2, '0')}/"
           "${stakeDate.month.toString().padLeft(2, '0')}/"
@@ -213,8 +221,10 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     try {
       final totalData = await MiningApi.getTotalMiningValue(address);
       if (totalData["result"] != null) {
-        rewardsReceived =
-            toEther("${BigInt.tryParse(totalData["result"]["total"])}", 18).toDouble();
+        rewardsReceived = toEther(
+          "${BigInt.tryParse(totalData["result"]["total"])}",
+          18,
+        ).toDouble();
       }
     } catch (err) {
       AppLogger.w('SummaryPage', 'err: $err');
@@ -225,8 +235,10 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
     try {
       final totalData = await MiningApi.getAccountRewardUnpaid(address);
       if (totalData["result"] != null) {
-        accumulatedRewards =
-            toEther("${BigInt.tryParse(totalData["result"])}", 18).toDouble();
+        accumulatedRewards = toEther(
+          "${BigInt.tryParse(totalData["result"])}",
+          18,
+        ).toDouble();
       }
     } catch (err) {
       AppLogger.w('SummaryPage', 'err: $err');
@@ -234,8 +246,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
   }
 
   Future<void> getAstPrice() async {
-    final data =
-    globalWapAdapter.getCoinPriceWithUnit(CoinType.N.name);
+    final data = globalWapAdapter.getCoinPriceWithUnit(CoinType.N.name);
     if (data != null) {
       astPrice = data["coinPrice"];
       AppLogger.d('SummaryPage', 'astPrice: $astPrice');
@@ -265,9 +276,7 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
             content: SingleChildScrollView(
               child: Text(
                 S.current.g_mining_key20,
-                style: TextStyle(
-                    color: AppThemeUtils.getColorByKey(
-                        context, AppThemeKeys.mainTextColor.name)),
+                style: TextStyle(color: AppColorTokens.of(context).textPrimary),
               ),
             ),
             actions: <Widget>[
@@ -302,17 +311,18 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                       mp.setMiningStatus(false);
                       MiningUtils.stopMining();
                       SPUtil sPUtils = SPUtil();
-                      Map<String, dynamic>? ms =
-                          await sPUtils.getMiningStautus();
+                      Map<String, dynamic>? ms = await sPUtils
+                          .getMiningStautus();
                       if (ms != null) {
                         ms[astAddress ?? ""]?["miningType"] = null;
                         ms[astAddress ?? ""]?["miningValue"][miningValueKey] =
                             null;
                         sPUtils.setMiningStatus(
-                            astAddress ?? "", ms[astAddress ?? ""]);
+                          astAddress ?? "",
+                          ms[astAddress ?? ""],
+                        );
                       }
-                      ToastUtils.show(
-                          "Release the pledge and stop mining");
+                      ToastUtils.show("Release the pledge and stop mining");
                       if (!mounted) return;
                       setState(() {
                         isCanUnlock = false;
@@ -330,7 +340,8 @@ mixin _SummaryPageLogicMixin on State<SummaryPage> {
                         load = Load.finish;
                       });
                       eventBus.fire(
-                          EventPublic(EventPublicType.refreshMiningData));
+                        EventPublic(EventPublicType.refreshMiningData),
+                      );
                     }
                   }
                 },

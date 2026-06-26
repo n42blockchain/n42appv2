@@ -2,6 +2,7 @@ import 'package:n42_wallet/features/mining_v1/pages/select_mining_plans.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,7 +34,7 @@ class SelectPlan extends StatelessWidget {
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,
           ),
-          borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+          borderRadius: AppRadius.brMd,
         ),
         child: Stack(
           children: [
@@ -58,13 +59,12 @@ class SelectPlan extends StatelessWidget {
                       title1,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
-                      style: TextStyle(
+                      style: AppTypography.body.copyWith(
                         color: AppThemeUtils.getColorByKey(
                           context,
                           AppThemeKeys.mainWhiteColor.name,
                         ),
-                        fontSize: ScreenUtil().setSp(30),
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),

@@ -123,48 +123,72 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m44(value, value1) =>
       "Akaunti hii inamiliki vitu vya ${value}, kumaanisha kuwa ${value1} XRP ya ziada imehifadhiwa.";
 
-  static String m45(value) =>
+  static String m45(message) => "Imeshindwa kuingia chumbani\n${message}";
+
+  static String m46(value) =>
       "Mchoro usio sahihi, ${value} majaribio yaliyobaki";
 
-  static String m46(value) => "Mchoro usio sahihi, ${value} jaribio lililobaki";
-
-  static String m47(value) =>
-      "Umefanikiwa kusanidi ${value} na utaanza uthibitishaji kwa N42Wallet!";
+  static String m47(value) => "Mchoro usio sahihi, ${value} jaribio lililobaki";
 
   static String m48(value) =>
+      "Umefanikiwa kusanidi ${value} na utaanza uthibitishaji kwa N42Wallet!";
+
+  static String m49(value) =>
       "Jiunge na kikundi changu cha ${value} kwenye @N42Wallet ili uwe mchimbaji wa mapema wa safu ya 1, na upate crypto kwenye simu yako!";
 
-  static String m49(value, value1) =>
+  static String m50(value, value1) =>
       "Je, una uhakika unataka kufunga ${value} N hadi ${value1} ili kuendesha nodi?";
 
-  static String m50(value) => "Imeshindwa kuleta:${value}";
+  static String m51(value) => "Imeshindwa kuleta:${value}";
 
-  static String m51(value) =>
+  static String m52(value) =>
       "Salio kuu la angalau ${value} linahitajika ili kupata zawadi.";
 
-  static String m52(value, value1) =>
+  static String m53(value, value1) =>
       "${value} N kila vitalu vya ${value1} vinachimbwa";
 
-  static String m53(value) => "Lazima ziwe na herufi ${value}";
+  static String m54(value) => "Lazima ziwe na herufi ${value}";
 
-  static String m54(value) => "${value} Salio Lililotosha.";
+  static String m55(symbol) => "Kiasi (${symbol})";
 
-  static String m55(value) => "${value} zinazoingia...";
+  static String m56(amount, symbol) => "Salio: ${amount} ${symbol}";
 
-  static String m56(value) =>
+  static String m57(label) =>
+      "Tangaza “${label}” mshindi na utatue? Haiwezi kutenduliwa.";
+
+  static String m58(n) => "dakika ${n}";
+
+  static String m59(n) => "Tokeo ${n}";
+
+  static String m60(label, pct) => "${label} inashinda (${pct}%)";
+
+  static String m61(shares, avg, after) =>
+      "Kadirio ${shares} hisa · wastani ${avg}% · baada ${after}%";
+
+  static String m62(reason) => "Ukombozi umeshindwa: ${reason}";
+
+  static String m63(label) => "Tokeo: ${label}";
+
+  static String m64(n) => "Uza ${n}";
+
+  static String m65(value) => "${value} Salio Lililotosha.";
+
+  static String m66(value) => "${value} zinazoingia...";
+
+  static String m67(value) =>
       "${value} iliyobadilishwa ndani ya programu itasambazwa kwa mkoba wako hivi karibuni na haiwezi kuuzwa kupitia mchakato huu. Inaweza kutumika kuendesha nodi.";
 
-  static String m57(value) => "Upeo wa herufi ${value}";
+  static String m68(value) => "Upeo wa herufi ${value}";
 
-  static String m58(value) => "${value} mnyororo APP tayari inatumika!";
+  static String m69(value) => "${value} mnyororo APP tayari inatumika!";
 
-  static String m59(value) =>
+  static String m70(value) =>
       "${value} mnyororo APP tayari inatumika, je, ungependa kuiongeza?";
 
-  static String m60(value) =>
+  static String m71(value) =>
       "Kiungo cha jaribio la anwani ya ${value} kimeshindwa!";
 
-  static String m61(value) => "0~${value} herufi";
+  static String m72(value) => "0~${value} herufi";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -2227,6 +2251,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Jumla ya Hifadhi = Hifadhi ya Msingi + (Hesabu ya Vitu Vinavyomilikiwa × Hifadhi ya Nyongeza)",
     ),
+    "g_live_enter_room_failed": m45,
+    "g_live_follow": MessageLookupByLibrary.simpleMessage("Fuata"),
+    "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
+      "Kipengele cha kufuata kinakuja",
+    ),
     "g_lock_key1": MessageLookupByLibrary.simpleMessage(
       "Kitambulisho cha Kugusa na Kitambulisho cha Uso",
     ),
@@ -2243,7 +2272,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Chora ishara ya sasa",
     ),
-    "g_lock_key21": m45,
+    "g_lock_key21": m46,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Weka upya nenosiri la ishara",
     ),
@@ -2253,7 +2282,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Ungependa kuongeza Nenosiri la Wallet?",
     ),
-    "g_lock_key25": m46,
+    "g_lock_key25": m47,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
       "Transfer Verification",
     ),
@@ -2343,12 +2372,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Shiriki kwa marafiki",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Endelea"),
-    "g_mining_key63": m47,
-    "g_mining_key73": m48,
+    "g_mining_key63": m48,
+    "g_mining_key73": m49,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Nimeanzisha nodi kwenye @N42Wallet na nikaanza uthibitishaji kwenye vifaa vya rununu! Njoo ujiunge nami. Wakati ujao uliowekwa madarakani ni wa simu!",
     ),
-    "g_mining_key76": m49,
+    "g_mining_key76": m50,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Madini"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Nodi"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Mtandao"),
@@ -2381,7 +2410,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Umbizo la data iliyosimbwa kwa njia isiyotumika!",
     ),
-    "g_mining_key_109": m50,
+    "g_mining_key_109": m51,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Zawadi za Jana"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage(
       "Data iliyosimbwa kwa njia fiche",
@@ -2395,7 +2424,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Ukombozi huchukua muda, tafadhali subiri kidogo!",
     ),
-    "g_mining_key_116": m51,
+    "g_mining_key_116": m52,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Zawadi hujilimbikiza kila siku na hutumwa kwa pochi yako ya N tu inapofikia ~0.5 N.",
     ),
@@ -2487,7 +2516,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "Vitalu 100 kwa siku ~ dakika 15",
     ),
-    "g_mining_key_71": m52,
+    "g_mining_key_71": m53,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "Sekunde 128 kwa hundi",
     ),
@@ -2557,7 +2586,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Tafadhali weka nenosiri la usimbaji fiche",
     ),
-    "g_mining_key_98": m53,
+    "g_mining_key_98": m54,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Tafadhali ingiza tena nenosiri lako ili kuhakikisha kuwa ni sahihi",
     ),
@@ -2641,6 +2670,76 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage(
       "Jumla ya Thamani",
     ),
+    "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Ongeza tokeo"),
+    "g_pred_amount_input": m55,
+    "g_pred_balance": m56,
+    "g_pred_buy": MessageLookupByLibrary.simpleMessage("Nunua"),
+    "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
+      "Ghairi & rejesha",
+    ),
+    "g_pred_close_only": MessageLookupByLibrary.simpleMessage("Funga tu"),
+    "g_pred_closed_waiting": MessageLookupByLibrary.simpleMessage(
+      "Imefungwa, inasubiri matokeo",
+    ),
+    "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
+      "Thibitisha utatuzi",
+    ),
+    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_create_title": MessageLookupByLibrary.simpleMessage("Anza Utabiri"),
+    "g_pred_creating": MessageLookupByLibrary.simpleMessage("Inaunda…"),
+    "g_pred_deadline": MessageLookupByLibrary.simpleMessage("Tarehe ya mwisho"),
+    "g_pred_err_amount_low": MessageLookupByLibrary.simpleMessage(
+      "Kiasi lazima kiwe zaidi ya 0",
+    ),
+    "g_pred_err_insufficient_balance": MessageLookupByLibrary.simpleMessage(
+      "Salio halitoshi",
+    ),
+    "g_pred_err_insufficient_shares": MessageLookupByLibrary.simpleMessage(
+      "Hisa hazitoshi",
+    ),
+    "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
+      "Tokeo batili",
+    ),
+    "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
+      "Soko limefungwa, biashara haipatikani",
+    ),
+    "g_pred_err_market_not_found": MessageLookupByLibrary.simpleMessage(
+      "Soko halikupatikana",
+    ),
+    "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
+      "Soko halijatatuliwa, haiwezi kukombolewa",
+    ),
+    "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
+      "Angalau matokeo mawili sahihi",
+    ),
+    "g_pred_err_question": MessageLookupByLibrary.simpleMessage(
+      "Tafadhali andika swali",
+    ),
+    "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
+      "Mteremko umezidi, jaribu tena",
+    ),
+    "g_pred_minutes": m58,
+    "g_pred_no": MessageLookupByLibrary.simpleMessage("Hapana"),
+    "g_pred_outcome_n": m59,
+    "g_pred_outcome_win": m60,
+    "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Matokeo"),
+    "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
+      "Chagua matokeo yaliyoshinda kutatua (fedha kwa matokeo)",
+    ),
+    "g_pred_processing": MessageLookupByLibrary.simpleMessage("Inachakata…"),
+    "g_pred_publish": MessageLookupByLibrary.simpleMessage("Chapisha"),
+    "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
+      "Swali la utabiri, mf.: Nani atashinda raundi hii?",
+    ),
+    "g_pred_quote_info": m61,
+    "g_pred_redeem_failed": m62,
+    "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Imetatuliwa"),
+    "g_pred_result_label": m63,
+    "g_pred_sell_n": m64,
+    "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
+      "Bila kikomo (funga mwenyewe)",
+    ),
+    "g_pred_yes": MessageLookupByLibrary.simpleMessage("Ndiyo"),
     "g_referral_downloaded": MessageLookupByLibrary.simpleMessage(
       "Imepakuliwa",
     ),
@@ -2673,7 +2772,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Rejea kupitia"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Kiungo"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kanuni"),
-    "g_swap_key_14": m54,
+    "g_swap_key_14": m65,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Pata hitilafu ya bei ya sarafu.",
     ),
@@ -2687,7 +2786,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Mabadilishano yako yatasambazwa baada ya muda mfupi. Tafadhali kuwa na subira.",
     ),
-    "g_swap_key_20": m55,
+    "g_swap_key_20": m66,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Gharama za kuendesha nodi: Uthibitishaji wa Kikundi 1-49 N Njia ya Msingi: 50 N Nodi ya Kulipiwa: 100 N Pro Nodi: 500 N.",
     ),
@@ -2701,7 +2800,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Salio Mpya"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Unalipa"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarehe"),
-    "g_swap_key_31": m56,
+    "g_swap_key_31": m67,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Ubadilishanaji unaweza kutazamwa kwenye wachunguzi wa mlolongo husika (Etherscan, BscScan, TRONSCAN na yetu wenyewe).",
     ),
@@ -2716,7 +2815,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Weka upya kwa chaguomsingi",
     ),
-    "g_token_m_key_1": m57,
+    "g_token_m_key_1": m68,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Mtu yeyote anaweza kuunda ishara, ikiwa ni pamoja na kuunda matoleo ya bandia ya ishara zilizopo. Chunguza tokeni kila wakati kabla ya kuiingiza.",
     ),
@@ -2739,9 +2838,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Hitilafu ya Umbizo!",
     ),
-    "g_token_m_key_22": m58,
-    "g_token_m_key_23": m59,
-    "g_token_m_key_24": m60,
+    "g_token_m_key_22": m69,
+    "g_token_m_key_23": m70,
+    "g_token_m_key_24": m71,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Leta tokeni"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Mitandao yote"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Tokeni Maalum"),
@@ -2755,6 +2854,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Hatari kubwa"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Salama"),
     "g_version_later": MessageLookupByLibrary.simpleMessage("Baadaye"),
+    "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
+      "Wallet ya HD · Mnemonic",
+    ),
+    "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
+      "Mnyororo Mmoja · Imeingizwa",
+    ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Muunganisho umepotea. Tafadhali unganisha tena.",
     ),
@@ -2785,6 +2890,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wc_sessions": MessageLookupByLibrary.simpleMessage(
       "DApps zilizounganishwa",
     ),
+    "g_xrp_dest_tag_hint": MessageLookupByLibrary.simpleMessage(
+      "Kawaida inahitajika unapotuma kwa exchange",
+    ),
+    "g_xrp_optional": MessageLookupByLibrary.simpleMessage("(Si lazima)"),
     "google_verification_message10": MessageLookupByLibrary.simpleMessage(
       "Kiungo",
     ),
@@ -2792,13 +2901,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Barua pepe"),
     "login_password": MessageLookupByLibrary.simpleMessage("Nenosiri"),
     "next": MessageLookupByLibrary.simpleMessage("Inayofuata"),
-    "nicknameMessage": m61,
+    "nicknameMessage": m72,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Badilisha Wasifu",
     ),
     "photograph": MessageLookupByLibrary.simpleMessage("Picha"),
     "please_input_address": MessageLookupByLibrary.simpleMessage(
       "Tafadhali Ingiza Anwani",
+    ),
+    "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
+      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+    ),
+    "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
+      "Background Delivery May Be Limited",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Usikumbushe tena",

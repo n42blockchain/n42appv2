@@ -30,8 +30,7 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
       onDismissed: (_) => deleteItem(info),
       background: Container(
         alignment: Alignment.centerRight,
-        color: AppThemeUtils.getColorByKey(
-            context, AppThemeKeys.errorTextColor.name),
+        color: AppColorTokens.of(context).danger,
         padding: EdgeInsets.only(right: ScreenUtil().setWidth(48)),
         child: Icon(
           Icons.delete_outline,
@@ -39,40 +38,33 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
           size: ScreenUtil().setWidth(52),
         ),
       ),
-      child: GestureDetector(
-        onTap: () => navigateToEdit(info),
-        child: content,
-      ),
+      child: GestureDetector(onTap: () => navigateToEdit(info), child: content),
     );
   }
 
   Widget _buildItemContent(BuildContext context, AddressBookModel info) {
-    final mainText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name);
-    final subtitleText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final itemBg =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name);
-    final mutedText =
-        AppThemeUtils.getColorByKey(context, AppThemeKeys.ff888888.name);
+    final mainText = AppColorTokens.of(context).textPrimary;
+    final subtitleText = AppColorTokens.of(context).textSubtitle;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final mutedText = AppThemeUtils.getColorByKey(
+      context,
+      AppThemeKeys.ff888888.name,
+    );
 
     return Container(
       margin: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(8),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space2,
       ),
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(30),
-        vertical: ScreenUtil().setWidth(20),
+        horizontal: AppSpacing.space8,
+        vertical: AppSpacing.space4,
       ),
-      decoration: BoxDecoration(
-        color: itemBg,
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
-      ),
+      decoration: BoxDecoration(color: itemBg, borderRadius: AppRadius.brMd),
       child: Row(
         children: [
           _buildAvatar(info),
-          SizedBox(width: ScreenUtil().setWidth(20)),
+          SizedBox(width: AppSpacing.space4),
 
           Expanded(
             child: Column(
@@ -84,56 +76,47 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
                     Flexible(
                       child: Text(
                         info.name ?? '',
-                        style: TextStyle(
+                        style: AppTypography.body.copyWith(
                           color: mainText,
-                          fontSize: ScreenUtil().setSp(30),
                           fontWeight: FontWeight.w500,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    SizedBox(width: ScreenUtil().setWidth(12)),
+                    SizedBox(width: AppSpacing.space4),
                     Container(
                       padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(14),
-                        vertical: ScreenUtil().setWidth(4),
+                        horizontal: AppSpacing.space4,
+                        vertical: AppSpacing.space2,
                       ),
                       decoration: BoxDecoration(
                         color: subtitleText.withValues(alpha: 0.1),
-                        borderRadius:
-                            BorderRadius.circular(ScreenUtil().setWidth(20)),
+                        borderRadius: AppRadius.brMd,
                       ),
                       child: Text(
                         info.coinName ?? '',
-                        style: TextStyle(
+                        style: AppTypography.captionSm.copyWith(
                           color: subtitleText,
-                          fontSize: ScreenUtil().setSp(20),
                         ),
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
 
                 EnsAddressText(
                   address: info.address ?? '',
                   coinType: info.coinName ?? 'ETH',
-                  style: TextStyle(
-                    color: subtitleText,
-                    fontSize: ScreenUtil().setSp(24),
-                  ),
+                  style: AppTypography.caption.copyWith(color: subtitleText),
                 ),
 
                 if (info.desc != null && info.desc!.isNotEmpty) ...[
-                  SizedBox(height: ScreenUtil().setWidth(6)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     info.desc!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: mutedText,
-                      fontSize: ScreenUtil().setSp(24),
-                    ),
+                    style: AppTypography.caption.copyWith(color: mutedText),
                   ),
                 ],
               ],
@@ -164,17 +147,13 @@ mixin _AddressBookListItemMixin on State<AddressBookList> {
         Container(
           width: avatarSize,
           height: avatarSize,
-          decoration: BoxDecoration(
-            color: bgColor,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
           alignment: Alignment.center,
           child: Text(
             initial,
-            style: TextStyle(
+            style: AppTypography.body.copyWith(
               color: Colors.white,
-              fontSize: ScreenUtil().setSp(30),
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),

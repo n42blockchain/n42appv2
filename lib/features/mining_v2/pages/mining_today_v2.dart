@@ -22,7 +22,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/chart_histogram.dart';
 import 'package:n42_wallet/features/widgets/detail_refresh_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -39,8 +39,10 @@ class MiningTodayV2 extends ConsumerStatefulWidget {
 }
 
 class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
-    with AutomaticKeepAliveClientMixin, _MiningTodayV2LogicMixin, _MiningTodayV2WidgetsMixin {
-
+    with
+        AutomaticKeepAliveClientMixin,
+        _MiningTodayV2LogicMixin,
+        _MiningTodayV2WidgetsMixin {
   @override
   void initState() {
     super.initState();
@@ -95,9 +97,9 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
                             Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(height: ScreenUtil().setWidth(18)),
+                                SizedBox(height: AppSpacing.space4),
                                 PlansWidget(onTap: null),
-                                SizedBox(height: ScreenUtil().setWidth(10)),
+                                SizedBox(height: AppSpacing.space2),
                               ],
                             ),
                           MiningStatusWidget(mpValue: mpValue),
@@ -106,7 +108,7 @@ class _MiningTodayV2State extends ConsumerState<MiningTodayV2>
                           if (mpValue.depositsEnable == true)
                             buildBarChart(context, mpValue),
                           if (mpValue.depositsEnable == true)
-                            SizedBox(height: ScreenUtil().setWidth(20)),
+                            SizedBox(height: AppSpacing.space4),
                           BackgroundMiningWidget(mpValue: mpValue),
                           buildDataBroadRows(context, mpValue),
                           buildRedemptionSection(context, mpValue),

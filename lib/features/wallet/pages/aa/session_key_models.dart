@@ -14,19 +14,10 @@ import 'package:flutter/material.dart';
 /// - [contractCall] — interact with whitelisted DApp contracts (medium risk)
 /// - [full] — unrestricted delegation (high risk, requires explicit consent)
 /// - [approve] — token approve only; kept for backward-compat with stored data
-enum SessionKeyPermission {
-  transfer,
-  approve,
-  contractCall,
-  full,
-}
+enum SessionKeyPermission { transfer, approve, contractCall, full }
 
 /// Lifecycle status of a session key.
-enum SessionKeyStatus {
-  active,
-  expired,
-  revoked,
-}
+enum SessionKeyStatus { active, expired, revoked }
 
 /// Immutable session key record.
 ///
@@ -93,21 +84,21 @@ class SessionKeyData {
   // ── Persistence ───────────────────────────────────────────────────────────
 
   Map<String, dynamic> toDbMap() => {
-        'key_address': keyAddress,
-        'label': label,
-        'permission': permission.name,
-        'status': status.name,
-        'created_at': createdAt.millisecondsSinceEpoch,
-        'expires_at': expiresAt.millisecondsSinceEpoch,
-        if (dappName != null) 'dapp_name': dappName,
-        if (allowedContracts != null)
-          'allowed_contracts': jsonEncode(allowedContracts),
-        if (spendingLimit != null) 'spending_limit': spendingLimit.toString(),
-        if (spendingToken != null) 'spending_token': spendingToken,
-        if (usedAmount != null) 'used_amount': usedAmount.toString(),
-        if (transactionCount != null) 'transaction_count': transactionCount,
-        'chain_id': chainId,
-      };
+    'key_address': keyAddress,
+    'label': label,
+    'permission': permission.name,
+    'status': status.name,
+    'created_at': createdAt.millisecondsSinceEpoch,
+    'expires_at': expiresAt.millisecondsSinceEpoch,
+    if (dappName != null) 'dapp_name': dappName,
+    if (allowedContracts != null)
+      'allowed_contracts': jsonEncode(allowedContracts),
+    if (spendingLimit != null) 'spending_limit': spendingLimit.toString(),
+    if (spendingToken != null) 'spending_token': spendingToken,
+    if (usedAmount != null) 'used_amount': usedAmount.toString(),
+    if (transactionCount != null) 'transaction_count': transactionCount,
+    'chain_id': chainId,
+  };
 
   factory SessionKeyData.fromDbMap(Map<String, dynamic> map) {
     List<String>? contracts;
@@ -130,10 +121,8 @@ class SessionKeyData {
         (e) => e.name == map['status'],
         orElse: () => SessionKeyStatus.active,
       ),
-      createdAt:
-          DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
-      expiresAt:
-          DateTime.fromMillisecondsSinceEpoch(map['expires_at'] as int),
+      createdAt: DateTime.fromMillisecondsSinceEpoch(map['created_at'] as int),
+      expiresAt: DateTime.fromMillisecondsSinceEpoch(map['expires_at'] as int),
       dappName: map['dapp_name'] as String?,
       allowedContracts: contracts,
       spendingLimit: map['spending_limit'] != null
@@ -163,25 +152,23 @@ class SessionKeyData {
     BigInt? usedAmount,
     int? transactionCount,
     int? chainId,
-  }) =>
-      SessionKeyData(
-        keyAddress: keyAddress ?? this.keyAddress,
-        label: label ?? this.label,
-        permission: permission ?? this.permission,
-        status: status ?? this.status,
-        createdAt: createdAt ?? this.createdAt,
-        expiresAt: expiresAt ?? this.expiresAt,
-        dappName: dappName ?? this.dappName,
-        dappIcon: dappIcon ?? this.dappIcon,
-        allowedContracts: allowedContracts ?? this.allowedContracts,
-        spendingLimit: spendingLimit ?? this.spendingLimit,
-        spendingToken: spendingToken ?? this.spendingToken,
-        usedAmount: usedAmount ?? this.usedAmount,
-        transactionCount: transactionCount ?? this.transactionCount,
-        chainId: chainId ?? this.chainId,
-      );
+  }) => SessionKeyData(
+    keyAddress: keyAddress ?? this.keyAddress,
+    label: label ?? this.label,
+    permission: permission ?? this.permission,
+    status: status ?? this.status,
+    createdAt: createdAt ?? this.createdAt,
+    expiresAt: expiresAt ?? this.expiresAt,
+    dappName: dappName ?? this.dappName,
+    dappIcon: dappIcon ?? this.dappIcon,
+    allowedContracts: allowedContracts ?? this.allowedContracts,
+    spendingLimit: spendingLimit ?? this.spendingLimit,
+    spendingToken: spendingToken ?? this.spendingToken,
+    usedAmount: usedAmount ?? this.usedAmount,
+    transactionCount: transactionCount ?? this.transactionCount,
+    chainId: chainId ?? this.chainId,
+  );
 }
-
 
 // ════════════════════════════════════════════════════════════════════════════
 // Shared UI helpers

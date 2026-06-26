@@ -6,14 +6,10 @@ part of 'csv_import_page.dart';
 /// expanded state, and action callbacks (copy/paste/pick file).
 mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   Widget _buildFormatSection() {
-    final blue = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainBlueColor.name);
-    final itemBg = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemBgColor.name);
-    final subText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.itemSubtitleTextColor.name);
-    final mainText = AppThemeUtils.getColorByKey(
-        context, AppThemeKeys.mainTextColor.name);
+    final blue = AppColorTokens.of(context).brand;
+    final itemBg = AppColorTokens.of(context).bgSurface;
+    final subText = AppColorTokens.of(context).textSubtitle;
+    final mainText = AppColorTokens.of(context).textPrimary;
     final scr = ScreenUtil();
     final pad16 = scr.setWidth(16);
 
@@ -52,14 +48,16 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
         ),
         child: Row(
           children: [
-            Icon(Icons.description_outlined,
-                color: blue, size: scr.setWidth(28)),
+            Icon(
+              Icons.description_outlined,
+              color: blue,
+              size: scr.setWidth(28),
+            ),
             SizedBox(width: scr.setWidth(8)),
             Expanded(
               child: Text(
                 S.of(context).g_key_batch_csv_format,
-                style: TextStyle(
-                  fontSize: scr.setSp(26),
+                style: AppTypography.bodySm.copyWith(
                   fontWeight: FontWeight.w600,
                   color: blue,
                 ),
@@ -76,12 +74,19 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   }
 
   Widget _buildExpandedContent(
-      Color mainText, Color subText, Color itemBg, ScreenUtil scr, double pad16) {
+    Color mainText,
+    Color subText,
+    Color itemBg,
+    ScreenUtil scr,
+    double pad16,
+  ) {
     final gap6 = SizedBox(height: scr.setWidth(6));
     final gap12 = SizedBox(height: scr.setWidth(12));
-    final bodyStyle = TextStyle(fontSize: scr.setSp(22), color: subText);
+    final bodyStyle = AppTypography.caption.copyWith(color: subText);
     final fieldStyle = bodyStyle.copyWith(
-        fontFamily: 'monospace', fontWeight: FontWeight.w600);
+      fontFamily: 'monospace',
+      fontWeight: FontWeight.w600,
+    );
 
     return Padding(
       padding: EdgeInsets.all(pad16),
@@ -90,18 +95,40 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
         children: [
           _docSectionTitle('Columns', mainText, scr),
           gap6,
-          _docRow('address', 'Required — EVM address (0x + 40 hex)',
-              fieldStyle, bodyStyle, scr),
-          _docRow('amount', 'Required — Decimal number (e.g. 1.5)',
-              fieldStyle, bodyStyle, scr),
-          _docRow('memo', 'Optional — Label or note', fieldStyle, bodyStyle, scr),
+          _docRow(
+            'address',
+            'Required — EVM address (0x + 40 hex)',
+            fieldStyle,
+            bodyStyle,
+            scr,
+          ),
+          _docRow(
+            'amount',
+            'Required — Decimal number (e.g. 1.5)',
+            fieldStyle,
+            bodyStyle,
+            scr,
+          ),
+          _docRow(
+            'memo',
+            'Optional — Label or note',
+            fieldStyle,
+            bodyStyle,
+            scr,
+          ),
           gap12,
           _docSectionTitle('Rules', mainText, scr),
           gap6,
-          _docBullet('Header row (address,amount,memo) is optional — auto-detected',
-              bodyStyle, scr),
-          _docBullet('Lines starting with # are comments and will be ignored',
-              bodyStyle, scr),
+          _docBullet(
+            'Header row (address,amount,memo) is optional — auto-detected',
+            bodyStyle,
+            scr,
+          ),
+          _docBullet(
+            'Lines starting with # are comments and will be ignored',
+            bodyStyle,
+            scr,
+          ),
           _docBullet('Blank lines are ignored', bodyStyle, scr),
           _docBullet('Duplicate addresses will be flagged', bodyStyle, scr),
           _docBullet('Maximum 200 recipients per batch', bodyStyle, scr),
@@ -121,8 +148,8 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
               '0x1234567890123456789012345678901234567890,1.5,Alice\n'
               '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd,2.0,Bob\n'
               '0x9876543210987654321098765432109876543210,0.5,',
-              style: TextStyle(
-                fontSize: scr.setSp(20),
+              style: AppTypography.captionSm.copyWith(
+                fontWeight: FontWeight.w400,
                 fontFamily: 'monospace',
                 color: subText,
                 height: 1.6,
@@ -139,11 +166,35 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
       padding: EdgeInsets.fromLTRB(pad16, 0, pad16, scr.setWidth(12)),
       child: Row(
         children: [
-          Expanded(child: _actionBtn(Icons.copy, 'Copy Template', _copyTemplate, blue, scr)),
+          Expanded(
+            child: _actionBtn(
+              Icons.copy,
+              'Copy Template',
+              _copyTemplate,
+              blue,
+              scr,
+            ),
+          ),
           SizedBox(width: scr.setWidth(8)),
-          Expanded(child: _actionBtn(Icons.paste, 'Paste', _pasteFromClipboard, blue, scr)),
+          Expanded(
+            child: _actionBtn(
+              Icons.paste,
+              'Paste',
+              _pasteFromClipboard,
+              blue,
+              scr,
+            ),
+          ),
           SizedBox(width: scr.setWidth(8)),
-          Expanded(child: _actionBtn(Icons.folder_open, 'Pick File', _pickFile, blue, scr)),
+          Expanded(
+            child: _actionBtn(
+              Icons.folder_open,
+              'Pick File',
+              _pickFile,
+              blue,
+              scr,
+            ),
+          ),
         ],
       ),
     );
@@ -152,16 +203,20 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
   Widget _docSectionTitle(String title, Color color, ScreenUtil scr) {
     return Text(
       title,
-      style: TextStyle(
-        fontSize: scr.setSp(24),
+      style: AppTypography.caption.copyWith(
         fontWeight: FontWeight.w600,
         color: color,
       ),
     );
   }
 
-  Widget _docRow(String field, String desc, TextStyle fieldStyle,
-      TextStyle descStyle, ScreenUtil scr) {
+  Widget _docRow(
+    String field,
+    String desc,
+    TextStyle fieldStyle,
+    TextStyle descStyle,
+    ScreenUtil scr,
+  ) {
     return Padding(
       padding: EdgeInsets.only(bottom: scr.setWidth(4)),
       child: Row(
@@ -190,12 +245,20 @@ mixin _CsvFormatSectionMixin on _CsvValidationMixin {
     );
   }
 
-  Widget _actionBtn(IconData icon, String label, VoidCallback onTap,
-      Color blue, ScreenUtil scr) {
+  Widget _actionBtn(
+    IconData icon,
+    String label,
+    VoidCallback onTap,
+    Color blue,
+    ScreenUtil scr,
+  ) {
     return OutlinedButton.icon(
       onPressed: onTap,
       icon: Icon(icon, size: scr.setWidth(20)),
-      label: Text(label, style: TextStyle(fontSize: scr.setSp(20))),
+      label: Text(
+        label,
+        style: AppTypography.captionSm.copyWith(fontWeight: FontWeight.w400),
+      ),
       style: OutlinedButton.styleFrom(
         foregroundColor: blue,
         side: BorderSide(color: blue.withValues(alpha: 0.4)),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
@@ -29,7 +30,7 @@ Future<bool?> showPhishingWarningDialog(
     context,
     Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
+        borderRadius: AppRadius.brMd,
         color: themeColor(AppThemeKeys.itemBgColor),
       ),
       child: Column(
@@ -39,14 +40,14 @@ Future<bool?> showPhishingWarningDialog(
           Container(
             width: double.infinity,
             padding: EdgeInsets.symmetric(
-              vertical: ScreenUtil().setWidth(20),
-              horizontal: ScreenUtil().setWidth(24),
+              vertical: AppSpacing.space4,
+              horizontal: AppSpacing.space6,
             ),
             decoration: BoxDecoration(
               color: themeColor(AppThemeKeys.errorBgColor),
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(ScreenUtil().setWidth(16)),
-                topRight: Radius.circular(ScreenUtil().setWidth(16)),
+                topLeft: Radius.circular(AppRadius.md),
+                topRight: Radius.circular(AppRadius.md),
               ),
             ),
             child: Row(
@@ -56,13 +57,11 @@ Future<bool?> showPhishingWarningDialog(
                   color: themeColor(AppThemeKeys.errorTextColor),
                   size: ScreenUtil().setWidth(44),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(12)),
+                SizedBox(width: AppSpacing.space2),
                 Expanded(
                   child: Text(
                     s.g_phishing_warning_title,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                      fontWeight: FontWeight.bold,
+                    style: AppTypography.headline.copyWith(
                       color: themeColor(AppThemeKeys.errorTextColor),
                     ),
                   ),
@@ -73,39 +72,35 @@ Future<bool?> showPhishingWarningDialog(
 
           // ── Body ─────────────────────────────────────────────────────────
           Padding(
-            padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   s.g_phishing_warning_body,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
+                  style: AppTypography.body.copyWith(
                     color: themeColor(AppThemeKeys.mainTextColor),
                     height: 1.5,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(16)),
+                SizedBox(height: AppSpacing.space4),
                 Text(
                   s.g_phishing_warning_url_label,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(24),
+                  style: AppTypography.caption.copyWith(
                     color: themeColor(AppThemeKeys.ff888888),
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(8)),
+                SizedBox(height: AppSpacing.space2),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.all(ScreenUtil().setWidth(12)),
+                  padding: EdgeInsets.all(AppSpacing.space2),
                   decoration: BoxDecoration(
                     color: themeColor(AppThemeKeys.errorBgColor),
-                    borderRadius:
-                        BorderRadius.circular(ScreenUtil().setWidth(8)),
+                    borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
                     url,
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(24),
+                    style: AppTypography.caption.copyWith(
                       color: themeColor(AppThemeKeys.errorTextColor),
                     ),
                     maxLines: 3,
@@ -127,16 +122,14 @@ Future<bool?> showPhishingWarningDialog(
                   child: InkWell(
                     onTap: () => Navigator.of(context).pop(false),
                     borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(ScreenUtil().setWidth(16)),
+                      bottomLeft: Radius.circular(AppRadius.md),
                     ),
                     child: Container(
                       height: ScreenUtil().setWidth(88),
                       alignment: Alignment.center,
                       child: Text(
                         s.g_phishing_go_back,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.bodyStrong.copyWith(
                           color: themeColor(AppThemeKeys.mainBlueColor),
                         ),
                       ),
@@ -151,15 +144,14 @@ Future<bool?> showPhishingWarningDialog(
                   child: InkWell(
                     onTap: () => Navigator.of(context).pop(true),
                     borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(ScreenUtil().setWidth(16)),
+                      bottomRight: Radius.circular(AppRadius.md),
                     ),
                     child: Container(
                       height: ScreenUtil().setWidth(88),
                       alignment: Alignment.center,
                       child: Text(
                         s.g_phishing_proceed_anyway,
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(30),
+                        style: AppTypography.body.copyWith(
                           color: themeColor(AppThemeKeys.ff888888),
                         ),
                       ),

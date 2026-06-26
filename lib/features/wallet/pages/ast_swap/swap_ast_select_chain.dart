@@ -1,4 +1,4 @@
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -8,7 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SwapAstSelectChain extends StatefulWidget {
   final List<SwapAstModel> swapAsts;
-  const SwapAstSelectChain(this.swapAsts,{super.key});
+  const SwapAstSelectChain(this.swapAsts, {super.key});
 
   @override
   State<SwapAstSelectChain> createState() => _SwapAstSelectChainState();
@@ -18,23 +18,19 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(
-        text: S.of(context).g_key_9,
-      ),
-      body: SafeArea(
-        child: tokenListWidget(),
-      ),
+      appBar: AppBarWidget(text: S.of(context).g_key_9),
+      body: SafeArea(child: tokenListWidget()),
     );
   }
 
   Widget tokenListWidget() {
     return ListView.separated(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      itemBuilder: (context,int index){
-        SwapAstModel sm=widget.swapAsts[index];
+      padding: AppSpacing.pageHorizontal,
+      itemBuilder: (context, int index) {
+        SwapAstModel sm = widget.swapAsts[index];
         return InkWell(
-          onTap: (){
-            Navigator.pop(context,sm);
+          onTap: () {
+            Navigator.pop(context, sm);
           },
           child: Container(
             height: ScreenUtil().setWidth(126),
@@ -45,28 +41,26 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
                 Container(
                   height: ScreenUtil().setWidth(52),
                   width: ScreenUtil().setWidth(52),
-                  margin: EdgeInsets.only(right: ScreenUtil().setWidth(10)),
-                  child: ImageNetWork(imageUrl:
-                      sm.uri??"",
+                  margin: EdgeInsets.only(right: AppSpacing.space2),
+                  child: ImageNetWork(
+                    imageUrl: sm.uri ?? "",
                     placeholder: "assets/img/list_default.png",
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: Text(
-                    sm.payCoin??"",
-                    style: TextStyle(
-                      fontSize: ScreenUtil().setSp(30),
-                      color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                    sm.payCoin ?? "",
+                    style: AppTypography.body.copyWith(
+                      color: AppColorTokens.of(context).textItem,
                     ),
                   ),
                 ),
-                SizedBox(width: ScreenUtil().setWidth(10),),
+                SizedBox(width: AppSpacing.space2),
                 Text(
                   "${sm.payChain}",
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(30),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
                   ),
                 ),
               ],
@@ -74,12 +68,12 @@ class _SwapAstSelectChainState extends State<SwapAstSelectChain> {
           ),
         );
       },
-      separatorBuilder: (context,int index){
+      separatorBuilder: (context, int index) {
         return Divider(
           height: ScreenUtil().setWidth(1),
           indent: 0,
           endIndent: 0,
-          color: AppThemeUtils.getColorByKey(context, AppThemeKeys.dividerColor.name),
+          color: AppColorTokens.of(context).border,
         );
       },
       itemCount: widget.swapAsts.length,

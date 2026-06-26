@@ -5,7 +5,7 @@ import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/dapp_security_badge.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
@@ -60,8 +60,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                     Expanded(
                       child: Text(
                         cm.coin['name'],
-                        style: TextStyle(
-                          fontSize: su.setSp(30),
+                        style: AppTypography.headline.copyWith(
+                          fontWeight: FontWeight.w400,
                           color: mainText,
                         ),
                         textAlign: TextAlign.end,
@@ -95,9 +95,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
             child: actionButton(S.of(context).g_key_79, () {
               connectV2.cleanData();
               Navigator.pop(context, false);
-            }),
+            }, variant: AppButtonVariant.secondary),
           ),
-          SizedBox(width: ScreenUtil().setWidth(30)),
+          SizedBox(width: AppSpacing.space8),
           Expanded(
             child: actionButton(S.of(context).g_connect_key1, () {
               connectV2.viewStateDeal(WalletConnectState.connectOK);
@@ -147,13 +147,10 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                     color: subtitleColor,
                   ),
                 ),
-                SizedBox(height: ScreenUtil().setWidth(24)),
+                SizedBox(height: AppSpacing.space6),
                 Text(
                   S.of(context).g_wc_dapp_disconnected,
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(28),
-                    color: subtitleColor,
-                  ),
+                  style: AppTypography.body.copyWith(color: subtitleColor),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -167,9 +164,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 child: actionButton(S.of(context).g_key_79, () {
                   connectV2.cleanData();
                   Navigator.pop(context, false);
-                }),
+                }, variant: AppButtonVariant.secondary),
               ),
-              SizedBox(width: ScreenUtil().setWidth(30)),
+              SizedBox(width: AppSpacing.space8),
               Expanded(
                 child: actionButton(S.of(context).g_key_4, () async {
                   final scanStr = await scan();
@@ -279,9 +276,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           ),
           child: Text(
             connectV2.errorMessage,
-            style: TextStyle(
+            style: AppTypography.bodySm.copyWith(
               color: _themeColor(AppThemeKeys.errorTextColor),
-              fontSize: su.setSp(26),
             ),
             textAlign: TextAlign.center,
           ),
@@ -324,8 +320,14 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     final s = S.of(context);
     return Row(
       children: [
-        Expanded(child: actionButton(s.g_connect_key3, onCancel)),
-        SizedBox(width: ScreenUtil().setWidth(30)),
+        Expanded(
+          child: actionButton(
+            s.g_connect_key3,
+            onCancel,
+            variant: AppButtonVariant.secondary,
+          ),
+        ),
+        SizedBox(width: AppSpacing.space8),
         Expanded(child: actionButton(s.g_key_78, onConfirm)),
       ],
     );
@@ -341,11 +343,15 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
     );
   }
 
-  Widget actionButton(String title, VoidCallback onTap) {
+  Widget actionButton(
+    String title,
+    VoidCallback onTap, {
+    AppButtonVariant variant = AppButtonVariant.primary,
+  }) {
     return SizedBox(
       width: double.infinity,
       height: ScreenUtil().setWidth(88.0),
-      child: buttonStyle2(context, onTap, title),
+      child: AppButton(label: title, onPressed: onTap, variant: variant),
     );
   }
 
@@ -362,8 +368,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         ),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: su.setSp(30.0),
+          style: AppTypography.headline.copyWith(
+            fontWeight: FontWeight.w400,
             color: _themeColor(AppThemeKeys.mainButtonTextColor),
           ),
         ),
@@ -380,13 +386,13 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: su.setSp(28), color: textColor),
+            style: AppTypography.body.copyWith(color: textColor),
           ),
           SizedBox(width: su.setWidth(20)),
           Expanded(
             child: Text(
               value,
-              style: TextStyle(fontSize: su.setSp(28), color: textColor),
+              style: AppTypography.body.copyWith(color: textColor),
               maxLines: 5,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.right,
@@ -446,9 +452,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           alignment: Alignment.center,
           child: Text(
             S.of(context).g_connect_key14,
-            style: TextStyle(
+            style: AppTypography.headline.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor),
-              fontSize: ScreenUtil().setSp(32.0),
             ),
             textAlign: TextAlign.center,
           ),
@@ -469,8 +474,8 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
 
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
-      padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.all(AppSpacing.space8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -489,10 +494,9 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               width: double.infinity,
               child: Text(
                 dAppName,
-                style: TextStyle(
+                style: AppTypography.title.copyWith(
                   color: _themeColor(AppThemeKeys.mainTextColor),
-                  fontSize: ScreenUtil().setSp(36),
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w600,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -502,13 +506,14 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           if (dAppDesc != "")
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20)),
+              padding: EdgeInsets.symmetric(
+                vertical: AppSpacing.space4,
+              ),
               alignment: Alignment.center,
               child: Text(
                 dAppDesc,
-                style: TextStyle(
+                style: AppTypography.bodySm.copyWith(
                   color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-                  fontSize: ScreenUtil().setSp(26),
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -518,18 +523,18 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           if (dAppWebUrl != "")
             InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => BrowserPage(dAppWebUrl),
-                ));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => BrowserPage(dAppWebUrl)),
+                );
               },
               child: SizedBox(
                 height: ScreenUtil().setWidth(60),
                 width: double.infinity,
                 child: Text(
                   dAppWebUrl,
-                  style: TextStyle(
+                  style: AppTypography.bodySm.copyWith(
                     color: _themeColor(AppThemeKeys.mainBlueColor),
-                    fontSize: ScreenUtil().setSp(26),
                     decoration: TextDecoration.underline,
                   ),
                   maxLines: 1,
@@ -554,15 +559,14 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
   Widget buildTitleWidget(String title) {
     return Container(
       height: ScreenUtil().setWidth(100),
-      margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(30)),
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       width: double.infinity,
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: TextStyle(
+        style: AppTypography.title.copyWith(
           color: _themeColor(AppThemeKeys.mainTextColor),
-          fontSize: ScreenUtil().setSp(36),
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );

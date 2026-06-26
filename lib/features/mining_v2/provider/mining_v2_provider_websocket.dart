@@ -121,7 +121,10 @@ mixin _MiningWebSocketMixin on _MiningStateMixin {
 
     wsReconnectAttempts++;
     final delay = Duration(seconds: wsReconnectAttempts * 5);
-    AppLogger.d('MiningWS', 'scheduling reconnect attempt $wsReconnectAttempts in ${delay.inSeconds}s');
+    AppLogger.d(
+      'MiningWS',
+      'scheduling reconnect attempt $wsReconnectAttempts in ${delay.inSeconds}s',
+    );
 
     wsStateValue = WebSocketState.reconnecting;
     notifyListeners();

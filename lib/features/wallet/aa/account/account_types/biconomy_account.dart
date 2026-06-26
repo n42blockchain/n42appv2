@@ -106,7 +106,9 @@ class BiconomyAccountHelper {
   /// initData = abi.encode(bootstrapAddress, bootstrapCalldata)
   /// bootstrapCalldata = initNexusWithSingleValidator(BootstrapConfig({k1Validator, abi.encode(owner)}))
   Uint8List buildInitData({required String owner}) {
-    final bootstrapCalldata = _buildInitNexusWithSingleValidatorCalldata(owner: owner);
+    final bootstrapCalldata = _buildInitNexusWithSingleValidatorCalldata(
+      owner: owner,
+    );
 
     // abi.encode(address bootstrap, bytes bootstrapCalldata)
     //   head: offset to bootstrap(32) + offset to bootstrapCalldata(32) = 64 bytes
@@ -119,16 +121,21 @@ class BiconomyAccountHelper {
 
     final bootstrapPadded = _addressToBytes32(nexusBootstrapAddress);
     final calldataOffset = _uint256ToBytes32(BigInt.from(64));
-    final calldataLength = _uint256ToBytes32(BigInt.from(bootstrapCalldata.length));
+    final calldataLength = _uint256ToBytes32(
+      BigInt.from(bootstrapCalldata.length),
+    );
     final padding = (32 - bootstrapCalldata.length % 32) % 32;
     final calldataPadded = Uint8List(bootstrapCalldata.length + padding);
     calldataPadded.setAll(0, bootstrapCalldata);
 
     final result = Uint8List(32 + 32 + 32 + calldataPadded.length);
     var pos = 0;
-    result.setAll(pos, bootstrapPadded); pos += 32;
-    result.setAll(pos, calldataOffset); pos += 32;
-    result.setAll(pos, calldataLength); pos += 32;
+    result.setAll(pos, bootstrapPadded);
+    pos += 32;
+    result.setAll(pos, calldataOffset);
+    pos += 32;
+    result.setAll(pos, calldataLength);
+    pos += 32;
     result.setAll(pos, calldataPadded);
 
     return result;
@@ -137,11 +144,10 @@ class BiconomyAccountHelper {
   /// Build initCode for inclusion in a UserOperation.
   ///
   /// Format: factory address (20 bytes) ++ createAccount calldata
-  Uint8List getInitCode({
-    required String owner,
-    required BigInt salt,
-  }) {
-    final factoryBytes = hexToBytes(factoryAddress.replaceFirst('0x', '').padLeft(40, '0'));
+  Uint8List getInitCode({required String owner, required BigInt salt}) {
+    final factoryBytes = hexToBytes(
+      factoryAddress.replaceFirst('0x', '').padLeft(40, '0'),
+    );
     final calldata = _buildCreateAccountCalldata(owner: owner, salt: salt);
     final result = Uint8List(20 + calldata.length);
     result.setAll(0, factoryBytes);
@@ -155,10 +161,14 @@ class BiconomyAccountHelper {
   ///
   /// BootstrapConfig = struct { address module; bytes initData; }
   /// selector = keccak256("initNexusWithSingleValidator((address,bytes))")[:4]
-  Uint8List _buildInitNexusWithSingleValidatorCalldata({required String owner}) {
+  Uint8List _buildInitNexusWithSingleValidatorCalldata({
+    required String owner,
+  }) {
     // selector
     final selectorFull = keccak256(
-      Uint8List.fromList(utf8.encode('initNexusWithSingleValidator((address,bytes))')),
+      Uint8List.fromList(
+        utf8.encode('initNexusWithSingleValidator((address,bytes))'),
+      ),
     );
     final selector = selectorFull.sublist(0, 4);
 
@@ -190,12 +200,20 @@ class BiconomyAccountHelper {
 
     final calldata = Uint8List(4 + 5 * 32);
     var pos = 0;
-    calldata.setAll(pos, selector); pos += 4;
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32))); pos += 32; // offset to struct
-    calldata.setAll(pos, structModule); pos += 32;            // struct.module
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(structInitDataRelOffset))); pos += 32; // relative offset
-    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32))); pos += 32; // initData.length
-    calldata.setAll(pos, ownerEncoded);                       // initData bytes
+    calldata.setAll(pos, selector);
+    pos += 4;
+    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32)));
+    pos += 32; // offset to struct
+    calldata.setAll(pos, structModule);
+    pos += 32; // struct.module
+    calldata.setAll(
+      pos,
+      _uint256ToBytes32(BigInt.from(structInitDataRelOffset)),
+    );
+    pos += 32; // relative offset
+    calldata.setAll(pos, _uint256ToBytes32(BigInt.from(32)));
+    pos += 32; // initData.length
+    calldata.setAll(pos, ownerEncoded); // initData bytes
 
     return calldata;
   }
@@ -206,7 +224,11 @@ class BiconomyAccountHelper {
     required BigInt salt,
   }) {
     final initData = buildInitData(owner: owner);
-    return _encodeSelectorBytesBytes32('createAccount(bytes,bytes32)', initData, salt);
+    return _encodeSelectorBytesBytes32(
+      'createAccount(bytes,bytes32)',
+      initData,
+      salt,
+    );
   }
 
   // ── Private: calldata encoding ─────────────────────────────────────────────
@@ -230,10 +252,14 @@ class BiconomyAccountHelper {
 
     final calldata = Uint8List(4 + 32 + 32 + 32 + padded.length);
     var pos = 0;
-    calldata.setAll(pos, selector); pos += 4;
-    calldata.setAll(pos, offset); pos += 32;
-    calldata.setAll(pos, saltBytes); pos += 32;
-    calldata.setAll(pos, length); pos += 32;
+    calldata.setAll(pos, selector);
+    pos += 4;
+    calldata.setAll(pos, offset);
+    pos += 32;
+    calldata.setAll(pos, saltBytes);
+    pos += 32;
+    calldata.setAll(pos, length);
+    pos += 32;
     calldata.setAll(pos, padded);
     return calldata;
   }

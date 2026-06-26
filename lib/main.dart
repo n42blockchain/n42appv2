@@ -213,7 +213,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
         );
       }
     } catch (e) {
-      AppLogger.w('Security', 'wallet data migration failed: $e');
+      AppLogger.e('Security', 'wallet data migration FAILED', error: e);
     }
   }
 

@@ -6,7 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_chain_config.dart';
 import 'package:n42_wallet/features/wallet/services/ens_registration_service.dart';
 
@@ -25,48 +25,41 @@ class EnsDomainCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isExpiringSoon = ownedEns.isExpiringSoon;
     final isExpired = ownedEns.isExpired;
-    final themeBlue = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.mainBlueColor.name,
-    );
+    final themeBlue = AppColorTokens.of(context).brand;
 
     final Color gradientBase;
     if (isExpired) {
-      gradientBase = Colors.red;
+      gradientBase = AppColorTokens.of(context).danger;
     } else if (isExpiringSoon) {
-      gradientBase = Colors.orange;
+      gradientBase = AppColorTokens.of(context).warning;
     } else {
       gradientBase = themeBlue;
     }
 
     return Container(
-      padding: EdgeInsets.all(ScreenUtil().setWidth(24)),
+      padding: EdgeInsets.all(AppSpacing.space6),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [gradientBase.withAlpha(30), gradientBase.withAlpha(10)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(20)),
+        borderRadius: AppRadius.brMd,
       ),
       child: Column(
         children: [
           _EnsAvatar(ownedEns: ownedEns, domainChain: domainChain),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           Text(
             ownedEns.name,
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(36),
-              fontWeight: FontWeight.bold,
-              color: AppThemeUtils.getColorByKey(
-                context,
-                AppThemeKeys.mainTextColor.name,
-              ),
+            style: AppTypography.title.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColorTokens.of(context).textPrimary,
             ),
           ),
-          SizedBox(height: ScreenUtil().setWidth(8)),
+          SizedBox(height: AppSpacing.space2),
           _ChainBadgeRow(ownedEns: ownedEns, domainChain: domainChain),
-          SizedBox(height: ScreenUtil().setWidth(16)),
+          SizedBox(height: AppSpacing.space4),
           _ExpiryRow(
             ownedEns: ownedEns,
             isExpired: isExpired,
@@ -75,12 +68,8 @@ class EnsDomainCard extends StatelessWidget {
           if (!isExpired)
             Text(
               '${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}',
-              style: TextStyle(
-                fontSize: ScreenUtil().setSp(22),
-                color: AppThemeUtils.getColorByKey(
-                  context,
-                  AppThemeKeys.itemSubtitleTextColor.name,
-                ).withAlpha(150),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textSubtitle.withAlpha(150),
               ),
             ),
         ],
@@ -97,7 +86,10 @@ class _EnsAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defaultAvatar = _DefaultAvatar(ownedEns: ownedEns, domainChain: domainChain);
+    final defaultAvatar = _DefaultAvatar(
+      ownedEns: ownedEns,
+      domainChain: domainChain,
+    );
     if (ownedEns.avatar == null) return defaultAvatar;
     return ClipRRect(
       borderRadius: BorderRadius.circular(ScreenUtil().setWidth(40)),
@@ -130,9 +122,8 @@ class _DefaultAvatar extends StatelessWidget {
       child: Center(
         child: Text(
           ownedEns.name.substring(0, 1).toUpperCase(),
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(36),
-            fontWeight: FontWeight.bold,
+          style: AppTypography.title.copyWith(
+            fontWeight: FontWeight.w600,
             color: domainChain.color,
           ),
         ),
@@ -154,8 +145,11 @@ class _ChainBadgeRow extends StatelessWidget {
       children: [
         _badge(label: domainChain.name, color: domainChain.color),
         if (ownedEns.isPrimary) ...[
-          SizedBox(width: ScreenUtil().setWidth(8)),
-          _badge(label: S.of(context).g_key_ens_primary, color: Colors.green),
+          SizedBox(width: AppSpacing.space2),
+          _badge(
+            label: S.of(context).g_key_ens_primary,
+            color: AppColorTokens.of(context).success,
+          ),
         ],
       ],
     );
@@ -164,18 +158,17 @@ class _ChainBadgeRow extends StatelessWidget {
   Widget _badge({required String label, required Color color}) {
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: ScreenUtil().setWidth(12),
-        vertical: ScreenUtil().setWidth(4),
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
       ),
       decoration: BoxDecoration(
         color: color.withAlpha(25),
-        borderRadius: BorderRadius.circular(ScreenUtil().setWidth(12)),
+        borderRadius: AppRadius.brMd,
         border: Border.all(color: color.withAlpha(60)),
       ),
       child: Text(
         label,
-        style: TextStyle(
-          fontSize: ScreenUtil().setSp(20),
+        style: AppTypography.captionSm.copyWith(
           color: color,
           fontWeight: FontWeight.w600,
         ),
@@ -197,10 +190,7 @@ class _ExpiryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final subtitleColor = AppThemeUtils.getColorByKey(
-      context,
-      AppThemeKeys.itemSubtitleTextColor.name,
-    );
+    final subtitleColor = AppColorTokens.of(context).textSubtitle;
 
     IconData icon;
     Color color;
@@ -208,27 +198,26 @@ class _ExpiryRow extends StatelessWidget {
 
     if (isExpired) {
       icon = Icons.error;
-      color = Colors.red;
+      color = AppColorTokens.of(context).danger;
       label = S.of(context).g_key_ens_expired;
     } else if (isExpiringSoon) {
       icon = Icons.warning;
-      color = Colors.orange;
-      label = '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
+      color = AppColorTokens.of(context).warning;
+      label =
+          '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
     } else {
       icon = Icons.access_time;
       color = subtitleColor;
-      label = '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
+      label =
+          '${S.of(context).g_key_ens_expires}: ${ownedEns.formattedExpiresAt}';
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(icon, size: ScreenUtil().setWidth(20), color: color),
-        SizedBox(width: ScreenUtil().setWidth(6)),
-        Text(
-          label,
-          style: TextStyle(fontSize: ScreenUtil().setSp(24), color: color),
-        ),
+        SizedBox(width: AppSpacing.space2),
+        Text(label, style: AppTypography.caption.copyWith(color: color)),
       ],
     );
   }

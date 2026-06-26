@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class Loading extends StatelessWidget {
@@ -21,8 +22,9 @@ class Loading extends StatelessWidget {
             child: Text(
               text ?? "${S.of(context).g_key_106}...",
               overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                  color: textColor ?? const Color(0xff666666), fontSize: 16),
+              style: AppTypography.body.copyWith(
+                color: textColor ?? const Color(0xff666666),
+              ),
             ),
           ),
         ],

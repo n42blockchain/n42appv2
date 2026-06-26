@@ -9,12 +9,15 @@ class BtcApi {
   final bool isTest;
 
   BtcApi({bool test = false})
-      : isTest = test,
-        uri = RequestUrl().getUrl2(CoinType.BTC.name, 'api', isTest: test);
+    : isTest = test,
+      uri = RequestUrl().getUrl2(CoinType.BTC.name, 'api', isTest: test);
 
   Future<MessageModel> getGasfee() async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${uri}v1/fees/recommended', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${uri}v1/fees/recommended',
+        params: {},
+      );
       return MessageModel()..data = data['economyFee'];
     } catch (e) {
       // 获取 gas 费失败时返回默认值 2
@@ -24,7 +27,10 @@ class BtcApi {
 
   Future<MessageModel> getUtxos(String address) async {
     try {
-      final data = await BaseApi.requestEmptyH.get('${uri}address/$address/utxo', params: {});
+      final data = await BaseApi.requestEmptyH.get(
+        '${uri}address/$address/utxo',
+        params: {},
+      );
       return MessageModel()..data = data;
     } catch (e) {
       return MessageModel.error()..data = e;
@@ -78,7 +84,8 @@ class BtcApi {
       if (response.statusCode == 200) {
         return MessageModel()..data = response.body;
       } else {
-        return MessageModel.error()..data = 'Error: ${response.statusCode} - ${response.body}';
+        return MessageModel.error()
+          ..data = 'Error: ${response.statusCode} - ${response.body}';
       }
     } catch (e) {
       return MessageModel.error()..data = 'Request failed: $e';

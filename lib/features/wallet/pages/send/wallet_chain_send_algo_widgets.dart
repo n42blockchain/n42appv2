@@ -8,7 +8,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Color _tc(String key) => AppThemeUtils.getColorByKey(context, key);
 
   /// Standard page margin
-  EdgeInsets get _pageMargin => EdgeInsets.all(ScreenUtil().setWidth(30.0));
+  EdgeInsets get _pageMargin => EdgeInsets.all(AppSpacing.space8);
 
   /// Builds a pill-shaped action button (blue bg, white text, fully rounded)
   Widget _pillButton({required String label, required VoidCallback onTap}) {
@@ -17,7 +17,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       child: Container(
         margin: EdgeInsets.only(left: ScreenUtil().setWidth(10.0)),
         height: ScreenUtil().setWidth(60.0),
-        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(20.0)),
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
         decoration: BoxDecoration(
           color: _tc(AppThemeKeys.mainBlueColor.name),
           borderRadius: BorderRadius.all(
@@ -27,10 +27,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
-            fontSize: ScreenUtil().setSp(26.0),
-            color: _tc(AppThemeKeys.mainWhiteColor.name),
-          ),
+          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
         ),
       ),
     );
@@ -43,18 +40,15 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: TextStyle(
-          color: _tc(AppThemeKeys.errorTextColor.name),
-          fontSize: ScreenUtil().setSp(24.0),
-        ),
+        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
       ),
     );
   }
 
   Widget algoAddToken() {
     final String contract = widget.coinModel.isTest
-        ? widget.coinModel.coin['contract_test']
-        : widget.coinModel.coin['contract'];
+        ? widget.coinModel.config.contractTest
+        : widget.coinModel.config.contract;
     return Container(
       margin: _pageMargin,
       alignment: Alignment.center,
@@ -62,20 +56,14 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'There is no "${widget.coinModel.coin['miniName']}($contract)" added under your account "${widget.coinModel.address}"',
-            style: TextStyle(
-              color: _tc(AppThemeKeys.textColorOrange.name),
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            'There is no "${widget.coinModel.config.miniName}($contract)" added under your account "${widget.coinModel.address}"',
+            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.textColorOrange.name)),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: ScreenUtil().setWidth(30)),
+          SizedBox(height: AppSpacing.space8),
           Text(
             'Adding will consume some absenteeism fees. Click the "Add" button to add.',
-            style: TextStyle(
-              color: _tc(AppThemeKeys.mainTextColor.name),
-              fontSize: ScreenUtil().setSp(26),
-            ),
+            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
             textAlign: TextAlign.center,
           ),
         ],
@@ -94,10 +82,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         children: [
           Text(
             S.of(context).g_key_38,
-            style: TextStyle(
-              color: mainText,
-              fontSize: ScreenUtil().setSp(28.0),
-            ),
+            style: AppTypography.body.copyWith(color: mainText),
           ),
           Container(
             alignment: Alignment.center,
@@ -107,9 +92,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
             ),
             margin: EdgeInsets.only(top: ScreenUtil().setWidth(20.0)),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             height: ScreenUtil().setWidth(88.0),
@@ -118,9 +101,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               children: [
                 Expanded(
                   child: TextField(
-                    style: TextStyle(
+                    style: AppTypography.headline.copyWith(
                       color: mainText,
-                      fontSize: ScreenUtil().setWidth(30.0),
+                      fontWeight: FontWeight.w400,
                     ),
                     controller: toTextEditingController,
                     focusNode: toNode,
@@ -133,7 +116,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                       focusedBorder: InputBorder.none,
                       isCollapsed: true,
                       contentPadding: EdgeInsets.symmetric(
-                        vertical: ScreenUtil().setWidth(10.0),
+                        vertical: AppSpacing.space2,
                       ),
                     ),
                     maxLines: 1,
@@ -148,7 +131,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
                   child: Container(
                     width: ScreenUtil().setWidth(60.0),
                     height: ScreenUtil().setWidth(60.0),
-                    padding: EdgeInsets.all(ScreenUtil().setWidth(8.0)),
+                    padding: EdgeInsets.all(AppSpacing.space2),
                     child: Image.asset(
                       "assets/wallet/scan.png",
                       color: _tc(AppThemeKeys.mainBlueColor.name),
@@ -190,14 +173,11 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               Flexible(
                 child: Text(
                   S.of(context).g_key_44,
-                  style: TextStyle(
-                    color: mainText,
-                    fontSize: ScreenUtil().setSp(28.0),
-                  ),
+                  style: AppTypography.body.copyWith(color: mainText),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              SizedBox(width: ScreenUtil().setWidth(20.0)),
+              SizedBox(width: AppSpacing.space4),
               Expanded(child: amountBalanceWidget()),
             ],
           ),
@@ -207,11 +187,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
               left: ScreenUtil().setWidth(30.0),
               right: ScreenUtil().setWidth(10.0),
             ),
-            margin: EdgeInsets.symmetric(vertical: ScreenUtil().setWidth(20.0)),
+            margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(
-                Radius.circular(ScreenUtil().setWidth(8.0)),
-              ),
+              borderRadius: AppRadius.brSm,
               color: itemBg,
             ),
             child: Column(
@@ -278,7 +256,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   Widget _balanceText(String text, Color color) {
     return Text(
       text,
-      style: TextStyle(color: color, fontSize: ScreenUtil().setSp(28.0)),
+      style: AppTypography.body.copyWith(color: color),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -294,7 +272,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
     final double availableBalance =
         widget.coinModel.balanceDoubleAll() - minBalance;
 
-    if (widget.coinModel.coin['isContract']) {
+    if (widget.coinModel.config.isContract) {
       return _balanceText(
         '${widget.coinModel.balanceStringAll()} $unit',
         _tc(AppThemeKeys.mainTextColor.name),
@@ -325,10 +303,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: TextStyle(
-          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-          fontSize: ScreenUtil().setSp(30.0),
-        ),
+        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -336,11 +311,11 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
   }
 
   Widget minerFeeWidget() {
-    final bool isContract = widget.coinModel.coin['isContract'] == true;
+    final bool isContract = widget.coinModel.config.isContract;
     final int decimals = isContract
         ? (chainModel?.coin['decimals'] ?? 0)
         : widget.coinModel.coin['decimals'] as int;
-    final String title = widget.coinModel.coin['coinType']?.toString() ?? '';
+    final String title = widget.coinModel.config.coinType;
     final String feeText =
         '${toEther(totalGasPrice.toString(), decimals)} $title';
 
@@ -362,10 +337,7 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
     final double availableBalance =
         (chainModel?.balanceDoubleAll() ?? 0) - minBalance;
 
-    final labelStyle = TextStyle(
-      color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
-      fontSize: ScreenUtil().setSp(28.0),
-    );
+    final labelStyle = AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name));
 
     Widget balanceRow(String label, String value, Color valueColor) {
       return Row(

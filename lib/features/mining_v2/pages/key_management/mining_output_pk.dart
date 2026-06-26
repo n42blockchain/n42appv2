@@ -1,20 +1,19 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/mining_v2/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v2/pages/key_management/data_encryption.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/widgets/button_widget.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class MiningOutputPk extends StatefulWidget {
-  final Map<String,dynamic>? value;
-  const MiningOutputPk({this.value,super.key});
+  final Map<String, dynamic>? value;
+  const MiningOutputPk({this.value, super.key});
 
   @override
   State<MiningOutputPk> createState() => _MiningOutputPkState();
@@ -23,28 +22,30 @@ class MiningOutputPk extends StatefulWidget {
 class _MiningOutputPkState extends State<MiningOutputPk> {
   final TextEditingController _pwdController = TextEditingController();
   final TextEditingController _confirmController = TextEditingController();
-  final FocusNode _pwdFocus=FocusNode();
-  final FocusNode _confirmFocus=FocusNode();
-  String pwdErrorMessage="";
-  String confirmErrorMessage="";
+  final FocusNode _pwdFocus = FocusNode();
+  final FocusNode _confirmFocus = FocusNode();
+  String pwdErrorMessage = "";
+  String confirmErrorMessage = "";
 
   bool _showEncryptResult = false;
   String _encryptedData = "";
-  bool obscure=true;
-  Load load=Load.finish;
-  bool copyEncrypte=false;
-  Map<String,dynamic>? encrypteData;
-  Map<String,dynamic>? _localValue;
+  bool obscure = true;
+  Load load = Load.finish;
+  bool copyEncrypte = false;
+  Map<String, dynamic>? encrypteData;
+  Map<String, dynamic>? _localValue;
 
   Future<String> encryptData(String password) async {
-    _localValue ??= widget.value ?? await MiningApi.init().generateBls12381Keypair();
+    _localValue ??=
+        widget.value ?? await MiningApi.init().generateBls12381Keypair();
     if (!mounted) return "";
 
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) return "";
 
-    final credentials =
-        await walletService.getCredentials(walletService.miningWalletIndex);
+    final credentials = await walletService.getCredentials(
+      walletService.miningWalletIndex,
+    );
 
     encrypteData = {
       'validator': _localValue,
@@ -63,7 +64,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       return;
     }
     if (pwd != confirm) {
-      setState(() => confirmErrorMessage = S.of(context).g_key_passwords_not_match);
+      setState(
+        () => confirmErrorMessage = S.of(context).g_key_passwords_not_match,
+      );
       return;
     }
 
@@ -93,7 +96,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
     Clipboard.setData(ClipboardData(text: _encryptedData));
     ToastUtils.show(S.of(context).copy);
     setState(() {
-      copyEncrypte=true;
+      copyEncrypte = true;
     });
   }
 
@@ -105,7 +108,7 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
       child: Image.asset(
         'assets/login/${obscure ? "icon_denglu_yincang" : "icon_denglu_xianshi"}.png',
         width: ScreenUtil().setWidth(34.0),
-        color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainBlueColor.name),
+        color: AppColorTokens.of(context).brand,
       ),
     );
   }
@@ -136,110 +139,91 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
         }
       },
       child: Scaffold(
-      appBar: AppBar(title: Text(S.of(context).g_mining_key_96)),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (!_showEncryptResult) ...[
-              Text(
-                S.of(context).g_mining_key_97,
-                style: TextStyle(
-                    fontSize: ScreenUtil().setSp(32),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+        appBar: AppBar(title: Text(S.of(context).g_mining_key_96)),
+        body: SingleChildScrollView(
+          padding: EdgeInsets.all(AppSpacing.space8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (!_showEncryptResult) ...[
+                Text(
+                  S.of(context).g_mining_key_97,
+                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(10)),
-              textFieldStyle3(
+                SizedBox(height: AppSpacing.space2),
+                textFieldStyle3(
                   context,
-                controller: _pwdController,
-                focusNode: _pwdFocus,
-                hintText: S.of(context).g_mining_key_98(8),
-                textInputAction:TextInputAction.next,
-                errorMessage: pwdErrorMessage,
-                onEditingComplete: (){
-                  FocusScope.of(context).requestFocus(_confirmFocus);
-                },
-                obscure: obscure,
-                rightWidget1: _buildObscureToggle(),
-                rightOnTap1: _toggleObscure,
-              ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
-              Text(
-                S.of(context).g_mining_key_99,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(32),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+                  controller: _pwdController,
+                  focusNode: _pwdFocus,
+                  hintText: S.of(context).g_mining_key_98(8),
+                  textInputAction: TextInputAction.next,
+                  errorMessage: pwdErrorMessage,
+                  onEditingComplete: () {
+                    FocusScope.of(context).requestFocus(_confirmFocus);
+                  },
+                  obscure: obscure,
+                  rightWidget1: _buildObscureToggle(),
+                  rightOnTap1: _toggleObscure,
                 ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(10)),
-              textFieldStyle3(
-                context,
-                controller: _confirmController,
-                focusNode: _confirmFocus,
-                hintText: S.of(context).rest_Confirm_password,
-                textInputAction:TextInputAction.done,
-                errorMessage: confirmErrorMessage,
-                onEditingComplete: (){
-                  FocusScope.of(context).unfocus();
-                },
-                obscure: obscure,
-                rightWidget1: _buildObscureToggle(),
-                rightOnTap1: _toggleObscure,
-              ),
-            ],
+                SizedBox(height: AppSpacing.space12),
+                Text(
+                  S.of(context).g_mining_key_99,
+                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                ),
+                SizedBox(height: AppSpacing.space2),
+                textFieldStyle3(
+                  context,
+                  controller: _confirmController,
+                  focusNode: _confirmFocus,
+                  hintText: S.of(context).rest_Confirm_password,
+                  textInputAction: TextInputAction.done,
+                  errorMessage: confirmErrorMessage,
+                  onEditingComplete: () {
+                    FocusScope.of(context).unfocus();
+                  },
+                  obscure: obscure,
+                  rightWidget1: _buildObscureToggle(),
+                  rightOnTap1: _toggleObscure,
+                ),
+              ],
 
-            if (_showEncryptResult) ...[
-              Text(
-                S.of(context).g_mining_key_100,
-                style: TextStyle(
-                  fontSize: ScreenUtil().setSp(36),
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.mainTextColor.name),
+              if (_showEncryptResult) ...[
+                Text(
+                  S.of(context).g_mining_key_100,
+                  style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
                 ),
-              ),
-              SizedBox(height: ScreenUtil().setWidth(40)),
-              Container(
-                padding: EdgeInsets.all(ScreenUtil().setWidth(30)),
-                decoration: BoxDecoration(
-                  color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemBgColor.name),
-                  borderRadius: BorderRadius.circular(ScreenUtil().setWidth(16)),
-                ),
-                width: double.infinity,
-                child: Text(
-                  _encryptedData,
-                  style: TextStyle(
-                      fontSize: ScreenUtil().setSp(32),
-                    color: AppThemeUtils.getColorByKey(context, AppThemeKeys.itemTextColor.name),
+                SizedBox(height: AppSpacing.space12),
+                Container(
+                  padding: EdgeInsets.all(AppSpacing.space8),
+                  decoration: BoxDecoration(
+                    color: AppColorTokens.of(context).bgSurface,
+                    borderRadius: AppRadius.brMd,
+                  ),
+                  width: double.infinity,
+                  child: Text(
+                    _encryptedData,
+                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
                   ),
                 ),
-              ),
+              ],
             ],
-          ],
-        ),
-      ),
-
-      bottomNavigationBar: SafeArea(
-        child: Container(
-          margin: EdgeInsets.all(ScreenUtil().setWidth(30)),
-          width: double.infinity,
-          height: ScreenUtil().setWidth(88),
-          child: buttonStyle6(
-            context,
-            _showEncryptResult ? _copyEncryptedData : _onConfirm,
-            _showEncryptResult ? S.of(context).g_mining_key_101 : S.of(context).g_key_78,
-            AppThemeUtils.getColorByKey(
-              context,
-              (load == Load.loading ? AppThemeKeys.mainButtonBgColor3 : AppThemeKeys.mainButtonBgColor).name,
-            ),
-            AppThemeUtils.getColorByKey(
-              context,
-              (load == Load.loading ? AppThemeKeys.mainButtonTextColor3 : AppThemeKeys.mainButtonTextColor).name,
-            ),
-            load == Load.loading,
           ),
         ),
-      ),
+
+        bottomNavigationBar: SafeArea(
+          child: Container(
+            margin: EdgeInsets.all(AppSpacing.space8),
+            width: double.infinity,
+            height: ScreenUtil().setWidth(88),
+            child: AppButton(
+              label: _showEncryptResult
+                  ? S.of(context).g_mining_key_101
+                  : S.of(context).g_key_78,
+              loading: load == Load.loading,
+              onPressed: _showEncryptResult ? _copyEncryptedData : _onConfirm,
+            ),
+          ),
+        ),
       ),
     );
   }
