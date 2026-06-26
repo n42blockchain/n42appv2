@@ -76,6 +76,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         defaultValue: 'eastus',
       );
       const envGiphyApiKey = String.fromEnvironment('GIPHY_API_KEY');
+      const envTenorApiKey = String.fromEnvironment('TENOR_API_KEY');
       const envAiApiKey = String.fromEnvironment('AI_API_KEY');
       const envAiBaseUrl = String.fromEnvironment(
         'AI_BASE_URL',
@@ -111,6 +112,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directGoogleSpeechApiKey = normalizedEnv(envGoogleSpeechApiKey);
       final directAzureSpeechApiKey = normalizedEnv(envAzureSpeechApiKey);
       final directGiphyApiKey = normalizedEnv(envGiphyApiKey);
+      final directTenorApiKey = normalizedEnv(envTenorApiKey);
       final directAiApiKey = normalizedEnv(envAiApiKey);
       final directDebankApiKey = normalizedEnv(envDebankApiKey);
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
@@ -190,6 +192,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           giphyApiKey: directGiphyApiKey,
           giphyBaseUrl: 'https://api.giphy.com/v1/gifs',
           giphyUseProxyEndpoint: false,
+          tenorApiKey: directTenorApiKey,
+          tenorBaseUrl: 'https://tenor.googleapis.com/v2',
+          tenorUseProxyEndpoint: false,
           googleTranslateApiKey: directGoogleTranslateApiKey,
           aiApiKey: directAiApiKey,
           aiBaseUrl: envAiBaseUrl,
