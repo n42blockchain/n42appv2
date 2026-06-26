@@ -26,14 +26,13 @@ class BatchConfirmDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final contentColor = isDark ? Colors.white70 : Colors.black87;
+    final contentColor = AppColorTokens.of(context).textSecondary;
 
     return AlertDialog(
-      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      backgroundColor: AppColorTokens.of(context).bgElevated,
       title: Text(
         S.of(context).g_key_batch_confirm_title,
-        style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+        style: TextStyle(color: AppColorTokens.of(context).textPrimary),
       ),
       content: SingleChildScrollView(
         child: Column(
@@ -255,14 +254,13 @@ class BatchHelpDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    final textColor = isDark ? Colors.white70 : Colors.black87;
+    final textColor = AppColorTokens.of(context).textSecondary;
 
     return AlertDialog(
-      backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+      backgroundColor: AppColorTokens.of(context).bgElevated,
       title: Text(
         S.of(context).g_key_batch_help_title,
-        style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+        style: TextStyle(color: AppColorTokens.of(context).textPrimary),
       ),
       content: SingleChildScrollView(
         child: Column(
@@ -282,8 +280,7 @@ class BatchHelpDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: (isDark ? Colors.white : AppColorTokens.of(context).textTertiary)
-                    .withAlpha(30),
+                color: AppColorTokens.of(context).textTertiary.withAlpha(30),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(

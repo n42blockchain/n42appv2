@@ -134,11 +134,10 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
   }
 
   void showBurnNftTip(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
+        backgroundColor: AppColorTokens.of(context).bgElevated,
         title: Row(
           children: [
             Icon(
@@ -150,7 +149,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             Expanded(
               child: Text(
                 S.of(context).g_key_nft_burn_title,
-                style: TextStyle(color: isDark ? Colors.white : Colors.black87),
+                style: TextStyle(color: AppColorTokens.of(context).textPrimary),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -165,7 +164,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
             '${S.of(context).g_key_burn_nft_step2}\n'
             '${S.of(context).g_key_burn_nft_step3}\n'
             '${S.of(context).g_key_burn_nft_step4}',
-            style: TextStyle(color: isDark ? Colors.white70 : Colors.black87),
+            style: TextStyle(color: AppColorTokens.of(context).textSecondary),
           ),
         ),
         actions: [

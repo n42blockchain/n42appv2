@@ -192,14 +192,12 @@ class MiningBoardWidget extends StatelessWidget {
   }
 
   Widget _buildItems(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final rewardPerVerification =
         "${toEther('$cReward', 9)} ${CoinType.N.name}";
 
     return Container(
       decoration: BoxDecoration(
-        color: (isDark ? Colors.white : AppColorTokens.of(context).textTertiary)
-            .withValues(alpha: 0.03),
+        color: AppColorTokens.of(context).textTertiary.withValues(alpha: 0.03),
         borderRadius: AppRadius.brMd,
       ),
       child: Column(

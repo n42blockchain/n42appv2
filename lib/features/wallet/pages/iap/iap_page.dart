@@ -295,7 +295,7 @@ class _IapPageState extends State<IapPage> {
     Color textSecondary,
   ) {
     final isPending = _pending.contains(product.id);
-    final cardBg = isDark ? const Color(0xFF1A2236) : Colors.white;
+    final cardBg = AppColorTokens.of(context).bgSurface;
     final borderColor = isDark
         ? Colors.white.withValues(alpha: 0.08)
         : AppColorTokens.of(context).border.withValues(alpha: 0.15);

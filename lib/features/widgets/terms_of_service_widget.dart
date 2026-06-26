@@ -31,13 +31,12 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
   }
 
   void initController() {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final initialHost = Uri.parse(widget.url).host;
 
     _webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..addJavaScriptChannel("WalletChat", onMessageReceived: (_) {})
-      ..setBackgroundColor(isDark ? const Color(0xFF1C1C1E) : Colors.white)
+      ..setBackgroundColor(AppColorTokens.of(context).bgSurface)
       ..setNavigationDelegate(
         NavigationDelegate(
           onNavigationRequest: (NavigationRequest request) {
