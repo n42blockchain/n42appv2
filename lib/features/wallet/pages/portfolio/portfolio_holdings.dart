@@ -43,106 +43,126 @@ class HoldingRow extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.h),
-      child: Row(
-        children: [
-          Container(
-            width: 64.w,
-            height: 64.w,
-            decoration: BoxDecoration(
-              color: sliceColor.withAlpha(30),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '$rank',
-                style: AppTypography.caption.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: sliceColor,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final availableWidth = constraints.maxWidth.isFinite
+              ? constraints.maxWidth
+              : MediaQuery.sizeOf(context).width;
+          final rightColumnWidth = (availableWidth * 0.38)
+              .clamp(112.0, 172.0)
+              .toDouble();
+          final changeText =
+              '${isUp ? '+' : ''}${record.percentage.toStringAsFixed(2)}% '
+              '(${pnl >= 0 ? '+' : ''}\$${pnl.abs() < 1 ? pnl.toStringAsFixed(4) : pnl.toStringAsFixed(2)})';
+
+          return Row(
+            children: [
+              Container(
+                width: 64.w,
+                height: 64.w,
+                decoration: BoxDecoration(
+                  color: sliceColor.withAlpha(30),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Text(
+                    '$rank',
+                    style: AppTypography.caption.copyWith(
+                      fontWeight: FontWeight.w600,
+                      color: sliceColor,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          SizedBox(width: 16.w),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(28.r),
-            child: record.icon.isNotEmpty
-                ? ImageNetWork(imageUrl: record.icon, width: 56.w, height: 56.w)
-                : Container(
-                    width: 56.w,
-                    height: 56.w,
-                    color: textColor.withAlpha(20),
-                  ),
-          ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  record.symbol.toUpperCase(),
-                  style: AppTypography.bodyStrong.copyWith(
-                    color: textColor,
-                  ),
-                ),
-                SizedBox(height: 6.h),
-                Row(
+              SizedBox(width: 16.w),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(28.r),
+                child: record.icon.isNotEmpty
+                    ? ImageNetWork(
+                        imageUrl: record.icon,
+                        width: 56.w,
+                        height: 56.w,
+                      )
+                    : Container(
+                        width: 56.w,
+                        height: 56.w,
+                        color: textColor.withAlpha(20),
+                      ),
+              ),
+              SizedBox(width: 16.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(4.r),
-                        child: LinearProgressIndicator(
-                          value: (pct / 100).clamp(0.0, 1.0),
-                          minHeight: 6.h,
-                          backgroundColor: textColor.withAlpha(20),
-                          valueColor: AlwaysStoppedAnimation<Color>(sliceColor),
-                        ),
+                    Text(
+                      record.symbol.toUpperCase(),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.bodyStrong.copyWith(
+                        color: textColor,
                       ),
                     ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      '${pct.toStringAsFixed(1)}%',
-                      style: AppTypography.captionSm.copyWith(
-                        fontWeight: FontWeight.w400,
-                        color: textColor.withAlpha(128),
-                      ),
+                    SizedBox(height: 6.h),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(4.r),
+                            child: LinearProgressIndicator(
+                              value: (pct / 100).clamp(0.0, 1.0),
+                              minHeight: 6.h,
+                              backgroundColor: textColor.withAlpha(20),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                sliceColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 12.w),
+                        Text(
+                          '${pct.toStringAsFixed(1)}%',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.captionSm.copyWith(
+                            fontWeight: FontWeight.w400,
+                            color: textColor.withAlpha(128),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          SizedBox(width: 24.w),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                fmtUsd(record.value),
-                style: AppTypography.bodySm.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
+              ),
+              SizedBox(width: 16.w),
+              SizedBox(
+                width: rightColumnWidth,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      fmtUsd(record.value),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: AppTypography.bodySm.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: textColor,
+                      ),
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      changeText,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: AppTypography.caption.copyWith(color: pctColor),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(height: 4.h),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '${isUp ? '+' : ''}${record.percentage.toStringAsFixed(2)}%',
-                    style: AppTypography.caption.copyWith(color: pctColor),
-                  ),
-                  SizedBox(width: 8.w),
-                  Text(
-                    '(${pnl >= 0 ? '+' : ''}\$${pnl.abs() < 1 ? pnl.toStringAsFixed(4) : pnl.toStringAsFixed(2)})',
-                    style: AppTypography.captionSm.copyWith(
-                      fontWeight: FontWeight.w400,
-                      color: pctColor.withAlpha(180),
-                    ),
-                  ),
-                ],
-              ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }
