@@ -267,7 +267,13 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
       );
     }
 
-    return imageWidget;
+    return Semantics(
+      image: true,
+      button: widget.onTap != null,
+      label: S.of(context)?.commonImage ?? 'Image',
+      excludeSemantics: true,
+      child: imageWidget,
+    );
   }
 
   Widget _buildManualLoadCard(BuildContext context, Size size) {
@@ -532,7 +538,14 @@ class ImageGridWidget extends StatelessWidget {
             client: MatrixClientManager.instance.client,
           );
 
-          return GestureDetector(
+          return Semantics(
+            image: true,
+            button: true,
+            label: isLast
+                ? 'Image ${index + 1}, +${images.length - maxCount} more'
+                : 'Image ${index + 1}',
+            excludeSemantics: true,
+            child: GestureDetector(
             onTap: () => onTap?.call(index),
             child: Stack(
               children: [
@@ -582,6 +595,7 @@ class ImageGridWidget extends StatelessWidget {
                   ),
               ],
             ),
+          ),
           );
         }),
       ),

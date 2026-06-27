@@ -281,7 +281,15 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget>
           : CrossAxisAlignment.start,
       children: [
         // 语音消息主体
-        GestureDetector(
+        Semantics(
+          button: true,
+          label: _isPlaying
+              ? 'Voice message, ${widget.duration} seconds, playing'
+              : (!widget.isSelf && !widget.isRead
+                    ? 'Voice message, ${widget.duration} seconds, unplayed'
+                    : 'Voice message, ${widget.duration} seconds'),
+          excludeSemantics: true,
+          child: GestureDetector(
           onTap: _handleTap,
           behavior: HitTestBehavior.opaque,
           onLongPress:
@@ -352,6 +360,7 @@ class _VoiceMessageWidgetState extends State<VoiceMessageWidget>
                   ),
                 ),
             ],
+          ),
           ),
         ),
 

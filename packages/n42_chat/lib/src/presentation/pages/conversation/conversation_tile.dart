@@ -51,6 +51,24 @@ class ConversationTile extends StatelessWidget {
     return conversation.name;
   }
 
+  /// 组合无障碍播报文案：名称 + 状态标识 + 最后消息 + 时间 + 未读数。
+  /// 名称/消息/时间为已本地化的用户数据；状态描述词为首批英文兜底（待补 l10n）。
+  String _semanticLabel() {
+    final parts = <String>[_getDisplayName()];
+    if (isLocked) parts.add('locked');
+    if (conversation.isEncrypted) parts.add('encrypted');
+    final msg = _getLastMessageText();
+    if (msg.isNotEmpty) parts.add(msg);
+    if (conversation.lastMessageTime != null) {
+      parts.add(N42DateUtils.formatConversationTime(
+          conversation.lastMessageTime!));
+    }
+    if (conversation.isMuted) parts.add('muted');
+    final unread = conversation.unreadCount;
+    if (unread > 0) parts.add('$unread unread');
+    return parts.join(', ');
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
@@ -68,23 +86,34 @@ class ConversationTile extends StatelessWidget {
       children: [
         Material(
           color: bgColor,
-          child: InkWell(
-            onTap: onTap,
-            onLongPress: onLongPress,
-            child: Container(
-              height: 76,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  // 头像（带未读红点）
-                  _buildAvatar(isDark),
-                  const SizedBox(width: 14),
+          // 整条会话作为单个可点按语义节点播报（名称+最后消息+时间+未读/锁/免打扰），
+          // 避免屏幕阅读器把名称、图标、消息、时间拆成多段零碎播报。
+          child: MergeSemantics(
+            child: Semantics(
+              button: true,
+              selected: isSelected,
+              label: _semanticLabel(),
+              child: InkWell(
+                onTap: onTap,
+                onLongPress: onLongPress,
+                child: ExcludeSemantics(
+                  child: Container(
+                    height: 76,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        // 头像（带未读红点）
+                        _buildAvatar(isDark),
+                        const SizedBox(width: 14),
 
-                  // 内容
-                  Expanded(
-                    child: _buildContent(context, isDark),
+                        // 内容
+                        Expanded(
+                          child: _buildContent(context, isDark),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                ),
               ),
             ),
           ),

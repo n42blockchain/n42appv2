@@ -115,10 +115,12 @@ extension _ChatPageAppBarMethods on _ChatPageState {
         IconButton(
           icon: const Icon(Icons.search),
           onPressed: _toggleSearch,
+          tooltip: S.of(context)?.commonSearch ?? 'Search',
         ),
         IconButton(
           icon: const Icon(Icons.more_horiz),
           onPressed: widget.onMorePressed ?? _openChatSettings,
+          tooltip: S.of(context)?.commonMore ?? 'More',
         ),
       ],
     );
