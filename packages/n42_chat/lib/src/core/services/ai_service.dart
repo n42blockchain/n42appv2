@@ -118,6 +118,20 @@ abstract class AiService {
   /// 是否支持文生图（用于 UI 决定是否展示 AI 生成入口）
   bool get supportsImageGeneration;
 
+  /// 图像理解 / OCR：把图片发给视觉模型，返回描述或转写的文字。
+  ///
+  /// [prompt] 自定义指令（默认描述图片并转写其中文字）。
+  /// [mimeType] 图片 MIME（默认 image/png）。不支持时抛 [AiServiceException]。
+  Future<String> describeImage(
+    Uint8List imageBytes, {
+    String? prompt,
+    String? model,
+    String mimeType,
+  });
+
+  /// 是否支持图像理解（视觉模型可用时为 true）
+  bool get supportsVision;
+
   /// 检查服务是否可用
   bool get isAvailable;
 

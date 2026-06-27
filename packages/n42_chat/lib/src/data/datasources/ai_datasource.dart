@@ -17,6 +17,7 @@ class AiDatasource implements AiService {
   final String _apiKey;
   final String _defaultModel;
   final String _imageModel;
+  final String _visionModel;
   final bool _useProxyEndpoint;
 
   static final _newlineRegExp = RegExp(r'[\r\n]+');
@@ -29,6 +30,7 @@ class AiDatasource implements AiService {
     required String apiKey,
     String defaultModel = 'gpt-4o-mini',
     String imageModel = 'dall-e-3',
+    String visionModel = 'gpt-4o',
     bool useProxyEndpoint = false,
     Dio? dio,
   }) : _baseUrl = baseUrl.endsWith('/')
@@ -37,6 +39,7 @@ class AiDatasource implements AiService {
        _apiKey = apiKey,
        _defaultModel = defaultModel,
        _imageModel = imageModel,
+       _visionModel = visionModel,
        _useProxyEndpoint = useProxyEndpoint,
        _dio = dio ?? Dio() {
     _dio.options.baseUrl = _baseUrl;
@@ -459,6 +462,58 @@ class AiDatasource implements AiService {
 
   @override
   bool get supportsImageGeneration => isAvailable;
+
+  @override
+  bool get supportsVision => isAvailable;
+
+  @override
+  Future<String> describeImage(
+    Uint8List imageBytes, {
+    String? prompt,
+    String? model,
+    String mimeType = 'image/png',
+  }) async {
+    if (imageBytes.isEmpty) {
+      throw const AiServiceException('Image is empty');
+    }
+    final instruction = prompt ??
+        'Describe this image concisely. If it contains text, transcribe '
+            'the text (OCR). Reply in the language of the text if any.';
+    final dataUri = 'data:$mimeType;base64,${base64Encode(imageBytes)}';
+    try {
+      final response = await _dio.post<Map<String, dynamic>>(
+        _chatCompletionsUrl,
+        data: {
+          'model': model ?? _visionModel,
+          'messages': [
+            {
+              'role': 'user',
+              'content': [
+                {'type': 'text', 'text': instruction},
+                {
+                  'type': 'image_url',
+                  'image_url': {'url': dataUri},
+                },
+              ],
+            },
+          ],
+          'max_tokens': 1024,
+          'stream': false,
+        },
+      );
+      final data = response.data;
+      final choices = data?['choices'] as List<dynamic>?;
+      if (choices == null || choices.isEmpty) {
+        throw const AiServiceException('No choices in response');
+      }
+      final message = choices[0]['message'] as Map<String, dynamic>?;
+      final content = _extractMessageText(message?['content']) ?? '';
+      return content.trim();
+    } on DioException catch (e) {
+      debugLog('AiDatasource: Vision error: ${e.message}');
+      throw AiServiceException(_parseErrorMessage(e));
+    }
+  }
 
   @override
   Future<AiImageResult> generateImage(

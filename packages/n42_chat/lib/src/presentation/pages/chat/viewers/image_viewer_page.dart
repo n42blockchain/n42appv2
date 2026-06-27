@@ -7,11 +7,15 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:saver_gallery/saver_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../../l10n/app_localizations.dart';
+import '../../../../core/di/injection.dart';
+import '../../../../core/services/ai_provider_router.dart';
+import '../../../../core/services/ai_service.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/matrix_utils.dart' as mx_utils;
 import '../../../../data/datasources/matrix/matrix_client_manager.dart';
@@ -113,6 +117,19 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
     }
   }
 
+  /// AI 识别 / OCR：打开底部弹层，下载图片字节并交云端视觉模型描述/转写。
+  void _describeWithAi() {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.grey[900],
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (_) => _AiDescribeSheet(imageUrl: widget.imageUrl),
+    );
+  }
+
   Future<void> _shareImage() async {
     try {
       final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
@@ -201,9 +218,26 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
                 case 'share':
                   _shareImage();
                   break;
+                case 'ai_describe':
+                  _describeWithAi();
+                  break;
               }
             },
             itemBuilder: (context) => [
+              if (getIt<AiProviderRouter>().supportsVision)
+                const PopupMenuItem(
+                  value: 'ai_describe',
+                  child: Row(
+                    children: [
+                      Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+                      SizedBox(width: 12),
+                      Text(
+                        'AI describe / OCR',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
               PopupMenuItem(
                 value: 'save',
                 child: Row(
@@ -264,6 +298,140 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+/// AI 图像理解 / OCR 结果底部弹层。下载图片字节后交云端视觉模型描述/转写。
+class _AiDescribeSheet extends StatefulWidget {
+  const _AiDescribeSheet({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  State<_AiDescribeSheet> createState() => _AiDescribeSheetState();
+}
+
+class _AiDescribeSheetState extends State<_AiDescribeSheet> {
+  bool _loading = true;
+  String? _result;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _run();
+  }
+
+  Future<void> _run() async {
+    try {
+      final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+        widget.imageUrl,
+        client: MatrixClientManager.instance.client,
+      );
+      final resp = await http.get(Uri.parse(widget.imageUrl), headers: headers);
+      if (resp.statusCode != 200) {
+        throw Exception('Download failed: ${resp.statusCode}');
+      }
+      final text = await getIt<AiProviderRouter>().describeImage(
+        resp.bodyBytes,
+        mimeType: 'image/jpeg',
+      );
+      if (!mounted) return;
+      setState(() {
+        _result = text.isEmpty ? '(empty result)' : text;
+        _loading = false;
+      });
+    } on AiServiceException catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = e.message;
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = '$e';
+        _loading = false;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 16 + MediaQuery.of(context).viewInsets.bottom,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Row(
+              children: [
+                Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+                SizedBox(width: 8),
+                Text(
+                  'AI describe / OCR',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            if (_loading)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 24),
+                child: Center(
+                  child: CircularProgressIndicator(color: Colors.white),
+                ),
+              )
+            else if (_error != null)
+              Text(
+                _error!,
+                style: const TextStyle(color: AppColors.error),
+              )
+            else
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                ),
+                child: SingleChildScrollView(
+                  child: SelectableText(
+                    _result ?? '',
+                    style: const TextStyle(color: Colors.white, height: 1.4),
+                  ),
+                ),
+              ),
+            if (!_loading && _result != null) ...[
+              const SizedBox(height: 12),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton.icon(
+                  onPressed: () {
+                    Clipboard.setData(ClipboardData(text: _result!));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Copied')),
+                    );
+                  },
+                  icon: const Icon(Icons.copy, color: Colors.white, size: 18),
+                  label: const Text(
+                    'Copy',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );

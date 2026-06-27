@@ -969,4 +969,79 @@ void main() {
       );
     });
   });
+
+  group('AiDatasource.describeImage', () {
+    late MockDio mockDio;
+    late AiDatasource datasource;
+
+    setUp(() {
+      mockDio = MockDio();
+      datasource = AiDatasource(
+        baseUrl: 'https://api.openai.com',
+        apiKey: 'test-api-key',
+        visionModel: 'gpt-4o',
+        dio: mockDio,
+      );
+    });
+
+    test('supportsVision reflects availability', () {
+      expect(datasource.supportsVision, isTrue);
+      final unavailable = AiDatasource(baseUrl: '', apiKey: '', dio: mockDio);
+      expect(unavailable.supportsVision, isFalse);
+    });
+
+    test('empty image throws', () {
+      expect(
+        () => datasource.describeImage(Uint8List(0)),
+        throwsA(isA<AiServiceException>()),
+      );
+    });
+
+    test('returns model text content for the image', () async {
+      when(
+        () => mockDio.post<Map<String, dynamic>>(
+          any(),
+          data: any(named: 'data'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer(
+        (_) async => Response<Map<String, dynamic>>(
+          data: {
+            'choices': [
+              {
+                'message': {'content': 'A cat wearing sunglasses.'},
+              },
+            ],
+          },
+          statusCode: 200,
+          requestOptions: RequestOptions(path: '/v1/chat/completions'),
+        ),
+      );
+
+      final text = await datasource.describeImage(
+        Uint8List.fromList([1, 2, 3]),
+      );
+      expect(text, 'A cat wearing sunglasses.');
+    });
+
+    test('throws when choices empty', () {
+      when(
+        () => mockDio.post<Map<String, dynamic>>(
+          any(),
+          data: any(named: 'data'),
+          options: any(named: 'options'),
+        ),
+      ).thenAnswer(
+        (_) async => Response<Map<String, dynamic>>(
+          data: {'choices': <dynamic>[]},
+          statusCode: 200,
+          requestOptions: RequestOptions(path: '/v1/chat/completions'),
+        ),
+      );
+      expect(
+        () => datasource.describeImage(Uint8List.fromList([1])),
+        throwsA(isA<AiServiceException>()),
+      );
+    });
+  });
 }
