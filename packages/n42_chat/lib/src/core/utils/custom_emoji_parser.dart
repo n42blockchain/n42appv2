@@ -19,10 +19,16 @@ class CustomEmojiParser {
   CustomEmojiParser._();
 
   /// 短代码合法字符：字母/数字/下划线/加减号
-  static final RegExp _shortcodePattern = RegExp(r':([a-z0-9_+\-]+):');
+  static final RegExp _shortcodePattern = RegExp(
+    r':([a-z0-9_+\-]+):',
+    caseSensitive: false,
+  );
 
   /// 触发联想用：光标前的 `:partial`（无闭合冒号）
-  static final RegExp _triggerPattern = RegExp(r':([a-z0-9_+\-]*)$');
+  static final RegExp _triggerPattern = RegExp(
+    r':([a-z0-9_+\-]*)$',
+    caseSensitive: false,
+  );
 
   /// 文本是否可能含自定义 emoji（快速预判，避免无谓分词）
   static bool mightContain(String text) => text.contains(':');
@@ -85,8 +91,9 @@ class CustomEmojiParser {
   /// （避免把 `http://` 的 `//` 之类误触发；`a:b` 等也不触发）。
   static String? extractTrigger(String text, int cursorOffset) {
     if (text.isEmpty) return null;
-    final offset =
-        (cursorOffset < 0 || cursorOffset > text.length) ? text.length : cursorOffset;
+    final offset = (cursorOffset < 0 || cursorOffset > text.length)
+        ? text.length
+        : cursorOffset;
     final before = text.substring(0, offset);
     final match = _triggerPattern.firstMatch(before);
     if (match == null) return null;

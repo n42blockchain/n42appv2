@@ -50,6 +50,13 @@ void main() {
       expect(tokens[2].text, ' there');
     });
 
+    test('replaces known shortcode case-insensitively', () {
+      final tokens = CustomEmojiParser.parse('hi :FIRE:');
+      expect(tokens, hasLength(2));
+      expect(tokens[1].isEmoji, isTrue);
+      expect(tokens[1].emoji!.shortcode, 'fire');
+    });
+
     test('unknown shortcode stays as plain text', () {
       final tokens = CustomEmojiParser.parse('see :nope: ok');
       expect(tokens, hasLength(1));
@@ -80,6 +87,10 @@ void main() {
   group('extractTrigger', () {
     test('returns partial after colon at cursor', () {
       expect(CustomEmojiParser.extractTrigger('hi :fi', 6), 'fi');
+    });
+
+    test('accepts uppercase partial after colon', () {
+      expect(CustomEmojiParser.extractTrigger('hi :FI', 6), 'FI');
     });
 
     test('returns empty string right after lone colon', () {

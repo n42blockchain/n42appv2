@@ -37,14 +37,14 @@ class EventMessageData {
 
   /// 编码为 Matrix 自定义消息的 additionalData（不含 msgtype/body）
   Map<String, dynamic> toContent() => {
-        'title': title,
-        'starts_at': startsAt.millisecondsSinceEpoch,
-        if (endsAt != null) 'ends_at': endsAt!.millisecondsSinceEpoch,
-        if (location != null && location!.trim().isNotEmpty)
-          'location': location!.trim(),
-        if (description != null && description!.trim().isNotEmpty)
-          'description': description!.trim(),
-      };
+    'title': title,
+    'starts_at': startsAt.millisecondsSinceEpoch,
+    if (endsAt != null) 'ends_at': endsAt!.millisecondsSinceEpoch,
+    if (location != null && location!.trim().isNotEmpty)
+      'location': location!.trim(),
+    if (description != null && description!.trim().isNotEmpty)
+      'description': description!.trim(),
+  };
 
   /// 从消息 content 解析；缺少 title / starts_at 返回 null。
   static EventMessageData? fromContent(Map<String, dynamic> content) {
@@ -53,10 +53,17 @@ class EventMessageData {
     if (title == null || title.isEmpty || startsMs is! int) return null;
 
     final endsMs = content['ends_at'];
+    final startsAt = DateTime.fromMillisecondsSinceEpoch(startsMs);
+    final parsedEndsAt = endsMs is int
+        ? DateTime.fromMillisecondsSinceEpoch(endsMs)
+        : null;
+    final endsAt = parsedEndsAt != null && !parsedEndsAt.isBefore(startsAt)
+        ? parsedEndsAt
+        : null;
     return EventMessageData(
       title: title,
-      startsAt: DateTime.fromMillisecondsSinceEpoch(startsMs),
-      endsAt: endsMs is int ? DateTime.fromMillisecondsSinceEpoch(endsMs) : null,
+      startsAt: startsAt,
+      endsAt: endsAt,
       location: _nullIfEmpty(content['location'] as String?),
       description: _nullIfEmpty(content['description'] as String?),
     );
@@ -101,6 +108,8 @@ class EventMessageData {
 
   /// ICS 文本转义（逗号/分号/反斜杠/换行）
   static String _icsEscape(String s) => s
+      .replaceAll('\r\n', '\n')
+      .replaceAll('\r', '\n')
       .replaceAll('\\', '\\\\')
       .replaceAll(',', '\\,')
       .replaceAll(';', '\\;')

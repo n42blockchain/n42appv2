@@ -17,8 +17,10 @@ class StickerSuggestionUtils {
     String query, {
     int limit = 24,
   }) {
-    final q = query.trim().toLowerCase();
+    final rawQuery = query.trim();
+    final q = rawQuery.toLowerCase();
     if (q.isEmpty) return const [];
+    if (limit <= 0) return const [];
 
     final seen = <String>{};
     final scored = <_ScoredHit>[];
@@ -31,7 +33,7 @@ class StickerSuggestionUtils {
         final emoji = sticker.emoji ?? '';
 
         int? score;
-        if (emoji.isNotEmpty && emoji == query) {
+        if (emoji.isNotEmpty && emoji == rawQuery) {
           score = 0; // emoji 精确匹配
         } else if (name.isNotEmpty && name == q) {
           score = 1; // 名称精确匹配
@@ -39,15 +41,14 @@ class StickerSuggestionUtils {
           score = 2; // 名称前缀匹配
         } else if (name.contains(q)) {
           score = 3; // 名称包含
-        } else if (emoji.isNotEmpty && emoji.contains(query)) {
+        } else if (emoji.isNotEmpty && emoji.contains(rawQuery)) {
           score = 4; // emoji 包含
         }
 
         if (score != null) {
-          scored.add(_ScoredHit(
-            StickerHit(sticker: sticker, packId: pack.id),
-            score,
-          ));
+          scored.add(
+            _ScoredHit(StickerHit(sticker: sticker, packId: pack.id), score),
+          );
         }
       }
     }
@@ -77,8 +78,9 @@ class StickerSuggestionUtils {
   /// - 词过长（>32）不触发。
   static String? extractQuery(String text, int cursorOffset) {
     if (text.isEmpty) return null;
-    final offset =
-        (cursorOffset < 0 || cursorOffset > text.length) ? text.length : cursorOffset;
+    final offset = (cursorOffset < 0 || cursorOffset > text.length)
+        ? text.length
+        : cursorOffset;
     final before = text.substring(0, offset);
     if (before.trimLeft().startsWith('/')) return null;
 

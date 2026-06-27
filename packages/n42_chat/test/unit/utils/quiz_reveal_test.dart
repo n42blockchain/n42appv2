@@ -5,6 +5,7 @@ void main() {
   group('isQuiz', () {
     test('true only with a correct index', () {
       expect(QuizReveal.isQuiz(0), isTrue);
+      expect(QuizReveal.isQuiz(-1), isFalse);
       expect(QuizReveal.isQuiz(null), isFalse);
     });
   });
@@ -13,7 +14,18 @@ void main() {
     test('never for a normal poll', () {
       expect(
         QuizReveal.shouldReveal(
-            correctIndex: null, hasVoted: true, pollEnded: true),
+          correctIndex: null,
+          hasVoted: true,
+          pollEnded: true,
+        ),
+        isFalse,
+      );
+      expect(
+        QuizReveal.shouldReveal(
+          correctIndex: -1,
+          hasVoted: true,
+          pollEnded: true,
+        ),
         isFalse,
       );
     });
@@ -21,17 +33,26 @@ void main() {
     test('reveals after voting or when ended', () {
       expect(
         QuizReveal.shouldReveal(
-            correctIndex: 1, hasVoted: true, pollEnded: false),
+          correctIndex: 1,
+          hasVoted: true,
+          pollEnded: false,
+        ),
         isTrue,
       );
       expect(
         QuizReveal.shouldReveal(
-            correctIndex: 1, hasVoted: false, pollEnded: true),
+          correctIndex: 1,
+          hasVoted: false,
+          pollEnded: true,
+        ),
         isTrue,
       );
       expect(
         QuizReveal.shouldReveal(
-            correctIndex: 1, hasVoted: false, pollEnded: false),
+          correctIndex: 1,
+          hasVoted: false,
+          pollEnded: false,
+        ),
         isFalse,
       );
     });
@@ -53,15 +74,28 @@ void main() {
       );
     });
 
+    test('none for invalid negative correct index', () {
+      expect(
+        QuizReveal.optionState(
+          optionIndex: 0,
+          optionId: 'a',
+          correctIndex: -1,
+          myVoteIds: const ['a'],
+          reveal: true,
+        ),
+        QuizOptionState.none,
+      );
+    });
+
     test('marks correct, wrong-picked and neutral', () {
       // correct = index 1 ('b'); user picked 'a' (wrong)
       QuizOptionState stateFor(int i) => QuizReveal.optionState(
-            optionIndex: i,
-            optionId: ids[i],
-            correctIndex: 1,
-            myVoteIds: const ['a'],
-            reveal: true,
-          );
+        optionIndex: i,
+        optionId: ids[i],
+        correctIndex: 1,
+        myVoteIds: const ['a'],
+        reveal: true,
+      );
       expect(stateFor(1), QuizOptionState.correct);
       expect(stateFor(0), QuizOptionState.wrongPicked);
       expect(stateFor(2), QuizOptionState.neutral);
@@ -74,7 +108,10 @@ void main() {
     test('true when correct option is among my votes', () {
       expect(
         QuizReveal.isAnswerCorrect(
-            correctIndex: 2, optionIds: ids, myVoteIds: const ['c']),
+          correctIndex: 2,
+          optionIds: ids,
+          myVoteIds: const ['c'],
+        ),
         isTrue,
       );
     });
@@ -82,7 +119,10 @@ void main() {
     test('false when correct option not picked', () {
       expect(
         QuizReveal.isAnswerCorrect(
-            correctIndex: 2, optionIds: ids, myVoteIds: const ['a']),
+          correctIndex: 2,
+          optionIds: ids,
+          myVoteIds: const ['a'],
+        ),
         isFalse,
       );
     });
@@ -90,12 +130,18 @@ void main() {
     test('guards null and out-of-range index', () {
       expect(
         QuizReveal.isAnswerCorrect(
-            correctIndex: null, optionIds: ids, myVoteIds: const ['a']),
+          correctIndex: null,
+          optionIds: ids,
+          myVoteIds: const ['a'],
+        ),
         isFalse,
       );
       expect(
         QuizReveal.isAnswerCorrect(
-            correctIndex: 9, optionIds: ids, myVoteIds: const ['a']),
+          correctIndex: 9,
+          optionIds: ids,
+          myVoteIds: const ['a'],
+        ),
         isFalse,
       );
     });

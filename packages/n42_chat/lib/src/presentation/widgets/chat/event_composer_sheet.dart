@@ -55,7 +55,7 @@ class _EventComposerSheetState extends State<_EventComposerSheet> {
       context: context,
       initialTime: TimeOfDay.fromDateTime(initial),
     );
-    if (time == null) return null;
+    if (time == null || !mounted) return null;
     return DateTime(date.year, date.month, date.day, time.hour, time.minute);
   }
 
@@ -139,8 +139,9 @@ class _EventComposerSheetState extends State<_EventComposerSheet> {
                   ? EventMessageData.formatLocal(_end!)
                   : 'Optional',
               onTap: () async {
-                final picked = await _pickDateTime(_end ??
-                    _start.add(const Duration(hours: 1)));
+                final picked = await _pickDateTime(
+                  _end ?? _start.add(const Duration(hours: 1)),
+                );
                 if (picked != null) setState(() => _end = picked);
               },
               onClear: _end != null ? () => setState(() => _end = null) : null,
@@ -166,8 +167,10 @@ class _EventComposerSheetState extends State<_EventComposerSheet> {
             ),
             if (_error != null) ...[
               const SizedBox(height: 8),
-              Text(_error!,
-                  style: const TextStyle(color: AppColors.error, fontSize: 13)),
+              Text(
+                _error!,
+                style: const TextStyle(color: AppColors.error, fontSize: 13),
+              ),
             ],
             const SizedBox(height: 16),
             SizedBox(
@@ -197,11 +200,15 @@ class _EventComposerSheetState extends State<_EventComposerSheet> {
           children: [
             Icon(Icons.schedule, size: 18, color: context.textSecondary),
             const SizedBox(width: 10),
-            Text(label,
-                style: TextStyle(fontSize: 15, color: context.textPrimary)),
+            Text(
+              label,
+              style: TextStyle(fontSize: 15, color: context.textPrimary),
+            ),
             const Spacer(),
-            Text(value,
-                style: TextStyle(fontSize: 14, color: context.textSecondary)),
+            Text(
+              value,
+              style: TextStyle(fontSize: 14, color: context.textSecondary),
+            ),
             if (onClear != null)
               IconButton(
                 icon: Icon(Icons.close, size: 16, color: context.textTertiary),

@@ -8,19 +8,26 @@ void main() {
     name: 'Faces',
     stickers: [
       Sticker(id: 'fire', url: 'asset:fire.svg', name: 'Fire', emoji: '🔥'),
-      Sticker(id: 'firework', url: 'asset:fw.svg', name: 'Firework', emoji: '🎆'),
+      Sticker(
+        id: 'firework',
+        url: 'asset:fw.svg',
+        name: 'Firework',
+        emoji: '🎆',
+      ),
       Sticker(id: 'joy', url: 'asset:joy.svg', name: 'Joy', emoji: '😂'),
       Sticker(
-          id: 'heart',
-          url: 'asset:heart.svg',
-          name: 'Heart',
-          emoji: '❤️',
-          usageCount: 5),
+        id: 'heart',
+        url: 'asset:heart.svg',
+        name: 'Heart',
+        emoji: '❤️',
+        usageCount: 5,
+      ),
       Sticker(
-          id: 'heart2',
-          url: 'asset:heart2.svg',
-          name: 'Heart eyes',
-          emoji: '😍'),
+        id: 'heart2',
+        url: 'asset:heart2.svg',
+        name: 'Heart eyes',
+        emoji: '😍',
+      ),
     ],
   );
 
@@ -30,12 +37,14 @@ void main() {
       expect(StickerSuggestionUtils.rank([pack], '   '), isEmpty);
     });
 
-    test('matches sticker name (case-insensitive, prefix wins over contains)',
-        () {
-      final hits = StickerSuggestionUtils.rank([pack], 'fire');
-      expect(hits.map((h) => h.sticker.id), ['fire', 'firework']);
-      expect(hits.first.packId, 'p1');
-    });
+    test(
+      'matches sticker name (case-insensitive, prefix wins over contains)',
+      () {
+        final hits = StickerSuggestionUtils.rank([pack], 'fire');
+        expect(hits.map((h) => h.sticker.id), ['fire', 'firework']);
+        expect(hits.first.packId, 'p1');
+      },
+    );
 
     test('exact name match ranks before prefix match', () {
       final hits = StickerSuggestionUtils.rank([pack], 'heart');
@@ -49,10 +58,21 @@ void main() {
       expect(hits.single.sticker.id, 'fire');
     });
 
+    test('trims emoji query before matching', () {
+      final hits = StickerSuggestionUtils.rank([pack], '  🔥  ');
+      expect(hits, hasLength(1));
+      expect(hits.single.sticker.id, 'fire');
+    });
+
     test('respects limit', () {
       final hits = StickerSuggestionUtils.rank([pack], 'fire', limit: 1);
       expect(hits, hasLength(1));
       expect(hits.single.sticker.id, 'fire');
+    });
+
+    test('returns empty for non-positive limit', () {
+      expect(StickerSuggestionUtils.rank([pack], 'fire', limit: 0), isEmpty);
+      expect(StickerSuggestionUtils.rank([pack], 'fire', limit: -1), isEmpty);
     });
 
     test('dedupes by sticker id across packs', () {

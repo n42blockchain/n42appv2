@@ -21,7 +21,8 @@ class QuizReveal {
   QuizReveal._();
 
   /// 是否为 Quiz（有正确答案序号）
-  static bool isQuiz(int? correctIndex) => correctIndex != null;
+  static bool isQuiz(int? correctIndex) =>
+      correctIndex != null && correctIndex >= 0;
 
   /// 是否应揭晓答案：已投票或已结束
   static bool shouldReveal({
@@ -29,7 +30,7 @@ class QuizReveal {
     required bool hasVoted,
     required bool pollEnded,
   }) {
-    if (correctIndex == null) return false;
+    if (!isQuiz(correctIndex)) return false;
     return hasVoted || pollEnded;
   }
 
@@ -43,7 +44,7 @@ class QuizReveal {
     required Iterable<String> myVoteIds,
     required bool reveal,
   }) {
-    if (correctIndex == null || !reveal) return QuizOptionState.none;
+    if (!isQuiz(correctIndex) || !reveal) return QuizOptionState.none;
     if (optionIndex == correctIndex) return QuizOptionState.correct;
     if (myVoteIds.contains(optionId)) return QuizOptionState.wrongPicked;
     return QuizOptionState.neutral;

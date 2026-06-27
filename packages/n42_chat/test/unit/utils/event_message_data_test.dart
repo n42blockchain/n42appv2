@@ -40,6 +40,19 @@ void main() {
         isNull,
       );
     });
+
+    test('fromContent drops end time before start time', () {
+      final restored = EventMessageData.fromContent({
+        'title': 'Bad range',
+        'starts_at': start.millisecondsSinceEpoch,
+        'ends_at': start
+            .subtract(const Duration(minutes: 1))
+            .millisecondsSinceEpoch,
+      });
+
+      expect(restored, isNotNull);
+      expect(restored!.endsAt, isNull);
+    });
   });
 
   group('isPast', () {
@@ -77,10 +90,12 @@ void main() {
     test('escapes special characters', () {
       final data = EventMessageData(
         title: 'A; B, C\\D',
+        description: 'Line 1\r\nLine 2\rLine 3',
         startsAt: start,
       );
       final ics = data.toIcs();
       expect(ics, contains(r'SUMMARY:A\; B\, C\\D'));
+      expect(ics, contains(r'DESCRIPTION:Line 1\nLine 2\nLine 3'));
     });
   });
 
