@@ -69,6 +69,7 @@ import '../../../domain/repositories/sticker_repository.dart';
 import '../../../domain/entities/custom_emoji.dart';
 import '../../../core/utils/sticker_suggestion_utils.dart';
 import '../../../core/utils/custom_emoji_parser.dart';
+import '../../../core/utils/nft_gift_ref.dart';
 import '../../../core/services/giphy_service.dart';
 import '../../../core/services/reminder_service.dart';
 import '../../widgets/chat/red_packet_dialogs.dart';

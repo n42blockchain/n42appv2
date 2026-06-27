@@ -478,6 +478,114 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
         ));
   }
 
+  /// 赠送 NFT：解析接收方地址 → 选择 NFT → 钱包桥转移 → 发聊天通知
+  Future<void> _sendNftGift() async {
+    String? toAddress;
+    if (widget.conversation.isDirect &&
+        widget.conversation.directUserId != null) {
+      try {
+        final contact = await getIt<IContactRepository>()
+            .getContactById(widget.conversation.directUserId!);
+        toAddress = contact?.walletAddress;
+      } catch (_) {}
+    }
+    if (!mounted) return;
+    if (toAddress == null || toAddress.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Recipient has no wallet address')),
+      );
+      return;
+    }
+
+    final contractC = TextEditingController();
+    final tokenIdC = TextEditingController();
+    final chainC = TextEditingController(text: '1');
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.surfaceColor,
+        title: const Text('Gift an NFT'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: contractC,
+              decoration:
+                  const InputDecoration(labelText: 'Contract address'),
+            ),
+            TextField(
+              controller: tokenIdC,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Token ID'),
+            ),
+            TextField(
+              controller: chainC,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Chain ID'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Gift'),
+          ),
+        ],
+      ),
+    );
+
+    final contract = contractC.text.trim();
+    final tokenId = tokenIdC.text.trim();
+    final chainId = int.tryParse(chainC.text.trim()) ?? 1;
+    contractC.dispose();
+    tokenIdC.dispose();
+    chainC.dispose();
+    if (ok != true || !mounted) return;
+    if (contract.isEmpty || tokenId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Contract and token ID are required')),
+      );
+      return;
+    }
+
+    final ref = NftGiftRef(
+      contractAddress: contract,
+      tokenId: tokenId,
+      chainId: chainId,
+    );
+
+    TransferResult result;
+    try {
+      result = await getIt<IWalletBridge>().requestNftTransfer(
+        contractAddress: contract,
+        tokenId: tokenId,
+        toAddress: toAddress,
+        chainId: chainId,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('NFT gift failed: $e')));
+      }
+      return;
+    }
+    if (!mounted) return;
+    if (!result.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('NFT gift failed: ${result.errorMessage ?? ''}'),
+        ),
+      );
+      return;
+    }
+
+    _sendMessage('🎁 Gifted NFT ${ref.shortLabel}\n${ref.format()}');
+  }
+
   Future<void> _openReceive() async {
     await Navigator.of(context).push<PaymentRequest>(
       MaterialPageRoute<PaymentRequest>(
@@ -492,6 +600,13 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
   Future<void> _openCommerceHub() async {
     final quickLaunchApps = MiniAppLauncherHelper.commerceQuickLaunchApps();
     final actions = <PaymentCommerceAction>[
+      PaymentCommerceAction(
+        icon: Icons.card_giftcard_outlined,
+        color: Colors.pinkAccent,
+        title: 'Gift NFT',
+        subtitle: 'Send an NFT to this contact',
+        onTap: _sendNftGift,
+      ),
       for (final app in quickLaunchApps)
         PaymentCommerceAction(
           icon: _commerceMiniAppIcon(app.id),

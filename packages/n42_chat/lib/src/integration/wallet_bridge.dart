@@ -123,6 +123,20 @@ abstract class IWalletBridge {
     required int chainId,
   }) async => null;
 
+  /// 赠送 / 转移一枚 NFT（ERC-721 / ERC-1155）。
+  ///
+  /// 默认返回「不支持」失败，由宿主 App 覆写接入真实链上转移。
+  /// [standard] 区分 721/1155；1155 用 [amount]（默认 1 枚）。
+  Future<TransferResult> requestNftTransfer({
+    required String contractAddress,
+    required String tokenId,
+    required String toAddress,
+    required int chainId,
+    NftStandard standard = NftStandard.erc721,
+    int amount = 1,
+  }) async =>
+      TransferResult.failure('NFT transfer not supported', code: 'unsupported');
+
   // ============================================
   // 消息签名（治理投票等）
   // ============================================
@@ -138,6 +152,9 @@ abstract class IWalletBridge {
   /// 返回签名的十六进制字符串。
   Future<String?> signTypedData(String typedDataJson) async => null;
 }
+
+/// NFT 标准
+enum NftStandard { erc721, erc1155 }
 
 /// 转账结果
 class TransferResult {
