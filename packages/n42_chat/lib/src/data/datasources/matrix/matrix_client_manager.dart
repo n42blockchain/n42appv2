@@ -35,10 +35,7 @@ class MatrixClientManager {
   Completer<void>? _initCompleter;
   Duration _syncWaitTimeout = const Duration(seconds: 3);
 
-  static final _heicHeifRegExp = RegExp(
-    r'\.(heic|heif)$',
-    caseSensitive: false,
-  );
+  static final _heicHeifRegExp = RegExp(r'\.(heic|heif)$', caseSensitive: false);
 
   /// 获取Matrix客户端实例
   Client? get client => _client;
@@ -72,17 +69,13 @@ class MatrixClientManager {
   /// 同步状态流
   Stream<SyncStatusUpdate>? get onSyncStatus => _client?.onSyncStatus.stream;
 
-  /// SDK 当前是否有 /sync 请求在进行中。
-  bool get syncPending => _client?.syncPending ?? false;
-
   /// 登录状态变化流
   Stream<LoginState>? get onLoginStateChanged =>
       _client?.onLoginStateChanged.stream;
 
   /// 房间更新流
-  Stream<String>? get onRoomUpdate => _client?.onSync.stream.map(
-    (sync) => sync.rooms?.join?.keys.firstOrNull ?? '',
-  );
+  Stream<String>? get onRoomUpdate =>
+      _client?.onSync.stream.map((sync) => sync.rooms?.join?.keys.firstOrNull ?? '');
 
   // ============================================
   // 初始化
@@ -150,8 +143,8 @@ class MatrixClientManager {
       final dbPathFuture = databasePath == null
           ? _getDefaultDatabasePath()
           : null;
-      final privacySettingsFuture = preferencesDataSource
-          ?.getPrivacySettingsModel();
+      final privacySettingsFuture =
+          preferencesDataSource?.getPrivacySettingsModel();
 
       if (vodozemacFuture != null) {
         await vodozemacFuture;
@@ -349,9 +342,7 @@ class MatrixClientManager {
             password: password,
             initialDeviceDisplayName: deviceName ?? 'N42Chat',
           );
-          debugLog(
-            'MatrixClientManager: Login successful - ${response.userId}',
-          );
+          debugLog('MatrixClientManager: Login successful - ${response.userId}');
           return response;
         } on MatrixException catch (e) {
           if (e.errcode != 'M_UNKNOWN') rethrow;
@@ -520,65 +511,31 @@ class MatrixClientManager {
   Future<void> startSync({Duration? timeout, bool fullState = false}) async {
     _ensureInitialized();
     _ensureLoggedIn();
-    final client = _client!;
     final effectiveTimeout = timeout ?? _syncWaitTimeout;
 
     try {
-      final nextSync = client.onSync.stream.first;
-
       // 启动后台同步循环
-      client.backgroundSync = true;
+      _client!.backgroundSync = true;
 
       // 等待首次同步完成，确保从服务器获取最新的房间和消息数据
       // 如果本地数据库已有缓存（prevBatch != null），同步会增量获取
       // 如果是全新登录（prevBatch == null），同步会获取完整初始数据
       debugLog(
-        'MatrixClientManager: Sync enabled, waiting for next sync response '
-        '(pending=${client.syncPending})...',
+        'MatrixClientManager: Sync enabled, waiting for first sync response...',
       );
       try {
-        await nextSync.timeout(effectiveTimeout);
+        await _client!.onSync.stream.first.timeout(effectiveTimeout);
         debugLog(
-          'MatrixClientManager: Sync response received, rooms: ${client.rooms.length}',
+          'MatrixClientManager: First sync completed, rooms: ${_client!.rooms.length}',
         );
       } on TimeoutException {
         debugLog(
-          'MatrixClientManager: Sync wait timed out after $effectiveTimeout, '
-          'continuing with ${client.rooms.length} cached rooms '
-          '(pending=${client.syncPending})',
+          'MatrixClientManager: First sync timed out after $effectiveTimeout, '
+          'continuing with ${_client!.rooms.length} cached rooms',
         );
       }
     } catch (e) {
       debugLog('MatrixClientManager: Start sync failed: $e');
-      rethrow;
-    }
-  }
-
-  /// 确保后台同步处于运行状态。
-  ///
-  /// 与 [startSync] 不同，这个方法适合 UI/生命周期兜底调用：未初始化或未登录时
-  /// 只记录日志并返回，避免前台恢复、页面进入等场景把用户强制踢到错误态。
-  Future<void> ensureSyncRunning({
-    Duration timeout = const Duration(seconds: 5),
-    String reason = 'unspecified',
-  }) async {
-    if (!_isInitialized || _client == null) {
-      debugLog(
-        'MatrixClientManager: ensureSyncRunning skipped ($reason): not initialized',
-      );
-      return;
-    }
-    if (!isLoggedIn) {
-      debugLog(
-        'MatrixClientManager: ensureSyncRunning skipped ($reason): not logged in',
-      );
-      return;
-    }
-
-    try {
-      await startSync(timeout: timeout);
-    } catch (e) {
-      debugLog('MatrixClientManager: ensureSyncRunning failed ($reason): $e');
       rethrow;
     }
   }
@@ -728,7 +685,10 @@ class MatrixClientManager {
         lowerFilename.endsWith('.heif')) {
       // HEIC/HEIF 需要转换为 JPEG，因为 Matrix 服务器可能不支持
       mimeType = 'image/jpeg';
-      actualFilename = actualFilename.replaceAll(_heicHeifRegExp, '.jpg');
+      actualFilename = actualFilename.replaceAll(
+        _heicHeifRegExp,
+        '.jpg',
+      );
     }
 
     debugLog('Final filename: $actualFilename');

@@ -10,6 +10,7 @@ import '../../../domain/repositories/message_repository.dart';
 import '../../blocs/conversation/conversation_bloc.dart';
 import '../../widgets/common/n42_avatar.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// 转发朋友圈动态到聊天的底部弹窗
 class MomentForwardSheet extends StatefulWidget {
@@ -248,7 +249,7 @@ class _MomentForwardSheetState extends State<MomentForwardSheet> {
                     hintText: s?.momentSelectFriends ?? 'Search',
                     prefixIcon: const Icon(Icons.search, size: 20),
                     filled: true,
-                    fillColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                    fillColor: AppColors.inputBgOf(isDark),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
                       borderSide: BorderSide.none,

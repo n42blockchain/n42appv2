@@ -244,7 +244,7 @@ class _GraphPainter extends CustomPainter {
     // Label
     final textColor = isSelected
         ? Colors.white
-        : (isDark ? AppColors.textPrimaryDark : AppColors.textPrimary);
+        : AppColors.textPrimaryOf(isDark);
     _drawText(
       canvas,
       center,

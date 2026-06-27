@@ -108,7 +108,7 @@ class _SpaceCreatePageState extends State<SpaceCreatePage> {
                 S.of(context)?.spacesType ?? 'Community Type',
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
-                  color: isDark ? Colors.white70 : AppColors.textSecondary,
+                  color: AppColors.textSecondaryOf(isDark),
                 ),
               ),
               const SizedBox(height: 8),

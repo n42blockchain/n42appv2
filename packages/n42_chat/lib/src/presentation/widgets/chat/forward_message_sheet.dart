@@ -6,6 +6,7 @@ import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/entities/message_entity.dart';
 import '../../../domain/repositories/conversation_repository.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/theme/app_colors.dart';
 
 /// 转发消息对话框
 class ForwardMessageSheet extends StatefulWidget {
@@ -66,7 +67,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-        color: widget.isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(widget.isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
@@ -92,7 +93,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: widget.isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(widget.isDark),
                   ),
                 ),
                 const Spacer(),
@@ -113,9 +114,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
                 hintText: S.of(context)?.chatSearchHint ?? 'Search',
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
-                fillColor: widget.isDark 
-                    ? const Color(0xFF2C2C2E) 
-                    : const Color(0xFFF5F5F5),
+                fillColor: AppColors.inputBgOf(widget.isDark),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
@@ -135,9 +134,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: widget.isDark 
-                  ? const Color(0xFF2C2C2E) 
-                  : const Color(0xFFF5F5F5),
+              color: AppColors.inputBgOf(widget.isDark),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(
@@ -145,7 +142,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
                 Icon(
                   _getMessageIcon(widget.message.type),
                   size: 20,
-                  color: widget.isDark ? Colors.white70 : Colors.black54,
+                  color: AppColors.textSecondaryOf(widget.isDark),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -153,7 +150,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
                     _getMessagePreview(widget.message),
                     style: TextStyle(
                       fontSize: 14,
-                      color: widget.isDark ? Colors.white70 : Colors.black54,
+                      color: AppColors.textSecondaryOf(widget.isDark),
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -191,7 +188,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
               ? (S.of(context)?.chatNoForwardableChat ?? 'No chats available for forwarding')
               : (S.of(context)?.chatNoMatchingChat ?? 'No matching chats found'),
           style: TextStyle(
-            color: widget.isDark ? Colors.white54 : Colors.black54,
+            color: AppColors.textTertiaryOf(widget.isDark),
           ),
         ),
       );
@@ -205,23 +202,21 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
         final isGroup = chat.type == ConversationType.group;
         return ListTile(
           leading: CircleAvatar(
-            backgroundColor: widget.isDark 
-                ? const Color(0xFF3A3A3C) 
-                : const Color(0xFFE5E5EA),
+            backgroundColor: AppColors.placeholderOf(widget.isDark),
             backgroundImage: chat.avatarUrl != null && chat.avatarUrl!.isNotEmpty
                 ? NetworkImage(chat.avatarUrl!)
                 : null,
             child: chat.avatarUrl == null || chat.avatarUrl!.isEmpty
                 ? Icon(
                     isGroup ? Icons.group : Icons.person,
-                    color: widget.isDark ? Colors.white70 : Colors.black54,
+                    color: AppColors.textSecondaryOf(widget.isDark),
                   )
                 : null,
           ),
           title: Text(
             chat.name,
             style: TextStyle(
-              color: widget.isDark ? Colors.white : Colors.black,
+              color: AppColors.textPrimaryOf(widget.isDark),
             ),
           ),
           subtitle: chat.lastMessage != null
@@ -231,7 +226,7 @@ class _ForwardMessageSheetState extends State<ForwardMessageSheet> {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: 12,
-                    color: widget.isDark ? Colors.white38 : Colors.black38,
+                    color: AppColors.textTertiaryOf(widget.isDark),
                   ),
                 )
               : null,

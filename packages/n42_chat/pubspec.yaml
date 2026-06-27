@@ -119,6 +119,8 @@ dependencies:
   # UI Helpers
   # ============================================
   flutter_svg: ^2.2.4
+  lottie: ^3.1.2
+  flutter_highlight: ^0.7.0
   badges: ^3.1.2
   pinyin: ^3.0.0
   qr_flutter: ^4.1.0
@@ -240,3 +242,5 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/animations/
+    - assets/stickers/openmoji/
+    - assets/stickers/lottie/

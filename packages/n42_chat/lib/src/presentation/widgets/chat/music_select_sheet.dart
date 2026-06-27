@@ -133,7 +133,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.75,
       decoration: BoxDecoration(
-        color: widget.isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(widget.isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
@@ -144,7 +144,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: widget.isDark ? Colors.white12 : Colors.black12,
+                  color: AppColors.dividerOf(widget.isDark),
                 ),
               ),
             ),
@@ -155,14 +155,14 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: widget.isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(widget.isDark),
                   ),
                 ),
                 const Spacer(),
                 IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: widget.isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(widget.isDark),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -212,7 +212,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
               size: 18,
               color: isSelected 
                   ? AppColors.primary 
-                  : (widget.isDark ? Colors.white54 : Colors.black54),
+                  : (AppColors.textSecondaryOf(widget.isDark)),
             ),
             const SizedBox(width: 6),
             Text(
@@ -220,7 +220,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
               style: TextStyle(
                 color: isSelected 
                     ? AppColors.primary 
-                    : (widget.isDark ? Colors.white54 : Colors.black54),
+                    : (AppColors.textSecondaryOf(widget.isDark)),
                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
               ),
             ),
@@ -255,9 +255,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
               hintText: S.of(context)?.chatSearchSongOrArtist ?? 'Search song or artist',
               prefixIcon: const Icon(Icons.search),
               filled: true,
-              fillColor: widget.isDark 
-                  ? const Color(0xFF3A3A3C) 
-                  : const Color(0xFFF2F2F7),
+              fillColor: AppColors.inputBgOf(widget.isDark),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide.none,
@@ -277,7 +275,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
                   child: Text(
                     S.of(context)?.chatNoSongsFound ?? 'No songs found',
                     style: TextStyle(
-                      color: widget.isDark ? Colors.white54 : Colors.black54,
+                      color: AppColors.textSecondaryOf(widget.isDark),
                     ),
                   ),
                 )
@@ -301,14 +299,14 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
                       title: Text(
                         song['name'] as String,
                         style: TextStyle(
-                          color: widget.isDark ? Colors.white : Colors.black,
+                          color: AppColors.textPrimaryOf(widget.isDark),
                         ),
                       ),
                       subtitle: Text(
                         song['artist'] as String,
                         style: TextStyle(
                           fontSize: 12,
-                          color: widget.isDark ? Colors.white54 : Colors.black54,
+                          color: AppColors.textSecondaryOf(widget.isDark),
                         ),
                       ),
                       trailing: const Icon(
@@ -325,9 +323,9 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
   }
   
   Widget _buildNetworkLinkInput() {
-    final textColor = widget.isDark ? Colors.white : Colors.black;
-    final hintColor = widget.isDark ? Colors.white54 : Colors.black54;
-    final fillColor = widget.isDark ? const Color(0xFF3A3A3C) : const Color(0xFFF2F2F7);
+    final textColor = AppColors.textPrimaryOf(widget.isDark);
+    final hintColor = AppColors.textSecondaryOf(widget.isDark);
+    final fillColor = AppColors.inputBgOf(widget.isDark);
     
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -434,8 +432,8 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
   }
   
   Widget _buildLocalFilePicker() {
-    final textColor = widget.isDark ? Colors.white : Colors.black;
-    final subtextColor = widget.isDark ? Colors.white54 : Colors.black54;
+    final textColor = AppColors.textPrimaryOf(widget.isDark);
+    final subtextColor = AppColors.textSecondaryOf(widget.isDark);
     
     return Center(
       child: Padding(

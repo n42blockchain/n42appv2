@@ -119,7 +119,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
         maxHeight: MediaQuery.of(context).size.height * 0.5,
       ),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF2C2C2E) : Colors.white,
+        color: AppColors.surfaceOf(isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
@@ -131,7 +131,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
+              color: AppColors.dividerOf(isDark),
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -147,7 +147,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : AppColors.textPrimary,
+                    color: AppColors.textPrimaryOf(isDark),
                   ),
                 ),
                 if (widget.onManage != null)
@@ -200,14 +200,14 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
           Icon(
             Icons.flash_on_outlined,
             size: 48,
-            color: isDark ? Colors.white38 : Colors.black26,
+            color: AppColors.textTertiaryOf(isDark),
           ),
           const SizedBox(height: 16),
           Text(
             l10n?.settingsNoQuickReplies ?? 'No quick replies',
             style: TextStyle(
               fontSize: 15,
-              color: isDark ? Colors.white54 : Colors.black45,
+              color: AppColors.textTertiaryOf(isDark),
             ),
           ),
         ],
@@ -268,7 +268,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              color: isDark ? Colors.white54 : Colors.black45,
+              color: AppColors.textTertiaryOf(isDark),
             ),
           ),
           const Spacer(),
@@ -293,7 +293,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
                 reply.content,
                 style: TextStyle(
                   fontSize: 16,
-                  color: isDark ? Colors.white : AppColors.textPrimary,
+                  color: AppColors.textPrimaryOf(isDark),
                 ),
               ),
             ),
@@ -310,7 +310,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
                   'Default',
                   style: TextStyle(
                     fontSize: 10,
-                    color: isDark ? Colors.white38 : Colors.black38,
+                    color: AppColors.textTertiaryOf(isDark),
                   ),
                 ),
               ),
@@ -334,7 +334,7 @@ class _QuickReplySheetState extends State<QuickReplySheet> {
                 reply,
                 style: TextStyle(
                   fontSize: 16,
-                  color: isDark ? Colors.white : AppColors.textPrimary,
+                  color: AppColors.textPrimaryOf(isDark),
                 ),
               ),
             ),

@@ -481,7 +481,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
       decoration: BoxDecoration(
         color: context.surfaceColor,
         border: Border(
-          top: BorderSide(color: isDark ? Colors.white12 : Colors.black12),
+          top: BorderSide(color: AppColors.dividerOf(isDark)),
         ),
       ),
       child: Row(
@@ -491,9 +491,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
             child: Container(
               constraints: const BoxConstraints(maxHeight: 120),
               decoration: BoxDecoration(
-                color: isDark
-                    ? const Color(0xFF2C2C2E)
-                    : const Color(0xFFF5F5F5),
+                color: AppColors.inputBgOf(isDark),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: TextField(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../widgets/common/common_widgets.dart';
 
 /// 服务号列表页面
@@ -26,7 +27,7 @@ class ServiceAccountsPage extends StatelessWidget {
             child: Container(
               height: 36,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF3A3A3C) : const Color(0xFFF2F2F7),
+                color: AppColors.inputBgOf(isDark),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(
@@ -54,7 +55,7 @@ class ServiceAccountsPage extends StatelessWidget {
                   Icon(
                     Icons.support_agent_outlined,
                     size: 64,
-                    color: isDark ? Colors.grey[600] : Colors.grey[400],
+                    color: AppColors.textTertiaryOf(isDark),
                   ),
                   const SizedBox(height: 16),
                   Text(

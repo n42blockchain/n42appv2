@@ -96,7 +96,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
             width: 48,
             height: 48,
             decoration: BoxDecoration(
-              color: isDark ? Colors.white24 : Colors.black12,
+              color: AppColors.dividerOf(isDark),
               borderRadius: BorderRadius.circular(6),
             ),
           ),
@@ -109,7 +109,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
                   height: 12,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white24 : Colors.black12,
+                    color: AppColors.dividerOf(isDark),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -118,7 +118,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
                   height: 10,
                   width: 120,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.white24 : Colors.black12,
+                    color: AppColors.dividerOf(isDark),
                     borderRadius: BorderRadius.circular(4),
                   ),
                 ),
@@ -179,9 +179,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
-                          color: isDark
-                              ? AppColors.textPrimaryDark
-                              : AppColors.textPrimary,
+                          color: AppColors.textPrimaryOf(isDark),
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -194,9 +192,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
                           data.description!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: isDark
-                                ? AppColors.textSecondaryDark
-                                : AppColors.textSecondary,
+                            color: AppColors.textSecondaryOf(isDark),
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

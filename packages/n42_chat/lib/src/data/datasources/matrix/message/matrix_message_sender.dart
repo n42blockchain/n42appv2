@@ -22,26 +22,6 @@ class MatrixMessageSender {
 
   matrix.Client? get _client => _clientManager.client;
 
-  matrix.Room _requireRoomForSend(String roomId, String operation) {
-    final client = _clientManager.requireClient(operation);
-    if (!client.isLogged()) {
-      throw StateError('Cannot $operation: Matrix client is not logged in');
-    }
-
-    final room = client.getRoomById(roomId);
-    if (room == null) {
-      throw StateError('Cannot $operation: room not found ($roomId)');
-    }
-    return room;
-  }
-
-  String _requireEventId(String? eventId, String operation) {
-    if (eventId == null || eventId.isEmpty) {
-      throw StateError('Cannot $operation: Matrix server returned no event id');
-    }
-    return eventId;
-  }
-
   // ============================================
   // 媒体消息发送（委托给 MatrixMediaSender）
   // ============================================
@@ -132,25 +112,23 @@ class MatrixMessageSender {
     List<String>? mentionedUserIds,
     bool mentionsRoom = false,
   }) async {
-    final room = _requireRoomForSend(roomId, 'send text message');
+    final room = _client?.getRoomById(roomId);
+    if (room == null) return null;
 
     final content = buildTextMessageContent(
       text,
       selfDestructAfter: selfDestructAfter,
       mentionedUserIds: mentionedUserIds,
       mentionsRoom: mentionsRoom,
-      currentUserId: room.client.userID,
+      currentUserId: _client?.userID,
     );
 
     // 如果有特殊字段，使用 sendEvent；否则使用 sendTextEvent
     if (hasExtendedTextMetadata(content)) {
-      return _requireEventId(
-        await room.sendEvent(content),
-        'send text message',
-      );
+      return await room.sendEvent(content);
     }
 
-    return _requireEventId(await room.sendTextEvent(text), 'send text message');
+    return await room.sendTextEvent(text);
   }
 
   /// 发送位置消息
@@ -385,10 +363,13 @@ class MatrixMessageSender {
     required String msgType,
     required Map<String, dynamic> content,
   }) async {
-    final room = _requireRoomForSend(roomId, 'send custom message');
+    final room = _client?.getRoomById(roomId);
+    if (room == null) {
+      throw Exception('房间不存在');
+    }
 
     final eventId = await room.sendEvent(content);
-    return _requireEventId(eventId, 'send custom message');
+    return eventId ?? '';
   }
 
   /// 发送自定义房间事件（不展示在消息列表中）
@@ -397,10 +378,13 @@ class MatrixMessageSender {
     required String type,
     required Map<String, dynamic> content,
   }) async {
-    final room = _requireRoomForSend(roomId, 'send room event');
+    final room = _client?.getRoomById(roomId);
+    if (room == null) {
+      throw Exception('房间不存在');
+    }
 
     final eventId = await room.sendEvent(content, type: type);
-    return _requireEventId(eventId, 'send room event');
+    return eventId ?? '';
   }
 
   /// 重发消息

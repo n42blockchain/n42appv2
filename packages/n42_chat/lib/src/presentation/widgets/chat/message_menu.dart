@@ -186,7 +186,7 @@ class MessageMenu extends StatelessWidget {
               size: 22,
               color: item.isDestructive
                   ? AppColors.error
-                  : (isDark ? Colors.white : AppColors.textPrimary),
+                  : (AppColors.textPrimaryOf(isDark)),
             ),
             const SizedBox(width: 16),
             Text(
@@ -195,7 +195,7 @@ class MessageMenu extends StatelessWidget {
                 fontSize: 16,
                 color: item.isDestructive
                     ? AppColors.error
-                    : (isDark ? Colors.white : AppColors.textPrimary),
+                    : (AppColors.textPrimaryOf(isDark)),
               ),
             ),
           ],
@@ -245,7 +245,7 @@ class _ForwardDialogState extends State<ForwardDialog> {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : AppColors.textPrimary,
+                    color: AppColors.textPrimaryOf(isDark),
                   ),
                 ),
                 const Spacer(),

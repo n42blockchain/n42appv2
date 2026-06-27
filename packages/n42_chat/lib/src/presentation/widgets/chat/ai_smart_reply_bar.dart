@@ -24,9 +24,9 @@ class AiSmartReplyBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final backgroundColor = context.surfaceColor;
-    final borderColor = isDark ? Colors.white10 : Colors.black12;
-    final titleColor = isDark ? Colors.white : AppColors.textPrimary;
-    final subtitleColor = isDark ? Colors.white70 : AppColors.textSecondary;
+    final borderColor = AppColors.dividerOf(isDark);
+    final titleColor = AppColors.textPrimaryOf(isDark);
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
 
     return Container(
       decoration: BoxDecoration(
@@ -110,9 +110,7 @@ class AiSmartReplyBar extends StatelessWidget {
                             alpha: isDark ? 0.16 : 0.10,
                           ),
                           labelStyle: TextStyle(
-                            color: isDark
-                                ? Colors.white
-                                : AppColors.textPrimary,
+                            color: AppColors.textPrimaryOf(isDark),
                             fontSize: 13,
                           ),
                           side: BorderSide(

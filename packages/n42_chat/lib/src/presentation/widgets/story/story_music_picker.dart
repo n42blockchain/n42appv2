@@ -151,7 +151,7 @@ class _StoryMusicPickerState extends State<StoryMusicPicker> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
@@ -220,7 +220,7 @@ class _StoryMusicPickerState extends State<StoryMusicPicker> {
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w500,
-                            color: isDark ? Colors.white : Colors.black87,
+                            color: AppColors.textPrimaryOf(isDark),
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -244,7 +244,7 @@ class _StoryMusicPickerState extends State<StoryMusicPicker> {
                           '${_formatDuration(_position)} / ${_formatDuration(_duration)} ${l10n?.storyMusicPreview ?? "(max 15s)"}',
                           style: TextStyle(
                             fontSize: 11,
-                            color: isDark ? Colors.white38 : Colors.black38,
+                            color: AppColors.textTertiaryOf(isDark),
                           ),
                         ),
                       ],

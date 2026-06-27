@@ -367,15 +367,15 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                         fit: BoxFit.cover,
                         httpHeaders: _getAuthHeaders(),
                         placeholder: (_, _) => Container(
-                          color: isDark ? Colors.grey[850] : Colors.grey[800],
+                          color: AppColors.placeholderOf(isDark),
                         ),
                         errorWidget: (_, _, _) => Container(
-                          color: isDark ? Colors.grey[850] : Colors.grey[800],
+                          color: AppColors.placeholderOf(isDark),
                         ),
                       )
                     else
                       Container(
-                        color: isDark ? Colors.grey[850] : Colors.grey[800],
+                        color: AppColors.placeholderOf(isDark),
                       ),
                     const Center(
                       child: Icon(
@@ -392,13 +392,13 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                   fit: BoxFit.cover,
                   httpHeaders: _getAuthHeaders(),
                   errorWidget: (_, _, _) => Container(
-                    color: isDark ? Colors.grey[800] : Colors.grey[200],
+                    color: AppColors.placeholderOf(isDark),
                     child: const Icon(Icons.image, size: 48),
                   ),
                 )
               else
                 Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[200],
+                  color: AppColors.placeholderOf(isDark),
                   child: const Icon(Icons.image, size: 48),
                 ),
             ],
@@ -433,15 +433,15 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                         fit: BoxFit.cover,
                         httpHeaders: _getAuthHeaders(),
                         placeholder: (_, _) => Container(
-                          color: isDark ? Colors.grey[850] : Colors.grey[800],
+                          color: AppColors.placeholderOf(isDark),
                         ),
                         errorWidget: (_, _, _) => Container(
-                          color: isDark ? Colors.grey[850] : Colors.grey[800],
+                          color: AppColors.placeholderOf(isDark),
                         ),
                       )
                     else
                       Container(
-                        color: isDark ? Colors.grey[850] : Colors.grey[800],
+                        color: AppColors.placeholderOf(isDark),
                       ),
                     const Center(
                       child: Icon(
@@ -458,13 +458,13 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                   fit: BoxFit.cover,
                   httpHeaders: _getAuthHeaders(),
                   errorWidget: (_, _, _) => Container(
-                    color: isDark ? Colors.grey[800] : Colors.grey[200],
+                    color: AppColors.placeholderOf(isDark),
                     child: const Icon(Icons.image),
                   ),
                 )
               else
                 Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[200],
+                  color: AppColors.placeholderOf(isDark),
                   child: const Icon(Icons.image),
                 ),
             ],
@@ -578,7 +578,7 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
           Expanded(
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? Colors.grey[800] : Colors.grey[100],
+                color: AppColors.inputBgOf(isDark),
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(

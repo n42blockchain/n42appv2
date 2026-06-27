@@ -595,7 +595,7 @@ class _RuleTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.dividerThinDark : const Color(0xFFF8F8F8),
+        color: AppColors.dividerThinOf(isDark),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(

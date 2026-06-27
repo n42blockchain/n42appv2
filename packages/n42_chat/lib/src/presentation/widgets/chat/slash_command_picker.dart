@@ -125,7 +125,7 @@ class SlashCommandPicker extends StatelessWidget {
               '/${item.command}',
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white : AppColors.textPrimary,
+                color: AppColors.textPrimaryOf(isDark),
               ),
             ),
             subtitle: Text(

@@ -92,14 +92,14 @@ class _AiSummaryBubbleState extends State<AiSummaryBubble> {
                       child: Icon(
                         Icons.close,
                         size: 16,
-                        color: isDark ? Colors.white38 : Colors.black38,
+                        color: AppColors.textTertiaryOf(isDark),
                       ),
                     ),
                   const SizedBox(width: 4),
                   Icon(
                     _isExpanded ? Icons.expand_less : Icons.expand_more,
                     size: 18,
-                    color: isDark ? Colors.white54 : Colors.black54,
+                    color: AppColors.textTertiaryOf(isDark),
                   ),
                 ],
               ),
@@ -116,7 +116,7 @@ class _AiSummaryBubbleState extends State<AiSummaryBubble> {
                       widget.summary,
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark ? Colors.white70 : Colors.black87,
+                        color: AppColors.textSecondaryOf(isDark),
                         height: 1.5,
                       ),
                     ),

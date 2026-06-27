@@ -199,7 +199,7 @@ class _StickerStorePageState extends State<StickerStorePage>
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primary.withValues(alpha: 0.1)
-                : (isDark ? Colors.grey[800] : Colors.grey[200]),
+                : AppColors.inputBgOf(isDark),
             borderRadius: BorderRadius.circular(16),
             border: isSelected ? Border.all(color: AppColors.primary) : null,
           ),
@@ -255,7 +255,7 @@ class _StickerStorePageState extends State<StickerStorePage>
             Icon(
               Icons.emoji_emotions_outlined,
               size: 64,
-              color: isDark ? Colors.grey[600] : Colors.grey[400],
+              color: AppColors.textTertiaryOf(isDark),
             ),
             const SizedBox(height: 16),
             Text(
@@ -300,7 +300,7 @@ class _StickerStorePageState extends State<StickerStorePage>
                   width: 48,
                   height: 48,
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[800] : Colors.grey[200],
+                    color: AppColors.placeholderOf(isDark),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
@@ -329,9 +329,7 @@ class _StickerStorePageState extends State<StickerStorePage>
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 height: 1.3,
-                                color: isDark
-                                    ? Colors.white
-                                    : AppColors.textPrimary,
+                                color: AppColors.textPrimaryOf(isDark),
                               ),
                             ),
                           ),
@@ -397,7 +395,7 @@ class _StickerStorePageState extends State<StickerStorePage>
                     height: 48,
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      color: isDark ? Colors.grey[800] : Colors.grey[100],
+                      color: AppColors.placeholderOf(isDark),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Center(
@@ -464,7 +462,7 @@ class _StickerStorePageState extends State<StickerStorePage>
             Icon(
               Icons.emoji_emotions_outlined,
               size: 64,
-              color: isDark ? Colors.grey[600] : Colors.grey[400],
+              color: AppColors.textTertiaryOf(isDark),
             ),
             const SizedBox(height: 16),
             Text(
@@ -485,7 +483,7 @@ class _StickerStorePageState extends State<StickerStorePage>
               style: TextStyle(
                 fontSize: 13,
                 height: 1.3,
-                color: isDark ? Colors.grey[500] : Colors.grey[500],
+                color: AppColors.textTertiaryOf(isDark),
               ),
             ),
             const SizedBox(height: 24),

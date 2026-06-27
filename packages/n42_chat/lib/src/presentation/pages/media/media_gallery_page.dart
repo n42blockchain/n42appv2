@@ -296,7 +296,7 @@ class _MediaGalleryPageState extends State<MediaGalleryPage>
       onTap: () => _openMediaPreview(message),
       child: Container(
         decoration: BoxDecoration(
-          color: isDark ? Colors.grey[800] : Colors.grey[200],
+          color: AppColors.placeholderOf(isDark),
           borderRadius: BorderRadius.circular(4),
         ),
         clipBehavior: Clip.antiAlias,
@@ -309,7 +309,7 @@ class _MediaGalleryPageState extends State<MediaGalleryPage>
                 fit: BoxFit.cover,
                 httpHeaders: headers,
                 placeholder: (_, _) => Container(
-                  color: isDark ? Colors.grey[800] : Colors.grey[200],
+                  color: AppColors.placeholderOf(isDark),
                 ),
                 errorWidget: (_, _, _) => Icon(
                   isVideo ? Icons.videocam : Icons.image,

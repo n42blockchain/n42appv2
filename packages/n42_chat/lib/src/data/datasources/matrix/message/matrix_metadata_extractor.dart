@@ -23,6 +23,18 @@ class MatrixMetadataExtractor {
     final mxcUrl = event.content['url'] as String? ?? fileContent?['url'] as String?;
     final thumbnailMxc = info?['thumbnail_url'] as String?;
 
+    // 贴纸信息（m.sticker 是独立 event type，无 msgtype；字段结构同图片）
+    if (event.type == matrix.EventTypes.Sticker) {
+      return MessageMetadata(
+        mediaUrl: mxcUrl,
+        httpUrl: _convertMxcToHttp(mxcUrl),
+        width: info?['w'] as int?,
+        height: info?['h'] as int?,
+        size: info?['size'] as int?,
+        mimeType: info?['mimetype'] as String?,
+      );
+    }
+
     // 图片信息
     if (event.messageType == matrix.MessageTypes.Image) {
       return MessageMetadata(
@@ -141,6 +153,15 @@ class MatrixMetadataExtractor {
         amount: event.content['amount'] as String?,
         token: event.content['token'] as String?,
         transferStatus: event.content['status'] as String?,
+        txHash: event.content['tx_hash'] as String?,
+      );
+    }
+
+    // 打赏信息
+    if (event.content['msgtype'] == 'n42.tip') {
+      return MessageMetadata(
+        amount: event.content['amount'] as String?,
+        token: event.content['token'] as String?,
         txHash: event.content['tx_hash'] as String?,
       );
     }

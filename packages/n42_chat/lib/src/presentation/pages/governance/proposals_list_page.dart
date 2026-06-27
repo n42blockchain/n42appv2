@@ -341,7 +341,7 @@ class _FilterChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary
-              : (isDark ? AppColors.dividerThinDark : const Color(0xFFF0F0F0)),
+              : AppColors.dividerThinOf(isDark),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(

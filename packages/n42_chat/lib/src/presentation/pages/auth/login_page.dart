@@ -27,9 +27,7 @@ import '../../helpers/bloc_message_helper.dart';
 ///
 /// 微信风格的登录界面
 class LoginPage extends StatefulWidget {
-  final Future<void> Function()? onClose;
-
-  const LoginPage({super.key, this.onClose});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -173,39 +171,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Future<void> _handleClose() async {
-    final close = widget.onClose;
-    if (close != null) {
-      await close();
-      return;
-    }
-
-    final localNavigator = Navigator.of(context);
-    if (await localNavigator.maybePop()) {
-      return;
-    }
-    if (!mounted) return;
-
-    final rootNavigator = Navigator.of(context, rootNavigator: true);
-    if (rootNavigator != localNavigator && await rootNavigator.maybePop()) {
-      return;
-    }
-    if (!mounted) return;
-
-    final router = GoRouter.maybeOf(context);
-    if (router == null) return;
-
-    if (router.canPop()) {
-      router.pop();
-    } else {
-      router.go(Routes.welcome);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? AppColors.backgroundDark : Colors.white;
+    final bgColor = AppColors.bgOf(isDark);
     final textColor = context.textPrimary;
 
     return Scaffold(
@@ -217,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
         leading: IconButton(
           icon: Icon(AppIcons.close, color: textColor, size: 22),
           tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-          onPressed: _handleClose,
+          onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: Text(
           S.of(context)?.authLogin ?? 'Log In',
@@ -390,11 +359,7 @@ class _LoginPageState extends State<LoginPage> {
             S.of(context)?.authRegisterAccount ?? 'Sign Up',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.3,
-              color: AppColors.link,
-            ),
+            style: const TextStyle(fontSize: 14, height: 1.3, color: AppColors.link),
           ),
         ),
         const Text('|', style: TextStyle(color: AppColors.textTertiary)),
@@ -404,11 +369,7 @@ class _LoginPageState extends State<LoginPage> {
             S.of(context)?.authForgotPassword ?? 'Forgot Password',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 14,
-              height: 1.3,
-              color: AppColors.link,
-            ),
+            style: const TextStyle(fontSize: 14, height: 1.3, color: AppColors.link),
           ),
         ),
       ],
@@ -417,9 +378,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildServerInput(BuildContext context, AuthState state, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -493,11 +452,7 @@ class _LoginPageState extends State<LoginPage> {
             '✓ ${S.of(context)?.authConnectedTo(state.homeserverInfo!.serverName) ?? 'Connected to ${state.homeserverInfo!.serverName}'}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 12,
-              height: 1.3,
-              color: AppColors.success,
-            ),
+            style: const TextStyle(fontSize: 12, height: 1.3, color: AppColors.success),
           ),
         ],
       ],
@@ -506,9 +461,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildUsernameInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -562,9 +515,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildPasswordInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -680,11 +631,7 @@ class _LoginPageState extends State<LoginPage> {
             'Login with $_biometricTypeDescription',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(
-          fontSize: 16,
-          height: 1.3,
-          fontWeight: FontWeight.w600,
-        ),
+        style: const TextStyle(fontSize: 16, height: 1.3, fontWeight: FontWeight.w600),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -735,12 +682,12 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextSpan(
               text: S.of(context)?.authTermsOfService ?? 'Terms of Service',
-              style: TextStyle(color: AppColors.link.withValues(alpha: 0.8)),
+              style: TextStyle(
+                color: AppColors.link.withValues(alpha: 0.8),
+              ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  final url = Uri.parse(
-                    'https://www.n42.ai/static/terms_of_use.html',
-                  );
+                  final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   }
@@ -749,12 +696,12 @@ class _LoginPageState extends State<LoginPage> {
             TextSpan(text: S.of(context)?.authAnd ?? ' and '),
             TextSpan(
               text: S.of(context)?.authPrivacyPolicy ?? 'Privacy Policy',
-              style: TextStyle(color: AppColors.link.withValues(alpha: 0.8)),
+              style: TextStyle(
+                color: AppColors.link.withValues(alpha: 0.8),
+              ),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  final url = Uri.parse(
-                    'https://www.n42.ai/static/terms_of_use.html',
-                  );
+                  final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   }

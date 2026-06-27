@@ -48,7 +48,7 @@ class AiRewriteBar extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(isDark),
         border: Border(
           top: BorderSide(
             color: AppColors.primary.withValues(alpha: 0.3),
@@ -81,7 +81,7 @@ class AiRewriteBar extends StatelessWidget {
                   child: Icon(
                     Icons.close,
                     size: 18,
-                    color: isDark ? Colors.white38 : Colors.black38,
+                    color: AppColors.textTertiaryOf(isDark),
                   ),
                 ),
               ],
@@ -126,7 +126,7 @@ class AiRewriteBar extends StatelessWidget {
                     l10n?.aiRewriteLoading ?? 'Rewriting...',
                     style: TextStyle(
                       fontSize: 13,
-                      color: isDark ? Colors.white54 : Colors.black54,
+                      color: AppColors.textTertiaryOf(isDark),
                     ),
                   ),
                 ],
@@ -144,7 +144,7 @@ class AiRewriteBar extends StatelessWidget {
                 rewrittenText!,
                 style: TextStyle(
                   fontSize: 14,
-                  color: isDark ? Colors.white : Colors.black87,
+                  color: AppColors.textPrimaryOf(isDark),
                   height: 1.4,
                 ),
                 maxLines: 5,
@@ -162,7 +162,7 @@ class AiRewriteBar extends StatelessWidget {
                     child: Text(
                       l10n?.aiRewriteCancel ?? 'Cancel',
                       style: TextStyle(
-                        color: isDark ? Colors.white54 : Colors.black54,
+                        color: AppColors.textTertiaryOf(isDark),
                       ),
                     ),
                   ),
@@ -219,12 +219,12 @@ class _ToneChip extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? AppColors.primary
-              : (isDark ? const Color(0xFF2C2C2E) : const Color(0xFFF0F0F0)),
+              : AppColors.inputBgOf(isDark),
           borderRadius: BorderRadius.circular(16),
           border: isSelected
               ? null
               : Border.all(
-                  color: isDark ? Colors.white12 : Colors.black12,
+                  color: AppColors.dividerOf(isDark),
                 ),
         ),
         child: Text(
@@ -234,7 +234,7 @@ class _ToneChip extends StatelessWidget {
             fontWeight: FontWeight.w500,
             color: isSelected
                 ? Colors.white
-                : (isDark ? Colors.white70 : Colors.black87),
+                : AppColors.textSecondaryOf(isDark),
           ),
         ),
       ),

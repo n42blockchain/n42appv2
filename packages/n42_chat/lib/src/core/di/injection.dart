@@ -3,9 +3,18 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../services/gif_service.dart';
 import '../services/giphy_service.dart';
 import '../services/tenor_service.dart';
+import '../services/gif_service.dart';
+import '../services/reminder_service.dart';
+import '../services/subscription_service.dart';
+import '../services/fiat_ramp_service.dart';
+import '../services/live_caption_service.dart';
+import '../services/system_integration_service.dart';
+import '../services/local_llm_service.dart';
+import '../services/ai_provider_router.dart';
+import '../encryption/mls_protocol.dart';
+import '../encryption/mls_manager.dart';
 import '../services/remark_service.dart';
 import '../services/mymemory_translation_service.dart';
 import '../services/translation_service.dart';
@@ -252,6 +261,43 @@ Future<void> _registerServices(N42ChatConfig config) async {
     }
   }
 
+  if (!getIt.isRegistered<SpeechToTextService>()) {
+    getIt.registerSingleton<SpeechToTextService>(speechService);
+  }
+
+  // 实时字幕服务（复用 STT + Voice；音频源可插拔——通话音频管道/麦克风喂 chunk）
+  getIt.registerLazySingleton<LiveCaptionService>(
+    () => LiveCaptionService(
+      getIt<SpeechToTextService>(),
+      getIt<VoiceService>(),
+    ),
+    dispose: (svc) => svc.dispose(),
+  );
+
+  // 系统级集成（MethodChannel 桥；原生未实现时优雅 no-op）
+  getIt.registerLazySingleton<SystemIntegrationService>(
+    () => SystemIntegrationService(),
+  );
+
+  // 端侧推理（Dart 桥+服务；原生未接入时 unavailable）
+  getIt.registerLazySingleton<LocalLlmBridge>(() => LocalLlmBridge());
+  getIt.registerLazySingleton<LocalLlmService>(
+    () => LocalLlmService(getIt<LocalLlmBridge>()),
+    dispose: (s) => s.dispose(),
+  );
+  // AI 云↔端路由（端侧就绪走本地，否则云端；端侧失败回退云端）
+  getIt.registerLazySingleton<AiProviderRouter>(
+    () => AiProviderRouter(
+      cloud: getIt.isRegistered<AiService>() ? getIt<AiService>() : null,
+      local: getIt<LocalLlmService>(),
+    ),
+  );
+
+  // MLS 双栈调度（默认 Olm；底层 OpenMLS FFI 未绑定时 mlsAvailable=false）
+  getIt.registerLazySingleton<MlsManager>(
+    () => MlsManager(const UnboundMlsProtocol()),
+  );
+
   // Giphy 服务（配置了 API Key 或代理端点时注册）
   if ((config.giphyApiKey != null && config.giphyApiKey!.isNotEmpty) ||
       config.giphyUseProxyEndpoint) {
@@ -268,7 +314,7 @@ Future<void> _registerServices(N42ChatConfig config) async {
     );
   }
 
-  // Tenor service, used as an optional GIF provider or fallback.
+  // Tenor 服务（配置了 API Key 或代理端点时注册）
   if ((config.tenorApiKey != null && config.tenorApiKey!.isNotEmpty) ||
       config.tenorUseProxyEndpoint) {
     getIt.registerLazySingleton<TenorService>(
@@ -284,6 +330,7 @@ Future<void> _registerServices(N42ChatConfig config) async {
     );
   }
 
+  // 统一 GIF 服务（Giphy 主 + Tenor 兜底，任一可用即注册，供 GifPicker 使用）
   final gifProviders = <GifService>[
     if (getIt.isRegistered<GiphyService>()) getIt<GiphyService>(),
     if (getIt.isRegistered<TenorService>()) getIt<TenorService>(),
@@ -291,6 +338,16 @@ Future<void> _registerServices(N42ChatConfig config) async {
   if (gifProviders.isNotEmpty) {
     getIt.registerLazySingleton<GifService>(
       () => CompositeGifService(gifProviders),
+    );
+  }
+
+  // 法币出入金（配置了 key 才注册；未注册时入口/页面降级提示）
+  if (config.fiatRampApiKey != null && config.fiatRampApiKey!.isNotEmpty) {
+    getIt.registerLazySingleton<FiatRampService>(
+      () => FiatRampService(FiatRampConfig(
+        provider: config.fiatRampProvider,
+        apiKey: config.fiatRampApiKey!,
+      )),
     );
   }
 
@@ -556,6 +613,18 @@ Future<void> _registerDataSources() async {
   // 偏好设置存储（非敏感数据：外观、备注、草稿等）
   getIt.registerLazySingleton<PreferencesDataSource>(
     () => PreferencesDataSource(),
+  );
+
+  // 待办提醒服务（自带本地通知 + 60s 周期到期检查）
+  getIt.registerLazySingleton<ReminderService>(
+    () => ReminderService(getIt<PreferencesDataSource>()),
+    dispose: (svc) => svc.dispose(),
+  );
+  getIt<ReminderService>().start();
+
+  // 订阅服务（创作者计划 + 用户订阅记录，本地存储）
+  getIt.registerLazySingleton<SubscriptionService>(
+    () => SubscriptionService(getIt<PreferencesDataSource>()),
   );
 
   // Matrix认证数据源

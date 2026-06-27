@@ -85,7 +85,7 @@ class RecoveryKeyDisplayDialog extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: isDark ? Colors.grey[900] : Colors.grey[100],
+                color: AppColors.inputBgOf(isDark),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
                   color: context.dividerColor,
@@ -98,7 +98,7 @@ class RecoveryKeyDisplayDialog extends StatelessWidget {
                   fontSize: 14,
                   height: 1.6,
                   letterSpacing: 0.5,
-                  color: isDark ? Colors.white : Colors.black87,
+                  color: AppColors.textPrimaryOf(isDark),
                 ),
               ),
             ),

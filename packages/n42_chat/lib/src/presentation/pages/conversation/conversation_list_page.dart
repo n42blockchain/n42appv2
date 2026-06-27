@@ -531,7 +531,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
         child: Container(
           height: AppDimensions.searchBarHeight + 4,
           decoration: BoxDecoration(
-            color: isDark ? AppColors.surfaceDark : AppColors.searchBackground,
+            color: AppColors.inputBgOf(isDark),
             borderRadius: BorderRadius.circular(
               (AppDimensions.searchBarHeight + 4) / 2,
             ),

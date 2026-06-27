@@ -305,7 +305,7 @@ class _NftAvatarPickerPageState extends State<NftAvatarPickerPage>
               color: surfaceColor,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isDark ? Colors.white12 : AppColors.divider,
+                color: AppColors.dividerOf(isDark),
               ),
             ),
             child: TextField(
@@ -351,7 +351,7 @@ class _NftAvatarPickerPageState extends State<NftAvatarPickerPage>
               color: surfaceColor,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(
-                color: isDark ? Colors.white12 : AppColors.divider,
+                color: AppColors.dividerOf(isDark),
               ),
             ),
             child: TextField(
@@ -730,7 +730,7 @@ class _CollectionCard extends StatelessWidget {
           color: context.surfaceColor,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: isDark ? Colors.white10 : AppColors.divider,
+            color: AppColors.dividerOf(isDark),
           ),
         ),
         child: Column(

@@ -66,7 +66,13 @@ class FavoriteEntity extends Equatable {
   
   /// 备注
   final String? remark;
-  
+
+  /// 待办截止/提醒时间（null 表示未设提醒）
+  final DateTime? dueAt;
+
+  /// 待办是否已完成
+  final bool isCompleted;
+
   const FavoriteEntity({
     required this.id,
     required this.type,
@@ -83,8 +89,17 @@ class FavoriteEntity extends Equatable {
     required this.createdAt,
     this.tags = const [],
     this.remark,
+    this.dueAt,
+    this.isCompleted = false,
   });
-  
+
+  /// 是否设了待办提醒
+  bool get hasReminder => dueAt != null;
+
+  /// 提醒是否已到期（未完成且 dueAt 已过）
+  bool get isReminderDue =>
+      dueAt != null && !isCompleted && DateTime.now().isAfter(dueAt!);
+
   @override
   List<Object?> get props => [
     id,
@@ -102,8 +117,10 @@ class FavoriteEntity extends Equatable {
     createdAt,
     tags,
     remark,
+    dueAt,
+    isCompleted,
   ];
-  
+
   FavoriteEntity copyWith({
     String? id,
     FavoriteType? type,
@@ -120,6 +137,9 @@ class FavoriteEntity extends Equatable {
     DateTime? createdAt,
     List<String>? tags,
     String? remark,
+    DateTime? dueAt,
+    bool clearDueAt = false,
+    bool? isCompleted,
   }) {
     return FavoriteEntity(
       id: id ?? this.id,
@@ -137,6 +157,8 @@ class FavoriteEntity extends Equatable {
       createdAt: createdAt ?? this.createdAt,
       tags: tags ?? this.tags,
       remark: remark ?? this.remark,
+      dueAt: clearDueAt ? null : (dueAt ?? this.dueAt),
+      isCompleted: isCompleted ?? this.isCompleted,
     );
   }
   
@@ -161,6 +183,10 @@ class FavoriteEntity extends Equatable {
       createdAt: DateTime.fromMillisecondsSinceEpoch(json['created_at'] as int),
       tags: (json['tags'] as List<dynamic>?)?.whereType<String>().toList() ?? [],
       remark: json['remark'] as String?,
+      dueAt: json['due_at'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(json['due_at'] as int)
+          : null,
+      isCompleted: json['is_completed'] as bool? ?? false,
     );
   }
   
@@ -182,9 +208,11 @@ class FavoriteEntity extends Equatable {
       'created_at': createdAt.millisecondsSinceEpoch,
       'tags': tags,
       'remark': remark,
+      'due_at': dueAt?.millisecondsSinceEpoch,
+      'is_completed': isCompleted,
     };
   }
-  
+
   /// 获取类型描述
   String get typeDescription {
     switch (type) {

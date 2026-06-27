@@ -22,6 +22,7 @@ import 'services/voip/call_manager.dart';
 import 'n42_chat_config.dart';
 import 'core/di/injection.dart';
 import 'core/utils/date_utils.dart';
+import 'core/theme/app_colors.dart';
 import 'domain/entities/conversation_entity.dart';
 import 'domain/entities/user_entity.dart';
 import 'domain/entities/user_profile_entity.dart';
@@ -50,15 +51,6 @@ part 'presentation/widgets/n42_chat_widgets.dart';
 part 'core/services/n42_theme_manager.dart';
 part 'core/services/n42_push_manager.dart';
 part 'core/services/n42_call_facade.dart';
-
-class _N42ChatLifecycleObserver with WidgetsBindingObserver {
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      N42Chat._ensureMatrixSyncRunning('app resumed');
-    }
-  }
-}
 
 /// N42 Chat 模块主入口类
 ///
@@ -110,8 +102,6 @@ class N42Chat {
 
   /// Moment 邀请节流时间戳（10 秒内不重复处理）
   static DateTime? _lastMomentInviteCheck;
-
-  static _N42ChatLifecycleObserver? _lifecycleObserver;
 
   /// 用户变化流控制器
   static StreamController<UserEntity?> _userStreamController =
@@ -179,8 +169,7 @@ class N42Chat {
   ///   N42Chat.setThemeMode(next);
   /// });
   /// ```
-  static void setThemeMode(ThemeMode mode) =>
-      _N42ThemeManager.setThemeMode(mode);
+  static void setThemeMode(ThemeMode mode) => _N42ThemeManager.setThemeMode(mode);
 
   /// 添加主题变化监听器
   static void addThemeListener(void Function(ThemeMode) listener) =>
@@ -525,8 +514,6 @@ class N42Chat {
       }
 
       _setupMomentInviteListener();
-      _installLifecycleObserver();
-      _ensureMatrixSyncRunning('initialize');
 
       _initialized = true;
       _flushPendingNotificationTap();
@@ -639,39 +626,6 @@ class N42Chat {
       debugLog('N42Chat: Moment invite listener set up');
     } catch (e) {
       debugLog('N42Chat: Failed to setup moment invite listener: $e');
-    }
-  }
-
-  static void _installLifecycleObserver() {
-    if (_lifecycleObserver != null) return;
-    final observer = _N42ChatLifecycleObserver();
-    WidgetsBinding.instance.addObserver(observer);
-    _lifecycleObserver = observer;
-  }
-
-  static void _removeLifecycleObserver() {
-    final observer = _lifecycleObserver;
-    if (observer == null) return;
-    WidgetsBinding.instance.removeObserver(observer);
-    _lifecycleObserver = null;
-  }
-
-  static void _ensureMatrixSyncRunning(String reason) {
-    try {
-      if (!getIt.isRegistered<MatrixClientManager>()) return;
-      final clientManager = getIt<MatrixClientManager>();
-      unawaited(
-        clientManager
-            .ensureSyncRunning(
-              timeout: const Duration(seconds: 5),
-              reason: reason,
-            )
-            .catchError((Object e) {
-              debugLog('N42Chat: ensure Matrix sync failed ($reason): $e');
-            }),
-      );
-    } catch (e) {
-      debugLog('N42Chat: ensure Matrix sync failed ($reason): $e');
     }
   }
 
@@ -918,7 +872,8 @@ class N42Chat {
   static bool _isLoggedOutState(AuthStatus status) =>
       status == AuthStatus.unauthenticated || status == AuthStatus.initial;
 
-  static bool _defaultIsFailure(AuthState s) => s.status == AuthStatus.error;
+  static bool _defaultIsFailure(AuthState s) =>
+      s.status == AuthStatus.error;
 
   /// 清理本地持久化的 chat 数据。
   ///
@@ -1247,8 +1202,6 @@ class N42Chat {
   /// **注意**：本方法**不**清空 pending 通知队列——init 失败的重试路径
   /// 需要让用户在 init 前点击的通知在重试成功后仍能跳转。dispose() 单独清。
   static Future<void> _cleanupRuntimeResources() async {
-    _removeLifecycleObserver();
-
     try {
       await _momentSyncSubscription?.cancel();
     } catch (_) {}

@@ -3,9 +3,13 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/utils/matrix_utils.dart' as mx_utils;
+import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/remark_service.dart';
 import '../../../core/services/url_preview_service.dart';
@@ -23,6 +27,7 @@ import '../../../core/services/ai_service.dart';
 import '../../widgets/chat/message_reaction_bar.dart';
 import '../../widgets/chat/edit_history_sheet.dart';
 import '../../widgets/chat/thread_indicator.dart';
+import '../../widgets/chat/code_block_message_widget.dart';
 import 'message_item_helpers.dart';
 import '../../../core/utils/debug_log.dart';
 
@@ -385,6 +390,12 @@ class MessageItem extends StatelessWidget {
       case MessageType.image:
         content = _buildImageMessage();
         break;
+      case MessageType.sticker:
+        content = _buildStickerMessage();
+        break;
+      case MessageType.codeBlock:
+        content = CodeBlockMessageWidget(raw: message.content);
+        break;
       case MessageType.voice:
       case MessageType.audio:
         content = _buildVoiceMessage(context);
@@ -400,6 +411,9 @@ class MessageItem extends StatelessWidget {
         break;
       case MessageType.transfer:
         content = _buildTransferMessage();
+        break;
+      case MessageType.tip:
+        content = _buildTipMessage();
         break;
       case MessageType.paymentRequest:
         content = _buildPaymentRequestMessage(context);
@@ -888,6 +902,62 @@ class MessageItem extends StatelessWidget {
       isExpired: message.isExpired,
       isViewed: message.isDestructionStarted && !message.isExpired,
       isFromMe: message.isFromMe,
+    );
+  }
+
+  Widget _buildStickerMessage() {
+    final metadata = message.metadata;
+    final url = metadata?.httpUrl ?? metadata?.mediaUrl ?? '';
+    final mimeType = metadata?.mimeType ?? '';
+    const double size = 120;
+
+    Widget fallback() => Text(
+          message.content.isNotEmpty ? message.content : '🙂',
+          style: const TextStyle(fontSize: 40),
+        );
+
+    // 无有效媒体 URL（未上传/解析失败）时回退显示 body 文本
+    if (!url.startsWith('http')) {
+      return fallback();
+    }
+
+    final client = getIt.isRegistered<MatrixClientManager>()
+        ? getIt<MatrixClientManager>().client
+        : null;
+    final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+      url,
+      client: client,
+    );
+
+    final lower = url.toLowerCase();
+    final isLottie = mimeType.contains('lottie') ||
+        mimeType.contains('json') ||
+        lower.endsWith('.json');
+    final isSvg = mimeType.contains('svg') || lower.endsWith('.svg');
+    return SizedBox(
+      width: size,
+      height: size,
+      child: isLottie
+          ? Lottie.network(
+              url,
+              headers: headers,
+              fit: BoxFit.contain,
+              repeat: true,
+              errorBuilder: (_, _, _) => fallback(),
+            )
+          : isSvg
+              ? SvgPicture.network(
+                  url,
+                  headers: headers,
+                  fit: BoxFit.contain,
+                  placeholderBuilder: (_) => fallback(),
+                )
+              : Image.network(
+                  url,
+                  fit: BoxFit.contain,
+                  headers: headers,
+                  errorBuilder: (_, _, _) => fallback(),
+                ),
     );
   }
 
@@ -1395,6 +1465,64 @@ class MessageItem extends StatelessWidget {
     );
   }
 
+  /// 打赏消息（渐变气泡）
+  Widget _buildTipMessage() {
+    final metadata = message.metadata;
+    final amount = metadata?.amount ?? '0';
+    final token = metadata?.token ?? '';
+    final note = message.content.trim();
+    final confirmed = (metadata?.txHash ?? '').isNotEmpty;
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 260),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Color(0xFFFF6B9D), Color(0xFFFF9A56)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const Text('💝', style: TextStyle(fontSize: 20)),
+              const SizedBox(width: 8),
+              Text(
+                'Tip · $amount $token',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 16,
+                ),
+              ),
+            ],
+          ),
+          if (note.isNotEmpty) ...[
+            const SizedBox(height: 6),
+            Text(
+              note,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(color: Colors.white, fontSize: 13),
+            ),
+          ],
+          const SizedBox(height: 4),
+          Text(
+            confirmed ? 'On-chain ✓' : 'Sent',
+            style: TextStyle(
+              color: Colors.white.withValues(alpha: 0.85),
+              fontSize: 11,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildTransferMessage() {
     final metadata = message.metadata;
     final amount = metadata?.amount ?? '0';
@@ -1719,7 +1847,7 @@ class MessageItem extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: isSelected
                       ? AppColors.primary.withValues(alpha: 0.1)
-                      : (isDark ? Colors.grey[800] : Colors.grey[100]),
+                      : AppColors.inputBgOf(isDark),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
                     color: isSelected ? AppColors.primary : Colors.transparent,

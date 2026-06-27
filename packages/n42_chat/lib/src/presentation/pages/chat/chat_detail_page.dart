@@ -996,7 +996,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
                 fontSize: 12,
-                color: context.isDarkMode ? Colors.white70 : Colors.black54,
+                color: AppColors.textSecondaryOf(context.isDarkMode),
               ),
             ),
           ],
@@ -1166,14 +1166,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               height: 50,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: isDark ? Colors.white30 : Colors.black26,
+                  color: AppColors.textTertiaryOf(isDark),
                   width: 1,
                 ),
                 borderRadius: BorderRadius.circular(6),
               ),
               child: Icon(
                 icon,
-                color: isDark ? Colors.white30 : Colors.black26,
+                color: AppColors.textTertiaryOf(isDark),
                 size: 24,
               ),
             ),
@@ -1859,7 +1859,7 @@ class _GroupMemberListPageState extends State<_GroupMemberListPage> {
                 hintStyle: TextStyle(color: secondaryTextColor),
                 prefixIcon: Icon(Icons.search, color: secondaryTextColor),
                 filled: true,
-                fillColor: isDark ? Colors.white10 : Colors.grey[200],
+                fillColor: AppColors.inputBgOf(isDark),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,

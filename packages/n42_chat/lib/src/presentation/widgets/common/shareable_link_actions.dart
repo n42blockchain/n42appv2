@@ -239,14 +239,10 @@ class _ShareableLinkQrPageState extends State<_ShareableLinkQrPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final backgroundColor = isDark
-        ? AppColors.backgroundDark
-        : const Color(0xFFF3F5F7);
+    final backgroundColor = AppColors.bgOf(isDark);
     final cardColor = context.surfaceColor;
-    final primaryText = isDark ? Colors.white : AppColors.textPrimary;
-    final secondaryText = isDark
-        ? AppColors.textSecondaryDark
-        : AppColors.textSecondary;
+    final primaryText = AppColors.textPrimaryOf(isDark);
+    final secondaryText = AppColors.textSecondaryOf(isDark);
 
     return Scaffold(
       backgroundColor: backgroundColor,

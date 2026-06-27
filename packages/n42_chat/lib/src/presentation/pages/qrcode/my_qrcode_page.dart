@@ -153,10 +153,10 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? AppColors.surfaceDark : AppColors.background;
+    final bgColor = AppColors.bgOf(isDark);
     final cardColor = _qrCardColor(isDark);
-    final textColor = isDark ? Colors.white : AppColors.textPrimary;
-    final subtitleColor = isDark ? Colors.white70 : AppColors.textSecondary;
+    final textColor = AppColors.textPrimaryOf(isDark);
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -359,7 +359,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
             style: TextStyle(
               fontSize: 12,
               height: 1.3,
-              color: isDark ? Colors.white70 : AppColors.textSecondary,
+              color: AppColors.textSecondaryOf(isDark),
             ),
           ),
         ],

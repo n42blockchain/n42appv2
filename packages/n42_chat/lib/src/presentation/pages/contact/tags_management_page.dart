@@ -247,7 +247,7 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
                       Icon(
                         Icons.label_outline,
                         size: 64,
-                        color: isDark ? Colors.grey[600] : Colors.grey[400],
+                        color: AppColors.textTertiaryOf(isDark),
                       ),
                       const SizedBox(height: 16),
                       Text(

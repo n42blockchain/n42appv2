@@ -69,7 +69,7 @@ class _EditHistorySheetState extends State<EditHistorySheet> {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+            color: AppColors.surfaceOf(isDark),
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
           ),
           child: Column(
@@ -92,7 +92,7 @@ class _EditHistorySheetState extends State<EditHistorySheet> {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(isDark),
                   ),
                 ),
               ),
@@ -215,7 +215,7 @@ class _EditHistorySheetState extends State<EditHistorySheet> {
             entry.content,
             style: TextStyle(
               fontSize: 15,
-              color: isDark ? Colors.white : Colors.black87,
+              color: AppColors.textPrimaryOf(isDark),
               height: 1.4,
             ),
           ),

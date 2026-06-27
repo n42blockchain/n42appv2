@@ -132,7 +132,7 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                 hintText: s?.momentSelectFriends ?? 'Search',
                 prefixIcon: const Icon(Icons.search, size: 20),
                 filled: true,
-                fillColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                fillColor: AppColors.inputBgOf(isDark),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -177,7 +177,7 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                         selected: allSelected,
                         onSelected: (_) => _toggleTag(tag),
                         selectedColor: AppColors.primary,
-                        backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                        backgroundColor: AppColors.inputBgOf(isDark),
                         checkmarkColor: Colors.white,
                       );
                     }).toList(),
@@ -270,7 +270,7 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: Colors.white,
-                    disabledBackgroundColor: isDark ? Colors.grey[700] : Colors.grey[300],
+                    disabledBackgroundColor: AppColors.inputBgOf(isDark),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),

@@ -11,8 +11,8 @@ class ChatDeleteConfirmSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final bgColor = isDark ? const Color(0xFF2C2C2E) : Colors.white;
-    final separatorColor = isDark ? const Color(0xFF38383A) : const Color(0xFFE5E5EA);
+    final bgColor = AppColors.surfaceOf(isDark);
+    final separatorColor = AppColors.dividerOf(isDark);
 
     return SafeArea(
       child: Container(

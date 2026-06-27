@@ -1,15 +1,5 @@
 part of '../../n42_chat.dart';
 
-Future<void> _closeRouteFromHostContext(BuildContext hostContext) async {
-  final hostNavigator = N42Chat._navigatorKey?.currentState;
-  if (hostNavigator != null && hostNavigator.canPop()) {
-    hostNavigator.pop();
-    return;
-  }
-
-  await Navigator.of(hostContext).maybePop();
-}
-
 /// N42 Chat 入口Widget
 ///
 /// 根据登录状态自动切换页面：
@@ -80,14 +70,12 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
     super.dispose();
   }
 
-  Future<void> _closeChatRoute() => _closeRouteFromHostContext(context);
-
   void _navigateToLogin(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => BlocProvider.value(
           value: N42Chat.authBloc,
-          child: LoginPage(onClose: _closeChatRoute),
+          child: const LoginPage(),
         ),
       ),
     );
@@ -140,17 +128,20 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
 
                   // 已登录 - 显示主框架（微信风格底部Tab）
                   if (state.isAuthenticated) {
-                    return ChatMainPage(onBackToMain: _closeChatRoute);
+                    return ChatMainPage(
+                      onBackToMain: () {
+                        // 返回主应用 - 弹出整个 chat 路由（外层宿主导航栈）
+                        Navigator.of(context, rootNavigator: true).maybePop();
+                      },
+                    );
                   }
 
                   // 未登录 - 显示欢迎页面
                   return WelcomePage(
-                    onBack: _closeChatRoute,
                     onLogin: () => _navigateToLogin(context),
                     onRegister: () => _navigateToRegister(context),
                     onTermsOfService: () => _launchUrl(
-                      N42Chat._config?.termsOfServiceUrl ??
-                          'https://www.n42.ai/static/terms_of_use.html',
+                      N42Chat._config?.termsOfServiceUrl ?? 'https://www.n42.ai/static/terms_of_use.html',
                     ),
                     onPrivacyPolicy: () => _launchUrl(
                       N42Chat._config?.privacyPolicyUrl ??
@@ -176,9 +167,7 @@ class _LoadingPage extends StatelessWidget {
     final isDark = context.isDarkMode;
 
     return Scaffold(
-      backgroundColor: isDark
-          ? const Color(0xFF1E1E1E)
-          : const Color(0xFFEDEDED),
+      backgroundColor: AppColors.bgOf(isDark),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +191,7 @@ class _LoadingPage extends StatelessWidget {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.w500,
-                color: isDark ? Colors.white : const Color(0xFF181818),
+                color: AppColors.textPrimaryOf(isDark),
               ),
             ),
             const SizedBox(height: 16),
@@ -344,9 +333,9 @@ class _NotInitializedPageState extends State<_NotInitializedPage> {
     }
 
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? const Color(0xFF1E1E1E) : const Color(0xFFEDEDED);
-    final textColor = isDark ? Colors.white : const Color(0xFF181818);
-    final subtitleColor = isDark ? Colors.white70 : const Color(0xFF888888);
+    final bgColor = AppColors.bgOf(isDark);
+    final textColor = AppColors.textPrimaryOf(isDark);
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -496,14 +485,12 @@ class _N42ProfileEntryWidgetState extends State<_N42ProfileEntryWidget> {
     super.dispose();
   }
 
-  Future<void> _closeChatRoute() => _closeRouteFromHostContext(context);
-
   void _navigateToLogin(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => BlocProvider.value(
           value: N42Chat.authBloc,
-          child: LoginPage(onClose: _closeChatRoute),
+          child: const LoginPage(),
         ),
       ),
     );
@@ -550,12 +537,10 @@ class _N42ProfileEntryWidgetState extends State<_N42ProfileEntryWidget> {
 
             // 未登录 - 显示欢迎页面
             return WelcomePage(
-              onBack: _closeChatRoute,
               onLogin: () => _navigateToLogin(context),
               onRegister: () => _navigateToRegister(context),
               onTermsOfService: () => _launchUrl(
-                N42Chat._config?.termsOfServiceUrl ??
-                    'https://www.n42.ai/static/terms_of_use.html',
+                N42Chat._config?.termsOfServiceUrl ?? 'https://www.n42.ai/static/terms_of_use.html',
               ),
               onPrivacyPolicy: () => _launchUrl(
                 N42Chat._config?.privacyPolicyUrl ??

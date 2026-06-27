@@ -132,7 +132,7 @@ class _PhoneContactsPageState extends State<PhoneContactsPage> {
             Icon(
               Icons.contacts,
               size: 72,
-              color: isDark ? Colors.grey[600] : Colors.grey[400],
+              color: AppColors.textTertiaryOf(isDark),
             ),
             const SizedBox(height: 24),
             Text(
@@ -215,7 +215,7 @@ class _PhoneContactsPageState extends State<PhoneContactsPage> {
             Icon(
               Icons.person_search,
               size: 72,
-              color: isDark ? Colors.grey[600] : Colors.grey[400],
+              color: AppColors.textTertiaryOf(isDark),
             ),
             const SizedBox(height: 24),
             Text(

@@ -119,7 +119,7 @@ class _RedPacketHistoryPageState extends State<RedPacketHistoryPage>
             Text(
               'No red packets yet',
               style: TextStyle(
-                color: isDark ? Colors.white38 : Colors.grey.shade500,
+                color: AppColors.textTertiaryOf(isDark),
               ),
             ),
           ],

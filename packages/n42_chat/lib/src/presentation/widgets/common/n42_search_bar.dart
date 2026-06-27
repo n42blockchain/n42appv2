@@ -130,8 +130,7 @@ class _N42SearchBarState extends State<N42SearchBar> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = widget.backgroundColor ??
-        (isDark ? AppColors.surfaceDark : AppColors.searchBackground);
+    final bgColor = widget.backgroundColor ?? AppColors.inputBgOf(isDark);
     final tertiary = context.textTertiary;
 
     return Row(

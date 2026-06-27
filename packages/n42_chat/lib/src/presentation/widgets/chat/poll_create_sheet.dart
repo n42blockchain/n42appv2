@@ -107,7 +107,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.85,
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey[900] : Colors.white,
+        color: AppColors.surfaceOf(isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
@@ -118,7 +118,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
+                  color: AppColors.dividerOf(isDark),
                 ),
               ),
             ),
@@ -129,7 +129,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                   child: Text(
                     S.of(context)?.commonCancel ?? 'Cancel',
                     style: TextStyle(
-                      color: isDark ? Colors.white70 : Colors.black54,
+                      color: AppColors.textSecondaryOf(isDark),
                     ),
                   ),
                 ),
@@ -188,7 +188,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                   S.of(context)?.chatPollQuestionLabel ?? 'Poll Question',
                   style: TextStyle(
                     fontSize: 14,
-                    color: isDark ? Colors.white70 : Colors.black54,
+                    color: AppColors.textSecondaryOf(isDark),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -202,7 +202,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     filled: true,
-                    fillColor: isDark ? Colors.grey[850] : Colors.grey[100],
+                    fillColor: AppColors.inputBgOf(isDark),
                   ),
                 ),
 
@@ -216,14 +216,14 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                       S.of(context)?.chatPollOptionsLabel ?? 'Poll Options',
                       style: TextStyle(
                         fontSize: 14,
-                        color: isDark ? Colors.white70 : Colors.black54,
+                        color: AppColors.textSecondaryOf(isDark),
                       ),
                     ),
                     Text(
                       '${_optionControllers.length}/10',
                       style: TextStyle(
                         fontSize: 12,
-                        color: isDark ? Colors.white38 : Colors.black38,
+                        color: AppColors.textTertiaryOf(isDark),
                       ),
                     ),
                   ],
@@ -264,7 +264,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               filled: true,
-                              fillColor: isDark ? Colors.grey[850] : Colors.grey[100],
+                              fillColor: AppColors.inputBgOf(isDark),
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 10,
@@ -300,7 +300,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[850] : Colors.grey[100],
+                    color: AppColors.inputBgOf(isDark),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Column(
@@ -311,7 +311,7 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
-                          color: isDark ? Colors.white : Colors.black87,
+                          color: AppColors.textPrimaryOf(isDark),
                         ),
                       ),
                       const SizedBox(height: 12),

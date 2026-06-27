@@ -205,7 +205,7 @@ class FullReactionPicker extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: isDark ? Colors.white : AppColors.textPrimary,
+                    color: AppColors.textPrimaryOf(isDark),
                   ),
                 ),
                 IconButton(

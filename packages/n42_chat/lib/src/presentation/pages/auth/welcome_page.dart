@@ -66,7 +66,7 @@ class WelcomePage extends StatelessWidget {
           top: AppDimensions.spacingS,
         ),
         child: IconButton(
-          onPressed: onBack ?? () => _handleBack(context),
+          onPressed: onBack ?? () => Navigator.of(context).maybePop(),
           icon: Icon(
             AppIcons.back,
             color: context.textPrimary,
@@ -80,20 +80,6 @@ class WelcomePage extends StatelessWidget {
     );
   }
 
-  void _handleBack(BuildContext context) {
-    final localNavigator = Navigator.of(context);
-    final rootNavigator = Navigator.of(context, rootNavigator: true);
-
-    if (rootNavigator != localNavigator && rootNavigator.canPop()) {
-      rootNavigator.pop();
-      return;
-    }
-
-    if (localNavigator.canPop()) {
-      localNavigator.pop();
-    }
-  }
-
   Widget _buildHeader(BuildContext context) {
     return Column(
       children: [
@@ -104,7 +90,10 @@ class WelcomePage extends StatelessWidget {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [AppColors.primary, AppColors.primaryLight],
+              colors: [
+                AppColors.primary,
+                AppColors.primaryLight,
+              ],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
@@ -141,7 +130,9 @@ class WelcomePage extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: AppTextStyles.bodyLarge.copyWith(color: context.textSecondary),
+          style: AppTextStyles.bodyLarge.copyWith(
+            color: context.textSecondary,
+          ),
         ),
       ],
     );
@@ -152,28 +143,20 @@ class WelcomePage extends StatelessWidget {
       children: [
         _FeatureItem(
           icon: Icons.security,
-          title:
-              S.of(context)?.commonEndToEndEncryption ??
-              'End-to-end encryption',
-          description:
-              S.of(context)?.authMessagesOnlyYouCanSee ??
-              'Messages visible only to you and the recipient',
+          title: S.of(context)?.commonEndToEndEncryption ?? 'End-to-end encryption',
+          description: S.of(context)?.authMessagesOnlyYouCanSee ?? 'Messages visible only to you and the recipient',
         ),
         const SizedBox(height: 20),
         _FeatureItem(
           icon: Icons.public,
           title: S.of(context)?.authDecentralized ?? 'Decentralized',
-          description:
-              S.of(context)?.authBasedOnMatrix ??
-              'Built on the Matrix open protocol',
+          description: S.of(context)?.authBasedOnMatrix ?? 'Built on the Matrix open protocol',
         ),
         const SizedBox(height: 20),
         _FeatureItem(
           icon: Icons.account_balance_wallet,
           title: S.of(context)?.authWalletIntegration ?? 'Wallet Integration',
-          description:
-              S.of(context)?.authEasyCryptoTransfer ??
-              'Easy cryptocurrency transfers',
+          description: S.of(context)?.authEasyCryptoTransfer ?? 'Easy cryptocurrency transfers',
         ),
       ],
     );
@@ -279,7 +262,7 @@ class WelcomePage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(32, 12, 32, 24),
       decoration: BoxDecoration(
-        color: isDark ? AppColors.backgroundDark : Colors.white,
+        color: AppColors.bgOf(isDark),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.06),
@@ -359,3 +342,5 @@ class _FeatureItem extends StatelessWidget {
     );
   }
 }
+
+

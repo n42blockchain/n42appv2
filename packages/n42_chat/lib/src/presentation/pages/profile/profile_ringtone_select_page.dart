@@ -288,7 +288,7 @@ class RingtoneSelectPageState extends State<RingtoneSelectPage> {
     final s = S.of(context);
 
     return Scaffold(
-      backgroundColor: isDark ? AppColors.backgroundDark : const Color(0xFFF5F5F5),
+      backgroundColor: AppColors.bgOf(isDark),
       appBar: AppBar(
         backgroundColor: context.surfaceColor,
         elevation: 0,

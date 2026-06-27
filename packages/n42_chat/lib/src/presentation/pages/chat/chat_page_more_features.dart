@@ -377,6 +377,107 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     );
   }
 
+  /// 打赏：经钱包桥真实转账 + 发 n42.tip 渐变气泡（回填链上 txHash）
+  Future<void> _sendTip() async {
+    String? toAddress;
+    if (widget.conversation.isDirect &&
+        widget.conversation.directUserId != null) {
+      try {
+        final contact = await getIt<IContactRepository>()
+            .getContactById(widget.conversation.directUserId!);
+        toAddress = contact?.walletAddress;
+      } catch (_) {}
+    }
+    if (!mounted) return;
+    if (toAddress == null || toAddress.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Recipient has no wallet address')),
+      );
+      return;
+    }
+
+    final amountC = TextEditingController();
+    final tokenC = TextEditingController(text: 'USDT');
+    final noteC = TextEditingController();
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: context.surfaceColor,
+        title: const Text('Send a tip'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: amountC,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: 'Amount'),
+            ),
+            TextField(
+              controller: tokenC,
+              decoration: const InputDecoration(labelText: 'Token'),
+            ),
+            TextField(
+              controller: noteC,
+              decoration: const InputDecoration(labelText: 'Note (optional)'),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Tip'),
+          ),
+        ],
+      ),
+    );
+
+    final amount = amountC.text.trim();
+    final token = tokenC.text.trim().isEmpty ? 'USDT' : tokenC.text.trim();
+    final note = noteC.text.trim();
+    amountC.dispose();
+    tokenC.dispose();
+    noteC.dispose();
+    if (ok != true || !mounted) return;
+    if (amount.isEmpty || double.tryParse(amount) == null) return;
+
+    TransferResult result;
+    try {
+      result = await getIt<IWalletBridge>().requestTransfer(
+        toAddress: toAddress,
+        amount: amount,
+        token: token,
+        memo: note.isEmpty ? 'Tip' : note,
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Tip failed: $e')));
+      }
+      return;
+    }
+    if (!mounted) return;
+    if (!result.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Tip failed: ${result.errorMessage ?? ''}')),
+      );
+      return;
+    }
+
+    context.read<ChatBloc>().add(SendCustomMessage(
+          content: note,
+          type: MessageType.tip,
+          metadata: MessageMetadata(
+            amount: amount,
+            token: token,
+            txHash: result.transactionHash,
+          ),
+        ));
+  }
+
   Future<void> _openReceive() async {
     await Navigator.of(context).push<PaymentRequest>(
       MaterialPageRoute<PaymentRequest>(
@@ -806,6 +907,23 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
         ),
       );
     }
+  }
+
+  /// 统一表情面板内联发送 GIF（不经模态对话框）
+  void _onGifSelectedInline(GiphyGif gif) {
+    debugLog('ChatPage: Sending GIF (inline) - ${gif.title}');
+    context.read<ChatBloc>().add(
+      SendGifMessage(
+        gifUrl: gif.originalUrl,
+        previewUrl: gif.previewUrl,
+        width: gif.width,
+        height: gif.height,
+        title: gif.title,
+      ),
+    );
+    setState(() {
+      _showEmojiPicker = false;
+    });
   }
 
   /// 显示/隐藏贴纸选择器面板

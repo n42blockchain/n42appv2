@@ -400,9 +400,7 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
                           hintText: S.of(context)?.chatSearchLocation ?? 'Search location',
                           prefixIcon: const Icon(Icons.search),
                           filled: true,
-                          fillColor: isDark
-                              ? const Color(0xFF3A3A3C)
-                              : const Color(0xFFF2F2F7),
+                          fillColor: AppColors.inputBgOf(isDark),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(8),
                             borderSide: BorderSide.none,
@@ -782,7 +780,7 @@ class _LocationActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: isDark ? AppColors.backgroundDark : const Color(0xFFF5F5F5),
+      color: AppColors.bgOf(isDark),
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,

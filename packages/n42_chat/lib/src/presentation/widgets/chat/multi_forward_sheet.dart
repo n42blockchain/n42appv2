@@ -72,9 +72,9 @@ class _MultiForwardSheetState extends State<MultiForwardSheet> {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor = widget.isDark ? const Color(0xFF1C1C1E) : Colors.white;
-    final textColor = widget.isDark ? Colors.white : Colors.black;
-    final subtextColor = widget.isDark ? Colors.white54 : Colors.black54;
+    final bgColor = AppColors.surfaceOf(widget.isDark);
+    final textColor = AppColors.textPrimaryOf(widget.isDark);
+    final subtextColor = AppColors.textSecondaryOf(widget.isDark);
 
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,

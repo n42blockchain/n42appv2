@@ -957,6 +957,47 @@ extension _ChatPageMessageActionsMethods on _ChatPageState {
     _showMemberPicker(message);
   }
 
+  /// 将消息设为个人待办提醒（选日期+时间 → 到期弹本地通知）
+  Future<void> _remindMe(MessageEntity message) async {
+    final now = DateTime.now();
+    final date = await showDatePicker(
+      context: context,
+      initialDate: now.add(const Duration(hours: 1)),
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (date == null || !mounted) return;
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(now.add(const Duration(hours: 1))),
+    );
+    if (time == null || !mounted) return;
+    final dueAt =
+        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+    if (!getIt.isRegistered<ReminderService>()) return;
+    final preview = message.content.trim().isEmpty
+        ? '[${message.type.name}]'
+        : message.content;
+    await getIt<ReminderService>().createFromMessage(
+      text: preview,
+      dueAt: dueAt,
+      roomId: message.roomId,
+      roomName: widget.conversation.name,
+      messageId: message.id,
+      senderName: message.senderName,
+    );
+    if (!mounted) return;
+    String two(int n) => n.toString().padLeft(2, '0');
+    final label =
+        '${dueAt.year}-${two(dueAt.month)}-${two(dueAt.day)} ${two(dueAt.hour)}:${two(dueAt.minute)}';
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Reminder set · $label'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   /// 显示群成员选择器（@某人）
   Future<void> _showMemberPicker(MessageEntity message) async {
     final isDark = context.isDarkMode;

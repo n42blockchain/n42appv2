@@ -78,7 +78,7 @@ class _AiLinkSummaryCardState extends State<AiLinkSummaryCard> {
                 Icon(
                   _isExpanded ? Icons.expand_less : Icons.expand_more,
                   size: 16,
-                  color: isDark ? Colors.white38 : Colors.black38,
+                  color: AppColors.textTertiaryOf(isDark),
                 ),
               ],
             ),
@@ -112,7 +112,7 @@ class _AiLinkSummaryCardState extends State<AiLinkSummaryCard> {
                 widget.summary ?? '',
                 style: TextStyle(
                   fontSize: 13,
-                  color: isDark ? Colors.white70 : Colors.black87,
+                  color: AppColors.textSecondaryOf(isDark),
                   height: 1.4,
                 ),
               ),

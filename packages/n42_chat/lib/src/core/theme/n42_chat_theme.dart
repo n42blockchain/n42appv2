@@ -250,7 +250,7 @@ class N42ChatTheme {
           ? AppColors.surfaceDark
           : AppColors.inputBackground,
       outline: dividerColor,
-      outlineVariant: isDark ? AppColors.dividerThinDark : AppColors.dividerThin,
+      outlineVariant: AppColors.dividerThinOf(isDark),
     );
 
     final inputBorder = OutlineInputBorder(
@@ -462,11 +462,11 @@ class N42ChatTheme {
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return isDark ? AppColors.dividerDark : AppColors.divider;
+            return AppColors.dividerOf(isDark);
           }
           return states.contains(WidgetState.selected)
               ? primaryColor
-              : (isDark ? AppColors.dividerDark : AppColors.divider);
+              : AppColors.dividerOf(isDark);
         }),
         trackOutlineColor: const WidgetStatePropertyAll(Colors.transparent),
       ),

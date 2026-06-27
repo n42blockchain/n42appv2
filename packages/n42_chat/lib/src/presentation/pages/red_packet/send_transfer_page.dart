@@ -131,13 +131,11 @@ class _SendTransferPageState extends State<SendTransferPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? AppColors.backgroundDark : const Color(0xFFF5F5F5);
+    final bgColor = AppColors.bgOf(isDark);
     final surfaceColor = context.surfaceColor;
     final textColor = context.textPrimary;
-    final secondaryTextColor = isDark
-        ? AppColors.textSecondaryDark
-        : Colors.grey;
-    final chipBgColor = isDark ? Colors.white10 : Colors.grey[100];
+    final secondaryTextColor = AppColors.textSecondaryOf(isDark);
+    final chipBgColor = AppColors.inputBgOf(isDark);
     final dividerColor = context.dividerColor;
 
     return Scaffold(

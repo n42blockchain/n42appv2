@@ -5,6 +5,7 @@ import 'dart:async';
 import '../../domain/entities/sticker_pack_entity.dart';
 import '../../domain/repositories/sticker_repository.dart';
 import '../datasources/matrix/matrix_sticker_datasource.dart';
+import '../datasources/bundled_sticker_packs.dart';
 import '../../core/utils/debug_log.dart';
 
 /// 贴纸仓库实现
@@ -25,7 +26,13 @@ class StickerRepositoryImpl implements IStickerRepository {
       return _installedPacksCache!;
     }
 
-    final packs = await _dataSource.getInstalledPacks();
+    final remotePacks = await _dataSource.getInstalledPacks();
+    // 内置贴纸包始终置顶且默认"已安装"，保证面板不空；按 id 去重避免与远端重复。
+    final bundledIds = BundledStickerPacks.all.map((p) => p.id).toSet();
+    final packs = <StickerPack>[
+      ...BundledStickerPacks.all,
+      ...remotePacks.where((p) => !bundledIds.contains(p.id)),
+    ];
     _installedPacksCache = packs;
     return packs;
   }

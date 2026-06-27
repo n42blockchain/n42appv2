@@ -44,7 +44,7 @@ class PaymentCommerceSheet extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
-                  color: isDark ? Colors.white : AppColors.textPrimary,
+                  color: AppColors.textPrimaryOf(isDark),
                 ),
               ),
               const SizedBox(height: 18),
@@ -102,7 +102,7 @@ class PaymentCommerceSheet extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
-                      color: isDark ? Colors.white : AppColors.textPrimary,
+                      color: AppColors.textPrimaryOf(isDark),
                     ),
                   ),
                   if (action.subtitle != null) ...[

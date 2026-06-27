@@ -545,7 +545,7 @@ class _SpaceDetailScaffold extends StatelessWidget {
             Icon(
               icon,
               size: 18,
-              color: isDark ? Colors.white54 : AppColors.textSecondary,
+              color: AppColors.textSecondaryOf(isDark),
             ),
             const SizedBox(width: 8),
             Text(
@@ -556,7 +556,7 @@ class _SpaceDetailScaffold extends StatelessWidget {
                 fontSize: 13,
                 height: 1.3,
                 fontWeight: FontWeight.w600,
-                color: isDark ? Colors.white54 : AppColors.textSecondary,
+                color: AppColors.textSecondaryOf(isDark),
               ),
             ),
             const SizedBox(width: 4),

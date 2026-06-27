@@ -80,7 +80,7 @@ class TranslatedMessageWidget extends StatelessWidget {
                 isOriginalDisplay ? Icons.edit : Icons.check_circle,
                 size: 12,
                 color: isOriginalDisplay
-                    ? (isDark ? Colors.white38 : Colors.black38)
+                    ? (AppColors.textTertiaryOf(isDark))
                     : (isDark
                           ? const Color(0xFF66BB6A)
                           : const Color(0xFF43A047)),
@@ -92,7 +92,7 @@ class TranslatedMessageWidget extends StatelessWidget {
                     : _getTranslationLabel(l10n),
                 style: TextStyle(
                   fontSize: 11,
-                  color: isDark ? Colors.white38 : Colors.black38,
+                  color: AppColors.textTertiaryOf(isDark),
                 ),
               ),
             ],
@@ -118,7 +118,7 @@ class TranslatedMessageWidget extends StatelessWidget {
             child: CircularProgressIndicator(
               strokeWidth: 1.5,
               valueColor: AlwaysStoppedAnimation<Color>(
-                isDark ? Colors.white38 : Colors.black26,
+                AppColors.textTertiaryOf(isDark),
               ),
             ),
           ),
@@ -127,7 +127,7 @@ class TranslatedMessageWidget extends StatelessWidget {
             l10n?.commonTranslating ?? 'Translating...',
             style: TextStyle(
               fontSize: 12,
-              color: isDark ? Colors.white38 : Colors.black38,
+              color: AppColors.textTertiaryOf(isDark),
             ),
           ),
         ],

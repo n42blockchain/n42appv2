@@ -252,25 +252,16 @@ class MessageRepositoryImpl implements IMessageRepository {
     List<String>? mentionedUserIds,
     bool mentionsRoom = false,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendTextMessage(
-        roomId,
-        text,
-        selfDestructAfter: selfDestructAfter,
-        mentionedUserIds: mentionedUserIds,
-        mentionsRoom: mentionsRoom,
-      ),
-      'sendTextMessage',
+    final eventId = await _messageDataSource.sendTextMessage(
+      roomId,
+      text,
+      selfDestructAfter: selfDestructAfter,
+      mentionedUserIds: mentionedUserIds,
+      mentionsRoom: mentionsRoom,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
-  }
-
-  String _requireEventId(String? eventId, String operation) {
-    if (eventId == null || eventId.isEmpty) {
-      throw StateError('$operation failed: Matrix server returned no event id');
-    }
-    return eventId;
   }
 
   @override
@@ -281,16 +272,14 @@ class MessageRepositoryImpl implements IMessageRepository {
     String? mimeType,
     int? selfDestructAfter,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendImageMessage(
-        roomId,
-        imageBytes: imageBytes,
-        filename: filename,
-        mimeType: mimeType,
-        selfDestructAfter: selfDestructAfter,
-      ),
-      'sendImageMessage',
+    final eventId = await _messageDataSource.sendImageMessage(
+      roomId,
+      imageBytes: imageBytes,
+      filename: filename,
+      mimeType: mimeType,
+      selfDestructAfter: selfDestructAfter,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -304,17 +293,15 @@ class MessageRepositoryImpl implements IMessageRepository {
     String? mimeType,
     int? selfDestructAfter,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendVoiceMessage(
-        roomId,
-        audioBytes: audioBytes,
-        filename: filename,
-        duration: duration,
-        mimeType: mimeType,
-        selfDestructAfter: selfDestructAfter,
-      ),
-      'sendVoiceMessage',
+    final eventId = await _messageDataSource.sendVoiceMessage(
+      roomId,
+      audioBytes: audioBytes,
+      filename: filename,
+      duration: duration,
+      mimeType: mimeType,
+      selfDestructAfter: selfDestructAfter,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -328,17 +315,15 @@ class MessageRepositoryImpl implements IMessageRepository {
     Uint8List? thumbnailBytes,
     int? selfDestructAfter,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendVideoMessage(
-        roomId,
-        videoBytes: videoBytes,
-        filename: filename,
-        mimeType: mimeType,
-        thumbnailBytes: thumbnailBytes,
-        selfDestructAfter: selfDestructAfter,
-      ),
-      'sendVideoMessage',
+    final eventId = await _messageDataSource.sendVideoMessage(
+      roomId,
+      videoBytes: videoBytes,
+      filename: filename,
+      mimeType: mimeType,
+      thumbnailBytes: thumbnailBytes,
+      selfDestructAfter: selfDestructAfter,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -354,19 +339,17 @@ class MessageRepositoryImpl implements IMessageRepository {
     Stream<List<int>>? fileStream,
     int? fileSize,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendFileMessage(
-        roomId,
-        fileBytes: fileBytes,
-        filename: filename,
-        mimeType: mimeType,
-        selfDestructAfter: selfDestructAfter,
-        filePath: filePath,
-        fileStream: fileStream,
-        fileSize: fileSize,
-      ),
-      'sendFileMessage',
+    final eventId = await _messageDataSource.sendFileMessage(
+      roomId,
+      fileBytes: fileBytes,
+      filename: filename,
+      mimeType: mimeType,
+      selfDestructAfter: selfDestructAfter,
+      filePath: filePath,
+      fileStream: fileStream,
+      fileSize: fileSize,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -378,15 +361,13 @@ class MessageRepositoryImpl implements IMessageRepository {
     required double longitude,
     String? description,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendLocationMessage(
-        roomId,
-        latitude: latitude,
-        longitude: longitude,
-        description: description,
-      ),
-      'sendLocationMessage',
+    final eventId = await _messageDataSource.sendLocationMessage(
+      roomId,
+      latitude: latitude,
+      longitude: longitude,
+      description: description,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -400,17 +381,15 @@ class MessageRepositoryImpl implements IMessageRepository {
     int? height,
     String? title,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendGifMessage(
-        roomId,
-        gifUrl: gifUrl,
-        previewUrl: previewUrl,
-        width: width,
-        height: height,
-        title: title,
-      ),
-      'sendGifMessage',
+    final eventId = await _messageDataSource.sendGifMessage(
+      roomId,
+      gifUrl: gifUrl,
+      previewUrl: previewUrl,
+      width: width,
+      height: height,
+      title: title,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -429,22 +408,20 @@ class MessageRepositoryImpl implements IMessageRepository {
     String? mimeType,
     int? size,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendStickerMessage(
-        roomId,
-        stickerId: stickerId,
-        packId: packId,
-        url: url,
-        httpUrl: httpUrl,
-        name: name,
-        emoji: emoji,
-        width: width,
-        height: height,
-        mimeType: mimeType,
-        size: size,
-      ),
-      'sendStickerMessage',
+    final eventId = await _messageDataSource.sendStickerMessage(
+      roomId,
+      stickerId: stickerId,
+      packId: packId,
+      url: url,
+      httpUrl: httpUrl,
+      name: name,
+      emoji: emoji,
+      width: width,
+      height: height,
+      mimeType: mimeType,
+      size: size,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -481,17 +458,15 @@ class MessageRepositoryImpl implements IMessageRepository {
     List<String>? mentionedUserIds,
     bool mentionsRoom = false,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.replyToMessage(
-        roomId,
-        replyToMessageId,
-        text,
-        selfDestructAfter: selfDestructAfter,
-        mentionedUserIds: mentionedUserIds,
-        mentionsRoom: mentionsRoom,
-      ),
-      'replyToMessage',
+    final eventId = await _messageDataSource.replyToMessage(
+      roomId,
+      replyToMessageId,
+      text,
+      selfDestructAfter: selfDestructAfter,
+      mentionedUserIds: mentionedUserIds,
+      mentionsRoom: mentionsRoom,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -502,10 +477,12 @@ class MessageRepositoryImpl implements IMessageRepository {
     String messageId,
     String newText,
   ) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.editMessage(roomId, messageId, newText),
-      'editMessage',
+    final eventId = await _messageDataSource.editMessage(
+      roomId,
+      messageId,
+      newText,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }
@@ -1323,14 +1300,12 @@ class MessageRepositoryImpl implements IMessageRepository {
     String text, {
     required int selfDestructAfter,
   }) async {
-    final eventId = _requireEventId(
-      await _messageDataSource.sendTextMessage(
-        roomId,
-        text,
-        selfDestructAfter: selfDestructAfter,
-      ),
-      'sendSelfDestructingMessage',
+    final eventId = await _messageDataSource.sendTextMessage(
+      roomId,
+      text,
+      selfDestructAfter: selfDestructAfter,
     );
+    if (eventId == null) return null;
 
     return _getMessageById(roomId, eventId);
   }

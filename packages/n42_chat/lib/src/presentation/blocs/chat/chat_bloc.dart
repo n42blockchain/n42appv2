@@ -190,22 +190,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     return defaultSeconds;
   }
 
-  void _kickSync(String reason) {
-    final clientManager = _clientManager;
-    if (clientManager == null) return;
-
-    unawaited(
-      clientManager
-          .ensureSyncRunning(
-            timeout: const Duration(seconds: 5),
-            reason: reason,
-          )
-          .catchError((Object e) {
-            debugLog('ChatBloc: ensure sync failed ($reason): $e');
-          }),
-    );
-  }
-
   /// 处理销毁时间加载完成事件
   Future<void> _onDestructionTimesLoaded(
     DestructionTimesLoaded event,
@@ -245,7 +229,6 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ) async {
     _currentRoomId = event.roomId;
     _locallyDeletedMessageIds.clear();
-    _kickSync('open room ${event.roomId}');
 
     // 从持久化存储加载已删除的消息ID（异步，不阻塞）
     _loadDeletedMessageIds(event.roomId);

@@ -47,6 +47,7 @@ class WeChatMessageMenu extends StatelessWidget {
   final VoidCallback? onReplyInThread; // 在线程中回复
   final VoidCallback? onEdit; // 编辑消息
   final VoidCallback? onReport; // 举报消息
+  final VoidCallback? onRemindMe; // 设为待办提醒
 
   /// 表情回应回调
   final void Function(String emoji)? onReaction;
@@ -78,6 +79,7 @@ class WeChatMessageMenu extends StatelessWidget {
     this.onReplyInThread,
     this.onEdit,
     this.onReport,
+    this.onRemindMe,
     this.onReaction,
   });
 
@@ -243,6 +245,12 @@ class WeChatMessageMenu extends StatelessWidget {
                     label: s?.commonQuote ?? 'Quote',
                     onTap: () { onDismiss(); onQuote?.call(); },
                   ),
+                  if (onRemindMe != null)
+                    _buildMenuItem(
+                      icon: Icons.alarm_add_outlined,
+                      label: 'Remind',
+                      onTap: () { onDismiss(); onRemindMe?.call(); },
+                    ),
                   if (message.isFromMe &&
                       message.type == MessageType.text &&
                       onEdit != null)
@@ -488,8 +496,8 @@ class _RecallConfirmSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? const Color(0xFF2C2C2E) : Colors.white;
-    final separatorColor = isDark ? const Color(0xFF38383A) : const Color(0xFFE5E5EA);
+    final bgColor = AppColors.surfaceOf(isDark);
+    final separatorColor = AppColors.dividerOf(isDark);
     
     return SafeArea(
       child: Container(

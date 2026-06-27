@@ -118,6 +118,10 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
           debugLog('Search clicked');
           _searchMessage(message);
         },
+        onRemindMe: () {
+          debugLog('Remind me clicked');
+          _remindMe(message);
+        },
         onDelete: () {
           debugLog('Delete message locally clicked');
           _deleteMessageLocally(message);

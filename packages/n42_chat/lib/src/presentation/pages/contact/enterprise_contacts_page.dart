@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/theme/app_colors.dart';
 import '../../widgets/common/common_widgets.dart';
 
 /// 企业联系人列表页面
@@ -25,7 +26,7 @@ class EnterpriseContactsPage extends StatelessWidget {
             child: Container(
               height: 36,
               decoration: BoxDecoration(
-                color: isDark ? const Color(0xFF3A3A3C) : const Color(0xFFF2F2F7),
+                color: AppColors.inputBgOf(isDark),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Row(

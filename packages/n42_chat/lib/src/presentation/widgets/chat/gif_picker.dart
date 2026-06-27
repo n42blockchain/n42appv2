@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../../../core/extensions/context_extension.dart';
-import '../../../core/services/gif_service.dart';
 import '../../../core/services/giphy_service.dart';
+import '../../../core/services/gif_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/debug_log.dart';
 import 'scheduled_send_picker.dart';
@@ -207,7 +207,10 @@ class _GifPickerState extends State<GifPicker> {
       decoration: BoxDecoration(
         color: context.inputBarColor,
         border: Border(
-          top: BorderSide(color: context.dividerColor, width: 0.5),
+          top: BorderSide(
+            color: context.dividerColor,
+            width: 0.5,
+          ),
         ),
       ),
       child: SafeArea(
@@ -239,10 +242,16 @@ class _GifPickerState extends State<GifPicker> {
         ),
         child: TextField(
           controller: _searchController,
-          style: TextStyle(fontSize: 14, color: context.textPrimary),
+          style: TextStyle(
+            fontSize: 14,
+            color: context.textPrimary,
+          ),
           decoration: InputDecoration(
             hintText: 'Search GIFs...',
-            hintStyle: TextStyle(fontSize: 14, color: context.textTertiary),
+            hintStyle: TextStyle(
+              fontSize: 14,
+              color: context.textTertiary,
+            ),
             prefixIcon: Icon(
               Icons.search,
               size: 20,
@@ -281,12 +290,17 @@ class _GifPickerState extends State<GifPicker> {
             SizedBox(height: 8),
             Text(
               'GIF service not configured',
-              style: TextStyle(color: AppColors.textTertiary),
+              style: TextStyle(
+                color: AppColors.textTertiary,
+              ),
             ),
             SizedBox(height: 4),
             Text(
               'Please configure Giphy API key',
-              style: TextStyle(fontSize: 12, color: AppColors.textTertiary),
+              style: TextStyle(
+                fontSize: 12,
+                color: AppColors.textTertiary,
+              ),
             ),
           ],
         ),
@@ -310,7 +324,9 @@ class _GifPickerState extends State<GifPicker> {
             const SizedBox(height: 8),
             Text(
               _currentQuery.isEmpty ? 'No trending GIFs' : 'No GIFs found',
-              style: const TextStyle(color: AppColors.textTertiary),
+              style: const TextStyle(
+                color: AppColors.textTertiary,
+              ),
             ),
           ],
         ),
@@ -351,7 +367,7 @@ class _GifPickerState extends State<GifPicker> {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(8),
         child: Container(
-          color: isDark ? Colors.grey[800] : Colors.grey[200],
+          color: AppColors.placeholderOf(isDark),
           child: Image.network(
             gif.previewUrl,
             fit: BoxFit.cover,
@@ -383,7 +399,10 @@ class _GifPickerState extends State<GifPicker> {
         children: [
           const Text(
             'Powered by ',
-            style: TextStyle(fontSize: 10, color: AppColors.textTertiary),
+            style: TextStyle(
+              fontSize: 10,
+              color: AppColors.textTertiary,
+            ),
           ),
           Image.network(
             'https://giphy.com/static/img/giphy_logo_small.png',

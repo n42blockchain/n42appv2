@@ -39,7 +39,7 @@ class ChatFolderTabBar extends StatelessWidget {
     return Container(
       height: 40,
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(isDark),
         border: Border(
           bottom: BorderSide(
             color: isDark ? Colors.white.withValues(alpha: 0.06) : Colors.black.withValues(alpha: 0.06),
@@ -92,7 +92,7 @@ class ChatFolderTabBar extends StatelessWidget {
                 fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                 color: isSelected
                     ? AppColors.primary
-                    : (isDark ? Colors.white60 : Colors.black54),
+                    : AppColors.textSecondaryOf(isDark),
               ),
             ),
             if (folder.showUnreadBadge && folder.unreadChatsCount > 0) ...[
@@ -130,7 +130,7 @@ class ChatFolderTabBar extends StatelessWidget {
         child: Icon(
           Icons.add,
           size: 20,
-          color: isDark ? Colors.white38 : Colors.black38,
+          color: AppColors.textTertiaryOf(isDark),
         ),
       ),
     );

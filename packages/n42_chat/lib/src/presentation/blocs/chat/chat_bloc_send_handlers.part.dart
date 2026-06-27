@@ -24,7 +24,6 @@ extension ChatBlocSendHandlers on ChatBloc {
       }
     }
 
-    _kickSync('before send $actionLabel');
     return true;
   }
 
@@ -68,8 +67,6 @@ extension ChatBlocSendHandlers on ChatBloc {
         return;
       }
     }
-
-    _kickSync('before send text');
 
     // 智能回复翻译：发送前自动翻译为对方语言
     String textToSend = event.text;
@@ -167,8 +164,7 @@ extension ChatBlocSendHandlers on ChatBloc {
         emit(newState);
       }
     } catch (e) {
-      debugLog('ChatBloc: Send text error - $e');
-      emit(state.copyWith(isSending: false, error: 'Failed to send: $e'));
+      emit(state.copyWith(isSending: false, error: 'Failed to send'));
     }
   }
 
@@ -480,6 +476,28 @@ extension ChatBlocSendHandlers on ChatBloc {
             'artist': event.metadata?.musicArtist ?? '',
             'url': event.metadata?.musicUrl ?? '',
             'cover': event.metadata?.musicCover ?? '',
+          },
+        );
+      } else if (event.type == MessageType.codeBlock) {
+        // 发送代码块消息：body 用 markdown 围栏 ```lang\ncode\n``` 编码语言，
+        // N42 客户端按 MessageType.codeBlock 富渲染；其它客户端回退为代码围栏文本。
+        eventId = await _messageRepository.sendCustomMessage(
+          _currentRoomId!,
+          msgType: 'n42.code_block',
+          content: event.content,
+          additionalData: const {},
+        );
+      } else if (event.type == MessageType.tip) {
+        // 发送打赏消息（金额/代币/链上交易哈希）
+        eventId = await _messageRepository.sendCustomMessage(
+          _currentRoomId!,
+          msgType: 'n42.tip',
+          content: event.content,
+          additionalData: {
+            'amount': event.metadata?.amount ?? '0',
+            'token': event.metadata?.token ?? '',
+            if (event.metadata?.txHash != null)
+              'tx_hash': event.metadata!.txHash,
           },
         );
       }

@@ -62,6 +62,9 @@ import '../../blocs/transfer/transfer_bloc.dart';
 import '../../widgets/chat/chat_widgets.dart';
 import '../../widgets/chat/gif_picker.dart';
 import '../../widgets/chat/sticker_picker.dart';
+import '../../widgets/chat/expression_panel.dart';
+import '../../../core/services/giphy_service.dart';
+import '../../../core/services/reminder_service.dart';
 import '../../widgets/chat/red_packet_dialogs.dart';
 import '../sticker/sticker_store_page.dart';
 import '../../widgets/chat/edit_history_sheet.dart';
@@ -161,6 +164,8 @@ class _ChatPageState extends State<ChatPage> {
   bool _showMorePanel = false;
   bool _showEmojiPicker = false;
   bool _showStickerPicker = false;
+  // 统一表情面板初始分页（emoji 按钮→emoji；"+"菜单贴纸/GIF→对应分页）
+  ExpressionTab _expressionInitialTab = ExpressionTab.emoji;
   String? _highlightedMessageId;
 
   // 录音状态

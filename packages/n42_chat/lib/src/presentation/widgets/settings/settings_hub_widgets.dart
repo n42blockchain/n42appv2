@@ -24,7 +24,7 @@ class SettingsHubOverviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final cardColor = context.surfaceColor;
-    final titleColor = isDark ? Colors.white : AppColors.textPrimary;
+    final titleColor = AppColors.textPrimaryOf(isDark);
     final subtitleColor = context.textSecondary;
 
     return Container(
@@ -168,7 +168,7 @@ class SettingsHubActionTile extends StatelessWidget {
                         title,
                         style: TextStyle(
                           fontSize: 16,
-                          color: isDark ? Colors.white : AppColors.textPrimary,
+                          color: AppColors.textPrimaryOf(isDark),
                         ),
                       ),
                       const SizedBox(height: 2),
@@ -215,7 +215,7 @@ class SettingsHubChip extends StatelessWidget {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: isDark ? Colors.white : AppColors.textPrimary,
+          color: AppColors.textPrimaryOf(isDark),
         ),
       ),
     );

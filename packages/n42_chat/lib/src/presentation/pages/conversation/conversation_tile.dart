@@ -262,7 +262,7 @@ class ConversationTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   height: 1.3,
-                  color: isDark ? Colors.white38 : AppColors.textTertiary,
+                  color: AppColors.textTertiaryOf(isDark),
                 ),
               ),
           ],
@@ -295,7 +295,7 @@ class ConversationTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.3,
-                  color: isDark ? Colors.white38 : AppColors.textSecondary,
+                  color: AppColors.textSecondaryOf(isDark),
                 ),
               ),
             ),

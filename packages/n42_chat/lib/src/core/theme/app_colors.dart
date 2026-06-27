@@ -260,6 +260,45 @@ abstract class AppColors {
 
   /// 时间分隔器文字（已弃用背景色，改为纯文字）
   static const Color timeSeparator = Color(0xFF808080);
+
+  // ============================================
+  // 主题解析器 (Theme resolvers)
+  // 设计文档 §3：消除散落的 `isDark ? light : dark` 三元，统一走命名令牌解析。
+  // 暗色采用设计系统既定档（如主文字 #E5E5E5 而非纯白、辅助文字 #6B6B6B），
+  // 故个别站点从裸 white/black/grey[N]/inline-hex 归一到这些档会有细微但合规的位移。
+  // 仅用于「成对语义色」；纯 alpha 调节(primary.withValues)/非色值(brightness/elevation) 不在此列。
+  // ============================================
+
+  /// 页面背景：浅 #EDEDED / 深 #111111
+  static Color bgOf(bool isDark) => isDark ? backgroundDark : background;
+
+  /// 卡片 / Sheet / 弹层表面：浅 #FFFFFF / 深 #1E1E1E
+  static Color surfaceOf(bool isDark) => isDark ? surfaceDark : surface;
+
+  /// 主文字：浅 #181818 / 深 #E5E5E5
+  static Color textPrimaryOf(bool isDark) => isDark ? textPrimaryDark : textPrimary;
+
+  /// 次要文字：浅 #888888 / 深 #AAAAAA
+  static Color textSecondaryOf(bool isDark) =>
+      isDark ? textSecondaryDark : textSecondary;
+
+  /// 辅助 / 占位 / hint 文字：浅 #B2B2B2 / 深 #6B6B6B
+  static Color textTertiaryOf(bool isDark) =>
+      isDark ? textTertiaryDark : textTertiary;
+
+  /// 分隔线 / 描边：浅 #E5E5E5 / 深 #3D3D3D
+  static Color dividerOf(bool isDark) => isDark ? dividerDark : divider;
+
+  /// 细分隔线：浅 #F0F0F0 / 深 #2A2A2A
+  static Color dividerThinOf(bool isDark) =>
+      isDark ? dividerThinDark : dividerThin;
+
+  /// 输入 / 填充背景：浅 #F7F7F7 / 深 #2C2C2C
+  static Color inputBgOf(bool isDark) => isDark ? inputBarDark : inputBackground;
+
+  /// 占位 / 图片加载底 / 中性填充：浅 #E5E5E5 / 深 #2A2A2A
+  static Color placeholderOf(bool isDark) =>
+      isDark ? placeholderDark : placeholder;
 }
 
 /// 颜色调色板

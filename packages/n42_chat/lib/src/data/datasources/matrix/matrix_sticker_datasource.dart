@@ -1,9 +1,11 @@
 import 'dart:typed_data';
 
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:matrix/matrix.dart' as matrix;
 
 import '../../../core/utils/matrix_utils.dart';
 import '../../../domain/entities/sticker_pack_entity.dart';
+import '../bundled_sticker_packs.dart';
 import 'matrix_client_manager.dart';
 import '../../../core/utils/debug_log.dart';
 
@@ -385,6 +387,9 @@ class MatrixStickerDataSource {
     return MatrixUtils.getMediaDownloadUrl(mxcUrl, client: _client);
   }
 
+  /// 内置 asset 贴纸上传后的 mxc 缓存（避免每次发送重复上传）
+  static final Map<String, String> _assetMxcCache = {};
+
   /// 发送贴纸消息
   Future<String?> sendStickerMessage(String roomId, Sticker sticker) async {
     if (_client == null) return null;
@@ -399,10 +404,36 @@ class MatrixStickerDataSource {
         return await room.sendTextEvent(emoji);
       }
 
+      // 内置 asset 贴纸（SVG）：首次发送时把资源字节上传到媒体库换取 mxc，
+      // 之后复用缓存。这样接收方（含其它客户端）可从媒体库下载渲染。
+      var mxcUrl = sticker.url;
+      if (BundledStickerPacks.isAssetSticker(sticker.url)) {
+        final cached = _assetMxcCache[sticker.url];
+        if (cached != null) {
+          mxcUrl = cached;
+        } else {
+          final path = BundledStickerPacks.assetPath(sticker.url);
+          final data = await rootBundle.load(path);
+          final bytes = data.buffer.asUint8List();
+          final filename = path.split('/').last;
+          final uploaded = await uploadStickerImage(
+            bytes,
+            filename,
+            BundledStickerPacks.mimeForAsset(sticker.url),
+          );
+          if (uploaded == null) {
+            // 上传失败兜底：发 emoji 文本，保证用户操作有反馈
+            return await room.sendTextEvent(sticker.emoji ?? sticker.name ?? '🙂');
+          }
+          _assetMxcCache[sticker.url] = uploaded;
+          mxcUrl = uploaded;
+        }
+      }
+
       // 发送图片贴纸
       final content = {
         'body': sticker.name ?? sticker.emoji ?? 'sticker',
-        'url': sticker.url,
+        'url': mxcUrl,
         'info': {
           'w': sticker.width ?? 256,
           'h': sticker.height ?? 256,

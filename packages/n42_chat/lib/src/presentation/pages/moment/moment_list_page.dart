@@ -16,6 +16,7 @@ import '../../widgets/common/n42_avatar.dart';
 import '../chat/viewers/video_player_page.dart';
 import 'create_moment_page.dart';
 import 'moment_forward_sheet.dart';
+import 'video_feed_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 朋友圈列表页面
@@ -174,6 +175,16 @@ class _MomentListViewState extends State<_MomentListView> {
               style: TextStyle(color: context.textPrimary),
             ),
             actions: [
+              if (!_isUserMode)
+                IconButton(
+                  icon: const Icon(Icons.video_collection_outlined),
+                  tooltip: 'Videos',
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const VideoFeedPage(),
+                    ),
+                  ),
+                ),
               if (!_isUserMode)
                 IconButton(
                   icon: const Icon(Icons.camera_alt_outlined),
@@ -608,12 +619,12 @@ class _MomentTile extends StatelessWidget {
           fit: BoxFit.cover,
           httpHeaders: _getAuthHeaders(),
           placeholder: (_, _) =>
-              Container(color: isDark ? Colors.grey[850] : Colors.grey[800]),
+              Container(color: AppColors.placeholderOf(isDark)),
           errorWidget: (_, _, _) =>
-              Container(color: isDark ? Colors.grey[850] : Colors.grey[800]),
+              Container(color: AppColors.placeholderOf(isDark)),
         );
       }
-      return Container(color: isDark ? Colors.grey[850] : Colors.grey[800]);
+      return Container(color: AppColors.placeholderOf(isDark));
     }
 
     if (media.httpUrl != null) {
@@ -622,7 +633,7 @@ class _MomentTile extends StatelessWidget {
         fit: BoxFit.cover,
         httpHeaders: _getAuthHeaders(),
         placeholder: (_, _) =>
-            Container(color: isDark ? Colors.grey[800] : Colors.grey[200]),
+            Container(color: AppColors.placeholderOf(isDark)),
         errorWidget: (_, _, _) => const Icon(Icons.image),
       );
     }
@@ -674,7 +685,7 @@ class _MomentTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: isDark ? Colors.grey[800] : Colors.grey[200],
+            color: AppColors.inputBgOf(isDark),
             borderRadius: BorderRadius.circular(4),
           ),
           child: Icon(
@@ -860,7 +871,7 @@ class _MomentTile extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey[850] : Colors.grey[100],
+        color: AppColors.inputBgOf(isDark),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Column(

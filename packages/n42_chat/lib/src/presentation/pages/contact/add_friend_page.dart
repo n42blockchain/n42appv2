@@ -820,7 +820,7 @@ class _MethodCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: context.surfaceColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: isDark ? Colors.white10 : AppColors.divider),
+        border: Border.all(color: AppColors.dividerOf(isDark)),
       ),
       child: Row(
         children: [

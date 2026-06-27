@@ -234,7 +234,7 @@ class _CallEnhancementSheetState extends State<CallEnhancementSheet> {
     final isDark = context.isDarkMode;
     final backgroundColor = context.surfaceColor;
     final dividerColor = Colors.white.withValues(alpha: isDark ? 0.10 : 0.08);
-    final subtitleColor = isDark ? Colors.white70 : Colors.black54;
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
     final audioConfig = _controller.audioProcessingConfig;
     final canToggleBackgroundBlur =
         !_isBusy &&
@@ -396,7 +396,7 @@ class _SwitchTile extends StatelessWidget {
     final tileColor = isDark
         ? Colors.white.withValues(alpha: 0.04)
         : Colors.black.withValues(alpha: 0.03);
-    final subtitleColor = isDark ? Colors.white70 : Colors.black54;
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
@@ -447,7 +447,7 @@ class _ActionTile extends StatelessWidget {
     final tileColor = isDark
         ? Colors.white.withValues(alpha: 0.04)
         : Colors.black.withValues(alpha: 0.03);
-    final subtitleColor = isDark ? Colors.white70 : Colors.black54;
+    final subtitleColor = AppColors.textSecondaryOf(isDark);
 
     return Container(
       decoration: BoxDecoration(

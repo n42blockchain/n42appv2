@@ -77,6 +77,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       );
       const envGiphyApiKey = String.fromEnvironment('GIPHY_API_KEY');
       const envTenorApiKey = String.fromEnvironment('TENOR_API_KEY');
+      const envFiatRampApiKey = String.fromEnvironment('FIATRAMP_API_KEY');
       const envAiApiKey = String.fromEnvironment('AI_API_KEY');
       const envAiBaseUrl = String.fromEnvironment(
         'AI_BASE_URL',
@@ -113,6 +114,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directAzureSpeechApiKey = normalizedEnv(envAzureSpeechApiKey);
       final directGiphyApiKey = normalizedEnv(envGiphyApiKey);
       final directTenorApiKey = normalizedEnv(envTenorApiKey);
+      final directFiatRampApiKey = normalizedEnv(envFiatRampApiKey);
       final directAiApiKey = normalizedEnv(envAiApiKey);
       final directDebankApiKey = normalizedEnv(envDebankApiKey);
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
@@ -195,6 +197,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           tenorApiKey: directTenorApiKey,
           tenorBaseUrl: 'https://tenor.googleapis.com/v2',
           tenorUseProxyEndpoint: false,
+          fiatRampApiKey: directFiatRampApiKey,
+          fiatRampProvider: 'moonpay',
           googleTranslateApiKey: directGoogleTranslateApiKey,
           aiApiKey: directAiApiKey,
           aiBaseUrl: envAiBaseUrl,

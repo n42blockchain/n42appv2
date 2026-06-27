@@ -1,0 +1,17 @@
+OpenMoji sticker assets
+========================
+
+The .svg files in this directory are emoji from the OpenMoji project,
+included unmodified as N42 Chat's built-in sticker packs.
+
+Source:   https://openmoji.org
+Project:  https://github.com/hfg-gmuend/openmoji
+License:  Creative Commons Attribution-ShareAlike 4.0 International
+          (CC BY-SA 4.0) — https://creativecommons.org/licenses/by-sa/4.0/
+
+Attribution: "OpenMoji" – the open-source emoji and icon project.
+License: CC BY-SA 4.0
+
+Files are named by their Unicode code point(s) (e.g. 1F600.svg).
+No changes were made to the artwork. Per CC BY-SA 4.0, any redistribution
+of these assets must retain this attribution and license notice.

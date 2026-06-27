@@ -78,7 +78,7 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
     return Container(
       height: MediaQuery.of(context).size.height * 0.7,
       decoration: BoxDecoration(
-        color: widget.isDark ? const Color(0xFF1C1C1E) : Colors.white,
+        color: AppColors.surfaceOf(widget.isDark),
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: Column(
@@ -89,7 +89,7 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: widget.isDark ? Colors.white12 : Colors.black12,
+                  color: AppColors.dividerOf(widget.isDark),
                 ),
               ),
             ),
@@ -100,14 +100,14 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: widget.isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(widget.isDark),
                   ),
                 ),
                 const Spacer(),
                 IconButton(
                   icon: Icon(
                     Icons.close,
-                    color: widget.isDark ? Colors.white : Colors.black,
+                    color: AppColors.textPrimaryOf(widget.isDark),
                   ),
                   onPressed: () => Navigator.pop(context),
                 ),
@@ -122,9 +122,7 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
                 hintText: widget.searchContactHintText,
                 prefixIcon: const Icon(Icons.search),
                 filled: true,
-                fillColor: widget.isDark
-                    ? const Color(0xFF3A3A3C)
-                    : const Color(0xFFF2F2F7),
+                fillColor: AppColors.inputBgOf(widget.isDark),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -146,7 +144,7 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
                     child: Text(
                       widget.noContactsFoundText,
                       style: TextStyle(
-                        color: widget.isDark ? Colors.white54 : Colors.black54,
+                        color: AppColors.textTertiaryOf(widget.isDark),
                       ),
                     ),
                   )
@@ -174,16 +172,14 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
                         title: Text(
                           contact.effectiveDisplayName,
                           style: TextStyle(
-                            color: widget.isDark ? Colors.white : Colors.black,
+                            color: AppColors.textPrimaryOf(widget.isDark),
                           ),
                         ),
                         subtitle: Text(
                           contact.userId,
                           style: TextStyle(
                             fontSize: 12,
-                            color: widget.isDark
-                                ? Colors.white54
-                                : Colors.black54,
+                            color: AppColors.textTertiaryOf(widget.isDark),
                           ),
                         ),
                         onTap: () => Navigator.pop(context, {

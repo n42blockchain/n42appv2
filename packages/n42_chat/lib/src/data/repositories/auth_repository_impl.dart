@@ -217,7 +217,9 @@ class AuthRepositoryImpl implements IAuthRepository {
       if (_authDataSource.isLoggedIn) {
         _clearCachedUserProfile();
         final sdkUserId = _authDataSource.userId;
-        authLog('Matrix SDK already logged in as $sdkUserId, fast restore');
+        authLog(
+          'Matrix SDK already logged in as $sdkUserId, fast restore',
+        );
 
         _startMonitoringLoginState();
 
@@ -1410,14 +1412,12 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   /// 后台启动同步——不阻塞认证返回，本地缓存数据立即可用。
-  /// `ensureSyncRunning()` 自身幂等（重复调用只是确保 background sync 在跑）。
+  /// `startSync()` 自身幂等（重复调用只是把 backgroundSync 设为 true）。
   void _kickOffBackgroundSync() {
     unawaited(
-      _authDataSource.clientManager
-          .ensureSyncRunning(reason: 'auth flow')
-          .catchError((Object e) {
-            authLog('Background sync error: $e');
-          }),
+      _authDataSource.clientManager.startSync().catchError((Object e) {
+        authLog('Background sync error: $e');
+      }),
     );
   }
 

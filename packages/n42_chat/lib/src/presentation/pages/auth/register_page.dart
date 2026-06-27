@@ -161,7 +161,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? AppColors.backgroundDark : Colors.white;
+    final bgColor = AppColors.bgOf(isDark);
     final textColor = context.textPrimary;
 
     return Scaffold(
@@ -277,9 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildServerInput(BuildContext context, AuthState state, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -363,9 +361,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildAnonymousModeToggle(BuildContext context, bool isDark) {
     final textColor = context.textPrimary;
     final subtitleColor = context.textSecondary;
-    final cardColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final cardColor = AppColors.inputBgOf(isDark);
 
     return Container(
       decoration: BoxDecoration(
@@ -406,9 +402,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildAnonymousInfoCard(BuildContext context, bool isDark) {
     final textColor = context.textPrimary;
     final subtitleColor = context.textSecondary;
-    final cardColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final cardColor = AppColors.inputBgOf(isDark);
 
     return Container(
       width: double.infinity,
@@ -445,9 +439,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildUsernameInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -511,9 +503,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildEmailInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -582,9 +572,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildPasswordInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -645,9 +633,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildConfirmPasswordInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 
@@ -712,9 +698,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Widget _buildInviteCodeInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
-    final inputBgColor = isDark
-        ? AppColors.surfaceDark
-        : AppColors.inputBackground;
+    final inputBgColor = AppColors.inputBgOf(isDark);
     final textColor = context.textPrimary;
     final hintColor = context.textSecondary;
 

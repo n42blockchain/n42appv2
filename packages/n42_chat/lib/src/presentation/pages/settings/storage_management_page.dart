@@ -784,7 +784,7 @@ class _StorageRingPainter extends CustomPainter {
 
     // 背景圆环
     final bgPaint = Paint()
-      ..color = isDark ? Colors.grey[800]! : Colors.grey[200]!
+      ..color = AppColors.placeholderOf(isDark)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
     canvas.drawCircle(center, radius - strokeWidth / 2, bgPaint);

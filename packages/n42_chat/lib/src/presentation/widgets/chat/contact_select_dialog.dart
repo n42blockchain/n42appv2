@@ -35,8 +35,8 @@ class _ContactSelectDialogState extends State<ContactSelectDialog> {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    final bgColor = isDark ? const Color(0xFF1C1C1E) : Colors.white;
-    final textColor = isDark ? Colors.white : Colors.black;
+    final bgColor = AppColors.surfaceOf(isDark);
+    final textColor = AppColors.textPrimaryOf(isDark);
 
     return AlertDialog(
       backgroundColor: bgColor,

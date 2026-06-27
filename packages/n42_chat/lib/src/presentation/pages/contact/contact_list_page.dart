@@ -174,7 +174,7 @@ class _ContactListPageState extends State<ContactListPage> {
       child: Container(
         height: 36,
         decoration: BoxDecoration(
-          color: isDark ? const Color(0xFF3A3A3C) : const Color(0xFFF2F2F7),
+          color: AppColors.inputBgOf(isDark),
           borderRadius: BorderRadius.circular(8),
         ),
         child: TextField(
@@ -1449,7 +1449,7 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context)?.contactNewFriends ?? 'New Friends'),
-        backgroundColor: isDark ? AppColors.backgroundDark : Colors.white,
+        backgroundColor: AppColors.bgOf(isDark),
         foregroundColor: context.textPrimary,
         elevation: 0.5,
       ),
@@ -1574,7 +1574,7 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
           TextButton(
             onPressed: () => _rejectRequest(request),
             style: TextButton.styleFrom(
-              backgroundColor: isDark ? Colors.grey[700] : Colors.grey[300],
+              backgroundColor: AppColors.inputBgOf(isDark),
               foregroundColor: context.textPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               shape: RoundedRectangleBorder(
@@ -1699,7 +1699,7 @@ class _GroupListPageState extends State<_GroupListPage> {
       backgroundColor: context.pageBackground,
       appBar: AppBar(
         title: Text(S.of(context)?.commonGroupChat ?? 'Group Chat'),
-        backgroundColor: isDark ? AppColors.backgroundDark : Colors.white,
+        backgroundColor: AppColors.bgOf(isDark),
         foregroundColor: context.textPrimary,
         elevation: 0.5,
         actions: [
@@ -2095,7 +2095,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: widget.isDark ? Colors.white12 : Colors.black12,
+                  color: AppColors.dividerOf(widget.isDark),
                 ),
               ),
             ),
@@ -2137,9 +2137,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
                     S.of(context)?.commonSearchContacts ?? 'Search contacts',
                 prefixIcon: const Icon(AppIcons.search),
                 filled: true,
-                fillColor: widget.isDark
-                    ? const Color(0xFF3A3A3C)
-                    : const Color(0xFFF2F2F7),
+                fillColor: AppColors.inputBgOf(widget.isDark),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide.none,
@@ -2186,9 +2184,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
                           contact.userId,
                           style: TextStyle(
                             fontSize: 12,
-                            color: widget.isDark
-                                ? Colors.white54
-                                : Colors.black54,
+                            color: AppColors.textTertiaryOf(widget.isDark),
                           ),
                         ),
                         onTap: () => Navigator.pop(context, contact),
