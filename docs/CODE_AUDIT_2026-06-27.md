@@ -33,7 +33,14 @@
   确认已验**（Codex 设备报告原记 NOT VERIFIED，缺第二端，用户后续实测通过）。
   仍待：iOS 帧注入（第二阶段）。
 
-### `1b55fa6a` stabilize mobile calls — ✅ 通过（含 1 处已修 lint）
+### `1b55fa6a` stabilize mobile calls — ✅ 通过（含 1 处已修 lint，真机已全验）
+
+> **真机验证（2026-06-27，用户确认）**：iPhone 启动正常；iPhone/Android **双向
+> 音频与视频通话均实测正常**；`flutter_vodozemac` iOS 动态库打包问题已修复（IPA 内
+> 校验为真实 arm64 dynamic library）；`flutter analyze` 通过（仅剩既有 4 个
+> warning/info）；chat 目标测试通过；TestFlight IPA 已生成
+> （`build/ios/ipa/N42Wallet.ipa`，app-store-connect 导出，可 Transporter 上传）。
+
 - `webrtc_service.dart`（+426/-）：getUserMedia 失败回退最小约束、`_ensureMediaPermissions`、
   远端视频轨未就绪时延后挂 renderer、room_id 缺失时回落找 DM 房间、丰富日志。
   资源生命周期复核：`_callEventsSubscription`/`_timelineEventsSubscription` 两条订阅、
@@ -73,5 +80,7 @@
 ## 四、结论
 
 最近一天代码整体质量良好、边界标注诚实、资源释放规范。唯一缺陷（sp_util 2 处
-info lint）已修复并验证。剩余风险均为**需真机/双端**的运行时验证项（虚拟背景 A/B、
-iOS 帧注入、T5 Live Activity 设备运行、T6 macOS 运行），非代码缺陷。
+info lint）已修复并验证。`1b55fa6a` 通话稳定性已 iPhone/Android 双向音视频真机验证、
+IPA 已出；T7 虚拟背景 A/B 经用户确认已验。剩余待验项：T7 iOS 帧注入、T5 Live
+Activity 设备运行、T6 macOS 运行、#9 屏幕共享（已派 Codex T8），均为原生/真机范畴，
+非代码缺陷。
