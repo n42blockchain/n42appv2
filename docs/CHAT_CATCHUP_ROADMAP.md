@@ -18,7 +18,7 @@
 | 6 | ~~图像理解 / OCR~~ ✅ **完成 2026-06-27** | 云端视觉(`describeImage`)+图片查看器「AI describe/OCR」入口+4 测试 |
 | 7 | ~~图像生成~~ ✅ **接口+消费者已就位** | `AiService.generateImage` + AI 贴纸(#1)消费；如需「生成并作为消息发送」可后续小增 |
 | 8 | ~~优先通知 / 智能过滤~~ ✅ **完成 2026-06-27** | 客户端规则：优先关键词/优先发送者(强制通知，绕过仅提及/静音/免打扰) + 屏蔽关键词(抑制)；纯判定+JSON(`NotificationFilterRules`)、SharedPreferences 持久化(`NotificationFilterStore`)、接入 `FirebasePushService` 通知闸门、设置页「Smart Filter」管理 UI + 10 单测 |
-| 9 | 屏幕共享完成 | ⏳ WebRTC 框架具备 | 补采集+发布+UI |
+| 9 | 屏幕共享 | ⏳ **Dart+UI 已完成，缺 Android 原生前台服务** | `group_call_screen` 切换按钮/共享浮层/参与者渲染 + `livekit_service.start/stop/toggleScreenShare`(`setScreenShareEnabled`) 均就位。**剩余(原生/真机，宜 Codex 接)**：① 加 `flutter_background` 依赖 + AndroidManifest 声明 `FOREGROUND_SERVICE_MEDIA_PROJECTION` 权限与 `foregroundServiceType=mediaProjection` 服务(见 livekit_client 2.8 README)；② 开播前先 `Helper.requestCapturePermission()` 再起前台服务，否则 Android 14+ `setScreenShareEnabled(true)` 运行时失败；③ iOS Broadcast Upload Extension；④ 真机双端验证 |
 | 10 | ~~商户收款二维码~~ ✅ **完成 2026-06-27** | 带金额收款码：纯 URI 编解码(`PaymentRequestUri` `n42pay://pay?to&amount&token&memo`)、商户收款页(`MerchantQrPage` 金额/代币/备注→实时二维码+分享)、收款页入口、扫码端识别并确认付款(经 `IWalletBridge.requestTransfer`)+9 单测 |
 | 11 | ~~NFT 赠送~~ ✅ **完成 2026-06-27** | 赠送流程：钱包桥 `requestNftTransfer`(默认不支持，宿主覆写) + 纯 `NftGiftRef`(`nft://contract/tokenId@chain` 编解码) + 商务面板「Gift NFT」入口(解析对方地址→选 NFT→转移→发聊天通知)+7 单测；宿主需实现 `requestNftTransfer` 才真正上链 |
 | 12 | ~~直播间真视频~~ ✅ **已具备（早于本清单）** | 独立直播客户端 `lib/features/live/`：`live_video_service` 经 LiveKit 主播发布摄像头/麦(`enableVideo=true`)、观众订阅主播 `VideoTrack`(`VideoTrackRenderer`)、go-live/room 页 + 弹幕 overlay + chat 发现入口(`121d1a8f`)。原「现仅语音房」表述过时（混淆了 chat 内 voice_room 与独立 live 客户端） |
@@ -29,7 +29,7 @@
 | # | 任务 | 现状 |
 |---|---|---|
 | 14 | OpenMLS 移动端打包接线 | Rust crate 已做+测试；缺 cargo-ndk `.so` / iOS `.xcframework` + JNI/Swift |
-| 15 | ~~虚拟背景发布帧注入~~ ✅ **Android 完成（Codex T7，已验收）** | 无需 fork：复用 `flutter_webrtc 1.4.0` 的 `LocalVideoTrack` processor 链（`a5c6ab61`）。`VirtualBackgroundHandler`(MethodChannel) + `N42VirtualBackgroundProcessor`(ML Kit Selfie Seg，none/blur/solidColor/virtualBackground 四模式) + Dart `virtual_background_processor` + 6 单测(本端已验过)；Codex Redmi 真机 APK build+install+冷启动 PASS。**未验**：A/B 通话对端看处理后视频(需双端)；iOS 帧注入为第二阶段 |
+| 15 | ~~虚拟背景发布帧注入~~ ✅ **Android 完成（Codex T7，已验收）** | 无需 fork：复用 `flutter_webrtc 1.4.0` 的 `LocalVideoTrack` processor 链（`a5c6ab61`）。`VirtualBackgroundHandler`(MethodChannel) + `N42VirtualBackgroundProcessor`(ML Kit Selfie Seg，none/blur/solidColor/virtualBackground 四模式) + Dart `virtual_background_processor` + 6 单测(本端已验过)；Codex Redmi 真机 APK build+install+冷启动 PASS；A/B 通话对端看处理后视频**经用户确认已验**。仍待：iOS 帧注入(第二阶段) |
 | 16 | iOS 本地 AI 推理桥接 | Android 已 flutter_gemma；iOS 待 Core ML/MediaPipe |
 | 17 | 通话录制 Egress 服务端部署 | ⏳ 框架待部署 |
 | 18 | 美颜 | ❌（可复用虚拟背景 ML Kit 分割管线） |

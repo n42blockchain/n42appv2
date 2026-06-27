@@ -29,8 +29,9 @@
   `n42.chat/virtual_background` MethodChannel 完成；原生未接时 `MissingPluginException`
   优雅 no-op。
 - 验收：本端 `virtual_background_engine_test.dart` 6 测全过、Dart analyze 干净；
-  Codex Redmi 真机 APK build+install+冷启动 PASS。**未验**：A/B 通话对端看处理后画面、
-  iOS 帧注入（第二阶段）。
+  Codex Redmi 真机 APK build+install+冷启动 PASS。**A/B 通话对端看处理后画面：经用户
+  确认已验**（Codex 设备报告原记 NOT VERIFIED，缺第二端，用户后续实测通过）。
+  仍待：iOS 帧注入（第二阶段）。
 
 ### `1b55fa6a` stabilize mobile calls — ✅ 通过（含 1 处已修 lint）
 - `webrtc_service.dart`（+426/-）：getUserMedia 失败回退最小约束、`_ensureMediaPermissions`、
@@ -58,6 +59,16 @@
 - Codex 报告：`docs/device-test-reports/2026-06-27-{virtual-bg,ios-live-activity,macos}.md`
   均在 master。
 - 本报告即「对应文档」。
+
+## 三'、附：#9 屏幕共享现状核查（本次审计顺带）
+
+`group_call_screen.dart` + `livekit_service.dart` 的 Dart 逻辑与 UI **已完整**
+（切换按钮 / 共享浮层 / `start/stop/toggleScreenShare` 经 `setScreenShareEnabled`）。
+**缺口（原生 + 真机，宜 Codex 接）**：仓库未引入 `flutter_background`、AndroidManifest
+无 `FOREGROUND_SERVICE_MEDIA_PROJECTION` 权限与 `mediaProjection` 前台服务，亦无
+`Helper.requestCapturePermission()` 调用——故 Android 14+（真机 Android 16）
+`setScreenShareEnabled(true)` 运行时会失败。详见 roadmap #9。未在本机半成品落地以免
+破坏钱包 App 清单与构建。
 
 ## 四、结论
 
