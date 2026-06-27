@@ -13,5 +13,6 @@ struct N42Bundle: WidgetBundle {
     var body: some Widget {
         //N42()
         N42LiveActivity()
+        N42ChatCallLiveActivity()
     }
 }

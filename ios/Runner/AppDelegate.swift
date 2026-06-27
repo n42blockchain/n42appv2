@@ -79,8 +79,87 @@ import UIKit
             result(FlutterMethodNotImplemented)
           }
         }
+
+        // 系统级集成（n42_chat）：iOS Live Activity（通话进行中活动）。
+        // 仅处理 updateLiveActivity/endLiveActivity/isSupported(liveActivity)；
+        // 其余能力返回 FlutterMethodNotImplemented，由 Dart 侧插件兜底
+        // （flutter_local_notifications / quick_actions / app_badge_plus）。
+        let sysChannel = FlutterMethodChannel(
+          name: "n42.chat/system_integration",
+          binaryMessenger: controller.binaryMessenger
+        )
+        sysChannel.setMethodCallHandler { call, result in
+          self.handleSystemIntegration(call, result: result)
+        }
       }
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  /// 处理 n42_chat 系统集成通道：仅接管 iOS Live Activity 相关方法。
+  private func handleSystemIntegration(
+    _ call: FlutterMethodCall,
+    result: @escaping FlutterResult
+  ) {
+    let args = call.arguments as? [String: Any] ?? [:]
+    switch call.method {
+    case "isSupported":
+      let capability = args["capability"] as? String
+      guard capability == "liveActivity" else {
+        // 其余能力交给 Dart 兜底
+        result(FlutterMethodNotImplemented)
+        return
+      }
+      if #available(iOS 16.1, *) {
+        result(ActivityAuthorizationInfo().areActivitiesEnabled)
+      } else {
+        result(false)
+      }
+
+    case "updateLiveActivity":
+      guard #available(iOS 16.1, *) else {
+        result(false)
+        return
+      }
+      let title = (args["title"] as? String) ?? "N42"
+      let body = (args["body"] as? String) ?? ""
+      let state = N42ChatCallAttributes.ContentState(body: body)
+      if let activity = chatCallActivity {
+        Task { await activity.update(using: state) }
+        result(true)
+      } else {
+        do {
+          chatCallActivity = try Activity.request(
+            attributes: N42ChatCallAttributes(title: title),
+            contentState: state
+          )
+          result(true)
+        } catch {
+          result(FlutterError(
+            code: "LiveActivityError",
+            message: "Failed to start chat call Live Activity: \(error)",
+            details: nil
+          ))
+        }
+      }
+
+    case "endLiveActivity":
+      guard #available(iOS 16.1, *) else {
+        result(true)
+        return
+      }
+      let activity = chatCallActivity
+      chatCallActivity = nil
+      if let activity = activity {
+        let finalState = N42ChatCallAttributes.ContentState(body: "")
+        Task { await activity.end(using: finalState, dismissalPolicy: .immediate) }
+      }
+      result(true)
+
+    default:
+      // showConversationBubble / setDynamicShortcuts / setTrayBadge /
+      // flashWindow 等交给 Dart 侧插件兜底
+      result(FlutterMethodNotImplemented)
+    }
   }
 }
