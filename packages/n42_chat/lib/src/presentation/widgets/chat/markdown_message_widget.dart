@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:markdown/markdown.dart' as md;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../domain/entities/custom_emoji.dart';
 import '../../../core/utils/message_markdown_utils.dart';
+import 'custom_emoji_text.dart';
 
 /// Markdown 消息渲染组件
 ///
@@ -36,6 +39,12 @@ class MarkdownMessageWidget extends StatelessWidget {
       data: displayText,
       selectable: false,
       softLineBreak: true,
+      inlineSyntaxes: <md.InlineSyntax>[_CustomEmojiMarkdownSyntax()],
+      builders: <String, MarkdownElementBuilder>{
+        _CustomEmojiMarkdownSyntax.tag: _CustomEmojiMarkdownBuilder(
+          fallbackSize: fontSize * 1.35,
+        ),
+      },
       onTapLink: (text, href, title) {
         if (href == null) return;
         final uri = Uri.tryParse(href);
@@ -142,6 +151,65 @@ class MarkdownMessageWidget extends StatelessWidget {
         tableBorder: TableBorder.all(
           color: textColor.withValues(alpha: 0.2),
           width: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+class _CustomEmojiMarkdownSyntax extends md.InlineSyntax {
+  static const String tag = 'custom_emoji';
+
+  _CustomEmojiMarkdownSyntax()
+    : super(
+        r':([a-z0-9_+\-]+):',
+        startCharacter: 58, // ':'
+        caseSensitive: false,
+      );
+
+  @override
+  bool onMatch(md.InlineParser parser, Match match) {
+    final raw = match.group(0)!;
+    final emoji = BuiltinCustomEmojis.lookup(match.group(1)!);
+    if (emoji == null) {
+      parser.addNode(md.Text(raw));
+      return true;
+    }
+
+    final element = md.Element.text(tag, raw)
+      ..attributes['shortcode'] = emoji.shortcode;
+    parser.addNode(element);
+    return true;
+  }
+}
+
+class _CustomEmojiMarkdownBuilder extends MarkdownElementBuilder {
+  final double fallbackSize;
+
+  _CustomEmojiMarkdownBuilder({required this.fallbackSize});
+
+  @override
+  Widget visitElementAfterWithContext(
+    BuildContext context,
+    md.Element element,
+    TextStyle? preferredStyle,
+    TextStyle? parentStyle,
+  ) {
+    final shortcode = element.attributes['shortcode'];
+    final emoji = shortcode == null
+        ? null
+        : BuiltinCustomEmojis.lookup(shortcode);
+    if (emoji == null) {
+      return Text(element.textContent, style: preferredStyle);
+    }
+
+    final size = (preferredStyle?.fontSize ?? fallbackSize / 1.35) * 1.35;
+    return Text.rich(
+      WidgetSpan(
+        alignment: PlaceholderAlignment.middle,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 1),
+          child: CustomEmojiInline(emoji: emoji, size: size),
         ),
       ),
     );
