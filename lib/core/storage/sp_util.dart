@@ -48,8 +48,9 @@ class SPUtil {
     try {
       return (json.decode(raw) as List<dynamic>).cast<String>();
     } catch (e) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('[SPUtil._decodeJsonList] JSON decode failed: $e');
+      }
       return [];
     }
   }
@@ -60,8 +61,9 @@ class SPUtil {
     try {
       return json.decode(raw) as Map<String, dynamic>;
     } catch (e) {
-      if (kDebugMode)
+      if (kDebugMode) {
         debugPrint('[SPUtil._decodeJsonMap] JSON decode failed: $e');
+      }
       return null;
     }
   }
