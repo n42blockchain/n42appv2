@@ -19,7 +19,7 @@
 | 7 | ~~图像生成~~ ✅ **接口+消费者已就位** | `AiService.generateImage` + AI 贴纸(#1)消费；如需「生成并作为消息发送」可后续小增 |
 | 8 | ~~优先通知 / 智能过滤~~ ✅ **完成 2026-06-27** | 客户端规则：优先关键词/优先发送者(强制通知，绕过仅提及/静音/免打扰) + 屏蔽关键词(抑制)；纯判定+JSON(`NotificationFilterRules`)、SharedPreferences 持久化(`NotificationFilterStore`)、接入 `FirebasePushService` 通知闸门、设置页「Smart Filter」管理 UI + 10 单测 |
 | 9 | 屏幕共享完成 | ⏳ WebRTC 框架具备 | 补采集+发布+UI |
-| 10 | 商户收款二维码 | ⏳ 可用收款请求 | 补二维码 UI |
+| 10 | ~~商户收款二维码~~ ✅ **完成 2026-06-27** | 带金额收款码：纯 URI 编解码(`PaymentRequestUri` `n42pay://pay?to&amount&token&memo`)、商户收款页(`MerchantQrPage` 金额/代币/备注→实时二维码+分享)、收款页入口、扫码端识别并确认付款(经 `IWalletBridge.requestTransfer`)+9 单测 |
 | 11 | NFT 赠送 | ⏳ 可用 transfer | 补赠送流程 UI |
 | 12 | **直播间真视频** | ⏳ 现仅语音房 | 扩 voice_room/live 到视频直播（**优先，确保可用**） |
 | 13 | 各 native 能力 key/模型源配置 + 真机回归 | 契约就位 | STT/GIF/MoonPay/Gemma key + 通话 E2EE 密钥分发 |

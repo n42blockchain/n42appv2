@@ -5,9 +5,12 @@ import 'dart:async';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/social_scan_payload_parser.dart';
+import '../../../core/utils/payment_request_uri.dart';
 import '../../../domain/repositories/contact_repository.dart';
+import '../../../integration/wallet_bridge.dart';
 import '../../helpers/mini_app_launcher_helper.dart';
 import 'my_qrcode_page.dart';
 import '../../../core/utils/debug_log.dart';
@@ -171,6 +174,18 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
     unawaited(_scannerController?.stop());
 
     try {
+      // 收款二维码（商户收款码）：识别后展示金额确认并发起付款
+      if (PaymentRequestUri.isPaymentUri(data)) {
+        final payment = PaymentRequestUri.tryParse(data);
+        if (payment != null) {
+          completedWithExit = await _handlePaymentUri(payment);
+          if (!completedWithExit && mounted) {
+            unawaited(_scannerController?.start());
+          }
+          return;
+        }
+      }
+
       final payload = parseSocialScanPayload(data);
       if (payload == null) {
         _showError(S.of(context)?.qrcodeInvalidQrCode ?? 'Invalid QR code');
@@ -206,6 +221,90 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         setState(() => _isProcessing = false);
       }
     }
+  }
+
+  /// 处理扫到的收款二维码：确认金额后通过钱包桥发起付款。
+  /// 返回 true 表示已离开扫码页（无需重启扫描）。
+  Future<bool> _handlePaymentUri(PaymentRequestData payment) async {
+    final confirmed = await showModalBottomSheet<bool>(
+      context: context,
+      backgroundColor: context.surfaceColor,
+      builder: (ctx) {
+        final amountLine = payment.hasAmount
+            ? '${payment.amount} ${payment.token}'.trim()
+            : (S.of(ctx)?.transferReceive ?? 'Payment request');
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  amountLine,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  payment.receiverAddress,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    fontFamily: 'monospace',
+                    color: AppColors.textSecondary,
+                  ),
+                ),
+                if (payment.memo != null && payment.memo!.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  Text(payment.memo!),
+                ],
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () => Navigator.pop(ctx, false),
+                        child: Text(S.of(ctx)?.commonCancel ?? 'Cancel'),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: Text(S.of(ctx)?.commonConfirm ?? 'Pay'),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+
+    if (confirmed != true) return false;
+
+    try {
+      final result = await getIt<IWalletBridge>().requestTransfer(
+        toAddress: payment.receiverAddress,
+        amount: payment.amount,
+        token: payment.token,
+        memo: payment.memo,
+      );
+      if (!mounted) return true;
+      if (result.success) {
+        Navigator.of(context).pop();
+        return true;
+      }
+      _showError(result.errorMessage ?? 'Payment failed');
+    } catch (e) {
+      if (!mounted) return false;
+      _showError('Payment failed: $e');
+    }
+    return false;
   }
 
   Future<bool> _startChatWithUser(String userId) async {

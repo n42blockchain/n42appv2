@@ -12,6 +12,7 @@ import '../../blocs/transfer/transfer_event.dart';
 import '../../blocs/transfer/transfer_state.dart';
 import '../../helpers/bloc_message_helper.dart';
 import '../../widgets/common/common_widgets.dart';
+import 'merchant_qr_page.dart';
 
 /// 收款页面
 class ReceivePage extends StatefulWidget {
@@ -147,8 +148,23 @@ class _ReceivePageState extends State<ReceivePage> {
 
           const SizedBox(height: 32),
 
+          // 商户收款码（带金额二维码）
+          N42Button(
+            text: 'Merchant QR (with amount)',
+            type: N42ButtonType.secondary,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const MerchantQrPage(),
+                ),
+              );
+            },
+          ),
+
           // 发送收款请求按钮
           if (widget.roomId != null) ...[
+            const SizedBox(height: 16),
             if (!_showRequestForm) ...[
               N42Button(
                 text: S.of(context)?.transferSendPaymentRequest ?? 'Send Payment Request',
