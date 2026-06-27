@@ -28,9 +28,9 @@
 
 | # | 任务 | 现状 |
 |---|---|---|
-| 14 | OpenMLS 移动端打包接线 | Rust crate 已做+测试；缺 cargo-ndk `.so` / iOS `.xcframework` + JNI/Swift |
+| 14 | ~~OpenMLS 移动端打包接线~~ ✅ **编译级完成（Codex T9，已验收）** | `9a064049`：Android 四 ABI `libn42_mls.so`(cargo-ndk)+Kotlin `MlsChannelHandler`/`MlsNativeBridge`+MainActivity；iOS `N42Mls.xcframework`+Swift `N42MlsHandler`+AppDelegate；Rust `android_jni.rs`+构建脚本；DI 接 `FfiMlsProtocol.probe()`。验证：`cargo test` 6 过(含 ffi_round_trip)、Android/iOS 符号检查 PASS、build 脚本产物齐。仍待：两设备 A/B MLS 收发 |
 | 15 | ~~虚拟背景发布帧注入~~ ✅ **Android 完成（Codex T7，已验收）** | 无需 fork：复用 `flutter_webrtc 1.4.0` 的 `LocalVideoTrack` processor 链（`a5c6ab61`）。`VirtualBackgroundHandler`(MethodChannel) + `N42VirtualBackgroundProcessor`(ML Kit Selfie Seg，none/blur/solidColor/virtualBackground 四模式) + Dart `virtual_background_processor` + 6 单测(本端已验过)；Codex Redmi 真机 APK build+install+冷启动 PASS；A/B 通话对端看处理后视频**经用户确认已验**。仍待：iOS 帧注入(第二阶段) |
-| 16 | iOS 本地 AI 推理桥接 | Android 已 flutter_gemma；iOS 待 Core ML/MediaPipe |
+| 16 | ~~iOS 本地 AI 推理桥接~~ ✅ **iOS 设备构建通过（Codex T10，已验收）** | `34518b21`：`flutter_gemma`(MediaPipe/TFLite)在 iOS **设备** build PASS、analyze PASS、单测 PASS，**无需改 Dart 推理逻辑**（验证了 flutter_gemma 覆盖 iOS 的判断）。模拟器 build 被上游 `TensorFlowLiteSelectTfOps` 仅设备 slice 阻塞（非本仓代码）。仍待：配小 `.task` 模型源后真机生成 |
 | 17 | 通话录制 Egress 服务端部署 | ⏳ 框架待部署 |
 | 18 | ~~美颜~~ ✅ **完成 2026-06-27** | 复用虚拟背景 ML Kit 人像分割：`VirtualBackgroundEngine` 对人像区域磨皮(混入模糊层)+提亮，与背景处理独立可叠加；`VoIPConfig.beautyStrength`(0–1) + native 配置通道透传 `beauty` + 9 单测(含美颜 3 例)。本地预览即时生效；发布帧替换同虚拟背景走原生 frame processor |
 | 19 | ~~超级应用 Agentic AI~~ ✅ **首版完成 2026-06-27** | 编排器把「用户一句话」映射到 Mini App+参数：纯 `MiniAppAgentPlanner`（喂应用目录给 LLM→容错解析 JSON+校验落到目录内 app；无 LLM 时规则词重叠兜底）+ `MiniAppAgentService`（AiService 优先，低置信/失败回退规则）+ 商务面板「AI Assistant」面板（输入任务→展示匹配应用/参数/置信度→一键打开）+10 单测。后续可扩多步编排/真正代执行 |
