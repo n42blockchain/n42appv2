@@ -139,4 +139,57 @@ void main() {
     );
     expect(out, same(frame));
   });
+
+  group('美颜 (#18)', () {
+    test('mode none + beauty=0 直接透传原字节', () {
+      final frame = _solidPng(w, h, 128, 128, 128);
+      final out = VirtualBackgroundEngine.composeFrame(
+        frame,
+        maskWidth: w,
+        maskHeight: h,
+        confidences: _leftForegroundMask(w, h),
+        mode: BackgroundMode.none,
+        beautyStrength: 0,
+      );
+      expect(out, same(frame));
+    });
+
+    test('beauty 提亮人像区域，背景区域不变（mode none）', () {
+      final frame = _solidPng(w, h, 128, 128, 128);
+      final out = _decode(
+        VirtualBackgroundEngine.composeFrame(
+          frame,
+          maskWidth: w,
+          maskHeight: h,
+          confidences: _leftForegroundMask(w, h), // 左前景右背景
+          mode: BackgroundMode.none,
+          beautyStrength: 1.0,
+        ),
+      );
+      final person = out.getPixel(2, 2);
+      final bg = out.getPixel(w - 2, 2);
+      expect(_r(person), greaterThan(132)); // 人像提亮
+      expect((_r(bg) - 128).abs(), lessThanOrEqualTo(4)); // 背景未替换
+    });
+
+    test('beauty 与背景替换可叠加', () {
+      final frame = _solidPng(w, h, 128, 128, 128);
+      final out = _decode(
+        VirtualBackgroundEngine.composeFrame(
+          frame,
+          maskWidth: w,
+          maskHeight: h,
+          confidences: _leftForegroundMask(w, h),
+          mode: BackgroundMode.solidColor,
+          solidColorHex: '#0000FF',
+          beautyStrength: 1.0,
+        ),
+      );
+      final person = out.getPixel(2, 2);
+      final bg = out.getPixel(w - 2, 2);
+      expect(_b(bg), greaterThan(200)); // 背景替换为蓝
+      expect(_r(bg), lessThan(60));
+      expect(_r(person), greaterThan(132)); // 人像提亮
+    });
+  });
 }

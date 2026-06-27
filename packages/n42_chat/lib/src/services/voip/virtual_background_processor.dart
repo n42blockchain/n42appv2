@@ -56,8 +56,13 @@ class VirtualBackgroundEngine {
     double blurRadius = 0.5,
     String? solidColorHex,
     Uint8List? backgroundImageBytes,
+    double beautyStrength = 0.0,
   }) async {
-    if (kIsWeb || mode == BackgroundMode.none) return frameBytes;
+    final beauty = beautyStrength.clamp(0.0, 1.0);
+    // 背景替换或美颜任一开启才需要分割；都关则直接透传。
+    if (kIsWeb || (mode == BackgroundMode.none && beauty <= 0)) {
+      return frameBytes;
+    }
 
     SegmentationMask? mask;
     File? tempFile;
@@ -97,6 +102,7 @@ class VirtualBackgroundEngine {
           blurRadius: blurRadius,
           solidColorHex: solidColorHex,
           backgroundImageBytes: backgroundImageBytes,
+          beautyStrength: beauty,
         ),
       );
     } catch (e) {
@@ -120,6 +126,7 @@ class VirtualBackgroundEngine {
     double blurRadius = 0.5,
     String? solidColorHex,
     Uint8List? backgroundImageBytes,
+    double beautyStrength = 0.0,
   }) =>
       _composeInIsolate(_ComposeParams(
         frameBytes: frameBytes,
@@ -130,6 +137,7 @@ class VirtualBackgroundEngine {
         blurRadius: blurRadius,
         solidColorHex: solidColorHex,
         backgroundImageBytes: backgroundImageBytes,
+        beautyStrength: beautyStrength,
       ));
 
   /// 前景判定阈值（供单测断言用）
@@ -138,51 +146,65 @@ class VirtualBackgroundEngine {
 
   /// 在 isolate 中执行像素级合成（避免阻塞 UI）
   static Uint8List _composeInIsolate(_ComposeParams p) {
+    final beauty = p.beautyStrength.clamp(0.0, 1.0);
+    final replaceBg = p.mode != BackgroundMode.none;
+    if (!replaceBg && beauty <= 0) return p.frameBytes;
+
     final original = img.decodeImage(p.frameBytes);
     if (original == null) return p.frameBytes;
 
     final width = original.width;
     final height = original.height;
+    final minSide = width < height ? width : height;
 
-    // 构造背景图层
-    final img.Image background;
-    switch (p.mode) {
-      case BackgroundMode.blur:
-        // 模糊半径 0..1 映射到像素半径 1..40，并按帧尺寸夹紧
-        // （半径过大会越界，gaussianBlur 在小帧上崩溃）
-        final maxR = ((width < height ? width : height) ~/ 2 - 1).clamp(1, 40);
-        final radius =
-            (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round().clamp(1, maxR);
-        background = img.gaussianBlur(original.clone(), radius: radius);
-        break;
-      case BackgroundMode.solidColor:
-        final color = _parseHexColor(p.solidColorHex) ??
-            img.ColorRgb8(0x07, 0xC1, 0x60);
-        background = img.Image(width: width, height: height)..clear(color);
-        break;
-      case BackgroundMode.virtualBackground:
-        final bgBytes = p.backgroundImageBytes;
-        final bg = bgBytes != null ? img.decodeImage(bgBytes) : null;
-        if (bg != null) {
-          // 缩放铺满整帧（cover）
-          background = img.copyResize(bg, width: width, height: height);
-        } else {
-          // 无背景图时降级为强模糊，避免黑屏（半径按帧尺寸夹紧）
-          final r = ((width < height ? width : height) ~/ 2 - 1).clamp(1, 20);
-          background = img.gaussianBlur(original.clone(), radius: r);
-        }
-        break;
-      case BackgroundMode.none:
-        return p.frameBytes;
+    // 背景图层（仅替换背景时构造）
+    img.Image? background;
+    if (replaceBg) {
+      switch (p.mode) {
+        case BackgroundMode.blur:
+          // 模糊半径 0..1 映射到像素半径 1..40，并按帧尺寸夹紧
+          // （半径过大会越界，gaussianBlur 在小帧上崩溃）
+          final maxR = (minSide ~/ 2 - 1).clamp(1, 40);
+          final radius =
+              (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round().clamp(1, maxR);
+          background = img.gaussianBlur(original.clone(), radius: radius);
+          break;
+        case BackgroundMode.solidColor:
+          final color = _parseHexColor(p.solidColorHex) ??
+              img.ColorRgb8(0x07, 0xC1, 0x60);
+          background = img.Image(width: width, height: height)..clear(color);
+          break;
+        case BackgroundMode.virtualBackground:
+          final bgBytes = p.backgroundImageBytes;
+          final bg = bgBytes != null ? img.decodeImage(bgBytes) : null;
+          if (bg != null) {
+            background = img.copyResize(bg, width: width, height: height);
+          } else {
+            final r = (minSide ~/ 2 - 1).clamp(1, 20);
+            background = img.gaussianBlur(original.clone(), radius: r);
+          }
+          break;
+        case BackgroundMode.none:
+          break;
+      }
     }
 
-    // 逐像素合成：前景（人像）用原图，背景用背景图层。
-    // mask 分辨率可能与原图不同，按比例映射采样。
+    // 美颜：对人像区域做磨皮（混入模糊层）+ 提亮。预算一张模糊层。
+    img.Image? smooth;
+    if (beauty > 0) {
+      final maxR = (minSide ~/ 2 - 1).clamp(1, 12);
+      final r = (beauty * 6).round().clamp(1, maxR);
+      smooth = img.gaussianBlur(original.clone(), radius: r);
+    }
+
+    // 逐像素合成：mask 分辨率可能与原图不同，按比例映射采样。
     final maskW = p.maskWidth;
     final maskH = p.maskHeight;
     final conf = p.confidences;
     final scaleX = maskW / width;
     final scaleY = maskH / height;
+    final smoothBlend = beauty * 0.6; // 磨皮强度上限，保留五官细节
+    final brighten = beauty * 0.12; // 提亮强度
 
     for (var y = 0; y < height; y++) {
       final my = (y * scaleY).floor().clamp(0, maskH - 1);
@@ -190,14 +212,47 @@ class VirtualBackgroundEngine {
       for (var x = 0; x < width; x++) {
         final mx = (x * scaleX).floor().clamp(0, maskW - 1);
         final c = conf[rowBase + mx];
+        final isPerson = c >= _foregroundThreshold;
         // ML Kit：置信度越高越偏前景。低于阈值 → 用背景像素。
-        if (c < _foregroundThreshold) {
-          original.setPixel(x, y, background.getPixel(x, y));
+        if (!isPerson) {
+          if (background != null) {
+            original.setPixel(x, y, background.getPixel(x, y));
+          }
+        } else if (smooth != null) {
+          // 人像像素：向模糊层混合（磨皮）+ 提亮
+          final o = original.getPixel(x, y);
+          final s = smooth.getPixel(x, y);
+          original.setPixel(
+            x,
+            y,
+            _beautyPixel(o, s, smoothBlend, brighten),
+          );
         }
       }
     }
 
     return Uint8List.fromList(img.encodeJpg(original, quality: 88));
+  }
+
+  /// 美颜单像素：原色 → 模糊色按 [blend] 混合（磨皮），再按 [brighten] 提亮。
+  static img.Color _beautyPixel(
+    img.Color o,
+    img.Color s,
+    double blend,
+    double brighten,
+  ) {
+    int chan(num orig, num smooth) {
+      final mixed = orig + (smooth - orig) * blend;
+      final lit = mixed + (255 - mixed) * brighten;
+      return lit.round().clamp(0, 255);
+    }
+
+    return img.ColorRgba8(
+      chan(o.r, s.r),
+      chan(o.g, s.g),
+      chan(o.b, s.b),
+      o.a.round().clamp(0, 255),
+    );
   }
 
   static img.Color? _parseHexColor(String? hex) {
@@ -232,6 +287,7 @@ class _ComposeParams {
   final double blurRadius;
   final String? solidColorHex;
   final Uint8List? backgroundImageBytes;
+  final double beautyStrength;
 
   const _ComposeParams({
     required this.frameBytes,
@@ -242,6 +298,7 @@ class _ComposeParams {
     required this.blurRadius,
     this.solidColorHex,
     this.backgroundImageBytes,
+    this.beautyStrength = 0.0,
   });
 }
 
@@ -276,7 +333,9 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   String get name => 'n42-virtual-background';
 
   /// 当前是否启用了背景处理
-  bool get isEnabled => _config.backgroundMode != BackgroundMode.none;
+  bool get isEnabled =>
+      _config.backgroundMode != BackgroundMode.none ||
+      _config.beautyStrength > 0;
 
   /// 预加载虚拟背景图片字节（供后续合成使用）
   set backgroundImageBytes(Uint8List? bytes) => _backgroundImageBytes = bytes;
@@ -342,7 +401,7 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
       'blurRadius': _config.backgroundBlurRadius,
       'solidColor': _config.backgroundProcessing.solidColor,
       'hasBackgroundImage': _backgroundImageBytes != null,
-      'backgroundImageBytes': _backgroundImageBytes,
+      'beauty': _config.beautyStrength,
       // 本地相机轨道 id：原生据此定位 libwebrtc VideoSource 挂处理器
       // （见 docs/virtual-background-frame-injection.md §3.4）。
       'trackId': _sourceTrack?.id,
@@ -380,6 +439,7 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
       blurRadius: _config.backgroundBlurRadius,
       solidColorHex: _config.backgroundProcessing.solidColor,
       backgroundImageBytes: _backgroundImageBytes,
+      beautyStrength: _config.beautyStrength,
     );
   }
 }

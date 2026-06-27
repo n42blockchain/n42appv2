@@ -131,6 +131,12 @@ class VoIPConfig {
   /// 可以是本地文件路径或网络 URL
   String? virtualBackgroundUrl;
 
+  /// 美颜强度 (0.0 - 1.0)
+  /// 0.0 = 关闭, 复用人像分割 mask 对人像区域磨皮+提亮，与背景处理独立可叠加。
+  double _beautyStrength = 0.0;
+  double get beautyStrength => _beautyStrength;
+  set beautyStrength(double value) => _beautyStrength = value.clamp(0.0, 1.0);
+
   /// 预设虚拟背景列表
   List<String> presetBackgrounds = [];
 

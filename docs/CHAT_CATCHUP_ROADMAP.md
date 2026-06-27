@@ -32,7 +32,7 @@
 | 15 | ~~虚拟背景发布帧注入~~ ✅ **Android 完成（Codex T7，已验收）** | 无需 fork：复用 `flutter_webrtc 1.4.0` 的 `LocalVideoTrack` processor 链（`a5c6ab61`）。`VirtualBackgroundHandler`(MethodChannel) + `N42VirtualBackgroundProcessor`(ML Kit Selfie Seg，none/blur/solidColor/virtualBackground 四模式) + Dart `virtual_background_processor` + 6 单测(本端已验过)；Codex Redmi 真机 APK build+install+冷启动 PASS；A/B 通话对端看处理后视频**经用户确认已验**。仍待：iOS 帧注入(第二阶段) |
 | 16 | iOS 本地 AI 推理桥接 | Android 已 flutter_gemma；iOS 待 Core ML/MediaPipe |
 | 17 | 通话录制 Egress 服务端部署 | ⏳ 框架待部署 |
-| 18 | 美颜 | ❌（可复用虚拟背景 ML Kit 分割管线） |
+| 18 | ~~美颜~~ ✅ **完成 2026-06-27** | 复用虚拟背景 ML Kit 人像分割：`VirtualBackgroundEngine` 对人像区域磨皮(混入模糊层)+提亮，与背景处理独立可叠加；`VoIPConfig.beautyStrength`(0–1) + native 配置通道透传 `beauty` + 9 单测(含美颜 3 例)。本地预览即时生效；发布帧替换同虚拟背景走原生 frame processor |
 | 19 | 超级应用 Agentic AI | 中差距（AI 调用 Mini App 办实事编排） |
 | 20 | 服务号/订阅号 + 公众号文章阅读器排版 | ✅ **阅读器完成 2026-06-27**：长文消息长按「Reading」进入阅读模式(`ArticleReaderPage`)——限定阅读宽度 680、放大行距、可调字号(A-/A+ 持久化)、Markdown 富排版、阅读时长估算；纯逻辑 `ArticleReaderUtils`(长文阈值/时长/标题提取,11 单测)。服务号/订阅号账号形态仍待产品定义 |
 | 21 | 游戏中心 | ⏳ 仅页面框架 |
