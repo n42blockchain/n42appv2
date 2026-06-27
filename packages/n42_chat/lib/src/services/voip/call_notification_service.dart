@@ -7,6 +7,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter_callkit_incoming/entities/android_params.dart';
+import 'package:flutter_callkit_incoming/entities/call_event.dart' as callkit;
 import 'package:flutter_callkit_incoming/entities/call_kit_params.dart';
 import 'package:flutter_callkit_incoming/entities/ios_params.dart';
 import 'package:flutter_callkit_incoming/entities/notification_params.dart';
@@ -60,8 +61,9 @@ class CallNotificationService {
   /// 构造函数中立即开始监听 CallKit 事件，防止 app 从锁屏/冷启动时丢失
   /// action_call_accept 事件（用户在通知中点击接听但 Flutter 引擎尚未就绪的情况）
   CallNotificationService._internal() {
-    _callKitSubscription =
-        FlutterCallkitIncoming.onEvent.listen(_handleCallKitEvent);
+    _callKitSubscription = FlutterCallkitIncoming.onEvent.listen(
+      _handleCallKitEvent,
+    );
     debugLog('CallNotificationService: Event listener attached in constructor');
   }
 
@@ -113,48 +115,77 @@ class CallNotificationService {
   void _handleCallKitEvent(dynamic event) {
     if (event == null) return;
 
-    final eventName = event.event as String?;
-    debugLog('CallNotificationService: Event - $eventName');
+    final eventType = _parseCallKitEvent(event.event);
+    debugLog('CallNotificationService: Event - ${event.event}');
 
     final body = event.body;
-    if (body == null) return;
+    if (body is! Map) return;
 
-    final callInfo = IncomingCallInfo.fromMap(body as Map<String, dynamic>);
+    final callInfo = IncomingCallInfo.fromMap(Map<String, dynamic>.from(body));
 
-    if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_incoming') {
+    if (eventType == callkit.Event.actionCallIncoming) {
       debugLog(
         'CallNotificationService: Incoming call from ${callInfo.callerName}',
       );
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_accept') {
+    } else if (eventType == callkit.Event.actionCallAccept) {
       debugLog('CallNotificationService: Call accepted by user');
       // 同时存入缓存，防止 CallManager 尚未初始化时事件丢失
       _pendingAcceptAction = (CallAction.accept, callInfo);
       _pendingAcceptTime = DateTime.now();
       _callActionController.add((CallAction.accept, callInfo));
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_decline') {
+    } else if (eventType == callkit.Event.actionCallDecline) {
       debugLog('CallNotificationService: Call declined');
       _callActionController.add((CallAction.decline, callInfo));
       _currentCallId = null;
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_timeout') {
+    } else if (eventType == callkit.Event.actionCallTimeout) {
       debugLog('CallNotificationService: Call timeout');
       _callActionController.add((CallAction.timeout, callInfo));
       _currentCallId = null;
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_callback') {
+    } else if (eventType == callkit.Event.actionCallCallback) {
       debugLog('CallNotificationService: Callback');
       _callActionController.add((CallAction.callback, callInfo));
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_ended') {
+    } else if (eventType == callkit.Event.actionCallEnded) {
       debugLog('CallNotificationService: Call ended');
       _currentCallId = null;
-    } else if (eventName ==
-        'com.hiennv.flutter_callkit_incoming.action_call_start') {
+    } else if (eventType == callkit.Event.actionCallStart) {
       debugLog('CallNotificationService: Call started');
     }
+  }
+
+  callkit.Event? _parseCallKitEvent(Object? rawEvent) {
+    if (rawEvent is callkit.Event) return rawEvent;
+    final normalized = rawEvent?.toString().toLowerCase();
+    if (normalized == null) return null;
+
+    if (normalized.contains('actioncallincoming') ||
+        normalized.contains('action_call_incoming')) {
+      return callkit.Event.actionCallIncoming;
+    }
+    if (normalized.contains('actioncallstart') ||
+        normalized.contains('action_call_start')) {
+      return callkit.Event.actionCallStart;
+    }
+    if (normalized.contains('actioncallaccept') ||
+        normalized.contains('action_call_accept')) {
+      return callkit.Event.actionCallAccept;
+    }
+    if (normalized.contains('actioncalldecline') ||
+        normalized.contains('action_call_decline')) {
+      return callkit.Event.actionCallDecline;
+    }
+    if (normalized.contains('actioncallended') ||
+        normalized.contains('action_call_ended')) {
+      return callkit.Event.actionCallEnded;
+    }
+    if (normalized.contains('actioncalltimeout') ||
+        normalized.contains('action_call_timeout')) {
+      return callkit.Event.actionCallTimeout;
+    }
+    if (normalized.contains('actioncallcallback') ||
+        normalized.contains('action_call_callback')) {
+      return callkit.Event.actionCallCallback;
+    }
+    return null;
   }
 
   /// 显示来电通知
@@ -208,9 +239,7 @@ class CallNotificationService {
         incomingCallChannelName: incomingCallChannelName,
         missedCallChannelName: missedCallChannelName,
       ),
-      ios: buildIncomingCallIOSParams(
-        ringtonePreference: ringtonePreference,
-      ),
+      ios: buildIncomingCallIOSParams(ringtonePreference: ringtonePreference),
     );
 
     await FlutterCallkitIncoming.showCallkitIncoming(params);

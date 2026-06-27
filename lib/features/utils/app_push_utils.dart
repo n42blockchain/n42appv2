@@ -64,6 +64,7 @@ class AppPushUtils {
   }
 
   static const Duration _chatTapDedupWindow = Duration(seconds: 8);
+  static const Duration _settingsPromptCooldown = Duration(days: 1);
   static String? _pendingChatRoomId;
   static String? _pendingChatEventId;
   static String? _lastHandledChatRoomId;
@@ -171,7 +172,9 @@ class AppPushUtils {
     FirebaseMessaging.onMessage.listen(_onForegroundMessage);
     // 注册 top-level 入口（见文件顶部 firebaseMessagingBackgroundEntrypoint
     // 注释：class static method 在后台 isolate 无法被 native 回调访问）。
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundEntrypoint);
+    FirebaseMessaging.onBackgroundMessage(
+      firebaseMessagingBackgroundEntrypoint,
+    );
     FirebaseMessaging.onMessageOpenedApp.listen(_onNotificationOpenedApp);
     FirebaseMessaging.instance.onTokenRefresh.listen((newToken) {
       AppLogger.d('AppPush', 'firebase messaging token updated: $newToken');
@@ -646,9 +649,13 @@ class AppPushUtils {
       // 系统弹窗被拒绝，检查用户是否已选择"不再提醒"
       final dismissed = await SPUtil().getPushPermissionDismissed();
       if (dismissed) return;
+      final lastPromptAt = await SPUtil().getPushPermissionLastPromptAt();
+      if (_isSettingsPromptInCooldown(lastPromptAt)) return;
 
       final ctx = AppGlobals.navigatorKey.currentContext;
       if (ctx == null || !ctx.mounted) return;
+
+      unawaited(SPUtil().setPushPermissionLastPromptAt(DateTime.now()));
 
       final s = S.of(ctx);
       // ignore: use_build_context_synchronously
@@ -668,13 +675,19 @@ class AppPushUtils {
               child: Text(s.push_permission_btn_dismiss),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                unawaited(
+                  SPUtil().setPushPermissionLastPromptAt(DateTime.now()),
+                );
                 if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
               },
               child: Text(s.push_permission_btn_later),
             ),
             TextButton(
               onPressed: () async {
+                unawaited(
+                  SPUtil().setPushPermissionLastPromptAt(DateTime.now()),
+                );
                 if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
                 await openAppSettings();
               },
@@ -706,9 +719,13 @@ class AppPushUtils {
       if (await Permission.ignoreBatteryOptimizations.isGranted) return;
 
       if (await SPUtil().getBgDeliveryGuideDismissed()) return;
+      final lastPromptAt = await SPUtil().getBgDeliveryGuideLastPromptAt();
+      if (_isSettingsPromptInCooldown(lastPromptAt)) return;
 
       final ctx = AppGlobals.navigatorKey.currentContext;
       if (ctx == null || !ctx.mounted) return;
+
+      unawaited(SPUtil().setBgDeliveryGuideLastPromptAt(DateTime.now()));
 
       final s = S.of(ctx);
       // ignore: use_build_context_synchronously
@@ -728,13 +745,19 @@ class AppPushUtils {
               child: Text(s.push_permission_btn_dismiss),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async {
+                unawaited(
+                  SPUtil().setBgDeliveryGuideLastPromptAt(DateTime.now()),
+                );
                 if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
               },
               child: Text(s.push_permission_btn_later),
             ),
             TextButton(
               onPressed: () async {
+                unawaited(
+                  SPUtil().setBgDeliveryGuideLastPromptAt(DateTime.now()),
+                );
                 if (dialogCtx.mounted) Navigator.of(dialogCtx).pop();
                 // 先发系统标准的电池优化豁免请求（一键），再跳应用设置页
                 // 引导用户开自启动（厂商私有，无标准 API）。
@@ -753,4 +776,8 @@ class AppPushUtils {
     }
   }
 
+  static bool _isSettingsPromptInCooldown(DateTime? lastPromptAt) {
+    if (lastPromptAt == null) return false;
+    return DateTime.now().difference(lastPromptAt) < _settingsPromptCooldown;
+  }
 }

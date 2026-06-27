@@ -342,6 +342,7 @@
 				97C146EC1CF9000F007C117D /* Resources */,
 				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 				B6C2B36985033CBD4964FC51 /* [CP] Embed Pods Frameworks */,
+				6A42CA112F7A000100000006 /* [Fix] Embed flutter_vodozemac */,
 				884D19DC5AA2CCB07E010457 /* [CP] Copy Pods Resources */,
 				N42STRIP001202600000001 /* Strip Simulator Slices */,
 			);
@@ -460,6 +461,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "/bin/sh \"$FLUTTER_ROOT/packages/flutter_tools/bin/xcode_backend.sh\" embed_and_thin\n";
+		};
+		6A42CA112F7A000100000006 /* [Fix] Embed flutter_vodozemac */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[Fix] Embed flutter_vodozemac";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/scripts/embed_flutter_vodozemac.sh\"\n";
 		};
 		788FCFDB92E15FF0BE84D871 /* [Fix] Missing framework Info.plist */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -48,7 +48,8 @@ class SPUtil {
     try {
       return (json.decode(raw) as List<dynamic>).cast<String>();
     } catch (e) {
-      if (kDebugMode) debugPrint('[SPUtil._decodeJsonList] JSON decode failed: $e');
+      if (kDebugMode)
+        debugPrint('[SPUtil._decodeJsonList] JSON decode failed: $e');
       return [];
     }
   }
@@ -59,7 +60,8 @@ class SPUtil {
     try {
       return json.decode(raw) as Map<String, dynamic>;
     } catch (e) {
-      if (kDebugMode) debugPrint('[SPUtil._decodeJsonMap] JSON decode failed: $e');
+      if (kDebugMode)
+        debugPrint('[SPUtil._decodeJsonMap] JSON decode failed: $e');
       return null;
     }
   }
@@ -216,6 +218,21 @@ class SPUtil {
     await prefs?.setBool(SPkey.pushPermissionDismissed.name, value);
   }
 
+  Future<DateTime?> getPushPermissionLastPromptAt() async {
+    await initPrefs();
+    final value = prefs?.getInt(SPkey.pushPermissionLastPromptAt.name);
+    if (value == null || value <= 0) return null;
+    return DateTime.fromMillisecondsSinceEpoch(value);
+  }
+
+  Future<void> setPushPermissionLastPromptAt(DateTime value) async {
+    await initPrefs();
+    await prefs?.setInt(
+      SPkey.pushPermissionLastPromptAt.name,
+      value.millisecondsSinceEpoch,
+    );
+  }
+
   // 后台送达引导（自启动+电池白名单）：用户是否已选择"不再提醒"
   Future<bool> getBgDeliveryGuideDismissed() async {
     await initPrefs();
@@ -225,6 +242,21 @@ class SPUtil {
   Future<void> setBgDeliveryGuideDismissed(bool value) async {
     await initPrefs();
     await prefs?.setBool(SPkey.bgDeliveryGuideDismissed.name, value);
+  }
+
+  Future<DateTime?> getBgDeliveryGuideLastPromptAt() async {
+    await initPrefs();
+    final value = prefs?.getInt(SPkey.bgDeliveryGuideLastPromptAt.name);
+    if (value == null || value <= 0) return null;
+    return DateTime.fromMillisecondsSinceEpoch(value);
+  }
+
+  Future<void> setBgDeliveryGuideLastPromptAt(DateTime value) async {
+    await initPrefs();
+    await prefs?.setInt(
+      SPkey.bgDeliveryGuideLastPromptAt.name,
+      value.millisecondsSinceEpoch,
+    );
   }
 
   // 小额资产隐藏开关（< $1 USD 的代币不在资产列表中显示）
@@ -436,5 +468,7 @@ enum SPkey {
   ignoredTokenContracts, // 代币自动发现：用户手动忽略的合约地址 JSON List<String>
   smallAssetsThreshold, // 小额资产过滤阈值（double: 0=关闭, 1/5/10/50 表示过滤低于该 USD 价值的代币）
   pushPermissionDismissed, // 用户已明确关闭推送权限提醒，不再弹窗
+  pushPermissionLastPromptAt, // 推送权限提醒最近展示时间，避免短时间反复弹窗
   bgDeliveryGuideDismissed, // 用户已明确关闭后台送达引导（自启动+电池白名单）
+  bgDeliveryGuideLastPromptAt, // 后台送达引导最近展示时间，避免短时间反复跳设置
 }
