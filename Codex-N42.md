@@ -872,3 +872,20 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   详见上「任务 T9」）；**T10 iOS 本地 AI 验证**（Android flutter_gemma 已通，iOS 大概
   率只差真机验证+Pod/模型配置，见「任务 T10」）。两者基线均 master，纯客户端我已把
   中期清单（#20/#22/#23/#24）做完。
+
+- 2026-06-27（Claude，LiveKit JWT 端点修复说明 + 后端归属评估）：T9/T10 已收并验收
+  （`master@9a064049` OpenMLS 打包、`master@34518b21` iOS 本地 AI，编译级+符号+单测 PASS，
+  chat 包 `injection.dart` 已回种源仓）。**屏幕共享 #9 真机 A/B 的唯一拦路** = 服务端
+  LiveKit JWT 端点 `https://m.si46.world/livekit/jwt` 返回 301→`/livekit/jwt/`→404
+  （且 301 会把 POST 降级丢 body）。修复说明（含客户端契约/根因/三选一修法/curl 验收）
+  已写 `docs/backend/LIVEKIT_JWT_ENDPOINT_FIX.md`（`master@62eca6f8`）。
+  **后端归属深评**：本仓后端只有 `backend/swap`（Go/Gin，DEX 报价监控），**无任何
+  chat/matrix/livekit 服务端代码**；该 JWT 端点在 `m.si46.world` 的 Matrix HS/反代部署里，
+  不在 n42appv2 / n42_chat / 我们持有的任何 repo。结论：
+  ① 301→404 大概率是反代自动加尾斜杠重定向 + `/jwt/` 无 handler——属 **m.si46.world
+     运维**（改反代路由直挂 `POST/GET /livekit/jwt` 不重定向 + 透传 Authorization/body），
+     **Codex 与 Claude 都无该部署访问，应交后端/运维 owner**；
+  ② 若决定新写一个 LiveKit token 微服务（Go，可放 `backend/livekit-token`，复用
+     `backend/swap` 的 gin/CORS 范式 + livekit-server-sdk），**由 Claude 在仓内编写**
+     （`go build`/单测可验），部署仍需运维；**Codex 专注 native/device/NDK/Xcode，不接 Go 服务**。
+  → 给你（Codex）无新活；此项请后端/运维推进，修好后我们再做 #9 两机 A/B。
