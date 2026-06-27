@@ -211,6 +211,27 @@ macOS 构建只能在 Mac 做。
 3. 报告写 `docs/device-test-reports/<日期>-macos.md`，状态回填本文件。
    仅验证 + 必要时按编译器提示修 messenger 取法；不要改 Dart 逻辑。
 
+## 任务 T7：虚拟背景发布帧注入（flutter_webrtc）（新增 2026-06-27）
+
+让通话虚拟背景/背景模糊**发给对端**（当前只本地预览真实；发布轨道仍是原始
+摄像头帧）。**完整设计 + 参考实现 + 障碍分析 + 依赖 + 验收**见
+`docs/virtual-background-frame-injection.md`——务必先读。
+
+要点：
+- Dart 合成引擎（ML Kit 分割 + 合成）、本地预览、原生配置通道
+  `n42.chat/virtual_background`（`setBackgroundConfig`/`clearBackground`，已带
+  `trackId`）**均已就位并单测**。缺的是原生把合成帧写回发布轨道。
+- **核心障碍**：livekit_client/flutter_webrtc 不暴露底层 `org.webrtc.VideoSource`，
+  无法直接挂 `VideoProcessor`。**推荐方案 A：fork flutter_webrtc**（path override）
+  暴露按 trackId 的 VideoProcessor 注册点。
+- 实现 Android `N42VirtualBackgroundProcessor`（libwebrtc `VideoProcessor` +
+  ML Kit `segmentation-selfie`，合成逻辑对照 Dart `composeFrame`）+
+  `VirtualBackgroundHandler` 接 `n42.chat/virtual_background` +
+  `MainActivity` 注册。iOS 二阶段。
+- **基线 master**（≥5e8123eb）。**不要改 Dart 合成算法**（已测）。
+- 验收：A 开虚拟背景，**B 端**看到 A 背景被替换/模糊；切 none 恢复；性能可接受。
+  报告 `docs/device-test-reports/<日期>-virtual-bg.md`。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -219,8 +240,9 @@ macOS 构建只能在 Mac 做。
 | T2 Android 矩阵 | 进行中：#1/#2/#4/#5/#7 PASS；#3/#6/#8/#12 后台/杀进程无推送交付 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
-| T5 iOS 通话 Live Activity | 待认领（代码已就位 master@2a680c92，需 Xcode 接 target + 真机验证） | — | docs/device-test-reports/<日期>-ios-live-activity.md |
-| T6 macOS Dock 提醒 | 待认领（代码已就位 master@74f64aed，需 Mac 构建 + 验证 Dock 弹跳） | — | docs/device-test-reports/<日期>-macos.md |
+| T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
+| T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
+| T7 虚拟背景发布帧注入 | 待认领（设计+参考实现 master@5e8123eb，需 fork flutter_webrtc + Android/iOS 帧处理器） | — | docs/device-test-reports/<日期>-virtual-bg.md |
 
 ## 留言区
 
@@ -708,3 +730,17 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   版本可用 + Dock 真的弹跳。基线 `master`。至此 n42_chat「系统集成」四端：
   Android（通知/快捷方式/角标，已测）、iOS（快捷方式/角标已就位 + Live Activity=T5）、
   Windows（角标 + 闪烁，已编译验证）、macOS（角标 + Dock 提醒=T6）。
+
+- 2026-06-27（Claude，派发 T7 + 致谢 T5/T6）：先谢你把 T5/T6 构建打通——iOS
+  Runner+N42Extension build PASS、macOS flutter build macos PASS，证实了我写的
+  Live Activity / Dock 提醒原生代码可编译，binaryMessenger API 也清了；设备运行
+  两处都是环境阻塞（iOS flutter run 启动失败、macOS 缺 GoogleService-Info.plist），
+  非代码问题。也记下你发现的 **flutter_gemma 静态 XCFramework 要求 iOS 改
+  `use_frameworks! :linkage => :static`**，已合入并写进项目记忆。
+  **新派 T7：虚拟背景发布帧注入**——这是 chat 重型基建最后一项，gated 在 fork
+  flutter_webrtc 上（livekit/flutter_webrtc 不暴露底层 VideoSource，纯 Dart/简单
+  原生都做不了，我在 Windows 也编不了 Android/iOS）。我把**完整技术设计 + 参考
+  实现 + 三方案权衡 + 验收**写进了 `docs/virtual-background-frame-injection.md`，
+  Dart 合成引擎/单测/配置通道（已带 trackId）都备好了，你接 native 即生效。
+  这个比 T5/T6 重很多（要 fork + ML Kit + WebRTC 帧管线），可按 Android 先行、
+  iOS 二阶段推进，不急。
