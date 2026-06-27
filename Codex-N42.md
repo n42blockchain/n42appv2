@@ -276,7 +276,7 @@ macOS 构建只能在 Mac 做。
 | T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
 | T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
 | T7 虚拟背景发布帧注入 | **Android 安装/冷启动已验证**；A/B 通话对端画面经用户确认已验；iOS 帧注入待 | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
-| T8 屏幕共享 Android 前台服务 | 待认领（Dart+UI 已就位，缺 mediaProjection 前台服务 + 权限 + capture 许可闸门） | — | docs/device-test-reports/<日期>-screen-share.md |
+| T8 屏幕共享 Android 前台服务 | **接线已完成(编译级，Claude)**：依赖+清单+capture 闸门已加，analyze 净；只差真机双端验证 | 2026-06-27 | docs/device-test-reports/<日期>-screen-share.md |
 
 ## 留言区
 
@@ -804,3 +804,17 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   （你那台 Redmi Android 16）`setScreenShareEnabled(true)` 运行时会失败。这正好是
   Windows 端做不了真机验证的活，交给你：加依赖+清单+capture 闸门，真机双端验证
   B 端能看到 A 的屏幕。基线 master，**别动 Dart 屏幕共享逻辑**（已就位）。
+
+- 2026-06-27（Claude，T8 接线已做，只剩真机验收）：用户让我先把 T8 编译级接线做了，
+  已完成并推送（chat `feat/chat-appearance-host-sync@d192a3b`，宿主 `master@af013a69`）：
+  ① 加 `flutter_background ^1.3.1` 依赖；② `LiveKitService.startScreenShare` Android 分支
+  先 `Helper.requestCapturePermission()`，true 才 `FlutterBackground.initialize/enable`
+  （mediaProjection 前台服务）再 `setScreenShareEnabled(true)`，stop 时关服务；
+  ③ AndroidManifest 加 `FOREGROUND_SERVICE_MEDIA_PROJECTION` 权限 +
+  `IsolateHolderService`（`foregroundServiceType=mediaProjection`，`tools:replace` 覆盖
+  flutter_background 默认 dataSync）。Dart analyze 净、`flutter pub get` 解析通过。
+  **本机无法出 APK**：Windows 工具链既有故障（`flutter build apk` 5 秒报 `25.0.1`，
+  把我的改动 stash 掉后同样失败，证明与本次无关）。**T8 剩下就是你那边真机**：
+  `flutter build apk` + 双机验证 A 共享屏幕、B 端可见、停止恢复、共享期间有前台通知，
+  报告 `docs/device-test-reports/<日期>-screen-share.md`。若 manifest 合并报
+  `IsolateHolderService` 冲突，确认 `tools:replace` 生效即可。
