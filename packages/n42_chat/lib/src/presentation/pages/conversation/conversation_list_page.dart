@@ -435,6 +435,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
             color: context.textPrimary,
             size: 20,
           ),
+          tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -511,6 +512,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
               Icons.add_circle_outline,
               color: context.textPrimary,
             ),
+            tooltip: S.of(context)?.commonAdd ?? 'New chat',
             onPressed: widget.onAddPressed ?? _showAddMenu,
           ),
         ],
@@ -526,7 +528,10 @@ class _ConversationListPageState extends State<ConversationListPage> {
         horizontal: AppDimensions.listItemPadding,
         vertical: AppDimensions.spacingS,
       ),
-      child: GestureDetector(
+      child: Semantics(
+        button: true,
+        label: S.of(context)?.commonSearch ?? 'Search',
+        child: GestureDetector(
         onTap: widget.onSearchTap ?? _navigateToSearch,
         child: Container(
           height: AppDimensions.searchBarHeight + 4,
@@ -556,6 +561,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
             ],
           ),
         ),
+      ),
       ),
     );
   }

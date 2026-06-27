@@ -1286,7 +1286,10 @@ class MessageItem extends StatelessWidget {
     final filename = metadata?.fileName ?? message.content;
     final size = metadata?.size;
 
-    return Container(
+    return Semantics(
+      label: 'File, $filename',
+      excludeSemantics: true,
+      child: Container(
       width: 200,
       padding: const EdgeInsets.all(12),
       child: Row(
@@ -1340,6 +1343,7 @@ class MessageItem extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 
@@ -1356,7 +1360,10 @@ class MessageItem extends StatelessWidget {
       locationName = S.of(context)?.chatMyLocation ?? 'My Location';
     }
 
-    return SizedBox(
+    return Semantics(
+      label: 'Location, $locationName',
+      excludeSemantics: true,
+      child: SizedBox(
       width: 220,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1477,6 +1484,7 @@ class MessageItem extends StatelessWidget {
           ),
         ],
       ),
+      ),
     );
   }
 
@@ -1487,7 +1495,14 @@ class MessageItem extends StatelessWidget {
     final token = metadata?.token ?? '';
     final note = message.content.trim();
     final confirmed = (metadata?.txHash ?? '').isNotEmpty;
-    return Container(
+    return Semantics(
+      label: [
+        'Tip',
+        '$amount $token'.trim(),
+        if (note.isNotEmpty) note,
+      ].where((e) => e.isNotEmpty).join(', '),
+      excludeSemantics: true,
+      child: Container(
       constraints: const BoxConstraints(maxWidth: 260),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
@@ -1534,6 +1549,7 @@ class MessageItem extends StatelessWidget {
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -2284,7 +2300,11 @@ class MessageItem extends StatelessWidget {
           // 未接来电显示回拨按钮
           if (isMissed && !message.isFromMe && onCallBack != null) ...[
             const SizedBox(width: 8),
-            GestureDetector(
+            Semantics(
+              button: true,
+              label: S.of(context)?.chatCallBack ?? '回拨',
+              excludeSemantics: true,
+              child: GestureDetector(
               onTap: () => onCallBack?.call(message),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -2315,6 +2335,7 @@ class MessageItem extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
             ),
           ],
         ],
