@@ -24,8 +24,13 @@ class SsoBrandClassifier {
 
   /// 按 provider id / name 关键字归类（大小写不敏感）。
   static SsoBrand classify(String idOrName) {
-    final s = idOrName.toLowerCase();
+    final s = idOrName.trim().toLowerCase();
     bool has(String kw) => s.contains(kw);
+    bool hasToken(String token) {
+      return RegExp(
+        '(^|[^a-z0-9])${RegExp.escape(token)}([^a-z0-9]|\$)',
+      ).hasMatch(s);
+    }
 
     if (has('google')) return SsoBrand.google;
     if (has('apple')) return SsoBrand.apple;
@@ -40,7 +45,7 @@ class SsoBrandClassifier {
     if (has('github')) return SsoBrand.github;
     if (has('gitlab')) return SsoBrand.gitlab;
     if (has('facebook') || has('meta')) return SsoBrand.facebook;
-    if (has('twitter') || has(' x ') || s == 'x' || has('x.com')) {
+    if (has('twitter') || s == 'x' || has('x.com') || hasToken('x')) {
       return SsoBrand.twitter;
     }
     if (has('discord')) return SsoBrand.discord;

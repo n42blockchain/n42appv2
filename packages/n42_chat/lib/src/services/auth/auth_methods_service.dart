@@ -1120,8 +1120,9 @@ class AuthMethodsService {
     required String homeserver,
     required String redirectUrl,
   }) {
+    final base = _normalizeHomeserverBase(homeserver);
     final encodedRedirect = Uri.encodeComponent(redirectUrl);
-    return '$homeserver/_matrix/client/v3/login/sso/redirect?redirectUrl=$encodedRedirect';
+    return '$base/_matrix/client/v3/login/sso/redirect?redirectUrl=$encodedRedirect';
   }
 
   /// 获取支持的 SSO 提供商列表
@@ -1144,27 +1145,7 @@ class AuthMethodsService {
 
         if (flows == null) return [];
 
-        final providers = <SsoProvider>[];
-
-        for (final flow in flows) {
-          if (flow['type'] == 'm.login.sso') {
-            final identityProviders =
-                flow['identity_providers'] as List<dynamic>?;
-            if (identityProviders != null) {
-              for (final provider in identityProviders) {
-                providers.add(
-                  SsoProvider(
-                    id: provider['id'] as String? ?? '',
-                    name: provider['name'] as String? ?? 'SSO',
-                    icon: provider['icon'] as String?,
-                    brand: provider['brand'] as String?,
-                  ),
-                );
-              }
-            }
-            // identity_providers 为空说明服务器未配置具体 provider，不添加占位符
-          }
-        }
+        final providers = parseSsoProviders(data);
 
         debugLog('AuthMethodsService: Found ${providers.length} SSO providers');
         return providers;
@@ -1187,8 +1168,58 @@ class AuthMethodsService {
     required String providerId,
     required String redirectUrl,
   }) {
+    final base = _normalizeHomeserverBase(homeserver);
+    final encodedProviderId = Uri.encodeComponent(providerId.trim());
     final encodedRedirect = Uri.encodeComponent(redirectUrl);
-    return '$homeserver/_matrix/client/v3/login/sso/redirect/$providerId?redirectUrl=$encodedRedirect';
+    return '$base/_matrix/client/v3/login/sso/redirect/$encodedProviderId?redirectUrl=$encodedRedirect';
+  }
+
+  /// Parse `/_matrix/client/v3/login` response into usable SSO providers.
+  ///
+  /// Some Matrix homeservers expose `m.login.sso` without enumerating
+  /// `identity_providers`; that still supports the generic SSO redirect
+  /// endpoint, so return a synthetic `sso` provider instead of treating SSO as
+  /// unavailable.
+  static List<SsoProvider> parseSsoProviders(Map<String, dynamic> data) {
+    final flows = data['flows'] as List<dynamic>?;
+    if (flows == null) return const [];
+
+    final providers = <SsoProvider>[];
+    var hasSsoFlow = false;
+
+    for (final flow in flows) {
+      if (flow is! Map<String, dynamic> || flow['type'] != 'm.login.sso') {
+        continue;
+      }
+      hasSsoFlow = true;
+
+      final identityProviders = flow['identity_providers'] as List<dynamic>?;
+      if (identityProviders == null) continue;
+
+      for (final provider in identityProviders) {
+        if (provider is! Map<String, dynamic>) continue;
+        final id = (provider['id'] as String? ?? '').trim();
+        if (id.isEmpty) continue;
+        final name = (provider['name'] as String? ?? '').trim();
+        providers.add(
+          SsoProvider(
+            id: id,
+            name: name.isEmpty ? 'SSO' : name,
+            icon: (provider['icon'] as String?)?.trim(),
+            brand: (provider['brand'] as String?)?.trim(),
+          ),
+        );
+      }
+    }
+
+    if (providers.isEmpty && hasSsoFlow) {
+      return const [SsoProvider(id: 'sso', name: 'SSO')];
+    }
+    return providers;
+  }
+
+  static String _normalizeHomeserverBase(String homeserver) {
+    return homeserver.trim().replaceFirst(RegExp(r'/+$'), '');
   }
 
   // ============================================

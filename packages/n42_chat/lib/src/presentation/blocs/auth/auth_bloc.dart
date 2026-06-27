@@ -226,8 +226,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       rememberMe: true,
     );
 
-    // 账号不存在 → 首次用钱包登录，注册同名同密账号
-    if (!(result.success && result.user != null)) {
+    // Matrix password login usually reports both "unknown user" and "wrong
+    // password" as invalid credentials. Only that class of failure should fall
+    // through to first-use auto-registration; network/server/rate-limit errors
+    // must surface directly instead of issuing a second auth request.
+    if (!(result.success && result.user != null) &&
+        _shouldAttemptWalletAutoRegister(result)) {
       result = await _authRepository.register(
         homeserver: event.homeserver,
         username: creds.username,
@@ -241,11 +245,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(
         state.copyWith(
           status: AuthStatus.error,
-          errorMessage: result.errorMessage ?? 'Wallet login failed',
+          errorMessage: _walletAuthErrorMessage(result),
           errorType: result.errorType,
         ),
       );
     }
+  }
+
+  bool _shouldAttemptWalletAutoRegister(AuthResult loginResult) {
+    return loginResult.errorType == AuthErrorType.invalidCredentials;
+  }
+
+  String _walletAuthErrorMessage(AuthResult result) {
+    if (result.errorType == AuthErrorType.usernameExists) {
+      return 'Wallet account already exists but could not be unlocked. Reconnect the same wallet and try again.';
+    }
+    return result.errorMessage ?? 'Wallet login failed';
   }
 
   /// 匿名注册

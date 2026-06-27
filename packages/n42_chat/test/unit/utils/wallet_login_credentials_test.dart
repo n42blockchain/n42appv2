@@ -18,6 +18,13 @@ void main() {
         WalletLoginCredentials.canonicalLoginMessage('  $addr  '),
       );
     });
+
+    test('rejects empty address', () {
+      expect(
+        () => WalletLoginCredentials.canonicalLoginMessage('  '),
+        throwsArgumentError,
+      );
+    });
   });
 
   group('deriveUsername', () {
@@ -37,6 +44,13 @@ void main() {
       expect(
         WalletLoginCredentials.deriveUsername('0xaaa'),
         isNot(WalletLoginCredentials.deriveUsername('0xbbb')),
+      );
+    });
+
+    test('rejects empty address', () {
+      expect(
+        () => WalletLoginCredentials.deriveUsername(''),
+        throwsArgumentError,
       );
     });
   });
@@ -59,6 +73,13 @@ void main() {
       expect(
         WalletLoginCredentials.derivePassword('0xaaa'),
         isNot(WalletLoginCredentials.derivePassword('0xbbb')),
+      );
+    });
+
+    test('rejects empty signature', () {
+      expect(
+        () => WalletLoginCredentials.derivePassword('  '),
+        throwsArgumentError,
       );
     });
   });
