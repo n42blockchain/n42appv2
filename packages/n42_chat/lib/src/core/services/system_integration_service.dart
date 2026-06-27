@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:quick_actions/quick_actions.dart';
 
 import '../utils/debug_log.dart';
 
@@ -30,6 +31,13 @@ class SystemIntegrationService {
   final FlutterLocalNotificationsPlugin _notifications =
       FlutterLocalNotificationsPlugin();
   bool _notifReady = false;
+
+  /// 动态快捷方式插件（Android Shortcuts / iOS Quick Actions）
+  final QuickActions _quickActions = const QuickActions();
+  bool _quickActionsReady = false;
+
+  /// 用户点选某动态快捷方式时回调（type 即 [setDynamicShortcuts] 传入的 type）
+  void Function(String type)? onShortcutSelected;
 
   /// 进行中活动通知渠道（低优先级、静默、常驻）
   static const String _activityChannelId = 'n42.chat.activity';
@@ -211,9 +219,41 @@ class SystemIntegrationService {
 
   /// 设置 App 动态快捷方式（Android Shortcuts / iOS Quick Actions）。
   ///
-  /// 平台原生专属，无通知兜底；原生未接时 no-op（需 quick_actions 等后续接线）。
-  Future<void> setDynamicShortcuts(List<Map<String, dynamic>> shortcuts) =>
-      _tryNative<void>('setDynamicShortcuts', {'shortcuts': shortcuts});
+  /// 每个 map：`{type, title|localizedTitle, subtitle?, icon?}`。移动端经
+  /// `quick_actions` 真实生效；桌面无该能力，原生未接时 no-op。空列表→清空。
+  Future<void> setDynamicShortcuts(List<Map<String, dynamic>> shortcuts) async {
+    final handled = await _tryNative<bool>('setDynamicShortcuts', {
+      'shortcuts': shortcuts,
+    });
+    if (handled == true) return;
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS)) return;
+    try {
+      await _ensureQuickActions();
+      if (shortcuts.isEmpty) {
+        await _quickActions.clearShortcutItems();
+        return;
+      }
+      final items = shortcuts
+          .map((m) => ShortcutItem(
+                type: (m['type'] ?? '').toString(),
+                localizedTitle:
+                    (m['title'] ?? m['localizedTitle'] ?? '').toString(),
+                localizedSubtitle: m['subtitle']?.toString(),
+                icon: m['icon']?.toString(),
+              ))
+          .where((i) => i.type.isNotEmpty && i.localizedTitle.isNotEmpty)
+          .toList();
+      await _quickActions.setShortcutItems(items);
+    } catch (e) {
+      debugLog('SystemIntegrationService: setDynamicShortcuts failed: $e');
+    }
+  }
+
+  Future<void> _ensureQuickActions() async {
+    if (_quickActionsReady) return;
+    await _quickActions.initialize((type) => onShortcutSelected?.call(type));
+    _quickActionsReady = true;
+  }
 
   /// 桌面系统托盘未读角标（平台原生专属，无兜底；需 tray_manager 后续接线）
   Future<void> setTrayBadge(int count) =>
@@ -234,9 +274,14 @@ class SystemIntegrationService {
     switch (capability) {
       case 'liveActivity':
       case 'conversation':
+      case 'shortcuts':
         return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
       default:
         return false;
     }
   }
+
+  /// 把字符串 id 稳定映射为正整数通知 id（仅供测试断言其纯函数性质）。
+  @visibleForTesting
+  int stableIdForTest(String s) => _stableId(s);
 }

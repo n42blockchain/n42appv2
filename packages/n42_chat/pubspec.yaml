@@ -195,7 +195,9 @@ dependencies:
   firebase_core: ^4.5.0
   firebase_messaging: ^16.1.2
   flutter_local_notifications: ^20.1.0
-  
+  # 系统级集成：动态快捷方式（Android Shortcuts / iOS Quick Actions）
+  quick_actions: ^1.1.0
+
   # ============================================
   # Wakelock - 保持屏幕常亮
   # ============================================
