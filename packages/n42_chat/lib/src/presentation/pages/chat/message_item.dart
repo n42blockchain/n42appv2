@@ -1636,7 +1636,11 @@ class MessageItem extends StatelessWidget {
     final cover = metadata?.musicCover;
     final url = metadata?.musicUrl;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: 'Music, $title, $artist',
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: () {
         if (url != null && url.isNotEmpty) {
           onTap?.call();
@@ -1726,6 +1730,7 @@ class MessageItem extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 
@@ -1806,7 +1811,11 @@ class MessageItem extends StatelessWidget {
           if (data.description != null && data.description!.isNotEmpty)
             row(Icons.notes, data.description!, maxLines: 3),
           const SizedBox(height: 10),
-          GestureDetector(
+          Semantics(
+            button: true,
+            label: 'Add to calendar',
+            excludeSemantics: true,
+            child: GestureDetector(
             onTap: () => _shareEventIcs(context, data),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
@@ -1824,6 +1833,7 @@ class MessageItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
         ],
       ),
@@ -1987,7 +1997,12 @@ class MessageItem extends StatelessWidget {
                     (maxSelections == 1 && myVotes.isNotEmpty) // 单选可以更改
                     );
 
-            return GestureDetector(
+            return Semantics(
+              button: canChangeVote,
+              selected: isSelected,
+              label: '$optionText, $voteCount votes',
+              excludeSemantics: true,
+              child: GestureDetector(
               onTap: canChangeVote
                   ? () => onPollVote?.call(
                       message.id,
@@ -2092,6 +2107,7 @@ class MessageItem extends StatelessWidget {
                   ],
                 ),
               ),
+              ),
             );
           }),
 
@@ -2145,7 +2161,11 @@ class MessageItem extends StatelessWidget {
                 ),
               ),
               if (!pollEnded && message.isFromMe)
-                GestureDetector(
+                Semantics(
+                  button: true,
+                  label: S.of(context)?.chatEndPollButton ?? 'End Poll',
+                  excludeSemantics: true,
+                  child: GestureDetector(
                   onTap: () => onEndPoll?.call(message.id),
                   child: Text(
                     S.of(context)?.chatEndPollButton ?? 'End Poll',
@@ -2157,6 +2177,7 @@ class MessageItem extends StatelessWidget {
                       color: AppColors.error,
                     ),
                   ),
+                ),
                 ),
             ],
           ),

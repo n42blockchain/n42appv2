@@ -260,6 +260,7 @@ class _GifPickerState extends State<GifPicker> {
             suffixIcon: _searchController.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.clear, size: 18),
+                    tooltip: 'Clear search',
                     onPressed: () {
                       _searchController.clear();
                       _currentQuery = '';

@@ -437,7 +437,11 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
     final bgColor = context.surfaceColor;
     final defaultIconColor = context.textSecondary;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: item.label,
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: item.onTap,
       onLongPress: item.onLongPress,
       child: SizedBox(
@@ -470,6 +474,7 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
             ),
           ],
         ),
+      ),
       ),
     );
   }

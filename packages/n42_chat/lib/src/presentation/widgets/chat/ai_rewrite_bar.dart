@@ -76,12 +76,17 @@ class AiRewriteBar extends StatelessWidget {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: onDismiss,
-                  child: Icon(
-                    Icons.close,
-                    size: 18,
-                    color: AppColors.textTertiaryOf(isDark),
+                Semantics(
+                  button: true,
+                  label: MaterialLocalizations.of(context).closeButtonTooltip,
+                  excludeSemantics: true,
+                  child: GestureDetector(
+                    onTap: onDismiss,
+                    child: Icon(
+                      Icons.close,
+                      size: 18,
+                      color: AppColors.textTertiaryOf(isDark),
+                    ),
                   ),
                 ),
               ],

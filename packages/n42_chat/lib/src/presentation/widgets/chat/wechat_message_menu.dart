@@ -405,7 +405,11 @@ class WeChatMessageMenu extends StatelessWidget {
     return Builder(
       builder: (context) => Material(
         color: Colors.transparent,
-        child: InkWell(
+        child: Semantics(
+          button: true,
+          label: 'More reactions',
+          excludeSemantics: true,
+          child: InkWell(
           onTap: () {
             HapticFeedback.lightImpact();
             // 先关闭当前菜单
@@ -438,6 +442,7 @@ class WeChatMessageMenu extends StatelessWidget {
               size: 22,
             ),
           ),
+        ),
         ),
       ),
     );

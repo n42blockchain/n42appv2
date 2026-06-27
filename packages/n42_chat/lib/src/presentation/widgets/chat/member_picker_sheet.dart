@@ -111,6 +111,7 @@ class _MemberPickerSheetState extends State<MemberPickerSheet> {
               children: [
                 IconButton(
                   onPressed: () => Navigator.pop(context),
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
                   icon: Icon(Icons.close, color: textColor),
                 ),
                 Expanded(

@@ -133,7 +133,11 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
   Widget _buildPreview(BuildContext context, UrlPreviewData data) {
     final isDark = context.isDarkMode;
 
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      label: 'Open link, ${data.title ?? data.siteName ?? data.url}',
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: () => _openUrl(data.url),
       child: Container(
         margin: const EdgeInsets.only(top: 8),
@@ -219,6 +223,7 @@ class _UrlPreviewWidgetState extends State<UrlPreviewWidget> {
               ),
           ],
         ),
+      ),
       ),
     );
   }

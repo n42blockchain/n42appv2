@@ -96,7 +96,11 @@ class CodeBlockMessageWidget extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                InkWell(
+                Semantics(
+                  button: true,
+                  label: 'Copy code',
+                  excludeSemantics: true,
+                  child: InkWell(
                   borderRadius: BorderRadius.circular(6),
                   onTap: () => _copy(context, parsed.code),
                   child: Padding(
@@ -118,6 +122,7 @@ class CodeBlockMessageWidget extends StatelessWidget {
                       ],
                     ),
                   ),
+                ),
                 ),
               ],
             ),

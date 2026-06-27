@@ -248,7 +248,11 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
                   
                   // 删除按钮
                   if (widget.onBackspace != null)
-                    GestureDetector(
+                    Semantics(
+                      button: true,
+                      label: 'Backspace',
+                      excludeSemantics: true,
+                      child: GestureDetector(
                       onTap: widget.onBackspace,
                       onLongPress: () {
                         // 长按连续删除
@@ -271,11 +275,16 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
                           color: context.textSecondary,
                         ),
                       ),
+                      ),
                     ),
-                  
+
                   // 发送按钮
                   if (widget.onSend != null)
-                    GestureDetector(
+                    Semantics(
+                      button: true,
+                      label: S.of(context)?.chatSendButton ?? 'Send',
+                      excludeSemantics: true,
+                      child: GestureDetector(
                       onTap: widget.onSend,
                       child: Container(
                         width: 60,
@@ -291,6 +300,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
                             ),
                           ),
                         ),
+                      ),
                       ),
                     ),
                 ],

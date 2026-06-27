@@ -90,12 +90,16 @@ class _VideoStickerViewState extends State<VideoStickerView> {
         ),
       );
     }
-    return FittedBox(
-      fit: widget.fit,
-      child: SizedBox(
-        width: controller.value.size.width,
-        height: controller.value.size.height,
-        child: VideoPlayer(controller),
+    return Semantics(
+      label: 'Video sticker',
+      image: true,
+      child: FittedBox(
+        fit: widget.fit,
+        child: SizedBox(
+          width: controller.value.size.width,
+          height: controller.value.size.height,
+          child: VideoPlayer(controller),
+        ),
       ),
     );
   }

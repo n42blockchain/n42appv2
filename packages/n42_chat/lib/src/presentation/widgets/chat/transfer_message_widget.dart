@@ -272,7 +272,16 @@ class _PaymentCardFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: onTap != null,
+      label: [
+        footerLabel,
+        title,
+        subtitle,
+        if (note?.isNotEmpty == true) note,
+      ].where((e) => e != null && e.isNotEmpty).join(', '),
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         width: 240,
@@ -359,6 +368,7 @@ class _PaymentCardFrame extends StatelessWidget {
           ],
         ),
       ),
+      ),
     );
   }
 }
@@ -402,7 +412,15 @@ class RedPacketMessageWidget extends StatelessWidget {
         ? const Color(0xFF8B7355) // 已领取：深棕色文字
         : Colors.white; // 未领取：白色文字
 
-    return GestureDetector(
+    return Semantics(
+      button: onTap != null,
+      label: [
+        S.of(context)?.profileRedPacket ?? 'Red Packet',
+        if (note?.isNotEmpty == true) note,
+        isOpened ? 'opened' : 'unopened',
+      ].where((e) => e != null && e.isNotEmpty).join(', '),
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         width: 260,
@@ -496,6 +514,7 @@ class RedPacketMessageWidget extends StatelessWidget {
               ),
           ],
         ),
+      ),
       ),
     );
   }

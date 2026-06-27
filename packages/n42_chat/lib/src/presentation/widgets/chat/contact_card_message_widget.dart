@@ -25,7 +25,11 @@ class ContactCardMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Semantics(
+      button: onTap != null,
+      label: 'Contact card, $displayName',
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         width: 240,
@@ -101,6 +105,7 @@ class ContactCardMessageWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }

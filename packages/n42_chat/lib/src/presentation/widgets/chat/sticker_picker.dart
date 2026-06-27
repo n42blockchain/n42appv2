@@ -211,12 +211,17 @@ class _StickerPickerState extends State<StickerPicker> {
               ),
             ),
             if (_searchQuery.isNotEmpty)
-              GestureDetector(
-                onTap: _clearSearch,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(Icons.close,
-                      size: 18, color: context.textTertiary),
+              Semantics(
+                button: true,
+                label: 'Clear search',
+                excludeSemantics: true,
+                child: GestureDetector(
+                  onTap: _clearSearch,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Icon(Icons.close,
+                        size: 18, color: context.textTertiary),
+                  ),
                 ),
               ),
           ],
@@ -320,7 +325,12 @@ class _StickerPickerState extends State<StickerPicker> {
     VoidCallback? onTap,
     required bool isDark,
   }) {
-    return GestureDetector(
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: icon != null ? 'Sticker store' : (label ?? 'Sticker pack'),
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -351,6 +361,7 @@ class _StickerPickerState extends State<StickerPicker> {
                   ),
                 ),
         ),
+      ),
       ),
     );
   }

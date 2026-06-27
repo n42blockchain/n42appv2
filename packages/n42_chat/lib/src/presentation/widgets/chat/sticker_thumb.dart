@@ -34,13 +34,20 @@ class StickerThumb extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.placeholderOf(isDark),
-        borderRadius: BorderRadius.circular(8),
+    return Semantics(
+      label: sticker.emoji?.isNotEmpty == true
+          ? 'Sticker, ${sticker.emoji}'
+          : 'Sticker',
+      image: true,
+      excludeSemantics: true,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.placeholderOf(isDark),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: padding,
+        child: Center(child: _content()),
       ),
-      padding: padding,
-      child: Center(child: _content()),
     );
   }
 
