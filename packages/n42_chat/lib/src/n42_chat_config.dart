@@ -169,6 +169,12 @@ class N42ChatConfig {
   /// 当前仅应在宿主已经打通浏览器回调流程时启用。
   final bool enableSsoLogin;
 
+  /// 是否显示钱包/DID 登录入口
+  ///
+  /// 用钱包对固定消息的签名派生 Matrix 用户名+密码（见 WalletLoginCredentials），
+  /// 需宿主 `IWalletBridge` 已接入且 `signMessage` 返回确定性签名。
+  final bool enableWalletLogin;
+
   /// Google Sign-In OAuth Client ID
   ///
   /// 宿主已使用 google-services / 原生配置兜底时可不传；
@@ -473,6 +479,7 @@ class N42ChatConfig {
     this.enableTwitterLogin = false,
     this.enableWeChatLogin = false,
     this.enableSsoLogin = false,
+    this.enableWalletLogin = true,
     this.googleClientId,
     this.googleServerClientId,
     this.twitterApiKey,
@@ -553,6 +560,7 @@ class N42ChatConfig {
     bool? enableTwitterLogin,
     bool? enableWeChatLogin,
     bool? enableSsoLogin,
+    bool? enableWalletLogin,
     Object? googleClientId = _copyWithUndefined,
     Object? googleServerClientId = _copyWithUndefined,
     Object? twitterApiKey = _copyWithUndefined,
@@ -644,6 +652,7 @@ class N42ChatConfig {
       enableTwitterLogin: enableTwitterLogin ?? this.enableTwitterLogin,
       enableWeChatLogin: enableWeChatLogin ?? this.enableWeChatLogin,
       enableSsoLogin: enableSsoLogin ?? this.enableSsoLogin,
+      enableWalletLogin: enableWalletLogin ?? this.enableWalletLogin,
       googleClientId: _nullableCopyWithValue<String>(
         googleClientId,
         this.googleClientId,

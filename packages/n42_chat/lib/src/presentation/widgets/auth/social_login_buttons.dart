@@ -6,8 +6,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/wallet_login_credentials.dart';
+import '../../../core/utils/sso_brand.dart';
+import '../../../integration/wallet_bridge.dart';
 import '../../../n42_chat.dart' show N42Chat;
 import '../../../services/auth/auth_methods_service.dart' show AuthMethodsService, SsoProvider;
 import '../../blocs/auth/auth_bloc.dart';
@@ -58,6 +62,7 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
   bool _isFacebookLoading = false;
   bool _isTwitterLoading = false;
   bool _isWeChatLoading = false;
+  bool _isWalletLoading = false;
   bool _isAppleAvailable = false;
   bool _isWeChatAvailable = false;
   bool _isSsoAvailable = false;
@@ -68,7 +73,10 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
       _isSsoLoading ||
       _isFacebookLoading ||
       _isTwitterLoading ||
-      _isWeChatLoading;
+      _isWeChatLoading ||
+      _isWalletLoading;
+
+  bool get _isWalletAvailable => getIt.isRegistered<IWalletBridge>();
 
   void _setProviderLoading({
     bool? google,
@@ -98,6 +106,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
       twitter: false,
       weChat: false,
     );
+    if (mounted && _isWalletLoading) {
+      setState(() => _isWalletLoading = false);
+    }
   }
 
   @override
@@ -215,6 +226,15 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
           tooltip: S.of(context)?.commonWechat ?? 'WeChat',
           // 微信登录按钮保留微信官方品牌绿以保证识别度
           backgroundColor: const Color(0xFF07C160),
+          iconColor: Colors.white,
+        ),
+      if ((config?.enableWalletLogin ?? true) && _isWalletAvailable)
+        _buildSocialButton(
+          onTap: isAnyLoading ? null : _handleWalletSignIn,
+          icon: Icons.account_balance_wallet,
+          isLoading: _isWalletLoading,
+          tooltip: 'Wallet',
+          backgroundColor: AppColors.primary,
           iconColor: Colors.white,
         ),
     ];
@@ -484,13 +504,16 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
                   style: Theme.of(ctx).textTheme.titleMedium,
                 ),
               ),
-              ...providers.map(
-                (p) => ListTile(
-                  leading: const Icon(Icons.login),
+              ...providers.map((p) {
+                final brand = _ssoBrandVisual(
+                  SsoBrandClassifier.classify('${p.id} ${p.name}'),
+                );
+                return ListTile(
+                  leading: Icon(brand.$1, color: brand.$2),
                   title: Text(p.name),
                   onTap: () => Navigator.of(ctx).pop(p),
-                ),
-              ),
+                );
+              }),
             ],
           ),
         );
@@ -557,6 +580,91 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
         _setProviderLoading(twitter: false);
         widget.onError?.call(e.toString());
       }
+    }
+  }
+
+  /// 钱包/DID 登录：取地址 → 钱包对固定消息签名 → 派生凭据登录/注册
+  Future<void> _handleWalletSignIn() async {
+    if (!widget.isAgreedToTerms) {
+      widget.onTermsNotAgreed?.call();
+      return;
+    }
+    if (_homeserver.isEmpty) {
+      widget.onError?.call(
+        S.of(context)?.authEnterServerAddressFirst ??
+            'Please enter server address first',
+      );
+      return;
+    }
+    if (!getIt.isRegistered<IWalletBridge>()) {
+      widget.onError?.call('Wallet is not available');
+      return;
+    }
+
+    _setWalletLoading(true);
+    try {
+      final bridge = getIt<IWalletBridge>();
+      final address = bridge.walletAddress;
+      if (address == null || address.isEmpty) {
+        _setWalletLoading(false);
+        widget.onError?.call('Please connect your wallet first');
+        return;
+      }
+      final message = WalletLoginCredentials.canonicalLoginMessage(address);
+      final signature = await bridge.signMessage(message);
+      if (signature == null || signature.isEmpty) {
+        _setWalletLoading(false);
+        widget.onError?.call('Wallet login is not supported by this wallet');
+        return;
+      }
+      if (!mounted) return;
+      context.read<AuthBloc>().add(
+        AuthWalletAuthRequested(
+          homeserver: _homeserver,
+          address: address,
+          signature: signature,
+        ),
+      );
+    } catch (e) {
+      if (mounted) {
+        _setWalletLoading(false);
+        widget.onError?.call(e.toString());
+      }
+    }
+  }
+
+  void _setWalletLoading(bool value) {
+    if (!mounted) return;
+    setState(() => _isWalletLoading = value);
+  }
+
+  /// SSO 品牌 → (图标, 品牌色)
+  (IconData, Color) _ssoBrandVisual(SsoBrand brand) {
+    switch (brand) {
+      case SsoBrand.google:
+        return (Icons.g_mobiledata, Colors.red);
+      case SsoBrand.apple:
+        return (Icons.apple, context.textPrimary);
+      case SsoBrand.microsoft:
+        return (Icons.window, const Color(0xFF00A4EF));
+      case SsoBrand.github:
+        return (Icons.code, context.textPrimary);
+      case SsoBrand.gitlab:
+        return (Icons.merge_type, const Color(0xFFFC6D26));
+      case SsoBrand.facebook:
+        return (Icons.facebook, const Color(0xFF1877F2));
+      case SsoBrand.twitter:
+        return (Icons.alternate_email, context.textPrimary);
+      case SsoBrand.discord:
+        return (Icons.discord, const Color(0xFF5865F2));
+      case SsoBrand.linkedin:
+        return (Icons.business_center, const Color(0xFF0A66C2));
+      case SsoBrand.wechat:
+        return (Icons.chat_bubble, const Color(0xFF07C160));
+      case SsoBrand.telegram:
+        return (Icons.send, const Color(0xFF229ED9));
+      case SsoBrand.generic:
+        return (Icons.login, AppColors.primary);
     }
   }
 

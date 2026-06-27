@@ -14,6 +14,7 @@ import '../bloc_message_keys.dart';
 import 'auth_event.dart';
 import 'auth_state.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/wallet_login_credentials.dart';
 
 /// 认证BLoC
 ///
@@ -37,6 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthLoginRequested>(_onLoginRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthRegisterRequested>(_onRegisterRequested);
+    on<AuthWalletAuthRequested>(_onWalletAuthRequested);
     on<AuthAnonymousRegisterRequested>(_onAnonymousRegisterRequested);
     on<AuthHomeserverCheckRequested>(_onHomeserverCheckRequested);
     on<AuthRestoreSessionRequested>(_onRestoreSessionRequested);
@@ -199,6 +201,47 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         state.copyWith(
           status: AuthStatus.error,
           errorMessage: result.errorMessage ?? 'Registration failed',
+          errorType: result.errorType,
+        ),
+      );
+    }
+  }
+
+  /// 钱包/DID 登录：派生确定性凭据 → 先登录，失败则注册
+  Future<void> _onWalletAuthRequested(
+    AuthWalletAuthRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    final creds = WalletLoginCredentials.derive(
+      address: event.address,
+      signature: event.signature,
+    );
+
+    var result = await _authRepository.login(
+      homeserver: event.homeserver,
+      username: creds.username,
+      password: creds.password,
+      rememberMe: true,
+    );
+
+    // 账号不存在 → 首次用钱包登录，注册同名同密账号
+    if (!(result.success && result.user != null)) {
+      result = await _authRepository.register(
+        homeserver: event.homeserver,
+        username: creds.username,
+        password: creds.password,
+      );
+    }
+
+    if (result.success && result.user != null) {
+      await _completeAuthenticatedFlow(result.user!, emit);
+    } else {
+      emit(
+        state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: result.errorMessage ?? 'Wallet login failed',
           errorType: result.errorType,
         ),
       );

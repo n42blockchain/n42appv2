@@ -74,6 +74,23 @@ class AuthAnonymousRegisterRequested extends AuthEvent {
   List<Object?> get props => [homeserver, registrationToken];
 }
 
+/// 钱包/DID 登录：用钱包对固定消息的签名派生 Matrix 用户名+密码，
+/// 先尝试登录，账号不存在则注册（凭据派生见 WalletLoginCredentials）。
+class AuthWalletAuthRequested extends AuthEvent {
+  final String homeserver;
+  final String address;
+  final String signature;
+
+  const AuthWalletAuthRequested({
+    required this.homeserver,
+    required this.address,
+    required this.signature,
+  });
+
+  @override
+  List<Object?> get props => [homeserver, address];
+}
+
 /// 检查Homeserver
 class AuthHomeserverCheckRequested extends AuthEvent {
   final String homeserver;
