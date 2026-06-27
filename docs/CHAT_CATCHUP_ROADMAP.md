@@ -11,7 +11,7 @@
 | # | 任务 | 现状 | 做法 / 依赖 |
 |---|---|---|---|
 | 1 | ~~**AI 生成贴纸/表情**~~ ✅ **完成 2026-06-27** | 云端文生图(`AiService.generateImage`)+`AiStickerService`+贴纸 store「AI 生成」入口+11 单测（chat@891e3e4）| 需配置云端 AI key |
-| 2 | 用户自建贴纸包 + 上传 UI | 数据层已具，UI 缺 | 补建包/上传流程 |
+| 2 | ~~用户自建贴纸包 + 上传 UI~~ ✅ **完成 2026-06-27** | CustomStickerPackPage(多选上传/删贴纸/改名/删包) + store「新建包」入口/自定义包「管理」按钮 |
 | 3 | WebM / 视频贴纸 | 现 SVG+Lottie | 对齐 TG 三格式 |
 | 4 | 贴纸搜索 / 输入联想 | ❌ | 按输入推荐贴纸 |
 | 5 | 自定义动画 emoji | ❌ | TG Premium / DC 服务器 emoji 型 |

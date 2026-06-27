@@ -7,6 +7,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/sticker_pack_entity.dart';
 import '../../../domain/repositories/sticker_repository.dart';
 import 'ai_sticker_generate_page.dart';
+import 'custom_sticker_pack_page.dart';
 
 /// 贴纸商店页面
 class StickerStorePage extends StatefulWidget {
@@ -71,6 +72,52 @@ class _StickerStorePageState extends State<StickerStorePage>
     }
   }
 
+  /// 新建自定义贴纸包（输入名称 → 创建 → 进入管理页上传贴纸）。
+  Future<void> _createPack() async {
+    final controller = TextEditingController();
+    final name = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('New sticker pack'),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          decoration: const InputDecoration(hintText: 'Pack name'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+    if (name == null || name.isEmpty || !mounted) return;
+    final pack = await _repository.createCustomPack(name: name);
+    if (!mounted) return;
+    if (pack == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to create pack')),
+      );
+      return;
+    }
+    await _openCustomPack(pack.id);
+  }
+
+  /// 打开自定义包管理页；返回后刷新（贴纸增删/删包都会反映）。
+  Future<void> _openCustomPack(String packId) async {
+    await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(
+        builder: (_) => CustomStickerPackPage(packId: packId),
+      ),
+    );
+    if (mounted) await _loadData();
+  }
+
   Future<void> _installPack(StickerPack pack) async {
     final success = await _repository.installPack(pack.id);
     if (!mounted) return;
@@ -131,6 +178,11 @@ class _StickerStorePageState extends State<StickerStorePage>
         title: const Text('Sticker Store'),
         backgroundColor: context.surfaceColor,
         actions: [
+          IconButton(
+            tooltip: 'New pack',
+            icon: const Icon(Icons.create_new_folder_outlined),
+            onPressed: _createPack,
+          ),
           if (getIt<AiStickerService>().isAvailable)
             IconButton(
               tooltip: 'AI Sticker',
@@ -377,8 +429,18 @@ class _StickerStorePageState extends State<StickerStorePage>
                   ),
                 ),
 
+                // 自定义包：管理（增删贴纸/改名/删包）
+                if (pack.source == StickerPackSource.custom)
+                  OutlinedButton(
+                    onPressed: () => _openCustomPack(pack.id),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: AppColors.primary,
+                      side: const BorderSide(color: AppColors.primary),
+                    ),
+                    child: const Text('Manage'),
+                  )
                 // 安装/已安装按钮
-                if (isInstalled)
+                else if (isInstalled)
                   OutlinedButton(
                     onPressed: () => _uninstallPack(pack),
                     style: OutlinedButton.styleFrom(
