@@ -19,6 +19,7 @@ library;
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:google_mlkit_selfie_segmentation/google_mlkit_selfie_segmentation.dart';
 import 'package:image/image.dart' as img;
@@ -104,6 +105,37 @@ class VirtualBackgroundEngine {
     }
   }
 
+  /// 纯函数合成入口（供单测直接调用，绕过分割器与 isolate）。
+  ///
+  /// 给定原图字节 + 人像 mask（[confidences] 行优先，长度 = maskW×maskH，
+  /// 值越大越偏前景），按 [mode] 产出合成后的 JPEG 字节。前景保留原图、
+  /// 背景按模式替换（模糊/纯色/虚拟背景图）。
+  @visibleForTesting
+  static Uint8List composeFrame(
+    Uint8List frameBytes, {
+    required int maskWidth,
+    required int maskHeight,
+    required List<double> confidences,
+    required BackgroundMode mode,
+    double blurRadius = 0.5,
+    String? solidColorHex,
+    Uint8List? backgroundImageBytes,
+  }) =>
+      _composeInIsolate(_ComposeParams(
+        frameBytes: frameBytes,
+        maskWidth: maskWidth,
+        maskHeight: maskHeight,
+        confidences: confidences,
+        mode: mode,
+        blurRadius: blurRadius,
+        solidColorHex: solidColorHex,
+        backgroundImageBytes: backgroundImageBytes,
+      ));
+
+  /// 前景判定阈值（供单测断言用）
+  @visibleForTesting
+  static double get foregroundThreshold => _foregroundThreshold;
+
   /// 在 isolate 中执行像素级合成（避免阻塞 UI）
   static Uint8List _composeInIsolate(_ComposeParams p) {
     final original = img.decodeImage(p.frameBytes);
@@ -116,8 +148,11 @@ class VirtualBackgroundEngine {
     final img.Image background;
     switch (p.mode) {
       case BackgroundMode.blur:
-        // 模糊半径 0..1 映射到像素半径 1..40
-        final radius = (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round();
+        // 模糊半径 0..1 映射到像素半径 1..40，并按帧尺寸夹紧
+        // （半径过大会越界，gaussianBlur 在小帧上崩溃）
+        final maxR = ((width < height ? width : height) ~/ 2 - 1).clamp(1, 40);
+        final radius =
+            (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round().clamp(1, maxR);
         background = img.gaussianBlur(original.clone(), radius: radius);
         break;
       case BackgroundMode.solidColor:
@@ -132,8 +167,9 @@ class VirtualBackgroundEngine {
           // 缩放铺满整帧（cover）
           background = img.copyResize(bg, width: width, height: height);
         } else {
-          // 无背景图时降级为强模糊，避免黑屏
-          background = img.gaussianBlur(original.clone(), radius: 20);
+          // 无背景图时降级为强模糊，避免黑屏（半径按帧尺寸夹紧）
+          final r = ((width < height ? width : height) ~/ 2 - 1).clamp(1, 20);
+          background = img.gaussianBlur(original.clone(), radius: r);
         }
         break;
       case BackgroundMode.none:
@@ -227,6 +263,15 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   MediaStreamTrack? _sourceTrack;
   Uint8List? _backgroundImageBytes;
 
+  /// 原生 frame processor 配置通道。
+  ///
+  /// 当宿主在原生侧（Android libwebrtc `VideoProcessor` / iOS
+  /// `RTCVideoCapturerDelegate`）实现真正的发布轨道逐帧替换时，会监听本通道获取
+  /// 当前背景配置。原生未实现时调用经 [MissingPluginException] 优雅 no-op——
+  /// 不抛错、不误导。这是发布侧替换的**真实契约**，待原生接入即生效。
+  static const MethodChannel _nativeChannel =
+      MethodChannel('n42.chat/virtual_background');
+
   @override
   String get name => 'n42-virtual-background';
 
@@ -261,12 +306,14 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   Future<void> init(ProcessorOptions options) async {
     _sourceTrack = options.track;
     debugLog('VoipCameraProcessor: init (mode=${_config.backgroundMode})');
+    await pushConfigToNative();
   }
 
   @override
   Future<void> restart(ProcessorOptions options) async {
     _sourceTrack = options.track;
     debugLog('VoipCameraProcessor: restart (mode=${_config.backgroundMode})');
+    await pushConfigToNative();
   }
 
   @override
@@ -283,6 +330,30 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   Future<void> destroy() async {
     _sourceTrack = null;
     debugLog('VoipCameraProcessor: destroy');
+    await _safeNative('clearBackground');
+  }
+
+  /// 把当前背景配置下发给原生 frame processor（native-first，未接则优雅 no-op）。
+  ///
+  /// 配置变更后（[LiveKitService] 调用）应调用本方法，使原生侧拿到最新模式。
+  Future<void> pushConfigToNative() async {
+    await _safeNative('setBackgroundConfig', <String, dynamic>{
+      'mode': _config.backgroundMode.name,
+      'blurRadius': _config.backgroundBlurRadius,
+      'solidColor': _config.backgroundProcessing.solidColor,
+      'hasBackgroundImage': _backgroundImageBytes != null,
+    });
+  }
+
+  Future<void> _safeNative(String method, [Object? args]) async {
+    if (kIsWeb) return;
+    try {
+      await _nativeChannel.invokeMethod<void>(method, args);
+    } on MissingPluginException {
+      // 原生 frame processor 未实现：优雅降级（发布轨道仍透传）
+    } catch (e) {
+      debugLog('VoipCameraProcessor: native $method failed: $e');
+    }
   }
 
   /// 透传源轨道。
@@ -290,7 +361,8 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   /// flutter_webrtc 暂未向 Dart 暴露摄像头轨道逐帧回调，无法在纯 Dart 侧把
   /// [VirtualBackgroundEngine] 的合成帧重新编码为 WebRTC 轨道。因此发布轨道
   /// 维持源轨道，背景效果落在本地自视图预览（用 [renderFrame]）。
-  /// 真正的发布侧替换需原生 frame processor 接线，与录制 Egress 同属待接线项。
+  /// 真正的发布侧替换由原生 frame processor 完成——配置经 [_nativeChannel]
+  /// 下发（[pushConfigToNative]），原生接好即对发布帧生效；当前为透传。
   @override
   MediaStreamTrack? get processedTrack => _sourceTrack;
 

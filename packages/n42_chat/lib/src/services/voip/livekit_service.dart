@@ -558,6 +558,9 @@ class LiveKitService extends ChangeNotifier {
     final bgConfig = _config.backgroundProcessing;
     debugLog('LiveKitService: Updating background processing: $bgConfig');
 
+    // 下发最新配置给原生 frame processor（发布轨道替换；未接则优雅 no-op）
+    await _cameraProcessor.pushConfigToNative();
+
     // LiveKit 背景模糊通过 LocalVideoTrack 的处理器实现
     // 需要重新设置视频轨道来应用新设置
     if (_localParticipant == null || !_isVideoEnabled) {
