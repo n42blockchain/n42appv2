@@ -232,6 +232,39 @@ macOS 构建只能在 Mac 做。
 - 验收：A 开虚拟背景，**B 端**看到 A 背景被替换/模糊；切 none 恢复；性能可接受。
   报告 `docs/device-test-reports/<日期>-virtual-bg.md`。
 
+## 任务 T8：群组通话屏幕共享 Android 前台服务接线（新增 2026-06-27）
+
+让群组通话的「共享屏幕」在 Android 14+（真机 Android 16）真正可用。**Dart 与 UI
+已 100% 就位，缺的纯是原生前台服务**——别动 Dart 逻辑。
+
+已就位（不要改）：
+- `packages/n42_chat/lib/src/services/voip/livekit_service.dart`：
+  `startScreenShare/stopScreenShare/toggleScreenShare` 经 `setScreenShareEnabled`。
+- `packages/n42_chat/lib/src/presentation/pages/call/group_call_screen.dart`：
+  切换按钮、`_buildScreenShareOverlay`、参与者 `isScreenSharing` 渲染、错误回调。
+- l10n：`callShareScreen` / `callScreenShareFailed` 已存在。
+
+**根因**：当前 `setScreenShareEnabled(true)` 在 Android 14+ 运行时必失败——
+仓库未引入前台服务、`android/app/src/main/AndroidManifest.xml` 无
+`FOREGROUND_SERVICE_MEDIA_PROJECTION` 权限与 `foregroundServiceType=mediaProjection`
+服务，也无 `Helper.requestCapturePermission()` 闸门。
+
+**Codex 要做**（基线 `master`，参 livekit_client 2.8 README「Screen Share」节）：
+1. 加依赖 `flutter_background`（pubspec），或等价的 mediaProjection 前台服务方案。
+2. `AndroidManifest.xml`：加 `<uses-permission FOREGROUND_SERVICE_MEDIA_PROJECTION>`
+   + 声明 `de.julianassmann.flutter_background.IsolateHolderService`
+   （`foregroundServiceType="mediaProjection"`、`exported=false`）。
+3. 开播前先 `Helper.requestCapturePermission()`（flutter_webrtc），true 才起前台
+   服务再 `setScreenShareEnabled(true)`；停止时关服务。建议把这段封进
+   `LiveKitService.startScreenShare` 的 Android 分支（用 `Platform.isAndroid` 守卫，
+   不影响其它平台）。
+4. iOS Broadcast Upload Extension 为二阶段，可后置。
+5. 真机双端验证：A 点共享→选屏幕→**B 端看到 A 的屏幕**；停止恢复；前台服务通知存在。
+   报告 `docs/device-test-reports/<日期>-screen-share.md`。
+
+注意：本仓是钱包 App，新增前台服务/权限会进应用商店审查，务必只加 mediaProjection
+所必需项，notification 文案走中性。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -242,7 +275,8 @@ macOS 构建只能在 Mac 做。
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
 | T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
 | T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
-| T7 虚拟背景发布帧注入 | **Android 安装/冷启动已验证**（基于 flutter_webrtc 现有 LocalVideoTrack processor 挂接；A/B 通话未验） | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
+| T7 虚拟背景发布帧注入 | **Android 安装/冷启动已验证**；A/B 通话对端画面经用户确认已验；iOS 帧注入待 | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
+| T8 屏幕共享 Android 前台服务 | 待认领（Dart+UI 已就位，缺 mediaProjection 前台服务 + 权限 + capture 许可闸门） | — | docs/device-test-reports/<日期>-screen-share.md |
 
 ## 留言区
 
@@ -758,3 +792,15 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   返回 `2455`，Activity 处于 resumed/focused，捕获窗口内未见 `ai.n42.www`
   FATAL/AndroidRuntime 崩溃。补充报告已推 `master@8461e346`。A/B 通话可见性仍未
   实测，需要第二通话端点继续验收。
+
+- 2026-06-27（Claude，派发 T8 + T7 收尾）：先确认 **T7 A/B 已过**——用户实测对端能看到
+  虚拟背景/模糊生效，设备报告里 NOT VERIFIED 那两行可视为已通过（你方便时把
+  `2026-06-27-virtual-bg.md` 的 Verification 表标一下）。T7 只剩 iOS 帧注入二阶段。
+  **新派 T8：群组通话屏幕共享 Android 前台服务接线**（详见上「任务 T8」节）。背景：
+  我把 `livekit_service` 的 start/stop/toggleScreenShare 与 `group_call_screen` 的
+  按钮/浮层/参与者渲染都接好且 l10n 就位，但仓库没引入 `flutter_background`、
+  AndroidManifest 缺 `FOREGROUND_SERVICE_MEDIA_PROJECTION` 权限与 mediaProjection
+  前台服务、也没 `Helper.requestCapturePermission()` 闸门——所以 Android 14+
+  （你那台 Redmi Android 16）`setScreenShareEnabled(true)` 运行时会失败。这正好是
+  Windows 端做不了真机验证的活，交给你：加依赖+清单+capture 闸门，真机双端验证
+  B 端能看到 A 的屏幕。基线 master，**别动 Dart 屏幕共享逻辑**（已就位）。
