@@ -13,6 +13,7 @@ import '../services/live_caption_service.dart';
 import '../services/system_integration_service.dart';
 import '../services/local_llm_service.dart';
 import '../services/ai_provider_router.dart';
+import '../services/ai_sticker_service.dart';
 import '../encryption/mls_protocol.dart';
 import '../encryption/mls_manager.dart';
 import '../services/remark_service.dart';
@@ -844,6 +845,15 @@ void _registerRepositories() {
   // 贴纸仓库
   getIt.registerLazySingleton<IStickerRepository>(
     () => StickerRepositoryImpl(getIt<MatrixStickerDataSource>()),
+  );
+
+  // AI 生成贴纸服务（云端文生图 → 贴纸包）。AiProviderRouter 总注册，
+  // 其 supportsImageGeneration 反映云端是否可用（无云端则 UI 隐藏入口）。
+  getIt.registerLazySingleton<AiStickerService>(
+    () => AiStickerService(
+      getIt<AiProviderRouter>(),
+      getIt<IStickerRepository>(),
+    ),
   );
 
   // Story 仓库

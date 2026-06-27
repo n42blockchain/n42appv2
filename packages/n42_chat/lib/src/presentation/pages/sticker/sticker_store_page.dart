@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/services/ai_sticker_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/sticker_pack_entity.dart';
 import '../../../domain/repositories/sticker_repository.dart';
+import 'ai_sticker_generate_page.dart';
 
 /// 贴纸商店页面
 class StickerStorePage extends StatefulWidget {
@@ -57,6 +59,15 @@ class _StickerStorePageState extends State<StickerStorePage>
     } catch (e) {
       if (!mounted) return;
       setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _openAiGenerate() async {
+    final added = await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(builder: (_) => const AiStickerGeneratePage()),
+    );
+    if (added == true && mounted) {
+      await _loadData(); // 新 AI 贴纸入「My Stickers」后刷新
     }
   }
 
@@ -119,6 +130,14 @@ class _StickerStorePageState extends State<StickerStorePage>
       appBar: AppBar(
         title: const Text('Sticker Store'),
         backgroundColor: context.surfaceColor,
+        actions: [
+          if (getIt<AiStickerService>().isAvailable)
+            IconButton(
+              tooltip: 'AI Sticker',
+              icon: const Icon(Icons.auto_awesome),
+              onPressed: _openAiGenerate,
+            ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           labelColor: AppColors.primary,

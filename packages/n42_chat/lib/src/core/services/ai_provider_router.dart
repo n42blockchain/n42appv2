@@ -158,5 +158,22 @@ class AiProviderRouter implements AiService {
   }
 
   @override
+  bool get supportsImageGeneration => cloud?.supportsImageGeneration ?? false;
+
+  @override
+  Future<AiImageResult> generateImage(
+    String prompt, {
+    String? model,
+    String size = '1024x1024',
+  }) {
+    // 端侧（Gemma）不做文生图，统一走云端。
+    final c = cloud;
+    if (c == null) {
+      throw const AiServiceException('Image generation unavailable (no cloud AI)');
+    }
+    return c.generateImage(prompt, model: model, size: size);
+  }
+
+  @override
   void dispose() => cloud?.dispose();
 }
