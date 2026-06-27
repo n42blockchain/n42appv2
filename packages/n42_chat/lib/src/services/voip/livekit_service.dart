@@ -5,8 +5,11 @@ library;
 
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter_background/flutter_background.dart';
+import 'package:flutter_webrtc/flutter_webrtc.dart' show Helper;
 import 'package:livekit_client/livekit_client.dart';
 
 import 'call_e2ee_provider.dart';
@@ -398,10 +401,23 @@ class LiveKitService extends ChangeNotifier {
   }
 
   /// 开始屏幕共享
+  ///
+  /// Android 需先获取屏幕捕获许可（[Helper.requestCapturePermission]）并启动
+  /// mediaProjection 前台服务（[FlutterBackground]），否则 Android 14+ 会在
+  /// `setScreenShareEnabled(true)` 运行时失败。
   Future<bool> startScreenShare() async {
     if (_localParticipant == null) return false;
 
     try {
+      if (!kIsWeb && Platform.isAndroid) {
+        final granted = await Helper.requestCapturePermission();
+        if (!granted) {
+          debugLog('LiveKitService: Screen capture permission denied');
+          return false;
+        }
+        await _ensureAndroidForegroundService();
+      }
+
       await _localParticipant!.setScreenShareEnabled(true);
       _isScreenSharing = true;
       _updateLocalParticipant();
@@ -409,6 +425,7 @@ class LiveKitService extends ChangeNotifier {
       return true;
     } catch (e) {
       debugLog('LiveKitService: Start screen share failed: $e');
+      await _stopAndroidForegroundService();
       onError?.call(MeetingErrorType.screenShareFailed, e.toString());
       return false;
     }
@@ -422,9 +439,38 @@ class LiveKitService extends ChangeNotifier {
       await _localParticipant!.setScreenShareEnabled(false);
       _isScreenSharing = false;
       _updateLocalParticipant();
+      await _stopAndroidForegroundService();
       debugLog('LiveKitService: Screen share stopped');
     } catch (e) {
       debugLog('LiveKitService: Stop screen share failed: $e');
+    }
+  }
+
+  /// 启动 Android mediaProjection 前台服务（屏幕共享期间常驻通知）
+  Future<void> _ensureAndroidForegroundService() async {
+    const config = FlutterBackgroundAndroidConfig(
+      notificationTitle: 'Screen sharing',
+      notificationText: 'Your screen is being shared in a call',
+      notificationImportance: AndroidNotificationImportance.normal,
+      enableWifiLock: true,
+    );
+    final hasPermissions = await FlutterBackground.initialize(
+      androidConfig: config,
+    );
+    if (hasPermissions) {
+      await FlutterBackground.enableBackgroundExecution();
+    }
+  }
+
+  /// 关闭 Android 前台服务（若在运行）
+  Future<void> _stopAndroidForegroundService() async {
+    if (kIsWeb || !Platform.isAndroid) return;
+    try {
+      if (FlutterBackground.isBackgroundExecutionEnabled) {
+        await FlutterBackground.disableBackgroundExecution();
+      }
+    } catch (e) {
+      debugLog('LiveKitService: Stop foreground service failed: $e');
     }
   }
 

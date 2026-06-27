@@ -35,6 +35,8 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"  tools:node="remove"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <!-- 屏幕共享前台服务（T8） -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
     <!-- 来电通知权限 -->
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -105,6 +107,13 @@
             android:name="ai.n42.www.WebSocketService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <!-- 屏幕共享前台服务（T8）：flutter_background 默认 dataSync，
+             这里覆盖为 mediaProjection 以满足 LiveKit/WebRTC 屏幕捕获要求 -->
+        <service
+            android:name="de.julianassmann.flutter_background.IsolateHolderService"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"
+            tools:replace="android:foregroundServiceType" />
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
