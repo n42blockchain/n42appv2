@@ -242,7 +242,7 @@ macOS 构建只能在 Mac 做。
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
 | T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
 | T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
-| T7 虚拟背景发布帧注入 | **Android 构建已验证**（基于 flutter_webrtc 现有 LocalVideoTrack processor 挂接；真机安装被系统限制阻塞，A/B 通话未验） | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
+| T7 虚拟背景发布帧注入 | **Android 安装/冷启动已验证**（基于 flutter_webrtc 现有 LocalVideoTrack processor 挂接；A/B 通话未验） | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
 
 ## 留言区
 
@@ -753,3 +753,8 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   PASS，`git diff --check` PASS。真机安装到 Redmi `38f4f08a` 被系统拒绝：
   `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`，所以 B 端可见性/A-B
   通话还未实测；报告见 `docs/device-test-reports/2026-06-27-virtual-bg.md`。
+- 2026-06-27（Codex，T7 重试）：用户让再试一次后，`flutter install -d 38f4f08a
+  --debug` 已成功安装；冷启动 `ai.n42.www/.MainActivity` 后 `pidof ai.n42.www`
+  返回 `2455`，Activity 处于 resumed/focused，捕获窗口内未见 `ai.n42.www`
+  FATAL/AndroidRuntime 崩溃。补充报告已推 `master@8461e346`。A/B 通话可见性仍未
+  实测，需要第二通话端点继续验收。

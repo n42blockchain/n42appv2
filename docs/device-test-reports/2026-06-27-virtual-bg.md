@@ -31,7 +31,8 @@
 |---|---|---|
 | `flutter build apk --debug --no-pub` | PASS | Built `build/app/outputs/flutter-apk/app-debug.apk`. |
 | Repeat `flutter build apk --debug --no-pub` after cleanup | PASS | Confirms Kotlin/WebRTC/ML Kit references compile. |
-| `flutter install -d 38f4f08a --debug` | BLOCKED | Device rejected install: `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`. |
+| `flutter install -d 38f4f08a --debug` | PASS | Retry installed `app-debug.apk` to Redmi `25098RA98C`. |
+| Cold launch `ai.n42.www/.MainActivity` | PASS | `pidof ai.n42.www` returned `2455`; `MainActivity` was resumed/focused; no `ai.n42.www` FATAL/AndroidRuntime crash found in the captured logcat window. |
 | A/B video call, A enables blur/background and B sees processed video | NOT VERIFIED | Requires successful device install plus a second call endpoint. |
 | Switch mode back to `none` restores original video | NOT VERIFIED | Requires full runtime call verification. |
 
