@@ -192,10 +192,27 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
                 debugLog('Report clicked');
                 _showReportDialog(message);
               },
+        onReadingMode:
+            (message.type == MessageType.text &&
+                ArticleReaderUtils.isLongArticle(message.content))
+            ? () {
+                debugLog('Reading mode clicked');
+                _openReadingMode(message);
+              }
+            : null,
       ),
     );
 
     overlay.insert(overlayEntry);
+  }
+
+  /// 打开长文阅读模式
+  void _openReadingMode(MessageEntity message) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ArticleReaderPage(content: message.content),
+      ),
+    );
   }
 
   void _showReportDialog(MessageEntity message) {

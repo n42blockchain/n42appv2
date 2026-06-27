@@ -48,6 +48,7 @@ class WeChatMessageMenu extends StatelessWidget {
   final VoidCallback? onEdit; // 编辑消息
   final VoidCallback? onReport; // 举报消息
   final VoidCallback? onRemindMe; // 设为待办提醒
+  final VoidCallback? onReadingMode; // 长文阅读模式
 
   /// 表情回应回调
   final void Function(String emoji)? onReaction;
@@ -80,6 +81,7 @@ class WeChatMessageMenu extends StatelessWidget {
     this.onEdit,
     this.onReport,
     this.onRemindMe,
+    this.onReadingMode,
     this.onReaction,
   });
 
@@ -270,6 +272,12 @@ class WeChatMessageMenu extends StatelessWidget {
                       icon: Icons.translate,
                       label: s?.commonTranslate ?? 'Translate',
                       onTap: () { onDismiss(); onTranslate?.call(); },
+                    ),
+                  if (onReadingMode != null)
+                    _buildMenuItem(
+                      icon: Icons.menu_book_outlined,
+                      label: 'Reading',
+                      onTap: () { onDismiss(); onReadingMode?.call(); },
                     ),
                   if (message.isEdited && onViewEditHistory != null)
                     _buildMenuItem(
