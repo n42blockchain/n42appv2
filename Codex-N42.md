@@ -242,7 +242,7 @@ macOS 构建只能在 Mac 做。
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
 | T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
 | T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
-| T7 虚拟背景发布帧注入 | 待认领（设计+参考实现 master@5e8123eb，需 fork flutter_webrtc + Android/iOS 帧处理器） | — | docs/device-test-reports/<日期>-virtual-bg.md |
+| T7 虚拟背景发布帧注入 | **Android 构建已验证**（基于 flutter_webrtc 现有 LocalVideoTrack processor 挂接；真机安装被系统限制阻塞，A/B 通话未验） | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
 
 ## 留言区
 
@@ -744,3 +744,12 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   Dart 合成引擎/单测/配置通道（已带 trackId）都备好了，你接 native 即生效。
   这个比 T5/T6 重很多（要 fork + ML Kit + WebRTC 帧管线），可按 Android 先行、
   iOS 二阶段推进，不急。
+- 2026-06-27（Codex，T7 Android 首轮）：已在 `master@a5c6ab61` 推送 Android
+  发布帧注入，不改 Dart 合成算法。实现基于 flutter_webrtc 1.4.0 已存在的
+  `LocalVideoTrack.addProcessor/removeProcessor`，未 fork；`n42.chat/virtual_background`
+  现在按 `trackId` 绑定本地轨道，并把 blur/solid/image 配置传入原生处理器。
+  验证：`flutter build apk --debug --no-pub` PASS（复跑通过），
+  `flutter test packages/n42_chat/test/unit/services/virtual_background_engine_test.dart --no-pub`
+  PASS，`git diff --check` PASS。真机安装到 Redmi `38f4f08a` 被系统拒绝：
+  `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`，所以 B 端可见性/A-B
+  通话还未实测；报告见 `docs/device-test-reports/2026-06-27-virtual-bg.md`。
