@@ -105,16 +105,16 @@ class _N42CallFacade {
                 'N42Chat: Found LiveKit JWT service: $jwtServiceUrl, alias=$liveKitAlias',
               );
 
-              if (jwtServiceUrl != null) {
+              final jwtUrl = normalizeLiveKitHttpUrl(jwtServiceUrl);
+              if (jwtUrl != null) {
                 // 保存 JWT URL
-                _liveKitJwtUrl = jwtServiceUrl;
+                _liveKitJwtUrl = jwtUrl;
 
                 // 从 JWT URL 推导 WebSocket URL
                 // https://m.si46.world/livekit/jwt -> wss://m.si46.world/livekit/sfu
-                final uri = Uri.parse(jwtServiceUrl);
-                final wsUrl = 'wss://${uri.host}/livekit/sfu';
+                final wsUrl = deriveLiveKitWsUrl(jwtUrl);
 
-                if (_callManager != null) {
+                if (_callManager != null && wsUrl != null) {
                   _callManager!.configureLiveKit(url: wsUrl);
                   debugLog('N42Chat: LiveKit WebSocket configured: $wsUrl');
                 }
@@ -128,8 +128,10 @@ class _N42CallFacade {
       // 备选：检查自定义 LiveKit 配置字段
       final liveKitConfig = wellKnown['n42.livekit'] as Map<String, dynamic>?;
       if (liveKitConfig != null && _callManager != null) {
-        final wsUrl = liveKitConfig['ws_url'] as String?;
-        final jwtUrl = liveKitConfig['jwt_url'] as String?;
+        final wsUrl = normalizeLiveKitWsUrl(liveKitConfig['ws_url'] as String?);
+        final jwtUrl = normalizeLiveKitHttpUrl(
+          liveKitConfig['jwt_url'] as String?,
+        );
         if (wsUrl != null) {
           _callManager!.configureLiveKit(url: wsUrl);
           debugLog('N42Chat: LiveKit configured from n42.livekit: $wsUrl');

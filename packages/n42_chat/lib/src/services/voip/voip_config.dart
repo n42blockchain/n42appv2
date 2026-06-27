@@ -1,5 +1,5 @@
 /// VoIP 配置
-/// 
+///
 /// 用于存储 TURN/STUN 服务器配置和 LiveKit 配置
 /// 这些参数需要从服务端获取或在初始化时配置
 library;
@@ -16,31 +16,31 @@ class VoIPConfig {
   // ============================================
   // TURN/STUN 服务器配置
   // ============================================
-  
+
   /// TURN 服务器 URI 列表
   /// 格式: ["turn:turn.example.com:3478", "turns:turn.example.com:5349"]
   List<String> turnUris = [];
-  
+
   /// TURN 服务器用户名（从服务端获取，临时凭证）
   String? turnUsername;
-  
+
   /// TURN 服务器密码（从服务端获取，临时凭证）
   String? turnPassword;
-  
+
   /// TURN 凭证有效期（毫秒）
   int turnTtl = 86400000; // 24小时
-  
+
   // ============================================
   // LiveKit 配置（多人会议）
   // ============================================
-  
+
   /// LiveKit 服务器 URL
   /// 格式: "wss://livekit.example.com"
   String? liveKitUrl;
-  
+
   /// LiveKit API Key（用于生成 token）
   String? liveKitApiKey;
-  
+
   /// LiveKit API Secret（用于生成 token）
   ///
   /// **安全警告**: 此字段仅用于开发测试。
@@ -48,7 +48,7 @@ class VoIPConfig {
   /// API Secret 不应存储在客户端。
   @Deprecated('Token should be generated server-side in production')
   String? liveKitApiSecret;
-  
+
   // ============================================
   // 通话设置
   // ============================================
@@ -111,7 +111,9 @@ class VoIPConfig {
     enableAutoGainControl = config.autoGainControl;
     enableHighPassFilter = config.highPassFilter;
     enableEnhancedAudioMode = config.enhancedMode;
-    debugLog('VoIPConfig: Audio processing updated - NS: $enableNoiseSuppression, AEC: $enableEchoCancellation, AGC: $enableAutoGainControl');
+    debugLog(
+      'VoIPConfig: Audio processing updated - NS: $enableNoiseSuppression, AEC: $enableEchoCancellation, AGC: $enableAutoGainControl',
+    );
   }
 
   // ============================================
@@ -133,18 +135,21 @@ class VoIPConfig {
   List<String> presetBackgrounds = [];
 
   /// 获取背景处理配置
-  BackgroundProcessingConfig get backgroundProcessing => BackgroundProcessingConfig(
-    mode: backgroundMode,
-    blurRadius: backgroundBlurRadius,
-    virtualBackgroundUrl: virtualBackgroundUrl,
-  );
+  BackgroundProcessingConfig get backgroundProcessing =>
+      BackgroundProcessingConfig(
+        mode: backgroundMode,
+        blurRadius: backgroundBlurRadius,
+        virtualBackgroundUrl: virtualBackgroundUrl,
+      );
 
   /// 设置背景处理配置
   void setBackgroundProcessing(BackgroundProcessingConfig config) {
     backgroundMode = config.mode;
     backgroundBlurRadius = config.blurRadius;
     virtualBackgroundUrl = config.virtualBackgroundUrl;
-    debugLog('VoIPConfig: Background processing updated - mode: $backgroundMode, blur: $backgroundBlurRadius');
+    debugLog(
+      'VoIPConfig: Background processing updated - mode: $backgroundMode, blur: $backgroundBlurRadius',
+    );
   }
 
   // ============================================
@@ -189,26 +194,28 @@ class VoIPConfig {
     recordingBitRate = config.bitRate;
     recordingMaxDuration = config.maxDuration;
     recordingSavePath = config.savePath;
-    debugLog('VoIPConfig: Call recording updated - enabled: $enableCallRecording, autoStart: $autoStartRecording');
+    debugLog(
+      'VoIPConfig: Call recording updated - enabled: $enableCallRecording, autoStart: $autoStartRecording',
+    );
   }
 
   // ============================================
   // 来电推送配置
   // ============================================
-  
+
   /// Firebase 服务器密钥（FCM 推送）
   String? fcmServerKey;
-  
+
   /// APNs 证书路径（iOS 推送）
   String? apnsCertPath;
-  
+
   /// VoIP 推送证书路径（iOS VoIP 推送）
   String? voipCertPath;
-  
+
   // ============================================
   // 公共 STUN 服务器（备用）
   // ============================================
-  
+
   /// 公共 STUN 服务器列表
   static const List<Map<String, String>> publicStunServers = [
     {'urls': 'stun:stun.l.google.com:19302'},
@@ -216,11 +223,11 @@ class VoIPConfig {
     {'urls': 'stun:stun2.l.google.com:19302'},
     {'urls': 'stun:stun.stunprotocol.org:3478'},
   ];
-  
+
   /// 获取 ICE 服务器配置
   List<Map<String, dynamic>> getIceServers() {
     final servers = <Map<String, dynamic>>[];
-    
+
     // 添加 TURN 服务器
     if (turnUris.isNotEmpty && turnUsername != null && turnPassword != null) {
       for (final uri in turnUris) {
@@ -231,13 +238,13 @@ class VoIPConfig {
         });
       }
     }
-    
+
     // 添加公共 STUN 服务器作为备用
     servers.addAll(publicStunServers);
-    
+
     return servers;
   }
-  
+
   /// 从 Matrix 服务器响应更新 TURN 配置
   void updateFromTurnResponse(Map<String, dynamic> response) {
     if (response['uris'] != null) {
@@ -250,25 +257,26 @@ class VoIPConfig {
     }
     debugLog('VoIPConfig: Updated TURN config with ${turnUris.length} URIs');
   }
-  
+
   /// 配置 LiveKit
   void configureLiveKit({
     required String url,
     String? apiKey,
     String? apiSecret,
   }) {
-    liveKitUrl = url;
+    liveKitUrl = url.trim();
     liveKitApiKey = apiKey;
     liveKitApiSecret = apiSecret;
     debugLog('VoIPConfig: LiveKit configured with URL: $url');
   }
-  
+
   /// 检查是否已配置 TURN
   bool get hasTurnConfig => turnUris.isNotEmpty;
-  
+
   /// 检查是否已配置 LiveKit
-  bool get hasLiveKitConfig => liveKitUrl != null && liveKitUrl!.isNotEmpty;
-  
+  bool get hasLiveKitConfig =>
+      liveKitUrl != null && liveKitUrl!.trim().isNotEmpty;
+
   /// 重置配置
   void reset() {
     turnUris = [];
@@ -278,7 +286,7 @@ class VoIPConfig {
     liveKitApiKey = null;
     liveKitApiSecret = null;
   }
-  
+
   @override
   String toString() {
     return 'VoIPConfig('
@@ -293,10 +301,13 @@ class VoIPConfig {
 enum VideoResolution {
   /// 360p (640x360)
   sd360(640, 360),
+
   /// 480p (854x480)
   sd480(854, 480),
+
   /// 720p (1280x720)
   hd720(1280, 720),
+
   /// 1080p (1920x1080)
   hd1080(1920, 1080);
 
@@ -431,25 +442,20 @@ class BackgroundProcessingConfig {
   });
 
   /// 无背景处理
-  static const BackgroundProcessingConfig disabled = BackgroundProcessingConfig();
+  static const BackgroundProcessingConfig disabled =
+      BackgroundProcessingConfig();
 
   /// 轻度模糊
-  static const BackgroundProcessingConfig lightBlur = BackgroundProcessingConfig(
-    mode: BackgroundMode.blur,
-    blurRadius: 0.3,
-  );
+  static const BackgroundProcessingConfig lightBlur =
+      BackgroundProcessingConfig(mode: BackgroundMode.blur, blurRadius: 0.3);
 
   /// 中度模糊
-  static const BackgroundProcessingConfig mediumBlur = BackgroundProcessingConfig(
-    mode: BackgroundMode.blur,
-    blurRadius: 0.5,
-  );
+  static const BackgroundProcessingConfig mediumBlur =
+      BackgroundProcessingConfig(mode: BackgroundMode.blur, blurRadius: 0.5);
 
   /// 强烈模糊
-  static const BackgroundProcessingConfig heavyBlur = BackgroundProcessingConfig(
-    mode: BackgroundMode.blur,
-    blurRadius: 0.8,
-  );
+  static const BackgroundProcessingConfig heavyBlur =
+      BackgroundProcessingConfig(mode: BackgroundMode.blur, blurRadius: 0.8);
 
   /// 创建虚拟背景配置
   factory BackgroundProcessingConfig.withVirtualBackground(String url) {

@@ -42,7 +42,8 @@ class CallManager {
       CallNotificationService();
   final VoIPConfig _config = VoIPConfig();
   // 系统级集成：通话进行中显示常驻"活动"通知（Android 真实生效）
-  final SystemIntegrationService _systemIntegration = SystemIntegrationService();
+  final SystemIntegrationService _systemIntegration =
+      SystemIntegrationService();
 
   // 导航键
   GlobalKey<NavigatorState>? _navigatorKey;
@@ -511,8 +512,8 @@ class CallManager {
     required bool enableVideo,
   }) async {
     final client = _client;
-    final jwtUrl = N42Chat.liveKitJwtUrl;
-    final accessToken = client?.accessToken;
+    final jwtUrl = N42Chat.liveKitJwtUrl?.trim();
+    final accessToken = client?.accessToken?.trim();
     if (client == null ||
         jwtUrl == null ||
         jwtUrl.isEmpty ||

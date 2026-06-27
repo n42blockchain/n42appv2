@@ -241,7 +241,9 @@ class LiveKitService extends ChangeNotifier {
       return false;
     }
 
-    if (_config.liveKitUrl == null) {
+    final liveKitUrl = _config.liveKitUrl?.trim();
+    final liveKitToken = token.trim();
+    if (liveKitUrl == null || liveKitUrl.isEmpty || liveKitToken.isEmpty) {
       onError?.call(MeetingErrorType.serverNotConfigured);
       return false;
     }
@@ -299,8 +301,8 @@ class LiveKitService extends ChangeNotifier {
 
       // 连接到房间
       await _room!.connect(
-        _config.liveKitUrl!,
-        token,
+        liveKitUrl,
+        liveKitToken,
         fastConnectOptions: FastConnectOptions(
           microphone: TrackOption(enabled: enableAudio),
           camera: TrackOption(enabled: enableVideo),
@@ -474,18 +476,20 @@ class LiveKitService extends ChangeNotifier {
   /// 停止屏幕共享
   Future<void> stopScreenShare() async {
     if (_localParticipant == null) {
+      _isScreenSharing = false;
+      notifyListeners();
       await _stopAndroidScreenShareForegroundService();
       return;
     }
 
     try {
       await _localParticipant!.setScreenShareEnabled(false);
-      _isScreenSharing = false;
-      _updateLocalParticipant();
       debugLog('LiveKitService: Screen share stopped');
     } catch (e) {
       debugLog('LiveKitService: Stop screen share failed: $e');
     } finally {
+      _isScreenSharing = false;
+      _updateLocalParticipant();
       await _stopAndroidScreenShareForegroundService();
     }
   }

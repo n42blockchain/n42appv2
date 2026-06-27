@@ -46,6 +46,7 @@ import 'presentation/pages/profile/profile_page.dart';
 import 'presentation/pages/profile/user_profile_page.dart';
 import 'presentation/pages/settings/change_email_page.dart' as chat_settings;
 import 'core/utils/debug_log.dart';
+import 'core/utils/livekit_call_utils.dart';
 
 part 'presentation/widgets/n42_chat_widgets.dart';
 part 'core/services/n42_theme_manager.dart';
@@ -174,7 +175,8 @@ class N42Chat {
   ///   N42Chat.setThemeMode(next);
   /// });
   /// ```
-  static void setThemeMode(ThemeMode mode) => _N42ThemeManager.setThemeMode(mode);
+  static void setThemeMode(ThemeMode mode) =>
+      _N42ThemeManager.setThemeMode(mode);
 
   /// 添加主题变化监听器
   static void addThemeListener(void Function(ThemeMode) listener) =>
@@ -330,7 +332,9 @@ class N42Chat {
   /// 注册宿主侧"打开视频直播"回调。
   /// 由发现页「直播」入口触发；宿主应 push 自己的视频直播页面。
   /// 未注册时发现页「直播」回退到语音房列表。
-  static void setLiveEntryHandler(void Function(BuildContext context)? handler) {
+  static void setLiveEntryHandler(
+    void Function(BuildContext context)? handler,
+  ) {
     _onOpenLive = handler;
   }
 
@@ -893,8 +897,7 @@ class N42Chat {
   static bool _isLoggedOutState(AuthStatus status) =>
       status == AuthStatus.unauthenticated || status == AuthStatus.initial;
 
-  static bool _defaultIsFailure(AuthState s) =>
-      s.status == AuthStatus.error;
+  static bool _defaultIsFailure(AuthState s) => s.status == AuthStatus.error;
 
   /// 清理本地持久化的 chat 数据。
   ///
