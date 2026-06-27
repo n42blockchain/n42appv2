@@ -9,6 +9,8 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:livekit_client/livekit_client.dart';
 
+import 'call_e2ee_provider.dart';
+import 'virtual_background_processor.dart';
 import 'voip_config.dart';
 import '../../core/utils/debug_log.dart';
 
@@ -114,6 +116,13 @@ class LiveKitService extends ChangeNotifier {
   LocalParticipant? _localParticipant;
   EventsListener<RoomEvent>? _roomListener;
 
+  /// 摄像头帧处理器（虚拟背景 / 背景模糊）
+  late final VoipCameraProcessor _cameraProcessor = VoipCameraProcessor(_config);
+
+  /// 通话端到端加密提供器（LiveKit 帧加密）
+  final CallE2EEProvider _e2ee = CallE2EEProvider();
+  bool _e2eeEnabled = false;
+
   MeetingState _state = MeetingState.idle;
   MeetingInfo? _currentMeeting;
   final Map<String, MeetingParticipant> _participants = {};
@@ -156,6 +165,32 @@ class LiveKitService extends ChangeNotifier {
   Duration get duration => _duration;
   Room? get room => _room;
 
+  /// 当前通话是否启用了端到端加密
+  bool get isE2EEEnabled => _e2eeEnabled;
+
+  /// 摄像头帧处理器（虚拟背景 / 背景模糊），供本地自视图预览调用 renderFrame
+  VoipCameraProcessor get cameraProcessor => _cameraProcessor;
+
+  // ============================================
+  // 端到端加密（帧加密）
+  // ============================================
+
+  /// 运行时切换帧加密开关（房间已用 e2eeOptions 初始化时有效）
+  Future<void> setE2EEEnabled(bool enabled) async {
+    if (_room == null) return;
+    try {
+      await _room!.setE2EEEnabled(enabled);
+      _e2eeEnabled = enabled;
+      notifyListeners();
+      debugLog('LiveKitService: E2EE ${enabled ? "enabled" : "disabled"}');
+    } catch (e) {
+      debugLog('LiveKitService: setE2EEEnabled failed: $e');
+    }
+  }
+
+  /// 棘轮推进共享密钥（前向保密；各端需同步调用）
+  Future<void> ratchetE2EEKey() => _e2ee.ratchet();
+
   // ============================================
   // 加入/离开会议
   // ============================================
@@ -167,6 +202,8 @@ class LiveKitService extends ChangeNotifier {
   /// [participantName] 参与者名称
   /// [enableVideo] 是否开启视频
   /// [enableAudio] 是否开启音频
+  /// [enableE2EE] 是否开启通话端到端加密（LiveKit 帧加密）。开启时必须提供
+  /// [e2eeSharedKey]，且参会各端密钥需一致（详见 [CallE2EEProvider]）。
   Future<bool> joinMeeting({
     required String roomName,
     required String token,
@@ -174,6 +211,8 @@ class LiveKitService extends ChangeNotifier {
     String? participantAvatarUrl,
     bool enableVideo = true,
     bool enableAudio = true,
+    bool enableE2EE = false,
+    String? e2eeSharedKey,
   }) async {
     if (_state != MeetingState.idle) {
       debugLog('LiveKitService: Already in a meeting');
@@ -191,11 +230,22 @@ class LiveKitService extends ChangeNotifier {
       // 获取音频处理配置
       final audioConfig = _config.audioProcessing;
 
+      // 构建通话端到端加密选项（如启用）
+      E2EEOptions? e2eeOptions;
+      if (enableE2EE && e2eeSharedKey != null && e2eeSharedKey.isNotEmpty) {
+        e2eeOptions = await _e2ee.buildOptions(e2eeSharedKey);
+        _e2eeEnabled = true;
+        debugLog('LiveKitService: E2EE enabled for this meeting');
+      } else {
+        _e2eeEnabled = false;
+      }
+
       // 创建房间实例
       _room = Room(
         roomOptions: RoomOptions(
           adaptiveStream: true,
           dynacast: true,
+          encryption: e2eeOptions,
           defaultAudioPublishOptions: const AudioPublishOptions(),
           defaultVideoPublishOptions: const VideoPublishOptions(
             simulcast: true,
@@ -211,6 +261,10 @@ class LiveKitService extends ChangeNotifier {
             noiseSuppression: audioConfig.noiseSuppression,
             autoGainControl: audioConfig.autoGainControl,
             highPassFilter: audioConfig.highPassFilter,
+          ),
+          // 摄像头采集挂载虚拟背景 / 背景模糊处理器
+          defaultCameraCaptureOptions: CameraCaptureOptions(
+            processor: _cameraProcessor,
           ),
         ),
       );
@@ -228,6 +282,16 @@ class LiveKitService extends ChangeNotifier {
           camera: TrackOption(enabled: enableVideo),
         ),
       );
+
+      // 连接成功后启用帧加密
+      if (_e2eeEnabled) {
+        try {
+          await _room!.setE2EEEnabled(true);
+          debugLog('LiveKitService: Frame encryption activated');
+        } catch (e) {
+          debugLog('LiveKitService: Failed to activate E2EE: $e');
+        }
+      }
 
       _localParticipant = _room!.localParticipant;
 
@@ -450,6 +514,14 @@ class LiveKitService extends ChangeNotifier {
   Future<void> setVirtualBackground(String imageUrl) async {
     _config.backgroundMode = BackgroundMode.virtualBackground;
     _config.virtualBackgroundUrl = imageUrl;
+    await _cameraProcessor.loadBackgroundImage(imageUrl);
+    await _updateBackgroundProcessing();
+  }
+
+  /// 设置虚拟背景（直接提供图片字节，适用于网络图 / 内存图）
+  Future<void> setVirtualBackgroundBytes(Uint8List imageBytes) async {
+    _config.backgroundMode = BackgroundMode.virtualBackground;
+    _cameraProcessor.backgroundImageBytes = imageBytes;
     await _updateBackgroundProcessing();
   }
 
@@ -478,8 +550,10 @@ class LiveKitService extends ChangeNotifier {
 
   /// 更新背景处理设置
   ///
-  /// 注意：LiveKit 的背景处理需要使用视频处理器（Video Processor）
-  /// 这里提供了配置更新的框架，实际的视频处理需要配合 UI 层实现
+  /// 配置存于 [VoIPConfig] 单例，已挂载的 [VoipCameraProcessor]（虚拟背景 /
+  /// 背景模糊处理器）会实时读取最新配置：本地自视图通过
+  /// `cameraProcessor.renderFrame` 渲染合成效果（真实可用），发布轨道的逐帧
+  /// 替换待原生 frame processor 接线（见 [VoipCameraProcessor.processedTrack]）。
   Future<void> _updateBackgroundProcessing() async {
     final bgConfig = _config.backgroundProcessing;
     debugLog('LiveKitService: Updating background processing: $bgConfig');
@@ -884,6 +958,9 @@ class LiveKitService extends ChangeNotifier {
     _isVideoEnabled = true;
     _isScreenSharing = false;
     _chatMessages.clear();
+
+    _e2ee.reset();
+    _e2eeEnabled = false;
 
     debugLog('LiveKitService: Cleaned up');
   }
