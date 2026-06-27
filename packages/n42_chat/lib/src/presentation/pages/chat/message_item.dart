@@ -22,6 +22,7 @@ import '../../blocs/chat/chat_event.dart';
 import '../../widgets/chat/message_status_indicator.dart' as indicator;
 import '../../widgets/chat/chat_widgets.dart';
 import '../../widgets/chat/contact_card_message_widget.dart';
+import '../../widgets/chat/video_sticker_view.dart';
 import '../../widgets/chat/url_preview_widget.dart';
 import '../../../core/services/ai_service.dart';
 import '../../widgets/chat/message_reaction_bar.dart';
@@ -934,30 +935,37 @@ class MessageItem extends StatelessWidget {
         mimeType.contains('json') ||
         lower.endsWith('.json');
     final isSvg = mimeType.contains('svg') || lower.endsWith('.svg');
+    final isVideo = VideoStickerView.isVideoSticker(
+      mimeType: mimeType,
+      url: url,
+    );
     return SizedBox(
       width: size,
       height: size,
-      child: isLottie
-          ? Lottie.network(
-              url,
-              headers: headers,
-              fit: BoxFit.contain,
-              repeat: true,
-              errorBuilder: (_, _, _) => fallback(),
-            )
-          : isSvg
-              ? SvgPicture.network(
+      child: isVideo
+          // 视频贴纸（WebM/MP4，对齐 Telegram；iOS WebM 受限见 VideoStickerView）
+          ? VideoStickerView(url: url, headers: headers)
+          : isLottie
+              ? Lottie.network(
                   url,
                   headers: headers,
                   fit: BoxFit.contain,
-                  placeholderBuilder: (_) => fallback(),
-                )
-              : Image.network(
-                  url,
-                  fit: BoxFit.contain,
-                  headers: headers,
+                  repeat: true,
                   errorBuilder: (_, _, _) => fallback(),
-                ),
+                )
+              : isSvg
+                  ? SvgPicture.network(
+                      url,
+                      headers: headers,
+                      fit: BoxFit.contain,
+                      placeholderBuilder: (_) => fallback(),
+                    )
+                  : Image.network(
+                      url,
+                      fit: BoxFit.contain,
+                      headers: headers,
+                      errorBuilder: (_, _, _) => fallback(),
+                    ),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
+import 'video_sticker_view.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
@@ -332,21 +333,33 @@ class _StickerPickerState extends State<StickerPicker> {
       );
     }
 
-    // 图片贴纸
+    // 图片 / 视频贴纸
     final httpUrl = sticker.httpUrl ?? sticker.url;
     if (httpUrl.startsWith('http')) {
       final client = getIt.isRegistered<MatrixClientManager>()
           ? getIt<MatrixClientManager>().client
           : null;
+      final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+        httpUrl,
+        client: client,
+      );
+      // 视频贴纸（WebM/MP4，对齐 Telegram）：用 video_player 循环播放。
+      if (VideoStickerView.isVideoSticker(
+        mimeType: sticker.mimeType,
+        url: httpUrl,
+      )) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: VideoStickerView(url: httpUrl, headers: headers),
+        );
+      }
+      // 静态 / 动画 WebP / GIF（Flutter Image 原生支持动画 WebP & GIF）。
       return ClipRRect(
         borderRadius: BorderRadius.circular(4),
         child: Image.network(
           httpUrl,
           fit: BoxFit.contain,
-          headers: mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
-            httpUrl,
-            client: client,
-          ),
+          headers: headers,
           errorBuilder: (_, _, _) => const Icon(Icons.image_not_supported),
         ),
       );
