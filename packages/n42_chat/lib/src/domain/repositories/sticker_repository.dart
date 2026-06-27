@@ -35,6 +35,12 @@ abstract class IStickerRepository {
   /// 搜索贴纸包
   Future<List<StickerPack>> searchPacks(String query);
 
+  /// 在已安装贴纸包内按关键词/emoji 搜索单个贴纸
+  ///
+  /// 用于贴纸面板搜索框与输入框联想（输入词推荐贴纸）。按相关度排序：
+  /// emoji 精确匹配 > 名称前缀匹配 > 名称包含。
+  Future<List<StickerHit>> searchStickers(String query, {int limit = 24});
+
   /// 获取贴纸分类列表
   Future<List<StickerCategory>> getCategories();
 

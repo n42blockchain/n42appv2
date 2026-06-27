@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/recent_emoji_store.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/matrix_utils.dart' as mx_utils;
-import '../../../data/datasources/bundled_sticker_packs.dart';
-import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../domain/entities/sticker_pack_entity.dart';
 import '../../../domain/repositories/sticker_repository.dart';
 import 'emoji_picker.dart';
 import 'sticker_picker.dart';
+import 'sticker_thumb.dart';
 import 'gif_picker.dart';
 
 /// 统一表情面板分页
@@ -330,57 +326,12 @@ class _RecentTabState extends State<_RecentTab> {
   }
 }
 
-/// 贴纸缩略图（asset SVG / emoji / 网络图）
+/// 贴纸缩略图（统一渲染，见 [StickerThumb]）
 class _StickerThumb extends StatelessWidget {
   final Sticker sticker;
 
   const _StickerThumb({required this.sticker});
 
   @override
-  Widget build(BuildContext context) {
-    final isDark = context.isDarkMode;
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.placeholderOf(isDark),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      padding: const EdgeInsets.all(6),
-      child: Center(child: _content()),
-    );
-  }
-
-  Widget _content() {
-    if (sticker.url.startsWith('emoji:')) {
-      return Text(sticker.url.substring(6),
-          style: const TextStyle(fontSize: 28));
-    }
-    if (BundledStickerPacks.isAssetSticker(sticker.url)) {
-      final path = BundledStickerPacks.assetPath(sticker.url);
-      if (BundledStickerPacks.isLottie(sticker.url)) {
-        return Lottie.asset(path, fit: BoxFit.contain, repeat: true);
-      }
-      return SvgPicture.asset(
-        path,
-        fit: BoxFit.contain,
-        placeholderBuilder: (_) =>
-            Text(sticker.emoji ?? '🙂', style: const TextStyle(fontSize: 28)),
-      );
-    }
-    final httpUrl = sticker.httpUrl ?? sticker.url;
-    if (httpUrl.startsWith('http')) {
-      final client = getIt.isRegistered<MatrixClientManager>()
-          ? getIt<MatrixClientManager>().client
-          : null;
-      return Image.network(
-        httpUrl,
-        fit: BoxFit.contain,
-        headers: mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
-          httpUrl,
-          client: client,
-        ),
-        errorBuilder: (_, _, _) => const Icon(Icons.image_not_supported),
-      );
-    }
-    return Text(sticker.emoji ?? '?', style: const TextStyle(fontSize: 28));
-  }
+  Widget build(BuildContext context) => StickerThumb(sticker: sticker);
 }

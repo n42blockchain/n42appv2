@@ -7,6 +7,7 @@ import '../../domain/repositories/sticker_repository.dart';
 import '../datasources/matrix/matrix_sticker_datasource.dart';
 import '../datasources/bundled_sticker_packs.dart';
 import '../../core/utils/debug_log.dart';
+import '../../core/utils/sticker_suggestion_utils.dart';
 
 /// 贴纸仓库实现
 class StickerRepositoryImpl implements IStickerRepository {
@@ -188,6 +189,13 @@ class StickerRepositoryImpl implements IStickerRepository {
         (pack.description?.toLowerCase().contains(queryLower) ?? false));
 
     return _dedupePacksById([...installedMatches, ...storeMatches]);
+  }
+
+  @override
+  Future<List<StickerHit>> searchStickers(String query, {int limit = 24}) async {
+    if (query.trim().isEmpty) return const [];
+    final installed = await getInstalledPacks();
+    return StickerSuggestionUtils.rank(installed, query, limit: limit);
   }
 
   @override

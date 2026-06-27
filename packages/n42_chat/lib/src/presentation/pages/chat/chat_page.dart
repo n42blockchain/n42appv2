@@ -62,7 +62,10 @@ import '../../blocs/transfer/transfer_bloc.dart';
 import '../../widgets/chat/chat_widgets.dart';
 import '../../widgets/chat/gif_picker.dart';
 import '../../widgets/chat/sticker_picker.dart';
+import '../../widgets/chat/sticker_suggestion_bar.dart';
 import '../../widgets/chat/expression_panel.dart';
+import '../../../domain/repositories/sticker_repository.dart';
+import '../../../core/utils/sticker_suggestion_utils.dart';
 import '../../../core/services/giphy_service.dart';
 import '../../../core/services/reminder_service.dart';
 import '../../widgets/chat/red_packet_dialogs.dart';
@@ -193,6 +196,10 @@ class _ChatPageState extends State<ChatPage> {
 
   // 当前用户ID（用于表情回应高亮）
   String? _currentUserId;
+
+  // 贴纸输入联想（按词推荐贴纸）
+  List<StickerHit> _stickerSuggestions = const [];
+  int _stickerSuggestionToken = 0;
 
   // @ 提醒相关状态
   bool _showMentionPicker = false;
@@ -696,6 +703,48 @@ class _ChatPageState extends State<ChatPage> {
       }
       _checkMentionTrigger(text);
     }
+
+    // 贴纸输入联想（按词推荐贴纸）
+    _updateStickerSuggestions(text);
+  }
+
+  /// 按当前输入词更新贴纸联想候选
+  void _updateStickerSuggestions(String text) {
+    if (!getIt.isRegistered<IStickerRepository>()) return;
+
+    final query = StickerSuggestionUtils.extractQuery(
+      text,
+      _inputController.selection.baseOffset,
+    );
+    if (query == null) {
+      if (_stickerSuggestions.isNotEmpty) {
+        _stickerSuggestionToken++;
+        setState(() => _stickerSuggestions = const []);
+      }
+      return;
+    }
+
+    final token = ++_stickerSuggestionToken;
+    unawaited(() async {
+      try {
+        final hits = await getIt<IStickerRepository>().searchStickers(
+          query,
+          limit: 12,
+        );
+        if (!mounted || token != _stickerSuggestionToken) return;
+        setState(() => _stickerSuggestions = hits);
+      } catch (_) {
+        if (!mounted || token != _stickerSuggestionToken) return;
+        setState(() => _stickerSuggestions = const []);
+      }
+    }());
+  }
+
+  /// 选中联想贴纸：发送并清空候选
+  void _onStickerSuggestionSelected(Sticker sticker, String packId) {
+    _stickerSuggestionToken++;
+    setState(() => _stickerSuggestions = const []);
+    _onStickerSelected(sticker, packId);
   }
 
   /// 检测 @ 触发
@@ -1193,6 +1242,16 @@ class _ChatPageState extends State<ChatPage> {
                   !_isMultiSelectMode &&
                   !_showSearchBar)
                 _buildSelfDestructTimerBar(),
+
+              // 贴纸输入联想条（按词推荐贴纸）
+              if (_stickerSuggestions.isNotEmpty &&
+                  !_isMultiSelectMode &&
+                  !_showSearchBar &&
+                  !_showMentionPicker)
+                StickerSuggestionBar(
+                  suggestions: _stickerSuggestions,
+                  onSelected: _onStickerSuggestionSelected,
+                ),
 
               // 多选模式下显示操作栏，否则显示输入栏
               if (_isMultiSelectMode)

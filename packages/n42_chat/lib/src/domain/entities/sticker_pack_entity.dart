@@ -265,6 +265,22 @@ class RecentSticker extends Equatable {
   List<Object?> get props => [sticker, packId, lastUsedAt, usageCount];
 }
 
+/// 贴纸搜索/联想命中结果
+///
+/// 携带贴纸所属包 id，便于命中后直接发送与记录使用次数。
+class StickerHit extends Equatable {
+  final Sticker sticker;
+  final String packId;
+
+  const StickerHit({
+    required this.sticker,
+    required this.packId,
+  });
+
+  @override
+  List<Object?> get props => [sticker, packId];
+}
+
 /// 贴纸包分类
 class StickerCategory extends Equatable {
   final String id;
