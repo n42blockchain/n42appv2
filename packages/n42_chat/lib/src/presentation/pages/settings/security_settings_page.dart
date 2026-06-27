@@ -8,6 +8,7 @@ import '../../../core/encryption/e2ee_manager.dart';
 import '../../../core/encryption/key_backup_service.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/biometric_service.dart';
+import '../../../core/services/totp_2fa_store.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/utils/matrix_uia_utils.dart';
@@ -20,6 +21,7 @@ import '../../widgets/settings/recovery_key_display_dialog.dart';
 import '../../widgets/settings/recovery_key_import_dialog.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../security/sas_verification_page.dart';
+import 'totp_2fa_setup_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 安全设置页面
@@ -189,6 +191,11 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                   _buildPasskeySection(),
                   const SizedBox(height: 16),
                 ],
+
+                // 二步验证（TOTP 认证器）
+                _buildTotp2faSection(),
+
+                const SizedBox(height: 16),
 
                 // 密钥备份
                 _buildKeyBackupSection(),
@@ -666,6 +673,50 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTotp2faSection() {
+    return Container(
+      color: context.surfaceColor,
+      child: FutureBuilder<bool>(
+        future: Totp2faStore().isEnabled(),
+        builder: (context, snapshot) {
+          final enabled = snapshot.data ?? false;
+          return ListTile(
+            leading: Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: enabled ? AppColors.success : AppColors.primary,
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Icon(Icons.shield_outlined,
+                  color: Colors.white, size: 20),
+            ),
+            title: Text(
+              'Two-factor authentication',
+              style: TextStyle(fontSize: 16, color: context.textPrimary),
+            ),
+            subtitle: Text(
+              enabled
+                  ? 'On — authenticator app code required'
+                  : 'Off — protect with an authenticator app (TOTP)',
+              style: TextStyle(fontSize: 13, color: context.textSecondary),
+            ),
+            trailing: Icon(AppIcons.chevron, color: context.textSecondary),
+            onTap: () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const Totp2faSetupPage(),
+                ),
+              );
+              if (mounted) setState(() {});
+            },
+          );
+        },
       ),
     );
   }

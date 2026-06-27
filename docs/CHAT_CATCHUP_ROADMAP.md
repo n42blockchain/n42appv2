@@ -37,7 +37,7 @@
 | 20 | 服务号/订阅号 + 公众号文章阅读器排版 | ✅ **阅读器完成 2026-06-27**：长文消息长按「Reading」进入阅读模式(`ArticleReaderPage`)——限定阅读宽度 680、放大行距、可调字号(A-/A+ 持久化)、Markdown 富排版、阅读时长估算；纯逻辑 `ArticleReaderUtils`(长文阈值/时长/标题提取,11 单测)。服务号/订阅号账号形态仍待产品定义 |
 | 21 | 游戏中心 | ⏳ 仅页面框架 |
 | 22 | ~~钱包/DID 登录入口~~ ✅ **完成 2026-06-27** | 「Sign in with Wallet」：钱包对固定消息签名→确定性派生 Matrix 用户名+密码(`WalletLoginCredentials`,7 单测)→`AuthWalletAuthRequested`(先登录失败则注册)，登录页钱包按钮(gated on `IWalletBridge`+`enableWalletLogin`)。**顺带完善第三方登录**：原生五家(Google/Apple/Facebook/Twitter/WeChat)已在；通用 Matrix SSO picker 加品牌识别(`SsoBrandClassifier`,3 单测)首类显示 Microsoft/GitHub/LinkedIn/Discord/GitLab 等任意 OIDC 提供方；矩阵见 `docs/THIRD_PARTY_LOGIN.md`。安全：派生密码要求钱包签名确定性(已注释，生产建议服务端 SIWE) |
-| 23 | 2FA / TOTP | ⏳ 依赖 Matrix HS |
+| 23 | 2FA / TOTP | ✅ **App 级 TOTP 完成 2026-06-27**：纯 RFC 6238 实现(`Totp`：HOTP/TOTP+Base32+otpauth URI，14 单测含 RFC 向量) + 安全存储(`Totp2faStore` Keychain/Keystore) + 设置页「Two-Factor」(生成密钥/QR/认证器扫码/回填验证码启用/关闭)。账号级(Matrix HS UIA)2FA 仍依赖服务端 |
 | 24 | ~~日程/事件消息、Quiz 答题~~ ✅ **完成 2026-06-27** | **日程**：新增 `MessageType.event` + `EventMessageData`(纯编解码/ICS/格式化,10 单测) + 端到端 + 气泡卡片(起止/地点/描述/「加入日历」.ics) + 「+」面板入口 + 编辑面板。**Quiz**：poll 扩展 `n42.quiz`(正确序号+解析)，`QuizReveal` 纯揭晓逻辑(8 单测)，创建面板 Quiz 开关+正确项单选+解析，气泡投票后揭晓对/错色标+解析；全链路 metadata/mapper/repo/bloc 透传 |
 
 ## 远期（战略级 / 重基建 / 平台或生态依赖）
