@@ -63,9 +63,12 @@ import '../../widgets/chat/chat_widgets.dart';
 import '../../widgets/chat/gif_picker.dart';
 import '../../widgets/chat/sticker_picker.dart';
 import '../../widgets/chat/sticker_suggestion_bar.dart';
+import '../../widgets/chat/custom_emoji_suggestion_bar.dart';
 import '../../widgets/chat/expression_panel.dart';
 import '../../../domain/repositories/sticker_repository.dart';
+import '../../../domain/entities/custom_emoji.dart';
 import '../../../core/utils/sticker_suggestion_utils.dart';
+import '../../../core/utils/custom_emoji_parser.dart';
 import '../../../core/services/giphy_service.dart';
 import '../../../core/services/reminder_service.dart';
 import '../../widgets/chat/red_packet_dialogs.dart';
@@ -200,6 +203,9 @@ class _ChatPageState extends State<ChatPage> {
   // 贴纸输入联想（按词推荐贴纸）
   List<StickerHit> _stickerSuggestions = const [];
   int _stickerSuggestionToken = 0;
+
+  // 自定义 emoji 输入联想（输入 `:partial` 推荐动画 emoji）
+  List<CustomEmoji> _customEmojiSuggestions = const [];
 
   // @ 提醒相关状态
   bool _showMentionPicker = false;
@@ -704,8 +710,53 @@ class _ChatPageState extends State<ChatPage> {
       _checkMentionTrigger(text);
     }
 
-    // 贴纸输入联想（按词推荐贴纸）
+    // 输入联想：自定义 emoji（`:partial`）优先于贴纸（按词）
+    _updateComposerSuggestions(text);
+  }
+
+  /// 更新输入联想：`:partial` 命中时推荐自定义 emoji，否则按词推荐贴纸
+  void _updateComposerSuggestions(String text) {
+    final cursor = _inputController.selection.baseOffset;
+    final emojiTrigger = CustomEmojiParser.extractTrigger(text, cursor);
+    if (emojiTrigger != null) {
+      // `:` 后至少 1 个字符才推荐，避免单个冒号刷屏
+      final hits = emojiTrigger.isEmpty
+          ? const <CustomEmoji>[]
+          : BuiltinCustomEmojis.search(emojiTrigger, limit: 12);
+      if (!listEquals(hits, _customEmojiSuggestions) ||
+          _stickerSuggestions.isNotEmpty) {
+        setState(() {
+          _customEmojiSuggestions = hits;
+          _stickerSuggestions = const [];
+        });
+      }
+      return;
+    }
+    if (_customEmojiSuggestions.isNotEmpty) {
+      setState(() => _customEmojiSuggestions = const []);
+    }
     _updateStickerSuggestions(text);
+  }
+
+  /// 选中联想的自定义 emoji：把 `:partial` 替换为完整 `:shortcode:`
+  void _onCustomEmojiSuggestionSelected(CustomEmoji emoji) {
+    final text = _inputController.text;
+    final cursor = _inputController.selection.baseOffset;
+    final offset = (cursor < 0 || cursor > text.length) ? text.length : cursor;
+    final before = text.substring(0, offset);
+    final triggerStart = before.lastIndexOf(':');
+    if (triggerStart < 0) return;
+
+    final insertion = ':${emoji.shortcode}: ';
+    final newText = text.replaceRange(triggerStart, offset, insertion);
+    _inputController.value = TextEditingValue(
+      text: newText,
+      selection: TextSelection.collapsed(
+        offset: triggerStart + insertion.length,
+      ),
+    );
+    setState(() => _customEmojiSuggestions = const []);
+    _inputFocusNode.requestFocus();
   }
 
   /// 按当前输入词更新贴纸联想候选
@@ -1242,6 +1293,16 @@ class _ChatPageState extends State<ChatPage> {
                   !_isMultiSelectMode &&
                   !_showSearchBar)
                 _buildSelfDestructTimerBar(),
+
+              // 自定义 emoji 联想条（输入 `:partial`）
+              if (_customEmojiSuggestions.isNotEmpty &&
+                  !_isMultiSelectMode &&
+                  !_showSearchBar &&
+                  !_showMentionPicker)
+                CustomEmojiSuggestionBar(
+                  suggestions: _customEmojiSuggestions,
+                  onSelected: _onCustomEmojiSuggestionSelected,
+                ),
 
               // 贴纸输入联想条（按词推荐贴纸）
               if (_stickerSuggestions.isNotEmpty &&

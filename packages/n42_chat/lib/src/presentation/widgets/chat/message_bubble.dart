@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/message_markdown_utils.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import 'markdown_message_widget.dart';
+import 'custom_emoji_text.dart';
 import 'message_status_indicator.dart';
 import '../../../core/utils/debug_log.dart';
 
@@ -373,8 +374,8 @@ class TextMessageBubble extends StatelessWidget {
       onResend: onResend,
       child: useMarkdown
           ? MarkdownMessageWidget(text: text, isSelf: isSelf)
-          : Text(
-              text,
+          : CustomEmojiText(
+              text: text,
               style: TextStyle(fontSize: 16, color: textColor, height: 1.4),
             ),
     );

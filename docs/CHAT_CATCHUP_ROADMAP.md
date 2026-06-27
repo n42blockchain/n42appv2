@@ -14,7 +14,7 @@
 | 2 | ~~用户自建贴纸包 + 上传 UI~~ ✅ **完成 2026-06-27** | CustomStickerPackPage(多选上传/删贴纸/改名/删包) + store「新建包」入口/自定义包「管理」按钮 |
 | 3 | ~~WebM / 视频贴纸~~ ✅ **完成 2026-06-27** | VideoStickerView(video_player 循环/静音/回退)接入选择器+消息渲染；动画 WebP/GIF 经 Flutter Image 已支持；iOS WebM 受编解码限制(诚实标注) |
 | 4 | ~~贴纸搜索 / 输入联想~~ ✅ **完成 2026-06-27** | 贴纸面板搜索框(`searchStickers` 按名称/emoji 排序命中) + 输入框打字按词联想推荐贴纸条(`StickerSuggestionBar`/`StickerSuggestionUtils`) + 抽出复用 `StickerThumb` + 20 单测 |
-| 5 | 自定义动画 emoji | ❌ | TG Premium / DC 服务器 emoji 型 |
+| 5 | ~~自定义动画 emoji~~ ✅ **完成 2026-06-27** | `:shortcode:` 内联动画 emoji（Discord/TG 型）：内置 16 个 Noto Lottie 动画集+别名(`BuiltinCustomEmojis`)、纯解析器(`CustomEmojiParser`)、消息气泡内联渲染(`CustomEmojiText`/`WidgetSpan` 按字号缩放)、输入 `:partial` 联想条(`CustomEmojiSuggestionBar`)+16 单测；markdown 文本路径暂不内联(诚实标注) |
 | 6 | ~~图像理解 / OCR~~ ✅ **完成 2026-06-27** | 云端视觉(`describeImage`)+图片查看器「AI describe/OCR」入口+4 测试 |
 | 7 | ~~图像生成~~ ✅ **接口+消费者已就位** | `AiService.generateImage` + AI 贴纸(#1)消费；如需「生成并作为消息发送」可后续小增 |
 | 8 | 优先通知 / 智能过滤 | ❌ | 客户端规则 |
