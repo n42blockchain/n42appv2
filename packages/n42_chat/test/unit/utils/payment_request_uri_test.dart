@@ -5,7 +5,7 @@ void main() {
   group('encode/parse round-trip', () {
     test('full data round-trips', () {
       const data = PaymentRequestData(
-        receiverAddress: '0xABC123',
+        receiverAddress: ' 0xABC123 ',
         amount: '12.5',
         token: 'USDT',
         memo: 'order #42',
@@ -14,14 +14,15 @@ void main() {
       final encoded = PaymentRequestUri.encode(data);
       expect(PaymentRequestUri.isPaymentUri(encoded), isTrue);
       final parsed = PaymentRequestUri.tryParse(encoded);
-      expect(parsed, data);
+      expect(parsed?.receiverAddress, '0xABC123');
+      expect(parsed?.amount, data.amount);
+      expect(parsed?.token, data.token);
+      expect(parsed?.memo, data.memo);
+      expect(parsed?.chain, data.chain);
     });
 
     test('open amount (no amount) round-trips', () {
-      const data = PaymentRequestData(
-        receiverAddress: '0xABC',
-        token: 'ETH',
-      );
+      const data = PaymentRequestData(receiverAddress: '0xABC', token: 'ETH');
       final parsed = PaymentRequestUri.tryParse(PaymentRequestUri.encode(data));
       expect(parsed?.receiverAddress, '0xABC');
       expect(parsed?.hasAmount, isFalse);
@@ -46,9 +47,16 @@ void main() {
       expect(PaymentRequestUri.tryParse('n42chat://user/@a:b'), isNull);
     });
 
+    test('returns null for wrong host or path', () {
+      expect(PaymentRequestUri.tryParse('n42pay://evil?to=0x1'), isNull);
+      expect(PaymentRequestUri.tryParse('n42pay://pay/extra?to=0x1'), isNull);
+    });
+
     test('returns null when receiver address missing', () {
-      expect(PaymentRequestUri.tryParse('n42pay://pay?amount=1&token=ETH'),
-          isNull);
+      expect(
+        PaymentRequestUri.tryParse('n42pay://pay?amount=1&token=ETH'),
+        isNull,
+      );
     });
 
     test('returns null for blank/garbage', () {
@@ -72,6 +80,11 @@ void main() {
       expect(PaymentRequestUri.isPaymentUri('N42PAY://pay?to=0x1'), isTrue);
       expect(PaymentRequestUri.isPaymentUri('n42pay://pay?to=0x1'), isTrue);
       expect(PaymentRequestUri.isPaymentUri('other://x'), isFalse);
+    });
+
+    test('rejects malformed payment-like uri', () {
+      expect(PaymentRequestUri.isPaymentUri('n42pay://evil?to=0x1'), isFalse);
+      expect(PaymentRequestUri.isPaymentUri('n42pay://pay?amount=1'), isFalse);
     });
   });
 }

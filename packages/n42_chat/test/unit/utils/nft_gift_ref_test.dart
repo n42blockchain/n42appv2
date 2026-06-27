@@ -16,7 +16,7 @@ void main() {
 
   group('tryParse', () {
     test('parses full ref', () {
-      final ref = NftGiftRef.tryParse('nft://0xabc/42@137');
+      final ref = NftGiftRef.tryParse(' nft://0xabc/42@137 ');
       expect(ref?.contractAddress, '0xabc');
       expect(ref?.tokenId, '42');
       expect(ref?.chainId, 137);
@@ -50,6 +50,15 @@ void main() {
 
     test('returns null for non-numeric chain', () {
       expect(NftGiftRef.tryParse('nft://0xabc/42@abc'), isNull);
+    });
+
+    test('returns null for non-positive chain', () {
+      expect(NftGiftRef.tryParse('nft://0xabc/42@0'), isNull);
+      expect(NftGiftRef.tryParse('nft://0xabc/42@-1'), isNull);
+    });
+
+    test('returns null when token id contains path separators', () {
+      expect(NftGiftRef.tryParse('nft://0xabc/42/extra@1'), isNull);
     });
   });
 }

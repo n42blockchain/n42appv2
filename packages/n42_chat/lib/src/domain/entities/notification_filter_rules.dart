@@ -42,9 +42,9 @@ class NotificationFilterRules extends Equatable {
 
   /// 是否没有任何规则（用于快速跳过判定）
   bool get isEmpty =>
-      priorityKeywords.isEmpty &&
-      mutedKeywords.isEmpty &&
-      prioritySenders.isEmpty;
+      !_hasAnyNonBlank(priorityKeywords) &&
+      !_hasAnyNonBlank(mutedKeywords) &&
+      !_hasAnyNonBlank(prioritySenders);
 
   /// 判定一条消息。优先规则高于屏蔽规则。
   ///
@@ -56,7 +56,10 @@ class NotificationFilterRules extends Equatable {
     if (isEmpty) return NotificationFilterDecision.neutral;
 
     // 优先发送者
-    if (senderId != null && prioritySenders.contains(senderId)) {
+    final normalizedSenderId = senderId?.trim();
+    if (normalizedSenderId != null &&
+        normalizedSenderId.isNotEmpty &&
+        prioritySenders.any((sender) => sender.trim() == normalizedSenderId)) {
       return NotificationFilterDecision.priority;
     }
 
@@ -96,15 +99,26 @@ class NotificationFilterRules extends Equatable {
   }
 
   Map<String, dynamic> toJson() => {
-        'priorityKeywords': priorityKeywords,
-        'mutedKeywords': mutedKeywords,
-        'prioritySenders': prioritySenders,
-        'caseSensitive': caseSensitive,
-      };
+    'priorityKeywords': priorityKeywords,
+    'mutedKeywords': mutedKeywords,
+    'prioritySenders': prioritySenders,
+    'caseSensitive': caseSensitive,
+  };
 
   factory NotificationFilterRules.fromJson(Map<String, dynamic> json) {
-    List<String> readList(Object? value) =>
-        (value as List<dynamic>?)?.whereType<String>().toList() ?? const [];
+    List<String> readList(Object? value) {
+      final seen = <String>{};
+      final result = <String>[];
+      final list = value is List<dynamic> ? value : const <dynamic>[];
+      for (final item in list) {
+        if (item is! String) continue;
+        final trimmed = item.trim();
+        if (trimmed.isEmpty || !seen.add(trimmed)) continue;
+        result.add(trimmed);
+      }
+      return result;
+    }
+
     return NotificationFilterRules(
       priorityKeywords: readList(json['priorityKeywords']),
       mutedKeywords: readList(json['mutedKeywords']),
@@ -112,6 +126,9 @@ class NotificationFilterRules extends Equatable {
       caseSensitive: json['caseSensitive'] as bool? ?? false,
     );
   }
+
+  static bool _hasAnyNonBlank(List<String> values) =>
+      values.any((value) => value.trim().isNotEmpty);
 
   String encode() => jsonEncode(toJson());
 
@@ -130,9 +147,9 @@ class NotificationFilterRules extends Equatable {
 
   @override
   List<Object?> get props => [
-        priorityKeywords,
-        mutedKeywords,
-        prioritySenders,
-        caseSensitive,
-      ];
+    priorityKeywords,
+    mutedKeywords,
+    prioritySenders,
+    caseSensitive,
+  ];
 }

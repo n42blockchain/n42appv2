@@ -14,7 +14,8 @@ class NftGiftRef {
   });
 
   /// 格式化为 `nft://contract/tokenId@chainId`
-  String format() => 'nft://$contractAddress/$tokenId@$chainId';
+  String format() =>
+      'nft://${contractAddress.trim()}/${tokenId.trim()}@$chainId';
 
   /// 简短展示名：`#tokenId`
   String get shortLabel => '#$tokenId';
@@ -29,20 +30,20 @@ class NftGiftRef {
     final slash = rest.indexOf('/');
     if (slash <= 0) return null;
 
-    final contract = rest.substring(0, slash);
-    var tokenPart = rest.substring(slash + 1);
+    final contract = rest.substring(0, slash).trim();
+    var tokenPart = rest.substring(slash + 1).trim();
     if (contract.isEmpty || tokenPart.isEmpty) return null;
 
     var chainId = 1;
     final at = tokenPart.lastIndexOf('@');
     if (at >= 0) {
-      final chainStr = tokenPart.substring(at + 1);
-      tokenPart = tokenPart.substring(0, at);
+      final chainStr = tokenPart.substring(at + 1).trim();
+      tokenPart = tokenPart.substring(0, at).trim();
       final parsed = int.tryParse(chainStr);
-      if (parsed == null) return null;
+      if (parsed == null || parsed <= 0) return null;
       chainId = parsed;
     }
-    if (tokenPart.isEmpty) return null;
+    if (tokenPart.isEmpty || tokenPart.contains('/')) return null;
 
     return NftGiftRef(
       contractAddress: contract,

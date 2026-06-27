@@ -35,6 +35,16 @@ void main() {
       );
     });
 
+    test('priority sender ignores accidental whitespace', () {
+      const rules = NotificationFilterRules(
+        prioritySenders: [' @boss:server '],
+      );
+      expect(
+        rules.evaluate(body: 'hi', senderId: ' @boss:server '),
+        NotificationFilterDecision.priority,
+      );
+    });
+
     test('priority wins over muted when both match', () {
       const rules = NotificationFilterRules(
         priorityKeywords: ['urgent'],
@@ -83,16 +93,39 @@ void main() {
     });
 
     test('decode of null/garbage returns empty', () {
-      expect(NotificationFilterRules.decode(null), NotificationFilterRules.empty);
-      expect(NotificationFilterRules.decode('not json'),
-          NotificationFilterRules.empty);
-      expect(NotificationFilterRules.decode('  '),
-          NotificationFilterRules.empty);
+      expect(
+        NotificationFilterRules.decode(null),
+        NotificationFilterRules.empty,
+      );
+      expect(
+        NotificationFilterRules.decode('not json'),
+        NotificationFilterRules.empty,
+      );
+      expect(
+        NotificationFilterRules.decode('  '),
+        NotificationFilterRules.empty,
+      );
+    });
+
+    test('fromJson trims, drops blanks, and deduplicates lists', () {
+      final rules = NotificationFilterRules.fromJson({
+        'priorityKeywords': [' urgent ', '', 'urgent'],
+        'mutedKeywords': [' spam ', '   '],
+        'prioritySenders': [' @boss:server ', '@boss:server'],
+      });
+
+      expect(rules.priorityKeywords, ['urgent']);
+      expect(rules.mutedKeywords, ['spam']);
+      expect(rules.prioritySenders, ['@boss:server']);
     });
   });
 
   test('isEmpty reflects presence of any rule', () {
     expect(const NotificationFilterRules().isEmpty, isTrue);
+    expect(
+      const NotificationFilterRules(priorityKeywords: ['   ']).isEmpty,
+      isTrue,
+    );
     expect(
       const NotificationFilterRules(priorityKeywords: ['x']).isEmpty,
       isFalse,

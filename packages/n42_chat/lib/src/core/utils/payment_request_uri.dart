@@ -35,8 +35,7 @@ class PaymentRequestData {
       other.chain == chain;
 
   @override
-  int get hashCode =>
-      Object.hash(receiverAddress, amount, token, memo, chain);
+  int get hashCode => Object.hash(receiverAddress, amount, token, memo, chain);
 }
 
 /// 收款请求二维码 URI 编解码（纯逻辑，便于单测）
@@ -51,9 +50,7 @@ class PaymentRequestUri {
 
   /// 编码为可放进二维码的 URI 字符串。
   static String encode(PaymentRequestData data) {
-    final params = <String, String>{
-      'to': data.receiverAddress,
-    };
+    final params = <String, String>{'to': data.receiverAddress.trim()};
     if (data.amount.trim().isNotEmpty) params['amount'] = data.amount.trim();
     if (data.token.trim().isNotEmpty) params['token'] = data.token.trim();
     final memo = data.memo?.trim();
@@ -61,11 +58,7 @@ class PaymentRequestUri {
     final chain = data.chain?.trim();
     if (chain != null && chain.isNotEmpty) params['chain'] = chain;
 
-    final uri = Uri(
-      scheme: scheme,
-      host: _host,
-      queryParameters: params,
-    );
+    final uri = Uri(scheme: scheme, host: _host, queryParameters: params);
     return uri.toString();
   }
 
@@ -81,7 +74,9 @@ class PaymentRequestUri {
       return null;
     }
 
-    if (uri.scheme.toLowerCase() != scheme) return null;
+    if (uri.scheme.toLowerCase() != scheme || !_hasExpectedRoute(uri)) {
+      return null;
+    }
 
     final params = uri.queryParameters;
     final to = (params['to'] ?? '').trim();
@@ -98,8 +93,12 @@ class PaymentRequestUri {
 
   /// 是否是收款 URI（快速判定，用于扫码分发）
   static bool isPaymentUri(String raw) {
-    final t = raw.trim().toLowerCase();
-    return t.startsWith('$scheme://');
+    return tryParse(raw) != null;
+  }
+
+  static bool _hasExpectedRoute(Uri uri) {
+    return uri.host.toLowerCase() == _host &&
+        (uri.path.isEmpty || uri.path == '/');
   }
 
   static String? _nullIfEmpty(String? value) {

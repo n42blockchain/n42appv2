@@ -338,8 +338,9 @@ class N42WalletBridge implements IWalletBridge {
 
   @override
   Future<String?> signMessage(String message) async {
+    web3.EthPrivateKey? ethKey;
     try {
-      final ethKey = await _getEthPrivateKey();
+      ethKey = await _getEthPrivateKey();
       if (ethKey == null) return null;
 
       // Detect hex-encoded vs UTF-8 message
@@ -355,21 +356,27 @@ class N42WalletBridge implements IWalletBridge {
 
       final signedData = ethKey.signPersonalMessageToUint8List(encodedMessage);
       final result = web3.bytesToHex(signedData, include0x: true);
-      _zeroKey(ethKey);
       return result;
     } catch (e) {
       AppLogger.w('N42WalletBridge', 'signMessage error: $e');
       return null;
+    } finally {
+      if (ethKey != null) {
+        _zeroKey(ethKey);
+      }
     }
   }
 
   @override
   Future<String?> signTypedData(String typedDataJson) async {
+    web3.EthPrivateKey? ethKey;
     try {
-      final ethKey = await _getEthPrivateKey();
-      if (ethKey == null) return null;
-
-      final Map<String, dynamic> typedData = json.decode(typedDataJson);
+      final decoded = json.decode(typedDataJson);
+      if (decoded is! Map<String, dynamic>) {
+        AppLogger.w('N42WalletBridge', 'invalid EIP-712 payload');
+        return null;
+      }
+      final typedData = decoded;
       const requiredFields = ['types', 'primaryType', 'domain', 'message'];
       for (final field in requiredFields) {
         if (!typedData.containsKey(field)) {
@@ -377,6 +384,9 @@ class N42WalletBridge implements IWalletBridge {
           return null;
         }
       }
+
+      ethKey = await _getEthPrivateKey();
+      if (ethKey == null) return null;
 
       final typedMessage = TypedMessage.fromJson(typedData);
       final hash = hashTypedData(
@@ -389,11 +399,14 @@ class N42WalletBridge implements IWalletBridge {
       final s = signature.s.toRadixString(16).padLeft(64, '0');
       final v = signature.v.toRadixString(16).padLeft(2, '0');
       final result = '0x$r$s$v';
-      _zeroKey(ethKey);
       return result;
     } catch (e) {
       AppLogger.w('N42WalletBridge', 'signTypedData error: $e');
       return null;
+    } finally {
+      if (ethKey != null) {
+        _zeroKey(ethKey);
+      }
     }
   }
 
