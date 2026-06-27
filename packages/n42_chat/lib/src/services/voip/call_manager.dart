@@ -13,6 +13,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import '../../../l10n/app_localizations.dart';
 import '../../n42_chat.dart';
 import '../../core/utils/livekit_call_utils.dart';
+import '../../core/services/system_integration_service.dart';
 import 'voip_config.dart';
 import 'webrtc_service.dart';
 import 'livekit_service.dart';
@@ -40,6 +41,8 @@ class CallManager {
   final CallNotificationService _notificationService =
       CallNotificationService();
   final VoIPConfig _config = VoIPConfig();
+  // 系统级集成：通话进行中显示常驻"活动"通知（Android 真实生效）
+  final SystemIntegrationService _systemIntegration = SystemIntegrationService();
 
   // 导航键
   GlobalKey<NavigatorState>? _navigatorKey;
@@ -681,6 +684,12 @@ class CallManager {
       if (callKitId != null) {
         _notificationService.setCallConnected(callKitId);
       }
+      // 进行中活动：常驻通知（Android 真实生效；iOS Live Activity 待原生）
+      final ctx = _navigatorKey?.currentContext;
+      final title = (ctx != null && ctx.mounted)
+          ? (S.of(ctx)?.chatInCall ?? 'In call')
+          : 'In call';
+      _systemIntegration.updateLiveActivity(id: 'call', title: title);
       // 确保通话界面已显示
       if (!_isCallScreenShowing) {
         debugLog(
@@ -690,6 +699,7 @@ class CallManager {
       }
     } else if (state == CallState.ended || state == CallState.failed) {
       _notificationService.endAllCalls();
+      _systemIntegration.endLiveActivity('call');
       _isCallScreenShowing = false;
       // 清除活跃房间，恢复该房间的消息通知
       N42Chat.pushService?.setActiveRoom(null);
