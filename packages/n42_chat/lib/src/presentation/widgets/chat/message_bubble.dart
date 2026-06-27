@@ -183,7 +183,12 @@ class MessageBubble extends StatelessWidget {
       headers['Authorization'] = 'Bearer $accessToken';
     }
 
-    return GestureDetector(
+    return Semantics(
+      label: avatarName?.isNotEmpty == true ? avatarName : null,
+      image: true,
+      button: onAvatarTap != null,
+      excludeSemantics: true,
+      child: GestureDetector(
       onTap: onAvatarTap,
       onDoubleTap: onAvatarDoubleTap,
       child: Container(
@@ -217,6 +222,7 @@ class MessageBubble extends StatelessWidget {
                 },
               )
             : _buildDefaultAvatar(),
+      ),
       ),
     );
   }
@@ -290,27 +296,35 @@ class MessageBubble extends StatelessWidget {
   }
 
   Widget _buildSendingIndicator() {
-    return const SizedBox(
-      width: 14,
-      height: 14,
-      child: CircularProgressIndicator(
-        strokeWidth: 1.5,
-        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+    return Semantics(
+      label: 'Sending',
+      child: const SizedBox(
+        width: 14,
+        height: 14,
+        child: CircularProgressIndicator(
+          strokeWidth: 1.5,
+          valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+        ),
       ),
     );
   }
 
   Widget _buildFailedIndicator() {
-    return GestureDetector(
-      onTap: onResend,
-      child: Container(
-        width: 20,
-        height: 20,
-        decoration: const BoxDecoration(
-          color: AppColors.error,
-          shape: BoxShape.circle,
+    return Semantics(
+      button: true,
+      label: 'Failed to send, tap to resend',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onResend,
+        child: Container(
+          width: 20,
+          height: 20,
+          decoration: const BoxDecoration(
+            color: AppColors.error,
+            shape: BoxShape.circle,
+          ),
+          child: const Icon(Icons.priority_high, size: 14, color: Colors.white),
         ),
-        child: const Icon(Icons.priority_high, size: 14, color: Colors.white),
       ),
     );
   }
