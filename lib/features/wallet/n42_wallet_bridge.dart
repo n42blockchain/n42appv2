@@ -15,6 +15,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
@@ -525,6 +526,77 @@ class N42WalletBridge implements IWalletBridge {
     return null;
   }
 
+  @override
+  Future<TransferResult> requestNftTransfer({
+    required String contractAddress,
+    required String tokenId,
+    required String toAddress,
+    required int chainId,
+    NftStandard standard = NftStandard.erc721,
+    int amount = 1,
+  }) async {
+    try {
+      if (!isWalletConnected) {
+        return TransferResult.failure('Wallet not connected');
+      }
+      if (!_ethAddressRegExp.hasMatch(contractAddress) ||
+          !_ethAddressRegExp.hasMatch(toAddress)) {
+        return TransferResult.failure('Invalid NFT transfer address');
+      }
+      if (BigInt.tryParse(tokenId) == null) {
+        return TransferResult.failure('Invalid NFT token ID');
+      }
+      if (standard == NftStandard.erc1155 && amount <= 0) {
+        return TransferResult.failure('Invalid NFT transfer amount');
+      }
+
+      final provider = _provider;
+      if (provider == null) {
+        return TransferResult.failure('Wallet not connected');
+      }
+
+      final coinModel = _findEvmChainCoin(provider, chainId);
+      if (coinModel == null) {
+        return TransferResult.failure('Chain $chainId not found in wallet');
+      }
+
+      final addrType = coinModel.addrType;
+      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
+      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final path = getPathWithIndex(basePath, coinModel.pathIndex);
+      final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
+      final nftStandard = standard == NftStandard.erc1155
+          ? 'ERC1155'
+          : 'ERC721';
+
+      final result = await NftSender().send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: coinModel.address.toString(),
+          toAddress: toAddress,
+          amount: 0.0,
+          decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
+          path: path,
+          isTest: coinModel.isTest,
+          contractAddress: contractAddress,
+          nftTokenId: tokenId,
+          nftStandard: nftStandard,
+          nftQuantity: standard == NftStandard.erc1155 ? amount : 1,
+          chainConfig: coinModel.coin,
+        ),
+      );
+
+      if (!result.success) {
+        return TransferResult.failure(result.error ?? 'NFT transfer failed');
+      }
+      return TransferResult.success(result.txHash ?? '');
+    } catch (e) {
+      AppLogger.w('N42WalletBridge', 'NFT transfer error: $e');
+      return TransferResult.failure(e.toString());
+    }
+  }
+
   /// Query token balance via TokenViewApi; returns raw balance string or '0'.
   Future<String> _queryTokenBalance(
     String contractAddress,
@@ -551,5 +623,21 @@ class N42WalletBridge implements IWalletBridge {
       );
       return '0';
     }
+  }
+
+  CoinModel? _findEvmChainCoin(WalletActionProvider provider, int chainId) {
+    for (final coinModel in provider.coinModels) {
+      if (coinModel.coin['isContract'] == true) continue;
+      final modelChainId = _readChainId(coinModel);
+      if (modelChainId == chainId) return coinModel;
+    }
+    return null;
+  }
+
+  int? _readChainId(CoinModel coinModel) {
+    final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
+    final raw = baseInfo?['chainId'];
+    if (raw is num) return raw.toInt();
+    return int.tryParse(raw?.toString() ?? '');
   }
 }

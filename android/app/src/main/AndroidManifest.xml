@@ -111,6 +111,7 @@
              这里覆盖为 mediaProjection 以满足 LiveKit/WebRTC 屏幕捕获要求 -->
         <service
             android:name="de.julianassmann.flutter_background.IsolateHolderService"
+            android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection"
             tools:replace="android:foregroundServiceType" />

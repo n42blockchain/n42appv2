@@ -221,7 +221,7 @@ class ChatInputBarState extends State<ChatInputBar> {
   late FocusNode _focusNode;
   bool _isVoiceMode = false;
   bool _hasText = false;
-  bool _showFormattingBar = false;
+  final bool _showFormattingBar = false;
   bool _showCommandPicker = false;
   String _commandQuery = '';
 
@@ -572,10 +572,7 @@ class ChatInputBarState extends State<ChatInputBar> {
       decoration: BoxDecoration(
         color: context.inputBarColor,
         border: Border(
-          top: BorderSide(
-            color: context.dividerColor,
-            width: 0.5,
-          ),
+          top: BorderSide(color: context.dividerColor, width: 0.5),
         ),
       ),
       child: SafeArea(
@@ -638,11 +635,11 @@ class ChatInputBarState extends State<ChatInputBar> {
                   _hasText
                       ? _buildSendButton()
                       : (widget.showMoreButton
-                          ? _buildIconButton(
-                              icon: Icons.attach_file,
-                              onPressed: widget.onMorePressed,
-                            )
-                          : const SizedBox.shrink()),
+                            ? _buildIconButton(
+                                icon: Icons.attach_file,
+                                onPressed: widget.onMorePressed,
+                              )
+                            : const SizedBox.shrink()),
                 ],
               ),
             ),
@@ -659,10 +656,7 @@ class ChatInputBarState extends State<ChatInputBar> {
       decoration: BoxDecoration(
         color: context.surfaceColor,
         border: Border(
-          top: BorderSide(
-            color: context.dividerColor,
-            width: 0.5,
-          ),
+          top: BorderSide(color: context.dividerColor, width: 0.5),
         ),
       ),
       child: ListView.builder(
@@ -752,7 +746,9 @@ class ChatInputBarState extends State<ChatInputBar> {
         child: Icon(
           icon,
           size: 22,
-          color: effectiveCallback != null ? color : color.withValues(alpha: 0.4),
+          color: effectiveCallback != null
+              ? color
+              : color.withValues(alpha: 0.4),
         ),
       ),
     );
@@ -779,10 +775,7 @@ class ChatInputBarState extends State<ChatInputBar> {
         minLines: 1,
         textInputAction: TextInputAction.send,
         onSubmitted: (_) => _sendMessage(),
-        style: TextStyle(
-          fontSize: 16,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: 16, color: context.textPrimary),
         decoration: InputDecoration(
           hintText:
               widget.hintText ??
@@ -891,7 +884,9 @@ class ChatInputBarState extends State<ChatInputBar> {
           child: Icon(
             Icons.send,
             size: 22,
-            color: widget.enabled ? AppColors.primary : AppColors.primary.withValues(alpha: 0.4),
+            color: widget.enabled
+                ? AppColors.primary
+                : AppColors.primary.withValues(alpha: 0.4),
           ),
         ),
       ),

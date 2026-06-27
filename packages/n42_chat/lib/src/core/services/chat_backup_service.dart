@@ -1091,6 +1091,7 @@ class ChatBackupService {
 
   /// AES-256-CBC 加密（v2，保留用于向后兼容解密）
   /// 格式: "N42ENC2:" (8字节) + salt (32字节) + iv (16字节) + 加密数据
+  // ignore: unused_element
   static Uint8List _encryptAes256(List<int> plaintext, String password) {
     final random = Random.secure();
     final salt = Uint8List.fromList(
@@ -1230,12 +1231,7 @@ class ChatBackupService {
     final cipher = pc.GCMBlockCipher(pc.AESEngine())
       ..init(
         false,
-        pc.AEADParameters(
-          pc.KeyParameter(key),
-          128,
-          nonce,
-          Uint8List(0),
-        ),
+        pc.AEADParameters(pc.KeyParameter(key), 128, nonce, Uint8List(0)),
       );
 
     // GCM expects ciphertext + tag concatenated
@@ -1265,7 +1261,9 @@ class ChatBackupService {
       try {
         final header = await raf.read(8);
         final headerStr = utf8.decode(header, allowMalformed: true);
-        if (headerStr == 'N42ENC3:' || headerStr == 'N42ENC2:' || headerStr.startsWith('N42ENC:')) {
+        if (headerStr == 'N42ENC3:' ||
+            headerStr == 'N42ENC2:' ||
+            headerStr.startsWith('N42ENC:')) {
           return null; // 加密文件无法快速预览
         }
       } finally {
