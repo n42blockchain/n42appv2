@@ -25,6 +25,39 @@ bool FlutterWindow::OnCreate() {
     return false;
   }
   RegisterPlugins(flutter_controller_->engine());
+
+  // n42_chat system integration: handle flashWindow only (taskbar flash).
+  // Other capabilities return NotImplemented so the Dart side falls back
+  // (flutter_local_notifications / quick_actions / app_badge_plus).
+  system_channel_ =
+      std::make_unique<flutter::MethodChannel<flutter::EncodableValue>>(
+          flutter_controller_->engine()->messenger(),
+          "n42.chat/system_integration",
+          &flutter::StandardMethodCodec::GetInstance());
+  system_channel_->SetMethodCallHandler(
+      [this](const flutter::MethodCall<flutter::EncodableValue>& call,
+             std::unique_ptr<flutter::MethodResult<flutter::EncodableValue>>
+                 result) {
+        if (call.method_name() == "flashWindow") {
+          HWND hwnd = GetHandle();
+          if (hwnd == nullptr) {
+            result->Success(flutter::EncodableValue(false));
+            return;
+          }
+          FLASHWINFO info = {};
+          info.cbSize = sizeof(FLASHWINFO);
+          info.hwnd = hwnd;
+          // Flash the taskbar button until the window is brought to foreground.
+          info.dwFlags = FLASHW_TRAY | FLASHW_TIMERNOFG;
+          info.uCount = 0;
+          info.dwTimeout = 0;
+          FlashWindowEx(&info);
+          result->Success(flutter::EncodableValue(true));
+        } else {
+          result->NotImplemented();
+        }
+      });
+
   SetChildContent(flutter_controller_->view()->GetNativeWindow());
 
   flutter_controller_->engine()->SetNextFrameCallback([&]() {
