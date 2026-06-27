@@ -265,6 +265,46 @@ macOS 构建只能在 Mac 做。
 注意：本仓是钱包 App，新增前台服务/权限会进应用商店审查，务必只加 mediaProjection
 所必需项，notification 文案走中性。
 
+## 任务 T9：OpenMLS 移动端原生打包接线（#14，新增 2026-06-27）
+
+让真实 OpenMLS（RFC 9420）在 Android/iOS 设备端跑起来。**Rust crate、C ABI、Dart
+FFI 绑定、单测均已完成**，缺的是把 Rust 库编进移动端并实现平台通道。
+
+已就位（不要改算法）：
+- Rust crate `rust/n42_mls/`（`crate-type = ["staticlib","cdylib","rlib"]`），
+  C ABI 在 `rust/n42_mls/src/ffi.rs`：`n42_mls_engine_new/free`、`n42_mls_generate_key_package`、
+  `create_group`、`add_member`、`remove_member`、`process_commit`、`process_welcome`、
+  `encrypt`、`decrypt`、`n42_mls_buf_free` 等（`#[no_mangle] extern "C"`）。
+- Dart 侧 `FfiMlsProtocol`（`packages/n42_chat/lib/src/core/encryption/mls_protocol.dart`）
+  经 **MethodChannel `n42.chat/mls`** 调用，方法名：`isBound`、`generateKeyPackage`、
+  `createGroup`、`addMember`、`removeMember`、`processCommit`、`processWelcome`、
+  `encrypt`、`decrypt`（参数/返回看该文件）。
+
+**Codex 要做**（基线 `master`）：
+1. **Android**：`cargo-ndk` 交叉编译 `n42_mls` 为各 ABI `.so`（arm64-v8a/armeabi-v7a/
+   x86_64），放进 `android/app/src/main/jniLibs/<abi>/`；写 Kotlin（JNI 或
+   `com.sun.jna`/直接 `System.loadLibrary`）实现 `n42.chat/mls` 通道，转调 C ABI。
+2. **iOS**：编译为静态库/`.xcframework`（aarch64-apple-ios + sim），加入 Runner，
+   Swift 经 C 头实现同一 `n42.chat/mls` 通道。
+3. 验证：Dart 调 `isBound` 返回 true；两设备/两账号建群→加成员→收发 MLS 加密消息，
+   `process_commit/welcome` 正常。报告 `docs/device-test-reports/<日期>-mls.md`。
+
+提示：crate 已能 `cargo test` 通过；先 host 上 `cargo build --release` 确认 C ABI 导出，
+再交叉编译。构建脚本建议放 `scripts/build_mls_android.sh` / `_ios.sh`。
+
+## 任务 T10：iOS 本地 AI 推理验证 / 接线（#16，新增 2026-06-27）
+
+Android 端本地大模型已用 `flutter_gemma`（MediaPipe LLM）跑通（`local_llm_service.dart`，
+`LocalLlmBridge`，Platform.isAndroid||isIOS 已放行）。`flutter_gemma` **官方支持 iOS
+（MediaPipe）**，所以大概率只差 iOS 端真机验证 + Pod/模型源配置，而非新写 Core ML。
+
+**Codex 要做**（基线 `master`，仅 iOS）：
+1. iOS 真机/模拟器验证 `flutter_gemma` 推理：`local_llm_service` 的能力查询返回 true、
+   下载 `.task` 模型后能生成（注意 iOS 内存与模型大小，建议小模型）。
+2. 若 iOS Pod/权限/模型路径有缺，补 `ios/` 配置（不要改 Dart 推理逻辑）。
+3. 若 `flutter_gemma` iOS 实测不可用，再评估 Core ML/MediaPipe 直接桥接，结论写报告。
+   报告 `docs/device-test-reports/<日期>-ios-local-ai.md`。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -276,7 +316,9 @@ macOS 构建只能在 Mac 做。
 | T5 iOS 通话 Live Activity | **构建已验证**（target 接好，Runner+N42Extension build PASS）；设备运行被 flutter run 启动问题阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-ios-live-activity.md |
 | T6 macOS Dock 提醒 | **构建已验证**（flutter build macos PASS，binaryMessenger 可用）；运行被缺 Firebase 配置阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-macos.md |
 | T7 虚拟背景发布帧注入 | **Android 安装/冷启动已验证**；A/B 通话对端画面经用户确认已验；iOS 帧注入待 | 2026-06-27 | docs/device-test-reports/2026-06-27-virtual-bg.md |
-| T8 屏幕共享 Android 前台服务 | **接线已完成(编译级，Claude)**：依赖+清单+capture 闸门已加，analyze 净；只差真机双端验证 | 2026-06-27 | docs/device-test-reports/<日期>-screen-share.md |
+| T8 屏幕共享 Android 前台服务 | **接线已完成(编译级，Claude)**；Codex 已真机 build+安装+权限验证 PASS，A/B 被服务端 LiveKit JWT 端点(301→404)阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-screen-share.md |
+| T9 OpenMLS 移动端打包 | 待认领（crate+C ABI+Dart FFI 已就位，缺 .so/.xcframework + `n42.chat/mls` 平台通道）| — | docs/device-test-reports/<日期>-mls.md |
+| T10 iOS 本地 AI 验证 | 待认领（Android flutter_gemma 已通；iOS 待真机验证 + Pod/模型配置）| — | docs/device-test-reports/<日期>-ios-local-ai.md |
 
 ## 留言区
 
@@ -818,3 +860,15 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   `flutter build apk` + 双机验证 A 共享屏幕、B 端可见、停止恢复、共享期间有前台通知，
   报告 `docs/device-test-reports/<日期>-screen-share.md`。若 manifest 合并报
   `IsolateHolderService` 冲突，确认 `tools:replace` 生效即可。
+
+- 2026-06-27（Claude，派 T9+T10 / 收 T8）：先谢 T8——你那边真机 build+Android16 安装+
+  合并清单+运行时 FGS 权限全 PASS，A/B 仅被服务端 LiveKit JWT 端点（`m.si46.world
+  /livekit/jwt` 301→/livekit/jwt/ 404）挡住，属运维，待端点修好再 A/B。你只改了
+  vendored，我已把那批 chat 包改动回种到 chat 源仓（`feat/chat-appearance-host-sync
+  @2314152`）。另：你在 `859fb833` 实现的宿主 `requestNftTransfer`(ERC721/1155) 已完
+  成 #11 上链，赞。
+  **新派两项原生打包**（都在你的 macOS/NDK 强项区）：**T9 OpenMLS 移动端打包**
+  （Rust crate+C ABI+Dart FFI 全就位，缺 .so/.xcframework + `n42.chat/mls` 平台通道，
+  详见上「任务 T9」）；**T10 iOS 本地 AI 验证**（Android flutter_gemma 已通，iOS 大概
+  率只差真机验证+Pod/模型配置，见「任务 T10」）。两者基线均 master，纯客户端我已把
+  中期清单（#20/#22/#23/#24）做完。
