@@ -21,7 +21,7 @@
 | 9 | 屏幕共享完成 | ⏳ WebRTC 框架具备 | 补采集+发布+UI |
 | 10 | ~~商户收款二维码~~ ✅ **完成 2026-06-27** | 带金额收款码：纯 URI 编解码(`PaymentRequestUri` `n42pay://pay?to&amount&token&memo`)、商户收款页(`MerchantQrPage` 金额/代币/备注→实时二维码+分享)、收款页入口、扫码端识别并确认付款(经 `IWalletBridge.requestTransfer`)+9 单测 |
 | 11 | ~~NFT 赠送~~ ✅ **完成 2026-06-27** | 赠送流程：钱包桥 `requestNftTransfer`(默认不支持，宿主覆写) + 纯 `NftGiftRef`(`nft://contract/tokenId@chain` 编解码) + 商务面板「Gift NFT」入口(解析对方地址→选 NFT→转移→发聊天通知)+7 单测；宿主需实现 `requestNftTransfer` 才真正上链 |
-| 12 | **直播间真视频** | ⏳ 现仅语音房 | 扩 voice_room/live 到视频直播（**优先，确保可用**） |
+| 12 | ~~直播间真视频~~ ✅ **已具备（早于本清单）** | 独立直播客户端 `lib/features/live/`：`live_video_service` 经 LiveKit 主播发布摄像头/麦(`enableVideo=true`)、观众订阅主播 `VideoTrack`(`VideoTrackRenderer`)、go-live/room 页 + 弹幕 overlay + chat 发现入口(`121d1a8f`)。原「现仅语音房」表述过时（混淆了 chat 内 voice_room 与独立 live 客户端） |
 | 13 | 各 native 能力 key/模型源配置 + 真机回归 | 契约就位 | STT/GIF/MoonPay/Gemma key + 通话 E2EE 密钥分发 |
 
 ## 中期（需原生/服务端/跨平台基建，已设计或部分就位）
@@ -29,7 +29,7 @@
 | # | 任务 | 现状 |
 |---|---|---|
 | 14 | OpenMLS 移动端打包接线 | Rust crate 已做+测试；缺 cargo-ndk `.so` / iOS `.xcframework` + JNI/Swift |
-| 15 | 虚拟背景发布帧注入 | 已派 Codex T7（fork flutter_webrtc + 帧处理器） |
+| 15 | ~~虚拟背景发布帧注入~~ ✅ **Android 完成（Codex T7，已验收）** | 无需 fork：复用 `flutter_webrtc 1.4.0` 的 `LocalVideoTrack` processor 链（`a5c6ab61`）。`VirtualBackgroundHandler`(MethodChannel) + `N42VirtualBackgroundProcessor`(ML Kit Selfie Seg，none/blur/solidColor/virtualBackground 四模式) + Dart `virtual_background_processor` + 6 单测(本端已验过)；Codex Redmi 真机 APK build+install+冷启动 PASS。**未验**：A/B 通话对端看处理后视频(需双端)；iOS 帧注入为第二阶段 |
 | 16 | iOS 本地 AI 推理桥接 | Android 已 flutter_gemma；iOS 待 Core ML/MediaPipe |
 | 17 | 通话录制 Egress 服务端部署 | ⏳ 框架待部署 |
 | 18 | 美颜 | ❌（可复用虚拟背景 ML Kit 分割管线） |
