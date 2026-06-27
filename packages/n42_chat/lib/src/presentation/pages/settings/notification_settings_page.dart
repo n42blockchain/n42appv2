@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../domain/entities/user_profile_entity.dart';
 import '../../widgets/common/common_widgets.dart';
+import 'notification_filter_page.dart';
 
 /// 通知设置页面
 class NotificationSettingsPage extends StatefulWidget {
@@ -217,6 +218,26 @@ class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
                     ),
                   ],
                 ],
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 智能过滤（优先通知 / 关键词屏蔽）
+            Container(
+              color: context.surfaceColor,
+              child: _buildValueTile(
+                title: 'Smart Filter',
+                subtitle:
+                    'Priority keywords/senders and muted keywords',
+                icon: Icons.filter_alt_outlined,
+                value: '',
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (_) => const NotificationFilterPage(),
+                  ),
+                ),
               ),
             ),
           ],

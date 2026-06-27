@@ -18,6 +18,8 @@ import '../../services/voip/call_manager.dart';
 import '../../services/voip/incoming_call_ringtone_preference.dart';
 import '../../data/datasources/local/preferences_datasource.dart';
 import '../utils/conversation_notification_utils.dart';
+import '../../domain/entities/notification_filter_rules.dart';
+import 'notification_filter_store.dart';
 import 'push_dedup_store.dart';
 import 'push_notification_service.dart';
 import '../utils/debug_log.dart';
@@ -129,6 +131,10 @@ class FirebasePushService implements IPushNotificationService {
 
   /// 通知配置
   NotificationConfig _notificationConfig = const NotificationConfig();
+
+  /// 智能过滤规则（优先/屏蔽关键词、优先发送者）
+  NotificationFilterRules _filterRules = NotificationFilterRules.empty;
+  final NotificationFilterStore _filterStore = NotificationFilterStore();
 
   /// 通知 ID 计数器（避免时间戳碰撞）
   static int _notificationIdCounter = 0;
@@ -290,6 +296,19 @@ class FirebasePushService implements IPushNotificationService {
     _applyIOSForegroundPresentationOptions(config);
   }
 
+  /// 当前智能过滤规则
+  NotificationFilterRules get filterRules => _filterRules;
+
+  /// 设置智能过滤规则（运行时即时生效；持久化另由 store 负责）
+  void setFilterRules(NotificationFilterRules rules) {
+    _filterRules = rules;
+  }
+
+  /// 重新加载持久化的智能过滤规则
+  Future<void> reloadFilterRules() async {
+    _filterRules = await _filterStore.load();
+  }
+
   /// 设置当前活跃房间（正在查看的房间不弹通知）
   void setActiveRoom(String? roomId) {
     _activeRoomId = roomId;
@@ -343,6 +362,9 @@ class FirebasePushService implements IPushNotificationService {
       // 尽早加载持久化配置，避免 iOS 前台横幅先按默认值泄露通知内容。
       _notificationConfig = await _loadPersistedNotificationConfig();
       _applyIOSForegroundPresentationOptions(_notificationConfig);
+
+      // 加载智能过滤规则（优先/屏蔽关键词、优先发送者）
+      _filterRules = await _filterStore.load();
 
       // 监听前台消息
       _foregroundSubscription = FirebaseMessaging.onMessage.listen(
@@ -1013,27 +1035,40 @@ class FirebasePushService implements IPushNotificationService {
       return false;
     }
 
+    // 智能过滤：优先关键词/发送者强制通知（绕过仅提及/静音/免打扰）；
+    // 屏蔽关键词直接抑制。
+    final decision = _filterRules.evaluate(
+      body: (event.content['body'] as String?) ?? '',
+      senderId: event.senderId,
+    );
+    if (decision == NotificationFilterDecision.muted) {
+      debugLog('FirebasePushService: Suppressed by muted-keyword filter');
+      return false;
+    }
+    final isPriority = decision == NotificationFilterDecision.priority;
+
     // 检查房间是否静音
     final room = _client.getRoomById(roomId);
     if (room == null) {
-      return !_notificationConfig.isInDoNotDisturbPeriod();
+      return isPriority || !_notificationConfig.isInDoNotDisturbPeriod();
     }
 
     final notificationMode = conversationNotificationModeFromPushRuleState(
       room.pushRuleState,
     );
-    if (!shouldNotifyForConversationMode(
-      mode: notificationMode,
-      event: event,
-      currentUserId: _client.userID,
-      client: _client,
-      room: room,
-    )) {
+    if (!isPriority &&
+        !shouldNotifyForConversationMode(
+          mode: notificationMode,
+          event: event,
+          currentUserId: _client.userID,
+          client: _client,
+          room: room,
+        )) {
       return false;
     }
 
-    // 检查免打扰
-    if (_notificationConfig.isInDoNotDisturbPeriod()) {
+    // 检查免打扰（优先消息绕过）
+    if (!isPriority && _notificationConfig.isInDoNotDisturbPeriod()) {
       return false;
     }
 

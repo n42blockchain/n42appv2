@@ -17,7 +17,7 @@
 | 5 | ~~自定义动画 emoji~~ ✅ **完成 2026-06-27** | `:shortcode:` 内联动画 emoji（Discord/TG 型）：内置 16 个 Noto Lottie 动画集+别名(`BuiltinCustomEmojis`)、纯解析器(`CustomEmojiParser`)、消息气泡内联渲染(`CustomEmojiText`/`WidgetSpan` 按字号缩放)、输入 `:partial` 联想条(`CustomEmojiSuggestionBar`)+16 单测；markdown 文本路径暂不内联(诚实标注) |
 | 6 | ~~图像理解 / OCR~~ ✅ **完成 2026-06-27** | 云端视觉(`describeImage`)+图片查看器「AI describe/OCR」入口+4 测试 |
 | 7 | ~~图像生成~~ ✅ **接口+消费者已就位** | `AiService.generateImage` + AI 贴纸(#1)消费；如需「生成并作为消息发送」可后续小增 |
-| 8 | 优先通知 / 智能过滤 | ❌ | 客户端规则 |
+| 8 | ~~优先通知 / 智能过滤~~ ✅ **完成 2026-06-27** | 客户端规则：优先关键词/优先发送者(强制通知，绕过仅提及/静音/免打扰) + 屏蔽关键词(抑制)；纯判定+JSON(`NotificationFilterRules`)、SharedPreferences 持久化(`NotificationFilterStore`)、接入 `FirebasePushService` 通知闸门、设置页「Smart Filter」管理 UI + 10 单测 |
 | 9 | 屏幕共享完成 | ⏳ WebRTC 框架具备 | 补采集+发布+UI |
 | 10 | 商户收款二维码 | ⏳ 可用收款请求 | 补二维码 UI |
 | 11 | NFT 赠送 | ⏳ 可用 transfer | 补赠送流程 UI |
