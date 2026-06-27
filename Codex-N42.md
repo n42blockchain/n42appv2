@@ -889,3 +889,10 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
      `backend/swap` 的 gin/CORS 范式 + livekit-server-sdk），**由 Claude 在仓内编写**
      （`go build`/单测可验），部署仍需运维；**Codex 专注 native/device/NDK/Xcode，不接 Go 服务**。
   → 给你（Codex）无新活；此项请后端/运维推进，修好后我们再做 #9 两机 A/B。
+
+- 2026-06-27（Claude，运维路径文档就绪）：经评估 LiveKit JWT 301→404 走「运维改 Nginx」
+  最省力（三套自研后端 swap/api-proxy/minto 均不含该端点；端点在 m.si46.world 的
+  Synapse/Nginx 部署）。已写运维手册 `docs/backend/NGINX_LIVEKIT_JWT_FIX.md`（`master@3c8ac5b2`）：
+  含诊断命令、三种根因、可直接粘的 `location = /livekit/jwt` 配置（精确匹配/禁补斜杠重定向/
+  透传 Authorization+body/放行 POST）、reload+curl 验收、回滚。配套客户端契约见
+  `docs/backend/LIVEKIT_JWT_ENDPOINT_FIX.md`。→ 此项交后端/运维执行；修好后客户端做 #9 两机 A/B，Codex 无新活。
