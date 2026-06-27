@@ -142,6 +142,53 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
 `refactor(<area>): coin migration batch <n> - <files/dir>`，正文写明
 保留了哪些站点及原因（参照 116e92c2 的提交信息）。
 
+## 任务 T5：iOS 通话 Live Activity —— Xcode target 接线 + 真机验证（新增 2026-06-27）
+
+背景：n42_chat 的系统集成（`SystemIntegrationService`）已在通话连接时经
+MethodChannel `n42.chat/system_integration` 触发 iOS Live Activity（通话进行中
+活动）。Windows 端已写好全部 iOS 原生代码，但**两件事只能在 Mac/Xcode 做**：
+把两个新 Swift 文件加入对应 target，以及真机/模拟器验证。
+
+**基线**：`master` @ `2a680c92`（`feat(ios): chat call Live Activity (ActivityKit)
+native code`）。⚠️ 与通知回归的 `feat/ui-token-migration` 基线不同——本任务请
+基于 `master`。开工前 `git fetch origin && git checkout master && git pull`。
+
+**已就位的代码（master 上）**：
+- `ios/Runner/N42ChatCallAttributes.swift`（新）：`N42ChatCallAttributes`
+  （`title` 固定 + `ContentState.body` 动态）+ 全局 `chatCallActivity`。
+  与挖矿的 `N42Attributes` 完全独立。
+- `ios/N42/N42ChatCallLiveActivity.swift`（新）：锁屏 + 灵动岛 UI（电话图标 +
+  标题 + 副标题）。
+- `ios/N42/N42Bundle.swift`（已改）：bundle 里已加 `N42ChatCallLiveActivity()`。
+- `ios/Runner/AppDelegate.swift`（已改）：注册 `n42.chat/system_integration`
+  通道，`handleSystemIntegration` 处理 `updateLiveActivity`/`endLiveActivity`/
+  `isSupported(liveActivity)`，用 `Activity.request/update/end` 驱动；其余方法
+  返回 `FlutterMethodNotImplemented` 交 Dart 兜底。
+- `ios/Runner/Info.plist` 已有 `NSSupportsLiveActivities=true`（挖矿在用）。
+
+**T5.1 Xcode target 成员配置（关键，pbxproj 手改易坏，请用 Xcode GUI）**：
+1. 打开 `ios/Runner.xcworkspace`。
+2. `N42ChatCallAttributes.swift` → File Inspector → Target Membership 勾选
+   **Runner 与 N42（widget extension）两个 target**（attributes 需双端共享，
+   照搬现有 `n42Attributes.swift` 的勾选方式）。
+3. `N42ChatCallLiveActivity.swift` → Target Membership 仅勾 **N42**（与现有
+   `N42LiveActivity.swift` 一致）。
+4. 确认编译通过（Runner + N42 两 scheme 均 build）。
+
+**T5.2 真机/模拟器验证**（iOS 16.1+，灵动岛建议 iPhone 14 Pro+）：
+| # | 步骤 | 期望 |
+|---|------|------|
+| 1 | 在 chat 内发起/接通一通语音或视频通话 | 锁屏出现「通话中」Live Activity（电话图标+标题）；灵动岛显示紧凑态 |
+| 2 | 通话期间锁屏 | 锁屏 Live Activity 持续可见，文案正确（非挖矿的 "Verifying"） |
+| 3 | 挂断/结束通话 | Live Activity 立即消失（`.immediate` dismissal） |
+| 4 | 通话中同时挖矿活动也在 | 两个 Live Activity 并存、互不干扰（独立 attributes） |
+| 5 | 设置里关闭 Live Activities 后通话 | 不崩溃；通话功能正常（活动启动静默失败） |
+
+报告写 `docs/device-test-reports/<日期>-ios-live-activity.md`，状态回填本文件。
+**只验证、必要时补 target 勾选与 UI 微调；不要改 Dart 侧 `n42_chat` 逻辑。**
+若 Live Activity UI 需调整文案/配色，直接改
+`ios/N42/N42ChatCallLiveActivity.swift` 即可（widget 侧，安全）。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -150,6 +197,7 @@ market 里**只**迁这几个钱包配置字段：`coinType`、`name`、`symbol`
 | T2 Android 矩阵 | 进行中：#1/#2/#4/#5/#7 PASS；#3/#6/#8/#12 后台/杀进程无推送交付 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
+| T5 iOS 通话 Live Activity | 待认领（代码已就位 master@2a680c92，需 Xcode 接 target + 真机验证） | — | docs/device-test-reports/<日期>-ios-live-activity.md |
 
 ## 留言区
 
@@ -615,3 +663,16 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   **辛苦你这几轮真机 + logcat，定位了两个被厂商限制表象掩盖的真 bug
   （active-room 静默 9fd5981、isolate 崩溃 ff2576d2）。T2 真机回归到此可收尾，
   除非要验 option 2 或 device_login。** T1 iOS 仍等 Mac 装 Xcode iOS 26.5 组件。
+
+- 2026-06-27（Claude，派发 T5）：新增 **T5 iOS 通话 Live Activity** —— Windows
+  端已写好全部 iOS 原生代码（master@2a680c92），但 **target 成员配置 + 真机
+  验证只能在 Mac/Xcode 做**，交给你。这是 n42_chat「系统集成」真补的收尾：
+  Dart 侧 `SystemIntegrationService`（通知后端 + 动态快捷方式 quick_actions +
+  应用角标 app_badge_plus）已落地并单测，通话连接时经 `n42.chat/
+  system_integration` 通道触发 iOS Live Activity，原生 handler 已写好驱动
+  ActivityKit（复用现有 N42 widget extension，新增独立的 `N42ChatCallAttributes`
+  + `N42ChatCallLiveActivity`，与挖矿活动隔离）。**关键就两步**：① 把两个新
+  Swift 文件在 Xcode 勾对 target（attributes→Runner+N42，widget→N42，见 T5.1）；
+  ② 真机走 T5.2 的 5 项。⚠️ 基线是 `master`（非 `feat/ui-token-migration`），
+  与通知回归任务不同分支。代码无法在 Windows 编译，劳烦你 Mac 上 build 验证，
+  发现编译/接线问题在留言区回我。
