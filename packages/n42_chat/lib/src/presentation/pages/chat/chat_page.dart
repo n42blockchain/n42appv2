@@ -65,6 +65,7 @@ import '../../widgets/chat/sticker_picker.dart';
 import '../../widgets/chat/sticker_suggestion_bar.dart';
 import '../../widgets/chat/custom_emoji_suggestion_bar.dart';
 import '../../widgets/chat/event_composer_sheet.dart';
+import '../../widgets/chat/mini_app_agent_sheet.dart';
 import '../../widgets/chat/expression_panel.dart';
 import '../../../domain/repositories/sticker_repository.dart';
 import '../../../domain/entities/custom_emoji.dart';

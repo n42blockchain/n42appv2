@@ -33,7 +33,7 @@
 | 16 | iOS 本地 AI 推理桥接 | Android 已 flutter_gemma；iOS 待 Core ML/MediaPipe |
 | 17 | 通话录制 Egress 服务端部署 | ⏳ 框架待部署 |
 | 18 | ~~美颜~~ ✅ **完成 2026-06-27** | 复用虚拟背景 ML Kit 人像分割：`VirtualBackgroundEngine` 对人像区域磨皮(混入模糊层)+提亮，与背景处理独立可叠加；`VoIPConfig.beautyStrength`(0–1) + native 配置通道透传 `beauty` + 9 单测(含美颜 3 例)。本地预览即时生效；发布帧替换同虚拟背景走原生 frame processor |
-| 19 | 超级应用 Agentic AI | 中差距（AI 调用 Mini App 办实事编排） |
+| 19 | ~~超级应用 Agentic AI~~ ✅ **首版完成 2026-06-27** | 编排器把「用户一句话」映射到 Mini App+参数：纯 `MiniAppAgentPlanner`（喂应用目录给 LLM→容错解析 JSON+校验落到目录内 app；无 LLM 时规则词重叠兜底）+ `MiniAppAgentService`（AiService 优先，低置信/失败回退规则）+ 商务面板「AI Assistant」面板（输入任务→展示匹配应用/参数/置信度→一键打开）+10 单测。后续可扩多步编排/真正代执行 |
 | 20 | 服务号/订阅号 + 公众号文章阅读器排版 | ✅ **阅读器完成 2026-06-27**：长文消息长按「Reading」进入阅读模式(`ArticleReaderPage`)——限定阅读宽度 680、放大行距、可调字号(A-/A+ 持久化)、Markdown 富排版、阅读时长估算；纯逻辑 `ArticleReaderUtils`(长文阈值/时长/标题提取,11 单测)。服务号/订阅号账号形态仍待产品定义 |
 | 21 | 游戏中心 | ⏳ 仅页面框架 |
 | 22 | ~~钱包/DID 登录入口~~ ✅ **完成 2026-06-27** | 「Sign in with Wallet」：钱包对固定消息签名→确定性派生 Matrix 用户名+密码(`WalletLoginCredentials`,7 单测)→`AuthWalletAuthRequested`(先登录失败则注册)，登录页钱包按钮(gated on `IWalletBridge`+`enableWalletLogin`)。**顺带完善第三方登录**：原生五家(Google/Apple/Facebook/Twitter/WeChat)已在；通用 Matrix SSO picker 加品牌识别(`SsoBrandClassifier`,3 单测)首类显示 Microsoft/GitHub/LinkedIn/Discord/GitLab 等任意 OIDC 提供方；矩阵见 `docs/THIRD_PARTY_LOGIN.md`。安全：派生密码要求钱包签名确定性(已注释，生产建议服务端 SIWE) |

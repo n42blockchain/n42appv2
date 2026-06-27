@@ -601,6 +601,16 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     final quickLaunchApps = MiniAppLauncherHelper.commerceQuickLaunchApps();
     final actions = <PaymentCommerceAction>[
       PaymentCommerceAction(
+        icon: Icons.auto_awesome,
+        color: AppColors.primary,
+        title: 'AI Assistant',
+        subtitle: 'Describe a task, open the right mini app',
+        onTap: () => MiniAppAgentSheet.show(
+          context,
+          roomId: widget.conversation.id,
+        ),
+      ),
+      PaymentCommerceAction(
         icon: Icons.card_giftcard_outlined,
         color: Colors.pinkAccent,
         title: 'Gift NFT',
