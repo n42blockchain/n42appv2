@@ -54,37 +54,70 @@ class DateLocaleStrings {
   static String _defaultYearMonthDay(int year, int month, int day) =>
       '$year/$month/$day';
 
-  /// Chinese locale strings
+  /// Chinese locale strings（简体，默认 zh / zh_CN）
   static const DateLocaleStrings chinese = DateLocaleStrings(
     yesterday: '昨天',
-    justNow: '剛剛',
+    justNow: '刚刚',
     minutesAgo: _chineseMinutesAgo,
     hoursAgo: _chineseHoursAgo,
     daysAgo: _chineseDaysAgo,
-    online: '在線',
-    offline: '離線',
+    online: '在线',
+    offline: '离线',
     minutesAgoOnline: _chineseMinutesAgoOnline,
     hoursAgoOnline: _chineseHoursAgoOnline,
     daysAgoOnline: _chineseDaysAgoOnline,
-    weekdays: ['', '週一', '週二', '週三', '週四', '週五', '週六', '週日'],
+    weekdays: ['', '周一', '周二', '周三', '周四', '周五', '周六', '周日'],
     localeCode: 'zh',
     monthDay: _chineseMonthDay,
     yearMonthDay: _chineseYearMonthDay,
   );
 
-  static String _chineseMinutesAgo(int count) => '$count分鐘前';
-  static String _chineseHoursAgo(int count) => '$count小時前';
+  /// 繁体中文（zh_TW / zh_HK / zh_Hant）
+  static const DateLocaleStrings chineseTraditional = DateLocaleStrings(
+    yesterday: '昨天',
+    justNow: '剛剛',
+    minutesAgo: _chineseTradMinutesAgo,
+    hoursAgo: _chineseTradHoursAgo,
+    daysAgo: _chineseTradDaysAgo,
+    online: '在線',
+    offline: '離線',
+    minutesAgoOnline: _chineseTradMinutesAgoOnline,
+    hoursAgoOnline: _chineseTradHoursAgoOnline,
+    daysAgoOnline: _chineseTradDaysAgoOnline,
+    weekdays: ['', '週一', '週二', '週三', '週四', '週五', '週六', '週日'],
+    localeCode: 'zh_TW',
+    monthDay: _chineseMonthDay,
+    yearMonthDay: _chineseYearMonthDay,
+  );
+
+  static String _chineseMinutesAgo(int count) => '$count分钟前';
+  static String _chineseHoursAgo(int count) => '$count小时前';
   static String _chineseDaysAgo(int count) => '$count天前';
-  static String _chineseMinutesAgoOnline(int count) => '$count分鐘前在線';
-  static String _chineseHoursAgoOnline(int count) => '$count小時前在線';
-  static String _chineseDaysAgoOnline(int count) => '$count天前在線';
+  static String _chineseMinutesAgoOnline(int count) => '$count分钟前在线';
+  static String _chineseHoursAgoOnline(int count) => '$count小时前在线';
+  static String _chineseDaysAgoOnline(int count) => '$count天前在线';
   static String _chineseMonthDay(int month, int day) => '$month月$day日';
   static String _chineseYearMonthDay(int year, int month, int day) =>
       '$year年$month月$day日';
 
+  static String _chineseTradMinutesAgo(int count) => '$count分鐘前';
+  static String _chineseTradHoursAgo(int count) => '$count小時前';
+  static String _chineseTradDaysAgo(int count) => '$count天前';
+  static String _chineseTradMinutesAgoOnline(int count) => '$count分鐘前在線';
+  static String _chineseTradHoursAgoOnline(int count) => '$count小時前在線';
+  static String _chineseTradDaysAgoOnline(int count) => '$count天前在線';
+
   /// 根据语言代码创建本地化字符串
   static DateLocaleStrings fromLocaleCode(String localeCode) {
-    if (localeCode.startsWith('zh')) {
+    final lower = localeCode.toLowerCase().replaceAll('-', '_');
+    if (lower.startsWith('zh')) {
+      // 繁体：zh_TW / zh_HK / zh_MO / zh_Hant
+      if (lower.contains('tw') ||
+          lower.contains('hk') ||
+          lower.contains('mo') ||
+          lower.contains('hant')) {
+        return chineseTraditional;
+      }
       return chinese;
     }
     // 对于其他语言，使用intl包的本地化（不提供自定义weekdays）
