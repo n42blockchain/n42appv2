@@ -1,48 +1,185 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_gemma/flutter_gemma.dart';
 
 import '../utils/debug_log.dart';
 
-/// 本地大模型 MethodChannel 桥
+/// 端侧推理模型配置
 ///
-/// 桥接平台原生设备端推理（Android MediaPipe LLM Inference / iOS Core ML）。
-/// **Dart 侧完整**；原生 handler 另行实现，未实现时各调用经 [_safe] 捕获
-/// `MissingPluginException` 优雅降级（能力查询返回 false、生成返回 null）。
-class LocalLlmBridge {
-  static const MethodChannel _channel = MethodChannel('n42.chat/local_llm');
+/// [modelUrl] 为 MediaPipe `.task` 模型的网络地址（Gemma 系列多为 HuggingFace
+/// 受限模型，需配套 [huggingFaceToken]）。**未配置 [modelUrl] 时端侧推理不可用**，
+/// [LocalLlmService] 恒 `unavailable` → 回退云端，不误导为可用。
+class LocalLlmConfig {
+  final String? modelUrl;
+  final ModelType modelType;
+  final int maxTokens;
+  final String? huggingFaceToken;
 
-  Future<T?> _safe<T>(String method, [Object? args]) async {
+  const LocalLlmConfig({
+    this.modelUrl,
+    this.modelType = ModelType.gemmaIt,
+    this.maxTokens = 1024,
+    this.huggingFaceToken,
+  });
+
+  bool get hasModelSource => modelUrl != null && modelUrl!.trim().isNotEmpty;
+
+  /// 由 URL 末段推导模型文件名（flutter_gemma 以文件名为已安装判定 id）
+  String get modelFilename {
+    final url = modelUrl;
+    if (url == null || url.isEmpty) return '';
+    final clean = url.split('?').first;
+    final slash = clean.lastIndexOf('/');
+    return slash >= 0 ? clean.substring(slash + 1) : clean;
+  }
+
+  LocalLlmConfig copyWith({
+    String? modelUrl,
+    ModelType? modelType,
+    int? maxTokens,
+    String? huggingFaceToken,
+  }) =>
+      LocalLlmConfig(
+        modelUrl: modelUrl ?? this.modelUrl,
+        modelType: modelType ?? this.modelType,
+        maxTokens: maxTokens ?? this.maxTokens,
+        huggingFaceToken: huggingFaceToken ?? this.huggingFaceToken,
+      );
+}
+
+/// 端侧推理后端接口（便于注入与单测）
+abstract class LocalLlmBackend {
+  LocalLlmConfig get config;
+  void configure(LocalLlmConfig config);
+  Future<bool> isDeviceCapable();
+  Future<bool> isModelDownloaded();
+  Future<bool> downloadModel({void Function(double progress)? onProgress});
+  Future<bool> loadModel();
+  Future<void> unloadModel();
+  Future<String?> generate(String prompt, {int maxTokens});
+}
+
+/// 本地大模型推理桥（flutter_gemma / MediaPipe LLM Inference 真实后端）
+///
+/// 替代了早期的纯 MethodChannel 占位：现经 `flutter_gemma` 在 Android/iOS 设备端
+/// **真实运行 Gemma 推理**。模型为**运行时下载**（不打进包体），未配置模型源或在
+/// Web/桌面（flutter_gemma 移动端为主）时各调用优雅降级（能力查询 false、生成
+/// 返回 null），由 [AiProviderRouter] 回退云端。
+class LocalLlmBridge implements LocalLlmBackend {
+  LocalLlmBridge([LocalLlmConfig config = const LocalLlmConfig()])
+      : _config = config;
+
+  LocalLlmConfig _config;
+  bool _sdkInitialized = false;
+  InferenceModel? _model;
+  InferenceModelSession? _session;
+
+  @override
+  LocalLlmConfig get config => _config;
+
+  /// 运行时配置模型源（host 可经远端配置注入 URL/token 后启用端侧推理）
+  @override
+  void configure(LocalLlmConfig config) {
+    _config = config;
+    _sdkInitialized = false; // token 可能变化，重新初始化 SDK
+  }
+
+  bool get _platformSupported =>
+      !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+
+  void _ensureSdk() {
+    if (_sdkInitialized) return;
+    FlutterGemma.initialize(huggingFaceToken: _config.huggingFaceToken);
+    _sdkInitialized = true;
+  }
+
+  /// 设备是否具备端侧推理能力（平台支持 + 已配置模型源）
+  @override
+  Future<bool> isDeviceCapable() async {
+    return _platformSupported && _config.hasModelSource;
+  }
+
+  /// 模型是否已下载
+  @override
+  Future<bool> isModelDownloaded() async {
+    if (!_platformSupported || !_config.hasModelSource) return false;
     try {
-      return await _channel.invokeMethod<T>(method, args);
-    } on MissingPluginException {
-      return null;
+      _ensureSdk();
+      return await FlutterGemma.isModelInstalled(_config.modelFilename);
     } catch (e) {
-      debugLog('LocalLlmBridge.$method failed: $e');
-      return null;
+      debugLog('LocalLlmBridge.isModelDownloaded failed: $e');
+      return false;
     }
   }
 
-  /// 设备是否具备端侧推理能力（GPU/NPU/内存）
-  Future<bool> isDeviceCapable() async =>
-      (await _safe<bool>('isDeviceCapable')) ?? false;
+  /// 下载模型（运行时网络下载；幂等。返回是否成功）。
+  ///
+  /// [onProgress] 0.0–1.0 进度回调（可选）。
+  @override
+  Future<bool> downloadModel({void Function(double progress)? onProgress}) async {
+    if (!_platformSupported || !_config.hasModelSource) return false;
+    try {
+      _ensureSdk();
+      await FlutterGemma.installModel(modelType: _config.modelType)
+          .fromNetwork(_config.modelUrl!, token: _config.huggingFaceToken)
+          .withProgress((p) => onProgress?.call(p / 100.0))
+          .install();
+      return await FlutterGemma.isModelInstalled(_config.modelFilename);
+    } catch (e) {
+      debugLog('LocalLlmBridge.downloadModel failed: $e');
+      return false;
+    }
+  }
 
-  /// 模型是否已下载
-  Future<bool> isModelDownloaded() async =>
-      (await _safe<bool>('isModelDownloaded')) ?? false;
+  /// 加载模型到内存（创建推理会话）
+  @override
+  Future<bool> loadModel() async {
+    if (!_platformSupported || !_config.hasModelSource) return false;
+    try {
+      _ensureSdk();
+      _model ??= await FlutterGemmaPlugin.instance.createModel(
+        modelType: _config.modelType,
+        maxTokens: _config.maxTokens,
+      );
+      _session ??= await _model!.createSession();
+      return true;
+    } catch (e) {
+      debugLog('LocalLlmBridge.loadModel failed: $e');
+      return false;
+    }
+  }
 
-  /// 下载模型（返回是否成功）
-  Future<bool> downloadModel() async =>
-      (await _safe<bool>('downloadModel')) ?? false;
+  /// 卸载模型，释放内存
+  @override
+  Future<void> unloadModel() async {
+    try {
+      await _session?.close();
+      await _model?.close();
+    } catch (e) {
+      debugLog('LocalLlmBridge.unloadModel failed: $e');
+    }
+    _session = null;
+    _model = null;
+  }
 
-  /// 加载模型到内存
-  Future<bool> loadModel() async => (await _safe<bool>('loadModel')) ?? false;
-
-  /// 卸载模型
-  Future<void> unloadModel() => _safe<void>('unloadModel');
-
-  /// 生成（非流式）。原生未实现/失败返回 null。
-  Future<String?> generate(String prompt, {int maxTokens = 512}) =>
-      _safe<String>('generate', {'prompt': prompt, 'maxTokens': maxTokens});
+  /// 生成（非流式）。会话未就绪时自动加载；失败/不支持返回 null。
+  @override
+  Future<String?> generate(String prompt, {int maxTokens = 512}) async {
+    if (!_platformSupported || !_config.hasModelSource) return null;
+    try {
+      if (_session == null) {
+        final ok = await loadModel();
+        if (!ok) return null;
+      }
+      await _session!.addQueryChunk(Message.text(text: prompt));
+      final response = await _session!.getResponse();
+      return response;
+    } catch (e) {
+      debugLog('LocalLlmBridge.generate failed: $e');
+      return null;
+    }
+  }
 }
 
 /// 本地大模型状态
@@ -50,15 +187,18 @@ enum LocalLlmState { unavailable, notDownloaded, downloading, ready }
 
 /// 本地设备推理服务（模型生命周期 + 生成）
 ///
-/// 经 [LocalLlmBridge] 调用原生设备端推理。**原生未接入时 [state] 恒为
-/// `unavailable`**，AI 请求由 [AiProviderRouter] 回退云端——不误导为可用。
+/// 经 [LocalLlmBridge]（flutter_gemma）调用设备端推理。**未配置模型源/原生不可用时
+/// [state] 恒为 `unavailable`**，AI 请求由 [AiProviderRouter] 回退云端——不误导。
 class LocalLlmService {
-  final LocalLlmBridge _bridge;
+  final LocalLlmBackend _bridge;
 
   LocalLlmService(this._bridge);
 
   final ValueNotifier<LocalLlmState> stateNotifier =
       ValueNotifier<LocalLlmState>(LocalLlmState.unavailable);
+
+  /// 下载进度（0.0–1.0），仅 downloading 态有意义
+  final ValueNotifier<double> downloadProgress = ValueNotifier<double>(0);
 
   /// 用户是否启用端侧推理（开关；默认关）
   bool enabled = false;
@@ -66,6 +206,12 @@ class LocalLlmService {
   LocalLlmState get state => stateNotifier.value;
 
   bool get isReady => enabled && state == LocalLlmState.ready;
+
+  /// 运行时配置模型源后重新探测
+  Future<void> configure(LocalLlmConfig config) async {
+    _bridge.configure(config);
+    await init();
+  }
 
   /// 探测设备能力 + 模型状态
   Future<void> init() async {
@@ -82,7 +228,10 @@ class LocalLlmService {
   Future<void> download() async {
     if (state == LocalLlmState.unavailable) return;
     stateNotifier.value = LocalLlmState.downloading;
-    final ok = await _bridge.downloadModel();
+    downloadProgress.value = 0;
+    final ok = await _bridge.downloadModel(
+      onProgress: (p) => downloadProgress.value = p.clamp(0.0, 1.0),
+    );
     stateNotifier.value =
         ok ? LocalLlmState.ready : LocalLlmState.notDownloaded;
   }
@@ -92,5 +241,8 @@ class LocalLlmService {
     return _bridge.generate(prompt, maxTokens: maxTokens);
   }
 
-  void dispose() => stateNotifier.dispose();
+  void dispose() {
+    stateNotifier.dispose();
+    downloadProgress.dispose();
+  }
 }
