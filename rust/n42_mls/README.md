@@ -42,6 +42,16 @@ cargo clippy --all-targets
 > 真机/跨平台构建无法在当前 Windows 开发机完成（NDK/iOS 工具链），属基建任务。
 > Dart 契约（`FfiMlsProtocol`）与本 crate 均已就绪，接线即生效。
 
+### 已知设计约束（接线前须确认）
+
+- **存储为内存态**：用 `OpenMlsRustCrypto::default()`（`MemoryStorage`），签名密钥/
+  群密钥/棘轮状态只活在 `MlsEngine` 句柄生命周期内。**句柄被释放/App 重启即丢失
+  全部密钥**（历史不可解、需重新建群/入群）。MVP 若可接受重启重新协商则无妨；
+  生产需换持久化 `StorageProvider`（如 `openmls_sqlite_storage`）并在 `MlsEngine`
+  注入。原生层应保证句柄长生命周期。
+- **握手为密文**：`PURE_CIPHERTEXT_WIRE_FORMAT_POLICY`，加密 Commit/Proposal。
+- **单线程**：每个引擎句柄非线程安全，原生层须按句柄串行调用（或自加锁）。
+
 ## Ciphersuite
 
 `MLS_128_DHKEMX25519_CHACHA20POLY1305_SHA256_Ed25519`（普遍支持）。

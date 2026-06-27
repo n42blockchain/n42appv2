@@ -73,6 +73,8 @@ bool FlutterWindow::OnCreate() {
 }
 
 void FlutterWindow::OnDestroy() {
+  // Release the channel before the engine/messenger it was created against.
+  system_channel_ = nullptr;
   if (flutter_controller_) {
     flutter_controller_ = nullptr;
   }

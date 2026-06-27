@@ -34,11 +34,14 @@ impl N42Buf {
         }
     }
 
-    fn from_vec(mut v: Vec<u8>) -> Self {
-        v.shrink_to_fit();
-        let len = v.len();
-        let ptr = v.as_mut_ptr();
-        std::mem::forget(v);
+    fn from_vec(v: Vec<u8>) -> Self {
+        // into_boxed_slice 保证容量恰好 == len，使 buf_free 的
+        // Vec::from_raw_parts(ptr, len, len) 在任意全局分配器下都合法
+        // （shrink_to_fit 不保证 cap==len，会在 sized-dealloc 分配器下 UB）。
+        let mut boxed = v.into_boxed_slice();
+        let len = boxed.len();
+        let ptr = boxed.as_mut_ptr();
+        std::mem::forget(boxed);
         N42Buf { ptr, len }
     }
 }

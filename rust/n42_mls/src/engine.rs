@@ -14,6 +14,7 @@ use openmls::{
     framing::{MlsMessageIn, ProcessedMessageContent},
     group::{
         GroupId, MlsGroup, MlsGroupCreateConfig, MlsGroupJoinConfig, StagedWelcome,
+        PURE_CIPHERTEXT_WIRE_FORMAT_POLICY,
     },
     key_packages::{KeyPackage, KeyPackageIn},
     prelude::{LeafNodeIndex, MlsMessageBodyIn, ProtocolMessage, ProtocolVersion},
@@ -97,6 +98,8 @@ impl MlsEngine {
         MlsGroupCreateConfig::builder()
             .ciphersuite(CIPHERSUITE)
             .use_ratchet_tree_extension(true)
+            // 密文握手：加密 Commit/Proposal，避免泄露成员变更/叶子身份等元数据。
+            .wire_format_policy(PURE_CIPHERTEXT_WIRE_FORMAT_POLICY)
             .build()
     }
 

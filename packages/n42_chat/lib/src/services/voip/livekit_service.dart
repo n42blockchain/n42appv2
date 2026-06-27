@@ -965,6 +965,10 @@ class LiveKitService extends ChangeNotifier {
     _e2ee.reset();
     _e2eeEnabled = false;
 
+    // 释放 ML Kit 人像分割器（虚拟背景），避免原生分割器泄漏到进程生命周期；
+    // 下次需要时 renderComposite 会惰性重建。
+    await VirtualBackgroundEngine.dispose();
+
     debugLog('LiveKitService: Cleaned up');
   }
 

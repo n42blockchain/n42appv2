@@ -88,7 +88,11 @@ import UIKit
           name: "n42.chat/system_integration",
           binaryMessenger: controller.binaryMessenger
         )
-        sysChannel.setMethodCallHandler { call, result in
+        sysChannel.setMethodCallHandler { [weak self] call, result in
+          guard let self else {
+            result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
+            return
+          }
           self.handleSystemIntegration(call, result: result)
         }
       }
@@ -124,7 +128,9 @@ import UIKit
       let title = (args["title"] as? String) ?? "N42"
       let body = (args["body"] as? String) ?? ""
       let state = N42ChatCallAttributes.ContentState(body: body)
-      if let activity = chatCallActivity {
+      // 仅当现有活动仍处于 active 才更新；若系统已消解则落到 else 重新发起，
+      // 避免对已结束的活动 update 空转而看不到任何活动。
+      if let activity = chatCallActivity, activity.activityState == .active {
         Task { await activity.update(using: state) }
         result(true)
       } else {

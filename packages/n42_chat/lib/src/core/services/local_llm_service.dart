@@ -73,7 +73,6 @@ class LocalLlmBridge implements LocalLlmBackend {
   LocalLlmConfig _config;
   bool _sdkInitialized = false;
   InferenceModel? _model;
-  InferenceModelSession? _session;
 
   @override
   LocalLlmConfig get config => _config;
@@ -83,6 +82,12 @@ class LocalLlmBridge implements LocalLlmBackend {
   void configure(LocalLlmConfig config) {
     _config = config;
     _sdkInitialized = false; // token 可能变化，重新初始化 SDK
+    // 释放旧模型，避免 configure 后仍用旧模型（loadModel 用 `_model ??=`）。
+    final old = _model;
+    _model = null;
+    if (old != null) {
+      old.close(); // fire-and-forget 释放原生模型内存
+    }
   }
 
   bool get _platformSupported =>
@@ -132,7 +137,7 @@ class LocalLlmBridge implements LocalLlmBackend {
     }
   }
 
-  /// 加载模型到内存（创建推理会话）
+  /// 加载模型到内存（推理会话按调用即用即建，见 [generate]）。
   @override
   Future<bool> loadModel() async {
     if (!_platformSupported || !_config.hasModelSource) return false;
@@ -142,7 +147,6 @@ class LocalLlmBridge implements LocalLlmBackend {
         modelType: _config.modelType,
         maxTokens: _config.maxTokens,
       );
-      _session ??= await _model!.createSession();
       return true;
     } catch (e) {
       debugLog('LocalLlmBridge.loadModel failed: $e');
@@ -154,27 +158,32 @@ class LocalLlmBridge implements LocalLlmBackend {
   @override
   Future<void> unloadModel() async {
     try {
-      await _session?.close();
       await _model?.close();
     } catch (e) {
       debugLog('LocalLlmBridge.unloadModel failed: $e');
     }
-    _session = null;
     _model = null;
   }
 
-  /// 生成（非流式）。会话未就绪时自动加载；失败/不支持返回 null。
+  /// 生成（非流式）。模型未就绪时自动加载；失败/不支持返回 null。
+  ///
+  /// **每次生成用独立会话**（用完即关），避免多次调用共享同一会话导致上下文
+  /// 跨请求串台、无限增长——`AiProviderRouter` 消费的是一次性 generate。
   @override
   Future<String?> generate(String prompt, {int maxTokens = 512}) async {
     if (!_platformSupported || !_config.hasModelSource) return null;
     try {
-      if (_session == null) {
+      if (_model == null) {
         final ok = await loadModel();
         if (!ok) return null;
       }
-      await _session!.addQueryChunk(Message.text(text: prompt));
-      final response = await _session!.getResponse();
-      return response;
+      final session = await _model!.createSession();
+      try {
+        await session.addQueryChunk(Message.text(text: prompt));
+        return await session.getResponse();
+      } finally {
+        await session.close();
+      }
     } catch (e) {
       debugLog('LocalLlmBridge.generate failed: $e');
       return null;
