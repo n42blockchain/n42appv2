@@ -793,6 +793,8 @@ class MessageRepositoryImpl implements IMessageRepository {
     required List<String> options,
     int maxSelections = 1,
     bool isAnonymous = false,
+    int? quizCorrectIndex,
+    String? quizExplanation,
   }) async {
     try {
       debugLog(
@@ -804,6 +806,8 @@ class MessageRepositoryImpl implements IMessageRepository {
         options: options,
         maxSelections: maxSelections,
         isAnonymous: isAnonymous,
+        quizCorrectIndex: quizCorrectIndex,
+        quizExplanation: quizExplanation,
       );
       if (eventId != null) {
         debugLog(
@@ -840,6 +844,8 @@ class MessageRepositoryImpl implements IMessageRepository {
             pollOptions: options,
             isAnonymousPoll: isAnonymous,
             maxSelections: maxSelections,
+            quizCorrectIndex: quizCorrectIndex,
+            quizExplanation: quizExplanation,
           ),
         );
       }

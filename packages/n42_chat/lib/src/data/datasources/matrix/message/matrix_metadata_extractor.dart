@@ -449,6 +449,11 @@ class MatrixMetadataExtractor {
         debugLog('MatrixMessageDataSource: Error parsing poll aggregation: $e');
       }
 
+      // Quiz 扩展：正确选项序号 + 解析
+      final quiz = event.content['n42.quiz'] as Map<String, dynamic>?;
+      final quizCorrectIndex = quiz?['correct_index'] as int?;
+      final quizExplanation = quiz?['explanation'] as String?;
+
       // 检查是否是转发的投票快照
       final forwardedPoll =
           event.content['n42.forwarded_poll'] as Map<String, dynamic>?;
@@ -491,6 +496,8 @@ class MatrixMetadataExtractor {
         voteCounts: voteCounts,
         totalVoters: voters.length,
         myVotes: myVotes,
+        quizCorrectIndex: quizCorrectIndex,
+        quizExplanation: quizExplanation,
       );
     } catch (e) {
       debugLog('MatrixMessageDataSource: Failed to extract poll metadata: $e');

@@ -583,6 +583,12 @@ class MessageMetadata extends Equatable {
   /// 是否匿名投票
   final bool? isAnonymousPoll;
 
+  /// Quiz 正确选项序号（null = 普通投票，非 null = Quiz 答题）
+  final int? quizCorrectIndex;
+
+  /// Quiz 答案解析（可空）
+  final String? quizExplanation;
+
   // ============================================
   // E2EE 加密媒体属性（file 字段中的 key 材料）
   // ============================================
@@ -675,6 +681,8 @@ class MessageMetadata extends Equatable {
     this.maxSelections,
     this.pollEnded,
     this.isAnonymousPoll,
+    this.quizCorrectIndex,
+    this.quizExplanation,
     this.encryptKey,
     this.encryptIv,
     this.encryptSha256,
@@ -748,6 +756,8 @@ class MessageMetadata extends Equatable {
     maxSelections,
     pollEnded,
     isAnonymousPoll,
+    quizCorrectIndex,
+    quizExplanation,
     encryptKey,
     encryptIv,
     encryptSha256,
@@ -781,6 +791,8 @@ class MessageMetadata extends Equatable {
     voteCounts: voteCounts ?? this.voteCounts,
     totalVoters: totalVoters ?? this.totalVoters,
     myVotes: myVotes ?? this.myVotes,
+    quizCorrectIndex: quizCorrectIndex,
+    quizExplanation: quizExplanation,
     mediaUrl: mediaUrl,
     httpUrl: httpUrl,
     thumbnailUrl: thumbnailUrl,

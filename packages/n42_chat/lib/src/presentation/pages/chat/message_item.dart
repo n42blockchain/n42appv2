@@ -11,6 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/utils/event_message_data.dart';
+import '../../../core/utils/quiz_reveal.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -1861,6 +1862,14 @@ class MessageItem extends StatelessWidget {
     final maxSelections = metadata?.maxSelections ?? 1;
     final pollEnded = metadata?.pollEnded ?? false;
 
+    // Quiz：揭晓时机为「已投票或已结束」
+    final quizCorrectIndex = metadata?.quizCorrectIndex;
+    final quizReveal = QuizReveal.shouldReveal(
+      correctIndex: quizCorrectIndex,
+      hasVoted: myVotes.isNotEmpty,
+      pollEnded: pollEnded,
+    );
+
     return Container(
       width: 260,
       padding: const EdgeInsets.all(12),
@@ -1961,8 +1970,18 @@ class MessageItem extends StatelessWidget {
             // 1. 投票已结束，不能投票
             // 2. 单选时，可以点击其他选项更改投票
             // 3. 多选时，可以取消已选项或选择新选项（未达最大值时）
+            // Quiz 揭晓后锁定作答
+            final quizState = QuizReveal.optionState(
+              optionIndex: index,
+              optionId: optionId,
+              correctIndex: quizCorrectIndex,
+              myVoteIds: myVotes,
+              reveal: quizReveal,
+            );
+
             final canChangeVote =
                 !pollEnded &&
+                !quizReveal &&
                 (isSelected || // 可以取消已选的
                     myVotes.length < maxSelections || // 可以添加新选择
                     (maxSelections == 1 && myVotes.isNotEmpty) // 单选可以更改
@@ -1981,12 +2000,24 @@ class MessageItem extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 8),
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? AppColors.primary.withValues(alpha: 0.1)
-                      : AppColors.inputBgOf(isDark),
+                  color: switch (quizState) {
+                    QuizOptionState.correct =>
+                      AppColors.success.withValues(alpha: 0.12),
+                    QuizOptionState.wrongPicked =>
+                      AppColors.error.withValues(alpha: 0.12),
+                    _ => isSelected
+                        ? AppColors.primary.withValues(alpha: 0.1)
+                        : AppColors.inputBgOf(isDark),
+                  },
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: isSelected ? AppColors.primary : Colors.transparent,
+                    color: switch (quizState) {
+                      QuizOptionState.correct => AppColors.success,
+                      QuizOptionState.wrongPicked => AppColors.error,
+                      _ => isSelected
+                          ? AppColors.primary
+                          : Colors.transparent,
+                    },
                     width: 1.5,
                   ),
                 ),
@@ -2010,7 +2041,13 @@ class MessageItem extends StatelessWidget {
                             ),
                           ),
                         ),
-                        if (isSelected)
+                        if (quizState == QuizOptionState.correct)
+                          const Icon(Icons.check_circle,
+                              size: 18, color: AppColors.success)
+                        else if (quizState == QuizOptionState.wrongPicked)
+                          const Icon(Icons.cancel,
+                              size: 18, color: AppColors.error)
+                        else if (isSelected)
                           const Icon(
                             Icons.check_circle,
                             size: 18,
@@ -2057,6 +2094,39 @@ class MessageItem extends StatelessWidget {
               ),
             );
           }),
+
+          // Quiz 解析（揭晓后显示）
+          if (quizReveal &&
+              metadata?.quizExplanation != null &&
+              metadata!.quizExplanation!.isNotEmpty) ...[
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.info.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Icon(Icons.lightbulb_outline,
+                      size: 14, color: AppColors.info),
+                  const SizedBox(width: 6),
+                  Expanded(
+                    child: Text(
+                      metadata.quizExplanation!,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        height: 1.35,
+                        color: AppColors.info,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
 
           // 底部统计
           const SizedBox(height: 4),

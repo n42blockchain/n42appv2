@@ -22,6 +22,8 @@ class MatrixPollHandler {
     required List<String> options,
     int maxSelections = 1,
     bool isAnonymous = false,
+    int? quizCorrectIndex,
+    String? quizExplanation,
   }) async {
     final room = _client?.getRoomById(roomId);
     if (room == null) {
@@ -55,6 +57,13 @@ class MatrixPollHandler {
           'answers': pollOptions,
         },
         'org.matrix.msc1767.text': '$question\n${options.asMap().entries.map((e) => '${e.key + 1}. ${e.value}').join('\n')}',
+        // Quiz 扩展（非标准，N42 私有）：携带正确选项序号与解析
+        if (quizCorrectIndex != null)
+          'n42.quiz': {
+            'correct_index': quizCorrectIndex,
+            if (quizExplanation != null && quizExplanation.trim().isNotEmpty)
+              'explanation': quizExplanation.trim(),
+          },
       };
 
       final eventId = await room.sendEvent(

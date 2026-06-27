@@ -382,16 +382,27 @@ class SendPollMessage extends ChatEvent {
   final List<String> options;
   final int maxSelections; // 1 = 单选, 0 = 多选（不限）
   final bool isAnonymous;
+  final int? quizCorrectIndex; // 非空 = Quiz 答题
+  final String? quizExplanation;
 
   const SendPollMessage({
     required this.question,
     required this.options,
     this.maxSelections = 1,
     this.isAnonymous = false,
+    this.quizCorrectIndex,
+    this.quizExplanation,
   });
 
   @override
-  List<Object?> get props => [question, options, maxSelections, isAnonymous];
+  List<Object?> get props => [
+        question,
+        options,
+        maxSelections,
+        isAnonymous,
+        quizCorrectIndex,
+        quizExplanation,
+      ];
 }
 
 /// 投票响应事件

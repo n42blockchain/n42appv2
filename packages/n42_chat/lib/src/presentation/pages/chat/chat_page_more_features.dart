@@ -990,6 +990,8 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
           options: result.options,
           maxSelections: result.maxSelections,
           isAnonymous: result.isAnonymous,
+          quizCorrectIndex: result.quizCorrectIndex,
+          quizExplanation: result.quizExplanation,
         ),
       );
     }

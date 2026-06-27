@@ -13,12 +13,20 @@ class PollComposerResult {
   final bool isAnonymous;
   final PollComposerAction action;
 
+  /// Quiz 正确选项序号（相对 [options]，null = 普通投票）
+  final int? quizCorrectIndex;
+
+  /// Quiz 答案解析
+  final String? quizExplanation;
+
   const PollComposerResult({
     required this.question,
     required this.options,
     required this.maxSelections,
     required this.isAnonymous,
     required this.action,
+    this.quizCorrectIndex,
+    this.quizExplanation,
   });
 }
 
@@ -39,10 +47,14 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
   ];
   int _maxSelections = 1; // 1 = 单选, 0 = 多选（不限）
   bool _isAnonymous = false;
+  bool _isQuiz = false;
+  int _correctControllerIndex = 0; // 正确选项（按控制器序号）
+  final _explanationController = TextEditingController();
 
   @override
   void dispose() {
     _questionController.dispose();
+    _explanationController.dispose();
     for (final controller in _optionControllers) {
       controller.dispose();
     }
@@ -62,6 +74,12 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
       setState(() {
         _optionControllers[index].dispose();
         _optionControllers.removeAt(index);
+        // 维持正确选项指向：被删项之前的索引前移；删的正是正确项则回退到 0
+        if (_correctControllerIndex == index) {
+          _correctControllerIndex = 0;
+        } else if (_correctControllerIndex > index) {
+          _correctControllerIndex -= 1;
+        }
       });
     }
   }
@@ -75,16 +93,34 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
       return;
     }
 
-    final options = _optionControllers
-        .map((c) => c.text.trim())
-        .where((o) => o.isNotEmpty)
-        .toList();
+    // 保留控制器序号以便映射 Quiz 正确项
+    final kept = <MapEntry<int, String>>[];
+    for (var i = 0; i < _optionControllers.length; i++) {
+      final text = _optionControllers[i].text.trim();
+      if (text.isNotEmpty) kept.add(MapEntry(i, text));
+    }
+    final options = kept.map((e) => e.value).toList();
 
     if (options.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(S.of(context)?.chatAtLeastTwoOptions ?? 'At least 2 options required')),
       );
       return;
+    }
+
+    int? quizCorrectIndex;
+    String? quizExplanation;
+    if (_isQuiz) {
+      quizCorrectIndex =
+          kept.indexWhere((e) => e.key == _correctControllerIndex);
+      if (quizCorrectIndex < 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Mark a non-empty correct answer')),
+        );
+        return;
+      }
+      final exp = _explanationController.text.trim();
+      quizExplanation = exp.isEmpty ? null : exp;
     }
 
     Navigator.pop(
@@ -95,6 +131,8 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
         maxSelections: _maxSelections,
         isAnonymous: _isAnonymous,
         action: action,
+        quizCorrectIndex: quizCorrectIndex,
+        quizExplanation: quizExplanation,
       ),
     );
   }
@@ -235,6 +273,23 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: Row(
                       children: [
+                        if (_isQuiz)
+                          IconButton(
+                            tooltip: 'Correct answer',
+                            visualDensity: VisualDensity.compact,
+                            onPressed: () => setState(
+                              () => _correctControllerIndex = index,
+                            ),
+                            icon: Icon(
+                              _correctControllerIndex == index
+                                  ? Icons.radio_button_checked
+                                  : Icons.radio_button_unchecked,
+                              color: _correctControllerIndex == index
+                                  ? AppColors.success
+                                  : context.textTertiary,
+                              size: 20,
+                            ),
+                          ),
                         Container(
                           width: 24,
                           height: 24,
@@ -366,6 +421,45 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 12),
+                      const Divider(height: 1),
+                      const SizedBox(height: 12),
+
+                      // Quiz 模式：标记正确答案，投票后揭晓
+                      Row(
+                        children: [
+                          const Text('Quiz mode'),
+                          const Spacer(),
+                          Switch(
+                            value: _isQuiz,
+                            onChanged: (value) {
+                              setState(() {
+                                _isQuiz = value;
+                                if (value) _maxSelections = 1; // Quiz 仅单选
+                              });
+                            },
+                            activeTrackColor: AppColors.primary,
+                          ),
+                        ],
+                      ),
+                      if (_isQuiz) ...[
+                        const SizedBox(height: 8),
+                        TextField(
+                          controller: _explanationController,
+                          maxLength: 200,
+                          maxLines: 2,
+                          decoration: InputDecoration(
+                            hintText: 'Answer explanation (optional)',
+                            counterText: '',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            filled: true,
+                            fillColor: AppColors.inputBgOf(isDark),
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),

@@ -375,6 +375,10 @@ extension ChatBlocMessageHandlers on ChatBloc {
               voteCounts: currentMeta.voteCounts,
               totalVoters: currentMeta.totalVoters,
               myVotes: currentMeta.myVotes,
+              quizCorrectIndex:
+                  newMeta?.quizCorrectIndex ?? currentMeta.quizCorrectIndex,
+              quizExplanation:
+                  newMeta?.quizExplanation ?? currentMeta.quizExplanation,
               // 保留其他元数据
               mediaUrl: newMeta?.mediaUrl,
               httpUrl: newMeta?.httpUrl,

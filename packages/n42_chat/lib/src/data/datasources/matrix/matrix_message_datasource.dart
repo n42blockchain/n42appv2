@@ -454,12 +454,16 @@ class MatrixMessageDataSource {
     required List<String> options,
     int maxSelections = 1,
     bool isAnonymous = false,
+    int? quizCorrectIndex,
+    String? quizExplanation,
   }) => _pollHandler.sendPollMessage(
     roomId,
     question: question,
     options: options,
     maxSelections: maxSelections,
     isAnonymous: isAnonymous,
+    quizCorrectIndex: quizCorrectIndex,
+    quizExplanation: quizExplanation,
   );
 
   /// 发送转发的投票快照

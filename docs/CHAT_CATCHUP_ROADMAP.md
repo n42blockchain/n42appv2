@@ -38,7 +38,7 @@
 | 21 | 游戏中心 | ⏳ 仅页面框架 |
 | 22 | 钱包/DID 登录入口 | ⏳ 现仅"关联已有" |
 | 23 | 2FA / TOTP | ⏳ 依赖 Matrix HS |
-| 24 | 日程/事件消息（✅ 完成 2026-06-27）、Quiz 答题（进行中） | **日程**：新增 `MessageType.event` + `EventMessageData`(纯编解码/ICS/格式化,10 单测) + 端到端(mapper/extractor/send bloc) + 气泡卡片(起止/地点/描述/「加入日历」分享 .ics) + 「+」面板 Event 入口 + 编辑面板。**Quiz**：待做 |
+| 24 | ~~日程/事件消息、Quiz 答题~~ ✅ **完成 2026-06-27** | **日程**：新增 `MessageType.event` + `EventMessageData`(纯编解码/ICS/格式化,10 单测) + 端到端 + 气泡卡片(起止/地点/描述/「加入日历」.ics) + 「+」面板入口 + 编辑面板。**Quiz**：poll 扩展 `n42.quiz`(正确序号+解析)，`QuizReveal` 纯揭晓逻辑(8 单测)，创建面板 Quiz 开关+正确项单选+解析，气泡投票后揭晓对/错色标+解析；全链路 metadata/mapper/repo/bloc 透传 |
 
 ## 远期（战略级 / 重基建 / 平台或生态依赖）
 

@@ -18,6 +18,8 @@ extension ChatBlocPollHandlers on ChatBloc {
         options: event.options,
         maxSelections: event.maxSelections,
         isAnonymous: event.isAnonymous,
+        quizCorrectIndex: event.quizCorrectIndex,
+        quizExplanation: event.quizExplanation,
       );
 
       if (message != null) {
