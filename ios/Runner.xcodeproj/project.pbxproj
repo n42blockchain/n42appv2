@@ -31,6 +31,9 @@
 		69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */; };
 		69D7DAC32F15EC6F004CA1FA /* TrustdartPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */; };
 		69PK0001PasskeyHandler000 /* PasskeyHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69PK0000PasskeyHandler000 /* PasskeyHandler.swift */; };
+		6A42CA112F7A000100000002 /* N42ChatCallAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42CA112F7A000100000001 /* N42ChatCallAttributes.swift */; };
+		6A42CA112F7A000100000003 /* N42ChatCallAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42CA112F7A000100000001 /* N42ChatCallAttributes.swift */; };
+		6A42CA112F7A000100000005 /* N42ChatCallLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A42CA112F7A000100000004 /* N42ChatCallLiveActivity.swift */; };
 		74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74858FAE1ED2DC5600515810 /* AppDelegate.swift */; };
 		80DF6CA187EF2D544C26CFCA /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56C53ED41BD5DB7271872A76 /* Pods_Runner.framework */; };
 		91638B74777D7C9D4B2A0D49 /* Pods_RunnerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F04F9C4638963A4198071CD6 /* Pods_RunnerTests.framework */; };
@@ -106,6 +109,8 @@
 		69D7DAC02F15E36E004CA1FA /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		69D7DAC22F15EC6F004CA1FA /* TrustdartPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrustdartPlugin.swift; sourceTree = "<group>"; };
 		69PK0000PasskeyHandler000 /* PasskeyHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyHandler.swift; sourceTree = "<group>"; };
+		6A42CA112F7A000100000001 /* N42ChatCallAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42ChatCallAttributes.swift; sourceTree = "<group>"; };
+		6A42CA112F7A000100000004 /* N42ChatCallLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42ChatCallLiveActivity.swift; sourceTree = "<group>"; };
 		74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Runner-Bridging-Header.h"; sourceTree = "<group>"; };
 		74858FAE1ED2DC5600515810 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		764E347C82549ABBCDA7A27F /* Pods-RunnerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.release.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -196,6 +201,7 @@
 			children = (
 				52B30CAB2CF46B39005C0363 /* N42Bundle.swift */,
 				52B30CAD2CF46B39005C0363 /* N42LiveActivity.swift */,
+				6A42CA112F7A000100000004 /* N42ChatCallLiveActivity.swift */,
 				52B30CAF2CF46B39005C0363 /* N42.swift */,
 				52B30CB12CF46B3C005C0363 /* Assets.xcassets */,
 				52B30CB32CF46B3C005C0363 /* Info.plist */,
@@ -279,6 +285,7 @@
 				526F3A0B2C10463F00FF9273 /* permissionsUtil.swift */,
 				526F3A0D2C10466E00FF9273 /* avPlay.swift */,
 				52B30CBD2CF46B76005C0363 /* N42Attributes.swift */,
+				6A42CA112F7A000100000001 /* N42ChatCallAttributes.swift */,
 			);
 			path = Runner;
 			sourceTree = "<group>";
@@ -596,9 +603,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				52B30CBF2CF46BC9005C0363 /* N42Attributes.swift in Sources */,
+				6A42CA112F7A000100000003 /* N42ChatCallAttributes.swift in Sources */,
 				52B30CB02CF46B39005C0363 /* N42.swift in Sources */,
 				52B30CAC2CF46B39005C0363 /* N42Bundle.swift in Sources */,
 				52B30CAE2CF46B39005C0363 /* N42LiveActivity.swift in Sources */,
+				6A42CA112F7A000100000005 /* N42ChatCallLiveActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -615,6 +624,7 @@
 				69D7DAC12F15E36E004CA1FA /* WebSocketManager.swift in Sources */,
 				526F3A0C2C10463F00FF9273 /* permissionsUtil.swift in Sources */,
 				52B30CBE2CF46B76005C0363 /* N42Attributes.swift in Sources */,
+				6A42CA112F7A000100000002 /* N42ChatCallAttributes.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				69PK0001PasskeyHandler000 /* PasskeyHandler.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
