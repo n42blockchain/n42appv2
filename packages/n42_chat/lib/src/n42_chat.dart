@@ -100,6 +100,11 @@ class N42Chat {
   static VoidCallback? _onOpenWallet;
   static VoidCallback? _onOpenCardPack;
 
+  /// 宿主"打开视频直播"回调（发现页「直播」触发）。
+  /// 视频直播由宿主实现（复用 chat 的 Matrix 房间 + 自部署 LiveKit）；
+  /// 宿主未注册时发现页「直播」回退到语音房列表。
+  static void Function(BuildContext context)? _onOpenLive;
+
   /// Moment 邀请节流时间戳（10 秒内不重复处理）
   static DateTime? _lastMomentInviteCheck;
 
@@ -322,6 +327,13 @@ class N42Chat {
     _onOpenCardPack = handler;
   }
 
+  /// 注册宿主侧"打开视频直播"回调。
+  /// 由发现页「直播」入口触发；宿主应 push 自己的视频直播页面。
+  /// 未注册时发现页「直播」回退到语音房列表。
+  static void setLiveEntryHandler(void Function(BuildContext context)? handler) {
+    _onOpenLive = handler;
+  }
+
   /// 内部使用：ServicesPage 触发 Wallet，若未注册返回 false。
   static bool invokeOpenWallet() {
     final cb = _onOpenWallet;
@@ -335,6 +347,15 @@ class N42Chat {
     final cb = _onOpenCardPack;
     if (cb == null) return false;
     cb();
+    return true;
+  }
+
+  /// 内部使用：发现页「直播」触发视频直播，若宿主未注册返回 false
+  /// （调用方据此回退到语音房列表）。
+  static bool invokeOpenLive(BuildContext context) {
+    final cb = _onOpenLive;
+    if (cb == null) return false;
+    cb(context);
     return true;
   }
 

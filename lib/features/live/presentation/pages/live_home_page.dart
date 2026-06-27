@@ -51,6 +51,12 @@ class _LiveHomePageState extends State<LiveHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // 嵌入主 App（从聊天「发现」进入）时关闭返回；独立运行时 maybePop 无副作用。
+        leading: IconButton(
+          tooltip: '关闭',
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+        ),
         title: const Text('N42 Live'),
         actions: [
           IconButton(

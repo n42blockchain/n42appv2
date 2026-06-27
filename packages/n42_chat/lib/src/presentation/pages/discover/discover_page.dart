@@ -108,7 +108,7 @@ class DiscoverPage extends StatelessWidget {
                 isDark: isDark,
                 iconWidget: _LiveIcon(),
                 title: l10n?.discoverLive ?? 'Live',
-                onTap: () => _openVoiceRooms(context),
+                onTap: () => _openLive(context),
               ),
               _buildDivider(context, isDark),
               _buildMenuItem(
@@ -431,6 +431,13 @@ class DiscoverPage extends StatelessWidget {
     Navigator.of(
       context,
     ).push(MaterialPageRoute<void>(builder: (_) => const VoiceRoomListPage()));
+  }
+
+  /// 「直播」入口：优先打开宿主注入的视频直播（[N42Chat.setLiveEntryHandler]）；
+  /// 宿主未注册时回退到语音房列表，保证独立运行/轻量宿主下仍可用。
+  void _openLive(BuildContext context) {
+    if (N42Chat.invokeOpenLive(context)) return;
+    _openVoiceRooms(context);
   }
 
   void _openMiniApps(BuildContext context) {

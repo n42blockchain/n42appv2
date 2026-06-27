@@ -17,6 +17,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/features/live/presentation/pages/live_app.dart';
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
 import 'package:n42_wallet/features/utils/chat_logout_compat.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
@@ -287,6 +288,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           Navigator.of(ctx).popUntil((r) => r.isFirst);
         }
         globalProviderContainer.read(homeTabIndexProvider.notifier).state = 0;
+      });
+      // 发现页「直播」入口 → 宿主的视频直播（复用 chat 的 Matrix 房间 +
+      // 自部署 LiveKit）。未注册时发现页回退到语音房列表。
+      N42Chat.setLiveEntryHandler((ctx) {
+        Navigator.of(ctx).push(
+          MaterialPageRoute<void>(builder: (_) => const LiveApp()),
+        );
       });
 
       AppLogger.i('N42Chat', 'initialized successfully with theme: $currentTheme');
