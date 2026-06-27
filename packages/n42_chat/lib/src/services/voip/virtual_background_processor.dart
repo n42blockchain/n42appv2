@@ -342,6 +342,7 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
       'blurRadius': _config.backgroundBlurRadius,
       'solidColor': _config.backgroundProcessing.solidColor,
       'hasBackgroundImage': _backgroundImageBytes != null,
+      'backgroundImageBytes': _backgroundImageBytes,
       // 本地相机轨道 id：原生据此定位 libwebrtc VideoSource 挂处理器
       // （见 docs/virtual-background-frame-injection.md §3.4）。
       'trackId': _sourceTrack?.id,

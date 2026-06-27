@@ -171,6 +171,9 @@ dependencies {
     compileOnly(files("libs/evm.aar"))
     // MediaPipe LLM Inference — 本地 Gemma 推理（可选，未安装时 LocalLlmHandler 走 fallback）
     implementation("com.google.mediapipe:tasks-genai:0.10.22")
+    // Chat virtual background publisher frame injection.
+    implementation("io.github.webrtc-sdk:android:144.7559.01")
+    implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
     // Kotlin Coroutines（LocalLlmHandler 异步推理）
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
 }

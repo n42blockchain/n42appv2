@@ -71,5 +71,8 @@ class MainActivity: FlutterFragmentActivity() {
 
         // 本地 LLM 推理 (MediaPipe Gemma)
         LocalLlmHandler.register(flutterEngine, this)
+
+        // Chat virtual background publisher frame injection.
+        VirtualBackgroundHandler.register(flutterEngine)
     }
 }
