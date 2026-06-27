@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -5,9 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/utils/event_message_data.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -430,6 +433,9 @@ class MessageItem extends StatelessWidget {
         break;
       case MessageType.contactCard:
         content = _buildContactCardWidget(context);
+        break;
+      case MessageType.event:
+        content = _buildEventMessage(isDark, context);
         break;
       case MessageType.encrypted:
         content = _buildEncryptedMessage(isDark);
@@ -1720,6 +1726,128 @@ class MessageItem extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  /// 日程 / 事件卡片：标题 + 起止时间 + 地点 + 描述 + 「加入日历」
+  Widget _buildEventMessage(bool isDark, BuildContext context) {
+    final data = message.metadata?.event;
+    if (data == null) return _buildTextMessage(isDark, context);
+
+    final titleColor = message.isFromMe
+        ? AppColors.sentText(isDark)
+        : context.textPrimary;
+    final subColor = message.isFromMe
+        ? AppColors.sentText(isDark).withValues(alpha: 0.75)
+        : context.textSecondary;
+
+    Widget row(IconData icon, String text, {int maxLines = 2}) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 6),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 15, color: subColor),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                text,
+                maxLines: maxLines,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 13, height: 1.3, color: subColor),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final when = data.endsAt != null
+        ? EventMessageData.formatRange(data.startsAt, data.endsAt!)
+        : EventMessageData.formatLocal(data.startsAt);
+
+    return Container(
+      width: 250,
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: message.isFromMe
+            ? AppColors.messageSent
+            : (isDark
+                  ? AppColors.messageReceivedDark
+                  : AppColors.messageReceived),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.event, size: 18, color: AppColors.primary),
+              const SizedBox(width: 6),
+              Expanded(
+                child: Text(
+                  data.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 15,
+                    height: 1.3,
+                    fontWeight: FontWeight.w600,
+                    color: titleColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          row(Icons.schedule, when),
+          if (data.location != null && data.location!.isNotEmpty)
+            row(Icons.place_outlined, data.location!),
+          if (data.description != null && data.description!.isNotEmpty)
+            row(Icons.notes, data.description!, maxLines: 3),
+          const SizedBox(height: 10),
+          GestureDetector(
+            onTap: () => _shareEventIcs(context, data),
+            child: const Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.calendar_today,
+                    size: 14, color: AppColors.primary),
+                SizedBox(width: 4),
+                Text(
+                  'Add to calendar',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _shareEventIcs(
+    BuildContext context,
+    EventMessageData data,
+  ) async {
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [
+            XFile.fromData(
+              Uint8List.fromList(utf8.encode(data.toIcs())),
+              mimeType: 'text/calendar',
+              name: 'event.ics',
+            ),
+          ],
+        ),
+      );
+    } catch (_) {
+      // 分享失败静默（用户取消等）
+    }
   }
 
   Widget _buildPollMessage(bool isDark, BuildContext context) {

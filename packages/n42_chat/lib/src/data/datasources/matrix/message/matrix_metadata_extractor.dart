@@ -1,6 +1,7 @@
 import 'package:matrix/matrix.dart' as matrix;
 
 import '../../../../domain/entities/message_entity.dart';
+import '../../../../core/utils/event_message_data.dart';
 import '../../../../core/utils/debug_log.dart';
 
 /// Matrix 消息元数据提取器
@@ -188,6 +189,14 @@ class MatrixMetadataExtractor {
         musicUrl: event.content['url'] as String?,
         musicCover: event.content['cover'] as String?,
       );
+    }
+
+    // 日程 / 事件消息
+    if (event.content['msgtype'] == 'n42.event') {
+      final data = EventMessageData.fromContent(event.content);
+      if (data != null) {
+        return MessageMetadata(event: data);
+      }
     }
 
     // 通话记录消息

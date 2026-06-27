@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../core/utils/event_message_data.dart';
+
 final _whitespaceRegExp = RegExp(r'\s+');
 
 /// 消息类型
@@ -69,6 +71,9 @@ enum MessageType {
 
   /// 联系人名片
   contactCard,
+
+  /// 日程 / 事件消息（可加入日历）
+  event,
 
   /// 未知类型
   unknown,
@@ -629,6 +634,13 @@ class MessageMetadata extends Equatable {
   /// 通话对方 ID
   final String? callPeerId;
 
+  // ============================================
+  // 日程 / 事件属性
+  // ============================================
+
+  /// 日程/事件载荷（标题、起止时间、地点、描述）
+  final EventMessageData? event;
+
   const MessageMetadata({
     this.mediaUrl,
     this.httpUrl,
@@ -676,6 +688,7 @@ class MessageMetadata extends Equatable {
     this.callEndReason,
     this.callRoomId,
     this.callPeerId,
+    this.event,
   });
 
   /// 格式化文件大小
@@ -748,6 +761,7 @@ class MessageMetadata extends Equatable {
     callEndReason,
     callRoomId,
     callPeerId,
+    event,
   ];
 
   /// Create a copy with updated poll fields

@@ -14,6 +14,7 @@ import '../../../core/utils/content_filter_utils.dart';
 import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../domain/entities/message_entity.dart';
+import '../../../core/utils/event_message_data.dart';
 import '../../../domain/entities/scheduled_message_draft.dart';
 import '../../../domain/repositories/group_repository.dart';
 import '../../../domain/repositories/message_repository.dart';

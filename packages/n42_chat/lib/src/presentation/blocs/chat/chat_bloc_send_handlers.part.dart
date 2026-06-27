@@ -500,6 +500,15 @@ extension ChatBlocSendHandlers on ChatBloc {
               'tx_hash': event.metadata!.txHash,
           },
         );
+      } else if (event.type == MessageType.event &&
+          event.metadata?.event != null) {
+        // 发送日程/事件消息（标题/起止时间/地点/描述）
+        eventId = await _messageRepository.sendCustomMessage(
+          _currentRoomId!,
+          msgType: EventMessageData.msgType,
+          content: event.content,
+          additionalData: event.metadata!.event!.toContent(),
+        );
       }
 
       if (eventId != null) {

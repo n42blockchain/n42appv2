@@ -434,6 +434,10 @@ extension _ChatPageInputMethods on _ChatPageState {
         _hideMorePanel();
         _createPoll();
       },
+      onEventPressed: () {
+        _hideMorePanel();
+        _createEvent();
+      },
       onGifPressed: () {
         _hideMorePanel();
         _showGifPicker();

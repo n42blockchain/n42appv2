@@ -62,6 +62,9 @@ class ChatMorePanel extends StatefulWidget {
   /// 投票回调
   final VoidCallback? onPollPressed;
 
+  /// 日程/事件回调
+  final VoidCallback? onEventPressed;
+
   /// GIF 回调
   final VoidCallback? onGifPressed;
 
@@ -120,6 +123,7 @@ class ChatMorePanel extends StatefulWidget {
     this.onShopPressed,
     this.shopLabel,
     this.onPollPressed,
+    this.onEventPressed,
     this.onGifPressed,
     this.onStickerPressed,
     this.onViewOncePressed,
@@ -285,6 +289,12 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
                       label: S.of(context)?.commonPoll ?? 'Poll',
                       onTap: widget.onPollPressed,
                       iconColor: AppColors.primary,
+                    ),
+                    _MoreItem(
+                      icon: Icons.event_outlined,
+                      label: 'Event',
+                      onTap: widget.onEventPressed,
+                      iconColor: AppColors.info,
                     ),
                     _MoreItem(
                       icon: Icons.gif_box_outlined,

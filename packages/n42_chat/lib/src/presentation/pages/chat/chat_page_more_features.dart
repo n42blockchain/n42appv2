@@ -995,6 +995,20 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     }
   }
 
+  /// 创建并发送日程/事件消息
+  Future<void> _createEvent() async {
+    final data = await showEventComposerSheet(context);
+    if (data == null || !mounted) return;
+
+    context.read<ChatBloc>().add(
+      SendCustomMessage(
+        content: data.fallbackBody,
+        type: MessageType.event,
+        metadata: MessageMetadata(event: data),
+      ),
+    );
+  }
+
   /// 显示 GIF 选择器
   Future<void> _showGifPicker() async {
     final selection = await showGifPicker(context);
