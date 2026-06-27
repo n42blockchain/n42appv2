@@ -189,6 +189,28 @@ native code`）。⚠️ 与通知回归的 `feat/ui-token-migration` 基线不�
 若 Live Activity UI 需调整文案/配色，直接改
 `ios/N42/N42ChatCallLiveActivity.swift` 即可（widget 侧，安全）。
 
+## 任务 T6：macOS 窗口提醒（Dock 弹跳）构建验证（新增 2026-06-27）
+
+背景：同 T5 的系统集成，新增消息/通话时让 macOS Dock 图标提醒。代码已写好
+（master，单文件、属现有 Runner target，**无需 target 配置**，比 T5 轻），但
+macOS 构建只能在 Mac 做。
+
+**基线**：`master` @ `74f64aed`（含 Windows 闪烁 + macOS 提醒）。
+**已就位代码**：`macos/Runner/MainFlutterWindow.swift` —— 在
+`awakeFromNib` 注册 `n42.chat/system_integration` 通道，`flashWindow` →
+`NSApp.requestUserAttention(.criticalRequest)`（Dock 持续弹跳直到聚焦），
+其余方法返回 `FlutterMethodNotImplemented` 交 Dart 兜底。
+
+**T6 验收**：
+1. `flutter build macos`（或 `flutter run -d macos`）编译通过（确认
+   `flutterViewController.engine.binaryMessenger` API 在当前 FlutterMacOS
+   版本可用——若签名变化按编译器提示微调，这是本任务的主要风险点）。
+2. App 切到后台/失焦，触发一次 `SystemIntegrationService.flashWindow()`
+   （可在 chat 收到新消息时，或临时加个测试入口）→ Dock 图标弹跳；点回 App
+   后停止。
+3. 报告写 `docs/device-test-reports/<日期>-macos.md`，状态回填本文件。
+   仅验证 + 必要时按编译器提示修 messenger 取法；不要改 Dart 逻辑。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -198,6 +220,7 @@ native code`）。⚠️ 与通知回归的 `feat/ui-token-migration` 基线不�
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
 | T4 coin 机械批次 | 展示层 batch 1-5 已合并；batch 6 审计无安全可迁点 | 2026-06-14 01:20 EDT | feat/ui-token-migration @ 6021b326 |
 | T5 iOS 通话 Live Activity | 待认领（代码已就位 master@2a680c92，需 Xcode 接 target + 真机验证） | — | docs/device-test-reports/<日期>-ios-live-activity.md |
+| T6 macOS Dock 提醒 | 待认领（代码已就位 master@74f64aed，需 Mac 构建 + 验证 Dock 弹跳） | — | docs/device-test-reports/<日期>-macos.md |
 
 ## 留言区
 
@@ -676,3 +699,12 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   ② 真机走 T5.2 的 5 项。⚠️ 基线是 `master`（非 `feat/ui-token-migration`），
   与通知回归任务不同分支。代码无法在 Windows 编译，劳烦你 Mac 上 build 验证，
   发现编译/接线问题在留言区回我。
+
+- 2026-06-27（Claude，派发 T6）：新增 **T6 macOS Dock 提醒** —— 系统集成桌面侧
+  收尾。Windows 任务栏闪烁我已在本机用 MSVC 语法编译验证并合入 master
+  （`FlashWindowEx`，f20af840）；macOS 的 `requestUserAttention` 同一通道写好了
+  （74f64aed，单文件无 target 配置），但 macOS 只能你那边 build。比 T5 轻很多，
+  主要就确认 `flutterViewController.engine.binaryMessenger` 在当前 FlutterMacOS
+  版本可用 + Dock 真的弹跳。基线 `master`。至此 n42_chat「系统集成」四端：
+  Android（通知/快捷方式/角标，已测）、iOS（快捷方式/角标已就位 + Live Activity=T5）、
+  Windows（角标 + 闪烁，已编译验证）、macOS（角标 + Dock 提醒=T6）。
