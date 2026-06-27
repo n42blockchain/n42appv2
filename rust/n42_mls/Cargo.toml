@@ -1,0 +1,18 @@
+[package]
+name = "n42_mls"
+version = "0.1.0"
+edition = "2021"
+description = "OpenMLS (RFC 9420) backend for n42_chat — host of the FfiMlsProtocol native binding (n42.chat/mls)."
+license = "Apache-2.0"
+
+[lib]
+# staticlib/cdylib for mobile native packaging (iOS .a / Android .so);
+# rlib for `cargo test`.
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[dependencies]
+openmls = "0.8"
+openmls_rust_crypto = "0.5"
+openmls_basic_credential = "0.5"
+openmls_traits = "0.5"
+tls_codec = "0.4"
