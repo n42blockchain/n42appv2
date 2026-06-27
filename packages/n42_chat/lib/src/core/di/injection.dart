@@ -295,9 +295,9 @@ Future<void> _registerServices(N42ChatConfig config) async {
   );
 
   // MLS 双栈调度（默认 Olm；底层 OpenMLS FFI 未绑定时 mlsAvailable=false）
-  getIt.registerLazySingleton<MlsManager>(
-    () => MlsManager(const UnboundMlsProtocol()),
-  );
+  final mlsProtocol = FfiMlsProtocol();
+  await mlsProtocol.probe();
+  getIt.registerLazySingleton<MlsManager>(() => MlsManager(mlsProtocol));
 
   // Giphy 服务（配置了 API Key 或代理端点时注册）
   if ((config.giphyApiKey != null && config.giphyApiKey!.isNotEmpty) ||

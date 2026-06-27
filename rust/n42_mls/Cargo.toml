@@ -16,3 +16,6 @@ openmls_rust_crypto = "0.5"
 openmls_basic_credential = "0.5"
 openmls_traits = "0.5"
 tls_codec = "0.4"
+
+[target.'cfg(target_os = "android")'.dependencies]
+jni = "0.21"

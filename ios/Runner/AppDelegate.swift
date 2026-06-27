@@ -4,6 +4,8 @@ import UIKit
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+  private var mlsHandler: N42MlsHandler?
+
   private func normalizeConfigValue(_ value: Any?) -> String? {
     guard let stringValue = value as? String else { return nil }
     let trimmed = stringValue.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -95,6 +97,8 @@ import UIKit
           }
           self.handleSystemIntegration(call, result: result)
         }
+
+        mlsHandler = N42MlsHandler(binaryMessenger: controller.binaryMessenger)
       }
 
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

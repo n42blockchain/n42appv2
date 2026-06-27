@@ -7,6 +7,9 @@
 pub mod engine;
 pub mod ffi;
 
+#[cfg(target_os = "android")]
+mod android_jni;
+
 pub use engine::{MlsEngine, MlsError, CIPHERSUITE};
 
 pub fn version() -> &'static str {
