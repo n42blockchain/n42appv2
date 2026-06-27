@@ -52,7 +52,7 @@
 | 30 | 白板协作 / 手写 Digital Touch | ❌（可先 Mini App 替代） |
 | 31 | 圆形视频留言 Video Note | ❌（TG 独有，优先级低） |
 | 32 | Web 端性能优化 | Flutter Web 长会话 jank |
-| 33 | 无障碍深度（Semantics 全覆盖） | ⏳ 基础 |
+| 33 | 无障碍深度（Semantics 全覆盖） | 🚧 **首批落地 2026-06-27**：原 chat 仓 `Semantics()` 全仓 0 命中（屏幕阅读器只播报"按钮"无描述）。本次给**最高频交互面**补语义标签：①`chat_input_bar` 语音/键盘切换、快捷回复、表情、附件、发送、按住说话按钮（`Semantics(button/label/excludeSemantics)`，复用 `commonSend/commonHoldToTalk/chatVoiceMessage` l10n + 英文兜底）；②`message_bubble` 头像播报发送者名、发送中/发送失败状态播报（"Sending"/"Failed to send, tap to resend"）。+3 widget 测试锁定（`message_bubble_a11y_test.dart`）。剩余：会话列表项、AppBar 导航、各 sheet/picker、媒体消息 alt——后续按面铺开 |
 | 34 | 联系人发现元数据保护（Matrix MSC） | ⏳ |
 | 35 | EU DMA 第三方互操作（Matrix Bridge） | ⏳ |
 
