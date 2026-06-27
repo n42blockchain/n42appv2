@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:app_badge_plus/app_badge_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -255,9 +256,22 @@ class SystemIntegrationService {
     _quickActionsReady = true;
   }
 
-  /// 桌面系统托盘未读角标（平台原生专属，无兜底；需 tray_manager 后续接线）
-  Future<void> setTrayBadge(int count) =>
-      _tryNative<void>('setTrayBadge', {'count': count});
+  /// 应用未读角标（桌面 任务栏/Dock + 移动端图标）。
+  ///
+  /// 原生优先；未接时用 `app_badge_plus` 真实设置角标（count<=0 清除）。
+  /// 平台不支持时优雅 no-op。
+  Future<void> setTrayBadge(int count) async {
+    final handled = await _tryNative<bool>('setTrayBadge', {'count': count});
+    if (handled == true) return;
+    if (kIsWeb) return;
+    try {
+      if (await AppBadgePlus.isSupported()) {
+        await AppBadgePlus.updateBadge(count < 0 ? 0 : count);
+      }
+    } catch (e) {
+      debugLog('SystemIntegrationService: setTrayBadge failed: $e');
+    }
+  }
 
   /// 桌面窗口闪烁提示（平台原生专属，无兜底；需 window_manager 后续接线）
   Future<void> flashWindow() => _tryNative<void>('flashWindow');
@@ -276,6 +290,13 @@ class SystemIntegrationService {
       case 'conversation':
       case 'shortcuts':
         return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+      case 'badge':
+        if (kIsWeb) return false;
+        try {
+          return await AppBadgePlus.isSupported();
+        } catch (_) {
+          return false;
+        }
       default:
         return false;
     }

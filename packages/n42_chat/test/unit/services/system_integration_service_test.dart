@@ -19,9 +19,27 @@ void main() {
     });
   });
 
+  // app_badge_plus 的平台通道（用于校验角标兜底）
+  const badgeChannel = MethodChannel('app_badge_plus');
+  final List<MethodCall> badgeCalls = <MethodCall>[];
+  bool badgeSupported = true;
+
+  setUp(() {
+    badgeCalls.clear();
+    badgeSupported = true;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(badgeChannel, (MethodCall call) async {
+      badgeCalls.add(call);
+      if (call.method == 'isSupported') return badgeSupported;
+      return null;
+    });
+  });
+
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(channel, null);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(badgeChannel, null);
   });
 
   group('stableIdForTest（纯函数）', () {
@@ -108,6 +126,31 @@ void main() {
       final call =
           nativeCalls.firstWhere((c) => c.method == 'setDynamicShortcuts');
       expect(call.arguments, isA<Map<dynamic, dynamic>>());
+    });
+
+    test('setTrayBadge 原生未实现时经 app_badge_plus 兜底设角标', () async {
+      nativeReturn = null; // 原生未处理
+      final svc = SystemIntegrationService();
+      await svc.setTrayBadge(7);
+      // 先查 isSupported，再 updateBadge(7)
+      expect(badgeCalls.any((c) => c.method == 'isSupported'), isTrue);
+      final upd = badgeCalls.firstWhere((c) => c.method == 'updateBadge');
+      expect((upd.arguments as Map)['count'], 7);
+    });
+
+    test('setTrayBadge 负数被夹紧为 0（清除角标）', () async {
+      nativeReturn = null;
+      final svc = SystemIntegrationService();
+      await svc.setTrayBadge(-5);
+      final upd = badgeCalls.firstWhere((c) => c.method == 'updateBadge');
+      expect((upd.arguments as Map)['count'], 0);
+    });
+
+    test('isSupported(badge) 反映 app_badge_plus 支持度', () async {
+      nativeReturn = null;
+      badgeSupported = true;
+      final svc = SystemIntegrationService();
+      expect(await svc.isSupported('badge'), isTrue);
     });
 
     test('原生未实现（返回 null）时各方法不抛异常', () async {
