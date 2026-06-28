@@ -43,6 +43,9 @@ export 'src/core/theme/app_text_styles.dart';
 // ============================================
 // 实体导出 (供外部使用)
 // ============================================
+// AI 服务接口（供宿主钱包侧 AI 助手复用 chat 的 AI 通道，见 wallet ai_assistant）
+export 'src/core/services/ai_service.dart'
+    show AiService, AiMessage, AiRole, AiCompletionResult, AiTone;
 export 'src/domain/entities/conversation_entity.dart';
 export 'src/domain/entities/message_entity.dart';
 export 'src/domain/entities/contact_entity.dart';
