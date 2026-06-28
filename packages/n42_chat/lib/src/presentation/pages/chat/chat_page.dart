@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
@@ -128,6 +129,7 @@ import '../group/bot_settings_page.dart';
 import '../transfer/receive_page.dart';
 import '../transfer/transfer_page.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/a11y_l10n.dart';
 
 part 'chat_page_app_bar.dart';
 part 'chat_page_message_list.dart';
@@ -194,6 +196,9 @@ class _ChatPageState extends State<ChatPage> {
   // 撤回的消息ID，用于显示"重新编辑"
   final Set<String> _recalledMessageIds = {};
   String? _lastRecalledContent;
+
+  /// 无障碍 live-region：已播报过的最后一条「对方」消息 id（去重，避免重复播报）。
+  String? _lastAnnouncedIncomingId;
 
   // 多选模式
   bool _isMultiSelectMode = false;
@@ -1359,7 +1364,13 @@ class _ChatPageState extends State<ChatPage> {
         listenWhen: (prev, curr) => prev.messages != curr.messages,
         listener: (context, state) {
           _handleSmartReplyStateChanged(state);
+          _announceIncomingMessage(context, state);
         },
+      ),
+      // 无障碍：对方「正在输入」状态变化时主动播报（屏幕阅读器否则感知不到）。
+      BlocListener<ChatBloc, ChatState>(
+        listenWhen: (prev, curr) => prev.typingUsers != curr.typingUsers,
+        listener: _announceTyping,
       ),
     ];
 
@@ -1379,6 +1390,46 @@ class _ChatPageState extends State<ChatPage> {
     }
 
     return MultiBlocListener(listeners: listeners, child: content);
+  }
+
+  /// 新「对方」消息到达时,经 [SemanticsService] 主动播报给屏幕阅读器。
+  ///
+  /// 只播报最后一条且为对方发送的新消息(自己发的不报),并用
+  /// [_lastAnnouncedIncomingId] 去重,避免分页/刷新重复触发。
+  void _announceIncomingMessage(BuildContext context, ChatState state) {
+    if (state.messages.isEmpty) return;
+    final last = state.messages.last;
+    if (last.isFromMe) return;
+    if (last.id == _lastAnnouncedIncomingId) return;
+    // 初次进入会话(此前没播报过任何消息)不播报历史最后一条,只记录基线。
+    final isFirstSync = _lastAnnouncedIncomingId == null;
+    _lastAnnouncedIncomingId = last.id;
+    if (isFirstSync) return;
+
+    final a11y = A11yL10n.of(context);
+    final preview = last.type == MessageType.text ? last.content.trim() : '';
+    final text = preview.isEmpty
+        ? a11y.newMessageFrom(last.senderName)
+        : a11y.newMessageFromWithText(last.senderName, preview);
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      text,
+      Directionality.of(context),
+    );
+  }
+
+  /// 对方开始「正在输入」时播报;停止输入(列表清空)不播报。
+  void _announceTyping(BuildContext context, ChatState state) {
+    if (state.typingUsers.isEmpty) return;
+    final a11y = A11yL10n.of(context);
+    final text = state.typingUsers.length == 1
+        ? a11y.userTyping(state.typingUsers.first)
+        : a11y.peopleTyping(state.typingUsers.length);
+    SemanticsService.sendAnnouncement(
+      View.of(context),
+      text,
+      Directionality.of(context),
+    );
   }
 }
 

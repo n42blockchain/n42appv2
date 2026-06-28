@@ -28,6 +28,14 @@ void main() {
       expect(a.unreadCount(3), '3 unread');
       expect(a.pollOption('Yes', 2), 'Yes, 2 votes');
     });
+
+    test('live-region announcements', () {
+      expect(const A11yL10n('zh').newMessageFrom('Bob'), 'Bob 发来新消息');
+      expect(const A11yL10n('zh_TW').userTyping('Bob'), 'Bob 正在輸入');
+      expect(const A11yL10n('en').newMessageFromWithText('Bob', 'hi'),
+          'New message from Bob: hi');
+      expect(const A11yL10n('en').peopleTyping(3), '3 people typing');
+    });
   });
 
   group('A11yL10n.of locale normalization', () {

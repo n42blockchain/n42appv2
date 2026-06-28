@@ -108,4 +108,17 @@ class A11yL10n {
   String get tip => _pick('打赏', '打賞', 'Tip');
   String get redPacketOpened => _pick('已领取', '已領取', 'opened');
   String get redPacketUnopened => _pick('未领取', '未領取', 'unopened');
+
+  // —— Live-region 主动播报（新消息 / 输入中） ——
+  String newMessageFrom(String sender) =>
+      _pick('$sender 发来新消息', '$sender 傳來新訊息', 'New message from $sender');
+  String newMessageFromWithText(String sender, String text) => _pick(
+        '$sender 发来新消息：$text',
+        '$sender 傳來新訊息：$text',
+        'New message from $sender: $text',
+      );
+  String userTyping(String name) =>
+      _pick('$name 正在输入', '$name 正在輸入', '$name is typing');
+  String peopleTyping(int count) =>
+      _pick('$count 人正在输入', '$count 人正在輸入', '$count people typing');
 }
