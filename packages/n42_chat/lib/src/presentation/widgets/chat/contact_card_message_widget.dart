@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../widgets/common/common_widgets.dart';
 
 /// 联系人名片消息组件
@@ -27,7 +28,7 @@ class ContactCardMessageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: onTap != null,
-      label: 'Contact card, $displayName',
+      label: A11yL10n.of(context).contactCard(displayName),
       excludeSemantics: true,
       child: GestureDetector(
       onTap: onTap,

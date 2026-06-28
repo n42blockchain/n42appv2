@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
+import '../../../core/utils/a11y_l10n.dart';
 
 /// 转账消息组件（仿微信）
 class TransferMessageWidget extends StatelessWidget {
@@ -417,7 +418,9 @@ class RedPacketMessageWidget extends StatelessWidget {
       label: [
         S.of(context)?.profileRedPacket ?? 'Red Packet',
         if (note?.isNotEmpty == true) note,
-        isOpened ? 'opened' : 'unopened',
+        isOpened
+            ? A11yL10n.of(context).redPacketOpened
+            : A11yL10n.of(context).redPacketUnopened,
       ].where((e) => e != null && e.isNotEmpty).join(', '),
       excludeSemantics: true,
       child: GestureDetector(

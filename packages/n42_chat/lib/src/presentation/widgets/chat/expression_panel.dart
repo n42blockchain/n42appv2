@@ -4,6 +4,7 @@ import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/recent_emoji_store.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../domain/entities/sticker_pack_entity.dart';
 import '../../../domain/repositories/sticker_repository.dart';
 import 'emoji_picker.dart';
@@ -161,7 +162,7 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
       child: Semantics(
         button: true,
         selected: selected,
-        label: _tabLabel(tab),
+        label: _tabLabel(context, tab),
         excludeSemantics: true,
         child: InkWell(
           onTap: () => _switchTab(tab),
@@ -181,16 +182,17 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
     );
   }
 
-  String _tabLabel(ExpressionTab tab) {
+  String _tabLabel(BuildContext context, ExpressionTab tab) {
+    final a11y = A11yL10n.of(context);
     switch (tab) {
       case ExpressionTab.recent:
-        return 'Recent';
+        return a11y.tabRecent;
       case ExpressionTab.emoji:
-        return 'Emoji';
+        return a11y.emoji;
       case ExpressionTab.sticker:
-        return 'Sticker';
+        return a11y.tabSticker;
       case ExpressionTab.gif:
-        return 'GIF';
+        return a11y.tabGif;
     }
   }
 }

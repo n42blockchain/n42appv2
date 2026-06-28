@@ -10,6 +10,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/event_message_data.dart';
 import '../../../core/utils/quiz_reveal.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
@@ -409,7 +410,7 @@ class MessageItem extends StatelessWidget {
         content = _buildVideoMessage(context);
         break;
       case MessageType.file:
-        content = _buildFileMessage(isDark);
+        content = _buildFileMessage(isDark, context);
         break;
       case MessageType.location:
         content = _buildLocationMessage(isDark, context);
@@ -418,7 +419,7 @@ class MessageItem extends StatelessWidget {
         content = _buildTransferMessage();
         break;
       case MessageType.tip:
-        content = _buildTipMessage();
+        content = _buildTipMessage(context);
         break;
       case MessageType.paymentRequest:
         content = _buildPaymentRequestMessage(context);
@@ -1281,13 +1282,13 @@ class MessageItem extends StatelessWidget {
     return '${(bytes / (1024 * 1024 * 1024)).toStringAsFixed(1)} GB';
   }
 
-  Widget _buildFileMessage(bool isDark) {
+  Widget _buildFileMessage(bool isDark, BuildContext context) {
     final metadata = message.metadata;
     final filename = metadata?.fileName ?? message.content;
     final size = metadata?.size;
 
     return Semantics(
-      label: 'File, $filename',
+      label: A11yL10n.of(context).file(filename),
       excludeSemantics: true,
       child: Container(
       width: 200,
@@ -1361,7 +1362,7 @@ class MessageItem extends StatelessWidget {
     }
 
     return Semantics(
-      label: 'Location, $locationName',
+      label: A11yL10n.of(context).location(locationName),
       excludeSemantics: true,
       child: SizedBox(
       width: 220,
@@ -1489,7 +1490,7 @@ class MessageItem extends StatelessWidget {
   }
 
   /// 打赏消息（渐变气泡）
-  Widget _buildTipMessage() {
+  Widget _buildTipMessage(BuildContext context) {
     final metadata = message.metadata;
     final amount = metadata?.amount ?? '0';
     final token = metadata?.token ?? '';
@@ -1497,7 +1498,7 @@ class MessageItem extends StatelessWidget {
     final confirmed = (metadata?.txHash ?? '').isNotEmpty;
     return Semantics(
       label: [
-        'Tip',
+        A11yL10n.of(context).tip,
         '$amount $token'.trim(),
         if (note.isNotEmpty) note,
       ].where((e) => e.isNotEmpty).join(', '),
@@ -1654,7 +1655,7 @@ class MessageItem extends StatelessWidget {
 
     return Semantics(
       button: true,
-      label: 'Music, $title, $artist',
+      label: A11yL10n.of(context).music(title, artist),
       excludeSemantics: true,
       child: GestureDetector(
       onTap: () {
@@ -1829,7 +1830,7 @@ class MessageItem extends StatelessWidget {
           const SizedBox(height: 10),
           Semantics(
             button: true,
-            label: 'Add to calendar',
+            label: A11yL10n.of(context).addToCalendar,
             excludeSemantics: true,
             child: GestureDetector(
             onTap: () => _shareEventIcs(context, data),
@@ -2016,7 +2017,7 @@ class MessageItem extends StatelessWidget {
             return Semantics(
               button: canChangeVote,
               selected: isSelected,
-              label: '$optionText, $voteCount votes',
+              label: A11yL10n.of(context).pollOption(optionText, voteCount),
               excludeSemantics: true,
               child: GestureDetector(
               onTap: canChangeVote

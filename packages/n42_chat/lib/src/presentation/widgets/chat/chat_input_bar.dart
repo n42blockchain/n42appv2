@@ -8,6 +8,7 @@ import '../../../core/extensions/context_extension.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/services/voice_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import 'slash_command_picker.dart';
 import 'scheduled_send_picker.dart';
 import '../../../core/utils/debug_log.dart';
@@ -609,8 +610,8 @@ class ChatInputBarState extends State<ChatInputBar> {
                       icon: _isVoiceMode ? Icons.keyboard : Icons.mic,
                       onPressed: _toggleVoiceMode,
                       semanticLabel: _isVoiceMode
-                          ? (S.of(context)?.commonSendMessage ?? 'Keyboard')
-                          : (S.of(context)?.chatVoiceMessage ?? 'Voice'),
+                          ? A11yL10n.of(context).switchToKeyboard
+                          : A11yL10n.of(context).voice,
                     ),
 
                   // 输入区域
@@ -625,7 +626,7 @@ class ChatInputBarState extends State<ChatInputBar> {
                     _buildIconButton(
                       icon: Icons.flash_on_outlined,
                       onPressed: widget.onQuickReplyPressed,
-                      semanticLabel: 'Quick reply',
+                      semanticLabel: A11yL10n.of(context).quickReply,
                     ),
 
                   // 表情
@@ -633,7 +634,7 @@ class ChatInputBarState extends State<ChatInputBar> {
                     _buildIconButton(
                       icon: Icons.emoji_emotions_outlined,
                       onPressed: widget.onEmojiPressed,
-                      semanticLabel: 'Emoji',
+                      semanticLabel: A11yL10n.of(context).emoji,
                     ),
 
                   // 附件/更多 或 发送
@@ -643,7 +644,7 @@ class ChatInputBarState extends State<ChatInputBar> {
                             ? _buildIconButton(
                                 icon: Icons.attach_file,
                                 onPressed: widget.onMorePressed,
-                                semanticLabel: 'Attachments',
+                                semanticLabel: A11yL10n.of(context).attachments,
                               )
                             : const SizedBox.shrink()),
                 ],
@@ -813,7 +814,7 @@ class ChatInputBarState extends State<ChatInputBar> {
     // 使用 Listener 直接处理 pointer events，比 GestureDetector 更可靠
     return Semantics(
       button: true,
-      label: S.of(context)?.commonHoldToTalk ?? 'Hold to talk',
+      label: A11yL10n.of(context).holdToTalk,
       child: _buildVoiceListener(),
     );
   }
@@ -889,7 +890,7 @@ class ChatInputBarState extends State<ChatInputBar> {
     return Semantics(
       button: true,
       enabled: widget.enabled,
-      label: S.of(context)?.commonSend ?? 'Send',
+      label: A11yL10n.of(context).send,
       excludeSemantics: true,
       child: GestureDetector(
         onLongPress: widget.enabled && widget.onScheduledSend != null

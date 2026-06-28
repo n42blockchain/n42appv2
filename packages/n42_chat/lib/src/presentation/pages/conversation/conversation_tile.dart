@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/remark_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/bridge_detection_utils.dart';
 import '../../../core/utils/date_utils.dart';
 import '../../../domain/entities/conversation_entity.dart';
@@ -52,20 +53,21 @@ class ConversationTile extends StatelessWidget {
   }
 
   /// 组合无障碍播报文案：名称 + 状态标识 + 最后消息 + 时间 + 未读数。
-  /// 名称/消息/时间为已本地化的用户数据；状态描述词为首批英文兜底（待补 l10n）。
-  String _semanticLabel() {
+  /// 名称/消息/时间为已本地化的用户数据；状态描述词经 [A11yL10n] 本地化。
+  String _semanticLabel(BuildContext context) {
+    final a11y = A11yL10n.of(context);
     final parts = <String>[_getDisplayName()];
-    if (isLocked) parts.add('locked');
-    if (conversation.isEncrypted) parts.add('encrypted');
+    if (isLocked) parts.add(a11y.locked);
+    if (conversation.isEncrypted) parts.add(a11y.encrypted);
     final msg = _getLastMessageText();
     if (msg.isNotEmpty) parts.add(msg);
     if (conversation.lastMessageTime != null) {
       parts.add(N42DateUtils.formatConversationTime(
           conversation.lastMessageTime!));
     }
-    if (conversation.isMuted) parts.add('muted');
+    if (conversation.isMuted) parts.add(a11y.muted);
     final unread = conversation.unreadCount;
-    if (unread > 0) parts.add('$unread unread');
+    if (unread > 0) parts.add(a11y.unreadCount(unread));
     return parts.join(', ');
   }
 
@@ -92,7 +94,7 @@ class ConversationTile extends StatelessWidget {
             child: Semantics(
               button: true,
               selected: isSelected,
-              label: _semanticLabel(),
+              label: _semanticLabel(context),
               child: InkWell(
                 onTap: onTap,
                 onLongPress: onLongPress,

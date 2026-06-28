@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 
 /// 表情选择器
 /// 
@@ -250,7 +251,7 @@ class _EmojiPickerState extends State<EmojiPicker> with SingleTickerProviderStat
                   if (widget.onBackspace != null)
                     Semantics(
                       button: true,
-                      label: 'Backspace',
+                      label: A11yL10n.of(context).backspace,
                       excludeSemantics: true,
                       child: GestureDetector(
                       onTap: widget.onBackspace,

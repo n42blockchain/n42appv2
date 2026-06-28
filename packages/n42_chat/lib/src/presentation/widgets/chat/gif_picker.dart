@@ -7,6 +7,7 @@ import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/giphy_service.dart';
 import '../../../core/services/gif_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/debug_log.dart';
 import 'scheduled_send_picker.dart';
 
@@ -260,7 +261,7 @@ class _GifPickerState extends State<GifPicker> {
             suffixIcon: _searchController.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.clear, size: 18),
-                    tooltip: 'Clear search',
+                    tooltip: A11yL10n.of(context).clearSearch,
                     onPressed: () {
                       _searchController.clear();
                       _currentQuery = '';

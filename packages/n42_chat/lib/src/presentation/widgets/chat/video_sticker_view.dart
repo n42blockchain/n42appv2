@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../core/utils/a11y_l10n.dart';
+
 /// 视频贴纸渲染（WebM / MP4，循环静音自动播放）。
 ///
 /// 对标 Telegram 的 WebM/VP9 视频贴纸。
@@ -91,7 +93,7 @@ class _VideoStickerViewState extends State<VideoStickerView> {
       );
     }
     return Semantics(
-      label: 'Video sticker',
+      label: A11yL10n.of(context).videoSticker,
       image: true,
       child: FittedBox(
         fit: widget.fit,

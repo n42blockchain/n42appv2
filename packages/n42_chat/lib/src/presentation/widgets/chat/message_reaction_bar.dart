@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../domain/entities/message_reaction_entity.dart';
 
 /// 消息反应栏（显示在消息下方）
@@ -58,7 +59,7 @@ class _ReactionChip extends StatelessWidget {
     return Semantics(
       button: true,
       selected: hasReacted,
-      label: '${reaction.emoji} reaction, ${reaction.count}',
+      label: A11yL10n.of(context).reaction(reaction.emoji, reaction.count),
       excludeSemantics: true,
       child: GestureDetector(
       onTap: onTap,
@@ -115,7 +116,7 @@ class _AddReactionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Add reaction',
+      label: A11yL10n.of(context).addReaction,
       excludeSemantics: true,
       child: GestureDetector(
       onTap: onTap,

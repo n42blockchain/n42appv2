@@ -7,6 +7,7 @@ import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import 'video_sticker_view.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../data/datasources/bundled_sticker_packs.dart';
@@ -213,7 +214,7 @@ class _StickerPickerState extends State<StickerPicker> {
             if (_searchQuery.isNotEmpty)
               Semantics(
                 button: true,
-                label: 'Clear search',
+                label: A11yL10n.of(context).clearSearch,
                 excludeSemantics: true,
                 child: GestureDetector(
                   onTap: _clearSearch,
@@ -328,7 +329,9 @@ class _StickerPickerState extends State<StickerPicker> {
     return Semantics(
       button: true,
       selected: isSelected,
-      label: icon != null ? 'Sticker store' : (label ?? 'Sticker pack'),
+      label: icon != null
+          ? A11yL10n.of(context).stickerStore
+          : (label ?? A11yL10n.of(context).stickerPack),
       excludeSemantics: true,
       child: GestureDetector(
       onTap: onTap,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/message_markdown_utils.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import 'markdown_message_widget.dart';
@@ -140,7 +141,7 @@ class MessageBubble extends StatelessWidget {
                       children: [
                         // 发送失败图标（自己的消息，在气泡左侧）
                         if (isSelf && status == MessageStatus.failed) ...[
-                          _buildFailedIndicator(),
+                          _buildFailedIndicator(context),
                           const SizedBox(width: 4),
                         ],
 
@@ -157,7 +158,7 @@ class MessageBubble extends StatelessWidget {
                         // 发送中指示器（自己的消息，在气泡右侧）
                         if (isSelf && status == MessageStatus.sending) ...[
                           const SizedBox(width: 4),
-                          _buildSendingIndicator(),
+                          _buildSendingIndicator(context),
                         ],
                       ],
                     ),
@@ -295,9 +296,9 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildSendingIndicator() {
+  Widget _buildSendingIndicator(BuildContext context) {
     return Semantics(
-      label: 'Sending',
+      label: A11yL10n.of(context).sending,
       child: const SizedBox(
         width: 14,
         height: 14,
@@ -309,10 +310,10 @@ class MessageBubble extends StatelessWidget {
     );
   }
 
-  Widget _buildFailedIndicator() {
+  Widget _buildFailedIndicator(BuildContext context) {
     return Semantics(
       button: true,
-      label: 'Failed to send, tap to resend',
+      label: A11yL10n.of(context).failedToSendTapResend,
       excludeSemantics: true,
       child: GestureDetector(
         onTap: onResend,

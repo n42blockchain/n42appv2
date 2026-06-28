@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../domain/entities/message_entity.dart';
 import 'message_reaction_bar.dart';
 
@@ -407,7 +408,7 @@ class WeChatMessageMenu extends StatelessWidget {
         color: Colors.transparent,
         child: Semantics(
           button: true,
-          label: 'More reactions',
+          label: A11yL10n.of(context).moreReactions,
           excludeSemantics: true,
           child: InkWell(
           onTap: () {
