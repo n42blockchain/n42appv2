@@ -1433,5 +1433,6 @@
   "g_key_earn_stablecoin_desc": "Earn daily yield on USDC / USDT / DAI",
   "g_key_earn_stablecoin_deposit": "Deposit",
   "g_key_earn_stablecoin_empty": "No stablecoin markets available right now",
-  "g_key_earn_best_apy": "Best APY"
+  "g_key_earn_best_apy": "Best APY",
+  "g_key_nft_hide_spam": "Hide spam"
 }

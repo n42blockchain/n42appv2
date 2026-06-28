@@ -1422,5 +1422,6 @@
   "g_key_earn_stablecoin_desc": "經 Aave 賺取 USDC / USDT / DAI 活期收益",
   "g_key_earn_stablecoin_deposit": "存入",
   "g_key_earn_stablecoin_empty": "暫無可用的穩定幣市場",
-  "g_key_earn_best_apy": "最佳 APY"
+  "g_key_earn_best_apy": "最佳 APY",
+  "g_key_nft_hide_spam": "隱藏垃圾"
 }

@@ -11673,6 +11673,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Hide spam`
+  String get g_key_nft_hide_spam {
+    return Intl.message(
+      'Hide spam',
+      name: 'g_key_nft_hide_spam',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

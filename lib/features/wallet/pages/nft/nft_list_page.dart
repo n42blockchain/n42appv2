@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_detail_page.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
+import 'package:n42_wallet/features/wallet/utils/nft_gallery_utils.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 part 'nft_list_page_widgets.dart';
@@ -44,6 +45,8 @@ class _NftListPageState extends State<NftListPage> {
   _NftFilter _filter = _NftFilter.all;
   String _query = '';
   String? _loadErrorMessage;
+  // S4: 默认隐藏疑似垃圾/空投钓鱼 NFT。
+  bool _hideSpam = true;
 
   @override
   void initState() {
@@ -121,7 +124,19 @@ class _NftListPageState extends State<NftListPage> {
       }).toList();
     }
 
+    // S4: 隐藏疑似垃圾 NFT（启发式）。
+    if (_hideSpam) list = NftGalleryUtils.filterSpam(list);
+
     return list;
+  }
+
+  /// 当前过滤集合中被隐藏的垃圾 NFT 数量（用于角标提示）。
+  int get _spamCount {
+    final base = _nfts.where((n) => n.balance > 0).length;
+    final keptIfShown = _nfts
+        .where((n) => n.balance > 0 && !NftGalleryUtils.isLikelySpam(n))
+        .length;
+    return base - keptIfShown;
   }
 
   bool get _hasOrdinals {

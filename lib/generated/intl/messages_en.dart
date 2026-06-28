@@ -1734,6 +1734,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Floor"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Gallery"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage("Hide spam"),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage(
       "Inscription #",
     ),

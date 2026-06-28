@@ -1259,6 +1259,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("影片"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("地面"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT畫廊"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage("隱藏垃圾"),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("銘文#"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage("未找到 NFT"),
     "g_key_nft_no_url": MessageLookupByLibrary.simpleMessage("沒有可用的瀏覽器連結"),

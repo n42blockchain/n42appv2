@@ -69,48 +69,103 @@ extension _NftListPageWidgets on _NftListPageState {
         (_NftFilter.ordinals, S.of(context).g_key_nft_ordinals),
     ];
 
-    if (filters.length <= 1) return const SizedBox.shrink();
+    final showTypeFilters = filters.length > 1;
+    final showSpamToggle = _nfts.any((n) => n.balance > 0) && _spamCount > 0;
+    if (!showTypeFilters && !showSpamToggle) return const SizedBox.shrink();
 
     final accentColor = AppColorTokens.of(context).brand;
 
     return SizedBox(
       height: ScreenUtil().setWidth(52),
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
-        itemCount: filters.length,
-        separatorBuilder: (ctx, i) => SizedBox(width: AppSpacing.space2),
-        itemBuilder: (context, i) {
-          final (type, label) = filters[i];
-          final selected = _filter == type;
-          return Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: () => _updateView(() => _filter = type),
-              borderRadius: AppRadius.brMd,
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 150),
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space4,
-                  vertical: AppSpacing.space2,
-                ),
-                decoration: BoxDecoration(
-                  color: selected ? accentColor : accentColor.withAlpha(20),
-                  borderRadius: AppRadius.brMd,
-                ),
-                child: Text(
-                  label,
-                  style: AppTypography.caption.copyWith(
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-                    color: selected
-                        ? Colors.white
-                        : AppColorTokens.of(context).textPrimary,
-                  ),
-                ),
+      child: Row(
+        children: [
+          if (showTypeFilters)
+            Expanded(
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+                itemCount: filters.length,
+                separatorBuilder: (ctx, i) => SizedBox(width: AppSpacing.space2),
+                itemBuilder: (context, i) {
+                  final (type, label) = filters[i];
+                  final selected = _filter == type;
+                  return Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      onTap: () => _updateView(() => _filter = type),
+                      borderRadius: AppRadius.brMd,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 150),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppSpacing.space4,
+                          vertical: AppSpacing.space2,
+                        ),
+                        decoration: BoxDecoration(
+                          color:
+                              selected ? accentColor : accentColor.withAlpha(20),
+                          borderRadius: AppRadius.brMd,
+                        ),
+                        child: Text(
+                          label,
+                          style: AppTypography.caption.copyWith(
+                            fontWeight:
+                                selected ? FontWeight.w600 : FontWeight.normal,
+                            color: selected
+                                ? Colors.white
+                                : AppColorTokens.of(context).textPrimary,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
-            ),
-          );
-        },
+            )
+          else
+            const Spacer(),
+          if (showSpamToggle) _buildSpamToggle(context),
+          SizedBox(width: AppSpacing.space4),
+        ],
+      ),
+    );
+  }
+
+  /// S4: 隐藏/显示疑似垃圾 NFT 的开关。
+  Widget _buildSpamToggle(BuildContext context) {
+    final tokens = AppColorTokens.of(context);
+    final active = _hideSpam;
+    final color = active ? tokens.brand : tokens.textSubtitle;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _updateView(() => _hideSpam = !_hideSpam),
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
+          ),
+          decoration: BoxDecoration(
+            color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: color.withAlpha(60)),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                active ? Icons.shield : Icons.shield_outlined,
+                size: ScreenUtil().setWidth(16),
+                color: color,
+              ),
+              SizedBox(width: AppSpacing.space2),
+              Text(
+                '${S.of(context).g_key_nft_hide_spam} ($_spamCount)',
+                style: AppTypography.captionSm.copyWith(color: color),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
