@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
@@ -14,6 +15,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
+import 'package:n42_wallet/features/wallet/pages/send/scan_to_pay_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_settings_page.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_base_send.dart';
@@ -21,7 +23,9 @@ import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_ens.dart
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_form.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_gas.dart';
 import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_logic.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
+import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/address_validator.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_confirm_dialog.dart';
@@ -32,8 +36,14 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 class WalletChainSend extends ConsumerStatefulWidget {
   final CoinModel coinModel;
   final String? initialToAddress;
+  final String? initialAmount;
 
-  const WalletChainSend(this.coinModel, {this.initialToAddress, super.key});
+  const WalletChainSend(
+    this.coinModel, {
+    this.initialToAddress,
+    this.initialAmount,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletChainSend> createState() => _WalletChainSendState();
@@ -80,7 +90,9 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   @override
   void initState() {
     super.initState();
-    valueTextEditingController.text = '0';
+    valueTextEditingController.text = widget.initialAmount?.isNotEmpty == true
+        ? widget.initialAmount!
+        : '0';
     toTextEditingController.addListener(_onAddressInputChanged);
     if (widget.initialToAddress?.isNotEmpty == true) {
       toTextEditingController.text = widget.initialToAddress!;
@@ -185,21 +197,64 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   Widget buildWalletBaseSend(TransationRecordModel trModel, String chainUnit) =>
       WalletBaseSend(trModel, null, chainUnit);
 
-  void scanQR() async {
+  Future<void> scanQR() async {
     final scanValue = await Navigator.push<String>(
       context,
       MaterialPageRoute(builder: (_) => ScanPage()),
     );
     if (!mounted) return;
     if (scanValue != null) {
-      toTextEditingController.text = scanValue;
-      if (!EnsService.isEnsName(scanValue)) {
-        setState(() {
-          ensStatus = EnsResolveStatus.idle;
-          ensResult = null;
-        });
-      }
-      toAddressCheck(scanValue);
+      await _applyScannedValue(scanValue);
+    }
+  }
+
+  Future<void> _applyScannedValue(String scanValue) async {
+    final request = Eip681.parse(scanValue);
+    if (request == null) {
+      _setRecipient(scanValue);
+      await toAddressCheck(scanValue);
+      return;
+    }
+
+    final resolution = ScanToPayResolver.resolve(
+      request: request,
+      coinModels: ref.read(wapBridgeProvider).coinList.whereType<CoinModel>(),
+      currentCoin: widget.coinModel,
+    );
+    if (resolution == null) {
+      ToastUtils.show('Payment request token or chain is not in this wallet');
+      return;
+    }
+
+    if (!ScanToPayResolver.sameAsset(widget.coinModel, resolution.coinModel)) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WalletChainSend(
+            resolution.coinModel,
+            initialToAddress: resolution.recipient,
+            initialAmount: resolution.amount,
+          ),
+        ),
+      );
+      return;
+    }
+
+    _setRecipient(resolution.recipient);
+    if (resolution.amount != null) {
+      valueTextEditingController.text = resolution.amount!;
+      amountCheck(value: resolution.amount!);
+    }
+    await toAddressCheck(resolution.recipient);
+  }
+
+  void _setRecipient(String address) {
+    toTextEditingController.text = address;
+    if (!EnsService.isEnsName(address)) {
+      setState(() {
+        ensStatus = EnsResolveStatus.idle;
+        ensResult = null;
+      });
     }
   }
 
@@ -210,6 +265,10 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       onAddressSelected: (addr) {
         toTextEditingController.text = addr;
         toAddressCheck(addr);
+      },
+      onScanQR: () async {
+        Navigator.pop(context);
+        await scanQR();
       },
     );
   }

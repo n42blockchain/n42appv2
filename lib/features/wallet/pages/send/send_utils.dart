@@ -62,7 +62,9 @@ Widget buildUsdEquivalent(
     ),
     child: Text(
       '≈ $usdStr',
-      style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+      style: AppTypography.caption.copyWith(
+        color: AppColorTokens.of(context).textSubtitle,
+      ),
     ),
   );
 }
@@ -113,7 +115,9 @@ Future<void> showAddressPickerSheet(
       MaterialPageRoute(builder: (_) => ScanPage()),
     );
     if (!context.mounted) return;
-    if (scanValue != null) onAddressSelected(scanValue as String);
+    if (scanValue != null) {
+      onAddressSelected(Eip681.resolveRecipient(scanValue as String));
+    }
     if (context.mounted) Navigator.pop(context);
   }
 
@@ -268,10 +272,7 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
             return Padding(
               padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
               child: ActionChip(
-                label: Text(
-                  label,
-                  style: AppTypography.caption,
-                ),
+                label: Text(label, style: AppTypography.caption),
                 onPressed: () => widget.onSelected(entry.address),
               ),
             );
