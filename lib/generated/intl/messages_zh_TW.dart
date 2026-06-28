@@ -1278,6 +1278,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("代幣ID"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("類型"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("其他"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage("密碼不匹配"),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),

@@ -38,7 +38,7 @@ H1 2026 市场跑出**三条新赛道**，加上四款新增竞品的锋芒，N4
 | S1 | ~~**稳定币活期收益入口（Stablecoin Earn）**~~ ✅ **v1 完成 2026-06-28** | 纯 `StablecoinEarnUtils`（识别稳定币 + 按 APY 降序，5 单测）+ `StablecoinEarnPage`（聚合 Aave V3 四链 USDC/USDT/DAI 供给市场，按 APY 排序，「存入」接既有 `LendingPage` Supply——顺带把此前未接线的 LendingPage 接入导航）+ earn 推荐区入口卡 + 5 l10n key（en/zh_TW）。`flutter analyze` 净。后续可扩多协议/活期赎回 UX | Trust Stablecoin Earn |
 | S2 | **AI 钱包助手（只读 + 建议，第一步）** | chat 有 AI 助手；钱包侧无 | 钱包内 AI 面板：查询余额/持仓/Gas、解读交易、**建议**（非代执行）swap/转账参数；接已有云端 AI 通道 + 钱包桥读接口 | Binance AI Wallet（雏形）|
 | S3 | **EIP-7702 重定位 + Session Key 差异化** | "唯一支持"已失效（§15.1）| 文案/引导改为"AA 完整度领先"：突出 **Session Key 细粒度授权 + 4 Account + 社交恢复 + Passkey 签名** 组合（竞品普遍只有 7702 升级）；纯文案/UI | MetaMask/OKX 已有 7702 |
-| S4 | ~~**NFT 高级管理**~~ 🚧 **v1 完成 2026-06-28** | 纯 `NftGalleryUtils`（垃圾 NFT 启发式 + 按系列分组，6 单测）+ NFT 列表默认**隐藏疑似垃圾/空投钓鱼 NFT** 开关（带数量角标）。剩余：分组视图渲染、批量选择转移、收藏（v2）| Phantom / Rabby |
+| S4 | ~~**NFT 高级管理**~~ 🚧 **v1 完成 2026-06-28** | 纯 `NftGalleryUtils`（垃圾 NFT 启发式 + 按系列分组，6 单测）+ NFT 列表默认**隐藏疑似垃圾/空投钓鱼 NFT** 开关（带数量角标）。**v2**：**按系列分组视图**开关（`CustomScrollView` 每组系列标题+计数+2 列网格，复用 `groupByCollection`）。剩余：批量选择转移、收藏 | Phantom / Rabby |
 | S5 | ~~**多链长尾扩展（高价值优先）**~~ 🚧 **v1 完成 2026-06-28** | `PopularChainPresets` 10 条主流非内置 EVM 链预设（Scroll/Blast/Mantle/Mode/Gnosis/Celo/Polygon zkEVM/Metis/Cronos/Fantom，规范公共 RPC）+ 添加自定义链页「热门链」一键填表（提交仍走 `addChain` 的 eth_chainId 校验 + 拒内置/重复）+ 4 单测。剩余：非 EVM 长尾、链图标 | Bitget 130 / Phantom 8+ |
 | S6 | **keyless 入门引导打磨** | 有 MPC(Web3Auth)+Passkey，流程分散 | 新手"无私钥/社交登录→Passkey 解锁"一条龙引导，弱化助记词门槛；纯客户端 | Bitget/Binance keyless |
 | S7 | **Swap 聚合广度 + 报价对比增强** | DEX+AST 双引擎 | 接更多聚合源（LI.FI 已有→加 1inch/0x/Jupiter(SOL)）、多源报价并排 + 最优高亮；按 source 增量 | OKX 400+ / Bitget Super DEX |

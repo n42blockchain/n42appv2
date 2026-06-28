@@ -47,6 +47,8 @@ class _NftListPageState extends State<NftListPage> {
   String? _loadErrorMessage;
   // S4: 默认隐藏疑似垃圾/空投钓鱼 NFT。
   bool _hideSpam = true;
+  // S4 v2: 按系列分组视图。
+  bool _groupByCollection = false;
 
   @override
   void initState() {
@@ -170,7 +172,9 @@ class _NftListPageState extends State<NftListPage> {
                   return buildEmpty(context);
                 }
 
-                return buildGrid(context, filtered);
+                return _groupByCollection
+                    ? buildGroupedView(context, filtered)
+                    : buildGrid(context, filtered);
               },
             ),
           ),

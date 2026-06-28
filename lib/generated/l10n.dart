@@ -11683,6 +11683,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Others`
+  String get g_key_nft_uncategorized {
+    return Intl.message(
+      'Others',
+      name: 'g_key_nft_uncategorized',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

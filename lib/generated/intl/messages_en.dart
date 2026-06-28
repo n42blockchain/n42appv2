@@ -1759,6 +1759,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("Token ID"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Type"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("Others"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match",
     ),

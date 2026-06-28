@@ -69,9 +69,10 @@ extension _NftListPageWidgets on _NftListPageState {
         (_NftFilter.ordinals, S.of(context).g_key_nft_ordinals),
     ];
 
+    final hasNfts = _nfts.any((n) => n.balance > 0);
     final showTypeFilters = filters.length > 1;
-    final showSpamToggle = _nfts.any((n) => n.balance > 0) && _spamCount > 0;
-    if (!showTypeFilters && !showSpamToggle) return const SizedBox.shrink();
+    final showSpamToggle = hasNfts && _spamCount > 0;
+    if (!hasNfts) return const SizedBox.shrink();
 
     final accentColor = AppColorTokens.of(context).brand;
 
@@ -123,9 +124,41 @@ extension _NftListPageWidgets on _NftListPageState {
             )
           else
             const Spacer(),
+          _buildGroupToggle(context),
+          SizedBox(width: AppSpacing.space2),
           if (showSpamToggle) _buildSpamToggle(context),
           SizedBox(width: AppSpacing.space4),
         ],
+      ),
+    );
+  }
+
+  /// S4 v2: 按系列分组视图开关。
+  Widget _buildGroupToggle(BuildContext context) {
+    final tokens = AppColorTokens.of(context);
+    final active = _groupByCollection;
+    final color = active ? tokens.brand : tokens.textSubtitle;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => _updateView(() => _groupByCollection = !_groupByCollection),
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
+          ),
+          decoration: BoxDecoration(
+            color: active ? tokens.brand.withAlpha(20) : Colors.transparent,
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: color.withAlpha(60)),
+          ),
+          child: Icon(
+            active ? Icons.dashboard : Icons.dashboard_outlined,
+            size: ScreenUtil().setWidth(16),
+            color: color,
+          ),
+        ),
       ),
     );
   }
@@ -237,6 +270,66 @@ extension _NftListPageWidgets on _NftListPageState {
       ),
       itemCount: nfts.length,
       itemBuilder: (context, index) => _buildNftCard(context, nfts[index]),
+    );
+  }
+
+  /// S4 v2: 按系列分组渲染（每组系列标题 + 2 列网格）。
+  Widget buildGroupedView(BuildContext context, List<NftModel> nfts) {
+    final groups = NftGalleryUtils.groupByCollection(nfts);
+    final su = ScreenUtil();
+    return CustomScrollView(
+      slivers: [
+        for (final g in groups) ...[
+          SliverPadding(
+            padding: EdgeInsets.fromLTRB(
+              AppSpacing.space4,
+              AppSpacing.space4,
+              AppSpacing.space4,
+              AppSpacing.space2,
+            ),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      g.name == NftGalleryUtils.uncategorized
+                          ? S.of(context).g_key_nft_uncategorized
+                          : g.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.bodyStrong.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '${g.items.length}',
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textSubtitle,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: su.setWidth(12),
+                mainAxisSpacing: su.setWidth(12),
+                childAspectRatio: 0.75,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, i) => _buildNftCard(context, g.items[i]),
+                childCount: g.items.length,
+              ),
+            ),
+          ),
+        ],
+        SliverToBoxAdapter(child: SizedBox(height: AppSpacing.space8)),
+      ],
     );
   }
 
