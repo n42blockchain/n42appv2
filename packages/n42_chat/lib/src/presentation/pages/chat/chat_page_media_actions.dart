@@ -17,6 +17,23 @@ class _PersistedScheduledAttachment {
 extension _ChatPageMediaActionsMethods on _ChatPageState {
   static const int _maxEncryptedRoomFileBytes = 64 * 1024 * 1024;
 
+  /// 打开白板/涂鸦页，绘制结果栅格化为 PNG 后走图片发送链路。
+  Future<void> _openWhiteboard() async {
+    final bytes = await Navigator.of(context).push<Uint8List>(
+      MaterialPageRoute<Uint8List>(
+        builder: (_) => const WhiteboardPage(),
+        fullscreenDialog: true,
+      ),
+    );
+    if (!mounted || bytes == null || bytes.isEmpty) return;
+    final image = XFile.fromData(
+      bytes,
+      name: 'whiteboard.png',
+      mimeType: 'image/png',
+    );
+    await _sendImage(image);
+  }
+
   Future<void> _pickImage({DateTime? scheduledAt}) async {
     try {
       final picker = ImagePicker();

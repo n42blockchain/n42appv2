@@ -104,6 +104,9 @@ class ChatMorePanel extends StatefulWidget {
   /// 打赏
   final VoidCallback? onTipPressed;
 
+  /// 白板 / 涂鸦
+  final VoidCallback? onWhiteboardPressed;
+
   const ChatMorePanel({
     super.key,
     this.onPhotoPressed,
@@ -137,6 +140,7 @@ class ChatMorePanel extends StatefulWidget {
     this.onMiniAppsPressed,
     this.onCodePressed,
     this.onTipPressed,
+    this.onWhiteboardPressed,
   });
 
   @override
@@ -349,6 +353,12 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
                           S.of(context)?.scheduledMessageLabel ?? 'Scheduled',
                       onTap: widget.onScheduledPressed,
                       iconColor: AppColors.primary,
+                    ),
+                    _MoreItem(
+                      icon: Icons.draw_outlined,
+                      label: 'Whiteboard',
+                      onTap: widget.onWhiteboardPressed,
+                      iconColor: Colors.brown,
                     ),
                     if (widget.onAiAssistantPressed != null)
                       _MoreItem(

@@ -130,6 +130,7 @@ import '../transfer/receive_page.dart';
 import '../transfer/transfer_page.dart';
 import '../../../core/utils/debug_log.dart';
 import '../../../core/utils/a11y_l10n.dart';
+import 'whiteboard_page.dart';
 
 part 'chat_page_app_bar.dart';
 part 'chat_page_message_list.dart';
