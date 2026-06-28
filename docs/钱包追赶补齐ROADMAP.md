@@ -42,7 +42,7 @@ H1 2026 市场跑出**三条新赛道**，加上四款新增竞品的锋芒，N4
 | S5 | ~~**多链长尾扩展（高价值优先）**~~ 🚧 **v1 完成 2026-06-28** | `PopularChainPresets` 10 条主流非内置 EVM 链预设（Scroll/Blast/Mantle/Mode/Gnosis/Celo/Polygon zkEVM/Metis/Cronos/Fantom，规范公共 RPC）+ 添加自定义链页「热门链」一键填表（提交仍走 `addChain` 的 eth_chainId 校验 + 拒内置/重复）+ 4 单测。**v2**：预设按已添加链过滤（`available()` 读 `getCustomChains`，已加/内置不再出现）。剩余：非 EVM 长尾、链图标 | Bitget 130 / Phantom 8+ |
 | S6 | **keyless 入门引导打磨** | 有 MPC(Web3Auth)+Passkey，流程分散 | 新手"无私钥/社交登录→Passkey 解锁"一条龙引导，弱化助记词门槛；纯客户端 | Bitget/Binance keyless |
 | S7 | **Swap 聚合广度 + 报价对比增强** | DEX+AST 双引擎 | 接更多聚合源（LI.FI 已有→加 1inch/0x/Jupiter(SOL)）、多源报价并排 + 最优高亮；按 source 增量 | OKX 400+ / Bitget Super DEX |
-| S8 | ~~**交易模拟可读化补强**~~ 🚧 **v1 完成 2026-06-28** | `signature_decoder` 扩展高价值/高风险 selector 识别：增/减授权额度、ERC-1155 转移、WETH wrap/unwrap、Uniswap V3 swap(exactInput/Output) + 风险分级 + 6 单测。剩余：资产变动 diff 预览（需 simulation 后端，见 M3）| Rabby |
+| S8 | ~~**交易模拟可读化补强**~~ 🚧 **v1 完成 2026-06-28** | `signature_decoder` 扩展高价值/高风险 selector 识别：增/减授权额度、ERC-1155 转移、WETH wrap/unwrap、Uniswap V3 swap(exactInput/Output) + 风险分级 + 6 单测。**v2**：+ **Permit2 授权(danger)**、**Seaport NFT 订单**、**Lido 质押**、Multicall3 aggregate3（10 单测）。剩余：资产变动 diff 预览（需 simulation 后端，见 M3）| Rabby |
 | S9 | **桌面/设计打磨（持续）** | mac/Win 桌面已有 | 接入设计令牌、键盘快捷键、窗口态、列表虚拟化；与 chat 的 design_system 复用 | Exodus 设计 |
 
 ---

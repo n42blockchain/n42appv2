@@ -44,4 +44,26 @@ void main() {
     expect(r.riskLevel, TxRiskLevel.caution);
     expect(r.warnings, isNotEmpty);
   });
+
+  test('Permit2 approve -> danger', () {
+    final r = SignatureDecoder.decodeContractCall(calldata: _call('87517c45'));
+    expect(r.title, 'Permit2 Approval');
+    expect(r.riskLevel, TxRiskLevel.danger);
+  });
+
+  test('Seaport fulfillBasicOrder -> NFT Order', () {
+    final r = SignatureDecoder.decodeContractCall(calldata: _call('fb0f3ee1'));
+    expect(r.title, 'NFT Order (Seaport)');
+  });
+
+  test('Lido submit -> Stake ETH', () {
+    final r = SignatureDecoder.decodeContractCall(calldata: _call('a1903eab'));
+    expect(r.title, 'Stake ETH (Lido)');
+    expect(r.riskLevel, TxRiskLevel.safe);
+  });
+
+  test('Multicall3 aggregate3 -> Multicall', () {
+    final r = SignatureDecoder.decodeContractCall(calldata: _call('82ad56cb'));
+    expect(r.title, 'Multicall (Batch)');
+  });
 }

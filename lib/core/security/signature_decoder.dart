@@ -247,12 +247,60 @@ class SignatureDecoder {
       // ── Multicall ──
       case 'ac9650d8':
       case '5ae401dc':
+      case '82ad56cb': // Multicall3 aggregate3
         return SignatureDecodedResult(
           title: 'Multicall (Batch)',
           description: 'Multiple operations in a single transaction',
           riskLevel: TxRiskLevel.caution,
           fields: [],
           warnings: ['Contains multiple bundled operations — review each carefully'],
+        );
+
+      // ── Permit2（Uniswap 通用授权，常见于现代 swap）──
+      case '87517c45': // approve(token,spender,amount,expiration)
+      case '2b67b570': // permit(...) single
+      case '2a2d80d1': // permit(...) batch
+        return SignatureDecodedResult(
+          title: 'Permit2 Approval',
+          description: 'Grants Permit2 permission to move your tokens',
+          riskLevel: TxRiskLevel.danger,
+          fields: [
+            if (contractAddress != null)
+              DecodedField('Permit2', _shortAddress(contractAddress)),
+          ],
+          warnings: [
+            'Permit2 can transfer the approved token on your behalf',
+            'Verify the spender, amount and expiration carefully',
+          ],
+        );
+
+      // ── Seaport（OpenSea NFT 订单）──
+      case 'fb0f3ee1': // fulfillBasicOrder
+      case 'b3a34c4c': // fulfillOrder
+      case 'e7acab24': // fulfillAdvancedOrder
+      case '87201b41': // fulfillAvailableAdvancedOrders
+        return SignatureDecodedResult(
+          title: 'NFT Order (Seaport)',
+          description: 'Fulfills an NFT marketplace order',
+          riskLevel: TxRiskLevel.caution,
+          fields: [
+            if (value != null && value != '0x0')
+              DecodedField('ETH Value', _formatWei(value)),
+          ],
+          warnings: ['Review the NFT, price and fees before confirming'],
+        );
+
+      // ── Lido 质押 ──
+      case 'a1903eab': // submit(address)
+        return SignatureDecodedResult(
+          title: 'Stake ETH (Lido)',
+          description: 'Stakes ETH for stETH via Lido',
+          riskLevel: TxRiskLevel.safe,
+          fields: [
+            if (value != null && value != '0x0')
+              DecodedField('Amount', _formatWei(value)),
+          ],
+          warnings: [],
         );
 
       default:
