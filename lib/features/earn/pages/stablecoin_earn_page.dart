@@ -46,10 +46,11 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
   @override
   void initState() {
     super.initState();
-    _load();
+    _load(initial: true);
   }
 
-  Future<void> _load() async {
+  Future<void> _load({bool initial = false}) async {
+    if (initial && mounted) setState(() => _loading = true);
     final results = await Future.wait(
       _chains.entries.map((e) async {
         try {
@@ -90,7 +91,18 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator())
-          : (_entries.isEmpty ? _buildEmpty(context) : _buildList(context)),
+          : RefreshIndicator(
+              onRefresh: _load,
+              child: _entries.isEmpty
+                  ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        SizedBox(height: ScreenUtil().setWidth(120)),
+                        _buildEmpty(context),
+                      ],
+                    )
+                  : _buildList(context),
+            ),
     );
   }
 
@@ -125,6 +137,7 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
     final tokens = AppColorTokens.of(context);
     final best = _entries.first.reserve.supplyApy;
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: EdgeInsets.all(su.setWidth(20)),
       children: [
         // 顶部说明 + 最佳 APY
@@ -207,7 +220,7 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
                   ),
                 ),
                 Text(
-                  e.chainName,
+                  '${e.chainName} · TVL ${_formatUsd(e.reserve.totalLiquidityUsd)}',
                   style: AppTypography.caption.copyWith(
                     color: tokens.textSubtitle,
                   ),
@@ -248,6 +261,14 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
         ],
       ),
     );
+  }
+
+  /// 紧凑 USD 金额（如 $1.2M / $345K）。
+  static String _formatUsd(double v) {
+    if (v >= 1e9) return '\$${(v / 1e9).toStringAsFixed(1)}B';
+    if (v >= 1e6) return '\$${(v / 1e6).toStringAsFixed(1)}M';
+    if (v >= 1e3) return '\$${(v / 1e3).toStringAsFixed(1)}K';
+    return '\$${v.toStringAsFixed(0)}';
   }
 
   void _openLending(int chainId) {
