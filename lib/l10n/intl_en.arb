@@ -1428,5 +1428,10 @@
   "g_pred_err_not_resolved": "Market not resolved, cannot redeem",
   "g_pred_err_market_not_found": "Market not found",
   "g_pred_redeem_failed": "Redeem failed: {reason}",
-  "@g_pred_redeem_failed": {"placeholders":{"reason":{}}}
+  "@g_pred_redeem_failed": {"placeholders":{"reason":{}}},
+  "g_key_earn_stablecoin_title": "Stablecoin Earn",
+  "g_key_earn_stablecoin_desc": "Earn daily yield on USDC / USDT / DAI",
+  "g_key_earn_stablecoin_deposit": "Deposit",
+  "g_key_earn_stablecoin_empty": "No stablecoin markets available right now",
+  "g_key_earn_best_apy": "Best APY"
 }

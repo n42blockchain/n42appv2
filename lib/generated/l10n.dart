@@ -11623,6 +11623,56 @@ class S {
       args: [reason],
     );
   }
+
+  /// `Stablecoin Earn`
+  String get g_key_earn_stablecoin_title {
+    return Intl.message(
+      'Stablecoin Earn',
+      name: 'g_key_earn_stablecoin_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn daily yield on USDC / USDT / DAI`
+  String get g_key_earn_stablecoin_desc {
+    return Intl.message(
+      'Earn daily yield on USDC / USDT / DAI',
+      name: 'g_key_earn_stablecoin_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Deposit`
+  String get g_key_earn_stablecoin_deposit {
+    return Intl.message(
+      'Deposit',
+      name: 'g_key_earn_stablecoin_deposit',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No stablecoin markets available right now`
+  String get g_key_earn_stablecoin_empty {
+    return Intl.message(
+      'No stablecoin markets available right now',
+      name: 'g_key_earn_stablecoin_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Best APY`
+  String get g_key_earn_best_apy {
+    return Intl.message(
+      'Best APY',
+      name: 'g_key_earn_best_apy',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

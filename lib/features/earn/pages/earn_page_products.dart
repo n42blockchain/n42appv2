@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page_logic.dart';
+import 'package:n42_wallet/features/earn/pages/stablecoin_earn_page.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 
 /// 产品区域 mixin：活跃产品列表、推荐产品列表
@@ -290,6 +291,21 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
             style: AppTypography.headline.copyWith(color: mainText),
           ),
           SizedBox(height: su.setWidth(16)),
+          _buildRecommendedItem(
+            context,
+            name: s.g_key_earn_stablecoin_title,
+            description: s.g_key_earn_stablecoin_desc,
+            apy: s.g_key_earn_best_apy,
+            color: const Color(0xFF26A17B),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) =>
+                    StablecoinEarnPage(walletAddress: walletAddress),
+              ),
+            ),
+          ),
+          SizedBox(height: su.setWidth(12)),
           _buildRecommendedItem(
             context,
             name: 'ETH ${s.g_key_stake_title}',

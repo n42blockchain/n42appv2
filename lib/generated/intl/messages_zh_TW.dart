@@ -833,6 +833,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("您收到"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage("活躍產品"),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("批次"),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage("最佳 APY"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("燒傷"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("買N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
@@ -856,6 +857,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("快速工具"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("受到推崇的"),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage("選擇兌換類型"),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage("存入"),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "經 Aave 賺取 USDC / USDT / DAI 活期收益",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "暫無可用的穩定幣市場",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "穩定幣活期",
+    ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "用 Lido 質押 ETH",
     ),

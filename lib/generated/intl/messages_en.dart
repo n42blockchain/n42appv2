@@ -1094,6 +1094,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Active Products",
     ),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Batch"),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage("Best APY"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Burn"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Buy N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
@@ -1130,6 +1131,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Select Swap Type",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Deposit",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "Earn daily yield on USDC / USDT / DAI",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "No stablecoin markets available right now",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Stablecoin Earn",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Stake ETH with Lido",

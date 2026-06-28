@@ -35,7 +35,7 @@ H1 2026 市场跑出**三条新赛道**，加上四款新增竞品的锋芒，N4
 
 | # | 任务 | 现状 / 差距 | 做法 / 依赖 | 对标 |
 |---|---|---|---|---|
-| S1 | **稳定币活期收益入口（Stablecoin Earn）** | 已有 `earn` + Aave V3 集成，但无"稳定币一键活期"聚合 UX | 在 `features/earn` 聚合现有 Aave/协议的 USDT/USDC/DAI 供给 APY，做"稳定币赚币"卡片 + 一键存取；纯客户端，复用 `aave_service` | Trust Stablecoin Earn |
+| S1 | ~~**稳定币活期收益入口（Stablecoin Earn）**~~ ✅ **v1 完成 2026-06-28** | 纯 `StablecoinEarnUtils`（识别稳定币 + 按 APY 降序，5 单测）+ `StablecoinEarnPage`（聚合 Aave V3 四链 USDC/USDT/DAI 供给市场，按 APY 排序，「存入」接既有 `LendingPage` Supply——顺带把此前未接线的 LendingPage 接入导航）+ earn 推荐区入口卡 + 5 l10n key（en/zh_TW）。`flutter analyze` 净。后续可扩多协议/活期赎回 UX | Trust Stablecoin Earn |
 | S2 | **AI 钱包助手（只读 + 建议，第一步）** | chat 有 AI 助手；钱包侧无 | 钱包内 AI 面板：查询余额/持仓/Gas、解读交易、**建议**（非代执行）swap/转账参数；接已有云端 AI 通道 + 钱包桥读接口 | Binance AI Wallet（雏形）|
 | S3 | **EIP-7702 重定位 + Session Key 差异化** | "唯一支持"已失效（§15.1）| 文案/引导改为"AA 完整度领先"：突出 **Session Key 细粒度授权 + 4 Account + 社交恢复 + Passkey 签名** 组合（竞品普遍只有 7702 升级）；纯文案/UI | MetaMask/OKX 已有 7702 |
 | S4 | **NFT 高级管理** | 列表/详情/发送（基础）| 加**分组/分类/收藏/隐藏垃圾 NFT** + 系列聚合 + 批量选择转移（Rabby 式）；纯客户端 | Phantom / Rabby |
