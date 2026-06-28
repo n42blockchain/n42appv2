@@ -5,6 +5,14 @@
 > **本季已真补的**（代码块/待办/短视频/订阅/打赏/法币/实时字幕/系统集成/本地AI路由/
 > MLS crate/虚拟背景本地合成/通话E2EE/表情贴纸GIF）**不再列为缺口**；其移动端
 > 打包/真机验证若未完成，归入对应类别。
+>
+> **✅ chat 仓同步状态（2026-06-28）**：#33 无障碍（全链路 Semantics + live-region +
+> A11yL10n 三语种 l10n）、#30 白板/涂鸦、#31 圆形视频留言、#32 Web 列表性能首批
+> **已同步到独立 chat 仓** `github.com/n42blockchain/n42_chat` 分支
+> `feat/chat-appearance-host-sync@186b6a3`（isolated patch 反向同步，`dart analyze`
+> 净 + 19 单测全过），D/C 两本地克隆与 vendored `packages/n42_chat`（app 构建源，
+> 已推 Gitee）三方一致。app `pubspec.yaml` git ref 仍 `98fb3816`（被 pubspec_overrides
+> 架空、不影响构建，未 bump）。
 
 ## 近期（纯客户端可做 / 已派待验 / 低成本高感知）
 
