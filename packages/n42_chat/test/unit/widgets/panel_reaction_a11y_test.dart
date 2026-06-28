@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/chat_more_panel.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/message_reaction_bar.dart';
@@ -12,13 +11,11 @@ void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   testWidgets('attachment grid items are labeled buttons', (tester) async {
-    await tester.pumpWidget(
-      wrap(ChatMorePanel(onTransferPressed: () {})),
-    );
+    await tester.pumpWidget(wrap(ChatMorePanel(onTransferPressed: () {})));
 
     // 'Transfer'（commonTransfer 的英文兜底）在首页第一行，稳定可断言。
     final node = tester.getSemantics(find.bySemanticsLabel('Transfer'));
-    expect(node.hasFlag(SemanticsFlag.isButton), isTrue);
+    expect(node.flagsCollection.isButton, isTrue);
   });
 
   testWidgets('quick reaction emojis are labeled buttons', (tester) async {
