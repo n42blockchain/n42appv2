@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
+import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
@@ -78,8 +79,10 @@ Future<void> performScanQR(
   );
   if (!context.mounted) return;
   if (scanValue != null) {
-    controller.text = scanValue;
-    onAddress(scanValue);
+    // M2: 若扫到 EIP-681 支付请求，取其收款地址而非原始 URI。
+    final address = Eip681.resolveRecipient(scanValue);
+    controller.text = address;
+    onAddress(address);
   }
 }
 
