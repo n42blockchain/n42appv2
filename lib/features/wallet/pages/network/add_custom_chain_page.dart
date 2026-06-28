@@ -34,6 +34,25 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
   bool _lookingUp = false;
   String? _error;
   String? _rpcStatus; // 'valid', 'invalid', null
+  // S5 v2: 已添加的自定义链 ID（用于过滤已添加的预设）。
+  List<int> _existingChainIds = const [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadExistingChains();
+  }
+
+  Future<void> _loadExistingChains() async {
+    try {
+      final chains = await CustomChainService.getCustomChains();
+      if (mounted) {
+        setState(() => _existingChainIds = chains.map((c) => c.chainId).toList());
+      }
+    } catch (_) {
+      // 忽略：预设仍会过滤内置链，已添加项最多重复（addChain 会拒绝）。
+    }
+  }
 
   @override
   void dispose() {
@@ -330,7 +349,7 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
   }
 
   Widget _buildPresets() {
-    final presets = PopularChainPresets.all();
+    final presets = PopularChainPresets.available(_existingChainIds);
     if (presets.isEmpty) return const SizedBox.shrink();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
