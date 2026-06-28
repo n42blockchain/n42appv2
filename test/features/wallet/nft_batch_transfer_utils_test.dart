@@ -1,0 +1,66 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/features/wallet/models/nft_model.dart';
+import 'package:n42_wallet/features/wallet/pages/nft/nft_batch_transfer_utils.dart';
+
+void main() {
+  NftModel nft({
+    String nftId = 'nft-1',
+    String chain = 'ethereum',
+    String contract = '0xContract',
+    String tokenId = '1',
+    String type = 'ERC721',
+  }) {
+    return NftModel(
+      nftId: nftId,
+      name: 'Test NFT',
+      contractAddress: contract,
+      tokenId: tokenId,
+      nftType: type,
+      balance: 1,
+      chain: chain,
+    );
+  }
+
+  test('isBatchTransferable only allows EVM ERC721/ERC1155 with ids', () {
+    expect(NftBatchTransferUtils.isBatchTransferable(nft()), isTrue);
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(type: 'ERC1155')),
+      isTrue,
+    );
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(chain: 'solana')),
+      isFalse,
+    );
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(chain: 'bitcoin')),
+      isFalse,
+    );
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(contract: '')),
+      isFalse,
+    );
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(tokenId: '')),
+      isFalse,
+    );
+    expect(
+      NftBatchTransferUtils.isBatchTransferable(nft(type: 'INSCRIPTION')),
+      isFalse,
+    );
+  });
+
+  test('selectionKey falls back to chain contract token and type', () {
+    final model = nft(
+      nftId: '',
+      chain: 'ethereum',
+      contract: '0xABCDEF',
+      tokenId: '42',
+      type: 'ERC1155',
+    );
+
+    expect(
+      NftBatchTransferUtils.selectionKey(model),
+      'ethereum:0xabcdef:42:ERC1155',
+    );
+  });
+}

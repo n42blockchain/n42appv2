@@ -86,7 +86,8 @@ extension _NftListPageWidgets on _NftListPageState {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
                 itemCount: filters.length,
-                separatorBuilder: (ctx, i) => SizedBox(width: AppSpacing.space2),
+                separatorBuilder: (ctx, i) =>
+                    SizedBox(width: AppSpacing.space2),
                 itemBuilder: (context, i) {
                   final (type, label) = filters[i];
                   final selected = _filter == type;
@@ -102,15 +103,17 @@ extension _NftListPageWidgets on _NftListPageState {
                           vertical: AppSpacing.space2,
                         ),
                         decoration: BoxDecoration(
-                          color:
-                              selected ? accentColor : accentColor.withAlpha(20),
+                          color: selected
+                              ? accentColor
+                              : accentColor.withAlpha(20),
                           borderRadius: AppRadius.brMd,
                         ),
                         child: Text(
                           label,
                           style: AppTypography.caption.copyWith(
-                            fontWeight:
-                                selected ? FontWeight.w600 : FontWeight.normal,
+                            fontWeight: selected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
                             color: selected
                                 ? Colors.white
                                 : AppColorTokens.of(context).textPrimary,
@@ -141,7 +144,8 @@ extension _NftListPageWidgets on _NftListPageState {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: () => _updateView(() => _groupByCollection = !_groupByCollection),
+        onTap: () =>
+            _updateView(() => _groupByCollection = !_groupByCollection),
         borderRadius: AppRadius.brMd,
         child: Container(
           padding: EdgeInsets.symmetric(
@@ -336,27 +340,81 @@ extension _NftListPageWidgets on _NftListPageState {
   Widget _buildNftCard(BuildContext context, NftModel nft) {
     final su = ScreenUtil();
     final radius = BorderRadius.circular(su.setWidth(12));
+    final selected = _isSelected(nft);
+    final selectable = NftBatchTransferUtils.isBatchTransferable(nft);
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => NftDetailPage(nft, widget.coinModel)),
-      ),
+      onLongPress: () => _toggleSelection(nft),
+      onTap: () {
+        if (_selectionMode) {
+          _toggleSelection(nft);
+          return;
+        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => NftDetailPage(nft, widget.coinModel),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           color: AppColorTokens.of(context).bgBase,
           borderRadius: radius,
           border: Border.all(
-            color: AppColorTokens.of(context).textSubtitle.withAlpha(40),
+            color: selected
+                ? AppColorTokens.of(context).brand
+                : AppColorTokens.of(context).textSubtitle.withAlpha(40),
+            width: selected ? 2 : 1,
           ),
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Expanded(child: _buildImageSection(nft)),
-            _buildInfoSection(context, nft),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _buildImageSection(nft)),
+                _buildInfoSection(context, nft),
+              ],
+            ),
+            if (_selectionMode)
+              Positioned(
+                top: su.setWidth(8),
+                right: su.setWidth(8),
+                child: _buildSelectionBadge(
+                  context,
+                  selected: selected,
+                  enabled: selectable,
+                ),
+              ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSelectionBadge(
+    BuildContext context, {
+    required bool selected,
+    required bool enabled,
+  }) {
+    final su = ScreenUtil();
+    final tokens = AppColorTokens.of(context);
+    final color = selected
+        ? tokens.brand
+        : enabled
+        ? Colors.black.withAlpha(130)
+        : tokens.textSubtitle.withAlpha(130);
+    return Container(
+      width: su.setWidth(28),
+      height: su.setWidth(28),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        border: Border.all(color: Colors.white, width: 1.5),
+      ),
+      child: selected
+          ? Icon(Icons.check, color: Colors.white, size: su.setWidth(18))
+          : null,
     );
   }
 

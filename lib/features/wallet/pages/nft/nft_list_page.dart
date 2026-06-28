@@ -6,12 +6,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/api/simplehash_nft_api.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/nft_model.dart';
+import 'package:n42_wallet/features/wallet/pages/nft/nft_batch_send_page.dart';
+import 'package:n42_wallet/features/wallet/pages/nft/nft_batch_transfer_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/nft/nft_detail_page.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
 import 'package:n42_wallet/features/wallet/utils/nft_gallery_utils.dart';
@@ -49,6 +52,8 @@ class _NftListPageState extends State<NftListPage> {
   bool _hideSpam = true;
   // S4 v2: 按系列分组视图。
   bool _groupByCollection = false;
+  bool _selectionMode = false;
+  final Set<String> _selectedNftKeys = <String>{};
 
   @override
   void initState() {
@@ -103,6 +108,8 @@ class _NftListPageState extends State<NftListPage> {
   void _retry() {
     setState(() {
       _nfts = [];
+      _selectionMode = false;
+      _selectedNftKeys.clear();
       _load();
     });
   }
@@ -146,10 +153,89 @@ class _NftListPageState extends State<NftListPage> {
     return coinType.toUpperCase() == 'BTC';
   }
 
+  List<NftModel> get _selectedNfts => _filtered
+      .where((nft) => _selectedNftKeys.contains(_selectionKey(nft)))
+      .toList(growable: false);
+
+  String _selectionKey(NftModel nft) => NftBatchTransferUtils.selectionKey(nft);
+
+  bool _isSelected(NftModel nft) =>
+      _selectedNftKeys.contains(_selectionKey(nft));
+
+  void _toggleSelection(NftModel nft) {
+    if (!NftBatchTransferUtils.isBatchTransferable(nft)) {
+      ToastUtils.showWarning(
+        nft.isOrdinal
+            ? S.of(context).g_key_nft_ordinals_unsupported
+            : nft.isSolana
+            ? S.of(context).g_key_nft_send_sol_unsupported
+            : 'NFT transfer is not supported',
+      );
+      return;
+    }
+    setState(() {
+      _selectionMode = true;
+      final key = _selectionKey(nft);
+      if (_selectedNftKeys.contains(key)) {
+        _selectedNftKeys.remove(key);
+      } else {
+        _selectedNftKeys.add(key);
+      }
+      if (_selectedNftKeys.isEmpty) _selectionMode = false;
+    });
+  }
+
+  void _clearSelection() {
+    setState(() {
+      _selectionMode = false;
+      _selectedNftKeys.clear();
+    });
+  }
+
+  Future<void> _openBatchSend() async {
+    final selected = _selectedNfts;
+    if (selected.isEmpty) return;
+    final completed = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => NftBatchSendPage(selected, widget.coinModel),
+      ),
+    );
+    if (!mounted) return;
+    if (completed == true) {
+      _clearSelection();
+      _retry();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: S.of(context).g_key_nft_gallery),
+      appBar: AppBarWidget(
+        text: _selectionMode
+            ? '${_selectedNftKeys.length} selected'
+            : S.of(context).g_key_nft_gallery,
+        leading: _selectionMode
+            ? IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: _clearSelection,
+              )
+            : null,
+        actions: [
+          if (_selectionMode)
+            IconButton(
+              tooltip: S.of(context).g_key_48,
+              icon: const Icon(Icons.send_outlined),
+              onPressed: _selectedNftKeys.isEmpty ? null : _openBatchSend,
+            )
+          else if (_nfts.any(NftBatchTransferUtils.isBatchTransferable))
+            IconButton(
+              tooltip: 'Select',
+              icon: const Icon(Icons.checklist_outlined),
+              onPressed: () => setState(() => _selectionMode = true),
+            ),
+        ],
+      ),
       body: Column(
         children: [
           buildSearchBar(context),
