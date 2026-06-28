@@ -64,6 +64,15 @@ void main() {
       expect(Eip681.parse('ethereum:'), isNull);
       expect(Eip681.parse('random'), isNull);
     });
+
+    test('malformed percent-encoding does not throw (untrusted scan input)', () {
+      // 畸形 %zz 序列：必须安全降级，绝不抛（否则扫码崩溃）。
+      expect(() => Eip681.parse('ethereum:$recipient?memo=%zz&x=%'),
+          returnsNormally);
+      expect(() => Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'),
+          returnsNormally);
+      expect(Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'), recipient);
+    });
   });
 
   group('resolveRecipient', () {

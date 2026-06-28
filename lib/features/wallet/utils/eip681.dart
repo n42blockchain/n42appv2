@@ -128,13 +128,21 @@ class Eip681 {
       if (pair.isEmpty) continue;
       final eq = pair.indexOf('=');
       if (eq < 0) {
-        map[Uri.decodeComponent(pair)] = '';
+        map[_safeDecode(pair)] = '';
       } else {
-        final k = Uri.decodeComponent(pair.substring(0, eq));
-        final v = Uri.decodeComponent(pair.substring(eq + 1));
-        map[k] = v;
+        map[_safeDecode(pair.substring(0, eq))] =
+            _safeDecode(pair.substring(eq + 1));
       }
     }
     return map;
+  }
+
+  /// 安全 URL 解码：扫码等不可信输入遇畸形 `%` 序列时回退原文，绝不抛。
+  static String _safeDecode(String s) {
+    try {
+      return Uri.decodeComponent(s);
+    } catch (_) {
+      return s;
+    }
   }
 }
