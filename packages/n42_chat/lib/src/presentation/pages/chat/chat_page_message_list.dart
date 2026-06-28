@@ -54,6 +54,11 @@ extension _ChatPageMessageListMethods on _ChatPageState {
           reverse: true, // 从底部开始显示
           padding: const EdgeInsets.symmetric(vertical: 8),
           itemCount: state.messages.length + extraItems,
+          // Web 端长会话性能（#32）：聊天项无需在滚出视口后保活内部状态，
+          // 关掉 keepAlive 降内存/重建开销；语义索引对消息流也无意义。
+          // (每项的 RepaintBoundary 由 ListView 默认 addRepaintBoundaries 提供。)
+          addAutomaticKeepAlives: false,
+          addSemanticIndexes: false,
           itemBuilder: (context, index) {
             if (state.hasTypingUsers && index == 0) {
               return TypingIndicator(
@@ -145,6 +150,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
                   _recalledMessageIds.contains(message.id) &&
                   _lastRecalledContent != null;
               return Column(
+                key: ValueKey(message.id),
                 children: [
                   if (showTimeSeparator)
                     TimeSeparator(dateTime: message.timestamp),
@@ -171,6 +177,9 @@ extension _ChatPageMessageListMethods on _ChatPageState {
             final hasTranslation = translatedText != null || isTranslatingMsg;
 
             return Column(
+              // 稳定 key：加载更多在列表「顶部」插入历史消息时，让 Flutter 按
+              // 消息 id 复用 element 而非整体重建（#32 Web 长会话）。
+              key: ValueKey(message.id),
               children: [
                 if (showTimeSeparator)
                   TimeSeparator(dateTime: message.timestamp),
