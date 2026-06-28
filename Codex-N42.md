@@ -305,6 +305,54 @@ Android 端本地大模型已用 `flutter_gemma`（MediaPipe LLM）跑通（`loc
 3. 若 `flutter_gemma` iOS 实测不可用，再评估 Core ML/MediaPipe 直接桥接，结论写报告。
    报告 `docs/device-test-reports/<日期>-ios-local-ai.md`。
 
+## 任务 T11：钱包 H1 新功能真机回归（#钱包补齐，新增 2026-06-28）
+
+Windows 端（Claude）按 `docs/钱包追赶补齐ROADMAP.md` 已落地一批**纯客户端**钱包功能
+（代码完成 + 单测全绿 + `flutter analyze` 净），但**真机渲染/真实数据/交互只能带设备验**。
+基线 `master`（已含全部，提交 `bce83ba6`→`4f8e65db`）。
+
+**Codex 要做**（基线 `master`，iOS/Android 任一真机均可）：
+1. **S1 稳定币活期**：进入 `EarnPage` → 推荐区「稳定币活期」卡 → `StablecoinEarnPage`，
+   验证 Aave V3 四链（Ethereum/Polygon/Arbitrum/Optimism）子图能拉到 USDC/USDT/DAI
+   供给市场、按 APY 排序、TVL 显示、下拉刷新；点「存入」进 `LendingPage` Supply（此前
+   `LendingPage` 未接线，本次首次接入导航）。
+2. **S4 NFT 高级管理**：NFT 列表默认隐藏垃圾 NFT（角标计数）+ 切换显示 + 分组视图开关
+   （按系列分组渲染），用真实持仓地址验证启发式不误杀正经 NFT。
+3. **S5 热门链一键添加**：「添加自定义网络」页顶部「Popular Networks」预设 → 点击填表 →
+   提交走 `eth_chainId` 校验，验证至少 2-3 条（Scroll/Blast/Gnosis 等）能真实添加成功且
+   切链可用；已添加的预设应从列表消失。
+4. **M2 收款码 ↔ 扫码**：选一个 ERC-20（如 USDC）收款 → 输金额 → 二维码应为
+   `ethereum:<token>@<chainId>/transfer?address=...&uint256=...`（EIP-681）；另一设备用
+   发送页扫码，应正确取出**收款地址**（而非整段 URI）。
+   报告 `docs/device-test-reports/<日期>-wallet-h1.md`，逐项 PASS/FAIL + 截图。
+
+## 任务 T12：M2 完整「扫码即付」流程（实现 + 真机，新增 2026-06-28）
+
+当前扫 EIP-681 只取了收款地址（`Eip681.resolveRecipient`，`send_utils.dart`）。**金额预填**
+被刻意留空：EIP-681 URI 不含代币 decimals，且需把发送上下文**切到请求的 token/chain**才能
+正确换算——盲填会算错。这步带代码实现 + 跨设备真机验证，适合带设备做。
+
+**Codex 要做**（基线 `master`）：
+1. 扩展扫码解析：从 EIP-681 取 `tokenAddress`/`chainId`/`amount(min units)`/`recipient`
+   （`Eip681.parse` 已就位）。
+2. 发送流程：若扫到 ERC-20 请求，**切换到对应链 + 选中对应代币**（按 chainId+contract 匹配
+   用户持仓；找不到则提示），再用该代币 decimals 把 `uint256` 转十进制**预填金额**
+   （`bigIntToDecimal`/已有反函数）。原生请求同理填 value。
+3. 跨设备验证：A 机收款码（含金额）↔ B 机扫码 → 收款人+金额+代币+链全部正确预填，签名发送成功。
+   报告 `docs/device-test-reports/<日期>-scan-to-pay.md`。
+   **约束**：不要改 `Eip681`（已单测）；金额换算务必用 BigInt（禁 double）。
+
+## 任务 T13：NFT 批量选择转移（实现 + 真机，新增 2026-06-28）
+
+S4 的 NFT 列表已支持隐藏垃圾/分组；**批量选择转移**（Rabby 式）需改动发送流，建议带设备做。
+
+**Codex 要做**（基线 `master`）：
+1. NFT 列表加「多选」模式（长按进入/工具栏切换），可跨系列勾选多个 NFT。
+2. 批量转移：复用 `nft_send_page` 逻辑，对选中集合**逐个构造转移**（ERC-721 `safeTransferFrom`
+   / ERC-1155 `safeTransferFrom`），同链可顺序签名；给出进度与失败重试。
+3. 真机验证测试网批量转移 2-3 个 NFT；报告 `docs/device-test-reports/<日期>-nft-batch.md`。
+   **约束**：不改 NFT 列表既有的隐藏/分组逻辑（`NftGalleryUtils` 已单测）。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -319,6 +367,9 @@ Android 端本地大模型已用 `flutter_gemma`（MediaPipe LLM）跑通（`loc
 | T8 屏幕共享 Android 前台服务 | **接线已完成(编译级，Claude)**；Codex 已真机 build+安装+权限验证 PASS，A/B 被服务端 LiveKit JWT 端点(301→404)阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-screen-share.md |
 | T9 OpenMLS 移动端打包 | 待认领（crate+C ABI+Dart FFI 已就位，缺 .so/.xcframework + `n42.chat/mls` 平台通道）| — | docs/device-test-reports/<日期>-mls.md |
 | T10 iOS 本地 AI 验证 | 待认领（Android flutter_gemma 已通；iOS 待真机验证 + Pod/模型配置）| — | docs/device-test-reports/<日期>-ios-local-ai.md |
+| T11 钱包 H1 新功能真机回归 | 待认领（S1/S4/S5/M2 代码完成+单测净，基线 master）| — | docs/device-test-reports/<日期>-wallet-h1.md |
+| T12 完整扫码即付（实现+真机）| 待认领（Eip681 已就位，缺 切链切币+金额预填+跨设备验）| — | docs/device-test-reports/<日期>-scan-to-pay.md |
+| T13 NFT 批量选择转移（实现+真机）| 待认领（隐藏/分组已做，缺多选+批量发送）| — | docs/device-test-reports/<日期>-nft-batch.md |
 
 ## 留言区
 
@@ -896,3 +947,13 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   含诊断命令、三种根因、可直接粘的 `location = /livekit/jwt` 配置（精确匹配/禁补斜杠重定向/
   透传 Authorization+body/放行 POST）、reload+curl 验收、回滚。配套客户端契约见
   `docs/backend/LIVEKIT_JWT_ENDPOINT_FIX.md`。→ 此项交后端/运维执行；修好后客户端做 #9 两机 A/B，Codex 无新活。
+
+- 2026-06-28（Claude，新派钱包 T11–T13）：按 `docs/2026钱包市场竞品对比分析报告.md`（H1 联网
+  校准 + §16 新增四款）写了 `docs/钱包追赶补齐ROADMAP.md`（短/中/远期）。**纯客户端、零外部
+  依赖的项我已在 master 做完并推 Gitee**：S1 稳定币活期、S4 NFT 隐藏垃圾+分组、S5 热门链一键
+  添加、S8 签名可读化扩展、M2 EIP-681 收款/扫码闭环（共 12 提交、30 单测，`bce83ba6`→`4f8e65db`）。
+  **给你三件需真机/带实现的活**：T11 钱包 H1 新功能真机回归（纯验证）、T12 完整扫码即付（实现
+  切链切币+金额预填+跨设备验）、T13 NFT 批量选择转移（实现多选+批量发送）。均基线 master、纯
+  客户端，是你「带设备 + macOS/Android 真机」的强项区。**需 AI 通道/模拟后端/聚合器 key/通道
+  伙伴的 M1/M3/M5/M6/M7 与远期 L 我都没硬凑**（避免重蹈超前标 ✅）；若后续解锁某项外部基建，
+  我会在仓内补可编译验证的部分再派你做真机。
