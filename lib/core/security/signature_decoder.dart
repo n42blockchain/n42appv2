@@ -166,12 +166,73 @@ class SignatureDecoder {
           ],
         );
 
-      // ── Swaps ──
+      // ── ERC-20 allowance tweaks ──
+      case '39509351': // increaseAllowance(address,uint256)
+        return SignatureDecodedResult(
+          title: 'Increase Allowance',
+          description: 'Increases a spender\'s token allowance',
+          riskLevel: TxRiskLevel.caution,
+          fields: [
+            if (contractAddress != null) DecodedField('Token', contractAddress),
+          ],
+          warnings: ['Raises how many tokens a spender may move on your behalf'],
+        );
+      case 'a457c2d7': // decreaseAllowance(address,uint256)
+        return SignatureDecodedResult(
+          title: 'Decrease Allowance',
+          description: 'Decreases a spender\'s token allowance',
+          riskLevel: TxRiskLevel.safe,
+          fields: [
+            if (contractAddress != null) DecodedField('Token', contractAddress),
+          ],
+          warnings: [],
+        );
+
+      // ── ERC-1155 ──
+      case 'f242432a': // safeTransferFrom(address,address,uint256,uint256,bytes)
+      case '2eb2c2d6': // safeBatchTransferFrom(...)
+        return SignatureDecodedResult(
+          title: 'NFT Transfer (ERC-1155)',
+          description: 'Transfers ERC-1155 token(s)',
+          riskLevel: TxRiskLevel.caution,
+          fields: [
+            if (contractAddress != null)
+              DecodedField('Contract', _shortAddress(contractAddress)),
+          ],
+          warnings: [],
+        );
+
+      // ── WETH wrap / unwrap ──
+      case 'd0e30db0': // deposit()
+        return SignatureDecodedResult(
+          title: 'Wrap ETH',
+          description: 'Wraps ETH into WETH',
+          riskLevel: TxRiskLevel.safe,
+          fields: [
+            if (value != null && value != '0x0')
+              DecodedField('Amount', _formatWei(value)),
+          ],
+          warnings: [],
+        );
+      case '2e1a7d4d': // withdraw(uint256)
+        return SignatureDecodedResult(
+          title: 'Unwrap WETH',
+          description: 'Unwraps WETH back into ETH',
+          riskLevel: TxRiskLevel.safe,
+          fields: [],
+          warnings: [],
+        );
+
+      // ── Swaps (V2 routers + V3 router) ──
       case '7ff36ab5':
       case '38ed1739':
       case '18cbafe5':
       case '8803dbee':
       case 'fb3bdb41':
+      case '414bf389': // exactInputSingle
+      case 'c04b8d59': // exactInput
+      case 'db3e2198': // exactOutputSingle
+      case 'f28c0498': // exactOutput
         return SignatureDecodedResult(
           title: 'Token Swap',
           description: 'Exchange tokens via DEX router',
