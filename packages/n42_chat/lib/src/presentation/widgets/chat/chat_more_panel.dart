@@ -107,6 +107,9 @@ class ChatMorePanel extends StatefulWidget {
   /// 白板 / 涂鸦
   final VoidCallback? onWhiteboardPressed;
 
+  /// 圆形视频留言（Video Note）
+  final VoidCallback? onVideoNotePressed;
+
   const ChatMorePanel({
     super.key,
     this.onPhotoPressed,
@@ -141,6 +144,7 @@ class ChatMorePanel extends StatefulWidget {
     this.onCodePressed,
     this.onTipPressed,
     this.onWhiteboardPressed,
+    this.onVideoNotePressed,
   });
 
   @override
@@ -359,6 +363,12 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
                       label: 'Whiteboard',
                       onTap: widget.onWhiteboardPressed,
                       iconColor: Colors.brown,
+                    ),
+                    _MoreItem(
+                      icon: Icons.video_camera_front_outlined,
+                      label: 'Video note',
+                      onTap: widget.onVideoNotePressed,
+                      iconColor: Colors.pinkAccent,
                     ),
                     if (widget.onAiAssistantPressed != null)
                       _MoreItem(

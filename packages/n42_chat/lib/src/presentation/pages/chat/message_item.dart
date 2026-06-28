@@ -11,6 +11,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/utils/a11y_l10n.dart';
+import '../../../core/utils/video_note_utils.dart';
 import '../../../core/utils/event_message_data.dart';
 import '../../../core/utils/quiz_reveal.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
@@ -1012,6 +1013,68 @@ class MessageItem extends StatelessWidget {
     );
   }
 
+  /// 圆形视频留言渲染（缩略图圆形裁切 + 播放叠层）。
+  Widget _buildVideoNote(String? thumbnailUrl) {
+    const double size = 160;
+    return Semantics(
+      button: true,
+      label: 'Video note',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: onTap,
+        child: ClipOval(
+          child: SizedBox(
+            width: size,
+            height: size,
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                if (thumbnailUrl != null && thumbnailUrl.isNotEmpty)
+                  ImageMessageWidget(
+                    imageUrl: thumbnailUrl,
+                    onTap: onTap,
+                    maxWidth: size,
+                    maxHeight: size,
+                    borderRadius: 0,
+                  )
+                else
+                  Container(
+                    width: size,
+                    height: size,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [Colors.grey[800]!, Colors.grey[900]!],
+                      ),
+                    ),
+                    child: Icon(
+                      Icons.videocam,
+                      color: Colors.white.withValues(alpha: 0.6),
+                      size: 40,
+                    ),
+                  ),
+                Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.4),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    Icons.play_arrow,
+                    color: Colors.white,
+                    size: 28,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildVideoMessage(BuildContext context) {
     final metadata = message.metadata;
     final thumbnailUrl = metadata?.thumbnailUrl;
@@ -1118,6 +1181,11 @@ class MessageItem extends StatelessWidget {
           ),
         ),
       );
+    }
+
+    // 圆形视频留言（Video Note）：据文件名前缀识别，圆形渲染。
+    if (VideoNoteUtils.isVideoNote(metadata?.fileName)) {
+      return _buildVideoNote(thumbnailUrl);
     }
 
     return GestureDetector(

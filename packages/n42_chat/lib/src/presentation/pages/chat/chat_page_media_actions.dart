@@ -17,6 +17,30 @@ class _PersistedScheduledAttachment {
 extension _ChatPageMediaActionsMethods on _ChatPageState {
   static const int _maxEncryptedRoomFileBytes = 64 * 1024 * 1024;
 
+  /// 录制圆形视频留言（Video Note）：相机录短视频 → 以 `n42note_` 前缀文件名
+  /// 走既有视频发送链路；渲染端据文件名前缀圆形渲染。
+  Future<void> _recordVideoNote() async {
+    try {
+      final picker = ImagePicker();
+      final video = await picker.pickVideo(
+        source: ImageSource.camera,
+        maxDuration: const Duration(seconds: 15),
+      );
+      if (video == null || !mounted) return;
+      final bytes = await video.readAsBytes();
+      if (bytes.isEmpty || !mounted) return;
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final note = XFile.fromData(
+        bytes,
+        name: VideoNoteUtils.buildFilename(timestamp),
+        mimeType: video.mimeType ?? 'video/mp4',
+      );
+      await _sendVideo(note);
+    } catch (e) {
+      debugLog('_recordVideoNote failed: $e');
+    }
+  }
+
   /// 打开白板/涂鸦页，绘制结果栅格化为 PNG 后走图片发送链路。
   Future<void> _openWhiteboard() async {
     final bytes = await Navigator.of(context).push<Uint8List>(
