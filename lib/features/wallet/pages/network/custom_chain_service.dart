@@ -203,6 +203,9 @@ class CustomChainService {
     324, // zkSync Era
     59144, // Linea
   };
+
+  /// Public view of built-in chain IDs (for preset filtering / tests).
+  static Set<int> get builtInChainIds => _builtInChainIds;
 }
 
 /// User-added custom EVM chain configuration.

@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';
+import 'package:n42_wallet/features/wallet/pages/network/popular_chain_presets.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
@@ -139,6 +140,9 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // S5: 热门链快速填充
+              _buildPresets(),
+
               // Chain ID + lookup
               _buildLabel('Chain ID'),
               Row(
@@ -309,6 +313,60 @@ class _AddCustomChainPageState extends State<AddCustomChainPage> {
           ),
         ),
       ),
+    );
+  }
+
+  /// S5: 热门链预设——点击填充表单（提交时仍校验 RPC + 拒绝内置/重复）。
+  void _applyPreset(CustomChain c) {
+    setState(() {
+      _chainIdController.text = c.chainId.toString();
+      _nameController.text = c.name;
+      _rpcController.text = c.rpcUrl;
+      _symbolController.text = c.symbol;
+      _explorerController.text = c.explorerUrl ?? '';
+      _rpcStatus = null;
+      _error = null;
+    });
+  }
+
+  Widget _buildPresets() {
+    final presets = PopularChainPresets.all();
+    if (presets.isEmpty) return const SizedBox.shrink();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildLabel('Popular Networks'),
+        Wrap(
+          spacing: AppSpacing.space2,
+          runSpacing: AppSpacing.space2,
+          children: presets.map((c) {
+            return Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: () => _applyPreset(c),
+                borderRadius: AppRadius.brMd,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: AppSpacing.space4,
+                    vertical: AppSpacing.space2,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColorTokens.of(context).brand.withAlpha(20),
+                    borderRadius: AppRadius.brMd,
+                  ),
+                  child: Text(
+                    c.name,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+        SizedBox(height: AppSpacing.space6),
+      ],
     );
   }
 
