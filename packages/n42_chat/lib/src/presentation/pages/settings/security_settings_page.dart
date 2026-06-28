@@ -347,6 +347,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                   ),
                 ),
                 trailing: IconButton(
+                  tooltip: S.of(context)?.commonDelete ?? 'Delete',
                   icon: const Icon(
                     Icons.delete_outline,
                     color: AppColors.error,

@@ -121,4 +121,10 @@ class A11yL10n {
       _pick('$name 正在输入', '$name 正在輸入', '$name is typing');
   String peopleTyping(int count) =>
       _pick('$count 人正在输入', '$count 人正在輸入', '$count people typing');
+
+  // —— 设置页表单（#33 长尾） ——
+  String get solidColor => _pick('纯色背景', '純色背景', 'Solid color');
+  String get gradient => _pick('渐变背景', '漸層背景', 'Gradient');
+  String get showPassword => _pick('显示密码', '顯示密碼', 'Show password');
+  String get hidePassword => _pick('隐藏密码', '隱藏密碼', 'Hide password');
 }

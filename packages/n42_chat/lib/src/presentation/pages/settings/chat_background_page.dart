@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/chat_background_presets.dart';
@@ -202,7 +203,12 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
         final colorKey = 'solid_${entry.key}';
         final isSelected = _selectedBackground == colorKey;
 
-        return GestureDetector(
+        return Semantics(
+          button: true,
+          selected: isSelected,
+          label: A11yL10n.of(context).solidColor,
+          excludeSemantics: true,
+          child: GestureDetector(
           onTap: _isSaving ? null : () => _selectBackground(colorKey),
           child: Container(
             width: 64,
@@ -221,6 +227,7 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
                   )
                 : null,
           ),
+          ),
         );
       }).toList(),
     );
@@ -234,7 +241,12 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
         final gradientKey = 'gradient_${entry.key}';
         final isSelected = _selectedBackground == gradientKey;
 
-        return GestureDetector(
+        return Semantics(
+          button: true,
+          selected: isSelected,
+          label: A11yL10n.of(context).gradient,
+          excludeSemantics: true,
+          child: GestureDetector(
           onTap: _isSaving ? null : () => _selectBackground(gradientKey),
           child: Container(
             width: 80,
@@ -256,6 +268,7 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
                     child: Icon(Icons.check_rounded, color: Colors.white, size: 24),
                   )
                 : null,
+          ),
           ),
         );
       }).toList(),

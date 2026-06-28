@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -256,6 +257,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             ),
             prefixIcon: Icon(Icons.lock_outline, color: hintColor),
             suffixIcon: IconButton(
+              tooltip: _obscureCurrentPassword
+                  ? A11yL10n.of(context).showPassword
+                  : A11yL10n.of(context).hidePassword,
               icon: Icon(
                 _obscureCurrentPassword
                     ? Icons.visibility_off
@@ -323,6 +327,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             ),
             prefixIcon: Icon(Icons.lock_outline, color: hintColor),
             suffixIcon: IconButton(
+              tooltip: _obscureNewPassword
+                  ? A11yL10n.of(context).showPassword
+                  : A11yL10n.of(context).hidePassword,
               icon: Icon(
                 _obscureNewPassword ? Icons.visibility_off : Icons.visibility,
                 color: hintColor,
@@ -396,6 +403,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             ),
             prefixIcon: Icon(Icons.lock_outline, color: hintColor),
             suffixIcon: IconButton(
+              tooltip: _obscureConfirmPassword
+                  ? A11yL10n.of(context).showPassword
+                  : A11yL10n.of(context).hidePassword,
               icon: Icon(
                 _obscureConfirmPassword
                     ? Icons.visibility_off

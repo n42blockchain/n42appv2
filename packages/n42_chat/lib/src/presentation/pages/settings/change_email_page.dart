@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
+import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
@@ -329,6 +330,9 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
             ),
             prefixIcon: Icon(Icons.lock_outline, color: hintColor),
             suffixIcon: IconButton(
+              tooltip: _obscurePassword
+                  ? A11yL10n.of(context).showPassword
+                  : A11yL10n.of(context).hidePassword,
               icon: Icon(
                 _obscurePassword ? Icons.visibility_off : Icons.visibility,
                 color: hintColor,

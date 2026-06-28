@@ -340,6 +340,7 @@ class _QuickRepliesPageState extends State<QuickRepliesPage> {
           children: [
             if (!reply.isSystem)
               IconButton(
+                tooltip: S.of(context)?.commonEdit ?? 'Edit',
                 icon: Icon(
                   Icons.edit_outlined,
                   color: context.textTertiary,
@@ -347,6 +348,7 @@ class _QuickRepliesPageState extends State<QuickRepliesPage> {
                 onPressed: _isSaving ? null : () => _editReply(reply),
               ),
             IconButton(
+              tooltip: S.of(context)?.commonDelete ?? 'Delete',
               icon: Icon(
                 Icons.delete_outline,
                 color: AppColors.error.withValues(alpha: 0.7),

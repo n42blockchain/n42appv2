@@ -219,6 +219,7 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
                   ),
                 ),
                 IconButton(
+                  tooltip: S.of(context)?.commonAdd ?? 'Add',
                   icon: const Icon(Icons.add, color: AppColors.primary),
                   onPressed: () => _promptAdd(
                     title: title,

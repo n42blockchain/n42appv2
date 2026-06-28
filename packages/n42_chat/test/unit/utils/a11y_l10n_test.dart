@@ -36,6 +36,13 @@ void main() {
           'New message from Bob: hi');
       expect(const A11yL10n('en').peopleTyping(3), '3 people typing');
     });
+
+    test('settings form labels', () {
+      expect(const A11yL10n('zh').solidColor, '纯色背景');
+      expect(const A11yL10n('zh_TW').gradient, '漸層背景');
+      expect(const A11yL10n('en').showPassword, 'Show password');
+      expect(const A11yL10n('zh').hidePassword, '隐藏密码');
+    });
   });
 
   group('A11yL10n.of locale normalization', () {
