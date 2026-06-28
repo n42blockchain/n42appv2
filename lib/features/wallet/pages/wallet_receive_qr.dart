@@ -11,6 +11,8 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -56,9 +58,29 @@ String _buildQrData({
   required String address,
   required String blockchainType,
   required String amount,
+  String? erc20Contract,
+  int erc20Decimals = 18,
+  int? chainId,
 }) {
   final trimmed = amount.trim();
   if (trimmed.isEmpty) return address;
+
+  // M2 v2: EVM 上的 ERC-20（稳定币）金额请求 → 标准 EIP-681 transfer。
+  if (blockchainType == 'Ethereum' &&
+      erc20Contract != null &&
+      erc20Contract.isNotEmpty) {
+    try {
+      final units = decimalStringToBigInt(trimmed, erc20Decimals);
+      return Eip681.buildErc20Transfer(
+        token: erc20Contract,
+        recipient: address,
+        amount: units.toString(),
+        chainId: chainId,
+      );
+    } catch (_) {
+      // 转换失败则回退到下方原生/通用格式。
+    }
+  }
 
   final prefix = switch (blockchainType) {
     'Ethereum' => 'ethereum:$address?value=',
@@ -136,10 +158,14 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   }
 
   void _onAmountChanged() {
+    final token = widget.tokenCoinModel;
     final newData = _buildQrData(
       address: address,
       blockchainType: blockchainType,
       amount: amountCtrl.text,
+      erc20Contract: token?.config.contract,
+      erc20Decimals: token?.config.decimals ?? 18,
+      chainId: widget.chainCoinModel.config.chainId,
     );
     setState(() => qrData = newData);
   }

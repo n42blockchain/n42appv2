@@ -52,7 +52,7 @@ H1 2026 市场跑出**三条新赛道**，加上四款新增竞品的锋芒，N4
 | # | 任务 | 现状 / 差距 | 做法 / 依赖 | 对标 |
 |---|---|---|---|---|
 | M1 | **AI Agent 代执行（受控自主）** | S2 之后 | 在 S2 只读/建议基础上加**用户每步授权的代执行**：AI 规划 → 生成交易 → 用户确认签名；可引入 **Session Key 限额授权**做"半自主"；依赖 AA Session Key（已有）+ 编排层 | Trust AgentKit |
-| M2 | ~~**稳定币消费 / Pay（Exodus Pay / Base Pay 式）**~~ 🚧 **v1 完成 2026-06-28** | 标准 **EIP-681** 支付请求 `Eip681`（原生 + ERC-20/稳定币 transfer 的构建/解析 + `resolveRecipient`，9 单测）已落地，并接入发送页扫码：扫到 EIP-681 支付请求时取其收款地址（而非破损原始 URI）。剩余：金额预填（需代币 decimals）、收款码请求稳定币金额 UI、法币结算（需伙伴）| Exodus Pay / Base Pay |
+| M2 | ~~**稳定币消费 / Pay（Exodus Pay / Base Pay 式）**~~ 🚧 **v1 完成 2026-06-28** | 标准 **EIP-681** 支付请求 `Eip681`（原生 + ERC-20/稳定币 transfer 的构建/解析 + `resolveRecipient`，9 单测）已落地，并接入发送页扫码：扫到 EIP-681 支付请求时取其收款地址（而非破损原始 URI）。**v2**：收款码对 EVM ERC-20（稳定币）按金额生成标准 EIP-681 `transfer` 请求（复用 `decimalStringToBigInt`，原生路径不动）——与扫码端形成「请求金额→扫码取地址」闭环。剩余：金额预填到发送表单、法币结算（需伙伴）| Exodus Pay / Base Pay |
 | M3 | **交易模拟深度（Rabby 级）** | S8 之后 | 接 Tenderly / 自建 simulation 后端做完整 pre-flight（多步/合约交互全量模拟 + 钓鱼/貔貅识别）；依赖模拟后端 | Rabby（标杆）|
 | M4 | **多链广度上量（聚合策略）** | S5 之后 | 用**地址/资产聚合 API**（DeBank/Covalent/Ankr）覆盖长尾链的"读"，"写"按需补 sender；依赖第三方聚合 API key | Bitget/OKX/SafePal |
 | M5 | **xNFT / 可执行应用增强** | 有 Mini App 平台 | 借鉴 Backpack：让 Mini App / "可执行 NFT"在钱包内作为应用运行（沙箱 + 钱包能力注入）；扩展现有 Mini App 桥 | Backpack xNFT |
