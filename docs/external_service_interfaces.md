@@ -979,3 +979,36 @@ android:networkSecurityConfig="@xml/network_security_config"
 | 服务条款 | `https://n42.world/terms` |
 | 隐私政策 | `https://n42.world/privacy` |
 | 官方网站 | `https://www.n42.ai` |
+
+---
+
+## 附录 E: 钱包补齐（2026-06-28）的外部基建依赖
+
+> 配套 `docs/钱包追赶补齐ROADMAP.md` 与 `docs/钱包长期项设计稿.md`。
+> 区分「已交付项用到的外部依赖」与「待解锁基建才能推进的项」，便于运维/采购按需配置。
+
+### E.1 本次已交付功能用到的外部依赖
+
+| 功能 | 外部依赖 | 是否需 key | 备注 / 生产建议 |
+|------|----------|:---:|------|
+| **S1 稳定币活期**（`StablecoinEarnPage`）| Aave V3 **The Graph 子图**（ETH/Polygon/Arbitrum/Optimism）+ 链 RPC（供给/存取）| ⚠️ 公共子图无 key 但**限流**；写操作走现有 RPC | 生产应换**带 key 的托管子图 / 自建索引**，避免公共端点限流/弃用；APY 实时读取，失败按链降级为空 |
+| **S5 热门链一键添加**（`PopularChainPresets`）| 预设公共 RPC（Scroll/Blast/Gnosis…）+ `chainid.network/chains.json`（chainlist 查询）+ `eth_chainId` 校验 | ❌ 无 key | 预设用规范公共 RPC；添加时 `eth_chainId` 校验失败即拒；建议后续允许用户自填私有 RPC |
+| **S2/M1 AI 钱包助手**（`features/ai_assistant`）| **复用 n42_chat 的 `AiService`**（OpenAI/Claude 兼容云端）| ⚠️ **需在 chat 侧配置 AI key** 才出自然语言回答 | 未配 key → `ChatAiChannel` 返回 null → 引擎**降级为规则回答**（余额/持仓/Gas/帮助仍可用）。只读不签名 |
+| **S4 NFT 高级管理** | 既有 NFT 数据源（SimpleHash 等，见正文）| 同正文 | 隐藏/分组为本地纯逻辑，无新增依赖 |
+| **S8 签名可读化 / M2 EIP-681** | 无 | ❌ | 纯本地逻辑（selector 解码 / 支付请求构建解析），零外部依赖 |
+
+### E.2 待解锁外部基建才能推进的项（中/远期）
+
+| 项 | 必需外部基建 | 归属 |
+|----|-------------|------|
+| **M1 受控代执行 / M6 x402 自主支付 / L3 AI Agent** | 云端 AI key（已有复用通道，缺 key）；x402 支付协议适配；EIP-8004 代理身份注册表（标准演进中）| 配 key 即可启自然语言；agentic 代执行需 Session Key 编排（工程可做）+ 协议成熟 |
+| **M3 Rabby 级交易模拟** | **Tenderly Simulation API** 或自建模拟后端 + key | 第三方/自建后端 |
+| **M4 多链资产「上量」聚合** | DeBank / Covalent / Ankr 等聚合 API key（DeBank 已接） | 第三方 key |
+| **M7 出入金本地化通道** | MoonPay/Transak 之外的本地通道（Ramp/Banxa/UPI/Pix…）伙伴 API key + 商务 | 通道伙伴 |
+| **M8 硬件钱包扩展** | GridPlus/OneKey/imKey 等设备 SDK + 真机 | 设备 SDK + 真机（Codex） |
+| **L1 钱包银行卡** | BIN sponsor + Program Manager（Marqeta/Stripe Issuing 类）+ 卡组织 + **KYC/AML/PCI-DSS** | 发卡伙伴 + 合规 |
+| **L2 原生稳定币** | 发行方/基础设施（M0/Bridge 类）+ 储备托管 + 月度审计/PoR | 发行方 + 监管 |
+| **L5 合规牌照** | MSB/VASP/EMI 等各地牌照（L1/L2/M7 的前置） | 法务/合规 |
+| **L7 自有硬件钱包** | 硬件供应链 + 固件 | 硬件 BD |
+
+> **诚信红线**：以上「待解锁」项**不得在代码/文档提前标 ✅**；接口契约可先就位（见 `钱包长期项设计稿.md` 的 `CardBridge`/`StablecoinIssuerBridge`/`WalletAiChannel`），但真实功能须外部基建到位后才标完成。
