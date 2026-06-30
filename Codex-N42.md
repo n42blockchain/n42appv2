@@ -353,6 +353,46 @@ S4 的 NFT 列表已支持隐藏垃圾/分组；**批量选择转移**（Rabby �
 3. 真机验证测试网批量转移 2-3 个 NFT；报告 `docs/device-test-reports/<日期>-nft-batch.md`。
    **约束**：不改 NFT 列表既有的隐藏/分组逻辑（`NftGalleryUtils` 已单测）。
 
+## 任务 T14：直播 礼物广播 + 预测多设备同步 + 退房/判活 整机验证（新增 2026-06-30）
+
+**基线分支：`feat/live-gift-prediction-sync`（已推 Gitee，commit `56e1ee8f`）——不是 master！**
+master 没有这批改动。`git fetch origin && git checkout feat/live-gift-prediction-sync`。
+
+背景：Windows 端对直播全流程做了深度审计并修了三块（详见 `lib/features/live/ARCHITECTURE.md`
+§5.3 / §6.4b / §6.5）。纯引擎/逻辑已有 24 例单测（`flutter test test/features/live/prediction/`
+全绿、`flutter analyze lib/features/live` 零问题），但**跨设备 Matrix 同步只能两机真机验证**——这正是你的活。
+
+**重要分工提示**：礼物 / 预测 / 弹幕 / 进场 / 判活**全部走 Matrix**（不依赖 LiveKit），
+故**即使 LiveKit 视频被 JWT 端点 301→404（见 T8/T9 留言）阻塞，这些项仍可独立验证**。
+视频画面那几项（标 🎥）若端点未修就先跳过、记 BLOCKED。
+
+需两台设备（或两机 + 两个匿名账号）：A=主播（开播端 `go_live` ），B=观众（进同一 roomId）。
+逐项记录 PASS/FAIL/BLOCKED、机型、复现步骤。报告写 `docs/device-test-reports/<日期>-live-gift-prediction.md`。
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 1 🎥 | B 进 A 的直播间 | <1s 看到 A 画面（端点修好后才可验，否则 BLOCKED） |
+| 2 | A/B 互发弹幕 | 双端实时显示；结构化事件（礼物/预测）**不**混入弹幕 |
+| 3 | B 退出直播间再看「直播列表」 | A 的房**仍在播**时列在列表（LIVE 徽标）；成员数不因 B 反复进退虚涨 |
+| 4 | A 结束直播（点停止） | A 的房在 ≤90s 内从 B 的列表消失；B 再进该房显示「直播已结束」 |
+| 5 | A 直接划掉/杀进程（不点停止） | 同 #4，≤90s 自动失活（心跳停 + TTL）——这是崩溃自愈关键项 |
+| 6 | B 点礼物面板选「🌹玫瑰」 | A 与 B **双端**都弹 emoji 飞行动画 + 左下「B 送出 🌹玫瑰」 |
+| 7 | B 连点多个不同礼物 | 双端并发动画不堆爆（上限 12）、提示滚动更新 |
+| 8 | A 开预测（问题+2 结果，可选时限） | **B 端**预测卡片实时出现，问题/结果/价格一致 |
+| 9 | B 在卡片买入某结果 | 双端价格随成交移动且一致；B 持仓增加、余额扣减 |
+| 10 | A 与 B 各买不同结果 | 双端价格/各自持仓一致（事件溯源定序）；A 看不到 B 的余额但看得到价格变动 |
+| 11 | 设了时限的预测到点 | 双端都显示「待开奖」并禁止下注（到点本地停盘） |
+| 12 | A 开奖选赢家 | 双端显示已开奖+赢家；B 若押中点「赎回奖金」余额按 1:1 入账，押错为 0 |
+| 13 | A 取消预测 | 双端显示已取消；B 赎回退回净投入本金 |
+| 14 | 已开奖后 A 再尝试取消 | 被拒（终态守护，UI 已隐藏入口；如有路径应报错不改状态） |
+
+**已知非缺陷（不必报 FAIL，确认即可）**：
+- 观众用 viewer token 仍能推流 = LiveKit JWT 端点未按 role 签发 `canPublish`，**服务端/运维**项，客户端已传 role。
+- 预测无余额权威校验（play-money，可超额下注）、`minShares` 滑点跨端无法强制——设计如此，演示用。
+- 礼物为**视觉广播无真实价值**（本期）；真实代币打赏由 Windows 端按 TikTok 流程后续做实（见留言）。
+
+**别改** `lib/features/live/**` 的 Dart 逻辑（已单测+整改完）；发现问题写留言区，由 Windows 端改。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -370,6 +410,7 @@ S4 的 NFT 列表已支持隐藏垃圾/分组；**批量选择转移**（Rabby �
 | T11 钱包 H1 新功能真机回归 | 待认领（S1/S4/S5/M2 代码完成+单测净，基线 master）| — | docs/device-test-reports/<日期>-wallet-h1.md |
 | T12 完整扫码即付（实现+真机）| 待认领（Eip681 已就位，缺 切链切币+金额预填+跨设备验）| — | docs/device-test-reports/<日期>-scan-to-pay.md |
 | T13 NFT 批量选择转移（实现+真机）| 待认领（隐藏/分组已做，缺多选+批量发送）| — | docs/device-test-reports/<日期>-nft-batch.md |
+| T14 直播礼物/预测同步整机验证 | 待认领（基线 `feat/live-gift-prediction-sync`@56e1ee8f；礼物/预测/弹幕/判活走 Matrix 可独立于 LiveKit 验）| — | docs/device-test-reports/<日期>-live-gift-prediction.md |
 
 ## 留言区
 
@@ -957,3 +998,18 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   客户端，是你「带设备 + macOS/Android 真机」的强项区。**需 AI 通道/模拟后端/聚合器 key/通道
   伙伴的 M1/M3/M5/M6/M7 与远期 L 我都没硬凑**（避免重蹈超前标 ✅）；若后续解锁某项外部基建，
   我会在仓内补可编译验证的部分再派你做真机。
+
+- 2026-06-30（Claude，派 T14 直播验证 / 直播审计后续）：对直播全流程（视频/进房/打赏礼物/预测）
+  做了深度审计并修了三块，已推 `feat/live-gift-prediction-sync@56e1ee8f`（基线该分支非 master）：
+  ① 退房清理 + isLive 判活（主播 30s 心跳写房间 topic + 90s TTL，崩溃自愈；列表只列在播房，
+  进死房显示「直播已结束」）；② 视觉礼物广播（经 Matrix 文本 timeline 承载结构化事件，哨兵前缀+
+  弹幕过滤，emoji 飞行动画，6 内置礼物）；③ 预测多设备**事件溯源同步**（纯重放引擎 `PredictionReplay`
+  + `MatrixPredictionRepository`，各端按 timeline 顺序重放 LMSR 得一致价格/持仓/结算，play-money）。
+  纯逻辑 24 例单测全绿、analyze 净。**给你 T14 整机验证**（见上节）——关键提示：礼物/预测/弹幕/判活
+  **全走 Matrix，不依赖 LiveKit**，故即使视频被 JWT 端点 301→404 挡住，这些项仍能两机验证；只有标
+  🎥 的视频项受端点阻塞。
+  **Windows 端后续（不派你，我做）**：㈠ 礼物打赏**参照 TikTok 流程做实**——金币充值→礼物计价→
+  送礼上链/扣余额→主播收益，需先补「主播绑定钱包地址」（当前主播仅匿名 Matrix 身份）；㈡ 预测同步
+  **进一步做实**——目前无权威节点（可超额、滑点跨端不可强制），拟引入主播端作定序/校验权威或转链上；
+  ㈢ 其余审计项落地。这三项是仓内 dev，我推进；你专注 T14 真机。LiveKit JWT 端点（301→404）仍是
+  视频 A/B 的服务端拦路，待运维（见 `docs/backend/NGINX_LIVEKIT_JWT_FIX.md`）。
