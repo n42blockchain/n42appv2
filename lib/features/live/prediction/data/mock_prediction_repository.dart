@@ -122,16 +122,23 @@ class MockPredictionRepository implements PredictionRepository {
   @override
   Future<void> closeMarket(String marketId) async {
     final m = _require(marketId);
-    if (m.status == MarketStatus.open) {
-      m.status = MarketStatus.closed;
-      _emit();
+    // 仅开放市场可停盘；已停盘幂等放过，已结算（开奖/取消）为非法转移。
+    if (m.status == MarketStatus.closed) return;
+    if (m.status != MarketStatus.open) {
+      throw const PredictionException(PredictionError.invalidState);
     }
+    m.status = MarketStatus.closed;
+    _emit();
   }
 
   @override
   Future<void> resolveMarket(String marketId, String winningOutcomeId) async {
     final m = _require(marketId);
-    if (m.status == MarketStatus.resolved) return;
+    if (m.status == MarketStatus.resolved) return; // 幂等：重复开奖同一结果无副作用
+    // 已取消的市场是终态，不能再开奖（否则与已退款的本金互相矛盾）。
+    if (m.status == MarketStatus.cancelled) {
+      throw const PredictionException(PredictionError.invalidState);
+    }
     if (m.outcomes.every((o) => o.id != winningOutcomeId)) {
       throw PredictionException(PredictionError.invalidOutcome);
     }
@@ -143,6 +150,11 @@ class MockPredictionRepository implements PredictionRepository {
   @override
   Future<void> cancelMarket(String marketId) async {
     final m = _require(marketId);
+    if (m.status == MarketStatus.cancelled) return; // 幂等
+    // 已开奖市场可能已有赢家赎回，再取消按本金退款会造成双重支付，禁止。
+    if (m.status == MarketStatus.resolved) {
+      throw const PredictionException(PredictionError.invalidState);
+    }
     m.status = MarketStatus.cancelled;
     _emit();
   }

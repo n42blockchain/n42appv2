@@ -2137,6 +2137,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Total Reserve = Base Reserve + (Owned Objects Count × Incremental Reserve)",
     ),
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "Live stream has ended",
+    ),
     "g_live_enter_room_failed": m45,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Follow"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
@@ -2525,6 +2528,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Invalid outcome",
+    ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Market already settled, action not allowed",
     ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Market closed, trading unavailable",

@@ -14,6 +14,8 @@ N42 Live 是 N42 钱包仓库内的一个**手机直播客户端**，形态参�
 - **一个 App 两种角色**：① 用本机摄像头**开播推流**（单主播）；② 其他用户**纯观看 + 发文字弹幕**。
 - 经典**一对多广播**（主播 1，观众 N，观众只发文字不推视频），不是视频会议。
 - 叠加 **Polymarket 式预测市场**：主播开预测，观众用（测试）代币买结果份额，主播实时开局按结果结算。
+  预测当前用 **Matrix 事件溯源同步**（`MatrixPredictionRepository`，play-money 跨设备一致；详见 §6）。
+- **视觉礼物广播**：观众送礼物经 Matrix 事件广播全房（emoji 飞行动画 + "X 送出 Y"），纯视觉无真实价值（详见 §5.3）。
 - **复用现有基础设施**：视频复用 `n42_chat` 自部署的 LiveKit（WebRTC SFU），弹幕复用 `n42_chat` 的 Matrix。
 - **同仓独立入口**：独立 `lib/main_live.dart` 入口，与主钱包 App 共享 `core/`、主题、l10n；成熟后再合入主 App 底部 tab。
 
@@ -146,6 +148,15 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
 UI：`danmu_overlay`（半透明滚动、自动到底）、`danmu_input_bar`（发送节流 `minInterval` 默认 800ms 防刷屏）、
 `enter_room_banner`（取 Matrix uid 本地名，淡入淡出 3s）。
 
+### 5.3 直播事件通道（礼物 / 预测同步复用）
+弹幕用纯文本 timeline；**结构化事件**（礼物、预测同步）复用同一 timeline，载荷为
+`n42live:<JSON>` 的文本消息（哨兵前缀），弹幕流过滤掉它们。`LiveChatService` 暴露
+`sendEvent` / `watchEvents`（有序日志，供预测重放）/ `watchNewEvents`（去重、首帧不补历史，供礼物一次性动画）。
+- **礼物**：`{t:'gift', g:<giftId>}` → 全房 `GiftOverlay` 播放 emoji 飞行 + "X 送出 Y"。纯视觉、无资金。
+  目录 `gift_catalog`，未知 id 回退 🎁（前向兼容）。
+- **直播判活（isLive）**：主播把状态写入房间 `topic`（`N42LIVE:1:<心跳ms>`），30s 心跳 + 90s TTL；
+  停播/崩溃后自动失活，直播列表只列在播房、观众进死房显示"直播已结束"。
+
 ---
 
 ## 6. 预测市场子系统
@@ -185,8 +196,20 @@ collateral                                                                     /
 - **LMSR 行为注记（产品需知）**：它是份额边际定价，"投钱多 ≠ 价格高"——在便宜的长尾结果上等额买入会换到更多份额、
   价格抬升更猛，与平注池(parimutuel)直觉不同。若要"押注多者即热门"的直觉赔率，需改 parimutuel 模型。
 
+### 6.4b Matrix 事件溯源实现（`data/prediction_replay.dart` + `matrix_prediction_repository.dart`，当前默认）
+跨设备同步靠**事件溯源**：每个动作（create/buy/sell/resolve/cancel/close）作为一条事件经直播间
+Matrix room 的 timeline 广播；各端用纯函数引擎 `PredictionReplay` 按**同一时间线顺序**重放进同一套
+LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.dart` 9 例验证确定性/多用户/结算/过期/守护）。
+- `MatrixPredictionRepository`：per-room 常驻订阅维护 `_latest` 重放态，`_changes` tick 驱动所有 `watch*`；
+  `marketId` 内嵌 `roomId`（`~` 分隔）以便仅有 marketId 时反解房间；余额 = 初始 + 各房 `tradeDelta(我)` +
+  本地已赎回；`redeem` 仅本端入账不广播，`claimed` 为本地视角。
+- **限制**：`minShares` 滑点跨端无法强制（成交份额由各端定序后才定，仅本地预检）；**无余额权威节点**
+  （可超额下注，play-money 演示可接受）。真实资金仍须 `ChainPredictionRepository`。**Matrix 同步链路需两机真机验证**。
+
 ### 6.5 Providers（`prediction/providers/prediction_providers.dart`）
-`predictionRepositoryProvider`（单例，当前返回 mock；接链时改返回 `ChainPredictionRepository`）、
+`predictionRepositoryProvider`（单例，**当前返回 `MatrixPredictionRepository`**——经 Matrix 房间 timeline
+事件溯源同步，play-money 跨设备一致；`MockPredictionRepository` 仅单机/单测用；接链时改返回
+`ChainPredictionRepository`）、
 `predictionBalanceProvider`、`roomMarketsProvider.family`、`marketProvider.family`、`positionProvider.family`。
 > Riverpod 取值用 `.asData?.value`（本仓库 Riverpod 版本无 `valueOrNull`）。
 

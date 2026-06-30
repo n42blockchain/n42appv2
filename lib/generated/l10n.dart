@@ -11494,6 +11494,16 @@ class S {
     );
   }
 
+  /// `Live stream has ended`
+  String get g_live_ended {
+    return Intl.message(
+      'Live stream has ended',
+      name: 'g_live_ended',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `HD Wallet · Mnemonic`
   String get g_wallet_group_hd {
     return Intl.message(
@@ -11609,6 +11619,16 @@ class S {
     return Intl.message(
       'Market not found',
       name: 'g_pred_err_market_not_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market already settled, action not allowed`
+  String get g_pred_err_invalid_state {
+    return Intl.message(
+      'Market already settled, action not allowed',
+      name: 'g_pred_err_invalid_state',
       desc: '',
       args: [],
     );

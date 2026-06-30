@@ -1534,6 +1534,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "總儲備 = 基礎儲備 +（擁有物件數 × 增量儲備）",
     ),
+    "g_live_ended": MessageLookupByLibrary.simpleMessage("直播已結束"),
     "g_live_enter_room_failed": m45,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("關注"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage("關注功能開發中"),
@@ -1785,6 +1786,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "持倉不足",
     ),
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage("無效的結果"),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "市場已結算，無法操作",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "市場已停盤，無法交易",
     ),

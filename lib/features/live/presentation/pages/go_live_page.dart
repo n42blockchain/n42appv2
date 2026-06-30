@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +17,7 @@ import '../../services/live_bootstrap.dart';
 import '../../services/live_chat_service.dart';
 import '../../services/live_video_service.dart';
 import '../widgets/danmu_overlay.dart';
+import '../widgets/gift_overlay.dart';
 import '../widgets/live_player_view.dart';
 
 /// 开播端：申请摄像头/麦克风权限 → 创建 Matrix 直播间 → 以主播身份发布
@@ -30,6 +33,8 @@ class _GoLivePageState extends State<GoLivePage> {
   final LiveVideoService _video = LiveVideoService();
   final LiveChatService _chat = LiveChatService();
   Stream<List<LiveDanmu>>? _danmu;
+  Stream<LiveEvent>? _gifts;
+  Timer? _heartbeat;
 
   bool _starting = false;
   bool _live = false;
@@ -65,11 +70,16 @@ class _GoLivePageState extends State<GoLivePage> {
       try {
         await _chat.join(roomId);
         _danmu = _chat.watchDanmu(roomId);
+        _gifts = _chat.watchNewEvents(roomId);
         await _video.joinAsBroadcaster(roomId);
       } catch (_) {
         await _chat.leave(roomId);
         rethrow;
       }
+
+      // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新房间 topic 时间戳，
+      // 使本房在直播列表判活；停播/崩溃后心跳停止，liveTtl 内自动失活。
+      _startHeartbeat(roomId);
 
       if (mounted) {
         setState(() {
@@ -88,14 +98,40 @@ class _GoLivePageState extends State<GoLivePage> {
     }
   }
 
+  /// 开始/刷新直播心跳。立即上报一拍，之后每 [LiveChatService.heartbeatInterval]
+  /// 刷新一次房间 topic 时间戳。
+  void _startHeartbeat(String roomId) {
+    _heartbeat?.cancel();
+    unawaited(_chat.markLive(roomId));
+    _heartbeat = Timer.periodic(
+      LiveChatService.heartbeatInterval,
+      (_) => unawaited(_chat.markLive(roomId)),
+    );
+  }
+
   Future<void> _endLive() async {
+    final roomId = _roomId;
+    _heartbeat?.cancel();
+    _heartbeat = null;
     await _video.leave();
+    if (roomId != null) {
+      // 标记直播结束使房间立即从列表失活，并退出 Matrix room 清理成员占用。
+      await _chat.markEnded(roomId);
+      await _chat.leave(roomId);
+    }
     if (mounted) context.pop();
   }
 
   @override
   void dispose() {
+    // 页面被直接销毁（未走 _endLive，如系统返回）时的兜底：停止心跳并失活房间。
+    _heartbeat?.cancel();
+    final roomId = _roomId;
     _video.leave();
+    if (roomId != null) {
+      _chat.markEnded(roomId);
+      _chat.leave(roomId);
+    }
     super.dispose();
   }
 
@@ -171,6 +207,9 @@ class _GoLivePageState extends State<GoLivePage> {
       children: [
         // 本地摄像头预览
         LivePlayerView(videoService: _video, showLocal: true),
+
+        // 礼物动画层（观众送出的礼物，主播同屏可见）
+        if (_gifts != null) GiftOverlay(giftStream: _gifts!),
 
         // 顶部：roomId（可分享）+ 在线人数 + 结束
         SafeArea(

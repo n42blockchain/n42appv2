@@ -18,5 +18,6 @@ String predictionErrorText(BuildContext context, Object e) {
     PredictionError.insufficientShares => s.g_pred_err_insufficient_shares,
     PredictionError.notResolved => s.g_pred_err_not_resolved,
     PredictionError.marketNotFound => s.g_pred_err_market_not_found,
+    PredictionError.invalidState => s.g_pred_err_invalid_state,
   };
 }

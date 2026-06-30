@@ -133,6 +133,57 @@ void main() {
     );
   });
 
+  PredictionError? errorOf(Object? e) =>
+      e is PredictionException ? e.error : null;
+
+  test('已开奖的市场不能再取消（防双重支付）', () async {
+    final m = await open2();
+    await repo.resolveMarket(m.id, m.outcomes[0].id);
+    await expectLater(
+      () => repo.cancelMarket(m.id),
+      throwsA(
+        predicate((e) => errorOf(e) == PredictionError.invalidState),
+      ),
+    );
+    // 状态保持 resolved，未被改写为 cancelled
+    expect((await market(m.id)).status, MarketStatus.resolved);
+  });
+
+  test('已取消的市场不能再开奖', () async {
+    final m = await open2();
+    await repo.cancelMarket(m.id);
+    await expectLater(
+      () => repo.resolveMarket(m.id, m.outcomes[0].id),
+      throwsA(
+        predicate((e) => errorOf(e) == PredictionError.invalidState),
+      ),
+    );
+    expect((await market(m.id)).status, MarketStatus.cancelled);
+  });
+
+  test('终态市场停盘抛非法状态', () async {
+    final m = await open2();
+    await repo.resolveMarket(m.id, m.outcomes[0].id);
+    await expectLater(
+      () => repo.closeMarket(m.id),
+      throwsA(
+        predicate((e) => errorOf(e) == PredictionError.invalidState),
+      ),
+    );
+  });
+
+  test('重复开奖/重复取消幂等不抛错', () async {
+    final m1 = await open2();
+    await repo.resolveMarket(m1.id, m1.outcomes[0].id);
+    await repo.resolveMarket(m1.id, m1.outcomes[0].id); // 不抛
+    expect((await market(m1.id)).status, MarketStatus.resolved);
+
+    final m2 = await open2();
+    await repo.cancelMarket(m2.id);
+    await repo.cancelMarket(m2.id); // 不抛
+    expect((await market(m2.id)).status, MarketStatus.cancelled);
+  });
+
   test('LMSR：同一结果连续买入价格单调上升且始终归一化', () async {
     // 注意：LMSR 为份额边际定价——价格反映各结果累计份额而非投入金额，
     // 在便宜的长尾结果上等额买入会换到更多份额、价格抬升更猛（与平注池不同）。

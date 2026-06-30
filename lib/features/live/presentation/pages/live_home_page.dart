@@ -145,7 +145,11 @@ class _LiveHomePageState extends State<LiveHomePage> {
     return StreamBuilder<List<LiveRoomSummary>>(
       stream: _rooms,
       builder: (context, snapshot) {
-        final rooms = snapshot.data ?? const <LiveRoomSummary>[];
+        // 仅展示正在直播的房间：已结束/失活（无心跳超 liveTtl）的房不入列，
+        // 避免观众点进死房空等画面。
+        final rooms = (snapshot.data ?? const <LiveRoomSummary>[])
+            .where((r) => r.isLive)
+            .toList();
         if (rooms.isEmpty) {
           return const AppEmptyState(
             icon: Icons.inbox_outlined,
@@ -161,12 +165,50 @@ class _LiveHomePageState extends State<LiveHomePage> {
               leading: const CircleAvatar(child: Icon(Icons.live_tv)),
               title: Text(r.name, maxLines: 1, overflow: TextOverflow.ellipsis),
               subtitle: Text('${r.memberCount} 人'),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: const _LiveBadge(),
               onTap: () => _enterRoom(r.id),
             );
           },
         );
       },
+    );
+  }
+}
+
+/// 直播中徽标（红点 + LIVE）。
+class _LiveBadge extends StatelessWidget {
+  const _LiveBadge();
+
+  @override
+  Widget build(BuildContext context) {
+    final danger = AppColorTokens.of(context).danger;
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
+      ),
+      decoration: BoxDecoration(
+        color: danger.withValues(alpha: 0.15),
+        borderRadius: AppRadius.brPill,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 6,
+            height: 6,
+            decoration: BoxDecoration(color: danger, shape: BoxShape.circle),
+          ),
+          SizedBox(width: AppSpacing.space2),
+          Text(
+            'LIVE',
+            style: AppTypography.captionSm.copyWith(
+              color: danger,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
