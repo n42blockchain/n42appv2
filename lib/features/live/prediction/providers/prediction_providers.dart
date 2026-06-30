@@ -1,19 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../services/live_chat_service.dart';
+import '../data/chain_prediction_repository.dart';
 import '../data/matrix_prediction_repository.dart';
 import '../domain/prediction_market.dart';
 import '../domain/prediction_repository.dart';
 
-/// 预测市场仓库。当前用 [MatrixPredictionRepository]：经 Matrix 房间 timeline
-/// 做**事件溯源同步**（play-money），主播/观众真正跨设备看到同一市场与价格。
+/// 预测市场仓库。**按 [liveChainPredictionConfig] 自动选择实现**：
+/// - 配置非空（合约已部署）→ [ChainPredictionRepository]（真实资金，链上托管合约）。
+/// - 配置为空（默认）→ [MatrixPredictionRepository]（Matrix 事件溯源同步，play-money，跨设备一致）。
 ///
-/// 备选实现：
-/// - `MockPredictionRepository`（内存 LMSR，仅单机演示/单测用）。
-/// - `ChainPredictionRepository`（真实资金，接链上托管合约，见 CHAIN_INTEGRATION.md）：
-///     return ChainPredictionRepository(ChainPredictionConfig(...));
-///   合约地址/ABI/测试网 RPC/测试 ERC20 由合约团队提供后填入。
+/// 另有 `MockPredictionRepository`（内存 LMSR，仅单机演示/单测用）。
+/// 接链落地见 CHAIN_INTEGRATION.md：交付合约地址/ABI/RPC/ERC20 后赋值 [liveChainPredictionConfig] 即切换。
 final predictionRepositoryProvider = Provider<PredictionRepository>((ref) {
+  final chainConfig = liveChainPredictionConfig;
+  if (chainConfig != null) {
+    return ChainPredictionRepository(chainConfig);
+  }
   final repo = MatrixPredictionRepository(LiveChatService());
   ref.onDispose(repo.dispose);
   return repo;

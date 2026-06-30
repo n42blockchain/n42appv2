@@ -59,7 +59,65 @@ LMSR 为**份额边际定价**：在便宜的长尾结果上等额买入会换�
 | `collateral` | 测试 ERC20 元数据（symbol/decimals） |
 
 ## 接入步骤（本仓库侧）
-1. 新增 `data/chain_prediction_repository.dart implements PredictionRepository`，注入钱包地址/链/合约地址。
-2. 金额改 `BigInt` base-unit；实体保持不变（`double` 仅 mock 内部）。
-3. `prediction_providers.dart` 按环境切换 mock / chain 实现。
-4. 合约地址、ABI、测试网 RPC 由合约团队提供后填入。
+1. ✅ 已建 `data/chain_prediction_repository.dart implements PredictionRepository`（`ChainPredictionConfig`：
+   chainId / marketContract / collateral / collateralContract / walletAddress；各方法 `_todo()` 占位，签名与接口一致）。
+2. ✅ `prediction_providers.dart` 已**自动切换**：检测到 `liveChainPredictionConfig != null` 即返回
+   `ChainPredictionRepository`，否则 `MatrixPredictionRepository`（play-money 跨设备）。**插即用**：交付到位后
+   在 `main_live.dart`（或宿主接入处）给 `liveChainPredictionConfig` 赋值即切换，无需改 provider/UI。
+3. 金额改 `BigInt` base-unit；实体保持不变（`double` 仅 mock 内部）。
+4. ⛔ 填入 `_todo()` 方法体——**待下方「外部阻塞清单」交付后**（call 编码由最终 ABI 决定，不预写以免与实际合约不符）。
+
+## 🔒 外部阻塞清单（必须由合约/运维团队交付，缺一不可上链）
+本仓库客户端侧已就绪（接口/配置/provider 切换/UX/AMM 规格）；以下为**唯一阻塞项**，交付后即可填 `_todo` 方法体：
+- [ ] **产品决策**：AMM 定价机制 = LMSR（须预存 `b·ln(n)` 补贴）/ CPMM / 平注池（见上「AMM 偿付能力」）。
+- [ ] **合约部署**：`PredictionMarket` 托管合约地址 + 结算 ERC20（tUSDC）地址（测试网）。
+- [ ] **合约 ABI**（JSON）：按下方接口产出，决定客户端 call/event 编解码。
+- [ ] **测试网 RPC**：endpoint（复用钱包 `request_url_testnet.dart` 既有链则免）。
+- [ ] **resolver 鉴权**：建市时 `resolver=主播钱包地址`——故须先做**「主播绑定钱包地址」**（当前主播仅匿名 Matrix 身份）。
+
+## 合约 ABI 规格（零歧义版，供合约团队产出）
+> 类型固定：金额 `uint256` base-unit；`outcomeIdx` `uint8`；`marketId` `bytes32`；时间 `uint64`（unix 秒）。
+```solidity
+interface IPredictionMarket {
+  // —— 写 ——
+  function createMarket(bytes32 questionId, uint8 nOutcomes, uint64 closesAt,
+                        address resolver, address collateral) external returns (bytes32 marketId);
+  function buy(bytes32 marketId, uint8 outcomeIdx, uint256 collateralIn, uint256 minShares) external;
+  function sell(bytes32 marketId, uint8 outcomeIdx, uint256 shares, uint256 minCollateralOut) external;
+  function closeMarket(bytes32 marketId) external;                 // onlyResolver 或 closesAt 自动
+  function resolveMarket(bytes32 marketId, uint8 winningIdx) external; // onlyResolver
+  function cancelMarket(bytes32 marketId) external;                // onlyResolver/治理
+  function redeem(bytes32 marketId) external;                      // 持仓者
+
+  // —— 读（view，客户端组装实体 / 本地镜像报价）——
+  function getMarket(bytes32 marketId) external view
+    returns (uint8 nOutcomes, uint8 status, uint8 winningIdx, uint64 closesAt,
+             address resolver, address collateral, uint256 totalVolume);
+  function getQ(bytes32 marketId) external view returns (uint256[] memory q);     // AMM 累计份额向量
+  function calcBuyShares(bytes32 marketId, uint8 outcomeIdx, uint256 collateralIn)
+    external view returns (uint256 shares);
+  function positionOf(bytes32 marketId, address user) external view returns (uint256[] memory shares);
+
+  // —— 事件（客户端 watch* 据此驱动流）——
+  event MarketCreated(bytes32 indexed marketId, address indexed resolver, bytes32 questionId,
+                      uint8 nOutcomes, uint64 closesAt, address collateral);
+  event Trade(bytes32 indexed marketId, address indexed trader, uint8 outcomeIdx,
+              bool isBuy, uint256 collateral, uint256 shares);
+  event MarketClosed(bytes32 indexed marketId);
+  event MarketResolved(bytes32 indexed marketId, uint8 winningIdx);
+  event MarketCancelled(bytes32 indexed marketId);
+  event Redeemed(bytes32 indexed marketId, address indexed user, uint256 payout);
+}
+```
+状态枚举 `status`：`0=open / 1=closed / 2=resolved / 3=cancelled`（对齐客户端 `MarketStatus`）。
+`status==resolved` 时 `winningIdx` 有效；建议增 `finalizeAt` 争议期字段（UMA 式）防恶意裁定。
+
+## 客户端映射补充（`_todo` 待填，编码依赖最终 ABI）
+| 接口方法 | 链上调用（待 ABI 落地后实现）|
+|---|---|
+| `quoteBuy` | 优先 `calcBuyShares` view；或读 `getQ` 后用本仓 `PredictionReplay` 的 LMSR 数学本地镜像估算 |
+| `watchMarkets/watchMarket` | 订阅 `MarketCreated/Trade/...` 事件 + `getMarket`/`getQ` view 组装 `PredictionMarket` |
+| `watchPosition` | `positionOf(marketId, walletAddress)`，base-unit→份额 |
+| `watchBalance` | `collateralContract.balanceOf(walletAddress)` |
+| `buy` | 必要时先 `approve(collateralContract, marketContract, collateralIn)` 再 `buy(..., minShares)` |
+| `redeem/resolve/cancel/close/sell` | 对应 tx（resolver 操作用主播钱包签名）|

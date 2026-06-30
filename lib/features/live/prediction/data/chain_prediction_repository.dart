@@ -1,6 +1,14 @@
 import '../domain/prediction_market.dart';
 import '../domain/prediction_repository.dart';
 
+/// 链上托管合约的接入配置**单一来源**。部署落地后由启动代码（或远端配置）写入本变量，
+/// `predictionRepositoryProvider` 检测到非空即自动切到 [ChainPredictionRepository]；
+/// 为空（默认）则用 Matrix 事件溯源同步（play-money）。
+///
+/// 即插即用：合约团队交付「合约地址 / ABI / 测试网 RPC / 测试 ERC20 地址」后，
+/// 在 `main_live.dart`（或宿主接入处）赋值本变量即可，无需改 provider/UI。
+ChainPredictionConfig? liveChainPredictionConfig;
+
 /// 链上预测市场仓库的**接入配置**。
 ///
 /// 由合约团队提供测试网部署信息后填入；`prediction_providers.dart` 据环境
