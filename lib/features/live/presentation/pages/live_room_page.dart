@@ -73,14 +73,10 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
     }
   }
 
-  /// 打开礼物面板，选中后经 Matrix 事件广播给全房（含自己，作即时反馈）。
+  /// 打开礼物面板（金币计价）。选中后由经济服务按金币扣费并广播给全房
+  /// （含自己，作即时反馈）。
   void _openGiftPicker() {
-    GiftPickerSheet.show(
-      context,
-      onPick: (giftId) {
-        _chat.sendEvent(widget.roomId, {'t': 'gift', 'g': giftId});
-      },
-    );
+    GiftPickerSheet.show(context, roomId: widget.roomId);
   }
 
   /// 显式关闭：先离会、再退出 Matrix 房间，最后返回

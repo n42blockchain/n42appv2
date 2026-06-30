@@ -18,6 +18,7 @@ import '../../services/live_chat_service.dart';
 import '../../services/live_video_service.dart';
 import '../widgets/danmu_overlay.dart';
 import '../widgets/gift_overlay.dart';
+import '../widgets/gift_providers.dart';
 import '../widgets/live_player_view.dart';
 
 /// 开播端：申请摄像头/麦克风权限 → 创建 Matrix 直播间 → 以主播身份发布
@@ -221,6 +222,7 @@ class _GoLivePageState extends State<GoLivePage> {
             child: Row(
               children: [
                 Expanded(child: _RoomIdChip(roomId: _roomId ?? '')),
+                if (_roomId != null) _EarningsBadge(roomId: _roomId!),
                 if (_video.listenable != null)
                   ListenableBuilder(
                     listenable: _video.listenable!,
@@ -354,6 +356,45 @@ class _CircleButton extends StatelessWidget {
           shape: BoxShape.circle,
         ),
         child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
+      ),
+    );
+  }
+}
+
+/// 主播礼物收益徽标（金币）。
+class _EarningsBadge extends ConsumerWidget {
+  const _EarningsBadge({required this.roomId});
+
+  final String roomId;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final earnings = ref.watch(giftEarningsProvider(roomId)).asData?.value ?? 0;
+    return Container(
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space4,
+        vertical: AppSpacing.space2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColorTokens.overlay,
+        borderRadius: AppRadius.brPill,
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.monetization_on,
+            color: AppColorTokens.warningOnOverlay,
+            size: 14,
+          ),
+          SizedBox(width: AppSpacing.space2),
+          Text(
+            '$earnings',
+            style: AppTypography.captionSm.copyWith(
+              color: AppColorTokens.onOverlayPrimary,
+            ),
+          ),
+        ],
       ),
     );
   }

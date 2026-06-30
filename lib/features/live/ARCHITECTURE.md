@@ -152,8 +152,11 @@ UI：`danmu_overlay`（半透明滚动、自动到底）、`danmu_input_bar`（�
 弹幕用纯文本 timeline；**结构化事件**（礼物、预测同步）复用同一 timeline，载荷为
 `n42live:<JSON>` 的文本消息（哨兵前缀），弹幕流过滤掉它们。`LiveChatService` 暴露
 `sendEvent` / `watchEvents`（有序日志，供预测重放）/ `watchNewEvents`（去重、首帧不补历史，供礼物一次性动画）。
-- **礼物**：`{t:'gift', g:<giftId>}` → 全房 `GiftOverlay` 播放 emoji 飞行 + "X 送出 Y"。纯视觉、无资金。
-  目录 `gift_catalog`，未知 id 回退 🎁（前向兼容）。
+- **礼物（TikTok 式内部金币经济）**：`{t:'gift', g:<giftId>}` → 全房 `GiftOverlay` 播 emoji 飞行 + "X 送出 Y"。
+  金币计价由共享目录 `gift_catalog` 的 `coinPrice` **权威推导**（不信任事件载荷价格，防伪造）；`gift_economy`
+  事件溯源得出**我的金币余额**（初始+本地充值−送礼花费）与**主播礼物收益**（全房礼物金币总额），跨端一致。
+  金币为 play-money；**真实代币充值金币 / 主播收益提现 = 接缝**（`recharge` 现 mock，后续接钱包 sender）。
+  未知 giftId 回退 🎁（价 1，前向兼容）。
 - **直播判活（isLive）**：主播把状态写入房间 `topic`（`N42LIVE:1:<心跳ms>`），30s 心跳 + 90s TTL；
   停播/崩溃后自动失活，直播列表只列在播房、观众进死房显示"直播已结束"。
 
