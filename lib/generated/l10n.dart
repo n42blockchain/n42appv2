@@ -11634,6 +11634,16 @@ class S {
     );
   }
 
+  /// `Only the host who created this market can do this`
+  String get g_pred_err_not_resolver {
+    return Intl.message(
+      'Only the host who created this market can do this',
+      name: 'g_pred_err_not_resolver',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Redeem failed: {reason}`
   String g_pred_redeem_failed(Object reason) {
     return Intl.message(

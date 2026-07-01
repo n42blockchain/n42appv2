@@ -1429,6 +1429,7 @@
   "g_pred_err_not_resolved": "Market not resolved, cannot redeem",
   "g_pred_err_market_not_found": "Market not found",
   "g_pred_err_invalid_state": "Market already settled, action not allowed",
+  "g_pred_err_not_resolver": "Only the host who created this market can do this",
   "g_pred_redeem_failed": "Redeem failed: {reason}",
   "@g_pred_redeem_failed": {"placeholders":{"reason":{}}},
   "g_key_earn_stablecoin_title": "Stablecoin Earn",

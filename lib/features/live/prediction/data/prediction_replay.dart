@@ -10,6 +10,12 @@ import '../domain/prediction_market.dart';
 ///
 /// 资金口径：play-money（每个用户初始 [initialBalance] tUSDC，本地视角）。
 /// 无权威节点校验余额，故不拒绝他人超额下注——仅用于演示。
+///
+/// **resolver 鉴权**：建市事件的 `sender` 即该市场的 resolver（对齐"主播只能裁定
+/// 结果、不能卷款"的信任模型）。resolve/cancel/close 这三个终结性动作只信任
+/// resolver 发出的事件——任何非 resolver 伪造的同类事件会被本引擎**丢弃**（不改
+/// 变状态）。由于所有客户端都跑同一套确定性重放逻辑，伪造事件在每一端都会被
+/// 一致地忽略，无需服务端仲裁即可堵住"任意用户伪造开奖结果套利"这个漏洞。
 class PredictionReplay {
   PredictionReplay({this.initialBalance = 1000});
 
@@ -42,6 +48,7 @@ class PredictionReplay {
           labels: labels,
           createdAt: e.timestamp,
           closesAt: e.closesAt,
+          resolverId: e.sender,
         );
       case 'buy':
         final m = _markets[e.marketId];
@@ -75,6 +82,7 @@ class PredictionReplay {
         final m = _markets[e.marketId];
         final i = e.outcomeIndex;
         if (m == null || i == null) return;
+        if (e.sender != m.resolverId) return; // 鉴权：仅建市者可开奖
         // 状态机守护：终态不可再转移（与 mock 一致）。
         if (m.status == MarketStatus.resolved ||
             m.status == MarketStatus.cancelled) {
@@ -86,6 +94,7 @@ class PredictionReplay {
       case 'cancel':
         final m = _markets[e.marketId];
         if (m == null) return;
+        if (e.sender != m.resolverId) return; // 鉴权：仅建市者可取消
         if (m.status == MarketStatus.resolved ||
             m.status == MarketStatus.cancelled) {
           return;
@@ -94,6 +103,7 @@ class PredictionReplay {
       case 'close':
         final m = _markets[e.marketId];
         if (m == null || m.status != MarketStatus.open) return;
+        if (e.sender != m.resolverId) return; // 鉴权：仅建市者可停盘
         m.status = MarketStatus.closed;
     }
   }
@@ -112,6 +122,10 @@ class PredictionReplay {
 
   PredictionMarket? market(String marketId, {DateTime? now}) =>
       _markets[marketId]?.toModel(now ?? _nowFallback);
+
+  /// 该市场的 resolver（建市者）身份；市场不存在返回 null。供仓库层在发送
+  /// resolve/cancel/close 前做即时客户端预检（真正的鉴权仍在 [_applyOne]）。
+  String? resolverOf(String marketId) => _markets[marketId]?.resolverId;
 
   /// 买入报价（不改状态）：返回份额 / 均价 / 成交后价；市场不存在或结果非法返回 null。
   TradeQuote? quoteBuy(String marketId, int i, double collateralIn) {
@@ -237,6 +251,7 @@ class _MarketState {
     required this.question,
     required this.labels,
     required this.createdAt,
+    required this.resolverId,
     this.closesAt,
   }) : q = List<double>.filled(labels.length, 0);
 
@@ -248,6 +263,9 @@ class _MarketState {
   final List<String> labels;
   final DateTime createdAt;
   final DateTime? closesAt;
+
+  /// 建市事件的 sender——本市场唯一有权 resolve/cancel/close 的身份。
+  final String resolverId;
 
   final List<double> q;
   MarketStatus status = MarketStatus.open;
@@ -263,8 +281,7 @@ class _MarketState {
   /// user -> 交易净额（买负卖正，算余额用）。
   final Map<String, double> tradeDelta = {};
 
-  bool _expiredAt(DateTime now) =>
-      closesAt != null && now.isAfter(closesAt!);
+  bool _expiredAt(DateTime now) => closesAt != null && now.isAfter(closesAt!);
 
   bool tradableAt(DateTime now) =>
       status == MarketStatus.open && !_expiredAt(now);

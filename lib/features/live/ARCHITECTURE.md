@@ -121,7 +121,14 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
    > 不符合"主播全屏 + 弹幕叠加"的需求；故直接驱动底层 `LiveKitService`，UI 自绘。
 
 对外只暴露 UI 友好的访问器（隐藏 n42_chat src 类型）：`listenable`（`Listenable`）、`primaryVideoTrack`、
-`localVideoTrack`、`participantCount`、`isMuted`、`switchCamera()`、`toggleMicrophone()`、`leave()`。
+`localVideoTrack`、`participantCount`、`isMuted`、`switchCamera()`、`toggleMicrophone()`、`leave()`、`dispose()`。
+
+**取消安全**：`_join()` 在权限申请/网络换 token/`joinMeeting` 等每个耗时 await 后都检查内部 `_disposed`
+标志；页面若在这些阶段被销毁（如权限弹窗时用户提前退出），join 完成后会检测到该标志并立即清理刚建立
+的连接、不赋给 `_service`——否则会孤立一条无人再调用 `leave()` 的会话（主播端场景下即摄像头/麦克风
+被永久占用，只能杀进程才能停止；这是曾经的真实 bug）。页面应调用 `dispose()`（非 `leave()`）做终态
+退出：它同时设置 `_disposed=true` 并离会，幂等、可安全重复调用。`leave()` 现也对 `leaveMeeting()` 做
+异常兜底（失败静默，对齐 `LiveChatService.leave` 的处理）。
 
 `live_player_view.dart` 用 `ListenableBuilder` 监听会话，渲染 `VideoTrackRenderer(track, fit: cover)`；
 `showLocal` 区分主播自预览（本地轨道）与观众（远端主播轨道）。
@@ -152,13 +159,28 @@ UI：`danmu_overlay`（半透明滚动、自动到底）、`danmu_input_bar`（�
 弹幕用纯文本 timeline；**结构化事件**（礼物、预测同步）复用同一 timeline，载荷为
 `n42live:<JSON>` 的文本消息（哨兵前缀），弹幕流过滤掉它们。`LiveChatService` 暴露
 `sendEvent` / `watchEvents`（有序日志，供预测重放）/ `watchNewEvents`（去重、首帧不补历史，供礼物一次性动画）。
-- **礼物（TikTok 式内部金币经济）**：`{t:'gift', g:<giftId>}` → 全房 `GiftOverlay` 播 emoji 飞行 + "X 送出 Y"。
-  金币计价由共享目录 `gift_catalog` 的 `coinPrice` **权威推导**（不信任事件载荷价格，防伪造）；`gift_economy`
-  事件溯源得出**我的金币余额**（初始+本地充值−送礼花费）与**主播礼物收益**（全房礼物金币总额），跨端一致。
-  金币为 play-money；**真实代币充值金币 / 主播收益提现 = 接缝**（`recharge` 现 mock，后续接钱包 sender）。
-  未知 giftId 回退 🎁（价 1，前向兼容）。
-- **直播判活（isLive）**：主播把状态写入房间 `topic`（`N42LIVE:1:<心跳ms>`），30s 心跳 + 90s TTL；
-  停播/崩溃后自动失活，直播列表只列在播房、观众进死房显示"直播已结束"。
+- **礼物（TikTok 式内部金币经济，`gift_economy.dart`）**：`{t:'gift', g:<giftId>}` → 全房 `GiftOverlay`
+  播 emoji 飞行 + "X 送出 Y"。金币计价由共享目录 `gift_catalog` 的 `coinPrice` **权威推导**（不信任事件
+  载荷价格，防伪造低价）；**金币余额是全局钱包**（跨直播间统一，不按房间隔离）= 初始额 + 本地充值 −
+  本人在**全部已知房间**内经重放判定为有效的送礼花费；**主播收益**（某房间）= 该房间内被判定有效的
+  礼物金额总和。
+  - **防伪造边界**：任何人都能绕过送礼 UI 直接广播 gift 事件（Matrix 无法阻止已加入房间者广播消息），
+    但所有客户端对同一份事件日志跑同一套**确定性重放**——按发送者、按时间线顺序，运行余额从
+    `initialCoins` 起逐笔扣减，超出余额的礼物一律判**无效**：不计入任何人的收益/花费统计，也不会触发
+    `GiftOverlay` 动画。跨端一致，无需服务端仲裁。
+  - **未知 giftId 一律忽略**（不计价、不播动画），而非回退固定价格——回退价一旦与目录后续新增的真实
+    价格不同，"认识"与"不认识"该礼物的客户端会对同一批事件算出不同收益，破坏跨版本一致性；忽略则
+    只会让旧客户端的数字暂时偏低，绝不会算错。
+  - 金币为 play-money；`recharge` 现为本地展示性 mock（只影响本端显示的余额数字，不参与跨端可验证的
+    重放校验——私有充值天然无法被他人验证，是"无权威账本"架构的固有限制）；真实代币充值/提现是后续
+    接缝（接钱包 sender 后替换）。
+- **直播判活（isLive）**：主播状态写入**自定义 Matrix state event**（`n42.live.status`，非 `m.room.topic`）
+  ——避免与房间真实公告字段冲突（此前复用 topic 时，若主播用聊天原生"群信息"页编辑话题会误摧毁判活
+  标记）；内容 `{'live': bool, 'ts': <毫秒>}`，30s 心跳 + 90s TTL，停播/崩溃后自动失活。读写走
+  `Client.getRoomById`/`setRoomStateWithKey`（与 `topic` 同样存于本地已同步的 `room.states`，零额外
+  订阅成本）。观众端 `watchIsRoomLive` 为**持续订阅**（非一次性判定）：双路触发——房间任意状态变化
+  （含心跳本身）+ 5s 定期兜底重算（应对房间彻底安静、无后续事件时 TTL 到期仍需自然生效）；直播列表
+  只列在播房、观众进死房或主播中途下播都显示"直播已结束"，且能随后自愈刷新。
 
 ---
 
@@ -202,12 +224,21 @@ collateral                                                                     /
 ### 6.4b Matrix 事件溯源实现（`data/prediction_replay.dart` + `matrix_prediction_repository.dart`，当前默认）
 跨设备同步靠**事件溯源**：每个动作（create/buy/sell/resolve/cancel/close）作为一条事件经直播间
 Matrix room 的 timeline 广播；各端用纯函数引擎 `PredictionReplay` 按**同一时间线顺序**重放进同一套
-LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.dart` 9 例验证确定性/多用户/结算/过期/守护）。
+LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.dart` 14 例验证确定性/多用户/结算/
+过期/守护/resolver 鉴权）。
 - `MatrixPredictionRepository`：per-room 常驻订阅维护 `_latest` 重放态，`_changes` tick 驱动所有 `watch*`；
   `marketId` 内嵌 `roomId`（`~` 分隔）以便仅有 marketId 时反解房间；余额 = 初始 + 各房 `tradeDelta(我)` +
   本地已赎回；`redeem` 仅本端入账不广播，`claimed` 为本地视角。
+- **resolver 鉴权**：`_MarketState.resolverId` 取自建市事件的 `sender`；重放引擎对 resolve/cancel/close
+  这三个终结性动作校验 `e.sender == resolverId`，非建市者伪造的同类事件会被**所有客户端一致丢弃**（不
+  改变状态）——堵住"任意用户伪造开奖结果让自己赢"这一此前存在的完整性漏洞。`MatrixPredictionRepository`
+  在发送前也做同样的客户端预检（立即报 `PredictionError.notResolver`，不浪费网络往返），并对非法状态
+  转移（如对已取消市场开奖）显式抛 `invalidState`（对齐 mock 行为，而非静默丢弃让用户以为操作生效了）；
+  真正的强制边界始终在重放层，预检只是即时反馈。
 - **限制**：`minShares` 滑点跨端无法强制（成交份额由各端定序后才定，仅本地预检）；**无余额权威节点**
-  （可超额下注，play-money 演示可接受）。真实资金仍须 `ChainPredictionRepository`。**Matrix 同步链路需两机真机验证**。
+  （可超额下注，play-money 演示可接受）；`_ensureRoom` 的订阅只在整个仓库销毁时统一清理，单房间从不
+  单独释放（访问过的房间越多订阅越多，量级有限、影响可控）。真实资金仍须 `ChainPredictionRepository`。
+  **Matrix 同步链路需两机真机验证**（Codex T14 已验自动化通过，设备闸门待解除）。
 
 ### 6.5 Providers（`prediction/providers/prediction_providers.dart`）
 `predictionRepositoryProvider`（单例，**当前返回 `MatrixPredictionRepository`**——经 Matrix 房间 timeline
@@ -302,20 +333,34 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 **风险/优化**
 - 匿名账号增生：每个新观众/列表加载触发 `registerAnonymously`；建议持久化复用一个匿名凭据（n42_chat `restoreSession` 配合）。
 - `watchMessages` 全量返回：已截 100 条，规模化可加 throttle。
+- `primaryVideoTrack` 无主播身份锚定（`live_video_service.dart`）：取"第一个有画面的非本地参与者"，房间内
+  出现多个发布者（如 §9.2 角色权限尚未落地、观众也能推流）时，不同观众端可能各自选中不同/未授权画面；
+  服务端按角色锁 `canPublish` 落地后自然消解。
+- `MatrixPredictionRepository` 的 `marketId` 路由：展示层信任 `room` 字段、路由（buy/sell/resolve 等发往
+  哪个房间）信任 `marketId` 字符串前缀解析（`_roomIdOf`），两者是不同信任级别却用同一字符串承担；精心
+  构造的 marketId 理论上可把交易动作路由到错误房间（利用门槛高，需猜中跨房间真实 marketId）。同时
+  `_roomIdOf` 依赖"Matrix room id 不含 `~`"这一未强制断言的假设。
 
 **待办（多为出仓/服务端/硬件）**
 - 🔴 LiveKit JWT 按 `role` 锁 `canPublish`（§9.2）。
 - 🔴 预测真实合约 + `ChainPredictionRepository`（§9.3 / CHAIN_INTEGRATION.md）。
-- 🔧 两台真机联调（视频+弹幕+下注开奖）。
+- 🔧 两台真机联调（视频+弹幕+下注开奖+礼物），含判活/退房清理全流程（Codex T14 自动化已验通过，
+  设备真机矩阵待安装闸门解除）。
 - 产品决策：AMM(LMSR) vs 平注池(parimutuel)。
-- P2：礼物真实化 / 关注社交图 / 内容审核 / LiveKit Egress→HLS-CDN 大基数 / 合入主 App 底部 tab。
+- P2：礼物真实充值/提现（需先做"主播绑定钱包地址"）/ 关注社交图 / 内容审核 / LiveKit Egress→HLS-CDN
+  大基数 / 合入主 App 底部 tab。
 
 ---
 
 ## 12. 测试与质量
 
-- 单元测试：`flutter test test/features/live/prediction/mock_prediction_repository_test.dart`（11 例，验证定价归一化、
-  买入推价、quote 一致、买卖对账、赢家 1:1 赔付/输家归零、取消退本金、停盘/余额/过期守护）。
+- 单元测试：`flutter test test/features/live/`（38 例）：
+  - `prediction/mock_prediction_repository_test.dart`（15 例，定价归一化、买入推价、quote 一致、买卖对账、
+    赢家 1:1 赔付/输家归零、取消退本金、停盘/余额/过期守护、终态状态机守护）。
+  - `prediction/prediction_replay_test.dart`（14 例，同上 + 确定性重放、多用户独立、**resolver 鉴权**：
+    非建市者伪造 resolve/cancel/close 被拒、建市者本人正常生效）。
+  - `gift_tally_test.dart`（9 例，礼物确定性重放：收益/花费聚合、跨房间统一余额、**超额送礼被判无效**、
+    不同发送者互不影响、未知礼物忽略、确定性）。
 - 静态检查：`flutter analyze lib/features/live`（应零问题）；提交前 `dart format lib/features/live`。
 - 真机验证：两台设备分别以主播（publisher token）/观众（viewer token）进同一 roomId，核验视频<1s、弹幕实时、
   下注→开奖→赎回闭环；观众用 viewer token 尝试推流应被拒（验证 §9.2 角色权限，待服务端实现）。

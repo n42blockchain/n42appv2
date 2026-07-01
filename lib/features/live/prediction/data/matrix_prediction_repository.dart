@@ -189,8 +189,7 @@ class MatrixPredictionRepository implements PredictionRepository {
   }
 
   @override
-  Future<void> closeMarket(String marketId) =>
-      _sendAction(marketId, 'close');
+  Future<void> closeMarket(String marketId) => _sendAction(marketId, 'close');
 
   @override
   Future<void> resolveMarket(String marketId, String winningOutcomeId) {
@@ -202,15 +201,46 @@ class MatrixPredictionRepository implements PredictionRepository {
   }
 
   @override
-  Future<void> cancelMarket(String marketId) =>
-      _sendAction(marketId, 'cancel');
+  Future<void> cancelMarket(String marketId) => _sendAction(marketId, 'cancel');
 
+  /// 发送 resolve/cancel/close 这类 resolver 专属动作。先做客户端即时预检
+  /// （非 resolver 或非法状态转移立刻报错，不浪费一次网络往返，且行为对齐
+  /// [MockPredictionRepository] 的显式报错，而非让用户以为操作静默生效）；
+  /// 真正的强制鉴权与状态机守护仍在 [PredictionReplay] 重放层——即使这里的
+  /// 预检被绕过（如直接调 repo 方法），伪造/非法事件仍会被所有客户端一致
+  /// 丢弃，不会改变市场状态。
   Future<void> _sendAction(
     String marketId,
     String action, {
     Map<String, dynamic> extra = const {},
   }) async {
     final roomId = _roomIdOf(marketId);
+    final replay = _replayFor(roomId);
+    final resolverId = replay?.resolverOf(marketId);
+    if (resolverId == null) {
+      throw const PredictionException(PredictionError.marketNotFound);
+    }
+    if (_me == null || _me != resolverId) {
+      throw const PredictionException(PredictionError.notResolver);
+    }
+    final status = replay!.market(marketId, now: DateTime.now())?.status;
+    switch (action) {
+      case 'close':
+        if (status == MarketStatus.closed) return; // 幂等
+        if (status != MarketStatus.open) {
+          throw const PredictionException(PredictionError.invalidState);
+        }
+      case 'resolve':
+        if (status == MarketStatus.resolved) return; // 幂等
+        if (status == MarketStatus.cancelled) {
+          throw const PredictionException(PredictionError.invalidState);
+        }
+      case 'cancel':
+        if (status == MarketStatus.cancelled) return; // 幂等
+        if (status == MarketStatus.resolved) {
+          throw const PredictionException(PredictionError.invalidState);
+        }
+    }
     await _chat.sendEvent(roomId, {
       't': 'pred',
       'a': action,

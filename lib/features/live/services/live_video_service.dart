@@ -30,6 +30,12 @@ import 'live_bootstrap.dart';
 class LiveVideoService {
   LiveKitService? _service;
 
+  /// 服务是否已释放（页面销毁）。`_join()` 在每个关键 await 点后检查此标志，
+  /// 若页面在加入流程完成前就销毁了本实例，一旦 join 最终完成会立即自我清理
+  /// 刚建立的连接——否则会孤立一条无人再调用 [leave] 的 LiveKit 会话（主播端
+  /// 场景下即摄像头/麦克风被永久占用，只能杀进程才能停止）。
+  bool _disposed = false;
+
   /// 当前已加入的 LiveKit 会话（[ChangeNotifier]，UI 可直接监听）。
   LiveKitService? get service => _service;
 
@@ -88,10 +94,14 @@ class LiveVideoService {
     String matrixRoomId, {
     required bool broadcaster,
   }) async {
+    if (_disposed) throw StateError('LiveVideoService 已释放');
     await ensureLiveChatReady();
+    if (_disposed) throw StateError('LiveVideoService 已释放');
     await ensureAnonymousLogin();
+    if (_disposed) throw StateError('LiveVideoService 已释放');
     // 登录在 N42Chat.initialize 之后发生，需手动触发 LiveKit 配置发现。幂等。
     await N42Chat.initializeCallManager();
+    if (_disposed) throw StateError('LiveVideoService 已释放');
 
     var cm = N42Chat.callManager;
     if (cm == null) {
@@ -140,6 +150,7 @@ class LiveVideoService {
       conversationId: matrixRoomId,
       enableVideo: broadcaster,
     );
+    if (_disposed) throw StateError('LiveVideoService 已释放');
 
     final ok = await svc.joinMeeting(
       roomName: roomName,
@@ -151,15 +162,38 @@ class LiveVideoService {
     if (!ok) {
       throw StateError('加入 LiveKit 房间失败');
     }
+    if (_disposed) {
+      // 页面在加入完成前已销毁：不留孤儿连接（尤其主播端会持续占用摄像头/
+      // 麦克风），立即退出刚建立好的会话，不赋给 _service。
+      try {
+        await svc.leaveMeeting();
+      } catch (_) {
+        // 清理是尽力而为，失败静默——反正实例已作废，无人再依赖其状态。
+      }
+      throw StateError('LiveVideoService 已释放');
+    }
     _service = svc;
     return svc;
   }
 
-  /// 离开当前直播间。
+  /// 离开当前直播间。失败静默——清理是尽力而为，调用方多为 fire-and-forget
+  /// 的 dispose 路径，不应让未处理异常向上抛出。
   Future<void> leave() async {
     final svc = _service;
     _service = null;
-    await svc?.leaveMeeting();
+    try {
+      await svc?.leaveMeeting();
+    } catch (_) {
+      // 忽略：会话可能已处于非法状态离会，无需向上层暴露。
+    }
+  }
+
+  /// 释放本服务实例：标记 [_disposed] 并离会。若 `_join()` 仍在进行中，其
+  /// 完成后会检测到本标志并自我清理刚建立的连接（见 `_join` 内的检查点）。
+  /// 幂等——可安全重复调用（如"用户点关闭"与 widget 框架 dispose 都会触发）。
+  Future<void> dispose() async {
+    _disposed = true;
+    await leave();
   }
 
   /// 向 LiveKit JWT 端点换取 token（先 POST 后 GET 兜底），逻辑对齐

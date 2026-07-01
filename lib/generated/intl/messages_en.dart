@@ -2541,6 +2541,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Market not resolved, cannot redeem",
     ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Only the host who created this market can do this",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "At least two valid outcomes",
     ),

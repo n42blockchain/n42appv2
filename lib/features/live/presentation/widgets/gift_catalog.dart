@@ -31,11 +31,16 @@ const List<LiveGift> kLiveGifts = [
   LiveGift(id: 'crown', emoji: '👑', label: '皇冠', coinPrice: 99),
 ];
 
-/// 按 id 取礼物；未知 id 回退一个通用礼物盒（价 1），保证跨端前向兼容（对端新增
-/// 礼物时旧端不至于崩，仍能显示"送出礼物"且不至于把价当 0）。
-LiveGift giftById(String id) {
+/// 按 id 取礼物；未知 id 返回 `null`。
+///
+/// **不回退到任意固定价格**：若回退价与目录后续新增的真实价格不同，同一批
+/// Matrix 事件会被"认识该礼物"的新版本客户端算出一个收益/花费数字，被"不
+/// 认识"的旧版本客户端算出另一个数字——两者都在跑同一套确定性重放却得到
+/// 不同结果，破坏跨版本一致性。未知礼物**一律忽略**（不计入收益/花费、不播
+/// 动画）才是安全的：旧客户端的数字只会"暂时偏低/不完整"，绝不会"算错"。
+LiveGift? giftById(String id) {
   for (final g in kLiveGifts) {
     if (g.id == id) return g;
   }
-  return const LiveGift(id: 'gift', emoji: '🎁', label: '礼物', coinPrice: 1);
+  return null;
 }

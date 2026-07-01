@@ -34,7 +34,6 @@ class _GoLivePageState extends State<GoLivePage> {
   final LiveVideoService _video = LiveVideoService();
   final LiveChatService _chat = LiveChatService();
   Stream<List<LiveDanmu>>? _danmu;
-  Stream<LiveEvent>? _gifts;
   Timer? _heartbeat;
 
   bool _starting = false;
@@ -54,6 +53,8 @@ class _GoLivePageState extends State<GoLivePage> {
         Permission.camera,
         Permission.microphone,
       ].request();
+      // 权限弹窗耗时期间用户可能已退出页面；此刻尚未创建任何资源，直接放弃。
+      if (!mounted) return;
       final granted = statuses.values.every((s) => s.isGranted);
       if (!granted) {
         throw StateError('需要摄像头与麦克风权限才能开播');
@@ -65,30 +66,37 @@ class _GoLivePageState extends State<GoLivePage> {
       final roomId = await N42Chat.createGroup(
         name: '直播 ${DateTime.now().toIso8601String()}',
       );
+      // 建房后、发布视频前用户退出：房已建但尚无视频/心跳，只需退房。
+      if (!mounted) return _abortStartup(roomId);
 
       // 3. 弹幕 + 以主播身份发布。任一步失败则回滚（离开刚建的房间），
       //    否则每次重试都会新建 Matrix room，遗留一堆空直播间。
       try {
         await _chat.join(roomId);
         _danmu = _chat.watchDanmu(roomId);
-        _gifts = _chat.watchNewEvents(roomId);
         await _video.joinAsBroadcaster(roomId);
       } catch (_) {
         await _chat.leave(roomId);
         rethrow;
       }
+      // 视频发布完成、心跳启动前用户退出：摄像头/麦克风已占用，需退会。
+      if (!mounted) return _abortStartup(roomId, videoJoined: true);
 
       // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新房间 topic 时间戳，
       // 使本房在直播列表判活；停播/崩溃后心跳停止，liveTtl 内自动失活。
       _startHeartbeat(roomId);
-
-      if (mounted) {
-        setState(() {
-          _live = true;
-          _roomId = roomId;
-          _starting = false;
-        });
+      // 心跳已起、最终 setState 前用户退出：三项资源都已建立，全量清理。
+      // 此前的真实 bug——dispose() 因 `_roomId`/`_heartbeat` 尚未赋值而误判
+      // "无需清理"，导致这三项资源在后台永久脱管运行，只能杀进程才能停止。
+      if (!mounted) {
+        return _abortStartup(roomId, videoJoined: true, heartbeatStarted: true);
       }
+
+      setState(() {
+        _live = true;
+        _roomId = roomId;
+        _starting = false;
+      });
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -97,6 +105,22 @@ class _GoLivePageState extends State<GoLivePage> {
         });
       }
     }
+  }
+
+  /// 页面在开播流程完成前被销毁时的清理：按已建立到哪一步分级清理心跳/
+  /// 视频会话/Matrix 房间，避免任何一项永久脱管运行。
+  Future<void> _abortStartup(
+    String roomId, {
+    bool videoJoined = false,
+    bool heartbeatStarted = false,
+  }) async {
+    if (heartbeatStarted) {
+      _heartbeat?.cancel();
+      _heartbeat = null;
+      await _chat.markEnded(roomId);
+    }
+    if (videoJoined) await _video.dispose();
+    await _chat.leave(roomId);
   }
 
   /// 开始/刷新直播心跳。立即上报一拍，之后每 [LiveChatService.heartbeatInterval]
@@ -114,7 +138,7 @@ class _GoLivePageState extends State<GoLivePage> {
     final roomId = _roomId;
     _heartbeat?.cancel();
     _heartbeat = null;
-    await _video.leave();
+    await _video.dispose();
     if (roomId != null) {
       // 标记直播结束使房间立即从列表失活，并退出 Matrix room 清理成员占用。
       await _chat.markEnded(roomId);
@@ -126,12 +150,16 @@ class _GoLivePageState extends State<GoLivePage> {
   @override
   void dispose() {
     // 页面被直接销毁（未走 _endLive，如系统返回）时的兜底：停止心跳并失活房间。
+    // _video.dispose()（非 leave()）：若 _startLive 的 joinAsBroadcaster 仍在
+    // 进行中，其完成后会检测到已释放并自我清理，不留孤儿摄像头/麦克风连接。
     _heartbeat?.cancel();
     final roomId = _roomId;
-    _video.leave();
+    _video.dispose();
     if (roomId != null) {
-      _chat.markEnded(roomId);
-      _chat.leave(roomId);
+      // 顺序执行（非并发触发）：markEnded 必须先到达服务器再 leave——若二者
+      // 并发发起、leave 先完成，服务端可能因已非房间成员拒绝这次状态写入，
+      // 让"立即失活"这层保险失效（仍有 90s TTL 兜底，顺序执行才能真正生效）。
+      unawaited(_chat.markEnded(roomId).then((_) => _chat.leave(roomId)));
     }
     super.dispose();
   }
@@ -209,8 +237,8 @@ class _GoLivePageState extends State<GoLivePage> {
         // 本地摄像头预览
         LivePlayerView(videoService: _video, showLocal: true),
 
-        // 礼物动画层（观众送出的礼物，主播同屏可见）
-        if (_gifts != null) GiftOverlay(giftStream: _gifts!),
+        // 礼物动画层（观众送出、经确定性重放校验的礼物，主播同屏可见）
+        if (_roomId != null) GiftOverlay(roomId: _roomId!),
 
         // 顶部：roomId（可分享）+ 在线人数 + 结束
         SafeArea(
@@ -226,13 +254,12 @@ class _GoLivePageState extends State<GoLivePage> {
                 if (_video.listenable != null)
                   ListenableBuilder(
                     listenable: _video.listenable!,
-                    builder: (context, _) =>
-                        OnlineBadge(
-                          count: _video.participantCount,
-                          margin: EdgeInsets.symmetric(
-                            horizontal: AppSpacing.space4,
-                          ),
-                        ),
+                    builder: (context, _) => OnlineBadge(
+                      count: _video.participantCount,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space4,
+                      ),
+                    ),
                   ),
                 IconButton(
                   icon: const Icon(

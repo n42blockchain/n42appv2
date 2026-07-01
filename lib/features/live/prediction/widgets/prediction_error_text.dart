@@ -19,5 +19,6 @@ String predictionErrorText(BuildContext context, Object e) {
     PredictionError.notResolved => s.g_pred_err_not_resolved,
     PredictionError.marketNotFound => s.g_pred_err_market_not_found,
     PredictionError.invalidState => s.g_pred_err_invalid_state,
+    PredictionError.notResolver => s.g_pred_err_not_resolver,
   };
 }

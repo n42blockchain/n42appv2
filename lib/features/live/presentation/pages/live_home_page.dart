@@ -55,7 +55,8 @@ class _LiveHomePageState extends State<LiveHomePage> {
         leading: IconButton(
           tooltip: '关闭',
           icon: const Icon(Icons.close),
-          onPressed: () => Navigator.of(context, rootNavigator: true).maybePop(),
+          onPressed: () =>
+              Navigator.of(context, rootNavigator: true).maybePop(),
         ),
         title: const Text('N42 Live'),
         actions: [

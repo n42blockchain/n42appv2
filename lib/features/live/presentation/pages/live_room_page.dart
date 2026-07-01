@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:go_router/go_router.dart';
@@ -33,7 +35,7 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   final LikeBurstController _likes = LikeBurstController();
   Stream<List<LiveDanmu>>? _danmu;
   Stream<String>? _enter;
-  Stream<LiveEvent>? _gifts;
+  StreamSubscription<bool>? _liveSub;
   bool _joining = true;
   bool _ended = false;
   String? _error;
@@ -52,14 +54,12 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       if (mounted) setState(() => _error = '$e');
     }
     await chatFuture;
-    // 死房判定：主播已结束/崩溃失活的房间不让观众空等画面。
-    final live = await _chat.isRoomLive(widget.roomId);
-    if (mounted) {
-      setState(() {
-        _ended = !live;
-        _joining = false;
-      });
-    }
+    // 死房判定：**持续**订阅（非一次性判定）——主播中途下播/崩溃、或网络
+    // 抖动导致的瞬时误判都能自愈刷新，而不是永久锁死在进房那一刻的状态。
+    _liveSub = _chat.watchIsRoomLive(widget.roomId).listen((live) {
+      if (mounted) setState(() => _ended = !live);
+    });
+    if (mounted) setState(() => _joining = false);
   }
 
   Future<void> _joinChat() async {
@@ -67,7 +67,6 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
       await _chat.join(widget.roomId);
       _danmu = _chat.watchDanmu(widget.roomId);
       _enter = _chat.watchEnter(widget.roomId);
-      _gifts = _chat.watchNewEvents(widget.roomId);
     } catch (_) {
       // 弹幕不可用时仍展示视频。
     }
@@ -80,9 +79,9 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   }
 
   /// 显式关闭：先离会、再退出 Matrix 房间，最后返回
-  /// （dispose 里的 leave 是异步未 await 的兜底）。
+  /// （dispose 里的 dispose 是异步未 await 的兜底）。
   Future<void> _close() async {
-    await _video.leave();
+    await _video.dispose();
     await _chat.leave(widget.roomId);
     if (mounted) context.pop();
   }
@@ -90,7 +89,11 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
   @override
   void dispose() {
     _likes.dispose();
-    _video.leave();
+    _liveSub?.cancel();
+    // 用 dispose()（非 leave()）：若 _join() 里的 joinAsViewer 仍在进行中
+    // （权限/网络耗时导致用户提前退出），dispose 会让其完成后自我清理，
+    // 不留孤儿 LiveKit 连接。
+    _video.dispose();
     // 观众退房：退出 Matrix room，避免匿名账号永久滞留导致成员数虚高、
     // 死房堆积在直播列表。失败静默（已在 LiveChatService.leave 内吞掉）。
     _chat.leave(widget.roomId);
@@ -110,8 +113,8 @@ class _LiveRoomPageState extends State<LiveRoomPage> {
           // 点赞飘心层
           LikeBurstLayer(controller: _likes),
 
-          // 礼物动画层（跨端广播的礼物 emoji 飞行 + "X 送出 Y"提示）
-          if (_gifts != null) GiftOverlay(giftStream: _gifts!),
+          // 礼物动画层（跨端广播、经确定性重放校验的礼物 emoji 飞行 + "X 送出 Y"提示）
+          GiftOverlay(roomId: widget.roomId),
 
           // 顶部栏
           if (_video.listenable != null)

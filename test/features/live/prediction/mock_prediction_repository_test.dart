@@ -10,10 +10,10 @@ void main() {
   tearDown(() => repo.dispose());
 
   Future<PredictionMarket> open2() => repo.createMarket(
-        roomId: 'room1',
-        question: '本局谁赢？',
-        outcomeLabels: const ['A', 'B'],
-      );
+    roomId: 'room1',
+    question: '本局谁赢？',
+    outcomeLabels: const ['A', 'B'],
+  );
 
   Future<double> balance() => repo.watchBalance().first;
   Future<PredictionMarket> market(String id) => repo.watchMarket(id).first;
@@ -46,7 +46,11 @@ void main() {
   test('quote 与实际买入份额一致', () async {
     final m = await open2();
     final o0 = m.outcomes[0].id;
-    final q = await repo.quoteBuy(marketId: m.id, outcomeId: o0, collateralIn: 100);
+    final q = await repo.quoteBuy(
+      marketId: m.id,
+      outcomeId: o0,
+      collateralIn: 100,
+    );
     await repo.buy(marketId: m.id, outcomeId: o0, collateralIn: 100);
     expect((await position(m.id)).sharesOf(o0), closeTo(q.shares, 1e-6));
     expect(q.avgPrice, closeTo(100 / q.shares, 1e-6));
@@ -128,7 +132,11 @@ void main() {
     );
     expect((await market(m.id)).status, MarketStatus.closed);
     expect(
-      () => repo.buy(marketId: m.id, outcomeId: m.outcomes[0].id, collateralIn: 10),
+      () => repo.buy(
+        marketId: m.id,
+        outcomeId: m.outcomes[0].id,
+        collateralIn: 10,
+      ),
       throwsA(isA<PredictionException>()),
     );
   });
@@ -141,9 +149,7 @@ void main() {
     await repo.resolveMarket(m.id, m.outcomes[0].id);
     await expectLater(
       () => repo.cancelMarket(m.id),
-      throwsA(
-        predicate((e) => errorOf(e) == PredictionError.invalidState),
-      ),
+      throwsA(predicate((e) => errorOf(e) == PredictionError.invalidState)),
     );
     // 状态保持 resolved，未被改写为 cancelled
     expect((await market(m.id)).status, MarketStatus.resolved);
@@ -154,9 +160,7 @@ void main() {
     await repo.cancelMarket(m.id);
     await expectLater(
       () => repo.resolveMarket(m.id, m.outcomes[0].id),
-      throwsA(
-        predicate((e) => errorOf(e) == PredictionError.invalidState),
-      ),
+      throwsA(predicate((e) => errorOf(e) == PredictionError.invalidState)),
     );
     expect((await market(m.id)).status, MarketStatus.cancelled);
   });
@@ -166,9 +170,7 @@ void main() {
     await repo.resolveMarket(m.id, m.outcomes[0].id);
     await expectLater(
       () => repo.closeMarket(m.id),
-      throwsA(
-        predicate((e) => errorOf(e) == PredictionError.invalidState),
-      ),
+      throwsA(predicate((e) => errorOf(e) == PredictionError.invalidState)),
     );
   });
 

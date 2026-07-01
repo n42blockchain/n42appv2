@@ -1,6 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_chat/n42_chat.dart';
+// matrix 为 n42_chat 传递依赖；此处仅借用其 Client 类型读写自定义 room state
+// （直播判活心跳），不经 n42_chat 封装（其仓库接口未暴露任意 state event 读写）。
+// ignore: depend_on_referenced_packages
+import 'package:matrix/matrix.dart' show Client;
 // 仓库接口未从 n42_chat 公共入口导出，经实现导入访问（集中于本文件）。
 // ignore_for_file: implementation_imports
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
@@ -83,12 +88,15 @@ class LiveChatService {
   /// 形如 `n42live:{json}`；弹幕流过滤掉这些消息，事件流只取它们。
   static const String _eventPrefix = 'n42live:';
 
-  /// 直播状态写入房间 topic（Matrix state event），供列表判活、观众判断死房。
-  /// 格式 `N42LIVE:1:<最后心跳毫秒>` 表示直播中；其他（含缺失、`N42LIVE:0`）为非直播。
-  static const String _liveTopicPrefix = 'N42LIVE:1:';
-  static const String _endedTopic = 'N42LIVE:0';
+  /// 直播判活状态写入**自定义 Matrix state event**（不复用 `m.room.topic`）：
+  /// 避免与房间真实公告字段冲突——若主播/协作者用聊天原生「群信息」页编辑
+  /// 话题，不会误摧毁判活标记；反过来直播心跳也不会污染用户可见的群公告。
+  /// state event type/内容：`{'live': bool, 'ts': <毫秒>}`（`live=false` 或
+  /// 缺失即非直播）。读写走 [Client.getRoomById]/[Client.setRoomStateWithKey]，
+  /// 与 `topic` 同样存于本地已同步的 `room.states`，零额外订阅成本。
+  static const String _liveStateType = 'n42.live.status';
 
-  /// 直播心跳上报间隔（主播端周期刷新 topic 时间戳）。
+  /// 直播心跳上报间隔（主播端周期刷新 state event 时间戳）。
   static const Duration heartbeatInterval = Duration(seconds: 30);
 
   /// 直播存活窗口：超过该时长无心跳即判定为已结束（主播崩溃/划掉时自动失活，
@@ -99,10 +107,10 @@ class LiveChatService {
   IConversationRepository get _conv =>
       GetIt.instance<IConversationRepository>();
   IGroupRepository get _group => GetIt.instance<IGroupRepository>();
+  Client? get _client => GetIt.instance<MatrixClientManager>().client;
 
   /// 当前 Matrix 用户 id（预测事件溯源用来识别"我的"持仓 / 余额；未登录为 null）。
-  String? get myUserId =>
-      GetIt.instance<MatrixClientManager>().client?.userID;
+  String? get myUserId => _client?.userID;
 
   /// 进房：确保初始化 + 匿名登录 + 加入 Matrix room。
   Future<void> join(String roomId) async {
@@ -227,12 +235,15 @@ class LiveChatService {
     }
   }
 
-  /// 主播端：上报/刷新直播心跳（把当前时间戳写入房间 topic）。
+  /// 主播端：上报/刷新直播心跳（写入自定义 state event 的当前时间戳）。
   /// 开播后立即调一次、之后每 [heartbeatInterval] 调一次。失败静默。
   Future<void> markLive(String roomId) async {
     try {
       final ms = DateTime.now().millisecondsSinceEpoch;
-      await _group.setGroupTopic(roomId, '$_liveTopicPrefix$ms');
+      await _client?.setRoomStateWithKey(roomId, _liveStateType, '', {
+        'live': true,
+        'ts': ms,
+      });
     } catch (_) {
       // 网络/权限问题；下一拍心跳会重试。
     }
@@ -241,30 +252,65 @@ class LiveChatService {
   /// 主播端：标记直播结束（停止心跳后调用，使房间立即从列表失活）。失败静默。
   Future<void> markEnded(String roomId) async {
     try {
-      await _group.setGroupTopic(roomId, _endedTopic);
+      await _client?.setRoomStateWithKey(roomId, _liveStateType, '', {
+        'live': false,
+      });
     } catch (_) {
       // 即便写失败，心跳停止后房间也会在 liveTtl 内自动失活。
     }
   }
 
-  /// 观众端：判断房间当前是否在直播（用于进死房时给出明确反馈，而非空等画面）。
-  /// 仅在确实读到房间信息且其标记为非直播时判死；读不到房间（加载失败/未知）
-  /// 时不武断判死，按"可能在播"放行，交由视频层呈现。
-  Future<bool> isRoomLive(String roomId) async {
-    try {
-      final conv = await _conv.getConversationById(roomId);
-      if (conv == null) return true;
-      return _parseLive(conv.topic);
-    } catch (_) {
-      return true;
+  /// 观众端：**持续**订阅房间是否在直播（用于进死房/中途下播都能给出正确
+  /// 反馈，而非只在进房那一刻判一次——此前的真实缺口：一次性判定要么把
+  /// 网络抖动导致的瞬时误判永久锁死为"已结束"，要么对主播中途下播/崩溃
+  /// 毫无反应，一直显示"直播中"直到用户重新进房）。
+  ///
+  /// 双路触发保证及时性与自愈：①房间任意状态变化（含主播心跳，最及时，
+  /// 通常心跳本身就是一次状态变化）；②定期兜底重算（应对房间彻底安静、
+  /// 无任何后续事件时 TTL 到期仍需自然生效——只靠状态变化触发的话，最后
+  /// 一次心跳之后房间再无任何事件，观众端会一直卡在"直播中"）。
+  ///
+  /// 仅在确实读到房间信息且其标记为非直播时判死；读不到房间（加载失败/
+  /// 未知）时不武断判死，按"可能在播"放行，交由视频层呈现。
+  Stream<bool> watchIsRoomLive(String roomId) {
+    late StreamController<bool> controller;
+    StreamSubscription<void>? convSub;
+    Timer? ticker;
+
+    bool computeNow() {
+      try {
+        final room = _client?.getRoomById(roomId);
+        if (room == null) return true;
+        return _parseLive(room.getState(_liveStateType)?.content);
+      } catch (_) {
+        return true;
+      }
     }
+
+    void emit() {
+      if (!controller.isClosed) controller.add(computeNow());
+    }
+
+    controller = StreamController<bool>.broadcast(
+      onListen: () {
+        emit();
+        convSub = _conv.watchConversation(roomId).listen((_) => emit());
+        ticker = Timer.periodic(const Duration(seconds: 5), (_) => emit());
+      },
+      onCancel: () {
+        convSub?.cancel();
+        ticker?.cancel();
+      },
+    );
+    return controller.stream;
   }
 
-  /// 解析房间 topic 的直播标记：须有 live 前缀且最后心跳在 [liveTtl] 窗口内。
-  static bool _parseLive(String? topic) {
-    if (topic == null || !topic.startsWith(_liveTopicPrefix)) return false;
-    final ms = int.tryParse(topic.substring(_liveTopicPrefix.length));
-    if (ms == null) return false;
+  /// 解析自定义 state event 内容的直播标记：`live==true` 且最后心跳时间戳在
+  /// [liveTtl] 窗口内才判活。
+  static bool _parseLive(Map<String, dynamic>? content) {
+    if (content == null || content['live'] != true) return false;
+    final ms = content['ts'];
+    if (ms is! int) return false;
     final last = DateTime.fromMillisecondsSinceEpoch(ms);
     return DateTime.now().difference(last) < liveTtl;
   }
@@ -283,7 +329,9 @@ class LiveChatService {
               name: c.name,
               memberCount: c.memberCount,
               avatarUrl: c.avatarUrl,
-              isLive: _parseLive(c.topic),
+              isLive: _parseLive(
+                _client?.getRoomById(c.id)?.getState(_liveStateType)?.content,
+              ),
             ),
           )
           .toList();

@@ -86,6 +86,9 @@ enum PredictionError {
 
   /// 对已结算（开奖/取消）的终态市场做停盘/开奖/取消等非法状态转移。
   invalidState,
+
+  /// 非建市者（非 resolver）尝试停盘/开奖/取消——仅建市主播可执行这些操作。
+  notResolver,
 }
 
 /// 预测市场业务异常：data 层抛语义 [error] 码，UI 层据此本地化。

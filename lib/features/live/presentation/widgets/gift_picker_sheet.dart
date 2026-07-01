@@ -8,7 +8,7 @@ import 'gift_providers.dart';
 
 /// 礼物面板（底部弹窗，TikTok 式金币计价）。顶部显示我的金币余额 + 充值入口，
 /// 每个礼物标注金币单价；选中即按金币扣费并经 Matrix 广播（全房动画 + 主播收益）。
-class GiftPickerSheet extends ConsumerWidget {
+class GiftPickerSheet extends ConsumerStatefulWidget {
   const GiftPickerSheet({super.key, required this.roomId});
 
   final String roomId;
@@ -21,9 +21,18 @@ class GiftPickerSheet extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GiftPickerSheet> createState() => _GiftPickerSheetState();
+}
+
+class _GiftPickerSheetState extends ConsumerState<GiftPickerSheet> {
+  /// 发送中禁用整个网格，防止连点触发多笔并发送礼请求（UX 防抖；真正防超额
+  /// 的安全边界在 [LiveGiftEconomy] 的确定性重放，见该类文档）。
+  bool _sending = false;
+
+  @override
+  Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
-    final coins = ref.watch(myCoinsProvider(roomId)).asData?.value ?? 0;
+    final coins = ref.watch(myCoinsProvider(widget.roomId)).asData?.value ?? 0;
     final economy = ref.read(giftEconomyProvider);
 
     return Padding(
@@ -70,7 +79,7 @@ class GiftPickerSheet extends ConsumerWidget {
               for (final g in kLiveGifts)
                 _GiftTile(
                   gift: g,
-                  onTap: () => _send(context, ref, economy, g),
+                  onTap: _sending ? null : () => _send(economy, g),
                 ),
             ],
           ),
@@ -79,22 +88,18 @@ class GiftPickerSheet extends ConsumerWidget {
     );
   }
 
-  Future<void> _send(
-    BuildContext context,
-    WidgetRef ref,
-    LiveGiftEconomy economy,
-    LiveGift gift,
-  ) async {
+  Future<void> _send(LiveGiftEconomy economy, LiveGift gift) async {
+    if (_sending) return;
+    setState(() => _sending = true);
     try {
-      await economy.sendGift(roomId, gift.id);
-      if (context.mounted) Navigator.of(context).pop();
+      await economy.sendGift(widget.roomId, gift.id);
+      if (mounted) Navigator.of(context).pop();
     } on GiftInsufficientCoins {
-      if (!context.mounted) return;
+      if (!mounted) return;
+      setState(() => _sending = false);
       ScaffoldMessenger.of(context)
         ..hideCurrentSnackBar()
-        ..showSnackBar(
-          const SnackBar(content: Text('金币不足，请先充值')),
-        );
+        ..showSnackBar(const SnackBar(content: Text('金币不足，请先充值')));
     }
   }
 }
@@ -103,7 +108,7 @@ class _GiftTile extends StatelessWidget {
   const _GiftTile({required this.gift, required this.onTap});
 
   final LiveGift gift;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {

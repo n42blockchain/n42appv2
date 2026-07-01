@@ -1419,6 +1419,7 @@
   "g_pred_err_not_resolved": "市場未開獎，無法贖回",
   "g_pred_err_market_not_found": "市場不存在",
   "g_pred_err_invalid_state": "市場已結算，無法操作",
+  "g_pred_err_not_resolver": "僅建立此預測的主播可執行此操作",
   "g_pred_redeem_failed": "贖回失敗：{reason}",
   "g_key_earn_stablecoin_title": "穩定幣活期",
   "g_key_earn_stablecoin_desc": "經 Aave 賺取 USDC / USDT / DAI 活期收益",

@@ -120,4 +120,3 @@ class _FollowButton extends StatelessWidget {
     );
   }
 }
-

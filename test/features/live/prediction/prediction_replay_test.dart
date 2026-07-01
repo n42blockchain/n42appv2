@@ -42,18 +42,26 @@ void main() {
     shares: s,
   );
 
-  PredEvent resolve(int sec, int i) => PredEvent(
-    sender: '@host:server',
-    timestamp: at(sec),
-    action: 'resolve',
-    marketId: mkt,
-    outcomeIndex: i,
-  );
+  PredEvent resolve(int sec, int i, {String sender = '@host:server'}) =>
+      PredEvent(
+        sender: sender,
+        timestamp: at(sec),
+        action: 'resolve',
+        marketId: mkt,
+        outcomeIndex: i,
+      );
 
-  PredEvent cancel(int sec) => PredEvent(
-    sender: '@host:server',
+  PredEvent cancel(int sec, {String sender = '@host:server'}) => PredEvent(
+    sender: sender,
     timestamp: at(sec),
     action: 'cancel',
+    marketId: mkt,
+  );
+
+  PredEvent close(int sec, {String sender = '@host:server'}) => PredEvent(
+    sender: sender,
+    timestamp: at(sec),
+    action: 'close',
     marketId: mkt,
   );
 
@@ -123,22 +131,61 @@ void main() {
       resolve(3, 0), // o0 获胜
     ]);
     final winnerShares = r.positionFor(mkt, '@a:server').sharesOf('o0');
-    expect(r.redeemableFor(mkt, '@a:server', now: at(4)),
-        closeTo(winnerShares, 1e-9));
+    expect(
+      r.redeemableFor(mkt, '@a:server', now: at(4)),
+      closeTo(winnerShares, 1e-9),
+    );
     expect(winnerShares, greaterThan(100)); // 押中净赚
     expect(r.redeemableFor(mkt, '@b:server', now: at(4)), 0);
   });
 
   test('取消：退回净投入本金', () {
+    final r = replayOf([create(), buy(1, '@a:server', 0, 100), cancel(2)]);
+    expect(r.redeemableFor(mkt, '@a:server', now: at(3)), closeTo(100, 1e-6));
+  });
+
+  test('非建市者伪造开奖被拒——resolver 鉴权（防任意用户操纵结果）', () {
     final r = replayOf([
-      create(),
-      buy(1, '@a:server', 0, 100),
-      cancel(2),
+      create(sender: '@host:server'),
+      buy(1, '@attacker:server', 0, 100), // 攻击者押 o0
+      resolve(2, 0, sender: '@attacker:server'), // 攻击者伪造开奖让自己赢
     ]);
-    expect(
-      r.redeemableFor(mkt, '@a:server', now: at(3)),
-      closeTo(100, 1e-6),
-    );
+    // 伪造事件被丢弃：市场仍是 open，未被结算。
+    expect(r.market(mkt, now: at(3))!.status, MarketStatus.open);
+    expect(r.redeemableFor(mkt, '@attacker:server', now: at(3)), 0);
+  });
+
+  test('非建市者伪造取消被拒', () {
+    final r = replayOf([
+      create(sender: '@host:server'),
+      buy(1, '@attacker:server', 0, 100),
+      cancel(2, sender: '@attacker:server'),
+    ]);
+    expect(r.market(mkt, now: at(3))!.status, MarketStatus.open);
+  });
+
+  test('非建市者伪造停盘被拒', () {
+    final r = replayOf([
+      create(sender: '@host:server'),
+      close(1, sender: '@intruder:server'),
+    ]);
+    expect(r.market(mkt, now: at(2))!.status, MarketStatus.open);
+  });
+
+  test('建市者本人开奖正常生效（鉴权不误伤合法操作）', () {
+    final r = replayOf([
+      create(sender: '@host:server'),
+      buy(1, '@a:server', 0, 100),
+      resolve(2, 0, sender: '@host:server'),
+    ]);
+    expect(r.market(mkt, now: at(3))!.status, MarketStatus.resolved);
+    expect(r.redeemableFor(mkt, '@a:server', now: at(3)), greaterThan(0));
+  });
+
+  test('resolverOf 返回建市者身份；市场不存在返回 null', () {
+    final r = replayOf([create(sender: '@host:server')]);
+    expect(r.resolverOf(mkt), '@host:server');
+    expect(r.resolverOf('unknown~market'), isNull);
   });
 
   test('已取消的市场不能再开奖（终态守护）', () {
@@ -161,10 +208,7 @@ void main() {
   });
 
   test('卖出退回代币并减少持仓（往返近似无损）', () {
-    final r = replayOf([
-      create(),
-      buy(1, '@a:server', 0, 100),
-    ]);
+    final r = replayOf([create(), buy(1, '@a:server', 0, 100)]);
     final held = r.positionFor(mkt, '@a:server').sharesOf('o0');
     final r2 = replayOf([
       create(),

@@ -1798,6 +1798,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "市場未開獎，無法贖回",
     ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "僅建立此預測的主播可執行此操作",
+    ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage("至少兩個有效結果"),
     "g_pred_err_question": MessageLookupByLibrary.simpleMessage("請填寫預測問題"),
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage("滑點超限，請重試"),
