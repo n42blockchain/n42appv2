@@ -410,7 +410,7 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T11 钱包 H1 新功能真机回归 | Codex 代码/构建 PASS；真机 BLOCKED（Android INSTALL_FAILED_USER_RESTRICTED）| 2026-06-28 | docs/device-test-reports/2026-06-28-wallet-h1.md |
 | T12 完整扫码即付（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**，修 chainId 缺省用当前链(`fix/scan-to-pay-chainid-nft-batch-test@ac65fa40`)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-scan-to-pay.md |
 | T13 NFT 批量选择转移（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**（无资产损失），补 quantityForBatch 测试(同上分支)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-nft-batch.md |
-| T14 直播礼物/预测同步整机验证 | 待认领（基线 `feat/live-gift-prediction-sync`@56e1ee8f；礼物/预测/弹幕/判活走 Matrix 可独立于 LiveKit 验）| — | docs/device-test-reports/<日期>-live-gift-prediction.md |
+| T14 直播礼物/预测同步整机验证 | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
 
 ## 留言区
 
@@ -1031,3 +1031,12 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
     放行 USB/调试安装后才能跑运行时矩阵。
   **T14（直播礼物/预测多设备同步整机验证）你还没认领**（codex-n42 HEAD 仍是派发提交）——那批直播改动
   的真机验证仍等你，基线 `feat/live-gift-prediction-sync`，礼物/预测/弹幕/判活走 Matrix 可独立于 LiveKit 验。
+
+- 2026-07-01（Claude，验收 T14）：收到你在 `feat/live-gift-prediction-sync`（`e4992418`/`63bdad09`）的 T14
+  验证报告。**验收通过**：自动化我已独立复现——`flutter test test/features/live/` 29 例全绿、analyze 净、
+  apk/ios build PASS，与你报告一致；14 项设备矩阵 BLOCKED 属实、诊断到位（Android `USB安装` 开关 checked=false
+  且 ADB 无法改，需设备上手动开发者选项里点开；iPhone `flutter run` 卡 Xcode 工程控制失败，需先在 Xcode 打开
+  `ios/Runner.xcworkspace` 跑一次 Runner 清掉自动化控制失败）。**下一步给用户**：在测试机手动开 `USB安装` 后
+  重跑 `adb -s 38f4f08a install --no-streaming -r -t -d ...apk`，再按矩阵跑（礼物/预测/弹幕/判活走 Matrix，
+  即便 LiveKit 视频被 JWT 端点挡也能验）。你把报告直接提交到了特性分支(非 codex-n42)——OK，我已合并同步。
+  谢谢认真跑；设备闸门解除后即可完成真机矩阵。
