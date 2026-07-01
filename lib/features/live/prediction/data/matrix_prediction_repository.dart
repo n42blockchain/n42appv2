@@ -29,6 +29,14 @@ class MatrixPredictionRepository implements PredictionRepository {
   /// roomId -> 最新重放态。
   final Map<String, PredictionReplay> _latest = {};
 
+  /// roomId -> 当前活跃的"持续关注者"数（`watchMarkets`/`watchMarket`/
+  /// `watchPosition` 的活跃订阅数）。归零时才真正取消该房间的订阅、释放
+  /// `_latest` 态——此前只在整个仓库 `dispose()` 时统一清理，访问过的房间
+  /// 越多订阅越积越多，是技术债；一次性动作（buy/sell/quoteBuy/createMarket/
+  /// `_sendAction`）不参与计数，只确保订阅存在，避免被无关的持续关注者提前
+  /// 释放。见 [_releaseWatcher]。
+  final Map<String, int> _watcherCounts = {};
+
   /// 本地已赎回的市场 -> 入账金额（结算赢利/退本金只在本端赎回时计入余额）。
   final Map<String, double> _redeemed = {};
 
@@ -44,6 +52,8 @@ class MatrixPredictionRepository implements PredictionRepository {
       s.cancel();
     }
     _subs.clear();
+    _latest.clear();
+    _watcherCounts.clear();
     if (!_changes.isClosed) _changes.close();
   }
 
@@ -51,14 +61,16 @@ class MatrixPredictionRepository implements PredictionRepository {
     if (!_changes.isClosed) _changes.add(null);
   }
 
-  // marketId 内嵌 roomId，便于仅有 marketId 的 watchMarket/watchPosition 反解房间。
+  // marketId 内嵌 roomId，便于仅有 marketId 的 watchMarket/watchPosition 反解房间
+  // （仅用于路由/订阅提示，字符串本身不可信——真正的信任边界与校验在
+  // `PredictionReplay.trustedRoomId`，见该类文档"房间归属鉴权"）。
   // 形如 `<roomId>~<随机后缀>`；Matrix room id 不含 '~'，分隔安全。
-  static String _roomIdOf(String marketId) {
-    final i = marketId.lastIndexOf('~');
-    return i <= 0 ? marketId : marketId.substring(0, i);
-  }
+  static String _roomIdOf(String marketId) =>
+      PredictionReplay.roomIdFromMarketId(marketId);
 
-  /// 确保订阅该房事件流以维护重放态。
+  /// 确保订阅该房事件流以维护重放态。`trustedRoomId: roomId` 传入本仓库
+  /// **实际物理订阅**的房间——重放引擎据此拒绝 marketId 房间前缀与之不符的
+  /// 伪造/串房 create 事件（见 `PredictionReplay` 类文档）。
   void _ensureRoom(String roomId) {
     if (roomId.isEmpty || _subs.containsKey(roomId)) return;
     _subs[roomId] = _chat.watchEvents(roomId).listen((events) {
@@ -71,10 +83,31 @@ class MatrixPredictionRepository implements PredictionRepository {
         );
         if (p != null) parsed.add(p);
       }
-      _latest[roomId] = PredictionReplay(initialBalance: initialBalance)
-        ..replay(parsed);
+      _latest[roomId] = PredictionReplay(
+        initialBalance: initialBalance,
+        trustedRoomId: roomId,
+      )..replay(parsed);
       _emit();
     });
+  }
+
+  /// 登记一个持续关注者（进入某个 watch* 流时调用）。
+  void _registerWatcher(String roomId) {
+    _watcherCounts[roomId] = (_watcherCounts[roomId] ?? 0) + 1;
+  }
+
+  /// 释放一个持续关注者（watch* 流被取消订阅时，经 `finally` 调用）。计数
+  /// 归零才真正取消该房间订阅、清理重放态；未归零说明还有其他 watch* 流
+  /// 依赖同一房间，不能提前释放。
+  void _releaseWatcher(String roomId) {
+    final n = (_watcherCounts[roomId] ?? 0) - 1;
+    if (n > 0) {
+      _watcherCounts[roomId] = n;
+      return;
+    }
+    _watcherCounts.remove(roomId);
+    _subs.remove(roomId)?.cancel();
+    _latest.remove(roomId);
   }
 
   PredictionReplay? _replayFor(String roomId) => _latest[roomId];
@@ -106,8 +139,13 @@ class MatrixPredictionRepository implements PredictionRepository {
   @override
   Stream<List<PredictionMarket>> watchMarkets(String roomId) async* {
     _ensureRoom(roomId);
-    yield _marketsFor(roomId);
-    yield* _changes.stream.map((_) => _marketsFor(roomId));
+    _registerWatcher(roomId);
+    try {
+      yield _marketsFor(roomId);
+      yield* _changes.stream.map((_) => _marketsFor(roomId));
+    } finally {
+      _releaseWatcher(roomId);
+    }
   }
 
   List<PredictionMarket> _marketsFor(String roomId) =>
@@ -118,20 +156,30 @@ class MatrixPredictionRepository implements PredictionRepository {
   Stream<PredictionMarket> watchMarket(String marketId) async* {
     final roomId = _roomIdOf(marketId);
     _ensureRoom(roomId);
-    final initial = _replayFor(roomId)?.market(marketId, now: DateTime.now());
-    if (initial != null) yield initial;
-    yield* _changes.stream
-        .map((_) => _replayFor(roomId)?.market(marketId, now: DateTime.now()))
-        .where((m) => m != null)
-        .cast<PredictionMarket>();
+    _registerWatcher(roomId);
+    try {
+      final initial = _replayFor(roomId)?.market(marketId, now: DateTime.now());
+      if (initial != null) yield initial;
+      yield* _changes.stream
+          .map((_) => _replayFor(roomId)?.market(marketId, now: DateTime.now()))
+          .where((m) => m != null)
+          .cast<PredictionMarket>();
+    } finally {
+      _releaseWatcher(roomId);
+    }
   }
 
   @override
   Stream<UserPosition> watchPosition(String marketId) async* {
     final roomId = _roomIdOf(marketId);
     _ensureRoom(roomId);
-    yield _positionFor(marketId);
-    yield* _changes.stream.map((_) => _positionFor(marketId));
+    _registerWatcher(roomId);
+    try {
+      yield _positionFor(marketId);
+      yield* _changes.stream.map((_) => _positionFor(marketId));
+    } finally {
+      _releaseWatcher(roomId);
+    }
   }
 
   UserPosition _positionFor(String marketId) {

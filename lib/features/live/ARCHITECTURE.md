@@ -333,13 +333,28 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 **风险/优化**
 - 匿名账号增生：每个新观众/列表加载触发 `registerAnonymously`；建议持久化复用一个匿名凭据（n42_chat `restoreSession` 配合）。
 - `watchMessages` 全量返回：已截 100 条，规模化可加 throttle。
-- `primaryVideoTrack` 无主播身份锚定（`live_video_service.dart`）：取"第一个有画面的非本地参与者"，房间内
-  出现多个发布者（如 §9.2 角色权限尚未落地、观众也能推流）时，不同观众端可能各自选中不同/未授权画面；
-  服务端按角色锁 `canPublish` 落地后自然消解。
-- `MatrixPredictionRepository` 的 `marketId` 路由：展示层信任 `room` 字段、路由（buy/sell/resolve 等发往
-  哪个房间）信任 `marketId` 字符串前缀解析（`_roomIdOf`），两者是不同信任级别却用同一字符串承担；精心
-  构造的 marketId 理论上可把交易动作路由到错误房间（利用门槛高，需猜中跨房间真实 marketId）。同时
-  `_roomIdOf` 依赖"Matrix room id 不含 `~`"这一未强制断言的假设。
+
+**以下三项此前列为"较低优先级"，已修复（2026-07-01）**：
+- ✅ **`primaryVideoTrack` 主播身份锚定**（`live_video_service.dart`）：原取"第一个有画面的非本地参与者"，
+  房间内出现多个发布者（如 §9.2 角色权限尚未落地、观众也能推流）时可能选错/未授权画面。现锚定到
+  Matrix `m.room.create` 事件的 `sender`（`_broadcasterId`，房间创建者、homeserver 权威写入、不可变更，
+  不依赖本模块自维护状态）；`primaryVideoTrack` 优先精确匹配该身份，匹配不到（如创建事件尚未同步）才
+  退回原宽松兜底，不会因锚点缺失导致完全无法显示画面。
+- ✅ **`MatrixPredictionRepository` 的 marketId 路由双信任级别**：原展示层信任 `room` 字段、路由信任
+  `marketId` 字符串前缀（`_roomIdOf`）两条不同信任级别的判断路径，攻击者可在自己所在房间广播一条
+  `marketId` 前缀伪装成其他房间的伪造 create 事件，诱导受害者对无关房间发送交易。现 `PredictionReplay`
+  加 `trustedRoomId`（调用方实际物理订阅的房间——Matrix 服务端保证房间隔离，这是唯一真正可信的信号）：
+  建市事件的 `marketId` 房间前缀必须与之一致才被接受，不一致则整条 create 事件被拒绝、该市场永不存在
+  于任何房间的重放态中（从源头堵住伪造，而非仅在路由/查找时才发现找不到）。`_MarketState.roomId` 也
+  改为优先取 `trustedRoomId`（可信）而非事件载荷的 `room` 字段（攻击者可任意设置）。`_roomIdOf` 逻辑
+  统一收敛到 `PredictionReplay.roomIdFromMarketId`（单一实现，路由解析与校验用同一函数，不会出现两处
+  逻辑不一致）。
+- ✅ **预测订阅不逐房释放**：`_subs`/`_latest` 原只在整个仓库 `dispose()`（近似 App 生命周期）时统一清理，
+  访问过的房间越多订阅越积越多。现加 `_watcherCounts` 引用计数：`watchMarkets`/`watchMarket`/
+  `watchPosition` 用 `try/finally` 在流被取消订阅时调用 `_releaseWatcher`，计数归零才真正取消该房间
+  订阅、清理重放态；一次性动作（buy/sell/quoteBuy/createMarket/`_sendAction`）不参与计数，避免被无关
+  操作提前释放仍在用的房间。配套把 `roomMarketsProvider`/`marketProvider`/`positionProvider` 改为
+  `.autoDispose.family`，使 Riverpod 在无 widget 监听时真正取消订阅（否则 `finally` 永不触发，修复无效）。
 
 **待办（多为出仓/服务端/硬件）**
 - 🔴 LiveKit JWT 按 `role` 锁 `canPublish`（§9.2）。
@@ -354,11 +369,13 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 
 ## 12. 测试与质量
 
-- 单元测试：`flutter test test/features/live/`（38 例）：
+- 单元测试：`flutter test test/features/live/`（42 例）：
   - `prediction/mock_prediction_repository_test.dart`（15 例，定价归一化、买入推价、quote 一致、买卖对账、
     赢家 1:1 赔付/输家归零、取消退本金、停盘/余额/过期守护、终态状态机守护）。
-  - `prediction/prediction_replay_test.dart`（14 例，同上 + 确定性重放、多用户独立、**resolver 鉴权**：
-    非建市者伪造 resolve/cancel/close 被拒、建市者本人正常生效）。
+  - `prediction/prediction_replay_test.dart`（18 例，同上 + 确定性重放、多用户独立、**resolver 鉴权**：
+    非建市者伪造 resolve/cancel/close 被拒、建市者本人正常生效；**房间归属鉴权**：`roomIdFromMarketId`
+    解析、`trustedRoomId` 一致时建市生效、marketId 伪装成其他房间的 create 事件被拒、`trustedRoomId`
+    为 null 时跳过校验）。
   - `gift_tally_test.dart`（9 例，礼物确定性重放：收益/花费聚合、跨房间统一余额、**超额送礼被判无效**、
     不同发送者互不影响、未知礼物忽略、确定性）。
 - 静态检查：`flutter analyze lib/features/live`（应零问题）；提交前 `dart format lib/features/live`。

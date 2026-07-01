@@ -3,9 +3,10 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:livekit_client/livekit_client.dart';
-// matrix 为 n42_chat 传递依赖；此处仅借用其 Client 类型换取 LiveKit token。
+// matrix 为 n42_chat 传递依赖；此处仅借用其 Client 类型换取 LiveKit token，
+// 及 EventTypes 读取房间创建事件的 sender（锚定主播身份，见 _broadcasterId）。
 // ignore: depend_on_referenced_packages
-import 'package:matrix/matrix.dart' show Client;
+import 'package:matrix/matrix.dart' show Client, EventTypes;
 import 'package:n42_chat/n42_chat.dart';
 
 // 以下为 n42_chat 内部实现，未从 package:n42_chat/n42_chat.dart 导出。
@@ -36,6 +37,14 @@ class LiveVideoService {
   /// 场景下即摄像头/麦克风被永久占用，只能杀进程才能停止）。
   bool _disposed = false;
 
+  /// 本房间的主播身份（LiveKit `identity`，等于其 Matrix userID）：取自 Matrix
+  /// `m.room.create` 事件的 `sender`——该字段由 homeserver 在建房时权威写入，
+  /// 建房后不可变更，不依赖任何本模块自行维护的状态，是比"参与者列表顺序"
+  /// 更可靠的锚点。用于 [primaryVideoTrack] 精确挑选主播画面，防止在服务端
+  /// 尚未按角色锁 `canPublish`（观众也能推流）的窗口期，把非主播的画面/未
+  /// 授权推流误当作主播展示。
+  String? _broadcasterId;
+
   /// 当前已加入的 LiveKit 会话（[ChangeNotifier]，UI 可直接监听）。
   LiveKitService? get service => _service;
 
@@ -45,14 +54,23 @@ class LiveVideoService {
   /// 是否已在会议中。
   bool get isInMeeting => _service?.isInMeeting ?? false;
 
-  /// 主播视频轨道（观众端渲染用）：取第一个有画面的远端参与者。
+  /// 主播视频轨道（观众端渲染用）。优先按 [_broadcasterId] 精确匹配；仅当
+  /// 匹配不到时（如房间创建事件尚未同步到本地）才退回"任意有画面的远端
+  /// 参与者"这一宽松兜底，避免因锚点缺失导致完全无法显示画面。
   VideoTrack? get primaryVideoTrack {
     final svc = _service;
     if (svc == null) return null;
+    final broadcasterId = _broadcasterId;
+    if (broadcasterId != null) {
+      for (final p in svc.participants) {
+        if (p.id == broadcasterId && p.videoTrack != null) return p.videoTrack;
+      }
+    }
+    // 兜底：锚点缺失时退回"第一个有画面的非本地参与者"。
     for (final p in svc.participants) {
       if (!p.isLocal && p.videoTrack != null) return p.videoTrack;
     }
-    // 兜底：任意有画面的轨道（含本地，便于主播自预览）。
+    // 再兜底：任意有画面的轨道（含本地，便于主播自预览）。
     for (final p in svc.participants) {
       if (p.videoTrack != null) return p.videoTrack;
     }
@@ -135,6 +153,12 @@ class LiveVideoService {
     if (client == null || identity == null) {
       throw StateError('Matrix 客户端未登录');
     }
+    // 主播身份锚点：房间创建事件的 sender 恒为建房者（即主播），与本端是否
+    // 以主播/观众身份加入无关——两端都据此解析，观众端才能定位到正确画面。
+    _broadcasterId = client
+        .getRoomById(matrixRoomId)
+        ?.getState(EventTypes.RoomCreate)
+        ?.senderId;
     final displayName = N42Chat.currentUser?.displayName;
     final participantName =
         (displayName != null && displayName.trim().isNotEmpty)
@@ -181,6 +205,7 @@ class LiveVideoService {
   Future<void> leave() async {
     final svc = _service;
     _service = null;
+    _broadcasterId = null;
     try {
       await svc?.leaveMeeting();
     } catch (_) {

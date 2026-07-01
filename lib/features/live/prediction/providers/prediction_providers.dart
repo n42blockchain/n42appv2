@@ -27,24 +27,23 @@ final predictionBalanceProvider = StreamProvider<double>((ref) {
   return ref.watch(predictionRepositoryProvider).watchBalance();
 });
 
-/// 某直播间的市场列表。
-final roomMarketsProvider =
-    StreamProvider.family<List<PredictionMarket>, String>((ref, roomId) {
+/// 某直播间的市场列表。**autoDispose**：无 widget 监听时 Riverpod 会取消订阅，
+/// 触发 `MatrixPredictionRepository.watchMarkets` 的 `finally` 释放该房间的
+/// 订阅/重放态——否则访问过的房间订阅只在整个仓库 dispose（近似 App 生命周期）
+/// 时才统一清理，越逛越多间直播间订阅只增不减。
+final roomMarketsProvider = StreamProvider.autoDispose
+    .family<List<PredictionMarket>, String>((ref, roomId) {
       return ref.watch(predictionRepositoryProvider).watchMarkets(roomId);
     });
 
-/// 单个市场实时状态。
-final marketProvider = StreamProvider.family<PredictionMarket, String>((
-  ref,
-  marketId,
-) {
-  return ref.watch(predictionRepositoryProvider).watchMarket(marketId);
-});
+/// 单个市场实时状态。autoDispose 理由同 [roomMarketsProvider]。
+final marketProvider = StreamProvider.autoDispose
+    .family<PredictionMarket, String>((ref, marketId) {
+      return ref.watch(predictionRepositoryProvider).watchMarket(marketId);
+    });
 
-/// 当前用户在某市场的持仓。
-final positionProvider = StreamProvider.family<UserPosition, String>((
-  ref,
-  marketId,
-) {
-  return ref.watch(predictionRepositoryProvider).watchPosition(marketId);
-});
+/// 当前用户在某市场的持仓。autoDispose 理由同 [roomMarketsProvider]。
+final positionProvider = StreamProvider.autoDispose
+    .family<UserPosition, String>((ref, marketId) {
+      return ref.watch(predictionRepositoryProvider).watchPosition(marketId);
+    });

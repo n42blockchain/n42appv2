@@ -144,6 +144,35 @@ void main() {
     expect(r.redeemableFor(mkt, '@a:server', now: at(3)), closeTo(100, 1e-6));
   });
 
+  test('roomIdFromMarketId 解析出房间前缀', () {
+    expect(PredictionReplay.roomIdFromMarketId(mkt), room);
+    expect(PredictionReplay.roomIdFromMarketId('noSeparator'), 'noSeparator');
+  });
+
+  test('trustedRoomId 与 marketId 前缀一致时建市正常生效', () {
+    final r = PredictionReplay(initialBalance: 1000, trustedRoomId: room)
+      ..replay([create()]);
+    expect(r.market(mkt, now: at(1)), isNotNull);
+    expect(r.marketsFor(room, now: at(1)).length, 1);
+  });
+
+  test('房间归属鉴权——marketId 前缀伪装成其他房间的 create 事件被拒（防串房）', () {
+    // 攻击者在房间 other-room 广播一条 marketId 前缀伪装成 mkt(!room:server)
+    // 的 create 事件；本实例代表的物理可信房间是 other-room，应拒绝创建。
+    final r = PredictionReplay(
+      initialBalance: 1000,
+      trustedRoomId: 'other-room',
+    )..replay([create()]); // create() 的 marketId 前缀是 room，非 other-room
+    expect(r.market(mkt, now: at(1)), isNull);
+    expect(r.marketsFor(room, now: at(1)), isEmpty);
+    expect(r.marketsFor('other-room', now: at(1)), isEmpty);
+  });
+
+  test('trustedRoomId 为 null 时跳过房间归属校验（兼容无房间语境）', () {
+    final r = PredictionReplay(initialBalance: 1000)..replay([create()]);
+    expect(r.market(mkt, now: at(1)), isNotNull);
+  });
+
   test('非建市者伪造开奖被拒——resolver 鉴权（防任意用户操纵结果）', () {
     final r = replayOf([
       create(sender: '@host:server'),

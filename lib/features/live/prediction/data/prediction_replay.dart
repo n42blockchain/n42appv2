@@ -16,15 +16,40 @@ import '../domain/prediction_market.dart';
 /// resolver 发出的事件——任何非 resolver 伪造的同类事件会被本引擎**丢弃**（不改
 /// 变状态）。由于所有客户端都跑同一套确定性重放逻辑，伪造事件在每一端都会被
 /// 一致地忽略，无需服务端仲裁即可堵住"任意用户伪造开奖结果套利"这个漏洞。
+///
+/// **房间归属鉴权**：`marketId` 形如 `<roomId>~<后缀>`（见 [roomIdFromMarketId]），
+/// 调用方（`MatrixPredictionRepository`）据此字符串前缀决定把交易/赎回等动作
+/// 路由到哪个 Matrix room——但字符串前缀只是事件载荷里的普通字段，攻击者完全
+/// 可以在自己所在的房间 A 广播一条 `marketId` 前缀伪装成房间 B 的伪造 create
+/// 事件。若不加校验，房间 A 的观众会看到一个"看起来属于房间 B"的假市场，一旦
+/// 下单，解析出的房间 B 才是真正发送交易事件的目的地——可能把资金路由到无关
+/// 房间的真实市场（前提是受害者也恰好在房间 B）。真正可信的信号是**事件物理
+/// 到达的房间**（Matrix 服务端保证房间隔离，A 房间广播的消息不可能出现在 B
+/// 房间的 timeline 里）——即 [trustedRoomId]，由调用方传入"本实例实际订阅的
+/// 那个房间"。建市事件的 `marketId` 前缀必须与 [trustedRoomId] 一致才被接受，
+/// 否则整条 create 事件被拒绝（该市场永不存在于任何房间的重放态中，从源头
+/// 堵住伪造，而不只是在路由/查找时才发现找不到）。
 class PredictionReplay {
-  PredictionReplay({this.initialBalance = 1000});
+  PredictionReplay({this.initialBalance = 1000, this.trustedRoomId});
 
   final double initialBalance;
+
+  /// 本实例代表的**物理可信房间**（即调用方实际订阅事件流的那个房间）。
+  /// 非空时，建市事件的 `marketId` 房间前缀必须与此一致才被接受；为 null 时
+  /// 跳过校验（供无房间语境的单测使用）。
+  final String? trustedRoomId;
 
   /// b 参数：与 mock 保持一致，便于行为对齐。
   static const double _liquidity = 50;
 
   final Map<String, _MarketState> _markets = {};
+
+  /// 从 `marketId`（形如 `<roomId>~<后缀>`）解析出房间 id。**仅用于路由/订阅
+  /// 提示**，字符串本身不可信——真正的信任边界见类文档"房间归属鉴权"。
+  static String roomIdFromMarketId(String marketId) {
+    final i = marketId.lastIndexOf('~');
+    return i <= 0 ? marketId : marketId.substring(0, i);
+  }
 
   /// 按时间线顺序重放整段事件日志，重建全部市场状态。
   /// 每次事件流更新时整体重放（市场/事件规模有限，简单且天然幂等）。
@@ -41,9 +66,16 @@ class PredictionReplay {
         if (_markets.containsKey(e.marketId)) return; // 重复建市忽略
         final labels = e.labels;
         if (labels == null || labels.length < 2) return;
+        // 房间归属鉴权：marketId 的房间前缀必须与本实例的物理可信房间一致，
+        // 否则是伪造/串房的 create 事件，直接拒绝（不创建市场，见类文档）。
+        final trusted = trustedRoomId;
+        if (trusted != null && roomIdFromMarketId(e.marketId) != trusted) {
+          return;
+        }
         _markets[e.marketId] = _MarketState(
           id: e.marketId,
-          roomId: e.roomId ?? '',
+          // 优先用物理可信房间；无（如单测）则退回事件载荷字段。
+          roomId: trusted ?? e.roomId ?? '',
           question: e.question ?? '',
           labels: labels,
           createdAt: e.timestamp,
