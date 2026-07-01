@@ -113,6 +113,59 @@ void main() {
     expect(resolution, isNull);
   });
 
+  test('absent chain id resolves native to the current network', () {
+    final eth = native(coinType: 'ETH', chainId: 1);
+    final polygon = native(coinType: 'MATIC', chainId: 137);
+    // 无 @chainId 的原生请求：按 EIP-681「当前所选网络」，应落到 currentCoin 所在链。
+    final request = Eip681.parse('ethereum:0xRecipient?value=1000000000000000000')!;
+
+    final resolution = ScanToPayResolver.resolve(
+      request: request,
+      coinModels: [eth, polygon],
+      currentCoin: polygon,
+    );
+
+    expect(resolution?.coinModel, same(polygon));
+    expect(resolution?.amount, '1');
+  });
+
+  test('absent chain id resolves ERC-20 on the current chain, not a same-address token on another chain', () {
+    const shared = '0x0000000000000000000000000000000000000abc';
+    final usdcEth = erc20(
+      coinType: 'ETH',
+      chainId: 1,
+      contract: shared,
+      decimals: 6,
+    );
+    final usdcPolygon = erc20(
+      coinType: 'MATIC',
+      chainId: 137,
+      contract: shared,
+      decimals: 6,
+    );
+    final polygonNative = native(coinType: 'MATIC', chainId: 137);
+    // 同一合约地址在两条链都持有；无 @chainId → 按当前链(137)选，不能误选到链 1。
+    final request = Eip681.parse(
+      'ethereum:$shared/transfer?address=0xRecipient&uint256=2500000',
+    )!;
+
+    final resolution = ScanToPayResolver.resolve(
+      request: request,
+      coinModels: [usdcEth, usdcPolygon],
+      currentCoin: polygonNative,
+    );
+
+    expect(resolution?.coinModel, same(usdcPolygon));
+    expect(resolution?.amount, '2.5');
+  });
+
+  test('sameAsset separates native coins across chains', () {
+    final eth = native(coinType: 'ETH', chainId: 1);
+    final polygon = native(coinType: 'MATIC', chainId: 137);
+    expect(ScanToPayResolver.sameAsset(eth, polygon), isFalse);
+    expect(ScanToPayResolver.sameAsset(eth, eth), isTrue);
+  });
+
   test('sameAsset separates contracts on the same chain', () {
     final usdc = erc20(
       coinType: 'ETH',

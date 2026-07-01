@@ -32,7 +32,7 @@ class ScanToPayResolver {
     if (recipient.isEmpty) return null;
 
     final targetCoin = request.isErc20Transfer
-        ? _findErc20Coin(request, coinModels)
+        ? _findErc20Coin(request, coinModels, currentCoin: currentCoin)
         : _findNativeCoin(request, coinModels, currentCoin: currentCoin);
     if (targetCoin == null) return null;
 
@@ -75,15 +75,17 @@ class ScanToPayResolver {
 
   static CoinModel? _findErc20Coin(
     Eip681Request request,
-    Iterable<CoinModel> coinModels,
-  ) {
+    Iterable<CoinModel> coinModels, {
+    CoinModel? currentCoin,
+  }) {
     final token = _normalizeAddress(request.tokenAddress);
     if (token.isEmpty) return null;
+    final chainId = _effectiveChainId(request, currentCoin);
     return _firstOrNull(
       coinModels.where((coin) {
         if (!coin.config.isContract) return false;
         if (_normalizeAddress(_contractFor(coin)) != token) return false;
-        return _matchesChainId(coin, request.chainId);
+        return _matchesChainId(coin, chainId);
       }),
     );
   }
@@ -93,10 +95,11 @@ class ScanToPayResolver {
     Iterable<CoinModel> coinModels, {
     CoinModel? currentCoin,
   }) {
+    final chainId = _effectiveChainId(request, currentCoin);
     if (currentCoin != null &&
         !currentCoin.config.isContract &&
         _isEvmCoin(currentCoin) &&
-        _matchesChainId(currentCoin, request.chainId)) {
+        _matchesChainId(currentCoin, chainId)) {
       return currentCoin;
     }
 
@@ -104,13 +107,25 @@ class ScanToPayResolver {
       coinModels.where((coin) {
         if (coin.config.isContract) return false;
         if (!_isEvmCoin(coin)) return false;
-        return _matchesChainId(coin, request.chainId);
+        return _matchesChainId(coin, chainId);
       }),
     );
   }
 
   static bool _isEvmCoin(CoinModel coin) =>
       coin.config.blockchainType == BlockchainType.Ethereum.name;
+
+  /// EIP-681 `chain_id` 缺省时按**当前所选网络**（`currentCoin` 所在链）处理，
+  /// 而非"通配任意链"——否则无 `@chainId` 的请求会把金额预填到列表首个匹配币，
+  /// 可能落到错误链的同址代币/原生币。仅当既无请求 chainId、又无 EVM 当前币时
+  /// 才退回宽松匹配（无链上下文的最后兜底，下游发送页仍会二次确认资产）。
+  static int? _effectiveChainId(Eip681Request request, CoinModel? currentCoin) {
+    if (request.chainId != null) return request.chainId;
+    if (currentCoin != null && _isEvmCoin(currentCoin)) {
+      return _chainIdFor(currentCoin);
+    }
+    return null;
+  }
 
   static bool _matchesChainId(CoinModel coin, int? requestedChainId) {
     if (requestedChainId == null) return true;
