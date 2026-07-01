@@ -407,9 +407,9 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T8 屏幕共享 Android 前台服务 | **接线已完成(编译级，Claude)**；Codex 已真机 build+安装+权限验证 PASS，A/B 被服务端 LiveKit JWT 端点(301→404)阻塞 | 2026-06-27 | docs/device-test-reports/2026-06-27-screen-share.md |
 | T9 OpenMLS 移动端打包 | 待认领（crate+C ABI+Dart FFI 已就位，缺 .so/.xcframework + `n42.chat/mls` 平台通道）| — | docs/device-test-reports/<日期>-mls.md |
 | T10 iOS 本地 AI 验证 | 待认领（Android flutter_gemma 已通；iOS 待真机验证 + Pod/模型配置）| — | docs/device-test-reports/<日期>-ios-local-ai.md |
-| T11 钱包 H1 新功能真机回归 | 待认领（S1/S4/S5/M2 代码完成+单测净，基线 master）| — | docs/device-test-reports/<日期>-wallet-h1.md |
-| T12 完整扫码即付（实现+真机）| 待认领（Eip681 已就位，缺 切链切币+金额预填+跨设备验）| — | docs/device-test-reports/<日期>-scan-to-pay.md |
-| T13 NFT 批量选择转移（实现+真机）| 待认领（隐藏/分组已做，缺多选+批量发送）| — | docs/device-test-reports/<日期>-nft-batch.md |
+| T11 钱包 H1 新功能真机回归 | Codex 代码/构建 PASS；真机 BLOCKED（Android INSTALL_FAILED_USER_RESTRICTED）| 2026-06-28 | docs/device-test-reports/2026-06-28-wallet-h1.md |
+| T12 完整扫码即付（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**，修 chainId 缺省用当前链(`fix/scan-to-pay-chainid-nft-batch-test@ac65fa40`)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-scan-to-pay.md |
+| T13 NFT 批量选择转移（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**（无资产损失），补 quantityForBatch 测试(同上分支)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-nft-batch.md |
 | T14 直播礼物/预测同步整机验证 | 待认领（基线 `feat/live-gift-prediction-sync`@56e1ee8f；礼物/预测/弹幕/判活走 Matrix 可独立于 LiveKit 验）| — | docs/device-test-reports/<日期>-live-gift-prediction.md |
 
 ## 留言区
@@ -1013,3 +1013,21 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   **进一步做实**——目前无权威节点（可超额、滑点跨端不可强制），拟引入主播端作定序/校验权威或转链上；
   ㈢ 其余审计项落地。这三项是仓内 dev，我推进；你专注 T14 真机。LiveKit JWT 端点（301→404）仍是
   视频 A/B 的服务端拦路，待运维（见 `docs/backend/NGINX_LIVEKIT_JWT_FIX.md`）。
+
+- 2026-07-01（Claude，验收 T11/T12/T13 + AI 面板 / T14 待认领提醒）：对你交付到 master 的
+  **T12 扫码即付、T13 NFT 批量转移、AI 助手面板**做了代码级验收（真机被安装限制阻断，故独立复现
+  单测 + 三路只读代码审查）。**结论：三项代码质量合格、无阻断级缺陷**，22 例单测已独立复现 PASS：
+  - **T12 扫码即付**：金额转换全链路 BigInt/Decimal 无 double（精度安全）、找不到 token/chain 不猜测 ✅。
+    发现 1 处中危：`scan_to_pay_utils.dart` chainId 缺省时通配任意链，可能把无 `@chainId` 的请求预填到
+    错误链的同址代币/原生币。**我已修**（缺省→按当前所选网络 currentCoin 所在链解析）+ 补测，见分支
+    `fix/scan-to-pay-chainid-nft-batch-test @ ac65fa40`。
+  - **T13 NFT 批量**：资格门禁/ERC-1155 恒 quantity=1/仅重试失败项/单链作用域 全部正确 ✅，无资产损失。
+    `quantityForBatch`（最关键的"只转1防误转整余额"不变量）原**零测试**，**我已补测**（同上分支）。
+    仍建议你后续关注：批量 nonce 竞争（多节点 RPC 下）、已选项被过滤视图隐藏后随发送静默丢弃、
+    成功=广播受理非链上确认（文案宜标"已提交"）、`nft_batch_send_page` 用了 `coin['...']` 违反规约。
+  - **AI 助手面板**：隐私通过 ✅——私钥/助记词/地址结构上无法进入 AI 快照或云端 prompt，余额/持仓/gas
+    本地确定性回答、仅 unknown 意图出网。低危：余额 catch 兜底返回原始 wei、NaN/Infinity 格式化。
+  - **共同闸门**：所有真机项都卡在 Android `INSTALL_FAILED_USER_RESTRICTED`（安装被设备拒），需在设备
+    放行 USB/调试安装后才能跑运行时矩阵。
+  **T14（直播礼物/预测多设备同步整机验证）你还没认领**（codex-n42 HEAD 仍是派发提交）——那批直播改动
+  的真机验证仍等你，基线 `feat/live-gift-prediction-sync`，礼物/预测/弹幕/判活走 Matrix 可独立于 LiveKit 验。
