@@ -9,6 +9,7 @@
   - `b667776b` optional chain-backed prediction repository switch and ABI spec.
 
 ## Automated Verification
+- Re-run at `2026-06-30 23:57 EDT` after confirming no newer T14 task text or branch commits.
 - PASS: `flutter test test/features/live/ --no-pub`
   - 29 tests passed.
 - PASS: `flutter analyze lib/features/live --no-fatal-infos`
@@ -27,16 +28,25 @@
   - `adb install -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
   - `adb install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
   - All failed with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`.
+  - Re-run at `2026-06-30 23:57 EDT`: `adb install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk` still fails with the same error after pushing the APK to the device.
+  - Re-run at `2026-07-01 00:04 EDT`:
+    - `adb -s 38f4f08a install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
+    - `adb -s 38f4f08a install -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
+    - `flutter install -d 38f4f08a --debug`
+    - All still fail with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`.
 - Android settings inspection:
   - Developer options and USB debugging are enabled.
   - `USB调试（安全设置）` is enabled.
   - `USB安装` is currently `checked=false`.
   - Attempts to enable `USB安装` via ADB input did not change the setting; this appears to require a manual on-device tap/confirmation.
   - `pm list packages` showed no installed `ai.n42.www`, so the T14 build is not currently installed on Android.
+  - Re-run confirmation: `pm list packages` still only shows `com.example.n42_chat_example` and `com.n42.verifier`; `ai.n42.www` is still absent.
+  - Re-run confirmation at `2026-07-01 00:04 EDT`: target package is still absent from `pm list packages`; `dumpsys package ai.n42.www` returns no version data.
 - iPhone launch BLOCKED:
   - `flutter run -d 00008150-000E2469149A401C --debug --no-pub` completed Xcode build and began install/launch, then failed with:
     - `Error starting debug session in Xcode: Failed to find project Runner: Error: 不能获取对象。`
     - Flutter suggested opening `ios/Runner.xcworkspace` and running from Xcode.
+  - Re-run at `2026-06-30 23:57 EDT`: same failure after Xcode build and install/launch phase.
 
 ## T14 Matrix
 | # | Scenario | Status | Evidence / Notes |
