@@ -238,7 +238,7 @@ class WalletActionProvider extends ChangeNotifier
   List<CoinModel> _coinModels = [];
   List<CoinModel> get coinModels => _coinModels;
   //首页 显示的币列表（包含 CoinModel 和 AggregatedCoinModel）
-  List<dynamic> coinList = [];
+  List<CoinModel> coinList = [];
   //钱包所有币种余额
   //可用余额，美刀
   double _balanceTotal = 0.0;

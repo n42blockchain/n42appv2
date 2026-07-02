@@ -142,13 +142,9 @@ extension WalletActionProviderSort on WalletActionProvider {
     // 按 24h 涨跌幅排序（0=降序, 1=升序）
     final changeSort = sort['change'] ?? -1;
     if (changeSort == 0) {
-      coinList.sort(
-        (a, b) => (b.percentage as double).compareTo(a.percentage as double),
-      );
+      coinList.sort((a, b) => b.percentage.compareTo(a.percentage));
     } else if (changeSort == 1) {
-      coinList.sort(
-        (a, b) => (a.percentage as double).compareTo(b.percentage as double),
-      );
+      coinList.sort((a, b) => a.percentage.compareTo(b.percentage));
     }
 
     // 任何排序后，置顶代币始终在最前面
@@ -178,25 +174,23 @@ extension WalletActionProviderSort on WalletActionProvider {
 
     if (walletInfo.pinnedCoins.isEmpty) {
       for (final c in coinList) {
-        if (c is CoinModel) c.isPinned = false;
+        c.isPinned = false;
       }
       return;
     }
     final pinnedSet = Set<String>.from(walletInfo.pinnedCoins);
     for (final c in coinList) {
-      if (c is CoinModel) {
-        c.isPinned = pinnedSet.contains(_coinPinKey(c));
-      }
+      c.isPinned = pinnedSet.contains(_coinPinKey(c));
     }
   }
 
   /// 将已置顶的代币提升到 coinList 前端，各组内部顺序不变（稳定）。
   void _elevatePinnedToTop() {
     if (walletInfo.pinnedCoins.isEmpty || coinList.isEmpty) return;
-    final pinned = <dynamic>[];
-    final others = <dynamic>[];
+    final pinned = <CoinModel>[];
+    final others = <CoinModel>[];
     for (final c in coinList) {
-      if (c is CoinModel && c.isPinned) {
+      if (c.isPinned) {
         pinned.add(c);
       } else {
         others.add(c);

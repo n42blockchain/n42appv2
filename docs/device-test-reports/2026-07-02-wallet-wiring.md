@@ -102,13 +102,62 @@ blocker appears to be an OS/InputManager-layer restriction rather than the
 visible Developer options switch state. `monkey` launch still works, and the
 app returns to `ai.n42.www/.MainActivity`.
 
+## 2026-07-02 Android ADB Retest
+
+Retested after reconnecting Android device `38f4f08a` (`25098RA98C`,
+Android 16 / API 36):
+
+- Rebuilt current branch with
+  `flutter build apk --debug --target-platform android-arm64 --no-pub`.
+- Installed successfully with
+  `adb -s 38f4f08a install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk`.
+- Installed package after retest:
+  - `versionName=2.4.3`
+  - `versionCode=2026062618`
+  - `firstInstallTime=2026-07-02 02:23:42`
+  - `lastUpdateTime=2026-07-02 04:51:17`
+- ADB input is now available on this connection:
+  `adb shell input tap 1 1` and `adb shell input keyevent KEYCODE_WAKEUP`
+  both returned success.
+- Cold launch via `monkey` succeeded; foreground activity remained
+  `ai.n42.www/.MainActivity`.
+- Wallet home rendered `Account1`, `Balance`, `Just updated`, `Send`,
+  `Receive`, `Buy`, and token rows for `N`, `BTC`, `ETH`, and `USDT`.
+- Smart Wallet entry opened successfully and showed `Smart Account`,
+  `Smart Accounts`, `Send`, `Batch`, `Advanced Features`, and
+  `Create Smart Account`.
+- Receive entry did not open the receive address because the device wallet is
+  not backed up; it correctly showed the guard dialog
+  `Please backup your wallet seed phrase first!`.
+- Startup log initially exposed a Flutter runtime issue:
+  `NoSuchMethodError: Class 'CoinModel' has no instance getter 'config'` in
+  `WalletActionProviderMarket.getCoinInfo`. Root cause was `coinList` being a
+  `List<dynamic>`, which made extension getter `CoinModel.config` dispatch
+  dynamically inside `coinList.map(...)`.
+- Fixed by typing `coinList` as `List<CoinModel>` and cleaning the now
+  redundant sort casts/type checks. Also removed three redundant `?? 0.0`
+  expressions in Earn that became analyzer warnings after the type tightening.
+- Verification after the fix:
+  - `flutter analyze --no-fatal-infos`: PASS.
+  - T15 targeted wallet/AA/staking tests: PASS, 309 tests.
+  - Android debug build: PASS.
+  - Android reinstall and cold launch: PASS.
+  - Logcat no longer shows the `CoinModel.config` NoSuchMethodError or an app
+    `FATAL EXCEPTION`.
+
+Remaining non-fatal runtime warnings observed on this device:
+
+- Token discovery RPC/proxy calls return 401 for ETH/BASE.
+- MATIC token discovery logs a response-shape cast warning:
+  `type 'String' is not a subtype of type 'Map<String, dynamic>?'`.
+- Some remote token images fail Android image decoding with
+  `ImageDecoder$DecodeException: ... unimplemented`.
+
 ## Blockers
 
-1. Android automated input is still rejected by the OS even though Developer
-   options show `USB安装` and `USB调试（安全设置）` enabled and
-   `persist.security.adbinput=1`, and even though `com.android.shell` reports
-   `android.permission.INJECT_EVENTS: granted=true`. ADB cannot drive
-   deterministic taps through the T15 matrix.
+1. Full transfer/signing rows still require a backed-up wallet and funded test
+   assets. The current device blocks receive/send entry with the seed backup
+   guard, which is expected.
 2. macOS Terminal/IDE does not currently have Local Network access for Flutter's
    iPhone Dart VM discovery. `flutter run` reaches install/launch, then fails on
    mDNS/port 5353 with `No route to host`.
@@ -119,9 +168,9 @@ app returns to `ai.n42.www/.MainActivity`.
 
 ## Next Steps
 
-1. On Android, run the T15 matrix manually on the device, or continue debugging
-   why HyperOS still denies shell input injection after the security debugging
-   switch and shell `INJECT_EVENTS` permission both report enabled.
+1. On Android, continue the T15 matrix with ADB-driven navigation where possible,
+   but keep transfer/signature submission manual until funded test wallets and
+   recipients are confirmed.
 2. On macOS, grant the terminal or IDE Local Network permission in System
    Settings -> Privacy & Security -> Local Network, then rerun:
    `flutter run -d 00008150-000E2469149A401C --debug --no-pub`.

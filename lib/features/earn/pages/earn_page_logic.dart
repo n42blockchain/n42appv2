@@ -30,15 +30,15 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
       if (addr.isEmpty) continue;
       if (coinType == 'ETH' && ethAddr == null) {
         ethAddr = addr;
-        ethPrice = cm.coinPrice ?? 0.0;
+        ethPrice = cm.coinPrice;
       }
       if (coinType == 'SOL' && solAddr == null) {
         solAddr = addr;
-        solPrice = cm.coinPrice ?? 0.0;
+        solPrice = cm.coinPrice;
       }
       if (coinType == 'ATOM' && atomAddr == null) {
         atomAddr = addr;
-        atomPrice = cm.coinPrice ?? 0.0;
+        atomPrice = cm.coinPrice;
       }
     }
     ref
