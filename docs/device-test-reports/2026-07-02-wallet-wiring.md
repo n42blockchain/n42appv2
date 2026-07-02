@@ -144,6 +144,12 @@ Android 16 / API 36):
   - Android reinstall and cold launch: PASS.
   - Logcat no longer shows the `CoinModel.config` NoSuchMethodError or an app
     `FATAL EXCEPTION`.
+- After committing, the pre-commit hook bumped the source version to
+  `2.4.3+2026062619`. A follow-up build of that HEAD passed, but two install
+  retries failed with
+  `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`. The connected
+  device therefore remains on the verified `2.4.3+2026062618` build until the
+  phone-side install confirmation is allowed.
 
 Remaining non-fatal runtime warnings observed on this device:
 
