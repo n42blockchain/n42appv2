@@ -85,15 +85,26 @@ After the initial report, Android installation was retried successfully:
 - UI tree showed wallet home content including `Account1`, `Balance`, `$0.00`, and wallet action entries.
 - Recent logcat scan found no `FATAL EXCEPTION` / app `AndroidRuntime` crash. Startup did log expected network/data warnings such as `TrxApi ... unauthorized` and balance fetch fallback messages.
 
-Remaining Android runtime blocker: `persist.security.adbinput=0`, so ADB cannot
-drive deterministic taps through the T15 UI matrix. The app is installed and
-ready for manual on-device testing or for automation after simulated input is
-enabled.
+Initial Android runtime blocker was `persist.security.adbinput=0`, which meant
+ADB could not drive deterministic taps through the T15 UI matrix. The app is
+installed and ready for manual on-device testing. A direct tap attempt confirmed
+the blocker:
+`adb shell input tap 100 100` fails with
+`SecurityException: Injecting input events requires ... INJECT_EVENTS permission`.
+
+Re-run after opening Developer options showed both `USB安装` and
+`USB调试（安全设置）` as checked, and `persist.security.adbinput=1`; however,
+after `adb reconnect` and ADB server restart, both `adb shell input keyevent
+KEYCODE_BACK` and `adb shell input tap 100 100` still failed with the same
+`INJECT_EVENTS` security exception. `monkey` launch still works, and the app
+returns to `ai.n42.www/.MainActivity`.
 
 ## Blockers
 
-1. Android automated input is disabled (`persist.security.adbinput=0`), so ADB
-   cannot tap any on-device install confirmation.
+1. Android automated input is still rejected by the OS even though Developer
+   options show `USB安装` and `USB调试（安全设置）` enabled and
+   `persist.security.adbinput=1`. ADB cannot drive deterministic taps through
+   the T15 matrix.
 2. macOS Terminal/IDE does not currently have Local Network access for Flutter's
    iPhone Dart VM discovery. `flutter run` reaches install/launch, then fails on
    mDNS/port 5353 with `No route to host`.
@@ -104,8 +115,9 @@ enabled.
 
 ## Next Steps
 
-1. On Android, enable the MIUI USB debugging security/simulated input option so
-   `persist.security.adbinput=1`, or run the T15 matrix manually on the device.
+1. On Android, run the T15 matrix manually on the device, or continue debugging
+   why HyperOS still denies shell input injection after the security debugging
+   switch is enabled.
 2. On macOS, grant the terminal or IDE Local Network permission in System
    Settings -> Privacy & Security -> Local Network, then rerun:
    `flutter run -d 00008150-000E2469149A401C --debug --no-pub`.
