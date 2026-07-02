@@ -14,6 +14,8 @@ import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/core/security/device_security.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
@@ -35,6 +37,7 @@ import 'package:n42_wallet/features/wallet/pages/create_wallet/import/import_clo
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_privatekey.dart';
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
+import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -105,7 +108,7 @@ void main() async {
     AppLogger.e(
       'main',
       'CRITICAL: SSL certificate pinning uses placeholder fingerprints. '
-      'Replace with real server certificate fingerprints before production.',
+          'Replace with real server certificate fingerprints before production.',
     );
   }
 
@@ -166,6 +169,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     with ChatInitializationMixin {
   DeepLinkService? _deepLinkService;
   DeepLinkHandler? _deepLinkHandler;
+  Timer? _priceAlertTimer;
 
   @override
   void initState() {
@@ -187,7 +191,38 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       unawaited(_migrateWalletData());
       unawaited(initN42Chat());
       unawaited(_initPhishingDetector());
+      unawaited(_checkDeviceSecurity());
+      _startPriceAlertLoop();
     });
+  }
+
+  /// 价格提醒前台周期检查。服务与设置面板早已存在，但此前唯一的检查调用点
+  /// 在一个没有任何导航入口的死页面里——用户设了提醒也永远不会触发。
+  /// 无已启用提醒时 checkAllNow 直接返回，不产生网络请求。
+  void _startPriceAlertLoop() {
+    unawaited(CoinPriceAlertService.checkAllNow());
+    _priceAlertTimer = Timer.periodic(
+      const Duration(minutes: 5),
+      (_) => unawaited(CoinPriceAlertService.checkAllNow()),
+    );
+  }
+
+  /// 启动后检测设备完整性（Root/越狱）。release 模式下若设备被攻破，弹一次
+  /// 非阻塞警告——不禁用功能（避免误报锁死用户），仅提醒风险。debug 模式恒静默。
+  Future<void> _checkDeviceSecurity() async {
+    try {
+      if (!await DeviceSecurityService.instance.isDeviceCompromised()) return;
+      final ctx = AppGlobals.navigatorKey.currentContext;
+      if (ctx == null || !ctx.mounted) return;
+      await AppDialog.show(
+        ctx,
+        title: S.of(ctx).g_key_device_security_warning_title,
+        message: S.of(ctx).g_key_device_security_warning_message,
+        danger: true,
+      );
+    } catch (e) {
+      AppLogger.w('Security', 'device security check failed: $e');
+    }
   }
 
   Future<void> _initPhishingDetector() async {
@@ -284,6 +319,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
 
   @override
   void dispose() {
+    _priceAlertTimer?.cancel();
     disposeChatSubscriptions();
     _deepLinkHandler?.dispose();
     unawaited(_deepLinkService?.dispose());

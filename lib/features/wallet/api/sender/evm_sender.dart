@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:web3dart/web3dart.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/network/mev_protection.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
@@ -178,6 +179,28 @@ class EvmSender implements ChainSender {
       return SendResult.fail(
         sigResult.errorMessage ?? 'Signature validation failed',
       );
+    }
+
+    // MEV 保护：高风险交易（DEX swap/授权/大额转账）在支持的链（当前仅主网
+    // ETH，见 MevProtectionService.supportedChains）上优先经 Flashbots
+    // Protect 私有交易池广播，绕开公开 mempool 防三明治/抢跑攻击；失败
+    // （网络问题/端点不可用）静默回退到普通 RPC 广播，不因保护层故障阻断
+    // 用户的正常交易。
+    if (!params.isTest &&
+        MevProtectionService.instance.isEnabled &&
+        MevProtectionService.isAvailable(chainId) &&
+        MevProtectionService.assessRisk(
+          chainId: chainId,
+          data: params.calldata ?? '0x',
+          value: valuePrice,
+        ).shouldProtect) {
+      try {
+        final txHash = await MevProtectionService.instance
+            .sendProtectedTransaction(chainId: chainId, signedTx: signStr);
+        return SendResult.ok(txHash, actualAmount: adjustedValue);
+      } catch (_) {
+        // 落到下方普通 RPC 广播兜底。
+      }
     }
 
     final sendMm =

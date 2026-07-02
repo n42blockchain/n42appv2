@@ -113,3 +113,7 @@ test/screenshots/out/
 
 # 基准测试每次运行重新生成的产物（曾被误当数据提交）
 benchmark_results/
+
+# Chrome 扩展子项目（独立 npm 项目，构建产物/依赖不进主仓库）
+chrome-extension/node_modules/
+chrome-extension/dist/

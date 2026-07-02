@@ -1023,6 +1023,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tap to show all",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Recent"),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Device Security Warning",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Approved! Tap Swap to continue.",
     ),

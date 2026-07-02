@@ -10739,6 +10739,26 @@ class S {
     );
   }
 
+  /// `Device Security Warning`
+  String get g_key_device_security_warning_title {
+    return Intl.message(
+      'Device Security Warning',
+      name: 'g_key_device_security_warning_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.`
+  String get g_key_device_security_warning_message {
+    return Intl.message(
+      'This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.',
+      name: 'g_key_device_security_warning_message',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Watch Wallet`
   String get g_key_watch_wallet {
     return Intl.message(

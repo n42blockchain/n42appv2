@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:n42_wallet/core/security/signature_decoder.dart';
+import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
+import 'package:n42_wallet/features/wallet_connect/widgets/tx_risk_banner_widget.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +62,18 @@ class DAppSigningSheet extends StatelessWidget {
         ),
 
         Divider(height: 1, color: AppColorTokens.of(context).border),
+
+        // 签名可读化：把原始 calldata/EIP-712/personal_sign 翻译成人类可读的
+        // 标题+说明+风险等级+关键字段高亮（复用 WalletConnect 签名流程同款
+        // TxRiskBannerWidget，视觉一致）。解码失败时静默回退，不影响下方原始
+        // 数据展示——用户始终能看到真实请求内容。
+        Builder(
+          builder: (context) {
+            final analysis = _decode();
+            if (analysis == null) return const SizedBox.shrink();
+            return TxRiskBannerWidget(analysis: analysis);
+          },
+        ),
 
         // Scrollable content
         Flexible(
@@ -137,6 +152,56 @@ class DAppSigningSheet extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  /// 按请求类型选择合适的解码器，返回 [TxRiskAnalysis]（复用 WalletConnect
+  /// 流程的展示模型）。解析失败（如无法识别的 typed data 结构）返回 null，
+  /// 调用方隐藏横幅、不影响原始数据的展示。
+  TxRiskAnalysis? _decode() {
+    try {
+      final isTransaction = method.contains('Transaction');
+      final SignatureDecodedResult result;
+
+      if (isTransaction) {
+        result = SignatureDecoder.decodeContractCall(
+          calldata: details['data']?.toString() ?? '0x',
+          contractAddress: details['to']?.toString(),
+          fromAddress: details['from']?.toString(),
+          value: details['value']?.toString(),
+        );
+      } else if (method.contains('signTypedData')) {
+        final raw = details['data'] ?? details['message'];
+        Map<String, dynamic>? typedData;
+        if (raw is Map<String, dynamic>) {
+          typedData = raw;
+        } else if (raw is String) {
+          final decoded = json.decode(raw);
+          if (decoded is Map<String, dynamic>) typedData = decoded;
+        }
+        if (typedData == null) return null;
+        result = SignatureDecoder.decodeTypedData(typedData);
+      } else {
+        // personal_sign / eth_sign
+        final msg = (details['message'] ?? details['data'] ?? '').toString();
+        if (msg.isEmpty) return null;
+        result = SignatureDecoder.decodePersonalSign(msg);
+      }
+
+      return TxRiskAnalysis(
+        level: result.riskLevel,
+        functionName: result.title,
+        fields: [
+          if (result.description.isNotEmpty)
+            TxRiskField('Details', result.description),
+          for (final f in result.fields)
+            TxRiskField(f.label, f.value, isHighlighted: f.isHighlighted),
+        ],
+        warnings: result.warnings,
+      );
+    } catch (_) {
+      // 解析失败（畸形/未知结构）：静默回退，不阻断签名流程，原始数据仍可见。
+      return null;
+    }
   }
 
   Widget _itemWidget(BuildContext context, String label, String value) {

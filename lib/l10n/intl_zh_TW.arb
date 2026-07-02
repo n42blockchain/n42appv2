@@ -1321,6 +1321,8 @@
   "g_key_token_discovery_added": "已新增代幣",
   "g_key_token_discovery_empty": "沒有發現新的代幣",
   "g_key_manage_chains": "管理鏈",
+  "g_key_device_security_warning_title": "裝置安全警告",
+  "g_key_device_security_warning_message": "偵測到本裝置疑似已 Root/越獄。在存在安全風險的裝置上使用錢包會增加私鑰洩露與未授權存取的風險，請謹慎操作。",
   "g_key_watch_wallet": "手錶錢包",
   "g_key_watch_wallet_desc": "無需私鑰即可追蹤任何 EVM 位址",
   "g_key_watch_address_hint": "輸入以太坊地址（0x...）",

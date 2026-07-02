@@ -1321,6 +1321,8 @@
   "g_key_token_discovery_added": "Token added",
   "g_key_token_discovery_empty": "No new tokens found",
   "g_key_manage_chains": "Manage Chains",
+  "g_key_device_security_warning_title": "Device Security Warning",
+  "g_key_device_security_warning_message": "This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.",
   "g_key_watch_wallet": "Watch Wallet",
   "g_key_watch_wallet_desc": "Track any EVM address without private key",
   "g_key_watch_address_hint": "Enter Ethereum address (0x...)",

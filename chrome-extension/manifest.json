@@ -14,13 +14,13 @@
     "http://*/*"
   ],
   "background": {
-    "service_worker": "src/background/index.ts",
+    "service_worker": "background.js",
     "type": "module"
   },
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "js": ["src/content/bridge.ts"],
+      "js": ["content-bridge.js"],
       "run_at": "document_start",
       "all_frames": true
     }
@@ -42,7 +42,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["src/content/inpage.js"],
+      "resources": ["content-inpage.js"],
       "matches": ["https://*/*", "http://*/*"]
     }
   ],

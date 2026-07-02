@@ -7,7 +7,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
-import 'package:web3dart/web3dart.dart' show hexToBytes;
+import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:web3dart/web3dart.dart' show hexToBytes, bytesToHex;
 
 /// Aave V3 lending protocol integration.
 ///
@@ -154,15 +155,62 @@ class AaveService {
     return result;
   }
 
+  /// Check current ERC-20 allowance for `owner -> spender` on [tokenAddr]
+  /// via `eth_call`. Returns [BigInt.zero] on any error — callers treat
+  /// that as "needs approval", which is the safe default.
+  static Future<BigInt> checkAllowance({
+    required String coinType,
+    required String tokenAddr,
+    required String owner,
+    required String spender,
+  }) async {
+    try {
+      // allowance(address,address) selector: 0xdd62ed3e
+      final selector = hexToBytes('dd62ed3e');
+      final callData = Uint8List(4 + 2 * 32);
+      callData.setAll(0, selector);
+      _writeAddress(callData, 4, owner);
+      _writeAddress(callData, 36, spender);
+      final dataHex = '0x${bytesToHex(callData)}';
+
+      final result = await EthAPI()
+          .baseRPCEth(
+            'eth_call',
+            [
+              {'to': tokenAddr, 'data': dataHex},
+              'latest',
+            ],
+            coinType: coinType,
+            enableRetry: false,
+          )
+          .timeout(const Duration(seconds: 6));
+
+      if (result.isSuccess) {
+        final hex = result.valueOrNull?.toString() ?? '';
+        if (hex.startsWith('0x') && hex.length > 2) {
+          return BigInt.parse(hex.substring(2), radix: 16);
+        }
+      }
+      return BigInt.zero;
+    } catch (e) {
+      AppLogger.w('AaveService', 'checkAllowance error: $e');
+      return BigInt.zero;
+    }
+  }
+
   // ==================== Data Models ====================
 
-  // Reserve data will be fetched via UI Data Provider contract calls
-  // or Aave's subgraph API for simplicity.
+  /// Aave's official public GraphQL API (api.v3.aave.com) — no API key
+  /// required. Replaces the old `api.thegraph.com/subgraphs/name/...`
+  /// hosted-service URL, which TheGraph decommissioned (now 301s to
+  /// error.thegraph.com) — that endpoint silently returned zero reserves
+  /// in production, making the whole Supply/Borrow list permanently empty.
+  static const String _graphApiUrl = 'https://api.v3.aave.com/graphql';
 
-  /// Fetch reserve data from Aave subgraph.
+  /// Fetch reserve data for [chainId] from Aave's official GraphQL API.
   static Future<List<AaveReserve>> getReserves(int chainId) async {
-    final subgraphUrl = _subgraphUrls[chainId];
-    if (subgraphUrl == null) return [];
+    final poolAddress = poolAddresses[chainId];
+    if (poolAddress == null) return [];
 
     try {
       final dio = Dio(
@@ -173,35 +221,34 @@ class AaveService {
       );
 
       final response = await dio.post(
-        subgraphUrl,
+        _graphApiUrl,
         data: {
           'query': '''
-          {
-            reserves(where: { isActive: true }) {
-              id
-              symbol
-              name
-              underlyingAsset
-              liquidityRate
-              variableBorrowRate
-              totalLiquidity
-              availableLiquidity
-              totalCurrentVariableDebt
-              decimals
-              price {
-                priceInEth
+          query MarketReserves(\$chainId: ChainId!, \$address: EvmAddress!) {
+            market(request: { chainId: \$chainId, address: \$address }) {
+              reserves {
+                underlyingToken { address symbol name decimals }
+                size { usd }
+                supplyInfo { apy { value } }
+                borrowInfo {
+                  apy { value }
+                  total { usd }
+                  availableLiquidity { usd }
+                }
               }
             }
           }
         ''',
+          'variables': {'chainId': chainId, 'address': poolAddress},
         },
       );
 
-      final reserves = response.data['data']?['reserves'] as List<dynamic>?;
+      final reserves =
+          response.data['data']?['market']?['reserves'] as List<dynamic>?;
       if (reserves == null) return [];
 
       return reserves
-          .map((r) => AaveReserve.fromSubgraph(r as Map<String, dynamic>))
+          .map((r) => AaveReserve.fromGraphApi(r as Map<String, dynamic>))
           .where((r) => r.symbol.isNotEmpty)
           .toList()
         ..sort((a, b) => b.totalLiquidityUsd.compareTo(a.totalLiquidityUsd));
@@ -210,15 +257,6 @@ class AaveService {
       return [];
     }
   }
-
-  // ==================== Internal ====================
-
-  static const Map<int, String> _subgraphUrls = {
-    1: 'https://api.thegraph.com/subgraphs/name/aave/protocol-v3',
-    137: 'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-polygon',
-    42161: 'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-arbitrum',
-    10: 'https://api.thegraph.com/subgraphs/name/aave/protocol-v3-optimism',
-  };
 
   static void _writeAddress(Uint8List buffer, int offset, String address) {
     final hex = address.replaceFirst('0x', '').padLeft(64, '0');
@@ -259,35 +297,33 @@ class AaveReserve {
     required this.decimals,
   });
 
-  factory AaveReserve.fromSubgraph(Map<String, dynamic> json) {
-    // Aave rates are in RAY (1e27), convert to APY percentage
-    final liquidityRate =
-        BigInt.tryParse(json['liquidityRate']?.toString() ?? '0') ??
-        BigInt.zero;
-    final borrowRate =
-        BigInt.tryParse(json['variableBorrowRate']?.toString() ?? '0') ??
-        BigInt.zero;
-    final ray = BigInt.from(10).pow(27);
+  /// Parse a `Reserve` object returned by Aave's official GraphQL API
+  /// (api.v3.aave.com). `apy.value` fields are raw fractions (0.03 = 3%).
+  factory AaveReserve.fromGraphApi(Map<String, dynamic> json) {
+    final token = json['underlyingToken'] as Map<String, dynamic>? ?? {};
+    final supplyInfo = json['supplyInfo'] as Map<String, dynamic>?;
+    final borrowInfo = json['borrowInfo'] as Map<String, dynamic>?;
 
-    final supplyApy = liquidityRate.toDouble() / ray.toDouble() * 100;
-    final borrowApy = borrowRate.toDouble() / ray.toDouble() * 100;
+    double apyOf(Map<String, dynamic>? info) {
+      final apy = info?['apy'] as Map<String, dynamic>?;
+      return (double.tryParse(apy?['value']?.toString() ?? '0') ?? 0) * 100;
+    }
+
+    double usdOf(Map<String, dynamic>? node) =>
+        double.tryParse(node?['usd']?.toString() ?? '0') ?? 0;
 
     return AaveReserve(
-      symbol: json['symbol'] as String? ?? '',
-      name: json['name'] as String? ?? '',
-      underlyingAsset: json['underlyingAsset'] as String? ?? '',
-      supplyApy: supplyApy,
-      borrowApy: borrowApy,
-      totalLiquidityUsd:
-          double.tryParse(json['totalLiquidity']?.toString() ?? '0') ?? 0,
-      availableLiquidityUsd:
-          double.tryParse(json['availableLiquidity']?.toString() ?? '0') ?? 0,
-      totalBorrowedUsd:
-          double.tryParse(
-            json['totalCurrentVariableDebt']?.toString() ?? '0',
-          ) ??
-          0,
-      decimals: json['decimals'] as int? ?? 18,
+      symbol: token['symbol'] as String? ?? '',
+      name: token['name'] as String? ?? '',
+      underlyingAsset: token['address'] as String? ?? '',
+      supplyApy: apyOf(supplyInfo),
+      borrowApy: apyOf(borrowInfo),
+      totalLiquidityUsd: usdOf(json['size'] as Map<String, dynamic>?),
+      availableLiquidityUsd: usdOf(
+        borrowInfo?['availableLiquidity'] as Map<String, dynamic>?,
+      ),
+      totalBorrowedUsd: usdOf(borrowInfo?['total'] as Map<String, dynamic>?),
+      decimals: token['decimals'] as int? ?? 18,
     );
   }
 }

@@ -9,6 +9,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
 
 /// 单个币种的价格到达提醒配置
 class CoinPriceAlertConfig {
@@ -140,6 +142,42 @@ class CoinPriceAlertService {
   }
 
   // ── 检查与通知 ─────────────────────────────────────────────────────────────
+
+  /// 自包含的全量检查：加载已启用的提醒配置 → 向行情 API 查询当前价格 →
+  /// 触发 [checkAndNotify]。供启动后的前台周期定时器调用（App 在前台期间
+  /// 生效；无系统级后台推送）。无已启用提醒时不产生任何网络请求。
+  static Future<void> checkAllNow() async {
+    try {
+      final configs = await loadAll();
+      final enabledSymbols = configs.values
+          .where((c) => c.enabled)
+          .map((c) => c.symbol.toLowerCase())
+          .toSet();
+      if (enabledSymbols.isEmpty) return;
+
+      final resp = await MarketApi().getWalletCoinsInfo(
+        enabledSymbols.join(','),
+      );
+      if (resp['error'] != false) return;
+
+      final coins = extractMarketCoinItems(resp['data']);
+      if (coins.isEmpty) return;
+
+      final prices = <String, double>{};
+      for (final c in coins) {
+        final sym = c['coin']?.toString().toLowerCase() ?? '';
+        final raw = c['price'];
+        final price = (raw is num)
+            ? raw.toDouble()
+            : double.tryParse(raw?.toString() ?? '') ?? 0.0;
+        if (sym.isNotEmpty && price > 0) prices[sym] = price;
+      }
+
+      await checkAndNotify(prices);
+    } catch (e) {
+      AppLogger.w('CoinPriceAlert', 'checkAllNow error: $e');
+    }
+  }
 
   /// 检查当前价格是否触发提醒阈值，若触发则发送本地通知。
   ///

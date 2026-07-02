@@ -5,6 +5,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/features/wallet/pages/lending/aave_action_page.dart';
 import 'package:n42_wallet/features/wallet/pages/lending/aave_service.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
@@ -132,7 +133,8 @@ class _LendingPageState extends State<LendingPage>
   Widget _buildReserveCard(AaveReserve reserve, {required bool isSupply}) {
     final apy = isSupply ? reserve.supplyApy : reserve.borrowApy;
     final apyColor = isSupply
-        ? AppColorTokens.of(context).success // green for supply
+        ? AppColorTokens.of(context)
+              .success // green for supply
         : AppColorTokens.of(context).warning; // orange for borrow
 
     return Container(
@@ -192,8 +194,19 @@ class _LendingPageState extends State<LendingPage>
             ),
           ],
         ),
-        onTap: () {
-          // TODO: Navigate to supply/borrow detail page with amount input
+        onTap: () async {
+          final submitted = await Navigator.push<bool>(
+            context,
+            MaterialPageRoute(
+              builder: (_) => AaveActionPage(
+                reserve: reserve,
+                chainId: widget.chainId,
+                walletAddress: widget.walletAddress,
+                isSupply: isSupply,
+              ),
+            ),
+          );
+          if (submitted == true) _loadReserves();
         },
       ),
     );
