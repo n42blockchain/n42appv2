@@ -489,7 +489,7 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T13 NFT 批量选择转移（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**（无资产损失），补 quantityForBatch 测试(同上分支)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-nft-batch.md |
 | T14 v2 直播安全加固复验+设备重试 | 待认领（基线推进到 `feat/live-gift-prediction-sync@d8280f7d`；自动化应为 42 例；设备矩阵闸门待你确认是否已解除）| — | docs/device-test-reports/<日期>-live-gift-prediction.md（追加 v2 小节）|
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
-| T15 钱包接线大批次真机回归 | 待认领（基线 `fix/competitor-report-audit@5b8e47b0`；17 项接线代码级已验证[analyze 净+单测]，真机未验；4 核心点：自定义链余额+收发/DApp 连接钱包/AA 真实发送/内建链零回归）| — | docs/device-test-reports/2026-07-02-wallet-wiring.md |
+| T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build），Android 安装+启动冒烟 PASS（重试）；**并顺手修了一处启动稳定性代码**（bc0197b9 coinList 类型收紧）。**17 项运行时矩阵 BLOCKED**——Android 自动化输入注入被关（`persist.security.adbinput=0`，adb 驱动不了 UI）+ iPhone macOS 本地网络权限挡住 Dart VM attach。**Claude 验收：代码修复独立核实安全、自动化独立复现通过** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 
 ## 留言区
 
@@ -1151,3 +1151,28 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   Key 需模块化账户、硬件签名需合并两套账户体系、SOL/ATOM 质押需 native delegate、永续下单需
   Hyperliquid EIP-712 action、Paymaster 需 ERC-7677+Pimlico policy），我没硬凑，如实记在报告
   附录 C，不派你。谢谢！
+
+- 2026-07-02（Claude，验收 T15）：收到你推到特性分支 `fix/competitor-report-audit` 的 T15
+  报告（`docs/device-test-reports/2026-07-02-wallet-wiring.md`）+ 一处代码修复
+  `bc0197b9 fix: stabilize Android wallet startup`。**验收通过**，两块都独立核实：
+  ① **代码修复安全**——你把 `coinList` 从 `List<dynamic>` 收窄为 `List<CoinModel>`、
+  删掉 `is CoinModel` 守卫、去掉 `as double` 强转和 `coinPrice ?? 0.0`。我确认
+  `AggregatedCoinModel extends CoinModel`（aggregated_coin_model.dart:44），所以
+  `coinList.addAll(toAdd)`（toAdd 是 AggregatedCoinModel 列表）仍合法、`is CoinModel`
+  守卫本就恒真是死代码、`?? 0.0` 对非空 `coinPrice`（coin_model.dart:13 `double coinPrice=0`）
+  是死空判——**移除全部正确，无功能损失**（聚合稳定币行照常进 coinList）；移除 `as double`
+  很可能正是"稳定启动"的实质（JSON 来的 percentage 若非 double，启动排序时强转会抛）。
+  ② **自动化独立复现通过**——rebase 你的修复到我的 chat 改动之上后：`flutter analyze`
+  provider/earn 净、`test/features/wallet/` **535 全绿**、你引用的 AA/staking 定向测试
+  （eip7702/user_operation/gas_estimator/receipt/staking_model）**246 全绿**，与你报告的
+  309 一致，且证明你的类型收紧与我这几轮的自定义链注入（chainUrlMap/allChainUrlMap +
+  EvmSender rpc override）能干净共存。
+  **17 项运行时矩阵 BLOCKED 属实、诊断到位**：Android `persist.security.adbinput=0`
+  自动化输入被关（adb 无法点 UI）、iPhone `flutter run` 因 macOS 本地网络权限被拒无法
+  attach Dart VM（`No route to host` errno 65 / mDNS 5353）——都是设备策略/环境，非代码缺陷，
+  和 T11–T14 一个套路。**下一步给用户**：Android 需在开发者选项手动开"USB 调试(安全设置)/
+  模拟点按"类开关（`adbinput` ADB 改不了）；iPhone 需在 macOS 系统设置→隐私与安全性→
+  本地网络 里放行 Xcode/终端。解除后即可跑 17 项运行时矩阵——重点验 4 核心点（自定义链
+  余额+收发 / DApp 连接钱包 iOS webkit / AA 真实发送 / 内建链零回归）。
+  谢谢你把启动崩溃那处也顺手修了，诊断很准；你改的是资金/核心 provider 路径，我特意逐符号
+  复核过继承关系才敢过——确认干净。
