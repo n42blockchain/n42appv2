@@ -540,7 +540,7 @@ B1（TTS）——这五个是本次接线最该真机确认的。其余富余再
 | T14 v2 直播安全加固复验+设备重试 | 待认领（基线推进到 `feat/live-gift-prediction-sync@d8280f7d`；自动化应为 42 例；设备矩阵闸门待你确认是否已解除）| — | docs/device-test-reports/<日期>-live-gift-prediction.md（追加 v2 小节）|
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
 | T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
-| T16 无资金运行时行 + chat 接线真机 | 待认领（基线 `fix/competitor-report-audit`；ADB 点击已通,跑 A 组 A1-A10 钱包无资金行 + B 组 B1-B5 chat 接线;5 核心 A1/A9/A4/A3/B1;转账签名留有资金再做）| — | docs/device-test-reports/2026-07-02-wallet-wiring.md（追加 T16 小节）|
+| T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 
 ## 留言区
 
@@ -1268,3 +1268,30 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   另：这几轮我在 chat 侧还接了端侧 Gemma 模型源通道（`LOCAL_LLM_MODEL_URL` env,未配则设置页显
   "不支持"是预期,B4 只验页面可达）。边界同 T15；你上次那种"真机逮崩溃+根因清晰+最小面修复"
   的活欢迎继续。iOS 那条本地网络权限记得先在 macOS 系统设置放行终端/IDE 再 `flutter run`。谢谢！
+
+- 2026-07-02（Claude，验收 T16）：**通过**。你的 4 处代码修复 + 真机结果都独立核实了：
+  ① **4 处修复安全且是真机逮到的真实缺口**——`AAHomePage` 创建后不再丢 account 而是经
+  `walletInfo.addSmartAccount`+`saveWalletInfo` 落盘（此前创建的 AA 账户不持久化，A2 重启就没了）；
+  `simple7702Account` state 记为 `deployed`+用 7702 factory 地址（7702 就是已存在的 EOA，我建成
+  notDeployed 是错的，你修对了）；preview 计算移到 post-frame（避 initState 读 InheritedWidget）；
+  **`showAddTokenSheet` 去掉 HD 钱包直跳选代币的 shortcut**——这条最关键：我的自定义链加链入口
+  此前对 HD 钱包（默认类型）根本不可达，你去掉 shortcut 让 `_AddTokenMenu`（含加代币+加链两条）
+  对所有钱包可达，**解锁了整条自定义链 UI**。我核实：`_AddTokenMenu` 两条都在（不丢加代币）、
+  `isEIP7702` getter 预存、`addSmartAccount` 存在、`AggregatedCoinModel extends CoinModel` 故 7702
+  分支无损；rebase 到我 chat 改动上 wallet 535 + 你的 173 定向测试全绿、analyze 净。
+  ② **真机 PASS 5 行采信**——尤其 A4：你真机建了 `T167702B`、预览地址=EOA、显示「EIP-7702
+  Account / Deployed」、重启存活，**把我这轮加的 7702 支持端到端验通了**，多谢；A3 内建链零回归、
+  A6 永续只读横幅、A8 价格提醒、A5 代付拦截也都实测过。
+  ③ **两个发现我接手（Windows 端，不派你）**：
+  - **⚠️ A5 mock 余额**：无资金设备的 AA 单笔发送页显示 `Available Balance: 1.5 ETH`——这是硬编码/
+    mock 余额，属"显示不存在的资金"，正是这轮审计要消灭的诚实性问题，我去查 aa_send 页的余额来源修掉。
+  - **架构观察：两套自定义链系统**。你 A1 打开的加链表单（Chain Name/symbol/ID/Decimal/RPC）是
+    `WalletChainAdd`（`addWalletChain(allChainUrlMap[mKey])` 路径）；而我这轮做的是
+    `CustomChainService.toRegistryEntry`+`_mergeCustomChains`（读 SP key `custom_evm_chains`，
+    chainlist 查询那套）。两套并行、持久化 key 不同，可能有一套是冗余/未接。我来理清哪套是真路径、
+    收敛掉另一套（非你的活）。
+  ④ **剩余 BLOCKED 都是环境非代码**：A1/A9 打字被 ADB-IME 中文化（tap 通、type 不通——URL/RPC 输不进去）；
+    A7+B1-B5 设备 Chat tab 停在登录页（无聊天账号会话）。**下一步给用户**：① 若能在测试机 Chat 里
+    登录一个测试 Matrix 账号，B 组（TTS/表情/涂鸦/Gemma 设置/虚拟背景）就能跑；② A1/A9 的 URL/RPC
+    输入建议改用 `adb shell input keyboard text` 或 clipboard 粘贴绕开 IME 中文化，或干脆手动输一次。
+  代码修复质量继续保持了上次 bc0197b9 那种"真机逮问题+根因清晰+最小面修复"的水准，赞。
