@@ -96,15 +96,19 @@ Re-run after opening Developer options showed both `USB安装` and
 `USB调试（安全设置）` as checked, and `persist.security.adbinput=1`; however,
 after `adb reconnect` and ADB server restart, both `adb shell input keyevent
 KEYCODE_BACK` and `adb shell input tap 100 100` still failed with the same
-`INJECT_EVENTS` security exception. `monkey` launch still works, and the app
-returns to `ai.n42.www/.MainActivity`.
+`INJECT_EVENTS` security exception. `dumpsys package com.android.shell` also
+shows `android.permission.INJECT_EVENTS: granted=true`, so the remaining
+blocker appears to be an OS/InputManager-layer restriction rather than the
+visible Developer options switch state. `monkey` launch still works, and the
+app returns to `ai.n42.www/.MainActivity`.
 
 ## Blockers
 
 1. Android automated input is still rejected by the OS even though Developer
    options show `USB安装` and `USB调试（安全设置）` enabled and
-   `persist.security.adbinput=1`. ADB cannot drive deterministic taps through
-   the T15 matrix.
+   `persist.security.adbinput=1`, and even though `com.android.shell` reports
+   `android.permission.INJECT_EVENTS: granted=true`. ADB cannot drive
+   deterministic taps through the T15 matrix.
 2. macOS Terminal/IDE does not currently have Local Network access for Flutter's
    iPhone Dart VM discovery. `flutter run` reaches install/launch, then fails on
    mDNS/port 5353 with `No route to host`.
@@ -117,7 +121,7 @@ returns to `ai.n42.www/.MainActivity`.
 
 1. On Android, run the T15 matrix manually on the device, or continue debugging
    why HyperOS still denies shell input injection after the security debugging
-   switch is enabled.
+   switch and shell `INJECT_EVENTS` permission both report enabled.
 2. On macOS, grant the terminal or IDE Local Network permission in System
    Settings -> Privacy & Security -> Local Network, then rerun:
    `flutter run -d 00008150-000E2469149A401C --debug --no-pub`.
