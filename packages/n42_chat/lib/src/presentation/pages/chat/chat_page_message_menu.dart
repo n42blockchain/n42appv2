@@ -200,10 +200,23 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
                 _openReadingMode(message);
               }
             : null,
+        onSpeak: message.type == MessageType.text
+            ? () {
+                debugLog('Read aloud clicked');
+                _speakMessage(message);
+              }
+            : null,
       ),
     );
 
     overlay.insert(overlayEntry);
+  }
+
+  /// 朗读文本消息（TTS）。TtsService 为进程级单例，再点同一条即停止。
+  void _speakMessage(MessageEntity message) {
+    final text = message.content.trim();
+    if (text.isEmpty) return;
+    unawaited(TtsService.instance.speak(text, messageId: message.id));
   }
 
   /// 打开长文阅读模式

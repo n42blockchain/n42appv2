@@ -12,7 +12,7 @@ import 'message_reaction_bar.dart';
 const List<String> _quickReactions = ['😀', '🎁', '❤️', '👍', '😂', '😮'];
 
 /// 微信风格的消息长按菜单
-/// 
+///
 /// 完美复刻微信的消息操作菜单，包括：
 /// - 气泡上方/下方的弹出菜单
 /// - 表情快速回应栏（类似WhatsApp/Element）
@@ -23,7 +23,7 @@ class WeChatMessageMenu extends StatelessWidget {
   final Offset position;
   final Size messageSize;
   final VoidCallback onDismiss;
-  
+
   // 状态
   final bool isFavorited;
   final bool isPinned;
@@ -50,6 +50,7 @@ class WeChatMessageMenu extends StatelessWidget {
   final VoidCallback? onReport; // 举报消息
   final VoidCallback? onRemindMe; // 设为待办提醒
   final VoidCallback? onReadingMode; // 长文阅读模式
+  final VoidCallback? onSpeak; // 朗读（TTS）
 
   /// 表情回应回调
   final void Function(String emoji)? onReaction;
@@ -83,6 +84,7 @@ class WeChatMessageMenu extends StatelessWidget {
     this.onReport,
     this.onRemindMe,
     this.onReadingMode,
+    this.onSpeak,
     this.onReaction,
   });
 
@@ -123,7 +125,8 @@ class WeChatMessageMenu extends StatelessWidget {
       left = screenWidth - menuWidth - 12;
     }
     if (left < 12) left = 12;
-    if (left + menuWidth > screenWidth - 12) left = screenWidth - menuWidth - 12;
+    if (left + menuWidth > screenWidth - 12)
+      left = screenWidth - menuWidth - 12;
     return left;
   }
 
@@ -185,20 +188,29 @@ class WeChatMessageMenu extends StatelessWidget {
                     _buildMenuItem(
                       icon: Icons.content_copy_outlined,
                       label: s?.chatCopy ?? 'Copy',
-                      onTap: () { onDismiss(); onCopy?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onCopy?.call();
+                      },
                     )
                   else if (message.type == MessageType.image ||
                       message.type == MessageType.video)
                     _buildMenuItem(
                       icon: Icons.download_outlined,
                       label: s?.commonSave ?? 'Save',
-                      onTap: () { onDismiss(); onSave?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onSave?.call();
+                      },
                     ),
                   if (onForward != null)
                     _buildMenuItem(
                       icon: Icons.shortcut_outlined,
                       label: s?.commonForward ?? 'Forward',
-                      onTap: () { onDismiss(); onForward?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onForward?.call();
+                      },
                     ),
                   _buildMenuItem(
                     icon: isFavorited ? Icons.star : Icons.star_border_outlined,
@@ -206,29 +218,46 @@ class WeChatMessageMenu extends StatelessWidget {
                         ? (s?.commonUnfavorite ?? 'Unfav')
                         : (s?.commonFavorite ?? 'Fav'),
                     isHighlighted: isFavorited,
-                    onTap: () { onDismiss(); onFavorite?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onFavorite?.call();
+                    },
                   ),
-                  if (message.isFromMe && message.status == MessageStatus.failed)
+                  if (message.isFromMe &&
+                      message.status == MessageStatus.failed)
                     _buildMenuItem(
                       icon: Icons.refresh,
                       label: s?.settingsResend ?? 'Resend',
-                      onTap: () { onDismiss(); onResend?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onResend?.call();
+                      },
                     ),
-                  if (message.isFromMe && message.status != MessageStatus.failed)
+                  if (message.isFromMe &&
+                      message.status != MessageStatus.failed)
                     _buildMenuItem(
                       icon: Icons.undo_outlined,
                       label: s?.chatRecall ?? 'Recall',
-                      onTap: () { onDismiss(); onRecall?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onRecall?.call();
+                      },
                     ),
                   _buildMenuItem(
                     icon: Icons.delete_outline,
                     label: s?.commonDelete ?? 'Delete',
-                    onTap: () { onDismiss(); onDelete?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onDelete?.call();
+                    },
                   ),
                   _buildMenuItem(
                     icon: Icons.checklist_outlined,
                     label: s?.chatSelectMessages ?? 'Select',
-                    onTap: () { onDismiss(); onMultiSelect?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onMultiSelect?.call();
+                    },
                   ),
                 ]),
               ),
@@ -246,13 +275,19 @@ class WeChatMessageMenu extends StatelessWidget {
                   _buildMenuItem(
                     icon: Icons.format_quote_outlined,
                     label: s?.commonQuote ?? 'Quote',
-                    onTap: () { onDismiss(); onQuote?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onQuote?.call();
+                    },
                   ),
                   if (onRemindMe != null)
                     _buildMenuItem(
                       icon: Icons.alarm_add_outlined,
                       label: 'Remind',
-                      onTap: () { onDismiss(); onRemindMe?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onRemindMe?.call();
+                      },
                     ),
                   if (message.isFromMe &&
                       message.type == MessageType.text &&
@@ -260,31 +295,55 @@ class WeChatMessageMenu extends StatelessWidget {
                     _buildMenuItem(
                       icon: Icons.edit_outlined,
                       label: s?.commonEdit ?? 'Edit',
-                      onTap: () { onDismiss(); onEdit?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onEdit?.call();
+                      },
                     ),
                   if (onReplyInThread != null)
                     _buildMenuItem(
                       icon: Icons.forum_outlined,
                       label: s?.threadReplyInThread ?? 'Thread',
-                      onTap: () { onDismiss(); onReplyInThread?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onReplyInThread?.call();
+                      },
                     ),
                   if (message.type == MessageType.text && onTranslate != null)
                     _buildMenuItem(
                       icon: Icons.translate,
                       label: s?.commonTranslate ?? 'Translate',
-                      onTap: () { onDismiss(); onTranslate?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onTranslate?.call();
+                      },
+                    ),
+                  if (message.type == MessageType.text && onSpeak != null)
+                    _buildMenuItem(
+                      icon: Icons.volume_up,
+                      label: s?.chatReadAloud ?? 'Read Aloud',
+                      onTap: () {
+                        onDismiss();
+                        onSpeak?.call();
+                      },
                     ),
                   if (onReadingMode != null)
                     _buildMenuItem(
                       icon: Icons.menu_book_outlined,
                       label: 'Reading',
-                      onTap: () { onDismiss(); onReadingMode?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onReadingMode?.call();
+                      },
                     ),
                   if (message.isEdited && onViewEditHistory != null)
                     _buildMenuItem(
                       icon: Icons.history,
                       label: s?.chatEditHistory ?? 'History',
-                      onTap: () { onDismiss(); onViewEditHistory?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onViewEditHistory?.call();
+                      },
                     ),
                   if (canPin)
                     isPinned
@@ -292,28 +351,43 @@ class WeChatMessageMenu extends StatelessWidget {
                             icon: Icons.push_pin,
                             label: s?.conversationUnpin ?? 'Unpin',
                             isHighlighted: true,
-                            onTap: () { onDismiss(); onUnpin?.call(); },
+                            onTap: () {
+                              onDismiss();
+                              onUnpin?.call();
+                            },
                           )
                         : _buildMenuItem(
                             icon: Icons.push_pin_outlined,
                             label: s?.conversationPin ?? 'Pin',
-                            onTap: () { onDismiss(); onPin?.call(); },
+                            onTap: () {
+                              onDismiss();
+                              onPin?.call();
+                            },
                           ),
                   _buildMenuItem(
                     icon: Icons.notifications_outlined,
                     label: s?.commonRemind ?? 'Remind',
-                    onTap: () { onDismiss(); onRemind?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onRemind?.call();
+                    },
                   ),
                   _buildMenuItem(
                     icon: Icons.search,
                     label: s?.commonSearch ?? 'Search',
-                    onTap: () { onDismiss(); onSearch?.call(); },
+                    onTap: () {
+                      onDismiss();
+                      onSearch?.call();
+                    },
                   ),
                   if (!message.isFromMe && onReport != null)
                     _buildMenuItem(
                       icon: Icons.flag_outlined,
                       label: s?.chatReportMessage ?? 'Report',
-                      onTap: () { onDismiss(); onReport?.call(); },
+                      onTap: () {
+                        onDismiss();
+                        onReport?.call();
+                      },
                     ),
                 ]),
               ),
@@ -335,16 +409,18 @@ class WeChatMessageMenu extends StatelessWidget {
     for (int i = 0; i < visible.length; i += cols) {
       final end = (i + cols).clamp(0, visible.length);
       final rowItems = visible.sublist(i, end);
-      rows.add(Row(
-        children: [
-          ...rowItems.map((w) => Expanded(child: w)),
-          // 空占位保证每行等宽对齐
-          ...List.generate(
-            cols - rowItems.length,
-            (_) => const Expanded(child: SizedBox()),
-          ),
-        ],
-      ));
+      rows.add(
+        Row(
+          children: [
+            ...rowItems.map((w) => Expanded(child: w)),
+            // 空占位保证每行等宽对齐
+            ...List.generate(
+              cols - rowItems.length,
+              (_) => const Expanded(child: SizedBox()),
+            ),
+          ],
+        ),
+      );
     }
     return Column(children: rows);
   }
@@ -392,10 +468,7 @@ class WeChatMessageMenu extends StatelessWidget {
           width: 48,
           height: 48,
           alignment: Alignment.center,
-          child: Text(
-            emoji,
-            style: const TextStyle(fontSize: 32),
-          ),
+          child: Text(emoji, style: const TextStyle(fontSize: 32)),
         ),
       ),
     );
@@ -411,39 +484,35 @@ class WeChatMessageMenu extends StatelessWidget {
           label: A11yL10n.of(context).moreReactions,
           excludeSemantics: true,
           child: InkWell(
-          onTap: () {
-            HapticFeedback.lightImpact();
-            // 先关闭当前菜单
-            onDismiss();
-            // 显示完整表情选择器
-            showModalBottomSheet<void>(
-              context: context,
-              backgroundColor: Colors.transparent,
-              builder: (ctx) => FullReactionPicker(
-                onReactionSelected: (emoji) {
-                  onReaction?.call(emoji);
-                },
+            onTap: () {
+              HapticFeedback.lightImpact();
+              // 先关闭当前菜单
+              onDismiss();
+              // 显示完整表情选择器
+              showModalBottomSheet<void>(
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (ctx) => FullReactionPicker(
+                  onReactionSelected: (emoji) {
+                    onReaction?.call(emoji);
+                  },
+                ),
+              );
+            },
+            borderRadius: BorderRadius.circular(20),
+            splashColor: Colors.white.withValues(alpha: 0.2),
+            highlightColor: Colors.white.withValues(alpha: 0.1),
+            child: Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(20),
               ),
-            );
-          },
-          borderRadius: BorderRadius.circular(20),
-          splashColor: Colors.white.withValues(alpha: 0.2),
-          highlightColor: Colors.white.withValues(alpha: 0.1),
-          child: Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: const Icon(
-              Icons.add,
-              color: Colors.white70,
-              size: 22,
+              child: const Icon(Icons.add, color: Colors.white70, size: 22),
             ),
           ),
-        ),
         ),
       ),
     );
@@ -512,7 +581,7 @@ class _RecallConfirmSheet extends StatelessWidget {
     final isDark = context.isDarkMode;
     final bgColor = AppColors.surfaceOf(isDark);
     final separatorColor = AppColors.dividerOf(isDark);
-    
+
     return SafeArea(
       child: Container(
         margin: const EdgeInsets.all(8),
@@ -532,7 +601,8 @@ class _RecallConfirmSheet extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 14),
                     child: Text(
-                      S.of(context)?.commonRecallThisMessage ?? 'Recall this message?',
+                      S.of(context)?.commonRecallThisMessage ??
+                          'Recall this message?',
                       style: TextStyle(
                         fontSize: 13,
                         color: context.textTertiary,
@@ -570,9 +640,9 @@ class _RecallConfirmSheet extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             const SizedBox(height: 8),
-            
+
             // 取消按钮
             Container(
               decoration: BoxDecoration(
@@ -612,11 +682,7 @@ class RecalledMessageWidget extends StatelessWidget {
   final bool isFromMe;
   final VoidCallback? onReEdit;
 
-  const RecalledMessageWidget({
-    super.key,
-    this.isFromMe = true,
-    this.onReEdit,
-  });
+  const RecalledMessageWidget({super.key, this.isFromMe = true, this.onReEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -635,10 +701,7 @@ class RecalledMessageWidget extends StatelessWidget {
               isFromMe
                   ? (s?.commonYouRecalledMessage ?? 'You recalled a message')
                   : (s?.commonMessageRecalled ?? 'Message recalled'),
-              style: TextStyle(
-                fontSize: 12,
-                color: textColor,
-              ),
+              style: TextStyle(fontSize: 12, color: textColor),
             ),
             if (isFromMe && onReEdit != null) ...[
               const SizedBox(width: 4),
@@ -648,7 +711,9 @@ class RecalledMessageWidget extends StatelessWidget {
                   s?.commonReEdit ?? 'Re-edit',
                   style: TextStyle(
                     fontSize: 12,
-                    color: isDark ? const Color(0xFF57A5FF) : const Color(0xFF576B95),
+                    color: isDark
+                        ? const Color(0xFF57A5FF)
+                        : const Color(0xFF576B95),
                   ),
                 ),
               ),
@@ -684,7 +749,8 @@ class MessageMenuHelper {
     bool isFavorited = false,
   }) {
     // 获取消息气泡的位置和大小
-    final RenderBox? renderBox = messageKey.currentContext?.findRenderObject() as RenderBox?;
+    final RenderBox? renderBox =
+        messageKey.currentContext?.findRenderObject() as RenderBox?;
     if (renderBox == null) return;
 
     final position = renderBox.localToGlobal(Offset.zero);
@@ -723,7 +789,7 @@ class MessageMenuHelper {
 
     overlay.insert(overlayEntry);
   }
-  
+
   /// 复制文本消息
   static void copyMessage(BuildContext context, MessageEntity message) {
     if (message.type == MessageType.text) {
@@ -731,7 +797,7 @@ class MessageMenuHelper {
       _showToast(context, S.of(context)?.chatCopied ?? 'Copied');
     }
   }
-  
+
   /// 显示轻提示
   static void _showToast(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -744,4 +810,3 @@ class MessageMenuHelper {
     );
   }
 }
-

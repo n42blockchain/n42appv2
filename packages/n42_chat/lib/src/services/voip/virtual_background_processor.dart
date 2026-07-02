@@ -127,18 +127,19 @@ class VirtualBackgroundEngine {
     String? solidColorHex,
     Uint8List? backgroundImageBytes,
     double beautyStrength = 0.0,
-  }) =>
-      _composeInIsolate(_ComposeParams(
-        frameBytes: frameBytes,
-        maskWidth: maskWidth,
-        maskHeight: maskHeight,
-        confidences: confidences,
-        mode: mode,
-        blurRadius: blurRadius,
-        solidColorHex: solidColorHex,
-        backgroundImageBytes: backgroundImageBytes,
-        beautyStrength: beautyStrength,
-      ));
+  }) => _composeInIsolate(
+    _ComposeParams(
+      frameBytes: frameBytes,
+      maskWidth: maskWidth,
+      maskHeight: maskHeight,
+      confidences: confidences,
+      mode: mode,
+      blurRadius: blurRadius,
+      solidColorHex: solidColorHex,
+      backgroundImageBytes: backgroundImageBytes,
+      beautyStrength: beautyStrength,
+    ),
+  );
 
   /// 前景判定阈值（供单测断言用）
   @visibleForTesting
@@ -165,12 +166,15 @@ class VirtualBackgroundEngine {
           // 模糊半径 0..1 映射到像素半径 1..40，并按帧尺寸夹紧
           // （半径过大会越界，gaussianBlur 在小帧上崩溃）
           final maxR = (minSide ~/ 2 - 1).clamp(1, 40);
-          final radius =
-              (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round().clamp(1, maxR);
+          final radius = (p.blurRadius.clamp(0.0, 1.0) * 39 + 1).round().clamp(
+            1,
+            maxR,
+          );
           background = img.gaussianBlur(original.clone(), radius: radius);
           break;
         case BackgroundMode.solidColor:
-          final color = _parseHexColor(p.solidColorHex) ??
+          final color =
+              _parseHexColor(p.solidColorHex) ??
               img.ColorRgb8(0x07, 0xC1, 0x60);
           background = img.Image(width: width, height: height)..clear(color);
           break;
@@ -222,11 +226,7 @@ class VirtualBackgroundEngine {
           // 人像像素：向模糊层混合（磨皮）+ 提亮
           final o = original.getPixel(x, y);
           final s = smooth.getPixel(x, y);
-          original.setPixel(
-            x,
-            y,
-            _beautyPixel(o, s, smoothBlend, brighten),
-          );
+          original.setPixel(x, y, _beautyPixel(o, s, smoothBlend, brighten));
         }
       }
     }
@@ -326,8 +326,9 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   /// `RTCVideoCapturerDelegate`）实现真正的发布轨道逐帧替换时，会监听本通道获取
   /// 当前背景配置。原生未实现时调用经 [MissingPluginException] 优雅 no-op——
   /// 不抛错、不误导。这是发布侧替换的**真实契约**，待原生接入即生效。
-  static const MethodChannel _nativeChannel =
-      MethodChannel('n42.chat/virtual_background');
+  static const MethodChannel _nativeChannel = MethodChannel(
+    'n42.chat/virtual_background',
+  );
 
   @override
   String get name => 'n42-virtual-background';
@@ -352,8 +353,10 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
         debugLog('VoipCameraProcessor: background image loaded ($pathOrUrl)');
       } else {
         _backgroundImageBytes = null;
-        debugLog('VoipCameraProcessor: background not a local file, '
-            'caller should inject bytes ($pathOrUrl)');
+        debugLog(
+          'VoipCameraProcessor: background not a local file, '
+          'caller should inject bytes ($pathOrUrl)',
+        );
       }
     } catch (e) {
       _backgroundImageBytes = null;
@@ -401,6 +404,11 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
       'blurRadius': _config.backgroundBlurRadius,
       'solidColor': _config.backgroundProcessing.solidColor,
       'hasBackgroundImage': _backgroundImageBytes != null,
+      // 实际图片字节（原生按 `backgroundImageBytes as? ByteArray` 取，
+      // Flutter 的 Uint8List 经 MethodChannel 自动映射为 Kotlin ByteArray）。
+      // 此前只发 hasBackgroundImage 布尔 → 原生取不到字节 → 虚拟背景图模式
+      // 永远降级为模糊；补发字节后背景图模式在 Android 发布帧上真正生效。
+      'backgroundImageBytes': _backgroundImageBytes,
       'beauty': _config.beautyStrength,
       // 本地相机轨道 id：原生据此定位 libwebrtc VideoSource 挂处理器
       // （见 docs/virtual-background-frame-injection.md §3.4）。
