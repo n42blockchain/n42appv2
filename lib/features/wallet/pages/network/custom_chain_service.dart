@@ -206,6 +206,69 @@ class CustomChainService {
 
   /// Public view of built-in chain IDs (for preset filtering / tests).
   static Set<int> get builtInChainIds => _builtInChainIds;
+
+  // ── Integration with the real chain registry ────────────────────────────
+
+  /// Stable coinType key for a custom chain (used as the map key in
+  /// `chainUrlMap`/`allChainUrlMap` and as the wallet's per-chain key).
+  /// Prefixed with `C` so it can never collide with a real CoinType enum name.
+  static String coinTypeKey(int chainId) => 'C$chainId';
+
+  /// Whether [coinType] is a custom-chain key produced by [coinTypeKey].
+  static bool isCustomCoinType(String coinType) =>
+      RegExp(r'^C\d+$').hasMatch(coinType);
+
+  /// Convert a [CustomChain] into a `chainUrlMap`-format registry entry.
+  ///
+  /// The shape mirrors a built-in EVM chain (e.g. BASE): `blockchainType`
+  /// is always `Ethereum` (custom chains are EVM-only), the derivation path
+  /// is the standard EVM path, and `baseInfo['custom'] == true` marks it so
+  /// the send flow knows to route RPC calls directly to [CustomChain.rpcUrl]
+  /// instead of the N42 backend (which doesn't recognise the coinType).
+  static Map<String, dynamic> toRegistryEntry(CustomChain chain) {
+    final key = coinTypeKey(chain.chainId);
+    return <String, dynamic>{
+      'isTest': false,
+      'supportTest': false,
+      'addrType': 'legacy',
+      'pathIndex': 0,
+      'pathList': [0],
+      'showList': true,
+      'baseInfo': <String, dynamic>{
+        'blockchainType': 'Ethereum',
+        'coinType': key,
+        'icon': chain.iconUrl ?? '',
+        'name': chain.name,
+        'miniName': chain.symbol,
+        'unit': chain.symbol,
+        'decimals': chain.decimals,
+        'balance': '0',
+        'balance_test': '0',
+        'coinPrice': 0.0,
+        'percentage': 0.0,
+        'isContract': false,
+        'custom': true,
+        'mKey': key,
+        'path': {'legacy': "m/44'/60'/0'/0/0"},
+        'service': chain.rpcUrl,
+        'service_test': '',
+        'chainId': chain.chainId,
+        'chainId_test': 0,
+        'contract': '',
+        'contract_test': '',
+        'canEdit': true,
+        'rules': 'ERC20',
+        if (chain.explorerUrl != null) 'explorer': chain.explorerUrl,
+      },
+      'mainnetChainID': chain.chainId,
+      'testnetChainID': 0,
+      'testnetIndex': 0,
+      'testnets': const [],
+      'mainnets': const <String, dynamic>{},
+      'mainnetContract': const {},
+      'testnetContract': const {},
+    };
+  }
 }
 
 /// User-added custom EVM chain configuration.

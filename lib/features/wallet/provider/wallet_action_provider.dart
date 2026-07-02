@@ -28,6 +28,8 @@ import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
+import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
@@ -58,10 +60,11 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
         : null;
   } else {
     // 自定义链：从存储数据取
-    svc = (coinModel.isTest
-            ? coinModel.config.serviceTest
-            : coinModel.config.service)
-        .trim();
+    svc =
+        (coinModel.isTest
+                ? coinModel.config.serviceTest
+                : coinModel.config.service)
+            .trim();
   }
 
   if (svc != null && svc.isNotEmpty) return svc;
@@ -180,7 +183,8 @@ class WalletActionProvider extends ChangeNotifier
               testnets.isNotEmpty &&
               testnets[0]['testnetContract'] != null) {
             walletMap[coinType]['testnets'][0]['testnetContract'][coinModel
-                    .config.mKey] =
+                    .config
+                    .mKey] =
                 coinModel.coin;
           }
         } else {

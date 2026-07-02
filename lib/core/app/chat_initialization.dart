@@ -149,7 +149,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         );
       });
 
-      await N42Chat.initialize(N42ChatConfig(
+      await N42Chat.initialize(
+        N42ChatConfig(
           defaultHomeserver: 'https://m.si46.world',
           enableEncryption: true,
           enablePushNotifications: true,
@@ -191,6 +192,11 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           ssoRedirectUrl: 'n42://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
+          // 链上事件通知（Push Protocol，公开只读 REST，只需钱包地址、无 key）。
+          // 会话列表页的通知铃铛入口一直在，但此前宿主从未传 pushProtocol，
+          // 导致 OnChainNotificationBloc 从不注册——铃铛的 BlocBuilder 解析
+          // 会抛异常。启用后 datasource/repository/bloc 完整注册，铃铛可用。
+          pushProtocol: const PushProtocolConfig(enabled: true, chainId: 1),
           proxyAuthToken: proxyAuthToken,
           giphyApiKey: directGiphyApiKey,
           giphyBaseUrl: 'https://api.giphy.com/v1/gifs',
@@ -220,10 +226,16 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           alchemyBaseUrl: 'https://eth-mainnet.g.alchemy.com/v2',
           alchemyUseProxyEndpoint: false,
         ),
-      ).timeout(const Duration(seconds: 15), onTimeout: () {
-        AppLogger.w('N42Chat', 'Initialization timed out after 15s');
-        throw TimeoutException('N42Chat.initialize', const Duration(seconds: 15));
-      });
+      ).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () {
+          AppLogger.w('N42Chat', 'Initialization timed out after 15s');
+          throw TimeoutException(
+            'N42Chat.initialize',
+            const Duration(seconds: 15),
+          );
+        },
+      );
       await flushPendingChatDeepLink();
       await flushPendingChatSsoDeepLink();
       await AppPushUtils.flushPendingChatNotification();
@@ -240,14 +252,14 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       if (!_localeListenerRegistered) {
         _localeListenerRegistered = true;
         N42Chat.addLocaleListener((locale) {
-        final currentAppLocale = globalProviderContainer.read(localeProvider);
-        if (languageCodeFromLocale(currentAppLocale) !=
-            languageCodeFromLocale(locale)) {
-          globalProviderContainer
-              .read(localeProvider.notifier)
-              .setLocale(languageCodeFromLocale(locale));
-          AppLogger.d('N42Chat', 'Main app locale synced: $locale');
-        }
+          final currentAppLocale = globalProviderContainer.read(localeProvider);
+          if (languageCodeFromLocale(currentAppLocale) !=
+              languageCodeFromLocale(locale)) {
+            globalProviderContainer
+                .read(localeProvider.notifier)
+                .setLocale(languageCodeFromLocale(locale));
+            AppLogger.d('N42Chat', 'Main app locale synced: $locale');
+          }
         });
       }
 
@@ -292,12 +304,15 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       // 发现页「直播」入口 → 宿主的视频直播（复用 chat 的 Matrix 房间 +
       // 自部署 LiveKit）。未注册时发现页回退到语音房列表。
       N42Chat.setLiveEntryHandler((ctx) {
-        Navigator.of(ctx).push(
-          MaterialPageRoute<void>(builder: (_) => const LiveApp()),
-        );
+        Navigator.of(
+          ctx,
+        ).push(MaterialPageRoute<void>(builder: (_) => const LiveApp()));
       });
 
-      AppLogger.i('N42Chat', 'initialized successfully with theme: $currentTheme');
+      AppLogger.i(
+        'N42Chat',
+        'initialized successfully with theme: $currentTheme',
+      );
     } catch (e, s) {
       AppLogger.e('N42Chat', 'initialization failed', error: e, stackTrace: s);
     }
@@ -315,7 +330,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
   Future<void> routeChatSsoDeepLink(DeepLinkData data) async {
     if (!N42Chat.isInitialized) {
       _pendingChatSsoDeepLink = data;
-      AppLogger.d('ChatSso', 'queued deep link until N42Chat initializes: $data');
+      AppLogger.d(
+        'ChatSso',
+        'queued deep link until N42Chat initializes: $data',
+      );
       return;
     }
 
@@ -350,7 +368,12 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         loginToken: loginToken,
       );
     } catch (e, s) {
-      AppLogger.e('ChatSso', 'failed to complete login', error: e, stackTrace: s);
+      AppLogger.e(
+        'ChatSso',
+        'failed to complete login',
+        error: e,
+        stackTrace: s,
+      );
     }
   }
 
@@ -384,10 +407,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
     }
   }
 
-  Future<void> openDirectMessage(
-    BuildContext navContext,
-    String userId,
-  ) async {
+  Future<void> openDirectMessage(BuildContext navContext, String userId) async {
     if (!isChatSessionReady) {
       await openChatEntry(navContext);
       return;

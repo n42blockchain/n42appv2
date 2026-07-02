@@ -47,6 +47,13 @@ class EvmSender implements ChainSender {
     final isContract = params.contractAddress.isNotEmpty;
     final gas = getCoinGas(coinType, contract: isContract);
 
+    // 自定义链（baseInfo.custom == true）：所有 EVM RPC 调用直连该链自己的
+    // RPC，绕开只认内建 coinType 的 N42 后端。内建链 rpcOverride 恒为 null，
+    // 走原有后端路径，行为完全不变。
+    final String? rpcOverride = (baseInfo?['custom'] == true)
+        ? (baseInfo?['service'] as String?)?.trim()
+        : null;
+
     // Get token balance if contract transfer
     BigInt balance = BigInt.zero;
     if (isContract) {
@@ -57,6 +64,7 @@ class EvmSender implements ChainSender {
             params.fromAddress,
             contract: params.contractAddress,
             isTest: params.isTest,
+            rpc: rpcOverride,
           ) ??
           _errMM();
       if (mm.error) return SendResult.fail(mm.data?.toString());
@@ -74,6 +82,7 @@ class EvmSender implements ChainSender {
           params.fromAddress,
           contract: '',
           isTest: params.isTest,
+          rpc: rpcOverride,
         ) ??
         _errMM();
     if (mmchain.error) return SendResult.fail(mmchain.data?.toString());
@@ -88,6 +97,7 @@ class EvmSender implements ChainSender {
           BlockchainType.Ethereum.name,
           coinType,
           isTest: params.isTest,
+          rpc: rpcOverride,
         ) ??
         _errMM();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
@@ -110,6 +120,7 @@ class EvmSender implements ChainSender {
       coinType,
       contract: params.contractAddress,
       isTest: params.isTest,
+      rpc: rpcOverride,
     );
     if (estimateMm.error) return SendResult.fail(estimateMm.data?.toString());
 
@@ -165,6 +176,7 @@ class EvmSender implements ChainSender {
       privateKey: params.privateKey,
       message: params.memo,
       calldata: params.calldata,
+      rpc: rpcOverride,
     );
     if (signResult is SendResult) return signResult;
 
@@ -209,6 +221,7 @@ class EvmSender implements ChainSender {
           coinType,
           signStr,
           netMode: params.isTest ? 'test' : 'main',
+          rpc: rpcOverride,
         ) ??
         _errMM();
 
@@ -231,6 +244,7 @@ class EvmSender implements ChainSender {
     String? privateKey,
     String? message,
     String? calldata,
+    String? rpc,
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
@@ -249,6 +263,7 @@ class EvmSender implements ChainSender {
       coinType,
       fromAddress,
       netMode: isTest ? 'test' : 'main',
+      rpc: rpc,
     );
     if (mmn.error) return SendResult.fail(mmn.data?.toString());
     final nonceHex = _dataUtils.bigIntToHex(mmn.data, need0x: false);

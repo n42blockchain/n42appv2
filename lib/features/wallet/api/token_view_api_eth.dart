@@ -149,7 +149,22 @@ extension TokenViewApiEth on TokenViewApi {
     String contract = '',
     String data = '',
     bool isTest = false,
+    String? rpc,
   }) async {
+    // 自定义链：直连其 RPC 估 gas，绕开只认内建 coinType 的 N42 后端。
+    if (rpc != null) {
+      return await EthAPI.init(null, rpc, null).getGasLimit(
+        from,
+        to,
+        gasPrice,
+        value,
+        gas,
+        coinType: coinType,
+        contract: contract,
+        data: data,
+        isTest: isTest,
+      );
+    }
     if (coinType == CoinType.TRX.name) {
       return await TrxApi().getGasEstimateTrx(
         from,
