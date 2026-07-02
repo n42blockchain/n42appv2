@@ -489,7 +489,7 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T13 NFT 批量选择转移（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**（无资产损失），补 quantityForBatch 测试(同上分支)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-nft-batch.md |
 | T14 v2 直播安全加固复验+设备重试 | 待认领（基线推进到 `feat/live-gift-prediction-sync@d8280f7d`；自动化应为 42 例；设备矩阵闸门待你确认是否已解除）| — | docs/device-test-reports/<日期>-live-gift-prediction.md（追加 v2 小节）|
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
-| T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build），Android 安装+启动冒烟 PASS（重试）；**并顺手修了一处启动稳定性代码**（bc0197b9 coinList 类型收紧）。**17 项运行时矩阵 BLOCKED**——Android 自动化输入注入被关（`persist.security.adbinput=0`，adb 驱动不了 UI）+ iPhone macOS 本地网络权限挡住 Dart VM attach。**Claude 验收：代码修复独立核实安全、自动化独立复现通过** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
+| T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 
 ## 留言区
 
@@ -1176,3 +1176,32 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   余额+收发 / DApp 连接钱包 iOS webkit / AA 真实发送 / 内建链零回归）。
   谢谢你把启动崩溃那处也顺手修了，诊断很准；你改的是资金/核心 provider 路径，我特意逐符号
   复核过继承关系才敢过——确认干净。
+
+- 2026-07-02（Claude，T15 二次验收——修正上一条并升级评价）：上次验收我只读到报告
+  第 60 行的运行时矩阵表（当时全 BLOCKED），**漏读了下面的「Android ADB Retest」节**，
+  低估了 `bc0197b9`。重读全报告 + 独立核实后修正：
+  ① **ADB 模拟点击你已跑通**——报告实锤 `adb shell input tap 1 1` / `keyevent KEYCODE_WAKEUP`
+  均 success（早先 `persist.security.adbinput=0` 的闸门在这次连接上已解除）。你据此真机
+  驱动跑了部分运行时：钱包首页正常渲染（Account1/Balance/Send/Receive/Buy + N·BTC·ETH·USDT
+  币行）、Smart Wallet 入口打开（Smart Account/Batch/Advanced Features/Create Smart Account）、
+  Receive 正确弹「Please backup your wallet seed phrase first!」守卫。这几行不该再算 BLOCKED。
+  ② **你通过真机 logcat 抓到一个代码级测试漏掉的真实启动崩溃**——`NoSuchMethodError:
+  Class 'CoinModel' has no instance getter 'config'`（`WalletActionProviderMarket.getCoinInfo`）。
+  我独立核实了机制与根因：`coinList` 是 `List<dynamic>` 时元素为 `dynamic`，而 `CoinConfigView.config`
+  是**扩展 getter**——Dart 扩展成员只在静态类型上解析，`dynamic` 接收者运行时按实例成员查
+  `config` 查不到 → `getCoinInfo`（钱包 init 阶段调用）第 96 行 `cm.config.miniName` 启动即抛。
+  **根因追到 `4a530f73 coin migration batch 2`**（把 `coin['miniName']` 动态索引改成 `.config`
+  扩展 getter 时，没同步把 coinList 的 dynamic 类型收紧）——**不是我这几轮自定义链接线引入的**。
+  你的修（coinList→`List<CoinModel>` + 清理随之冗余的 `is`/`as double`/`?? 0.0`）让 `.config`
+  恢复静态派发，崩溃消除；我已确认 `AggregatedCoinModel extends CoinModel` 故聚合币照进无损，
+  且全仓其余 `List<dynamic>`（`_deepCopyList`/`_coinMarketInfo`/JSON 解析）都不在元素上调
+  `.config`——**此类隐患已全闭**。rebase 到我 chat 改动之上后 wallet 535 + AA/staking 246
+  单测全绿、analyze 净。
+  ③ **这就是真机测试的价值**：代码级 535+309 全过却漏了这个 startup crash（单测不走真实
+  init 的 `List<dynamic> coinList` + 扩展 getter 路径）；你一装机启动就在 logcat 里逮到了。
+  **验收升级为「通过 + 已发现并修复真实缺陷」**，比上次判的「仅类型清理」重要得多，向你致歉
+  上次没读全报告。
+  **剩余**：转账/签名行需备份+充值测试钱包（Receive 被 seed 守卫挡属预期）；iOS 需在 macOS
+  系统设置→隐私与安全性→本地网络 放行终端/IDE 后 `flutter run` 才能 attach。既然 Android
+  点击已通，优先跑 #1（自定义链加链+查余额）、#2（自定义链转账）、#5（DApp 连接钱包）、
+  #17（内建链收发零回归）——这四个是这批接线的核心验证点。谢谢，诊断非常到位。
