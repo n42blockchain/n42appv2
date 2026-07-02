@@ -159,7 +159,9 @@ Features communicate through:
 
 ### Local Dependencies
 
-- `packages/n42_jmt_verify/` — JMT verification package (path dependency).
+- `packages/n42_jmt_verify/` — JMT verification package. **Standalone; NOT
+  referenced by the app** (absent from root pubspec.yaml, zero imports in
+  `lib/` as of 2026-07) — has its own tests only.
 - `packages/webview_flutter_wkwebview/` — Custom WebView fork (path dependency).
 - `plugins/flutter_mining/` — Native mining plugin v1 (path dependency).
 - `packages/n42_chat/` — **Cache directory only**; the host actually resolves
