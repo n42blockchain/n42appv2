@@ -90,6 +90,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       );
       const envDebankApiKey = String.fromEnvironment('DEBANK_API_KEY');
       const envAlchemyApiKey = String.fromEnvironment('ALCHEMY_API_KEY');
+      // 端侧 LLM（Gemma）模型源——不配则端侧推理不可用、AI 自动回退云端。
+      const envLocalLlmModelUrl = String.fromEnvironment('LOCAL_LLM_MODEL_URL');
+      const envLocalLlmHfToken = String.fromEnvironment('LOCAL_LLM_HF_TOKEN');
       final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
       final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
         nativeConfig: nativeSocialAuthConfig,
@@ -119,6 +122,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directAiApiKey = normalizedEnv(envAiApiKey);
       final directDebankApiKey = normalizedEnv(envDebankApiKey);
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
+      final directLocalLlmModelUrl = normalizedEnv(envLocalLlmModelUrl);
+      final directLocalLlmHfToken = normalizedEnv(envLocalLlmHfToken);
 
       for (final line in chatSocialAuthConfig.diagnostics(
         isAndroid: Platform.isAndroid,
@@ -211,6 +216,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           aiBaseUrl: envAiBaseUrl,
           aiModel: envAiModel,
           aiUseProxyEndpoint: false,
+          localLlmModelUrl: directLocalLlmModelUrl,
+          localLlmHuggingFaceToken: directLocalLlmHfToken,
           googleSpeechApiKey: directGoogleSpeechApiKey,
           azureSpeechApiKey: directAzureSpeechApiKey,
           azureSpeechRegion: envAzureSpeechRegion,

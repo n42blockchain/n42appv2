@@ -281,7 +281,17 @@ Future<void> _registerServices(N42ChatConfig config) async {
   );
 
   // 端侧推理（Dart 桥+服务；原生未接入时 unavailable）
-  getIt.registerLazySingleton<LocalLlmBridge>(() => LocalLlmBridge());
+  // 端侧 LLM 桥：用宿主配置的模型源 URL + HF token 初始化。未配置时
+  // modelUrl 为 null → isDeviceCapable 恒 false → AiProviderRouter 回退云端。
+  getIt.registerLazySingleton<LocalLlmBridge>(() {
+    final cfg = getIt<N42ChatConfig>();
+    return LocalLlmBridge(
+      LocalLlmConfig(
+        modelUrl: cfg.localLlmModelUrl,
+        huggingFaceToken: cfg.localLlmHuggingFaceToken,
+      ),
+    );
+  });
   getIt.registerLazySingleton<LocalLlmService>(
     () => LocalLlmService(getIt<LocalLlmBridge>()),
     dispose: (s) => s.dispose(),

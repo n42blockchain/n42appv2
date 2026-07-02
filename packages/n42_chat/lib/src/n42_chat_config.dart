@@ -359,6 +359,16 @@ class N42ChatConfig {
   /// 为 `true` 时，AI 数据源不会再自动拼接 `/v1/chat/completions`。
   final bool aiUseProxyEndpoint;
 
+  /// 端侧 LLM（Gemma via flutter_gemma/MediaPipe）模型源 URL。
+  ///
+  /// 指向 MediaPipe `.task` 模型（Gemma 系列多为 HuggingFace 受限模型，需配
+  /// [localLlmHuggingFaceToken]）。**未配置时端侧推理不可用**，`AiProviderRouter`
+  /// 恒回退云端——这也是 2026-07 复核前"端侧 AI 出厂不可达"的根因（缺此注入通道）。
+  final String? localLlmModelUrl;
+
+  /// 端侧 LLM 模型下载的 HuggingFace 访问 token（受限模型必需）。
+  final String? localLlmHuggingFaceToken;
+
   /// Google Speech 代理端点
   final String? speechGoogleBaseUrl;
 
@@ -520,6 +530,8 @@ class N42ChatConfig {
     this.aiBaseUrl = 'https://api.openai.com',
     this.aiModel = 'gpt-4o-mini',
     this.aiUseProxyEndpoint = false,
+    this.localLlmModelUrl,
+    this.localLlmHuggingFaceToken,
     this.speechGoogleBaseUrl,
     this.speechAzureBaseUrl,
     this.speechUseProxyEndpoint = false,
@@ -601,6 +613,8 @@ class N42ChatConfig {
     String? aiBaseUrl,
     String? aiModel,
     bool? aiUseProxyEndpoint,
+    Object? localLlmModelUrl = _copyWithUndefined,
+    Object? localLlmHuggingFaceToken = _copyWithUndefined,
     Object? speechGoogleBaseUrl = _copyWithUndefined,
     Object? speechAzureBaseUrl = _copyWithUndefined,
     bool? speechUseProxyEndpoint,
@@ -754,6 +768,14 @@ class N42ChatConfig {
       aiBaseUrl: aiBaseUrl ?? this.aiBaseUrl,
       aiModel: aiModel ?? this.aiModel,
       aiUseProxyEndpoint: aiUseProxyEndpoint ?? this.aiUseProxyEndpoint,
+      localLlmModelUrl: _nullableCopyWithValue<String>(
+        localLlmModelUrl,
+        this.localLlmModelUrl,
+      ),
+      localLlmHuggingFaceToken: _nullableCopyWithValue<String>(
+        localLlmHuggingFaceToken,
+        this.localLlmHuggingFaceToken,
+      ),
       speechGoogleBaseUrl: _nullableCopyWithValue<String>(
         speechGoogleBaseUrl,
         this.speechGoogleBaseUrl,
