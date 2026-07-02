@@ -163,9 +163,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
                   SizedBox(height: AppSpacing.space2),
                   _singleLineText(
                     dapp.description,
-                    style: AppTypography.caption.copyWith(
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                   ),
                   SizedBox(height: AppSpacing.space2),
                   _singleLineText(
@@ -210,10 +208,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
     );
   }
 
-  Widget _singleLineText(
-    String text, {
-    required TextStyle style,
-  }) {
+  Widget _singleLineText(String text, {required TextStyle style}) {
     return Text(
       text,
       style: style,

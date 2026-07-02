@@ -52,37 +52,44 @@ extension _BrowserPageTabs on _BrowserPageState {
           },
           borderRadius: AppRadius.brLg,
           child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          decoration: BoxDecoration(
-            borderRadius: AppRadius.brLg,
-            border: Border.all(
-              width: isActive
-                  ? ScreenUtil().setWidth(3.0)
-                  : ScreenUtil().setWidth(1.5),
-              color: AppThemeUtils.getColorByKey(
-                context,
-                isActive
-                    ? AppThemeKeys.mainBlueColor.name
-                    : AppThemeKeys.itemLineColor.name,
-              ),
-            ),
-          ),
-          clipBehavior: Clip.hardEdge,
-          child: Stack(
-            children: [
-              Positioned.fill(child: _buildTabPreview(bValue, index)),
-              Positioned.fill(
-                child: Container(
-                  color: AppThemeUtils.getColorByKey(
-                    context,
-                    AppThemeKeys.transparentBgColor.name,
-                  ),
+            duration: const Duration(milliseconds: 200),
+            decoration: BoxDecoration(
+              borderRadius: AppRadius.brLg,
+              border: Border.all(
+                width: isActive
+                    ? ScreenUtil().setWidth(3.0)
+                    : ScreenUtil().setWidth(1.5),
+                color: AppThemeUtils.getColorByKey(
+                  context,
+                  isActive
+                      ? AppThemeKeys.mainBlueColor.name
+                      : AppThemeKeys.itemLineColor.name,
                 ),
               ),
-              _buildTabCardHeader(bValue, index, isActive, title, host, letter),
-            ],
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Stack(
+              children: [
+                Positioned.fill(child: _buildTabPreview(bValue, index)),
+                Positioned.fill(
+                  child: Container(
+                    color: AppThemeUtils.getColorByKey(
+                      context,
+                      AppThemeKeys.transparentBgColor.name,
+                    ),
+                  ),
+                ),
+                _buildTabCardHeader(
+                  bValue,
+                  index,
+                  isActive,
+                  title,
+                  host,
+                  letter,
+                ),
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

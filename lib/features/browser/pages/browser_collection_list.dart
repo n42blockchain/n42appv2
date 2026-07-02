@@ -107,7 +107,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
   }
 
   TextStyle _subtitleStyle(BuildContext context) {
-    return AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle);
+    return AppTypography.bodySm.copyWith(
+      color: AppColorTokens.of(context).textSubtitle,
+    );
   }
 
   @override
@@ -191,9 +193,7 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
               }
             },
             child: Container(
-              margin: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               padding: EdgeInsets.symmetric(
                 vertical: AppSpacing.space4,
                 horizontal: AppSpacing.space8,
@@ -216,7 +216,9 @@ class _BrowserCollectionListState extends State<BrowserCollectionList> {
                           ),
                           child: Text(
                             bcm.name ?? "",
-                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                            style: AppTypography.body.copyWith(
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),

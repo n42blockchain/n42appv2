@@ -107,9 +107,7 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           InkWell(
             onTap: _deleting ? null : deleteCollection,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               height: ScreenUtil().setWidth(40.0),
               child: _deleting
                   ? SizedBox(
@@ -170,7 +168,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               label,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
           Container(
@@ -202,7 +202,9 @@ class _BrowserCollectionInfoState extends State<BrowserCollectionInfo> {
           if (errorMessage.isNotEmpty)
             Text(
               errorMessage,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
         ],
       ),

@@ -1,10 +1,17 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
+import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/core/security/dapp_security_service.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
+import 'package:n42_wallet/features/browser/handler/dapp_request_handler.dart';
+import 'package:n42_wallet/features/browser/js/ethereum_provider.dart';
 import 'package:n42_wallet/features/browser/pages/browser_collection.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +25,16 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 // #enddocregion platform_imports
 
 typedef ConnectDAPP = void Function(String url);
+
+/// Callback to show a DApp signing/transaction confirmation sheet.
+/// Returns `true` if the user approved, `false` if rejected.
+/// Set by [BrowserPage]; funnels to the shared [DAppSigningSheet].
+typedef DAppSigningApproval =
+    Future<bool> Function({
+      required String origin,
+      required String method,
+      required Map<String, dynamic> details,
+    });
 
 /// Callback invoked when a navigation is blocked as phishing.
 ///
@@ -63,6 +80,45 @@ class BrowserProvider extends ChangeNotifier {
   TextEditingController? titleEditingController;
   FocusNode? titleFocusNode;
   ConnectDAPP? connectDAPPCallBack;
+
+  /// Set by [BrowserPage] to show the DApp signing confirmation sheet for
+  /// injected-provider (EIP-1193) requests.
+  DAppSigningApproval? onSigningRequest;
+
+  /// Lazily-built EIP-1193 request handler for the injected `window.ethereum`.
+  /// Rebuilt whenever the wallet's EVM coin models change (address/chain).
+  DAppRequestHandler? _dappHandler;
+  int _dappHandlerCoinCount = -1;
+
+  /// Build/refresh the injected-provider request handler from the wallet's
+  /// current EVM coin models. Returns null if no EVM account exists.
+  DAppRequestHandler? _ensureDappHandler() {
+    final evm = globalWapAdapter.coinModels
+        .where((cm) => cm.config.coinType == CoinType.ETH.name)
+        .toList();
+    if (evm.isEmpty) {
+      _dappHandler = null;
+      _dappHandlerCoinCount = -1;
+      return null;
+    }
+    // Rebuild when the account set changes (cheap heuristic: count).
+    if (_dappHandler == null || _dappHandlerCoinCount != evm.length) {
+      final handler = DAppRequestHandler(ethCoinModels: evm);
+      handler.onSigningRequest =
+          ({
+            required String origin,
+            required String method,
+            required Map<String, dynamic> details,
+          }) async {
+            final cb = onSigningRequest;
+            if (cb == null) return false;
+            return cb(origin: origin, method: method, details: details);
+          };
+      _dappHandler = handler;
+      _dappHandlerCoinCount = evm.length;
+    }
+    return _dappHandler;
+  }
 
   /// Shortcut: URL of the currently active tab, or empty string
   String get _currentUrl {
@@ -159,6 +215,9 @@ class BrowserProvider extends ChangeNotifier {
             wInfoList[idx]['load'] = true;
             // Re-inject on every navigation so SPAs don't lose the interceptor.
             _injectWcClipboardScript(wvc);
+            // Inject the EIP-1193 provider as early as possible so DApps that
+            // probe window.ethereum at document-start find it.
+            _injectEthereumProvider(wvc);
             _safeNotify();
           },
           onPageFinished: (String url) async {
@@ -168,6 +227,7 @@ class BrowserProvider extends ChangeNotifier {
             wInfoList[idx]['progress'] = 0;
             // Inject again after full load in case onPageStarted fired too early.
             await _injectWcClipboardScript(wvc);
+            await _injectEthereumProvider(wvc);
             // Fetch title for this tab
             final t = await wvc.getTitle();
             if (t != null) {
@@ -222,6 +282,16 @@ class BrowserProvider extends ChangeNotifier {
             AppLogger.d('Browser', 'JS clipboard intercept: $preview');
           }
           _tryHandleWalletConnect(message.message);
+        },
+      )
+      // Injected EIP-1193 provider bridge: window.ethereum.request(...) →
+      // N42Wallet.postMessage(json) → here → DAppRequestHandler → callback
+      // into JS via window.ethereum._n42Cb(...). This is the direct
+      // connect/sign/send path, complementing the WalletConnect QR flow.
+      ..addJavaScriptChannel(
+        'N42Wallet',
+        onMessageReceived: (JavaScriptMessage message) {
+          _handleProviderMessage(wvc, message.message);
         },
       )
       // Use a desktop user agent so DApps (e.g. Uniswap/@reown/appkit) present
@@ -420,6 +490,15 @@ class BrowserProvider extends ChangeNotifier {
             _nativeHandler.postMessage([String(msg)]);
           };
         }
+        // Preserve the injected-provider bridge too, otherwise hiding
+        // window.webkit below breaks N42Wallet.postMessage on iOS and every
+        // connect/sign/send request silently hangs.
+        var _n42Handler = window.webkit.messageHandlers['N42Wallet'];
+        if (window.N42Wallet && _n42Handler) {
+          window.N42Wallet.postMessage = function(msg) {
+            _n42Handler.postMessage([String(msg)]);
+          };
+        }
         Object.defineProperty(window, 'webkit', { get: function() { return undefined; }, configurable: true });
       }
     } catch(e) {}
@@ -474,6 +553,123 @@ class BrowserProvider extends ChangeNotifier {
       await wvc.runJavaScript(_wcClipboardInterceptScript);
     } catch (e) {
       AppLogger.w('Browser', 'WC clipboard script inject error: $e');
+    }
+  }
+
+  /// Inject the EIP-1193 `window.ethereum` provider into [wvc], seeded with
+  /// the wallet's current EVM chain id + address. No-op when there is no EVM
+  /// account (nothing to expose).
+  Future<void> _injectEthereumProvider(WebViewController wvc) async {
+    final handler = _ensureDappHandler();
+    if (handler == null) return;
+    try {
+      final script = EthereumProviderJs.buildProviderScript(
+        handler.chainIdHex,
+        [handler.address],
+      );
+      await wvc.runJavaScript(script);
+    } catch (e) {
+      AppLogger.w('Browser', 'ethereum provider inject error: $e');
+    }
+  }
+
+  /// Handle one `N42Wallet.postMessage(json)` from the injected provider:
+  /// route to [DAppRequestHandler] and resolve/reject the JS Promise via
+  /// `window.ethereum._n42Cb(id, resultJson, errorJson)`.
+  Future<void> _handleProviderMessage(WebViewController wvc, String raw) async {
+    int? id;
+    try {
+      final msg = json.decode(raw) as Map<String, dynamic>;
+      id = msg['id'] as int?;
+      final method = msg['method'] as String? ?? '';
+      final params = (msg['params'] as List<dynamic>?) ?? const [];
+      if (id == null) return;
+
+      final handler = _ensureDappHandler();
+      if (handler == null) {
+        await _rejectProvider(wvc, id, -32603, 'No EVM account available');
+        return;
+      }
+
+      // Block signing/sending on known-phishing origins before anything else.
+      final origin = _originOf(_currentUrl);
+      handler.dappOrigin = origin;
+      if (_isSensitiveMethod(method)) {
+        final sec = DAppSecurityService.check(_currentUrl);
+        if (sec.level == DAppSecurityLevel.blocked) {
+          await _rejectProvider(
+            wvc,
+            id,
+            4001,
+            'Blocked: ${sec.reason ?? 'known phishing site'}',
+          );
+          return;
+        }
+      }
+
+      final result = await handler.handleRequest(method, params);
+      await _resolveProvider(wvc, id, result);
+    } catch (e) {
+      if (id == null) return;
+      // Normalize thrown JSON-RPC error maps and generic errors.
+      int code = -32603;
+      String message = e.toString();
+      if (e is Map) {
+        code = (e['code'] as int?) ?? code;
+        message = e['message']?.toString() ?? message;
+      }
+      await _rejectProvider(wvc, id, code, message);
+    }
+  }
+
+  static const Set<String> _sensitiveMethods = {
+    'eth_sendTransaction',
+    'eth_signTransaction',
+    'personal_sign',
+    'eth_sign',
+    'eth_signTypedData',
+    'eth_signTypedData_v3',
+    'eth_signTypedData_v4',
+  };
+
+  bool _isSensitiveMethod(String method) => _sensitiveMethods.contains(method);
+
+  String _originOf(String url) {
+    final uri = Uri.tryParse(url);
+    if (uri == null || uri.host.isEmpty) return url.isEmpty ? 'DApp' : url;
+    return '${uri.scheme}://${uri.host}';
+  }
+
+  Future<void> _resolveProvider(
+    WebViewController wvc,
+    int id,
+    dynamic result,
+  ) async {
+    final resultJson = json.encode(result);
+    try {
+      await wvc.runJavaScript(
+        'window.ethereum && window.ethereum._n42Cb('
+        '$id, ${json.encode(resultJson)}, null)',
+      );
+    } catch (e) {
+      AppLogger.w('Browser', 'provider resolve error: $e');
+    }
+  }
+
+  Future<void> _rejectProvider(
+    WebViewController wvc,
+    int id,
+    int code,
+    String message,
+  ) async {
+    final errJson = json.encode({'code': code, 'message': message});
+    try {
+      await wvc.runJavaScript(
+        'window.ethereum && window.ethereum._n42Cb('
+        '$id, null, ${json.encode(errJson)})',
+      );
+    } catch (e) {
+      AppLogger.w('Browser', 'provider reject error: $e');
     }
   }
 

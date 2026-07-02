@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/browser/pages/browser_history_page.dart';
 import 'package:n42_wallet/features/browser/pages/dapp_directory_page.dart';
 import 'package:n42_wallet/features/browser/pages/browser_setting.dart';
 import 'package:n42_wallet/features/browser/provider/browser_provider.dart';
+import 'package:n42_wallet/features/browser/widgets/dapp_signing_sheet.dart';
 import 'package:n42_wallet/features/browser/presentation/providers/browser_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -74,6 +75,7 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     _clipboardTimer?.cancel();
     _browserProvider?.connectDAPPCallBack = null;
     _browserProvider?.phishingCallBack = null;
+    _browserProvider?.onSigningRequest = null;
     _browserProvider?.browserDispose();
     super.dispose();
   }
@@ -137,6 +139,8 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
       if (!mounted) return;
       _showPhishingWarning(url, proceed);
     };
+    // Injected-provider (window.ethereum) signing/tx confirmations.
+    bp.onSigningRequest = _showDAppSigningSheet;
 
     bp.browserInit();
     bp.addUrl(widget.openUrl);
@@ -157,6 +161,27 @@ class _BrowserPageState extends ConsumerState<BrowserPage> {
     final sessions = wcp.getActiveSessions();
     if (sessions.isEmpty) return;
     wcp.setActiveSession(sessions.values.last);
+  }
+
+  /// Show the DApp signing/transaction confirmation sheet for an
+  /// injected-provider request. Returns true if the user approved.
+  Future<bool> _showDAppSigningSheet({
+    required String origin,
+    required String method,
+    required Map<String, dynamic> details,
+  }) async {
+    if (!mounted) return false;
+    final approved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColorTokens.of(context).bgBase,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) =>
+          DAppSigningSheet(origin: origin, method: method, details: details),
+    );
+    return approved == true;
   }
 
   /// Show a phishing warning dialog.

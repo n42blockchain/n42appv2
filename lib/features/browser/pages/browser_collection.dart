@@ -87,7 +87,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
         centerTitle: false,
         title: Text(
           S.of(context).g_browser_key5,
-          style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
+          style: AppTypography.title.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
+          ),
         ),
         actions: [
           InkWell(
@@ -162,7 +164,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
             height: ScreenUtil().setWidth(40.0),
             child: Text(
               label,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
           Container(
@@ -194,7 +198,9 @@ class BrowserCollectionState extends State<BrowserCollection> {
           if (errorMessage.isNotEmpty)
             Text(
               errorMessage,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).danger),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).danger,
+              ),
             ),
         ],
       ),

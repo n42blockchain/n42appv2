@@ -48,9 +48,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           decoration: InputDecoration(
             hintText: S.of(context).g_key_aa_account_name_hint,
             prefixIcon: const Icon(Icons.label_outline),
-            border: OutlineInputBorder(
-              borderRadius: AppRadius.brMd,
-            ),
+            border: OutlineInputBorder(borderRadius: AppRadius.brMd),
             contentPadding: EdgeInsets.symmetric(
               horizontal: AppSpacing.space4,
               vertical: 14.w,
@@ -108,6 +106,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
   Widget _buildTypeSelector() {
     const types = [
       SmartAccountType.simpleAccount,
+      SmartAccountType.simple7702Account,
       SmartAccountType.safe,
       SmartAccountType.biconomy,
       SmartAccountType.kernel,
@@ -127,6 +126,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
     final isSelected = selectedType == type;
     final isAvailable =
         type == SmartAccountType.simpleAccount ||
+        type == SmartAccountType.simple7702Account ||
         type == SmartAccountType.safe ||
         type == SmartAccountType.biconomy;
     final typeColor = _getTypeColor(type);
@@ -369,9 +369,7 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
         backgroundColor: _themeColor(AppThemeKeys.mainBlueColor),
         foregroundColor: Colors.white,
         padding: EdgeInsets.symmetric(vertical: 18.w),
-        shape: RoundedRectangleBorder(
-          borderRadius: AppRadius.brMd,
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
         disabledBackgroundColor: AppColorTokens.of(context).textTertiary,
       ),
       child: isCreating
