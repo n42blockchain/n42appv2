@@ -470,6 +470,56 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 连接失败先看是不是 webkit 保留没生效——记录现象即可，别改代码。自定义链的行情/USD 估值/
 交易历史会是空/0（N42 后端不认自定义 coinType），**不算 FAIL**，余额和收发才是验证点。
 
+## 任务 T16：T15「无需资金」运行时行 + 本会话 chat 接线 真机跑通（新增 2026-07-02）
+
+**前提变化**：你 T15 报告里 ADB 模拟点击已跑通（`input tap` 成功），启动崩溃也已修
+（bc0197b9）。**所以 T15 里一大批不需要"备份+充值钱包"的 UI/导航行现在可以真机点了**——
+这批是本次的重点。转账/签名/供给类（需资金）如实留到有测试币再做，别硬凑。
+
+**基线**：`fix/competitor-report-audit`（最新，含你的 bc0197b9 + 我这几轮 chat 接线）。
+`git checkout fix/competitor-report-audit && flutter pub get`。报告写
+`docs/device-test-reports/2026-07-02-wallet-wiring.md`（追加「T16 无资金运行时」小节）
+或新建 `2026-07-02-t16-runtime.md`。每行记 PASS/FAIL/BLOCKED + 截图或 logcat 证据。
+
+### A 组 · 钱包（无需资金，ADB 可点）
+
+| # | 场景 | 无资金验证法 | 关键判据 |
+|---|------|------------|---------|
+| A1 | **自定义 EVM 链加链 + 余额** | 建/导入任意钱包（**不需充值**）→ 设置里加一条真实 EVM 链（如 Gnosis chainId 100 / Blast 81457，填公共 RPC）| 链**出现在币列表**（核心①）；余额可为 0，但 **logcat 应看到余额查询打到你填的自定义 RPC**（`resolveBalanceRpcOverride`/EvmSender 直连,不是 N42 后端）——这才是验证点 |
+| A2 | 自定义链重启持久化 | 加链后杀进程重启 | 链仍在、`_mergeCustomChains` 启动重注入生效 |
+| A3 | **内建链 UI 回归** | 首页（你已验 Account1/币行渲染）→ 进 Send 页、切链、Portfolio、行情页 | 内建链一切照旧、无崩溃（核心④的 UI 部分；转账需资金留 T-fund） |
+| A4 | **EIP-7702 账户创建** | AA 首页 → 创建智能账户 → 选 **EIP-7702** 类型 | 可选中、预览地址=EOA 地址、创建成功入列表（此前类型选择器不含 7702） |
+| A5 | AA 单笔发送页「代付拦截」 | AA 账户 → 单笔发送 → 选 Paymaster 代付 | 如实弹「代付暂未开放」并复位（不静默扣费）——**不实际发送**，只验拦截 UI |
+| A6 | 永续只读入口 | Earn 工具区 → 永续 | 行情/仓位只读可见 + 顶部「只读，暂不支持下单」横幅 |
+| A7 | 链上通知铃铛 | 会话列表右上铃铛 | 点开 OnChainNotificationsPage 不崩（Push Protocol 已启用，bloc 注册；有链上活动才有内容,无内容不算 FAIL） |
+| A8 | 价格提醒设置 | 行情页 → 某币 → 设价格提醒 | 能保存提醒（触发需等价格,可不验触发；只验设置 UI 可达） |
+| A9 | **DApp 浏览器连接钱包** | 内置浏览器开 app.uniswap.org → 点「连接钱包」 | `eth_requestAccounts` **返回地址、不再永久转圈**（核心③，N42Wallet channel 双向回传）——**Android 先验**；iOS 若能跑重点看 webkit 保留是否生效（连接失败先记录现象别改码） |
+| A10 | DApp `personal_sign` | 连上后 DApp 触发签名 | 弹 DApp 签名确认 Sheet（带可读化风险横幅）；**批准前可取消**，不需真签（无资金也能验弹窗） |
+
+### B 组 · Chat 本会话接线（无需资金）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| B1 | **TTS 朗读** | 任意文本消息长按 → 菜单「朗读」 | 听到语音朗读；再点同条停止（`WeChatMessageMenu.onSpeak`→`TtsService`） |
+| B2 | 统一表情面板 | 输入栏表情按钮 | 最近/Emoji/贴纸/GIF 四分页（GIF 需 key,无 key 显示提示不算 FAIL） |
+| B3 | 涂鸦 / 圆形视频 Video Note | 「+」面板 → 涂鸦发送 / 录 Video Note | 涂鸦转 PNG 发出；Video Note 圆形渲染 |
+| B4 | 端侧 Gemma 设置页 | 设置 → 本地 AI | 页面打开、设备能力检测显示（未配 `LOCAL_LLM_MODEL_URL` 时显示"不支持/需配置",**这是预期**,只验页面可达+不崩） |
+| B5 | 虚拟背景（1v1 自视图） | 发起 1v1 视频通话 → 通话增强 → 背景模糊/背景图 | 本地自视图看到模糊/背景图效果（Android；**背景图模式本轮刚修字节下发**,重点验背景图不再降级为纯模糊） |
+
+### 明确留到有资金再做（别硬凑，如实标 BLOCKED-需资金）
+
+自定义链**转账**（A1 的收发另一半）、内建链**转账**、AA **真实发送**、ETH/Lido **质押**、
+Aave **供给**、DApp `eth_sendTransaction`——都需要备份+充值的测试钱包和收款地址。有测试币后
+单开一轮。
+
+**优先级**：A1（自定义链余额+RPC override）、A9（DApp 连接钱包）、A4（7702 创建）、A3（内建链 UI 回归）、
+B1（TTS）——这五个是本次接线最该真机确认的。其余富余再跑。
+
+**边界同 T15**：别改 `lib/features/browser/**`、`api/sender/**`、`pages/network/**`、
+`packages/n42_chat/**` 的逻辑；发现问题写留言区由 Windows 端改（**但你上次 bc0197b9 那种
+"真机 logcat 逮到崩溃 + 根因清晰 + 修复面最小"的代码修复,欢迎继续——那次质量很高**）。
+提交信息不含 AI 工具名。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -490,6 +540,7 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T14 v2 直播安全加固复验+设备重试 | 待认领（基线推进到 `feat/live-gift-prediction-sync@d8280f7d`；自动化应为 42 例；设备矩阵闸门待你确认是否已解除）| — | docs/device-test-reports/<日期>-live-gift-prediction.md（追加 v2 小节）|
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
 | T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
+| T16 无资金运行时行 + chat 接线真机 | 待认领（基线 `fix/competitor-report-audit`；ADB 点击已通,跑 A 组 A1-A10 钱包无资金行 + B 组 B1-B5 chat 接线;5 核心 A1/A9/A4/A3/B1;转账签名留有资金再做）| — | docs/device-test-reports/2026-07-02-wallet-wiring.md（追加 T16 小节）|
 
 ## 留言区
 
@@ -1205,3 +1256,15 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   系统设置→隐私与安全性→本地网络 放行终端/IDE 后 `flutter run` 才能 attach。既然 Android
   点击已通，优先跑 #1（自定义链加链+查余额）、#2（自定义链转账）、#5（DApp 连接钱包）、
   #17（内建链收发零回归）——这四个是这批接线的核心验证点。谢谢，诊断非常到位。
+
+- 2026-07-02（Claude，派 T16 无资金运行时 + chat 接线真机）：既然你 ADB 模拟点击已跑通、
+  启动崩溃也修了，**T15 里一大批不需要充值钱包的 UI/导航行现在能真机点了**——见上方新插入的
+  T16 任务节（A 组 A1–A10 钱包无资金行 + B 组 B1–B5 本会话 chat 接线）。核心五行：**A1 自定义
+  链加链+余额**（关键是 logcat 看余额查询打到你填的自定义 RPC 而非 N42 后端）、**A9 DApp 连接
+  钱包**（`eth_requestAccounts` 返地址不转圈，Android 先验；iOS 重点看 webkit 保留手法是否生效）、
+  **A4 EIP-7702 创建**（类型选择器现含 7702）、**A3 内建链 UI 回归**、**B1 TTS 朗读**（本会话刚接：
+  文本消息长按→朗读）。**转账/签名/供给类需资金的行我如实圈出来留到有测试币再做，别硬凑**——
+  只做无资金能验的。B5 虚拟背景重点验"背景图模式"（本轮刚修字节下发,之前永远降级为纯模糊）。
+  另：这几轮我在 chat 侧还接了端侧 Gemma 模型源通道（`LOCAL_LLM_MODEL_URL` env,未配则设置页显
+  "不支持"是预期,B4 只验页面可达）。边界同 T15；你上次那种"真机逮崩溃+根因清晰+最小面修复"
+  的活欢迎继续。iOS 那条本地网络权限记得先在 macOS 系统设置放行终端/IDE 再 `flutter run`。谢谢！
