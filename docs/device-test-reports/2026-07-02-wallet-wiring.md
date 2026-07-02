@@ -182,3 +182,88 @@ Remaining non-fatal runtime warnings observed on this device:
    `flutter run -d 00008150-000E2469149A401C --debug --no-pub`.
 3. After either device is controllable, run the T15 priority rows first:
    #1, #2, #5, #9, and #17.
+
+## T16 无资金运行时
+
+### Scope
+
+Task T16 continues on `fix/competitor-report-audit`, with priority on
+no-funds runtime verification for custom chain entry, DApp browser connection
+entry, EIP-7702 account creation, built-in wallet regression, and Chat feature
+availability.
+
+Baseline for this pass:
+
+- Branch: `fix/competitor-report-audit`
+- Starting commit: `6026a67f docs: record Android install retry status`
+- Required baseline commits present: `bc0197b9` and `9676e6cb`
+- Installed build after T16 fix: `2.4.3+2026062619`
+- Device: Android `38f4f08a` / `25098RA98C`, Android 16 / API 36
+- Package after install:
+  - `versionName=2.4.3`
+  - `versionCode=2026062619`
+  - `lastUpdateTime=2026-07-02 16:56:21`
+
+### Code Fixes Made During T16
+
+| Area | Result | Notes |
+|---|---:|---|
+| EIP-7702 account creation | FIXED | `AAAccountCreatePage` now defers preview address calculation until after the first frame, avoiding `dependOnInheritedWidgetOfExactType<_LocalizationsScope>` during `initState`. |
+| EIP-7702 persistence | FIXED | `AAHomePage` now receives the created `SmartAccount` result, persists it through the owning wallet, and updates the visible list immediately. |
+| EIP-7702 state semantics | FIXED | Factory-created `simple7702Account` records are treated as `deployed` because they use the EOA address and do not require factory deployment. |
+| Add custom chain entry | FIXED | Wallet plus menu now keeps `Add custom chain` reachable for HD/private-key wallets instead of jumping directly to token selection. |
+
+### Build And Test Verification
+
+| Check | Result | Notes |
+|---|---:|---|
+| `dart format` on changed wallet files | PASS | Applied before build. |
+| `flutter analyze --no-fatal-infos` | PASS | Only unrelated info remained in `packages/n42_chat/lib/src/presentation/widgets/chat/wechat_message_menu.dart`. |
+| `flutter build apk --debug --target-platform android-arm64 --no-pub` | PASS | Built `build/app/outputs/flutter-apk/app-debug.apk`. |
+| Android install | PASS | `adb -s 38f4f08a install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk` returned `Success`. |
+| Targeted tests | PASS | 173 tests passed for AA/EIP-7702/UserOp, custom chain registry, and price alert sheet utilities. |
+| Log scan after runtime checks | PASS | Recent logcat scan found no `FlutterError`, `FATAL EXCEPTION`, `AndroidRuntime`, AA, market, custom-chain, DApp, or WebView error matches. |
+
+Targeted test command:
+
+```text
+flutter test test/features/aa/eip7702_handler_test.dart test/features/aa/smart_account_test.dart test/features/aa/user_operation_test.dart test/features/wallet/custom_chain_registry_test.dart test/features/wallet/market/price_alert_sheet_utils_test.dart --no-pub
+```
+
+### Runtime Matrix
+
+| # | Scenario | Runtime Result | Evidence / Notes |
+|---|---|---:|---|
+| A1 | Custom EVM chain add + balance | PARTIAL/BLOCKED | Wallet plus menu now opens `Add Tokens` with `Add custom chain`; form opens with `Chain Name`, `Chain symbol`, `Chain ID`, `Decimal`, `RPC`, and `Add`. Actual Gnosis/Blast RPC submission and balance query were blocked by device IME: ADB text injection transforms URL/RPC strings into Chinese/full-width text. No app crash. |
+| A2 | Restart persistence | PARTIAL | EIP-7702 account persistence survived restart and wallet home showed `Smart Wallet / Ready`. Custom-chain persistence remains blocked because A1 submission could not be completed through ADB text input. |
+| A3 | Built-in chain UI regression | PASS | Wallet home rendered `Account1`, `$0.00`, `Just updated`, `Send`, `Receive`, `Buy`, token rows for `N`, `BTC`, `ETH`, `USDT`, `USDC`, and `All networks`. Send path correctly showed the backup guard: `Please backup your wallet seed phrase first!`. Chain switch and Manage Chains opened without crash. Markets and Portfolio opened; Portfolio showed `No assets found`. |
+| A4 | EIP-7702 account creation | PASS | Created `T167702B`; preview address was `0xea311ddcf42397df0007a160baf59e2aa`, matching the EOA. Create returned to the list with `T167702B / EIP-7702 Account / Deployed / 0xea31...25aa`; wallet home then showed `Smart Wallet / Ready` after restart. |
+| A5 | AA send Paymaster guard | PASS/WARNING | Smart Account Send page opened with From `T167702B`, `0xea31...25aa`, `AA`, `Gas Payment`, `Pay with ETH`; Send remained disabled without recipient/amount. Paymaster selector showed `Pay with ETH` and disabled `Sponsored (Free) FREE Gas Sponsored`; no real send was triggered. Warning: the no-funds device still displayed `Available Balance: 1.5 ETH` in this AA send UI. |
+| A6 | Perps read-only entry | PASS | Earn -> Perps opened `Perpetuals` with tabs `Markets (231)`, `Positions (0)`, `Orders (0)`, and banner `Read-only market data. Order placement is not supported in this version.` |
+| A7 | Chat on-chain notification bell | BLOCKED | Chat tab is currently on the N42 Chat welcome/login page, not a logged-in chat list. No credentials/session were available on this device, so the notification bell could not be reached. |
+| A8 | Price alert settings | PASS | Markets opened; ETH row alert button opened `Price Alert · ETH` with current price, `Goes Above`, `Drops Below`, target price field, enable switch, and `Set Alert`. No funds or signing required. |
+| A9 | DApp browser connect wallet on `app.uniswap.org` | PARTIAL/BLOCKED | Browser entry opened and WebView loaded the default N42 site. Navigating to `https://app.uniswap.org` was blocked by the same device IME issue that corrupts ADB-entered URLs. Browser itself did not crash. |
+| A10 | DApp `personal_sign` confirmation / cancel | BLOCKED | Requires A9 navigation/connect to a DApp test page; blocked by device URL input. |
+| B1 | Chat TTS long-press speak/stop | BLOCKED | Requires a logged-in chat room/message. Device is at Chat welcome/login page. |
+| B2 | Unified emoji panel | BLOCKED | Requires a logged-in chat composer. |
+| B3 | Doodle/video note | BLOCKED | Requires a logged-in chat composer/call flow. |
+| B4 | Local AI settings capability/unsupported state | BLOCKED | Requires access to Chat settings from a logged-in Chat surface. |
+| B5 | 1v1 virtual background self-view | BLOCKED | Requires a logged-in 1v1 call flow. |
+
+Funded rows remain intentionally blocked in this no-funds pass: custom-chain
+transfer, built-in transfer, AA real send, ETH/Lido staking, Aave execution,
+and DApp `eth_sendTransaction`.
+
+### Runtime Notes
+
+- Android ADB input is enabled for taps and navigation on this connection, but
+  text input is unreliable because the active Chinese IME rewrites ASCII URLs
+  and RPC endpoints. The device has Baidu, iFlytek, and Sogou IMEs installed;
+  no plain ADB keyboard or working clipboard command is available.
+- Chat welcome page is reachable and Android hardware Back returns to the
+  wallet host page. A coordinate tap on the visual left Back button did not
+  return during this pass, so Chat logged-in feature rows should be repeated
+  with manual touch or a logged-in session before marking them PASS.
+- The no-funds wallet state is suitable for guarded UI checks, but transfer,
+  staking, Aave, and transaction-signing rows require funded test assets and a
+  backed-up wallet.
