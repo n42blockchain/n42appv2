@@ -34,7 +34,15 @@ class AAHomePage extends StatefulWidget {
   /// AA 账户信息
   final AAAccountInfo? accountInfo;
 
-  const AAHomePage({super.key, required this.walletAddress, this.accountInfo});
+  /// Persists a newly created account in the owning wallet.
+  final Future<void> Function(SmartAccount account)? onAccountCreated;
+
+  const AAHomePage({
+    super.key,
+    required this.walletAddress,
+    this.accountInfo,
+    this.onAccountCreated,
+  });
 
   @override
   State<AAHomePage> createState() => _AAHomePageState();
@@ -75,11 +83,37 @@ class _AAHomePageState extends State<AAHomePage> {
 
   void navigateToCreateAccount() {
     if (!_requireOwnerAddress()) return;
-    _pushPage(AAAccountCreatePage(ownerAddress: widget.walletAddress)).then((
-      _,
-    ) {
+    Navigator.push<SmartAccount>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => AAAccountCreatePage(ownerAddress: widget.walletAddress),
+      ),
+    ).then((account) async {
       if (!mounted) return;
-      _loadAccounts();
+      if (account == null) {
+        _loadAccounts();
+        return;
+      }
+
+      if (widget.onAccountCreated != null) {
+        await widget.onAccountCreated!(account);
+      } else {
+        widget.accountInfo?.addAccount(account);
+      }
+
+      if (!mounted) return;
+      setState(() {
+        final existingIndex = accounts.indexWhere(
+          (a) =>
+              a.chainId == account.chainId &&
+              a.address.toLowerCase() == account.address.toLowerCase(),
+        );
+        if (existingIndex == -1) {
+          accounts.add(account);
+        } else {
+          accounts[existingIndex] = account;
+        }
+      });
     });
   }
 

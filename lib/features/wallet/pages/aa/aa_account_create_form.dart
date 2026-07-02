@@ -242,7 +242,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           _buildPreviewAddressContent(),
           SizedBox(height: AppSpacing.space2),
           Text(
-            S.of(context).g_key_aa_counterfactual_note,
+            selectedType.isEIP7702
+                ? S.of(context).g_key_aa_eip7702_desc
+                : S.of(context).g_key_aa_counterfactual_note,
             style: AppTypography.captionSm.copyWith(
               fontWeight: FontWeight.w400,
               color: _themeColor(AppThemeKeys.itemSubtitleTextColor),
@@ -350,7 +352,9 @@ mixin _AAAccountCreateFormMixin on _AAAccountCreateHelpersMixin {
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
-              S.of(context).g_key_aa_deployment_note,
+              selectedType.isEIP7702
+                  ? S.of(context).g_key_aa_eip7702_desc
+                  : S.of(context).g_key_aa_deployment_note,
               style: AppTypography.caption.copyWith(color: warning),
             ),
           ),

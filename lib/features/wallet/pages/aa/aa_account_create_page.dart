@@ -37,7 +37,9 @@ class _AAAccountCreatePageState extends State<AAAccountCreatePage>
   @override
   void initState() {
     super.initState();
-    _calculatePreviewAddress();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) _calculatePreviewAddress();
+    });
   }
 
   @override

@@ -188,23 +188,7 @@ void showSearchCoinSheet(BuildContext context, int type, {String? toAddress}) {
 // ── 添加代币/链弹窗 ───────────────────────────────────────────────────────────
 
 Future<void> showAddTokenSheet(BuildContext context, WidgetRef ref) async {
-  final wi = ref.read(wapBridgeProvider).walletInfo;
-
-  if (wi.privateKey != null) {
-    // HD 钱包：直接进入代币选择页
-    final cType = wi.coinInfo?.keys.toList()[0];
-    final result = await Navigator.push<bool>(
-      context,
-      MaterialPageRoute(builder: (_) => WalletCoinAddAll("", coinType: cType)),
-    );
-    if (!context.mounted) return;
-    if (result == true) {
-      ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
-    }
-    return;
-  }
-
-  // 多链钱包：展示"添加代币 / 添加链"菜单
+  // Keep the add-chain path reachable for HD/private-key wallets as well.
   sheetBottom(context, "", _AddTokenMenu(ref: ref));
 }
 
@@ -363,9 +347,7 @@ class BackupReminderBanner extends StatelessWidget {
               );
             },
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               child: Text(
                 S.of(context).g_key_wallet_c36,
                 style: AppTypography.headline.copyWith(

@@ -134,15 +134,20 @@ class SmartAccountFactory {
 
     final resolvedAddress = address ?? _calculateSimpleAddress(accountSalt);
     final factoryAddr = _factoryAddressForType(type);
+    final isEip7702 = type == SmartAccountType.simple7702Account;
 
     return SmartAccount(
       address: resolvedAddress,
       type: type,
       ownerAddress: _ownerAddress,
-      state: SmartAccountState.notDeployed,
+      state: isEip7702
+          ? SmartAccountState.deployed
+          : SmartAccountState.notDeployed,
       chainId: _chainId,
       salt: accountSalt,
-      factoryAddress: factoryAddr,
+      factoryAddress: isEip7702
+          ? (_config.simple7702AccountFactory ?? factoryAddr)
+          : factoryAddr,
       createdAt: DateTime.now(),
       label: label,
     );

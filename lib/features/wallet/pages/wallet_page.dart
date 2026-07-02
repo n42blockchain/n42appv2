@@ -423,6 +423,18 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                                 accountInfo: waValue
                                                     .walletInfo
                                                     .aaAccountInfo,
+                                                onAccountCreated:
+                                                    (account) async {
+                                                      waValue.walletInfo
+                                                          .addSmartAccount(
+                                                            account,
+                                                          );
+                                                      await waValue
+                                                          .saveWalletInfo(
+                                                            waValue.walletInfo,
+                                                            waValue.walletIndex,
+                                                          );
+                                                    },
                                               ),
                                             ),
                                           );
