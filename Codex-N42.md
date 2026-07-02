@@ -428,6 +428,48 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 
 **别改** `lib/features/live/**` 的 Dart 逻辑（已单测+整改完）；发现问题写留言区，由 Windows 端改。
 
+## 任务 T15：钱包接线大批次 真机端到端回归（新增 2026-07-02）
+
+**基线分支**：`fix/competitor-report-audit`（已推 origin/Gitee，最新 `5b8e47b0`）。
+**不是** master——这些接线都在该分支上。构建前 `git checkout fix/competitor-report-audit && flutter pub get`。
+
+**背景**：过去几轮对着 `docs/2026钱包市场竞品对比分析报告.md` 做了逐项诚实性复核，
+把一批「代码写好但从未接线/入口缺失」的功能真正接通（累计 17 项）。**全部通过
+`flutter analyze` 净 + 相关单测（含新增单测）**，但下列项**只有真机端到端能最终确认**——
+这正是你带设备的强项区。每项记录 PASS/FAIL + 设备型号/OS 版本 + 复现步骤；报告写
+`docs/device-test-reports/2026-07-02-wallet-wiring.md`。
+
+**基线诚实前提**：这些是「代码级已验证、真机未验」，不是「已知能跑」。请当作可能有
+平台细节坑的新接线来验，发现问题写留言区由 Windows 端改（**别改** `lib/features/browser/**`、
+`lib/features/wallet/api/sender/**`、`lib/features/wallet/pages/network/**` 的逻辑）。
+
+| # | 场景 | 期望行为 | 备注 |
+|---|------|----------|------|
+| 1 | **自定义 EVM 链**：设置里加一条真实 EVM 链（如 Gnosis chainId 100 或 Blast 81457，填 RPC）| 链出现在币列表，**能查到原生币余额** | 核心验证点①：余额链路 |
+| 2 | 向自定义链地址转一笔原生币 | 交易成功广播、区块浏览器可查 | 核心验证点②：EvmSender RPC override 直连自定义 RPC（绕开 N42 后端）|
+| 3 | 自定义链上转一笔 ERC-20（若该链有测试代币）| 余额/gas/nonce 正确，转账成功 | 合约转账路径 |
+| 4 | 重启 App 后自定义链仍在、余额仍刷新 | 持久化 + `_mergeCustomChains` 启动注入生效 | |
+| 5 | **内置 DApp 浏览器**：打开一个用注入 provider 的 DApp（如 app.uniswap.org），点「连接钱包」| 弹出连接授权、`eth_requestAccounts` 返回地址（不再永久转圈）| 核心验证点③：`window.ethereum` 注入 + N42Wallet channel 双向回传，**iOS/Android 双端都要试**（iOS 有 webkit 隐藏保留手法，重点验）|
+| 6 | DApp 内发起一笔 `personal_sign` / `eth_signTypedData` | 弹 DApp 签名确认 Sheet（带可读化风险横幅），批准后签名返回 DApp | 签名弹窗接线 |
+| 7 | DApp 内发起 `eth_sendTransaction` | 弹确认，批准后交易上链，DApp 收到 txHash | 发送路径 |
+| 8 | 打开一个已知钓鱼域名的 DApp 并尝试签名 | 敏感方法被 DAppSecurityService 前置拦截拒绝 | 安全前置 |
+| 9 | **AA 单笔发送**：AA 账户页发一笔 ETH 转账 | 走真实 UserOp（bundler 估 gas→签名→eth_sendUserOperation→回执），**不再是 2 秒假成功** | 核心验证点④：曾是 `Future.delayed(2s)` 假成功 |
+| 10 | AA 单笔发送时选择 Paymaster 代付 | 如实提示「代付暂未开放」并复位（不静默扣费）| 诚实拦截 |
+| 11 | **EIP-7702 账户创建**：AA 创建页选 EIP-7702 类型 | 可选中、预览地址=EOA 地址、创建成功入列表 | 此前类型选择器不含 7702 |
+| 12 | **ETH/Lido 质押**：Staking 页对 ETH 走 Lido submit | 交易真实签名广播（不再只弹 "Transaction prepared"）；SOL/ATOM 应显示「暂不支持该链广播」 | 核心验证点⑤ |
+| 13 | **链上通知**：聊天会话列表铃铛 | 铃铛可点开 OnChainNotificationsPage，不崩；有链上活动时出通知 | Push Protocol 启用后 bloc 注册 |
+| 14 | **价格提醒**：行情页设一个价格提醒，前台等待触发 | 到价时收到本地通知（前台每 5 分钟轮询）| MarketPage 入口 + 定时器 |
+| 15 | **永续页**：Earn 工具区进永续 | 行情/仓位只读可见，顶部有「只读，暂不支持下单」横幅 | 只读如实 |
+| 16 | **Aave 借贷**：借贷页选一个资产 supply 小额 | 授权额度检查→approve（如需）→supply 上链成功 | 执行 UI + 数据源已修 |
+| 17 | 全量冒烟：内置链正常收发不受上述改动影响 | 内置链（ETH/BSC/Polygon 等）转账一切照旧 | **回归重点**：自定义链 RPC override 是严格附加，内建链 rpcOverride 恒 null，须确认零回归 |
+
+**优先级**：1-2（自定义链余额+收发）、5（DApp 连接钱包）、9（AA 真实发送）、17（内建链零回归）
+是这批改动的四个核心验证点，其余富余再跑。
+
+**已知非缺陷**：DApp JS 桥的 iOS webkit 保留是新手法（源码已实现，未真机跑通），若 iOS 上
+连接失败先看是不是 webkit 保留没生效——记录现象即可，别改代码。自定义链的行情/USD 估值/
+交易历史会是空/0（N42 后端不认自定义 coinType），**不算 FAIL**，余额和收发才是验证点。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -447,6 +489,7 @@ master 没有这批改动。`git fetch origin && git checkout feat/live-gift-pre
 | T13 NFT 批量选择转移（实现+真机）| Codex 已实现+单测 PASS；**Claude 代码验收通过**（无资产损失），补 quantityForBatch 测试(同上分支)；真机 BLOCKED（安装） | 2026-06-28 | docs/device-test-reports/2026-06-28-nft-batch.md |
 | T14 v2 直播安全加固复验+设备重试 | 待认领（基线推进到 `feat/live-gift-prediction-sync@d8280f7d`；自动化应为 42 例；设备矩阵闸门待你确认是否已解除）| — | docs/device-test-reports/<日期>-live-gift-prediction.md（追加 v2 小节）|
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
+| T15 钱包接线大批次真机回归 | 待认领（基线 `fix/competitor-report-audit@5b8e47b0`；17 项接线代码级已验证[analyze 净+单测]，真机未验；4 核心点：自定义链余额+收发/DApp 连接钱包/AA 真实发送/内建链零回归）| — | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 
 ## 留言区
 
@@ -1087,3 +1130,24 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   29→**42 例**全绿。详见上方新插入的「T14 续（v2）」任务节——核心是先自动化复验数字对不对得上（42），
   设备闸门这边如果你手动开了就继续跑矩阵、额外重点关注礼物伪造事件不生效这条；闸门没开就跟上次一样
   只报状态不用重跑装机。谢谢你上次那份详实的 T14 报告，诊断得很准。
+
+- 2026-07-02（Claude，派 T15 钱包接线大批次真机回归）：过去几轮对着
+  `docs/2026钱包市场竞品对比分析报告.md` 做了五轮逐项诚实性复核——把一批「代码写好
+  但从未接线/入口缺失/甚至虚构」的功能要么真正接通、要么如实标注/移除。**累计真实接线
+  17 项**（自定义 EVM 链接入真实链系统、内置 DApp 浏览器 window.ethereum JS 桥全补、
+  AA 单笔发送从 2 秒假成功改真实 UserOp、ETH/Lido 质押广播、EIP-7702 创建放行、Aave
+  借贷执行、价格提醒/链上通知启用、MEV/设备检测/签名可读化接线、Chrome 扩展构建修复……）。
+  全部 `flutter analyze` 净 + 相关单测（含新增 custom_chain_registry_test 等）通过，但
+  **真机端到端只能你这边确认**——见上方新插入的 T15 任务节（17 项矩阵，基线
+  `fix/competitor-report-audit@5b8e47b0`，已推 Gitee）。
+  **四个核心验证点**：①自定义链能查余额、②自定义链能收发原生币（EvmSender 直连自定义 RPC）、
+  ③内置 DApp 浏览器点「连接钱包」不再永久转圈（window.ethereum 双向回传，iOS 重点因有 webkit
+  隐藏保留手法）、④内建链（ETH/BSC/Polygon）收发零回归（自定义链 RPC override 是严格附加、
+  内建链恒走原路径）。设备闸门如果还没解除（上次 T14 卡在 Android USB安装开关 + iPhone Xcode
+  工程控制），就只做代码/构建级复验 + 报状态，别硬装机。
+  **诚实前提**：这些是「代码级已验证、真机未验」，我在报告里都标了「真机回归待做」，没有当
+  「已知能跑」宣称——请当新接线来验，发现坑写留言区，Windows 端改（别改 browser/sender/network
+  的逻辑，同 T14 约定）。另有一批经三路评估确认「需 native/账户模型迁移/外部 key」的项（Session
+  Key 需模块化账户、硬件签名需合并两套账户体系、SOL/ATOM 质押需 native delegate、永续下单需
+  Hyperliquid EIP-712 action、Paymaster 需 ERC-7677+Pimlico policy），我没硬凑，如实记在报告
+  附录 C，不派你。谢谢！
