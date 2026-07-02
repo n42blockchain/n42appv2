@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.d
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/features/wallet/pages/gas/gas_tracker_page.dart';
 import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
+import 'package:n42_wallet/features/wallet/pages/perps/perps_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page_logic.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page_widgets.dart';
@@ -179,6 +180,18 @@ mixin EarnPageSectionsMixin
                   label: s.g_key_earn_burn,
                   color: const Color(0xFFFF5722),
                   onTap: () => showBurnNftTip(context),
+                ),
+                buildToolItem(
+                  context,
+                  icon: Icons.candlestick_chart_rounded,
+                  label: s.g_key_earn_perps,
+                  color: const Color(0xFF3F51B5),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PerpsPage(walletAddress: walletAddress),
+                    ),
+                  ),
                 ),
               ],
             ),

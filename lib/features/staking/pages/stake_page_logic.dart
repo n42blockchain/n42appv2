@@ -124,7 +124,8 @@ mixin _StakeLogicMixin on State<StakePage> {
     final amountBigInt = _parseAmountToBigInt(amountText, _getDecimals());
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
-    final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
+    final submittedMsg = S.of(context).g_key_stake_submitted;
+    final unsupportedMsg = S.of(context).g_key_stake_broadcast_unsupported;
     final successColor = AppColorTokens.of(context).success;
 
     setState(() {
@@ -140,12 +141,30 @@ mixin _StakeLogicMixin on State<StakePage> {
 
       if (result != null && result.success) {
         if (!mounted) return;
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(txPreparedMsg),
-            backgroundColor: successColor,
-          ),
-        );
+        // ETH（Lido submit）：构建产物是标准的 to+value+calldata，走 EvmSender
+        // 真实签名广播。其余链（SOL stake account / ATOM MsgDelegate）需要
+        // 各自的专用签名流程，当前版本未接——如实提示，不再假装"成功"。
+        if (widget.protocol.chainType == StakingChainType.ethereum &&
+            result.txData != null) {
+          final broadcastError = await _broadcastEthStake(
+            result.txData!,
+            amountText,
+          );
+          if (!mounted) return;
+          if (broadcastError == null) {
+            messenger.showSnackBar(
+              SnackBar(
+                content: Text(submittedMsg),
+                backgroundColor: successColor,
+              ),
+            );
+            await _loadBalance();
+          } else {
+            setState(() => _errorMessage = broadcastError);
+          }
+        } else {
+          messenger.showSnackBar(SnackBar(content: Text(unsupportedMsg)));
+        }
       } else {
         setState(() {
           _errorMessage = result?.error ?? '';
@@ -162,6 +181,36 @@ mixin _StakeLogicMixin on State<StakePage> {
         });
       }
     }
+  }
+
+  /// 把 Lido submit 交易（to + value + calldata）经 EvmSender 签名广播。
+  /// 成功返回 null，失败返回错误文案。
+  Future<String?> _broadcastEthStake(
+    Map<String, dynamic> txData,
+    String amountText,
+  ) async {
+    final cm = globalWapAdapter.coinModels
+        .where((c) => c.config.coinType == 'ETH')
+        .firstOrNull;
+    if (cm == null) return S.current.g_key_stake_no_wallet;
+
+    final basePath =
+        cm.config.pathForAddrType(cm.addrType) ?? "m/44'/60'/0'/0/0";
+    final result = await SenderFactory.instance
+        .getSender('ETH')
+        .send(
+          SendParams(
+            coinType: 'ETH',
+            fromAddress: widget.userAddress!,
+            toAddress: txData['to']?.toString() ?? '',
+            amount: double.tryParse(amountText) ?? 0.0,
+            decimals: 18,
+            path: getPathWithIndex(basePath, cm.pathIndex),
+            isTest: false,
+            calldata: txData['data']?.toString(),
+          ),
+        );
+    return result.success ? null : (result.error ?? 'Broadcast failed');
   }
 
   Future<void> _performUnstake(
@@ -196,8 +245,8 @@ mixin _StakeLogicMixin on State<StakePage> {
 
     // 提前捕获跨异步使用的对象
     final messenger = ScaffoldMessenger.of(context);
-    final txPreparedMsg = S.of(context).g_key_stake_tx_prepared;
-    final successColor = AppColorTokens.of(context).success;
+    // SOL/ATOM 的解质押交易同样只构建不广播（专用签名流程未接）——如实提示。
+    final unsupportedMsg = S.of(context).g_key_stake_broadcast_unsupported;
 
     setState(() {
       _isLoading = true;
@@ -215,13 +264,7 @@ mixin _StakeLogicMixin on State<StakePage> {
       if (!mounted) return;
 
       if (result != null && result.success) {
-        messenger.showSnackBar(
-          SnackBar(
-            content: Text(txPreparedMsg),
-            backgroundColor: successColor,
-          ),
-        );
-        // 解质押成功后刷新仓位列表
+        messenger.showSnackBar(SnackBar(content: Text(unsupportedMsg)));
         setState(() => _selectedPosition = null);
         await _loadActivePositions();
       } else {

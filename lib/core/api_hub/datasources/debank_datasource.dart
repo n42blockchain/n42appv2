@@ -28,15 +28,20 @@ class DeBankDatasource {
     defaultValue: '',
   );
 
-  static final Dio _dio = Dio(BaseOptions(
-    baseUrl: _baseUrl,
-    connectTimeout: const Duration(seconds: 15),
-    receiveTimeout: const Duration(seconds: 30),
-    headers: {
-      'AccessKey': _apiKey,
-      'Accept': 'application/json',
-    },
-  ));
+  /// Whether a DeBank API key was provided at build time
+  /// (`--dart-define=DEBANK_API_KEY=...`). UI 据此决定是否渲染 DeFi
+  /// 头寸区块——没有 key 时任何请求都会 401,与其挂一个永远空白的区块,
+  /// 不如整块隐藏。
+  static bool get hasApiKey => _apiKey.isNotEmpty;
+
+  static final Dio _dio = Dio(
+    BaseOptions(
+      baseUrl: _baseUrl,
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 30),
+      headers: {'AccessKey': _apiKey, 'Accept': 'application/json'},
+    ),
+  );
 
   /// Fetch all DeFi positions for an address across all chains.
   ///
@@ -52,9 +57,7 @@ class DeBankDatasource {
         return DeFiPortfolio.empty();
       }
 
-      return DeFiPortfolio.fromDeBankResponse(
-        response.data as List<dynamic>,
-      );
+      return DeFiPortfolio.fromDeBankResponse(response.data as List<dynamic>);
     } catch (e) {
       AppLogger.w('DeBank', 'portfolio error: $e');
       return DeFiPortfolio.empty();
@@ -126,13 +129,13 @@ class DeFiPortfolio {
   });
 
   factory DeFiPortfolio.empty() => DeFiPortfolio(
-        protocols: [],
-        totalUsdValue: 0,
-        lendingValue: 0,
-        lpValue: 0,
-        stakingValue: 0,
-        rewardsValue: 0,
-      );
+    protocols: [],
+    totalUsdValue: 0,
+    lendingValue: 0,
+    lpValue: 0,
+    stakingValue: 0,
+    rewardsValue: 0,
+  );
 
   factory DeFiPortfolio.fromDeBankResponse(List<dynamic> data) {
     final protocols = <ProtocolPosition>[];
@@ -254,13 +257,16 @@ class Position {
       name: json['name'] as String? ?? '',
       type: _parseType(json['name'] as String? ?? ''),
       usdValue: (stats['net_usd_value'] as num?)?.toDouble() ?? 0,
-      supplyTokens: supplyList.whereType<Map<String, dynamic>>()
+      supplyTokens: supplyList
+          .whereType<Map<String, dynamic>>()
           .map((t) => PositionToken.fromJson(t))
           .toList(),
-      borrowTokens: borrowList.whereType<Map<String, dynamic>>()
+      borrowTokens: borrowList
+          .whereType<Map<String, dynamic>>()
           .map((t) => PositionToken.fromJson(t))
           .toList(),
-      rewardTokens: rewardList.whereType<Map<String, dynamic>>()
+      rewardTokens: rewardList
+          .whereType<Map<String, dynamic>>()
           .map((t) => PositionToken.fromJson(t))
           .toList(),
     );
@@ -268,10 +274,14 @@ class Position {
 
   static PositionType _parseType(String name) {
     final lower = name.toLowerCase();
-    if (lower.contains('lend') || lower.contains('supply') || lower.contains('deposit')) {
+    if (lower.contains('lend') ||
+        lower.contains('supply') ||
+        lower.contains('deposit')) {
       return PositionType.lending;
     }
-    if (lower.contains('liquidity') || lower.contains('pool') || lower.contains('lp')) {
+    if (lower.contains('liquidity') ||
+        lower.contains('pool') ||
+        lower.contains('lp')) {
       return PositionType.liquidityPool;
     }
     if (lower.contains('stak') || lower.contains('lock')) {
@@ -316,7 +326,8 @@ class PositionToken {
     final amount = (json['amount'] as num?)?.toDouble() ?? 0;
     final price = (json['price'] as num?)?.toDouble() ?? 0;
     return PositionToken(
-      symbol: json['optimized_symbol'] as String? ??
+      symbol:
+          json['optimized_symbol'] as String? ??
           json['symbol'] as String? ??
           '???',
       name: json['name'] as String?,
@@ -352,7 +363,8 @@ class TokenBalance {
     final amount = (json['amount'] as num?)?.toDouble() ?? 0;
     final price = (json['price'] as num?)?.toDouble() ?? 0;
     return TokenBalance(
-      symbol: json['optimized_symbol'] as String? ??
+      symbol:
+          json['optimized_symbol'] as String? ??
           json['symbol'] as String? ??
           '???',
       name: json['name'] as String?,
@@ -366,11 +378,4 @@ class TokenBalance {
 }
 
 /// Type of DeFi position.
-enum PositionType {
-  lending,
-  liquidityPool,
-  staking,
-  reward,
-  vesting,
-  other,
-}
+enum PositionType { lending, liquidityPool, staking, reward, vesting, other }

@@ -172,9 +172,7 @@ mixin _StakeViewsMixin
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 child: Text(S.of(context).g_key_stake_stake),
               ),
             ),
@@ -183,9 +181,7 @@ mixin _StakeViewsMixin
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 child: Text(S.of(context).g_key_stake_unstake),
               ),
             ),

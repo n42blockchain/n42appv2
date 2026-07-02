@@ -5124,6 +5124,26 @@ class S {
     );
   }
 
+  /// `Staking transaction submitted`
+  String get g_key_stake_submitted {
+    return Intl.message(
+      'Staking transaction submitted',
+      name: 'g_key_stake_submitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction built, but in-wallet broadcasting for this chain is not supported yet.`
+  String get g_key_stake_broadcast_unsupported {
+    return Intl.message(
+      'Transaction built, but in-wallet broadcasting for this chain is not supported yet.',
+      name: 'g_key_stake_broadcast_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Wallet address not available`
   String get g_key_stake_no_wallet {
     return Intl.message(
@@ -5702,6 +5722,21 @@ class S {
   /// `Burn`
   String get g_key_earn_burn {
     return Intl.message('Burn', name: 'g_key_earn_burn', desc: '', args: []);
+  }
+
+  /// `Perps`
+  String get g_key_earn_perps {
+    return Intl.message('Perps', name: 'g_key_earn_perps', desc: '', args: []);
+  }
+
+  /// `Read-only market data. Order placement is not supported in this version.`
+  String get g_key_perps_read_only {
+    return Intl.message(
+      'Read-only market data. Order placement is not supported in this version.',
+      name: 'g_key_perps_read_only',
+      desc: '',
+      args: [],
+    );
   }
 
   /// `Mining`
@@ -7569,6 +7604,26 @@ class S {
     return Intl.message(
       'Batch execution failed',
       name: 'g_key_aa_batch_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction failed`
+  String get g_key_aa_send_failed {
+    return Intl.message(
+      'Transaction failed',
+      name: 'g_key_aa_send_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas sponsorship is not available yet. Please pay gas with your account balance.`
+  String get g_key_aa_paymaster_unavailable {
+    return Intl.message(
+      'Gas sponsorship is not available yet. Please pay gas with your account balance.',
+      name: 'g_key_aa_paymaster_unavailable',
       desc: '',
       args: [],
     );

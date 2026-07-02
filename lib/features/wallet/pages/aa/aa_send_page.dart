@@ -11,6 +11,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/aa/aa.dart' hide PaymasterType;
+import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/paymaster_select_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/aa_transaction_preview.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';

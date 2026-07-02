@@ -38,6 +38,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/import_p
 import 'package:n42_wallet/features/home/setting/security/security_setting.dart';
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
+import 'package:n42_wallet/features/wallet/services/limit_order_alert_service.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -196,14 +197,20 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     });
   }
 
-  /// 价格提醒前台周期检查。服务与设置面板早已存在，但此前唯一的检查调用点
-  /// 在一个没有任何导航入口的死页面里——用户设了提醒也永远不会触发。
-  /// 无已启用提醒时 checkAllNow 直接返回，不产生网络请求。
+  /// 前台周期提醒检查（价格提醒 + 限价单到价）。两个服务早已存在，但此前
+  /// 均没有任何可达的触发点：价格提醒的唯一检查调用在零导航的死页面里，
+  /// 限价单到价后后端只标记 triggered、客户端从不查询。无已启用提醒/未登录
+  /// 时各自直接返回，不产生额外请求。
   void _startPriceAlertLoop() {
-    unawaited(CoinPriceAlertService.checkAllNow());
+    void tick() {
+      unawaited(CoinPriceAlertService.checkAllNow());
+      unawaited(LimitOrderAlertService.checkAllNow());
+    }
+
+    tick();
     _priceAlertTimer = Timer.periodic(
       const Duration(minutes: 5),
-      (_) => unawaited(CoinPriceAlertService.checkAllNow()),
+      (_) => tick(),
     );
   }
 

@@ -7,6 +7,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/api_hub/datasources/debank_datasource.dart';
+import 'package:n42_wallet/features/wallet/pages/portfolio/defi_positions_section.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_holdings.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_movers.dart';
@@ -56,6 +58,16 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
     final total24hPct = previousTotal > 0
         ? total24hPnl / previousTotal * 100
         : 0.0;
+
+    // DeFi 头寸区块（DeBank 聚合）取第一个 EVM 地址；无 API key 时整块隐藏。
+    String? evmAddress;
+    for (final CoinModel cm in waValue.coinModels) {
+      final addr = cm.address?.toString() ?? '';
+      if (addr.startsWith('0x') && addr.length == 42) {
+        evmAddress = addr;
+        break;
+      }
+    }
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -111,6 +123,10 @@ class _PortfolioPageState extends ConsumerState<PortfolioPage> {
                     itemBg,
                     textColor,
                   ),
+                  if (DeBankDatasource.hasApiKey && evmAddress != null) ...[
+                    SizedBox(height: 32.h),
+                    DeFiPositionsSection(walletAddress: evmAddress),
+                  ],
                   SizedBox(height: 32.h),
                   _buildHoldingsList(
                     context,

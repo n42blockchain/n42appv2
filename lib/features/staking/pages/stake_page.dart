@@ -12,7 +12,12 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
 import 'package:n42_wallet/features/staking/pages/validator_list_page.dart';
 import 'package:n42_wallet/features/staking/provider/staking_provider.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show getPathWithIndex;
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 

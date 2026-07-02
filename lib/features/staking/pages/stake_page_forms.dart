@@ -27,52 +27,52 @@ mixin _StakeFormsMixin on _StakeLogicMixin {
         onTap: () => _navigateToValidatorList(context, provider),
         borderRadius: BorderRadius.circular(su.setWidth(12)),
         child: Container(
-        padding: EdgeInsets.all(su.setWidth(20)),
-        decoration: BoxDecoration(
-          color: itemBg,
-          borderRadius: BorderRadius.circular(su.setWidth(12)),
-          border: Border.all(color: itemBg),
-        ),
-        child: Row(
-          children: [
-            if (provider.selectedValidator != null) ...[
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      provider.selectedValidator!.name,
-                      style: AppTypography.bodyStrong.copyWith(
-                        color: mainText,
+          padding: EdgeInsets.all(su.setWidth(20)),
+          decoration: BoxDecoration(
+            color: itemBg,
+            borderRadius: BorderRadius.circular(su.setWidth(12)),
+            border: Border.all(color: itemBg),
+          ),
+          child: Row(
+            children: [
+              if (provider.selectedValidator != null) ...[
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        provider.selectedValidator!.name,
+                        style: AppTypography.bodyStrong.copyWith(
+                          color: mainText,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: su.setWidth(4)),
-                    Text(
-                      '${S.of(context).g_key_stake_commission}: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | ${S.of(context).g_key_stake_apy}: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%',
-                      style: AppTypography.caption.copyWith(
-                        color: subtitleColor,
+                      SizedBox(height: su.setWidth(4)),
+                      Text(
+                        '${S.of(context).g_key_stake_commission}: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | ${S.of(context).g_key_stake_apy}: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%',
+                        style: AppTypography.caption.copyWith(
+                          color: subtitleColor,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ] else ...[
-              Icon(
-                Icons.account_balance,
-                color: subtitleColor,
-                size: su.setWidth(36),
-              ),
-              SizedBox(width: su.setWidth(12)),
-              Expanded(
-                child: Text(
-                  S.of(context).g_key_stake_select_a_validator,
-                  style: AppTypography.body.copyWith(color: subtitleColor),
+              ] else ...[
+                Icon(
+                  Icons.account_balance,
+                  color: subtitleColor,
+                  size: su.setWidth(36),
                 ),
-              ),
+                SizedBox(width: su.setWidth(12)),
+                Expanded(
+                  child: Text(
+                    S.of(context).g_key_stake_select_a_validator,
+                    style: AppTypography.body.copyWith(color: subtitleColor),
+                  ),
+                ),
+              ],
+              Icon(Icons.chevron_right, color: subtitleColor),
             ],
-            Icon(Icons.chevron_right, color: subtitleColor),
-          ],
-        ),
+          ),
         ),
       ),
     );

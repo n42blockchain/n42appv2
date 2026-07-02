@@ -135,21 +135,52 @@ mixin _AASendLogicMixin on State<AASendPage> {
   }
 
   Future<void> _sendTransaction() async {
+    // Paymaster 代付当前没有真实的 pm_getPaymasterData 集成（见
+    // paymaster_select_page 的探测逻辑）——选了代付却静默按自付 gas 发送
+    // 会让用户被扣费。在此如实拦截，而不是假装代付生效。
+    if (selectedPaymaster.type != PaymasterType.none) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_key_aa_paymaster_unavailable)),
+      );
+      setState(() => selectedPaymaster = PaymasterOption.none);
+      return;
+    }
+
     setState(() => isSending = true);
 
-    await Future.delayed(const Duration(seconds: 2));
+    // 与批量交易页同一真实通道：AATransferHandler 构建 UserOperation →
+    // bundler 估 gas → 签名 → eth_sendUserOperation → 等待回执。
+    final handler = AATransferHandler(_chainSymbol());
+    final result = await handler.transfer(
+      AATransferParams(
+        chainSymbol: _chainSymbol(),
+        fromAddress: widget.walletAddress,
+        toAddress: toController.text.trim(),
+        value: double.tryParse(amountController.text.trim()) ?? 0.0,
+        smartAccount: widget.account,
+      ),
+    );
 
-    if (mounted) {
-      setState(() => isSending = false);
+    if (!mounted) return;
+    setState(() => isSending = false);
 
+    if (!result.error) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context).g_key_140),
           backgroundColor: AppColorTokens.of(context).success,
         ),
       );
-
       Navigator.pop(context, true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            result.data?.toString() ?? S.of(context).g_key_aa_send_failed,
+          ),
+          backgroundColor: AppColorTokens.of(context).danger,
+        ),
+      );
     }
   }
 

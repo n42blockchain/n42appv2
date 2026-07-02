@@ -536,6 +536,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "無法加載氣體選項",
     ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage("重試"),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Gas 代付暫未開放，請使用帳戶餘額支付 Gas。",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("待辦的"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("允許"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage("預覽地址"),
@@ -560,6 +563,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("已選擇"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage("使用您的智慧帳戶發送代幣"),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage("交易失敗"),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 天"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1小時"),
     "g_key_aa_session_30d": MessageLookupByLibrary.simpleMessage("30天"),
@@ -861,6 +865,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "參與節點挖礦賺取獎勵",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage("永續"),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("快速工具"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("受到推崇的"),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage("選擇兌換類型"),
@@ -1287,6 +1292,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("類型"),
     "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("其他"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage("密碼不匹配"),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "僅提供只讀行情資料，本版本暫不支持下單交易。",
+    ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
@@ -1326,6 +1334,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("平均年產量"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("平均年收益"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "交易已構建，但本版本暫不支持該鏈的錢包內廣播。",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("委員會"),
     "g_key_stake_d_unbond": m30,
     "g_key_stake_days_remaining": m31,
@@ -1373,6 +1384,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_stake": MessageLookupByLibrary.simpleMessage("賭注"),
     "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("質押"),
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage("開始質押"),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage("質押交易已提交"),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("質押"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage("交易準備成功"),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage("脫鉤"),

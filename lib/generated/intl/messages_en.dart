@@ -665,6 +665,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Failed to load gas options",
     ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage("Retry"),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Gas sponsorship is not available yet. Please pay gas with your account balance.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Permission"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -702,6 +705,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Selected"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Send tokens using your smart account",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "Transaction failed",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 Day"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 Hour"),
@@ -1129,6 +1135,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Earn rewards by participating in node mining",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage("Perps"),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Quick Tools",
     ),
@@ -1769,6 +1776,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match",
     ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Read-only market data. Order placement is not supported in this version.",
+    ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Select from phone gallery",
     ),
@@ -1820,6 +1830,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Avg APY"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Transaction built, but in-wallet broadcasting for this chain is not supported yet.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage(
       "Commission",
     ),
@@ -1882,6 +1895,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_staked": MessageLookupByLibrary.simpleMessage("Staked"),
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Start Staking",
+    ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Staking transaction submitted",
     ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(

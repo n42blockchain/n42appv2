@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/hyperliquid_service.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
-/// Perpetual futures trading page — Hyperliquid integration.
+/// Perpetual futures page — Hyperliquid integration (read-only).
 ///
-/// Displays available markets, user's positions, and provides
-/// basic order placement (market/limit).
+/// Displays available markets, the user's positions/orders and margin
+/// summary. Order placement/cancellation requires Hyperliquid's EIP-712
+/// action signing, which is NOT implemented yet — the page banner says so.
 class PerpsPage extends StatefulWidget {
   final String walletAddress;
 
@@ -102,6 +104,10 @@ class _PerpsPageState extends State<PerpsPage>
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
+                // 如实标注：本页仅只读行情/仓位/订单查询。下单需要 Hyperliquid
+                // 专有的 EIP-712 action 签名，尚未实现——不摆无效的交易按钮。
+                _buildReadOnlyBanner(),
+
                 // Margin summary
                 if (_margin != null) _buildMarginBar(_margin!),
 
@@ -118,6 +124,30 @@ class _PerpsPageState extends State<PerpsPage>
                 ),
               ],
             ),
+    );
+  }
+
+  Widget _buildReadOnlyBanner() {
+    final c = AppColorTokens.of(context);
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space2,
+      ),
+      color: c.warning.withValues(alpha: 0.12),
+      child: Row(
+        children: [
+          Icon(Icons.visibility_outlined, size: 16, color: c.warning),
+          SizedBox(width: AppSpacing.space2),
+          Expanded(
+            child: Text(
+              S.of(context).g_key_perps_read_only,
+              style: AppTypography.captionSm.copyWith(color: c.warning),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -381,7 +411,10 @@ class _PerpsPageState extends State<PerpsPage>
               color: AppColorTokens.of(context).danger,
             ),
             onPressed: () {
-              // TODO: Cancel order
+              // 撤单同样需要 Hyperliquid EIP-712 签名，未实现——如实提示。
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(S.of(context).g_key_perps_read_only)),
+              );
             },
           ),
         );

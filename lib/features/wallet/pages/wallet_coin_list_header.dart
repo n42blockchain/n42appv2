@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
@@ -133,6 +134,28 @@ class _TopRow extends StatelessWidget {
           ),
         ),
         const Spacer(),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MarketPage()),
+            ),
+            borderRadius: BorderRadius.circular(su.setWidth(16)),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: su.setWidth(10),
+                vertical: su.setWidth(6),
+              ),
+              child: Icon(
+                Icons.insights_rounded,
+                size: su.setWidth(36),
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: su.setWidth(4)),
         Material(
           color: Colors.transparent,
           child: InkWell(
