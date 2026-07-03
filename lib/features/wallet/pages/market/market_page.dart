@@ -508,23 +508,28 @@ class _MarketPageState extends ConsumerState<MarketPage>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppHomeTopBar(
-          titleChild: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Markets',
-                style: AppTypography.headline.copyWith(
-                  color: textColor,
-                  letterSpacing: -0.5,
+          // FittedBox 防标题+徽章在固定高顶栏内垂直溢出（宽屏/大字号下曾溢出 33px）
+          titleChild: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Markets',
+                  style: AppTypography.headline.copyWith(
+                    color: textColor,
+                    letterSpacing: -0.5,
+                  ),
                 ),
-              ),
-              if (_fearGreed != null)
-                Padding(
-                  padding: EdgeInsets.only(top: 4.h),
-                  child: _FearGreedBadge(data: _fearGreed!),
-                ),
-            ],
+                if (_fearGreed != null)
+                  Padding(
+                    padding: EdgeInsets.only(top: 4.h),
+                    child: _FearGreedBadge(data: _fearGreed!),
+                  ),
+              ],
+            ),
           ),
           onLeftImageClick: () {
             Scaffold.of(context).openDrawer();
