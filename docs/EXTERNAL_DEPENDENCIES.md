@@ -45,7 +45,7 @@ Chat 社交登录（Twitter 等 SSO key）经 `chatSocialAuthConfig` 传入，�
 
 ## 三、仓内后端盘点 + 无法由现有后端补齐的项（需交付物）
 
-**仓内现有后端 = `backend/swap`（Go）一个**：报价聚合（1inch/Jupiter/Uniswap）、
+**仓内现有后端 = `backend/swap`（Go）一个**（考古确认：全仓 git 历史从未有过其他 Go/Rust/Java 后端，也从未删除过后端代码；`rust/n42_mls` 是客户端 MLS FFI crate 非后端；真正的链后端是独立仓 n42-26。App 调用的 `api.n42.ai` 七个外部服务的接口需求见 [`BACKEND_REQUIREMENTS.md`](BACKEND_REQUIREMENTS.md)）：报价聚合（1inch/Jupiter/Uniswap）、
 `POST/GET/DELETE /v1/dex/limit`（限价单存取）、成交历史、交易确认监视（`monitor/`）。
 App 的 `dex_swap_api.dart` 已接通这些接口。
 

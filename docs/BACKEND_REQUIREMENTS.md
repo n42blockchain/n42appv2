@@ -2,6 +2,13 @@
 
 > 本文档由 Flutter 端代码反向整理，记录 App 实际调用的所有接口及其期望的请求/响应格式。
 > 每个模块标注了当前状态：✅ 已实现 / ⚠️ 部分实现 / ❌ 未实现 / 🔧 需确认格式。
+>
+> **2026-07-03 勘误**：本文档写于 2026-02-22，部分 ❌ 已过时——§三 DEX Swap 的
+> 3.1-3.4 四个接口已由**仓内 Go 服务 `backend/swap/`** 实现（`/v1/dex/tokens、quote、
+> commit、history`，另加限价单 `/v1/dex/limit` 三接口），App `dex_swap_api.dart` 已接通；
+> 其部署状态（是否已上 `api.n42.ai/swap`）以运维为准。§五 价格预警 5.1-5.3 仍未有后端，
+> 但已由客户端本地方案补偿（前台定时器 + 本地通知，见钱包竞品报告 §14）。
+> 外部 key/自建服务类依赖另见 [`EXTERNAL_DEPENDENCIES.md`](EXTERNAL_DEPENDENCIES.md)。
 
 ---
 
