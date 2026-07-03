@@ -12,6 +12,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/aa/aa.dart' hide PaymasterType;
 import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/paymaster_select_page.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/aa_transaction_preview.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
@@ -38,6 +40,12 @@ class AASendPage extends StatefulWidget {
 
 class _AASendPageState extends State<AASendPage>
     with _AASendLogicMixin, _AASendWidgetsMixin {
+  @override
+  void initState() {
+    super.initState();
+    loadBalance();
+  }
+
   @override
   void dispose() {
     disposeLogic();

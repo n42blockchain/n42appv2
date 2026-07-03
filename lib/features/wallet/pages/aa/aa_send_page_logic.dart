@@ -15,11 +15,48 @@ mixin _AASendLogicMixin on State<AASendPage> {
   BigInt? estimatedGas;
   BigInt? maxFeePerGas;
 
+  /// 智能账户地址上的真实原生币余额（wei）。null = 尚未查到 / 查询失败。
+  /// 此前此页硬编码显示「1.5 ETH」——无资金账户也显示假余额，属误导，
+  /// 现改为查智能账户地址的真实链上余额。
+  BigInt? nativeBalance;
+
   void disposeLogic() {
     toController.dispose();
     amountController.dispose();
     toFocusNode.dispose();
     amountFocusNode.dispose();
+  }
+
+  /// 查询智能账户地址在当前链上的原生币余额。复用钱包自身的余额链路
+  /// （`TokenViewApi.getBalance`，chainSymbol 是真实 coinType，无需额外 RPC）。
+  Future<void> loadBalance() async {
+    try {
+      final mm = await TokenViewApi().getBalance(
+        BlockchainType.Ethereum.name,
+        _chainSymbol(),
+        widget.account.address,
+        contract: '',
+      );
+      if (!mounted) return;
+      if (mm != null && !mm.error && mm.data is BigInt) {
+        setState(() => nativeBalance = mm.data as BigInt);
+      } else {
+        setState(() => nativeBalance = BigInt.zero);
+      }
+    } catch (_) {
+      if (mounted) setState(() => nativeBalance = BigInt.zero);
+    }
+  }
+
+  /// 余额的人类可读字符串（最多 6 位小数，去尾零）。未查到显示 '—'。
+  String formatNativeBalance() {
+    final bal = nativeBalance;
+    if (bal == null) return '—';
+    final divisor = BigInt.from(10).pow(18);
+    final intPart = bal ~/ divisor;
+    final frac = bal.remainder(divisor).toString().padLeft(18, '0');
+    final frac6 = frac.substring(0, 6).replaceAll(RegExp(r'0+$'), '');
+    return frac6.isEmpty ? '$intPart' : '$intPart.$frac6';
   }
 
   String _chainSymbol() => AAConfig.chainIds.entries

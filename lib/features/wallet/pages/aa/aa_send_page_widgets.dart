@@ -154,14 +154,16 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                 children: [
                   Flexible(
                     child: Text(
-                      '${S.of(context).g_key_43}: 1.5 $selectedToken',
+                      '${S.of(context).g_key_43}: ${formatNativeBalance()} $selectedToken',
                       overflow: TextOverflow.ellipsis,
                       style: AppTypography.caption.copyWith(color: _subText),
                     ),
                   ),
                   TextButton(
                     onPressed: () {
-                      amountController.text = '1.5';
+                      final bal = nativeBalance;
+                      if (bal == null || bal == BigInt.zero) return;
+                      amountController.text = formatNativeBalance();
                       estimateGas();
                     },
                     child: Text(S.of(context).g_key_197),
@@ -268,7 +270,9 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
             : _itemBg,
         borderRadius: AppRadius.brMd,
         border: isSponsored
-            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
+            ? Border.all(
+                color: AppColorTokens.of(context).success.withAlpha(30),
+              )
             : null,
       ),
       child: Column(
