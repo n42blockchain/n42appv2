@@ -273,7 +273,13 @@ Response:
 
 **Base URL**: `userInfoHost`
 
-### 4.1 修改邮箱 — 三步流程 ✅（已实现）
+### 4.1 修改邮箱 — 三步流程 ⚠️（客户端已接线；线上路由 404，2026-07-03 实测）
+
+> **2026-07-03 勘误（T19 真机+curl 复核）**：客户端页面/入口/三步 API 调用已全部接线
+> （`change_email_page.dart`/`change_email_api.dart`），但对当前线上网关的实测：
+> `POST api.n42.ai/user/v1/l/user/send/update/email/code` 及两种变体路径均返回
+> **404 Not Found**（预期应为未登录 401）。原 ✅ 标注与线上现状不符——需后端确认
+> 该三步接口的真实 base URL/路径后客户端复测。
 
 ```
 Step 1: POST /v1/l/user/send/update/email/code
