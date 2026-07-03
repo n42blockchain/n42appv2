@@ -15,7 +15,6 @@ import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
-import 'package:n42_wallet/features/news/news_page.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -61,12 +60,12 @@ class _HomePageState extends ConsumerState<HomePage>
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningHomePage(),
       if (Platform.isAndroid) const EarnPage(),
-      // 行情/新闻 tab 平台分支（同 Earn 的 Platform.isAndroid 手法）：
-      // - Android：MarketPage 四合一（热门/搜索/自选/新闻）
-      // - iOS：纯 NewsPage——App Store 对加密行情/交易入口审核敏感
-      // 背景：2026-05-14（74550da8，iOS 发版准备期）曾全平台换成 NewsPage,
-      // Android 被误伤失去多内容行情入口；2026-07-03 恢复为平台分支。
-      Platform.isAndroid ? const MarketPage() : const NewsPage(),
+      // 行情页四合一（热门/搜索/自选/新闻），双平台一致。
+      // 背景：正式发布的 iOS 版本即含 MarketPage（已过 App Store 审核），
+      // 2026-05-14（74550da8）曾把它全平台误换成纯 NewsPage——提交名
+      // 'restore news localization' 却换掉了整页；2026-07-03 恢复。
+      // News 功能由页内 News tab 覆盖，勿再替换。
+      const MarketPage(),
     ];
   }
 

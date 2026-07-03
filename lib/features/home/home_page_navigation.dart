@@ -101,11 +101,7 @@ extension on _HomePageState {
             height: 22,
             color: selectedColor,
           ),
-          label: Text(
-            Platform.isAndroid
-                ? S.of(context).g_home_market
-                : S.of(context).g_home_key2,
-          ),
+          label: Text(S.of(context).g_home_market),
         ),
         NavigationRailDestination(
           icon: Image.asset(
@@ -166,9 +162,7 @@ extension on _HomePageState {
           fixedFontSize: isWide ? fontSize : null,
         ),
         _buildBottomItem(
-          Platform.isAndroid
-              ? S.of(context).g_home_market
-              : S.of(context).g_home_key2,
+          S.of(context).g_home_market,
           3,
           "assets/home/tabbar/news.png",
           _tabSix,
@@ -206,9 +200,7 @@ extension on _HomePageState {
           fixedFontSize: isWide ? fontSize : null,
         ),
         _buildBottomItem(
-          Platform.isAndroid
-              ? S.of(context).g_home_market
-              : S.of(context).g_home_key2,
+          S.of(context).g_home_market,
           2,
           "assets/home/tabbar/news.png",
           _tabSix,
