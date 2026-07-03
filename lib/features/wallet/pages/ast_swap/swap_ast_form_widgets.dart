@@ -156,7 +156,7 @@ class SwapAstCheckWidget extends StatelessWidget {
                   WidgetSpan(
                     alignment: PlaceholderAlignment.baseline,
                     baseline: TextBaseline.alphabetic,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         Navigator.push(
                           context,
@@ -167,11 +167,17 @@ class SwapAstCheckWidget extends StatelessWidget {
                           ),
                         );
                       },
-                      child: Text(
-                        S.of(context).g_swap_key_17,
-                        style: AppTypography.caption.copyWith(
-                          decoration: TextDecoration.underline,
-                          color: AppColorTokens.of(context).brand,
+                      // 行内链接：补按压反馈 + 垂直外扩命中区（§5 红线）
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          vertical: AppSpacing.space2,
+                        ),
+                        child: Text(
+                          S.of(context).g_swap_key_17,
+                          style: AppTypography.caption.copyWith(
+                            decoration: TextDecoration.underline,
+                            color: AppColorTokens.of(context).brand,
+                          ),
                         ),
                       ),
                     ),

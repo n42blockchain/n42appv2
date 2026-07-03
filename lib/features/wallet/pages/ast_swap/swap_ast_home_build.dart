@@ -17,12 +17,19 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
                   ),
                 );
               },
-              child: SizedBox(
-                height: ScreenUtil().setWidth(44),
-                width: ScreenUtil().setWidth(44),
-                child: Image.asset(
-                  'assets/wallet/swap/record.png',
-                  color: AppColorTokens.of(context).brand,
+              customBorder: const CircleBorder(),
+              child: Container(
+                // 88.w≈44dp 命中区（触控红线），图标视觉 44.w 不变
+                height: ScreenUtil().setWidth(88),
+                width: ScreenUtil().setWidth(88),
+                alignment: Alignment.center,
+                child: SizedBox(
+                  height: ScreenUtil().setWidth(44),
+                  width: ScreenUtil().setWidth(44),
+                  child: Image.asset(
+                    'assets/wallet/swap/record.png',
+                    color: AppColorTokens.of(context).brand,
+                  ),
                 ),
               ),
             ),
@@ -30,17 +37,16 @@ extension _SwapAstHomeBuild on _SwapAstHomeState {
           Center(
             child: InkWell(
               onTap: queryWidget,
+              customBorder: const CircleBorder(),
               child: Container(
-                height: ScreenUtil().setWidth(44),
-                width: ScreenUtil().setWidth(44),
+                height: ScreenUtil().setWidth(88),
+                width: ScreenUtil().setWidth(88),
                 alignment: Alignment.center,
-                margin: EdgeInsets.only(
-                  right: AppSpacing.space8,
-                  left: AppSpacing.space2,
-                ),
+                margin: EdgeInsets.only(right: AppSpacing.space4),
                 child: Image.asset(
                   'assets/wallet/swap/doubt.png',
                   color: AppColorTokens.of(context).brand,
+                  width: ScreenUtil().setWidth(44),
                 ),
               ),
             ),
