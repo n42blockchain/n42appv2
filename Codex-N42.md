@@ -563,6 +563,46 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：W1（加速）> C1（共绘）> C3（FTS5 搜索）> W4（真余额）> 其余。
 
+## 任务 T18：UI 整改批次真机回归——双主题/触控/130% 字号（新增 2026-07-03）
+
+**背景**：Windows 端按 `docs/DESIGN_SYSTEM.md` 用 /ui-review 整改了四个模块共 33 文件
+（wallet 首页簇 10 + market 行情 10 + home 收尾 9 + swap 触控专项 4——见
+`docs/UI_POLISH_PROGRESS.md` 2026-07-03 各行）。**44 处 P0 全清**：触控 <44dp 扩到
+88.w、GestureDetector→InkWell 按压反馈、底部导航 5 tab 恢复按压态、两处 25dp 按钮修复、
+提醒 sheet 字阶重定、币种行 ripple 修复、选中态加 check 图标等。代码级已验证
+（analyze 净 + 535 单测），**需要真机确认视觉没塌**。**本任务不需要资金、不需要 chat
+登录**——纯 UI 巡检，你现有 Android 环境即可全跑。
+
+**基线**：`fix/competitor-report-audit@b08bc455` 或更新。重装 APK 后跑。
+报告：`docs/device-test-reports/2026-07-03-t18-ui-regression.md`。
+
+### 巡检矩阵（每项分别在 深色 + 浅色 主题下过一遍；主题切换在 设置→主题）
+
+| # | 页面 | 检查点 |
+|---|------|--------|
+| U1 | **钱包首页** | 币列表头两行布局正常（高度 165→192.w 是本批唯一动布局的改动——重点看有没有溢出/挤压/黄黑条）；币种行点击有 ripple；pin 图标可点且反馈；顶栏 WalletConnect/标题/加币/Market/Portfolio/网络胶囊逐个点，全部有按压反馈且好点中 |
+| U2 | 钱包首页-资产卡 | Send/Receive/Buy 三钮按压时有白色高亮（此前无）；渐变卡视觉未变 |
+| U3 | 钱包切换 sheet | 底部弹出→当前钱包有 ✓check 图标；行高变高后无溢出 |
+| U4 | **行情页 market** | 列表行点击 ripple 可见；铃铛/星标好点中；行情列表滚动流畅 |
+| U5 | 币详情页 | K线周期 chip 逐个点（有反馈、选中态正常）；返回/铃铛好点中；FAB 变大后不遮挡内容 |
+| U6 | **价格提醒 sheet** | 文字尺寸正常（此前整张 sheet 文字只有一半大小——标题/按钮/标签现应明显变大）；CTA 按钮高度正常(≈48dp)；Goes Above/Drops Below 选中有 ✓ 图标 |
+| U7 | 交易记录 sheet（币详情 FAB→添加交易）| 保存按钮大小正常、表单可用 |
+| U8 | **底部导航** | 5 个 tab 点击有高亮反馈（此前完全无反馈）；未选中色可读 |
+| U9 | 侧边抽屉 | 关闭钮好点中（此前 22dp 极难点）；头像/添加好友/登录退出按压反馈；菜单项行高舒适 |
+| U10 | 设置→个人资料 | 邀请码复制图标好点中且有反馈 |
+| U11 | 修改邮箱页 | 主按钮高度正常(≈48dp,此前 25dp)、文字大小正常；重发验证码可点区域大 |
+| U12 | swap 兑换页 | AppBar 记录/问号图标好点中；交易记录列表行高正常 |
+| U13 | **130% 字号**（系统设置→显示→字体最大档）| U1/U6/U8 三个重点页复查：无文字截断/溢出/黄黑条 |
+
+### 判据与产出
+
+- 每项记 PASS/FAIL + 深浅主题各一张截图（`adb exec-out screencap -p > u1_dark.png` 存本地,报告里记文件名即可,不入库）。
+- **布局溢出**（Flutter 黄黑条/RenderFlex overflow in logcat）一律 FAIL 并贴 logcat 行。
+- 视觉判断标准宽松：不塌、能点、有反馈即 PASS;像素级美感不做要求。
+- 逮到崩溃/溢出且根因清晰、修复面最小的,照旧欢迎直接修（如你 bc0197b9 那种水准）。
+
+**优先级**：U1（唯一动布局）> U6（字阶重定）> U8（最高频）> U13（130%）> 其余。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -585,6 +625,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
+| T18 UI 整改批次真机回归 | 待认领（基线 b08bc455+；U1-U13 双主题巡检+130%字号;无需资金/chat登录,纯UI;重点 U1 列表头布局/U6 提醒sheet字阶/U8 底部导航反馈）| — | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
 
 ## 留言区
 
@@ -1379,3 +1420,11 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   `switchToWalletTab`，无回调时兜底 rootNavigator maybePop 保持旧行为。一点提醒：改动在
   vendored `packages/n42_chat`（构建源，正确），后续若同步回 chat git repo 记得基于
   fix/push-notification-dedup 分支。
+
+- 2026-07-03（Claude，派 T18 UI 真机回归）：按 DESIGN_SYSTEM.md 整改了四模块 33 文件、
+  44 处 P0（触控 <44dp/无按压反馈/仅靠颜色传达 三类红线），代码级全验证过，需要真机确认
+  视觉没塌——见上方 T18。**这批不需要资金也不需要 chat 登录**，你现在的 Android 环境直接
+  全跑。三个重点：U1 钱包列表头是唯一动布局的（165→192.w，看溢出）；U6 价格提醒 sheet
+  修了整张字阶错配（此前文字只有一半大，现在应明显正常）；U8 底部导航此前被
+  transparent 关掉了全部按压反馈，现在点 tab 应有高亮。截图存本地记文件名即可不入库。
+  T17 的 W1/W2（Sepolia 加速）和 C 组（chat 双端）等用户给资产/测试号后再继续，不阻塞本批。
