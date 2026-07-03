@@ -1,28 +1,128 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get_it/get_it.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 import '../../../core/utils/debug_log.dart';
+import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../widgets/chat/whiteboard/whiteboard_controller.dart';
 
-/// 白板 / 涂鸦页（仿微信「涂鸦」、对标 iMessage Digital Touch 的轻量版）。
+/// 白板 / 涂鸦页（仿微信「涂鸦」、对标 iMessage Digital Touch / Apple Freeform）。
 ///
 /// 单人绘制 → 栅格化为 PNG → `Navigator.pop` 返回字节，由聊天页走既有图片
-/// 发送链路上传发送。实时协作（多端共绘）属后续：可把 [WhiteboardStroke] 序列
-/// 化为自定义 Matrix 事件增量广播；当前先交付单人涂鸦。
+/// 发送链路上传发送。
+///
+/// **实时共绘**：传入 [roomId] 即启用——本端每完成一笔（抬笔）以
+/// `n42.whiteboard.stroke` 自定义 Matrix 事件广播（0-1 归一化坐标，跨设备
+/// 尺寸无关）；同时监听房间内其他成员的笔画/清空事件实时上板。双方在同一
+/// 会话打开白板即共绘（v1 不回放进入前的历史笔画）。
 class WhiteboardPage extends StatefulWidget {
-  const WhiteboardPage({super.key});
+  /// 启用实时共绘的房间；null = 纯单人涂鸦。
+  final String? roomId;
+
+  const WhiteboardPage({super.key, this.roomId});
 
   @override
   State<WhiteboardPage> createState() => _WhiteboardPageState();
 }
 
 class _WhiteboardPageState extends State<WhiteboardPage> {
+  static const String strokeEventType = 'n42.whiteboard.stroke';
+  static const String clearEventType = 'n42.whiteboard.clear';
+
   final WhiteboardController _controller = WhiteboardController();
   final GlobalKey _canvasKey = GlobalKey();
   bool _exporting = false;
+
+  matrix.Room? _room;
+  StreamSubscription<matrix.Event>? _remoteSub;
+  int _peerStrokeCount = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCollaboration();
+  }
+
+  /// 共绘模式：解析房间 + 订阅远端笔画/清空事件。
+  void _initCollaboration() {
+    final roomId = widget.roomId;
+    if (roomId == null) return;
+    try {
+      final client = GetIt.instance<MatrixClientManager>().client;
+      _room = client?.getRoomById(roomId);
+      if (client == null || _room == null) return;
+      _remoteSub = client.onTimelineEvent.stream
+          .where(
+            (e) =>
+                e.room.id == roomId &&
+                e.senderId != client.userID &&
+                (e.type == strokeEventType || e.type == clearEventType),
+          )
+          .listen(_onRemoteEvent);
+    } catch (e) {
+      debugLog('WhiteboardPage: collaboration init failed: $e');
+    }
+  }
+
+  void _onRemoteEvent(matrix.Event event) {
+    if (!mounted) return;
+    if (event.type == clearEventType) {
+      _controller.clear();
+      return;
+    }
+    final size = _canvasSize();
+    if (size == null) return;
+    final stroke = WhiteboardStroke.fromJson(
+      Map<String, dynamic>.from(event.content),
+      size,
+    );
+    if (stroke == null) return;
+    _controller.addRemoteStroke(stroke);
+    setState(() => _peerStrokeCount++);
+  }
+
+  Size? _canvasSize() {
+    final box = _canvasKey.currentContext?.findRenderObject() as RenderBox?;
+    final size = box?.size;
+    if (size == null || size.isEmpty) return null;
+    return size;
+  }
+
+  /// 抬笔：把刚完成的一笔广播给共绘者（fire-and-forget，失败不影响本地）。
+  void _broadcastLastStroke() {
+    final room = _room;
+    if (room == null) return;
+    final strokes = _controller.strokes;
+    if (strokes.isEmpty || strokes.last.isEmpty) return;
+    final size = _canvasSize();
+    if (size == null) return;
+    final payload = strokes.last.toJson(size);
+    unawaited(
+      room.sendEvent(payload, type: strokeEventType).catchError((Object e) {
+        debugLog('WhiteboardPage: stroke broadcast failed: $e');
+        return null;
+      }),
+    );
+  }
+
+  void _clearBoard() {
+    _controller.clear();
+    final room = _room;
+    if (room == null) return;
+    unawaited(
+      room.sendEvent(<String, dynamic>{}, type: clearEventType).catchError((
+        Object e,
+      ) {
+        debugLog('WhiteboardPage: clear broadcast failed: $e');
+        return null;
+      }),
+    );
+  }
 
   static const List<Color> _palette = [
     Color(0xFF222222),
@@ -37,6 +137,7 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
 
   @override
   void dispose() {
+    _remoteSub?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -45,16 +146,16 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
     if (_controller.isEmpty || _exporting) return;
     setState(() => _exporting = true);
     try {
-      final boundary = _canvasKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary?;
+      final boundary =
+          _canvasKey.currentContext?.findRenderObject()
+              as RenderRepaintBoundary?;
       if (boundary == null) {
         setState(() => _exporting = false);
         return;
       }
       final dpr = MediaQuery.of(context).devicePixelRatio;
       final image = await boundary.toImage(pixelRatio: dpr);
-      final byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
       image.dispose();
       if (!mounted) return;
       final bytes = byteData?.buffer.asUint8List();
@@ -72,7 +173,11 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
       appBar: AppBar(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
-        title: const Text('Whiteboard'),
+        title: Text(
+          _room != null
+              ? 'Whiteboard · Live${_peerStrokeCount > 0 ? ' ✏️' : ''}'
+              : 'Whiteboard',
+        ),
         actions: [
           AnimatedBuilder(
             animation: _controller,
@@ -105,9 +210,9 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
               child: Container(
                 color: const Color(0xFF1A1A1A),
                 child: GestureDetector(
-                  onPanStart: (d) =>
-                      _controller.startStroke(d.localPosition),
+                  onPanStart: (d) => _controller.startStroke(d.localPosition),
                   onPanUpdate: (d) => _controller.addPoint(d.localPosition),
+                  onPanEnd: (_) => _broadcastLastStroke(),
                   child: AnimatedBuilder(
                     animation: _controller,
                     builder: (context, _) => CustomPaint(
@@ -146,7 +251,7 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
               label: 'Clear',
               child: IconButton(
                 icon: const Icon(Icons.delete_outline, color: Colors.white),
-                onPressed: _controller.clear,
+                onPressed: _clearBoard,
               ),
             ),
             const SizedBox(width: 4),
@@ -156,8 +261,7 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
                 builder: (context, _) => Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    for (final color in _palette)
-                      _buildColorDot(color),
+                    for (final color in _palette) _buildColorDot(color),
                   ],
                 ),
               ),
@@ -219,7 +323,8 @@ class _WhiteboardPainter extends CustomPainter {
         );
         continue;
       }
-      final path = Path()..moveTo(stroke.points.first.dx, stroke.points.first.dy);
+      final path = Path()
+        ..moveTo(stroke.points.first.dx, stroke.points.first.dy);
       for (var i = 1; i < stroke.points.length; i++) {
         path.lineTo(stroke.points[i].dx, stroke.points[i].dy);
       }

@@ -50,6 +50,31 @@ class MessageRepositoryImpl implements IMessageRepository {
     _archiveService = service;
   }
 
+  /// 本会话已触发过后台归档的房间（节流：每房间每 App 会话最多归档一次，
+  /// 避免每次进房都向服务端请求历史）。
+  final Set<String> _archivedThisSession = {};
+
+  /// 打开房间时把其历史增量写入 FTS5 归档库（跨会话全文搜索的数据源）。
+  /// fire-and-forget：不阻塞消息加载，失败静默（下次会话重试）。
+  void _scheduleBackgroundArchive(String roomId) {
+    final archive = _archiveService;
+    if (archive == null) return;
+    if (!_archivedThisSession.add(roomId)) return;
+    unawaited(
+      archive.archiveRoom(roomId).catchError((Object e) {
+        debugLog('MessageRepositoryImpl: background archive failed: $e');
+        // 失败允许本会话稍后重试（如网络恢复后再次进房）
+        _archivedThisSession.remove(roomId);
+        return ArchiveResult(
+          roomId: roomId,
+          archivedCount: 0,
+          skippedCount: 0,
+          duration: Duration.zero,
+        );
+      }),
+    );
+  }
+
   matrix.Client? get _client => _clientManager.client;
 
   @override
@@ -94,6 +119,11 @@ class MessageRepositoryImpl implements IMessageRepository {
       messages,
       timeline.events,
     );
+
+    // 后台归档（fire-and-forget，每房间每会话一次）：把该房间历史写入
+    // FTS5 归档库，供跨会话全文搜索使用。archiveRoom 自身有断点
+    // （lastArchivedTs）与磁盘空间守卫，重复调用是增量且幂等的。
+    _scheduleBackgroundArchive(roomId);
 
     // 归档回退：初始加载时如果消息不足，补充归档数据
     if (resolvedMessages.length < limit && _archiveService != null) {
