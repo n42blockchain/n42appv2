@@ -47,8 +47,8 @@ class FeatureEntrySection extends StatelessWidget {
           // Section Title
           Padding(
             padding: EdgeInsets.only(
-              left: ScreenUtil().setWidth(8),
-              bottom: ScreenUtil().setWidth(16),
+              left: AppSpacing.space2,
+              bottom: AppSpacing.space4,
             ),
             child: Row(
               children: [
@@ -181,10 +181,11 @@ class FeatureEntryHorizontal extends StatelessWidget {
     required VoidCallback onTap,
     bool enabled = true,
     bool showBadge = false,
-    Color badgeColor = const Color(0xFF4CAF50),
+    Color? badgeColor,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: AppRadius.brMd,
       child: Container(
         width: ScreenUtil().setWidth(320),
         padding: EdgeInsets.all(AppSpacing.space4),
@@ -224,9 +225,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         end: Alignment.bottomRight,
                         colors: gradientColors,
                       ),
-                      borderRadius: BorderRadius.circular(
-                        ScreenUtil().setWidth(32),
-                      ),
+                      shape: BoxShape.circle,
                     ),
                     child: Icon(
                       icon,
@@ -242,7 +241,8 @@ class FeatureEntryHorizontal extends StatelessWidget {
                         width: ScreenUtil().setWidth(20),
                         height: ScreenUtil().setWidth(20),
                         decoration: BoxDecoration(
-                          color: badgeColor,
+                          color:
+                              badgeColor ?? AppColorTokens.of(context).success,
                           borderRadius: AppRadius.brSm,
                           border: Border.all(color: Colors.white, width: 2),
                         ),

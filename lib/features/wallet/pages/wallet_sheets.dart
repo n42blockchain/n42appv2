@@ -67,17 +67,15 @@ class _AddressSheetHeader extends StatelessWidget {
             ),
           ),
           const Spacer(),
-          InkWell(
-            onTap: () {
+          // IconButton 默认 48dp 命中区（§5 触控红线）
+          IconButton(
+            onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (_) => WalletList()),
               );
             },
-            child: Icon(
-              Icons.settings,
-              color: AppColorTokens.of(context).brand,
-            ),
+            icon: Icon(Icons.settings, color: AppColorTokens.of(context).brand),
           ),
         ],
       ),
@@ -122,10 +120,21 @@ class _WalletAddressList extends StatelessWidget {
               }
             },
             child: Container(
-              height: ScreenUtil().setWidth(80.0),
+              // 列表项最小可点高 ≥48dp（§2.2）
+              height: ScreenUtil().setWidth(96.0),
               alignment: Alignment.centerLeft,
               child: Row(
                 children: [
+                  // 选中态加 check 图标——不靠颜色单独传达（§2.6 红线）
+                  if (isSelected)
+                    Padding(
+                      padding: EdgeInsets.only(right: AppSpacing.space2),
+                      child: Icon(
+                        Icons.check_circle,
+                        color: AppColorTokens.of(context).brand,
+                        size: ScreenUtil().setWidth(36),
+                      ),
+                    ),
                   if (wInfo.watchOnly)
                     Padding(
                       padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
@@ -346,12 +355,13 @@ class BackupReminderBanner extends StatelessWidget {
                 ),
               );
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+            child: Container(
+              // ≥88.w 命中区（44dp 触控红线）
+              constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+              alignment: Alignment.centerRight,
               child: Text(
                 S.of(context).g_key_wallet_c36,
-                style: AppTypography.headline.copyWith(
-                  fontWeight: FontWeight.w400,
+                style: AppTypography.bodyStrong.copyWith(
                   color: AppColorTokens.of(context).brand,
                   decoration: TextDecoration.underline,
                   decorationColor: AppColorTokens.of(context).brand,
@@ -366,24 +376,39 @@ class BackupReminderBanner extends StatelessWidget {
 }
 
 class AddTokenFloatingIcon extends StatelessWidget {
-  const AddTokenFloatingIcon({super.key});
+  const AddTokenFloatingIcon({super.key, this.onTap});
+
+  /// 点击回调。自带 InkWell 按压态与 ≥88.w（44dp）命中区（§5 触控红线）。
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: ScreenUtil().setWidth(50.0),
-      height: ScreenUtil().setWidth(50.0),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(
-          Radius.circular(ScreenUtil().setWidth(50.0)),
+    final brand = AppColorTokens.of(context).brand;
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        customBorder: const CircleBorder(),
+        child: Container(
+          width: ScreenUtil().setWidth(88.0),
+          height: ScreenUtil().setWidth(88.0),
+          alignment: Alignment.center,
+          child: Container(
+            width: ScreenUtil().setWidth(56.0),
+            height: ScreenUtil().setWidth(56.0),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColorTokens.of(context).bgElevated,
+              border: Border.all(color: brand),
+            ),
+            alignment: Alignment.center,
+            child: Icon(
+              Icons.add,
+              color: brand,
+              size: ScreenUtil().setWidth(40.0),
+            ),
+          ),
         ),
-        border: Border.all(color: AppColorTokens.of(context).brand),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        Icons.add,
-        color: AppColorTokens.of(context).brand,
-        size: ScreenUtil().setWidth(38.0),
       ),
     );
   }

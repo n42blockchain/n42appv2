@@ -58,7 +58,6 @@ class WalletCoinItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final su = ScreenUtil();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
     final coin = coinInfo.coin;
     final config = coinInfo.config;
     final balanceStr = _formatBalance(coinInfo.value);
@@ -84,9 +83,9 @@ class WalletCoinItem extends ConsumerWidget {
 
     final Widget refreshWidget = coinInfo.loadError
         ? Container(
-            height: su.setWidth(30.0),
-            width: su.setWidth(30.0),
-            margin: EdgeInsets.only(right: su.setWidth(6.0)),
+            height: su.setWidth(32.0),
+            width: su.setWidth(32.0),
+            margin: EdgeInsets.only(right: AppSpacing.space2),
             child: Image.asset(
               'assets/img/error.png',
               color: AppColorTokens.of(context).warning,
@@ -94,74 +93,80 @@ class WalletCoinItem extends ConsumerWidget {
           )
         : const SizedBox();
 
-    return InkWell(
-      onTap: () => _onTap(context),
-      child: Slidable(
-        key: ValueKey(itemKey),
-        groupTag: group,
-        closeOnScroll: true,
-        endActionPane: ActionPane(
-          motion: const ScrollMotion(),
-          extentRatio: 0.2,
-          children: [
-            SlidableAction(
-              onPressed: (_) {
-                if (!canEdit) return;
-                final wap = ref.read(wapBridgeProvider);
-                if (config.isContract) {
-                  wap.removeWalletChainToken(
-                    coin,
-                    symbol: config.coinType,
-                    miniName: config.miniName,
-                  );
-                } else {
-                  wap.removeWalletChain(config.mKey, coin['unit']);
-                }
-              },
-              backgroundColor: deleteColor,
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              autoClose: true,
-            ),
-          ],
+    return Slidable(
+      key: ValueKey(itemKey),
+      groupTag: group,
+      closeOnScroll: true,
+      endActionPane: ActionPane(
+        motion: const ScrollMotion(),
+        extentRatio: 0.2,
+        children: [
+          SlidableAction(
+            onPressed: (_) {
+              if (!canEdit) return;
+              final wap = ref.read(wapBridgeProvider);
+              if (config.isContract) {
+                wap.removeWalletChainToken(
+                  coin,
+                  symbol: config.coinType,
+                  miniName: config.miniName,
+                );
+              } else {
+                wap.removeWalletChain(config.mKey, coin['unit']);
+              }
+            },
+            backgroundColor: deleteColor,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+            autoClose: true,
+          ),
+        ],
+      ),
+      child: Container(
+        margin: EdgeInsets.symmetric(
+          horizontal: AppSpacing.space6,
+          vertical: AppSpacing.space2,
         ),
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space6,
-            vertical: AppSpacing.space2,
+        decoration: BoxDecoration(
+          borderRadius: AppRadius.brMd,
+          border: Border.all(
+            color: AppColorTokens.of(context).border,
+            width: 0.8,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space4,
-            vertical: AppSpacing.space6,
-          ),
-          decoration: BoxDecoration(
-            color: AppColorTokens.of(context).bgSurface,
+        ),
+        // Material 承接卡面色，InkWell ripple 画在卡面之上——
+        // 此前 InkWell 在不透明卡片下方，按压态完全不可见（§5 红线）。
+        child: Material(
+          color: AppColorTokens.of(context).bgSurface,
+          borderRadius: AppRadius.brMd,
+          child: InkWell(
+            onTap: () => _onTap(context),
             borderRadius: AppRadius.brMd,
-            border: Border.all(
-              color: isDark
-                  ? Colors.white.withAlpha(10)
-                  : Colors.black.withAlpha(6),
-              width: 0.8,
-            ),
-          ),
-          child: Row(
-            children: [
-              refreshWidget,
-              _CoinIcon(image: image, mainImage: mainImage),
-              Expanded(
-                child: _CoinInfo(
-                  coinInfo: coinInfo,
-                  balanceStr: balanceStr,
-                  tokenBalanceStr: tokenBalanceStr,
-                ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacing.space4,
+                vertical: AppSpacing.space6,
               ),
-              if (coin['isAggregated'] != true)
-                WalletPinIconButton(
-                  isPinned: coinInfo.isPinned,
-                  onTap: () =>
-                      ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
-                ),
-            ],
+              child: Row(
+                children: [
+                  refreshWidget,
+                  _CoinIcon(image: image, mainImage: mainImage),
+                  Expanded(
+                    child: _CoinInfo(
+                      coinInfo: coinInfo,
+                      balanceStr: balanceStr,
+                      tokenBalanceStr: tokenBalanceStr,
+                    ),
+                  ),
+                  if (coin['isAggregated'] != true)
+                    WalletPinIconButton(
+                      isPinned: coinInfo.isPinned,
+                      onTap: () =>
+                          ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
+                    ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

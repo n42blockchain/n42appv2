@@ -68,14 +68,16 @@ class _WalletTitleButton extends StatelessWidget {
     final su = ScreenUtil();
     return InkWell(
       onTap: onTap,
+      borderRadius: AppRadius.brMd,
       child: SizedBox(
-        height: su.setWidth(60),
+        // ≥88.w（44dp 触控红线）；Row 内容居中，视觉高度不变。
+        height: su.setWidth(88),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             if (isWatchOnly)
               Padding(
-                padding: EdgeInsets.only(right: su.setWidth(6)),
+                padding: EdgeInsets.only(right: AppSpacing.space2),
                 child: Icon(
                   Icons.visibility_outlined,
                   color: blueColor,
@@ -84,10 +86,7 @@ class _WalletTitleButton extends StatelessWidget {
               ),
             Text(
               walletName,
-              style: AppTypography.headline.copyWith(
-                color: blueColor,
-                fontWeight: FontWeight.w600,
-              ),
+              style: AppTypography.headline.copyWith(color: blueColor),
             ),
             SizedBox(
               height: su.setWidth(40),
@@ -123,9 +122,7 @@ class _QrCodeMenu extends StatelessWidget {
         color: AppColorTokens.of(context).brand,
       ),
       offset: Offset(0, su.setWidth(80)),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(su.setWidth(16)),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
       color: AppColorTokens.of(context).bgSurface,
       onSelected: (value) => switch (value) {
         0 => onScanTap(),
@@ -186,50 +183,59 @@ class _WalletConnectButton extends ConsumerWidget {
         wc.metadata != null;
     final iconUrl = wc.metadata?.icons.firstOrNull ?? "";
 
+    // 触控 ≥88.w（44dp 红线）：外层命中区扩大，图标视觉 60.w 不变。
     return InkWell(
       onTap: onTap,
+      borderRadius: AppRadius.brPill,
       child: SizedBox(
-        width: ScreenUtil().setWidth(60.0),
-        height: ScreenUtil().setWidth(60.0),
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Positioned.fill(
-              child: isConnected
-                  ? ImageNetWork(
-                      imageUrl: iconUrl,
-                      placeholder: "assets/img/list_default.png",
-                    )
-                  : Image.asset(
-                      "assets/wallet/WalletConnect.png",
-                      color: AppColorTokens.of(context).brand,
-                    ),
-            ),
-            if (sessionCount > 0)
-              Positioned(
-                right: -ScreenUtil().setWidth(8),
-                top: -ScreenUtil().setWidth(8),
-                child: Container(
-                  padding: EdgeInsets.all(AppSpacing.space2),
-                  decoration: BoxDecoration(
-                    color: AppColorTokens.of(context).brand,
-                    shape: BoxShape.circle,
-                  ),
-                  constraints: BoxConstraints(
-                    minWidth: ScreenUtil().setWidth(28),
-                    minHeight: ScreenUtil().setWidth(28),
-                  ),
-                  child: Text(
-                    '$sessionCount',
-                    style: AppTypography.captionSm.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+        width: ScreenUtil().setWidth(88.0),
+        height: ScreenUtil().setWidth(88.0),
+        child: Center(
+          child: SizedBox(
+            width: ScreenUtil().setWidth(60.0),
+            height: ScreenUtil().setWidth(60.0),
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned.fill(
+                  child: isConnected
+                      ? ImageNetWork(
+                          imageUrl: iconUrl,
+                          placeholder: "assets/img/list_default.png",
+                        )
+                      : Image.asset(
+                          "assets/wallet/WalletConnect.png",
+                          color: AppColorTokens.of(context).brand,
+                        ),
                 ),
-              ),
-          ],
+                if (sessionCount > 0)
+                  Positioned(
+                    right: -ScreenUtil().setWidth(8),
+                    top: -ScreenUtil().setWidth(8),
+                    child: Container(
+                      padding: EdgeInsets.all(AppSpacing.space2),
+                      decoration: BoxDecoration(
+                        color: AppColorTokens.of(context).brand,
+                        shape: BoxShape.circle,
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: ScreenUtil().setWidth(28),
+                        minHeight: ScreenUtil().setWidth(28),
+                      ),
+                      child: Text(
+                        '$sessionCount',
+                        // 品牌色底上反白（叠层 on-color，§2.7 边界允许固定色）
+                        style: AppTypography.captionSm.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
     );

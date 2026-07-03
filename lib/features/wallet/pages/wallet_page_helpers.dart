@@ -50,22 +50,21 @@ class WalletPinIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    // InkWell + ≥88.w 命中区（44dp 触控红线）；图标视觉尺寸不变。
+    return InkWell(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(
-          ScreenUtil().setWidth(12),
-          ScreenUtil().setWidth(16),
-          0,
-          ScreenUtil().setWidth(16),
+      borderRadius: AppRadius.brPill,
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          minWidth: ScreenUtil().setWidth(88),
+          minHeight: ScreenUtil().setWidth(88),
         ),
         child: Icon(
           isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-          size: ScreenUtil().setWidth(30),
+          size: ScreenUtil().setWidth(32),
           color: isPinned
               ? AppColorTokens.of(context).brand
-              : AppColorTokens.of(context).textSubtitle.withValues(alpha: 0.35),
+              : AppColorTokens.of(context).textTertiary,
         ),
       ),
     );
@@ -125,18 +124,17 @@ class WalletSkeletonCoinRow extends StatelessWidget {
   const WalletSkeletonCoinRow({super.key, required this.shimmerColor});
   final Color shimmerColor;
 
-  Widget _shimmerBox(double w, double h, double radius) => Container(
+  Widget _shimmerBox(double w, double h) => Container(
     width: ScreenUtil().setWidth(w),
     height: ScreenUtil().setWidth(h),
     decoration: BoxDecoration(
       color: shimmerColor,
-      borderRadius: BorderRadius.circular(radius),
+      borderRadius: AppRadius.brSm,
     ),
   );
 
   @override
   Widget build(BuildContext context) {
-    final radius = ScreenUtil().setWidth(8);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
@@ -145,7 +143,7 @@ class WalletSkeletonCoinRow extends StatelessWidget {
           Container(
             width: ScreenUtil().setWidth(48),
             height: ScreenUtil().setWidth(48),
-            margin: EdgeInsets.only(right: ScreenUtil().setWidth(14)),
+            margin: EdgeInsets.only(right: AppSpacing.space4),
             decoration: BoxDecoration(
               color: shimmerColor,
               shape: BoxShape.circle,
@@ -157,18 +155,12 @@ class WalletSkeletonCoinRow extends StatelessWidget {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _shimmerBox(80, 22, radius),
-                    _shimmerBox(60, 22, radius),
-                  ],
+                  children: [_shimmerBox(80, 22), _shimmerBox(60, 22)],
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _shimmerBox(100, 18, radius),
-                    _shimmerBox(50, 18, radius),
-                  ],
+                  children: [_shimmerBox(100, 18), _shimmerBox(50, 18)],
                 ),
               ],
             ),

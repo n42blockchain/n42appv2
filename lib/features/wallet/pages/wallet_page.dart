@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
@@ -488,19 +489,19 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                       ],
                     ),
                   ),
-                  // 悬浮添加代币按钮（滚动到底部时显示）
+                  // 悬浮添加代币按钮（滚动到底部时显示）——
+                  // AddTokenFloatingIcon 自带按压态与 ≥88.w 命中区（§5 红线）。
                   Positioned(
                     bottom: ScreenUtil().setWidth(180.0),
                     left: 0,
                     right: 0,
-                    height: ScreenUtil().setWidth(70.0),
+                    height: ScreenUtil().setWidth(88.0),
                     child: Visibility(
                       visible: _showAddTokenButton,
                       child: Container(
                         alignment: Alignment.center,
-                        child: GestureDetector(
+                        child: AddTokenFloatingIcon(
                           onTap: () => showAddTokenSheet(context, ref),
-                          child: const AddTokenFloatingIcon(),
                         ),
                       ),
                     ),
@@ -508,8 +509,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                   // 未备份提示条
                   Positioned(
                     bottom: ScreenUtil().setWidth(120.0),
-                    left: ScreenUtil().setWidth(30.0),
-                    right: ScreenUtil().setWidth(30.0),
+                    left: AppSpacing.space8,
+                    right: AppSpacing.space8,
                     child: Visibility(
                       visible: waValue.walletInfo.password == "",
                       child: BackupReminderBanner(waValue: waValue),

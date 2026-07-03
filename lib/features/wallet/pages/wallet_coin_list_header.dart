@@ -38,19 +38,20 @@ class WalletCoinListHeader extends StatelessWidget {
       pinned: true,
       floating: true,
       delegate: WalletSliverAppBarDelegate(
-        minHeight: ScreenUtil().setWidth(165.0),
-        maxHeight: ScreenUtil().setWidth(165.0),
+        // 192.w - 2*space2 = 176.w → 两行各 88.w（44dp 触控红线）
+        minHeight: ScreenUtil().setWidth(192.0),
+        maxHeight: ScreenUtil().setWidth(192.0),
         child: Container(
           width: double.infinity,
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.space6,
-            vertical: AppSpacing.space4,
+            vertical: AppSpacing.space2,
           ),
           decoration: BoxDecoration(
             color: AppColorTokens.of(context).bgBase,
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(ScreenUtil().setWidth(28)),
-              topLeft: Radius.circular(ScreenUtil().setWidth(28)),
+              topRight: Radius.circular(AppRadius.xl),
+              topLeft: Radius.circular(AppRadius.xl),
             ),
             boxShadow: [
               BoxShadow(
@@ -112,23 +113,30 @@ class _TopRow extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: su.setWidth(12)),
+        SizedBox(width: AppSpacing.space4),
         Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: onAddToken,
-            borderRadius: BorderRadius.circular(su.setWidth(16)),
-            child: Container(
-              width: su.setWidth(36),
-              height: su.setWidth(36),
-              decoration: BoxDecoration(
-                color: blueColor,
-                borderRadius: BorderRadius.circular(su.setWidth(12)),
-              ),
-              child: Icon(
-                Icons.add_rounded,
-                color: Colors.white,
-                size: su.setWidth(22),
+            borderRadius: AppRadius.brMd,
+            child: SizedBox(
+              // >=88.w 命中区（44dp 触控红线），视觉 36.w 不变
+              width: su.setWidth(88),
+              height: su.setWidth(88),
+              child: Center(
+                child: Container(
+                  width: su.setWidth(36),
+                  height: su.setWidth(36),
+                  decoration: BoxDecoration(
+                    color: blueColor,
+                    borderRadius: AppRadius.brMd,
+                  ),
+                  child: Icon(
+                    Icons.add_rounded,
+                    color: Colors.white,
+                    size: su.setWidth(24),
+                  ),
+                ),
               ),
             ),
           ),
@@ -141,12 +149,10 @@ class _TopRow extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const MarketPage()),
             ),
-            borderRadius: BorderRadius.circular(su.setWidth(16)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: su.setWidth(10),
-                vertical: su.setWidth(6),
-              ),
+            borderRadius: AppRadius.brMd,
+            child: SizedBox(
+              width: su.setWidth(88),
+              height: su.setWidth(88),
               child: Icon(
                 Icons.insights_rounded,
                 size: su.setWidth(36),
@@ -163,12 +169,10 @@ class _TopRow extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (_) => const PortfolioPage()),
             ),
-            borderRadius: BorderRadius.circular(su.setWidth(16)),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: su.setWidth(10),
-                vertical: su.setWidth(6),
-              ),
+            borderRadius: AppRadius.brMd,
+            child: SizedBox(
+              width: su.setWidth(88),
+              height: su.setWidth(88),
               child: Icon(
                 Icons.donut_large_rounded,
                 size: su.setWidth(36),
@@ -182,15 +186,14 @@ class _TopRow extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onChangeNetwork,
-            borderRadius: BorderRadius.circular(su.setWidth(20)),
+            borderRadius: AppRadius.brPill,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: su.setWidth(14),
-                vertical: su.setWidth(8),
-              ),
+              constraints: BoxConstraints(minHeight: su.setWidth(88)),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+              alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: blueColor.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(su.setWidth(20)),
+                borderRadius: AppRadius.brPill,
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -205,7 +208,7 @@ class _TopRow extends StatelessWidget {
                   Icon(
                     Icons.keyboard_arrow_down_rounded,
                     color: blueColor,
-                    size: su.setWidth(22),
+                    size: su.setWidth(24),
                   ),
                 ],
               ),
@@ -280,11 +283,11 @@ class _SortButton extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         borderRadius: AppRadius.brSm,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space2,
-            vertical: AppSpacing.space2,
-          ),
+        child: Container(
+          // >=88.w 命中高（44dp 触控红线）
+          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
+          alignment: Alignment.center,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -330,45 +333,51 @@ class _ThresholdButton extends StatelessWidget {
     final blueColor = AppColorTokens.of(context).brand;
     final subColor = AppColorTokens.of(context).textSubtitle;
 
-    return GestureDetector(
-      onTap: () {
-        final idx = thresholdCycle.indexOf(threshold);
-        final next = thresholdCycle[(idx + 1) % thresholdCycle.length];
-        onChanged(next);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space4,
-          vertical: AppSpacing.space2,
-        ),
-        decoration: BoxDecoration(
-          color: active
-              ? blueColor.withValues(alpha: 0.12)
-              : Colors.transparent,
-          borderRadius: AppRadius.brMd,
-          border: active
-              ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
-              : null,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              active
-                  ? Icons.visibility_off_outlined
-                  : Icons.visibility_outlined,
-              size: ScreenUtil().setWidth(26),
-              color: active ? blueColor : subColor,
-            ),
-            SizedBox(width: ScreenUtil().setWidth(5)),
-            Text(
-              label,
-              style: AppTypography.caption.copyWith(
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          final idx = thresholdCycle.indexOf(threshold);
+          final next = thresholdCycle[(idx + 1) % thresholdCycle.length];
+          onChanged(next);
+        },
+        borderRadius: AppRadius.brMd,
+        child: Container(
+          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space2,
+          ),
+          decoration: BoxDecoration(
+            color: active
+                ? blueColor.withValues(alpha: 0.12)
+                : Colors.transparent,
+            borderRadius: AppRadius.brMd,
+            border: active
+                ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
+                : null,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                active
+                    ? Icons.visibility_off_outlined
+                    : Icons.visibility_outlined,
+                size: ScreenUtil().setWidth(24),
                 color: active ? blueColor : subColor,
-                fontWeight: active ? FontWeight.w600 : FontWeight.normal,
               ),
-            ),
-          ],
+              SizedBox(width: AppSpacing.space2),
+              Text(
+                label,
+                style: AppTypography.caption.copyWith(
+                  color: active ? blueColor : subColor,
+                  fontWeight: active ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

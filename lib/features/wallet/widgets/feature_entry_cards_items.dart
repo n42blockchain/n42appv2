@@ -11,7 +11,7 @@ part of 'feature_entry_cards.dart';
 BoxDecoration _cardDecoration({
   required Color primaryColor,
   required Color secondaryColor,
-  required double borderRadius,
+  required BorderRadius borderRadius,
 }) {
   return BoxDecoration(
     gradient: LinearGradient(
@@ -22,7 +22,7 @@ BoxDecoration _cardDecoration({
         secondaryColor.withValues(alpha: 0.12),
       ],
     ),
-    borderRadius: BorderRadius.circular(borderRadius),
+    borderRadius: borderRadius,
     border: Border.all(color: primaryColor.withValues(alpha: 0.25), width: 1),
     boxShadow: [
       BoxShadow(
@@ -103,14 +103,15 @@ class EnsEntryCard extends StatelessWidget {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
-    return GestureDetector(
+    return InkWell(
       onTap: hasEns ? onTap : onRegisterTap,
+      borderRadius: AppRadius.brLg,
       child: Container(
-        padding: EdgeInsets.all(su.setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: _cardDecoration(
           primaryColor: ensBlue,
           secondaryColor: ensPurple,
-          borderRadius: su.setWidth(20),
+          borderRadius: AppRadius.brLg,
         ),
         child: Row(
           children: [
@@ -130,7 +131,7 @@ class EnsEntryCard extends StatelessWidget {
                     )
                   : _buildEnsIcon(),
             ),
-            SizedBox(width: su.setWidth(24)),
+            SizedBox(width: AppSpacing.space6),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,14 +143,12 @@ class EnsEntryCard extends StatelessWidget {
                       color: mainText,
                     ),
                   ),
-                  SizedBox(height: su.setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     hasEns
                         ? S.of(context).g_key_ens_manage_your_identity
                         : S.of(context).g_key_ens_register_description,
-                    style: AppTypography.caption.copyWith(
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -214,14 +213,15 @@ class SmartAccountEntryCard extends StatelessWidget {
     final subtitleColor = AppColorTokens.of(context).textSubtitle;
     final circleSize = su.setWidth(80);
 
-    return GestureDetector(
+    return InkWell(
       onTap: hasSmartAccount ? onTap : onCreateTap,
+      borderRadius: AppRadius.brLg,
       child: Container(
-        padding: EdgeInsets.all(su.setWidth(20)),
+        padding: EdgeInsets.all(AppSpacing.space6),
         decoration: _cardDecoration(
           primaryColor: cardRed,
           secondaryColor: cardYellow,
-          borderRadius: su.setWidth(20),
+          borderRadius: AppRadius.brLg,
         ),
         child: Row(
           children: [
@@ -259,7 +259,7 @@ class SmartAccountEntryCard extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(width: su.setWidth(24)),
+            SizedBox(width: AppSpacing.space6),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -280,15 +280,15 @@ class SmartAccountEntryCard extends StatelessWidget {
                         ),
                       ),
                       if (hasSmartAccount) ...[
-                        SizedBox(width: su.setWidth(10)),
+                        SizedBox(width: AppSpacing.space2),
                         Container(
                           padding: EdgeInsets.symmetric(
-                            horizontal: su.setWidth(10),
+                            horizontal: AppSpacing.space2,
                             vertical: su.setWidth(4),
                           ),
                           decoration: BoxDecoration(
                             color: statusColor.withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(su.setWidth(8)),
+                            borderRadius: AppRadius.brSm,
                           ),
                           child: Text(
                             isDeployed
@@ -303,14 +303,12 @@ class SmartAccountEntryCard extends StatelessWidget {
                       ],
                     ],
                   ),
-                  SizedBox(height: su.setWidth(8)),
+                  SizedBox(height: AppSpacing.space2),
                   Text(
                     hasSmartAccount
                         ? _formatAddress(accountAddress ?? '')
                         : S.of(context).g_key_aa_gasless_transactions,
-                    style: AppTypography.caption.copyWith(
-                      color: subtitleColor,
-                    ),
+                    style: AppTypography.caption.copyWith(color: subtitleColor),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

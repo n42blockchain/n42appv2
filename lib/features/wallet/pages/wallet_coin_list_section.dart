@@ -8,7 +8,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/features/widgets/empty.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 class WalletCoinListSliver extends StatelessWidget {
@@ -87,12 +86,9 @@ class _CoinListBody extends StatelessWidget {
     return Container(
       width: double.infinity,
       alignment: Alignment.topCenter,
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border.all(width: 2, color: bgColor),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: su.setWidth(30.0)),
-      margin: EdgeInsets.only(bottom: su.setWidth(20.0)),
+      decoration: BoxDecoration(color: bgColor),
+      padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      margin: EdgeInsets.only(bottom: AppSpacing.space4),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -128,22 +124,27 @@ class _LoadingBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // warning 12% 色调底 + 同色字（AppBadge 风格）——此前 warning 实底白字
+    // 亮色下对比 ≈2.2:1 不达 4.5:1（§2.6）。
+    final warning = AppColorTokens.of(context).warning;
     return Container(
       width: double.infinity,
-      height: su.setWidth(60.0),
+      height: su.setWidth(64.0),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: AppColorTokens.of(context).warning,
-        borderRadius: BorderRadius.circular(su.setWidth(8)),
+        color: warning.withValues(alpha: 0.12),
+        borderRadius: AppRadius.brSm,
       ),
-      child: Text(
-        S.of(context).g_key_208,
-        style: AppTypography.caption.copyWith(
-          color: AppThemeUtils.getColorByKey(
-            context,
-            AppThemeKeys.mainWhiteColor.name,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.sync_rounded, size: su.setWidth(28), color: warning),
+          SizedBox(width: AppSpacing.space2),
+          Text(
+            S.of(context).g_key_208,
+            style: AppTypography.caption.copyWith(color: warning),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -166,7 +167,7 @@ class _DiscoveryBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final blueColor = AppColorTokens.of(context).brand;
     return Padding(
-      padding: EdgeInsets.only(bottom: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.only(bottom: AppSpacing.space4),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -207,15 +208,17 @@ class _DiscoveryBanner extends StatelessWidget {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  behavior: HitTestBehavior.opaque,
+                InkWell(
                   onTap: onDismiss,
-                  child: Padding(
-                    padding: EdgeInsets.all(AppSpacing.space2),
+                  customBorder: const CircleBorder(),
+                  child: SizedBox(
+                    // >=88.w 命中区（44dp 触控红线）
+                    width: ScreenUtil().setWidth(88),
+                    height: ScreenUtil().setWidth(88),
                     child: Icon(
                       Icons.close_rounded,
                       color: blueColor.withValues(alpha: 0.70),
-                      size: ScreenUtil().setWidth(30),
+                      size: ScreenUtil().setWidth(32),
                     ),
                   ),
                 ),
@@ -283,9 +286,7 @@ class _PinnedDivider extends StatelessWidget {
             child: Text(
               S.of(context).g_key_coin_list_separator,
               style: AppTypography.captionSm.copyWith(
-                color: AppColorTokens.of(
-                  context,
-                ).textSubtitle.withValues(alpha: 0.6),
+                color: AppColorTokens.of(context).textTertiary,
               ),
             ),
           ),
@@ -320,12 +321,24 @@ class _AllHiddenHint extends StatelessWidget {
             ),
           ),
           SizedBox(height: AppSpacing.space2),
-          GestureDetector(
-            onTap: onShowAll,
-            child: Text(
-              S.of(context).g_key_coin_list_show_all,
-              style: AppTypography.bodySm.copyWith(
-                color: AppColorTokens.of(context).brand,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: onShowAll,
+              borderRadius: AppRadius.brSm,
+              child: Container(
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setWidth(88),
+                  minWidth: ScreenUtil().setWidth(88),
+                ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+                child: Text(
+                  S.of(context).g_key_coin_list_show_all,
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).brand,
+                  ),
+                ),
               ),
             ),
           ),

@@ -219,42 +219,53 @@ class _WalletBoardState extends State<WalletBoard> {
     String imagePath,
     GestureTapCallback? onTap,
   ) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: AppRadius.brLg,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: ScreenUtil().setWidth(96),
-            height: ScreenUtil().setWidth(96),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.11),
-              borderRadius: AppRadius.brLg,
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.16),
-                width: 1,
-              ),
-            ),
-            child: Center(
-              child: Image.asset(
-                imagePath,
-                width: ScreenUtil().setWidth(44),
-                height: ScreenUtil().setWidth(44),
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(height: AppSpacing.space2),
-          Text(
-            label,
-            style: AppTypography.captionSm.copyWith(
-              color: AppColorTokens.onOverlayPrimary,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
+    // Material(transparent) 让 ripple 画在渐变卡之上——此前最近 Material
+    // 祖先在渐变层之下，按压态被卡片渐变完全遮挡（§5 红线）。
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brLg,
+        highlightColor: Colors.white.withValues(alpha: 0.10),
+        splashColor: Colors.white.withValues(alpha: 0.08),
+        child: _actionBtnBody(label, imagePath),
       ),
+    );
+  }
+
+  Widget _actionBtnBody(String label, String imagePath) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          width: ScreenUtil().setWidth(96),
+          height: ScreenUtil().setWidth(96),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.11),
+            borderRadius: AppRadius.brLg,
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.16),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Image.asset(
+              imagePath,
+              width: ScreenUtil().setWidth(44),
+              height: ScreenUtil().setWidth(44),
+              color: Colors.white,
+            ),
+          ),
+        ),
+        SizedBox(height: AppSpacing.space2),
+        Text(
+          label,
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.onOverlayPrimary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }
