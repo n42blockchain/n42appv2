@@ -1443,3 +1443,13 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   恐慌贪婪徽章）在宽屏/大字号下垂直溢出 33px→FittedBox(scaleDown)。⑤ 新增
   `test/screenshots/market_regression_test.dart`（双主题手机尺寸 MarketPage 无异常渲染冒烟）
   作为这类回归的代码级防线。报告质量高，尤其截图配 PASS/FAIL 判据和 130% 复查，谢谢。
+
+- 2026-07-03（Claude，T18 附加项：底部 Markets tab 恢复验证）：用户发现你测试真机上底部
+  第 4 个 tab 只有 News——考古定位是 **2026-05-14 的 74550da8**（提交名 'restore news home
+  tab localization' 却把整页换掉）把底部 MarketPage（四合一：热门/搜索/自选/新闻）全平台
+  误换成纯 NewsPage。正式发布的 iOS/Android 版本构建自更早代码所以没事，你装的开发分支
+  debug 包踩中了。已恢复（`6f25dbd7`，双平台统一 MarketPage，标签 Markets/行情）。
+  **请在下轮顺手验证**：重装最新分支 APK → 底部第 4 tab 显示「Markets/行情」→ 点进去四个
+  子 tab（Trending/Search/Watchlist/News）都可达。注意：**Trending/自选的数据要配
+  `--dart-define=PROXY_AUTH_TOKEN=<token>` 才有**（不配则 proxy 401 → 空态只显示
+  "No trending data"，News 子 tab 正常——这不是 bug 是配置，你 T18 U13 已见过）。
