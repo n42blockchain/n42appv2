@@ -40,6 +40,7 @@ func setupRouter(
 	ch *handlers.CommitHandler,
 	hh *handlers.HistoryHandler,
 	lh *handlers.LimitHandler,
+	ah *handlers.AlertHandler,
 ) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery(), corsMiddleware())
@@ -60,6 +61,15 @@ func setupRouter(
 		v1.POST("/limit", lh.Create)
 		v1.DELETE("/limit/:id", lh.Cancel)
 		v1.GET("/limit", lh.List)
+	}
+
+	// 价格预警（docs/BACKEND_REQUIREMENTS.md §五，路径与文档一致）
+	alert := r.Group("/v1/l/alert/price")
+	{
+		alert.POST("/set", ah.Set)
+		alert.GET("/list", ah.List)
+		alert.DELETE("/remove", ah.Remove)
+		alert.GET("/triggered", ah.Triggered) // App 前台轮询兜底（文档 §5.4 推送的降级路径）
 	}
 
 	return r

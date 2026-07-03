@@ -9,12 +9,12 @@ import (
 
 // QuoteReq 报价请求
 type QuoteReq struct {
-	Chain       string   `json:"chain"`
-	TokenIn     string   `json:"token_in"`
-	TokenOut    string   `json:"token_out"`
-	AmountIn    string   `json:"amount_in"`    // 最小单位（wei / lamport）
-	UserAddr    string   `json:"user_addr"`
-	SlippageBps int      `json:"slippage_bps"` // 0.5% = 50
+	Chain       string `json:"chain"`
+	TokenIn     string `json:"token_in"`
+	TokenOut    string `json:"token_out"`
+	AmountIn    string `json:"amount_in"` // 最小单位（wei / lamport）
+	UserAddr    string `json:"user_addr"`
+	SlippageBps int    `json:"slippage_bps"` // 0.5% = 50
 
 	// 解析后的大整数，不序列化
 	AmountInWei *big.Int `json:"-"`
@@ -23,11 +23,11 @@ type QuoteReq struct {
 // QuoteResp 报价响应（最优来源）
 type QuoteResp struct {
 	OrderID      string   `json:"order_id"`
-	AmountOut    string   `json:"amount_out"`    // 人类可读
+	AmountOut    string   `json:"amount_out"` // 人类可读
 	AmountOutWei *big.Int `json:"-"`
-	PriceImpact  string   `json:"price_impact"`  // "0.12%"
-	GasEstimate  string   `json:"gas_estimate"`  // "0.003 ETH"
-	Source       string   `json:"source"`        // "Uniswap V3" / "1inch" / "Jupiter"
+	PriceImpact  string   `json:"price_impact"` // "0.12%"
+	GasEstimate  string   `json:"gas_estimate"` // "0.003 ETH"
+	Source       string   `json:"source"`       // "Uniswap V3" / "1inch" / "Jupiter"
 	Calldata     string   `json:"calldata"`
 	RouterAddr   string   `json:"router_addr"`
 	Chain        string   `json:"chain"`
@@ -46,16 +46,16 @@ type CommitReq struct {
 
 // HistoryItem 历史记录条目
 type HistoryItem struct {
-	OrderID        string  `json:"order_id"`
-	Chain          string  `json:"chain"`
-	TokenInSymbol  string  `json:"token_in_symbol"`
-	TokenOutSymbol string  `json:"token_out_symbol"`
-	AmountIn       string  `json:"amount_in"`
-	AmountOut      string  `json:"amount_out"`
-	Source         string  `json:"source"`
-	TxHash         string  `json:"tx_hash"`
-	Status         int     `json:"status"` // 0=quoted 1=committed 2=confirmed 3=failed
-	CreatedAt      int64   `json:"created_at"`
+	OrderID        string `json:"order_id"`
+	Chain          string `json:"chain"`
+	TokenInSymbol  string `json:"token_in_symbol"`
+	TokenOutSymbol string `json:"token_out_symbol"`
+	AmountIn       string `json:"amount_in"`
+	AmountOut      string `json:"amount_out"`
+	Source         string `json:"source"`
+	TxHash         string `json:"tx_hash"`
+	Status         int    `json:"status"` // 0=quoted 1=committed 2=confirmed 3=failed
+	CreatedAt      int64  `json:"created_at"`
 }
 
 // TokenInfo 代币信息
@@ -128,4 +128,39 @@ func OK(data any) APIResp {
 
 func Fail(msg string) APIResp {
 	return APIResp{Code: 400, Err: msg}
+}
+
+// ─── 价格预警（docs/BACKEND_REQUIREMENTS.md §五）───────────────────────────────
+
+// PriceAlertReq 创建/更新价格预警请求（POST /v1/l/alert/price/set）。
+// AlertID 为空 = 创建；非空 = 更新（按 alert_id 幂等，重新武装 triggered）。
+type PriceAlertReq struct {
+	UUID        string `json:"uuid"`
+	AlertID     string `json:"alert_id"`
+	Symbol      string `json:"symbol"`
+	CoinGeckoID string `json:"coin_gecko_id"`
+	Direction   string `json:"direction"`    // "above" | "below"
+	TargetPrice string `json:"target_price"` // 十进制字符串
+	Enabled     bool   `json:"enabled"`
+}
+
+// PriceAlertRemoveReq 删除价格预警请求（DELETE /v1/l/alert/price/remove）
+type PriceAlertRemoveReq struct {
+	UUID    string `json:"uuid"`
+	AlertID string `json:"alert_id"`
+}
+
+// PriceAlertItem 预警列表条目（GET /v1/l/alert/price/list）
+type PriceAlertItem struct {
+	AlertID      string `json:"alert_id"`
+	Symbol       string `json:"symbol"`
+	CoinGeckoID  string `json:"coin_gecko_id"`
+	Direction    string `json:"direction"`
+	TargetPrice  string `json:"target_price"`
+	CurrentPrice string `json:"current_price,omitempty"` // 监控缓存价，可能为空
+	Enabled      bool   `json:"enabled"`
+	Triggered    bool   `json:"triggered"`
+	TriggerPrice string `json:"trigger_price,omitempty"`
+	TriggeredAt  int64  `json:"triggered_at,omitempty"`
+	CreatedAt    int64  `json:"created_at"`
 }

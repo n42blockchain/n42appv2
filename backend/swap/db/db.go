@@ -51,6 +51,26 @@ CREATE INDEX IF NOT EXISTS idx_dex_limit_orders_user
     ON dex_limit_orders(user_uuid, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_dex_limit_orders_active
     ON dex_limit_orders(status) WHERE status = 0;
+
+CREATE TABLE IF NOT EXISTS price_alerts (
+    id            BIGSERIAL    PRIMARY KEY,
+    alert_id      VARCHAR(64)  NOT NULL UNIQUE,
+    user_uuid     VARCHAR(64)  NOT NULL,
+    symbol        VARCHAR(32)  NOT NULL,
+    coin_gecko_id VARCHAR(64)  NOT NULL,
+    direction     VARCHAR(8)   NOT NULL,
+    target_price  NUMERIC      NOT NULL,
+    enabled       BOOLEAN      NOT NULL DEFAULT TRUE,
+    triggered     BOOLEAN      NOT NULL DEFAULT FALSE,
+    trigger_price NUMERIC,
+    triggered_at  BIGINT,
+    created_at    BIGINT       NOT NULL,
+    updated_at    BIGINT       NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_price_alerts_user
+    ON price_alerts(user_uuid, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_price_alerts_active
+    ON price_alerts(enabled, triggered) WHERE enabled AND NOT triggered;
 `
 
 // DB 封装 sqlx.DB，提供 CRUD 操作
@@ -290,4 +310,112 @@ func (d *DB) ListOrders(userUUID string, page, size int) ([]*Order, error) {
 		userUUID, size, offset,
 	)
 	return orders, err
+}
+
+// ─── 价格预警（docs/BACKEND_REQUIREMENTS.md §五）───────────────────────────────
+
+// PriceAlert 价格预警数据库模型。
+// 一次性语义：触发后 triggered=true 不再重复触发；重新启用（enabled 置回 true
+// 且 UpsertPriceAlert 更新目标价）时复位 triggered。
+type PriceAlert struct {
+	ID           int64   `db:"id"`
+	AlertID      string  `db:"alert_id"`
+	UserUUID     string  `db:"user_uuid"`
+	Symbol       string  `db:"symbol"`
+	CoinGeckoID  string  `db:"coin_gecko_id"`
+	Direction    string  `db:"direction"` // "above" | "below"
+	TargetPrice  string  `db:"target_price"`
+	Enabled      bool    `db:"enabled"`
+	Triggered    bool    `db:"triggered"`
+	TriggerPrice *string `db:"trigger_price"`
+	TriggeredAt  *int64  `db:"triggered_at"`
+	CreatedAt    int64   `db:"created_at"`
+	UpdatedAt    int64   `db:"updated_at"`
+}
+
+// UpsertPriceAlert 创建或更新价格预警（按 alert_id 幂等）。
+// 更新路径会复位 triggered/trigger_price/triggered_at——语义是"重新武装"。
+func (d *DB) UpsertPriceAlert(
+	alertID, userUUID, symbol, coinGeckoID, direction, targetPrice string,
+	enabled bool,
+) error {
+	now := time.Now().Unix()
+	_, err := d.db.Exec(`
+		INSERT INTO price_alerts
+		    (alert_id, user_uuid, symbol, coin_gecko_id, direction,
+		     target_price, enabled, triggered, created_at, updated_at)
+		VALUES ($1,$2,$3,$4,$5,$6,$7,FALSE,$8,$8)
+		ON CONFLICT (alert_id) DO UPDATE SET
+		    symbol        = EXCLUDED.symbol,
+		    coin_gecko_id = EXCLUDED.coin_gecko_id,
+		    direction     = EXCLUDED.direction,
+		    target_price  = EXCLUDED.target_price,
+		    enabled       = EXCLUDED.enabled,
+		    triggered     = FALSE,
+		    trigger_price = NULL,
+		    triggered_at  = NULL,
+		    updated_at    = EXCLUDED.updated_at
+		WHERE price_alerts.user_uuid = EXCLUDED.user_uuid`,
+		alertID, userUUID, symbol, coinGeckoID, direction,
+		targetPrice, enabled, now,
+	)
+	return err
+}
+
+// ListPriceAlerts 查询用户全部预警
+func (d *DB) ListPriceAlerts(userUUID string) ([]*PriceAlert, error) {
+	var alerts []*PriceAlert
+	err := d.db.Select(&alerts, `
+		SELECT * FROM price_alerts
+		WHERE user_uuid=$1
+		ORDER BY created_at DESC
+		LIMIT 200`, userUUID)
+	return alerts, err
+}
+
+// DeletePriceAlert 删除预警（校验归属）
+func (d *DB) DeletePriceAlert(alertID, userUUID string) error {
+	res, err := d.db.Exec(`
+		DELETE FROM price_alerts WHERE alert_id=$1 AND user_uuid=$2`,
+		alertID, userUUID)
+	if err != nil {
+		return err
+	}
+	if n, _ := res.RowsAffected(); n == 0 {
+		return fmt.Errorf("alert not found or not owned")
+	}
+	return nil
+}
+
+// ListActivePriceAlerts 监控循环用：全部启用且未触发的预警
+func (d *DB) ListActivePriceAlerts() ([]*PriceAlert, error) {
+	var alerts []*PriceAlert
+	err := d.db.Select(&alerts, `
+		SELECT * FROM price_alerts
+		WHERE enabled AND NOT triggered
+		ORDER BY created_at ASC
+		LIMIT 10000`)
+	return alerts, err
+}
+
+// MarkPriceAlertTriggered 标记触发（记录触发时价格与时间）
+func (d *DB) MarkPriceAlertTriggered(alertID, triggerPrice string) error {
+	now := time.Now().Unix()
+	_, err := d.db.Exec(`
+		UPDATE price_alerts
+		SET triggered=TRUE, trigger_price=$2, triggered_at=$3, updated_at=$3
+		WHERE alert_id=$1 AND NOT triggered`,
+		alertID, triggerPrice, now)
+	return err
+}
+
+// ListTriggeredPriceAlertsSince App 前台轮询用：某用户 since 之后触发的预警
+func (d *DB) ListTriggeredPriceAlertsSince(userUUID string, since int64) ([]*PriceAlert, error) {
+	var alerts []*PriceAlert
+	err := d.db.Select(&alerts, `
+		SELECT * FROM price_alerts
+		WHERE user_uuid=$1 AND triggered AND triggered_at > $2
+		ORDER BY triggered_at DESC
+		LIMIT 100`, userUUID, since)
+	return alerts, err
 }

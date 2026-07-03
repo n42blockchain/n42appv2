@@ -6,8 +6,9 @@
 > **2026-07-03 勘误**：本文档写于 2026-02-22，部分 ❌ 已过时——§三 DEX Swap 的
 > 3.1-3.4 四个接口已由**仓内 Go 服务 `backend/swap/`** 实现（`/v1/dex/tokens、quote、
 > commit、history`，另加限价单 `/v1/dex/limit` 三接口），App `dex_swap_api.dart` 已接通；
-> 其部署状态（是否已上 `api.n42.ai/swap`）以运维为准。§五 价格预警 5.1-5.3 仍未有后端，
-> 但已由客户端本地方案补偿（前台定时器 + 本地通知，见钱包竞品报告 §14）。
+> 其部署状态（是否已上 `api.n42.ai/swap`）以运维为准。§五 价格预警 5.1-5.4 已于 2026-07-03 在
+> `backend/swap` 实现（CRUD + 60s CoinGecko 监控 + webhook/轮询触达，见该目录 README）；
+> 此前的客户端本地补偿（前台定时器 + 本地通知）继续作为离线兜底并存。
 > 外部 key/自建服务类依赖另见 [`EXTERNAL_DEPENDENCIES.md`](EXTERNAL_DEPENDENCIES.md)。
 
 ---
@@ -142,7 +143,7 @@ Body: {
 
 **Base URL**: `exchangeHost` = `https://api.n42.ai/swap`
 
-### 3.1 查询可交换代币列表 ❌
+### 3.1 查询可交换代币列表 ✅（仓内 `backend/swap` 已实现）
 
 ```
 GET /v1/dex/tokens
@@ -170,7 +171,7 @@ Response:
 
 ---
 
-### 3.2 获取兑换报价 ❌
+### 3.2 获取兑换报价 ✅（仓内已实现，1inch/Jupiter/Uniswap 聚合）
 
 ```
 POST /v1/dex/quote
@@ -213,7 +214,7 @@ Response (失败):
 
 ---
 
-### 3.3 提交兑换结果（链上 tx 发送后通知后端）❌
+### 3.3 提交兑换结果（链上 tx 发送后通知后端）✅（仓内已实现，含确认监视）
 
 ```
 POST /v1/dex/commit
@@ -235,7 +236,7 @@ Response:
 
 ---
 
-### 3.4 查询兑换历史 ❌
+### 3.4 查询兑换历史 ✅（仓内已实现）
 
 ```
 GET /v1/dex/history
@@ -317,7 +318,7 @@ Body: { uuid, token, source, code }
 
 **Base URL**: `userInfoHost` 或独立服务（待确认）
 
-### 5.1 创建/更新价格预警 ❌
+### 5.1 创建/更新价格预警 ✅（2026-07-03 仓内 `backend/swap` 已实现，部署以运维为准）
 
 ```
 POST /v1/l/alert/price/set
@@ -337,7 +338,7 @@ Response: { code: 200, data: { alert_id: "xxx" } }
 
 ---
 
-### 5.2 查询用户价格预警列表 ❌
+### 5.2 查询用户价格预警列表 ✅（2026-07-03 仓内已实现，含 `current_price` 回显）
 
 ```
 GET /v1/l/alert/price/list
@@ -363,7 +364,7 @@ Response:
 
 ---
 
-### 5.3 删除价格预警 ❌
+### 5.3 删除价格预警 ✅（2026-07-03 仓内已实现，校验归属）
 
 ```
 DELETE /v1/l/alert/price/remove
@@ -372,7 +373,7 @@ Body: { uuid, token, alert_id }
 
 ---
 
-### 5.4 推送通知 — 价格触达 🔧
+### 5.4 推送通知 — 价格触达 ⚠️（服务端触发+webhook 已实现；FCM/APNs 桥接待运维配 `PUSH_WEBHOOK_URL`；另有 `GET /v1/l/alert/price/triggered` App 前台轮询兜底）
 
 后端在价格触达目标时，通过 FCM/APNs 推送到 App：
 ```json
@@ -395,8 +396,8 @@ App 在登录后注册 FCM Token，后端存储并在以下事件推送：
 |------|-----------|---------|
 | 邀请成功 | `invite_success` | ✅ |
 | 挖矿奖励到账 | `mining_reward` | ✅ |
-| 价格预警触达 | `price_alert` | ❌ 待实现 |
-| 兑换完成 | `swap_complete` | ❌ 待实现 |
+| 价格预警触达 | `price_alert` | ⚠️ 服务端触发已实现（webhook/轮询），FCM 桥接待运维 |
+| 兑换完成 | `swap_complete` | ❌ 待实现（monitor 只更新状态，未接推送）|
 | 账户安全告警 | `security_alert` | 🔧 |
 
 ---

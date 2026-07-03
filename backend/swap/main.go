@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"log"
+	"net/http"
 	"os"
+	"time"
 
 	"github.com/n42/n42appv2/backend/swap/db"
 	"github.com/n42/n42appv2/backend/swap/handlers"
@@ -51,8 +53,29 @@ func main() {
 	priceMonitor := services.NewPriceMonitor(database, aggregator)
 	go priceMonitor.Start(context.Background())
 
+	// ─── 价格预警监控（docs/BACKEND_REQUIREMENTS.md §五）─────────────────
+	// COINGECKO_BASE/COINGECKO_API_KEY 可选（默认官方免费端点）；
+	// PUSH_WEBHOOK_URL 可选（配置后触发事件 POST 给运维推送桥，未配仅记日志，
+	// App 前台轮询 /v1/l/alert/price/triggered 兜底）。
+	var alertNotifier services.AlertNotifier
+	if hook := os.Getenv("PUSH_WEBHOOK_URL"); hook != "" {
+		alertNotifier = &services.WebhookNotifier{
+			URL:    hook,
+			Client: &http.Client{Timeout: 10 * time.Second},
+		}
+	}
+	alertMonitor := services.NewAlertMonitor(
+		database,
+		os.Getenv("COINGECKO_BASE"),
+		os.Getenv("COINGECKO_API_KEY"),
+		alertNotifier,
+	)
+	go alertMonitor.Start(context.Background())
+	alertHandler := handlers.NewAlertHandler(database, alertMonitor)
+
 	// ─── 路由 & 启动 ─────────────────────────────────────────────────────
-	router := setupRouter(quoteHandler, commitHandler, historyHandler, limitHandler)
+	router := setupRouter(
+		quoteHandler, commitHandler, historyHandler, limitHandler, alertHandler)
 
 	log.Printf("DEX swap service starting on :%s", port)
 	if err := router.Run(":" + port); err != nil {
