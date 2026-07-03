@@ -4,6 +4,76 @@ part of 'security_setting.dart';
 // ── Security setting widget components ───────────────────────────────────────
 
 extension on _SecuritySettingState {
+  Widget buildSectionTitle(String title) {
+    return Padding(
+      padding: EdgeInsets.only(top: AppSpacing.space4),
+      child: Text(
+        title,
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).textPrimary,
+        ),
+      ),
+    );
+  }
+
+  Widget buildNavigationWidget({
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    final colors = AppColorTokens.of(context);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: AppRadius.brMd,
+        onTap: onTap,
+        child: Padding(
+          padding: AppSpacing.cardInset,
+          child: Row(
+            children: [
+              Container(
+                padding: EdgeInsets.all(AppSpacing.space2),
+                decoration: BoxDecoration(
+                  color: colors.brandSubtle,
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: Icon(icon, color: colors.brand),
+              ),
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.bodyStrong.copyWith(
+                        color: colors.textPrimary,
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    Text(
+                      subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.caption.copyWith(
+                        color: colors.textSubtitle,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: AppSpacing.space4),
+              Icon(Icons.chevron_right, color: colors.textSubtitle),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget buildOpenWidget(
     String title,
     bool value,

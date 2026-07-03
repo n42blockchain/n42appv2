@@ -1,4 +1,5 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/home/setting/security/gesture_password_page.dart';
 import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page.dart';
 import 'package:n42_wallet/features/home/widgets/face_recognition_public.dart';
@@ -111,6 +112,31 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              buildSectionTitle('Account Security'),
+              Container(
+                margin: EdgeInsets.only(
+                  top: AppSpacing.space4,
+                  bottom: AppSpacing.space8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColorTokens.of(context).bgSurface,
+                  borderRadius: AppRadius.brMd,
+                ),
+                child: buildNavigationWidget(
+                  title: 'Change Email',
+                  subtitle:
+                      AppGlobals.currentUserEmail ?? 'Update account email',
+                  icon: Icons.mail_outline,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ChangeEmailPage(),
+                      ),
+                    );
+                  },
+                ),
+              ),
               // ── 转账验证区块 ──────────────────────────────────────
               Container(
                 height: ScreenUtil().setWidth(60.0),

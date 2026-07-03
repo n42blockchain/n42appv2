@@ -125,8 +125,9 @@ class WeChatMessageMenu extends StatelessWidget {
       left = screenWidth - menuWidth - 12;
     }
     if (left < 12) left = 12;
-    if (left + menuWidth > screenWidth - 12)
+    if (left + menuWidth > screenWidth - 12) {
       left = screenWidth - menuWidth - 12;
+    }
     return left;
   }
 
