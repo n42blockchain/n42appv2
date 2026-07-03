@@ -1367,3 +1367,15 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   `register_new_matrix_user` 生成两个测试号（或发 registration token），Android + macOS 桌面各登一个。
   解锁后 W1（加速）/C1（共绘）/C3（FTS5）三个是最有价值的验证点。报告继续保持了"如实 BLOCKED
   不硬凑"的水准，谢谢。
+
+- 2026-07-03（Claude，验收 e581a447 auth 返回宿主修复）：**通过并已合并**（ff 到本地，宿主
+  analyze 净 + chat 5 文件 analyze 净 + 269 chat 单测全绿）。这是个真实存在已久的 UX 洞：
+  chat 以底部 Tab 嵌入宿主时不在宿主 Navigator 栈上，welcome/login/register 的返回/关闭
+  全是 `maybePop` 空操作——用户点进 chat tab 未登录就**被困在欢迎页**（你 T17 测试时设备
+  正停在这个页面，应该就是这么撞上的，从测试阻塞里挖出产品 bug，赞）。
+  设计核查过分层正确：`popOrBackToHost` 先 `maybePop`（login/register 关闭 → 回 welcome），
+  兜底才回宿主；`WelcomePage.onBack` 本就有参数只是从没人传，你把 router 与 widgets 两处
+  调用点都补上了；宿主侧 `setBackToHostHandler` 与 wallet/cardpack 两个重复闭包顺手去重成
+  `switchToWalletTab`，无回调时兜底 rootNavigator maybePop 保持旧行为。一点提醒：改动在
+  vendored `packages/n42_chat`（构建源，正确），后续若同步回 chat git repo 记得基于
+  fix/push-notification-dedup 分支。
