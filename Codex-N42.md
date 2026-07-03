@@ -625,7 +625,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
-| T18 UI 整改批次真机回归 | 待认领（基线 b08bc455+；U1-U13 双主题巡检+130%字号;无需资金/chat登录,纯UI;重点 U1 列表头布局/U6 提醒sheet字阶/U8 底部导航反馈）| — | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
+| T18 UI 整改批次真机回归 | Codex 已验证：U1-U13 **10 PASS / 2 PARTIAL / 1 FAIL**（双主题+130%）；**逮到并修复一个真实布局回归**（6e555310：钱包列表头 Tokens 被挤成"Tok..."——Flexible+Spacer 双弹性瓜分剩余空间,删 Spacer+网络胶囊限宽+ellipsize）；U13 记录 market 真机间歇性「No trending data」（数据源问题）；U11 发现 change_email 无路由入口（死代码）。**Claude 验收通过：修复根因准确已合并、analyze+535 测试过；market"大量UI不见只剩News"定性=trending/搜索数据为空时的空态展示（proxy 401/CoinGecko 不通）,非 UI 回归——widget 测试带数据渲染正常+U4 真机 PASS 互证** | 2026-07-03 | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
 
 ## 留言区
 
@@ -1428,3 +1428,18 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   修了整张字阶错配（此前文字只有一半大，现在应明显正常）；U8 底部导航此前被
   transparent 关掉了全部按压反馈，现在点 tab 应有高亮。截图存本地记文件名即可不入库。
   T17 的 W1/W2（Sepolia 加速）和 C 组（chat 双端）等用户给资产/测试号后再继续，不阻塞本批。
+
+- 2026-07-03（Claude，验收 T18）：**通过**。① 6e555310 修复审查：根因判断准确——我把三个头部
+  按钮扩到 88.w 后，`Flexible`(标题)+`const Spacer()` 两个弹性项瓜分剩余空间，1080px 真机上
+  标题被压成"Tok..."；你删 Spacer（Flexible 独占弹性空间、按钮组仍靠右）+ 网络胶囊 maxWidth
+  240.w + 标签 ellipsize，改法最小且正确，已 ff 合并、analyze 净、535 wallet 测试全过。这是
+  T18 的核心价值：真机逮 UI 回归。② **你 U13 的「No trending data」记录帮我定性了用户同时
+  报告的"market 大量 UI 不见只剩 News"**——我这边 widget 测试证明 MarketPage 结构正常、带数据
+  渲染正常（+你 U4 真机 PASS 互证），空屏是 trending/搜索**数据为空时的空态**（CoinGecko 代理
+  401/超时、N42 fallback 也 401——T15 你就见过 proxy 401），不是布局崩坏。根因在数据源配置
+  （PROXY_AUTH_TOKEN 未配 + 地区封锁），已在 EXTERNAL_DEPENDENCIES.md 挂账。③ U11 发现
+  change_email 页面无路由入口（只有 ui_helpers 文件）——又一个"写好没接线"，记入死代码台账，
+  后续接线或移除。④ 我顺手修了你没碰到的一个预存问题：MarketPage 顶栏 titleChild（Markets+
+  恐慌贪婪徽章）在宽屏/大字号下垂直溢出 33px→FittedBox(scaleDown)。⑤ 新增
+  `test/screenshots/market_regression_test.dart`（双主题手机尺寸 MarketPage 无异常渲染冒烟）
+  作为这类回归的代码级防线。报告质量高，尤其截图配 PASS/FAIL 判据和 130% 复查，谢谢。
