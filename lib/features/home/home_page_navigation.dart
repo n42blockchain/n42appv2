@@ -27,12 +27,17 @@ extension on _HomePageState {
       labelType: NavigationRailLabelType.all,
       leading: InkWell(
         onTap: () => _scaffoldKey.currentState?.openDrawer(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Image.asset(
-            "assets/img/menu.png",
-            width: 24,
-            color: selectedColor,
+        customBorder: const CircleBorder(),
+        child: SizedBox(
+          // 48dp 命中区（§5 触控红线），图标视觉 24 不变
+          width: 48,
+          height: 48,
+          child: Center(
+            child: Image.asset(
+              "assets/img/menu.png",
+              width: 24,
+              color: selectedColor,
+            ),
           ),
         ),
       ),
@@ -256,14 +261,12 @@ extension on _HomePageState {
     final width = MediaQuery.of(context).size.width / pagesLength;
     final iSize = fixedIconSize ?? ScreenUtil().setWidth(40.0);
     final fSize = fixedFontSize ?? ScreenUtil().setSp(20.0);
-    final unselectedColor = AppColorTokens.of(
-      context,
-    ).textPrimary.withAlpha(100);
+    final unselectedColor = AppColorTokens.of(context).textTertiary;
 
+    // 底部导航是全 App 最高频交互——恢复按压反馈（§5 红线，此前被 transparent 关闭）
     return InkWell(
       onTap: _navigateToChat,
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+      highlightColor: AppColorTokens.of(context).brand.withValues(alpha: 0.08),
       child: SizedBox(
         key: key,
         width: width,
@@ -317,17 +320,14 @@ extension on _HomePageState {
     final isSelected = currentIndex == index;
 
     final selectedColor = AppColorTokens.of(context).brand;
-    final unselectedColor = AppColorTokens.of(
-      context,
-    ).textPrimary.withAlpha(100);
+    final unselectedColor = AppColorTokens.of(context).textTertiary;
 
     return InkWell(
       onTap: () {
         if (index == currentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;
       },
-      splashColor: Colors.transparent,
-      highlightColor: Colors.transparent,
+      highlightColor: AppColorTokens.of(context).brand.withValues(alpha: 0.08),
       child: SizedBox(
         key: key,
         width: width,

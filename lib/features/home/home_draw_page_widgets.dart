@@ -48,29 +48,34 @@ extension on _HomeDrawPageState {
         children: [
           Row(
             children: [
-              GestureDetector(
-                onTap: _openChat,
-                child: Container(
-                  width: ScreenUtil().setWidth(72),
-                  height: ScreenUtil().setWidth(72),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                      ScreenUtil().setWidth(36),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColorTokens.of(
-                          context,
-                        ).brand.withValues(alpha: 0.2),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
+              Material(
+                color: Colors.transparent,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: _openChat,
+                  child: Container(
+                    width: ScreenUtil().setWidth(88),
+                    height: ScreenUtil().setWidth(88),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                        ScreenUtil().setWidth(36),
                       ),
-                    ],
-                  ),
-                  clipBehavior: Clip.hardEdge,
-                  child: ImageNetWork(
-                    imageUrl: displayAvatar,
-                    placeholder: "assets/img/person_def_1.png",
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColorTokens.of(
+                            context,
+                          ).brand.withValues(alpha: 0.2),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    clipBehavior: Clip.hardEdge,
+                    child: ImageNetWork(
+                      imageUrl: displayAvatar,
+                      placeholder: "assets/img/person_def_1.png",
+                    ),
                   ),
                 ),
               ),
@@ -138,38 +143,44 @@ extension on _HomeDrawPageState {
             ],
           ),
           SizedBox(height: AppSpacing.space4),
-          GestureDetector(
-            onTap: _openChat,
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-                vertical: AppSpacing.space4,
-              ),
-              decoration: BoxDecoration(
-                color: AppColorTokens.of(context).brand,
-                borderRadius: AppRadius.brLg,
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.person_add_rounded,
-                    size: ScreenUtil().setWidth(20),
-                    color: Colors.white,
-                  ),
-                  SizedBox(width: AppSpacing.space2),
-                  Flexible(
-                    child: Text(
-                      S.of(context).g_home_key9,
-                      style: AppTypography.caption.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: _openChat,
+              borderRadius: AppRadius.brXl,
+              child: Container(
+                // >=88.w（44dp 触控红线，§2.1 按钮标准）
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setWidth(88),
+                ),
+                alignment: Alignment.center,
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
+                decoration: BoxDecoration(
+                  color: AppColorTokens.of(context).brand,
+                  borderRadius: AppRadius.brXl,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.person_add_rounded,
+                      size: ScreenUtil().setWidth(20),
+                      color: Colors.white,
                     ),
-                  ),
-                ],
+                    SizedBox(width: AppSpacing.space2),
+                    Flexible(
+                      child: Text(
+                        S.of(context).g_home_key9,
+                        style: AppTypography.caption.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -216,10 +227,9 @@ extension on _HomeDrawPageState {
           },
           borderRadius: AppRadius.brMd,
           child: Container(
-            padding: EdgeInsets.symmetric(
-              vertical: AppSpacing.space4,
-              horizontal: AppSpacing.space4,
-            ),
+            constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+            alignment: Alignment.center,
             decoration: BoxDecoration(
               color: showWalletLogout
                   ? AppColorTokens.of(context).danger.withValues(alpha: 0.1)

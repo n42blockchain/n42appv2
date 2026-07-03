@@ -79,13 +79,12 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                   children: [
                     const Spacer(),
                     Container(
-                      width: ScreenUtil().setWidth(44),
-                      height: ScreenUtil().setWidth(44),
+                      // 88.w≈44dp（触控红线；此前 44.w 仅 22dp）
+                      width: ScreenUtil().setWidth(88),
+                      height: ScreenUtil().setWidth(88),
                       decoration: BoxDecoration(
                         color: AppColorTokens.of(context).bgSurface,
-                        borderRadius: BorderRadius.circular(
-                          ScreenUtil().setWidth(22),
-                        ),
+                        shape: BoxShape.circle,
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
@@ -225,10 +224,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
             horizontal: AppSpacing.space4,
             vertical: AppSpacing.space2,
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space4,
-            vertical: AppSpacing.space4,
-          ),
+          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(96)),
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+          alignment: Alignment.centerLeft,
           decoration: BoxDecoration(borderRadius: AppRadius.brMd),
           child: Row(
             children: [

@@ -60,13 +60,14 @@ Widget changeEmailResendRow({
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
     children: [
-      GestureDetector(
-        onTap: (countdown > 0 || loading) ? null : onTap,
+      // TextButton 自带 48dp 最小命中区 + 禁用态（§5 触控红线）
+      TextButton(
+        onPressed: (countdown > 0 || loading) ? null : onTap,
         child: Text(
           countdown > 0
               ? S.of(context).g_email_resend_countdown(countdown)
               : S.of(context).g_email_resend,
-          style: AppTypography.captionSm.copyWith(
+          style: AppTypography.caption.copyWith(
             color: countdown > 0 ? subColor : accentColor,
             fontWeight: FontWeight.w500,
           ),
@@ -84,15 +85,14 @@ Widget changeEmailPrimaryButton({
 }) {
   return SizedBox(
     width: double.infinity,
-    height: 50.h,
+    // 96.h≈48dp（§2.1 Primary 标准高，44dp 触控红线）
+    height: 96.h,
     child: ElevatedButton(
       onPressed: loading ? null : onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: accentColor,
         foregroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12.r),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brXl),
       ),
       child: loading
           ? SizedBox(
@@ -103,12 +103,7 @@ Widget changeEmailPrimaryButton({
                 strokeWidth: 2,
               ),
             )
-          : Text(
-              label,
-              style: AppTypography.captionSm.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+          : Text(label, style: AppTypography.bodyStrong),
     ),
   );
 }

@@ -53,14 +53,16 @@ extension on _PersonalSettingState {
               Expanded(
                 child: Text(userInfo?.inviteCode ?? '', style: _subtitleStyle),
               ),
-              GestureDetector(
-                onTap: () {
+              // IconButton 默认 48dp 命中区（§5 触控红线；此前 16dp 且嵌套热区冲突）
+              IconButton(
+                onPressed: () {
                   Clipboard.setData(
                     ClipboardData(text: userInfo?.inviteCode ?? ''),
                   );
                   ToastUtils.showSuccess(S.of(context).copy);
                 },
-                child: Icon(
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
                   Icons.copy,
                   color: _blueColor,
                   size: ScreenUtil().setSp(32.0),
