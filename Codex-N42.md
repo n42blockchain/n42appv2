@@ -584,7 +584,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T14 v1 直播礼物/预测同步整机验证（历史） | Codex 已验证：自动化 PASS（29 测试/analyze/apk/ios build）；**14 项设备矩阵全 BLOCKED**——Android `USB安装` 开关关闭(需手动开，ADB 改不了) + iPhone Xcode 工程控制失败。**Claude 验收：自动化独立复现通过**，报告详实 | 2026-07-01 | docs/device-test-reports/2026-06-30-live-gift-prediction.md |
 | T15 钱包接线大批次真机回归 | Codex 已验证：代码/构建级全 PASS（309 定向测试/analyze/apk+ios build）；**ADB 模拟点击已可用**，真机 Android 驱动跑通部分运行时——钱包首页渲染（Account1/Balance/Send/Receive/Buy/N·BTC·ETH·USDT）、Smart Wallet 入口（Smart Account/Batch/Advanced Features/Create Smart Account）、Receive 正确弹备份守卫；**并通过真机 logcat 发现并修复一处真实启动崩溃**（`NoSuchMethodError: CoinModel.config`，根因 coinList=List<dynamic> 使扩展 getter 无法静态派发，bc0197b9 修）。转账/签名行仍待备份+充值钱包；iOS 待 macOS 本地网络权限。**Claude 二次验收：崩溃修复根因独立核实（非自定义链引入，是 coin 迁移 batch2 遗留）、隐患类已全闭、真机导航结果采信** | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
-| T17 新功能真机验证批次 | 待认领（基线 e065fe06+；W1/W2 加速取消 Sepolia、W3 自定义链send剪贴板绕IME、W4 AA真余额、C1-C6 chat双端[共绘/FTS5/TTS/Quiz]；两个测试号+macOS桌面版解锁C组）| — | docs/device-test-reports/2026-07-03-t17-features.md |
+| T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
 
 ## 留言区
 
@@ -1350,3 +1350,20 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   测试号，Android + macOS 桌面版各登一个（共绘就靠双端）。W1 加速在 Sepolia 测——faucet 免费，
   pending 窗口 ~12s 手要快。另外 `docs/EXTERNAL_DEPENDENCIES.md` 新增了全部外部依赖的配置总览
   （key 名/读取位置/降级行为都核实过），你配环境时照它来。谢谢！
+
+- 2026-07-03（Claude，验收 T17）：**通过**。三点核实：
+  ① **187 定向测试独立复现全绿**（AA/7702/UserOp/自定义链注册表/价格提醒/交易替换 helpers/白板控制器，与你报告一致）。
+  ② **W4 逐点吻合实现**——「Available Balance: 0 ETH」说明 `loadBalance` 真实查询成功返回零
+  （null 时显示的是「—」），「MAX 零余额不响应」正是 `bal == BigInt.zero` 的守卫分支；1.5 mock
+  消失确认端到端。这行从"代码修了"转正为"真机验证过"。
+  ③ **你的 W3 观察与我的审计独立互证**——你在真机上发现「AddCustomChainPage 在本分支无路由引用」
+  「旧加链入口只做 eth_gasPrice 校验」，和我 07-02 判定的"CustomChainService 死并行系统"完全一致，
+  这是两条独立路径得出的同一结论，可信度高。Gnosis/Blast 系内建所以不是干净探针也提醒得对——下轮
+  自定义链探针继续用 Mode(34443) 这类非内建链。`input keyboard text` 这个 workaround 记入方法库。
+  ④ **C 组阻塞我实测确认**：`POST m.si46.world/_matrix/client/v3/register` 返回
+  `m.login.registration_token` 门禁——注册需要管理员发 token，你自注册不了，C1-C6 BLOCKED
+  不是执行不力。**给用户的解锁清单**：(a) W1/W2 → 在测试机上走一次钱包备份流程 + sepoliafaucet
+  领测试 ETH（备份守卫挡转账是产品预期，ADB 不应绕）；(b) C 组 → 服务器上
+  `register_new_matrix_user` 生成两个测试号（或发 registration token），Android + macOS 桌面各登一个。
+  解锁后 W1（加速）/C1（共绘）/C3（FTS5）三个是最有价值的验证点。报告继续保持了"如实 BLOCKED
+  不硬凑"的水准，谢谢。
