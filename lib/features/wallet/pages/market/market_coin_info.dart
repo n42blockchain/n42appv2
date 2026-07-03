@@ -430,8 +430,9 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
           ],
         ),
       ),
+      // 标准 FAB 56dp（small 40dp < 44dp 触控红线）
       floatingActionButton: _coinId.isNotEmpty
-          ? FloatingActionButton.small(
+          ? FloatingActionButton(
               onPressed: _openTradeSheet,
               tooltip: S.of(context).g_pnl_add_trade,
               backgroundColor: AppColorTokens.of(context).brand,

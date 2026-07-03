@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/market/market_price_format_utils.dart';
-import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 // ─── period selector constants ─────────────────────────────────────────────
@@ -40,10 +39,8 @@ String fmtQty(double v) {
 }
 
 /// Returns the theme color for a positive/negative percentage value.
-Color pctColor(double v, BuildContext ctx) => AppThemeUtils.getColorByKey(
-  ctx,
-  v >= 0 ? AppThemeKeys.rightTextColor.name : AppThemeKeys.errorTextColor.name,
-);
+Color pctColor(double v, BuildContext ctx) =>
+    v >= 0 ? AppColorTokens.of(ctx).success : AppColorTokens.of(ctx).danger;
 
 bool marketCoinMatchesSymbol(Map<String, dynamic> coin, String expectedSymbol) {
   return (coin['coin']?.toString().trim().toLowerCase() ?? '') ==

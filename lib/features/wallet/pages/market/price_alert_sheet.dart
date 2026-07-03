@@ -200,8 +200,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         S
                             .of(context)
                             .g_alert_title(widget.symbol.toUpperCase()),
-                        style: AppTypography.captionSm.copyWith(
-                          fontWeight: FontWeight.w600,
+                        style: AppTypography.headline.copyWith(
                           color: textColor,
                         ),
                       ),
@@ -211,7 +210,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           onPressed: _saving ? null : _delete,
                           child: Text(
                             S.of(context).g_alert_remove,
-                            style: AppTypography.captionSm.copyWith(
+                            style: AppTypography.caption.copyWith(
                               fontWeight: FontWeight.w400,
                               color: AppColorTokens.of(context).danger,
                             ),
@@ -228,7 +227,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                           .g_alert_current_price(
                             formatMarketPriceDisplay(widget.currentPrice),
                           ),
-                      style: AppTypography.captionSm.copyWith(
+                      style: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w400,
                         color: subColor,
                       ),
@@ -238,7 +237,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   Text(
                     S.of(context).g_alert_direction,
-                    style: AppTypography.captionSm.copyWith(
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w400,
                       color: subColor,
                     ),
@@ -269,7 +268,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   Text(
                     S.of(context).g_alert_target_price,
-                    style: AppTypography.captionSm.copyWith(
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w400,
                       color: subColor,
                     ),
@@ -285,18 +284,18 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         RegExp(r'^\d*\.?\d{0,8}'),
                       ),
                     ],
-                    style: AppTypography.captionSm.copyWith(
+                    style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: textColor,
                     ),
                     decoration: InputDecoration(
                       prefixText: '\$ ',
-                      prefixStyle: AppTypography.captionSm.copyWith(
+                      prefixStyle: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w400,
                         color: subColor,
                       ),
                       hintText: '0.00',
-                      hintStyle: AppTypography.captionSm.copyWith(
+                      hintStyle: AppTypography.caption.copyWith(
                         fontWeight: FontWeight.w400,
                         color: subColor,
                       ),
@@ -327,7 +326,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                         child: Text(
                           S.of(context).g_alert_enable,
                           overflow: TextOverflow.ellipsis,
-                          style: AppTypography.captionSm.copyWith(
+                          style: AppTypography.caption.copyWith(
                             fontWeight: FontWeight.w400,
                             color: textColor,
                           ),
@@ -346,14 +345,15 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
 
                   SizedBox(
                     width: double.infinity,
-                    height: 50.h,
+                    // 96.h≈48dp（§2.1 Primary 标准高，44dp 触控红线）
+                    height: 96.h,
                     child: ElevatedButton(
                       onPressed: _saving ? null : _save,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: accentColor,
                         foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.r),
+                          borderRadius: AppRadius.brXl,
                         ),
                       ),
                       child: _saving
@@ -369,9 +369,7 @@ class _PriceAlertSheetState extends State<_PriceAlertSheet> {
                               _existing != null
                                   ? S.of(context).g_alert_update
                                   : S.of(context).g_alert_set,
-                              style: AppTypography.captionSm.copyWith(
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: AppTypography.bodyStrong,
                             ),
                     ),
                   ),
@@ -401,26 +399,43 @@ class _DirectionChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 9.h),
-        decoration: BoxDecoration(
-          color: selected
-              ? accentColor.withAlpha(26)
-              : dividerColor.withAlpha(80),
-          border: Border.all(
-            color: selected ? accentColor : dividerColor,
-            width: selected ? 1.5 : 1,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.brSm,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          // >=88.h（44dp 触控红线）
+          constraints: BoxConstraints(minHeight: 88.h),
+          alignment: Alignment.center,
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
+          decoration: BoxDecoration(
+            color: selected
+                ? accentColor.withAlpha(26)
+                : dividerColor.withAlpha(80),
+            border: Border.all(
+              color: selected ? accentColor : dividerColor,
+              width: selected ? 1.5 : 1,
+            ),
+            borderRadius: AppRadius.brSm,
           ),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        child: Text(
-          label,
-          style: AppTypography.captionSm.copyWith(
-            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
-            color: selected ? accentColor : textColor.withAlpha(153),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (selected) ...[
+                // 选中态配图标——不靠颜色单独传达（§2.6）
+                Icon(Icons.check, size: 28.sp, color: accentColor),
+                SizedBox(width: AppSpacing.space2),
+              ],
+              Text(
+                label,
+                style: AppTypography.body.copyWith(
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  color: selected ? accentColor : textColor.withAlpha(153),
+                ),
+              ),
+            ],
           ),
         ),
       ),

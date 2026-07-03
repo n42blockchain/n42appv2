@@ -26,7 +26,8 @@ Widget buildCoinInfoHeader(
   final alertActive = alertConfig != null && alertConfig.enabled;
   final textColor = _tc(context, AppThemeKeys.mainTextColor.name);
   final iconSize = ScreenUtil().setWidth(44);
-  final touchSize = ScreenUtil().setWidth(80);
+  // >=88.w（44dp 触控红线）
+  final touchSize = ScreenUtil().setWidth(88);
 
   return SizedBox(
     height: ScreenUtil().setWidth(100),
@@ -36,6 +37,7 @@ Widget buildCoinInfoHeader(
         children: [
           InkWell(
             onTap: onBack,
+            customBorder: const CircleBorder(),
             child: SizedBox(
               width: touchSize,
               height: touchSize,
@@ -193,12 +195,12 @@ Widget buildPnlCard(
                 ),
               ),
               const Spacer(),
-              GestureDetector(
-                onTap: onAddTrade,
-                child: Icon(
+              IconButton(
+                onPressed: onAddTrade,
+                icon: Icon(
                   Icons.add_circle_outline,
                   color: accentColor,
-                  size: ScreenUtil().setSp(30),
+                  size: ScreenUtil().setSp(32),
                 ),
               ),
             ],
@@ -251,28 +253,36 @@ Widget buildPeriodSelector(
       children: List.generate(periodLabels.length, (i) {
         final selected = selectedIndex == i;
         return Expanded(
-          child: GestureDetector(
-            onTap: () => onChanged(i),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
-              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
-              decoration: BoxDecoration(
-                color: _tc(
-                  context,
-                  selected
-                      ? AppThemeKeys.mainButtonBgColor.name
-                      : AppThemeKeys.itemBgColor.name,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => onChanged(i),
+              borderRadius: AppRadius.brSm,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
+                // >=88.w 命中高（44dp 触控红线，高频交互）
+                constraints: BoxConstraints(
+                  minHeight: ScreenUtil().setWidth(88),
                 ),
-                borderRadius: AppRadius.brSm,
-              ),
-              child: Text(
-                periodLabels[i],
-                textAlign: TextAlign.center,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                  color: selected
-                      ? Colors.white
-                      : _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: _tc(
+                    context,
+                    selected
+                        ? AppThemeKeys.mainButtonBgColor.name
+                        : AppThemeKeys.itemBgColor.name,
+                  ),
+                  borderRadius: AppRadius.brSm,
+                ),
+                child: Text(
+                  periodLabels[i],
+                  textAlign: TextAlign.center,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    color: selected
+                        ? Colors.white
+                        : _tc(context, AppThemeKeys.itemSubtitleTextColor.name),
+                  ),
                 ),
               ),
             ),

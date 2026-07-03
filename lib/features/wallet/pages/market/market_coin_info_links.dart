@@ -88,7 +88,7 @@ Widget _buildLinkRow(
   return InkWell(
     onTap: () => openUrl(context, item.url),
     child: SizedBox(
-      height: ScreenUtil().setWidth(85),
+      height: ScreenUtil().setWidth(96),
       child: Row(
         children: [
           Image.asset(
@@ -100,7 +100,9 @@ Widget _buildLinkRow(
           Expanded(
             child: Text(
               item.label,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
           Icon(
@@ -123,7 +125,7 @@ Widget _buildBrowserRows(
   return Column(
     children: [
       SizedBox(
-        height: ScreenUtil().setWidth(85),
+        height: ScreenUtil().setWidth(96),
         child: Row(
           children: [
             Image.asset(
@@ -135,7 +137,9 @@ Widget _buildBrowserRows(
             Expanded(
               child: Text(
                 S.of(context).g_key_m_15,
-                style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
               ),
             ),
           ],
@@ -145,14 +149,16 @@ Widget _buildBrowserRows(
         (url) => InkWell(
           onTap: () => openUrl(context, url),
           child: SizedBox(
-            height: ScreenUtil().setWidth(85),
+            height: ScreenUtil().setWidth(96),
             child: Row(
               children: [
                 SizedBox(width: ScreenUtil().setWidth(70)),
                 Expanded(
                   child: Text(
                     url,
-                    style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),

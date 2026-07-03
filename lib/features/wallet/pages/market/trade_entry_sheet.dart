@@ -244,9 +244,10 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: accentColor,
                           foregroundColor: Colors.white,
-                          minimumSize: Size(68.w, 48.h),
+                          // 96.h≈48dp（44dp 触控红线）
+                          minimumSize: Size(160.w, 96.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.r),
+                            borderRadius: AppRadius.brXl,
                           ),
                           elevation: 0,
                         ),
@@ -261,9 +262,7 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
                               )
                             : Text(
                                 s.g_pnl_save,
-                                style: AppTypography.caption.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                style: AppTypography.bodyStrong,
                               ),
                       ),
                     ],

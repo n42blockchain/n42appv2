@@ -92,10 +92,13 @@ class _CoinTile extends StatelessWidget {
 
     return InkWell(
       onTap: onTap,
-      splashColor: Colors.transparent,
-      highlightColor: AppColorTokens.of(context).brand.withAlpha(8),
+      // 默认 splash + 可见 highlight（此前 splash 禁用 + 3% 高亮形同虚设）
+      highlightColor: AppColorTokens.of(context).brand.withValues(alpha: 0.08),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space4,
+        ),
         child: Row(
           children: [
             Container(
@@ -202,27 +205,26 @@ class _CoinTile extends StatelessWidget {
               SizedBox(width: 6.w),
             ],
             if (_coinId.isNotEmpty)
-              GestureDetector(
-                onTap: () => onSetAlert(context, coin),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w),
-                  child: Icon(
-                    alertActive
-                        ? Icons.notifications_active_rounded
-                        : Icons.notifications_none_rounded,
-                    color: alertActive
-                        ? AppColorTokens.of(context).brand
-                        : subColor,
-                    size: 26.sp,
-                  ),
+              // IconButton 默认 48dp 命中区（§5 触控红线）
+              IconButton(
+                onPressed: () => onSetAlert(context, coin),
+                visualDensity: VisualDensity.compact,
+                icon: Icon(
+                  alertActive
+                      ? Icons.notifications_active_rounded
+                      : Icons.notifications_none_rounded,
+                  color: alertActive
+                      ? AppColorTokens.of(context).brand
+                      : subColor,
+                  size: 26.sp,
                 ),
               ),
-            SizedBox(width: 2.w),
-            GestureDetector(
-              onTap: () => onToggleWatchlist(_symbol),
-              child: Icon(
+            IconButton(
+              onPressed: () => onToggleWatchlist(_symbol),
+              visualDensity: VisualDensity.compact,
+              icon: Icon(
                 inWatchlist ? Icons.star_rounded : Icons.star_outline_rounded,
-                color: inWatchlist ? const Color(0xFFFACC15) : subColor,
+                color: inWatchlist ? AppColorTokens.highlight : subColor,
                 size: 28.sp,
               ),
             ),

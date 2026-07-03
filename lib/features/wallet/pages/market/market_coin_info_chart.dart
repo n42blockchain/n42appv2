@@ -98,6 +98,8 @@ List<double> _fallbackPrices(Map<String, dynamic> coin) {
 Widget _noChartData(BuildContext context) => Center(
   child: Text(
     S.of(context).g_market_no_chart,
-    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textSubtitle),
+    style: AppTypography.caption.copyWith(
+      color: AppColorTokens.of(context).textSubtitle,
+    ),
   ),
 );
