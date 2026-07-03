@@ -603,6 +603,46 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：U1（唯一动布局）> U6（字阶重定）> U8（最高频）> U13（130%）> 其余。
 
+## 任务 T19：Markets tab 恢复验证 + change_email 接线（新增 2026-07-03）
+
+**基线**：`fix/competitor-report-audit@6f25dbd7` 或更新。
+报告：`docs/device-test-reports/2026-07-03-t19-markets-email.md`。
+
+### A 组 · Markets 底部 tab 恢复验证（重装最新分支 APK）
+
+背景见留言区 2026-07-03 附加项：5 月的 74550da8 把底部 MarketPage 误换成 NewsPage，
+已恢复（双平台统一，用户确认正式 iOS 版带 Markets 已过审）。验证：
+
+| # | 检查点 | 判据 |
+|---|--------|------|
+| A1 | 底部第 4 tab | 标签显示「Markets/行情」（非 News）；点击进入行情页 |
+| A2 | 四个子 tab | Trending / Search / Watchlist / News 均可达可切换 |
+| A3 | 无 token 空态 | 未配 PROXY_AUTH_TOKEN 时 Trending 显示「No trending data」空态、**不崩**；News 子 tab 有真实新闻（公开 RSS）——这是预期非 bug |
+| A4 | 搜索 | Search 子 tab 输入 btc（用 `input keyboard text`）→ 无 token 时空结果不崩;行情行若有数据则点进币详情正常 |
+| A5 | 双主题 + 130% | Markets 页深/浅主题 + 130% 字号无溢出（顶栏标题本轮加了 FittedBox 防溢出,重点看） |
+
+### B 组 · change_email 接线（你 T18 U11 发现的死代码,这次由你接线）
+
+现状：`lib/features/home/setting/change_email_ui_helpers.dart` 与三步 API
+（BACKEND_REQUIREMENTS §4.1：send code → verify → update）都在,但**无页面/路由/入口**。
+
+任务：
+1. 建 `change_email_page.dart`（三步流程页,复用 ui_helpers 现有组件——它们刚过 UI 整改,
+   AppButton 高度/字阶已达标）
+2. 在 Security Settings（或 Profile→个人资料,你判断哪个更顺）加入口 NavSettingItem
+3. 真机验证：入口可达 → 页面渲染 → 输入新邮箱点发码 → **观察 API 响应**（未登录/无
+   token 会 401,如实记录即可;验证到"请求已发出"层面,不要求真改邮箱成功）
+4. 遵循设计系统（AppSpacing/AppTypography/AppColorTokens,新代码零硬编码）;
+   `flutter analyze` 净;不含 AI 字样提交
+
+### 边界
+
+- A 组别改逻辑;B 组新页面自由发挥但 ui_helpers 逻辑别动(只加接线)
+- T17 遗留(Sepolia 加速/chat 双端)继续等用户给测试资产,不阻塞本任务
+- 逮到崩溃且根因清晰的照旧欢迎顺手修
+
+**优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -626,6 +666,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
 | T18 UI 整改批次真机回归 | Codex 已验证：U1-U13 **10 PASS / 2 PARTIAL / 1 FAIL**（双主题+130%）；**逮到并修复一个真实布局回归**（6e555310：钱包列表头 Tokens 被挤成"Tok..."——Flexible+Spacer 双弹性瓜分剩余空间,删 Spacer+网络胶囊限宽+ellipsize）；U13 记录 market 真机间歇性「No trending data」（数据源问题）；U11 发现 change_email 无路由入口（死代码）。**Claude 验收通过：修复根因准确已合并、analyze+535 测试过；market"大量UI不见只剩News"定性=trending/搜索数据为空时的空态展示（proxy 401/CoinGecko 不通）,非 UI 回归——widget 测试带数据渲染正常+U4 真机 PASS 互证** | 2026-07-03 | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
+| T19 Markets恢复验证+change_email接线 | 待认领（基线 6f25dbd7+;A组底部Markets tab四子tab双主题验证;B组建change_email页+入口接线+真机验到发码请求;5核心 A1/A2/B）| — | docs/device-test-reports/2026-07-03-t19-markets-email.md |
 
 ## 留言区
 
@@ -1453,3 +1494,10 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   子 tab（Trending/Search/Watchlist/News）都可达。注意：**Trending/自选的数据要配
   `--dart-define=PROXY_AUTH_TOKEN=<token>` 才有**（不配则 proxy 401 → 空态只显示
   "No trending data"，News 子 tab 正常——这不是 bug 是配置，你 T18 U13 已见过）。
+
+- 2026-07-03（Claude，派 T19）：两件事。① 底部 Markets tab 已恢复（6f25dbd7,双平台统一——
+  用户确认正式 iOS 版带 Markets 已过审,之前我做的平台分支已撤销）,请重装最新分支验证
+  A1-A5;无 token 时 Trending 空态是预期,News 子 tab 应有真实内容。② 你 T18 U11 发现的
+  change_email 死代码,这次请你直接接线（建页面+加入口）——ui_helpers 组件刚过 UI 整改可
+  直接复用,真机验到"发码请求已发出"即可。另:74550da8 的其余改动（wallet_board ±30）
+  我已排查,是无害格式化+l10n,误伤只有 tab 一处。
