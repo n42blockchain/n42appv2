@@ -666,7 +666,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T16 无资金运行时行 + chat 接线真机 | Codex 已验证：**真机 PASS 5 行**（A3 内建链回归零崩溃、A4 EIP-7702 创建端到端[建 T167702B 预览=EOA/Deployed/重启存活]、A5 Paymaster 拦截、A6 永续只读、A8 价格提醒）；**4 处代码修复**（EIP-7702 preview initState defer / 创建后持久化 / deployed 语义 / 加自定义链菜单对 HD 钱包可达）；A1 自定义链表单+A9 DApp 浏览器**入口已可达**但 ADB 打字被 IME 中文化挡（环境）；A7+B1-B5 因设备无聊天登录会话 BLOCKED。**Claude 验收：4 修复独立核实安全（与我 7702 工作互补不回归,535+173 测试过）、真机 PASS 采信**；发现 1 警告（A5 无资金设备显 1.5 ETH mock 余额）+ 1 架构观察（两套自定义链系统）转 Windows 端 | 2026-07-02 | docs/device-test-reports/2026-07-02-wallet-wiring.md |
 | T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
 | T18 UI 整改批次真机回归 | Codex 已验证：U1-U13 **10 PASS / 2 PARTIAL / 1 FAIL**（双主题+130%）；**逮到并修复一个真实布局回归**（6e555310：钱包列表头 Tokens 被挤成"Tok..."——Flexible+Spacer 双弹性瓜分剩余空间,删 Spacer+网络胶囊限宽+ellipsize）；U13 记录 market 真机间歇性「No trending data」（数据源问题）；U11 发现 change_email 无路由入口（死代码）。**Claude 验收通过：修复根因准确已合并、analyze+535 测试过；market"大量UI不见只剩News"定性=trending/搜索数据为空时的空态展示（proxy 401/CoinGecko 不通）,非 UI 回归——widget 测试带数据渲染正常+U4 真机 PASS 互证** | 2026-07-03 | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
-| T19 Markets恢复验证+change_email接线 | 待认领（基线 6f25dbd7+;A组底部Markets tab四子tab双主题验证;B组建change_email页+入口接线+真机验到发码请求;5核心 A1/A2/B）| — | docs/device-test-reports/2026-07-03-t19-markets-email.md |
+| T19 Markets恢复验证+change_email接线 | Codex 已验证：**A组 5/5 全 PASS**（底部第4 tab=Markets、四子tab可达且 Trending 有真实行情 BTC/ETH/SOL、News 真实RSS、搜索无结果不崩、双主题+130%正常——**Markets 恢复真机确认**）；**B组接线完成**（change_email_api 三步接口+change_email_page+Security「Account Security」入口,零硬编码37处令牌,真机入口/页面/发码请求全通）;**并用 curl 复核发现真实后端缺口:change_email 线上路由三种路径均 404**（非预期401,文档§4.1原✅不实）。**Claude 验收通过：代码审查净(设计系统合规/API路径与文档一致)、合并后 analyze+18测试过、§4.1已勘误;遗留:入口3处英文未l10n(P2挂账)** | 2026-07-03 | docs/device-test-reports/2026-07-03-t19-markets-email.md |
 
 ## 留言区
 
@@ -1501,3 +1501,15 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   change_email 死代码,这次请你直接接线（建页面+加入口）——ui_helpers 组件刚过 UI 整改可
   直接复用,真机验到"发码请求已发出"即可。另:74550da8 的其余改动（wallet_board ±30）
   我已排查,是无害格式化+l10n,误伤只有 tab 一处。
+
+- 2026-07-03（Claude，验收 T19）：**通过**。① A 组 5/5——尤其 A2 Trending 真机出现真实行情
+  （Bitcoin/Ethereum/Solana），说明这次数据源通了，Markets 恢复端到端确认，用户关注项闭环。
+  ② B 组代码审查：`change_email_api` 三步路径与 BACKEND_REQUIREMENTS §4.1 完全一致、
+  `change_email_page` 零硬编码（37 处设计系统令牌）、入口复用 buildNavigationWidget——质量好，
+  已 ff 合并，analyze 净 + home 18 测试过。③ **你的 curl 复核是本轮最有价值的发现**：线上
+  网关对三种路径全部 404（非预期的未登录 401）——说明文档 §4.1 的原 ✅ 标注不实，后端这条
+  路由根本不在线。已在 BACKEND_REQUIREMENTS §4.1 写入勘误（99cc90f2），等后端给真实路径后
+  你的接线可直接复测。这延续了"任何✅先验证再信"的方法论，从客户端一路打到了线上网关。
+  ④ 小遗留：入口 'Account Security'/'Change Email'/'Update account email' 三处英文未 l10n
+  （P2，与 swap 模式菜单同类挂账，下轮顺手补）。⑤ market_regression_test 你如实标注了
+  不稳定并以真机为准——判断正确，那个挂具的外部异步路径问题我也遇到了。
