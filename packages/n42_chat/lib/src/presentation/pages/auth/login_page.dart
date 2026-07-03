@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
         builder: (_) => BlocProvider.value(
           value: context.read<AuthBloc>(),
           child: ChatMainPage(
-            onBackToMain: () => Navigator.of(context).maybePop(),
+            onBackToMain: () => N42Chat.popOrBackToHost(context),
           ),
         ),
       ),
@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
         leading: IconButton(
           icon: Icon(AppIcons.close, color: textColor, size: 22),
           tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () => N42Chat.popOrBackToHost(context),
         ),
         title: Text(
           S.of(context)?.authLogin ?? 'Log In',
@@ -359,7 +359,11 @@ class _LoginPageState extends State<LoginPage> {
             S.of(context)?.authRegisterAccount ?? 'Sign Up',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 14, height: 1.3, color: AppColors.link),
+            style: const TextStyle(
+              fontSize: 14,
+              height: 1.3,
+              color: AppColors.link,
+            ),
           ),
         ),
         const Text('|', style: TextStyle(color: AppColors.textTertiary)),
@@ -369,7 +373,11 @@ class _LoginPageState extends State<LoginPage> {
             S.of(context)?.authForgotPassword ?? 'Forgot Password',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 14, height: 1.3, color: AppColors.link),
+            style: const TextStyle(
+              fontSize: 14,
+              height: 1.3,
+              color: AppColors.link,
+            ),
           ),
         ),
       ],
@@ -452,7 +460,11 @@ class _LoginPageState extends State<LoginPage> {
             '✓ ${S.of(context)?.authConnectedTo(state.homeserverInfo!.serverName) ?? 'Connected to ${state.homeserverInfo!.serverName}'}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 12, height: 1.3, color: AppColors.success),
+            style: const TextStyle(
+              fontSize: 12,
+              height: 1.3,
+              color: AppColors.success,
+            ),
           ),
         ],
       ],
@@ -631,7 +643,11 @@ class _LoginPageState extends State<LoginPage> {
             'Login with $_biometricTypeDescription',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 16, height: 1.3, fontWeight: FontWeight.w600),
+        style: const TextStyle(
+          fontSize: 16,
+          height: 1.3,
+          fontWeight: FontWeight.w600,
+        ),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
@@ -682,12 +698,12 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             TextSpan(
               text: S.of(context)?.authTermsOfService ?? 'Terms of Service',
-              style: TextStyle(
-                color: AppColors.link.withValues(alpha: 0.8),
-              ),
+              style: TextStyle(color: AppColors.link.withValues(alpha: 0.8)),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
+                  final url = Uri.parse(
+                    'https://www.n42.ai/static/terms_of_use.html',
+                  );
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   }
@@ -696,12 +712,12 @@ class _LoginPageState extends State<LoginPage> {
             TextSpan(text: S.of(context)?.authAnd ?? ' and '),
             TextSpan(
               text: S.of(context)?.authPrivacyPolicy ?? 'Privacy Policy',
-              style: TextStyle(
-                color: AppColors.link.withValues(alpha: 0.8),
-              ),
+              style: TextStyle(color: AppColors.link.withValues(alpha: 0.8)),
               recognizer: TapGestureRecognizer()
                 ..onTap = () async {
-                  final url = Uri.parse('https://www.n42.ai/static/terms_of_use.html');
+                  final url = Uri.parse(
+                    'https://www.n42.ai/static/terms_of_use.html',
+                  );
                   if (await canLaunchUrl(url)) {
                     await launchUrl(url, mode: LaunchMode.externalApplication);
                   }

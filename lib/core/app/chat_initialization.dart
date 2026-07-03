@@ -291,23 +291,20 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         syncHostWithChatAuthStatus(status, previousStatus: previousStatus);
       });
 
+      void switchToWalletTab() {
+        final ctx = AppGlobals.navigatorKey.currentContext;
+        if (ctx != null) {
+          Navigator.of(ctx).popUntil((r) => r.isFirst);
+        }
+        globalProviderContainer.read(homeTabIndexProvider.notifier).state = 0;
+      }
+
       // 宿主侧 Wallet / Card Pack 入口：chat ServicesPage 点击后
       // 弹回主 app 并切到 wallet tab（index 0）。卡包暂未实装，
       // 同样指向 wallet tab 作为最接近的入口。
-      N42Chat.setOpenWalletHandler(() {
-        final ctx = AppGlobals.navigatorKey.currentContext;
-        if (ctx != null) {
-          Navigator.of(ctx).popUntil((r) => r.isFirst);
-        }
-        globalProviderContainer.read(homeTabIndexProvider.notifier).state = 0;
-      });
-      N42Chat.setOpenCardPackHandler(() {
-        final ctx = AppGlobals.navigatorKey.currentContext;
-        if (ctx != null) {
-          Navigator.of(ctx).popUntil((r) => r.isFirst);
-        }
-        globalProviderContainer.read(homeTabIndexProvider.notifier).state = 0;
-      });
+      N42Chat.setBackToHostHandler(switchToWalletTab);
+      N42Chat.setOpenWalletHandler(switchToWalletTab);
+      N42Chat.setOpenCardPackHandler(switchToWalletTab);
       // 发现页「直播」入口 → 宿主的视频直播（复用 chat 的 Matrix 房间 +
       // 自部署 LiveKit）。未注册时发现页回退到语音房列表。
       N42Chat.setLiveEntryHandler((ctx) {

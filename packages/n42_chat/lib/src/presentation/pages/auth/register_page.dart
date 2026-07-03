@@ -105,7 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (_) => BlocProvider.value(
           value: context.read<AuthBloc>(),
           child: ChatMainPage(
-            onBackToMain: () => Navigator.of(context).maybePop(),
+            onBackToMain: () => N42Chat.popOrBackToHost(context),
           ),
         ),
       ),
@@ -177,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
             size: AppDimensions.iconSizeSmall,
           ),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () => N42Chat.popOrBackToHost(context),
         ),
         title: Text(
           S.of(context)?.authRegister ?? 'Sign Up',
@@ -351,7 +351,11 @@ class _RegisterPageState extends State<RegisterPage> {
             '✓ ${S.of(context)?.authConnectedTo(state.homeserverInfo!.serverName) ?? 'Connected to ${state.homeserverInfo!.serverName}'}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 12, height: 1.3, color: AppColors.success),
+            style: const TextStyle(
+              fontSize: 12,
+              height: 1.3,
+              color: AppColors.success,
+            ),
           ),
         ],
       ],
@@ -726,7 +730,11 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Invite Code (Built-in)',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14, height: 1.3, color: labelColor),
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.3,
+                    color: labelColor,
+                  ),
                 ),
               ),
               const Spacer(),
@@ -821,8 +829,7 @@ class _RegisterPageState extends State<RegisterPage> {
               style: TextStyle(fontSize: 13, color: textColor),
               children: [
                 TextSpan(
-                  text:
-                      S.of(context)?.authTermsOfService ?? 'Terms of Service',
+                  text: S.of(context)?.authTermsOfService ?? 'Terms of Service',
                   style: const TextStyle(color: AppColors.link),
                   recognizer: _termsRecognizer,
                 ),

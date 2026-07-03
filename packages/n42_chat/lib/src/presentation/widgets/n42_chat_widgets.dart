@@ -130,8 +130,7 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
                   if (state.isAuthenticated) {
                     return ChatMainPage(
                       onBackToMain: () {
-                        // 返回主应用 - 弹出整个 chat 路由（外层宿主导航栈）
-                        Navigator.of(context, rootNavigator: true).maybePop();
+                        N42Chat.requestBackToHost(context);
                       },
                     );
                   }
@@ -140,8 +139,10 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
                   return WelcomePage(
                     onLogin: () => _navigateToLogin(context),
                     onRegister: () => _navigateToRegister(context),
+                    onBack: () => N42Chat.requestBackToHost(context),
                     onTermsOfService: () => _launchUrl(
-                      N42Chat._config?.termsOfServiceUrl ?? 'https://www.n42.ai/static/terms_of_use.html',
+                      N42Chat._config?.termsOfServiceUrl ??
+                          'https://www.n42.ai/static/terms_of_use.html',
                     ),
                     onPrivacyPolicy: () => _launchUrl(
                       N42Chat._config?.privacyPolicyUrl ??
@@ -539,8 +540,10 @@ class _N42ProfileEntryWidgetState extends State<_N42ProfileEntryWidget> {
             return WelcomePage(
               onLogin: () => _navigateToLogin(context),
               onRegister: () => _navigateToRegister(context),
+              onBack: () => N42Chat.requestBackToHost(context),
               onTermsOfService: () => _launchUrl(
-                N42Chat._config?.termsOfServiceUrl ?? 'https://www.n42.ai/static/terms_of_use.html',
+                N42Chat._config?.termsOfServiceUrl ??
+                    'https://www.n42.ai/static/terms_of_use.html',
               ),
               onPrivacyPolicy: () => _launchUrl(
                 N42Chat._config?.privacyPolicyUrl ??

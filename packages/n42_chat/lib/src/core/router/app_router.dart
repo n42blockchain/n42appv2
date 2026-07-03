@@ -229,6 +229,9 @@ class N42ChatRouter {
       builder: (context, state) => WelcomePage(
         onLogin: () => context.push(Routes.login),
         onRegister: () => context.push(Routes.register),
+        onBack: () {
+          N42Chat.requestBackToHost(context);
+        },
       ),
     ),
 

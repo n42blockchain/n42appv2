@@ -100,6 +100,7 @@ class N42Chat {
   /// 宿主未注册时 ServicesPage 会降级为信息提示。
   static VoidCallback? _onOpenWallet;
   static VoidCallback? _onOpenCardPack;
+  static VoidCallback? _onBackToHost;
 
   /// 宿主"打开视频直播"回调（发现页「直播」触发）。
   /// 视频直播由宿主实现（复用 chat 的 Matrix 房间 + 自部署 LiveKit）；
@@ -329,6 +330,14 @@ class N42Chat {
     _onOpenCardPack = handler;
   }
 
+  /// 注册宿主侧"返回主应用"回调。
+  ///
+  /// 嵌入底部 Tab 时 chat 自身可能不在宿主 Navigator 栈上，普通
+  /// `maybePop` 无法离开 chat；宿主应在此切换到默认 Tab 或关闭 chat 容器。
+  static void setBackToHostHandler(VoidCallback? handler) {
+    _onBackToHost = handler;
+  }
+
   /// 注册宿主侧"打开视频直播"回调。
   /// 由发现页「直播」入口触发；宿主应 push 自己的视频直播页面。
   /// 未注册时发现页「直播」回退到语音房列表。
@@ -352,6 +361,34 @@ class N42Chat {
     if (cb == null) return false;
     cb();
     return true;
+  }
+
+  /// 内部/页面通用：返回宿主应用；没有宿主回调时退回根 Navigator。
+  static Future<bool> backToHostOrPop(BuildContext context) async {
+    final cb = _onBackToHost;
+    if (cb != null) {
+      cb();
+      return true;
+    }
+    return Navigator.of(context, rootNavigator: true).maybePop();
+  }
+
+  /// 同步 UI 回调包装：返回宿主应用。
+  static void requestBackToHost(BuildContext context) {
+    unawaited(backToHostOrPop(context));
+  }
+
+  /// 页面通用：先关闭当前 chat 内子页面；若当前页已是入口根，再返回宿主。
+  static Future<bool> maybePopOrBackToHost(BuildContext context) async {
+    final navigator = Navigator.of(context);
+    if (await navigator.maybePop()) return true;
+    if (!context.mounted) return false;
+    return backToHostOrPop(context);
+  }
+
+  /// 同步 UI 回调包装：先 pop 当前页，否则返回宿主应用。
+  static void popOrBackToHost(BuildContext context) {
+    unawaited(maybePopOrBackToHost(context));
   }
 
   /// 内部使用：发现页「直播」触发视频直播，若宿主未注册返回 false
