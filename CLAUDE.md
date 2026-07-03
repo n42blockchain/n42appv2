@@ -84,8 +84,12 @@ level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`
 - **`features/`** — Feature modules. Each typically has its own
   `data/`, `domain/`, `presentation/`, `provider/`, `pages/`:
   - `wallet/` — Core wallet: create/import, send/receive, token management,
-    transaction history, account abstraction (`aa/` with Passkey + social
-    recovery), lending (Aave V3), perpetuals (Hyperliquid), custom EVM chains.
+    transaction history (含 pending 交易加速/取消 replace-by-fee), account
+    abstraction (`aa/` with Passkey + social recovery), lending (Aave V3),
+    perpetuals (Hyperliquid), custom EVM chains。**自定义链注意**：真正可达的
+    加链路径是 `add_token/wallet_chain_add.dart`（`addWalletChain` 持久化进钱包
+    coinInfo）；`pages/network/` 下的 `CustomChainService`/`AddCustomChainPage`
+    是无导航入口的死并行系统（勿基于它做新功能，详见钱包竞品报告 §2.3 勘误）。
     Transfer is dispatched through `api/sender/sender_factory.dart` →
     `ChainSender` implementations keyed by `blockchainType` (EVM / BTC /
     Cosmos / Solana / TRON / Polkadot / Aptos / TON / NEAR / SUI / Ripple /
@@ -164,16 +168,22 @@ Features communicate through:
   `lib/` as of 2026-07) — has its own tests only.
 - `packages/webview_flutter_wkwebview/` — Custom WebView fork (path dependency).
 - `plugins/flutter_mining/` — Native mining plugin v1 (path dependency).
-- `packages/n42_chat/` — **Cache directory only**; the host actually resolves
-  `n42_chat` via the git ref in `pubspec.yaml`
-  (`github.com/n42blockchain/n42_chat`). Do not modify the cache.
+- `packages/n42_chat/` — **⚠️ vendored 构建源（2026-07 更正）**：
+  `pubspec_overrides.yaml` 把 `n42_chat` 覆盖为此本地路径，**实际编译的就是这份
+  副本**——改 chat 必须改这里才进构建；仅 bump `pubspec.yaml` 里的 git ref 无效。
+  同步回 n42_chat git repo 时基于 `fix/push-notification-dedup` 分支（非 main）。
+  审计 chat 现状也以此目录为准（git repo 的 commit 未必已同步进 vendored）。
 - `chrome-extension/` — Independent Chrome MV3 extension (React/TypeScript,
   `npm run build`); not part of the Flutter build.
 
 ### Backend
 
-- `backend/swap/` — Go-based swap monitoring service (Dockerfile, REST API);
-  independent subproject.
+- `backend/swap/` — 仓内唯一后端（Go/gin/PostgreSQL，Dockerfile 部署）：DEX 聚合
+  报价（1inch/Jupiter/Uniswap）、限价单存取（非托管架构**无执行引擎**——后端无私钥
+  不能代签）、交易确认监视、**价格预警**（2026-07 新增：CRUD + 60s CoinGecko 监控 +
+  webhook/轮询触达）。Env 清单见 `backend/swap/README.md`。App 调用的 `api.n42.ai`
+  外部七服务接口需求见 `docs/BACKEND_REQUIREMENTS.md`；全部外部 key/自建服务依赖
+  见 `docs/EXTERNAL_DEPENDENCIES.md`。
 
 ### Strong-Typed Views
 
@@ -193,6 +203,9 @@ Features communicate through:
 - Commit style: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`)
 - Pre-commit hook auto-bumps build number in `pubspec.yaml` (installed via `make setup`)
 - Push 到 Gitee 时可能触发邮箱隐藏拒绝错误，Push 失败时立即重写 commit author 信息
+- **跨机协作（Codex）**：`origin/codex-n42` 分支上的 `Codex-N42.md` 是任务书
+  （派发/认领/验收/留言）；Codex 的真机测试报告落在 `docs/device-test-reports/`。
+  push 前先 fetch——Codex 可能已推新提交，冲突时 rebase 到远端之上
 
 ## Key Conventions
 
@@ -201,6 +214,9 @@ Features communicate through:
 - Lint config: `package:flutter_lints/flutter.yaml` base
 - New features go under `lib/features/<feature>/` with parallel tests in `test/features/<feature>/`
 - Prefer Riverpod providers over GetIt for new code
+- **UI 一律走设计系统令牌**：`lib/core/design_system/`（AppColorTokens/AppTypography/
+  AppSpacing/AppRadius/AppMotion/AppStylePresets），规范见 `docs/DESIGN_SYSTEM.md`；
+  新/改 UI 不写硬编码色值/字号/间距/圆角；批量审查用 `/ui-review` skill
 
 ## Workflow Rules
 
