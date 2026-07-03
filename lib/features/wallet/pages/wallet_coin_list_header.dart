@@ -106,6 +106,7 @@ class _TopRow extends StatelessWidget {
         Flexible(
           child: Text(
             S.of(context).g_token_m_key_11,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: AppTypography.headline.copyWith(
               fontWeight: FontWeight.w600,
@@ -141,7 +142,6 @@ class _TopRow extends StatelessWidget {
             ),
           ),
         ),
-        const Spacer(),
         Material(
           color: Colors.transparent,
           child: InkWell(
@@ -188,7 +188,10 @@ class _TopRow extends StatelessWidget {
             onTap: onChangeNetwork,
             borderRadius: AppRadius.brPill,
             child: Container(
-              constraints: BoxConstraints(minHeight: su.setWidth(88)),
+              constraints: BoxConstraints(
+                minHeight: su.setWidth(88),
+                maxWidth: su.setWidth(240),
+              ),
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -198,11 +201,15 @@ class _TopRow extends StatelessWidget {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
-                    networkLabel,
-                    style: AppTypography.caption.copyWith(
-                      fontWeight: FontWeight.w500,
-                      color: blueColor,
+                  Flexible(
+                    child: Text(
+                      networkLabel,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTypography.caption.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: blueColor,
+                      ),
                     ),
                   ),
                   Icon(
