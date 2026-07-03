@@ -333,6 +333,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_home_key2": MessageLookupByLibrary.simpleMessage("News"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verification"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Invite a friend"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Markets"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Cancelled"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Check your network connection and try again",

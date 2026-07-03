@@ -274,6 +274,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_home_key2": MessageLookupByLibrary.simpleMessage("訊息"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("確認"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("邀請朋友"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("行情"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("已取消"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage("請檢查網路連線後重試"),
     "g_iap_failed": m4,

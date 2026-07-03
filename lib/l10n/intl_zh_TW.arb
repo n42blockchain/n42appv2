@@ -1436,6 +1436,7 @@
   "g_key_earn_best_apy": "最佳 APY",
   "g_key_nft_hide_spam": "隱藏垃圾",
   "g_key_nft_uncategorized": "其他",
+  "g_home_market": "行情",
   "g_key_wallet_tx_speedup": "加速",
   "g_key_wallet_tx_replace_submitted": "替換交易已提交",
   "g_key_wallet_tx_replace_hint": "將以相同 nonce、約高 20% 的 Gas 廣播一筆替換交易；僅在原交易仍處於 pending 時生效。"

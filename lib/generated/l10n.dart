@@ -11799,6 +11799,11 @@ class S {
     );
   }
 
+  /// `Markets`
+  String get g_home_market {
+    return Intl.message('Markets', name: 'g_home_market', desc: '', args: []);
+  }
+
   /// `Speed Up`
   String get g_key_wallet_tx_speedup {
     return Intl.message(

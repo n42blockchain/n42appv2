@@ -1447,6 +1447,7 @@
   "g_key_earn_best_apy": "Best APY",
   "g_key_nft_hide_spam": "Hide spam",
   "g_key_nft_uncategorized": "Others",
+  "g_home_market": "Markets",
   "g_key_wallet_tx_speedup": "Speed Up",
   "g_key_wallet_tx_replace_submitted": "Replacement transaction submitted",
   "g_key_wallet_tx_replace_hint": "A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending."

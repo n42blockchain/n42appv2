@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page.dart';
-import 'package:n42_wallet/features/news/news_page.dart';
+import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,7 +60,11 @@ class _HomePageState extends ConsumerState<HomePage>
       const WalletPage(),
       useV2 ? const MiningTodayV2() : const MiningHomePage(),
       if (Platform.isAndroid) const EarnPage(),
-      const NewsPage(),
+      // 行情页（四合一：热门/搜索/自选/新闻）。2026-05-14 曾被误换成纯
+      // NewsPage（提交名'restore news localization'却换掉了整页），导致
+      // 多内容行情从底部 tab 消失——2026-07-03 恢复。News 功能由页内
+      // News tab 覆盖。
+      const MarketPage(),
     ];
   }
 
