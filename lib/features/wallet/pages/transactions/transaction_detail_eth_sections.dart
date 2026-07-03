@@ -65,10 +65,69 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
           buildItemWidget(s.g_key_wallet_k58, trm.message ?? ""),
           divider,
           buildErrorMessageWidget(),
+          if (_canReplace) buildReplaceActions(),
           SizedBox(height: ScreenUtil().setWidth(140)),
         ],
       ),
     );
+  }
+
+  /// pending 交易的「加速 / 取消」操作区（replace-by-fee）。仅在 [_canReplace]
+  /// 为真（自己发出、无回执、已拿到链上原交易）时展示。
+  Widget buildReplaceActions() {
+    final s = S.of(context);
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: ScreenUtil().setWidth(30),
+        vertical: ScreenUtil().setWidth(20),
+      ),
+      child: Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: _replacing ? null : () => _confirmReplace(true),
+              child: Text(s.g_key_79),
+            ),
+          ),
+          SizedBox(width: ScreenUtil().setWidth(20)),
+          Expanded(
+            child: FilledButton(
+              onPressed: _replacing ? null : () => _confirmReplace(false),
+              child: _replacing
+                  ? SizedBox(
+                      width: ScreenUtil().setWidth(32),
+                      height: ScreenUtil().setWidth(32),
+                      child: const CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(s.g_key_wallet_tx_speedup),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 二次确认后再执行 replace-by-fee（提价 20% 广播覆盖交易）。
+  Future<void> _confirmReplace(bool isCancel) async {
+    final s = S.of(context);
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(isCancel ? s.g_key_79 : s.g_key_wallet_tx_speedup),
+        content: Text(s.g_key_wallet_tx_replace_hint),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(s.g_key_79),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text(s.g_key_191),
+          ),
+        ],
+      ),
+    );
+    if (ok == true) await _replaceTx(isCancel);
   }
 
   Widget buildSearchWidget() {

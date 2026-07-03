@@ -9,6 +9,8 @@ import 'package:n42_wallet/features/sqlite/app_database.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
@@ -212,6 +214,87 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         trm.from1.toLowerCase() ==
         (transactionInfo?['from'] ?? "").toString().toLowerCase();
     return true;
+  }
+
+  /// 该交易是否可被加速/取消：是自己发出的、仍在 pending（无回执）、且已从
+  /// 链上拿到原交易数据（含 nonce/gasPrice）。
+  bool get _canReplace =>
+      owner &&
+      transactionInfo != null &&
+      transactionInfoReceipt == null &&
+      (transactionInfo!['nonce'] != null);
+
+  bool _replacing = false;
+
+  /// 交易加速（isCancel=false）或取消（isCancel=true）——replace-by-fee：
+  /// 复用原交易 nonce，用提价 20% 的 gasPrice 广播一笔覆盖交易。
+  /// - 加速：重放原交易（原生带 value；合约带原始 calldata）。
+  /// - 取消：0 值自转，仅为占用同一 nonce 使原交易作废。
+  Future<void> _replaceTx(bool isCancel) async {
+    final info = transactionInfo;
+    if (info == null || _replacing) return;
+
+    final origNonce = hexToInt(info['nonce'] ?? '0x0');
+    final origGasPrice = hexToInt(info['gasPrice'] ?? '0x0');
+    // 覆盖交易的 gasPrice 必须高于原值矿工才会替换；提价 20%（RBF 常规下限约
+    // +10%，留足余量）。
+    final bumpedGasPrice = origGasPrice * BigInt.from(12) ~/ BigInt.from(10);
+
+    final cm = widget.coinModel;
+    final basePath =
+        cm.config.pathForAddrType(cm.addrType) ?? "m/44'/60'/0'/0/0";
+    final path = getPathWithIndex(basePath, cm.pathIndex);
+    final decimals = (cm.coin['decimals'] as num?)?.toInt() ?? 18;
+
+    final SendParams params;
+    if (isCancel) {
+      params = SendParams(
+        coinType: cm.config.coinType,
+        fromAddress: cm.address,
+        toAddress: cm.address,
+        amount: 0,
+        decimals: decimals,
+        path: path,
+        isTest: cm.isTest,
+        privateKey: cm.privateKey,
+        chainConfig: cm.coin,
+        nonceOverride: origNonce,
+        gasPriceOverride: bumpedGasPrice,
+      );
+    } else {
+      final input = (info['input'] as String?) ?? '0x';
+      final hasCalldata = input.length > 2 && input != '0x';
+      final origValue = hexToInt(info['value'] ?? '0x0');
+      params = SendParams(
+        coinType: cm.config.coinType,
+        fromAddress: cm.address,
+        toAddress: (info['to'] as String?) ?? cm.address,
+        amount: toEther(origValue.toString(), decimals).toDouble(),
+        decimals: decimals,
+        path: path,
+        isTest: cm.isTest,
+        privateKey: cm.privateKey,
+        chainConfig: cm.coin,
+        calldata: hasCalldata ? input : null,
+        nonceOverride: origNonce,
+        gasPriceOverride: bumpedGasPrice,
+      );
+    }
+
+    setState(() => _replacing = true);
+    final result = await SenderFactory.instance
+        .getSender(cm.config.coinType)
+        .send(params);
+    if (!mounted) return;
+    setState(() => _replacing = false);
+    if (result.success) {
+      ToastUtils.show(S.of(context).g_key_wallet_tx_replace_submitted);
+      // 覆盖交易是新 hash，用它刷新详情。
+      searchEditingController.text = result.txHash ?? _txHash;
+      await init();
+    } else {
+      ToastUtils.show(result.error ?? S.of(context).g_key_191);
+    }
   }
 
   Future<void> getTransactionReceipt() async {

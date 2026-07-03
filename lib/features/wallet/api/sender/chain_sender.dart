@@ -30,6 +30,13 @@ class SendParams {
   // network round-trips (fee-rate API / UTXO fetch) that the UI already made.
   final int? btcFeeRate; // sat/byte; skips fee-rate API query
   final List<Map<String, dynamic>>? prebuiltUtxos; // skips UTXO fetch
+  // EVM 交易加速/取消（replace-by-fee）：复用某笔 pending 交易的 nonce，用更高
+  // gasPrice 广播一笔覆盖交易。[nonceOverride] 强制使用该 nonce（而非查询
+  // pending tag）；[gasPriceOverride] 是期望的 gasPrice 下限（EvmSender 取
+  // max(网络当前, 此值)，保证一定 ≥ 网络且 ≥ 原交易×提价系数）。均为 null 时
+  // 走原有查询逻辑，普通发送行为完全不变。
+  final BigInt? nonceOverride;
+  final BigInt? gasPriceOverride;
 
   const SendParams({
     required this.coinType,
@@ -52,6 +59,8 @@ class SendParams {
     this.nftQuantity,
     this.btcFeeRate,
     this.prebuiltUtxos,
+    this.nonceOverride,
+    this.gasPriceOverride,
   });
 }
 

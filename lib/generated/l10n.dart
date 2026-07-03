@@ -11798,6 +11798,36 @@ class S {
       args: [],
     );
   }
+
+  /// `Speed Up`
+  String get g_key_wallet_tx_speedup {
+    return Intl.message(
+      'Speed Up',
+      name: 'g_key_wallet_tx_speedup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Replacement transaction submitted`
+  String get g_key_wallet_tx_replace_submitted {
+    return Intl.message(
+      'Replacement transaction submitted',
+      name: 'g_key_wallet_tx_replace_submitted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending.`
+  String get g_key_wallet_tx_replace_hint {
+    return Intl.message(
+      'A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending.',
+      name: 'g_key_wallet_tx_replace_hint',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

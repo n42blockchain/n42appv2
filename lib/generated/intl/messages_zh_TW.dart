@@ -1532,6 +1532,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m5": m41,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("簽名錯誤"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage("管理錢包"),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "將以相同 nonce、約高 20% 的 Gas 廣播一筆替換交易；僅在原交易仍處於 pending 時生效。",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "替換交易已提交",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage("加速"),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "輸入以太坊地址（0x...）",
     ),

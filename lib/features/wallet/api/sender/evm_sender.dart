@@ -103,9 +103,15 @@ class EvmSender implements ChainSender {
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
 
     final baseFee = mmg.data as BigInt;
-    final gasPrice = get1559WithChainSymbol(coinType)
+    var gasPrice = get1559WithChainSymbol(coinType)
         ? baseFee * BigInt.from(2)
         : baseFee;
+    // 加速/取消：期望 gasPrice 下限。取 max(网络当前, 期望值)，既保证覆盖交易
+    // 一定 ≥ 网络当前（否则矿工不会替换），又保证 ≥ 原交易×提价系数。
+    if (params.gasPriceOverride != null &&
+        params.gasPriceOverride! > gasPrice) {
+      gasPrice = params.gasPriceOverride!;
+    }
 
     // Estimate gas
     final effectiveDecimals = isContract
@@ -177,6 +183,7 @@ class EvmSender implements ChainSender {
       message: params.memo,
       calldata: params.calldata,
       rpc: rpcOverride,
+      nonceOverride: params.nonceOverride,
     );
     if (signResult is SendResult) return signResult;
 
@@ -245,6 +252,7 @@ class EvmSender implements ChainSender {
     String? message,
     String? calldata,
     String? rpc,
+    BigInt? nonceOverride,
   }) async {
     final gasPriceHex = _dataUtils.bigIntToHex(gasPrice, need0x: false);
     final gasPrice2Hex = _dataUtils.bigIntToHex(gasPrice2, need0x: false);
@@ -258,15 +266,22 @@ class EvmSender implements ChainSender {
       need0x: false,
     );
 
-    // Get nonce
-    final mmn = await _tokenViewApi.getTransactionCountEth(
-      coinType,
-      fromAddress,
-      netMode: isTest ? 'test' : 'main',
-      rpc: rpc,
-    );
-    if (mmn.error) return SendResult.fail(mmn.data?.toString());
-    final nonceHex = _dataUtils.bigIntToHex(mmn.data, need0x: false);
+    // Get nonce — 加速/取消时强制复用 pending 交易的 nonce 以形成覆盖交易；
+    // 否则查询 pending tag。
+    final BigInt nonceBig;
+    if (nonceOverride != null) {
+      nonceBig = nonceOverride;
+    } else {
+      final mmn = await _tokenViewApi.getTransactionCountEth(
+        coinType,
+        fromAddress,
+        netMode: isTest ? 'test' : 'main',
+        rpc: rpc,
+      );
+      if (mmn.error) return SendResult.fail(mmn.data?.toString());
+      nonceBig = mmn.data as BigInt;
+    }
+    final nonceHex = _dataUtils.bigIntToHex(nonceBig, need0x: false);
 
     if (gasPrice == BigInt.zero) return SendResult.fail('Gas price error');
 

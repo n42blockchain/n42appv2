@@ -2136,6 +2136,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Manage Wallet",
     ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Replacement transaction submitted",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage("Speed Up"),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Enter Ethereum address (0x...)",
     ),
