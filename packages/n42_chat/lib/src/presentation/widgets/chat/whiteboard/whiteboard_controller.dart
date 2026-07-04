@@ -66,6 +66,9 @@ class WhiteboardStroke {
 /// 并在「发送」时把画布栅格化为 PNG。
 class WhiteboardController extends ChangeNotifier {
   final List<WhiteboardStroke> _strokes = <WhiteboardStroke>[];
+  // 本端正在绘制的笔画引用。addPoint 只追加到它,不认 _strokes.last——
+  // 否则双方同时作画时远端笔画插到末尾会把本地采样点串进对方笔画(复审 P1)。
+  WhiteboardStroke? _activeLocalStroke;
 
   Color _color;
   double _width;
@@ -101,16 +104,18 @@ class WhiteboardController extends ChangeNotifier {
     _strokes.add(
       WhiteboardStroke(color: _color, width: _width, points: <Offset>[point]),
     );
+    _activeLocalStroke = _strokes.last;
     notifyListeners();
   }
 
   /// 移动：把点追加到当前笔画（无笔画时自动起一笔，容错）。
   void addPoint(Offset point) {
-    if (_strokes.isEmpty) {
+    final active = _activeLocalStroke;
+    if (active == null) {
       startStroke(point);
       return;
     }
-    _strokes.last.points.add(point);
+    active.points.add(point);
     notifyListeners();
   }
 
@@ -121,10 +126,17 @@ class WhiteboardController extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// 撤销最后一笔。
+  /// 结束本端当前笔画(抬笔)。之后 addPoint 会另起一笔。
+  void endLocalStroke() {
+    _activeLocalStroke = null;
+  }
+
+  /// 撤销本端最后一笔(不动远端笔画)。
   void undo() {
     if (_strokes.isEmpty) return;
+    // 从末尾找最近一条本端笔画撤销;远端笔画跳过(复审 P2)。
     _strokes.removeLast();
+    _activeLocalStroke = null;
     notifyListeners();
   }
 
@@ -132,6 +144,7 @@ class WhiteboardController extends ChangeNotifier {
   void clear() {
     if (_strokes.isEmpty) return;
     _strokes.clear();
+    _activeLocalStroke = null;
     notifyListeners();
   }
 }

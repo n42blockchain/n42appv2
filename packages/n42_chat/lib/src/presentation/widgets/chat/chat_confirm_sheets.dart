@@ -115,6 +115,7 @@ class ChatMessageMenuSheet extends StatelessWidget {
   final VoidCallback? onReply;
   final VoidCallback? onForward;
   final VoidCallback? onDelete;
+  final VoidCallback? onSpeak;
 
   const ChatMessageMenuSheet({
     super.key,
@@ -123,6 +124,7 @@ class ChatMessageMenuSheet extends StatelessWidget {
     this.onReply,
     this.onForward,
     this.onDelete,
+    this.onSpeak,
   });
 
   @override
@@ -151,6 +153,13 @@ class ChatMessageMenuSheet extends StatelessWidget {
                 icon: Icons.copy,
                 title: S.of(context)?.chatCopy ?? 'Copy',
                 onTap: onCopy,
+              ),
+            if (message.type == MessageType.text && onSpeak != null)
+              _buildMenuItem(
+                context,
+                icon: Icons.volume_up,
+                title: S.of(context)?.chatReadAloud ?? 'Read Aloud',
+                onTap: onSpeak,
               ),
             _buildMenuItem(
               context,

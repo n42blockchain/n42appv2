@@ -100,6 +100,37 @@ void main() {
       );
     });
 
+    test('remote stroke mid-draw does not steal local sample points', () {
+      // 复审 P1:双方同时作画——本地落笔→远端整笔插入→本地继续移动,
+      // 本地点必须仍进本地笔画,不能串进远端笔画。
+      final c = WhiteboardController(color: const Color(0xFF222222));
+      c.startStroke(const Offset(0, 0));
+      c.addPoint(const Offset(1, 1));
+      // 远端一整笔到达(插到 _strokes 末尾)
+      c.addRemoteStroke(
+        WhiteboardStroke(
+          color: const Color(0xFF1E88E5),
+          width: 8,
+          points: const [Offset(9, 9), Offset(10, 10)],
+        ),
+      );
+      // 本地继续移动
+      c.addPoint(const Offset(2, 2));
+      // 本地笔画应有 3 点(0,0)(1,1)(2,2);远端笔画仍是 2 点
+      final local = c.strokes[0];
+      final remote = c.strokes[1];
+      expect(local.color, const Color(0xFF222222));
+      expect(local.points.length, 3);
+      expect(local.points.last, const Offset(2, 2));
+      expect(remote.color, const Color(0xFF1E88E5));
+      expect(remote.points.length, 2);
+      // 抬笔后再画另起一笔
+      c.endLocalStroke();
+      c.addPoint(const Offset(5, 5));
+      expect(c.strokes.length, 3);
+      expect(c.strokes.last.points.single, const Offset(5, 5));
+    });
+
     test('addRemoteStroke appends without touching local pen state', () {
       final c = WhiteboardController(color: const Color(0xFF222222));
       c.startStroke(const Offset(1, 1));

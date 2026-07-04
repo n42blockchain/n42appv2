@@ -14,6 +14,12 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
           Navigator.pop(ctx);
           _copyMessage(message);
         },
+        onSpeak: message.type == MessageType.text
+            ? () {
+                Navigator.pop(ctx);
+                _speakMessage(message);
+              }
+            : null,
         onReply: () {
           Navigator.pop(ctx);
           context.read<ChatBloc>().add(SetReplyTarget(message));

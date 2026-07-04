@@ -20,6 +20,11 @@ import '../../widgets/chat/whiteboard/whiteboard_controller.dart';
 /// `n42.whiteboard.stroke` 自定义 Matrix 事件广播（0-1 归一化坐标，跨设备
 /// 尺寸无关）；同时监听房间内其他成员的笔画/清空事件实时上板。双方在同一
 /// 会话打开白板即共绘（v1 不回放进入前的历史笔画）。
+///
+/// ⚠️ E2EE 房已知限制:每笔画=一条加密房间事件,会触发对端未读+1 与推送
+/// (服务端只见密文 m.room.encrypted,无法按自定义类型过滤推送——同实时字幕
+/// 的架构缺口)。当前缓解=收到远端笔画即回已读压未读;推送风暴的治本需改用
+/// to-device/EDU 传输,列入后续。建议 E2EE 群暂按小范围/测试使用。
 class WhiteboardPage extends StatefulWidget {
   /// 启用实时共绘的房间；null = 纯单人涂鸦。
   final String? roomId;
@@ -84,6 +89,14 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
     if (stroke == null) return;
     _controller.addRemoteStroke(stroke);
     setState(() => _peerStrokeCount++);
+    // E2EE 房里自定义笔画事件会计未读+推送(架构限制:服务端只见密文
+    // m.room.encrypted,无法按类型过滤;治本需 to-device/EDU 重构)。
+    // 缓解:双方都在白板页时,收到一笔即回已读压掉未读徽章。
+    unawaited(
+      _room
+          ?.setReadMarker(event.eventId, mRead: event.eventId)
+          .catchError((Object _) {}),
+    );
   }
 
   Size? _canvasSize() {
@@ -212,7 +225,10 @@ class _WhiteboardPageState extends State<WhiteboardPage> {
                 child: GestureDetector(
                   onPanStart: (d) => _controller.startStroke(d.localPosition),
                   onPanUpdate: (d) => _controller.addPoint(d.localPosition),
-                  onPanEnd: (_) => _broadcastLastStroke(),
+                  onPanEnd: (_) {
+                    _broadcastLastStroke();
+                    _controller.endLocalStroke();
+                  },
                   child: AnimatedBuilder(
                     animation: _controller,
                     builder: (context, _) => CustomPaint(

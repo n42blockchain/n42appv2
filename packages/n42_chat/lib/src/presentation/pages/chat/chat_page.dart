@@ -536,6 +536,8 @@ class _ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
+    // 离开聊天页停止朗读(TtsService 是进程级单例,否则跨页继续播)
+    unawaited(TtsService.instance.stop());
     _privacyPreferencesLoadVersion++;
 
     // 清除当前活跃房间

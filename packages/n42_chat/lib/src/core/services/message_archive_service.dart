@@ -57,8 +57,8 @@ class MessageArchiveService {
   MessageArchiveService({
     required ArchiveDatabase db,
     required MatrixClientManager clientManager,
-  })  : _db = db,
-        _clientManager = clientManager;
+  }) : _db = db,
+       _clientManager = clientManager;
 
   matrix.Client? get _client => _clientManager.client;
 
@@ -74,7 +74,9 @@ class MessageArchiveService {
 
     // 检查磁盘空间
     if (!await _hasSufficientDiskSpace()) {
-      debugLog('MessageArchiveService: Insufficient disk space, skipping archive');
+      debugLog(
+        'MessageArchiveService: Insufficient disk space, skipping archive',
+      );
       return ArchiveResult(
         roomId: roomId,
         archivedCount: 0,
@@ -103,89 +105,97 @@ class MessageArchiveService {
       );
     }
 
-    // 获取上次归档断点
-    final metadata = await _db.getMetadata(roomId);
-    final lastArchivedTs = metadata?.lastArchivedTs ?? 0;
-
-    // 获取 Timeline
+    // 获取 Timeline(用毕必须 cancelSubscriptions,否则每房间每会话
+    // 泄漏一份 sync 订阅——复审 P1)
     final timeline = await room.getTimeline();
+    try {
+      // 归档元数据(totalArchived 累计用;不再用 lastArchivedTs 做过滤)
+      final metadata = await _db.getMetadata(roomId);
 
-    // 拉取足够历史消息（如果需要）
-    // 尝试多轮拉取，最多 5 轮，每轮 batchSize 条
-    for (int round = 0; round < 5; round++) {
-      final before = timeline.events.length;
-      try {
-        await timeline.requestHistory(historyCount: batchSize);
-      } catch (e) {
-        debugLog('MessageArchiveService: requestHistory failed: $e');
-        break;
+      // 拉取足够历史消息（如果需要）
+      // 尝试多轮拉取，最多 5 轮，每轮 batchSize 条
+      for (int round = 0; round < 5; round++) {
+        final before = timeline.events.length;
+        try {
+          await timeline.requestHistory(historyCount: batchSize);
+        } catch (e) {
+          debugLog('MessageArchiveService: requestHistory failed: $e');
+          break;
+        }
+        final after = timeline.events.length;
+        if (after == before) break; // 没有更多历史
       }
-      final after = timeline.events.length;
-      if (after == before) break; // 没有更多历史
-    }
 
-    // 筛选需要归档的消息
-    final archivableEvents = timeline.events.where((e) {
-      if (!_isArchivableEvent(e)) return false;
-      // 只归档比断点更老的消息（避免重复）
-      final ts = e.originServerTs.millisecondsSinceEpoch;
-      if (lastArchivedTs > 0 && ts >= lastArchivedTs) return false;
-      return true;
-    }).toList();
+      // 筛选需要归档的消息。
+      // 注意:不做"只归档比断点更老"的时间过滤——那会让断点单调走向历史,
+      // 首轮归档之后的新消息永远进不了 FTS(接线复审 P0)。去重由
+      // insertMessages 的 insertOrIgnore 按 eventId 幂等保证。
+      final archivableEvents = timeline.events
+          .where(_isArchivableEvent)
+          .toList();
 
-    if (archivableEvents.isEmpty) {
+      if (archivableEvents.isEmpty) {
+        sw.stop();
+        return ArchiveResult(
+          roomId: roomId,
+          archivedCount: 0,
+          skippedCount: 0,
+          duration: sw.elapsed,
+        );
+      }
+
+      // 转换为 Drift Companion 对象
+      int skipped = 0;
+      final companions = <ArchivedMessagesCompanion>[];
+
+      for (final event in archivableEvents) {
+        try {
+          companions.add(_eventToCompanion(event, roomId));
+        } catch (e) {
+          skipped++;
+          debugLog(
+            'MessageArchiveService: Failed to convert event ${event.eventId}: $e',
+          );
+        }
+      }
+
+      // 批量写入
+      int totalInserted = 0;
+      for (int i = 0; i < companions.length; i += batchSize) {
+        final end = (i + batchSize).clamp(0, companions.length);
+        final batch = companions.sublist(i, end);
+        final inserted = await _db.insertMessages(batch);
+        totalInserted += inserted;
+      }
+
+      // 更新归档元数据
+      final oldestEvent = archivableEvents.last;
+      final newTotalArchived = (metadata?.totalArchived ?? 0) + totalInserted;
+      await _db.updateMetadata(
+        ArchiveMetadataCompanion(
+          roomId: Value(roomId),
+          lastArchivedEventId: Value(oldestEvent.eventId),
+          lastArchivedTs: Value(
+            oldestEvent.originServerTs.millisecondsSinceEpoch,
+          ),
+          totalArchived: Value(newTotalArchived),
+          lastArchiveTime: Value(DateTime.now()),
+        ),
+      );
+
       sw.stop();
-      return ArchiveResult(
+      final result = ArchiveResult(
         roomId: roomId,
-        archivedCount: 0,
-        skippedCount: 0,
+        archivedCount: totalInserted,
+        skippedCount: skipped,
         duration: sw.elapsed,
       );
+
+      debugLog('MessageArchiveService: $result');
+      return result;
+    } finally {
+      timeline.cancelSubscriptions();
     }
-
-    // 转换为 Drift Companion 对象
-    int skipped = 0;
-    final companions = <ArchivedMessagesCompanion>[];
-
-    for (final event in archivableEvents) {
-      try {
-        companions.add(_eventToCompanion(event, roomId));
-      } catch (e) {
-        skipped++;
-        debugLog('MessageArchiveService: Failed to convert event ${event.eventId}: $e');
-      }
-    }
-
-    // 批量写入
-    int totalInserted = 0;
-    for (int i = 0; i < companions.length; i += batchSize) {
-      final end = (i + batchSize).clamp(0, companions.length);
-      final batch = companions.sublist(i, end);
-      final inserted = await _db.insertMessages(batch);
-      totalInserted += inserted;
-    }
-
-    // 更新归档元数据
-    final oldestEvent = archivableEvents.last;
-    final newTotalArchived = (metadata?.totalArchived ?? 0) + totalInserted;
-    await _db.updateMetadata(ArchiveMetadataCompanion(
-      roomId: Value(roomId),
-      lastArchivedEventId: Value(oldestEvent.eventId),
-      lastArchivedTs: Value(oldestEvent.originServerTs.millisecondsSinceEpoch),
-      totalArchived: Value(newTotalArchived),
-      lastArchiveTime: Value(DateTime.now()),
-    ));
-
-    sw.stop();
-    final result = ArchiveResult(
-      roomId: roomId,
-      archivedCount: totalInserted,
-      skippedCount: skipped,
-      duration: sw.elapsed,
-    );
-
-    debugLog('MessageArchiveService: $result');
-    return result;
   }
 
   /// 查询归档消息（供 MessageRepositoryImpl 在 requestHistory 耗尽后回退调用）
@@ -242,10 +252,13 @@ class MessageArchiveService {
     final latestTs = entries
         .map((entry) => entry.originServerTs.value)
         .fold<int>(0, (maxTs, ts) => ts > maxTs ? ts : maxTs);
-    final latestEventId = entries.firstWhere(
-      (entry) => entry.originServerTs.value == latestTs,
-      orElse: () => entries.last,
-    ).eventId.value;
+    final latestEventId = entries
+        .firstWhere(
+          (entry) => entry.originServerTs.value == latestTs,
+          orElse: () => entries.last,
+        )
+        .eventId
+        .value;
 
     await _db.updateMetadata(
       ArchiveMetadataCompanion(
@@ -280,6 +293,12 @@ class MessageArchiveService {
       return false;
     }
 
+    // 仍处于密文态(密钥未达,body 为空)的事件不入库:eventId 是主键 +
+    // insertOrIgnore,提前入库会永久占位,之后解密成功也无法回填(复审 P1)。
+    if (event.type == matrix.EventTypes.Encrypted &&
+        (event.content['body'] == null)) {
+      return false;
+    }
     return event.type == matrix.EventTypes.Message ||
         event.type == matrix.EventTypes.Encrypted ||
         event.type == matrix.EventTypes.Sticker ||

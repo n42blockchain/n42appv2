@@ -194,13 +194,17 @@ class _ConversationListPageState extends State<ConversationListPage> {
       ),
     );
 
-    // 用 BlocProvider 包装提供链上通知 Bloc（用于铃铛 Badge）
-    final result = BlocProvider<OnChainNotificationBloc>(
-      create: (_) =>
-          getIt<OnChainNotificationBloc>()
-            ..add(const LoadOnChainNotifications()),
-      child: scaffold,
-    );
+    // 用 BlocProvider 包装提供链上通知 Bloc（用于铃铛 Badge）。
+    // pushProtocol 未配置的宿主不注册该 Bloc——无守卫会 getIt 抛错崩整页
+    // (复审 P1)。未注册时铃铛也一并隐藏(见 actions)。
+    final Widget result = getIt.isRegistered<OnChainNotificationBloc>()
+        ? BlocProvider<OnChainNotificationBloc>(
+            create: (_) =>
+                getIt<OnChainNotificationBloc>()
+                  ..add(const LoadOnChainNotifications()),
+            child: scaffold,
+          )
+        : scaffold;
 
     // 如果有 ContactBloc，用 BlocListener 包装来监听备注更新
     if (hasContactBloc) {
@@ -430,11 +434,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(
-            AppIcons.back,
-            color: context.textPrimary,
-            size: 20,
-          ),
+          icon: Icon(AppIcons.back, color: context.textPrimary, size: 20),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -447,71 +447,69 @@ class _ConversationListPageState extends State<ConversationListPage> {
           ),
         ),
         actions: [
-          // 链上通知铃铛（带未读 Badge）
-          BlocBuilder<OnChainNotificationBloc, OnChainNotificationState>(
-            builder: (context, notifState) {
-              final unread = notifState.unreadCount;
-              return Stack(
-                alignment: Alignment.center,
-                children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.notifications_outlined,
-                      color: context.textPrimary,
+          // 链上通知铃铛（带未读 Badge）。未注册(未配 pushProtocol)时隐藏。
+          if (getIt.isRegistered<OnChainNotificationBloc>())
+            BlocBuilder<OnChainNotificationBloc, OnChainNotificationState>(
+              builder: (context, notifState) {
+                final unread = notifState.unreadCount;
+                return Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.notifications_outlined,
+                        color: context.textPrimary,
+                      ),
+                      tooltip:
+                          S.of(context)?.onChainNotificationsTitle ??
+                          'Notifications',
+                      onPressed: () {
+                        final bloc = context.read<OnChainNotificationBloc>();
+                        Navigator.of(context).push(
+                          MaterialPageRoute<void>(
+                            builder: (_) =>
+                                BlocProvider<OnChainNotificationBloc>.value(
+                                  value: bloc,
+                                  child: const OnChainNotificationsPage(),
+                                ),
+                          ),
+                        );
+                      },
                     ),
-                    tooltip:
-                        S.of(context)?.onChainNotificationsTitle ??
-                        'Notifications',
-                    onPressed: () {
-                      final bloc = context.read<OnChainNotificationBloc>();
-                      Navigator.of(context).push(
-                        MaterialPageRoute<void>(
-                          builder: (_) =>
-                              BlocProvider<OnChainNotificationBloc>.value(
-                                value: bloc,
-                                child: const OnChainNotificationsPage(),
-                              ),
-                        ),
-                      );
-                    },
-                  ),
-                  if (unread > 0)
-                    Positioned(
-                      top: 8,
-                      right: 8,
-                      child: Container(
-                        padding: const EdgeInsets.all(2),
-                        constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
-                        ),
-                        decoration: const BoxDecoration(
-                          color: AppColors.error,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          unread > 99 ? '99+' : '$unread',
-                          maxLines: 1,
-                          overflow: TextOverflow.clip,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.captionSmall.copyWith(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
-                            height: 1.0,
+                    if (unread > 0)
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          decoration: const BoxDecoration(
+                            color: AppColors.error,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Text(
+                            unread > 99 ? '99+' : '$unread',
+                            maxLines: 1,
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.captionSmall.copyWith(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w600,
+                              height: 1.0,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                ],
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.add_circle_outline,
-              color: context.textPrimary,
+                  ],
+                );
+              },
             ),
+          IconButton(
+            icon: Icon(Icons.add_circle_outline, color: context.textPrimary),
             tooltip: S.of(context)?.commonAdd ?? 'New chat',
             onPressed: widget.onAddPressed ?? _showAddMenu,
           ),
@@ -532,36 +530,36 @@ class _ConversationListPageState extends State<ConversationListPage> {
         button: true,
         label: S.of(context)?.commonSearch ?? 'Search',
         child: GestureDetector(
-        onTap: widget.onSearchTap ?? _navigateToSearch,
-        child: Container(
-          height: AppDimensions.searchBarHeight + 4,
-          decoration: BoxDecoration(
-            color: AppColors.inputBgOf(isDark),
-            borderRadius: BorderRadius.circular(
-              (AppDimensions.searchBarHeight + 4) / 2,
-            ),
-            border: Border.all(
-              color: context.dividerColor.withValues(alpha: 0.6),
-              width: 0.5,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(AppIcons.search, size: 18, color: hintColor),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  S.of(context)?.commonSearch ?? 'Search',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.bodyMedium.copyWith(color: hintColor),
-                ),
+          onTap: widget.onSearchTap ?? _navigateToSearch,
+          child: Container(
+            height: AppDimensions.searchBarHeight + 4,
+            decoration: BoxDecoration(
+              color: AppColors.inputBgOf(isDark),
+              borderRadius: BorderRadius.circular(
+                (AppDimensions.searchBarHeight + 4) / 2,
               ),
-            ],
+              border: Border.all(
+                color: context.dividerColor.withValues(alpha: 0.6),
+                width: 0.5,
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(AppIcons.search, size: 18, color: hintColor),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    S.of(context)?.commonSearch ?? 'Search',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.bodyMedium.copyWith(color: hintColor),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
       ),
     );
   }
@@ -607,10 +605,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
           ),
           // 分隔
           SliverToBoxAdapter(
-            child: Container(
-              height: 8,
-              color: context.pageBackground,
-            ),
+            child: Container(height: 8, color: context.pageBackground),
           ),
         ],
 
@@ -733,9 +728,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: AppTextStyles.bodyLarge.copyWith(
-          color: context.textPrimary,
-        ),
+        style: AppTextStyles.bodyLarge.copyWith(color: context.textPrimary),
       ),
       onTap: onTap,
     );
@@ -946,12 +939,8 @@ class _ConversationListPageState extends State<ConversationListPage> {
     bool isDestructive = false,
     required VoidCallback onTap,
   }) {
-    final textColor = isDestructive
-        ? AppColors.error
-        : context.textPrimary;
-    final iconColor = isDestructive
-        ? AppColors.error
-        : context.textSecondary;
+    final textColor = isDestructive ? AppColors.error : context.textPrimary;
+    final iconColor = isDestructive ? AppColors.error : context.textSecondary;
 
     return ListTile(
       leading: Icon(icon, color: iconColor),

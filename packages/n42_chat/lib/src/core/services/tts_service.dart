@@ -33,10 +33,12 @@ class TtsService {
 
     final tts = FlutterTts();
     try {
+      // 仅 iOS 需要;macOS/Windows 未实现会抛 MissingPluginException——
+      // 不能因此放弃整个初始化(否则桌面端朗读永久静默,复审 P1)。
       await tts.setSharedInstance(true);
     } catch (e) {
-      debugLog('TtsService: Failed to initialize: $e');
-      return;
+      debugLog('TtsService: setSharedInstance unsupported (non-iOS): '
+          '$e — continuing');
     }
     _tts = tts;
 
