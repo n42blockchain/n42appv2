@@ -160,10 +160,20 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final bal = nativeBalance;
                       if (bal == null || bal == BigInt.zero) return;
-                      amountController.text = formatNativeBalance();
+                      // MAX 须预留 UserOp gas prefund——填满额会被 bundler
+                      // 以 AA21 didn't pay prefund 拒绝(接线复审 P1-5)。
+                      await estimateGas();
+                      final gasWei =
+                          (estimatedGas ?? BigInt.from(300000)) *
+                          (maxFeePerGas ?? BigInt.from(2000000000));
+                      // 1.5x 安全系数
+                      final reserve = gasWei * BigInt.from(3) ~/ BigInt.two;
+                      final usable = bal - reserve;
+                      if (usable <= BigInt.zero) return;
+                      amountController.text = formatWei(usable);
                       estimateGas();
                     },
                     child: Text(S.of(context).g_key_197),

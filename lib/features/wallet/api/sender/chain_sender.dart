@@ -37,6 +37,11 @@ class SendParams {
   // 走原有查询逻辑，普通发送行为完全不变。
   final BigInt? nonceOverride;
   final BigInt? gasPriceOverride;
+  // 1559 链的 tip(maxPriorityFeePerGas)下限:RBF 要求 feeCap 与 tipCap 同时
+  // ≥ 原值×1.1——只提 maxFee 不提 tip 会被节点拒 "replacement underpriced"。
+  final BigInt? tipOverride;
+  // 精确 wei 金额(绕过 double 的 15-16 位精度截断):非空时忽略 amount。
+  final BigInt? valueWeiOverride;
 
   const SendParams({
     required this.coinType,
@@ -61,6 +66,8 @@ class SendParams {
     this.prebuiltUtxos,
     this.nonceOverride,
     this.gasPriceOverride,
+    this.tipOverride,
+    this.valueWeiOverride,
   });
 }
 

@@ -1,4 +1,5 @@
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/home/setting/change_email_page.dart';
 import 'package:n42_wallet/features/home/setting/security/gesture_password_page.dart';
 import 'package:n42_wallet/features/home/setting/security/google_auth_setup_page.dart';
@@ -128,6 +129,11 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                       AppGlobals.currentUserEmail ?? 'Update account email',
                   icon: Icons.mail_outline,
                   onTap: () {
+                    // 未登录门禁:uuid/token 为空时后端请求必然无效
+                    if (AppGlobals.userInfo == null) {
+                      ToastUtils.show(S.of(context).g_key_error_12);
+                      return;
+                    }
                     Navigator.push(
                       context,
                       MaterialPageRoute(

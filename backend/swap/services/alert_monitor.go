@@ -18,7 +18,7 @@ import (
 // PriceAlertStore 是 AlertMonitor 对数据库层的最小依赖接口。
 type PriceAlertStore interface {
 	ListActivePriceAlerts() ([]*db.PriceAlert, error)
-	MarkPriceAlertTriggered(alertID, triggerPrice string) error
+	MarkPriceAlertTriggered(alertID, triggerPrice, expectTarget, expectDirection string) (bool, error)
 }
 
 // AlertNotifier 触发后的通知出口。默认 LogNotifier；配置 PUSH_WEBHOOK_URL 后
@@ -168,11 +168,17 @@ func (m *AlertMonitor) tick(ctx context.Context) {
 			continue
 		}
 		trigger := strconv.FormatFloat(price, 'f', -1, 64)
-		if err := m.store.MarkPriceAlertTriggered(a.AlertID, trigger); err != nil {
+		// 传本轮读到的 target/direction 快照做乐观并发——用户若已 upsert 新
+		// 目标价并复位 triggered,marked=false,不按旧目标误消费(复审 P1-4c)。
+		marked, err := m.store.MarkPriceAlertTriggered(
+			a.AlertID, trigger, a.TargetPrice, a.Direction)
+		if err != nil {
 			log.Printf("[alert-monitor] mark error alert=%s: %v", a.AlertID, err)
 			continue
 		}
-		m.notifier.NotifyPriceAlert(a, price)
+		if marked {
+			m.notifier.NotifyPriceAlert(a, price)
+		}
 	}
 }
 

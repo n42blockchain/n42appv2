@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -53,8 +54,15 @@ func (h *AlertHandler) Set(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, models.Fail("direction must be above|below"))
 		return
 	}
-	if price, err := strconv.ParseFloat(req.TargetPrice, 64); err != nil || price <= 0 {
+	if price, err := strconv.ParseFloat(req.TargetPrice, 64); err != nil ||
+		price <= 0 || math.IsNaN(price) || math.IsInf(price, 0) {
 		c.JSON(http.StatusBadRequest, models.Fail("invalid target_price"))
+		return
+	}
+	// 字段长度(对齐列宽 VARCHAR(64)/(32))——超长会在存库时报 500,提前拒为 400。
+	if len(req.UUID) > 64 || len(req.AlertID) > 64 || len(req.CoinGeckoID) > 64 ||
+		len(req.Symbol) > 32 {
+		c.JSON(http.StatusBadRequest, models.Fail("field too long"))
 		return
 	}
 
@@ -66,6 +74,11 @@ func (h *AlertHandler) Set(c *gin.Context) {
 		alertID, req.UUID, strings.ToUpper(req.Symbol), req.CoinGeckoID,
 		dir, req.TargetPrice, req.Enabled,
 	); err != nil {
+		// alert_id 被别的 uuid 占用 → 409(复审 P1-4a),其余 500。
+		if strings.Contains(err.Error(), "already owned") {
+			c.JSON(http.StatusConflict, models.Fail(err.Error()))
+			return
+		}
 		c.JSON(http.StatusInternalServerError, models.Fail("failed to save alert"))
 		return
 	}

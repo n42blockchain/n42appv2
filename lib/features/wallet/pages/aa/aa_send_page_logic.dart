@@ -48,6 +48,15 @@ mixin _AASendLogicMixin on State<AASendPage> {
     }
   }
 
+  /// 任意 wei 值的人类可读字符串（同 [formatNativeBalance] 规则）。
+  String formatWei(BigInt wei) {
+    final divisor = BigInt.from(10).pow(18);
+    final intPart = wei ~/ divisor;
+    final frac = wei.remainder(divisor).toString().padLeft(18, '0');
+    final frac6 = frac.substring(0, 6).replaceAll(RegExp(r'0+$'), '');
+    return frac6.isEmpty ? '$intPart' : '$intPart.$frac6';
+  }
+
   /// 余额的人类可读字符串（最多 6 位小数，去尾零）。未查到显示 '—'。
   String formatNativeBalance() {
     final bal = nativeBalance;

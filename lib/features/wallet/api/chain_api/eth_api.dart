@@ -196,7 +196,9 @@ class EthAPI {
   }) async {
     return _rpcWithHexParse(
       'eth_getTransactionCount',
-      [address, 'latest'],
+      // pending tag:连续发送时第二笔才能拿到 +1 的 nonce(latest 会拿到
+      // 相同 nonce 顶掉第一笔——接线复审 P1-6,与内建链后端路径对齐)
+      [address, 'pending'],
       coinType: coinType,
       isTest: isTest,
     );
@@ -264,17 +266,19 @@ class EthAPI {
   }) async {
     try {
       final String url;
-      if (coinType == null) {
-        final rpcUrl = rpc;
-        if (rpcUrl == null || rpcUrl.isEmpty) {
-          return Result.failure(
-            AppError.blockchain(
-              'ETH RPC URL is not configured',
-              code: 'ETH_NO_RPC_URL',
-            ),
-          );
-        }
+      final rpcUrl = rpc;
+      if (rpcUrl != null && rpcUrl.isNotEmpty) {
+        // 实例显式配置的 RPC 优先(自定义链直连)。此前 coinType 非空时
+        // 无条件走 getUrl2 查表,自定义 symbol 查不到返回空 URL——
+        // 自定义链发送在估 gas 一步必失败(接线复审 P0-3)。
         url = rpcUrl;
+      } else if (coinType == null) {
+        return Result.failure(
+          AppError.blockchain(
+            'ETH RPC URL is not configured',
+            code: 'ETH_NO_RPC_URL',
+          ),
+        );
       } else {
         url = RequestUrl().getUrl2(coinType, 'rpc', isTest: isTest);
       }

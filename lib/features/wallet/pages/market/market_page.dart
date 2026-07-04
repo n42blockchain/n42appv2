@@ -68,7 +68,6 @@ class _MarketPageState extends ConsumerState<MarketPage>
   int _alertsGeneration = 0;
 
   // Price alert polling timer
-  Timer? _alertCheckTimer;
 
   // Fear & Greed
   FearGreedData? _fearGreed;
@@ -85,7 +84,10 @@ class _MarketPageState extends ConsumerState<MarketPage>
     _loadTrending();
     _loadWatchlist();
     _loadAlerts();
-    _startAlertPolling();
+    // 价格提醒检查统一由 main.dart 全局 5 分钟循环负责——MarketPage 已
+    // 恢复为常驻底部 tab(IndexedStack),若此处再起同周期轮询会造成
+    // 行情请求翻倍 + 冷却读写竞态下同币重复弹通知(接线复审 P1)。
+    // 页内仅保留 _loadAlerts 供铃铛 UI 状态。
     _loadFearGreed();
     _loadNews();
   }
@@ -96,7 +98,6 @@ class _MarketPageState extends ConsumerState<MarketPage>
     _tabController.dispose();
     _searchCtrl.dispose();
     _debounce?.cancel();
-    _alertCheckTimer?.cancel();
     super.dispose();
   }
 
@@ -147,47 +148,6 @@ class _MarketPageState extends ConsumerState<MarketPage>
       }
     } catch (e) {
       AppLogger.w('MarketPage', 'failed to load alerts: $e');
-    }
-  }
-
-  void _startAlertPolling() {
-    // Immediate check + every 5 minutes while page is visible
-    _checkPriceAlerts();
-    _alertCheckTimer = Timer.periodic(
-      const Duration(minutes: 5),
-      (_) => _checkPriceAlerts(),
-    );
-  }
-
-  Future<void> _checkPriceAlerts() async {
-    try {
-      final configs = await CoinPriceAlertService.loadAll();
-      if (configs.isEmpty) return;
-
-      final enabledSymbols = configs.values
-          .where((c) => c.enabled)
-          .map((c) => c.symbol.toLowerCase())
-          .toSet();
-      if (enabledSymbols.isEmpty) return;
-
-      final resp = await MarketApi().getWalletCoinsInfo(
-        enabledSymbols.join(','),
-      );
-      if (resp['error'] != false) return;
-
-      final coins = extractMarketCoinItems(resp['data']);
-      if (coins.isEmpty) return;
-
-      final prices = <String, double>{};
-      for (final c in coins) {
-        final sym = c['coin']?.toString().toLowerCase() ?? '';
-        final price = _parsePrice(c['price']);
-        if (sym.isNotEmpty && price > 0) prices[sym] = price;
-      }
-
-      await CoinPriceAlertService.checkAndNotify(prices);
-    } catch (e) {
-      AppLogger.w('MarketPage', 'failed to check price alerts: $e');
     }
   }
 

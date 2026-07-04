@@ -122,7 +122,7 @@ extension _TransactionDetailEthSections on _TransactionDetailEthState {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text(s.g_key_191),
+            child: Text(s.g_key_78),
           ),
         ],
       ),

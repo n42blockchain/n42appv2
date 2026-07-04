@@ -340,7 +340,7 @@ func (d *DB) UpsertPriceAlert(
 	enabled bool,
 ) error {
 	now := time.Now().Unix()
-	_, err := d.db.Exec(`
+	res, err := d.db.Exec(`
 		INSERT INTO price_alerts
 		    (alert_id, user_uuid, symbol, coin_gecko_id, direction,
 		     target_price, enabled, triggered, created_at, updated_at)
@@ -359,7 +359,15 @@ func (d *DB) UpsertPriceAlert(
 		alertID, userUUID, symbol, coinGeckoID, direction,
 		targetPrice, enabled, now,
 	)
-	return err
+	if err != nil {
+		return err
+	}
+	// alert_id 全局唯一;若被别的 uuid 占用,ON CONFLICT 的 WHERE 不满足
+	// → 0 行受影响、err=nil。返回明确错误而非静默"成功"(复审 P1-4a)。
+	if n, _ := res.RowsAffected(); n == 0 {
+		return fmt.Errorf("alert_id already owned by another user")
+	}
+	return nil
 }
 
 // ListPriceAlerts 查询用户全部预警
@@ -399,14 +407,24 @@ func (d *DB) ListActivePriceAlerts() ([]*PriceAlert, error) {
 }
 
 // MarkPriceAlertTriggered 标记触发（记录触发时价格与时间）
-func (d *DB) MarkPriceAlertTriggered(alertID, triggerPrice string) error {
+func (d *DB) MarkPriceAlertTriggered(
+	alertID, triggerPrice, expectTarget, expectDirection string,
+) (bool, error) {
 	now := time.Now().Unix()
-	_, err := d.db.Exec(`
+	// 乐观并发:仅当行仍是 tick 读到的那份快照(同 target/direction)才标记,
+	// 否则说明用户刚 upsert 了新目标价并复位 triggered——不能按旧目标消费掉
+	// 新武装的预警(复审 P1-4c)。RowsAffected 决定是否通知。
+	res, err := d.db.Exec(`
 		UPDATE price_alerts
 		SET triggered=TRUE, trigger_price=$2, triggered_at=$3, updated_at=$3
-		WHERE alert_id=$1 AND NOT triggered`,
-		alertID, triggerPrice, now)
-	return err
+		WHERE alert_id=$1 AND NOT triggered
+		  AND target_price=$4 AND direction=$5`,
+		alertID, triggerPrice, now, expectTarget, expectDirection)
+	if err != nil {
+		return false, err
+	}
+	n, _ := res.RowsAffected()
+	return n > 0, nil
 }
 
 // ListTriggeredPriceAlertsSince App 前台轮询用：某用户 since 之后触发的预警

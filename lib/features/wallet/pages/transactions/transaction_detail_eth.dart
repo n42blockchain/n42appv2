@@ -210,9 +210,13 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         // intentional parse fallback: input may not contain valid transfer data
       }
     }
+    // owner 必须以"当前钱包地址==交易 from"判定——trm.from1 对入账交易
+    // 记录的是外部发送者,仅比对 from1 会把收款方向的 pending 也判成自己的,
+    // 加速/取消会用对方 nonce 签自己的交易(接线复审 P0-2)。
+    final txFrom = (transactionInfo?['from'] ?? "").toString().toLowerCase();
     owner =
-        trm.from1.toLowerCase() ==
-        (transactionInfo?['from'] ?? "").toString().toLowerCase();
+        trm.from1.toLowerCase() == txFrom &&
+        widget.coinModel.address.toLowerCase() == txFrom;
     return true;
   }
 
@@ -222,7 +226,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
       owner &&
       transactionInfo != null &&
       transactionInfoReceipt == null &&
-      (transactionInfo!['nonce'] != null);
+      (transactionInfo!['nonce'] != null) &&
+      // 合约创建交易(to=null)不支持加速——重放会把 initcode 发给自己地址
+      (transactionInfo!['to'] != null);
 
   bool _replacing = false;
 
@@ -239,12 +245,21 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     // 覆盖交易的 gasPrice 必须高于原值矿工才会替换；提价 20%（RBF 常规下限约
     // +10%，留足余量）。
     final bumpedGasPrice = origGasPrice * BigInt.from(12) ~/ BigInt.from(10);
+    // 1559 RBF 同时要求 tip ≥ 原值×1.1(只提 maxFee 会被拒 underpriced)。
+    final origTip = info['maxPriorityFeePerGas'] != null
+        ? hexToInt(info['maxPriorityFeePerGas'])
+        : null;
+    final bumpedTip = origTip != null
+        ? origTip * BigInt.from(12) ~/ BigInt.from(10)
+        : null;
 
     final cm = widget.coinModel;
     final basePath =
         cm.config.pathForAddrType(cm.addrType) ?? "m/44'/60'/0'/0/0";
     final path = getPathWithIndex(basePath, cm.pathIndex);
-    final decimals = (cm.coin['decimals'] as num?)?.toInt() ?? 18;
+    // 原生 value 一律按链原生 18 位精度(从 token 详情进入时 cm 是代币,
+    // 其 decimals 是代币精度——用它标度原生 value 会放大 double 截断)。
+    const decimals = 18;
 
     final SendParams params;
     if (isCancel) {
@@ -260,6 +275,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         chainConfig: cm.coin,
         nonceOverride: origNonce,
         gasPriceOverride: bumpedGasPrice,
+        tipOverride: bumpedTip,
       );
     } else {
       final input = (info['input'] as String?) ?? '0x';
@@ -278,6 +294,9 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
         calldata: hasCalldata ? input : null,
         nonceOverride: origNonce,
         gasPriceOverride: bumpedGasPrice,
+        tipOverride: bumpedTip,
+        // 精确 wei 透传:double 只有 ~15 位有效数字,18 位小数金额往返会漂移
+        valueWeiOverride: origValue,
       );
     }
 

@@ -45,7 +45,10 @@ class EvmSender implements ChainSender {
     final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
     final chainId = (baseInfo?['chainId'] as int?) ?? 1;
     final isContract = params.contractAddress.isNotEmpty;
-    final gas = getCoinGas(coinType, contract: isContract);
+    // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
+    // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。
+    final hasCalldata = (params.calldata ?? '').length > 2;
+    final gas = getCoinGas(coinType, contract: isContract || hasCalldata);
 
     // 自定义链（baseInfo.custom == true）：所有 EVM RPC 调用直连该链自己的
     // RPC，绕开只认内建 coinType 的 N42 后端。内建链 rpcOverride 恒为 null，
@@ -125,6 +128,10 @@ class EvmSender implements ChainSender {
       BigInt.from(gas),
       coinType,
       contract: params.contractAddress,
+      // 关键:raw calldata 必须参与估算——否则对合约地址的"无 data 裸估"
+      // 要么 revert 要么估出 21000,上链后 out-of-gas(接线复审 P0-1,
+      // 波及 DEX approve/swap、Aave、staking、DApp 签名与交易加速重放)。
+      data: params.calldata ?? '',
       isTest: params.isTest,
       rpc: rpcOverride,
     );
@@ -166,6 +173,22 @@ class EvmSender implements ChainSender {
       }
     }
 
+    // 精确 wei 覆盖(加速重放):原交易 value 直接透传,避免 double 往返
+    // 造成低位 wei 漂移(接线复审 P1-3)。
+    if (params.valueWeiOverride != null && !isContract) {
+      valuePrice = params.valueWeiOverride!;
+      if (totalGasPrice + valuePrice > chainBalance) {
+        return SendResult.fail(S.current.g_key_wallet_m5(coinType));
+      }
+    }
+    // 1559 tip 下限(RBF):tipCap 也须 ≥ 原值×1.1,取 max(网络, 期望)。
+    var effectiveTip = baseFee;
+    if (params.tipOverride != null && params.tipOverride! > effectiveTip) {
+      effectiveTip = params.tipOverride!;
+      // maxFee 不得低于 tip
+      if (gasPrice < effectiveTip) gasPrice = effectiveTip;
+    }
+
     // Sign and broadcast
     final signResult = await _sign(
       coinType: coinType,
@@ -174,7 +197,7 @@ class EvmSender implements ChainSender {
       toAddress: params.toAddress,
       valuePrice: valuePrice,
       gasPrice: gasPrice,
-      gasPrice2: baseFee,
+      gasPrice2: effectiveTip,
       gasLimit: gasLimit,
       chainId: chainId,
       contractAddress: params.contractAddress,
@@ -206,6 +229,12 @@ class EvmSender implements ChainSender {
     // （网络问题/端点不可用）静默回退到普通 RPC 广播，不因保护层故障阻断
     // 用户的正常交易。
     if (!params.isTest &&
+        // 加速/取消(nonceOverride)不得进私池:原交易在公共 mempool,私池
+        // 替换概率性失效且新 hash 公共 RPC 查不到(接线复审 P1-2);
+        // 自定义链(rpcOverride)必须直连其 RPC,chainId 恰为 1 时也不能
+        // 被劫持到主网 Flashbots(P2-7)。
+        params.nonceOverride == null &&
+        rpcOverride == null &&
         MevProtectionService.instance.isEnabled &&
         MevProtectionService.isAvailable(chainId) &&
         MevProtectionService.assessRisk(

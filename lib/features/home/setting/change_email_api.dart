@@ -75,6 +75,18 @@ class ChangeEmailApi {
         data: body,
         timeout: const Duration(seconds: 20),
       );
+      // userInfoHost 约定:HTTP 200 + {code:200,...} 信封。业务失败
+      // (验证码错/token失效等)是 200+code!=200——必须抛出,否则页面
+      // 会把失败当成功推进步骤、甚至把未生效的新邮箱写入本地。
+      if (response is Map && response['code'] != null) {
+        final bizCode = response['code'];
+        if (bizCode != 200 && bizCode != '200') {
+          final msg = (response['msg'] ?? response['message'] ?? 'code $bizCode')
+              .toString();
+          AppLogger.w('ChangeEmailApi', '$action business error: $msg');
+          throw Exception(msg);
+        }
+      }
       AppLogger.i('ChangeEmailApi', '$action request succeeded');
       return response;
     } catch (error) {

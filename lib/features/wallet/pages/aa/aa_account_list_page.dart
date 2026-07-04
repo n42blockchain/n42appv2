@@ -18,10 +18,14 @@ class AAAccountListPage extends StatefulWidget {
   final String walletAddress;
   final AAAccountInfo? accountInfo;
 
+  /// 创建成功后由宿主持久化(与 AAHomePage.onAccountCreated 同链)。
+  final Future<void> Function(SmartAccount account)? onAccountCreated;
+
   const AAAccountListPage({
     super.key,
     required this.walletAddress,
     this.accountInfo,
+    this.onAccountCreated,
   });
 
   @override
@@ -68,13 +72,23 @@ class _AAAccountListPageState extends State<AAAccountListPage> {
   }
 
   void _navigateToCreate() {
-    Navigator.push(
+    Navigator.push<SmartAccount>(
       context,
       MaterialPageRoute(
         builder: (context) =>
             AAAccountCreatePage(ownerAddress: widget.walletAddress),
       ),
-    ).then((_) {
+    ).then((account) async {
+      if (!mounted) return;
+      // 创建页 pop 返回的 SmartAccount 必须持久化——此前 (_) 直接丢弃,
+      // 从「我的账户→+」创建的账户提示成功后凭空消失(接线复审 P1-7)。
+      if (account != null) {
+        if (widget.onAccountCreated != null) {
+          await widget.onAccountCreated!(account);
+        } else {
+          widget.accountInfo?.addAccount(account);
+        }
+      }
       if (!mounted) return;
       setState(() {});
     });

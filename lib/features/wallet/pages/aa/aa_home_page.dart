@@ -123,6 +123,7 @@ class _AAHomePageState extends State<AAHomePage> {
       AAAccountListPage(
         walletAddress: widget.walletAddress,
         accountInfo: widget.accountInfo,
+        onAccountCreated: widget.onAccountCreated,
       ),
     );
   }
