@@ -643,6 +643,52 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T20：接线复审高危修复真机验证（新增 2026-07-03）
+
+**背景**：3 路并行深审 + 自查修了 7 P0 + 15 P1（commit 6cd06d0a 宿主+后端 / 5b037e9a chat）。
+其中改到**发送/签名核心路径**的几条单测覆盖不到、必须真机走一遍——尤其
+「EvmSender 估 gas 现在带 calldata」影响面覆盖所有合约交易（DEX/Aave/staking/DApp），
+是**回归风险最高的一条**：改对了则合约交易恢复正常，改错了则所有合约交易一起挂。
+
+**基线**：`fix/competitor-report-audit@5b037e9a` 或更新。报告：
+`docs/device-test-reports/2026-07-03-t20-wiring-review.md`。**优先跑不需要资金的回归项**，
+需资金的（Sepolia）有测试币再补。
+
+### A 组 · 合约交易回归（P0-1 影响面，最高优先——只验"不回归"）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | DEX approve（无需成交，只到弹签名/估 gas）| Earn→Swap 选一对 token→输入额度→触发 approve | **估 gas 成功、弹出签名确认**（不再因裸估 revert 而报错）；有测试币则真发 approve |
+| A2 | DApp eth_sendTransaction 估 gas | 内置浏览器连 DApp→触发一笔合约调用 | 估 gas 不报错、弹签名 sheet（token 输入被 IME 挡就记录到这层）|
+| A3 | 内建链**原生**转账零回归 | 普通 ETH/BSC 转账走一遍（有币则真发，无则到签名前）| gas 估算/金额/nonce 正常，与改动前一致 |
+
+### B 组 · 交易加速/取消（P0-2 owner 判定 + P1 tip/nonce/wei，Sepolia）
+
+| # | 场景 | 判据 |
+|---|------|------|
+| B1 | **收款方向 pending 交易不显示加速/取消** | 让测试机收一笔 pending 转入（或造一笔 from≠本钱包的 pending 记录）→ 进详情页 → **「加速/取消」按钮不出现**（P0-2 核心：此前会错误显示）|
+| B2 | 自己发出的 pending 显示加速/取消 | 自己发一笔 Sepolia 转账趁 pending 进详情 → 按钮出现 → 加速 → explorer 核对：nonce 与原一致、gasPrice≈原×1.2、**1559 链 tip 也提了**（不被拒 underpriced）|
+| B3 | 取消 | 同上点取消 → 0 值自转覆盖同 nonce |
+
+### C 组 · 其他复审修复（不需资金）
+
+| # | 场景 | 判据 |
+|---|------|------|
+| C1 | change_email 业务失败不误进 | 未登录点入口 → 提示登录不进页（P1 门禁）；登录态发码若后端 404/失败 → **停在当前步不推进、不写本地邮箱**（P0）|
+| C2 | Markets 提醒不重复 | 后台放置 App，观察价格提醒到价 → 同一提醒**只弹一次**（此前 MarketPage+main.dart 双轮询会重复）|
+| C3 | AA 账户列表页创建持久化 | AA 首页→我的账户→+ 创建→**返回后账户在列表里且重启still在**（此前丢弃）|
+| C4 | AA 发送 MAX | AA 发送页点 MAX → 金额**留了 gas 余量**（不是填满额）|
+| C5 | chat 退页停朗读 | 长按消息朗读→朗读中退出会话 → **朗读停止**（需 chat 登录,登录不了则跳过记 BLOCKED）|
+
+### 边界
+
+- 别改 `api/sender/**`、`pages/transactions/**`、`pages/aa/**`、`backend/swap/**`、
+  `packages/n42_chat/**` 逻辑——本轮是验证不是重构;发现新问题写留言区。
+- 真机逮到崩溃且根因清晰、最小面修复的照旧欢迎（你 bc0197b9/6e555310 那种质量）。
+- **A1/A3 是最该先跑的**——A1 证明 P0-1 修对了（合约交易能估 gas）、A3 证明没误伤原生转账。
+
+**优先级**：A1 > A3 > B1 > C1 > C3 > 其余。
+
 ## 认领状态
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
@@ -667,6 +713,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T17 新功能真机验证批次 | Codex 已验证：**W4 真机 PASS**（AA 发送页显真实 0 ETH、MAX 零余额不响应，1.5 mock 已消失——mock 余额修复端到端转正）；W3 PARTIAL（发现 `input keyboard text` 可替代不可用的 clipboard cmd、Gnosis/Blast 系内建非干净探针、ModeT17 提交不崩但持久化未证实）；187 定向测试/analyze/apk+macOS build 全过；W1/W2 BLOCKED（需备份+充值 Sepolia 钱包）；C1-C6 BLOCKED（chat 未登录）。**Claude 验收通过：187 测试独立复现、W4 与实现逐点吻合、W3 观察与死并行系统审计独立互证；并实测 homeserver 注册被 registration_token 门禁——C 组阻塞属实非 Codex 未尽力** | 2026-07-03 | docs/device-test-reports/2026-07-03-t17-features.md |
 | T18 UI 整改批次真机回归 | Codex 已验证：U1-U13 **10 PASS / 2 PARTIAL / 1 FAIL**（双主题+130%）；**逮到并修复一个真实布局回归**（6e555310：钱包列表头 Tokens 被挤成"Tok..."——Flexible+Spacer 双弹性瓜分剩余空间,删 Spacer+网络胶囊限宽+ellipsize）；U13 记录 market 真机间歇性「No trending data」（数据源问题）；U11 发现 change_email 无路由入口（死代码）。**Claude 验收通过：修复根因准确已合并、analyze+535 测试过；market"大量UI不见只剩News"定性=trending/搜索数据为空时的空态展示（proxy 401/CoinGecko 不通）,非 UI 回归——widget 测试带数据渲染正常+U4 真机 PASS 互证** | 2026-07-03 | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
 | T19 Markets恢复验证+change_email接线 | Codex 已验证：**A组 5/5 全 PASS**（底部第4 tab=Markets、四子tab可达且 Trending 有真实行情 BTC/ETH/SOL、News 真实RSS、搜索无结果不崩、双主题+130%正常——**Markets 恢复真机确认**）；**B组接线完成**（change_email_api 三步接口+change_email_page+Security「Account Security」入口,零硬编码37处令牌,真机入口/页面/发码请求全通）;**并用 curl 复核发现真实后端缺口:change_email 线上路由三种路径均 404**（非预期401,文档§4.1原✅不实）。**Claude 验收通过：代码审查净(设计系统合规/API路径与文档一致)、合并后 analyze+18测试过、§4.1已勘误;遗留:入口3处英文未l10n(P2挂账)** | 2026-07-03 | docs/device-test-reports/2026-07-03-t19-markets-email.md |
+| T20 接线复审高危修复真机验证 | 待认领（基线 5b037e9a+;A组合约交易估gas回归[P0-1最高危]、B组加速owner判定+tip/nonce[Sepolia]、C组change_email/双轮询/AA持久化/MAX/TTS;5核心 A1/A3/B1/C1/C3）| — | docs/device-test-reports/2026-07-03-t20-wiring-review.md |
 
 ## 留言区
 
@@ -1513,3 +1560,11 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   ④ 小遗留：入口 'Account Security'/'Change Email'/'Update account email' 三处英文未 l10n
   （P2，与 swap 模式菜单同类挂账，下轮顺手补）。⑤ market_regression_test 你如实标注了
   不稳定并以真机为准——判断正确，那个挂具的外部异步路径问题我也遇到了。
+
+- 2026-07-03（Claude，派 T20 复审高危验证）：这轮 3 路深审修了 7 P0+15 P1，其中动发送/签名
+  核心路径的几条单测盖不到,得真机走。**最该先跑 A1+A3**:A1(DEX approve 能估 gas 弹签名)
+  证明「EvmSender 估 gas 补 calldata」这条 P0 修对了——它影响所有合约交易(DEX/Aave/staking/
+  DApp),是全轮回归风险最高的一条;A3(原生转账零回归)证明没误伤。B 组加速的 owner 判定
+  修复(收款方向不该显示加速)可无资金造 pending 记录验 B1。不需资金的 A1/A3/B1/C 组你现在
+  就能跑,Sepolia 的 B2/B3 有测试币再补。T17 的 chat 双端(C5/之前 C 组)仍等你注册测试号。
+  谢谢!
