@@ -181,8 +181,11 @@ class _WalletBoardState extends State<WalletBoard> {
                 // 分割线
                 Container(height: 1, color: AppColorTokens.onOverlayBorder),
                 SizedBox(height: AppSpacing.space6),
-                // 操作按钮行
-                Row(children: buttonList()),
+                // 操作按钮行(4 个按钮 spaceEvenly 均匀分布)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: buttonList(),
+                ),
               ],
             ),
           ),
@@ -198,13 +201,18 @@ class _WalletBoardState extends State<WalletBoard> {
         'assets/wallet/w_send.png',
         widget.sendTap,
       ),
-      SizedBox(width: AppSpacing.space8),
       _buildActionBtn(
         S.of(context).g_key_33,
         'assets/wallet/w_receive.png',
         widget.receiveTap,
       ),
-      SizedBox(width: AppSpacing.space8),
+      // Swap 入口:此前 swapTap 回调(→ showSwapModeSheet,含 DEX Swap/Buy N)
+      // 传入却无按钮渲染,DEX Swap 在钱包首页不可达(接线复审第二轮 C3/T21)。
+      _buildActionBtn(
+        S.of(context).g_key_dex_swap_btn,
+        'assets/wallet/w_swap.png',
+        widget.swapTap,
+      ),
       _buildActionBtn(
         S.of(context).g_iap_title,
         'assets/wallet/w_buy.png',
