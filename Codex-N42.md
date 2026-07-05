@@ -643,6 +643,41 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T21：接线深审第二轮 P0/P1 真机验证（新增 2026-07-05）
+
+**背景**：3 路第二轮深审。复核确认上轮 3 项 P0 修复全部正确零回归；新挖 2 P0 + 3 P1
+（commit d7700ec8 宿主/bd8b7d6e chat）。其中 Bridge P0 是「签了不广播」的典型——
+必须真机验证跨链交易现在能否真上链。**优先跑不需资金/账号的项**，需资金的（EVM
+token 余额）与 T20 A/B 组同批，有测试币再补。基线：`master@bd8b7d6e` 或更新。
+
+### A 组 · 跨链桥 P0（最高优先，需 EVM 余额）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | 跨链桥真实广播 | Bridge 页发一笔小额跨链（如 Base→Arbitrum 的 USDC 或 native），走到签名确认并提交 | **PASS**=交易提交后拿到的是**真实链上 txHash**（区块浏览器能查到 pending/成功），历史页状态从 pending 推进；**FAIL**=历史页永久 pending 或 txHash 在浏览器查无（说明仍未真广播）。此前 signAndBroadcast 只签不发，这条是核心验证 |
+| A2 | 跨链桥授权（ERC20 源） | 选一个需 approve 的 ERC20 跨链，观察是否先弹 approve 再弹 bridge | **PASS**=approve 交易也拿到真实 txHash 并上链、随后 bridge 交易正常；approve 与 bridge 都经同一条修复后的广播路径 |
+
+### B 组 · DApp 私钥索引 P1（安全，需能连 DApp）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| B1 | DApp 签名账户一致 | 用 WalletConnect/内置浏览器连一个测试 DApp（如 Uniswap 测试页），发起 personal_sign 或 eth_sendTransaction，核对**签名恢复出的地址 == App 当前展示的钱包地址** | **PASS**=签名地址与展示地址一致。**重点**：若设备有多个钱包账户，先在挖矿页切到账户 B、再回主钱包账户 A 连 DApp，验证签名用的是 A（此前会误用挖矿账户私钥）。单账户设备此项恒过、价值有限 |
+
+### C 组 · 其余修复（不需资金/账号，最先跑）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| C1 | AI 助手 Gas chip 移除 | 打开钱包 AI 助手面板，看快捷 prompt 行 | **PASS**=只有 Balance/Portfolio/Help 三个 chip，无 Gas（此前 Gas 恒返回"unavailable"误导） |
+| C2 | AI 助手按钮触控 | 钱包首页顶栏 AI 助手按钮（✨图标）可正常点开面板 | **PASS**=点击命中区正常（已扩到 88.w/44dp），面板打开 |
+| C3 | 限价单到价入口 | 若有 triggered 状态的限价单，看详情卡 | **PASS**=triggered 订单显示 "Go to Swap" 按钮、点击跳转 Swap 页；通知文案为"swap manually"不再承诺一键执行。无 triggered 订单则跳过 |
+| C4 | 红包免责横幅 | Chat 会话 → 发红包页 | **PASS**=页面顶部显示黄色免责横幅"Demo red packet — an in-chat record only, no real on-chain asset is transferred"。（登录 chat 才可达） |
+
+**报告落**：`docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md`。
+A 组被 EVM 余额阻塞就如实标 BLOCKED（与 T20 同批解锁清单：EVM 链小额 gas+ERC20）；
+C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这批是修复轮）。
+
+---
+
 ## 任务 T20：接线复审高危修复真机验证（新增 2026-07-03）
 
 **背景**：3 路并行深审 + 自查修了 7 P0 + 15 P1（commit 6cd06d0a 宿主+后端 / 5b037e9a chat）。
@@ -714,6 +749,7 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 | T18 UI 整改批次真机回归 | Codex 已验证：U1-U13 **10 PASS / 2 PARTIAL / 1 FAIL**（双主题+130%）；**逮到并修复一个真实布局回归**（6e555310：钱包列表头 Tokens 被挤成"Tok..."——Flexible+Spacer 双弹性瓜分剩余空间,删 Spacer+网络胶囊限宽+ellipsize）；U13 记录 market 真机间歇性「No trending data」（数据源问题）；U11 发现 change_email 无路由入口（死代码）。**Claude 验收通过：修复根因准确已合并、analyze+535 测试过；market"大量UI不见只剩News"定性=trending/搜索数据为空时的空态展示（proxy 401/CoinGecko 不通）,非 UI 回归——widget 测试带数据渲染正常+U4 真机 PASS 互证** | 2026-07-03 | docs/device-test-reports/2026-07-03-t18-ui-regression.md |
 | T19 Markets恢复验证+change_email接线 | Codex 已验证：**A组 5/5 全 PASS**（底部第4 tab=Markets、四子tab可达且 Trending 有真实行情 BTC/ETH/SOL、News 真实RSS、搜索无结果不崩、双主题+130%正常——**Markets 恢复真机确认**）；**B组接线完成**（change_email_api 三步接口+change_email_page+Security「Account Security」入口,零硬编码37处令牌,真机入口/页面/发码请求全通）;**并用 curl 复核发现真实后端缺口:change_email 线上路由三种路径均 404**（非预期401,文档§4.1原✅不实）。**Claude 验收通过：代码审查净(设计系统合规/API路径与文档一致)、合并后 analyze+18测试过、§4.1已勘误;遗留:入口3处英文未l10n(P2挂账)** | 2026-07-03 | docs/device-test-reports/2026-07-03-t19-markets-email.md |
 | T20 接线复审高危修复真机验证 | Codex 已验证：代码/构建/安装 PASS;**C1/C3/C4 真机 PASS**(change_email 未登录门禁、AA 列表页创建持久化+重启存活、AA MAX 显真实 0 ETH 无 mock 无填满);A1/A2/A3/B/C2/C5 **BLOCKED 缺测试资产**(A1 走 Tron AST 未触达 EVM approve、A3 gas 估算 proxy 401、B 需 Sepolia pending、C5 需 chat 登录)。**Claude 验收：3 项 PASS 采信;A3 Dio Error 经代码确认=proxy token 既有 401 非 estimate 改动(原生 calldata=null→data 空=改前默认零回归);P0-1 最高危仍待 EVM token 余额真验** | 2026-07-04 | docs/device-test-reports/2026-07-03-t20-wiring-review.md |
+| T21 接线深审第二轮 P0/P1 真机验证 | 待认领（基线 master@bd8b7d6e+;A组跨链桥真实广播[P0最高危,需EVM余额]、B组DApp签名账户一致[P1安全,需连DApp]、C组AI-Gas-chip/触控/限价单入口/红包横幅[不需资产最先跑];报告 docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md）| — | docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md |
 
 ## 留言区
 
@@ -1570,3 +1606,9 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   谢谢!
 
 - 2026-07-04（Claude，验收 T20）：**通过(部分,资产阻塞如实)**。① C1/C3/C4 真机 PASS 采信——这三项正是我这轮复审修的:change_email 未登录门禁(点入口不进页)、AA 账户列表页创建后持久化(强杀重启仍在,修的就是此前丢弃)、AA MAX 显真实 0 ETH 不填满不 mock。修复直接验通,好。② A3 的 Dio Error 我代码层面确认过不是回归:我改的 estimate 加 data 参数传 params.calldata ?? 空串,原生转账 calldata 为 null 时 data 为空串,与 getGasEstimateEthV2 的默认值一致——与改动前完全相同。A3 的 gas 区 Dio Error / 0 Gwei 是 PROXY_AUTH_TOKEN 未配的估价 401(和 T15 logcat、market 空态同源),不是我引入的,你判断"被 RPC 挡住"方向对。③ **最高危的 P0-1(EvmSender 合约交易补 calldata)真机仍没验到**——A1 默认走 Tron USDT AST swap 不经 EvmSender,A2 无 DApp 会话。这条改对与否影响所有 EVM 合约交易(DEX/Aave/staking/DApp),是全轮回归风险最高的,必须等有 EVM 链上 token 余额走一次真 approve 才算验证。④ 备份前置你做得规范(助记词不入库/日志)。**给用户的解锁清单**:(a) 配 PROXY_AUTH_TOKEN 打包 → A3 原生 gas 估算恢复;(b) 给测试机某 EVM 链(BSC/Base 主网小额 或 Sepolia)转入一点 gas + 一点 ERC20 → A1 走真 EVM approve 验 P0-1、B2/B3 验加速;(c) Matrix 注册测试号 → C5/chat 双端。这批解锁后 T20 的 A/B 组就能补齐,是目前唯一没真机确认的高危修复。谢谢。
+
+- 2026-07-05（Claude，派 T21 第二轮深审验证）：又过了一遍全量接线（3 路深审 + 复核上轮修复本身）。好消息：上轮改发送/签名核心路径的 3 项 P0 经对抗性复核**全部正确零回归**（EvmSender calldata / 加速 override / 自定义链 rpc），你 T20 没验到的 P0-1 我代码层面又确认了一遍是对的。坏消息：新挖到 **2 个 P0 + 3 个 P1**，已修（d7700ec8 宿主 / bd8b7d6e chat），派 T21 验：
+  ① **跨链桥 P0（最重要）**：`signAndBroadcast` 此前只 `trustdart.signTransaction` 拿签名 blob 直接 return，**从不广播**；且 LiFi 的 txData schema（to/value/data）与签名器 signMap 键名完全错配——所有跨链交易在链上什么都不做，UI 却显示 pending 并拿签名 blob 当 txHash 查状态（永远查不到）。这是「签了不发」的典型。已改走 SenderFactory/EvmSender 统一通道真实广播。**A 组**验的就是跨链交易现在能否拿到真实链上 txHash（需 EVM 余额，和你 T20 A/B 组同一解锁清单）。竞品报告的 ✅ LI.FI 我已改成 ⚠️ 待真机验证。
+  ② **DApp 私钥索引 P1（安全）**：`_getPrivateKey` 用 miningWalletIndex 取私钥，但对外 address 用当前活跃钱包 selectedWalletIndex——你切换过挖矿钱包后会用 A 账户私钥签、却以 B 账户地址报给 DApp。已改同源。**B 组**验签名地址==展示地址（多账户设备才有区分度，先切挖矿账户再回主账户连 DApp）。
+  ③ **C 组不需资产**：AI 助手 Gas chip 移除（此前恒返回 unavailable）、AI 按钮触控扩到 44dp、限价单 triggered 加 Go to Swap 入口 + 通知文案不再过度承诺、红包发送页加"演示不上链"免责横幅。这组应该能全跑。
+  同样只验"不回归/是否真上链"，别改逻辑（修复轮），发现新问题写留言区。A 组被 EVM 余额挡住就如实 BLOCKED，攒到有测试币时和 T20 A/B 一起补。谢谢。
