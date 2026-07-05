@@ -261,7 +261,40 @@ class _SendRedPacketPageState extends State<SendRedPacketPage> {
             child: Column(
               children: [
                 const SizedBox(height: 16),
-                
+
+                // 免责横幅:红包为聊天内记账,不涉及真实链上资产转移
+                // (接线复审第二轮 P1:此前做真实余额校验+真币种却从不上链,
+                //  误导用户以为发了真币)。
+                Container(
+                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 12),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppColors.warning.withValues(alpha: 0.12),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.info_outline,
+                        size: 18,
+                        color: AppColors.warning,
+                      ),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          // 硬编码英文:l10n 未含此 key;红包上链落地时再补 l10n。
+                          'Demo red packet — an in-chat record only, '
+                          'no real on-chain asset is transferred.',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppColors.warning,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 // 金额输入
                 _buildMenuItem(
                   context: context,
