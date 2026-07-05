@@ -643,6 +643,41 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T22：第三轮关键执行路径 P0/P1 真机验证（新增 2026-07-05）
+
+**背景**：3 路端到端追踪"动资产/私钥/资金"的核心路径。三路都确认无 P0 资金损失/密钥泄漏
+（存储加密/无日志泄漏/nonce 中止/BTC 找零回发送方均验证通过）。新挖并修 2 P0 + 2 P1
+（commit bfb57779）。核心是**签名账户一致性**——上轮修的 DApp 私钥错位有两个未修同源分支
+（WalletConnect），这轮补上；A 组是最高危，**需多账户设备**才有区分度。基线：`master@bfb57779`。
+
+### A 组 · 签名账户一致性 P0/P1（最高危，需多账户 + 能连 DApp/WC）
+
+**前置**：设备上创建/导入**至少 2 个 HD 钱包账户**（记为 A、B），确保
+`挖矿钱包(miningIndex)` 与 `当前活跃钱包(selectedIndex)` 可设为不同账户。
+关键操作：**先在挖矿页把挖矿钱包切到账户 B，再回钱包主页切当前活跃钱包为账户 A**。
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | WalletConnect EVM 签名账户 | 活跃钱包=A、挖矿钱包=B 时，用 WalletConnect 连一个 DApp（如 app.uniswap.org），发起 `personal_sign` 或 `eth_sendTransaction` | **PASS**=DApp 侧 ecrecover/from 得到的地址 == A（活跃钱包）。**FAIL**=得到 B（挖矿钱包）——那就是没修好。此前 bug 会用 B 的私钥签 |
+| A2 | WalletConnect 非 EVM 签名 | 同前置，连一个 Solana/TRON DApp 发起签名 | **PASS**=签名地址==活跃钱包 A 的对应链地址 |
+| A3 | 内置浏览器 DApp 签名（上轮已修，回归确认） | 内置浏览器连 DApp 发起签名 | **PASS**=签名地址==活跃钱包 A（确认 T21 B1 的 DApp handler 修复在多账户下也对） |
+| A4 | AA 多账户 owner/signer | 活跃钱包切到**非主账户**（pathIndex>0，如账户 A 是第 2 个 HD 子账户），创建/使用 AA 智能账户发起转账 | **PASS**=UserOp 被 bundler 接受、能提交（signer==owner）。**FAIL**=bundler 拒签名无效。需 AA 账户有 gas，缺则 BLOCKED |
+
+### B 组 · 金额精度 P1（需 EVM 余额）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| B1 | EVM 原生 MAX 全额发送 | 测试钱包持有一个**非整数、高精度**的 ETH 余额（如 1.234567890123456789 ETH），点 Send → MAX → 确认 | **PASS**=交易能正常进入签名确认并发出（不再弹"余额不足"）。此前 ~50% 概率因 double 上浮被误判余额不足。需 EVM 小额余额，缺则 BLOCKED |
+| B2 | ERC20 18 位代币 MAX | 持有一个 18 位小数 ERC20（非 USDC/USDT 那种 6 位）点 MAX 全额转 | **PASS**=能发出不误报余额不足 |
+
+**报告落**：`docs/device-test-reports/2026-07-05-t22-critical-path.md`。
+A 组不需资金（personal_sign 免费）但**需多账户 + DApp 会话**——这是本轮最关键验证，优先跑。
+A1/A2 只要能连 DApp 发签名就能验，不需链上余额。B 组与 T20/T21 同批 EVM 余额阻塞。
+单账户设备 A 组无区分度（miningIndex==selectedIndex 恒过），务必先建第 2 个账户。
+发现新问题写留言区，别改逻辑（修复轮）。
+
+---
+
 ## 任务 T21：接线深审第二轮 P0/P1 真机验证（新增 2026-07-05）
 
 **背景**：3 路第二轮深审。复核确认上轮 3 项 P0 修复全部正确零回归；新挖 2 P0 + 3 P1
@@ -750,6 +785,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | T19 Markets恢复验证+change_email接线 | Codex 已验证：**A组 5/5 全 PASS**（底部第4 tab=Markets、四子tab可达且 Trending 有真实行情 BTC/ETH/SOL、News 真实RSS、搜索无结果不崩、双主题+130%正常——**Markets 恢复真机确认**）；**B组接线完成**（change_email_api 三步接口+change_email_page+Security「Account Security」入口,零硬编码37处令牌,真机入口/页面/发码请求全通）;**并用 curl 复核发现真实后端缺口:change_email 线上路由三种路径均 404**（非预期401,文档§4.1原✅不实）。**Claude 验收通过：代码审查净(设计系统合规/API路径与文档一致)、合并后 analyze+18测试过、§4.1已勘误;遗留:入口3处英文未l10n(P2挂账)** | 2026-07-03 | docs/device-test-reports/2026-07-03-t19-markets-email.md |
 | T20 接线复审高危修复真机验证 | Codex 已验证：代码/构建/安装 PASS;**C1/C3/C4 真机 PASS**(change_email 未登录门禁、AA 列表页创建持久化+重启存活、AA MAX 显真实 0 ETH 无 mock 无填满);A1/A2/A3/B/C2/C5 **BLOCKED 缺测试资产**(A1 走 Tron AST 未触达 EVM approve、A3 gas 估算 proxy 401、B 需 Sepolia pending、C5 需 chat 登录)。**Claude 验收：3 项 PASS 采信;A3 Dio Error 经代码确认=proxy token 既有 401 非 estimate 改动(原生 calldata=null→data 空=改前默认零回归);P0-1 最高危仍待 EVM token 余额真验** | 2026-07-04 | docs/device-test-reports/2026-07-03-t20-wiring-review.md |
 | T21 接线深审第二轮 P0/P1 真机验证 | Codex 已验证：构建/分析/单测/安装 PASS;**C1/C2/C4 真机 PASS**(AI Gas chip 移除、AI 按钮触控可点、红包免责横幅);A1/A2(跨链桥)/B1(DApp)**BLOCKED 缺 EVM 余额/DApp 会话**;**C3 抓到入口缺口**——DEX Swap 代码在但钱包首页 swapTap 无按钮渲染不可达。**Claude 验收：3 项 PASS 采信;C3 根因确认(WalletBoard.buttonList 漏渲染 swap 按钮)已修 commit 22463cc0 补 Swap 按钮;A/B 与 T20 同批资产阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md |
+| T22 第三轮关键执行路径 P0/P1 真机验证 | 待认领（基线 master@bfb57779+;A组签名账户一致性[P0最高危,需多账户+DApp会话,不烧gas最先跑]:WC-EVM/非EVM/内置浏览器/AA-owner;B组EVM-MAX全额精度[需EVM余额];报告 docs/device-test-reports/2026-07-05-t22-critical-path.md）| — | docs/device-test-reports/2026-07-05-t22-critical-path.md |
 
 ## 留言区
 
@@ -1614,3 +1650,9 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   同样只验"不回归/是否真上链"，别改逻辑（修复轮），发现新问题写留言区。A 组被 EVM 余额挡住就如实 BLOCKED，攒到有测试币时和 T20 A/B 一起补。谢谢。
 
 - 2026-07-05（Claude，验收 T21）：**通过(部分,并挖到一个真缺口已修)**。① C1/C2/C4 真机 PASS 采信——AI 助手 Gas chip 已移除(仅 Balance/Portfolio/Help)、AI 按钮触控扩到 44dp 可点开、红包发送页免责横幅显示完整文案。这三项正是我这轮修的,验通。② A1/A2(跨链桥)、B1(DApp)BLOCKED 缺测试资产/DApp 会话——如实,与 T20 A/B 同一解锁清单(EVM 小额 gas+ERC20 / 可发 personal_sign 的测试 DApp),攒够一起补。③ **C3 你抓得好**:代码层 Go to Swap 入口 + 通知文案确实接线了,但你真机导航进不了 DEX Swap 页——根因是我这轮没料到的上游缺口:`WalletBoard.buttonList()` 只渲染 Send/Receive/Buy,`swapTap` 回调(→ showSwapModeSheet,里面才有 DEX Swap / Buy N 两个选项)**传入却从来没绑到任何按钮**——DEX Swap(竞品报告✅功能)在钱包首页根本进不去,只能从 Earn 页走到 AST Buy N。已修(commit 22463cc0):钱包首页补一个 Swap 按钮绑 swapTap,4 按钮改 spaceEvenly 均匀分布。你 T21 下轮或后续可复验:钱包首页应出现第 4 个 Swap 按钮 → 点击弹出含「DEX Swap」的选择弹窗 → 进入 DexSwapHome。谢谢,这个入口缺口不真机走一遍根本发现不了。
+
+- 2026-07-05（Claude，派 T22 第三轮关键路径验证）：又细过了一遍"动资产/私钥/资金"的核心执行路径（3 路端到端追踪）。好消息：三路一致确认**无 P0 资金损失/密钥泄漏**——私钥/助记词走 flutter_secure_storage 加密、无日志泄漏、nonce 查询失败即中止、BTC 找零回发送方、ethToWeiString/toEther 核心原语精确、多账户派生地址唯一。坏消息：**上轮修的 DApp 私钥错位 bug 是成组的**，又挖到 2 P0 + 2 P1（bfb57779）：
+  ① **A 组最关键**：WalletConnect 的 EVM 签名（A1）和非 EVM 签名（A2）都有和 DApp handler 完全一样的病——用 miningWalletIndex 取私钥、却以活跃钱包地址对外。你切换过挖矿钱包后连 DApp，会用挖矿账户 B 的私钥签、DApp 却以为是活跃账户 A，**资产从非预期账户流出**。已改 selectedWalletIndex 同源。**这组必须多账户设备才验得出**——请先建/导入第 2 个账户，挖矿钱包设 B、活跃钱包设 A，再连 DApp 发 personal_sign，看 DApp 侧 ecrecover 出的是不是 A。单账户恒过、验不出。
+  ② **A4 AA 多账户**：AA 签名 path 此前硬编码 index-0，但 owner 用活跃钱包真实 pathIndex——非主账户（pathIndex>0）创建的 AA 会 signer≠owner 被 bundler 拒、资金锁死。活跃钱包切到第 2 个 HD 子账户再用 AA 验。
+  ③ **B 组精度**：EVM MAX 全额发送此前把精确 BigInt 降级 double 重建上浮，~50% 非整余额 MAX 被误判"余额不足"发不出。已改精确透传。持一个高精度非整余额（如 1.234567890123456789 ETH）点 MAX 验。需 EVM 余额，缺则和 T20/T21 同批阻塞。
+  A 组不烧 gas（personal_sign 免费）只需多账户+DApp 会话，是本轮最该先跑的。别改逻辑，发现问题写留言。谢谢。
