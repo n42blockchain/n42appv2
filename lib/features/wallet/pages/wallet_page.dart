@@ -12,6 +12,8 @@ import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
+import 'package:n42_wallet/features/ai_assistant/presentation/wallet_ai_snapshot_builder.dart';
+import 'package:n42_wallet/features/ai_assistant/presentation/wallet_assistant_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/iap/iap_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
@@ -23,6 +25,7 @@ import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
@@ -223,6 +226,19 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     wcp.refresh();
   }
 
+  void _openWalletAssistant(WalletActionProvider waValue) {
+    final snapshot = buildWalletAiSnapshot(
+      totalUsd: waValue.balanceTotal,
+      coins: waValue.coinList.whereType<CoinModel>(),
+    );
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WalletAssistantPage(snapshot: snapshot),
+      ),
+    );
+  }
+
   Future<String> _scan() async {
     final result = await Navigator.push<String>(
       context,
@@ -320,6 +336,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                           onWalletConnectTap: _walletConnect,
                           onScanTap: _walletConnect,
                           onReceiveTap: () => showSearchCoinSheet(context, 1),
+                          onAssistantTap: () => _openWalletAssistant(waValue),
                         ),
                         Expanded(
                           child: RefreshIndicator(

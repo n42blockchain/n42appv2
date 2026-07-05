@@ -21,6 +21,7 @@ class WalletTopBar extends ConsumerWidget {
     required this.onWalletConnectTap,
     required this.onScanTap,
     required this.onReceiveTap,
+    required this.onAssistantTap,
   });
 
   final String walletName;
@@ -30,6 +31,7 @@ class WalletTopBar extends ConsumerWidget {
   final VoidCallback onWalletConnectTap;
   final VoidCallback onScanTap;
   final VoidCallback onReceiveTap;
+  final VoidCallback onAssistantTap;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -42,6 +44,7 @@ class WalletTopBar extends ConsumerWidget {
       onLeftImageClick: onMenuTap,
       onLeftImageUri: "assets/img/menu.png",
       actions: [
+        _WalletAssistantButton(onTap: onAssistantTap),
         _QrCodeMenu(onScanTap: onScanTap, onReceiveTap: onReceiveTap),
         _WalletConnectButton(onTap: onWalletConnectTap),
       ],
@@ -161,6 +164,34 @@ class _QrCodeMenu extends StatelessWidget {
           SizedBox(width: AppSpacing.space4),
           Text(label, style: AppTypography.body.copyWith(color: textColor)),
         ],
+      ),
+    );
+  }
+}
+
+// ── 钱包 AI 助手按钮 ────────────────────────────────────────────────────────
+
+class _WalletAssistantButton extends StatelessWidget {
+  const _WalletAssistantButton({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    return Tooltip(
+      message: 'Wallet AI',
+      child: InkWell(
+        onTap: onTap,
+        child: SizedBox(
+          width: su.setWidth(60.0),
+          height: su.setWidth(60.0),
+          child: Icon(
+            Icons.auto_awesome_rounded,
+            size: su.setWidth(44.0),
+            color: AppColorTokens.of(context).brand,
+          ),
+        ),
       ),
     );
   }
