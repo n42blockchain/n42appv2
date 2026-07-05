@@ -506,6 +506,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
               memo: trModel.message,
               privateKey: coinModel.privateKey,
               chainConfig: chainConfig,
+              // 精确 wei 透传:trModel.price 是精确 BigInt,amount 经 double 往返
+              // 会上浮、令 MAX 全额被误判余额不足(第三轮 P1)。native/合约分别走
+              // valueWeiOverride / tokenValueWeiOverride。
+              valueWeiOverride: _isContract ? null : trModel.price,
+              tokenValueWeiOverride: _isContract ? trModel.price : null,
             ),
           );
 

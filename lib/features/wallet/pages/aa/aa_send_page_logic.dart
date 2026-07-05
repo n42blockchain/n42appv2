@@ -88,12 +88,24 @@ mixin _AASendLogicMixin on State<AASendPage> {
 
   static final _addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
 
+  /// 金额字符串 → 最小单位 BigInt(纯字符串拆分,不经 double)。
+  /// 此前用 `double*1e18` 承接 >15 有效位输入会低位漂移(第三轮 P2)。
+  BigInt _amountToWei(String text, int decimals) {
+    final t = text.trim();
+    if (t.isEmpty) return BigInt.zero;
+    final parts = t.split('.');
+    final whole = BigInt.tryParse(parts[0].isEmpty ? '0' : parts[0]) ??
+        BigInt.zero;
+    var frac = parts.length > 1 ? parts[1] : '';
+    if (frac.length > decimals) frac = frac.substring(0, decimals);
+    frac = frac.padRight(decimals, '0');
+    final fracBig = BigInt.tryParse(frac.isEmpty ? '0' : frac) ?? BigInt.zero;
+    return whole * BigInt.from(10).pow(decimals) + fracBig;
+  }
+
   Uint8List _buildCallData() {
     final toAddress = toController.text.trim();
-    final parsed = double.tryParse(amountController.text.trim()) ?? 0.0;
-    final wholePart = BigInt.from(parsed.truncate());
-    final fracPart = BigInt.from(((parsed - parsed.truncate()) * 1e18).round());
-    final amountWei = wholePart * BigInt.from(10).pow(18) + fracPart;
+    final amountWei = _amountToWei(amountController.text, 18);
     return CalldataBuilder.buildExecute(
       target: toAddress.isEmpty
           ? '0x0000000000000000000000000000000000000000'

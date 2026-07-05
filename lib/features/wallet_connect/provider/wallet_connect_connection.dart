@@ -11,6 +11,8 @@ import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart'
+    show selectedWalletIndexProvider;
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -241,9 +243,13 @@ mixin WalletConnectConnection on ChangeNotifier {
         return false;
       }
 
-      final currentIndex = walletService.miningWalletIndex >= 0
-          ? walletService.miningWalletIndex
-          : 0;
+      // 私钥必须来自与对外广播地址同一账户。WC 广播/展示地址用 cm.address
+      // (=活跃钱包 selectedWalletIndex);此前却用 miningWalletIndex 取私钥——
+      // 用户切换过挖矿钱包(miningIndex≠selectedIndex)时会用挖矿账户私钥签、
+      // 资产从非预期账户流出(第三轮 P0-1,与已修的 DApp handler 同病)。
+      final selectedIndex =
+          globalProviderContainer.read(selectedWalletIndexProvider);
+      final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
       String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
 
       if (pKey == null) {
@@ -488,7 +494,13 @@ mixin WalletConnectConnection on ChangeNotifier {
   getCurrentWalletCredentials() async {
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) return (mnemonic: '', privateKey: '');
-    return walletService.getCredentials(walletService.miningWalletIndex);
+    // 非 EVM 链凭据同样须用活跃钱包(selectedWalletIndex)——各链地址/pathIndex
+    // 都取自选中 coinModel,此前用 miningWalletIndex 取助记词会三者错配、签名
+    // 对不上广播地址(第三轮 P0-2)。
+    final selectedIndex =
+        globalProviderContainer.read(selectedWalletIndexProvider);
+    final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
+    return walletService.getCredentials(currentIndex);
   }
 
   // ── Abstract methods to be implemented by the concrete class ──────────────

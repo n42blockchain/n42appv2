@@ -22,6 +22,7 @@ import 'package:n42_wallet/features/wallet/aa/account/smart_account_factory.dart
 import 'package:n42_wallet/features/wallet/aa/bundler/bundler_client.dart';
 import 'package:n42_wallet/features/wallet/aa/utils/user_op_hash.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/transfer_serializer.dart';
@@ -287,7 +288,23 @@ class AATransferHandler extends BaseTransferHandler {
       throw UserOperationBuildError('Chain map not found');
     }
 
-    final path = chainMap['path'] as String? ?? "m/44'/60'/0'/0/0";
+    // 签名 path 必须与 owner 地址派生用同一 pathIndex/addrType。owner 来自
+    // walletProvider.getAddress(chainSymbol)(活跃钱包真实 pathIndex);此前 path
+    // 取 chainMap['path'](该键在 walletMap 是 Map 非 String,`as String?` 恒命中
+    // null)→ 硬编码 index-0,多账户(pathIndex>0)AA 会 signer≠owner 被 bundler
+    // 拒、资金锁死在该智能账户(第三轮 P1)。
+    String path = chainMap['path'] as String? ?? '';
+    if (path.isEmpty) {
+      final ownerCm =
+          walletProvider.getCoinModelWithCoinType(params.chainSymbol);
+      if (ownerCm != null) {
+        final base = ownerCm.config.pathForAddrType(ownerCm.addrType) ??
+            "m/44'/60'/0'/0/0";
+        path = getPathWithIndex(base, ownerCm.pathIndex);
+      } else {
+        path = "m/44'/60'/0'/0/0";
+      }
+    }
 
     // Sign using trustdart (prefer private key, fallback to mnemonic)
     final signatureHex = params.privateKey != null

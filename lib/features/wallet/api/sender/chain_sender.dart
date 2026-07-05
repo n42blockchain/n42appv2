@@ -41,7 +41,11 @@ class SendParams {
   // ≥ 原值×1.1——只提 maxFee 不提 tip 会被节点拒 "replacement underpriced"。
   final BigInt? tipOverride;
   // 精确 wei 金额(绕过 double 的 15-16 位精度截断):非空时忽略 amount。
+  // 原生转账 value。
   final BigInt? valueWeiOverride;
+  // 合约代币转账的精确最小单位金额(同上,针对 ERC20 transfer 金额)——
+  // 18 位代币 MAX 全额从 BigInt 降级 double 会上浮、被误判余额不足(第三轮 P1)。
+  final BigInt? tokenValueWeiOverride;
 
   const SendParams({
     required this.coinType,
@@ -68,6 +72,7 @@ class SendParams {
     this.gasPriceOverride,
     this.tipOverride,
     this.valueWeiOverride,
+    this.tokenValueWeiOverride,
   });
 }
 

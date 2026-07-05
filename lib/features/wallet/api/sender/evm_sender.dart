@@ -149,7 +149,14 @@ class EvmSender implements ChainSender {
     double adjustedValue = params.amount;
 
     if (!isContract) {
-      valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+      // 精确 wei 优先:有 override 直接用它,避免 double 往返上浮——否则合法
+      // MAX(balance-fee 的精确 BigInt 降级 double 后重建上浮几 wei)会在下面
+      // 的余额校验被误判"余额不足"而发不出(第三轮 P1;加速重放亦走此路)。
+      if (params.valueWeiOverride != null) {
+        valuePrice = params.valueWeiOverride!;
+      } else {
+        valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+      }
       if (valuePrice == chainBalance && params.sendMax) {
         valuePrice = valuePrice - totalGasPrice;
         adjustedValue = toEther(
@@ -161,10 +168,15 @@ class EvmSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     } else {
-      valuePrice = ethToWeiString(
-        params.amount.toString(),
-        params.tokenDecimals,
-      );
+      // 合约代币金额同样优先精确 override(18 位代币 MAX 上浮同病)。
+      if (params.tokenValueWeiOverride != null) {
+        valuePrice = params.tokenValueWeiOverride!;
+      } else {
+        valuePrice = ethToWeiString(
+          params.amount.toString(),
+          params.tokenDecimals,
+        );
+      }
       if (valuePrice > balance) {
         return SendResult.fail(S.current.g_key_wallet_m4);
       }
@@ -173,10 +185,9 @@ class EvmSender implements ChainSender {
       }
     }
 
-    // 精确 wei 覆盖(加速重放):原交易 value 直接透传,避免 double 往返
-    // 造成低位 wei 漂移(接线复审 P1-3)。
+    // 原生 valueWeiOverride 已在上面 native 分支应用;此处仅保留额外的
+    // 上限复核(加速重放路径同样受益)。
     if (params.valueWeiOverride != null && !isContract) {
-      valuePrice = params.valueWeiOverride!;
       if (totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }

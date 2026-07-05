@@ -208,6 +208,9 @@ mixin _StakeLogicMixin on State<StakePage> {
             path: getPathWithIndex(basePath, cm.pathIndex),
             isTest: false,
             calldata: txData['data']?.toString(),
+            // Lido submit 是 payable,value=质押额;精确 wei 透传避免 double 往返
+            // 上浮令大额质押被误判余额不足(第三轮 P2)。
+            valueWeiOverride: _parseAmountToBigInt(amountText, 18),
           ),
         );
     return result.success ? null : (result.error ?? 'Broadcast failed');
