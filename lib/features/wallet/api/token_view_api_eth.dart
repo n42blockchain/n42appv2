@@ -195,8 +195,14 @@ extension TokenViewApiEth on TokenViewApi {
     // EIP-1559 vs legacy gas price
     params[use1559 ? 'maxFeePerGas' : 'gasPrice'] = gasPriceHex;
 
-    // 合约调用：构建 transfer calldata
-    if (contract.isNotEmpty) {
+    // 防回归护栏:raw calldata 优先——若同时传了 contract 与 data,原逻辑
+    // 用 ERC20 transfer 编码覆盖 data、静默丢弃 raw calldata,与签名侧不一致。
+    // 当前调用方要么设 contract 要么设 calldata(互斥),此处显式让 raw
+    // calldata 优先以防未来同传时估算/签名分歧(接线复审第二轮 P2 加固)。
+    if (data.isNotEmpty) {
+      params['data'] = data;
+    } else if (contract.isNotEmpty) {
+      // 合约转账:构建 ERC20 transfer(address,uint256) calldata
       final toAddress = strip0x(to);
       final methodId = bytesToHex(
         keccakAscii('transfer(address,uint256)'),
@@ -204,8 +210,6 @@ extension TokenViewApiEth on TokenViewApi {
       final valueHex = bytesToHex(padUint8ListTo32(unsignedIntToBytes(value)));
       params['data'] =
           '0x${methodId}000000000000000000000000$toAddress$valueHex';
-    } else if (data.isNotEmpty) {
-      params['data'] = data;
     }
 
     return await getGasEstimateEth(params);

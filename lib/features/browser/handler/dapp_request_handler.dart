@@ -5,6 +5,8 @@ import 'package:http/http.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart'
+    show selectedWalletIndexProvider;
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
@@ -341,9 +343,13 @@ class DAppRequestHandler {
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) throw 'Wallet service not available';
 
-    final currentIndex = walletService.miningWalletIndex >= 0
-        ? walletService.miningWalletIndex
-        : 0;
+    // 私钥必须来自与对外 address 同一账户。address 用 ethCoinModels(=当前
+    // 活跃钱包 selectedWalletIndex);此前却用 miningWalletIndex 取私钥——用户
+    // 切换过挖矿钱包(miningIndex≠selectedIndex)时会用 A 账户私钥签、却以 B
+    // 账户地址报给 DApp(接线复审第二轮 P1 安全)。
+    final selectedIndex =
+        globalProviderContainer.read(selectedWalletIndexProvider);
+    final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
     String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
 
     if (pKey == null) {

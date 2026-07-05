@@ -284,7 +284,10 @@ class _PromptRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
-    const prompts = ['Balance', 'Portfolio', 'Gas', 'Help'];
+    // 'Gas' 暂不列入:快照未注入 gasGwei(打开面板未查 gas),引擎 gasAnswer
+    // 恒返回"unavailable"——不展示恒不可用的入口(接线复审第二轮 P1)。
+    // gas 数据源接通后可复原。
+    const prompts = ['Balance', 'Portfolio', 'Help'];
     return SizedBox(
       height: 46,
       child: ListView.separated(

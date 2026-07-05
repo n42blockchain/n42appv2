@@ -10,7 +10,8 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/models/bridge_models.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_history_page.dart';
 import 'package:n42_wallet/features/bridge/provider/bridge_provider.dart';
-import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
@@ -145,27 +146,67 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
         pathIndex,
       );
 
-      final trustdart = Trustdart();
-      final signedTx = await trustdart.signTransaction(
-        chainSymbol,
-        path,
-        txData,
-        mnemonic: mnemonic,
-        pk: privateKey,
-      );
-      if (!context.mounted) return null;
-
-      if (signedTx.isEmpty) {
+      // 走钱包统一发送通道(EvmSender):构建 SendParams → 估算(含 calldata)
+      // → 签名 → sendRawTransaction 广播,返回真实链上 txHash。
+      // 此前仅 trustdart.signTransaction 拿到已签名 blob 直接 return,从不广播;
+      // 且 LiFi 的 txData schema(to/value/data)与 trustdart signMap 键名不符——
+      // 跨链交易在链上什么都不做(接线复审第二轮 P0)。approve 与 bridge 两笔
+      // 都经本方法广播,统一修复。
+      final cm = walletProvider.getCoinModelWithCoinType(chainSymbol);
+      if (cm == null) {
+        _showSnack(context, S.of(context).g_key_bridge_chain_not_supported);
+        return null;
+      }
+      final toAddress = txData['to']?.toString() ?? '';
+      final calldata = txData['data']?.toString() ?? '';
+      final valueWei = _parseTxWei(txData['value']);
+      if (toAddress.isEmpty) {
         _showSnack(context, strings.g_key_175);
         return null;
       }
 
-      return signedTx;
+      final result = await SenderFactory.instance
+          .getSender(chainSymbol)
+          .send(
+            SendParams(
+              coinType: chainSymbol,
+              fromAddress: cm.address,
+              toAddress: toAddress,
+              // 名义金额供 gas 估算;精确 value 由 valueWeiOverride 透传给签名。
+              amount: valueWei == BigInt.zero ? 0.0 : valueWei.toDouble() / 1e18,
+              decimals: 18,
+              path: path,
+              isTest: cm.isTest,
+              privateKey: cm.privateKey,
+              chainConfig: cm.coin,
+              // LiFi diamond 合约调用:calldata 带上,contractAddress 留空走
+              // raw-data 分支(与加速/aave/staking 同款),value 经 override 精确保留。
+              calldata: calldata.isEmpty || calldata == '0x' ? null : calldata,
+              valueWeiOverride: valueWei,
+            ),
+          );
+      if (!context.mounted) return null;
+      if (!result.success) {
+        _showSnack(context, result.error ?? strings.g_key_175);
+        return null;
+      }
+      return result.txHash;
     } catch (e) {
       if (!context.mounted) return null;
       _showSnack(context, e.toString());
       return null;
     }
+  }
+
+  /// 解析 LiFi txData 的 value(十六进制 '0x..' 或十进制串)为 wei。
+  BigInt _parseTxWei(dynamic v) {
+    if (v == null) return BigInt.zero;
+    final s = v.toString().trim();
+    if (s.isEmpty) return BigInt.zero;
+    if (s.startsWith('0x') || s.startsWith('0X')) {
+      return BigInt.tryParse(s.substring(2), radix: 16) ?? BigInt.zero;
+    }
+    return BigInt.tryParse(s) ?? BigInt.zero;
   }
 
   void _showSnack(BuildContext context, String message) {

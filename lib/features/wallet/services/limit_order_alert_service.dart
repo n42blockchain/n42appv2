@@ -93,9 +93,12 @@ class LimitOrderAlertService {
       await FlutterLocalNotificationsPlugin().show(
         id: notificationId,
         title: '🎯 Limit Order Triggered',
+        // 诚实文案:非托管钱包后端无私钥不能代签、无自动成交引擎,到价后需
+        // 用户在 App 内手动兑换(接线复审第二轮 P1:此前承诺"execute"但无一键
+        // 执行入口)。限价单页 triggered 项提供 "Go to Swap" 跳转。
         body:
             '${order.symbolIn} → ${order.symbolOut} hit your limit price '
-            '${order.limitPrice}. Open the app to execute the swap.',
+            '${order.limitPrice}. Open the app to swap manually.',
         notificationDetails: _notificationDetails,
       );
     } catch (e) {

@@ -179,17 +179,22 @@ class _WalletAssistantButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final su = ScreenUtil();
+    // 触控 ≥88.w(44dp 红线):外层命中区扩大,图标视觉 44.w 不变
+    // (与兄弟 _WalletConnectButton 一致,接线复审第二轮 P2)。
     return Tooltip(
       message: 'Wallet AI',
       child: InkWell(
         onTap: onTap,
+        borderRadius: AppRadius.brPill,
         child: SizedBox(
-          width: su.setWidth(60.0),
-          height: su.setWidth(60.0),
-          child: Icon(
-            Icons.auto_awesome_rounded,
-            size: su.setWidth(44.0),
-            color: AppColorTokens.of(context).brand,
+          width: su.setWidth(88.0),
+          height: su.setWidth(88.0),
+          child: Center(
+            child: Icon(
+              Icons.auto_awesome_rounded,
+              size: su.setWidth(44.0),
+              color: AppColorTokens.of(context).brand,
+            ),
           ),
         ),
       ),

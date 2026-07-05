@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_limit_order_model.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -206,6 +207,36 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                           fontWeight: FontWeight.w400,
                         ),
                       ),
+              ),
+            ),
+          ],
+
+          // 到价订单:提供手动兑换入口(接线复审第二轮 P1——此前 triggered 只
+          // 显示状态标签、无任何执行路径,与通知"open the app to swap"不符)。
+          // 非托管钱包无自动成交,跳转 Swap 页由用户手动完成。
+          if (order.isTriggered) ...[
+            SizedBox(height: AppSpacing.space4),
+            SizedBox(
+              width: double.infinity,
+              height: 36,
+              child: OutlinedButton(
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const DexSwapHome()),
+                ),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: c.brand,
+                  side: BorderSide(color: c.brand),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Go to Swap',
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ),
             ),
           ],
