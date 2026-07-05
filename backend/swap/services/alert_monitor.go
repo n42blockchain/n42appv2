@@ -177,7 +177,11 @@ func (m *AlertMonitor) tick(ctx context.Context) {
 			continue
 		}
 		if marked {
-			m.notifier.NotifyPriceAlert(a, price)
+			// 异步通知——N 条同时触发时 webhook 串行(各 10s 超时)会拖慢
+			// tick 跨多周期,延迟其余告警(复审 P2)。捕获快照传入 goroutine。
+			alert := a
+			p := price
+			go m.notifier.NotifyPriceAlert(alert, p)
 		}
 	}
 }

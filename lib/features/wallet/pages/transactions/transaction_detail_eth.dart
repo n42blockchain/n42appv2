@@ -308,11 +308,19 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
     setState(() => _replacing = false);
     if (result.success) {
       ToastUtils.show(S.of(context).g_key_wallet_tx_replace_submitted);
+      // 原记录 txHash 更新为覆盖交易的新 hash——否则旧 hash 永远查不到回执,
+      // 交易列表里原记录长期滞留 pending(复审 P2-2)。
+      final newHash = result.txHash;
+      if (newHash != null && newHash.isNotEmpty && trm.trId != 0) {
+        trm.txHash = newHash;
+        unawaited(db.updateTransationRecord(trm));
+      }
       // 覆盖交易是新 hash，用它刷新详情。
-      searchEditingController.text = result.txHash ?? _txHash;
+      searchEditingController.text = newHash ?? _txHash;
       await init();
     } else {
-      ToastUtils.show(result.error ?? S.of(context).g_key_191);
+      // 失败文案:Transaction failed(此前误用 g_key_191=Success)。
+      ToastUtils.show(result.error ?? S.of(context).g_key_175);
     }
   }
 

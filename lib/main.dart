@@ -167,10 +167,11 @@ class N42AppV2 extends ConsumerStatefulWidget {
 }
 
 class _N42AppV2State extends ConsumerState<N42AppV2>
-    with ChatInitializationMixin {
+    with ChatInitializationMixin, WidgetsBindingObserver {
   DeepLinkService? _deepLinkService;
   DeepLinkHandler? _deepLinkHandler;
   Timer? _priceAlertTimer;
+  bool _priceCheckInFlight = false;
 
   @override
   void initState() {
@@ -202,16 +203,36 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   /// 限价单到价后后端只标记 triggered、客户端从不查询。无已启用提醒/未登录
   /// 时各自直接返回，不产生额外请求。
   void _startPriceAlertLoop() {
-    void tick() {
-      unawaited(CoinPriceAlertService.checkAllNow());
-      unawaited(LimitOrderAlertService.checkAllNow());
-    }
-
-    tick();
+    WidgetsBinding.instance.addObserver(this);
+    _priceAlertTick();
     _priceAlertTimer = Timer.periodic(
       const Duration(minutes: 5),
-      (_) => tick(),
+      (_) => _priceAlertTick(),
     );
+  }
+
+  /// 一轮提醒检查(防重入:慢网络下多轮 tick 不叠加,复审 P2)。
+  Future<void> _priceAlertTick() async {
+    if (_priceCheckInFlight) return;
+    _priceCheckInFlight = true;
+    try {
+      await CoinPriceAlertService.checkAllNow();
+      await LimitOrderAlertService.checkAllNow();
+    } catch (_) {
+      // 单轮失败不影响下一轮
+    } finally {
+      _priceCheckInFlight = false;
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    // 回前台补一次检查——限价单/价格到价"引导回 App 执行"以回前台为关键
+    // 时点,否则要等 periodic 下一跳(最长 5 分钟,复审 P2)。
+    if (state == AppLifecycleState.resumed) {
+      unawaited(_priceAlertTick());
+    }
   }
 
   /// 启动后检测设备完整性（Root/越狱）。release 模式下若设备被攻破，弹一次
@@ -327,6 +348,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   @override
   void dispose() {
     _priceAlertTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
     disposeChatSubscriptions();
     _deepLinkHandler?.dispose();
     unawaited(_deepLinkService?.dispose());

@@ -36,17 +36,26 @@ mixin _AASendLogicMixin on State<AASendPage> {
         _chainSymbol(),
         widget.account.address,
         contract: '',
+        // 测试网 AA 账户须查测试网 RPC——此前恒查主网,测试网账户会静默
+        // 拿到主网同地址余额(复审 P2-4)。
+        isTest: _isTestnetChain(),
       );
       if (!mounted) return;
       if (mm != null && !mm.error && mm.data is BigInt) {
         setState(() => nativeBalance = mm.data as BigInt);
       } else {
-        setState(() => nativeBalance = BigInt.zero);
+        // 查询失败保持 null → UI 显示 '—' 而非误报 '0'(复审 P2-5)。
+        setState(() => nativeBalance = null);
       }
     } catch (_) {
-      if (mounted) setState(() => nativeBalance = BigInt.zero);
+      if (mounted) setState(() => nativeBalance = null);
     }
   }
+
+  /// 该 AA 账户是否在测试网(chainId 命中 testnetConfigs)。
+  bool _isTestnetChain() => AAConfig.testnetConfigs.values.any(
+    (c) => c.chainId == widget.account.chainId,
+  );
 
   /// 任意 wei 值的人类可读字符串（同 [formatNativeBalance] 规则）。
   String formatWei(BigInt wei) {
@@ -68,12 +77,14 @@ mixin _AASendLogicMixin on State<AASendPage> {
     return frac6.isEmpty ? '$intPart' : '$intPart.$frac6';
   }
 
-  String _chainSymbol() => AAConfig.chainIds.entries
-      .firstWhere(
-        (e) => e.value == widget.account.chainId,
-        orElse: () => const MapEntry('ETH', 1),
-      )
-      .key;
+  String _chainSymbol() {
+    for (final e in AAConfig.chainIds.entries) {
+      if (e.value == widget.account.chainId) return e.key;
+    }
+    // 测试网原生币均为 ETH(Sepolia/Base Sepolia/Arb Sepolia);主网未命中
+    // 也兜底 ETH(与既有行为一致)。
+    return 'ETH';
+  }
 
   static final _addrRegex = RegExp(r'^0x[0-9a-fA-F]{40}$');
 
