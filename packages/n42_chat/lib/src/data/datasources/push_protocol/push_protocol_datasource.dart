@@ -78,12 +78,21 @@ class PushProtocolDatasource {
     }
   }
 
+  /// 已读 ID 集合上限——只增不清会无限增长(复审 P2)。
+  static const int _maxReadIds = 500;
+
   /// 将单条通知标记为已读
   Future<void> markAsRead(String notificationId) async {
     final ids = await getReadIds();
     if (ids.add(notificationId)) {
-      await _prefs.setString(_readIdsKey, jsonEncode(ids.toList()));
+      await _prefs.setString(_readIdsKey, jsonEncode(_capped(ids)));
     }
+  }
+
+  /// 截断到最近 [_maxReadIds] 条(LinkedHashSet 保插入序,丢最老)。
+  List<String> _capped(Set<String> ids) {
+    if (ids.length <= _maxReadIds) return ids.toList();
+    return ids.toList().sublist(ids.length - _maxReadIds);
   }
 
   /// 批量标记为已读
@@ -93,7 +102,7 @@ class PushProtocolDatasource {
     final before = ids.length;
     ids.addAll(notificationIds);
     if (ids.length != before) {
-      await _prefs.setString(_readIdsKey, jsonEncode(ids.toList()));
+      await _prefs.setString(_readIdsKey, jsonEncode(_capped(ids)));
     }
   }
 

@@ -264,7 +264,18 @@ class SearchRepositoryImpl implements ISearchRepository {
         limit: limit,
       );
       if (archiveItems.isEmpty) return liveItems;
-      return [...liveItems, ...archiveItems].take(limit).toList();
+      // 合并后按时间倒序重排——否则 live 全部排在 archive 之前,时间顺序错乱
+      // (复审 P2)。无 timestamp 的排最后。
+      final merged = [...liveItems, ...archiveItems]
+        ..sort((a, b) {
+          final ta = a.timestamp;
+          final tb = b.timestamp;
+          if (ta == null && tb == null) return 0;
+          if (ta == null) return 1;
+          if (tb == null) return -1;
+          return tb.compareTo(ta);
+        });
+      return merged.take(limit).toList();
     }
   }
 

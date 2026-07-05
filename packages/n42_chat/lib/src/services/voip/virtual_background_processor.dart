@@ -319,6 +319,9 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   final VoIPConfig _config;
   MediaStreamTrack? _sourceTrack;
   Uint8List? _backgroundImageBytes;
+  // 上次下发给原生的图片字节标识(长度+首尾字节),避免每次 pushConfig 都
+  // 把 MB 级图片重过 MethodChannel(复审 P2)。
+  int? _sentImageSignature;
 
   /// 原生 frame processor 配置通道。
   ///
@@ -399,21 +402,32 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   ///
   /// 配置变更后（[LiveKitService] 调用）应调用本方法，使原生侧拿到最新模式。
   Future<void> pushConfigToNative() async {
+    final bytes = _backgroundImageBytes;
+    // 只在虚拟背景图模式携带图片字节;且仅当字节自上次下发后变化时才带,
+    // 否则切模糊/纯色/摄像头 restart 等无关操作也会把 MB 级图重过通道
+    // (编解码双侧拷贝,复审 P2)。
+    final needImage = _config.backgroundMode == BackgroundMode.virtualBackground &&
+        bytes != null;
+    final sig = bytes == null
+        ? null
+        : bytes.length ^ (bytes.first << 8) ^ bytes.last;
+    final changed = sig != _sentImageSignature;
+
     await _safeNative('setBackgroundConfig', <String, dynamic>{
       'mode': _config.backgroundMode.name,
       'blurRadius': _config.backgroundBlurRadius,
       'solidColor': _config.backgroundProcessing.solidColor,
-      'hasBackgroundImage': _backgroundImageBytes != null,
+      'hasBackgroundImage': bytes != null,
       // 实际图片字节（原生按 `backgroundImageBytes as? ByteArray` 取，
       // Flutter 的 Uint8List 经 MethodChannel 自动映射为 Kotlin ByteArray）。
-      // 此前只发 hasBackgroundImage 布尔 → 原生取不到字节 → 虚拟背景图模式
-      // 永远降级为模糊；补发字节后背景图模式在 Android 发布帧上真正生效。
-      'backgroundImageBytes': _backgroundImageBytes,
+      // 仅在需要且变化时携带,否则传 null,原生保留上次已缓存的图。
+      if (needImage && changed) 'backgroundImageBytes': bytes,
       'beauty': _config.beautyStrength,
       // 本地相机轨道 id：原生据此定位 libwebrtc VideoSource 挂处理器
       // （见 docs/virtual-background-frame-injection.md §3.4）。
       'trackId': _sourceTrack?.id,
     });
+    if (needImage && changed) _sentImageSignature = sig;
   }
 
   Future<void> _safeNative(String method, [Object? args]) async {

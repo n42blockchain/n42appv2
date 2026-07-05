@@ -167,11 +167,14 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     int inserted = 0;
     await transaction(() async {
       for (final entry in entries) {
-        final rowId = await into(archivedMessages).insert(
+        // insertReturningOrNull:被 insertOrIgnore 忽略(eventId 已存在)时
+        // 返回 null,真正插入才返回行——避免用 rowId>0 把被忽略行也计入
+        // (last_insert_rowid 对被忽略行仍>0,会高估 totalArchived,复审 P2)。
+        final row = await into(archivedMessages).insertReturningOrNull(
           entry,
           mode: InsertMode.insertOrIgnore,
         );
-        if (rowId > 0) {
+        if (row != null) {
           inserted++;
         }
       }
