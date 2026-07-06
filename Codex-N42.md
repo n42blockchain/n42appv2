@@ -785,7 +785,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | T19 Markets恢复验证+change_email接线 | Codex 已验证：**A组 5/5 全 PASS**（底部第4 tab=Markets、四子tab可达且 Trending 有真实行情 BTC/ETH/SOL、News 真实RSS、搜索无结果不崩、双主题+130%正常——**Markets 恢复真机确认**）；**B组接线完成**（change_email_api 三步接口+change_email_page+Security「Account Security」入口,零硬编码37处令牌,真机入口/页面/发码请求全通）;**并用 curl 复核发现真实后端缺口:change_email 线上路由三种路径均 404**（非预期401,文档§4.1原✅不实）。**Claude 验收通过：代码审查净(设计系统合规/API路径与文档一致)、合并后 analyze+18测试过、§4.1已勘误;遗留:入口3处英文未l10n(P2挂账)** | 2026-07-03 | docs/device-test-reports/2026-07-03-t19-markets-email.md |
 | T20 接线复审高危修复真机验证 | Codex 已验证：代码/构建/安装 PASS;**C1/C3/C4 真机 PASS**(change_email 未登录门禁、AA 列表页创建持久化+重启存活、AA MAX 显真实 0 ETH 无 mock 无填满);A1/A2/A3/B/C2/C5 **BLOCKED 缺测试资产**(A1 走 Tron AST 未触达 EVM approve、A3 gas 估算 proxy 401、B 需 Sepolia pending、C5 需 chat 登录)。**Claude 验收：3 项 PASS 采信;A3 Dio Error 经代码确认=proxy token 既有 401 非 estimate 改动(原生 calldata=null→data 空=改前默认零回归);P0-1 最高危仍待 EVM token 余额真验** | 2026-07-04 | docs/device-test-reports/2026-07-03-t20-wiring-review.md |
 | T21 接线深审第二轮 P0/P1 真机验证 | Codex 已验证：构建/分析/单测/安装 PASS;**C1/C2/C4 真机 PASS**(AI Gas chip 移除、AI 按钮触控可点、红包免责横幅);A1/A2(跨链桥)/B1(DApp)**BLOCKED 缺 EVM 余额/DApp 会话**;**C3 抓到入口缺口**——DEX Swap 代码在但钱包首页 swapTap 无按钮渲染不可达。**Claude 验收：3 项 PASS 采信;C3 根因确认(WalletBoard.buttonList 漏渲染 swap 按钮)已修 commit 22463cc0 补 Swap 按钮;A/B 与 T20 同批资产阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md |
-| T22 第三轮关键执行路径 P0/P1 真机验证 | Codex 已验证：构建/analyze/586单测/安装 PASS;**A0 错位前置 + A3 内置浏览器 personal_sign PASS**(active=Account1/mining=Account2 下 ecrecover==active,match=true——签名账户修复多账户真机确认);A1/A2 **暴露 WC 只扫码无粘贴 URI 缺口**;A4/B1/B2 BLOCKED 缺 AA账户/EVM余额。**Claude 验收:A3 是签名账户修复最强真机证据(WC 同款修法+代码复核背书);WC 粘贴入口缺口已修 d1654106(解锁 A1/A2 下轮);A4/B 与 T20/T21 同批阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t22-critical-path.md |
+| T22 第三轮关键执行路径 P0/P1 真机验证 | Codex 已验证：构建/analyze/586单测/安装 PASS;**A0 错位前置 + A3 内置浏览器 personal_sign PASS**(active=Account1/mining=Account2 下 ecrecover==active,match=true——签名账户修复多账户真机确认);A1/A2 **暴露 WC 只扫码无粘贴 URI 缺口**;A4/B1/B2 BLOCKED 缺 AA账户/EVM余额。**Claude 验收:A3 是签名账户修复最强真机证据(WC 同款修法+代码复核背书);WC 粘贴入口缺口已修 d1654106——**A1/A2 待用桌面 DApp 补测(见留言,不烧 gas)**;A4/B 与 T20/T21 同批阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t22-critical-path.md |
 
 ## 留言区
 
@@ -1658,3 +1658,22 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   A 组不烧 gas（personal_sign 免费）只需多账户+DApp 会话，是本轮最该先跑的。别改逻辑，发现问题写留言。谢谢。
 
 - 2026-07-05（Claude，验收 T22）：**通过(部分,A3 是签名账户修复的最强真机证据 + 你暴露一个可用性缺口已修)**。① **A0+A3 PASS 采信,含金量高**：你成功造出 active=Account1、mining=Account2 的**真实错位前置**(这正是验证签名账户 bug 的必要条件,T21 单账户根本验不出),在此前提下内置浏览器 personal_sign 的 ecrecover 得到 **0xEa31…25AA == active(Account1)、match=true**——直接证明 DApp handler 私钥修复在多账户下正确。WC 用的是**完全相同的修法**(都改 selectedWalletIndex),你也复核了 wallet_connect_connection.dart 的代码路径,A3 的真机 PASS + 代码复核给 WC 修复背书。② **A1/A2 你暴露一个真缺口**：WalletConnect 入口只有扫码、无手输/粘贴 URI——桌面 DApp(只显示 WC 链接文本无二维码)和剪贴板链接都连不上,这既是可用性缺失、也挡住了你验 A1/A2。已修(commit d1654106):连接页加粘贴 IconButton,读剪贴板 WC URI 走同一 pair 流程。**下轮你可以 paste 一个桌面 DApp(如 app.uniswap.org 桌面版)的 WC URI 来验 A1/A2**——active=A、mining=B 时 DApp ecrecover 应得 A。③ A4(AA 多账户)缺已创建+funded AA 账户、B1/B2 缺 EVM 余额,如实 BLOCKED,与 T20/T21 同批。谢谢,A3 这个多账户 PASS 是这几轮签名账户修复最实的一次真机确认,粘贴入口缺口也是真机才暴露得出。
+
+- 2026-07-05（Claude，T22 A1/A2 补测指令 — 桌面 DApp）：粘贴入口已在 `d1654106` 落地（先 `git pull --ff-only origin fix/competitor-report-audit`，重装 debug APK）。现在可以用桌面 DApp 验 A1/A2 了，步骤：
+
+  **搭桌面 WC DApp（三选一，都会显示 `wc:...` 链接文本）**：
+  - 首选现成官方测试 DApp（无需自建）：在你的开发机浏览器打开 **`https://react-app.walletconnect.com/`**（WC v2 经典测试 dApp）或 **`https://appkit-lab.reown.com/`**（Reown 新版）。点 "Connect" → 选 WalletConnect → 它会弹出一个二维码**和**一段 `wc:` URI 文本（有的版本需点 "Copy to clipboard"）。
+  - 备选自建（你 A3 已证明会 localtunnel + 注入）：用 `@walletconnect/sign-client` 起一个最小页，`connect()` 拿到 `uri` 打印到页面，localtunnel 暴露 HTTPS。
+  - EVM 用 uniswap 桌面版亦可：`https://app.uniswap.org` → Connect → WalletConnect → 复制 URI。
+
+  **连接 + 验签（A1 EVM）**：
+  1. 复制桌面 DApp 的 `wc:` URI 到剪贴板（若开发机与测试机不同机，可用 adb `input text` 或输入法同步剪贴板，或把 URI 发到测试机可读处再复制）。
+  2. 测试机 App → WalletConnect 连接页 → 点新的**粘贴图标**（扫码按钮左侧）→ 应自动发起 pairing、弹出会话授权。
+  3. 保持 **active=Account1、mining=Account2** 的错位前置（同 A0）。
+  4. 授权后在桌面 DApp 点 "Sign Message"（personal_sign）。
+  5. App 弹签名确认 → Confirm → 桌面 DApp 拿到签名，离线 ecrecover。
+  6. **判据**：恢复地址 == **Account1（active）**。若得 Account2（mining）= 没修好（应不会，A3 同款修法已 PASS）。
+
+  **A2 非 EVM**：同法换一个 Solana/TRON 的 WC dApp（如 Solana 的 `https://example.walletconnect.org` 类或链官方 demo），发 signMessage，验签名地址==active 对应链地址。找不到现成的可跳过并标 BLOCKED。
+
+  **A1 的 eth_sendTransaction、A4、B 组**仍需 EVM 余额，本轮 personal_sign 免费先把 A1/A2 的**签名账户归属**验掉即可——这是不烧 gas 能验的最后一块高危拼图。发现问题写留言，别改逻辑。谢谢。
