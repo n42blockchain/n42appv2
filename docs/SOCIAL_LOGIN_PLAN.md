@@ -64,10 +64,18 @@
 
 Redirect URI 统一 `n42app://oauth/callback`（已有 `n42app` scheme，Android/iOS 均注册）。
 
-## 四、后端契约（外部 `api.n42.network`，本仓无代码 → 交外部团队）
+## 四、后端（✅ 仓内自建 `backend/social-auth` 已实现）
 
-`POST /v1/user/loginSocial` 现支持 `provider ∈ {google, apple, facebook, twitter, wechat}`。
-**需新增** `provider ∈ {discord, github, telegram}` 的处理：
+> **2026-07-06 更新**：新三家的后端已在本仓自建完成——`backend/social-auth`（Go 纯标准库，
+> 编译/vet/单测通过）。它实现 `POST /v1/user/loginSocial`，校验 Discord/GitHub OAuth2 与
+> Telegram Login Widget 后，经 Matrix Synapse shared-secret registration **无状态签发 Matrix 账号**
+> （localpart/password 由 identity 确定性派生，不存库），返回与 App 对齐的 `data.matrix_*`。
+> 部署/env 见 `backend/social-auth/README.md`。App 侧把新三家 `baseUrl` 指向本服务即可
+> （旧五家仍走外部 `api.n42.network`，或扩展 `providers.go` 的 `verifyProvider` 整体接管）。
+
+外部 `api.n42.network` 的 `POST /v1/user/loginSocial` 现支持
+`provider ∈ {google, apple, facebook, twitter, wechat}`。本仓 `backend/social-auth`
+**补齐** `provider ∈ {discord, github, telegram}` 的处理：
 
 | provider | 前端提交字段 | 后端动作 |
 |---|---|---|
@@ -88,7 +96,14 @@ Redirect URI 统一 `n42app://oauth/callback`（已有 `n42app` scheme，Android
 
 ## 六、实施批次
 
-- **批 1（本次）**：现状审计（本文档）+ Facebook iOS 基建（Info.plist）。
-- **批 2**：Discord + GitHub 前端全链（§3，WebView OAuth2 模板），gating 默认关，待 client id。
+- **批 1（已完成）**：现状审计（本文档）+ Facebook iOS 基建（Info.plist）。
+- **批 1.5（已完成）**：后端 `backend/social-auth` 自建（Discord/GitHub/Telegram 的 loginSocial +
+  Matrix 签发，编译/单测通过）。
+- **批 2（下一批）**：Discord + GitHub 前端全链（§3，WebView OAuth2 授权组件），gating 默认关，待 client id。
 - **批 3**：Telegram Login Widget 前端。
-- **批 4**：外部就绪后逐家真机验 + 开 gating。
+- **批 4**：外部就绪（client id + 部署 social-auth + Facebook iOS 后台）后逐家真机验 + 开 gating。
+
+### 前端接入的剩余外部前置（批 2/3 真用前）
+1. 注册 Discord App / GitHub OAuth App / Telegram Bot，拿 client id/secret / bot token。
+2. 部署 `backend/social-auth`，配 `MATRIX_SHARED_SECRET` 等 env（见其 README）。
+3. App 侧新三家 `baseUrl` 指向部署地址。

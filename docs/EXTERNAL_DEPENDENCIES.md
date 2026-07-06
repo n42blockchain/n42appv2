@@ -41,6 +41,7 @@ Chat 社交登录（Twitter 等 SSO key）经 `chatSocialAuthConfig` 传入，�
 | **LiveKit Egress** | Chat §3 通话录制 | 框架代码就位（对比表 ⏳），需在 LiveKit 侧部署 Egress 服务并暴露录制 API |
 | **mautrix 桥接族** | Chat §10 跨协议桥（16 平台，`BridgeManager`）| 客户端管理 UI 完整；每座桥需在服务端部署对应 mautrix-* 进程并在 homeserver 注册 appservice |
 | **swap 后端（`backend/swap/`，Go，仓内）** | 钱包 DEX 聚合报价/兑换历史/限价单存储/**价格预警（2026-07-03 新增：CRUD+CoinGecko 监控+webhook/轮询触达）** | ✅ 仓内自有，Docker 部署，env 清单见 `backend/swap/README.md`。见"三、后端盘点" |
+| **social-auth 后端（`backend/social-auth/`，Go，仓内）** | Chat 第三方登录 **Discord/GitHub/Telegram**（2026-07-06 新增）：OAuth2/Login-Widget 校验 → Matrix shared-secret 无状态签发账号 | ✅ 仓内自有（纯标准库），env 见 `backend/social-auth/README.md`。**外部前置**：Matrix homeserver 开 shared-secret registration + 三家 app 注册。现有五家仍走外部 `api.n42.network`。前端集成见 `SOCIAL_LOGIN_PLAN.md` |
 | **AA Bundler** | 钱包 §3 AA UserOp 真实发送 | 经 `ProxyConfig.bundler(chainId)` 走代理转发到第三方 bundler（需在代理侧配置上游，如 Pimlico/Alchemy）|
 
 ## 三、仓内后端盘点 + 无法由现有后端补齐的项（需交付物）
