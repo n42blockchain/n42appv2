@@ -27,6 +27,16 @@
 		<dict>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>facebook</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb903080600916838</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>wc</string>
@@ -63,9 +73,19 @@
 		<string>weixin</string>
 		<string>weixinULAPI</string>
 		<string>weixinURLParamsAPI</string>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>FacebookAppID</key>
+	<string>903080600916838</string>
+	<key>FacebookClientToken</key>
+	<string>b968a2a64f80b3bf9fe9981d72d2cd8b</string>
+	<key>FacebookDisplayName</key>
+	<string>N42</string>
 	<key>N42ChatGoogleClientID</key>
 	<string>$(N42_CHAT_GOOGLE_CLIENT_ID)</string>
 	<key>N42ChatGoogleServerClientID</key>
