@@ -64,6 +64,35 @@
 
 Redirect URI 统一 `n42app://oauth/callback`（已有 `n42app` scheme，Android/iOS 均注册）。
 
+### 3.3 精确接入点（基于代码，供下一批直接实现）
+
+登录走 **BLoC 链路**（非直接调用），照 Twitter 现成模板逐处加：
+
+| 层 | 文件:锚点 | 加什么（照现有 provider） |
+|---|---|---|
+| Event | `presentation/blocs/auth/auth_event.dart:275`（`AuthTwitterLoginRequested`）| `AuthDiscordLoginRequested`/`GitHub`/`Telegram`（带 `homeserver`）|
+| Bloc handler | `presentation/blocs/auth/auth_bloc.dart:887`（`_onTwitterLogin`）+ `:56` on() 注册 | `_onDiscordLogin`：`authService.signInWithDiscord()` → `_authRepository.loginWithSocialToken(provider:'discord', idToken: code)` → `_completeAuthenticatedFlow` |
+| Repository | `data/repositories/*auth*.dart:790`（`loginWithSocialToken` 的 provider switch，:821 起）| 加 `discord`/`github`/`telegram` case，调新 API 方法。**baseUrl 分流见下** |
+| API | `data/datasources/remote/social_auth_api.dart`（`_loginWithSocialToken` 通用方法已 provider 参数化）| 加 `loginWithDiscord/GitHub/Telegram` 包装，或直接用通用方法 |
+| Service | `services/auth/auth_methods_service.dart:175`（`initialize`）+ `signInWithTwitter` 模式 | `initialize` 加 `discordClientId` 等参数 + `_discordClientId` 字段；`isDiscordAvailable()`；`signInWithDiscord()`=**WebView OAuth2**（见下） |
+| UI | `presentation/widgets/auth/social_login_buttons.dart:214`（Twitter 按钮）+ `:555`（`_handleTwitterSignIn`）| 加按钮（gating `enableDiscordLogin && isDiscordAvailable`）+ `_handleDiscordSignIn`（发 `AuthDiscordLoginRequested`）+ loading 字段 |
+| Config(chat) | `n42_chat_config.dart:488`（`enableFacebookLogin`）| `enableDiscordLogin/GithubLogin/TelegramLogin`（默认 false）+ `socialAuthBaseUrl`（指向 `backend/social-auth`）|
+| Config(宿主) | `core/platform/chat_social_auth_config.dart` + `core/app/chat_initialization.dart` | 加 `discordClientId` 等字段 + dart-define（`CHAT_DISCORD_CLIENT_ID` 等）+ `enableDiscordLogin: discordConfigured` |
+
+**baseUrl 分流（关键）**：`SocialAuthApi` 默认 `api.n42.network`（旧五家）。新三家须指向自建
+`backend/social-auth`——repository 持第二个 `SocialAuthApi(baseUrl: config.socialAuthBaseUrl)`
+实例，对 `discord/github/telegram` 用它；旧五家继续用默认实例。
+
+**WebView OAuth2 组件（新，Discord/GitHub 共用）**：新建
+`presentation/pages/auth/oauth_webview_page.dart`——用 `webview_flutter`（已在依赖）打开
+`authorizeUrl`，`NavigationDelegate.onNavigationRequest` 拦截前缀 `n42app://oauth/callback`，
+从 query 取 `code`，`Navigator.pop(code)`。`signInWithDiscord()` 组装 authorize URL
+（client_id + redirect_uri + scope + state）→ push 该页拿 code → 包成 `SocialLoginResult(accessToken: code)`。
+后端 `backend/social-auth` 收 code→换 token（client_secret 在后端）。
+
+**Telegram**：无标准 OAuth2，用 `oauth.telegram.org/auth?bot_id=...` 的 Login Widget（同 WebView 拦截
+`tgAuthResult`），或深链到 Telegram App；拿到 `id/hash/auth_date/...` 传后端校验 hash。
+
 ## 四、后端（✅ 仓内自建 `backend/social-auth` 已实现）
 
 > **2026-07-06 更新**：新三家的后端已在本仓自建完成——`backend/social-auth`（Go 纯标准库，
