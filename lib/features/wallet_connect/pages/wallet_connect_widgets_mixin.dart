@@ -10,6 +10,7 @@ import 'package:n42_wallet/features/widgets/dapp_security_badge.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -167,6 +168,17 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
                 }, variant: AppButtonVariant.secondary),
               ),
               SizedBox(width: AppSpacing.space8),
+              // 粘贴 URI:桌面 DApp 只显示 WC 链接文本(无二维码可扫)、或从其他
+              // App 复制的链接,此前仅扫码入口无法连接(T22 暴露的可用性缺口)。
+              IconButton(
+                tooltip: 'Paste connection link',
+                icon: Icon(
+                  Icons.content_paste_rounded,
+                  color: AppColorTokens.of(context).brand,
+                ),
+                onPressed: () => _pasteAndPairWcUri(connectV2),
+              ),
+              SizedBox(width: AppSpacing.space8),
               Expanded(
                 child: actionButton(S.of(context).g_key_4, () async {
                   final scanStr = await scan();
@@ -186,6 +198,18 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
         ),
       ],
     );
+  }
+
+  /// 从剪贴板读取 WalletConnect URI 并发起连接(与扫码走同一 pair 流程)。
+  Future<void> _pasteAndPairWcUri(WalletConnectProvider connectV2) async {
+    final data = await Clipboard.getData(Clipboard.kTextPlain);
+    if (!mounted) return;
+    final uri = data?.text?.trim() ?? '';
+    if (isWalletConnectUriString(uri)) {
+      connectV2.viewStateDeal(WalletConnectState.loading, params: uri);
+    } else {
+      ToastUtils.show(S.of(context).g_key_203);
+    }
   }
 
   Widget transactionOKWidget(WalletConnectProvider connectV2) {
