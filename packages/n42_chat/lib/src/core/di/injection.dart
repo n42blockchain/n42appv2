@@ -51,6 +51,7 @@ import '../services/speech_to_text_service.dart';
 import '../services/voice_service.dart';
 import '../../data/datasources/local/archive_database.dart';
 import '../../data/datasources/local/media_metadata_database.dart';
+import '../../data/datasources/remote/social_auth_api.dart';
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../data/repositories/moment_repository_impl.dart';
 import '../../data/repositories/sticker_repository_impl.dart';
@@ -772,10 +773,20 @@ Future<void> _registerDataSources() async {
 void _registerRepositories() {
   // 认证仓库
   getIt.registerLazySingleton<IAuthRepository>(
-    () => AuthRepositoryImpl(
-      authDataSource: getIt<MatrixAuthDataSource>(),
-      secureStorage: getIt<SecureStorageDataSource>(),
-    ),
+    () {
+      final cfg = getIt<N42ChatConfig>();
+      final backendBaseUrl = cfg.socialAuthBaseUrl?.trim();
+      return AuthRepositoryImpl(
+        authDataSource: getIt<MatrixAuthDataSource>(),
+        secureStorage: getIt<SecureStorageDataSource>(),
+        // 新三家（discord/github/telegram）指向自建 backend/social-auth；
+        // 未配置则回退默认实例，配合 gating 保证按钮隐藏、不会误发到 api.n42.network。
+        socialAuthBackendApi:
+            (backendBaseUrl != null && backendBaseUrl.isNotEmpty)
+            ? SocialAuthApi(baseUrl: backendBaseUrl)
+            : null,
+      );
+    },
     dispose: (repo) => (repo as AuthRepositoryImpl).dispose(),
   );
 

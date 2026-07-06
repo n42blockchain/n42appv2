@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -13,10 +14,12 @@ import '../../../core/utils/wallet_login_credentials.dart';
 import '../../../core/utils/sso_brand.dart';
 import '../../../integration/wallet_bridge.dart';
 import '../../../n42_chat.dart' show N42Chat;
+import '../../../n42_chat_config.dart' show N42ChatConfig;
 import '../../../services/auth/auth_methods_service.dart' show AuthMethodsService, SsoProvider;
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../../pages/auth/oauth_webview_page.dart';
 import '../../../core/utils/debug_log.dart';
 import '../../helpers/bloc_message_helper.dart';
 
@@ -61,6 +64,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
   bool _isSsoLoading = false;
   bool _isFacebookLoading = false;
   bool _isTwitterLoading = false;
+  bool _isDiscordLoading = false;
+  bool _isGithubLoading = false;
+  bool _isTelegramLoading = false;
   bool _isWeChatLoading = false;
   bool _isWalletLoading = false;
   bool _isAppleAvailable = false;
@@ -73,6 +79,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
       _isSsoLoading ||
       _isFacebookLoading ||
       _isTwitterLoading ||
+      _isDiscordLoading ||
+      _isGithubLoading ||
+      _isTelegramLoading ||
       _isWeChatLoading ||
       _isWalletLoading;
 
@@ -84,6 +93,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
     bool? sso,
     bool? facebook,
     bool? twitter,
+    bool? discord,
+    bool? github,
+    bool? telegram,
     bool? weChat,
   }) {
     if (!mounted) return;
@@ -93,6 +105,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
       if (sso != null) _isSsoLoading = sso;
       if (facebook != null) _isFacebookLoading = facebook;
       if (twitter != null) _isTwitterLoading = twitter;
+      if (discord != null) _isDiscordLoading = discord;
+      if (github != null) _isGithubLoading = github;
+      if (telegram != null) _isTelegramLoading = telegram;
       if (weChat != null) _isWeChatLoading = weChat;
     });
   }
@@ -104,6 +119,9 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
       sso: false,
       facebook: false,
       twitter: false,
+      discord: false,
+      github: false,
+      telegram: false,
       weChat: false,
     );
     if (mounted && _isWalletLoading) {
@@ -216,6 +234,33 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
           isLoading: _isTwitterLoading,
           tooltip: 'Twitter',
           backgroundColor: Colors.black,
+          iconColor: Colors.white,
+        ),
+      if (_isDiscordConfigured(config))
+        _buildSocialButton(
+          onTap: isAnyLoading ? null : _handleDiscordSignIn,
+          icon: Icons.forum,
+          isLoading: _isDiscordLoading,
+          tooltip: 'Discord',
+          backgroundColor: const Color(0xFF5865F2),
+          iconColor: Colors.white,
+        ),
+      if (_isGithubConfigured(config))
+        _buildSocialButton(
+          onTap: isAnyLoading ? null : _handleGithubSignIn,
+          icon: Icons.code,
+          isLoading: _isGithubLoading,
+          tooltip: 'GitHub',
+          backgroundColor: const Color(0xFF24292F),
+          iconColor: Colors.white,
+        ),
+      if (_isTelegramConfigured(config))
+        _buildSocialButton(
+          onTap: isAnyLoading ? null : _handleTelegramSignIn,
+          icon: Icons.send,
+          isLoading: _isTelegramLoading,
+          tooltip: 'Telegram',
+          backgroundColor: const Color(0xFF26A5E4),
           iconColor: Colors.white,
         ),
       if ((config?.enableWeChatLogin ?? false) && _isWeChatAvailable)
@@ -581,6 +626,223 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
         widget.onError?.call(e.toString());
       }
     }
+  }
+
+  // ── 增量三家（Discord/GitHub/Telegram）gating ──────────────────────────────
+  // 均要求：开关开 + 对应 client id/bot id 已配 + 自建后端 baseUrl 已配，
+  // 缺一则按钮隐藏（避免"按钮显示但登录失败"的空壳）。
+
+  bool _backendConfigured(N42ChatConfig? config) =>
+      config?.socialAuthBaseUrl?.isNotEmpty ?? false;
+
+  bool _isDiscordConfigured(N42ChatConfig? config) =>
+      (config?.enableDiscordLogin ?? false) &&
+      (config?.discordClientId?.isNotEmpty ?? false) &&
+      _backendConfigured(config);
+
+  bool _isGithubConfigured(N42ChatConfig? config) =>
+      (config?.enableGithubLogin ?? false) &&
+      (config?.githubClientId?.isNotEmpty ?? false) &&
+      _backendConfigured(config);
+
+  bool _isTelegramConfigured(N42ChatConfig? config) =>
+      (config?.enableTelegramLogin ?? false) &&
+      (config?.telegramBotId?.isNotEmpty ?? false) &&
+      _backendConfigured(config);
+
+  /// Discord 登录：WebView OAuth2 拿 code → 事件带入 bloc。
+  Future<void> _handleDiscordSignIn() async {
+    final config = N42Chat.config;
+    if (!_isDiscordConfigured(config)) return;
+    await _handleOAuth2SignIn(
+      clientId: config!.discordClientId!,
+      redirectUri: config.oauthRedirectUri,
+      authorizeBase: 'https://discord.com/oauth2/authorize',
+      scope: 'identify email',
+      title: 'Discord',
+      setLoading: (v) => _setProviderLoading(discord: v),
+      dispatch: (code) => AuthDiscordLoginRequested(
+        homeserver: _homeserver,
+        code: code,
+        redirectUri: config.oauthRedirectUri,
+      ),
+    );
+  }
+
+  /// GitHub 登录：WebView OAuth2 拿 code → 事件带入 bloc。
+  Future<void> _handleGithubSignIn() async {
+    final config = N42Chat.config;
+    if (!_isGithubConfigured(config)) return;
+    await _handleOAuth2SignIn(
+      clientId: config!.githubClientId!,
+      redirectUri: config.oauthRedirectUri,
+      authorizeBase: 'https://github.com/login/oauth/authorize',
+      scope: 'read:user user:email',
+      title: 'GitHub',
+      setLoading: (v) => _setProviderLoading(github: v),
+      dispatch: (code) => AuthGithubLoginRequested(
+        homeserver: _homeserver,
+        code: code,
+        redirectUri: config.oauthRedirectUri,
+      ),
+    );
+  }
+
+  /// Discord/GitHub 共用的 OAuth2 Authorization Code 流程。
+  Future<void> _handleOAuth2SignIn({
+    required String clientId,
+    required String redirectUri,
+    required String authorizeBase,
+    required String scope,
+    required String title,
+    required void Function(bool) setLoading,
+    required AuthEvent Function(String code) dispatch,
+  }) async {
+    if (!widget.isAgreedToTerms) {
+      widget.onTermsNotAgreed?.call();
+      return;
+    }
+    if (_homeserver.isEmpty) {
+      widget.onError?.call(
+        S.of(context)?.authEnterServerAddressFirst ??
+            'Please enter server address first',
+      );
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // state 用于抗 CSRF（当前仅本地校验形态占位，后端换 token 不依赖它）。
+      final state = DateTime.now().microsecondsSinceEpoch.toRadixString(16);
+      final authorizeUrl = Uri.parse(authorizeBase).replace(
+        queryParameters: {
+          'client_id': clientId,
+          'redirect_uri': redirectUri,
+          'response_type': 'code',
+          'scope': scope,
+          'state': state,
+        },
+      ).toString();
+
+      if (!mounted) return;
+      final result = await OAuthWebViewPage.open(
+        context,
+        authorizeUrl: authorizeUrl,
+        redirectPrefix: redirectUri,
+        title: title,
+      );
+
+      final code = result?.queryParameters['code'];
+      if (code == null || code.isEmpty) {
+        // 用户取消或未拿到 code
+        setLoading(false);
+        return;
+      }
+
+      if (mounted) {
+        context.read<AuthBloc>().add(dispatch(code));
+      }
+    } catch (e) {
+      if (mounted) {
+        setLoading(false);
+        widget.onError?.call(e.toString());
+      }
+    }
+  }
+
+  /// Telegram 登录：oauth.telegram.org Login Widget → fragment 里的
+  /// tgAuthResult(base64url(JSON)) → 事件带入 bloc（后端验 hash）。
+  Future<void> _handleTelegramSignIn() async {
+    final config = N42Chat.config;
+    if (!_isTelegramConfigured(config)) return;
+    if (!widget.isAgreedToTerms) {
+      widget.onTermsNotAgreed?.call();
+      return;
+    }
+    if (_homeserver.isEmpty) {
+      widget.onError?.call(
+        S.of(context)?.authEnterServerAddressFirst ??
+            'Please enter server address first',
+      );
+      return;
+    }
+
+    _setProviderLoading(telegram: true);
+    try {
+      final redirectUri = config!.oauthRedirectUri;
+      final authorizeUrl = Uri.parse('https://oauth.telegram.org/auth').replace(
+        queryParameters: {
+          'bot_id': config.telegramBotId!,
+          'origin': redirectUri,
+          'return_to': redirectUri,
+          'request_access': 'write',
+          'embed': '0',
+        },
+      ).toString();
+
+      if (!mounted) return;
+      final result = await OAuthWebViewPage.open(
+        context,
+        authorizeUrl: authorizeUrl,
+        redirectPrefix: redirectUri,
+        title: 'Telegram',
+      );
+
+      final data = _parseTelegramResult(result);
+      if (data == null || data['id'] == null) {
+        _setProviderLoading(telegram: false);
+        return;
+      }
+
+      if (mounted) {
+        context.read<AuthBloc>().add(
+          AuthTelegramLoginRequested(homeserver: _homeserver, data: data),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        _setProviderLoading(telegram: false);
+        widget.onError?.call(e.toString());
+      }
+    }
+  }
+
+  /// 从回调 Uri 解析 Telegram 授权结果。
+  ///
+  /// 两种承载形态都兼容：
+  /// - fragment `#tgAuthResult=<base64url(JSON)>`（Login Widget 标准回传）；
+  /// - 平铺 query 参数（部分代理/中转形态）。
+  Map<String, String>? _parseTelegramResult(Uri? uri) {
+    if (uri == null) return null;
+
+    // 形态一：fragment 里的 tgAuthResult
+    final fragment = uri.fragment;
+    const marker = 'tgAuthResult=';
+    final idx = fragment.indexOf(marker);
+    if (idx >= 0) {
+      var b64 = fragment.substring(idx + marker.length);
+      final amp = b64.indexOf('&');
+      if (amp >= 0) b64 = b64.substring(0, amp);
+      b64 = Uri.decodeComponent(b64);
+      try {
+        // base64url，可能缺省填充——手动补齐到 4 的倍数
+        final pad = b64.length % 4;
+        if (pad > 0) b64 = b64 + ('=' * (4 - pad));
+        final jsonStr = utf8.decode(base64Url.decode(b64));
+        final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
+        return decoded.map((k, v) => MapEntry(k, v.toString()));
+      } catch (e) {
+        debugLog('Telegram: failed to decode tgAuthResult: $e');
+        return null;
+      }
+    }
+
+    // 形态二：平铺 query
+    if (uri.queryParameters.containsKey('id') &&
+        uri.queryParameters.containsKey('hash')) {
+      return Map<String, String>.from(uri.queryParameters);
+    }
+    return null;
   }
 
   /// 钱包/DID 登录：取地址 → 钱包对固定消息签名 → 派生凭据登录/注册

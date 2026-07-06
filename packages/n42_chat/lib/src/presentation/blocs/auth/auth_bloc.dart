@@ -54,6 +54,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthSsoLoginRequested>(_onSsoLogin);
     on<AuthFacebookLoginRequested>(_onFacebookLogin);
     on<AuthTwitterLoginRequested>(_onTwitterLogin);
+    on<AuthDiscordLoginRequested>(_onDiscordLogin);
+    on<AuthGithubLoginRequested>(_onGithubLogin);
+    on<AuthTelegramLoginRequested>(_onTelegramLogin);
     on<AuthWeChatLoginRequested>(_onWeChatLogin);
     on<AuthRequestChangeEmailRequested>(_onRequestChangeEmail);
     on<AuthConfirmChangeEmailRequested>(_onConfirmChangeEmail);
@@ -931,6 +934,133 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         state.copyWith(
           status: AuthStatus.error,
           errorMessage: BlocMessageKeys.authTwitterLoginFailed,
+        ),
+      );
+    }
+  }
+
+  /// Discord 登录（code 由 UI 层 WebView OAuth2 取回后经事件带入）
+  Future<void> _onDiscordLogin(
+    AuthDiscordLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _completeOAuthCodeLogin(
+      emit: emit,
+      homeserver: event.homeserver,
+      provider: 'discord',
+      code: event.code,
+      redirectUri: event.redirectUri,
+      failureKey: BlocMessageKeys.authDiscordLoginFailed,
+    );
+  }
+
+  /// GitHub 登录（同 Discord，走自建 backend/social-auth）
+  Future<void> _onGithubLogin(
+    AuthGithubLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    await _completeOAuthCodeLogin(
+      emit: emit,
+      homeserver: event.homeserver,
+      provider: 'github',
+      code: event.code,
+      redirectUri: event.redirectUri,
+      failureKey: BlocMessageKeys.authGithubLoginFailed,
+    );
+  }
+
+  /// Discord/GitHub 共用：用授权 code 调仓库社交登录换 Matrix 会话。
+  Future<void> _completeOAuthCodeLogin({
+    required Emitter<AuthState> emit,
+    required String homeserver,
+    required String provider,
+    required String code,
+    required String redirectUri,
+    required String failureKey,
+  }) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    if (code.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: BlocMessageKeys.authLoginCancelled,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final result = await _authRepository.loginWithSocialToken(
+        homeserver: homeserver,
+        provider: provider,
+        idToken: code,
+        extra: {'redirect_uri': redirectUri},
+      );
+
+      if (result.success && result.user != null) {
+        await _completeAuthenticatedFlow(result.user!, emit);
+      } else {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: result.errorMessage ?? failureKey,
+            errorType: result.errorType,
+          ),
+        );
+      }
+    } catch (e) {
+      debugLog('AuthBloc: $provider login failed - $e');
+      emit(
+        state.copyWith(status: AuthStatus.error, errorMessage: failureKey),
+      );
+    }
+  }
+
+  /// Telegram 登录（Login Widget 数据由 UI 层取回后经事件带入，后端验 hash）
+  Future<void> _onTelegramLogin(
+    AuthTelegramLoginRequested event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+
+    final id = event.data['id'];
+    if (id == null || id.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.unauthenticated,
+          errorMessage: BlocMessageKeys.authLoginCancelled,
+        ),
+      );
+      return;
+    }
+
+    try {
+      final result = await _authRepository.loginWithSocialToken(
+        homeserver: event.homeserver,
+        provider: 'telegram',
+        idToken: id,
+        extra: event.data,
+      );
+
+      if (result.success && result.user != null) {
+        await _completeAuthenticatedFlow(result.user!, emit);
+      } else {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage:
+                result.errorMessage ?? BlocMessageKeys.authTelegramLoginFailed,
+            errorType: result.errorType,
+          ),
+        );
+      }
+    } catch (e) {
+      debugLog('AuthBloc: Telegram login failed - $e');
+      emit(
+        state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: BlocMessageKeys.authTelegramLoginFailed,
         ),
       );
     }

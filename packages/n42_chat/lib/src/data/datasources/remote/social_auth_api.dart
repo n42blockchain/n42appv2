@@ -94,6 +94,58 @@ class SocialAuthApi {
     );
   }
 
+  /// 使用 Discord OAuth2 授权码登录（走自建 backend/social-auth）
+  ///
+  /// [code] OAuth2 Authorization Code；后端用 client_secret 换 token（secret 不落客户端）。
+  /// [redirectUri] 与授权请求一致的回调地址。
+  Future<SocialLoginResponse> loginWithDiscord({
+    required String code,
+    required String redirectUri,
+  }) async {
+    return _loginWithCustomPayload(
+      provider: 'discord',
+      body: {
+        'provider': 'discord',
+        'code': code,
+        'redirect_uri': redirectUri,
+        'source': 'app',
+      },
+    );
+  }
+
+  /// 使用 GitHub OAuth2 授权码登录（走自建 backend/social-auth）
+  Future<SocialLoginResponse> loginWithGithub({
+    required String code,
+    required String redirectUri,
+  }) async {
+    return _loginWithCustomPayload(
+      provider: 'github',
+      body: {
+        'provider': 'github',
+        'code': code,
+        'redirect_uri': redirectUri,
+        'source': 'app',
+      },
+    );
+  }
+
+  /// 使用 Telegram Login Widget 回传数据登录（走自建 backend/social-auth）
+  ///
+  /// [data] Login Widget 回传的字段（id/hash/auth_date/username/first_name...），
+  /// 后端用 Bot Token 校验 hash。
+  Future<SocialLoginResponse> loginWithTelegram({
+    required Map<String, String> data,
+  }) async {
+    return _loginWithCustomPayload(
+      provider: 'telegram',
+      body: {
+        'provider': 'telegram',
+        'source': 'app',
+        ...data,
+      },
+    );
+  }
+
   /// 通用社交登录方法
   Future<SocialLoginResponse> _loginWithSocialToken({
     required String provider,
@@ -140,7 +192,7 @@ class SocialAuthApi {
           matrixHomeserver: data['data']['matrix_homeserver'] as String?,
         );
       } else {
-        final error = (data['err'] ?? 'Login failed').toString();
+        final error = (data['err'] ?? data['msg'] ?? 'Login failed').toString();
         debugLog('SocialAuthApi: Login failed - $error');
         return SocialLoginResponse.failure(error);
       }

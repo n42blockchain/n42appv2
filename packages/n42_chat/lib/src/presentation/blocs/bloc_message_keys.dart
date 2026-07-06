@@ -53,6 +53,9 @@ class BlocMessageKeys {
   static const authSsoLoginFailed = 'auth_sso_login_failed';
   static const authFacebookLoginFailed = 'auth_facebook_login_failed';
   static const authTwitterLoginFailed = 'auth_twitter_login_failed';
+  static const authDiscordLoginFailed = 'auth_discord_login_failed';
+  static const authGithubLoginFailed = 'auth_github_login_failed';
+  static const authTelegramLoginFailed = 'auth_telegram_login_failed';
   static const authWeChatLoginFailed = 'auth_wechat_login_failed';
   static const authWeChatNotConfigured = 'auth_wechat_not_configured';
   static const authWeChatNotInstalled = 'auth_wechat_not_installed';

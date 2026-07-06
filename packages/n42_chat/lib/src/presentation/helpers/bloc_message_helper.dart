@@ -102,6 +102,14 @@ String resolveBlocMessage(BuildContext context, String key) {
       return l10n.blocAuthFacebookLoginFailed;
     case BlocMessageKeys.authTwitterLoginFailed:
       return l10n.blocAuthTwitterLoginFailed;
+    // Discord/GitHub/Telegram 为增量三家，暂无独立 l10n 键，回退可读英文兜底
+    // （多数情况下展示的是仓库层返回的真实错误，此兜底仅用于意外异常）。
+    case BlocMessageKeys.authDiscordLoginFailed:
+      return 'Discord login failed';
+    case BlocMessageKeys.authGithubLoginFailed:
+      return 'GitHub login failed';
+    case BlocMessageKeys.authTelegramLoginFailed:
+      return 'Telegram login failed';
     case BlocMessageKeys.authWeChatLoginFailed:
       return l10n.blocAuthWeChatLoginFailed;
     case BlocMessageKeys.authWeChatNotConfigured:

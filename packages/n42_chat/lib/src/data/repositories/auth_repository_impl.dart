@@ -19,6 +19,9 @@ class AuthRepositoryImpl implements IAuthRepository {
   final MatrixAuthDataSource _authDataSource;
   final SecureStorageDataSource _secureStorage;
   final SocialAuthApi _socialAuthApi;
+  // 新三家（discord/github/telegram）走自建 backend/social-auth；
+  // 未配置 baseUrl 时回退到默认实例（对新三家会失败，但 gating 保证按钮隐藏）。
+  final SocialAuthApi _socialAuthBackendApi;
 
   final _loginStateController = StreamController<bool>.broadcast();
 
@@ -41,9 +44,12 @@ class AuthRepositoryImpl implements IAuthRepository {
     MatrixAuthDataSource? authDataSource,
     SecureStorageDataSource? secureStorage,
     SocialAuthApi? socialAuthApi,
+    SocialAuthApi? socialAuthBackendApi,
   }) : _authDataSource = authDataSource ?? MatrixAuthDataSource(),
        _secureStorage = secureStorage ?? SecureStorageDataSource(),
-       _socialAuthApi = socialAuthApi ?? SocialAuthApi();
+       _socialAuthApi = socialAuthApi ?? SocialAuthApi(),
+       _socialAuthBackendApi =
+           socialAuthBackendApi ?? socialAuthApi ?? SocialAuthApi();
 
   @override
   bool get isLoggedIn => _authDataSource.isLoggedIn;
@@ -844,6 +850,28 @@ class AuthRepositoryImpl implements IAuthRepository {
         case 'wechat':
           response = await _socialAuthApi.loginWithWeChat(
             code: primaryCredential,
+          );
+          break;
+        case 'discord':
+          response = await _socialAuthBackendApi.loginWithDiscord(
+            code: primaryCredential,
+            redirectUri: (extra?['redirect_uri'] as String?) ?? '',
+          );
+          break;
+        case 'github':
+          response = await _socialAuthBackendApi.loginWithGithub(
+            code: primaryCredential,
+            redirectUri: (extra?['redirect_uri'] as String?) ?? '',
+          );
+          break;
+        case 'telegram':
+          // Telegram Login Widget 回传字段由 extra 携带，逐一校验后由后端验 hash。
+          final tgData = <String, String>{};
+          extra?.forEach((k, v) {
+            if (v != null) tgData[k] = v.toString();
+          });
+          response = await _socialAuthBackendApi.loginWithTelegram(
+            data: tgData,
           );
           break;
         default:

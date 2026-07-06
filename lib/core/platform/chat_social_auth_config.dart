@@ -8,6 +8,11 @@ class ChatSocialAuthConfig {
   final String twitterRedirectUri;
   final String weChatAppId;
   final String weChatUniversalLink;
+  // 增量三家（走自建 backend/social-auth）
+  final String discordClientId;
+  final String githubClientId;
+  final String telegramBotId;
+  final String socialAuthBaseUrl;
 
   const ChatSocialAuthConfig({
     required this.googleClientId,
@@ -17,6 +22,10 @@ class ChatSocialAuthConfig {
     required this.twitterRedirectUri,
     required this.weChatAppId,
     required this.weChatUniversalLink,
+    this.discordClientId = '',
+    this.githubClientId = '',
+    this.telegramBotId = '',
+    this.socialAuthBaseUrl = '',
   });
 
   bool get googleConfigured =>
@@ -26,6 +35,18 @@ class ChatSocialAuthConfig {
       twitterApiKey.isNotEmpty && twitterApiSecret.isNotEmpty;
 
   bool get weChatConfigured => weChatAppId.isNotEmpty;
+
+  /// 后端基址是三家的公共前置：未配则三家一律不可用。
+  bool get socialAuthBackendConfigured => socialAuthBaseUrl.isNotEmpty;
+
+  bool get discordConfigured =>
+      socialAuthBackendConfigured && discordClientId.isNotEmpty;
+
+  bool get githubConfigured =>
+      socialAuthBackendConfigured && githubClientId.isNotEmpty;
+
+  bool get telegramConfigured =>
+      socialAuthBackendConfigured && telegramBotId.isNotEmpty;
 
   bool supportsGoogleForCurrentPlatform({
     required bool isAndroid,
@@ -74,6 +95,28 @@ class ChatSocialAuthConfig {
           ? '[ChatSocialAuth] WeChat: enabled'
           : '[ChatSocialAuth] WeChat: disabled (missing app id)',
     );
+    if (!socialAuthBackendConfigured) {
+      lines.add(
+        '[ChatSocialAuth] Discord/GitHub/Telegram: disabled '
+        '(missing social-auth backend base url)',
+      );
+    } else {
+      lines.add(
+        discordConfigured
+            ? '[ChatSocialAuth] Discord: enabled'
+            : '[ChatSocialAuth] Discord: disabled (missing client id)',
+      );
+      lines.add(
+        githubConfigured
+            ? '[ChatSocialAuth] GitHub: enabled'
+            : '[ChatSocialAuth] GitHub: disabled (missing client id)',
+      );
+      lines.add(
+        telegramConfigured
+            ? '[ChatSocialAuth] Telegram: enabled'
+            : '[ChatSocialAuth] Telegram: disabled (missing bot id)',
+      );
+    }
 
     return lines;
   }
@@ -87,6 +130,10 @@ class ChatSocialAuthConfig {
     String envTwitterRedirectUri = '',
     String envWeChatAppId = '',
     String envWeChatUniversalLink = '',
+    String envDiscordClientId = '',
+    String envGithubClientId = '',
+    String envTelegramBotId = '',
+    String envSocialAuthBaseUrl = '',
   }) {
     String preferEnv(String envValue, String? nativeValue) {
       if (envValue.isNotEmpty) return envValue;
@@ -117,6 +164,10 @@ class ChatSocialAuthConfig {
         envWeChatUniversalLink,
         nativeConfig.weChatUniversalLink,
       ),
+      discordClientId: envDiscordClientId,
+      githubClientId: envGithubClientId,
+      telegramBotId: envTelegramBotId,
+      socialAuthBaseUrl: envSocialAuthBaseUrl,
     );
   }
 }

@@ -128,9 +128,25 @@ Redirect URI 统一 `n42app://oauth/callback`（已有 `n42app` scheme，Android
 - **批 1（已完成）**：现状审计（本文档）+ Facebook iOS 基建（Info.plist）。
 - **批 1.5（已完成）**：后端 `backend/social-auth` 自建（Discord/GitHub/Telegram 的 loginSocial +
   Matrix 签发，编译/单测通过）。
-- **批 2（下一批）**：Discord + GitHub 前端全链（§3，WebView OAuth2 授权组件），gating 默认关，待 client id。
-- **批 3**：Telegram Login Widget 前端。
-- **批 4**：外部就绪（client id + 部署 social-auth + Facebook iOS 后台）后逐家真机验 + 开 gating。
+- **批 2（✅ 已完成 2026-07-06）**：Discord + GitHub 前端全链——事件/Bloc handler/仓库分流/
+  SocialAuthApi 方法/config 字段/`OAuthWebViewPage`（WebView OAuth2 授权组件）/登录按钮全部落地，
+  gating 默认关（`enableXxxLogin && client id 已配 && socialAuthBaseUrl 已配` 三条缺一按钮隐藏）。
+  `flutter analyze` 全绿。
+- **批 3（✅ 已完成 2026-07-06，与批 2 合并交付）**：Telegram Login Widget 前端——
+  `oauth.telegram.org/auth` WebView + fragment `tgAuthResult`(base64url JSON) 解析 → 事件 → 后端验 hash。
+- **批 4（待外部）**：外部就绪（client id/bot id + 部署 social-auth + Facebook iOS 后台）后逐家真机验 + 配 dart-define 开 gating。
+
+> **批 2/3 前端实现落点（2026-07-06）**：
+> - chat：`social_auth_api.dart`(+loginWithDiscord/Github/Telegram)、`auth_repository_impl.dart`
+>   (+3 case + 第二个 `SocialAuthApi` 后端实例)、`injection.dart`(按 `socialAuthBaseUrl` 注入后端实例)、
+>   `auth_event.dart`(+3 事件)、`auth_bloc.dart`(+3 handler)、`bloc_message_keys/helper`(+3 错误键)、
+>   `n42_chat_config.dart`(+enableXxxLogin/discordClientId/githubClientId/telegramBotId/oauthRedirectUri/socialAuthBaseUrl)、
+>   **新建** `presentation/pages/auth/oauth_webview_page.dart`、`social_login_buttons.dart`(+3 按钮+handler+Telegram 结果解析)。
+> - 宿主：`chat_social_auth_config.dart`(+3 家 configured getter + 后端基址)、
+>   `chat_initialization.dart`(+dart-define `N42_CHAT_DISCORD_CLIENT_ID`/`N42_CHAT_GITHUB_CLIENT_ID`/
+>   `N42_CHAT_TELEGRAM_BOT_ID`/`N42_CHAT_SOCIAL_AUTH_BASE_URL` + 接线)。
+> - **回调无需注册 OS scheme**：`n42app://oauth/callback` 由 WebView `NavigationDelegate` 内部拦截，不外派到系统。
+> - **注意**：这是"骨架就位待 client_id"代码，未真机验证；批 4 配齐外部依赖后才可真用。
 
 ### 前端接入的剩余外部前置（批 2/3 真用前）
 1. 注册 Discord App / GitHub OAuth App / Telegram Bot，拿 client id/secret / bot token。

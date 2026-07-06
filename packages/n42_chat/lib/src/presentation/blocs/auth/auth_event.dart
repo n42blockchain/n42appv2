@@ -291,6 +291,57 @@ class AuthWeChatLoginRequested extends AuthEvent {
   List<Object?> get props => [homeserver];
 }
 
+/// Discord 登录请求
+///
+/// [code] UI 层 WebView OAuth2 授权后取回的 Authorization Code；
+/// [redirectUri] 与授权请求一致的回调地址（后端换 token 校验用）。
+class AuthDiscordLoginRequested extends AuthEvent {
+  final String homeserver;
+  final String code;
+  final String redirectUri;
+
+  const AuthDiscordLoginRequested({
+    required this.homeserver,
+    required this.code,
+    required this.redirectUri,
+  });
+
+  @override
+  List<Object?> get props => [homeserver, code, redirectUri];
+}
+
+/// GitHub 登录请求
+class AuthGithubLoginRequested extends AuthEvent {
+  final String homeserver;
+  final String code;
+  final String redirectUri;
+
+  const AuthGithubLoginRequested({
+    required this.homeserver,
+    required this.code,
+    required this.redirectUri,
+  });
+
+  @override
+  List<Object?> get props => [homeserver, code, redirectUri];
+}
+
+/// Telegram 登录请求
+///
+/// [data] Telegram Login Widget 回传的字段（id/hash/auth_date/...），后端验 hash。
+class AuthTelegramLoginRequested extends AuthEvent {
+  final String homeserver;
+  final Map<String, String> data;
+
+  const AuthTelegramLoginRequested({
+    required this.homeserver,
+    required this.data,
+  });
+
+  @override
+  List<Object?> get props => [homeserver, data];
+}
+
 // ============================================
 // 密码管理事件
 // ============================================

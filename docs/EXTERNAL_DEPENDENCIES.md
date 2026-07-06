@@ -32,6 +32,17 @@ flutter build apk --release \
 
 Chat 社交登录（Twitter 等 SSO key）经 `chatSocialAuthConfig` 传入，同文件。
 
+Chat 增量三家社交登录（2026-07-06，走自建 `backend/social-auth`）的构建期 key：
+
+| Env 名 | 读取位置 | 解锁功能 | 未配置时行为 |
+|---|---|---|---|
+| `N42_CHAT_SOCIAL_AUTH_BASE_URL` | `chat_initialization.dart` | 三家的公共前置（后端部署地址）| 三家一律隐藏 |
+| `N42_CHAT_DISCORD_CLIENT_ID` | 同上 | Chat Discord 登录 | Discord 按钮隐藏 |
+| `N42_CHAT_GITHUB_CLIENT_ID` | 同上 | Chat GitHub 登录 | GitHub 按钮隐藏 |
+| `N42_CHAT_TELEGRAM_BOT_ID` | 同上 | Chat Telegram 登录（数字 bot_id）| Telegram 按钮隐藏 |
+
+前端集成方案与实现落点见 `SOCIAL_LOGIN_PLAN.md` §3.3 / §六。
+
 ## 二、自建/部署型服务（无 key 可买，需要运维动作）
 
 | 服务 | 解锁功能 | 现状与配置点 |

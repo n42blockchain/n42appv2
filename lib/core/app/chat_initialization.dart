@@ -63,6 +63,20 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       const envChatWeChatUniversalLink = String.fromEnvironment(
         'N42_CHAT_WECHAT_UNIVERSAL_LINK',
       );
+      // 增量三家（Discord/GitHub/Telegram）——走自建 backend/social-auth。
+      // 三者均需 SOCIAL_AUTH_BASE_URL 指向部署地址才生效。
+      const envChatDiscordClientId = String.fromEnvironment(
+        'N42_CHAT_DISCORD_CLIENT_ID',
+      );
+      const envChatGithubClientId = String.fromEnvironment(
+        'N42_CHAT_GITHUB_CLIENT_ID',
+      );
+      const envChatTelegramBotId = String.fromEnvironment(
+        'N42_CHAT_TELEGRAM_BOT_ID',
+      );
+      const envChatSocialAuthBaseUrl = String.fromEnvironment(
+        'N42_CHAT_SOCIAL_AUTH_BASE_URL',
+      );
       const envGoogleTranslateApiKey = String.fromEnvironment(
         'GOOGLE_TRANSLATE_API_KEY',
       );
@@ -103,6 +117,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
         envTwitterRedirectUri: envChatTwitterRedirectUri,
         envWeChatAppId: envChatWeChatAppId,
         envWeChatUniversalLink: envChatWeChatUniversalLink,
+        envDiscordClientId: envChatDiscordClientId,
+        envGithubClientId: envChatGithubClientId,
+        envTelegramBotId: envChatTelegramBotId,
+        envSocialAuthBaseUrl: envChatSocialAuthBaseUrl,
       );
       String? normalizedEnv(String value) {
         final trimmed = value.trim();
@@ -171,6 +189,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           enableFacebookLogin: Platform.isAndroid,
           enableTwitterLogin: chatSocialAuthConfig.twitterConfigured,
           enableWeChatLogin: chatSocialAuthConfig.weChatConfigured,
+          enableDiscordLogin: chatSocialAuthConfig.discordConfigured,
+          enableGithubLogin: chatSocialAuthConfig.githubConfigured,
+          enableTelegramLogin: chatSocialAuthConfig.telegramConfigured,
           enableSsoLogin: true,
           googleClientId: chatSocialAuthConfig.googleClientId.isEmpty
               ? null
@@ -194,6 +215,18 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           weChatUniversalLink: chatSocialAuthConfig.weChatUniversalLink.isEmpty
               ? null
               : chatSocialAuthConfig.weChatUniversalLink,
+          discordClientId: chatSocialAuthConfig.discordClientId.isEmpty
+              ? null
+              : chatSocialAuthConfig.discordClientId,
+          githubClientId: chatSocialAuthConfig.githubClientId.isEmpty
+              ? null
+              : chatSocialAuthConfig.githubClientId,
+          telegramBotId: chatSocialAuthConfig.telegramBotId.isEmpty
+              ? null
+              : chatSocialAuthConfig.telegramBotId,
+          socialAuthBaseUrl: chatSocialAuthConfig.socialAuthBaseUrl.isEmpty
+              ? null
+              : chatSocialAuthConfig.socialAuthBaseUrl,
           ssoRedirectUrl: 'n42://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
