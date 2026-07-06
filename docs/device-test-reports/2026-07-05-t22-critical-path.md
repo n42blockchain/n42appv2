@@ -98,14 +98,66 @@
 - USDT 行显示 `0.00`，USDC 行显示 `0`。
 - 因缺少 ERC20 余额，无法验证 18 decimals MAX 精度路径。
 
+## c176 补测：WalletConnect 桌面 DApp A1/A2
+
+补测来源：`origin/codex-n42@c176bede`，对应修复基线 `d1654106`。本地分支已同步到 `d1654106` 后继续补测。
+
+### 补测中发现并修复的问题
+
+- `d1654106` 已新增 WalletConnect URI 粘贴入口，但钱包首页 WC 图标在无 session 时仍直接进入扫码页，导致粘贴入口不可达。已改为打开 `WalletConnectPage("")`，由该页提供 Cancel / Paste / Scan。
+- `wc:` deep link 原本只 fire `EventPublicType.walletConnect`，本仓库未发现有效 listener，导致桌面 DApp URI 能被系统收到但不能稳定进入 WC pairing 页。已改为 deep link 直接 push `WalletConnectPage(wcUri)`。
+- 空 URI 打开 `WalletConnectPage` 时 provider 初始态是 `loading`，页面会停在 `Pairing, please wait.`。已在空 URI 且初始 loading 时切到 `disconnect`。
+- Android Solana `solana_signMessage` 原来把 DApp 的 base64 message 直接传给 native `signMessage`；native 实际期望 hex message bytes，导致签名无法通过 Ed25519 校验。已在 Dart 侧先 base64 decode，再转 hex 传 native。
+
+### 补测构建与安装
+
+| 项目 | 结果 | 备注 |
+|---|---|---|
+| `flutter analyze --no-fatal-infos` | PASS | `No issues found!` |
+| `flutter test test/features/wallet_connect` | PASS | 160 tests passed |
+| `flutter build apk --debug --target-platform android-arm64 --no-pub` | PASS | debug APK 构建成功 |
+| ADB 覆盖安装 | PASS | `adb install -r -t -d -g ... Success` |
+
+### A1 EVM `personal_sign`
+
+结果：PASS
+
+- 桌面 Node WalletConnect DApp 使用 `@walletconnect/sign-client` 生成 `wc:` URI，经 `adb shell am start -a android.intent.action.VIEW -d <wc-uri>` 拉起 App。
+- App proposal 页显示测试 DApp，网络为 Ethereum。
+- 点击 `Connect` 后，App 弹出 `Message sign` 确认页，地址为 active wallet `Account1`。
+- 点击 `Confirm` 后，DApp 离线 `ecrecover` 校验通过：
+  - DApp account：`0xEa311dDcF42397dF0007A160baf59E2Aa1ee25AA`
+  - Recovered：`0xEa311dDcF42397dF0007A160baf59E2Aa1ee25AA`
+  - `match=true`
+
+结论：在 active=`Account1`、verify/mining=`Account2` 的错位前置下，WalletConnect EVM `personal_sign` 使用 active wallet `Account1` 签名，未误用 mining wallet。
+
+未补测：A1 `eth_sendTransaction` 仍需要 gas/funds，本轮继续 BLOCKED_BY_BALANCE。
+
+### A2 Solana `solana_signMessage`
+
+结果：PASS
+
+- 桌面 Node WalletConnect DApp 生成 Solana namespace proposal：`solana:4sGjMW1sUnHzSxGspuhpqLDx6wiyjNtZ` / `solana_signMessage`。
+- App proposal 页显示测试 DApp，网络为 Solana。
+- 点击 `Connect` 后，App 弹出 `Message sign` 确认页，地址为 `G3cJyGGSU6zQ6MSzCtXf6Fk7aBe1yhW7X7AFsi5aoTi7`。
+- 点击 `Confirm` 后，DApp 使用返回签名对原始 UTF-8 message bytes 做 Ed25519 校验：
+  - Account：`G3cJyGGSU6zQ6MSzCtXf6Fk7aBe1yhW7X7AFsi5aoTi7`
+  - Signature bytes：64
+  - Pubkey bytes：32
+  - `verified=true`
+
+结论：Solana WalletConnect message signing 已可被桌面 DApp 验签，非 EVM A2 至少 Solana 路径通过。TRON 未提供桌面 DApp，本轮未覆盖。
+
 ## 结论
 
-- PASS：构建/安装/冷启动、A 组错位前置、A3 内置浏览器 `personal_sign` active 账户签名。
-- BLOCKED：A1/A2 缺少外部 WalletConnect DApp pairing session；A4 缺少已创建/已 funded AA 账户；B1/B2 缺少 EVM native/ERC20 余额。
+- PASS：构建/安装/冷启动、A 组错位前置、A3 内置浏览器 `personal_sign` active 账户签名、c176 补测 A1 WalletConnect EVM `personal_sign`、c176 补测 A2 Solana `solana_signMessage`。
+- BLOCKED：A1 `eth_sendTransaction` 缺少 gas/funds；A2 TRON 未提供桌面 DApp；A4 缺少已创建/已 funded AA 账户；B1/B2 缺少 EVM native/ERC20 余额。
 - 本轮未发现 `miningIndex != selectedIndex` 时内置浏览器签名误用 mining wallet 的回归。
+- c176 补测修复了 WalletConnect URI 入口不可达、`wc:` deep link 未落到 WC 页面、空 URI 页卡 loading、Solana message 编码不匹配 native signer 的问题。
 
 ## 后续补测条件
 
-- 提供可扫码的 WalletConnect EVM DApp session，用于 A1 `personal_sign` 与 `eth_sendTransaction`。
-- 提供 Solana/TRON WalletConnect DApp session，用于 A2。
+- 给测试钱包注入小额 EVM native gas，用于 A1 `eth_sendTransaction`。
+- 提供 TRON WalletConnect DApp session，用于 A2 TRON。
 - 给测试钱包注入小额 EVM native gas 与 18 decimals ERC20，用于 B1/B2 和 A4 完整广播验证。
