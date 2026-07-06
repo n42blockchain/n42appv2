@@ -146,6 +146,7 @@ mixin WalletConnectSigning
         final requestParams = eventData.params! as Map;
         // DApp sends base64-encoded message bytes
         final dataToSign = requestParams["message"] as String? ?? '';
+        final dataToSignHex = bytesToHex(base64.decode(dataToSign));
         final cm = coinModelFor(CoinType.SOL);
         if (cm == null) {
           viewStateDeal(
@@ -159,11 +160,11 @@ mixin WalletConnectSigning
           cm.config.pathForAddrType(cm.addrType)!,
           cm.pathIndex,
         );
-        // Native signMessage for SOL decodes base64 and returns base64 signature
+        // Native signMessage expects hex message bytes and returns a hex signature.
         final sig = await trustdart.signMessage(
           CoinType.SOL.name,
           path,
-          dataToSign,
+          dataToSignHex,
           mnemonic: credentials.mnemonic,
           pk: credentials.privateKey,
         );
@@ -282,7 +283,10 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
-    final path = getPathWithIndex(cm.config.pathForAddrType(cm.addrType)!, cm.pathIndex);
+    final path = getPathWithIndex(
+      cm.config.pathForAddrType(cm.addrType)!,
+      cm.pathIndex,
+    );
     final returnStr = await trustdart.signTransaction(
       CoinType.TRX.name,
       path,
@@ -315,7 +319,10 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
-    final path = getPathWithIndex(cm.config.pathForAddrType(cm.addrType)!, cm.pathIndex);
+    final path = getPathWithIndex(
+      cm.config.pathForAddrType(cm.addrType)!,
+      cm.pathIndex,
+    );
 
     // trustdart signs the raw serialized transaction and returns base64 signed tx
     final txData = {
@@ -475,7 +482,10 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
-    final path = getPathWithIndex(cm.config.pathForAddrType(cm.addrType)!, cm.pathIndex);
+    final path = getPathWithIndex(
+      cm.config.pathForAddrType(cm.addrType)!,
+      cm.pathIndex,
+    );
     final txData = {"type": "WC_APT", "encodedTransaction": rawTx};
     final signedHex = await trustdart.signTransaction(
       CoinType.APT.name,
@@ -539,7 +549,10 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
-    final path = getPathWithIndex(cm.config.pathForAddrType(cm.addrType)!, cm.pathIndex);
+    final path = getPathWithIndex(
+      cm.config.pathForAddrType(cm.addrType)!,
+      cm.pathIndex,
+    );
     final txData = {"type": "WC_SUI", "transaction": txBlock};
     final signedResult = await trustdart.signTransaction(
       CoinType.SUI.name,
@@ -595,7 +608,10 @@ mixin WalletConnectSigning
       return;
     }
     final credentials = await getCurrentWalletCredentials();
-    final path = getPathWithIndex(cm.config.pathForAddrType(cm.addrType)!, cm.pathIndex);
+    final path = getPathWithIndex(
+      cm.config.pathForAddrType(cm.addrType)!,
+      cm.pathIndex,
+    );
 
     final signedTxList = <String>[];
     for (final rawTx in rawTxList) {

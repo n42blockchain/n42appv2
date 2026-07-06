@@ -25,11 +25,12 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
   @override
   void initState() {
     super.initState();
+    final connectV2 = ref.read(wcpBridgeProvider);
     if (widget.uri != "") {
-      ref.read(wcpBridgeProvider).pageOpen = true;
-      ref
-          .read(wcpBridgeProvider)
-          .viewStateDeal(WalletConnectState.loading, params: widget.uri);
+      connectV2.pageOpen = true;
+      connectV2.viewStateDeal(WalletConnectState.loading, params: widget.uri);
+    } else if (connectV2.walletConnectState == WalletConnectState.loading) {
+      connectV2.viewStateDeal(WalletConnectState.disconnect);
     }
   }
 

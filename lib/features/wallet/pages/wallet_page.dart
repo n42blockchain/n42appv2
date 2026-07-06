@@ -11,7 +11,6 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
-import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/ai_assistant/presentation/wallet_ai_snapshot_builder.dart';
 import 'package:n42_wallet/features/ai_assistant/presentation/wallet_assistant_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
@@ -34,8 +33,6 @@ import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
-import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -199,25 +196,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       return;
     }
 
-    final state = wcp.walletConnectState;
-    final shouldScan =
-        state == WalletConnectState.disconnect ||
-        state == WalletConnectState.loading ||
-        state == WalletConnectState.connectOK;
-
-    if (!shouldScan) {
-      await _pushAndRefreshWc(WalletConnectPage(""), wcp);
-      return;
-    }
-
-    final scanStr = await _scan();
-    if (!mounted || scanStr.isEmpty) return;
-
-    final normalizedWcUri = normalizeWalletConnectUriString(scanStr);
-    if (normalizedWcUri != null) {
-      await _pushAndRefreshWc(WalletConnectPage(normalizedWcUri), wcp);
-      return;
-    }
+    await _pushAndRefreshWc(WalletConnectPage(""), wcp);
   }
 
   Future<void> _pushAndRefreshWc(Widget page, dynamic wcp) async {
@@ -237,14 +216,6 @@ class _WalletPageState extends ConsumerState<WalletPage> {
         builder: (_) => WalletAssistantPage(snapshot: snapshot),
       ),
     );
-  }
-
-  Future<String> _scan() async {
-    final result = await Navigator.push<String>(
-      context,
-      MaterialPageRoute(builder: (_) => ScanPage()),
-    );
-    return result ?? "";
   }
 
   // ── WalletBoard callbacks ─────────────────────────────────────────────────

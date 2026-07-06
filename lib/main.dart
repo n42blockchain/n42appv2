@@ -18,7 +18,6 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/security/device_security.dart';
 import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
-import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
@@ -39,6 +38,7 @@ import 'package:n42_wallet/features/home/setting/security/security_setting.dart'
 import 'package:n42_wallet/features/wallet/provider/transaction_record_iterms_provider.dart';
 import 'package:n42_wallet/features/wallet/services/coin_price_alert_service.dart';
 import 'package:n42_wallet/features/wallet/services/limit_order_alert_service.dart';
+import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -325,9 +325,9 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     switch (data.type) {
       case DeepLinkType.walletConnect:
         final wcUri = data.params['wcUri'] ?? data.uri.toString();
-        eventBus.fire(
-          EventPublic(EventPublicType.walletConnect, stringValue: wcUri),
-        );
+        await Navigator.of(
+          navContext,
+        ).push(MaterialPageRoute(builder: (_) => WalletConnectPage(wcUri)));
         break;
       case DeepLinkType.groupMining:
         AppLogger.d('DeepLink', 'group mining: ${data.params}');
