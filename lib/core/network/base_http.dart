@@ -209,6 +209,9 @@ class BaseHttp {
       DioExceptionType.badResponse => _handleBadResponse(error.response),
       DioExceptionType.cancel => S.current.g_key_error_8,
       DioExceptionType.unknown => S.current.g_key_error_10,
+      // Keep fresh dependency resolution compatible when Dio adds enum members.
+      // ignore: unreachable_switch_case
+      _ => S.current.g_key_error_4,
     };
   }
 
