@@ -675,7 +675,9 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 flutterResult(FlutterError(code: "ClientError", message: "\(err)", details: nil))
             }
         })
-        flutterResult("Client started")
+        // 结果只由上面的异步 completion 回一次；此处原本还同步调了一次
+        // flutterResult("Client started")，一次请求回两次 reply 会触发
+        // Flutter engine 的重复提交断言，已移除。
         break
     default:
         result(FlutterMethodNotImplemented)
