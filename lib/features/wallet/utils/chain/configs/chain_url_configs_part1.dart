@@ -24,7 +24,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
       "isContract": false,
       "path": {"legacy": "m/44'/60'/0'/0/0"},
       "service": "https://rpc.n42.world",
-      "service_test": "https://testrpc.n42.world",
+      "service_test": "https://testrpc2.n42.world",
       "chainId": 94, //100100100,
       "chainId_test": 1142, //100100100,
       "contract": "",
@@ -42,7 +42,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "testnets": [
       {
         "testnetWS": "wss://testws.n42.world",
-        "testnetRPC": "https://testrpc.n42.world",
+        "testnetRPC": "https://testrpc2.n42.world",
         "testnetChainID": 1142, //100100100,//
         "testnetContract": <String, dynamic>{},
       },

@@ -21,7 +21,7 @@ const miningNodeMap = {
     // },
     {
       "name": "USA",
-      "ipAddress": "https://testrpc.n42.world",
+      "ipAddress": "https://testrpc2.n42.world",
       "socket": "wss://testws.n42.world",
     },
   ],
