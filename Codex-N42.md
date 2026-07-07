@@ -668,9 +668,24 @@ else { result(FlutterError(code:"invalid_pk",...)); break }`。happy path 未动
 **报告落**：`docs/device-test-reports/<日期>-t24-ios-pk-guard.md`，或直接并入
 `docs/ios-walletcore-signing-refactor-audit.md` 的回归小节。
 C1/C2/C3 是核心且**不烧 gas**（C3 传错私钥、C2 用现有钱包），优先跑。
-**未做留给你**：同文件另 3 处 `HDWallet(entropy: d, passphrase:)!` 强制解包
-（getPublicKey/getKeyStore/getPrivateKeyAndPublicKey，与 `wallet` 可选性缠绕）——
-你在 Mac 上做 iOS 全链重构（`refactor/ios-walletcore-signing`）时一起收，别单独硬改。
+
+### 更新（2026-07-07，Claude）：验证目标改为分支上的**完整重写**
+
+你已把 dev513 的全链重写推到 `refactor/ios-walletcore-signing`（commit `51363436`，
+`WalletCorePlugin.swift` 与 dev513 逐字节相同）。**这份是我 master 上 interim 修复
+（`d4fb2b9d` 6 处 guard + `403b8d97` MiningRunClient 双result）的完整超集**——
+私钥/HDWallet/args 全 guard 化、双result 已消除、还收了我留下的 3 处 `HDWallet(entropy:)!`。
+所以 T24 的验证目标**以分支上的完整重写为准**（不是只验我那 6 处）：
+
+- **基线改为**：`origin/refactor/ios-walletcore-signing@51363436`（或其后不含 `.idea` 噪声的等价点）。
+- C1（编译）/C2（happy path）/C3（传错私钥不崩溃）/C4（签名全链）四项**对整份重写跑**。
+- **额外核对 C5**：分支比 master 多出 `case "Camera"` / `case "Photo"` 两个 native 方法，
+  master 的 Dart 侧我没找到调用方——请确认是**有意新增**（那 Dart 侧要接上）还是**死代码**（那删掉）。
+- **通过后**：由你或 Claude 把这份完整重写合入 master，会**自然取代** interim `d4fb2b9d`
+  （整文件替换，无冲突）。`.idea` 噪声提交（`236b065d`/`26ddcedc`/`5b84de09`）不要带进 master。
+- 若 C1 编译报错**你直接在分支上修**，改完留言说明。
+
+我 master 上的 interim `d4fb2b9d` 先留着当兜底（严格子集、安全），等你这份验过再替换。
 
 ---
 
