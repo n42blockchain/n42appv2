@@ -204,10 +204,17 @@ class AATransferHandler extends BaseTransferHandler {
     final smartAccount = params.smartAccount;
 
     // Get nonce from EntryPoint
-    final nonce = await _getNonce(smartAccount.address, chainConfig);
+    final nonce = await _getNonce(
+      smartAccount.address,
+      chainConfig,
+      isTest: params.isTest,
+    );
 
     // Get gas prices
-    final gasPrices = await _getGasPrices(params.chainSymbol);
+    final gasPrices = await _getGasPrices(
+      params.chainSymbol,
+      isTest: params.isTest,
+    );
 
     // Build call data
     Uint8List callData;
@@ -332,10 +339,14 @@ class AATransferHandler extends BaseTransferHandler {
   }
 
   /// Get nonce for smart account
-  Future<BigInt> _getNonce(String sender, AAChainConfig chainConfig) async {
+  Future<BigInt> _getNonce(
+    String sender,
+    AAChainConfig chainConfig, {
+    bool isTest = false,
+  }) async {
     try {
       // Query nonce from EntryPoint contract via eth_call
-      final ethApi = EthAPI.init(_chainSymbol, _getRpcUrl(), '');
+      final ethApi = EthAPI.init(_chainSymbol, _getRpcUrl(isTest: isTest), '');
 
       // getNonce(address sender, uint192 key)
       // Function selector: 0x35567e1a
@@ -374,20 +385,22 @@ class AATransferHandler extends BaseTransferHandler {
   }
 
   /// Get RPC URL for the chain
-  String _getRpcUrl() {
-    return getChainMap(_chainSymbol)?['service'] as String? ??
-        chainUrlMap[_chainSymbol]?['baseInfo']?['service'] as String? ??
+  String _getRpcUrl({bool isTest = false}) {
+    final key = isTest ? 'service_test' : 'service';
+    return getChainMap(_chainSymbol)?[key] as String? ??
+        chainUrlMap[_chainSymbol]?['baseInfo']?[key] as String? ??
         '';
   }
 
   /// Get gas prices
   Future<({BigInt maxFeePerGas, BigInt maxPriorityFeePerGas})> _getGasPrices(
-    String chainSymbol,
-  ) async {
+    String chainSymbol, {
+    bool isTest = false,
+  }) async {
     final mm = await tokenViewApi.getGasPrice(
       BlockchainType.Ethereum.name,
       chainSymbol,
-      isTest: false,
+      isTest: isTest,
     );
 
     if (mm == null || mm.error) {
@@ -444,7 +457,10 @@ class AATransferHandler extends BaseTransferHandler {
       final userOp = await _buildUserOperation(params, chainConfig);
       final bundler = _getBundlerClient();
       final estimate = await bundler.estimateUserOperationGas(userOp);
-      final gasPrices = await _getGasPrices(params.chainSymbol);
+      final gasPrices = await _getGasPrices(
+        params.chainSymbol,
+        isTest: params.isTest,
+      );
       final totalGas = estimate.totalGas;
 
       return GasEstimation(

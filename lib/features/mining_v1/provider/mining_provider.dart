@@ -103,9 +103,14 @@ class MiningProvider extends ChangeNotifier {
     return false;
   }
 
+  // 复用带 5s connectTimeout 的静态 Dio：health check 不再可能因无超时而挂死。
+  static final _healthCheckDio = Dio(
+    BaseOptions(connectTimeout: const Duration(seconds: 5)),
+  );
+
   Future<bool> checkHostConnection(String url) async {
     try {
-      final response = await Dio().get(url);
+      final response = await _healthCheckDio.get(url);
       return response.statusCode == 200;
     } catch (_) {
       return false;

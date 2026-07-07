@@ -64,15 +64,25 @@ class NearSender implements ChainSender {
     final blockData = mmblock.data as Map<String, dynamic>;
     final blockHash = blockData['hash'] as String;
 
-    // Get nonce via access key
-    // NEAR public key needed — derive from path
-    final wi = globalWapAdapter.walletInfo;
+    // Get nonce via access key — 公钥必须由「将用于签名的同一把密钥」派生。
+    // 否则传入 params.privateKey（指定账户）时，公钥/nonce 取自活跃钱包而签名用
+    // 另一账户 → 账户错配（与签名账户一致性 bug 同族）。仅在未传私钥时才读活跃钱包。
+    final String signingMnemonic;
+    final String signingPk;
+    if (params.privateKey != null) {
+      signingMnemonic = '';
+      signingPk = params.privateKey!;
+    } else {
+      final wi = globalWapAdapter.walletInfo;
+      signingMnemonic = wi.mnemonic ?? '';
+      signingPk = wi.privateKey ?? '';
+    }
     final pubKeyMm = await _trustdart.generateAddress(
       CoinType.NEAR.name,
       params.path,
       'legacy',
-      mnemonic: wi.mnemonic ?? '',
-      pk: wi.privateKey ?? '',
+      mnemonic: signingMnemonic,
+      pk: signingPk,
     );
     final publicKey =
         pubKeyMm['publicKey']?.toString() ??
@@ -108,7 +118,7 @@ class NearSender implements ChainSender {
         CoinType.NEAR.name,
         params.path,
         signMap,
-        mnemonic: wi.mnemonic ?? '',
+        mnemonic: signingMnemonic,
       );
     } else {
       signStr = await _trustdart.signTransaction(

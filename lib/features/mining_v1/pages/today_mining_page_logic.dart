@@ -229,7 +229,8 @@ mixin _LogicMixin on State<TodayMiningPage> {
   Future<void> getMiningStatus() async {
     try {
       final data = await MiningPluginUtils.status();
-      final bool isRunning = data?["data"] != "stopped";
+      // plugin 返回 null（调用失败）时应视为"未运行"，而非旧逻辑的误判"运行中"
+      final bool isRunning = data?["data"] == "started";
       globalMiningV1.setMiningStatus(isRunning);
       if (!isRunning) MiningUtils.startMining();
     } catch (e) {

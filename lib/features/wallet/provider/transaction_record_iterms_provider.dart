@@ -52,6 +52,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
     );
     if (_unDoneTrModelList.isNotEmpty) timerStart();
     if (_trUndoneList.isNotEmpty) timerStartBtc();
+    notifyListeners();
   }
 
   // 添加未完成的交易；type：0=比特币类，1=其它类型
@@ -63,6 +64,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
       _trUndoneList.add(trm);
       timerStartBtc();
     }
+    notifyListeners();
   }
 
   void timerStart() {
@@ -86,17 +88,18 @@ class TransactionRecordItemProvider with ChangeNotifier {
   }
 
   void timerStartBtc() {
-    if (_timerBtc != null) return;
-    _timerBtc = Timer.periodic(const Duration(seconds: 180), (timer) {
+    if (_timerBtc != null && _timerBtc!.isActive) return;
+    // callback 必须 async：否则 checkUndoneTrBtc 是 fire-and-forget，
+    // 空列表检查会在异步完成前执行，定时器永远无法停止
+    _timerBtc = Timer.periodic(const Duration(seconds: 180), (timer) async {
       try {
-        if (_trUndoneList.isNotEmpty) {
-          for (final trm in List<BtcTransactionRecodeModel>.of(_trUndoneList)) {
-            checkUndoneTrBtc(trm);
-          }
-        }
-        if (_trUndoneList.isEmpty && _timerBtc != null) {
-          _timerBtc!.cancel();
+        if (_trUndoneList.isEmpty) {
+          timer.cancel();
           _timerBtc = null;
+          return;
+        }
+        for (final trm in List<BtcTransactionRecodeModel>.of(_trUndoneList)) {
+          await checkUndoneTrBtc(trm);
         }
       } on Exception catch (e) {
         AppLogger.w('TxRecordItems', 'timerStartBtc callback error: $e');
@@ -128,6 +131,7 @@ class TransactionRecordItemProvider with ChangeNotifier {
 
     _removeFromUndoneList(trm.txHash);
     checkUndoneList();
+    notifyListeners();
   }
 
   // 检查未完成的交易并返回更新后的对象（无 Toast/事件副作用）
@@ -153,30 +157,27 @@ class TransactionRecordItemProvider with ChangeNotifier {
     final int confirmations = await _resolver.resolveBtcConfirmations(trm);
     if (confirmations < 0) return; // 查询失败
 
-    if (trm.isTest == 1) {
-      if (confirmations >= 6) {
-        trm.state = 1;
-        await db.updateBtcTransactionRecord(trm);
-      }
-      return;
-    }
-
-    trm.confirmations = confirmations;
-    if (trm.confirmations >= 6) {
-      trm.state = 1;
-    }
+    // 主网记录实际确认数；测试网只需判断是否达标（resolveBtc 已返回 0 或 6）
+    if (trm.isTest != 1) trm.confirmations = confirmations;
+    if (confirmations >= 6) trm.state = 1;
     await db.updateBtcTransactionRecord(trm);
 
-    if (trm.state == 1) {
-      if (!AppGlobals.appContext.mounted) return;
+    // 未达标则本轮保留在列表继续轮询
+    if (trm.state != 1) return;
+
+    // 修复：原代码在 isTest==1 分支 state==1 后 return、以及 unmount 时 return，
+    // 都不从列表移除也不停定时器，导致测试网 / 后台场景下 BTC 定时器永不停止。
+    // 刷新余额/发事件只在 mounted 时做，但移除+停表+通知无论如何都执行。
+    if (AppGlobals.appContext.mounted) {
       await globalWapAdapter.refreshCoinBalance(
         trm.coin['coinType'],
         contract: '',
       );
       eventBus.fire(EventPublic(EventPublicType.transferOk));
-      _trUndoneList.remove(trm);
-      checkUndoneList();
     }
+    _trUndoneList.removeWhere((v) => v.txHash == trm.txHash);
+    checkUndoneList();
+    notifyListeners();
   }
 
   // 检查未完成的 BTC 类交易并返回更新后的对象

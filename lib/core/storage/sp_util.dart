@@ -162,16 +162,18 @@ class SPUtil {
   }
 
   // 挖矿数据（安全存储）
+  // uuid 与 WalletActionProvider.defaultWalletUUID / wallet_providers 的兜底保持一致：
+  // 未登录（默认钱包）时用 'AstranetWallet'，否则挖矿数据存不进/读不出（数据丢失）。
+  String get _miningUuid => AppGlobals.userInfo?.uuid?.isNotEmpty == true
+      ? AppGlobals.userInfo!.uuid!
+      : 'AstranetWallet';
+
   Future<void> setMiningData(Map<String, dynamic> value) async {
-    final uuid = AppGlobals.userInfo?.uuid;
-    if (uuid == null || uuid.isEmpty) return;
-    await _securePrefs.setMiningData(uuid, value);
+    await _securePrefs.setMiningData(_miningUuid, value);
   }
 
   Future<Map<String, dynamic>?> getMiningData() async {
-    final uuid = AppGlobals.userInfo?.uuid;
-    if (uuid == null || uuid.isEmpty) return null;
-    return await _securePrefs.getMiningData(uuid);
+    return await _securePrefs.getMiningData(_miningUuid);
   }
 
   // ==================== 非敏感设置（继续使用 SharedPreferences） ====================

@@ -196,25 +196,27 @@ class MiningRiskCard extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.shield_outlined,
-                size: ScreenUtil().setWidth(28),
-                color: riskColor,
-              ),
-              SizedBox(width: AppSpacing.space2),
-              Flexible(
-                child: Text(
-                  S.of(context).g_mining_key_76,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTypography.bodySm.copyWith(
-                    color: AppColorTokens.of(context).textPrimary,
-                    fontWeight: FontWeight.w500,
+          Expanded(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.shield_outlined,
+                  size: ScreenUtil().setWidth(28),
+                  color: riskColor,
+                ),
+                SizedBox(width: AppSpacing.space2),
+                Flexible(
+                  child: Text(
+                    S.of(context).g_mining_key_76,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.bodySm.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Container(
             padding: EdgeInsets.symmetric(

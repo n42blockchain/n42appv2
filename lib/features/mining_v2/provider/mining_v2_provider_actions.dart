@@ -154,8 +154,9 @@ mixin _MiningActionsMixin on _MiningStateMixin {
           rmm.data.toString(),
           coinInfo['baseInfo']['decimals'],
         ).toDouble();
+      } else {
+        AppLogger.d('MiningActions', 'N coin not found in wallet');
       }
-      AppLogger.d('MiningActions', 'N coin not found in wallet');
     } catch (e) {
       AppLogger.w('MiningActions', 'error getting wallet N balance: $e');
     }
@@ -183,7 +184,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       'keypart': keypart,
       'redeem': redeem,
     };
-    SPUtil().setMiningData(miningData!);
+    await SPUtil().setMiningData(miningData!);
   }
 
   Future<void> getMiningData() async {
@@ -259,7 +260,7 @@ mixin _MiningActionsMixin on _MiningStateMixin {
       'keypart': value['validator'],
       'redeem': false,
     };
-    SPUtil().setMiningData(miningData!);
+    await SPUtil().setMiningData(miningData!);
     wap.setWalletMiningIndex(
       index == -1 ? wap.walletInfoLsit.length - 1 : index,
     );
