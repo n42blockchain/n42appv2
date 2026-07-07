@@ -27,7 +27,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       "service": "https://rpc.n42.world",
       "service_test": const String.fromEnvironment(
         'N42_TESTNET_RPC',
-        defaultValue: 'https://testrpc.n42.world',
+        defaultValue: 'https://testrpc2.n42.world',
       ),
       "chainId": 94,
       "chainId_test": 1142,
@@ -42,7 +42,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
     "testnets": [
       {
         "testnetWS": "wss://testws.n42.world",
-        "testnetRPC": "https://testrpc.n42.world",
+        "testnetRPC": "https://testrpc2.n42.world",
         "testnetChainID": 1142,
         "testnetContract": <String, dynamic>{},
       },

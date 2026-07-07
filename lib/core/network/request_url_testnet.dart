@@ -30,7 +30,7 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
   'N': {
     'api': 'https://testnet2.n42.world/api?',
     'browser': 'https://testnet2.n42.world/',
-    'rpc': 'https://testrpc.n42.world',
+    'rpc': 'https://testrpc2.n42.world',
   },
   'ETC': {
     'api': 'https://blockscout.com/etc/kotti/api?',
