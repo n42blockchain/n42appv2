@@ -1111,7 +1111,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Burn"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Buy N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "Buy N with AST protocol",
+      "Buy N with N42 protocol",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Cross-chain transfer",

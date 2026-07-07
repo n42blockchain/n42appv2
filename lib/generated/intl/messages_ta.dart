@@ -1199,7 +1199,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("எரிக்கவும்"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("என் வாங்கவும்"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "AST நெறிமுறையுடன் N ஐ வாங்கவும்",
+      "N42 நெறிமுறையுடன் N ஐ வாங்கவும்",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "குறுக்கு சங்கிலி பரிமாற்றம்",

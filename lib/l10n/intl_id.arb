@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Tidak ada posisi aktif",
   "g_key_earn_go_staking": "Mulai Staking",
   "g_key_earn_buy_n": "Beli N",
-  "g_key_earn_buy_n_desc": "Beli N dengan protokol AST",
+  "g_key_earn_buy_n_desc": "Beli N dengan protokol N42",
   "g_key_earn_dex_swap": "Tukar DEX",
   "g_key_earn_select_swap": "Pilih Jenis Tukar",
   "g_key_earn_loading_apy": "Memuat APY...",

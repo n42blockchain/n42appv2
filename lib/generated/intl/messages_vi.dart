@@ -1103,7 +1103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Đốt"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Mua N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "Mua N bằng giao thức AST",
+      "Mua N bằng giao thức N42",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Chuyển giao chuỗi chéo",

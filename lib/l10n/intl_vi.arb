@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Không có vị thế hoạt động",
   "g_key_earn_go_staking": "Bắt đầu Staking",
   "g_key_earn_buy_n": "Mua N",
-  "g_key_earn_buy_n_desc": "Mua N bằng giao thức AST",
+  "g_key_earn_buy_n_desc": "Mua N bằng giao thức N42",
   "g_key_earn_dex_swap": "Hoán đổi DEX",
   "g_key_earn_select_swap": "Chọn loại hoán đổi",
   "g_key_earn_loading_apy": "Đang tải APY...",

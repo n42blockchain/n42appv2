@@ -1076,7 +1076,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("حرق"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("شراء ن"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "قم بشراء N باستخدام بروتوكول AST",
+      "قم بشراء N باستخدام بروتوكول N42",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "نقل عبر السلسلة",

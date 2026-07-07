@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "لا توجد مواقف نشطة",
   "g_key_earn_go_staking": "ابدأ التوقيع المساحي",
   "g_key_earn_buy_n": "شراء ن",
-  "g_key_earn_buy_n_desc": "قم بشراء N باستخدام بروتوكول AST",
+  "g_key_earn_buy_n_desc": "قم بشراء N باستخدام بروتوكول N42",
   "g_key_earn_dex_swap": "مبادلة ديكس",
   "g_key_earn_select_swap": "حدد نوع المبادلة",
   "g_key_earn_loading_apy": "جارٍ تحميل APY...",

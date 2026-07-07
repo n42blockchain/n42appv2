@@ -897,7 +897,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("소각"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N 구매"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "AST 프로토콜로 N 구매",
+      "N42 프로토콜로 N 구매",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("크로스체인 전송"),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 스왑"),

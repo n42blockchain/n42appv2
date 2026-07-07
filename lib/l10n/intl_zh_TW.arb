@@ -677,7 +677,7 @@
   "g_key_earn_no_positions": "沒有活躍職位",
   "g_key_earn_go_staking": "開始質押",
   "g_key_earn_buy_n": "買N",
-  "g_key_earn_buy_n_desc": "使用 AST 協議購買 N",
+  "g_key_earn_buy_n_desc": "使用 N42 協議購買 N",
   "g_key_earn_dex_swap": "DEX 互換",
   "g_key_earn_select_swap": "選擇兌換類型",
   "g_key_earn_loading_apy": "載入APY...",

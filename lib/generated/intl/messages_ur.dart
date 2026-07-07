@@ -1138,7 +1138,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("جلنا"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N خریدیں۔"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "AST پروٹوکول کے ساتھ N خریدیں۔",
+      "N42 پروٹوکول کے ساتھ N خریدیں۔",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "کراس چین ٹرانسفر",

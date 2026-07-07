@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Keine aktiven Positionen",
   "g_key_earn_go_staking": "Staking starten",
   "g_key_earn_buy_n": "N kaufen",
-  "g_key_earn_buy_n_desc": "N mit dem AST-Protokoll kaufen",
+  "g_key_earn_buy_n_desc": "N mit dem N42-Protokoll kaufen",
   "g_key_earn_dex_swap": "DEX-Tausch",
   "g_key_earn_select_swap": "Tauschtyp wählen",
   "g_key_earn_loading_apy": "APY wird geladen...",

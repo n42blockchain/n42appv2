@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "செயலில் உள்ள நிலைகள் இல்லை",
   "g_key_earn_go_staking": "ஸ்டாக்கிங்கைத் தொடங்குங்கள்",
   "g_key_earn_buy_n": "என் வாங்கவும்",
-  "g_key_earn_buy_n_desc": "AST நெறிமுறையுடன் N ஐ வாங்கவும்",
+  "g_key_earn_buy_n_desc": "N42 நெறிமுறையுடன் N ஐ வாங்கவும்",
   "g_key_earn_dex_swap": "DEX இடமாற்று",
   "g_key_earn_select_swap": "இடமாற்று வகையைத் தேர்ந்தெடுக்கவும்",
   "g_key_earn_loading_apy": "APY ஐ ஏற்றுகிறது...",

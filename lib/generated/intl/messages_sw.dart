@@ -1137,7 +1137,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Kuchoma moto"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Nunua N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "Nunua N kwa itifaki ya AST",
+      "Nunua N kwa itifaki ya N42",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Uhamisho wa mnyororo",

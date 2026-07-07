@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Немає активних позицій",
   "g_key_earn_go_staking": "Почніть робити ставки",
   "g_key_earn_buy_n": "Купити Н",
-  "g_key_earn_buy_n_desc": "Купуйте N з протоколом AST",
+  "g_key_earn_buy_n_desc": "Купуйте N з протоколом N42",
   "g_key_earn_dex_swap": "Обмін DEX",
   "g_key_earn_select_swap": "Виберіть Тип обміну",
   "g_key_earn_loading_apy": "Завантаження APY...",

@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "활성 포지션 없음",
   "g_key_earn_go_staking": "스테이킹 시작",
   "g_key_earn_buy_n": "N 구매",
-  "g_key_earn_buy_n_desc": "AST 프로토콜로 N 구매",
+  "g_key_earn_buy_n_desc": "N42 프로토콜로 N 구매",
   "g_key_earn_dex_swap": "DEX 스왑",
   "g_key_earn_select_swap": "스왑 유형 선택",
   "g_key_earn_loading_apy": "APY 로딩 중...",

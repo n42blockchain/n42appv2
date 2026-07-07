@@ -63,7 +63,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     }
   }
 
-  /// Direct AST payment flow.
+  /// Direct N42 payment flow.
   Future<void> _handleDirectPayment() async {
     if (_self.astBalance == null || _self.astBalance! < 50) {
       await checkAstBalance();
@@ -84,7 +84,7 @@ mixin _FullNodePageLogic on State<FullNodePage> {
     });
   }
 
-  /// USDT-to-AST swap payment flow.
+  /// USDT-to-N42 swap payment flow.
   Future<void> _handleSwapPayment() async {
     final WalletActionProvider wap = globalWapAdapter;
     final MiningProvider mp = globalMiningV1;

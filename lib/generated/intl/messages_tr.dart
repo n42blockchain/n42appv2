@@ -1119,7 +1119,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Yak"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N Satın Al"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "AST protokolü ile N satın al",
+      "N42 protokolü ile N satın al",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Çapraz zincir transferi",
