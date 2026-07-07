@@ -643,6 +643,37 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T24：iOS 私钥 guard 修复 Mac 编译验证 + 传错私钥回归（新增 2026-07-07，⚠️高优先）
+
+**背景**：Windows 端 Claude 无 Xcode，在 master 直接落了一处**未经编译的 iOS Swift**
+（`d4fb2b9d`）——你有 Mac + Xcode，请尽快把关，别让潜在语法/类型错卡住后续 iOS 构建。
+基线：`master@d4fb2b9d` 或更新。
+
+改动内容（`ios/Runner/WalletCorePlugin.swift`，6 处）：generateAddress + signTransaction
+/ signTransaction_btc_p2wsh / signTransaction_byteArray / signMessage /
+getTransactionMaxValue 的私钥解析，从
+`let d = Base64.decode(string: pkStr!)!` + `let pk = PrivateKey.init(data: d)!`
+改为 `guard let d: Data = Base64.decode(string: pkStr!), let pk = PrivateKey(data: d)
+else { result(FlutterError(code:"invalid_pk",...)); break }`。happy path 未动。
+
+### 验证项
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| C1 | 能编过 | Mac 上 `flutter build ios --debug --no-codesign`（或 Xcode Build） | **PASS**=编译成功。**FAIL**=报 Swift 语法/类型错——**你直接修**（这种编译级修正无需先问，改完在此留言说明改了什么） |
+| C2 | 正常私钥仍工作（happy path 无回归） | 用合法钱包正常发一笔交易 / 生成地址（EVM 即可，走 pk 分支或助记词分支均可） | **PASS**=签名/地址生成与改前一致，无异常 |
+| C3 | 传错格式私钥不再崩溃（本次修复的核心） | 构造调用让 `pkStr` 为非法值（非 base64 / 长度不对，如从 Dart 侧临时传 `"@@bad@@"`），触发 generateAddress 或 signTransaction 的 pk 分支 | **PASS**=返回 Flutter `error(code=invalid_pk)`、**App 不崩溃**。改前是 `!` 强制解包 nil → fatal crash 整个 App |
+| C4 | 签名全链无回归（顺带，若资产允许） | EVM/BTC/TON/SOL 各发一笔签名 + AA 签名路径 + 挖矿启动 | **PASS**=各链签名正常。缺测试资产则标 BLOCKED，与 T20/T21/T22 同批 |
+
+**报告落**：`docs/device-test-reports/<日期>-t24-ios-pk-guard.md`，或直接并入
+`docs/ios-walletcore-signing-refactor-audit.md` 的回归小节。
+C1/C2/C3 是核心且**不烧 gas**（C3 传错私钥、C2 用现有钱包），优先跑。
+**未做留给你**：同文件另 3 处 `HDWallet(entropy: d, passphrase:)!` 强制解包
+（getPublicKey/getKeyStore/getPrivateKeyAndPublicKey，与 `wallet` 可选性缠绕）——
+你在 Mac 上做 iOS 全链重构（`refactor/ios-walletcore-signing`）时一起收，别单独硬改。
+
+---
+
 ## 任务 T23：dev513 移植修复 A 类回归（新增 2026-07-06）
 
 **背景**：从打包分支 `dev513` 逐提交评估后，把 master 仍存在、逻辑正确、能干净落地的
@@ -811,6 +842,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | T21 接线深审第二轮 P0/P1 真机验证 | Codex 已验证：构建/分析/单测/安装 PASS;**C1/C2/C4 真机 PASS**(AI Gas chip 移除、AI 按钮触控可点、红包免责横幅);A1/A2(跨链桥)/B1(DApp)**BLOCKED 缺 EVM 余额/DApp 会话**;**C3 抓到入口缺口**——DEX Swap 代码在但钱包首页 swapTap 无按钮渲染不可达。**Claude 验收：3 项 PASS 采信;C3 根因确认(WalletBoard.buttonList 漏渲染 swap 按钮)已修 commit 22463cc0 补 Swap 按钮;A/B 与 T20 同批资产阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md |
 | T22 第三轮关键执行路径 P0/P1 真机验证 | Codex 已验证：构建/analyze/586单测/安装 PASS;**A0 错位前置 + A3 内置浏览器 personal_sign PASS**(active=Account1/mining=Account2 下 ecrecover==active,match=true——签名账户修复多账户真机确认);A1/A2 **暴露 WC 只扫码无粘贴 URI 缺口**;A4/B1/B2 BLOCKED 缺 AA账户/EVM余额。**Claude 验收:A3 是签名账户修复最强真机证据(WC 同款修法+代码复核背书);WC 粘贴入口缺口已修 d1654106——**A1 EVM/A2 Solana 桌面 DApp 补测 PASS**(错位前置下 ecrecover==active/Ed25519 verified;Codex 顺带修 4 真bug:粘贴入口不可达/deep link死/Solana base64→hex编码/空URI卡loading,Claude 审查通过并入 master 42a8d092);A4/B 与 T20/T21 同批阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t22-critical-path.md |
 | T23 dev513 移植修复 A 类回归（UI/行为，不依赖测试币） | 待认领（基线 `master@7554109d`；验证从 dev513 评估后移植的 8 处修复中「运行时可观测且不需测试币」的三项：交易列表刷新+BTC定时器、风险卡溢出、未登录挖矿数据持久化）| — | docs/device-test-reports/<日期>-t23-dev513-fixes.md |
+| T24 iOS 私钥 guard Mac 编译验证 + 传错私钥回归（⚠️高优先） | 待认领（基线 `master@d4fb2b9d`；Claude 在 Windows 无 Xcode 落了未编译的 iOS Swift `d4fb2b9d`——请 Mac `flutter build ios` 把关 C1、传错私钥不崩溃 C3、happy path 无回归 C2；编译错你直接修）| — | docs/device-test-reports/<日期>-t24-ios-pk-guard.md |
 
 ## 留言区
 
