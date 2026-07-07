@@ -52,6 +52,13 @@ post_install do |installer|
       end
     end
 
+    # WebRTC.framework is a prebuilt binary without dSYM; suppress dSYM upload requirement
+    if target.name == 'flutter_webrtc' || target.name.include?('WebRTC')
+      target.build_configurations.each do |config|
+        config.build_settings['DEBUG_INFORMATION_FORMAT'] = 'dwarf'
+      end
+    end
+
     target.build_configurations.each do |config|
       # 确保所有 pod 都使用 iOS 16.0 作为最低部署目标
       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
