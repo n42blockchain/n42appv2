@@ -643,6 +643,30 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T23：dev513 移植修复 A 类回归（新增 2026-07-06）
+
+**背景**：从打包分支 `dev513` 逐提交评估后，把 master 仍存在、逻辑正确、能干净落地的
+8 处真实 bug 修复移植进 master（commit `7554109d`，analyze 全绿）。其中大部分是
+「主网行为不变 / 静态可信」的，**只有下面三项是运行时可观测、且不需要测试币/测试账户**，
+优先真机跑这三项。基线：`master@7554109d`。资金/签名类（AA 测试网、NEAR 指定私钥、
+BTC 测试网确认全链）与 T20/T21/T22 同批 EVM 余额阻塞，等测试资产到位再补，不在本轮。
+
+### A 组 · 运行时行为回归（不依赖测试币）
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | 交易列表即时刷新（`notifyListeners` 修复） | 从钱包发起任意一笔转账（哪怕自转/小额），观察交易记录列表 | **PASS**=交易一发起 pending 记录**立即出现/更新**，无需手动下拉刷新或切页。此前缺 `notifyListeners`，列表要手动刷新才更新 |
+| A2 | BTC 轮询定时器不泄漏（`timerStartBtc` async 修复） | 持有一笔未确认的 BTC 交易（主网小额或历史 pending 均可）进入交易列表停留数分钟，再离开页面/切后台 | **PASS**=交易确认后从列表移除、无重复轮询；离开页面/确认完成后 logcat 无残留每 180s 触发的 BTC 状态查询。此前 fire-and-forget 致定时器永不停 |
+| A3 | 风险卡文案不溢出（`Expanded` 修复） | 打开 mining_v2 的挖矿风险卡，切到**文案最长的语言**（如德语/俄语）+ 系统字体放大到 130% | **PASS**=风险标题正常 ellipsis 截断、右侧风险等级胶囊不被挤出、无 RenderFlex overflow 黄黑条 |
+| A4 | 未登录挖矿数据持久化（`sp_util` 兜底修复） | **不登录**（默认 AstranetWallet 钱包）状态下进入挖矿页做一次会写 miningData 的操作（如设置/导入挖矿密钥分片）→ 完全杀进程重启 app → 回挖矿页 | **PASS**=重启后挖矿数据仍在（读得回）。此前未登录时 `uuid` 为空直接 early-return，存不进也读不出，数据每次丢失 |
+
+**报告落**：`docs/device-test-reports/<日期>-t23-dev513-fixes.md`。
+四项都不需链上资金：A1 自转即可、A2 用任意已有 pending BTC（无则可只验"离开页定时器停"）、
+A3/A4 纯本地。发现新问题写留言区，别改逻辑（这是回归验证轮）。
+若某项确实无法构造（如手上没有任何 BTC pending），如实标 BLOCKED 并说明。
+
+---
+
 ## 任务 T22：第三轮关键执行路径 P0/P1 真机验证（新增 2026-07-05）
 
 **背景**：3 路端到端追踪"动资产/私钥/资金"的核心路径。三路都确认无 P0 资金损失/密钥泄漏
@@ -786,6 +810,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | T20 接线复审高危修复真机验证 | Codex 已验证：代码/构建/安装 PASS;**C1/C3/C4 真机 PASS**(change_email 未登录门禁、AA 列表页创建持久化+重启存活、AA MAX 显真实 0 ETH 无 mock 无填满);A1/A2/A3/B/C2/C5 **BLOCKED 缺测试资产**(A1 走 Tron AST 未触达 EVM approve、A3 gas 估算 proxy 401、B 需 Sepolia pending、C5 需 chat 登录)。**Claude 验收：3 项 PASS 采信;A3 Dio Error 经代码确认=proxy token 既有 401 非 estimate 改动(原生 calldata=null→data 空=改前默认零回归);P0-1 最高危仍待 EVM token 余额真验** | 2026-07-04 | docs/device-test-reports/2026-07-03-t20-wiring-review.md |
 | T21 接线深审第二轮 P0/P1 真机验证 | Codex 已验证：构建/分析/单测/安装 PASS;**C1/C2/C4 真机 PASS**(AI Gas chip 移除、AI 按钮触控可点、红包免责横幅);A1/A2(跨链桥)/B1(DApp)**BLOCKED 缺 EVM 余额/DApp 会话**;**C3 抓到入口缺口**——DEX Swap 代码在但钱包首页 swapTap 无按钮渲染不可达。**Claude 验收：3 项 PASS 采信;C3 根因确认(WalletBoard.buttonList 漏渲染 swap 按钮)已修 commit 22463cc0 补 Swap 按钮;A/B 与 T20 同批资产阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t21-wiring-review-r2.md |
 | T22 第三轮关键执行路径 P0/P1 真机验证 | Codex 已验证：构建/analyze/586单测/安装 PASS;**A0 错位前置 + A3 内置浏览器 personal_sign PASS**(active=Account1/mining=Account2 下 ecrecover==active,match=true——签名账户修复多账户真机确认);A1/A2 **暴露 WC 只扫码无粘贴 URI 缺口**;A4/B1/B2 BLOCKED 缺 AA账户/EVM余额。**Claude 验收:A3 是签名账户修复最强真机证据(WC 同款修法+代码复核背书);WC 粘贴入口缺口已修 d1654106——**A1 EVM/A2 Solana 桌面 DApp 补测 PASS**(错位前置下 ecrecover==active/Ed25519 verified;Codex 顺带修 4 真bug:粘贴入口不可达/deep link死/Solana base64→hex编码/空URI卡loading,Claude 审查通过并入 master 42a8d092);A4/B 与 T20/T21 同批阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t22-critical-path.md |
+| T23 dev513 移植修复 A 类回归（UI/行为，不依赖测试币） | 待认领（基线 `master@7554109d`；验证从 dev513 评估后移植的 8 处修复中「运行时可观测且不需测试币」的三项：交易列表刷新+BTC定时器、风险卡溢出、未登录挖矿数据持久化）| — | docs/device-test-reports/<日期>-t23-dev513-fixes.md |
 
 ## 留言区
 
