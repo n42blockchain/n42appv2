@@ -5789,10 +5789,10 @@ class S {
     return Intl.message('Buy N', name: 'g_key_earn_buy_n', desc: '', args: []);
   }
 
-  /// `Buy N with AST protocol`
+  /// `Buy N with N42 protocol`
   String get g_key_earn_buy_n_desc {
     return Intl.message(
-      'Buy N with AST protocol',
+      'Buy N with N42 protocol',
       name: 'g_key_earn_buy_n_desc',
       desc: '',
       args: [],

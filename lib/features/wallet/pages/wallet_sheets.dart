@@ -273,7 +273,7 @@ class _AddTokenMenuItem extends StatelessWidget {
 
 // ── Swap 模式选择弹窗 ─────────────────────────────────────────────────────────
 
-/// 展示 AST 购买 / DEX Swap 两种模式选择的底部弹窗。
+/// 展示 N42 购买 / DEX Swap 两种模式选择的底部弹窗。
 void showSwapModeSheet(BuildContext context) {
   void pushAndClose(Widget page) {
     Navigator.pop(context);
@@ -289,7 +289,7 @@ void showSwapModeSheet(BuildContext context) {
         ListTile(
           leading: const Icon(Icons.currency_exchange),
           title: const Text('Buy N'),
-          subtitle: const Text('Purchase N via AST protocol'),
+          subtitle: const Text('Purchase N via N42 protocol'),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () => pushAndClose(SwapAstHome()),
         ),

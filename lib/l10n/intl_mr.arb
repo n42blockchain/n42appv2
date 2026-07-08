@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "सक्रिय पदे नाहीत",
   "g_key_earn_go_staking": "स्टॅकिंग सुरू करा",
   "g_key_earn_buy_n": "एन खरेदी करा",
-  "g_key_earn_buy_n_desc": "AST प्रोटोकॉलसह N खरेदी करा",
+  "g_key_earn_buy_n_desc": "N42 प्रोटोकॉलसह N खरेदी करा",
   "g_key_earn_dex_swap": "DEX स्वॅप",
   "g_key_earn_select_swap": "स्वॅप प्रकार निवडा",
   "g_key_earn_loading_apy": "APY लोड करत आहे...",

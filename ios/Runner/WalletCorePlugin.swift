@@ -81,14 +81,15 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                                             details: nil))
                 }
             }else if pkStr != ""{
-                var d:Data
-                if isImport == "true"{
-                    d = Data(hexString: pkStr!)!
-                }else{
-                    d = Base64.decode(string: pkStr!)!
+                guard let d: Data = (isImport == "true"
+                        ? Data(hexString: pkStr!)
+                        : Base64.decode(string: pkStr!)),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
                 }
-
-                let pk : PrivateKey = PrivateKey.init(data: d)!
                 let address: [String: String]? = self.generateAddress_pk(privateKey: pk, coin: coin!, addressType: addressType!,coinType: nil,isTest: isTest!)
                 if address == nil {
                     result(FlutterError(code: "address_null",
@@ -146,8 +147,13 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 }
             }else if pkStr != ""{
                 //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                let d:Data = Base64.decode(string: pkStr!)!
-                let pk : PrivateKey = PrivateKey.init(data: d)!
+                guard let d: Data = Base64.decode(string: pkStr!),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
+                }
                 let txHash: String? = self.signTransaction(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
                 if txHash == nil {
                     result(FlutterError(code: "txhash_null",
@@ -196,8 +202,13 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 }
             }else if pkStr != ""{
                 //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                let d:Data = Base64.decode(string: pkStr!)!
-                let pk : PrivateKey = PrivateKey.init(data: d)!
+                guard let d: Data = Base64.decode(string: pkStr!),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
+                }
                 let txHash: String? = self.signBitcoinTransaction_p2wsh(wallet: nil, path: "", txData: txData!, coinType: CoinType.bitcoin, pk: pk)
                 if txHash == nil {
                     result(FlutterError(code: "txhash_null",
@@ -246,8 +257,13 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 }
             }else if pkStr != ""{
                 //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                let d:Data = Base64.decode(string: pkStr!)!
-                let pk : PrivateKey = PrivateKey.init(data: d)!
+                guard let d: Data = Base64.decode(string: pkStr!),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
+                }
                 let txHash: String? = self.signTransaction_byteArray(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
                 if txHash == nil {
                     result(FlutterError(code: "txhash_null",
@@ -295,8 +311,13 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                                             details: nil))
                 }
             }else if pkStr != ""{
-                let d:Data = Base64.decode(string: pkStr!)!
-                let pk : PrivateKey = PrivateKey.init(data: d)!
+                guard let d: Data = Base64.decode(string: pkStr!),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
+                }
                 let txHash: String? = self.signMessage(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
                 if txHash == nil {
                     result(FlutterError(code: "txhash_null",
@@ -461,8 +482,13 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 }
             }else if pkStr != ""{
                 //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                let d:Data = Base64.decode(string: pkStr!)!
-                let pk : PrivateKey = PrivateKey.init(data: d)!
+                guard let d: Data = Base64.decode(string: pkStr!),
+                      let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk",
+                                            message: "Invalid private key format",
+                                            details: nil))
+                    break
+                }
                 let txHash: String? = self.signTransaction_maxValue(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
                 if txHash == nil {
                     result(FlutterError(code: "txhash_null",
@@ -675,7 +701,9 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
                 flutterResult(FlutterError(code: "ClientError", message: "\(err)", details: nil))
             }
         })
-        flutterResult("Client started")
+        // 结果只由上面的异步 completion 回一次；此处原本还同步调了一次
+        // flutterResult("Client started")，一次请求回两次 reply 会触发
+        // Flutter engine 的重复提交断言，已移除。
         break
     default:
         result(FlutterMethodNotImplemented)

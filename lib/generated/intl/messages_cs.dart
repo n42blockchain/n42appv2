@@ -1115,7 +1115,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Spálit"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Koupit N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "Koupit N s protokolem AST",
+      "Koupit N s protokolem N42",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Křížový převod",

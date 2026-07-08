@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Žádné aktivní pozice",
   "g_key_earn_go_staking": "Začněte vytyčovat",
   "g_key_earn_buy_n": "Koupit N",
-  "g_key_earn_buy_n_desc": "Koupit N s protokolem AST",
+  "g_key_earn_buy_n_desc": "Koupit N s protokolem N42",
   "g_key_earn_dex_swap": "Výměna DEX",
   "g_key_earn_select_swap": "Vyberte Typ výměny",
   "g_key_earn_loading_apy": "Načítání APY...",

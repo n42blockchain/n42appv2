@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "সক্রিয় অবস্থান নেই",
   "g_key_earn_go_staking": "স্টেকিং শুরু করুন",
   "g_key_earn_buy_n": "এন কিনুন",
-  "g_key_earn_buy_n_desc": "AST প্রোটোকল দিয়ে N কিনুন",
+  "g_key_earn_buy_n_desc": "N42 প্রোটোকল দিয়ে N কিনুন",
   "g_key_earn_dex_swap": "ডেক্স অদলবদল",
   "g_key_earn_select_swap": "সোয়াপ টাইপ নির্বাচন করুন",
   "g_key_earn_loading_apy": "APY লোড হচ্ছে...",

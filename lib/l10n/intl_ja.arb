@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "アクティブなポジションなし",
   "g_key_earn_go_staking": "ステーキング開始",
   "g_key_earn_buy_n": "Nを購入",
-  "g_key_earn_buy_n_desc": "ASTプロトコルでNを購入",
+  "g_key_earn_buy_n_desc": "N42プロトコルでNを購入",
   "g_key_earn_dex_swap": "DEXスワップ",
   "g_key_earn_select_swap": "スワップタイプを選択",
   "g_key_earn_loading_apy": "APY読み込み中...",

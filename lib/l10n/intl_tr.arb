@@ -640,7 +640,7 @@
   "g_key_earn_no_positions": "Aktif pozisyon yok",
   "g_key_earn_go_staking": "Staking'e Başla",
   "g_key_earn_buy_n": "N Satın Al",
-  "g_key_earn_buy_n_desc": "AST protokolü ile N satın al",
+  "g_key_earn_buy_n_desc": "N42 protokolü ile N satın al",
   "g_key_earn_dex_swap": "DEX Takas",
   "g_key_earn_select_swap": "Takas Türü Seçin",
   "g_key_earn_loading_apy": "APY yükleniyor...",

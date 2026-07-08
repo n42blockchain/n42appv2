@@ -1180,7 +1180,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("కాల్చండి"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N కొనండి"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "AST ప్రోటోకాల్‌తో N కొనుగోలు చేయండి",
+      "N42 ప్రోటోకాల్‌తో N కొనుగోలు చేయండి",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "క్రాస్ చైన్ బదిలీ",

@@ -917,7 +917,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("バーン"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Nを購入"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "ASTプロトコルでNを購入",
+      "N42プロトコルでNを購入",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("クロスチェーン転送"),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEXスワップ"),

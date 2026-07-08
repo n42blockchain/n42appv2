@@ -849,7 +849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("燒傷"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("買N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "使用 AST 協議購買 N",
+      "使用 N42 協議購買 N",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("跨鏈轉帳"),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 互換"),
