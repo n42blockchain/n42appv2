@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
-import 'package:n42_wallet/features/wallet/pages/market/market_page.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
@@ -145,10 +148,13 @@ class _TopRow extends StatelessWidget {
         Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const MarketPage()),
-            ),
+            onTap: () {
+              // Markets 本身就是主 tab 之一，切换 tab 而非另开一页
+              final marketTabIndex = Platform.isAndroid ? 3 : 2;
+              ProviderScope.containerOf(context, listen: false)
+                  .read(homeTabIndexProvider.notifier)
+                  .state = marketTabIndex;
+            },
             borderRadius: AppRadius.brMd,
             child: SizedBox(
               width: su.setWidth(88),
@@ -181,7 +187,7 @@ class _TopRow extends StatelessWidget {
             ),
           ),
         ),
-        SizedBox(width: su.setWidth(4)),
+        const Spacer(),
         Material(
           color: Colors.transparent,
           child: InkWell(

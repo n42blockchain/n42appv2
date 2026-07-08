@@ -213,11 +213,11 @@ class _WalletBoardState extends State<WalletBoard> {
         'assets/wallet/w_swap.png',
         widget.swapTap,
       ),
-      _buildActionBtn(
+      /*_buildActionBtn(
         S.of(context).g_iap_title,
         'assets/wallet/w_buy.png',
         widget.buyTap,
-      ),
+      ),*/
     ];
     return buttons;
   }
