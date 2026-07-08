@@ -21,692 +21,495 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
 
-    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    switch call.method {
-    case "generateMnemonic":
-        guard let args = call.arguments as? [String: Any] else {
-            result(FlutterError(code: "arguments_null", message: "arguments is null", details: nil))
-            break
+    // ── Key resolution helper ─────────────────────────────────────────────
+    // Shared by all 5 sign* dispatch cases to eliminate repeated mnemonic/pk logic.
+    private func resolveKey(from args: [String: Any]) -> Result<(HDWallet?, PrivateKey?), FlutterError> {
+        guard let mnemonic = args["mnemonic"] as? String,
+              let pkStr = args["pk"] as? String else {
+            return .failure(FlutterError(code: "arguments_null", message: "mnemonic or pk missing", details: nil))
         }
-        let passphrase: String = (args["passphrase"] as? String) ?? ""
-        let leng: Int32 = (args["length"] as? Int32) ?? 128
-        if let wallet = HDWallet(strength: leng, passphrase: passphrase) {
-            result(wallet.mnemonic)
-        } else {
-            result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
-        }
-    break
-    case "checkMnemonic":
-        guard let args = call.arguments as? [String: String] else {
-            result(FlutterError(code: "arguments_null", message: "arguments is null", details: nil))
-            break
-        }
-        guard let mnemonic = args["mnemonic"], !mnemonic.isEmpty else {
-            result(FlutterError(code: "arguments_null", message: "[mnemonic] cannot be null", details: nil))
-            break
-        }
-        let passphrase: String = args["passphrase"] ?? ""
-        if let wallet = HDWallet(mnemonic: mnemonic, passphrase: passphrase) {
-            result(true)
-        } else {
-            result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
-        }
-    break
-    case "generateAddress":
-        let args = call.arguments as! [String: String]
-        let path: String? = args["path"]
-        let coin: String? = args["coin"]
-        let mnemonic: String? = args["mnemonic"]
-        let passphrase: String? = args["passphrase"]
-        let addressType: String? = args["addressType"]
-        let pkStr: String? = args["pk"]
-        let isImport: String? = args["isImport"]
-        let isTest: String? = args["isTest"]
-        if path != nil && coin != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-                if wallet != nil {
-
-                    let address: [String: String]? = self.generateAddress(wallet: wallet!, path: path!, coin: coin!, addressType: addressType!,isTest: isTest!)
-                    if address == nil {
-                        result(FlutterError(code: "address_null",
-                                                message: "Failed to generate address",
-                                                details: nil))
-                    } else {
-                        result(address)
-                    }
-                } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
-                }
-            }else if pkStr != ""{
-                guard let d: Data = (isImport == "true"
-                        ? Data(hexString: pkStr!)
-                        : Base64.decode(string: pkStr!)),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
-                }
-                let address: [String: String]? = self.generateAddress_pk(privateKey: pk, coin: coin!, addressType: addressType!,coinType: nil,isTest: isTest!)
-                if address == nil {
-                    result(FlutterError(code: "address_null",
-                                            message: "Failed to generate address",
-                                            details: nil))
-                } else {
-                    result(address)
-                }
+        let passphrase = (args["passphrase"] as? String) ?? ""
+        if !mnemonic.isEmpty {
+            guard let wallet = HDWallet(mnemonic: mnemonic, passphrase: passphrase) else {
+                return .failure(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
             }
+            return .success((wallet, nil))
+        } else if !pkStr.isEmpty {
+            guard let d = Base64.decode(string: pkStr), let pk = PrivateKey(data: d) else {
+                return .failure(FlutterError(code: "invalid_pk", message: "Could not decode private key", details: nil))
+            }
+            return .success((nil, pk))
+        }
+        return .failure(FlutterError(code: "no_wallet", message: "mnemonic and pk both empty", details: nil))
+    }
 
-        } else {
-            result(FlutterError(code: "arguments_null",
+    public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+        switch call.method {
+
+        // ── Key management ────────────────────────────────────────────────
+
+        case "generateMnemonic":
+            guard let args = call.arguments as? [String: Any] else {
+                result(FlutterError(code: "arguments_null", message: "arguments is null", details: nil))
+                return
+            }
+            let passphrase = (args["passphrase"] as? String) ?? ""
+            let leng = (args["length"] as? Int32) ?? 128
+            guard let wallet = HDWallet(strength: leng, passphrase: passphrase) else {
+                result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                return
+            }
+            result(wallet.mnemonic)
+
+        case "checkMnemonic":
+            guard let args = call.arguments as? [String: String],
+                  let mnemonic = args["mnemonic"], !mnemonic.isEmpty else {
+                result(FlutterError(code: "arguments_null", message: "[mnemonic] cannot be null", details: nil))
+                return
+            }
+            result(Mnemonic.isValid(mnemonic: mnemonic))
+
+        case "generateAddress":
+            guard let args = call.arguments as? [String: String],
+                  let path = args["path"],
+                  let coin = args["coin"],
+                  let mnemonic = args["mnemonic"],
+                  let pkStr = args["pk"] else {
+                result(FlutterError(code: "arguments_null",
                                     message: "[path] and [coin] and [mnemonic] and [privateKey] cannot be null",
                                     details: nil))
-        }
-    break
-    case "validateAddress":
-        let args = call.arguments as! [String: String]
-        let address: String? = args["address"]
-        let coin: String? = args["coin"]
-        if address != nil && coin != nil {
-            let isValid: Bool = self.validateAddress(address: address!, coin: coin!)
-            result(isValid)
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[address] and [coin] cannot be null",
-                                    details: nil))
-        }
-    break
-    case "signTransaction":
-        let args = call.arguments as! [String: Any]
-        let coin: String? = args["coin"] as? String
-        let path: String? = args["path"] as? String
-        let txData: [String: Any]? = args["txData"] as? [String: Any]
-        let mnemonic: String? = args["mnemonic"] as? String
-        let passphrase: String? = args["passphrase"] as? String
-        let pkStr: String? = args["pk"] as? String
-        if coin != nil && path != nil && txData != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-
-                if wallet != nil {
-                    let txHash: String? = self.signTransaction(wallet: wallet, coin: coin!, path: path!, txData: txData!, pk: nil)
-                    if txHash == nil {
-                        result(FlutterError(code: "txhash_null",
-                                                message: "Failed to buid and sign transaction",
-                                                details: nil))
-                    } else {
-                        result(txHash)
-                    }
-                } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
-                }
-            }else if pkStr != ""{
-                //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                guard let d: Data = Base64.decode(string: pkStr!),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
-                }
-                let txHash: String? = self.signTransaction(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
-                if txHash == nil {
-                    result(FlutterError(code: "txhash_null",
-                                            message: "Failed to buid and sign transaction",
-                                            details: nil))
-                } else {
-                    result(txHash)
-                }
-            }else{
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
+                return
             }
+            let passphrase = args["passphrase"] ?? ""
+            let addressType = args["addressType"] ?? "legacy"
+            let isTest = args["isTest"] ?? "false"
+            let isImport = args["isImport"]
 
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[coin], [path] and [txData] cannot be null",
-                                    details: nil))
-        }
-    break
-    case "signTransaction_btc_p2wsh":
-        let args = call.arguments as! [String: Any]
-        let coin: String? = args["coin"] as? String
-        let path: String? = args["path"] as? String
-        let txData: [String: Any]? = args["txData"] as? [String: Any]
-        let mnemonic: String? = args["mnemonic"] as? String
-        let passphrase: String? = args["passphrase"] as? String
-        let pkStr: String? = args["pk"] as? String
-        if coin != nil && path != nil && txData != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-
-                if wallet != nil {
-                    let txHash: String? = self.signBitcoinTransaction_p2wsh(wallet: wallet, path: path!, txData: txData!, coinType: CoinType.bitcoin, pk: nil)
-                    if txHash == nil {
-                        result(FlutterError(code: "txhash_null",
-                                                message: "Failed to buid and sign transaction",
-                                                details: nil))
-                    } else {
-                        result(txHash)
-                    }
+            if !mnemonic.isEmpty {
+                guard let wallet = HDWallet(mnemonic: mnemonic, passphrase: passphrase) else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
+                }
+                guard let address = generateAddress(wallet: wallet, path: path, coin: coin,
+                                                    addressType: addressType, isTest: isTest) else {
+                    result(FlutterError(code: "address_null", message: "Failed to generate address", details: nil))
+                    return
+                }
+                result(address)
+            } else if !pkStr.isEmpty {
+                let rawData: Data?
+                if isImport == "true" {
+                    rawData = Data(hexString: pkStr)
                 } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
+                    rawData = Base64.decode(string: pkStr)
                 }
-            }else if pkStr != ""{
-                //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                guard let d: Data = Base64.decode(string: pkStr!),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
+                guard let d = rawData, let pk = PrivateKey(data: d) else {
+                    result(FlutterError(code: "invalid_pk", message: "Could not decode private key", details: nil))
+                    return
                 }
-                let txHash: String? = self.signBitcoinTransaction_p2wsh(wallet: nil, path: "", txData: txData!, coinType: CoinType.bitcoin, pk: pk)
-                if txHash == nil {
-                    result(FlutterError(code: "txhash_null",
-                                            message: "Failed to buid and sign transaction",
-                                            details: nil))
-                } else {
-                    result(txHash)
+                guard let address = generateAddress_pk(privateKey: pk, coin: coin,
+                                                       addressType: addressType, coinType: nil, isTest: isTest) else {
+                    result(FlutterError(code: "address_null", message: "Failed to generate address", details: nil))
+                    return
                 }
-            }else{
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[coin], [path] and [txData] cannot be null",
-                                    details: nil))
-        }
-    break
-    case "signTransaction_byteArray":
-        let args = call.arguments as! [String: Any]
-        let coin: String? = args["coin"] as? String
-        let path: String? = args["path"] as? String
-        let txData: [String: Any]? = args["txData"] as? [String: Any]
-        let mnemonic: String? = args["mnemonic"] as? String
-        let passphrase: String? = args["passphrase"] as? String
-        let pkStr: String? = args["pk"] as? String
-        if coin != nil && path != nil && txData != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-
-                if wallet != nil {
-                    let txHash: String? = self.signTransaction_byteArray(wallet: wallet, coin: coin!, path: path!, txData: txData!, pk: nil)
-                    if txHash == nil {
-                        result(FlutterError(code: "txhash_null",
-                                                message: "Failed to buid and sign transaction",
-                                                details: nil))
-                    } else {
-                        result(txHash)
-                    }
-                } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
-                }
-            }else if pkStr != ""{
-                //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                guard let d: Data = Base64.decode(string: pkStr!),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
-                }
-                let txHash: String? = self.signTransaction_byteArray(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
-                if txHash == nil {
-                    result(FlutterError(code: "txhash_null",
-                                            message: "Failed to buid and sign transaction",
-                                            details: nil))
-                } else {
-                    result(txHash)
-                }
-            }else{
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[coin], [path] and [txData] cannot be null",
-                                    details: nil))
-        }
-    break
-    case "signMessage":
-        let args = call.arguments as! [String: Any]
-        let coin: String? = args["coin"] as? String
-        let path: String? = args["path"] as? String
-        let txData: String? = args["txData"] as? String
-        let mnemonic: String? = args["mnemonic"] as? String
-        let passphrase: String? = args["passphrase"] as? String
-        let pkStr: String? = args["pk"] as? String
-        if coin != nil && path != nil && txData != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-
-                if wallet != nil {
-                    let txHash: String? = self.signMessage(wallet: wallet, coin: coin!, path: path!, txData: txData!, pk: nil)
-                    if txHash == nil {
-                        result(FlutterError(code: "txhash_null",
-                                                message: "Failed to buid and sign message",
-                                                details: nil))
-                    } else {
-                        result(txHash)
-                    }
-                } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
-                }
-            }else if pkStr != ""{
-                guard let d: Data = Base64.decode(string: pkStr!),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
-                }
-                let txHash: String? = self.signMessage(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
-                if txHash == nil {
-                    result(FlutterError(code: "txhash_null",
-                                            message: "Failed to buid and sign message",
-                                            details: nil))
-                } else {
-                    result(txHash)
-                }
-            }else{
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[coin], [path] and [txData] cannot be null",
-                                    details: nil))
-        }
-    break
-    case "getPublicKey":
-        let args = call.arguments as! [String: String]
-        let path: String? = args["path"]
-        let coin: String? = args["coin"]
-        let mnemonic: String? = args["mnemonic"]
-        let passphrase: String? = args["passphrase"]
-        let pkStr: String? = args["pk"]
-        if path != nil && coin != nil {
-            var wallet : HDWallet
-            if mnemonic != "" {
-                wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)!
-            }else{
-                let d:Data = Base64.decode(string: pkStr!)!
-                wallet = HDWallet(entropy: d, passphrase: passphrase!)!
-            }
-            if wallet != nil {
-                let publicKey: String? = self.getPublicKey(wallet: wallet, path: path!, coin: coin!)
-                if publicKey == nil {
-                    result(FlutterError(code: "address_null",
-                                            message: "Failed to generate address",
-                                            details: nil))
-                } else {
-                    result(publicKey)
-                }
+                result(address)
             } else {
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[path] and [coin] and [mnemonic] cannot be null",
+                result(FlutterError(code: "arguments_null",
+                                    message: "[path] and [coin] and [mnemonic] and [privateKey] cannot be null",
                                     details: nil))
-        }
-        break
-    case "getPrivateKey":
-        let args = call.arguments as! [String: String]
-        let path: String? = args["path"]
-        let coin: String? = args["coin"]
-        let mnemonic: String? = args["mnemonic"]
-        let passphrase: String? = args["passphrase"]
-        if path != nil && coin != nil && mnemonic != nil {
-            var wallet : HDWallet?
-            if mnemonic != "" {
-                wallet = HDWallet(mnemonic: mnemonic!, passphrase: "")
-            }else{
-                wallet = nil
             }
-            if wallet != nil {
-                let privateKey: String? = self.getPrivateKey(wallet: wallet!, path: path!, coin: coin!)
-                if privateKey == nil {
-                    result(FlutterError(code: "address_null",
-                                            message: "Failed to generate address",
-                                            details: nil))
-                } else {
-                    result(privateKey)
+
+        case "validateAddress":
+            guard let args = call.arguments as? [String: String],
+                  let address = args["address"],
+                  let coin = args["coin"] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[address] and [coin] cannot be null", details: nil))
+                return
+            }
+            result(validateAddress(address: address, coin: coin))
+
+        case "getPublicKey":
+            guard let args = call.arguments as? [String: String],
+                  let path = args["path"],
+                  let coin = args["coin"] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[path] and [coin] and [mnemonic] cannot be null", details: nil))
+                return
+            }
+            let passphrase = args["passphrase"] ?? ""
+            let mnemonic = args["mnemonic"] ?? ""
+            let pkStr = args["pk"] ?? ""
+
+            let wallet: HDWallet
+            if !mnemonic.isEmpty {
+                guard let w = HDWallet(mnemonic: mnemonic, passphrase: passphrase) else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
                 }
+                wallet = w
             } else {
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[path] and [coin] and [mnemonic] cannot be null",
-                                    details: nil))
-        }
-        break
-    case "getKeyStore":
-        let args = call.arguments as! [String: String]
-        let path: String? = args["path"]
-        let coin: String? = args["coin"]
-        let mnemonic: String? = args["mnemonic"]
-        let passphrase: String? = args["passphrase"]
-        let addressType: String? = args["addressType"]
-        let pkStr: String? = args["pk"]
-        if path != nil && coin != nil  && passphrase != nil && addressType != nil {
-            var wallet: HDWallet?
-            if mnemonic == ""{
-                let d:Data = Base64.decode(string: pkStr!)!
-                wallet = HDWallet(entropy: d, passphrase: "")!
-            }else{
-                wallet = HDWallet(mnemonic: mnemonic!, passphrase: "")!
-            }
-            if wallet != nil {
-                let keystore: String = self.getKeyStore(wallet: wallet!, path: path!, coin: coin!, passphrase: passphrase!, addressType: addressType!)
-                if keystore == "" {
-                    result(FlutterError(code: "KeyStore_error",
-                                            message: "Failed to KeyStore",
-                                            details: nil))
-                } else {
-                    result(keystore)
+                guard let d = Base64.decode(string: pkStr),
+                      let w = HDWallet(entropy: d, passphrase: passphrase) else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
                 }
+                wallet = w
+            }
+            guard let publicKey = getPublicKey(wallet: wallet, path: path, coin: coin) else {
+                result(FlutterError(code: "address_null", message: "Failed to generate address", details: nil))
+                return
+            }
+            result(publicKey)
+
+        case "getPrivateKey":
+            guard let args = call.arguments as? [String: String],
+                  let path = args["path"],
+                  let coin = args["coin"],
+                  let mnemonic = args["mnemonic"], !mnemonic.isEmpty else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[path] and [coin] and [mnemonic] cannot be null", details: nil))
+                return
+            }
+            guard let wallet = HDWallet(mnemonic: mnemonic, passphrase: "") else {
+                result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                return
+            }
+            let privateKey = getPrivateKey(wallet: wallet, path: path, coin: coin)
+            if privateKey.isEmpty {
+                result(FlutterError(code: "address_null", message: "Failed to generate address", details: nil))
             } else {
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
-            }
-        }else {
-            result(FlutterError(code: "arguments_null", message:"[path] and [coin] and [mnemonic] and [passphrase] cannot be null",
-                                    details: nil))
-        }
-        break
-    case "getWalletInfoWithKeyStore":
-        let args = call.arguments as! [String: String]
-        let keyStore: String? = args["keyStore"]
-        let coin: String? = args["coin"]
-        let passphrase: String? = args["passphrase"]
-        if keyStore != nil && coin != nil && passphrase != nil {
-            let keystore = self.getWalletInfoWithKeyStore(keyStore:keyStore!,passphrase: passphrase!,coinType: coin!)
-            result(keystore)
-        }else {
-            result(FlutterError(code: "arguments_null", message:"[keyStore] and [coin] and [passphrase] cannot be null",
-                                    details: nil))
-        }
-        break
-    case "getTransactionMaxValue":
-        let args = call.arguments as! [String: Any]
-        let coin: String? = args["coin"] as? String
-        let path: String? = args["path"] as? String
-        let txData: [String: Any]? = args["txData"] as? [String: Any]
-        let mnemonic: String? = args["mnemonic"] as? String
-        let passphrase: String? = args["passphrase"] as? String
-        let pkStr: String? = args["pk"] as? String
-        if coin != nil && path != nil && txData != nil && mnemonic != nil && pkStr != nil {
-            if mnemonic != ""{
-                let wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)
-
-                if wallet != nil {
-                    let txHash: String? = self.signTransaction_maxValue(wallet: wallet, coin: coin!, path: path!, txData: txData!, pk: nil)
-                    if txHash == nil {
-                        result(FlutterError(code: "txhash_null",
-                                                message: "Failed to buid and sign transaction",
-                                                details: nil))
-                    } else {
-                        result(txHash)
-                    }
-                } else {
-                    result(FlutterError(code: "no_wallet",
-                                            message: "Could not generate wallet, why?",
-                                            details: nil))
-                }
-            }else if pkStr != ""{
-                //let pk : PrivateKey = PrivateKey.init(data: Data(hexString: pkStr!)!)!
-                guard let d: Data = Base64.decode(string: pkStr!),
-                      let pk = PrivateKey(data: d) else {
-                    result(FlutterError(code: "invalid_pk",
-                                            message: "Invalid private key format",
-                                            details: nil))
-                    break
-                }
-                let txHash: String? = self.signTransaction_maxValue(wallet: nil, coin: coin!, path: "", txData: txData!,pk: pk)
-                if txHash == nil {
-                    result(FlutterError(code: "txhash_null",
-                                            message: "Failed to buid and sign transaction",
-                                            details: nil))
-                } else {
-                    result(txHash)
-                }
-            }else{
-                result(FlutterError(code: "no_wallet",
-                                        message: "Could not generate wallet, why?",
-                                        details: nil))
+                result(privateKey)
             }
 
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[coin], [path] and [txData] cannot be null",
+        case "getKeyStore":
+            guard let args = call.arguments as? [String: String],
+                  let path = args["path"],
+                  let coin = args["coin"],
+                  let passphrase = args["passphrase"],
+                  let addressType = args["addressType"] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[path] and [coin] and [mnemonic] and [passphrase] cannot be null",
                                     details: nil))
-        }
-    break
-    case "getPrivateKeyAndPublicKey":
-        let args = call.arguments as! [String: String]
-        let path: String? = args["path"]
-        let coin: String? = args["coin"]
-        let mnemonic: String? = args["mnemonic"]
-        let pkStr: String? = args["privateKey"]
-        let passphrase: String? = args["passphrase"]
-        if path != nil && coin != nil {
-            var wallet :HDWallet
-            if mnemonic != ""{
-                wallet = HDWallet(mnemonic: mnemonic!, passphrase: passphrase!)!
-            }else {
-                let d:Data = Base64.decode(string: pkStr!)!
-                wallet = HDWallet(entropy: d, passphrase: passphrase!)!
+                return
             }
+            let mnemonic = args["mnemonic"] ?? ""
+            let pkStr = args["pk"] ?? ""
 
-            let publicKey: String? = self.getPublicKey(wallet: wallet, path: path!, coin: coin!)
-            let privateKey: String? = self.getPrivateKey(wallet: wallet, path: path!, coin: coin!)
-            if privateKey == nil {
-                result(FlutterError(code: "address_null",
-                                        message: "Failed to generate address",
-                                        details: nil))
+            let walletKS: HDWallet
+            if mnemonic.isEmpty {
+                guard let d = Base64.decode(string: pkStr),
+                      let w = HDWallet(entropy: d, passphrase: "") else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
+                }
+                walletKS = w
             } else {
-                let rValue :[String?:String?]=["publicKey":publicKey,"privateKey":privateKey]
-
-                  result(self.objToJson(from: rValue))
+                guard let w = HDWallet(mnemonic: mnemonic, passphrase: "") else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
+                }
+                walletKS = w
             }
-        } else {
-            result(FlutterError(code: "arguments_null",
-                                    message: "[path] and [coin] and [mnemonic] cannot be null",
-                                    details: nil))
-        }
-        break
-    case "LiveActivityStart":
-        let args = call.arguments as! [String: Any]
-        var type: Int32? = args["type"] as? Int32
-        av_play(type: type!)
-        let state = N42Attributes.ContentState(value: 1);
-        let attr = N42Attributes(name: "test")
-
-        do {
-            if #available(iOS 16.1, *) {
-                activity = try Activity.request(attributes: attr, contentState: state)
+            let keystore = getKeyStore(wallet: walletKS, path: path, coin: coin,
+                                       passphrase: passphrase, addressType: addressType)
+            if keystore.isEmpty {
+                result(FlutterError(code: "KeyStore_error", message: "Failed to KeyStore", details: nil))
             } else {
+                result(keystore)
+            }
+
+        case "getWalletInfoWithKeyStore":
+            guard let args = call.arguments as? [String: String],
+                  let keyStore = args["keyStore"],
+                  let coin = args["coin"],
+                  let passphrase = args["passphrase"] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[keyStore] and [coin] and [passphrase] cannot be null", details: nil))
+                return
+            }
+            result(getWalletInfoWithKeyStore(keyStore: keyStore, passphrase: passphrase, coinType: coin))
+
+        case "getPrivateKeyAndPublicKey":
+            guard let args = call.arguments as? [String: String],
+                  let path = args["path"],
+                  let coin = args["coin"] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[path] and [coin] and [mnemonic] cannot be null", details: nil))
+                return
+            }
+            let mnemonic = args["mnemonic"] ?? ""
+            let pkStr = args["privateKey"] ?? ""
+            let passphrase = args["passphrase"] ?? ""
+
+            let walletKP: HDWallet
+            if !mnemonic.isEmpty {
+                guard let w = HDWallet(mnemonic: mnemonic, passphrase: passphrase) else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
+                }
+                walletKP = w
+            } else {
+                guard let d = Base64.decode(string: pkStr),
+                      let w = HDWallet(entropy: d, passphrase: passphrase) else {
+                    result(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
+                    return
+                }
+                walletKP = w
+            }
+            let publicKey = getPublicKey(wallet: walletKP, path: path, coin: coin)
+            let privateKey = getPrivateKey(wallet: walletKP, path: path, coin: coin)
+            guard !privateKey.isEmpty else {
+                result(FlutterError(code: "address_null", message: "Failed to generate address", details: nil))
+                return
+            }
+            result(objToJson(from: ["publicKey": publicKey as Any, "privateKey": privateKey as Any]))
+
+        // ── Transaction signing ───────────────────────────────────────────
+
+        case "signTransaction":
+            guard let args = call.arguments as? [String: Any],
+                  let coin = args["coin"] as? String,
+                  let path = args["path"] as? String,
+                  let txData = args["txData"] as? [String: Any] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[coin], [path] and [txData] cannot be null", details: nil))
+                return
+            }
+            switch resolveKey(from: args) {
+            case .failure(let err): result(err)
+            case .success(let (wallet, pk)):
+                guard let txHash = signTransaction(wallet: wallet, coin: coin, path: path, txData: txData, pk: pk) else {
+                    result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
+                    return
+                }
+                result(txHash)
+            }
+
+        case "signTransaction_btc_p2wsh":
+            guard let args = call.arguments as? [String: Any],
+                  let path = args["path"] as? String,
+                  let txData = args["txData"] as? [String: Any] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[coin], [path] and [txData] cannot be null", details: nil))
+                return
+            }
+            switch resolveKey(from: args) {
+            case .failure(let err): result(err)
+            case .success(let (wallet, pk)):
+                guard let txHash = signBitcoinTransaction_p2wsh(wallet: wallet, path: path, txData: txData,
+                                                                coinType: .bitcoin, pk: pk) else {
+                    result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
+                    return
+                }
+                result(txHash)
+            }
+
+        case "signTransaction_byteArray":
+            guard let args = call.arguments as? [String: Any],
+                  let coin = args["coin"] as? String,
+                  let path = args["path"] as? String,
+                  let txData = args["txData"] as? [String: Any] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[coin], [path] and [txData] cannot be null", details: nil))
+                return
+            }
+            switch resolveKey(from: args) {
+            case .failure(let err): result(err)
+            case .success(let (wallet, pk)):
+                guard let txHash = signTransaction_byteArray(wallet: wallet, coin: coin, path: path,
+                                                             txData: txData, pk: pk) else {
+                    result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
+                    return
+                }
+                result(txHash)
+            }
+
+        case "signMessage":
+            guard let args = call.arguments as? [String: Any],
+                  let coin = args["coin"] as? String,
+                  let path = args["path"] as? String,
+                  let txData = args["txData"] as? String else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[coin], [path] and [txData] cannot be null", details: nil))
+                return
+            }
+            switch resolveKey(from: args) {
+            case .failure(let err): result(err)
+            case .success(let (wallet, pk)):
+                guard let txHash = signMessage(wallet: wallet, coin: coin, path: path, txData: txData, pk: pk) else {
+                    result(FlutterError(code: "txhash_null", message: "Failed to build and sign message", details: nil))
+                    return
+                }
+                result(txHash)
+            }
+
+        case "getTransactionMaxValue":
+            guard let args = call.arguments as? [String: Any],
+                  let coin = args["coin"] as? String,
+                  let path = args["path"] as? String,
+                  let txData = args["txData"] as? [String: Any] else {
+                result(FlutterError(code: "arguments_null",
+                                    message: "[coin], [path] and [txData] cannot be null", details: nil))
+                return
+            }
+            switch resolveKey(from: args) {
+            case .failure(let err): result(err)
+            case .success(let (wallet, pk)):
+                guard let txHash = signTransaction_maxValue(wallet: wallet, coin: coin, path: path,
+                                                            txData: txData, pk: pk) else {
+                    result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
+                    return
+                }
+                result(txHash)
+            }
+
+        // ── Audio / LiveActivity ──────────────────────────────────────────
+
+        case "LiveActivityStart":
+            guard let args = call.arguments as? [String: Any],
+                  let type = args["type"] as? Int32 else {
+                result(FlutterError(code: "arguments_null", message: "type is null", details: nil))
+                return
+            }
+            guard #available(iOS 16.1, *) else {
                 result(FlutterError(code: "LiveActivityError",
-                                        message: "iOS version must be greater than 16.1",
-                                        details: nil))
+                                    message: "iOS version must be greater than 16.1", details: nil))
+                return
+            }
+            av_play(type: type)
+            let startState = N42Attributes.ContentState(value: 1)
+            let attr = N42Attributes(name: "test")
+            do {
+                activity = try Activity.request(attributes: attr, contentState: startState)
+                let toBackgroundControl = UIControl()
+                toBackgroundControl.sendAction(#selector(NSXPCConnection.suspend),
+                                               to: UIApplication.shared, for: nil)
+                result("true")
+            } catch {
+                result(FlutterError(code: "LiveActivityError", message: "LiveActivity Start Error", details: nil))
             }
 
-            let toBackgroundControl = UIControl()
-            toBackgroundControl.sendAction(#selector(NSXPCConnection.suspend), to: UIApplication.shared, for: nil)
-            result("true")
-        } catch {
-            result(FlutterError(code: "LiveActivityError",
-                                    message: "LiveActivity Start Error",
-                                    details: nil))
-        }
+        case "LiveActivityUpdate":
+            guard #available(iOS 16.1, *) else {
+                result(FlutterError(code: "LiveActivityError",
+                                    message: "iOS version must be greater than 16.1", details: nil))
+                return
+            }
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Int else {
+                result(FlutterError(code: "arguments_null", message: "value is null", details: nil))
+                return
+            }
+            let updateState = N42Attributes.ContentState(value: value)
+            Task {
+                await activity?.update(using: updateState)
+                result("true")
+            }
 
-        break
-    case "LiveActivityUpdate":
-        let args = call.arguments as! [String: Any]
-        let value : Int = args["value"] as! Int
-        let state = N42Attributes.ContentState(value: value);
-        if #available(iOS 13.0, *) {
-            Task{
-                if #available(iOS 16.1, *) {
-                    await activity?.update(using: state)
-                    result("true")
-                } else {
-                    result(FlutterError(code: "LiveActivityError",
-                                        message: "iOS version must be greater than 16.1",
-                                        details: nil))
+        case "LiveActivityEnd":
+            guard #available(iOS 16.1, *) else {
+                result(FlutterError(code: "LiveActivityError",
+                                    message: "iOS version must be greater than 16.1", details: nil))
+                return
+            }
+            guard let args = call.arguments as? [String: Any],
+                  let value = args["value"] as? Int else {
+                result(FlutterError(code: "arguments_null", message: "value is null", details: nil))
+                return
+            }
+            av_stop()
+            let endState = N42Attributes.ContentState(value: value)
+            Task {
+                await activity?.end(using: endState, dismissalPolicy: .immediate)
+                result("true")
+            }
+
+        // ── Permissions ───────────────────────────────────────────────────
+
+        case "Permissions":
+            guard let args = call.arguments as? [String: String],
+                  let pName = args["pName"] else {
+                result("")
+                return
+            }
+            switch pName {
+            case "Camera": result(getCameraPermission())
+            case "Photo":  result(getPhotoPermission())
+            default:       result("")
+            }
+
+        case "getPubKeySOL":
+            guard let args = call.arguments as? [String: String],
+                  let address = args["address"],
+                  let mintAddress = args["mintAddress"] else {
+                result("")
+                return
+            }
+            result(SolanaAddress(string: address)?.defaultTokenAddress(tokenMintAddress: mintAddress) ?? "")
+
+        // ── Mining ────────────────────────────────────────────────────────
+
+        case "MiningGenerateBls12381Keypair":
+            switch MobileSdk.generateBls12381Keypair() {
+            case .success(let keyPair): result(keyPair)
+            case .failure(let error):   result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+            }
+
+        case "MiningCreateDepositUnsignedTx":
+            guard let args = call.arguments as? [String: Any],
+                  let depositContractAddress = args["depositContractAddress"] as? String,
+                  let validatorPrivateKey = args["validatorPrivateKey"] as? String,
+                  let withdrawalAddress = args["withdrawalAddress"] as? String,
+                  let depositValueWeiInHex = args["depositValueWeiInHex"] as? String else {
+                result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+                return
+            }
+            switch MobileSdk.createDepositUnsignedTx(
+                depositContractAddress: depositContractAddress,
+                validatorPrivateKey: validatorPrivateKey,
+                withdrawalAddress: withdrawalAddress,
+                depositValueInWei: depositValueWeiInHex
+            ) {
+            case .success(let tx): result(tx)
+            case .failure(let error): result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+            }
+
+        case "MiningCreateExitUnsignedTx":
+            guard let args = call.arguments as? [String: Any],
+                  let validatorPublicKey = args["validatorPublicKey"] as? String,
+                  let feeWeiInHex = args["feeWeiInHex"] as? String else {
+                result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+                return
+            }
+            switch MobileSdk.createExitUnsignedTx(validatorPublicKey: validatorPublicKey,
+                                                   feeInWeiOrEmpty: feeWeiInHex) {
+            case .success(let tx): result(tx)
+            case .failure(let error): result(FlutterError(code: "ExitError", message: "\(error)", details: nil))
+            }
+
+        case "MiningCreateGetExitFeeUnsignedTx":
+            switch MobileSdk.createGetExitFeeUnsignedTx() {
+            case .success(let tx): result(tx)
+            case .failure(let error): result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
+            }
+
+        case "MiningRunClient":
+            guard let args = call.arguments as? [String: Any],
+                  let wsUrl = args["wsUrl"] as? String,
+                  let validatorPrivateKey = args["validatorPrivateKey"] as? String else {
+                result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
+                return
+            }
+            MobileSdk.runClient(wsUrl: wsUrl, validatorPrivateKey: validatorPrivateKey) { mobileResult in
+                switch mobileResult {
+                case .success:          result("Client started")
+                case .failure(let err): result(FlutterError(code: "ClientError", message: "\(err)", details: nil))
                 }
             }
-        } else {
-            // Fallback on earlier versions
+
+        default:
+            result(FlutterMethodNotImplemented)
         }
-        break
-    case "LiveActivityEnd":
-        av_stop()
-        let args = call.arguments as! [String: Any]
-        let value : Int = args["value"] as! Int
-        let state = N42Attributes.ContentState(value: value);
-        if #available(iOS 13.0, *) {
-            Task{
-                if #available(iOS 16.1, *) {
-                    await activity?.end(using: state,dismissalPolicy: .immediate)
-                    result("true")
-                } else {
-                    result(FlutterError(code: "LiveActivityError",
-                                        message: "iOS version must be greater than 16.1",
-                                        details: nil))
-                }
-            }
-        } else {
-            // Fallback on earlier versions
-        }
-        break
-    case "Permissions":
-        let args = call.arguments as! [String: String]
-        let pName: String? = args["pName"]
-        if pName == "Camera" {
-            let rData: String = getCameraPermission();
-            result(rData)
-        }else if pName == "Photo" {
-            let rData: String = getPhotoPermission();
-            result(rData)
-        }else{
-            result("")
-        }
-        break
-    case "getPubKeySOL":
-        let args = call.arguments as! [String: String]
-        let mintAddress: String? = args["mintAddress"]
-        let address: String? = args["address"]
-        let pubKey: String? = SolanaAddress(string: address!)?.defaultTokenAddress(tokenMintAddress: mintAddress!)
-        result(pubKey ?? "")
-        break
-    case "MiningGenerateBls12381Keypair":
-        let keyPairResult = MobileSdk.generateBls12381Keypair()
-        switch keyPairResult {
-        case .success(let keyPair):
-            result(keyPair)
-        case .failure(let error):
-            result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
-        }
-        break
-    case "MiningCreateDepositUnsignedTx":
-        guard let args = call.arguments as? [String: Any],
-              let depositContractAddress = args["depositContractAddress"] as? String,
-              let validatorPrivateKey = args["validatorPrivateKey"] as? String,
-              let withdrawalAddress = args["withdrawalAddress"] as? String,
-              let depositValueWeiInHex = args["depositValueWeiInHex"] as? String else {
-            result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
-            break
-        }
-        let txResult = MobileSdk.createDepositUnsignedTx(
-            depositContractAddress: depositContractAddress,
-            validatorPrivateKey: validatorPrivateKey,
-            withdrawalAddress: withdrawalAddress,
-            depositValueInWei: depositValueWeiInHex
-        )
-        switch txResult {
-        case .success(let tx):
-            result(tx)
-        case .failure(let error):
-            result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
-        }
-        break
-    case "MiningCreateExitUnsignedTx":
-        guard let args = call.arguments as? [String: Any],
-              let validatorPublicKey = args["validatorPublicKey"] as? String,
-              let feeWeiInHex = args["feeWeiInHex"] as? String else {
-            result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
-            break
-        }
-        let txResult = MobileSdk.createExitUnsignedTx(validatorPublicKey: validatorPublicKey, feeInWeiOrEmpty: feeWeiInHex)
-        switch txResult {
-        case .success(let tx):
-            result(tx)
-        case .failure(let error):
-            result(FlutterError(code: "ExitError", message: "\(error)", details: nil))
-        }
-        break
-    case "MiningCreateGetExitFeeUnsignedTx":
-        let txResult = MobileSdk.createGetExitFeeUnsignedTx()
-        switch txResult {
-        case .success(let tx):
-            result(tx)
-        case .failure(let error):
-            result(FlutterError(code: "DepositError", message: "\(error)", details: nil))
-        }
-        break
-    case "MiningRunClient":
-        guard let args = call.arguments as? [String: Any],
-              let wsUrl = args["wsUrl"] as? String,
-              let validatorPrivateKey = args["validatorPrivateKey"] as? String else {
-            result(FlutterError(code: "arguments_null", message: "invalid arguments", details: nil))
-            break
-        }
-        let flutterResult = result
-        MobileSdk.runClient(
-          wsUrl: wsUrl,
-          validatorPrivateKey: validatorPrivateKey,
-          completion:{ mobileResult in
-            switch mobileResult {
-            case .success:
-                flutterResult("Client started")
-            case .failure(let err):
-                flutterResult(FlutterError(code: "ClientError", message: "\(err)", details: nil))
-            }
-        })
-        // 结果只由上面的异步 completion 回一次；此处原本还同步调了一次
-        // flutterResult("Client started")，一次请求回两次 reply 会触发
-        // Flutter engine 的重复提交断言，已移除。
-        break
-    default:
-        result(FlutterMethodNotImplemented)
-    }
     }
 }
