@@ -358,6 +358,24 @@ extension WalletCorePlugin {
         case "ZIL":
             coinType=CoinType.zilliqa
             break
+        case "XLM":
+            coinType=CoinType.stellar
+            break
+        case "VET":
+            coinType=CoinType.veChain
+            break
+        case "NEAR":
+            coinType=CoinType.near
+            break
+        case "THETA":
+            coinType=CoinType.theta
+            break
+        case "ADA":
+            coinType=CoinType.cardano
+            break
+        case "EGLD":
+            coinType=CoinType.multiversX
+            break
         default:
             coinType = nil
         }
@@ -544,6 +562,25 @@ extension WalletCorePlugin {
             break
         case "ZIL":
             chainType="Zilliqa"
+            break
+        case "XLM":
+            chainType="Stellar"
+            break
+        case "VET":
+            chainType="VeChain"
+            break
+        case "NEAR":
+            chainType="Near"
+            break
+        case "THETA":
+            chainType="Theta"
+            break
+        case "ADA":
+            chainType="Cardano"
+            break
+        case "EGLD":
+            chainType="MultiversX"
+            break
         default:
             chainType = "Ethereum"
         }

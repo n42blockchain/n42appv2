@@ -75,6 +75,24 @@ extension WalletCorePlugin {
         case "Zilliqa":
             txHash = signZilTransaction(wallet: wallet, path: path, txData: txData, privateKey: pk)
             break
+        case "Stellar":
+            txHash = signStellarTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
+        case "VeChain":
+            txHash = signVeChainTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
+        case "Near":
+            txHash = signNearTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
+        case "Theta":
+            txHash = signThetaTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
+        case "Cardano":
+            txHash = signCardanoTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
+        case "MultiversX":
+            txHash = signMultiversXTransaction(wallet: wallet, path: path, txData: txData, pk: pk)
+            break
         default:
             txHash=nil
         }
@@ -1155,4 +1173,190 @@ extension WalletCorePlugin {
         let output: ZilliqaSigningOutput = AnySigner.sign(input: input, coin: CoinType.zilliqa)
         return output.json
       }
+
+    // MARK: - 新增链签名（对齐 Android TransactionSignerHandler；由 Windows 侧翻译，
+    //         须在 Mac + 真机验证签名结果与 Android/广播地址一致）
+
+    /// 将可能带 0x 前缀、奇数长度的十六进制字符串转 Data，对齐 Android
+    /// `Numeric.hexStringToByteArray` 的宽松语义（handHexData 不剥离 0x，故另设）。
+    private func hexStrToData(_ hex: String) -> Data {
+        var h = (hex.hasPrefix("0x") || hex.hasPrefix("0X")) ? String(hex.dropFirst(2)) : hex
+        if h.isEmpty { return Data() }
+        if h.count % 2 != 0 { h = "0" + h }
+        return Data(hexString: h) ?? Data()
+    }
+
+    func signStellarTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.stellar, derivationPath: path)
+        let toAddress: String = txData["toAddress"] as! String
+        let amount: Int64 = Int64(txData["amount"] as! String)!
+        let fee: Int32 = Int32(txData["fee"] as! String)!
+        let sequence: Int64 = Int64(txData["sequence"] as! String)!
+        let memo: String? = txData["memo"] as? String
+        let passphrase: String = (txData["passphrase"] as? String) ?? "Public Global Stellar Network ; September 2015"
+
+        var input = StellarSigningInput.with {
+            $0.passphrase = passphrase
+            $0.fee = fee
+            $0.sequence = sequence
+            $0.privateKey = privateKey.data
+            $0.opPayment = StellarOperationPayment.with {
+                $0.destination = toAddress
+                $0.amount = amount
+            }
+        }
+        if let memo = memo, !memo.isEmpty {
+            input.memoText = StellarMemoText.with { $0.text = memo }
+        }
+        let output: StellarSigningOutput = AnySigner.sign(input: input, coin: CoinType.stellar)
+        return output.signature
+    }
+
+    func signVeChainTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.veChain, derivationPath: path)
+        let toAddress: String = txData["toAddress"] as! String
+        let amount: Data = hexStrToData(txData["amount"] as! String)
+        let chainTag: UInt32 = UInt32(txData["chainTag"] as! String)!
+        let blockRef: UInt64 = UInt64(txData["blockRef"] as! String)!
+        let expiration: UInt32 = UInt32(txData["expiration"] as! String)!
+        let gas: UInt64 = UInt64(txData["gas"] as! String)!
+        let nonce: UInt64 = UInt64(txData["nonce"] as! String)!
+        let data: String = (txData["data"] as? String) ?? ""
+
+        let clause = VeChainClause.with {
+            $0.to = toAddress
+            $0.value = amount
+            $0.data = hexStrToData(data)
+        }
+        let input = VeChainSigningInput.with {
+            $0.chainTag = chainTag
+            $0.blockRef = blockRef
+            $0.expiration = expiration
+            $0.clauses = [clause]
+            $0.gas = gas
+            $0.nonce = nonce
+            $0.privateKey = privateKey.data
+        }
+        let output: VeChainSigningOutput = AnySigner.sign(input: input, coin: CoinType.veChain)
+        return "0x" + output.encoded.hexString
+    }
+
+    func signNearTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.near, derivationPath: path)
+        let signerId: String = txData["signerId"] as! String
+        let receiverId: String = txData["receiverId"] as! String
+        let nonce: UInt64 = UInt64(txData["nonce"] as! String)!
+        let blockHash: String = txData["blockHash"] as! String
+        let amount: String = txData["amount"] as! String
+
+        let transfer = NEARTransfer.with {
+            $0.deposit = hexStrToData(amount)
+        }
+        let action = NEARAction.with {
+            $0.transfer = transfer
+        }
+        let input = NEARSigningInput.with {
+            $0.signerID = signerId
+            $0.receiverID = receiverId
+            $0.nonce = nonce
+            $0.blockHash = hexStrToData(blockHash)
+            $0.actions = [action]
+            $0.privateKey = privateKey.data
+        }
+        let output: NEARSigningOutput = AnySigner.sign(input: input, coin: CoinType.near)
+        return output.signedTransaction.base64EncodedString()
+    }
+
+    func signThetaTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.theta, derivationPath: path)
+        let toAddress: String = txData["toAddress"] as! String
+        let thetaAmount: Data = hexStrToData((txData["thetaAmount"] as? String) ?? "0x0")
+        let tfuelAmount: Data = hexStrToData(txData["tfuelAmount"] as! String)
+        let sequence: UInt64 = UInt64(txData["sequence"] as! String)!
+        let fee: Data = hexStrToData(txData["fee"] as! String)
+
+        let input = ThetaSigningInput.with {
+            $0.toAddress = toAddress
+            $0.thetaAmount = thetaAmount
+            $0.tfuelAmount = tfuelAmount
+            $0.sequence = sequence
+            $0.fee = fee
+            $0.privateKey = privateKey.data
+        }
+        let output: ThetaSigningOutput = AnySigner.sign(input: input, coin: CoinType.theta)
+        return "0x" + output.encoded.hexString
+    }
+
+    func signCardanoTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.cardano, derivationPath: path)
+        let toAddress: String = txData["toAddress"] as! String
+        let amount: UInt64 = UInt64(txData["amount"] as! String)!
+        let ttl: UInt64 = UInt64(txData["ttl"] as! String)!
+        let utxos: [[String: Any]] = txData["utxos"] as! [[String: Any]]
+
+        var utxoList: [CardanoTxInput] = []
+        for utxo in utxos {
+            let txHash: String = utxo["txHash"] as! String
+            let outputIndex: UInt64 = UInt64(utxo["outputIndex"] as! Int)
+            let utxoAmount: UInt64 = UInt64(utxo["amount"] as! String)!
+            let utxoAddress: String = utxo["address"] as! String
+            utxoList.append(CardanoTxInput.with {
+                $0.outPoint = CardanoOutPoint.with {
+                    $0.txHash = hexStrToData(txHash)
+                    $0.outputIndex = outputIndex
+                }
+                $0.address = utxoAddress
+                $0.amount = utxoAmount
+            })
+        }
+
+        var input = CardanoSigningInput.with {
+            $0.ttl = ttl
+            $0.privateKey = [privateKey.data]
+            $0.utxos = utxoList
+            $0.transferMessage = CardanoTransfer.with {
+                $0.toAddress = toAddress
+                $0.changeAddress = CoinType.cardano.deriveAddress(privateKey: privateKey)
+                $0.amount = amount
+                $0.useMaxAmount = false
+            }
+        }
+        let output: CardanoSigningOutput = AnySigner.sign(input: input, coin: CoinType.cardano)
+        if !output.errorMessage.isEmpty {
+            return nil
+        }
+        return "0x" + output.encoded.hexString
+    }
+
+    func signMultiversXTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
+        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.multiversX, derivationPath: path)
+        let toAddress: String = txData["toAddress"] as! String
+        let amount: String = txData["amount"] as! String
+        let nonce: UInt64 = UInt64(txData["nonce"] as! String)!
+        let gasPrice: UInt64 = UInt64(txData["gasPrice"] as! String)!
+        let gasLimit: UInt64 = UInt64(txData["gasLimit"] as! String)!
+        let data: String = (txData["data"] as? String) ?? ""
+        let chainId: String = (txData["chainId"] as? String) ?? "1"
+        let version: UInt32 = UInt32((txData["version"] as? String) ?? "1")!
+        let sender: String = CoinType.multiversX.deriveAddress(privateKey: privateKey)
+
+        let input = MultiversXSigningInput.with {
+            $0.privateKey = privateKey.data
+            $0.gasPrice = gasPrice
+            $0.gasLimit = gasLimit
+            $0.chainID = chainId
+            $0.genericAction = MultiversXGenericAction.with {
+                $0.accounts = MultiversXAccounts.with {
+                    $0.senderNonce = nonce
+                    $0.sender = sender
+                    $0.receiver = toAddress
+                }
+                $0.value = amount
+                $0.data = data
+                $0.version = version
+            }
+        }
+        let output: MultiversXSigningOutput = AnySigner.sign(input: input, coin: CoinType.multiversX)
+        return output.encoded
+    }
 }
