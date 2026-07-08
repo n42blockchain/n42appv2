@@ -643,6 +643,44 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T25：wallet-core 4.7.0 + iOS 6 链补全 + 消息签名/公钥 UI Mac 编译验证（新增 2026-07-08，⚠️高优先）
+
+**背景**：Windows 端 Claude 无 Xcode，今天在 master 又落了三批**未经 iOS 编译**的改动，需你 Mac 把关。
+**先说清 master 现状**：T24 那份完整重写（`refactor/ios-walletcore-signing@51363436`）今天已合入
+master（merge `ff2072ba`，整文件替换、自然取代 interim `d4fb2b9d`）；在其之上又叠了三批：
+
+1. **wallet-core 4.6.8 → 4.7.0**（`84e9556f`，改 `ios/Podfile` + `android/app/build.gradle.kts`
+   版本号）。含多项钱包相关安全加固（TON/Ripple/Base58 地址解析收紧、超范围派生路径拒绝、
+   HyperEVM 支持等）。⚠️ **`ios/Podfile.lock` 仍停在 4.6.8**——Windows 无法 pod install。
+2. **iOS signTransaction 补齐 6 条链**（`7a239de0`，`WalletCorePlugin+Signing.swift`
+   + `+KeyManagement.swift`）：Stellar/VeChain/Near/Theta/Cardano/MultiversX，逐字翻译
+   Android `TransactionSignerHandler` 同名函数（此前 iOS switch 到 Zilliqa 即止、这些 coin
+   还落到 `getChainTypeWithCoinString` 的 default=Ethereum 被误当以太坊）。**proto 类型名/字段名
+   （`StellarSigningInput`/`VeChainClause`/`NEARSigningInput`/`CardanoTxInput`/
+   `MultiversXGenericAction`、`chainID`/`signerID`/`outPoint`/`senderNonce` 等）是按
+   SwiftProtobuf typealias 惯例写的、未编译验证**——最可能出拼写/类型偏差的就是这里。
+3. **消息签名页 + 公钥展示**（`c8352f17`，纯 Dart，analyze 已过）：`lib/features/wallet/pages/
+   message_sign/message_sign_page.dart` 钱包内主动消息签名工具（EVM 走 web3dart personal_sign，
+   TRX/APT/SUI/SOL 走原生 signMessage），入口在单币管理页；单币管理页地址下方新增公钥行。
+
+基线：`master@7a239de0`。
+
+### 验证项
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | wallet-core 4.7.0 pod 装好 | Mac `cd ios && pod install`（更新 Podfile.lock 到 4.7.0 + checksum） | **PASS**=拉到 4.7.0、lock 更新。请提交更新后的 `Podfile.lock`（`chore(ios): pod install 更新 Podfile.lock 到 TrustWalletCore 4.7.0`）|
+| A2 | 全工程能编过（含 6 链新代码） | `flutter build ios --debug --no-codesign`（或 Xcode Build） | **PASS**=编译成功。**FAIL**=报 Swift 错——**多半在 6 链 proto 类型名/字段名**，你直接按 WalletCore 4.7.0 实际 API 修（改完在此留言列出改了哪些符号，好让我同步认知） |
+| B1 | 消息签名页（EVM）真机 | 以太系单币管理页进「消息签名」→ 输入文本 → 签名 → 复制；对签名做 ecrecover | **PASS**=签名者地址==当前账户（EIP-191 personal_sign）。**不烧 gas** |
+| B2 | 消息签名页（非 EVM）真机 | TRX/APT/SUI/SOL 各签一条 | **PASS**=返回非空签名、不崩（原生 signMessage，与 WC 同路径）。**不烧 gas** |
+| B3 | 公钥展示真机 | 各链单币管理页看地址下方「公钥」行 + 复制 | **PASS**=显示且可复制；`getPublicKey` 此前 app 零调用，重点确认各链能取到、格式正常（取不到=静默不显示，不算崩） |
+| B4 | 6 新链 signTransaction 真机签名广播 | XLM/VET/NEAR/THETA/ADA/EGLD 有资产则各发一笔 | **PASS**=签名格式与 Android 一致、能广播。缺资产标 BLOCKED（与 T20/21/22 同批） |
+
+**报告落**：`docs/device-test-reports/2026-07-08-t25-walletcore47-6chains-msgsign.md`。
+**A1/A2 是本轮核心且不烧 gas（编译级把关，尤其 A2 的 6 链 proto 符号），优先跑**；B1/B3 也不烧 gas。
+
+---
+
 ## 任务 T24：iOS 私钥 guard 修复 Mac 编译验证 + 传错私钥回归（新增 2026-07-07，⚠️高优先）
 
 **背景**：Windows 端 Claude 无 Xcode，在 master 直接落了一处**未经编译的 iOS Swift**
@@ -858,6 +896,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 | T22 第三轮关键执行路径 P0/P1 真机验证 | Codex 已验证：构建/analyze/586单测/安装 PASS;**A0 错位前置 + A3 内置浏览器 personal_sign PASS**(active=Account1/mining=Account2 下 ecrecover==active,match=true——签名账户修复多账户真机确认);A1/A2 **暴露 WC 只扫码无粘贴 URI 缺口**;A4/B1/B2 BLOCKED 缺 AA账户/EVM余额。**Claude 验收:A3 是签名账户修复最强真机证据(WC 同款修法+代码复核背书);WC 粘贴入口缺口已修 d1654106——**A1 EVM/A2 Solana 桌面 DApp 补测 PASS**(错位前置下 ecrecover==active/Ed25519 verified;Codex 顺带修 4 真bug:粘贴入口不可达/deep link死/Solana base64→hex编码/空URI卡loading,Claude 审查通过并入 master 42a8d092);A4/B 与 T20/T21 同批阻塞** | 2026-07-05 | docs/device-test-reports/2026-07-05-t22-critical-path.md |
 | T23 dev513 移植修复 A 类回归（UI/行为，不依赖测试币） | Codex 已验证：analyze/43 定向测试/Android build+install PASS;**A4 未登录挖矿数据持久化 PASS**(临时探针验 SPUtil.setMiningData/getMiningData + `AstranetWallet` 兜底,写/重启读/清理全过,探针已移除)；A1 交易列表刷新 **BLOCKED**(钱包 0 ETH+gas quote 521 无法造 pending)、A2 BTC 定时器 **PARTIAL**(无 BTC pending 数据,但无 timer/错误日志、代码 async+空表取消)、A3 风险卡溢出 **PARTIAL**(130% 无溢出,但该账户 depositsEnable=false 卡片未渲染)。**Claude 验收:A4 PASS 采信=sp_util 兜底修复确认;A1/A2/A3 BLOCKED/PARTIAL 属测试资产/账户限制非代码问题;无需改代码** | 2026-07-07 | docs/device-test-reports/2026-07-07-t23-dev513-fixes.md |
 | T24 iOS 私钥 guard 编译验证 + 传错私钥回归（⚠️高优先） | Codex 已验证：**C1 iOS 编译 PASS**——`flutter build ios --debug --no-codesign` 对分支完整重写 `51363436` 成功产出 Runner.app、无 WalletCore Swift 编译错(**证明 guard-let 模式能编译,间接背书我 master 的 interim `d4fb2b9d`**)；C5 `Camera` case 有 Dart 调用方(scan_page)、`Photo` **无调用方=死/预留**；C2 传合法私钥出地址/C3 传错私钥返 invalid_pk 不崩/C4 签名全链 **BLOCKED**(iPhone 锁屏 devicectl 无法 launch 探针 + 缺签名资产)；**顺带修 dio 5.10.0 新增 DioExceptionType 未覆盖→`base_http._handleDioError` 加兜底 default**(已并入 master)。**Claude 验收:C1 编译 PASS 是关键、base_http 兜底已合(analyze 绿);完整重写待 C2/C3 真机(设备解锁)+ Photo 死代码处置 + iOS 依赖 pin 后再整文件替换合入,interim d4fb2b9d 先留兜底** | 2026-07-07 | docs/device-test-reports/2026-07-07-t24-ios-pk-guard.md |
+| T25 wallet-core 4.7.0 + iOS 6 链补全 + 消息签名/公钥 UI（⚠️高优先）| 待认领（基线 master@7a239de0；核心=A1 pod install 更新 4.7.0 lock + A2 编译含 6 链新 Swift，均不烧 gas；B1/B3 签名/公钥也不烧 gas；B4 需资产同 T20/21/22 阻塞）| — | docs/device-test-reports/2026-07-08-t25-walletcore47-6chains-msgsign.md |
 
 ## 留言区
 
