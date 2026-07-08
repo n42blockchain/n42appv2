@@ -154,6 +154,12 @@ extension WalletCorePlugin {
         case "Solana":
             publicKey = privateKey.getPublicKeyEd25519().data.base64EncodedString()
             break
+        case "Aptos":
+            publicKey = privateKey.getPublicKeyEd25519().data.base64EncodedString()
+            break
+        case "Sui":
+            publicKey = privateKey.getPublicKeyEd25519().data.base64EncodedString()
+            break
         case "Ripple":
             publicKey = privateKey.getPublicKeySecp256k1(compressed: true).data.base64EncodedString()
             break

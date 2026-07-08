@@ -129,9 +129,11 @@ extension WalletCorePlugin {
               let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
             return nil
         }
-        let curve = coinType.curve
-        if let digestData = handHexData(from: txData) {
-            if let ba = privateKey.sign(digest: digestData, curve: curve) {
+        if let messageData = handHexData(from: txData) {
+            let digestData = coin == "TRX" && messageData.count != 32
+                ? Hash.sha256(data: messageData)
+                : messageData
+            if let ba = privateKey.sign(digest: digestData, curve: coinType.curve) {
                 return ba.hexString
             }
         }

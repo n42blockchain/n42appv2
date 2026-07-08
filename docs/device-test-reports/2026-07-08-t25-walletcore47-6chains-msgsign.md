@@ -10,9 +10,9 @@ Device target: iPhone 17 Pro Max (`1046FC66-1844-5F30-88D0-7140EBF4A41C`).
 |---|---:|---|
 | A1 `TrustWalletCore` 4.7.0 pod install | PASS | `pod update ... --no-repo-update` and then `pod install --no-repo-update` completed. `ios/Podfile.lock` now resolves `TrustWalletCore 4.7.0`. |
 | A2 iOS compile including 6-chain Swift | PASS | `flutter build ios --debug --no-codesign --no-pub` succeeded after fixing target wiring and Swift 4.7.0 API compile errors. Built `build/ios/iphoneos/Runner.app`. |
-| B1 EVM message signing | BLOCKED / probe ready | Temporary iOS profile probe was built, but install/launch was blocked because the iPhone was locked (`kAMDMobileImageMounterDeviceLocked`). Probe checks web3dart personal_sign recover address equals current ETH address. |
-| B2 non-EVM message signing | BLOCKED / probe ready | Same probe checks TRX/SOL/APT/SUI native `trustdart.signMessage` returns non-empty signatures. Install blocked by locked iPhone. |
-| B3 public key display/native retrieval | BLOCKED / probe ready | Same probe checks ETH/TRX/SOL/APT/SUI `trustdart.getPublicKey` returns non-empty values. Install blocked by locked iPhone. UI code path also calls this same native method from single-coin manage page. |
+| B1 EVM message signing | PASS | iPhone profile probe recovered the `personal_sign` signer address and matched the generated ETH account. |
+| B2 non-EVM message signing | PASS | iPhone profile probe verified TRX/SOL/APT/SUI native `trustdart.signMessage` all return non-empty signatures. |
+| B3 public key display/native retrieval | PASS | iPhone profile probe verified ETH/TRX/SOL/APT/SUI native `trustdart.getPublicKey` all return non-empty values. UI code path also calls this same native method from the single-coin manage page. |
 | B4 6 new-chain transaction signing/broadcast | BLOCKED | Requires XLM/VET/NEAR/THETA/ADA/EGLD assets and broadcast fixtures. Not attempted in this no-gas compile pass. |
 
 ## What was fixed
@@ -27,6 +27,9 @@ Device target: iPhone 17 Pro Max (`1046FC66-1844-5F30-88D0-7140EBF4A41C`).
 4. While making the file compile against the actual Runner source, fixed two compile-adjacent signing defects in the same touched paths:
    - ZIL signing now derives `CoinType.zilliqa` instead of `CoinType.ton`.
    - SUI signing uses `pk.data` and `SuiSigningOutput` instead of a stale Aptos output/private-key reference.
+5. The first unlocked iPhone probe exposed two native edge-case gaps:
+   - `getPublicKey` was missing explicit Aptos and Sui branches, so APT/SUI public key retrieval returned empty.
+   - TRX `signMessage` attempted secp256k1 signing on a raw non-32-byte payload. The iOS path now hashes non-32-byte TRX message payloads with SHA-256 before signing, while preserving already-digested 32-byte inputs.
 
 ## Commands run
 
@@ -36,18 +39,21 @@ Device target: iPhone 17 Pro Max (`1046FC66-1844-5F30-88D0-7140EBF4A41C`).
 - `flutter build ios --debug --no-codesign --no-pub`
 - `flutter build ios --profile -t lib/t25_ios_probe.dart --no-pub`
 - `xcrun devicectl device install app --device 1046FC66-1844-5F30-88D0-7140EBF4A41C build/ios/iphoneos/Runner.app`
+- `xcrun devicectl device process launch --device 1046FC66-1844-5F30-88D0-7140EBF4A41C --terminate-existing --console --timeout 30 ai.n42.www`
 - `flutter analyze --no-fatal-infos`
 - Removed the temporary probe and rebuilt the normal app entrypoint with `flutter build ios --profile --no-pub`.
 
-## Device blocker
+## iPhone probe results
 
-The profile probe built successfully, but install/launch failed twice with:
+After unlocking the iPhone, the first probe result was:
 
-`kAMDMobileImageMounterDeviceLocked: The device is locked`
+`T25_RESULT:B1_EVM_PERSONAL_SIGN:PASS;B3_PUBLIC_KEY:ETH:PASS,TRX:PASS,SOL:PASS,APT:EMPTY,SUI:EMPTY;B2_NON_EVM_SIGN:TRX:EMPTY,SOL:PASS,APT:PASS,SUI:PASS`
 
-The temporary probe was removed after this check and the normal app entrypoint was rebuilt. After unlocking the iPhone, B1/B2/B3 can be rerun either through the UI or by rebuilding the same temporary probe. Expected probe line:
+After fixing the Aptos/Sui public-key branches and TRX digest handling, the retry result was:
 
 `T25_RESULT:B1_EVM_PERSONAL_SIGN:PASS;B3_PUBLIC_KEY:ETH:PASS,TRX:PASS,SOL:PASS,APT:PASS,SUI:PASS;B2_NON_EVM_SIGN:TRX:PASS,SOL:PASS,APT:PASS,SUI:PASS`
+
+The temporary probe was removed after this check and the normal app entrypoint was rebuilt.
 
 ## Notes
 
