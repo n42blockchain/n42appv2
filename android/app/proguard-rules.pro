@@ -132,6 +132,11 @@
 -keep class com.google.android.gms.vision.** { *; }
 -dontwarn com.google.android.gms.vision.**
 
+# MediaPipe (transitive dep of ML Kit face/vision plugins) — proto classes
+# stripped from the runtime jar, only referenced by unused profiler/template code paths
+-dontwarn com.google.mediapipe.proto.CalculatorProfileProto$CalculatorProfile
+-dontwarn com.google.mediapipe.proto.GraphTemplateProto$CalculatorGraphTemplate
+
 # ==================== Google Play Core ====================
 # 抑制 Play Core 分发功能的警告
 -dontwarn com.google.android.play.core.splitcompat.SplitCompatApplication
