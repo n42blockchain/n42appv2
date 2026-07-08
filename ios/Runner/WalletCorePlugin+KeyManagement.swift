@@ -16,11 +16,15 @@ extension WalletCorePlugin {
         if coinType == nil{
             return ""
         }
-        var pk:PrivateKey=wallet.getKey(coin: coinType!, derivationPath: path)
+        guard let pk = wallet.getKey(coin: coinType!, derivationPath: path) else {
+            return ""
+        }
         var address:String = ""
         switch coin {
         case "BTC":
-            let privateKey = wallet.getKey(coin: CoinType.bitcoin, derivationPath: path)
+            guard let privateKey = wallet.getKey(coin: CoinType.bitcoin, derivationPath: path) else {
+                return ""
+            }
             let publicKey = privateKey.getPublicKeySecp256k1(compressed: true)
             if addressType == "legacy"{
                 address=BitcoinAddress(publicKey: publicKey, prefix: 0)!.description
@@ -28,7 +32,9 @@ extension WalletCorePlugin {
                 address=CoinType.bitcoin.deriveAddress(privateKey: privateKey)
             }
         case "LTC":
-            let privateKey = wallet.getKey(coin: CoinType.litecoin, derivationPath: path)
+            guard let privateKey = wallet.getKey(coin: CoinType.litecoin, derivationPath: path) else {
+                return ""
+            }
             let publicKey = privateKey.getPublicKeySecp256k1(compressed: true)
             if addressType == "legacy"{
                 address=BitcoinAddress(publicKey: publicKey, prefix: 48)!.description
@@ -77,7 +83,9 @@ extension WalletCorePlugin {
         if coinType == nil{
             return nil
         }
-        let privateKey = wallet.getKey(coin: coinType!, derivationPath: path)
+        guard let privateKey = wallet.getKey(coin: coinType!, derivationPath: path) else {
+            return nil
+        }
         return self.generateAddress_pk(privateKey: privateKey, coin: coin, addressType: addressType,coinType: coinType,isTest: isTest)
     }
 
@@ -125,8 +133,10 @@ extension WalletCorePlugin {
 
     func getPublicKey(wallet: HDWallet, path: String, coin: String) -> String? {
         let chainType:String = self.getChainTypeWithCoinString(coin: coin)
-        let coinType:CoinType? = self.getCoinTypeWithCoinString(coin: coin)
-        let privateKey = wallet.getKey(coin: coinType!, derivationPath: path)
+        guard let coinType = self.getCoinTypeWithCoinString(coin: coin),
+              let privateKey = wallet.getKey(coin: coinType, derivationPath: path) else {
+            return nil
+        }
         var publicKey: String?
         switch chainType{
         case "Bitcoin":
@@ -161,13 +171,11 @@ extension WalletCorePlugin {
 
     //返回 某个链的 私钥
     func getPrivateKey(wallet: HDWallet, path: String, coin: String) -> String {
-        var coinType:CoinType? = getCoinTypeWithCoinString(coin: coin)
-        if coinType != nil{
-            var privateKey: String=wallet.getKey(coin: coinType!, derivationPath: path).data.base64EncodedString()
-            return privateKey
-        }else{
+        guard let coinType = getCoinTypeWithCoinString(coin: coin),
+              let privateKey = wallet.getKey(coin: coinType, derivationPath: path) else {
             return ""
         }
+        return privateKey.data.base64EncodedString()
     }
 
     func objToJson(from object:Any) -> String? {

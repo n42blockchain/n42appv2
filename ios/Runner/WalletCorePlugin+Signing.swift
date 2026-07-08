@@ -11,6 +11,18 @@ import WalletCore
 
 extension WalletCorePlugin {
 
+    private func resolveSigningPrivateKey(
+        wallet: HDWallet?,
+        coin: CoinType,
+        path: String,
+        privateKey: PrivateKey?
+    ) -> PrivateKey? {
+        if let privateKey = privateKey {
+            return privateKey
+        }
+        return wallet?.getKey(coin: coin, derivationPath: path)
+    }
+
     func signTransaction_maxValue(wallet: HDWallet?, coin: String, path: String, txData: [String: Any],pk: PrivateKey?) -> String? {
         let chainType:String = self.getChainTypeWithCoinString(coin: coin)
         let coinType:CoinType? = self.getCoinTypeWithCoinString(coin: coin)
@@ -113,20 +125,14 @@ extension WalletCorePlugin {
     }
 
     func signMessage(wallet: HDWallet?, coin: String, path: String, txData: String,pk: PrivateKey?) -> String? {
-        let chainType:String = self.getChainTypeWithCoinString(coin: coin)
-        let coinType:CoinType? = self.getCoinTypeWithCoinString(coin: coin)
-        var txHash: String?
-        var privateKey : PrivateKey
-        if pk == nil{
-            privateKey=wallet!.getKey(coin:  coinType!, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let coinType = self.getCoinTypeWithCoinString(coin: coin),
+              let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
+            return nil
         }
-        if let curve = coinType?.curve {
-            if let digestData = handHexData(from: txData) {
-                if let ba = privateKey.sign(digest: digestData, curve: curve) {
-                    return ba.hexString
-                }
+        let curve = coinType.curve
+        if let digestData = handHexData(from: txData) {
+            if let ba = privateKey.sign(digest: digestData, curve: curve) {
+                return ba.hexString
             }
         }
 
@@ -134,11 +140,8 @@ extension WalletCorePlugin {
     }
 
     func signCosmosTransaction(wallet: HDWallet?,path:String,txData: [String: Any],pk: PrivateKey?)-> String?{
-        var privateKey : PrivateKey
-        if pk == nil{
-            privateKey=wallet!.getKey(coin:  CoinType.cosmos, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.cosmos, path: path, privateKey: pk) else {
+            return nil
         }
         let fromAddress : String = CoinType.cosmos.deriveAddress(privateKey: privateKey)
         let toAddress:String = txData["toAddress"] as! String
@@ -184,11 +187,8 @@ extension WalletCorePlugin {
     }
 
     func signTezosTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk: PrivateKey?) -> String? {
-        var privateKey : PrivateKey
-        if pk == nil{
-              privateKey=wallet!.getKey(coin: CoinType.tezos, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.tezos, path: path, privateKey: pk) else {
+            return nil
         }
         let branchStr: String = txData["branch"] as! String
         let reveal: Bool = txData["reveal"] as! Bool
@@ -255,11 +255,8 @@ extension WalletCorePlugin {
     }
 
     func signXrpTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk: PrivateKey?) -> String? {
-        var privateKey : PrivateKey
-        if pk == nil{
-              privateKey=wallet!.getKey(coin: CoinType.xrp, derivationPath: path)
-        }else {
-              privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.xrp, path: path, privateKey: pk) else {
+            return nil
         }
         let amount: Int64 = Int64.init(txData["amount"] as! String)!
         let sequence : Int32 = txData["sequence"] as! Int32
@@ -310,11 +307,8 @@ extension WalletCorePlugin {
     func signEthereumTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],coinType:CoinType,privateKey: PrivateKey?) -> String? {
 
 //        let privateKey = wallet!.getKey(coin: coinType, derivationPath: path)
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let chainId : String = txData["chainId"] as! String
@@ -360,11 +354,8 @@ extension WalletCorePlugin {
       }
 
     func signEthereumTransaction_erc721(wallet: HDWallet?, path: String, txData:  [String: Any],coinType:CoinType,privateKey: PrivateKey?) -> String? {
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let chainId : String = txData["chainId"] as! String
@@ -457,11 +448,8 @@ extension WalletCorePlugin {
       }
 
     func signSolanaTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk: PrivateKey?) -> String? {
-        var privateKey : PrivateKey
-        if pk == nil{
-              privateKey=wallet!.getKey(coin: CoinType.solana, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.solana, path: path, privateKey: pk) else {
+            return nil
         }
         let type = txData["type"] as! String
         let encodeType = txData["encodeType"] as! String
@@ -546,11 +534,8 @@ extension WalletCorePlugin {
     func signTronTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],pk:PrivateKey?) -> String? {
        let cmd = txData["cmd"] as! String
         var txHash: String?
-        var privateKey : PrivateKey
-        if pk == nil{
-              privateKey=wallet!.getKey(coin: CoinType.tron, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.tron, path: path, privateKey: pk) else {
+            return nil
         }
         switch cmd {
         case "TRC20":
@@ -663,11 +648,8 @@ extension WalletCorePlugin {
     func signBitcoinTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],coinType: CoinType,pk: PrivateKey?) -> String? {
         //if wallet == nil { return nil}
         //let privateKey = wallet!.getKey(coin: coinType, derivationPath: path)
-        var privateKey : PrivateKey
-        if pk == nil{
-            privateKey=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
+            return nil
         }
         let utxos: [[String: Any]] = txData["utxo"] as! [[String: Any]]
         var unspent: [BitcoinUnspentTransaction] = []
@@ -714,11 +696,8 @@ extension WalletCorePlugin {
     func signBitcoinTransaction_p2wsh(wallet: HDWallet?, path: String, txData:  [String: Any],coinType: CoinType,pk: PrivateKey?) -> String? {
         //if wallet == nil { return nil}
         //let privateKey = wallet!.getKey(coin: coinType, derivationPath: path)
-        var privateKey : PrivateKey
-        if pk == nil{
-            privateKey=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
+            return nil
         }
         let utxos: [[String: Any]] = txData["utxo"] as! [[String: Any]]
         var unspent: [BitcoinUnspentTransaction] = []
@@ -784,11 +763,8 @@ extension WalletCorePlugin {
     func signBitcoinTransaction_maxValue(wallet: HDWallet?, path: String, txData:  [String: Any],coinType: CoinType,pk: PrivateKey?) -> String? {
         //if wallet == nil { return nil}
         //let privateKey = wallet!.getKey(coin: coinType, derivationPath: path)
-        var privateKey : PrivateKey
-        if pk == nil{
-            privateKey=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else {
-            privateKey=pk!
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: pk) else {
+            return nil
         }
         //let publicKey = privateKey.getPublicKeySecp256k1(compressed: true)
         //let address = coinType.deriveAddress(privateKey: privateKey)
@@ -844,11 +820,8 @@ extension WalletCorePlugin {
 
     func signAlgorandTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],coinType:CoinType,privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let type : String = txData["type"] as! String
@@ -894,11 +867,8 @@ extension WalletCorePlugin {
 
     func signFilecoinTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],coinType:CoinType,privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let gasLimit : String = txData["gasLimit"] as! String
@@ -925,11 +895,8 @@ extension WalletCorePlugin {
 
     func signPolkadotTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],coinType:CoinType,privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: coinType, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: coinType, path: path, privateKey: privateKey) else {
+            return nil
         }
 
 
@@ -963,11 +930,8 @@ extension WalletCorePlugin {
 
     func signAptosTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: CoinType.aptos, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.aptos, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let gasUnitPrice : UInt64 = txData["gasUnitPrice"] as! UInt64
@@ -989,7 +953,7 @@ extension WalletCorePlugin {
             $0.gasUnitPrice = gasUnitPrice
             $0.maxGasAmount = maxGasAmount
             $0.sequenceNumber = sequenceNumber
-            $0.privateKey = privateKey!.data
+            $0.privateKey = pk.data
         }
 
         if contractAddress == "" {
@@ -1023,11 +987,8 @@ extension WalletCorePlugin {
 
     func signSuiTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: CoinType.sui, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.sui, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let referenceGasPrice : UInt64 = txData["referenceGasPrice"] as! UInt64
@@ -1054,22 +1015,19 @@ extension WalletCorePlugin {
         paySui.inputCoins=inputCoins
         let input = SuiSigningInput.with {
             $0.paySui = paySui
-            $0.privateKey = privateKey!.data
+            $0.privateKey = pk.data
             $0.gasBudget = gasBudget
             $0.referenceGasPrice = referenceGasPrice
         }
 
-        let output: AptosSigningOutput = AnySigner.sign(input: input, coin: CoinType.sui)
-        return output.encoded.hexString
+        let output: SuiSigningOutput = AnySigner.sign(input: input, coin: CoinType.sui)
+        return output.unsignedTx
       }
 
     func signTonTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: CoinType.ton, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.ton, path: path, privateKey: privateKey) else {
+            return nil
         }
 
         let expireAt : UInt32 = txData["expireAt"] as! UInt32
@@ -1137,11 +1095,8 @@ extension WalletCorePlugin {
 
     func signZilTransaction(wallet: HDWallet?, path: String, txData:  [String: Any],privateKey: PrivateKey?) -> String? {
 
-        var pk: PrivateKey
-        if privateKey == nil{
-            pk=wallet!.getKey(coin: CoinType.ton, derivationPath: path)
-        }else{
-            pk = privateKey!
+        guard let pk = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.zilliqa, path: path, privateKey: privateKey) else {
+            return nil
         }
         let toAddress : String = txData["toAddress"] as! String
         let amount : String = txData["amount"] as! String
@@ -1187,7 +1142,9 @@ extension WalletCorePlugin {
     }
 
     func signStellarTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.stellar, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.stellar, path: path, privateKey: pk) else {
+            return nil
+        }
         let toAddress: String = txData["toAddress"] as! String
         let amount: Int64 = Int64(txData["amount"] as! String)!
         let fee: Int32 = Int32(txData["fee"] as! String)!
@@ -1213,7 +1170,9 @@ extension WalletCorePlugin {
     }
 
     func signVeChainTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.veChain, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.veChain, path: path, privateKey: pk) else {
+            return nil
+        }
         let toAddress: String = txData["toAddress"] as! String
         let amount: Data = hexStrToData(txData["amount"] as! String)
         let chainTag: UInt32 = UInt32(txData["chainTag"] as! String)!
@@ -1242,7 +1201,9 @@ extension WalletCorePlugin {
     }
 
     func signNearTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.near, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.near, path: path, privateKey: pk) else {
+            return nil
+        }
         let signerId: String = txData["signerId"] as! String
         let receiverId: String = txData["receiverId"] as! String
         let nonce: UInt64 = UInt64(txData["nonce"] as! String)!
@@ -1268,7 +1229,9 @@ extension WalletCorePlugin {
     }
 
     func signThetaTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.theta, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.theta, path: path, privateKey: pk) else {
+            return nil
+        }
         let toAddress: String = txData["toAddress"] as! String
         let thetaAmount: Data = hexStrToData((txData["thetaAmount"] as? String) ?? "0x0")
         let tfuelAmount: Data = hexStrToData(txData["tfuelAmount"] as! String)
@@ -1288,7 +1251,9 @@ extension WalletCorePlugin {
     }
 
     func signCardanoTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.cardano, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.cardano, path: path, privateKey: pk) else {
+            return nil
+        }
         let toAddress: String = txData["toAddress"] as! String
         let amount: UInt64 = UInt64(txData["amount"] as! String)!
         let ttl: UInt64 = UInt64(txData["ttl"] as! String)!
@@ -1329,7 +1294,9 @@ extension WalletCorePlugin {
     }
 
     func signMultiversXTransaction(wallet: HDWallet?, path: String, txData: [String: Any], pk: PrivateKey?) -> String? {
-        let privateKey: PrivateKey = pk ?? wallet!.getKey(coin: CoinType.multiversX, derivationPath: path)
+        guard let privateKey = resolveSigningPrivateKey(wallet: wallet, coin: CoinType.multiversX, path: path, privateKey: pk) else {
+            return nil
+        }
         let toAddress: String = txData["toAddress"] as! String
         let amount: String = txData["amount"] as! String
         let nonce: UInt64 = UInt64(txData["nonce"] as! String)!

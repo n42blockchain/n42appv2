@@ -12,6 +12,11 @@ import WalletCore
 
 public class WalletCorePlugin: NSObject, FlutterPlugin {
 
+    private enum KeyResolution {
+        case success(HDWallet?, PrivateKey?)
+        case failure(FlutterError)
+    }
+
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(
             name: "trustdart",
@@ -23,7 +28,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
 
     // ── Key resolution helper ─────────────────────────────────────────────
     // Shared by all 5 sign* dispatch cases to eliminate repeated mnemonic/pk logic.
-    private func resolveKey(from args: [String: Any]) -> Result<(HDWallet?, PrivateKey?), FlutterError> {
+    private func resolveKey(from args: [String: Any]) -> KeyResolution {
         guard let mnemonic = args["mnemonic"] as? String,
               let pkStr = args["pk"] as? String else {
             return .failure(FlutterError(code: "arguments_null", message: "mnemonic or pk missing", details: nil))
@@ -33,12 +38,12 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             guard let wallet = HDWallet(mnemonic: mnemonic, passphrase: passphrase) else {
                 return .failure(FlutterError(code: "no_wallet", message: "Could not generate wallet", details: nil))
             }
-            return .success((wallet, nil))
+            return .success(wallet, nil)
         } else if !pkStr.isEmpty {
             guard let d = Base64.decode(string: pkStr), let pk = PrivateKey(data: d) else {
                 return .failure(FlutterError(code: "invalid_pk", message: "Could not decode private key", details: nil))
             }
-            return .success((nil, pk))
+            return .success(nil, pk)
         }
         return .failure(FlutterError(code: "no_wallet", message: "mnemonic and pk both empty", details: nil))
     }
@@ -278,7 +283,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             }
             switch resolveKey(from: args) {
             case .failure(let err): result(err)
-            case .success(let (wallet, pk)):
+            case .success(let wallet, let pk):
                 guard let txHash = signTransaction(wallet: wallet, coin: coin, path: path, txData: txData, pk: pk) else {
                     result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
                     return
@@ -296,7 +301,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             }
             switch resolveKey(from: args) {
             case .failure(let err): result(err)
-            case .success(let (wallet, pk)):
+            case .success(let wallet, let pk):
                 guard let txHash = signBitcoinTransaction_p2wsh(wallet: wallet, path: path, txData: txData,
                                                                 coinType: .bitcoin, pk: pk) else {
                     result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
@@ -316,7 +321,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             }
             switch resolveKey(from: args) {
             case .failure(let err): result(err)
-            case .success(let (wallet, pk)):
+            case .success(let wallet, let pk):
                 guard let txHash = signTransaction_byteArray(wallet: wallet, coin: coin, path: path,
                                                              txData: txData, pk: pk) else {
                     result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))
@@ -336,7 +341,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             }
             switch resolveKey(from: args) {
             case .failure(let err): result(err)
-            case .success(let (wallet, pk)):
+            case .success(let wallet, let pk):
                 guard let txHash = signMessage(wallet: wallet, coin: coin, path: path, txData: txData, pk: pk) else {
                     result(FlutterError(code: "txhash_null", message: "Failed to build and sign message", details: nil))
                     return
@@ -355,7 +360,7 @@ public class WalletCorePlugin: NSObject, FlutterPlugin {
             }
             switch resolveKey(from: args) {
             case .failure(let err): result(err)
-            case .success(let (wallet, pk)):
+            case .success(let wallet, let pk):
                 guard let txHash = signTransaction_maxValue(wallet: wallet, coin: coin, path: path,
                                                             txData: txData, pk: pk) else {
                     result(FlutterError(code: "txhash_null", message: "Failed to build and sign transaction", details: nil))

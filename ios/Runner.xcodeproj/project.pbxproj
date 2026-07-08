@@ -105,9 +105,9 @@
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
 		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
 		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
-		6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletCorePlugin.swift; sourceTree = "<group>"; };
-		6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
-		6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
+		6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Runner/WalletCorePlugin.swift; sourceTree = "<group>"; };
+		6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+KeyManagement.swift"; sourceTree = "<group>"; };
+		6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Runner/WalletCorePlugin+Signing.swift"; sourceTree = "<group>"; };
 		69AC47A82F9B4A1D00DE4DA7 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		69D5E1C02EFA6F6400CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-arm64/libmobile_sdk.a"; sourceTree = "<group>"; };
 		69D5E1C22EFA6F7800CAF028 /* libmobile_sdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libmobile_sdk.a; path = "../../../Downloads/n42 doc/mobile-sdk-ios/MobileSdk.xcframework/ios-x86_64-simulator/libmobile_sdk.a"; sourceTree = "<group>"; };
