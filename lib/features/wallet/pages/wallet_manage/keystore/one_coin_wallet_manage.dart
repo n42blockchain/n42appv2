@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
+import 'package:n42_wallet/features/wallet/pages/message_sign/message_sign_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/keystore/keystore_export_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
@@ -59,6 +60,8 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
   List<dynamic> pathList = [0];
   @override
   Load load = Load.finish;
+  @override
+  String? publicKey;
 
   /// Shortcut to access the current coin's info map.
   Map<String, dynamic> get _coinInfo =>
@@ -78,6 +81,23 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
     pathIndex = _coinInfo['pathIndex'] ?? 0;
     pk = widget.walletInfo.privateKey;
     setState(() {});
+    loadPublicKey();
+  }
+
+  /// 异步派生并展示公钥。公钥是公开信息，失败静默（不阻塞页面、不显示公钥行）。
+  Future<void> loadPublicKey() async {
+    try {
+      final pub = await Trustdart().getPublicKey(
+        widget.model.config.coinType,
+        getPathWithIndex(coinPath ?? "", pathIndex),
+        mnemonic: mnemonic ?? "",
+        pk: pk ?? "",
+      );
+      if (!mounted || pub.isEmpty) return;
+      setState(() => publicKey = pub);
+    } catch (_) {
+      // 公钥非关键信息，获取失败时不显示公钥行即可。
+    }
   }
 
   @override
@@ -200,6 +220,8 @@ class _OneCoinWalletManageState extends ConsumerState<OneCoinWalletManage>
                 child: Column(
                   children: [
                     _buildWalletInfo(),
+                    if (messageSignSupported(widget.model))
+                      _buildSignMessageEntry(),
                     if (widget.walletInfo.privateKey == null) _buildExport(),
                   ],
                 ),

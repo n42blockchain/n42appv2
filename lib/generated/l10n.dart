@@ -11833,6 +11833,86 @@ class S {
       args: [],
     );
   }
+
+  /// `Sign Message`
+  String get g_key_msgsign_title {
+    return Intl.message(
+      'Sign Message',
+      name: 'g_key_msgsign_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the message to sign`
+  String get g_key_msgsign_input_hint {
+    return Intl.message(
+      'Enter the message to sign',
+      name: 'g_key_msgsign_input_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Only sign messages you fully trust. A malicious message could be used to authorize actions on your behalf.`
+  String get g_key_msgsign_warning {
+    return Intl.message(
+      'Only sign messages you fully trust. A malicious message could be used to authorize actions on your behalf.',
+      name: 'g_key_msgsign_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign`
+  String get g_key_msgsign_btn {
+    return Intl.message('Sign', name: 'g_key_msgsign_btn', desc: '', args: []);
+  }
+
+  /// `Signature`
+  String get g_key_msgsign_result {
+    return Intl.message(
+      'Signature',
+      name: 'g_key_msgsign_result',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter a message first`
+  String get g_key_msgsign_empty {
+    return Intl.message(
+      'Please enter a message first',
+      name: 'g_key_msgsign_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signing failed`
+  String get g_key_msgsign_failed {
+    return Intl.message(
+      'Signing failed',
+      name: 'g_key_msgsign_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Message signing is not supported for this chain yet`
+  String get g_key_msgsign_unsupported {
+    return Intl.message(
+      'Message signing is not supported for this chain yet',
+      name: 'g_key_msgsign_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Public Key`
+  String get g_key_pubkey {
+    return Intl.message('Public Key', name: 'g_key_pubkey', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

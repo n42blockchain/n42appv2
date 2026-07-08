@@ -1450,5 +1450,14 @@
   "g_home_market": "Markets",
   "g_key_wallet_tx_speedup": "Speed Up",
   "g_key_wallet_tx_replace_submitted": "Replacement transaction submitted",
-  "g_key_wallet_tx_replace_hint": "A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending."
+  "g_key_wallet_tx_replace_hint": "A replacement transaction will be broadcast with the same nonce and ~20% higher gas. It only takes effect while the original is still pending.",
+  "g_key_msgsign_title": "Sign Message",
+  "g_key_msgsign_input_hint": "Enter the message to sign",
+  "g_key_msgsign_warning": "Only sign messages you fully trust. A malicious message could be used to authorize actions on your behalf.",
+  "g_key_msgsign_btn": "Sign",
+  "g_key_msgsign_result": "Signature",
+  "g_key_msgsign_empty": "Please enter a message first",
+  "g_key_msgsign_failed": "Signing failed",
+  "g_key_msgsign_unsupported": "Message signing is not supported for this chain yet",
+  "g_key_pubkey": "Public Key"
 }

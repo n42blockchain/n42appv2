@@ -1722,6 +1722,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Please enter seed phrase",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("Sign"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Please enter a message first",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "Signing failed",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "Enter the message to sign",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("Signature"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage("Sign Message"),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Message signing is not supported for this chain yet",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Only sign messages you fully trust. A malicious message could be used to authorize actions on your behalf.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Total"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Name"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Back"),
@@ -1783,6 +1801,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Select from phone gallery",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Public Key"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Use Caution",

@@ -1252,6 +1252,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "需要質押",
     ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage("請輸入助記詞"),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("簽名"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage("請先輸入訊息"),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage("簽名失敗"),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "輸入要簽名的訊息",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("簽名結果"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage("訊息簽名"),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "該鏈暫不支持訊息簽名",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "僅簽名你完全信任的訊息。惡意訊息可能被用來冒你之名授權操作。",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("全部的"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("名稱"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("後退"),
@@ -1297,6 +1311,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "僅提供只讀行情資料，本版本暫不支持下單交易。",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("公鑰"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "使用小心",

@@ -1439,5 +1439,14 @@
   "g_home_market": "行情",
   "g_key_wallet_tx_speedup": "加速",
   "g_key_wallet_tx_replace_submitted": "替換交易已提交",
-  "g_key_wallet_tx_replace_hint": "將以相同 nonce、約高 20% 的 Gas 廣播一筆替換交易；僅在原交易仍處於 pending 時生效。"
+  "g_key_wallet_tx_replace_hint": "將以相同 nonce、約高 20% 的 Gas 廣播一筆替換交易；僅在原交易仍處於 pending 時生效。",
+  "g_key_msgsign_title": "訊息簽名",
+  "g_key_msgsign_input_hint": "輸入要簽名的訊息",
+  "g_key_msgsign_warning": "僅簽名你完全信任的訊息。惡意訊息可能被用來冒你之名授權操作。",
+  "g_key_msgsign_btn": "簽名",
+  "g_key_msgsign_result": "簽名結果",
+  "g_key_msgsign_empty": "請先輸入訊息",
+  "g_key_msgsign_failed": "簽名失敗",
+  "g_key_msgsign_unsupported": "該鏈暫不支持訊息簽名",
+  "g_key_pubkey": "公鑰"
 }

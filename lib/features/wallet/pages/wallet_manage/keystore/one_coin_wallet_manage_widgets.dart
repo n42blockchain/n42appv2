@@ -11,6 +11,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
   List<dynamic> get pathList;
   Load get load;
   set load(Load value);
+  String? get publicKey;
   void addPath();
   void removePath(int index);
   void chagePath(int index);
@@ -68,6 +69,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
             showCopy: true,
             fontSize: ScreenUtil().setSp(28.0),
           ),
+          _buildPublicKeyRow(),
           if (_hasMnemonic) ...[
             Divider(height: ScreenUtil().setWidth(48.0)),
             _buildPathRow(),
@@ -251,6 +253,98 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  // ── Public key row ──────────────────────────────────────────────────────────
+
+  Widget _buildPublicKeyRow() {
+    final pub = publicKey;
+    if (pub == null || pub.isEmpty) return const SizedBox.shrink();
+    final short = pub.length > 20
+        ? '${pub.substring(0, 10)}…${pub.substring(pub.length - 8)}'
+        : pub;
+    return Padding(
+      padding: EdgeInsets.only(top: AppSpacing.space4),
+      child: Row(
+        children: [
+          Text(
+            "${S.of(context).g_key_pubkey}: ",
+            style: AppTypography.bodySm.copyWith(
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              short,
+              overflow: TextOverflow.ellipsis,
+              style: AppTypography.bodySm.copyWith(
+                color: _color(AppThemeKeys.itemSubtitleTextColor),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () async {
+              await Clipboard.setData(ClipboardData(text: pub));
+              if (!mounted) return;
+              ToastUtils.show(S.of(context).copy);
+            },
+            child: Padding(
+              padding: EdgeInsets.all(AppSpacing.space2),
+              child: Icon(
+                Icons.copy_rounded,
+                size: ScreenUtil().setWidth(32.0),
+                color: _color(AppThemeKeys.mainBlueColor),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Sign message entry ──────────────────────────────────────────────────────
+
+  Widget _buildSignMessageEntry() {
+    return InkWell(
+      onTap: _onSignMessageTap,
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        decoration: _sectionDecoration,
+        padding: _sectionPadding,
+        margin: _sectionMargin,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              S.of(context).g_key_msgsign_title,
+              style: AppTypography.headline.copyWith(
+                color: _color(AppThemeKeys.mainTextColor),
+              ),
+            ),
+            Icon(
+              Icons.chevron_right,
+              size: ScreenUtil().setWidth(40.0),
+              color: _color(AppThemeKeys.itemSubtitleTextColor),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _onSignMessageTap() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => MessageSignPage(
+          walletInfo: widget.walletInfo,
+          model: widget.model,
+          path: getPathWithIndex(coinPath ?? "", pathIndex),
+          mnemonic: mnemonic,
+          pk: pk,
+        ),
       ),
     );
   }
