@@ -757,8 +757,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.3;
-				FLUTTER_BUILD_NUMBER = 2026062602;
+				FLUTTER_BUILD_NAME = 2.4.4;
+				FLUTTER_BUILD_NUMBER = 202607081;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -881,7 +881,7 @@
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-arm64",
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-x86_64-simulator",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1327,8 +1327,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.3;
-				FLUTTER_BUILD_NUMBER = 2026062602;
+				FLUTTER_BUILD_NAME = 2.4.4;
+				FLUTTER_BUILD_NUMBER = 202607081;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1451,7 +1451,7 @@
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-arm64",
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-x86_64-simulator",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1609,8 +1609,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.3;
-				FLUTTER_BUILD_NUMBER = 2026062602;
+				FLUTTER_BUILD_NAME = 2.4.4;
+				FLUTTER_BUILD_NUMBER = 202607081;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1733,7 +1733,7 @@
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-arm64",
 					"$(PROJECT_DIR)/MobileSdk.xcframework/ios-x86_64-simulator",
 				);
-				MARKETING_VERSION = 2.4.3;
+				MARKETING_VERSION = 2.4.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
