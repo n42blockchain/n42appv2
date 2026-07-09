@@ -5,6 +5,8 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:io' show Platform;
+
 import 'package:flutter/foundation.dart';
 
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -44,6 +46,12 @@ class AppConfig {
 
   /// Use mainnet for mining
   static bool isMainChainMining = true;
+
+  /// Whether swap entry points (Buy N42 / DEX Swap) are shown to the user.
+  /// Apple App Store review (Guideline 3.1.5, cryptocurrency exchanges)
+  /// scrutinizes in-app DEX/exchange features heavily, so iOS builds hide
+  /// all swap entry points; Android keeps them.
+  static bool get swapFeatureEnabled => !Platform.isIOS;
 
   /// Production environment flag.
   /// Use `--dart-define=ENV=development` to switch to test endpoints.

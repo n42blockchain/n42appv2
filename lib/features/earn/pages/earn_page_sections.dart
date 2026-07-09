@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
@@ -76,15 +77,19 @@ mixin EarnPageSectionsMixin
                     MaterialPageRoute(builder: (_) => const MiningTodayV2()),
                   ),
                 ),
-                SizedBox(width: AppSpacing.space4),
-                buildFeatureCard(
-                  context,
-                  title: S.of(context).g_key_earn_swap,
-                  subtitle: S.of(context).g_key_earn_buy_n_desc,
-                  icon: Icons.currency_exchange_rounded,
-                  gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
-                  onTap: () => navigateToSwap(context),
-                ),
+                // iOS 商店审核对 DEX/交易所类功能审查严格(Guideline 3.1.5),
+                // 该卡片(Buy N42)在 iOS 上隐藏,仅 Android 保留。
+                if (AppConfig.swapFeatureEnabled) ...[
+                  SizedBox(width: AppSpacing.space4),
+                  buildFeatureCard(
+                    context,
+                    title: S.of(context).g_key_earn_swap,
+                    subtitle: S.of(context).g_key_earn_buy_n_desc,
+                    icon: Icons.currency_exchange_rounded,
+                    gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
+                    onTap: () => navigateToSwap(context),
+                  ),
+                ],
                 SizedBox(width: AppSpacing.space4),
                 buildFeatureCard(
                   context,

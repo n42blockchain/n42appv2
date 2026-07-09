@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -206,13 +207,14 @@ class _WalletBoardState extends State<WalletBoard> {
         'assets/wallet/w_receive.png',
         widget.receiveTap,
       ),
-      // Swap 入口:此前 swapTap 回调(→ showSwapModeSheet,含 DEX Swap/Buy N)
-      // 传入却无按钮渲染,DEX Swap 在钱包首页不可达(接线复审第二轮 C3/T21)。
-      _buildActionBtn(
-        S.of(context).g_key_dex_swap_btn,
-        'assets/wallet/w_swap.png',
-        widget.swapTap,
-      ),
+      // Swap 入口:iOS 商店审核对 DEX/交易所类功能审查严格(Guideline 3.1.5),
+      // 该按钮在 iOS 上隐藏,仅 Android 保留(AppConfig.swapFeatureEnabled)。
+      if (AppConfig.swapFeatureEnabled)
+        _buildActionBtn(
+          S.of(context).g_key_dex_swap_btn,
+          'assets/wallet/w_swap.png',
+          widget.swapTap,
+        ),
       /*_buildActionBtn(
         S.of(context).g_iap_title,
         'assets/wallet/w_buy.png',

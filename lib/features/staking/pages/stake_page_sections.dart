@@ -71,18 +71,22 @@ mixin _StakeSectionsMixin on _StakeLogicMixin {
                 ],
               ),
             ),
-            SizedBox(height: AppSpacing.space8),
-            AppButton(
-              label: S.of(context).g_key_stake_go_to_swap,
-              icon: Icons.swap_horizontal_circle_outlined,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const DexSwapHome()),
-                );
-              },
-              expand: false,
-            ),
+            // iOS 商店审核对 DEX/交易所类功能审查严格(Guideline 3.1.5),
+            // 该按钮在 iOS 上隐藏,仅 Android 保留。
+            if (AppConfig.swapFeatureEnabled) ...[
+              SizedBox(height: AppSpacing.space8),
+              AppButton(
+                label: S.of(context).g_key_stake_go_to_swap,
+                icon: Icons.swap_horizontal_circle_outlined,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const DexSwapHome()),
+                  );
+                },
+                expand: false,
+              ),
+            ],
           ],
         ),
       ),
