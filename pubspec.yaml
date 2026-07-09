@@ -144,7 +144,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 98fb3816c78b6f1dcaff3d38b58d0852cea0cd23
+      ref: 9fd5981ef87871bb4a893ccb98b0e783ae167970
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
