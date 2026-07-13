@@ -22,15 +22,18 @@ class PushProtocolDatasource {
   PushProtocolDatasource({
     required SharedPreferences prefs,
     String? baseUrl,
-  })  : _prefs = prefs,
-        _dio = Dio(
-          BaseOptions(
-            baseUrl: baseUrl ?? _defaultBaseUrl,
-            connectTimeout: const Duration(seconds: 15),
-            receiveTimeout: const Duration(seconds: 15),
-            headers: const {'Content-Type': 'application/json'},
-          ),
-        );
+    Dio? dio,
+  }) : _prefs = prefs,
+       _dio =
+           dio ??
+           Dio(
+             BaseOptions(
+               baseUrl: baseUrl ?? _defaultBaseUrl,
+               connectTimeout: const Duration(seconds: 15),
+               receiveTimeout: const Duration(seconds: 15),
+               headers: const {'Content-Type': 'application/json'},
+             ),
+           );
 
   /// 获取指定钱包地址的通知列表
   ///
@@ -45,15 +48,14 @@ class PushProtocolDatasource {
     try {
       final response = await _dio.get<Map<String, dynamic>>(
         '/v1/users/$caip10/feeds',
-        queryParameters: {
-          'page': page,
-          'limit': limit,
-          'raw': 'false',
-        },
+        queryParameters: {'page': page, 'limit': limit},
       );
-      final results = response.data?['results'];
+      final results = response.data?['feeds'] ?? response.data?['results'];
       if (results is List) {
-        return results.cast<Map<String, dynamic>>();
+        return results
+            .whereType<Map<Object?, Object?>>()
+            .map((item) => Map<String, dynamic>.from(item))
+            .toList();
       }
       return [];
     } on DioException catch (e) {
@@ -61,7 +63,9 @@ class PushProtocolDatasource {
         // 地址在 Push Protocol 上没有历史通知（正常情况）
         return [];
       }
-      debugLog('PushProtocolDatasource: fetchNotifications error: ${e.message}');
+      debugLog(
+        'PushProtocolDatasource: fetchNotifications error: ${e.message}',
+      );
       rethrow;
     }
   }

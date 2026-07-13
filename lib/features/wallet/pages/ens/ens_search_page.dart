@@ -96,12 +96,12 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
 
         if (result.isAvailable) _loadPrice(query);
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted && _searchQuery == query) {
         setState(() => _isSearching = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('ENS search failed: $e'),
+            content: Text(S.of(context).g_key_error_14),
             backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
@@ -123,12 +123,12 @@ class _EnsSearchPageState extends State<EnsSearchPage> {
           }
         });
       }
-    } catch (e) {
+    } catch (_) {
       if (mounted && _searchQuery == name && loadVersion == _priceLoadVersion) {
         setState(() => _isLoadingPrice = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Load ENS price failed: $e'),
+            content: Text(S.of(context).g_key_error_14),
             backgroundColor: AppColorTokens.of(context).danger,
           ),
         );

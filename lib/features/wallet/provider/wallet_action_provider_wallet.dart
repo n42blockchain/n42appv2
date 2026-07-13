@@ -61,6 +61,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
     if (buildwallet == true) return;
     buildwallet = true;
+    coinList = [];
+    _coinModels = [];
+    _aggregatedCoins = [];
+    refresh();
     try {
       await getWalletInfo();
       await _mergeCustomChains();

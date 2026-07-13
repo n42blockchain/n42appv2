@@ -34,7 +34,12 @@ part 'market_news_tab.dart';
 // ─── Entry point ─────────────────────────────────────────────────────────────
 
 class MarketPage extends ConsumerStatefulWidget {
-  const MarketPage({super.key});
+  const MarketPage({super.key}) : _loadInitialData = true;
+
+  @visibleForTesting
+  const MarketPage.withoutInitialData({super.key}) : _loadInitialData = false;
+
+  final bool _loadInitialData;
 
   @override
   ConsumerState<MarketPage> createState() => _MarketPageState();
@@ -81,6 +86,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_onTabChanged);
+    if (!widget._loadInitialData) return;
     _loadTrending();
     _loadWatchlist();
     _loadAlerts();

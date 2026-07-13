@@ -349,11 +349,12 @@ void main() {
       weChatUniversalLink: '',
     );
 
-    test('produces exactly 5 lines (one per provider)', () {
+    test('includes the social-auth backend diagnostic', () {
       final lines = emptyCfg.diagnostics(
         isAndroid: false, isIOS: false, isMacOS: false,
       );
-      expect(lines.length, 5);
+      expect(lines, hasLength(6));
+      expect(lines.last, contains('Discord/GitHub/Telegram: disabled'));
     });
 
     test('every line carries the [ChatSocialAuth] prefix', () {

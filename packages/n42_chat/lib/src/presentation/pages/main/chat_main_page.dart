@@ -34,7 +34,6 @@ import '../group/create_group_page.dart';
 import '../profile/profile_page.dart';
 import '../qrcode/scan_qr_page.dart';
 import '../transfer/receive_page.dart';
-import '../../../core/utils/debug_log.dart';
 
 /// 聊天模块主框架页面
 ///
@@ -818,9 +817,6 @@ class _ChatTabContent extends StatelessWidget {
       child: ConversationListPage(
         onConversationTap: (conversation) =>
             _navigateToChat(context, conversation),
-        onSearchTap: () {
-          debugLog('Open search');
-        },
         showAppBar: false,
       ),
     );
@@ -848,9 +844,6 @@ class _ChatTabContentSplit extends StatelessWidget {
       child: ConversationListPage(
         onConversationTap: onConversationTap,
         selectedConversationId: selectedConversation?.id,
-        onSearchTap: () {
-          debugLog('Open search');
-        },
         showAppBar: false,
       ),
     );
