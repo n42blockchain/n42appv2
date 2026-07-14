@@ -82,6 +82,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Are you sure you want to remove \"${name}\" from saved devices?";
 
+  static String m73(value) => "Earn ${value} points";
+
   static String m28(value) => "Est. gas: ~${value} units";
 
   static String m29(reason) => "Reason: ${reason}";
@@ -820,6 +822,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Advanced Features",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Active"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("Discover"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "Distribute",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("Ended"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "No verified campaigns available",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("Pending"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Sources"),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("Airdrops"),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Upcoming"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Add Recipient",
     ),
@@ -1113,8 +1128,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Buy N with N42 protocol",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Find verified third-party campaigns",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Cross-chain transfer",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Daily on-chain points",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX Swap"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Gas"),
@@ -1696,6 +1717,60 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to exit the app?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Available Points",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Checked in today",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Check In",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Done"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Check-in failed",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Check-in confirmed on N42",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Copy"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Daily Check-in",
+    ),
+    "g_key_loyalty_earn_points": m73,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Leaderboard is empty",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("History"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Share your referral code",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Invite friends",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Leaderboard",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "No points history",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "No referrals yet. Share your code to get started.",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "No rewards available",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "No tasks available",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Referrals"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Rewards"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Tasks"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Points"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Total Earned",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Used"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1803,6 +1878,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Public Key"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Use Caution",
     ),

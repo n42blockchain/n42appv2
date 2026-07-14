@@ -24,6 +24,8 @@
 | `marketHost` | `https://api.n42.ai/market/v1` | 行情数据（补充接口） |
 | `activiteHost` | `https://api.n42.ai/activity/v1` | 活动/积分 |
 | `groupMiningHost` | `https://api.n42.ai/activity` | 挖矿相关 |
+| `airdropHost` | `https://api.n42.ai/airdrop/v1`（可由 `AIRDROP_API_BASE_URL` 覆盖） | 结构化空投活动聚合 |
+| `loyaltyHost` | `https://api.n42.ai/loyalty/v1`（可由 `LOYALTY_API_BASE_URL` 覆盖） | 不可转让积分与官方 Gas 代付 |
 
 ---
 
@@ -408,7 +410,60 @@ App 在登录后注册 FCM Token，后端存储并在以下事件推送：
 
 ---
 
-## 七、待确认事项
+## 七、空投聚合模块 ⚠️ 客户端完成，服务待部署
+
+客户端只接受结构化 JSON，不在 App 内保存第三方数据源 key，也不抓取网页。领取链接必须是无账号密码信息的 HTTPS URL。
+
+```http
+GET /airdrop/v1/airdrops?page=1&page_size=50&wallet=0x...
+Accept: application/json
+```
+
+```json
+{
+  "code": 200,
+  "data": [
+    {
+      "id": "provider:campaign-id",
+      "name": "Campaign name",
+      "description": "Eligibility and network summary",
+      "status": "active",
+      "network": "ethereum",
+      "claim_url": "https://official.example/claim",
+      "start_at": "2026-07-01T00:00:00Z",
+      "end_at": "2026-07-31T23:59:59Z"
+    }
+  ]
+}
+```
+
+服务端必须实现来源白名单、缓存、过期/下架、重复活动合并和审计日志。第三方 campaign 不得自动触发钱包签名。
+
+---
+
+## 八、主应用积分模块 ⚠️ 代码完成，待测试网部署
+
+实现位于 `contracts/loyalty/` 与 `backend/loyalty/`。这是普通不可转让积分账本，不是 ERC-20；只有 owner 配置的 operator/官方 relayer 可以代用户提交奖励和兑换交易，Gas 由官方 relayer 支付。
+
+公共路由都必须校验 App 现有 `UUID`/`Token`，并确认认证服务返回的绑定钱包与请求 `wallet` 完全一致：
+
+```text
+GET  /loyalty/v1/account?wallet=0x...
+GET  /loyalty/v1/tasks?wallet=0x...
+GET  /loyalty/v1/rewards?wallet=0x...
+GET  /loyalty/v1/history?wallet=0x...
+GET  /loyalty/v1/referral/list?wallet=0x...
+GET  /loyalty/v1/leaderboard?wallet=0x...
+POST /loyalty/v1/check-in  {"wallet":"0x..."}
+```
+
+内部任务/推荐接口使用独立 `X-Internal-Token`，不能暴露给 App。relayer 必须等待链上成功回执再返回 `tx_hash`；签到返回的 `points_earned` 以交易前后链上 `totalEarned` 差额计算，每日任务展示值读取合约 `dailyCheckInPoints()`，禁止客户端或 API 写死 10。
+
+部署、环境变量、鉴权边界和测试命令见 `backend/loyalty/README.md` 与 `contracts/loyalty/README.md`。`RELAYER_PRIVATE_KEY`、数据库凭据和内部 token 只能进入部署 secret manager。
+
+---
+
+## 九、待确认事项
 
 | 序号 | 问题 | 优先级 |
 |------|------|--------|
@@ -421,4 +476,4 @@ App 在登录后注册 FCM Token，后端存储并在以下事件推送：
 
 ---
 
-*最后更新: 2026-02-22*
+*最后更新: 2026-07-14*

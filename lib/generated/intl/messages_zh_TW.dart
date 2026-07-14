@@ -78,6 +78,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m27(name) => "您確定要從已儲存的裝置中刪除「${name}」嗎？";
 
+  static String m73(value) => "領取 ${value} 積分";
+
   static String m28(value) => "預計。氣體：~${value} 單位";
 
   static String m29(reason) => "原因：${reason}";
@@ -647,6 +649,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_address_6": MessageLookupByLibrary.simpleMessage("選擇硬幣"),
     "g_key_address_7": MessageLookupByLibrary.simpleMessage("搜尋硬幣"),
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage("進階功能"),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("進行中"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("發現"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage("分發"),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("已結束"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "暫無已驗證活動",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("待確認"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("來源"),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("空投"),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("即將開始"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage("新增收件者"),
     "g_key_batch_broadcasting": MessageLookupByLibrary.simpleMessage("廣播..."),
     "g_key_batch_clear_all": MessageLookupByLibrary.simpleMessage("全部清除"),
@@ -851,7 +864,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "使用 N42 協議購買 N",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "發現已驗證的第三方活動",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage("跨鏈轉帳"),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage("每日鏈上積分"),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX 互換"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("氣體"),
     "g_key_earn_go_staking": MessageLookupByLibrary.simpleMessage("開始質押"),
@@ -1230,6 +1247,46 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_login": MessageLookupByLibrary.simpleMessage("登入"),
     "g_key_logout": MessageLookupByLibrary.simpleMessage("退出"),
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage("您確定要退出該應用程式嗎？"),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "可用積分",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "今日已簽到",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage("簽到"),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("已完成"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "簽到失敗",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "已在 N42 鏈確認簽到",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("複製"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage("每日簽到"),
+    "g_key_loyalty_earn_points": m73,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "排行榜暫無資料",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("歷史記錄"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "分享你的推薦碼",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "推薦好友",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage("排行榜"),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage("暫無積分記錄"),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "暫無推薦記錄，分享推薦碼開始邀請。",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage("暫無可兌換獎勵"),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage("暫無可用任務"),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("推薦"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("獎勵"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("任務"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("積分"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage("累計獲得"),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("已使用"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("嘰嘰喳喳"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("紅迪網"),
@@ -1313,6 +1370,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
     "g_key_pubkey": MessageLookupByLibrary.simpleMessage("公鑰"),
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("重試"),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "使用小心",
     ),

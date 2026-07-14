@@ -9,11 +9,15 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
+import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
+import 'package:n42_wallet/features/loyalty/loyalty_wallet_address.dart';
 import 'package:n42_wallet/features/profile/pages/profile_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -57,6 +61,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
     super.build(context);
 
     final currentUser = ref.watch(currentUserProvider);
+    final wallet = ref.watch(wapBridgeProvider);
+    final walletAddress = selectLoyaltyWalletAddress(wallet.coinList);
 
     return ClipRRect(
       borderRadius: BorderRadius.only(
@@ -177,6 +183,34 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     SizedBox(height: AppSpacing.space4),
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
+                    _menuItem(
+                      "assets/home/tabbar/earn.png",
+                      S.of(context).g_key_loyalty_title,
+                      automationKey: const ValueKey<String>('drawer_loyalty'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                LoyaltyHomePage(walletAddress: walletAddress),
+                          ),
+                        );
+                      },
+                    ),
+                    _menuItem(
+                      "assets/home/money.png",
+                      S.of(context).g_key_airdrop_title,
+                      automationKey: const ValueKey<String>('drawer_airdrop'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                AirdropHomePage(walletAddress: walletAddress),
+                          ),
+                        );
+                      },
+                    ),
                     _menuItem(
                       "assets/home/tabbar/news.png",
                       S.of(context).g_browser_key11,

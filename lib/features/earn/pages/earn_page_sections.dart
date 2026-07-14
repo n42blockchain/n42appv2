@@ -9,7 +9,9 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
+import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
+import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
@@ -86,7 +88,10 @@ mixin EarnPageSectionsMixin
                     title: S.of(context).g_key_earn_swap,
                     subtitle: S.of(context).g_key_earn_buy_n_desc,
                     icon: Icons.currency_exchange_rounded,
-                    gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
+                    gradientColors: const [
+                      Color(0xFF4776E6),
+                      Color(0xFF8E54E9),
+                    ],
                     onTap: () => navigateToSwap(context),
                   ),
                 ],
@@ -100,6 +105,37 @@ mixin EarnPageSectionsMixin
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const BridgeHomePage()),
+                  ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                buildFeatureCard(
+                  context,
+                  title: S.of(context).g_key_airdrop_title,
+                  subtitle: S.of(context).g_key_earn_claim_free,
+                  icon: Icons.card_giftcard_rounded,
+                  gradientColors: const [Color(0xFF00897B), Color(0xFF43A047)],
+                  badge: 'LIVE',
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AirdropHomePage(walletAddress: walletAddress),
+                    ),
+                  ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                buildFeatureCard(
+                  context,
+                  title: S.of(context).g_key_loyalty_title,
+                  subtitle: S.of(context).g_key_earn_daily_bonus,
+                  icon: Icons.workspace_premium_rounded,
+                  gradientColors: const [Color(0xFF1565C0), Color(0xFFF9A825)],
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          LoyaltyHomePage(walletAddress: walletAddress),
+                    ),
                   ),
                 ),
                 SizedBox(width: AppSpacing.space4),

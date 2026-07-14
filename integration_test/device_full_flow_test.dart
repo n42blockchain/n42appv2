@@ -149,6 +149,8 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
     'drawer_address_book',
     'drawer_security',
     'drawer_settings',
+    'drawer_loyalty',
+    'drawer_airdrop',
     'drawer_browser',
     'drawer_about',
   ]) {
