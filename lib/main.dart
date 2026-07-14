@@ -20,6 +20,7 @@ import 'package:n42_wallet/core/di/injection.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
+import 'package:n42_wallet/features/identity/pages/id_hub_sign_page.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
 import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
@@ -334,6 +335,18 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
         break;
       case DeepLinkType.fullNode:
         AppLogger.d('DeepLink', 'full node: ${data.params}');
+        break;
+      case DeepLinkType.idHubBind:
+      case DeepLinkType.idHubAuth:
+        await Navigator.of(navContext).push(
+          MaterialPageRoute(
+            builder: (_) => IdHubSignPage(
+              sessionId: data.params['sid'] ?? '',
+              hubUrl: data.params['hub'] ?? '',
+              isLogin: data.type == DeepLinkType.idHubAuth,
+            ),
+          ),
+        );
         break;
       case DeepLinkType.chat:
       case DeepLinkType.user:

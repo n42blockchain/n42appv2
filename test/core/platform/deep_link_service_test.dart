@@ -379,4 +379,54 @@ void main() {
       );
     });
   });
+
+  group('DeepLinkService - n42id scan-to-sign', () {
+    late DeepLinkService service;
+    late StreamSubscription<DeepLinkData> subscription;
+    final List<DeepLinkData> received = [];
+
+    setUp(() {
+      service = DeepLinkService();
+      received.clear();
+      subscription = service.deepLinkStream.listen(received.add);
+    });
+
+    tearDown(() async {
+      await subscription.cancel();
+      await service.dispose();
+    });
+
+    test('parses n42id://bind into idHubBind with sid + hub', () async {
+      service.handleUri(
+        Uri.parse('n42id://bind?sid=abc123&hub=https://id.n42.ai'),
+      );
+      await Future.delayed(Duration.zero);
+      expect(received.single.type, DeepLinkType.idHubBind);
+      expect(received.single.params['sid'], 'abc123');
+      expect(received.single.params['hub'], 'https://id.n42.ai');
+    });
+
+    test('parses n42id://auth into idHubAuth', () async {
+      service.handleUri(
+        Uri.parse('n42id://auth?sid=xyz&hub=https://id.n42.ai'),
+      );
+      await Future.delayed(Duration.zero);
+      expect(received.single.type, DeepLinkType.idHubAuth);
+      expect(received.single.params['sid'], 'xyz');
+    });
+
+    test('an unknown n42id host is unknown', () async {
+      service.handleUri(Uri.parse('n42id://wat?sid=x'));
+      await Future.delayed(Duration.zero);
+      expect(received.single.type, DeepLinkType.unknown);
+    });
+
+    test('redacts sid in the sanitized string form', () async {
+      service.handleUri(
+        Uri.parse('n42id://bind?sid=secret123&hub=https://id.n42.ai'),
+      );
+      await Future.delayed(Duration.zero);
+      expect(received.single.toString(), isNot(contains('secret123')));
+    });
+  });
 }

@@ -37,10 +37,30 @@ environment to light it up. Unset = app behaves exactly as today.
    `completeBindSession` submits it. Hub error codes (e.g. `binding-conflict`)
    surface in the outcome.
 
-**Remaining native wiring** (needs a device to verify, tracked follow-up): the
-`n42id` URL scheme registration (AndroidManifest / Info.plist), the
-`DeepLinkService` scheme allowlist + parse, and the `IdHubSignPage` confirmation
-UI. The testable signing core above is complete and unit-tested.
+### Deep-link wiring (native, not device-verified)
+
+The `n42id://bind|auth` scheme is now wired end to end in code (device verification
+pending):
+
+- **Scheme registration**: `android/.../AndroidManifest.xml`, `ios/Runner/Info.plist`,
+  `macos/Runner/Info.plist` accept `n42id`.
+- **Parse**: `DeepLinkService` allowlists `n42id`, adds `DeepLinkType.idHubBind` /
+  `idHubAuth`, parses `sid`+`hub` (`_parseN42IdUri`), and redacts `sid` in logs.
+- **Validate**: `DeepLinkHandler` drops any link whose `sid` is empty or whose
+  `hub` fails `IdHubBindSigner.isHubAllowed` (anti-phishing gate).
+- **Dispatch**: `main.dart._handleDeepLinkNavigation` pushes `IdHubSignPage`.
+- **Sign page**: `pages/id_hub_sign_page.dart` re-checks the hub allowlist, pulls
+  the message from the hub (`prepare`), shows the decoded request (action, wallet,
+  hub domain, message), and on confirm signs via `N42WalletBridge` +
+  `completeBindSession`.
+- **In-app scan**: `services/id_hub_scan.dart` `tryHandleIdHubScan` routes a scanned
+  `n42id://` string into the deep-link pipeline; wired into `send_utils.dart` scans.
+
+Covered by unit tests (n42id parse + sid redaction in `deep_link_service_test.dart`;
+allowlist + flow in `id_hub_bind_signer_test.dart`). The `IdHubSignPage` UI and
+real device deep-link delivery still need on-device QA. A pending-when-locked queue
+(mirroring `chat_initialization`) is an optional refinement - today the page reads
+the wallet address on open and prompts to unlock if absent.
 
 Token storage uses `SecureStorage.saveIdHubToken/getIdHubToken/deleteIdHubToken`,
 keyed `n42id_token_<did>`, and is wiped by `clearUserData()` on logout.

@@ -94,6 +94,8 @@
                 <data android:scheme="n42"/>
                 <data android:scheme="n42app"/>
                 <data android:scheme="astraapp"/>
+                <!-- N42 ID Hub scan-to-sign (n42id://bind|auth) -->
+                <data android:scheme="n42id"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
