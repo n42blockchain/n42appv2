@@ -188,6 +188,7 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: _toggleControls,
         child: Stack(
           children: [
@@ -202,6 +203,18 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
 
             // 底部控制栏
             _buildBottomBar(),
+
+            // Invisible controls must not receive taps. This overlay restores
+            // them without passing the gesture through to the video surface.
+            if (!_showControls)
+              Positioned.fill(
+                child: GestureDetector(
+                  key: const ValueKey('group-call-controls-restore-layer'),
+                  behavior: HitTestBehavior.opaque,
+                  onTap: _toggleControls,
+                  child: const SizedBox.expand(),
+                ),
+              ),
 
             // 参与者列表
             if (_showParticipantsList) _buildParticipantsList(),
@@ -249,6 +262,12 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
         : null;
     if (focusedParticipant != null) {
       return _buildFocusedLayout(visibleParticipants, focusedParticipant);
+    }
+
+    if (visibleParticipants.length == 1) {
+      return SizedBox.expand(
+        child: _buildParticipantTile(visibleParticipants.single),
+      );
     }
 
     // 网格布局
@@ -316,6 +335,9 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
     bool compact = false,
   }) {
     return GestureDetector(
+      key: ValueKey('group-call-participant-${participant.id}'),
+      behavior: HitTestBehavior.opaque,
+      onTap: _toggleControls,
       onDoubleTap: () {
         setState(() {
           _focusedParticipant = participant;
@@ -359,7 +381,9 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
             if (showName)
               Positioned(
                 left: 8,
-                bottom: 8,
+                bottom: _showControls && !compact
+                    ? MediaQuery.of(context).padding.bottom + 112
+                    : 8,
                 right: 8,
                 child: Row(
                   children: [
@@ -537,130 +561,141 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
       top: 0,
       left: 0,
       right: 0,
-      child: AnimatedOpacity(
-        opacity: _showControls ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: Container(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top + 8,
-            left: 16,
-            right: 16,
-            bottom: 8,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black.withValues(alpha: 0.7), Colors.transparent],
+      child: IgnorePointer(
+        ignoring: !_showControls,
+        child: AnimatedOpacity(
+          opacity: _showControls ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          child: Container(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top + 8,
+              left: 16,
+              right: 16,
+              bottom: 8,
             ),
-          ),
-          child: Row(
-            children: [
-              // 返回按钮
-              IconButton(
-                icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-                onPressed: () => _showLeaveDialog(),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.7),
+                  Colors.transparent,
+                ],
               ),
+            ),
+            child: Row(
+              children: [
+                // 返回按钮
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => _showLeaveDialog(),
+                ),
 
-              // 房间信息
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.roomName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        height: 1.3,
-                        fontWeight: FontWeight.w600,
+                // 房间信息
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        widget.roomName,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          height: 1.3,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            S
-                                    .of(context)
-                                    ?.callParticipantCount(
-                                      _participants.length,
-                                    ) ??
-                                '${_participants.length} participants',
+                      const SizedBox(height: 2),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              S
+                                      .of(context)
+                                      ?.callParticipantCount(
+                                        _participants.length,
+                                      ) ??
+                                  '${_participants.length} participants',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.white.withValues(alpha: 0.7),
+                                fontSize: 12,
+                                height: 1.3,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(
+                            width: 6,
+                            height: 6,
+                            decoration: const BoxDecoration(
+                              color: AppColors.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            _formatDuration(_duration),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.7),
                               fontSize: 12,
                               height: 1.3,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 8),
-                        Container(
-                          width: 6,
-                          height: 6,
-                          decoration: const BoxDecoration(
-                            color: AppColors.primary,
-                            shape: BoxShape.circle,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _formatDuration(_duration),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.7),
-                            fontSize: 12,
-                            height: 1.3,
-                            fontFeatures: const [FontFeature.tabularFigures()],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
 
-              // 切换布局
-              IconButton(
-                icon: Icon(
-                  _focusedParticipant != null
-                      ? Icons.grid_view
-                      : Icons.fullscreen,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (_focusedParticipant != null) {
-                      _focusedParticipant = null;
-                    } else if (_participants.isNotEmpty) {
-                      _focusedParticipant = _participants.first;
-                    }
-                  });
-                },
-              ),
-
-              if (_state == MeetingState.connected)
+                // 切换布局
                 IconButton(
-                  icon: const Icon(Icons.tune, color: Colors.white),
-                  onPressed: _openCallEnhancementTools,
+                  icon: Icon(
+                    _focusedParticipant != null
+                        ? Icons.grid_view
+                        : Icons.fullscreen,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      if (_focusedParticipant != null) {
+                        _focusedParticipant = null;
+                      } else if (_participants.isNotEmpty) {
+                        _focusedParticipant = _participants.first;
+                      }
+                    });
+                  },
                 ),
 
-              // 参与者列表
-              IconButton(
-                icon: const Icon(Icons.people, color: Colors.white),
-                onPressed: () {
-                  setState(() {
-                    _showParticipantsList = !_showParticipantsList;
-                  });
-                },
-              ),
-            ],
+                if (_state == MeetingState.connected)
+                  IconButton(
+                    icon: const Icon(Icons.tune, color: Colors.white),
+                    onPressed: _openCallEnhancementTools,
+                  ),
+
+                // 参与者列表
+                IconButton(
+                  icon: const Icon(Icons.people, color: Colors.white),
+                  onPressed: () {
+                    setState(() {
+                      _showParticipantsList = !_showParticipantsList;
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -672,81 +707,99 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
       bottom: 0,
       left: 0,
       right: 0,
-      child: AnimatedOpacity(
-        opacity: _showControls ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 200),
-        child: Container(
-          padding: EdgeInsets.only(
-            top: 16,
-            bottom: MediaQuery.of(context).padding.bottom + 16,
-            left: 24,
-            right: 24,
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter,
-              colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
+      child: IgnorePointer(
+        ignoring: !_showControls,
+        child: AnimatedOpacity(
+          opacity: _showControls ? 1.0 : 0.0,
+          duration: const Duration(milliseconds: 200),
+          child: Container(
+            padding: EdgeInsets.only(
+              top: 16,
+              bottom: MediaQuery.of(context).padding.bottom + 16,
+              left: 12,
+              right: 12,
             ),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              // 静音
-              _buildControlButton(
-                icon: _isMuted ? Icons.mic_off : Icons.mic,
-                label: _isMuted
-                    ? (S.of(context)?.callUnmuteLabel ?? 'Unmute')
-                    : (S.of(context)?.callMuteLabel ?? 'Mute'),
-                isActive: _isMuted,
-                activeColor: AppColors.error,
-                onPressed: _toggleMute,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                colors: [
+                  Colors.black.withValues(alpha: 0.8),
+                  Colors.transparent,
+                ],
               ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 静音
+                Expanded(
+                  child: _buildControlButton(
+                    icon: _isMuted ? Icons.mic_off : Icons.mic,
+                    label: _isMuted
+                        ? (S.of(context)?.callUnmuteLabel ?? 'Unmute')
+                        : (S.of(context)?.callMuteLabel ?? 'Mute'),
+                    isActive: _isMuted,
+                    activeColor: AppColors.error,
+                    onPressed: _toggleMute,
+                  ),
+                ),
 
-              // 视频
-              _buildControlButton(
-                icon: _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
-                label: _isVideoEnabled
-                    ? (S.of(context)?.callTurnOffVideo ?? 'Turn off video')
-                    : (S.of(context)?.callTurnOnVideo ?? 'Turn on video'),
-                isActive: !_isVideoEnabled,
-                activeColor: AppColors.error,
-                onPressed: _toggleVideo,
-              ),
+                // 视频
+                Expanded(
+                  child: _buildControlButton(
+                    icon: _isVideoEnabled ? Icons.videocam : Icons.videocam_off,
+                    label: _isVideoEnabled
+                        ? (S.of(context)?.callTurnOffVideo ?? 'Turn off video')
+                        : (S.of(context)?.callTurnOnVideo ?? 'Turn on video'),
+                    isActive: !_isVideoEnabled,
+                    activeColor: AppColors.error,
+                    onPressed: _toggleVideo,
+                  ),
+                ),
 
-              // 屏幕共享
-              _buildControlButton(
-                icon: Icons.screen_share,
-                label: _isScreenSharing
-                    ? (S.of(context)?.callStopSharing ?? 'Stop sharing')
-                    : (S.of(context)?.callShareScreen ?? 'Share screen'),
-                isActive: _isScreenSharing,
-                activeColor: AppColors.primary,
-                onPressed: _toggleScreenShare,
-              ),
+                // 屏幕共享
+                Expanded(
+                  child: _buildControlButton(
+                    icon: Icons.screen_share,
+                    label: _isScreenSharing
+                        ? (S.of(context)?.callStopSharing ?? 'Stop sharing')
+                        : (S.of(context)?.callShareScreen ?? 'Share screen'),
+                    isActive: _isScreenSharing,
+                    activeColor: AppColors.primary,
+                    onPressed: _toggleScreenShare,
+                  ),
+                ),
 
-              // 通话中聊天
-              _buildControlButton(
-                icon: Icons.chat_bubble_outline,
-                label: S.of(context)?.callChatLabel ?? 'Chat',
-                onPressed: _openInCallChat,
-              ),
+                // 通话中聊天
+                Expanded(
+                  child: _buildControlButton(
+                    icon: Icons.chat_bubble_outline,
+                    label: S.of(context)?.callChatLabel ?? 'Chat',
+                    onPressed: _openInCallChat,
+                  ),
+                ),
 
-              // 切换摄像头
-              _buildControlButton(
-                icon: Icons.cameraswitch,
-                label: S.of(context)?.callSwitchCameraLabel ?? 'Switch',
-                onPressed: _switchCamera,
-              ),
+                // 切换摄像头
+                Expanded(
+                  child: _buildControlButton(
+                    icon: Icons.cameraswitch,
+                    label: S.of(context)?.callSwitchCameraLabel ?? 'Switch',
+                    onPressed: _switchCamera,
+                  ),
+                ),
 
-              // 离开
-              _buildControlButton(
-                icon: Icons.call_end,
-                label: S.of(context)?.callLeaveLabel ?? 'Leave',
-                backgroundColor: AppColors.error,
-                onPressed: _showLeaveDialog,
-              ),
-            ],
+                // 离开
+                Expanded(
+                  child: _buildControlButton(
+                    icon: Icons.call_end,
+                    label: S.of(context)?.callLeaveLabel ?? 'Leave',
+                    backgroundColor: AppColors.error,
+                    onPressed: _showLeaveDialog,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -761,36 +814,52 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
     Color? backgroundColor,
     VoidCallback? onPressed,
   }) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color:
-                  backgroundColor ??
-                  (isActive
-                      ? (activeColor ?? Colors.white)
-                      : Colors.white.withValues(alpha: 0.2)),
+    return Semantics(
+      button: true,
+      label: label,
+      child: ExcludeSemantics(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 2),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color:
+                        backgroundColor ??
+                        (isActive
+                            ? (activeColor ?? Colors.white)
+                            : Colors.white.withValues(alpha: 0.2)),
+                  ),
+                  child: Icon(icon, color: Colors.white, size: 23),
+                ),
+                const SizedBox(height: 6),
+                SizedBox(
+                  width: double.infinity,
+                  height: 15,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 11,
+                        height: 1.3,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            child: Icon(icon, color: Colors.white, size: 24),
           ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.8),
-              fontSize: 11,
-              height: 1.3,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

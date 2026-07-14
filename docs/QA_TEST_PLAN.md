@@ -178,7 +178,7 @@ shasum -a 256 build/ios/ipa/N42Wallet.ipa
 | iOS 真机启动 | Flutter 3.41.9 Profile + `devicectl` | Pass；USB 安装后连续 3 次冷启动，每次 8 秒后进程仍存活，联系人插件启动崩溃未复现 |
 | iOS 真机 App Smoke | `flutter drive --profile ... integration_test/app_test.dart` | Pass，USB Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS 模拟器完整点击 | `./scripts/run_automated_tests.sh device` | Blocked；旧 `MLImage.framework` 无 arm64-simulator slice，Xcode 26.6 无可用 x86_64 模拟器目标 |
-| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，283 tests（含 MatrixRTC 换票、安全降级边界及群通话布局回归） |
+| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，285 tests（含 MatrixRTC 换票、安全降级边界、群通话层级、窄屏布局及控件唤回回归） |
 | JMT / Mining | `dart test` / `flutter test --no-pub` | Pass，13 / 3 tests |
 | 三个 Go 后端 | `go test -count=1 ./...` | Pass，livekit-jwt、social-auth、swap |
 | Android Debug/Release | `flutter build apk ...` | Pass |
@@ -699,7 +699,7 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 
 | ID | 现状 | 当前处理 | 发布前要求 |
 |---|---|---|---|
-| K-01 | 客户端曾把 MatrixRTC `livekit_service_url` 基地址误当 token API，直接发送 Matrix access token，未按协议请求 `/sfu/get`；首次修复包入房后又暴露群通话页 `Positioned` 层级灰屏 | 已改为 Matrix OpenID 换票并解析 `url/jwt`；Android 单端已成功入房；灰屏已修复并补 Widget 回归 | 两台真机/两个账号重跑 CALL-05/07；完成前标 `Fix ready / dual-device retest pending`，不得直接标完整 Pass |
+| K-01 | 客户端曾把 MatrixRTC `livekit_service_url` 基地址误当 token API，直接发送 Matrix access token，未按协议请求 `/sfu/get`；首次修复包入房后又暴露群通话页 `Positioned` 层级灰屏、本地预览未绑定、窄屏控制标签/姓名条挤压及隐藏控件仍接收点击 | 已改为 Matrix OpenID 换票并解析 `url/jwt`；Android 单端已成功入房；灰屏、本地轨道同步、单人布局和窄屏控制栏已修复，姓名条避让控制栏，隐藏控件忽略点击并由全屏透明层安全唤回，均有 Widget 回归 | 两台真机/两个账号重跑 CALL-05/07；完成前标 `Fix ready / dual-device retest pending`，不得直接标完整 Pass |
 | K-02 | 当前真机钱包余额为 0 | 已完成无广播 UI/校验流程 | 准备受控小额钱包，重跑 TX-06~14、AA-05、DEFI-03/06/08/09、PAY-02 |
 | K-03 | 历史 `integration_test/` 曾使用空断言 | 已删除空断言；增加 6 项质量门禁和生产入口完整点击流；13 个钱包资金/破坏性用例显式 `SKIP` 并附原因 | 设备流实际跑完前不得记 Pass；不得删除 `SKIP` 伪装执行 |
 | K-04 | 原始行覆盖 13.07%，CI 门禁 70% | 主套件 3113 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
