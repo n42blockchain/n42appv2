@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../domain/prediction_market.dart';
+import '../domain/prediction_repository.dart';
 
 /// 预测市场**事件溯源重放引擎**（纯函数、无 IO，可单测）。
 ///
@@ -8,8 +9,9 @@ import '../domain/prediction_market.dart';
 /// 有序事件经 Matrix 房间 timeline 广播；各端按**同一时间线顺序**把事件重放进
 /// 同一套 LMSR 状态机，于是各端算出完全一致的价格 / 持仓 / 结算。
 ///
-/// 资金口径：play-money（每个用户初始 [initialBalance] tUSDC，本地视角）。
-/// 无权威节点校验余额，故不拒绝他人超额下注——仅用于演示。
+/// 资金口径：play-money（每个用户、每个直播房初始 [initialBalance] tUSDC）。
+/// 重放层会拒绝超过该房试玩额度的买单；跨房统一余额、真实资产托管仍必须由
+/// 链上合约或可信后端提供，不能由客户端时间线承担。
 ///
 /// **resolver 鉴权**：建市事件的 `sender` 即该市场的 resolver（对齐"主播只能裁定
 /// 结果、不能卷款"的信任模型）。resolve/cancel/close 这三个终结性动作只信任
@@ -65,7 +67,14 @@ class PredictionReplay {
       case 'create':
         if (_markets.containsKey(e.marketId)) return; // 重复建市忽略
         final labels = e.labels;
-        if (labels == null || labels.length < 2) return;
+        if (labels == null ||
+            !PredictionLimits.hasValidMarketId(e.marketId) ||
+            !PredictionLimits.hasValidCreateInput(
+              question: e.question ?? '',
+              outcomeLabels: labels,
+            )) {
+          return;
+        }
         // 房间归属鉴权：marketId 的房间前缀必须与本实例的物理可信房间一致，
         // 否则是伪造/串房的 create 事件，直接拒绝（不创建市场，见类文档）。
         final trusted = trustedRoomId;
@@ -86,10 +95,20 @@ class PredictionReplay {
         final m = _markets[e.marketId];
         final i = e.outcomeIndex;
         final c = e.collateral;
-        if (m == null || i == null || c == null || c <= 0) return;
+        if (m == null ||
+            i == null ||
+            c == null ||
+            !PredictionLimits.isFinitePositive(c)) {
+          return;
+        }
         if (!m.tradableAt(e.timestamp)) return;
         if (i < 0 || i >= m.q.length) return;
         final shares = m.solveSharesForCollateral(i, c);
+        if (!shares.isFinite || shares <= 0) return;
+        if (e.minShares != null && shares + 1e-9 < e.minShares!) return;
+        // Play-money 防刷量边界：同一用户在同一物理直播房内不能超过初始
+        // 演示额度。跨房真实统一余额须由链上/后端账本提供，不能由客户端伪造。
+        if (tradeDeltaFor(e.sender) - c < -initialBalance - 1e-9) return;
         m.q[i] += shares;
         m.addPosition(e.sender, i, shares);
         m.tradeDelta[e.sender] = (m.tradeDelta[e.sender] ?? 0) - c;
@@ -99,12 +118,21 @@ class PredictionReplay {
         final m = _markets[e.marketId];
         final i = e.outcomeIndex;
         final s = e.shares;
-        if (m == null || i == null || s == null || s <= 0) return;
+        if (m == null ||
+            i == null ||
+            s == null ||
+            !PredictionLimits.isFinitePositive(s)) {
+          return;
+        }
         if (!m.tradableAt(e.timestamp)) return;
         if (i < 0 || i >= m.q.length) return;
         final held = m.positions[e.sender]?[i] ?? 0;
         if (s > held + 1e-9) return; // 不能卖超过持有
         final proceeds = m.proceedsForSell(i, s);
+        if (!proceeds.isFinite || proceeds < 0) return;
+        if (e.minCollateral != null && proceeds + 1e-9 < e.minCollateral!) {
+          return;
+        }
         m.q[i] -= s;
         m.addPosition(e.sender, i, -s);
         m.tradeDelta[e.sender] = (m.tradeDelta[e.sender] ?? 0) + proceeds;
@@ -160,9 +188,20 @@ class PredictionReplay {
   String? resolverOf(String marketId) => _markets[marketId]?.resolverId;
 
   /// 买入报价（不改状态）：返回份额 / 均价 / 成交后价；市场不存在或结果非法返回 null。
-  TradeQuote? quoteBuy(String marketId, int i, double collateralIn) {
+  TradeQuote? quoteBuy(
+    String marketId,
+    int i,
+    double collateralIn, {
+    DateTime? now,
+  }) {
     final m = _markets[marketId];
-    if (m == null || i < 0 || i >= m.q.length) return null;
+    if (m == null ||
+        i < 0 ||
+        i >= m.q.length ||
+        !PredictionLimits.isFinitePositive(collateralIn) ||
+        !m.tradableAt(now ?? _nowFallback)) {
+      return null;
+    }
     final shares = m.solveSharesForCollateral(i, collateralIn);
     final after = m.pricesAfterBuy(i, shares)[i];
     return TradeQuote(
@@ -172,6 +211,19 @@ class PredictionReplay {
       avgPrice: shares > 0 ? collateralIn / shares : 0,
       priceAfter: after,
     );
+  }
+
+  /// 卖出报价（不改状态），用于客户端预检和事件重放的滑点保护。
+  double? quoteSell(String marketId, int i, double shares, {DateTime? now}) {
+    final m = _markets[marketId];
+    if (m == null ||
+        i < 0 ||
+        i >= m.q.length ||
+        !PredictionLimits.isFinitePositive(shares) ||
+        !m.tradableAt(now ?? _nowFallback)) {
+      return null;
+    }
+    return m.proceedsForSell(i, shares);
   }
 
   UserPosition positionFor(String marketId, String? user) {
@@ -230,6 +282,8 @@ class PredEvent {
     this.outcomeIndex,
     this.collateral,
     this.shares,
+    this.minShares,
+    this.minCollateral,
   });
 
   final String sender;
@@ -243,6 +297,8 @@ class PredEvent {
   final int? outcomeIndex;
   final double? collateral;
   final double? shares;
+  final double? minShares;
+  final double? minCollateral;
 
   /// 从事件载荷 map 解析（非预测事件或字段非法返回 null）。
   static PredEvent? tryParse({
@@ -250,28 +306,84 @@ class PredEvent {
     required DateTime timestamp,
     required Map<String, dynamic> data,
   }) {
-    if (data['t'] != 'pred') return null;
-    final action = data['a'];
-    final marketId = data['m'];
-    if (action is! String || marketId is! String) return null;
-    double? toD(Object? v) => v is num ? v.toDouble() : null;
-    int? toI(Object? v) => v is num ? v.toInt() : null;
-    final closeMs = toI(data['close']);
-    return PredEvent(
-      sender: sender,
-      timestamp: timestamp,
-      action: action,
-      marketId: marketId,
-      roomId: data['room'] as String?,
-      question: data['q'] as String?,
-      labels: (data['o'] as List?)?.map((e) => '$e').toList(),
-      closesAt: closeMs == null
-          ? null
-          : DateTime.fromMillisecondsSinceEpoch(closeMs),
-      outcomeIndex: toI(data['i']),
-      collateral: toD(data['c']),
-      shares: toD(data['s']),
-    );
+    try {
+      if (data['t'] != 'pred') return null;
+      final action = data['a'];
+      final marketId = data['m'];
+      if (action is! String ||
+          marketId is! String ||
+          !const {
+            'create',
+            'buy',
+            'sell',
+            'resolve',
+            'cancel',
+            'close',
+          }.contains(action) ||
+          !PredictionLimits.hasValidMarketId(marketId) ||
+          sender.trim().isEmpty) {
+        return null;
+      }
+      double? toD(Object? value) {
+        if (value is! num) return null;
+        final result = value.toDouble();
+        return result.isFinite ? result : null;
+      }
+
+      int? toI(Object? value) {
+        final number = toD(value);
+        if (number == null || number != number.truncateToDouble()) return null;
+        if (number < 0 || number > 4102444800000) return null;
+        return number.toInt();
+      }
+
+      final closeMs = data.containsKey('close') ? toI(data['close']) : null;
+      if (data.containsKey('close') && closeMs == null) return null;
+      final labels = data['o'];
+      if (labels != null && labels is! List) return null;
+      final outcomeIndex = data.containsKey('i') ? toI(data['i']) : null;
+      final collateral = data.containsKey('c') ? toD(data['c']) : null;
+      final shares = data.containsKey('s') ? toD(data['s']) : null;
+      final minShares = data.containsKey('min') ? toD(data['min']) : null;
+      final minCollateral = data.containsKey('min_out')
+          ? toD(data['min_out'])
+          : null;
+      if ((action == 'buy' &&
+              (!data.containsKey('i') ||
+                  outcomeIndex == null ||
+                  !data.containsKey('c') ||
+                  collateral == null)) ||
+          (action == 'sell' &&
+              (!data.containsKey('i') ||
+                  outcomeIndex == null ||
+                  !data.containsKey('s') ||
+                  shares == null)) ||
+          (action == 'resolve' &&
+              (!data.containsKey('i') || outcomeIndex == null)) ||
+          (data.containsKey('min') && minShares == null) ||
+          (data.containsKey('min_out') && minCollateral == null)) {
+        return null;
+      }
+      return PredEvent(
+        sender: sender,
+        timestamp: timestamp,
+        action: action,
+        marketId: marketId,
+        roomId: data['room'] as String?,
+        question: data['q'] as String?,
+        labels: labels?.map((e) => '$e').toList(),
+        closesAt: closeMs == null
+            ? null
+            : DateTime.fromMillisecondsSinceEpoch(closeMs),
+        outcomeIndex: outcomeIndex,
+        collateral: collateral,
+        shares: shares,
+        minShares: minShares,
+        minCollateral: minCollateral,
+      );
+    } catch (_) {
+      return null;
+    }
   }
 }
 

@@ -167,7 +167,9 @@ class _TradeSheetState extends ConsumerState<TradeSheet> {
   ) {
     final c = AppColorTokens.of(context);
     final symbol = market.collateral.symbol;
-    final tradable = market.isOpen;
+    final tradable =
+        market.isOpen &&
+        (market.closesAt == null || DateTime.now().isBefore(market.closesAt!));
     final held = position?.sharesOf(_outcomeId) ?? 0;
 
     return Column(

@@ -111,7 +111,12 @@ class LiveGiftEconomy {
         all.add((event: e, roomId: roomId, price: gift.coinPrice));
       }
     });
-    all.sort((a, b) => a.event.timestamp.compareTo(b.event.timestamp));
+    all.sort((a, b) {
+      final byTime = a.event.timestamp.compareTo(b.event.timestamp);
+      if (byTime != 0) return byTime;
+      final byRoom = a.roomId.compareTo(b.roomId);
+      return byRoom != 0 ? byRoom : a.event.id.compareTo(b.event.id);
+    });
 
     final runningBalance = <String, int>{};
     final ledger = <GiftLedgerEntry>[];

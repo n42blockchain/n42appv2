@@ -1,5 +1,48 @@
 import 'prediction_market.dart';
 
+/// 预测演示事件的输入边界。
+///
+/// Matrix timeline 是不可信的公共输入；这些限制同时用于本地操作和重放，防止
+/// 超长建市消息、NaN/Infinity 金额或异常精度值让所有订阅者的状态机失效。
+class PredictionLimits {
+  PredictionLimits._();
+
+  static const int maxMarketIdLength = 512;
+  static const int maxQuestionLength = 280;
+  static const int maxOutcomeLength = 64;
+  static const int maxOutcomes = 6;
+  static const double maxAmount = 1000000000;
+
+  static bool isFinitePositive(double value) =>
+      value.isFinite && value > 0 && value <= maxAmount;
+
+  static bool hasValidMarketId(String value) =>
+      value.trim().isNotEmpty && value.length <= maxMarketIdLength;
+
+  static bool hasValidCreateInput({
+    required String question,
+    required List<String> outcomeLabels,
+  }) {
+    final normalizedQuestion = question.trim();
+    if (normalizedQuestion.isEmpty ||
+        normalizedQuestion.length > maxQuestionLength) {
+      return false;
+    }
+    if (outcomeLabels.length < 2 || outcomeLabels.length > maxOutcomes) {
+      return false;
+    }
+    final seen = <String>{};
+    for (final label in outcomeLabels) {
+      final normalized = label.trim();
+      if (normalized.isEmpty || normalized.length > maxOutcomeLength) {
+        return false;
+      }
+      if (!seen.add(normalized.toLowerCase())) return false;
+    }
+    return true;
+  }
+}
+
 /// 预测市场仓库接口。
 ///
 /// 抽象底层实现：MVP 用内存 [MockPredictionRepository]（LMSR AMM），
