@@ -21,6 +21,26 @@ environment to light it up. Unset = app behaves exactly as today.
 | `api/id_hub_api.dart` | Self-contained Dio client; RFC 9457 problem+json error codes; `isEnabled` guard |
 | `services/id_token_store.dart` | Per-DID token custody (SecureStorage), pre-expiry refresh, single-flight |
 | `services/id_hub_wallet_login.dart` | challenge -> sign -> verify orchestration, decoupled from the wallet SDK via a `MessageSigner` |
+| `services/id_hub_bind_signer.dart` | `n42id://bind` scan-to-sign: hub-allowlist guard + getSession -> prepare -> sign -> complete |
+
+## n42id:// scan-to-sign (P3-B)
+
+`IdHubBindSigner` powers the wallet side of 11X's BindWallet QR. Given a scanned
+`n42id://bind?sid=...&hub=...`:
+
+1. **Anti-phishing guard**: `isHubAllowed(hubUrl)` checks the hub host against
+   `AppConfig.idHubAllowedHosts` (exact or registrable suffix, https only). A
+   malicious QR pointing `hub` at an attacker server is refused before any call.
+2. The message to sign is always **pulled from the hub** (`prepareBindSession`),
+   never taken from QR-embedded text.
+3. Wallet signs via a `MessageSigner` (wire to `N42WalletBridge.signMessage`);
+   `completeBindSession` submits it. Hub error codes (e.g. `binding-conflict`)
+   surface in the outcome.
+
+**Remaining native wiring** (needs a device to verify, tracked follow-up): the
+`n42id` URL scheme registration (AndroidManifest / Info.plist), the
+`DeepLinkService` scheme allowlist + parse, and the `IdHubSignPage` confirmation
+UI. The testable signing core above is complete and unit-tested.
 
 Token storage uses `SecureStorage.saveIdHubToken/getIdHubToken/deleteIdHubToken`,
 keyed `n42id_token_<did>`, and is wiped by `clearUserData()` on logout.

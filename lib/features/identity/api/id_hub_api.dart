@@ -80,6 +80,48 @@ class IdHubApi {
     );
   }
 
+  /// Fetch a bind session after scanning its QR (session id is the capability).
+  Future<IdHubBindSession> getBindSession(String sessionId) async {
+    _ensureEnabled();
+    final data = await _get('/v1/bind-sessions/$sessionId');
+    return IdHubBindSession.fromJson(data);
+  }
+
+  /// Submit the wallet address; the hub returns the exact message to sign.
+  Future<IdHubChallenge> prepareBindSession({
+    required String sessionId,
+    required String address,
+    String chain = defaultChainCaip2,
+  }) async {
+    _ensureEnabled();
+    final data = await _post('/v1/bind-sessions/$sessionId/prepare', {
+      'address': address.toLowerCase(),
+      'chain': chain,
+    });
+    return IdHubChallenge.fromJson(data);
+  }
+
+  /// Submit the signature to complete the binding.
+  Future<void> completeBindSession({
+    required String sessionId,
+    required String challengeId,
+    required String signature,
+    String signerType = 'eoa',
+    int? chainId,
+  }) async {
+    _ensureEnabled();
+    await _post(
+      '/v1/bind-sessions/$sessionId/complete',
+      {
+        'challenge_id': challengeId,
+        'signature': signature,
+        'signer_type': signerType,
+        'chain_id': ?chainId,
+      },
+      allowEmpty: true,
+    );
+  }
+
   /// Refresh an N42 ID Token with a rotating refresh token.
   Future<IdHubTokenResponse> refresh(String refreshToken) async {
     _ensureEnabled();
@@ -117,6 +159,18 @@ class IdHubApi {
       token: token,
       allowEmpty: allowEmpty,
     );
+  }
+
+  Future<Map<String, dynamic>> _get(String path) async {
+    try {
+      final res = await _dio.get<dynamic>('$_baseUrl$path');
+      final body = res.data;
+      if (body is Map<String, dynamic>) return body;
+      throw IdHubException('Unexpected ID Hub response',
+          statusCode: res.statusCode);
+    } on DioException catch (e) {
+      throw _toIdHubException(e, allowEmpty: false);
+    }
   }
 
   Future<Map<String, dynamic>> _postForm(

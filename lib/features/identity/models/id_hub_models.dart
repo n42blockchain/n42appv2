@@ -101,6 +101,36 @@ class StoredIdToken {
       };
 }
 
+/// A cross-device bind session as seen by the scanning wallet.
+class IdHubBindSession {
+  final String sessionId;
+
+  /// `wallet-binding` or `login`.
+  final String type;
+
+  /// `pending`, `completed`, or `expired`.
+  final String status;
+  final String? message;
+  final String? expiresAt;
+
+  const IdHubBindSession({
+    required this.sessionId,
+    required this.type,
+    required this.status,
+    this.message,
+    this.expiresAt,
+  });
+
+  factory IdHubBindSession.fromJson(Map<String, dynamic> json) =>
+      IdHubBindSession(
+        sessionId: json['session_id'] as String,
+        type: json['type'] as String,
+        status: json['status'] as String,
+        message: json['message'] as String?,
+        expiresAt: json['expires_at'] as String?,
+      );
+}
+
 /// RFC 9457 problem+json error surfaced from the hub, carrying a stable code.
 class IdHubException implements Exception {
   final String message;
