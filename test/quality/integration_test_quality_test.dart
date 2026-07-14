@@ -85,7 +85,7 @@ void main() {
       expect(source, contains('## 9. Chat 全量用例'));
       expect(source, contains('## 12. 权限专项矩阵'));
       expect(source, contains('## 17. 发布准入与签字'));
-      expect(source, contains('13.07%'));
+      expect(source, contains('13.60%'));
     });
 
     test('the automation runbook documents executable and honest gates', () {
@@ -96,7 +96,7 @@ void main() {
       expect(source, contains('packages/n42_chat'));
       expect(source, contains('go test -count=1 ./...'));
       expect(source, contains('DEVICE_ID'));
-      expect(source, contains('13.07%'));
+      expect(source, contains('13.60%'));
       expect(source, contains('70%'));
       expect(source, contains('`SKIP`'));
       expect(source, contains('不计 Pass'));

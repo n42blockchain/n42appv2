@@ -98,45 +98,6 @@ void main() {
       }
     });
   });
-
-  group('Loyalty Page Tests', () {
-    test('check-in should return points on success', () {
-      final result = _mockCheckIn(success: true);
-
-      expect(result, isNotNull);
-      expect(result!['points_earned'], isA<int>());
-      expect(result['points_earned'], greaterThan(0));
-    });
-
-    test('check-in should return null when already checked in', () {
-      final result = _mockCheckIn(alreadyCheckedIn: true);
-      expect(result, isNull);
-    });
-
-    test('complete task should return success', () {
-      final result = _mockCompleteTask('task_123');
-
-      expect(result['error'], false);
-      expect(result['data'], isNotNull);
-    });
-  });
-
-  group('API Error Handling Tests', () {
-    test('API failure should return mock data for testing', () {
-      final result = _simulateApiFailure();
-
-      // Should still return success with mock data
-      expect(result['error'], false);
-      expect(result['mock'], true);
-    });
-
-    test('network error should be handled gracefully', () {
-      final result = _simulateNetworkError();
-
-      expect(result['error'], false);
-      expect(result['data'], isNotNull);
-    });
-  });
 }
 
 // Helper classes and functions
@@ -184,51 +145,5 @@ bool _shouldUpdateIcon({
 
   // Only exact match should update icon
   return normalizedCoinSymbol == normalizedMiniName ||
-         normalizedCoinSymbol == normalizedUnit;
-}
-
-Map<String, dynamic>? _mockCheckIn({
-  bool success = true,
-  bool alreadyCheckedIn = false,
-}) {
-  if (alreadyCheckedIn) return null;
-  if (!success) return null;
-
-  return {
-    'points_earned': 10,
-    'streak': 5,
-    'bonus': 0,
-  };
-}
-
-Map<String, dynamic> _mockCompleteTask(String taskId) {
-  return {
-    'error': false,
-    'data': {
-      'points_earned': 10,
-      'task_id': taskId,
-    },
-  };
-}
-
-Map<String, dynamic> _simulateApiFailure() {
-  // Even on API failure, return mock success for testing
-  return {
-    'error': false,
-    'mock': true,
-    'data': {
-      'points_earned': 10,
-    },
-  };
-}
-
-Map<String, dynamic> _simulateNetworkError() {
-  // On network error, return mock data
-  return {
-    'error': false,
-    'data': {
-      'points_earned': 10,
-      'mock': true,
-    },
-  };
+      normalizedCoinSymbol == normalizedUnit;
 }

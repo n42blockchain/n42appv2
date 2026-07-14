@@ -2,9 +2,9 @@
 
 > 文档级别：自动化测试主文档（Single Source of Truth）
 >
-> 适用范围：N42 App、Wallet、Chat、本地插件、Dart 包和 Go 后端
+> 适用范围：N42 App、Wallet、Chat、本地插件、Dart 包、Go 后端和 Solidity 合约
 >
-> 当前代码基线：`master@10ad9045` 加本次测试自动化工作树
+> 当前代码基线：`master`
 >
 > 最近更新：2026-07-13
 
@@ -74,6 +74,8 @@
 | `backend/livekit-jwt/` | Go Unit/HTTP | 2 个测试文件 | JWT handler、Matrix 校验 |
 | `backend/social-auth/` | Go Unit | 1 个测试文件 | 社交登录 |
 | `backend/swap/` | Go Unit/Service | 6 个测试文件 | Quote、Alert、Price、Commit history |
+| `backend/loyalty/` | Go Unit/HTTP | 1 个测试文件 | 鉴权、链上签到确认、溢出和推荐双边入账 |
+| `contracts/loyalty/` | Foundry | 1 个 Solidity 测试文件 | 普通不可转让积分、签到、任务、推荐、消费和暂停 |
 | `ios/RunnerTests/`、`macos/RunnerTests/` | XCTest | 各 1 个模板文件 | 当前仅模板，不计有效业务覆盖 |
 
 `n42_chat` 在 `pubspec.yaml` 中声明为 Git 依赖，但本工作区通过 `pubspec_overrides.yaml` 指向 `packages/n42_chat/`。本地 Chat 测试结果仅对该 mirror 当前内容有效；提交前必须核对 Git dependency ref 与发布构建实际来源。
@@ -179,11 +181,12 @@ flutter test --no-pub test/features/wallet/
 flutter test --no-pub test/core/security/
 flutter test --no-pub test/features/wallet_connect/
 
-# 发布候选，全量串行并生成覆盖率
+# 发布候选，全量串行并生成覆盖率；macOS 先提高当前 shell 的软上限
+ulimit -n 10240
 flutter test --no-pub --coverage --concurrency=1
 ```
 
-串行执行用于降低共享数据库、计时器、全局 provider 和原生 mock 的资源竞争。若并发模式失败而串行通过，仍须按 Flaky 排查，不得直接忽略。
+串行执行用于降低共享数据库、计时器、全局 provider 和原生 mock 的资源竞争。macOS 默认 `maxfiles=256` 时，本项目会在约 3000 项后让 Flutter DDS 报 `Too many open files`；`ulimit` 仅调整当前 shell，不修改系统配置。若并发模式失败而串行通过，仍须按 Flaky 排查，不得直接忽略。
 
 ### 7.4 Chat 套件
 
@@ -218,9 +221,18 @@ MethodChannel fake 通过不等于 Android/iOS 原生实现通过。插件原生
 (cd backend/livekit-jwt && go test -count=1 ./...)
 (cd backend/social-auth && go test -count=1 ./...)
 (cd backend/swap && go test -count=1 ./...)
+(cd backend/loyalty && go test -count=1 ./...)
 ```
 
 Go 单元测试不能替代部署验证。Nginx 路由、TLS、CORS、密钥注入和真实 Matrix/LiveKit 上游必须按 `QA_TEST_PLAN.md` 的 `EXT` 用例执行。
+
+积分合约使用 Foundry 单独执行：
+
+```bash
+(cd contracts/loyalty && forge test)
+```
+
+必须验证默认每日 10 分、同一 UTC 日不可重复签到、request ID 防重放、推荐双方奖励、余额消费、operator 权限和紧急暂停。Foundry 通过不代表合约已部署，也不代表 relayer 已获得 N42 Gas。
 
 ### 7.7 真机/模拟器集成测试
 
@@ -249,7 +261,7 @@ DEVICE_ID=<device-id> ./scripts/run_automated_tests.sh device
 1. 首次协议确认与 Wallet、Mining、Earn(Android)、Market 主导航。
 2. Market Trending/Search/Watchlist/News 与真实搜索输入。
 3. Wallet 账号选择器、Wallet AI、WalletConnect、QR 收款菜单、Send/Receive/Swap 安全入口、ENS 和 Smart Account。
-4. Profile、Wallet Manage、Address Book、Security、Settings、Browser、About 全部非破坏性 Drawer 入口。
+4. Profile、Wallet Manage、Address Book、Security、Settings、Loyalty、Airdrop、Browser、About 全部非破坏性 Drawer 入口。
 5. Chat 欢迎/登录、运行时账号输入、全局搜索、Messages/Contacts/Discover/Me 和新增菜单。
 6. 每步检查目标页面或控件存在，并检查未出现未处理 Flutter exception。
 
@@ -273,6 +285,7 @@ DEVICE_ID=<device-id> ./scripts/run_automated_tests.sh device
 生成：
 
 ```bash
+ulimit -n 10240
 flutter test --no-pub --coverage --concurrency=1
 ```
 
@@ -291,7 +304,7 @@ awk -F: '
 1. 报告原始 `LH/LF`，不得只报测试数量。
 2. 生成文件、平台适配层或不可测代码若需排除，必须在 CI 和本地使用同一规则，并在报告列出排除模式。
 3. 不得通过删除低覆盖文件、只测简单 getter 或修改分母来伪造提升。
-4. `.github/workflows/ci.yml` 设置整体门禁 70%；最近真实原始基线为 13.07%，当前不满足门禁。
+4. `.github/workflows/ci.yml` 设置整体门禁 70%；最近真实原始基线为 13.60%，当前不满足门禁。
 5. 覆盖率不足时仍可报告“测试执行 Pass”，但整体发布准入必须报告“Coverage Gate Fail/Blocked”，两者不能混写。
 
 建议分阶段目标：
@@ -316,6 +329,7 @@ awk -F: '
 | WC/DAPP | URI、方法映射、链切换、会话状态、拒绝路径 | Unit/Provider/E2E fake | 二维码、真实 DApp、硬件确认 |
 | MKT/ENS/PORT | 搜索、格式、去抖、分页、回退和错误映射 | Unit/Widget/HTTP fake | 生产数据正确性和第三方可用性 |
 | DEFI/NFT | Quote/model、审批状态、批量资格、展示规则 | Unit/Provider | Swap/Bridge/Staking/NFT 真正执行 |
+| GROW | 动态签到积分、不可转让合约、鉴权/防重放、推荐双边历史、空投 HTTPS 与无假数据回退 | Unit/Widget/Go/Foundry | 测试网部署、官方 Gas、第三方领取和批量转账广播 |
 
 每个资金相关自动化默认不得连接主网广播端点。需要网络合约测试时使用 fake server、本地节点或批准的测试网隔离钱包。
 
@@ -400,7 +414,7 @@ awk -F: '
 
 - 执行 root `flutter test --coverage` 和 70% 原始覆盖率门禁。
 - 当前真实基线低于 70%，该 job 理论上会在 coverage step 失败。
-- 未执行 `packages/n42_chat`、`n42_jmt_verify`、`flutter_mining` 和三个 Go module。
+- 未执行 `packages/n42_chat`、`n42_jmt_verify`、`flutter_mining`、四个 Go module 和 Foundry 合约测试。
 - Android/iOS build 使用 `continue-on-error: true`，构建失败不会阻止整体测试结论。
 - performance job 对冷启动、内存等状态写固定成功符号，不是测量结果。
 
@@ -470,11 +484,12 @@ Passed / Failed / Skipped 数量:
 
 ---
 
-## 16. 2026-07-13 当前执行基线
+## 16. 2026-07-14 当前执行基线
 
 | 套件 | 结果 | 可信范围 |
 |---|---|---|
-| Flutter 主套件 | Pass，3113 tests | root `test/`；最近覆盖率基线 `15366/117554 = 13.07%` |
+| Flutter 主套件 | Pass，3147 tests | root `test/`；本轮重新生成 lcov，原始行覆盖率为 `16118/118558 = 13.60%` |
+| Airdrop/Loyalty 定向 Flutter | Pass，15 tests | API 正常/空/非 JSON/超时解析、HTTPS 限制、无 mock 回退、钱包地址、动态签到分值和推荐入口 |
 | 自动化质量门禁 | Pass，7 tests | 空断言、真实入口、显式 SKIP、QA 文档、设备点击、运行时登录和 WalletConnect 生命周期约束 |
 | Android 人工实弹 | Pass | Wallet/Market/Chat、真实文本发送、附件入口、视频呼叫权限和控制均已覆盖 |
 | Android 完整点击 | Pass with defect | 生产入口 DEVICE-01 Driver 2/2 Pass；发现并修复 WalletConnect 卸载异常；临时 Profile 已删除，最终无凭据 Release `2026070904` 等待 HyperOS 指纹安装回归 |
@@ -482,10 +497,13 @@ Passed / Failed / Skipped 数量:
 | iOS 真机 App Smoke | Pass | USB Flutter Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS Simulator 完整点击 | Blocked | `MLImage.framework` 不含 arm64-simulator slice，无匹配 destination |
 | Wallet device flows | 13 `SKIP` | 未执行；等待安全 fixture/RPC |
-| Chat 独立套件 | Pass，283 tests | 包含 MatrixRTC 换票、安全降级边界和群通话 `Stack/Positioned` 布局回归；不替代双真机通话 |
+| Chat 独立套件 | Pass，286 tests | 不替代双真机通话、推送和多设备 E2EE |
 | JMT verification | Pass，13 tests | 含 BLAKE3/JMT proof；不替代原生调用 |
 | Mining plugin | Pass，3 tests | Dart/MethodChannel fake；不替代真机挖矿原生实现 |
-| Go 后端 | Pass，livekit-jwt/social-auth/swap | 不含双端通话；生产 MatrixRTC `healthz=200`、`sfu/get` 路由存在，客户端 OpenID 换票协议已补单测，仍待双真机 A/B |
+| Go 后端 | Pass；Loyalty 定向 6 tests | Loyalty 覆盖接口鉴权、内部任务令牌、链上确认、溢出和推荐双边入账；服务仍待部署 |
+| Loyalty Foundry | Pass，8 tests | 普通非 ERC-20 积分合约；仍待 N42 测试网部署、验证和 relayer 充值 |
+| Android 新功能点击 | Blocked | debug APK 构建成功；旧签名包已卸载，新包被设备 `INSTALL_FAILED_USER_RESTRICTED` 拒绝，DEVICE-01 未开始 |
+| iOS 新功能点击 | Not Run | debug 无签名编译成功；本轮未安装到真机，不能计设备 Pass |
 
 本节必须在每次完整执行后用真实数字更新。详细人工基线、生产 LiveKit 路由和零余额阻塞见 `QA_TEST_PLAN.md` 第 15 节。
 
@@ -515,3 +533,4 @@ Passed / Failed / Skipped 数量:
 | 2026-07-13 | 1.1 | 增加生产入口 Wallet + Chat 全设备点击流、运行时登录注入、无线 iOS driver、平台阻塞判定和本轮完整套件结果 |
 | 2026-07-13 | 1.2 | 统一 Flutter 3.41.9 工具链；记录 Android 人工 Smoke、iOS USB 冷启动和 macOS 本地网络权限阻塞 |
 | 2026-07-14 | 1.3 | 记录 Android DEVICE-01 2/2、Chat 实弹和 WalletConnect 生命周期缺陷；增强路由卸载/IME 自动化断言；更新 13.07% 覆盖率基线 |
+| 2026-07-14 | 1.4 | 增加普通 Loyalty 合约/relayer、Airdrop/Loyalty Flutter 回归命令与覆盖映射；删除伪造积分成功的旧占位测试；记录 3147/15/6/8 自动化结果及双平台新功能真机状态 |

@@ -171,14 +171,14 @@ shasum -a 256 build/ios/ipa/N42Wallet.ipa
 | 检查 | 命令 | 2026-07-13 结果 |
 |---|---|---|
 | 静态分析 | `flutter analyze --no-fatal-infos --no-pub` | Pass，0 issues |
-| Flutter 主套件 | `flutter test --no-pub` | Pass，3113 tests |
-| Flutter 行覆盖率 | `flutter test --no-pub --coverage --concurrency=1` | Pass，`15366/117554 = 13.07%` |
+| Flutter 主套件 | `flutter test --no-pub` | Pass，3147 tests |
+| Flutter 行覆盖率 | `ulimit -n 10240 && flutter test --no-pub --coverage` | Pass，`16118/118558 = 13.60%`；串行模式须同样提高软上限 |
 | 自动化质量门禁 | `flutter test --no-pub test/quality/integration_test_quality_test.dart` | Pass，7 tests |
 | Android 真机 App Smoke | Release APK 安装与人工点击 | Pass；HyperOS USB 安装受限后改由文件管理器安装，冷启动及 Wallet 主要安全入口通过 |
 | iOS 真机启动 | Flutter 3.41.9 Profile + `devicectl` | Pass；USB 安装后连续 3 次冷启动，每次 8 秒后进程仍存活，联系人插件启动崩溃未复现 |
 | iOS 真机 App Smoke | `flutter drive --profile ... integration_test/app_test.dart` | Pass，USB Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS 模拟器完整点击 | `./scripts/run_automated_tests.sh device` | Blocked；旧 `MLImage.framework` 无 arm64-simulator slice，Xcode 26.6 无可用 x86_64 模拟器目标 |
-| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，285 tests（含 MatrixRTC 换票、安全降级边界、群通话层级、窄屏布局及控件唤回回归） |
+| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，286 tests（含 MatrixRTC 换票、安全降级边界、群通话层级、窄屏布局及控件唤回回归） |
 | JMT / Mining | `dart test` / `flutter test --no-pub` | Pass，13 / 3 tests |
 | 三个 Go 后端 | `go test -count=1 ./...` | Pass，livekit-jwt、social-auth、swap |
 | Android Debug/Release | `flutter build apk ...` | Pass |
@@ -194,7 +194,7 @@ Android Release 不应在旧 `GeneratedPluginRegistrant.java` 存在时盲目使
 | `packages/n42_chat/test/` | 30 个文件，集中在 utils/services/widgets，少量 datasource/repository/encryption | Matrix 消息、推送、群管理、媒体、通话、多设备 |
 | `integration_test/` | 3 个文件；1 个启动/生命周期 Smoke、1 个生产入口全设备点击流、13 个钱包资金/破坏性用例显式 `SKIP` | 系统权限、双端消息/通话、真实签名广播和最终链上结果仍必须人工实弹 |
 | `backend/` | 9 个 Go 测试文件 | 部署后路由、密钥、跨域和真实上游 |
-| 覆盖率 | `15366/117554 = 13.07%` 原始行覆盖 | CI 设置 70%，当前真实基线未达标 |
+| 覆盖率 | `16118/118558 = 13.60%` 原始行覆盖 | CI 设置 70%，当前真实基线未达标 |
 
 ### 6.3 自动化优先级
 
@@ -417,9 +417,15 @@ unset N42_E2E_CHAT_USERNAME N42_E2E_CHAT_PASSWORD
 | GROW-01 | P1 | Verification 选择 verify wallet，再切 active wallet | 两种钱包标识清晰；签名不串账号 | U(部分)、M |
 | GROW-02 | P1 | 切 Mining v1/v2（入口可见时）；启动/停止/领取 | 状态、产出、价格和日界线计算正确 | U、M、EXT |
 | GROW-03 | P1 | 挖矿中后台、断网、强杀、跨日 | 不重复计奖；按服务端状态恢复 | U、M、EXT |
-| GROW-04 | P2 | Loyalty 任务、领取、重复点击、历史 | 满足条件才可领；幂等；积分/历史一致 | U(部分)、M、EXT |
-| GROW-05 | P2 | Airdrop 列表、搜索、资格检查、无资格 | 来源/风险可见；不伪造资格 | M、EXT |
-| GROW-06 | P2 | 有资格测试钱包领取；拒绝/失败/重复领取 | 交易可追溯；重复领取拦截；不导航恶意站点 | M、EXT |
+| GROW-04 | P1 | 进入 Loyalty；检查余额、等级、任务、推荐、历史、排行、奖励五个页签和刷新 | 使用当前 N42/EVM 钱包；加载/空/错误态可区分；服务未部署不显示假积分 | U、W、E2E(入口)、M、EXT |
+| GROW-05 | P1 | 每日签到；连续点击；同一 UTC 日重试；跨 UTC 日再签 | 默认配置为 10 分但客户端读取链上值；同日只入账一次；返回真实 relayer txHash；历史/余额一致 | U、W、Go、Foundry、M、EXT |
+| GROW-06 | P1 | 用未绑定钱包、空/过期 Token 调签到；普通客户端尝试任务/推荐内部接口 | 钱包不匹配返回 401；内部接口必须有强 `X-Internal-Token`；客户端不能指定积分数量 | Go、M、EXT |
+| GROW-07 | P1 | 完成普通任务；重复相同 request ID；构造 0/超大积分 | 仅 operator 可发放；request ID 防重放；非法数量拒绝；账户与历史同步 | Go、Foundry、M、EXT |
+| GROW-08 | P1 | A 推荐 B；B 再次绑定推荐人；检查双方余额、历史和 A 的推荐列表 | 首次双方按配置入账；B 不可重复绑定；一笔 tx 可形成双方独立历史；排行刷新 | Go、Foundry、M、EXT(2 账号) |
+| GROW-09 | P1 | operator 消费积分；余额不足；owner 暂停/恢复；轮换 operator | 不提供 ERC-20 transfer/approve；不足回滚；暂停时所有积分变更停止但查询可用 | Foundry、EXT |
+| GROW-10 | P1 | 打开 Airdrop Discover；API 返回正常、空数组、坏 JSON、超时、5xx | 只显示结构化真实活动；空/失败如实展示；不得回退到 mock 活动 | U、W、M、EXT |
+| GROW-11 | P1 | 逐个打开 CoinMarketCap/Galxe/Layer3/Zealy；活动返回 HTTP、userinfo URL、钓鱼域名 | 固定来源使用当前 HTTPS 目录；不安全 URL 不可点；命中钓鱼名单先警告 | U、W、M、EXT |
+| GROW-12 | P1 | 从 Distribute 进入批量转账；有资格测试钱包人工领取第三方活动，分别取消/失败/成功 | 批量入口可达；任何签名必须人工核对域名/to/value/data；成功以链上 txHash/资产变化为准，不以网页提示为准 | E2E(入口)、M、EXT |
 
 ---
 
@@ -702,7 +708,7 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 | K-01 | 客户端曾把 MatrixRTC `livekit_service_url` 基地址误当 token API，直接发送 Matrix access token，未按协议请求 `/sfu/get`；首次修复包入房后又暴露群通话页 `Positioned` 层级灰屏、本地预览未绑定、窄屏控制标签/姓名条挤压及隐藏控件仍接收点击 | 已改为 Matrix OpenID 换票并解析 `url/jwt`；Android 单端已成功入房；灰屏、本地轨道同步、单人布局和窄屏控制栏已修复，姓名条避让控制栏，隐藏控件忽略点击并由全屏透明层安全唤回，均有 Widget 回归 | 两台真机/两个账号重跑 CALL-05/07；完成前标 `Fix ready / dual-device retest pending`，不得直接标完整 Pass |
 | K-02 | 当前真机钱包余额为 0 | 已完成无广播 UI/校验流程 | 准备受控小额钱包，重跑 TX-06~14、AA-05、DEFI-03/06/08/09、PAY-02 |
 | K-03 | 历史 `integration_test/` 曾使用空断言 | 已删除空断言；增加 6 项质量门禁和生产入口完整点击流；13 个钱包资金/破坏性用例显式 `SKIP` 并附原因 | 设备流实际跑完前不得记 Pass；不得删除 `SKIP` 伪装执行 |
-| K-04 | 原始行覆盖 13.07%，CI 门禁 70% | 主套件 3113 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
+| K-04 | 原始行覆盖 13.60%，CI 门禁 70% | 主套件 3147 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
 | K-05 | Chat 红包为本地演示记录，不上链 | 页面已有免责声明 | PAY-05 每版验证；不执行真实资产断言 |
 | K-06 | Egress、部分 Bridge、Local LLM、部分社交登录需外部部署/key | 未配置时应隐藏或降级 | 以 `docs/EXTERNAL_DEPENDENCIES.md` 为准；N/A 不得误标 Pass |
 | K-07 | Android 16 HyperOS 3 拦截 ADB 更新安装 | 首轮最新源码 Profile 与 DEVICE-01 Driver 2/2 Pass；临时 Profile 已安全删除，最终无测试凭据 Release `2026070904` 已由文件管理器进入机主指纹安装 | 完成当前 N42Wallet 指纹验证，冷启动 Release，并确认 WalletConnect 返回日志干净 |
@@ -808,3 +814,4 @@ Android DEVICE-01 已取得 2/2 Driver Pass，但同轮日志发现并修复 Wal
 | 2026-07-13 | 2.3 | 增加 Wallet + Chat 生产入口全设备点击流、运行时登录注入、真机/模拟器执行命令与本轮 Android/iOS 阻塞证据；更新自动化套件结果 |
 | 2026-07-13 | 2.4 | 更新 Android 人工 Smoke 与 iOS USB 三次冷启动结果；记录 UIScene/联系人启动修复及本地网络权限阻塞 |
 | 2026-07-14 | 2.5 | 更新 Android Wallet/Chat 实弹、视频权限与文本发送、DEVICE-01 Driver 结果、WalletConnect 生命周期修复和 13.07% 覆盖率基线 |
+| 2026-07-14 | 2.6 | 补充主应用普通 Loyalty 合约/官方 Gas relayer 的签到、任务、推荐、历史、排行与安全用例；细化 Airdrop 来源、无假数据、安全 URL 和批量分发验证 |

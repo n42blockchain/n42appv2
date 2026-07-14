@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -79,5 +81,41 @@ void main() {
         service.dispose();
       },
     );
+
+    test('returns an empty list for a valid empty response', () async {
+      final service = AirdropService(
+        client: MockClient((_) async => http.Response('{"data":[]}', 200)),
+        baseUrl: 'https://api.example/airdrop/v1',
+      );
+
+      await expectLater(service.getCampaigns(), completion(isEmpty));
+      service.dispose();
+    });
+
+    test('rejects malformed JSON without inventing campaigns', () async {
+      final service = AirdropService(
+        client: MockClient((_) async => http.Response('{broken', 200)),
+        baseUrl: 'https://api.example/airdrop/v1',
+      );
+
+      await expectLater(
+        service.getCampaigns(),
+        throwsA(isA<FormatException>()),
+      );
+      service.dispose();
+    });
+
+    test('surfaces aggregator timeouts', () async {
+      final service = AirdropService(
+        client: MockClient((_) async => throw TimeoutException('offline')),
+        baseUrl: 'https://api.example/airdrop/v1',
+      );
+
+      await expectLater(
+        service.getCampaigns(),
+        throwsA(isA<TimeoutException>()),
+      );
+      service.dispose();
+    });
   });
 }

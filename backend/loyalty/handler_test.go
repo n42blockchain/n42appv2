@@ -237,6 +237,27 @@ func TestRegisterReferralSynchronizesAndRecordsBothAccounts(t *testing.T) {
 	}
 }
 
+func TestInternalAwardRejectsMissingToken(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	chain := &fakeChain{}
+	router := newHandler(chain, &fakeStore{}, fakeAuth{wallet: testWallet}, "internal").router()
+	body, _ := json.Marshal(map[string]interface{}{
+		"wallet":     testWallet,
+		"task_id":    "task-1",
+		"points":     10,
+		"request_id": "task-request-1",
+	})
+	req := httptest.NewRequest(http.MethodPost, "/loyalty/v1/internal/award-task", bytes.NewReader(body))
+	req.Header.Set("Content-Type", "application/json")
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, req)
+
+	if recorder.Code != http.StatusUnauthorized {
+		t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+	}
+}
+
 func pointAccount(points uint64) chainAccount {
 	value := new(big.Int).SetUint64(points)
 	return chainAccount{

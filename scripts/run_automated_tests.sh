@@ -3,6 +3,10 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+# A serial Flutter coverage run opens one descriptor per accumulated trace on
+# macOS and can otherwise hit the default soft limit of 256 near suite end.
+ulimit -n 10240 2>/dev/null || ulimit -n 4096 2>/dev/null || true
 MODE="${1:-quick}"
 
 log() {
@@ -77,13 +81,19 @@ run_full() {
     flutter test --no-pub
   )
 
-  for module in livekit-jwt social-auth swap; do
+  for module in livekit-jwt social-auth swap loyalty; do
     log "Running Go tests: backend/$module"
     (
       cd "$ROOT/backend/$module"
       go test -count=1 ./...
     )
   done
+
+  log "Running Loyalty contract tests"
+  (
+    cd "$ROOT/contracts/loyalty"
+    forge test
+  )
 }
 
 run_device() {
