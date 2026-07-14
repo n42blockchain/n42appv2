@@ -106,7 +106,8 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
 ### 4.2 关键实现（`live_video_service.dart`）
 该文件是**唯一对 `n42_chat` 内部实现（`src/`）的耦合点**，集中管理 implementation import：
 - `package:n42_chat/src/services/voip/livekit_service.dart` —— `LiveKitService`（经 `N42Chat.callManager.liveKitService` 暴露）。
-- `package:n42_chat/src/core/utils/livekit_call_utils.dart` —— `buildLiveKitRoomName / buildLiveKitTokenUri / extractLiveKitToken`。
+- `package:n42_chat/src/core/utils/livekit_call_utils.dart` —— 房间名和 MatrixRTC 响应解析。
+- `package:n42_chat/src/services/voip/matrix_rtc_token_service.dart` —— Matrix OpenID + `/sfu/get` 换票及受控旧服务回退。
 - `package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart` —— `MatrixClientManager`（取 Matrix `Client` 换 LiveKit token）。
 
 加入流程 `_join(matrixRoomId, broadcaster)`：
@@ -114,8 +115,9 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
 2. `N42Chat.initializeCallManager()`（触发 `/.well-known` 的 LiveKit 配置发现，幂等）。
 3. 校验 `callManager.config.hasLiveKitConfig`，取 `liveKitService`。
 4. 取 Matrix `Client`（`GetIt.instance<MatrixClientManager>().client`）拿 `userID`/`accessToken`。
-5. `_fetchToken(...)`：向 `N42Chat.liveKitJwtUrl` **先 POST 后 GET 兜底**换 token，请求体含
-   `room/identity/name/video/role/conversation_id`（`role` 为 broadcaster/viewer，前向兼容服务端按角色签发权限）。
+5. `_fetchToken(...)`：先向 Matrix homeserver 获取短期 OpenID token，再向
+   `{N42Chat.liveKitJwtUrl}/sfu/get` POST Matrix room ID、OpenID 和 device ID；使用响应的
+   `url/jwt` 连接。只有官方端点不存在时才回退旧 N42 Bearer-token 协议。
 6. `liveKitService.joinMeeting(roomName, token, enableVideo, enableAudio)`。
    > 注意：**绕开 `CallManager.joinMeeting`**——后者成功后会强制导航到 n42_chat 自带的 `GroupCallScreen`（网格通话 UI），
    > 不符合"主播全屏 + 弹幕叠加"的需求；故直接驱动底层 `LiveKitService`，UI 自绘。

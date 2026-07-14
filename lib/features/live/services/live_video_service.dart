@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:livekit_client/livekit_client.dart';
@@ -16,6 +14,7 @@ import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_chat/src/core/utils/livekit_call_utils.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
 import 'package:n42_chat/src/services/voip/livekit_service.dart';
+import 'package:n42_chat/src/services/voip/matrix_rtc_token_service.dart';
 
 import 'live_bootstrap.dart';
 
@@ -63,7 +62,9 @@ class LiveVideoService {
     final broadcasterId = _broadcasterId;
     if (broadcasterId != null) {
       for (final p in svc.participants) {
-        if (p.id == broadcasterId && p.videoTrack != null) return p.videoTrack;
+        if (_belongsToMatrixUser(p.id, broadcasterId) && p.videoTrack != null) {
+          return p.videoTrack;
+        }
       }
     }
     // 兜底：锚点缺失时退回"第一个有画面的非本地参与者"。
@@ -166,19 +167,23 @@ class LiveVideoService {
         : identity;
 
     final roomName = buildLiveKitRoomName(matrixRoomId);
-    final token = await _fetchToken(
+    final credentials = await _fetchToken(
       client,
       roomName: roomName,
-      identity: identity,
       name: participantName,
       conversationId: matrixRoomId,
       enableVideo: broadcaster,
     );
     if (_disposed) throw StateError('LiveVideoService 已释放');
 
+    final serverUrl = credentials.serverUrl;
+    if (serverUrl != null) {
+      cm.configureLiveKit(url: serverUrl);
+    }
+
     final ok = await svc.joinMeeting(
       roomName: roomName,
-      token: token,
+      token: credentials.token,
       participantName: participantName,
       enableVideo: broadcaster,
       enableAudio: broadcaster,
@@ -221,12 +226,10 @@ class LiveVideoService {
     await leave();
   }
 
-  /// 向 LiveKit JWT 端点换取 token（先 POST 后 GET 兜底），逻辑对齐
-  /// n42_chat `CallManager._fetchLiveKitToken`。
-  Future<String> _fetchToken(
+  /// 通过 Matrix OpenID 向发现到的 MatrixRTC 服务换取 LiveKit 凭据。
+  Future<LiveKitConnectionCredentials> _fetchToken(
     Client client, {
     required String roomName,
-    required String identity,
     required String name,
     required String conversationId,
     required bool enableVideo,
@@ -235,54 +238,17 @@ class LiveVideoService {
     if (jwtUrl == null || jwtUrl.isEmpty) {
       throw StateError('liveKitJwtUrl 为空');
     }
-    final headers = <String, String>{
-      'Authorization': 'Bearer ${client.accessToken}',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    };
-
-    try {
-      final body = jsonEncode(<String, Object?>{
-        'room': roomName,
-        'identity': identity,
-        'name': name,
-        'video': enableVideo,
-        // 角色前向兼容：服务端实现按角色签发 can_publish 后即可读取，
-        // 在此之前服务端忽略该字段（见计划"后端改造"）。
-        'role': enableVideo ? 'broadcaster' : 'viewer',
-        'conversation_id': conversationId,
-        'metadata': jsonEncode(<String, Object?>{
-          'conversation_id': conversationId,
-          'video': enableVideo,
-          'role': enableVideo ? 'broadcaster' : 'viewer',
-        }),
-      });
-      final resp = await client.httpClient.post(
-        Uri.parse(jwtUrl),
-        headers: headers,
-        body: body,
-      );
-      if (resp.statusCode >= 200 && resp.statusCode < 300) {
-        final token = extractLiveKitToken(resp.body);
-        if (token != null) return token;
-      }
-    } catch (_) {
-      // 落到 GET 兜底
-    }
-
-    final getUri = buildLiveKitTokenUri(
-      jwtUrl,
-      roomName: roomName,
-      participantId: identity,
+    return const MatrixRtcTokenService().fetch(
+      client: client,
+      serviceUrl: jwtUrl,
+      roomId: conversationId,
+      legacyRoomName: roomName,
       participantName: name,
       enableVideo: enableVideo,
-      conversationId: conversationId,
+      role: enableVideo ? 'broadcaster' : 'viewer',
     );
-    final resp = await client.httpClient.get(getUri, headers: headers);
-    if (resp.statusCode >= 200 && resp.statusCode < 300) {
-      final token = extractLiveKitToken(resp.body);
-      if (token != null) return token;
-    }
-    throw StateError('LiveKit token 获取失败 (${resp.statusCode})');
   }
+
+  static bool _belongsToMatrixUser(String liveKitIdentity, String userId) =>
+      liveKitIdentity == userId || liveKitIdentity.startsWith('$userId:');
 }

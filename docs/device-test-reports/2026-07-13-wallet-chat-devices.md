@@ -15,9 +15,9 @@
 
 | 项目 | 结果 | 证据范围 |
 |---|---|---|
-| Root Flutter 测试 | Pass | 3112 tests；`15366/117554 = 13.07%` 原始行覆盖率 |
+| Root Flutter 测试 | Pass | 3113 tests；最近覆盖率基线 `15366/117554 = 13.07%` |
 | 自动化质量门禁 | Pass | 7 tests；检查空断言、显式 SKIP、生产入口、真实点击和 WalletConnect 生命周期 |
-| Chat 独立测试 | Pass | 273 tests，包含联系人 2.1 API 回归 |
+| Chat 独立测试 | Pass | 282 tests，包含联系人 2.1 API、MatrixRTC OpenID 换票、响应解析及安全降级边界回归 |
 | JMT/BLAKE3 | Pass | 13 tests |
 | 图片缓存回归 | Pass | 2 tests；响应元数据和条件请求头 |
 | iOS Profile 构建 | Pass | Flutter 3.41.9 全量构建，WalletConnect/Yttrium 和联系人插件均完成原生编译 |
@@ -87,7 +87,7 @@
 | iOS Wallet + Chat 完整自动点击 | Paused | Android 优先请求结束后 USB 重跑 DEVICE-01 |
 | Android Wallet + Chat 修复回归 | Blocked | 在当前 N42Wallet Release 安装指纹提示完成身份验证，然后冷启动并回归 WalletConnect 返回 |
 | Chat 双端消息/E2EE/通知 | Not Run | 两台受控账号设备和可重复 Matrix 测试数据 |
-| Chat 群语音/视频 | Blocked | 生产部署 exact `/livekit/jwt` 路由；当前 301 后 404 |
+| Chat 群语音/视频 | Fix ready / retest pending | 2026-07-14 确认生产 Authorization Service 正常；客户端已从错误的基地址直连改为 Matrix OpenID + `/sfu/get`，待两台真机 A/B |
 | Wallet 真实资金流程 | SKIP | 审批的小额测试钱包、Gas、RPC 和资产回收计划 |
 | iOS 模拟器 | Blocked | 替换包含 arm64-simulator slice 的 MLImage XCFramework |
 
@@ -97,5 +97,5 @@
 2. 如需重跑含 Chat 登录的 DEVICE-01，仅通过运行时参数注入测试配置，执行后立即删除临时 Profile 制品。
 3. Android 完成双账号接通后的音视频、摄像头切换和 E2EE 新设备恢复。
 4. 恢复 iOS USB DEVICE-01 并保存完整退出码。
-5. LiveKit 生产路由部署后复测 CALL-05/CALL-07。
+5. 使用修复包在两台真机、两个账号复测 CALL-05/CALL-07，并保存服务端参与者日志。
 6. 准备小额钱包后按 `docs/QA_TEST_PLAN.md` 第 14 节记录链上交易哈希和资产回收结果。

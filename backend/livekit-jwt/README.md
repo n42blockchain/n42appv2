@@ -1,5 +1,9 @@
 # N42 LiveKit JWT Service
 
+> Legacy compatibility service. Production `m.si46.world` currently uses the
+> Element MatrixRTC Authorization Service (`/livekit/jwt/sfu/get`) instead.
+> Do not apply this service's exact-path Nginx example to that deployment.
+
 Issues short-lived LiveKit room tokens for authenticated Matrix room members.
 The Flutter client discovers this service as
 `https://m.si46.world/livekit/jwt`.

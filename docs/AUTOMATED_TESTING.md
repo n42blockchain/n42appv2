@@ -474,7 +474,7 @@ Passed / Failed / Skipped 数量:
 
 | 套件 | 结果 | 可信范围 |
 |---|---|---|
-| Flutter 主套件 | Pass，3112 tests | root `test/`；`15366/117554 = 13.07%` |
+| Flutter 主套件 | Pass，3113 tests | root `test/`；最近覆盖率基线 `15366/117554 = 13.07%` |
 | 自动化质量门禁 | Pass，7 tests | 空断言、真实入口、显式 SKIP、QA 文档、设备点击、运行时登录和 WalletConnect 生命周期约束 |
 | Android 人工实弹 | Pass | Wallet/Market/Chat、真实文本发送、附件入口、视频呼叫权限和控制均已覆盖 |
 | Android 完整点击 | Pass with defect | 生产入口 DEVICE-01 Driver 2/2 Pass；发现并修复 WalletConnect 卸载异常；临时 Profile 已删除，最终无凭据 Release `2026070904` 等待 HyperOS 指纹安装回归 |
@@ -482,10 +482,10 @@ Passed / Failed / Skipped 数量:
 | iOS 真机 App Smoke | Pass | USB Flutter Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS Simulator 完整点击 | Blocked | `MLImage.framework` 不含 arm64-simulator slice，无匹配 destination |
 | Wallet device flows | 13 `SKIP` | 未执行；等待安全 fixture/RPC |
-| Chat 独立套件 | Pass，273 tests | 本地 mirror；不替代真实 Matrix/推送/通话 |
+| Chat 独立套件 | Pass，282 tests | 包含 Matrix OpenID、`/sfu/get` 请求、返回 `url/jwt` 解析及安全降级边界；不替代双真机通话 |
 | JMT verification | Pass，13 tests | 含 BLAKE3/JMT proof；不替代原生调用 |
 | Mining plugin | Pass，3 tests | Dart/MethodChannel fake；不替代真机挖矿原生实现 |
-| Go 后端 | Pass，livekit-jwt/social-auth/swap | 不含生产部署链路；生产 `/livekit/jwt` 仍为 301 后 404 |
+| Go 后端 | Pass，livekit-jwt/social-auth/swap | 不含双端通话；生产 MatrixRTC `healthz=200`、`sfu/get` 路由存在，客户端 OpenID 换票协议已补单测，仍待双真机 A/B |
 
 本节必须在每次完整执行后用真实数字更新。详细人工基线、生产 LiveKit 路由和零余额阻塞见 `QA_TEST_PLAN.md` 第 15 节。
 

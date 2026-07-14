@@ -171,14 +171,14 @@ shasum -a 256 build/ios/ipa/N42Wallet.ipa
 | 检查 | 命令 | 2026-07-13 结果 |
 |---|---|---|
 | 静态分析 | `flutter analyze --no-fatal-infos --no-pub` | Pass，0 issues |
-| Flutter 主套件 | `flutter test --no-pub --coverage --concurrency=1` | Pass，3112 tests |
+| Flutter 主套件 | `flutter test --no-pub` | Pass，3113 tests |
 | Flutter 行覆盖率 | `flutter test --no-pub --coverage --concurrency=1` | Pass，`15366/117554 = 13.07%` |
 | 自动化质量门禁 | `flutter test --no-pub test/quality/integration_test_quality_test.dart` | Pass，7 tests |
 | Android 真机 App Smoke | Release APK 安装与人工点击 | Pass；HyperOS USB 安装受限后改由文件管理器安装，冷启动及 Wallet 主要安全入口通过 |
 | iOS 真机启动 | Flutter 3.41.9 Profile + `devicectl` | Pass；USB 安装后连续 3 次冷启动，每次 8 秒后进程仍存活，联系人插件启动崩溃未复现 |
 | iOS 真机 App Smoke | `flutter drive --profile ... integration_test/app_test.dart` | Pass，USB Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS 模拟器完整点击 | `./scripts/run_automated_tests.sh device` | Blocked；旧 `MLImage.framework` 无 arm64-simulator slice，Xcode 26.6 无可用 x86_64 模拟器目标 |
-| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，273 tests |
+| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，282 tests（含 MatrixRTC OpenID 换票、响应解析及安全降级边界） |
 | JMT / Mining | `dart test` / `flutter test --no-pub` | Pass，13 / 3 tests |
 | 三个 Go 后端 | `go test -count=1 ./...` | Pass，livekit-jwt、social-auth、swap |
 | Android Debug/Release | `flutter build apk ...` | Pass |
@@ -533,7 +533,7 @@ unset N42_E2E_CHAT_USERNAME N42_E2E_CHAT_PASSWORD
 | CALL-03 | P1 | 通话中静音、扬声器/听筒、蓝牙、切后台 | 本地/远端媒体状态正确；路由切换不掉线 | U(部分)、M、EXT |
 | CALL-04 | P1 | 视频开关、前后摄像头、拒绝相机/麦克风 | 双端状态一致；拒绝权限可降级/安全结束 | M、EXT |
 | CALL-05 | P1 | 群内 Video Call；至少 3 人加入/退出 | token 成功后才入房；参与者/媒体状态正确 | U(token utils)、M、EXT |
-| CALL-06 | P0 | JWT 返回 301/401/404/5xx/非 JWT | 显示本地化连接失败；不暴露 token、HTML 或原始响应 | U、W(错误态待补)、M |
+| CALL-06 | P0 | OpenID/JWT 返回 301/400/401/403/404/5xx/非 JWT | 请求发往 `{livekit_service_url}/sfu/get`；显示本地化连接失败；不暴露 token、HTML 或原始响应 | U、W(错误态待补)、M |
 | CALL-07 | P1 | Wi-Fi↔蜂窝、5-20 秒断网、恢复、远端挂断 | 重连状态明确；不卡通话页；超时释放资源 | U(state)、M、EXT |
 | CALL-08 | P1 | 屏幕共享允许/拒绝、切后台、结束 | 权限正确；远端可见；结束后停止捕获 | U(部分)、M、EXT |
 | CALL-09 | P2 | 虚拟背景/模糊/关闭；低端机、横竖屏 | 生效且不黑屏/严重掉帧/崩溃 | U(处理引擎)、M、EXT |
@@ -699,10 +699,10 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 
 | ID | 现状 | 当前处理 | 发布前要求 |
 |---|---|---|---|
-| K-01 | 生产 `/livekit/jwt` 被 Nginx 301 到带斜杠路径，随后 404 | 客户端已将 raw token 错误改为“连接失败” | 按 `backend/livekit-jwt/README.md` 部署 exact location，再跑 CALL-05/07；未修复不得标群通话 Pass |
+| K-01 | 客户端曾把 MatrixRTC `livekit_service_url` 基地址误当 token API，直接发送 Matrix access token，未按协议请求 `/sfu/get` | 已改为 Matrix OpenID 换票、解析响应 `url/jwt` 并保留受控旧服务回退；生产 `healthz=200`、`sfu/get` 协议校验正常 | 两台真机/两个账号重跑 CALL-05/07；完成前标 `Fix ready / device retest pending`，不得直接标 Pass |
 | K-02 | 当前真机钱包余额为 0 | 已完成无广播 UI/校验流程 | 准备受控小额钱包，重跑 TX-06~14、AA-05、DEFI-03/06/08/09、PAY-02 |
 | K-03 | 历史 `integration_test/` 曾使用空断言 | 已删除空断言；增加 6 项质量门禁和生产入口完整点击流；13 个钱包资金/破坏性用例显式 `SKIP` 并附原因 | 设备流实际跑完前不得记 Pass；不得删除 `SKIP` 伪装执行 |
-| K-04 | 原始行覆盖 13.07%，CI 门禁 70% | 主套件 3112 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
+| K-04 | 原始行覆盖 13.07%，CI 门禁 70% | 主套件 3113 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
 | K-05 | Chat 红包为本地演示记录，不上链 | 页面已有免责声明 | PAY-05 每版验证；不执行真实资产断言 |
 | K-06 | Egress、部分 Bridge、Local LLM、部分社交登录需外部部署/key | 未配置时应隐藏或降级 | 以 `docs/EXTERNAL_DEPENDENCIES.md` 为准；N/A 不得误标 Pass |
 | K-07 | Android 16 HyperOS 3 拦截 ADB 更新安装 | 首轮最新源码 Profile 与 DEVICE-01 Driver 2/2 Pass；临时 Profile 已安全删除，最终无测试凭据 Release `2026070904` 已由文件管理器进入机主指纹安装 | 完成当前 N42Wallet 指纹验证，冷启动 Release，并确认 WalletConnect 返回日志干净 |

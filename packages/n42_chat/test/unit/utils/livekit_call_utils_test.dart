@@ -35,6 +35,46 @@ void main() {
     });
   });
 
+  group('extractLiveKitConnectionCredentials', () {
+    test('accepts the MatrixRTC authorization service response', () {
+      final credentials = extractLiveKitConnectionCredentials(
+        jsonEncode({'url': 'wss://m.si46.world/livekit/sfu', 'jwt': _jwt}),
+      );
+
+      expect(credentials?.token, _jwt);
+      expect(credentials?.serverUrl, 'wss://m.si46.world/livekit/sfu');
+    });
+
+    test('does not trust an invalid server URL', () {
+      final credentials = extractLiveKitConnectionCredentials(
+        jsonEncode({'url': 'https://invalid-sfu.example', 'jwt': _jwt}),
+      );
+
+      expect(credentials?.token, _jwt);
+      expect(credentials?.serverUrl, isNull);
+    });
+  });
+
+  group('buildMatrixRtcTokenUri', () {
+    test('appends the legacy MatrixRTC token route to the focus URL', () {
+      expect(
+        buildMatrixRtcTokenUri(
+          'https://m.si46.world/livekit/jwt?source=well-known',
+        ).toString(),
+        'https://m.si46.world/livekit/jwt/sfu/get?source=well-known',
+      );
+    });
+
+    test('keeps an explicit token endpoint unchanged', () {
+      expect(
+        buildMatrixRtcTokenUri(
+          'https://m.si46.world/livekit/jwt/sfu/get',
+        ).toString(),
+        'https://m.si46.world/livekit/jwt/sfu/get',
+      );
+    });
+  });
+
   group('buildLiveKitTokenUri', () {
     test('preserves base query and trims values', () {
       final uri = buildLiveKitTokenUri(

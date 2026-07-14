@@ -4,10 +4,8 @@
 library;
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart' as matrix;
 
 import '../../../l10n/app_localizations.dart';
@@ -17,6 +15,7 @@ import '../../core/services/system_integration_service.dart';
 import 'voip_config.dart';
 import 'webrtc_service.dart';
 import 'livekit_service.dart';
+import 'matrix_rtc_token_service.dart';
 import 'call_notification_service.dart';
 import '../../presentation/pages/call/call_screen.dart';
 import '../../presentation/pages/call/group_call_screen.dart';
@@ -41,6 +40,8 @@ class CallManager {
   final CallNotificationService _notificationService =
       CallNotificationService();
   final VoIPConfig _config = VoIPConfig();
+  static const MatrixRtcTokenService _matrixRtcTokenService =
+      MatrixRtcTokenService();
   // 系统级集成：通话进行中显示常驻"活动"通知（Android 真实生效）
   final SystemIntegrationService _systemIntegration =
       SystemIntegrationService();
@@ -482,15 +483,19 @@ class CallManager {
               : userId);
     final roomName = buildLiveKitRoomName(conversationId);
 
-    final token = await _fetchLiveKitToken(
+    final credentials = await _fetchLiveKitCredentials(
       conversationId: conversationId,
       roomName: roomName,
-      participantId: userId,
       participantName: resolvedParticipantName,
       enableVideo: enableVideo,
     );
-    if (token == null) {
+    if (credentials == null) {
       return false;
+    }
+
+    final serverUrl = credentials.serverUrl;
+    if (serverUrl != null) {
+      configureLiveKit(url: serverUrl);
     }
 
     return joinMeeting(
@@ -498,96 +503,46 @@ class CallManager {
       meetingDisplayName: roomDisplayName,
       participantName: resolvedParticipantName,
       participantAvatarUrl: participantAvatarUrl,
-      token: token,
+      token: credentials.token,
       enableVideo: enableVideo,
       enableAudio: true,
     );
   }
 
-  Future<String?> _fetchLiveKitToken({
+  Future<LiveKitConnectionCredentials?> _fetchLiveKitCredentials({
     required String conversationId,
     required String roomName,
-    required String participantId,
     required String participantName,
     required bool enableVideo,
   }) async {
     final client = _client;
     final jwtUrl = N42Chat.liveKitJwtUrl?.trim();
-    final accessToken = client?.accessToken?.trim();
-    if (client == null ||
-        jwtUrl == null ||
-        jwtUrl.isEmpty ||
-        accessToken == null ||
-        accessToken.isEmpty) {
+    if (client == null || jwtUrl == null || jwtUrl.isEmpty) {
       onError?.call('livekit_not_configured');
       return null;
     }
 
-    final uri = Uri.parse(jwtUrl);
-    final headers = <String, String>{
-      'Authorization': 'Bearer $accessToken',
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    };
-    final payload = <String, Object?>{
-      'room': roomName,
-      'identity': participantId,
-      'name': participantName,
-      'video': enableVideo,
-      'conversation_id': conversationId,
-      'metadata': jsonEncode({
-        'conversation_id': conversationId,
-        'video': enableVideo,
-      }),
-    };
-
     try {
-      final postResponse = await client.httpClient.post(
-        uri,
-        headers: headers,
-        body: jsonEncode(payload),
-      );
-      final token = _extractTokenFromResponse(postResponse);
-      if (token != null) {
-        return token;
-      }
-      debugLog(
-        'CallManager: LiveKit token POST returned ${postResponse.statusCode} without token',
-      );
-    } catch (e) {
-      debugLog('CallManager: LiveKit token POST failed: $e');
-    }
-
-    try {
-      final getUri = buildLiveKitTokenUri(
-        jwtUrl,
-        roomName: roomName,
-        participantId: participantId,
+      return await _matrixRtcTokenService.fetch(
+        client: client,
+        serviceUrl: jwtUrl,
+        roomId: conversationId,
+        legacyRoomName: roomName,
         participantName: participantName,
         enableVideo: enableVideo,
-        conversationId: conversationId,
       );
-      final getResponse = await client.httpClient.get(getUri, headers: headers);
-      final token = _extractTokenFromResponse(getResponse);
-      if (token != null) {
-        return token;
-      }
+    } on MatrixRtcTokenException catch (e) {
       debugLog(
-        'CallManager: LiveKit token GET returned ${getResponse.statusCode} without token',
+        'CallManager: MatrixRTC token exchange failed: ${e.code}'
+        '${e.statusCode == null ? '' : ' (${e.statusCode})'}',
       );
+      onError?.call(e.code);
+      return null;
     } catch (e) {
-      debugLog('CallManager: LiveKit token GET failed: $e');
-    }
-
-    onError?.call('livekit_token_fetch_failed');
-    return null;
-  }
-
-  String? _extractTokenFromResponse(http.Response response) {
-    if (response.statusCode < 200 || response.statusCode >= 300) {
+      debugLog('CallManager: MatrixRTC token exchange failed');
+      onError?.call('livekit_token_fetch_failed');
       return null;
     }
-    return extractLiveKitToken(response.body);
   }
 
   /// 离开会议
