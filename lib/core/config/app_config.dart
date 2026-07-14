@@ -87,6 +87,14 @@ class AppConfig {
       'main': 'https://api.n42.ai/user',
       'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
+
+    // Unified-identity N42 ID Hub. OPTIONAL: leave both empty to keep every ID
+    // Hub feature dark and fall back to current behavior (graceful degradation
+    // kill switch). Fill in once the hub is deployed per environment.
+    'idHubHost': {
+      'main': '',
+      'test': '',
+    },
     
     // IPFS — uploads go through the n42 cluster, reads through the public
     // gateway (writable cluster doesn't expose a permissioned read path).

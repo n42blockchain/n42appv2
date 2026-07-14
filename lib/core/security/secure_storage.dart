@@ -30,6 +30,9 @@ class SecureStorage {
   static const String _keyPasskeyCredentials = 'passkey_credentials';
   static const String _keyPasskeyEnabled = 'passkey_enabled';
 
+  // N42 ID Hub tokens are keyed per-DID (multi-identity), one JSON blob each.
+  static const String _keyIdHubTokenPrefix = 'n42id_token_';
+
   SecureStorage() {
     _storage = const FlutterSecureStorage(
       // Android：flutter_secure_storage v9+ 默认使用 AES-256-GCM custom cipher，
@@ -269,6 +272,23 @@ class SecureStorage {
     await _storage.deleteAll();
   }
 
+  // ---- N42 ID Hub token custody (per-DID JSON blob) ----
+
+  /// Persist the ID Hub token bundle (JSON) for a root DID.
+  Future<void> saveIdHubToken(String did, String tokenJson) async {
+    await _storage.write(key: '$_keyIdHubTokenPrefix$did', value: tokenJson);
+  }
+
+  /// Read the stored ID Hub token bundle (JSON) for a root DID.
+  Future<String?> getIdHubToken(String did) async {
+    return _storage.read(key: '$_keyIdHubTokenPrefix$did');
+  }
+
+  /// Drop the stored ID Hub token for a root DID.
+  Future<void> deleteIdHubToken(String did) async {
+    await _storage.delete(key: '$_keyIdHubTokenPrefix$did');
+  }
+
   /// 清除用户相关数据（登出时调用）
   ///
   /// 删除认证信息、钱包凭证、助记词、私钥和安全设置。
@@ -288,7 +308,8 @@ class SecureStorage {
     for (final key in allEntries.keys) {
       if (key.startsWith(_keyWalletPrefix) ||
           key.startsWith(_keyMnemonicPrefix) ||
-          key.startsWith(_keyPrivateKeyPrefix)) {
+          key.startsWith(_keyPrivateKeyPrefix) ||
+          key.startsWith(_keyIdHubTokenPrefix)) {
         keysToDelete.add(key);
       }
     }
