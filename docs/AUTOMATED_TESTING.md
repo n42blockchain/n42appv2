@@ -482,7 +482,7 @@ Passed / Failed / Skipped 数量:
 | iOS 真机 App Smoke | Pass | USB Flutter Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
 | iOS Simulator 完整点击 | Blocked | `MLImage.framework` 不含 arm64-simulator slice，无匹配 destination |
 | Wallet device flows | 13 `SKIP` | 未执行；等待安全 fixture/RPC |
-| Chat 独立套件 | Pass，282 tests | 包含 Matrix OpenID、`/sfu/get` 请求、返回 `url/jwt` 解析及安全降级边界；不替代双真机通话 |
+| Chat 独立套件 | Pass，283 tests | 包含 MatrixRTC 换票、安全降级边界和群通话 `Stack/Positioned` 布局回归；不替代双真机通话 |
 | JMT verification | Pass，13 tests | 含 BLAKE3/JMT proof；不替代原生调用 |
 | Mining plugin | Pass，3 tests | Dart/MethodChannel fake；不替代真机挖矿原生实现 |
 | Go 后端 | Pass，livekit-jwt/social-auth/swap | 不含双端通话；生产 MatrixRTC `healthz=200`、`sfu/get` 路由存在，客户端 OpenID 换票协议已补单测，仍待双真机 A/B |
