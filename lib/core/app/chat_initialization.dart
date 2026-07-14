@@ -537,6 +537,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       case DeepLinkType.walletConnect:
       case DeepLinkType.groupMining:
       case DeepLinkType.fullNode:
+      case DeepLinkType.idHubBind:
+      case DeepLinkType.idHubAuth:
       case DeepLinkType.unknown:
         return;
     }

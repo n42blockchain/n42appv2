@@ -4,6 +4,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/identity/api/id_hub_api.dart';
 import 'package:n42_wallet/features/identity/models/id_hub_models.dart';
 import 'package:n42_wallet/features/identity/services/id_hub_bind_signer.dart';
+import 'package:n42_wallet/features/identity/services/id_hub_error_message.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
@@ -63,7 +64,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       final api = IdHubApi(baseUrl: widget.hubUrl);
       final session = await api.getBindSession(widget.sessionId);
       if (session.status != 'pending') {
-        _fail('This request has expired. Ask the other device to retry.');
+        _fail(idHubRequestExpiredMessage);
         return;
       }
       // Fetch the exact message to sign from the hub (never from the QR).
@@ -80,7 +81,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         _stage = _Stage.ready;
       });
     } on IdHubException catch (e) {
-      _fail(e.message);
+      _fail(idHubUserFacingError(e));
     } catch (e) {
       AppLogger.w('IdHubSignPage', 'load error: $e');
       _fail('Could not load this request.');
@@ -107,9 +108,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       if (!mounted) return;
       setState(() => _stage = _Stage.success);
     } on IdHubException catch (e) {
-      _fail(e.code == 'binding-conflict'
-          ? 'This wallet is already linked to another identity.'
-          : e.message);
+      _fail(idHubUserFacingError(e));
     } catch (e) {
       AppLogger.w('IdHubSignPage', 'sign error: $e');
       _fail('Signing failed. Please try again.');
@@ -145,12 +144,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       case _Stage.loading:
         return Center(child: CircularProgressIndicator(color: colors.brand));
       case _Stage.error:
-        return _centered(
-          Icons.error_outline,
-          colors.danger,
-          _error,
-          colors,
-        );
+        return _centered(Icons.error_outline, colors.danger, _error, colors);
       case _Stage.success:
         return _centered(
           Icons.check_circle_outline,
@@ -182,7 +176,10 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         _row('Wallet', _short(_address ?? ''), colors),
         _row('Server', _hubHost, colors),
         const SizedBox(height: 16),
-        Text('Message', style: AppTypography.caption.copyWith(color: colors.textSecondary)),
+        Text(
+          'Message',
+          style: AppTypography.caption.copyWith(color: colors.textSecondary),
+        ),
         const SizedBox(height: 6),
         Container(
           padding: const EdgeInsets.all(12),
@@ -209,8 +206,10 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         const SizedBox(height: 12),
         TextButton(
           onPressed: signing ? null : () => Navigator.of(context).maybePop(),
-          child: Text('Cancel',
-              style: AppTypography.body.copyWith(color: colors.textSecondary)),
+          child: Text(
+            'Cancel',
+            style: AppTypography.body.copyWith(color: colors.textSecondary),
+          ),
         ),
       ],
     );
@@ -222,8 +221,10 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label,
-              style: AppTypography.body.copyWith(color: colors.textSecondary)),
+          Text(
+            label,
+            style: AppTypography.body.copyWith(color: colors.textSecondary),
+          ),
           Flexible(
             child: Text(
               value,
