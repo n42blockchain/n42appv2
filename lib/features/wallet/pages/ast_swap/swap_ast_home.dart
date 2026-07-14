@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/models/ast_swap/swap_ast_model.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_price_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart';
 import 'package:n42_wallet/features/wallet/pages/ast_swap/swap_ast_get_widget.dart';

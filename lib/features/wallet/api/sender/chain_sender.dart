@@ -21,7 +21,8 @@ class SendParams {
   final String?
   calldata; // raw hex calldata (DEX approve/swap), bypasses memo encoding
   final String? privateKey; // null = use wallet mnemonic
-  final Map<String, dynamic>? chainConfig; // full chain config from chainUrlMap
+  /// Full registry entry or the runtime `CoinModel.coin` (`baseInfo`) map.
+  final Map<String, dynamic>? chainConfig;
   final int? destinationTag; // XRP destination tag (exchange deposits)
   final String? nftTokenId; // ERC721/1155 token ID
   final String? nftStandard; // 'ERC721' | 'ERC1155'

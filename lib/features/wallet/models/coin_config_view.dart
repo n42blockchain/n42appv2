@@ -26,6 +26,29 @@
 
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 
+/// Accepts either a complete registry entry (`{baseInfo: ...}`) or the
+/// runtime [CoinModel.coin] shape, which already is the `baseInfo` map.
+Map<String, dynamic>? resolveChainBaseInfo(Map<String, dynamic>? chainConfig) {
+  if (chainConfig == null) return null;
+  final nested = chainConfig['baseInfo'];
+  if (nested is Map<String, dynamic>) return nested;
+  if (nested is Map) return Map<String, dynamic>.from(nested);
+  return chainConfig;
+}
+
+/// Resolves the mainnet/testnet chain ID from either supported config shape.
+int resolveChainConfigId(
+  Map<String, dynamic>? chainConfig, {
+  bool isTest = false,
+  int fallback = 1,
+}) {
+  final baseInfo = resolveChainBaseInfo(chainConfig);
+  if (baseInfo == null) return fallback;
+  final view = CoinConfigView(baseInfo);
+  final chainId = isTest ? view.chainIdTest : view.chainId;
+  return chainId > 0 ? chainId : fallback;
+}
+
 class CoinConfigView {
   /// The underlying map. Kept public for cases that genuinely need to
   /// pass the raw dynamic shape (e.g. into legacy APIs); prefer the

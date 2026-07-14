@@ -242,12 +242,11 @@ mixin _DotSendLogicMixin on ConsumerState<WalletChainSendDot> {
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
-      final addrType = widget.coinModel.addrType;
-      final baseInfo =
-          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/354'/0'/0/0";
-      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
+      final signingCoin = chainModel ?? widget.coinModel;
+      final addrType = signingCoin.addrType;
+      final basePath =
+          signingCoin.config.pathForAddrType(addrType) ?? "m/44'/354'/0'/0/0";
+      final path = getPathWithIndex(basePath, signingCoin.pathIndex);
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 10;
 

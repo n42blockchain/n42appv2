@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -26,9 +27,13 @@ import 'chain_sender.dart';
 /// EVM-compatible chain sender.
 /// Handles ETH, BNB, MATIC, AVAX, FTM, CELO, ONE, OP, ARB, BASE, etc.
 class EvmSender implements ChainSender {
+  final Map<String, dynamic>? _defaultChainConfig;
   final _tokenViewApi = TokenViewApi();
   final _trustdart = Trustdart();
   final _dataUtils = DataUtils();
+
+  EvmSender({Map<String, dynamic>? chainConfig})
+    : _defaultChainConfig = chainConfig;
 
   @override
   Future<SendResult> send(SendParams params) {
@@ -42,8 +47,9 @@ class EvmSender implements ChainSender {
 
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
-    final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final chainId = (baseInfo?['chainId'] as int?) ?? 1;
+    final chainConfig = params.chainConfig ?? _defaultChainConfig;
+    final baseInfo = resolveChainBaseInfo(chainConfig);
+    final chainId = resolveChainConfigId(chainConfig, isTest: params.isTest);
     final isContract = params.contractAddress.isNotEmpty;
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
     // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。

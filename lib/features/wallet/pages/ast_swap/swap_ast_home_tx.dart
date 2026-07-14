@@ -203,9 +203,7 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
 
     final cm = payCoinModel!;
     final addrType = cm.addrType;
-    final baseInfo = cm.coin['baseInfo'] as Map<String, dynamic>?;
-    final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-    final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+    final basePath = cm.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
     final path = getPathWithIndex(basePath, cm.pathIndex);
     final decimals = (cm.coin['decimals'] as num?)?.toInt() ?? 18;
     final contractAddress = youPay?.payCoinContract ?? '';
@@ -220,7 +218,8 @@ extension _SwapAstHomeGasAndTx on _SwapAstHomeState {
             amount: payAmount,
             decimals: decimals,
             path: path,
-            isTest: false,
+            isTest: cm.isTest,
+            privateKey: cm.privateKey,
             contractAddress: contractAddress,
             tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
             chainConfig: cm.coin,

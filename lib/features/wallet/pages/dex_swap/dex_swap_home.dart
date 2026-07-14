@@ -11,6 +11,7 @@ import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_quote_model.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
@@ -151,11 +152,18 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     for (final cm in wa.coinModels) {
       if ((cm.coin['coinType'] as String? ?? '') == chainCoinType) {
         final addrType = cm.addrType;
-        final baseInfo = cm.coin['baseInfo'] as Map<String, dynamic>?;
-        final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-        final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+        final basePath =
+            cm.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
         return getPathWithIndex(basePath, cm.pathIndex);
       }
+    }
+    return null;
+  }
+
+  CoinModel? _chainCoinModel(String chainCoinType) {
+    final wa = ref.read(wapBridgeProvider);
+    for (final cm in wa.coinModels) {
+      if (cm.config.coinType == chainCoinType) return cm;
     }
     return null;
   }
@@ -353,7 +361,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       if (wei > BigInt.zero) exactAmount = wei;
     }
 
-    final path = _buildChainPath(_chain);
+    final coinType = dexCoinTypeForChain(_chain);
+    final chainCoin = _chainCoinModel(coinType);
+    final path = _buildChainPath(coinType);
     if (path == null) {
       setState(() {
         _approveLoad = Load.finish;
@@ -363,16 +373,18 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     }
 
     final approveResult = await SenderFactory.instance
-        .getSender(_chain)
+        .getSender(coinType)
         .send(
           SendParams(
-            coinType: _chain,
+            coinType: coinType,
             fromAddress: _userAddr,
             toAddress: _tokenIn!.address,
             amount: 0.0,
             decimals: 18,
             path: path,
-            isTest: false,
+            isTest: chainCoin?.isTest ?? false,
+            privateKey: chainCoin?.privateKey,
+            chainConfig: chainCoin?.coin,
             calldata: DexSwapApi.buildApproveCalldata(
               q.routerAddr,
               amount: exactAmount,
@@ -428,7 +440,8 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       }
       txHash = txRes.data['txHash'] as String? ?? '';
     } else {
-      final swapChain = _tokenIn?.chain ?? _chain;
+      final swapChain = dexCoinTypeForChain(_tokenIn?.chain ?? _chain);
+      final chainCoin = _chainCoinModel(swapChain);
       final path = _buildChainPath(swapChain);
       if (path == null) {
         setState(() {
@@ -447,7 +460,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               amount: 0.0,
               decimals: 18,
               path: path,
-              isTest: false,
+              isTest: chainCoin?.isTest ?? false,
+              privateKey: chainCoin?.privateKey,
+              chainConfig: chainCoin?.coin,
               calldata: q.calldata,
             ),
           );

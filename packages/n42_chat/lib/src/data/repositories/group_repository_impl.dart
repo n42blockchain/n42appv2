@@ -385,7 +385,9 @@ class GroupRepositoryImpl implements IGroupRepository {
             );
             break;
           case TokenStandard.native:
-            final balanceStr = await _walletBridge.getBalance('ETH');
+            final balanceStr = await _walletBridge.getBalance(
+              nativeTokenSymbolForChainId(rule.chainId),
+            );
             final balanceDouble = double.tryParse(balanceStr) ?? 0;
             actualBalance = BigInt.from(balanceDouble * 1e18);
             break;

@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
@@ -19,8 +20,12 @@ import 'chain_sender.dart';
 
 /// Aptos chain sender.
 class AptSender implements ChainSender {
+  final Map<String, dynamic>? _defaultChainConfig;
   final _tokenViewApi = TokenViewApi();
   final _trustdart = Trustdart();
+
+  AptSender({Map<String, dynamic>? chainConfig})
+    : _defaultChainConfig = chainConfig;
 
   @override
   Future<SendResult> send(SendParams params) async {
@@ -87,7 +92,10 @@ class AptSender implements ChainSender {
     }
     final lt = (ledgerTimestamp.data as int) ~/ 1000000 + 60;
 
-    final chainId = params.chainConfig?['baseInfo']?['chainId'] as int? ?? 1;
+    final chainId = resolveChainConfigId(
+      params.chainConfig ?? _defaultChainConfig,
+      isTest: params.isTest,
+    );
 
     final signMap = <String, dynamic>{
       'amount': valuePrice.toInt(),

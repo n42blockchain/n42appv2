@@ -49,6 +49,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
   bool _checkingApproval = false;
   bool _submitting = false;
   String? _error;
+  int _approvalRequest = 0;
 
   @override
   void dispose() {
@@ -79,6 +80,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
 
   Future<void> _refreshApprovalState() async {
     if (!widget.isSupply) return;
+    final request = ++_approvalRequest;
     final amountWei = _amountWei();
     if (amountWei == BigInt.zero) {
       if (mounted) setState(() => _needsApproval = false);
@@ -95,7 +97,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
       owner: widget.walletAddress,
       spender: poolAddr,
     );
-    if (!mounted) return;
+    if (!mounted || request != _approvalRequest) return;
     setState(() {
       _needsApproval = allowance < amountWei;
       _checkingApproval = false;
@@ -127,9 +129,21 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
     final path = getPathWithIndex(basePath, cm.pathIndex);
     final sender = SenderFactory.instance.getSender(cm.config.coinType);
 
-    // Step 1: approve if needed（仅 Supply 需要——Borrow 是 Pool 主动放款，
-    // 不涉及从用户地址拉取资产，不需要预授权）。
-    if (widget.isSupply && _needsApproval) {
+    // Step 1: submit-time allowance check. The field-level check is only a UI
+    // hint and may still be in flight when the user confirms.
+    var needsApproval = false;
+    if (widget.isSupply) {
+      final allowance = await AaveService.checkAllowance(
+        coinType: cm.config.coinType,
+        tokenAddr: widget.reserve.underlyingAsset,
+        owner: widget.walletAddress,
+        spender: poolAddr,
+      );
+      if (!mounted) return;
+      needsApproval = allowance < amountWei;
+      setState(() => _needsApproval = needsApproval);
+    }
+    if (needsApproval) {
       final approveResult = await sender.send(
         SendParams(
           coinType: cm.config.coinType,
@@ -138,7 +152,9 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
           amount: 0.0,
           decimals: 18,
           path: path,
-          isTest: false,
+          isTest: cm.isTest,
+          privateKey: cm.privateKey,
+          chainConfig: cm.coin,
           calldata:
               '0x${bytesToHex(AaveService.buildApproveCalldata(spender: poolAddr, amount: amountWei))}',
         ),
@@ -175,7 +191,9 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
         amount: 0.0,
         decimals: 18,
         path: path,
-        isTest: false,
+        isTest: cm.isTest,
+        privateKey: cm.privateKey,
+        chainConfig: cm.coin,
         calldata: '0x${bytesToHex(calldata)}',
       ),
     );

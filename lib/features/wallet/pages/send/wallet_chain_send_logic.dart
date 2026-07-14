@@ -75,8 +75,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   void closeKeyboard();
 
   String get _coinType => coinModel.config.coinType;
-  String get _blockchainType =>
-      coinModel.config.blockchainType;
+  String get _blockchainType => coinModel.config.blockchainType;
   bool get _isContract => coinModel.config.isContract;
   int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
@@ -481,16 +480,16 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       final chainConfig = _isContract
           ? (chainModel?.coin ?? coinModel.coin)
           : coinModel.coin;
-      final baseInfo = chainConfig['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final pathConfig = CoinConfigView(chainConfig);
+      final basePath =
+          pathConfig.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
       final nativeDecimals = _isContract
           ? ((chainModel?.coin['decimals'] as num?)?.toInt() ?? 18)
           : _decimals;
 
       final result = await SenderFactory.instance
-          .getSender(_coinType)
+          .getSender(_coinType, chainConfig: chainConfig)
           .send(
             SendParams(
               coinType: _coinType,

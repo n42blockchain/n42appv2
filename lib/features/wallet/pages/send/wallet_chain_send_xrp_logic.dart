@@ -321,12 +321,11 @@ mixin _XrpSendLogicMixin on ConsumerState<WalletChainSendXrp> {
     bool completedWithExit = false;
     try {
       const coinType = 'XRP';
-      final addrType = widget.coinModel.addrType;
-      final baseInfo =
-          widget.coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/144'/0'/0/0";
-      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
+      final signingCoin = chainModel ?? widget.coinModel;
+      final addrType = signingCoin.addrType;
+      final basePath =
+          signingCoin.config.pathForAddrType(addrType) ?? "m/44'/144'/0'/0/0";
+      final path = getPathWithIndex(basePath, signingCoin.pathIndex);
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 6;
       final destTag = (trModel.other as RippleTrModel?)?.destinationTag;
