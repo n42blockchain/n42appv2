@@ -11,7 +11,7 @@ on:
       - 'v*'
 
 env:
-  FLUTTER_VERSION: '3.38.0'
+  FLUTTER_VERSION: '3.41.9'
   JAVA_VERSION: '21'
 
 jobs:
@@ -168,4 +168,3 @@ jobs:
             --type ios \
             --apiKey ${{ secrets.APP_STORE_API_KEY_ID }} \
             --apiIssuer ${{ secrets.APP_STORE_API_ISSUER_ID }}
-

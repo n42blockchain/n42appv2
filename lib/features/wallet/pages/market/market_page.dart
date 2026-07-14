@@ -380,6 +380,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
     final accentColor = AppColorTokens.of(context).brand;
 
     return Scaffold(
+      key: const ValueKey<String>('market_page'),
       backgroundColor: bgColor,
       body: Column(
         children: [
@@ -474,6 +475,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         AppHomeTopBar(
+          leftActionKey: const ValueKey<String>('market_open_drawer'),
           // FittedBox 防标题+徽章在固定高顶栏内垂直溢出（宽屏/大字号下曾溢出 33px）
           titleChild: FittedBox(
             fit: BoxFit.scaleDown,
@@ -549,10 +551,22 @@ class _MarketPageState extends ConsumerState<MarketPage>
             fontWeight: FontWeight.w400,
           ),
           tabs: [
-            Tab(text: S.of(context).g_market_trending),
-            Tab(text: S.of(context).g_market_search),
-            Tab(text: S.of(context).g_market_watchlist),
-            Tab(text: S.of(context).g_market_news),
+            Tab(
+              key: const ValueKey<String>('market_tab_trending'),
+              text: S.of(context).g_market_trending,
+            ),
+            Tab(
+              key: const ValueKey<String>('market_tab_search'),
+              text: S.of(context).g_market_search,
+            ),
+            Tab(
+              key: const ValueKey<String>('market_tab_watchlist'),
+              text: S.of(context).g_market_watchlist,
+            ),
+            Tab(
+              key: const ValueKey<String>('market_tab_news'),
+              text: S.of(context).g_market_news,
+            ),
           ],
         ),
       ],

@@ -794,7 +794,7 @@ SPEC CHECKSUMS:
   FirebaseSessions: a2d06fd980431fda934c7a543901aca05fc4edcc
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
-  flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
+  flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
   flutter_face_api: 54553daca9a5924bb8f9788b1192e58bdf88a584
   flutter_face_core_basic: e86f4c426917ac6c7b8dd8f114d366495cd315d1
   flutter_facebook_auth: fa3b69b1df0831d2178fe87a05ee2d7d0156db70

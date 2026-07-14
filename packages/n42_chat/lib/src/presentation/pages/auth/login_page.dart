@@ -178,6 +178,7 @@ class _LoginPageState extends State<LoginPage> {
     final textColor = context.textPrimary;
 
     return Scaffold(
+      key: const ValueKey<String>('chat_login_page'),
       backgroundColor: bgColor,
       appBar: AppBar(
         backgroundColor: bgColor,
@@ -399,6 +400,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          key: const ValueKey<String>('chat_login_server'),
           controller: _homeserverController,
           style: TextStyle(color: textColor, fontSize: 16, height: 1.3),
           decoration: InputDecoration(
@@ -488,6 +490,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          key: const ValueKey<String>('chat_login_username'),
           controller: _usernameController,
           style: TextStyle(color: textColor, fontSize: 16, height: 1.3),
           decoration: InputDecoration(
@@ -540,6 +543,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
         const SizedBox(height: 8),
         TextFormField(
+          key: const ValueKey<String>('chat_login_password'),
           controller: _passwordController,
           style: TextStyle(color: textColor, fontSize: 16, height: 1.3),
           decoration: InputDecoration(
@@ -591,6 +595,7 @@ class _LoginPageState extends State<LoginPage> {
     return SizedBox(
       height: 48,
       child: ElevatedButton(
+        key: const ValueKey<String>('chat_login_submit'),
         onPressed: isEnabled ? _onLogin : null,
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.primary,

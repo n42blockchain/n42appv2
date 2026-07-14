@@ -21,7 +21,7 @@ on:
         default: '3'
 
 env:
-  FLUTTER_VERSION: '3.38.0'
+  FLUTTER_VERSION: '3.41.9'
 
 jobs:
   benchmark:
@@ -125,4 +125,3 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Comparing PR performance with baseline..." >> $GITHUB_STEP_SUMMARY
           # 添加比较逻辑
-

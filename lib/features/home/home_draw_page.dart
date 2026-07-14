@@ -113,6 +113,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/profile.png",
                       S.of(context).g_home_key1,
+                      automationKey: const ValueKey<String>('drawer_profile'),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -124,6 +125,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/manage_wallet.png",
                       S.of(context).g_key_wallet_manage,
+                      automationKey: const ValueKey<String>(
+                        'drawer_wallet_manage',
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -134,6 +138,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/address_book.png",
                       S.of(context).g_key_108,
+                      automationKey: const ValueKey<String>(
+                        'drawer_address_book',
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -148,6 +155,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/security.png",
                       S.of(context).s_key_11,
+                      automationKey: const ValueKey<String>('drawer_security'),
                       onTap: () {
                         Navigator.pushNamed(context, '/securitySetting');
                       },
@@ -155,6 +163,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/settings.png",
                       S.of(context).g_key_94,
+                      automationKey: const ValueKey<String>('drawer_settings'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -171,6 +180,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/tabbar/news.png",
                       S.of(context).g_browser_key11,
+                      automationKey: const ValueKey<String>('drawer_browser'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -187,6 +197,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/about_app.png",
                       S.of(context).s_key_10,
+                      automationKey: const ValueKey<String>('drawer_about'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -211,12 +222,14 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
   Widget _menuItem(
     String iconPath,
     String actionName, {
+    Key? automationKey,
     Widget? rightWidget,
     GestureTapCallback? onTap,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        key: automationKey,
         onTap: onTap,
         borderRadius: AppRadius.brMd,
         child: Container(

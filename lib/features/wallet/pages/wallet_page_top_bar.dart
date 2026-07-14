@@ -36,6 +36,7 @@ class WalletTopBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return AppHomeTopBar(
+      leftActionKey: const ValueKey<String>('wallet_open_drawer'),
       titleChild: _WalletTitleButton(
         walletName: walletName,
         isWatchOnly: isWatchOnly,
@@ -70,6 +71,7 @@ class _WalletTitleButton extends StatelessWidget {
     final blueColor = AppColorTokens.of(context).brand;
     final su = ScreenUtil();
     return InkWell(
+      key: const ValueKey<String>('wallet_select_account'),
       onTap: onTap,
       borderRadius: AppRadius.brMd,
       child: SizedBox(
@@ -119,6 +121,7 @@ class _QrCodeMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     return PopupMenuButton<int>(
+      key: const ValueKey<String>('wallet_qr_menu'),
       icon: Icon(
         Icons.qr_code_rounded,
         size: su.setWidth(52.0),
@@ -157,6 +160,7 @@ class _QrCodeMenu extends StatelessWidget {
   }) {
     final textColor = AppColorTokens.of(context).textPrimary;
     return PopupMenuItem<int>(
+      key: ValueKey<String>('wallet_qr_menu_item_$value'),
       value: value,
       child: Row(
         children: [
@@ -184,6 +188,7 @@ class _WalletAssistantButton extends StatelessWidget {
     return Tooltip(
       message: 'Wallet AI',
       child: InkWell(
+        key: const ValueKey<String>('wallet_assistant'),
         onTap: onTap,
         borderRadius: AppRadius.brPill,
         child: SizedBox(
@@ -221,6 +226,7 @@ class _WalletConnectButton extends ConsumerWidget {
 
     // 触控 ≥88.w（44dp 红线）：外层命中区扩大，图标视觉 60.w 不变。
     return InkWell(
+      key: const ValueKey<String>('wallet_connect'),
       onTap: onTap,
       borderRadius: AppRadius.brPill,
       child: SizedBox(

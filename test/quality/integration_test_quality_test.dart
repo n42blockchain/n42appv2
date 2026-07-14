@@ -85,7 +85,79 @@ void main() {
       expect(source, contains('## 9. Chat 全量用例'));
       expect(source, contains('## 12. 权限专项矩阵'));
       expect(source, contains('## 17. 发布准入与签字'));
-      expect(source, contains('13.05%'));
+      expect(source, contains('13.07%'));
+    });
+
+    test('the automation runbook documents executable and honest gates', () {
+      final source = File('docs/AUTOMATED_TESTING.md').readAsStringSync();
+
+      expect(source, contains('./scripts/run_automated_tests.sh full'));
+      expect(source, contains('flutter test --no-pub --coverage'));
+      expect(source, contains('packages/n42_chat'));
+      expect(source, contains('go test -count=1 ./...'));
+      expect(source, contains('DEVICE_ID'));
+      expect(source, contains('13.07%'));
+      expect(source, contains('70%'));
+      expect(source, contains('`SKIP`'));
+      expect(source, contains('不计 Pass'));
+    });
+
+    test(
+      'the full device flow performs real clicks and runtime-only login',
+      () {
+        final source = File(
+          'integration_test/device_full_flow_test.dart',
+        ).readAsStringSync();
+
+        expect(source, contains("package:n42_wallet/main.dart"));
+        expect(source, contains('app.main();'));
+        expect(source, contains('tester.tap('));
+        expect(source, contains('tester.enterText('));
+        expect(
+          source,
+          contains("String.fromEnvironment('N42_E2E_CHAT_USERNAME')"),
+        );
+        expect(
+          source,
+          contains("String.fromEnvironment('N42_E2E_CHAT_PASSWORD')"),
+        );
+        expect(source, isNot(contains('skip: true')));
+        expect(
+          RegExp(r'DEVICE_STEP ').allMatches(source).length,
+          greaterThanOrEqualTo(6),
+        );
+
+        final driver = File(
+          'test_driver/integration_test.dart',
+        ).readAsStringSync();
+        expect(driver, contains('integrationDriver'));
+
+        final script = File(
+          'scripts/run_automated_tests.sh',
+        ).readAsStringSync();
+        expect(script, contains('PUBLISH_PORT'));
+        expect(script, contains('flutter drive'));
+        expect(script, contains('--publish-port'));
+      },
+    );
+
+    test('WalletConnect lifecycle does not read ref during dispose', () {
+      for (final path in <String>[
+        'lib/features/wallet_connect/pages/wallet_connect_page.dart',
+        'lib/features/wallet_connect/pages/wallet_connect_sheet.dart',
+      ]) {
+        final source = File(path).readAsStringSync();
+        final disposeBody = RegExp(
+          r'void dispose\(\)\s*\{([\s\S]*?)\n\s*\}',
+        ).firstMatch(source)?.group(1);
+
+        expect(disposeBody, isNotNull, reason: '$path has no dispose method');
+        expect(
+          disposeBody,
+          isNot(contains('ref.')),
+          reason: '$path must cache provider references before unmounting',
+        );
+      }
     });
   });
 }

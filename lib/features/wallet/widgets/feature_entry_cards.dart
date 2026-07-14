@@ -137,6 +137,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
         children: [
           // ENS 小卡片
           _buildMiniCard(
+            automationKey: const ValueKey<String>('wallet_feature_ens'),
             context: context,
             icon: Icons.alternate_email_rounded,
             title: ensName ?? 'ENS',
@@ -151,6 +152,9 @@ class FeatureEntryHorizontal extends StatelessWidget {
           SizedBox(width: AppSpacing.space4),
           // AA 小卡片
           _buildMiniCard(
+            automationKey: const ValueKey<String>(
+              'wallet_feature_smart_account',
+            ),
             context: context,
             icon: Icons.account_balance_wallet_rounded,
             title: S.of(context).g_key_aa_smart_wallet,
@@ -173,6 +177,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
   }
 
   Widget _buildMiniCard({
+    Key? automationKey,
     required BuildContext context,
     required IconData icon,
     required String title,
@@ -184,6 +189,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
     Color? badgeColor,
   }) {
     return InkWell(
+      key: automationKey,
       onTap: onTap,
       borderRadius: AppRadius.brMd,
       child: Container(

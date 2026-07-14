@@ -280,6 +280,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const ValueKey<String>('wallet_page'),
       body: SafeArea(
         child: ResponsiveContainer(
           child: Builder(

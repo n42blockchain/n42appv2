@@ -1,12 +1,13 @@
 import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:http/http.dart' as http;
-import 'dart:io';
 import 'package:n42_wallet/core/security/security_config.dart';
 
 ///
 class EsoImageCacheManager extends CacheManager {
-  static const key = 'EsoImageCacheManager';
+  static const key = 'EsoImageCacheManager.v2';
 
   static EsoImageCacheManager? _instance;
   factory EsoImageCacheManager() {
@@ -22,6 +23,9 @@ class EsoImageCacheManager extends CacheManager {
 }
 
 class EsoHttpFileService extends FileService {
+  static const _connectionTimeout = Duration(seconds: 15);
+  static const _responseTimeout = Duration(seconds: 60);
+
   late HttpClient _httpClient;
   EsoHttpFileService({HttpClient? httpClient}) {
     _httpClient = httpClient ?? HttpClient();
@@ -34,19 +38,28 @@ class EsoHttpFileService extends FileService {
     Map<String, String>? headers = const {},
   }) async {
     final Uri resolved = Uri.base.resolve(url);
-    final HttpClientRequest req = await _httpClient.getUrl(resolved);
+    final HttpClientRequest req = await _httpClient
+        .getUrl(resolved)
+        .timeout(_connectionTimeout);
     headers?.forEach((key, value) {
       req.headers.add(key, value);
     });
-    final HttpClientResponse httpResponse = await req.close();
-    //print("httpResponse statusCode ${httpResponse.statusCode}");
-    //print("httpResponse contentLength ${httpResponse.contentLength}");
+    final HttpClientResponse httpResponse = await req.close().timeout(
+      _connectionTimeout,
+    );
+    final responseHeaders = <String, String>{};
+    httpResponse.headers.forEach((name, values) {
+      responseHeaders[name] = values.join(',');
+    });
     final http.StreamedResponse response = http.StreamedResponse(
-      httpResponse.timeout(const Duration(seconds: 60)),
+      httpResponse.timeout(_responseTimeout),
       httpResponse.statusCode,
-      //contentLength: httpResponse.contentLength,
-      //reasonPhrase: httpResponse.reasonPhrase,
-      //isRedirect: httpResponse.isRedirect,
+      contentLength: httpResponse.contentLength >= 0
+          ? httpResponse.contentLength
+          : null,
+      headers: responseHeaders,
+      reasonPhrase: httpResponse.reasonPhrase,
+      isRedirect: httpResponse.isRedirect,
     );
     return HttpGetResponse(response);
   }

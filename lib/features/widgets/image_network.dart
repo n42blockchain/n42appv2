@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -56,6 +58,7 @@ class ImageNetWork extends StatelessWidget {
           return placeholderImage;
         },
         errorWidget: (context, String url, dynamic error) {
+          unawaited(EsoImageCacheManager().removeFile(url));
           return placeholderImage;
         },
         //

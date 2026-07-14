@@ -3,7 +3,7 @@ import ActivityKit
 import UIKit
 
 @main
-@objc class AppDelegate: FlutterAppDelegate {
+@objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var mlsHandler: N42MlsHandler?
 
   private func normalizeConfigValue(_ value: Any?) -> String? {
@@ -41,67 +41,57 @@ import UIKit
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
-      /*FlutterLocalNotificationsPlugin.setPluginRegistrantCallback { (registry) in
-          GeneratedPluginRegistrant.register(withRegistry: registry)
-      }*/
-
-      /// ios notification添加 — FlutterAppDelegate 已遵循 UNUserNotificationCenterDelegate
-      if #available(iOS 10.0, *) {
-        UNUserNotificationCenter.current().delegate = self as UNUserNotificationCenterDelegate
-      }
-      GeneratedPluginRegistrant.register(with: self)
-      // Mining WebSocket channel
-      TrustdartPlugin.register(
-        with: self.registrar(forPlugin: "TrustdartPlugin")!
-      )
-      // Wallet-core channel (trustdart)
-      WalletCorePlugin.register(
-        with: self.registrar(forPlugin: "WalletCorePlugin")!
-      )
-      // Passkey (WebAuthn) channel
-      if #available(iOS 16.0, *) {
-        PasskeyHandler.register(
-          with: self.registrar(forPlugin: "PasskeyHandler")!
-        )
-      }
-
-      if let controller = window?.rootViewController as? FlutterViewController {
-        let channel = FlutterMethodChannel(
-          name: "ai.n42.www/app_config",
-          binaryMessenger: controller.binaryMessenger
-        )
-        channel.setMethodCallHandler { [weak self] call, result in
-          guard let self else {
-            result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
-            return
-          }
-          if call.method == "getSocialAuthConfig" {
-            result(self.socialAuthConfig())
-          } else {
-            result(FlutterMethodNotImplemented)
-          }
-        }
-
-        // 系统级集成（n42_chat）：iOS Live Activity（通话进行中活动）。
-        // 仅处理 updateLiveActivity/endLiveActivity/isSupported(liveActivity)；
-        // 其余能力返回 FlutterMethodNotImplemented，由 Dart 侧插件兜底
-        // （flutter_local_notifications / quick_actions / app_badge_plus）。
-        let sysChannel = FlutterMethodChannel(
-          name: "n42.chat/system_integration",
-          binaryMessenger: controller.binaryMessenger
-        )
-        sysChannel.setMethodCallHandler { [weak self] call, result in
-          guard let self else {
-            result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
-            return
-          }
-          self.handleSystemIntegration(call, result: result)
-        }
-
-        mlsHandler = N42MlsHandler(binaryMessenger: controller.binaryMessenger)
-      }
-
+    if #available(iOS 10.0, *) {
+      UNUserNotificationCenter.current().delegate = self
+    }
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
+    let registry = engineBridge.pluginRegistry
+    GeneratedPluginRegistrant.register(with: registry)
+
+    if let registrar = registry.registrar(forPlugin: "TrustdartPlugin") {
+      TrustdartPlugin.register(with: registrar)
+    }
+    if let registrar = registry.registrar(forPlugin: "WalletCorePlugin") {
+      WalletCorePlugin.register(with: registrar)
+    }
+    if #available(iOS 16.0, *),
+       let registrar = registry.registrar(forPlugin: "PasskeyHandler") {
+      PasskeyHandler.register(with: registrar)
+    }
+
+    let messenger = engineBridge.applicationRegistrar.messenger()
+    let appConfigChannel = FlutterMethodChannel(
+      name: "ai.n42.www/app_config",
+      binaryMessenger: messenger
+    )
+    appConfigChannel.setMethodCallHandler { [weak self] call, result in
+      guard let self else {
+        result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
+        return
+      }
+      if call.method == "getSocialAuthConfig" {
+        result(self.socialAuthConfig())
+      } else {
+        result(FlutterMethodNotImplemented)
+      }
+    }
+
+    let systemIntegrationChannel = FlutterMethodChannel(
+      name: "n42.chat/system_integration",
+      binaryMessenger: messenger
+    )
+    systemIntegrationChannel.setMethodCallHandler { [weak self] call, result in
+      guard let self else {
+        result(FlutterError(code: "unavailable", message: "AppDelegate released", details: nil))
+        return
+      }
+      self.handleSystemIntegration(call, result: result)
+    }
+
+    mlsHandler = N42MlsHandler(binaryMessenger: messenger)
   }
 
   /// 处理 n42_chat 系统集成通道：仅接管 iOS Live Activity 相关方法。

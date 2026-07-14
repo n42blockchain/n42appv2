@@ -198,11 +198,13 @@ class _WalletBoardState extends State<WalletBoard> {
   List<Widget> buttonList() {
     final buttons = <Widget>[
       _buildActionBtn(
+        const ValueKey<String>('wallet_action_send'),
         S.of(context).g_key_48,
         'assets/wallet/w_send.png',
         widget.sendTap,
       ),
       _buildActionBtn(
+        const ValueKey<String>('wallet_action_receive'),
         S.of(context).g_key_33,
         'assets/wallet/w_receive.png',
         widget.receiveTap,
@@ -211,6 +213,7 @@ class _WalletBoardState extends State<WalletBoard> {
       // 该按钮在 iOS 上隐藏,仅 Android 保留(AppConfig.swapFeatureEnabled)。
       if (AppConfig.swapFeatureEnabled)
         _buildActionBtn(
+          const ValueKey<String>('wallet_action_swap'),
           S.of(context).g_key_dex_swap_btn,
           'assets/wallet/w_swap.png',
           widget.swapTap,
@@ -225,6 +228,7 @@ class _WalletBoardState extends State<WalletBoard> {
   }
 
   Widget _buildActionBtn(
+    Key key,
     String label,
     String imagePath,
     GestureTapCallback? onTap,
@@ -234,6 +238,7 @@ class _WalletBoardState extends State<WalletBoard> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        key: key,
         onTap: onTap,
         borderRadius: AppRadius.brLg,
         highlightColor: Colors.white.withValues(alpha: 0.10),

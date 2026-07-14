@@ -108,6 +108,7 @@ class _SearchTab extends StatelessWidget {
         Padding(
           padding: EdgeInsets.all(12.w),
           child: TextField(
+            key: const ValueKey<String>('market_search_input'),
             controller: controller,
             onChanged: onChanged,
             style: AppTypography.caption.copyWith(

@@ -4,13 +4,13 @@
 >
 > 适用范围：Android / iOS，Wallet + Chat + 宿主公共能力
 >
-> 当前基线：`master@2dd48afc`
+> 当前基线：`master` 本轮发布提交
 >
-> Android：`2.4.4+2026070903`
+> Android：`2.4.4+2026070904`
 >
-> iOS：`2.4.4 (202607092)`
+> iOS：`2.4.4 (202607093)`
 >
-> 最近更新：2026-07-13
+> 最近更新：2026-07-14
 
 ---
 
@@ -24,6 +24,7 @@
 - `docs/RELEASE_CHECKLIST.md`：发布构建和商店检查项。
 - `.github/workflows/ci.yml`：CI 实际命令和覆盖率门禁。
 - `test/`、`packages/n42_chat/test/`、`integration_test/`：当前自动化代码。
+- `docs/AUTOMATED_TESTING.md`：自动化测试执行、覆盖率、CI 和失败排查主文档。
 
 本文件从 2026-07-13 起作为测试团队的主执行手册。旧文档保留作历史依据；若描述冲突，以本文件、当前可达 UI 和当前代码为准。
 
@@ -68,10 +69,30 @@
 
 | 平台 | 文件 | 版本 | 已验证 |
 |---|---|---|---|
-| Android | `build/app/outputs/flutter-apk/app-release.apk` | `2.4.4+2026070903` | 包名 `ai.n42.www`、APK v2 签名、ZIP 完整性 |
-| iOS | `build/ios/ipa/N42Wallet.ipa` | `2.4.4 (202607092)` | App Store 分发签名、Team `CFRXH38L48`、TestFlight profile |
+| Android APK | `build/app/outputs/flutter-apk/app-release.apk` | `2.4.4+2026070904` | 包名 `ai.n42.www`、APK v2 签名、ZIP 完整性、非 debuggable/testOnly |
+| Android AAB | `build/app/outputs/bundle/release/app-release.aab` | `2.4.4+2026070904` | JAR 签名、Bundle ZIP 完整性 |
+| iOS | `build/ios/ipa/N42Wallet.ipa` | `2.4.4 (202607093)` | App Store 分发签名、Team `CFRXH38L48`、production push、`get-task-allow=false`、TestFlight profile |
 
 领包后必须独立记录 SHA-256，不能只凭文件名判断版本。测试记录必须填写 App 显示版本、原生 build number 和 Git commit。
+
+本轮交付包 SHA-256：
+
+- Android APK：`ece168d52f5aef13ea59aaffe0dc558416b1dff6d9a48fcb08242f796c51dee0`
+- Android AAB：`bce0b42d3b8d7be158578f81ca0639962637e32940effcb98638efdd71acaa0f`
+- iOS IPA：`ed54287cbaa1e27bd6e20d3e9007939253c31760b4f46fd05994c61eefb8b51e`
+
+交付与上传：
+
+```bash
+shasum -a 256 build/app/outputs/flutter-apk/app-release.apk
+shasum -a 256 build/app/outputs/bundle/release/app-release.aab
+shasum -a 256 build/ios/ipa/N42Wallet.ipa
+```
+
+- Android 测试包使用 `build/app/outputs/flutter-apk/app-release.apk`；`app-debug.apk` 只用于开发调试，不作为 RC。
+- TestFlight/Transporter 选择 `build/ios/ipa/N42Wallet.ipa`，不要选择 `.xcarchive`、`Runner.app` 或 Debug 包。
+- 可以使用 Apple Transporter 上传该 IPA，登录账号必须有对应 App Store Connect App 的上传权限。本轮导出由 App Store Connect 自动管理构建号，IPA 内实际 build number 为 `202607093`；上传前仍须确认不存在同号构建。
+- Transporter 显示 Delivery Success 只代表上传完成；仍需等待 App Store Connect 处理、加密合规检查和 TestFlight 可测试状态。
 
 ---
 
@@ -143,18 +164,23 @@
 
 ## 6. 自动化测试现状与改进要求
 
+完整命令、测试数据隔离、CI 对照、失败排查和新增用例规范见 `docs/AUTOMATED_TESTING.md`。本节只保留发布验收所需的结果摘要和人工追溯。
+
 ### 6.1 当前可信结果
 
 | 检查 | 命令 | 2026-07-13 结果 |
 |---|---|---|
 | 静态分析 | `flutter analyze --no-fatal-infos --no-pub` | Pass，0 issues |
-| Flutter 主套件 | `flutter test --no-pub --concurrency=1` | Pass，3108 tests |
-| Flutter 行覆盖率 | `flutter test --no-pub --coverage --concurrency=1` | Pass，最近一次测量 13.05% |
-| 自动化质量门禁 | `flutter test --no-pub test/quality/integration_test_quality_test.dart` | Pass，4 tests |
-| Android 真机启动 | `flutter test integration_test/app_test.dart -d <device>` | Pass，生产入口、Navigator/路由注册和前后台生命周期；未覆盖真实导航点击 |
-| iOS 真机启动 | 同一 E2E 命令指定 iPhone | Blocked，目标 iPhone 未连接，不计 Fail/Pass |
-| Chat Push 数据源 | `flutter test packages/n42_chat/test/unit/datasources/push_protocol_datasource_test.dart` | Pass |
-| LiveKit JWT 后端 | `cd backend/livekit-jwt && go test ./...` | Pass |
+| Flutter 主套件 | `flutter test --no-pub --coverage --concurrency=1` | Pass，3112 tests |
+| Flutter 行覆盖率 | `flutter test --no-pub --coverage --concurrency=1` | Pass，`15366/117554 = 13.07%` |
+| 自动化质量门禁 | `flutter test --no-pub test/quality/integration_test_quality_test.dart` | Pass，7 tests |
+| Android 真机 App Smoke | Release APK 安装与人工点击 | Pass；HyperOS USB 安装受限后改由文件管理器安装，冷启动及 Wallet 主要安全入口通过 |
+| iOS 真机启动 | Flutter 3.41.9 Profile + `devicectl` | Pass；USB 安装后连续 3 次冷启动，每次 8 秒后进程仍存活，联系人插件启动崩溃未复现 |
+| iOS 真机 App Smoke | `flutter drive --profile ... integration_test/app_test.dart` | Pass，USB Driver 2/2；DEVICE-01 因用户要求优先 Android 而暂停 |
+| iOS 模拟器完整点击 | `./scripts/run_automated_tests.sh device` | Blocked；旧 `MLImage.framework` 无 arm64-simulator slice，Xcode 26.6 无可用 x86_64 模拟器目标 |
+| Chat 独立套件 | `cd packages/n42_chat && flutter test --no-pub` | Pass，273 tests |
+| JMT / Mining | `dart test` / `flutter test --no-pub` | Pass，13 / 3 tests |
+| 三个 Go 后端 | `go test -count=1 ./...` | Pass，livekit-jwt、social-auth、swap |
 | Android Debug/Release | `flutter build apk ...` | Pass |
 | iOS Release/IPA | `flutter build ios/ipa ...` | Pass |
 
@@ -166,9 +192,9 @@ Android Release 不应在旧 `GeneratedPluginRegistrant.java` 存在时盲目使
 |---|---|---|
 | `test/` | 208 个测试文件；Wallet 66、Core 59、AA 8、WalletConnect 7，含 Widget/截图/溢出和自动化质量门禁 | 权限、原生签名、真实链上结果、完整导航 |
 | `packages/n42_chat/test/` | 30 个文件，集中在 utils/services/widgets，少量 datasource/repository/encryption | Matrix 消息、推送、群管理、媒体、通话、多设备 |
-| `integration_test/` | 2 个文件；1 个真实启动/生命周期 E2E，13 个钱包设备用例因缺少安全夹具或可控 RPC 显式 `SKIP` | `SKIP` 不计 Pass；需按阻塞原因逐项建设 fixture 后启用 |
+| `integration_test/` | 3 个文件；1 个启动/生命周期 Smoke、1 个生产入口全设备点击流、13 个钱包资金/破坏性用例显式 `SKIP` | 系统权限、双端消息/通话、真实签名广播和最终链上结果仍必须人工实弹 |
 | `backend/` | 9 个 Go 测试文件 | 部署后路由、密钥、跨域和真实上游 |
-| 覆盖率 | `15339/117534 = 13.05%` 原始行覆盖 | CI 设置 70%，当前真实基线未达标 |
+| 覆盖率 | `15366/117554 = 13.07%` 原始行覆盖 | CI 设置 70%，当前真实基线未达标 |
 
 ### 6.3 自动化优先级
 
@@ -203,6 +229,24 @@ Android Release 不应在旧 `GeneratedPluginRegistrant.java` 存在时盲目使
 | Market/ENS/Portfolio | 搜索、价格格式、告警、回退、ENS 错误 | MKT、ENS、PORT |
 | Chat utils/widgets/services | token、Push、消息 UI/服务 | CHT、MSG、CALL、PUSH |
 | L10n/截图/溢出 | 主题、伪本地化、关键布局 | UX |
+
+### 6.5 设备点击自动化执行
+
+`integration_test/device_full_flow_test.dart` 启动生产 `main()`，实际点击并断言：首次协议、Wallet/Mining/Earn(Android)/Market 主导航、Market 四个页签和搜索输入、钱包选择器、Wallet AI、WalletConnect、收发/Swap 安全入口、ENS、Smart Account、全部非破坏性 Drawer 入口，以及 Chat 运行时登录、全局搜索、四个主页签和新增菜单。
+
+```bash
+read -r -p "Chat test user: " N42_E2E_CHAT_USERNAME
+read -r -s -p "Chat test password: " N42_E2E_CHAT_PASSWORD
+printf '\n'
+export N42_E2E_CHAT_USERNAME N42_E2E_CHAT_PASSWORD
+
+DEVICE_ID=<android-or-wired-ios-id> ./scripts/run_automated_tests.sh device
+DEVICE_ID=<wireless-ios-id> PUBLISH_PORT=1 ./scripts/run_automated_tests.sh device
+
+unset N42_E2E_CHAT_USERNAME N42_E2E_CHAT_PASSWORD
+```
+
+运行前必须保持设备解锁。HyperOS 首次 USB 安装需在手机上等待倒计时结束并点“继续安装”；该原生安全弹窗不能由 Flutter 测试越权点击。自动化只打开并安全返回交易/签名类入口，不输入助记词、不确认密码、不广播交易、不删除数据。完整细节和结果判定见 `docs/AUTOMATED_TESTING.md`。
 
 ---
 
@@ -657,12 +701,15 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 |---|---|---|---|
 | K-01 | 生产 `/livekit/jwt` 被 Nginx 301 到带斜杠路径，随后 404 | 客户端已将 raw token 错误改为“连接失败” | 按 `backend/livekit-jwt/README.md` 部署 exact location，再跑 CALL-05/07；未修复不得标群通话 Pass |
 | K-02 | 当前真机钱包余额为 0 | 已完成无广播 UI/校验流程 | 准备受控小额钱包，重跑 TX-06~14、AA-05、DEFI-03/06/08/09、PAY-02 |
-| K-03 | 历史 `integration_test/` 曾使用空断言 | 已删除空断言；增加扫描门禁；启动/生命周期为真实 E2E；13 个钱包用例显式 `SKIP` 并附原因 | 未改成真实启动/点击/断言前不计 Pass；不得删除 `SKIP` 伪装执行 |
-| K-04 | 原始行覆盖 13.05%，CI 门禁 70% | 主套件 3108 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
+| K-03 | 历史 `integration_test/` 曾使用空断言 | 已删除空断言；增加 6 项质量门禁和生产入口完整点击流；13 个钱包资金/破坏性用例显式 `SKIP` 并附原因 | 设备流实际跑完前不得记 Pass；不得删除 `SKIP` 伪装执行 |
+| K-04 | 原始行覆盖 13.07%，CI 门禁 70% | 主套件 3112 项全通过 | 对齐门禁或持续补测；不得伪报 70% |
 | K-05 | Chat 红包为本地演示记录，不上链 | 页面已有免责声明 | PAY-05 每版验证；不执行真实资产断言 |
 | K-06 | Egress、部分 Bridge、Local LLM、部分社交登录需外部部署/key | 未配置时应隐藏或降级 | 以 `docs/EXTERNAL_DEPENDENCIES.md` 为准；N/A 不得误标 Pass |
+| K-07 | Android 16 HyperOS 3 拦截 ADB 更新安装 | 首轮最新源码 Profile 与 DEVICE-01 Driver 2/2 Pass；临时 Profile 已安全删除，最终无测试凭据 Release `2026070904` 已由文件管理器进入机主指纹安装 | 完成当前 N42Wallet 指纹验证，冷启动 Release，并确认 WalletConnect 返回日志干净 |
+| K-08 | iPhone iOS 27 的旧联系人插件在 UIScene 启动时强制访问 `AppDelegate.window`，且无线 LLDB 曾导致设备无响应 | 已迁移 Flutter UIScene 生命周期，升级 `flutter_contacts` 至 Flutter 3.41 兼容的 2.1.0；Flutter 3.41.9 Profile 全量构建后 USB 安装，连续 3 次冷启动和 Driver App Smoke 2/2 通过 | Android 优先测试完成后，通过 USB 恢复 DEVICE-01；当前完整点击为 Paused，不记 Blocked/Pass |
+| K-09 | iOS 模拟器依赖不兼容 arm64 | `MLImage.framework` arm64 slice 为 iPhoneOS，只有 x86_64 slice 可供模拟器；当前 Xcode 仅 arm64 | 升级/替换为含 arm64-simulator slice 的 MLImage XCFramework，删除 Runner 的 arm64 simulator 排除后复测 |
 
-### 15.1 2026-07-13 已执行真机基线
+### 15.1 2026-07-13 历史人工真机基线
 
 | 区域 | 已验证 |
 |---|---|
@@ -670,7 +717,17 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 | Chat | session 保留、会话列表/全局搜索、联系人、建群/加友入口、群搜索、长按/复制/引用取消/反应、附件/Topics/Details/Files/Scheduled、Discover/Moments/Live/Voice/Mini Apps/Games、Me 设置 |
 | 异常 | LiveKit 本地化失败、Push Protocol 当前 API、连续轮询无崩溃或渲染异常 |
 
-该表只代表当时基线，不替代新 RC 回归。
+该表来自本轮自动化改造前的人工记录，只代表当时基线，不替代新 RC 回归。
+
+### 15.2 2026-07-13 本轮设备自动化结果
+
+| 平台 | 设备 | 执行结果 | 结论 |
+|---|---|---|---|
+| Android | Xiaomi 25098RA98C / Android 16 / HyperOS 3 | 冷启动及 Wallet/Market/Chat 人工实弹通过；文本真实发送；视频呼叫权限与控制正常；生产入口 DEVICE-01 Driver 2/2 Pass；最终无凭据 Release 已进入 HyperOS 指纹安装 | `Pass with defect`：发现 WalletConnect 卸载期 `ref.read`，代码已修，仍待 Release 安装后回归 |
+| iOS 真机 | iPhone 17 Pro Max / iOS 27.0 / USB | Flutter 3.41.9 Profile 全量构建、签名、安装 Pass；连续 3 次冷启动存活；Driver App Smoke 2/2 | 启动与 App Smoke `Pass`；DEVICE-01 因切换 Android 而 `Paused` |
+| iOS Simulator | iPhone 17 Pro / iOS 26.5 | Xcode 无匹配的 simulator destination | `Blocked`，依赖架构不兼容，不计 Pass/Fail |
+
+Android DEVICE-01 已取得 2/2 Driver Pass，但同轮日志发现并修复 WalletConnect 生命周期缺陷，因此发布结论仍需修复包二次真机回归。静态、单元、Widget、包、插件和后端套件不替代双端消息、完整通话、系统权限和链上广播。
 
 ---
 
@@ -747,3 +804,7 @@ P0 至少 ETH/BTC/SOL/TRX；其余按发版范围为 P1/P2。每个可见且声�
 | 2026-07-10 | 1.0 | 初版 Wallet 回归手册 |
 | 2026-07-13 | 2.0 | 合并旧中英文清单和 T17-T25；补全 Wallet + Chat；增加自动化追溯、权限/弱网/安全/发布准入；明确 integration test 占位和 13.05% 真实覆盖率 |
 | 2026-07-13 | 2.1 | 删除 integration test 空断言；新增真实 App 启动/生命周期 E2E、显式阻塞用例和自动化质量门禁 |
+| 2026-07-13 | 2.2 | 增加自动化测试主文档和统一执行脚本引用；区分自动化执行、设备实弹和发布验收责任 |
+| 2026-07-13 | 2.3 | 增加 Wallet + Chat 生产入口全设备点击流、运行时登录注入、真机/模拟器执行命令与本轮 Android/iOS 阻塞证据；更新自动化套件结果 |
+| 2026-07-13 | 2.4 | 更新 Android 人工 Smoke 与 iOS USB 三次冷启动结果；记录 UIScene/联系人启动修复及本地网络权限阻塞 |
+| 2026-07-14 | 2.5 | 更新 Android Wallet/Chat 实弹、视频权限与文本发送、DEVICE-01 Driver 结果、WalletConnect 生命周期修复和 13.07% 覆盖率基线 |
