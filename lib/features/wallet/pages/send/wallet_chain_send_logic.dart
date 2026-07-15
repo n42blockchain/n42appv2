@@ -31,6 +31,11 @@ import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
+bool shouldBlockGasEstimateForAmountError({
+  required String amountErrorMessage,
+  String? amountOverride,
+}) => amountOverride == null && amountErrorMessage.isNotEmpty;
+
 /// Business logic mixin for _WalletChainSendState.
 ///
 /// Handles Gas estimation, balance fetching, amount validation, and the
@@ -255,7 +260,15 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     try {
       String? toAddr;
       if (checkAddress) {
-        if (amountErrorMessage != '') return;
+        // Max supplies its own zero-value estimate. An invalid value already
+        // present in the input must not prevent it from calculating and
+        // replacing that value with the transferable maximum.
+        if (shouldBlockGasEstimateForAmountError(
+          amountErrorMessage: amountErrorMessage,
+          amountOverride: amountOverride,
+        )) {
+          return;
+        }
         toAddr = await toAddressCheck(toTextEditingController.text.trim());
         if (toAddr == null) return;
       } else {
