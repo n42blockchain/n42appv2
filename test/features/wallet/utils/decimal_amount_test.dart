@@ -110,5 +110,21 @@ void main() {
       );
       expect(bigIntToDecimalString(BigInt.from(1000000), 6), '1');
     });
+
+    test('formatter keeps intermediate input but rejects excess decimals', () {
+      final formatter = DecimalPlacesInputFormatter(2);
+      const oldValue = TextEditingValue(text: '1.23');
+      final accepted = formatter.formatEditUpdate(
+        oldValue,
+        const TextEditingValue(text: '1.2'),
+      );
+      final rejected = formatter.formatEditUpdate(
+        oldValue,
+        const TextEditingValue(text: '1.234'),
+      );
+
+      expect(accepted.text, '1.2');
+      expect(rejected.text, oldValue.text);
+    });
   });
 }

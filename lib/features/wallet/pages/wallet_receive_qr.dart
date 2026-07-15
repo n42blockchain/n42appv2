@@ -1,11 +1,7 @@
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -17,7 +13,6 @@ import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -55,12 +50,13 @@ const Map<String, Color> _kChainColors = {
 final _amountInputRegex = RegExp(r'^\d*\.?\d*');
 
 // ─── QR 数据 URI 构建（BIP-21 / EIP-681 / Solana Pay 等）──────────────────────
-String _buildQrData({
+String buildReceiveQrData({
   required String address,
   required String blockchainType,
   required String amount,
   String? erc20Contract,
   int erc20Decimals = 18,
+  int nativeDecimals = 18,
   int? chainId,
 }) {
   final trimmed = amount.trim();
@@ -80,6 +76,20 @@ String _buildQrData({
       );
     } catch (_) {
       // 转换失败则回退到下方原生/通用格式。
+    }
+  }
+
+  // EIP-681 的 value 必须是最小单位，不能直接把用户输入的 6 写成
+  // `value=6`，否则付款方会被解析为 6 wei 而非 6 个原生币。
+  if (blockchainType == 'Ethereum') {
+    try {
+      return Eip681.buildNative(
+        recipient: address,
+        chainId: chainId,
+        amountWei: decimalStringToBigInt(trimmed, nativeDecimals).toString(),
+      );
+    } catch (_) {
+      return address;
     }
   }
 
@@ -117,7 +127,6 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   String blockchainType = ''; // 主链区块链类型（用于 URI 生成）
   String qrData = '';
 
-  final GlobalKey previewKey = GlobalKey();
   final TextEditingController amountCtrl = TextEditingController();
 
   @override
@@ -177,12 +186,13 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   void _onAmountChanged() {
     final token = widget.tokenCoinModel;
-    final newData = _buildQrData(
+    final newData = buildReceiveQrData(
       address: address,
       blockchainType: blockchainType,
       amount: amountCtrl.text,
       erc20Contract: token?.config.contract,
       erc20Decimals: token?.config.decimals ?? 18,
+      nativeDecimals: widget.chainCoinModel.config.decimals,
       chainId: widget.chainCoinModel.config.chainId,
     );
     setState(() => qrData = newData);
@@ -216,41 +226,14 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     );
   }
 
-  // ─── 截图分享（只截 QR 卡片区）────────────────────────────────────────────
-
-  Future<void> _shareScreenshot() async {
-    try {
-      final boundary =
-          previewKey.currentContext!.findRenderObject()
-              as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return;
-      final bytes = byteData.buffer.asUint8List();
-
-      final tempDir = await getTemporaryDirectory();
-      final file = await File(
-        '${tempDir.path}/receive_qr.png',
-      ).create(recursive: true);
-      await file.writeAsBytes(bytes);
-
-      if (!mounted) return;
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path, mimeType: 'image/png')],
-          subject: S.of(context).g_key_156, // "Scan to copy address"
-          text: S.of(context).g_key_179, // "This is my wallet address"
-        ),
-      );
-    } catch (e) {
-      AppLogger.w('WalletReceiveQr', 'share failed: $e');
-    }
-  }
-
   /// 分享收款链接（地址文本 / payment URI）
   Future<void> shareLink() async {
-    // 有金额时分享完整 URI（如 ethereum:0x...?value=0.5）；无金额时仅分享地址
-    final shareText = qrData.isNotEmpty ? qrData : address;
+    final amount = amountCtrl.text.trim();
+    final shareText = amount.isEmpty
+        ? '${S.of(context).g_key_33} $symbol\n$address'
+        : 'Request $amount $symbol on $network\n'
+              'Address: $address\n'
+              'Payment request: $qrData';
     if (!mounted) return;
     await SharePlus.instance.share(
       ShareParams(
@@ -269,27 +252,13 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   @override
   Widget build(BuildContext context) {
     final waValue = ref.watch(wapBridgeProvider);
-    final su = ScreenUtil();
-
     final bgColor = AppColorTokens.of(context).bgBase;
     final mainText = AppColorTokens.of(context).textPrimary;
     final blueColor = AppColorTokens.of(context).brand;
-    final w40 = su.setWidth(40.0);
-
     return Scaffold(
       appBar: AppBarWidget(
         text: '${S.of(context).g_key_33}($symbol)',
-        actions: [
-          InkWell(
-            onTap: _shareScreenshot,
-            child: Container(
-              width: w40,
-              height: w40,
-              margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-              child: Icon(Icons.share, size: w40, color: blueColor),
-            ),
-          ),
-        ],
+        actions: const [],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

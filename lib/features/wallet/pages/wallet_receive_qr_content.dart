@@ -76,105 +76,96 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     required Color blueColor,
     required Color chainColor,
   }) {
-    return RepaintBoundary(
-      key: previewKey,
-      child: Container(
-        color: bgColor,
-        padding: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space12,
-          vertical: AppSpacing.space6,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ImageNetWork(
-                  imageUrl: logoUrl,
-                  width: ScreenUtil().setWidth(60.0),
-                  height: ScreenUtil().setWidth(60.0),
-                  placeholder: 'assets/img/list_default.png',
-                ),
-                SizedBox(width: AppSpacing.space4),
-                Expanded(
-                  child: Text(
-                    network,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: AppTypography.title.copyWith(color: mainText),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: AppSpacing.space4),
-
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-                vertical: AppSpacing.space2,
+    return Container(
+      color: bgColor,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space12,
+        vertical: AppSpacing.space6,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ImageNetWork(
+                imageUrl: logoUrl,
+                width: ScreenUtil().setWidth(60.0),
+                height: ScreenUtil().setWidth(60.0),
+                placeholder: 'assets/img/list_default.png',
               ),
-              decoration: BoxDecoration(
-                color: chainColor.withValues(alpha: 0.12),
-                border: Border.all(color: chainColor, width: 1.2),
-                borderRadius: AppRadius.brPill,
-              ),
-              child: Text(
-                coinType,
-                style: AppTypography.caption.copyWith(
-                  color: chainColor,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0.4,
+              SizedBox(width: AppSpacing.space4),
+              Expanded(
+                child: Text(
+                  network,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: AppTypography.title.copyWith(color: mainText),
                 ),
               ),
-            ),
-            SizedBox(height: AppSpacing.space12),
+            ],
+          ),
+          SizedBox(height: AppSpacing.space4),
 
-            Container(
-              width: ScreenUtil().setWidth(360.0),
-              height: ScreenUtil().setWidth(360.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  width: 1.0,
-                  color: AppColorTokens.of(context).border,
-                ),
-                borderRadius: AppRadius.brXl,
-              ),
-              child: QrImageView(
-                padding: EdgeInsets.all(AppSpacing.space4),
-                data: qrData,
-                version: QrVersions.auto,
-              ),
+          Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppSpacing.space8,
+              vertical: AppSpacing.space2,
             ),
-            SizedBox(height: AppSpacing.space6),
-
-            EnsAddressDisplay(
-              address: address,
-              coinType: coinType,
-              style: EnsDisplayStyle.detailed,
-              showAvatar: true,
-              showCopy: false,
-              fontSize: ScreenUtil().setSp(26.0),
+            decoration: BoxDecoration(
+              color: chainColor.withValues(alpha: 0.12),
+              border: Border.all(color: chainColor, width: 1.2),
+              borderRadius: AppRadius.brPill,
             ),
-            SizedBox(height: AppSpacing.space6),
-
-            Text(
-              S.of(context).g_app_share_key_1,
+            child: Text(
+              coinType,
               style: AppTypography.caption.copyWith(
-                color: mainText.withValues(alpha: 0.55),
+                color: chainColor,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0.4,
               ),
-              textAlign: TextAlign.center,
             ),
-            SizedBox(height: AppSpacing.space6),
+          ),
+          SizedBox(height: AppSpacing.space12),
 
-            Text(
-              S.of(context).g_app_share_key_2,
-              style: AppTypography.bodyStrong.copyWith(color: blueColor),
+          Container(
+            width: ScreenUtil().setWidth(360.0),
+            height: ScreenUtil().setWidth(360.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                width: 1.0,
+                color: AppColorTokens.of(context).border,
+              ),
+              borderRadius: AppRadius.brXl,
             ),
-            SizedBox(height: AppSpacing.space2),
-          ],
-        ),
+            child: QrImageView(
+              padding: EdgeInsets.all(AppSpacing.space4),
+              data: qrData,
+              version: QrVersions.auto,
+            ),
+          ),
+          SizedBox(height: AppSpacing.space6),
+
+          EnsAddressDisplay(
+            address: address,
+            coinType: coinType,
+            style: EnsDisplayStyle.full,
+            showAvatar: true,
+            showCopy: false,
+            fontSize: ScreenUtil().setSp(22.0),
+          ),
+          SizedBox(height: AppSpacing.space6),
+
+          Text(
+            S.of(context).g_app_share_key_1,
+            style: AppTypography.caption.copyWith(
+              color: mainText.withValues(alpha: 0.55),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: AppSpacing.space6),
+        ],
       ),
     );
   }
@@ -250,7 +241,12 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     return TextField(
       controller: amountCtrl,
       keyboardType: const TextInputType.numberWithOptions(decimal: true),
-      inputFormatters: [FilteringTextInputFormatter.allow(_amountInputRegex)],
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(_amountInputRegex),
+        DecimalPlacesInputFormatter(
+          (widget.tokenCoinModel ?? widget.chainCoinModel).config.decimals,
+        ),
+      ],
       style: textStyle,
       decoration: InputDecoration(
         hintText: '0.0',

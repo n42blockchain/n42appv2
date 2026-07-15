@@ -4,18 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
+import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/ai_assistant/presentation/wallet_ai_snapshot_builder.dart';
 import 'package:n42_wallet/features/ai_assistant/presentation/wallet_assistant_page.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/iap/iap_page.dart';
 import 'package:n42_wallet/features/wallet/pages/ens/ens_home_page.dart';
+import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
@@ -23,11 +26,14 @@ import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
+import 'package:n42_wallet/features/wallet/pages/send/scan_to_pay_utils.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
+import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
@@ -52,6 +58,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   /// 小额资产过滤阈值：0=关闭，1/5/10/50 表示过滤低于该 USD 价值的代币
   double _smallAssetsThreshold = 0.0;
+  final TextEditingController _tokenSearchController = TextEditingController();
+  final FocusNode _tokenSearchFocusNode = FocusNode();
+  String _tokenSearchQuery = '';
+  bool _isTokenSearchVisible = false;
 
   // ── Token auto-discovery ──────────────────────────────────────────────────
   List<DiscoveredToken> _discoveredTokens = [];
@@ -86,6 +96,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   void dispose() {
     _priceRefreshTimer?.cancel();
     _scrollController.dispose();
+    _tokenSearchController.dispose();
+    _tokenSearchFocusNode.dispose();
     super.dispose();
   }
 
@@ -251,6 +263,65 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     if (await _guardAction(waValue) && mounted) showSwapModeSheet(context);
   }
 
+  void _setTokenSearchVisible(bool visible) {
+    setState(() {
+      _isTokenSearchVisible = visible;
+      if (!visible) {
+        _tokenSearchController.clear();
+        _tokenSearchQuery = '';
+      }
+    });
+    if (visible) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _tokenSearchFocusNode.requestFocus();
+      });
+    }
+  }
+
+  Future<void> _refreshWallet(WalletActionProvider waValue) async {
+    if (waValue.load == Load.refresh) return;
+    await waValue.refreshWalletCoinInfo();
+  }
+
+  /// 钱包首页二维码菜单的扫码入口。EIP-681 请求直接进入对应资产的付款页；
+  /// 普通地址则先选择要发送的资产，避免将地址误当作 WalletConnect URI。
+  Future<void> _scanToPay(WalletActionProvider waValue) async {
+    final scanned = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const ScanPage()),
+    );
+    if (!mounted || scanned == null || scanned.trim().isEmpty) return;
+
+    final request = Eip681.parse(scanned);
+    if (request == null) {
+      showSearchCoinSheet(
+        context,
+        0,
+        toAddress: Eip681.resolveRecipient(scanned),
+      );
+      return;
+    }
+
+    final resolution = ScanToPayResolver.resolve(
+      request: request,
+      coinModels: waValue.coinList.whereType<CoinModel>(),
+    );
+    if (resolution == null) {
+      ToastUtils.show('Payment request token or chain is not in this wallet');
+      return;
+    }
+    await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => WalletChainSend(
+          resolution.coinModel,
+          initialToAddress: resolution.recipient,
+          initialAmount: resolution.amount,
+        ),
+      ),
+    );
+  }
+
   Future<void> _promptBackup(WalletActionProvider waValue) async {
     if (!walletHasBackupableMnemonic(waValue.walletInfo)) {
       ToastUtils.show(walletBackupPhraseUnavailableMessage);
@@ -305,7 +376,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                           onMenuTap: () =>
                               Scaffold.of(this.context).openDrawer(),
                           onWalletConnectTap: _walletConnect,
-                          onScanTap: _walletConnect,
+                          onScanTap: () => _scanToPay(waValue),
                           onReceiveTap: () => showSearchCoinSheet(context, 1),
                           onAssistantTap: () => _openWalletAssistant(waValue),
                         ),
@@ -439,6 +510,32 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                       showAddTokenSheet(context, ref),
                                   onChangeNetwork: () =>
                                       showNetworkSheet(context, waValue),
+                                  searchController: _tokenSearchController,
+                                  searchFocusNode: _tokenSearchFocusNode,
+                                  isSearchVisible: _isTokenSearchVisible,
+                                  onSearchVisibilityChanged:
+                                      _setTokenSearchVisible,
+                                  onSearchChanged: (query) => setState(
+                                    () => _tokenSearchQuery = query.trim(),
+                                  ),
+                                  onRefresh: () => _refreshWallet(waValue),
+                                  onMarketTap: () {
+                                    final marketTabIndex =
+                                        Theme.of(context).platform ==
+                                            TargetPlatform.android
+                                        ? 3
+                                        : 2;
+                                    ref
+                                            .read(homeTabIndexProvider.notifier)
+                                            .state =
+                                        marketTabIndex;
+                                  },
+                                  onPortfolioTap: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => const PortfolioPage(),
+                                    ),
+                                  ),
                                   onThresholdChanged: (next) {
                                     setState(
                                       () => _smallAssetsThreshold = next,
@@ -449,6 +546,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                 WalletCoinListSliver(
                                   waValue: waValue,
                                   smallAssetsThreshold: _smallAssetsThreshold,
+                                  searchQuery: _tokenSearchQuery,
                                   discoveredTokens: _discoveredTokens,
                                   onDiscoveryDismiss: () =>
                                       setState(() => _discoveredTokens = []),
