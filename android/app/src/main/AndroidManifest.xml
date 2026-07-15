@@ -93,6 +93,7 @@
                 <!-- n42://, n42app://, astraapp:// deep links -->
                 <data android:scheme="n42"/>
                 <data android:scheme="n42app"/>
+				<data android:scheme="n42wallet"/>
                 <data android:scheme="astraapp"/>
                 <!-- N42 ID Hub scan-to-sign (n42id://bind|auth) -->
                 <data android:scheme="n42id"/>

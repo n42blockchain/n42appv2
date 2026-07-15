@@ -362,6 +362,20 @@ void main() {
     });
   });
 
+  test('wallet-specific chat SSO callback is accepted', () async {
+    final service = DeepLinkService();
+    addTearDown(service.dispose);
+    final future = service.deepLinkStream.first;
+    service.handleUri(
+      Uri.parse(
+        'n42wallet://auth/sso?loginToken=token&homeserver=https://m.si46.world',
+      ),
+    );
+    final data = await future;
+    expect(data.type, DeepLinkType.chatSso);
+    expect(data.params['loginToken'], 'token');
+  });
+
   group('DeepLinkType enum', () {
     test('should have all expected values', () {
       expect(

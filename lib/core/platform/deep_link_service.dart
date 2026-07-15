@@ -128,8 +128,10 @@ class DeepLinkService {
   /// 初始化服务
   Future<void> init() async {
     try {
-      final initialUri = await _appLinks.getInitialLink()
-          .timeout(const Duration(seconds: 5), onTimeout: () => null);
+      final initialUri = await _appLinks.getInitialLink().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => null,
+      );
       if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
       AppLogger.w('DeepLink', 'failed to get initial link: $e');
@@ -145,10 +147,7 @@ class DeepLinkService {
 
   void _handleUri(Uri uri) {
     // 诊断日志默认脱敏 query 参数。
-    AppLogger.d(
-      'DeepLink',
-      'received: ${DeepLinkData.redactUri(uri)}',
-    );
+    AppLogger.d('DeepLink', 'received: ${DeepLinkData.redactUri(uri)}');
 
     final data = _parseUri(uri);
     _lastDeepLink = data;
@@ -162,6 +161,7 @@ class DeepLinkService {
     const allowedSchemes = {
       'n42',
       'n42app',
+      'n42wallet',
       'n42id',
       'astraapp',
       'https',
@@ -185,7 +185,9 @@ class DeepLinkService {
         params: {'wcUri': parsedWcUri.toString()},
       );
     }
-    if (uri.scheme == 'n42' || uri.scheme == 'n42app') {
+    if (uri.scheme == 'n42' ||
+        uri.scheme == 'n42app' ||
+        uri.scheme == 'n42wallet') {
       return _parseN42Uri(uri);
     }
     if (uri.scheme == 'n42id') {
