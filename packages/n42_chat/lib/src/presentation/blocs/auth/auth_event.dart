@@ -79,12 +79,10 @@ class AuthAnonymousRegisterRequested extends AuthEvent {
 class AuthWalletAuthRequested extends AuthEvent {
   final String homeserver;
   final String address;
-  final String signature;
 
   const AuthWalletAuthRequested({
     required this.homeserver,
     required this.address,
-    required this.signature,
   });
 
   @override

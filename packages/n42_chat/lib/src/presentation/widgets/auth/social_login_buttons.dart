@@ -10,7 +10,6 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/wallet_login_credentials.dart';
 import '../../../core/utils/sso_brand.dart';
 import '../../../integration/wallet_bridge.dart';
 import '../../../n42_chat.dart' show N42Chat;
@@ -872,19 +871,13 @@ class _SocialLoginButtonsState extends State<SocialLoginButtons> {
         widget.onError?.call('Please connect your wallet first');
         return;
       }
-      final message = WalletLoginCredentials.canonicalLoginMessage(address);
-      final signature = await bridge.signMessage(message);
-      if (signature == null || signature.isEmpty) {
-        _setWalletLoading(false);
-        widget.onError?.call('Wallet login is not supported by this wallet');
-        return;
-      }
       if (!mounted) return;
+      // 签名下沉到 AuthBloc：待确定走 ID Hub 还是 legacy 路径后再让钱包签一次，
+      // 避免两条路径各自签名造成双重签名弹窗。
       context.read<AuthBloc>().add(
         AuthWalletAuthRequested(
           homeserver: _homeserver,
           address: address,
-          signature: signature,
         ),
       );
     } catch (e) {
