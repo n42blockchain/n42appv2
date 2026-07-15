@@ -86,6 +86,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
   final FocusNode toNode = FocusNode();
   final FocusNode valueNode = FocusNode();
   final FocusNode noteNode = FocusNode();
+  late bool _isPaymentRequestAmountLocked;
 
   @override
   void initState() {
@@ -93,6 +94,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
     valueTextEditingController.text = widget.initialAmount?.isNotEmpty == true
         ? widget.initialAmount!
         : '0';
+    _isPaymentRequestAmountLocked = widget.initialAmount?.isNotEmpty == true;
     toTextEditingController.addListener(_onAddressInputChanged);
     if (widget.initialToAddress?.isNotEmpty == true) {
       toTextEditingController.text = widget.initialToAddress!;
@@ -242,8 +244,11 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
 
     _setRecipient(resolution.recipient);
     if (resolution.amount != null) {
-      valueTextEditingController.text = resolution.amount!;
-      amountCheck(value: resolution.amount!);
+      setState(() {
+        _isPaymentRequestAmountLocked = true;
+        valueTextEditingController.text = resolution.amount!;
+        amountCheck(value: resolution.amount!);
+      });
     }
     await toAddressCheck(resolution.recipient);
   }
@@ -331,6 +336,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
           onChanged: (v) => amountCheck(value: v),
           onEditingComplete: amountCheck,
           onMaxTap: maxTag,
+          isAmountLocked: _isPaymentRequestAmountLocked,
         ),
         if (_isEvm && !isContract)
           SendNoteWidget(
