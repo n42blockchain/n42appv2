@@ -243,8 +243,9 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<dynamic> estimateGasEthLocal({
     bool checkAddress = true,
     String? amountOverride,
+    bool dismissKeyboard = true,
   }) async {
-    closeKeyboard();
+    if (dismissKeyboard) closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
     setState(() => gasLimitLoad = Load.loading);
     if (_blockchainType != BlockchainType.Ethereum.name &&
@@ -384,8 +385,18 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       // 在 estimateGas 阶段就做余额检查，从而返回 insufficient funds，导致
       // 后续永远算不出 balance-fee。普通转账的 gas 与 value 无关，使用 0
       // 作为估算值即可，最终发送仍使用下方精确的 balance-fee。
-      final rOK = await estimateGasEthLocal(amountOverride: '0');
+      // Keep the amount field focused. A delayed Max calculation must not
+      // overwrite text the user entered while the gas RPC request was pending.
+      final amountBeforeEstimate = valueTextEditingController.text;
+      final rOK = await estimateGasEthLocal(
+        amountOverride: '0',
+        dismissKeyboard: false,
+      );
       if (rOK == true) {
+        if (!mounted ||
+            valueTextEditingController.text != amountBeforeEstimate) {
+          return;
+        }
         transferValue = maxTransferableAmount(
           balance: coinModel.balance,
           fee: totalGasPrice,
