@@ -233,7 +233,10 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
     if (isContract) {
       final wap = ref.read(wapBridgeProvider);
       final cIndex = wap.coinModels.indexWhere(
-        (e) => e.config.coinType == config.coinType,
+        (e) =>
+            e.config.coinType == config.coinType &&
+            !e.config.isContract &&
+            e.isTest == cm.isTest,
       );
       if (cIndex < 0) return;
       _chainCoinModel = wap.coinModels[cIndex];

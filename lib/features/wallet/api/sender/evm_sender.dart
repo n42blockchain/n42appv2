@@ -43,7 +43,7 @@ class EvmSender implements ChainSender {
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
     final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final chainId = (baseInfo?['chainId'] as int?) ?? 1;
+    final chainId = resolveChainId(params.chainConfig, isTest: params.isTest);
     final isContract = params.contractAddress.isNotEmpty;
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
     // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。
@@ -371,4 +371,32 @@ class EvmSender implements ChainSender {
   }
 
   static MessageModel _errMM() => MessageModel.error();
+
+  /// 从完整链配置解析当前网络的 EIP-155 chain ID。
+  ///
+  /// 配置同时保留 `chainId` 与 `chainId_test`。过去签名始终读取前者，测试网
+  /// 交易会带主网 chain ID，被节点以 `invalid chain id for signer` 拒绝。
+  static int resolveChainId(
+    Map<String, dynamic>? chainConfig, {
+    required bool isTest,
+  }) {
+    final baseInfo = chainConfig?['baseInfo'] as Map<String, dynamic>?;
+
+    int read(dynamic value) {
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
+    final selected = isTest
+        ? read(baseInfo?['chainId_test'] ?? chainConfig?['testnetChainID'])
+        : read(baseInfo?['chainId'] ?? chainConfig?['mainnetChainID']);
+    if (selected > 0) return selected;
+
+    // 没有独立测试网配置时回退主网，而不是签名 chain ID 0/1。
+    final fallback = read(
+      baseInfo?['chainId'] ?? chainConfig?['mainnetChainID'],
+    );
+    return fallback > 0 ? fallback : 1;
+  }
 }

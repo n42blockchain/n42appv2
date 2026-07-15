@@ -71,3 +71,36 @@ BigInt doubleAmountToBigInt(double value, int decimals) {
   }
   return decimalStringToBigInt(value.toString(), decimals);
 }
+
+/// 输入金额的小数位数是否不超过代币链上精度。
+///
+/// `decimalStringToBigInt` 会截断超出的位数；转账 UI 不应静默截断，因此在
+/// 提交前先用此方法拒绝。这样 18-decimal 代币最多输入 18 位小数，而不是
+/// 允许第 19 位悄悄变成另一笔交易。
+bool hasAtMostDecimalPlaces(String input, int decimals) {
+  if (decimals < 0) return false;
+  final normalized = input.trim();
+  final exponentIndex = normalized.indexOf(RegExp('[eE]'));
+  final mantissa = exponentIndex < 0
+      ? normalized
+      : normalized.substring(0, exponentIndex);
+  final dotIndex = mantissa.indexOf('.');
+  return dotIndex < 0 || mantissa.length - dotIndex - 1 <= decimals;
+}
+
+/// 将链上最小单位精确格式化为十进制字符串，不经由 double。
+///
+/// 用于 MAX：double 只能稳定表示约 15-16 位有效数字，18-decimal 余额经
+/// double 往返会变大或变小，最终出现“明明点了 MAX 仍余额不足”。
+String bigIntToDecimalString(BigInt value, int decimals) {
+  if (decimals < 0) throw FormatException('negative decimals: $decimals');
+  if (decimals == 0) return value.toString();
+
+  final negative = value.isNegative;
+  var digits = value.abs().toString().padLeft(decimals + 1, '0');
+  final split = digits.length - decimals;
+  final whole = digits.substring(0, split);
+  final fraction = digits.substring(split).replaceFirst(RegExp(r'0+$'), '');
+  final result = fraction.isEmpty ? whole : '$whole.$fraction';
+  return negative ? '-$result' : result;
+}

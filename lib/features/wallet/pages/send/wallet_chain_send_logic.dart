@@ -27,6 +27,7 @@ import 'package:n42_wallet/features/wallet/services/recent_address_service.dart'
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/eth_layer2_chains.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
@@ -75,8 +76,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   void closeKeyboard();
 
   String get _coinType => coinModel.config.coinType;
-  String get _blockchainType =>
-      coinModel.config.blockchainType;
+  String get _blockchainType => coinModel.config.blockchainType;
   bool get _isContract => coinModel.config.isContract;
   int get _decimals => (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 
@@ -240,7 +240,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     setState(() {});
   }
 
-  Future<dynamic> estimateGasEthLocal({bool checkAddress = true}) async {
+  Future<dynamic> estimateGasEthLocal({
+    bool checkAddress = true,
+    String? amountOverride,
+  }) async {
     closeKeyboard();
     if (gasLimitLoad == Load.loading) return;
     setState(() => gasLimitLoad = Load.loading);
@@ -258,7 +261,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         toAddr = toTextEditingController.text.trim();
       }
       if (toErrorMessage != '') return;
-      final price = valueTextEditingController.text;
+      final price = amountOverride ?? valueTextEditingController.text;
       if (price.isEmpty) return;
 
       final gaslimit = BigInt.from(
@@ -322,6 +325,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       _setAmountError(S.of(context).g_key_134);
       return;
     }
+    if (!hasAtMostDecimalPlaces(value, decimals)) {
+      _setAmountError(S.of(context).g_key_134);
+      return;
+    }
 
     final Decimal decimalValue;
     try {
@@ -365,23 +372,27 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
     if (_isContract) {
-      valueTextEditingController.text = coinModel.balanceStringAll();
+      valueTextEditingController.text = bigIntToDecimalString(
+        coinModel.balance,
+        _decimals,
+      );
       transferValue = coinModel.balance;
       estimateGasEthLocal();
     } else if (_blockchainType == BlockchainType.Ethereum.name ||
         _blockchainType == BlockchainType.Tron.name) {
-      valueTextEditingController.text = coinModel.balanceStringAll();
-      final rOK = await estimateGasEthLocal();
+      // 估算 MAX 的 gas 时不能先把余额全作为 value 发送给 RPC；部分节点会
+      // 在 estimateGas 阶段就做余额检查，从而返回 insufficient funds，导致
+      // 后续永远算不出 balance-fee。普通转账的 gas 与 value 无关，使用 0
+      // 作为估算值即可，最终发送仍使用下方精确的 balance-fee。
+      final rOK = await estimateGasEthLocal(amountOverride: '0');
       if (rOK == true) {
         transferValue = maxTransferableAmount(
           balance: coinModel.balance,
           fee: totalGasPrice,
         );
-        valueTextEditingController.text = regular.formartNum(
-          toEther(transferValue.toString(), _decimals).toDouble(),
-          14,
-          isCrop: true,
-          isFill0: false,
+        valueTextEditingController.text = bigIntToDecimalString(
+          transferValue,
+          _decimals,
         );
       }
     } else {
@@ -394,8 +405,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         _decimals,
       ).toString();
     }
-    amountErrorMessage = '';
-    setState(() {});
+    amountCheck();
   }
 
   Future<void> sendTransaction() async {

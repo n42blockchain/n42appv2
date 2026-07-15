@@ -153,7 +153,11 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
     coinType = chainModel.config.coinType;
     symbol = dm.config.miniName;
-    address = dm.address;
+    // 代币收款始终使用父链账户地址。token 模型本身可能尚未同步 address，
+    // 过去会把空字符串交给二维码组件，结果页面只显示空白。
+    address = chainModel.address?.toString().trim().isNotEmpty == true
+        ? chainModel.address.toString().trim()
+        : dm.address?.toString().trim() ?? '';
     qrData = address;
   }
 
