@@ -42,7 +42,9 @@ class EvmSender implements ChainSender {
 
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
-    final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
+    // CoinModel stores baseInfo itself, while other callers may pass a full
+    // registry entry. Normalize both shapes before reading RPC settings.
+    final baseInfo = _baseInfo(params.chainConfig);
     final chainId = resolveChainId(params.chainConfig, isTest: params.isTest);
     final isContract = params.contractAddress.isNotEmpty;
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
@@ -380,7 +382,7 @@ class EvmSender implements ChainSender {
     Map<String, dynamic>? chainConfig, {
     required bool isTest,
   }) {
-    final baseInfo = chainConfig?['baseInfo'] as Map<String, dynamic>?;
+    final baseInfo = _baseInfo(chainConfig);
 
     int read(dynamic value) {
       if (value is num) return value.toInt();
@@ -398,5 +400,12 @@ class EvmSender implements ChainSender {
       baseInfo?['chainId'] ?? chainConfig?['mainnetChainID'],
     );
     return fallback > 0 ? fallback : 1;
+  }
+
+  /// Normalizes callers that provide either a full registry entry or baseInfo.
+  static Map<String, dynamic>? _baseInfo(Map<String, dynamic>? chainConfig) {
+    final nested = chainConfig?['baseInfo'];
+    if (nested is Map<String, dynamic>) return nested;
+    return chainConfig;
   }
 }

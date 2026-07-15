@@ -13,6 +13,12 @@ void main() {
     expect(EvmSender.resolveChainId(config, isTest: true), 1142);
   });
 
+  test('EVM sender accepts the baseInfo shape stored by CoinModel', () {
+    final baseInfo = config['baseInfo'] as Map<String, dynamic>;
+    expect(EvmSender.resolveChainId(baseInfo, isTest: false), 94);
+    expect(EvmSender.resolveChainId(baseInfo, isTest: true), 1142);
+  });
+
   test('EVM sender accepts numeric chain IDs serialized as strings', () {
     expect(
       EvmSender.resolveChainId(const {

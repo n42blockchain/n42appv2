@@ -11,6 +11,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
@@ -123,6 +124,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   void initState() {
     super.initState();
     _initData();
+    _hydrateMissingAddress();
     amountCtrl.addListener(_onAmountChanged);
   }
 
@@ -161,6 +163,18 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     qrData = address;
   }
 
+  Future<void> _hydrateMissingAddress() async {
+    if (address.isNotEmpty) return;
+    await buildCoinWallet(widget.chainCoinModel, ref.read(wapBridgeProvider));
+    if (!mounted) return;
+    setState(() {
+      _applyChainData(
+        widget.chainCoinModel,
+        displayModel: widget.tokenCoinModel ?? widget.chainCoinModel,
+      );
+    });
+  }
+
   void _onAmountChanged() {
     final token = widget.tokenCoinModel;
     final newData = _buildQrData(
@@ -176,12 +190,16 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   /// 切换到另一条链接收
   void _switchChain(CoinModel cm) {
-    if (cm.address.isEmpty) return;
+    if (!_hasAddress(cm)) return;
     setState(() {
       _applyChainData(cm);
       amountCtrl.clear(); // 不同链单位不同，清空金额
     });
   }
+
+  static bool _hasAddress(CoinModel coin) =>
+      coin.address?.toString().trim().isNotEmpty == true ||
+      coin.addressType[coin.addrType]?.toString().trim().isNotEmpty == true;
 
   // ─── 复制地址 ───────────────────────────────────────────────────────────────
 

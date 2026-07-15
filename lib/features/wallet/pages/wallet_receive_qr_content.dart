@@ -7,7 +7,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     Color mainText,
   ) {
     // 过滤掉地址为空的链（通常代表还未初始化）
-    final available = chains.where((c) => c.address.isNotEmpty).toList();
+    final available = chains.where(_WalletReceiveQrState._hasAddress).toList();
     if (available.length <= 1) return const SizedBox.shrink();
 
     return SizedBox(
