@@ -28,7 +28,7 @@ void main() {
     );
   });
 
-  test('EVM sender uses the selected chain RPC for S Coin transactions', () {
+  test('EVM sender uses the selected chain RPC for Sonic transactions', () {
     const sonic = <String, dynamic>{
       'chainId': 146,
       'chainId_test': 14601,

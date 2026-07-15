@@ -7,6 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/configs/wallet_chain_configs_part1.dart';
 
 // Alias for easier usage in tests
 Map<String, dynamic> get all_chain => allChainUrlMap;
@@ -16,8 +17,22 @@ void main() {
     test('all_chain should contain major CoinType entries', () {
       // Major coins that must have configurations
       final majorCoins = [
-        'BTC', 'ETH', 'BNB', 'SOL', 'TRX', 'MATIC', 'N',
-        'XLM', 'VET', 'ONE', 'IOTX', 'NEAR', 'ZIL', 'THETA', 'ADA', 'EGLD'
+        'BTC',
+        'ETH',
+        'BNB',
+        'SOL',
+        'TRX',
+        'MATIC',
+        'N',
+        'XLM',
+        'VET',
+        'ONE',
+        'IOTX',
+        'NEAR',
+        'ZIL',
+        'THETA',
+        'ADA',
+        'EGLD',
       ];
 
       for (final coin in majorCoins) {
@@ -27,6 +42,21 @@ void main() {
           reason: 'all_chain should contain configuration for $coin',
         );
       }
+    });
+
+    test('N42 includes the verified S Coin ERC-20 token', () {
+      final n42 = walletChainConfigsPart1['N'] as Map<String, dynamic>;
+      final tokens = n42['mainnets'] as Map<String, dynamic>;
+      final sCoin =
+          tokens['0XD44F4FDB883994A5BA529D76FE58E2D16575A1D1']
+              as Map<String, dynamic>;
+
+      expect(sCoin['name'], 'S Coin');
+      expect(sCoin['symbol'], '11X');
+      expect(sCoin['coinType'], 'N');
+      expect(sCoin['decimals'], 18);
+      expect(sCoin['icon'], 'assets/wallet/s_coin.png');
+      expect(sCoin['contract'], '0xD44F4fdB883994a5bA529d76Fe58e2D16575a1d1');
     });
 
     test('chain config should have required baseInfo fields', () {
@@ -44,8 +74,11 @@ void main() {
         final config = entry.value as Map<String, dynamic>;
         final baseInfo = config['baseInfo'] as Map<String, dynamic>?;
 
-        expect(baseInfo, isNotNull,
-            reason: '${entry.key} should have baseInfo');
+        expect(
+          baseInfo,
+          isNotNull,
+          reason: '${entry.key} should have baseInfo',
+        );
 
         for (final field in requiredFields) {
           expect(
@@ -107,7 +140,8 @@ void main() {
             expect(
               pathPattern.hasMatch(path),
               true,
-              reason: '${entry.key} path "$path" should match derivation path format',
+              reason:
+                  '${entry.key} path "$path" should match derivation path format',
             );
           }
         }
@@ -250,7 +284,17 @@ void main() {
 
   group('Chain Configuration Testnet Support', () {
     test('new chains should support testnet', () {
-      final newChains = ['XLM', 'VET', 'ONE', 'IOTX', 'NEAR', 'ZIL', 'THETA', 'ADA', 'EGLD'];
+      final newChains = [
+        'XLM',
+        'VET',
+        'ONE',
+        'IOTX',
+        'NEAR',
+        'ZIL',
+        'THETA',
+        'ADA',
+        'EGLD',
+      ];
 
       for (final chain in newChains) {
         if (all_chain.containsKey(chain)) {
@@ -265,7 +309,17 @@ void main() {
     });
 
     test('testnet RPC URLs should be different from mainnet', () {
-      final newChains = ['XLM', 'VET', 'ONE', 'IOTX', 'NEAR', 'ZIL', 'THETA', 'ADA', 'EGLD'];
+      final newChains = [
+        'XLM',
+        'VET',
+        'ONE',
+        'IOTX',
+        'NEAR',
+        'ZIL',
+        'THETA',
+        'ADA',
+        'EGLD',
+      ];
 
       for (final chain in newChains) {
         if (all_chain.containsKey(chain)) {
@@ -278,8 +332,10 @@ void main() {
             final mainnetService = baseInfo['service'] as String?;
             final testnetRPC = testnetConfig['testnetRPC'] as String?;
 
-            if (mainnetService != null && testnetRPC != null &&
-                mainnetService.isNotEmpty && testnetRPC.isNotEmpty) {
+            if (mainnetService != null &&
+                testnetRPC != null &&
+                mainnetService.isNotEmpty &&
+                testnetRPC.isNotEmpty) {
               expect(
                 mainnetService != testnetRPC,
                 true,
@@ -332,8 +388,11 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // Stellar uses coin type 148
-      expect(path.contains("148'"), true,
-          reason: 'Stellar should use coin type 148');
+      expect(
+        path.contains("148'"),
+        true,
+        reason: 'Stellar should use coin type 148',
+      );
     });
 
     test('VeChain should use BIP44 path', () {
@@ -343,8 +402,11 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // VeChain uses coin type 818
-      expect(path.contains("818'"), true,
-          reason: 'VeChain should use coin type 818');
+      expect(
+        path.contains("818'"),
+        true,
+        reason: 'VeChain should use coin type 818',
+      );
     });
 
     test('NEAR should use BIP44 path', () {
@@ -354,8 +416,11 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // NEAR uses coin type 397
-      expect(path.contains("397'"), true,
-          reason: 'NEAR should use coin type 397');
+      expect(
+        path.contains("397'"),
+        true,
+        reason: 'NEAR should use coin type 397',
+      );
     });
 
     test('Zilliqa should use BIP44 path', () {
@@ -365,8 +430,11 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // Zilliqa uses coin type 313
-      expect(path.contains("313'"), true,
-          reason: 'Zilliqa should use coin type 313');
+      expect(
+        path.contains("313'"),
+        true,
+        reason: 'Zilliqa should use coin type 313',
+      );
     });
 
     test('Cardano should use CIP-1852 path', () {
@@ -376,10 +444,16 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // Cardano uses purpose 1852 and coin type 1815
-      expect(path.contains("1852'"), true,
-          reason: 'Cardano should use purpose 1852');
-      expect(path.contains("1815'"), true,
-          reason: 'Cardano should use coin type 1815');
+      expect(
+        path.contains("1852'"),
+        true,
+        reason: 'Cardano should use purpose 1852',
+      );
+      expect(
+        path.contains("1815'"),
+        true,
+        reason: 'Cardano should use coin type 1815',
+      );
     });
 
     test('MultiversX should use BIP44 path', () {
@@ -389,8 +463,11 @@ void main() {
       final path = pathMap['legacy'] as String;
 
       // MultiversX uses coin type 508
-      expect(path.contains("508'"), true,
-          reason: 'MultiversX should use coin type 508');
+      expect(
+        path.contains("508'"),
+        true,
+        reason: 'MultiversX should use coin type 508',
+      );
     });
   });
 }

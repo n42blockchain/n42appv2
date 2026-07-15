@@ -31,7 +31,7 @@ void main() {
       expect(url, contains('5Kd3NBUAdUnh28WwTnT5s9XrJrM2Wm7wzJ9K4tqfN5Qm'));
     });
 
-    test('uses the S Coin explorer transaction path', () {
+    test('uses the Sonic explorer transaction path', () {
       expect(
         getSafeBrowserTxHashUrl('S', '0xabc', isTest: false),
         'https://sonicscan.org/tx/0xabc',

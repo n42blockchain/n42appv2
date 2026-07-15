@@ -97,7 +97,7 @@ final Map<String, dynamic> chainUrlConfigsPart4 = <String, dynamic>{
       "blockchainType": "Ethereum",
       "coinType": "S",
       "icon": "https://cryptologos.cc/logos/sonic-s-logo.png",
-      "name": "S Coin",
+      "name": "Sonic",
       "miniName": "S",
       "unit": "S",
       "decimals": 18,

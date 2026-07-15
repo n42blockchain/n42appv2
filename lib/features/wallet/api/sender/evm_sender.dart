@@ -51,7 +51,7 @@ class EvmSender implements ChainSender {
     final hasCalldata = (params.calldata ?? '').length > 2;
     final gas = getCoinGas(coinType, contract: isContract || hasCalldata);
 
-    // EVM 链有自己的 RPC 时统一直连。部分新链（包括 S Coin）尚未被旧的
+    // EVM 链有自己的 RPC 时统一直连。部分新链（包括 Sonic）尚未被旧的
     // TokenView 后端按 coinType 路由，继续走后端会产生 5xx/521，并可能把
     // 交易提交到错误的网络。测试网 URL 为空时保留后端回退。
     final String? rpcOverride = resolveRpcOverride(
