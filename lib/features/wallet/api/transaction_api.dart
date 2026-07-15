@@ -58,6 +58,7 @@ class TransactionApi {
             isTest: isTest,
           );
         case 'ETH':
+        case 'S':
         case 'ETC':
         case 'HT':
         case 'xDAI':
@@ -140,6 +141,7 @@ class TransactionApi {
     try {
       switch (coinMiniName) {
         case 'ETH':
+        case 'S':
         case 'ETC':
         case 'HT':
         case 'xDAI':

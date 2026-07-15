@@ -27,4 +27,22 @@ void main() {
       84532,
     );
   });
+
+  test('EVM sender uses the selected chain RPC for S Coin transactions', () {
+    const sonic = <String, dynamic>{
+      'chainId': 146,
+      'chainId_test': 14601,
+      'service': 'https://rpc.soniclabs.com',
+      'service_test': 'https://rpc.blaze.soniclabs.com',
+    };
+
+    expect(
+      EvmSender.resolveRpcOverride(sonic, isTest: false),
+      'https://rpc.soniclabs.com',
+    );
+    expect(
+      EvmSender.resolveRpcOverride(sonic, isTest: true),
+      'https://rpc.blaze.soniclabs.com',
+    );
+  });
 }

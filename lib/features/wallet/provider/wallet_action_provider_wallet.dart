@@ -156,6 +156,48 @@ extension WalletActionProviderWallet on WalletActionProvider {
           if (storedBase is! Map) continue;
 
           bool changed = false;
+          // 早期版本曾把已保存的 S 链 baseInfo 按 ETH 回退，导致 S Coin 资产
+          // 显示为 ETH，并把余额、转账和交易记录请求发到以太坊。链 key 已明确
+          // 是 S，因此以规范 S Coin 元数据修复身份字段；余额缓存保留，稍后会按
+          // S Coin RPC 刷新。
+          if (chainKey == CoinType.S.name &&
+              (storedBase['coinType'] != CoinType.S.name ||
+                  storedBase['name'] != canonicalBase['name'])) {
+            const sCoinIdentityKeys = <String>{
+              'blockchainType',
+              'coinType',
+              'icon',
+              'name',
+              'miniName',
+              'unit',
+              'decimals',
+              'mKey',
+              'path',
+              'chainId',
+              'chainId_test',
+              'contract',
+              'contract_test',
+              'canEdit',
+              'rules',
+            };
+            for (final key in sCoinIdentityKeys) {
+              if (canonicalBase.containsKey(key) &&
+                  storedBase[key] != canonicalBase[key]) {
+                storedBase[key] = _deepCopyValue(canonicalBase[key]);
+                changed = true;
+              }
+            }
+            for (final key in const <String>[
+              'mainnetChainID',
+              'testnetChainID',
+            ]) {
+              if (chainConfig.containsKey(key) &&
+                  storedChain[key] != chainConfig[key]) {
+                storedChain[key] = chainConfig[key];
+                changed = true;
+              }
+            }
+          }
           final canonicalService = canonicalBase['service'];
           final canonicalServiceTest = canonicalBase['service_test'];
           if (canonicalService != null &&
@@ -184,6 +226,12 @@ extension WalletActionProviderWallet on WalletActionProvider {
         );
       }
     }
+  }
+
+  dynamic _deepCopyValue(dynamic value) {
+    if (value is Map) return _deepCopyMap(value);
+    if (value is List) return _deepCopyList(value);
+    return value;
   }
 
   //创建钱包

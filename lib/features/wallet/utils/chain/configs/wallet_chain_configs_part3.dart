@@ -449,7 +449,7 @@ Map<String, dynamic> walletChainConfigsPart3 = {
       "blockchainType": "Ethereum",
       "coinType": "S",
       "icon": "https://cryptologos.cc/logos/sonic-s-logo.png",
-      "name": "Sonic",
+      "name": "S Coin",
       "miniName": "S",
       "unit": "S",
       "decimals": 18,
