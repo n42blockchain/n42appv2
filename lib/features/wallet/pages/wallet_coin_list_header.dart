@@ -210,13 +210,16 @@ class _TopRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
-                    child: Text(
-                      networkLabel,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.caption.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: blueColor,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        networkLabel,
+                        maxLines: 1,
+                        style: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: blueColor,
+                        ),
                       ),
                     ),
                   ),

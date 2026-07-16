@@ -136,7 +136,10 @@ class TokenDiscoveryService {
       if (explorer.baseUrl.startsWith(ProxyConfig.baseUrl)) 'size': '50',
     };
 
-    final response = await _dio.get<Map<String, dynamic>>(
+    // Explorer gateways are not consistent with content-type. Some return a
+    // plain-text rate-limit/error response; decoding it as Map here throws
+    // before the per-chain error handling can safely skip the chain.
+    final response = await _dio.get<dynamic>(
       explorer.baseUrl,
       queryParameters: params,
       options: Options(
@@ -231,9 +234,7 @@ class TokenDiscoveryService {
   }) async {
     try {
       // balanceOf(address) selector: 0x70a08231
-      final stripped = address
-          .replaceFirst(_hex0xPrefix, '')
-          .toLowerCase();
+      final stripped = address.replaceFirst(_hex0xPrefix, '').toLowerCase();
       final calldata = '0x70a08231${stripped.padLeft(64, '0')}';
 
       final result = await EthAPI()

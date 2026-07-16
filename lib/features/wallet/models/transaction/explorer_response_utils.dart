@@ -1,4 +1,19 @@
+import 'dart:convert';
+
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+
+/// Converts a JSON response delivered as text into its decoded structure.
+/// Explorer gateways can return plain-text error pages or JSON with an
+/// incorrect content type; callers should treat an undecodable response as
+/// unsupported data rather than crashing a background refresh.
+dynamic normalizeExplorerPayload(dynamic payload) {
+  if (payload is! String) return payload;
+  try {
+    return jsonDecode(payload);
+  } on FormatException {
+    return null;
+  }
+}
 
 String? explorerString(Map<String, dynamic> map, Iterable<String> keys) {
   for (final key in keys) {
@@ -45,6 +60,7 @@ bool hasExplorerItemContainer(dynamic payload) {
 }
 
 List<Map<String, dynamic>> extractExplorerItems(dynamic payload) {
+  payload = normalizeExplorerPayload(payload);
   if (payload is List<dynamic>) {
     return _mapList(payload);
   }

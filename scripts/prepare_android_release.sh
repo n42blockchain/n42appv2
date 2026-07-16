@@ -7,6 +7,24 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
 ANDROID_DIR="$PROJECT_ROOT/android"
+ENV_FILE="$PROJECT_ROOT/.env"
+
+# Runtime service credentials are supplied at build time and must never be
+# copied into source-controlled Android configuration. Flutter does not load
+# .env on its own, so turn valid KEY=value entries into dart-defines here.
+DART_DEFINES=()
+if [ -f "$ENV_FILE" ]; then
+    while IFS='=' read -r key value; do
+        key="${key%$'\r'}"
+        value="${value%$'\r'}"
+        if [[ "$key" =~ ^[A-Za-z_][A-Za-z0-9_]*$ ]] && [ -n "$value" ]; then
+            DART_DEFINES+=("--dart-define=$key=$value")
+        fi
+    done < "$ENV_FILE"
+    echo "  - Loaded ${#DART_DEFINES[@]} build-time environment values from .env"
+else
+    echo "WARNING: .env not found; proxy-backed services may return 401."
+fi
 
 echo "=== N42 Wallet Android Release Preparation ==="
 echo ""
@@ -52,12 +70,12 @@ flutter pub get
 # 5. Build Android App Bundle (recommended for Play Store)
 echo ""
 echo "Building Android App Bundle..."
-flutter build appbundle --release
+flutter build appbundle --release "${DART_DEFINES[@]}"
 
 # 6. Also build APK for testing
 echo ""
 echo "Building APK for testing..."
-flutter build apk --release
+flutter build apk --release "${DART_DEFINES[@]}"
 
 echo ""
 echo "=== Android Release Preparation Complete ==="
