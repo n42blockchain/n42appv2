@@ -405,6 +405,15 @@ void main() {
     });
   });
 
+  group('DexSwapApi.quoteServiceUnavailableMessage', () {
+    test('explains that quotes cannot be fetched safely', () {
+      expect(
+        DexSwapApi.quoteServiceUnavailableMessage,
+        'Quote service is temporarily unavailable. Please try again later.',
+      );
+    });
+  });
+
   // ─────────────────────────────────────────────────────────────
   // DexSwapApi (via stub) — getQuote
   // ─────────────────────────────────────────────────────────────

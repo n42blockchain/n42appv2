@@ -57,7 +57,16 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     try {
       final res = await _api.getTokens(widget.chain);
       if (!mounted) return;
+      final fallback = DexFallbackTokens.forChain(widget.chain);
       if (res.error) {
+        if (fallback.isNotEmpty) {
+          setState(() {
+            _loading = false;
+            _all = fallback;
+            _filtered = fallback;
+          });
+          return;
+        }
         setState(() {
           _loading = false;
           _error = res.data?.toString() ?? 'Load failed';
@@ -65,10 +74,11 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
         return;
       }
       final list = _parseTokens(res.data);
+      final visibleTokens = list.isEmpty ? fallback : list;
       setState(() {
         _loading = false;
-        _all = list;
-        _filtered = list;
+        _all = visibleTokens;
+        _filtered = visibleTokens;
       });
     } catch (e) {
       if (!mounted) return;

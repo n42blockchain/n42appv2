@@ -11,6 +11,9 @@ class DexSwapApi {
     : _base = AppConfig.getApiUrlOnline('exchangeHost'),
       _header = const {'content-type': 'application/json'};
 
+  static const quoteServiceUnavailableMessage =
+      'Quote service is temporarily unavailable. Please try again later.';
+
   /// GET /v1/dex/tokens?chain=ETH[&q=usdc]
   ///
   /// [q] 可选搜索词，后端按 symbol/name/address 模糊过滤。
@@ -61,7 +64,7 @@ class DexSwapApi {
       return MessageModel.error()
         ..data = data['msg'] ?? data['err'] ?? 'Quote failed';
     } catch (e) {
-      return MessageModel.error()..data = e.toString();
+      return MessageModel.error()..data = quoteServiceUnavailableMessage;
     }
   }
 
