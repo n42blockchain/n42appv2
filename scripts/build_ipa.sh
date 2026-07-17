@@ -133,10 +133,11 @@ else
 fi
 
 echo "=== Exporting IPA ==="
-EXPORT_OPTIONS="build/ios/ipa/ExportOptions.plist"
-if [ ! -f "$EXPORT_OPTIONS" ]; then
-  mkdir -p build/ios/ipa
-  cat > "$EXPORT_OPTIONS" << 'PLIST'
+mkdir -p build/ios/ipa
+# Flutter's generated ExportOptions.plist enables automatic build-number
+# management. This second export must preserve the archive's build number.
+EXPORT_OPTIONS="build/ios/ipa/N42WalletExportOptions.plist"
+cat > "$EXPORT_OPTIONS" << 'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -154,7 +155,6 @@ if [ ! -f "$EXPORT_OPTIONS" ]; then
 </dict>
 </plist>
 PLIST
-fi
 
 rm -f build/ios/ipa/*.ipa
 xcodebuild -exportArchive \

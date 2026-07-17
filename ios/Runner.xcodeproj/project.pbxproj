@@ -758,7 +758,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607099;
+				FLUTTER_BUILD_NUMBER = 202607101;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1328,7 +1328,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607099;
+				FLUTTER_BUILD_NUMBER = 202607101;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1610,7 +1610,7 @@
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607099;
+				FLUTTER_BUILD_NUMBER = 202607101;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
