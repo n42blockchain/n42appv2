@@ -146,6 +146,8 @@ cat > "$EXPORT_OPTIONS" << 'PLIST'
   <string>app-store-connect</string>
   <key>signingStyle</key>
   <string>automatic</string>
+  <key>manageAppVersionAndBuildNumber</key>
+  <false/>
   <key>teamID</key>
   <string>CFRXH38L48</string>
   <key>uploadSymbols</key>
