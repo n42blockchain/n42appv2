@@ -94,7 +94,7 @@ class N42Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget avatar = _buildAvatar();
+    Widget avatar = _buildAvatar(context);
 
     if (_hasDecoration) {
       avatar = _buildDecorationWrapper(avatar);
@@ -221,7 +221,7 @@ class N42Avatar extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(BuildContext context) {
     return Container(
       width: size,
       height: size,
@@ -230,11 +230,11 @@ class N42Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       clipBehavior: Clip.antiAlias,
-      child: _buildContent(),
+      child: _buildContent(context),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     // 如果有名字但没有图片URL，直接显示字母头像
     if ((imageUrl == null || imageUrl!.isEmpty) &&
         name != null &&
@@ -245,7 +245,11 @@ class N42Avatar extends StatelessWidget {
     // 优先显示网络图片
     if (imageUrl != null && imageUrl!.isNotEmpty) {
       final client = MatrixClientManager.instance.client;
-      final imageSize = size.round().clamp(1, 1024).toInt();
+      // 缩略图要按物理像素请求：只传逻辑像素的话 2x/3x 屏上头像是糊的。
+      final imageSize = (size * MediaQuery.devicePixelRatioOf(context))
+          .round()
+          .clamp(1, 1024)
+          .toInt();
       final resolvedImageUrl = imageUrl!.startsWith('mxc://')
           ? mx_utils.MatrixUtils.getAvatarUrl(
               imageUrl,

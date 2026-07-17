@@ -1448,5 +1448,10 @@
   "g_key_msgsign_empty": "請先輸入訊息",
   "g_key_msgsign_failed": "簽名失敗",
   "g_key_msgsign_unsupported": "該鏈暫不支持訊息簽名",
-  "g_key_pubkey": "公鑰"
+  "g_key_pubkey": "公鑰",
+  "g_key_dex_quote_unavailable": "報價服務暫時不可用，請稍後再試。",
+  "g_key_dex_tokens_offline": "代幣服務不可用，目前顯示精簡的離線清單。",
+  "g_key_receive_request_line": "請求 {amount} {symbol}（{network}）",
+  "g_key_receive_payment_request": "付款請求",
+  "g_key_scan_pay_unsupported": "此錢包不支援該付款請求的代幣或鏈"
 }

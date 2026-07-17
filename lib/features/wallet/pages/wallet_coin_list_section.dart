@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
@@ -26,7 +27,10 @@ class WalletCoinListSliver extends StatelessWidget {
 
   final WalletActionProvider waValue;
   final double smallAssetsThreshold;
-  final String searchQuery;
+
+  /// 搜索词以 listenable 传入：每个按键只重建下方列表，不惊动整页
+  /// （行情、资产总览等 sliver 与搜索无关）。
+  final ValueListenable<String> searchQuery;
   final List<DiscoveredToken> discoveredTokens;
   final VoidCallback onDiscoveryDismiss;
   final VoidCallback onDiscoveryAdded;
@@ -40,15 +44,18 @@ class WalletCoinListSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, _) => _CoinListBody(
-          waValue: waValue,
-          smallAssetsThreshold: smallAssetsThreshold,
-          searchQuery: searchQuery,
-          discoveredTokens: discoveredTokens,
-          onDiscoveryDismiss: onDiscoveryDismiss,
-          onDiscoveryAdded: onDiscoveryAdded,
-          onShowAllTap: onShowAllTap,
-          coinItemBuilder: coinItemBuilder,
+        (context, _) => ValueListenableBuilder<String>(
+          valueListenable: searchQuery,
+          builder: (context, query, _) => _CoinListBody(
+            waValue: waValue,
+            smallAssetsThreshold: smallAssetsThreshold,
+            searchQuery: query,
+            discoveredTokens: discoveredTokens,
+            onDiscoveryDismiss: onDiscoveryDismiss,
+            onDiscoveryAdded: onDiscoveryAdded,
+            onShowAllTap: onShowAllTap,
+            coinItemBuilder: coinItemBuilder,
+          ),
         ),
         childCount: 1,
       ),
@@ -94,7 +101,8 @@ class _CoinListBody extends StatelessWidget {
             final config = coin.config;
             return config.miniName.toLowerCase().contains(normalizedQuery) ||
                 config.name.toLowerCase().contains(normalizedQuery) ||
-                config.coinType.toLowerCase().contains(normalizedQuery);
+                config.coinType.toLowerCase().contains(normalizedQuery) ||
+                config.symbol.toLowerCase().contains(normalizedQuery);
           }).toList();
     final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 

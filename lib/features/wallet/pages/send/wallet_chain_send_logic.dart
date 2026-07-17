@@ -386,12 +386,12 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
   Future<void> maxTag() async {
     if (gasLimitLoad == Load.loading) return;
     if (_isContract) {
-      valueTextEditingController.text = bigIntToDecimalString(
-        coinModel.balance,
-        _decimals,
-      );
+      // 代币 Max 填入的就是整额余额，本身必然合法；不把它作为 amountOverride
+      // 传入的话，输入框里残留的旧金额错误会挡掉这次 gas 估算。
+      final maxAmount = bigIntToDecimalString(coinModel.balance, _decimals);
+      valueTextEditingController.text = maxAmount;
       transferValue = coinModel.balance;
-      estimateGasEthLocal();
+      estimateGasEthLocal(amountOverride: maxAmount);
     } else if (_blockchainType == BlockchainType.Ethereum.name ||
         _blockchainType == BlockchainType.Tron.name) {
       // 估算 MAX 的 gas 时不能先把余额全作为 value 发送给 RPC；部分节点会

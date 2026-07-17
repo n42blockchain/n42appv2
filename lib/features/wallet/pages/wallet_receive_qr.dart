@@ -251,11 +251,12 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   /// 分享收款链接（地址文本 / payment URI）
   Future<void> shareLink() async {
     final amount = amountCtrl.text.trim();
+    final s = S.of(context);
     final shareText = amount.isEmpty
-        ? '${S.of(context).g_key_33} $symbol\n$address'
-        : 'Request $amount $symbol on $network\n'
-              'Address: $address\n'
-              'Payment request: $qrData';
+        ? '${s.g_key_33} $symbol\n$address'
+        : '${s.g_key_receive_request_line(amount, symbol, network)}\n'
+              '${s.g_key_address}: $address\n'
+              '${s.g_key_receive_payment_request}: $qrData';
     if (!mounted) return;
     await SharePlus.instance.share(
       ShareParams(

@@ -11913,6 +11913,60 @@ class S {
   String get g_key_pubkey {
     return Intl.message('Public Key', name: 'g_key_pubkey', desc: '', args: []);
   }
+
+  /// `Quote service is temporarily unavailable. Please try again later.`
+  String get g_key_dex_quote_unavailable {
+    return Intl.message(
+      'Quote service is temporarily unavailable. Please try again later.',
+      name: 'g_key_dex_quote_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token service is unavailable. Showing a limited offline list.`
+  String get g_key_dex_tokens_offline {
+    return Intl.message(
+      'Token service is unavailable. Showing a limited offline list.',
+      name: 'g_key_dex_tokens_offline',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Request {amount} {symbol} on {network}`
+  String g_key_receive_request_line(
+    Object amount,
+    Object symbol,
+    Object network,
+  ) {
+    return Intl.message(
+      'Request $amount $symbol on $network',
+      name: 'g_key_receive_request_line',
+      desc: '',
+      args: [amount, symbol, network],
+    );
+  }
+
+  /// `Payment request`
+  String get g_key_receive_payment_request {
+    return Intl.message(
+      'Payment request',
+      name: 'g_key_receive_payment_request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Payment request token or chain is not in this wallet`
+  String get g_key_scan_pay_unsupported {
+    return Intl.message(
+      'Payment request token or chain is not in this wallet',
+      name: 'g_key_scan_pay_unsupported',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

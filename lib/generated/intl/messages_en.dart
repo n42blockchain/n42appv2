@@ -82,6 +82,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Are you sure you want to remove \"${name}\" from saved devices?";
 
+  static String m73(amount, symbol, network) =>
+      "Request ${amount} ${symbol} on ${network}";
+
   static String m28(value) => "Est. gas: ~${value} units";
 
   static String m29(reason) => "Reason: ${reason}";
@@ -1082,6 +1085,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Quote failed",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Quote service is temporarily unavailable. Please try again later.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Search symbol / name / address",
     ),
@@ -1098,6 +1104,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("Swap"),
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Swap submitted successfully",
+    ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Token service is unavailable. Showing a limited offline list.",
     ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("You Pay"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
@@ -1802,7 +1811,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "Select from phone gallery",
     ),
     "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Public Key"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Payment request",
+    ),
+    "g_key_receive_request_line": m73,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Payment request token or chain is not in this wallet",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Use Caution",
     ),

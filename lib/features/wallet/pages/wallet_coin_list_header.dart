@@ -8,7 +8,7 @@ import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
-class WalletCoinListHeader extends StatelessWidget {
+class WalletCoinListHeader extends StatefulWidget {
   const WalletCoinListHeader({
     super.key,
     required this.waValue,
@@ -40,7 +40,48 @@ class WalletCoinListHeader extends StatelessWidget {
   final VoidCallback onMarketTap;
   final VoidCallback onPortfolioTap;
 
+  @override
+  State<WalletCoinListHeader> createState() => _WalletCoinListHeaderState();
+}
+
+class _WalletCoinListHeaderState extends State<WalletCoinListHeader>
+    with SingleTickerProviderStateMixin {
+  // 搜索展开时额外显示一行输入框；收起时保持两行紧凑布局。头部是 pinned 的，
+  // 两个高度间必须插值，否则展开/收起时列表整体会突跳一段。
+  static const double _collapsedExtent = 192.0;
+  static const double _expandedExtent = 280.0;
+
+  late final AnimationController _searchAnimController = AnimationController(
+    vsync: this,
+    duration: AppMotion.base,
+    value: widget.isSearchVisible ? 1.0 : 0.0,
+  );
+  late final CurvedAnimation _searchAnim = CurvedAnimation(
+    parent: _searchAnimController,
+    curve: AppMotion.curveStandard,
+  );
+
+  @override
+  void didUpdateWidget(covariant WalletCoinListHeader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isSearchVisible != oldWidget.isSearchVisible) {
+      if (widget.isSearchVisible) {
+        _searchAnimController.forward();
+      } else {
+        _searchAnimController.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchAnim.dispose();
+    _searchAnimController.dispose();
+    super.dispose();
+  }
+
   String _networkLabel(BuildContext context) {
+    final waValue = widget.waValue;
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;
     }
@@ -49,63 +90,90 @@ class WalletCoinListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      floating: true,
-      delegate: WalletSliverAppBarDelegate(
-        // 搜索展开时额外显示一行输入框；收起时保持两行紧凑布局。
-        minHeight: ScreenUtil().setWidth(isSearchVisible ? 280.0 : 192.0),
-        maxHeight: ScreenUtil().setWidth(isSearchVisible ? 280.0 : 192.0),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space6,
-            vertical: AppSpacing.space2,
+    return AnimatedBuilder(
+      animation: _searchAnim,
+      builder: (context, _) {
+        final t = _searchAnim.value.clamp(0.0, 1.0);
+        final extent = ScreenUtil().setWidth(
+          _collapsedExtent + (_expandedExtent - _collapsedExtent) * t,
+        );
+        return SliverPersistentHeader(
+          pinned: true,
+          floating: true,
+          delegate: WalletSliverAppBarDelegate(
+            minHeight: extent,
+            maxHeight: extent,
+            child: _buildHeaderBody(context, t),
           ),
-          decoration: BoxDecoration(
-            color: AppColorTokens.of(context).bgBase,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(AppRadius.xl),
-              topLeft: Radius.circular(AppRadius.xl),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              _TopRow(
-                networkLabel: _networkLabel(context),
-                onAddToken: onAddToken,
-                onChangeNetwork: onChangeNetwork,
-                isSearchVisible: isSearchVisible,
-                onSearchVisibilityChanged: onSearchVisibilityChanged,
-                onMarketTap: onMarketTap,
-                onPortfolioTap: onPortfolioTap,
-              ),
-              if (isSearchVisible) ...[
-                SizedBox(height: AppSpacing.space2),
-                _TokenSearchField(
-                  controller: searchController,
-                  focusNode: searchFocusNode,
-                  onChanged: onSearchChanged,
-                  onClose: () => onSearchVisibilityChanged(false),
-                ),
-              ],
-              const Spacer(),
-              _BottomRow(
-                waValue: waValue,
-                smallAssetsThreshold: smallAssetsThreshold,
-                onThresholdChanged: onThresholdChanged,
-                onRefresh: onRefresh,
-              ),
-            ],
-          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeaderBody(BuildContext context, double t) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColorTokens.of(context).bgBase,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(AppRadius.xl),
+          topLeft: Radius.circular(AppRadius.xl),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _TopRow(
+            networkLabel: _networkLabel(context),
+            onAddToken: widget.onAddToken,
+            onChangeNetwork: widget.onChangeNetwork,
+            isSearchVisible: widget.isSearchVisible,
+            onSearchVisibilityChanged: widget.onSearchVisibilityChanged,
+            onMarketTap: widget.onMarketTap,
+            onPortfolioTap: widget.onPortfolioTap,
+          ),
+          // 输入框随高度一起长出/收起：Align 的 heightFactor 让它占位始终
+          // 不超过头部已插值出的高度，收到 0 时整段卸载。
+          if (t > 0)
+            ClipRect(
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: t,
+                child: Opacity(
+                  opacity: t,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: AppSpacing.space2),
+                      _TokenSearchField(
+                        controller: widget.searchController,
+                        focusNode: widget.searchFocusNode,
+                        onChanged: widget.onSearchChanged,
+                        onClose: () => widget.onSearchVisibilityChanged(false),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          const Spacer(),
+          _BottomRow(
+            waValue: widget.waValue,
+            smallAssetsThreshold: widget.smallAssetsThreshold,
+            onThresholdChanged: widget.onThresholdChanged,
+            onRefresh: widget.onRefresh,
+          ),
+        ],
       ),
     );
   }
@@ -352,7 +420,7 @@ class _TokenSearchField extends StatelessWidget {
           hintStyle: AppTypography.body.copyWith(color: colors.textSubtitle),
           prefixIcon: Icon(Icons.search_rounded, color: colors.textSubtitle),
           suffixIcon: IconButton(
-            tooltip: S.of(context).g_key_batch_clear_all,
+            tooltip: S.of(context).g_key_79,
             onPressed: onClose,
             icon: Icon(Icons.close_rounded, color: colors.textSubtitle),
           ),

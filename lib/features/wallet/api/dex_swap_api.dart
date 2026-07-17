@@ -1,5 +1,7 @@
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 
@@ -11,8 +13,8 @@ class DexSwapApi {
     : _base = AppConfig.getApiUrlOnline('exchangeHost'),
       _header = const {'content-type': 'application/json'};
 
-  static const quoteServiceUnavailableMessage =
-      'Quote service is temporarily unavailable. Please try again later.';
+  static String get quoteServiceUnavailableMessage =>
+      S.current.g_key_dex_quote_unavailable;
 
   /// GET /v1/dex/tokens?chain=ETH[&q=usdc]
   ///
@@ -64,6 +66,8 @@ class DexSwapApi {
       return MessageModel.error()
         ..data = data['msg'] ?? data['err'] ?? 'Quote failed';
     } catch (e) {
+      // 报价失败对用户只给友好文案，但原始异常必须留痕，否则线上无从排障。
+      AppLogger.w('DexSwapApi', 'getQuote failed on $chain: $e');
       return MessageModel.error()..data = quoteServiceUnavailableMessage;
     }
   }

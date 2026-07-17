@@ -11,7 +11,9 @@
 //   - DexSwapApi.getTokens    (null data guard)
 //   - DexSwapApi.getHistory   (null data guard)
 
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_history_model.dart';
@@ -406,7 +408,10 @@ void main() {
   });
 
   group('DexSwapApi.quoteServiceUnavailableMessage', () {
-    test('explains that quotes cannot be fetched safely', () {
+    // 报价失败时用户看到的是这条文案而不是原始异常，它必须真的能从 l10n
+    // 解析出来——getter 走 S.current，key 缺失或 S 未加载都会在运行期才炸。
+    test('resolves through l10n instead of throwing', () async {
+      await S.load(const Locale('en'));
       expect(
         DexSwapApi.quoteServiceUnavailableMessage,
         'Quote service is temporarily unavailable. Please try again later.',

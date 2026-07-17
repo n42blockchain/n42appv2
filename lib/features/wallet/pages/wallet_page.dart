@@ -61,7 +61,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   double _smallAssetsThreshold = 0.0;
   final TextEditingController _tokenSearchController = TextEditingController();
   final FocusNode _tokenSearchFocusNode = FocusNode();
-  String _tokenSearchQuery = '';
+  final ValueNotifier<String> _tokenSearchQuery = ValueNotifier<String>('');
   bool _isTokenSearchVisible = false;
 
   // ── Token auto-discovery ──────────────────────────────────────────────────
@@ -99,6 +99,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     _scrollController.dispose();
     _tokenSearchController.dispose();
     _tokenSearchFocusNode.dispose();
+    _tokenSearchQuery.dispose();
     super.dispose();
   }
 
@@ -269,7 +270,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       _isTokenSearchVisible = visible;
       if (!visible) {
         _tokenSearchController.clear();
-        _tokenSearchQuery = '';
+        _tokenSearchQuery.value = '';
       }
     });
     if (visible) {
@@ -318,7 +319,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       coinModels: _scanToPayCandidates(waValue),
     );
     if (resolution == null) {
-      ToastUtils.show('Payment request token or chain is not in this wallet');
+      ToastUtils.show(S.of(context).g_key_scan_pay_unsupported);
       return;
     }
     await Navigator.push(
@@ -537,9 +538,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                   isSearchVisible: _isTokenSearchVisible,
                                   onSearchVisibilityChanged:
                                       _setTokenSearchVisible,
-                                  onSearchChanged: (query) => setState(
-                                    () => _tokenSearchQuery = query.trim(),
-                                  ),
+                                  onSearchChanged: (query) =>
+                                      _tokenSearchQuery.value = query.trim(),
                                   onRefresh: () => _refreshWallet(waValue),
                                   onMarketTap: () {
                                     final marketTabIndex =
