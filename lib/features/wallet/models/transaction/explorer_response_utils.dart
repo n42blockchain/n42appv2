@@ -47,6 +47,7 @@ BigInt parseExplorerAmount(String? rawValue, int decimals) {
 }
 
 bool hasExplorerItemContainer(dynamic payload) {
+  payload = normalizeExplorerPayload(payload);
   if (payload is List<dynamic>) {
     return true;
   }

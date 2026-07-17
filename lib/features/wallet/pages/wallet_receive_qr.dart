@@ -94,7 +94,6 @@ String buildReceiveQrData({
   }
 
   final prefix = switch (blockchainType) {
-    'Ethereum' => 'ethereum:$address?value=',
     'Bitcoin' => 'bitcoin:$address?amount=',
     'Solana' => 'solana:$address?amount=',
     'TheOpenNetwork' => 'ton:transfer/$address?amount=',
@@ -127,6 +126,11 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   String blockchainType = ''; // 主链区块链类型（用于 URI 生成）
   String qrData = '';
 
+  // 当前选中的链/代币。切链后 chainId/decimals/contract 必须跟着走，
+  // 否则金额二维码会带上旧链参数（付款方会付错链/错代币）。
+  late CoinModel _selectedChainModel;
+  CoinModel? _selectedTokenModel;
+
   final TextEditingController amountCtrl = TextEditingController();
 
   @override
@@ -146,9 +150,11 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   }
 
   void _initData() {
+    _selectedChainModel = widget.chainCoinModel;
+    _selectedTokenModel = widget.tokenCoinModel;
     _applyChainData(
-      widget.chainCoinModel,
-      displayModel: widget.tokenCoinModel ?? widget.chainCoinModel,
+      _selectedChainModel,
+      displayModel: _selectedTokenModel ?? _selectedChainModel,
     );
   }
 
@@ -166,34 +172,48 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     symbol = dm.config.miniName;
     // 代币收款始终使用父链账户地址。token 模型本身可能尚未同步 address，
     // 过去会把空字符串交给二维码组件，结果页面只显示空白。
-    address = chainModel.address?.toString().trim().isNotEmpty == true
-        ? chainModel.address.toString().trim()
-        : dm.address?.toString().trim() ?? '';
+    // 取址回退链与 _hasAddress 保持一致（address → addressType[addrType]），
+    // 否则仅 addressType 有值的链通过筛选后会渲染空地址二维码。
+    final chainAddr = _extractAddress(chainModel);
+    address = chainAddr.isNotEmpty ? chainAddr : _extractAddress(dm);
     qrData = address;
+  }
+
+  static String _extractAddress(CoinModel coin) {
+    final direct = coin.address?.toString().trim() ?? '';
+    if (direct.isNotEmpty) return direct;
+    return coin.addressType[coin.addrType]?.toString().trim() ?? '';
   }
 
   Future<void> _hydrateMissingAddress() async {
     if (address.isNotEmpty) return;
-    await buildCoinWallet(widget.chainCoinModel, ref.read(wapBridgeProvider));
+    try {
+      await buildCoinWallet(widget.chainCoinModel, ref.read(wapBridgeProvider));
+    } catch (e) {
+      debugPrint('WalletReceiveQr: derive address failed: $e');
+      return;
+    }
     if (!mounted) return;
+    // 用户可能已切到别的链，补出来的初始链地址不能覆盖当前选择。
+    if (!identical(_selectedChainModel, widget.chainCoinModel)) return;
     setState(() {
       _applyChainData(
-        widget.chainCoinModel,
-        displayModel: widget.tokenCoinModel ?? widget.chainCoinModel,
+        _selectedChainModel,
+        displayModel: _selectedTokenModel ?? _selectedChainModel,
       );
     });
   }
 
   void _onAmountChanged() {
-    final token = widget.tokenCoinModel;
+    final token = _selectedTokenModel;
     final newData = buildReceiveQrData(
       address: address,
       blockchainType: blockchainType,
       amount: amountCtrl.text,
       erc20Contract: token?.config.contract,
       erc20Decimals: token?.config.decimals ?? 18,
-      nativeDecimals: widget.chainCoinModel.config.decimals,
-      chainId: widget.chainCoinModel.config.chainId,
+      nativeDecimals: _selectedChainModel.config.decimals,
+      chainId: _selectedChainModel.config.chainId,
     );
     setState(() => qrData = newData);
   }
@@ -202,6 +222,8 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   void _switchChain(CoinModel cm) {
     if (!_hasAddress(cm)) return;
     setState(() {
+      _selectedChainModel = cm;
+      _selectedTokenModel = null; // 切链后收该链原生币
       _applyChainData(cm);
       amountCtrl.clear(); // 不同链单位不同，清空金额
     });

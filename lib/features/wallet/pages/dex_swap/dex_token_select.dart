@@ -82,6 +82,15 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
       });
     } catch (e) {
       if (!mounted) return;
+      final fallback = DexFallbackTokens.forChain(widget.chain);
+      if (fallback.isNotEmpty) {
+        setState(() {
+          _loading = false;
+          _all = fallback;
+          _filtered = fallback;
+        });
+        return;
+      }
       setState(() {
         _loading = false;
         _error = e.toString();

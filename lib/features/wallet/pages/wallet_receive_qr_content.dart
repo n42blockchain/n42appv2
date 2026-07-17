@@ -244,7 +244,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
       inputFormatters: [
         FilteringTextInputFormatter.allow(_amountInputRegex),
         DecimalPlacesInputFormatter(
-          (widget.tokenCoinModel ?? widget.chainCoinModel).config.decimals,
+          (_selectedTokenModel ?? _selectedChainModel).config.decimals,
         ),
       ],
       style: textStyle,

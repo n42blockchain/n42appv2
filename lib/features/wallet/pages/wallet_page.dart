@@ -40,6 +40,7 @@ import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dar
 import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
@@ -292,6 +293,16 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     );
     if (!mounted || scanned == null || scanned.trim().isEmpty) return;
 
+    // WalletConnect 配对码要走 WC 会话流程，不能被当作收款地址塞进发送页。
+    final wcUri = normalizeWalletConnectUriString(scanned);
+    if (wcUri != null) {
+      final wcp = ref.read(wcpBridgeProvider);
+      await wcp.connectInit();
+      if (!mounted) return;
+      await _pushAndRefreshWc(WalletConnectPage(wcUri), wcp);
+      return;
+    }
+
     final request = Eip681.parse(scanned);
     if (request == null) {
       showSearchCoinSheet(
@@ -304,7 +315,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
     final resolution = ScanToPayResolver.resolve(
       request: request,
-      coinModels: waValue.coinList.whereType<CoinModel>(),
+      coinModels: _scanToPayCandidates(waValue),
     );
     if (resolution == null) {
       ToastUtils.show('Payment request token or chain is not in this wallet');
@@ -320,6 +331,17 @@ class _WalletPageState extends ConsumerState<WalletPage> {
         ),
       ),
     );
+  }
+
+  /// 扫码支付的资产候选须覆盖全部链与代币；coinList 受所选网络筛选影响，
+  /// 选中单一网络时会把其他链的合法付款码误判为「钱包不支持」。
+  Iterable<CoinModel> _scanToPayCandidates(WalletActionProvider waValue) sync* {
+    for (final mm in waValue.coinModels) {
+      yield mm;
+      for (final token in mm.tokens.values) {
+        yield waValue.buildTokenCoinModel(mm, token);
+      }
+    }
   }
 
   Future<void> _promptBackup(WalletActionProvider waValue) async {
