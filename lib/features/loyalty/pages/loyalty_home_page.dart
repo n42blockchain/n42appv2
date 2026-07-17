@@ -42,7 +42,9 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
     if (widget.walletAddress.trim().isEmpty) {
       setState(() {
         _loading = false;
-        _error = 'No active wallet';
+        // _load 由 initState 调起，此处不能用 S.of(context)（会触发
+        // dependOnInheritedWidgetOfExactType 断言）。
+        _error = S.current.g_key_loyalty_no_wallet;
       });
       return;
     }
@@ -121,7 +123,7 @@ class _LoyaltyHomePageState extends State<LoyaltyHomePage> {
     }
     if (_snapshot == null) {
       return _LoyaltyStatusView(
-        message: _error ?? 'Service unavailable',
+        message: _error ?? S.of(context).g_key_loyalty_unavailable,
         onRetry: _load,
       );
     }
@@ -187,7 +189,7 @@ class _PointsHeader extends StatelessWidget {
         decoration: BoxDecoration(
           color: colors.bgSurface,
           borderRadius: AppRadius.brMd,
-          border: Border.all(color: colors.border.withAlpha(70)),
+          border: Border.all(color: colors.border.withValues(alpha: 0.30)),
         ),
         child: Row(
           children: [
@@ -453,7 +455,7 @@ class _ServiceBanner extends StatelessWidget {
     final colors = AppColorTokens.of(context);
     return Container(
       width: double.infinity,
-      color: colors.warning.withAlpha(25),
+      color: colors.warning.withValues(alpha: 0.12),
       padding: EdgeInsets.all(AppSpacing.space8),
       child: Text(message, textAlign: TextAlign.center),
     );

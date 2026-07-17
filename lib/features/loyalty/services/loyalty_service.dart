@@ -20,13 +20,15 @@ class LoyaltyService {
   final String _baseUrl;
 
   Future<LoyaltySnapshot> load(String walletAddress) async {
+    // account/tasks 撑起页面主体，失败必须冒泡让用户看到错误状态；其余四项
+    // 只是补充分区，任一子服务抖动不该连带把签到入口一起打没。
     final results = await Future.wait<dynamic>([
       _get('/account', walletAddress),
       _get('/tasks', walletAddress),
-      _get('/rewards', walletAddress),
-      _get('/history', walletAddress),
-      _get('/referral/list', walletAddress),
-      _get('/leaderboard', walletAddress),
+      _getOptional('/rewards', walletAddress),
+      _getOptional('/history', walletAddress),
+      _getOptional('/referral/list', walletAddress),
+      _getOptional('/leaderboard', walletAddress),
     ]);
 
     return LoyaltySnapshot(
@@ -34,19 +36,30 @@ class LoyaltyService {
       tasks: _listData(
         results[1],
       ).map(LoyaltyTask.fromJson).toList(growable: false),
-      rewards: _listData(
-        results[2],
-      ).map(LoyaltyReward.fromJson).toList(growable: false),
-      history: _listData(
-        results[3],
-      ).map(LoyaltyHistoryItem.fromJson).toList(growable: false),
-      referrals: _listData(
-        results[4],
-      ).map(LoyaltyReferral.fromJson).toList(growable: false),
-      leaderboard: _listData(
-        results[5],
-      ).map(LoyaltyLeaderboardEntry.fromJson).toList(growable: false),
+      rewards: _optionalList(results[2], LoyaltyReward.fromJson),
+      history: _optionalList(results[3], LoyaltyHistoryItem.fromJson),
+      referrals: _optionalList(results[4], LoyaltyReferral.fromJson),
+      leaderboard: _optionalList(results[5], LoyaltyLeaderboardEntry.fromJson),
     );
+  }
+
+  Future<dynamic> _getOptional(String path, String walletAddress) async {
+    try {
+      return await _get(path, walletAddress);
+    } catch (_) {
+      return const <dynamic>[];
+    }
+  }
+
+  static List<T> _optionalList<T>(
+    dynamic response,
+    T Function(Map<String, dynamic>) fromJson,
+  ) {
+    try {
+      return _listData(response).map(fromJson).toList(growable: false);
+    } catch (_) {
+      return <T>[];
+    }
   }
 
   Future<LoyaltyCheckInResult> checkIn(String walletAddress) async {

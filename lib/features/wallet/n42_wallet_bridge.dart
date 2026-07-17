@@ -209,13 +209,21 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final addrType = coinModel.addrType;
-      final basePath =
-          coinModel.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
+      // 派生路径取不到时绝不能套用 ETH 路径：非 EVM 币会用一把与 fromAddress
+      // 不对应的密钥签名，签出来的交易要么废掉，要么动到别的账户。
+      final basePath = coinModel.config.pathForAddrType(addrType);
+      if (basePath == null || basePath.isEmpty) {
+        return TransferResult.failure(
+          'Missing derivation path for $token ($addrType)',
+        );
+      }
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
       final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
-      final coinType = coinModel.coin['coinType'] as String? ?? token;
-      final contractAddress = coinModel.coin['isContract'] == true
-          ? (coinModel.coin['contract'] as String? ?? '')
+      final coinType = coinModel.config.coinType.isNotEmpty
+          ? coinModel.config.coinType
+          : token;
+      final contractAddress = coinModel.config.isContract
+          ? coinModel.config.contract
           : '';
 
       final result = await SenderFactory.instance
@@ -754,7 +762,12 @@ class N42WalletBridge implements IWalletBridge {
 
   CoinModel? _findEvmChainCoin(WalletActionProvider provider, int chainId) {
     for (final coinModel in provider.coinModels) {
-      if (coinModel.coin['isContract'] == true) continue;
+      if (coinModel.config.isContract) continue;
+      // 只按 chainId 匹配会误命中非 EVM 链——Aptos 原生币的 baseInfo 同样
+      // 是 chainId: 1，chainId=1 的 ERC 调用会被路由到 APT 模型上。
+      if (coinModel.config.blockchainType != BlockchainType.Ethereum.name) {
+        continue;
+      }
       final modelChainId = _readChainId(coinModel);
       if (modelChainId == chainId) return coinModel;
     }
@@ -762,8 +775,7 @@ class N42WalletBridge implements IWalletBridge {
   }
 
   int? _readChainId(CoinModel coinModel) {
-    final raw = coinModel.coin['chainId'];
-    if (raw is num) return raw.toInt();
-    return int.tryParse(raw?.toString() ?? '');
+    final chainId = coinModel.config.chainId;
+    return chainId == 0 ? null : chainId;
   }
 }

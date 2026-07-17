@@ -45,6 +45,18 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
   bool _showControls = true;
   bool _showParticipantsList = false;
 
+  // 底栏尺寸由这几个常量推导，供参与者名条定位复用——名条曾经用一个估出来的
+  // 魔数贴在底栏上方，底栏一改高度就错位。
+  static const Duration _controlsFadeDuration = Duration(milliseconds: 200);
+  static const double _controlButtonCircleSize = 46;
+  static const double _controlButtonGap = 6;
+  static const double _controlButtonLabelHeight = 15;
+  static const double _bottomBarVerticalPadding = 16;
+  static const double _controlButtonHeight =
+      _controlButtonCircleSize + _controlButtonGap + _controlButtonLabelHeight;
+  static const double _bottomBarHeight =
+      _bottomBarVerticalPadding * 2 + _controlButtonHeight;
+
   // 当前焦点参与者（全屏显示）
   MeetingParticipant? _focusedParticipant;
 
@@ -212,6 +224,11 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
                   key: const ValueKey('group-call-controls-restore-layer'),
                   behavior: HitTestBehavior.opaque,
                   onTap: _toggleControls,
+                  // 恢复层盖住整屏，瓦片上的双击聚焦/退出聚焦会被它一并吞掉，
+                  // 这里把双击语义转回去，否则控制栏隐藏时双击就是失效的。
+                  onDoubleTap: _focusedParticipant == null
+                      ? null
+                      : () => setState(() => _focusedParticipant = null),
                   child: const SizedBox.expand(),
                 ),
               ),
@@ -379,10 +396,15 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
 
             // 名称和状态
             if (showName)
-              Positioned(
+              AnimatedPositioned(
+                // 与底栏同步渐变，否则底栏 200ms 淡出期间名条位置会瞬跳。
+                duration: _controlsFadeDuration,
+                curve: Curves.easeOut,
                 left: 8,
                 bottom: _showControls && !compact
-                    ? MediaQuery.of(context).padding.bottom + 112
+                    ? MediaQuery.of(context).padding.bottom +
+                          _bottomBarHeight +
+                          8
                     : 8,
                 right: 8,
                 child: Row(
@@ -711,11 +733,13 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
         ignoring: !_showControls,
         child: AnimatedOpacity(
           opacity: _showControls ? 1.0 : 0.0,
-          duration: const Duration(milliseconds: 200),
+          duration: _controlsFadeDuration,
           child: Container(
             padding: EdgeInsets.only(
-              top: 16,
-              bottom: MediaQuery.of(context).padding.bottom + 16,
+              top: _bottomBarVerticalPadding,
+              bottom:
+                  MediaQuery.of(context).padding.bottom +
+                  _bottomBarVerticalPadding,
               left: 12,
               right: 12,
             ),
@@ -827,8 +851,8 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  width: 46,
-                  height: 46,
+                  width: _controlButtonCircleSize,
+                  height: _controlButtonCircleSize,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color:
@@ -839,10 +863,10 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
                   ),
                   child: Icon(icon, color: Colors.white, size: 23),
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: _controlButtonGap),
                 SizedBox(
                   width: double.infinity,
-                  height: 15,
+                  height: _controlButtonLabelHeight,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(

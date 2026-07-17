@@ -44,6 +44,11 @@ class SenderFactory {
   /// Reads [allChainUrlMap] to determine the blockchain type, then returns
   /// the appropriate [ChainSender] implementation. A runtime [chainConfig]
   /// allows user-added networks that are not present in the static registry.
+  ///
+  /// NOTE: [chainConfig] only takes effect for coin types absent from
+  /// [allChainUrlMap]. For registry chains the cached registry-backed sender
+  /// wins and the argument is ignored — senders read per-call settings from
+  /// [SendParams.chainConfig], so a runtime override belongs there, not here.
   ChainSender getSender(String coinType, {Map<String, dynamic>? chainConfig}) {
     final key = coinType.toUpperCase();
     if (!allChainUrlMap.containsKey(key) && chainConfig != null) {
@@ -57,8 +62,11 @@ class SenderFactory {
   }
 
   /// Whether [coinType] has a concrete transfer implementation.
-  bool supportsTransfers(String coinType) =>
-      _createSender(coinType.toUpperCase()) is! _UnsupportedSender;
+  ///
+  /// Pass [chainConfig] for user-added networks; without it a chain missing
+  /// from the registry always reports unsupported.
+  bool supportsTransfers(String coinType, {Map<String, dynamic>? chainConfig}) =>
+      getSender(coinType, chainConfig: chainConfig) is! _UnsupportedSender;
 
   ChainSender _createSender(
     String coinType, {

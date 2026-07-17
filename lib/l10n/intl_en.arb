@@ -1496,5 +1496,11 @@
   "g_key_loyalty_empty_leaderboard": "Leaderboard is empty",
   "g_key_retry": "Retry",
   "g_key_earn_claim_free": "Find verified third-party campaigns",
-  "g_key_earn_daily_bonus": "Daily on-chain points"
+  "g_key_earn_daily_bonus": "Daily on-chain points",
+  "g_key_airdrop_sources_hint": "Open Sources to browse provider-maintained campaign directories.",
+  "g_key_airdrop_thirdparty_warning": "Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.",
+  "g_key_loyalty_no_wallet": "No active wallet",
+  "g_key_loyalty_unavailable": "Service unavailable",
+  "g_key_badge_hot": "HOT",
+  "g_key_badge_live": "LIVE"
 }

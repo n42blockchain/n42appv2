@@ -697,12 +697,15 @@ final Map<String, dynamic> chainUrlConfigsPart4 = <String, dynamic>{
       "path": {"legacy": "m/44'/637'/0'/0'/0'"},
       "service": "https://fullnode.mainnet.aptoslabs.com/v1",
       "chainId": 1,
+      // Aptos 测试网 chain_id 为 2。缺这一项时 resolveChainConfigId 会回退
+      // 到 1（主网），签出的「测试网」交易在主网合法。
+      "chainId_test": 2,
       "contract": "",
       "canEdit": true,
       "rules": "",
     },
     "mainnetChainID": 1,
-    "testnetChainID": 0,
+    "testnetChainID": 2,
     "testnetIndex": 0,
     "testnets": [
       {

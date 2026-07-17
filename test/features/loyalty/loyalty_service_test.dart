@@ -38,6 +38,49 @@ void main() {
     service.dispose();
   });
 
+  test('a failing supplementary endpoint degrades to an empty section', () async {
+    // 排行榜挂掉不该把整页（含签到入口）一起打没。
+    final service = LoyaltyService(
+      baseUrl: 'https://api.example/loyalty/v1/',
+      client: MockClient((request) async {
+        final body = switch (request.url.path) {
+          '/loyalty/v1/account' =>
+            '{"code":200,"data":{"total_points":120,"available_points":100,"used_points":20,"tier":"bronze","tier_progress":12,"next_tier_points":880}}',
+          '/loyalty/v1/tasks' =>
+            '{"code":200,"data":[{"id":"daily-checkin","title":"Daily Check-in","description":"Once daily","points":10,"status":"pending"}]}',
+          '/loyalty/v1/leaderboard' => throw StateError('leaderboard is down'),
+          _ => '{"code":200,"data":[]}',
+        };
+        return http.Response(body, 200);
+      }),
+    );
+
+    final snapshot = await service.load('0xabc');
+
+    expect(snapshot.account.availablePoints, 100);
+    expect(snapshot.tasks.single.id, 'daily-checkin');
+    expect(snapshot.leaderboard, isEmpty);
+    service.dispose();
+  });
+
+  test('a failing account endpoint still surfaces an error', () async {
+    final service = LoyaltyService(
+      baseUrl: 'https://api.example/loyalty/v1/',
+      client: MockClient((request) async {
+        if (request.url.path == '/loyalty/v1/account') {
+          return http.Response('{"code":500}', 500);
+        }
+        return http.Response('{"code":200,"data":[]}', 200);
+      }),
+    );
+
+    await expectLater(
+      service.load('0xabc'),
+      throwsA(isA<LoyaltyServiceException>()),
+    );
+    service.dispose();
+  });
+
   test('returns confirmed points and relayer transaction hash', () async {
     final service = LoyaltyService(
       baseUrl: 'https://api.example/loyalty/v1',

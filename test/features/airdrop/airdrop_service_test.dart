@@ -41,6 +41,31 @@ void main() {
         isNull,
       );
     });
+
+    test('source label is not spoofable by a lookalike suffix domain', () {
+      // 裸 endsWith 会让钓鱼域名顶着 CoinMarketCap 的来源标签展示。
+      expect(
+        AirdropCampaign.fromJson({
+          'name': 'Lookalike',
+          'claim_url': 'https://evilcoinmarketcap.com/claim',
+        }).sourceName,
+        'N42',
+      );
+      expect(
+        AirdropCampaign.fromJson({
+          'name': 'Subdomain',
+          'claim_url': 'https://airdrop.coinmarketcap.com/claim',
+        }).sourceName,
+        'CoinMarketCap',
+      );
+      expect(
+        AirdropCampaign.fromJson({
+          'name': 'Apex',
+          'claim_url': 'https://coinmarketcap.com/claim',
+        }).sourceName,
+        'CoinMarketCap',
+      );
+    });
   });
 
   group('AirdropService', () {

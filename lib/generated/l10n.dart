@@ -12258,6 +12258,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Open Sources to browse provider-maintained campaign directories.`
+  String get g_key_airdrop_sources_hint {
+    return Intl.message(
+      'Open Sources to browse provider-maintained campaign directories.',
+      name: 'g_key_airdrop_sources_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.`
+  String get g_key_airdrop_thirdparty_warning {
+    return Intl.message(
+      'Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.',
+      name: 'g_key_airdrop_thirdparty_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active wallet`
+  String get g_key_loyalty_no_wallet {
+    return Intl.message(
+      'No active wallet',
+      name: 'g_key_loyalty_no_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service unavailable`
+  String get g_key_loyalty_unavailable {
+    return Intl.message(
+      'Service unavailable',
+      name: 'g_key_loyalty_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `HOT`
+  String get g_key_badge_hot {
+    return Intl.message('HOT', name: 'g_key_badge_hot', desc: '', args: []);
+  }
+
+  /// `LIVE`
+  String get g_key_badge_live {
+    return Intl.message('LIVE', name: 'g_key_badge_live', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

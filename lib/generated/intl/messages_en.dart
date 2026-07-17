@@ -833,8 +833,16 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("Pending"),
     "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Sources"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Open Sources to browse provider-maintained campaign directories.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.",
+    ),
     "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("Airdrops"),
     "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Upcoming"),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("HOT"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("LIVE"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Add Recipient",
     ),
@@ -1763,12 +1771,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
       "No tasks available",
     ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "No active wallet",
+    ),
     "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Referrals"),
     "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Rewards"),
     "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Tasks"),
     "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Points"),
     "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
       "Total Earned",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Service unavailable",
     ),
     "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Used"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),

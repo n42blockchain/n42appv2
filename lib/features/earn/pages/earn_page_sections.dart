@@ -60,7 +60,7 @@ mixin EarnPageSectionsMixin
                   subtitle: S.of(context).g_key_earn_up_to_apy(maxApyStr),
                   icon: Icons.account_balance_rounded,
                   gradientColors: const [Color(0xFF11998e), Color(0xFF38ef7d)],
-                  badge: 'HOT',
+                  badge: S.of(context).g_key_badge_hot,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const StakingHomePage()),
@@ -114,7 +114,7 @@ mixin EarnPageSectionsMixin
                   subtitle: S.of(context).g_key_earn_claim_free,
                   icon: Icons.card_giftcard_rounded,
                   gradientColors: const [Color(0xFF00897B), Color(0xFF43A047)],
-                  badge: 'LIVE',
+                  badge: S.of(context).g_key_badge_live,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(

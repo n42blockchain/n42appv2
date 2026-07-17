@@ -33,6 +33,20 @@ class CosmosSender implements ChainSender {
   CosmosSender({Map<String, dynamic>? chainConfig})
     : _defaultChainConfig = chainConfig;
 
+  /// 端点解析顺序：本次调用带的运行期配置 → 工厂注入的注册表配置。前者是钱包
+  /// 持久化的 coin map，未必带 service；后者兜底。测试网取 service_test，取不到
+  /// 就返回空让调用方失败——绝不能拿主网端点当测试网用。
+  String _resolveServiceUrl(SendParams params) {
+    for (final config in [params.chainConfig, _defaultChainConfig]) {
+      final baseInfo = resolveChainBaseInfo(config);
+      if (baseInfo == null) continue;
+      final view = CoinConfigView(baseInfo);
+      final url = params.isTest ? view.serviceTest : view.service;
+      if (url.trim().isNotEmpty) return url;
+    }
+    return '';
+  }
+
   // Known Cosmos chain metadata: chainId + denom
   static const Map<String, _CosmosChainMeta> _knownChains = {
     'ATOM': _CosmosChainMeta('cosmoshub-4', 'uatom', 6),
@@ -74,10 +88,9 @@ class CosmosSender implements ChainSender {
     final coinType = params.coinType.toUpperCase();
     final meta = _knownChains[coinType];
     final denomDecimals = meta?.decimals ?? params.decimals;
-    final baseInfo = resolveChainBaseInfo(
-      params.chainConfig ?? _defaultChainConfig,
-    );
-    final serviceUrl = CoinConfigView(baseInfo ?? const {}).service;
+    // 运行期 chainConfig（钱包持久化的 coin map）可能没带 service；工厂注入的
+    // 注册表配置里往往有可用端点，不回退就会把本可发送的链判成缺端点。
+    final serviceUrl = _resolveServiceUrl(params);
     if (coinType != CoinType.ATOM.name && serviceUrl.trim().isEmpty) {
       return SendResult.fail('Missing Cosmos REST endpoint for $coinType');
     }
@@ -94,7 +107,7 @@ class CosmosSender implements ChainSender {
             BlockchainType.Cosmos.name,
             CoinType.ATOM.name,
             params.fromAddress,
-            isTest: false,
+            isTest: params.isTest,
           )
         : await cosmosApi.getBalance(params.fromAddress);
     if (mmb == null) {
@@ -111,7 +124,7 @@ class CosmosSender implements ChainSender {
         await _tokenViewApi.getGasPrice(
           BlockchainType.Cosmos.name,
           CoinType.ATOM.name,
-          isTest: false,
+          isTest: params.isTest,
         ) ??
         MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());

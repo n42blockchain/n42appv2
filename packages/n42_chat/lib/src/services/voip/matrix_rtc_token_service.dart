@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../core/utils/debug_log.dart';
 import '../../core/utils/livekit_call_utils.dart';
 
 final class MatrixRtcTokenException implements Exception {
@@ -95,8 +96,9 @@ final class MatrixRtcTokenService {
     matrix.OpenIdCredentials openId;
     try {
       openId = await client.requestOpenIdToken(userId, const {});
-    } catch (_) {
+    } catch (e) {
       // Older homeservers may only support the N42 legacy service.
+      _log('openid request failed', e);
       return const _TokenAttempt();
     }
 
@@ -114,7 +116,8 @@ final class MatrixRtcTokenService {
         }),
       );
       return _parseResponse(response, requireServerUrl: true);
-    } catch (_) {
+    } catch (e) {
+      _log('official /sfu/get request failed', e);
       return const _TokenAttempt();
     }
   }
@@ -163,8 +166,9 @@ final class MatrixRtcTokenService {
       final result = _parseResponse(response);
       if (result.credentials != null) return result;
       lastStatusCode = result.statusCode;
-    } catch (_) {
+    } catch (e) {
       // Fall through to the historical GET contract.
+      _log('legacy POST request failed', e);
     }
 
     try {
@@ -180,13 +184,19 @@ final class MatrixRtcTokenService {
         headers: headers,
       );
       final result = _parseResponse(response);
-      return result.credentials == null && result.statusCode == null
-          ? _TokenAttempt(statusCode: lastStatusCode)
-          : result;
-    } catch (_) {
+      if (result.credentials != null) return result;
+      // GET 也没拿到凭证：POST 的状态码更能说明问题（服务端早已移除这条
+      // 历史 GET 契约时只会回 404），优先保留它。
+      return _TokenAttempt(statusCode: lastStatusCode ?? result.statusCode);
+    } catch (e) {
+      _log('legacy GET request failed', e);
       return _TokenAttempt(statusCode: lastStatusCode);
     }
   }
+
+  /// 只记异常类型与所处阶段——token、Authorization 头、带参 URL 一律不入日志。
+  void _log(String stage, Object error) =>
+      debugLog('MatrixRtcTokenService: $stage (${error.runtimeType})');
 
   _TokenAttempt _parseResponse(
     http.Response response, {

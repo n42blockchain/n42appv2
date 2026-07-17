@@ -1485,5 +1485,11 @@
   "g_key_loyalty_empty_leaderboard": "排行榜暫無資料",
   "g_key_retry": "重試",
   "g_key_earn_claim_free": "發現已驗證的第三方活動",
-  "g_key_earn_daily_bonus": "每日鏈上積分"
+  "g_key_earn_daily_bonus": "每日鏈上積分",
+  "g_key_airdrop_sources_hint": "前往「來源」瀏覽由服務商維護的活動目錄。",
+  "g_key_airdrop_thirdparty_warning": "第三方活動可能是惡意的。簽名前請務必核對專案網域與交易內容。",
+  "g_key_loyalty_no_wallet": "沒有可用的錢包",
+  "g_key_loyalty_unavailable": "服務暫時不可用",
+  "g_key_badge_hot": "熱門",
+  "g_key_badge_live": "直播"
 }

@@ -76,10 +76,18 @@ class AirdropCampaign {
   static String _sourceName(Map<String, dynamic> json, Uri? claimUrl) {
     final explicit = _text(json['source_name'] ?? json['source']);
     if (explicit.isNotEmpty) return explicit;
-    if (claimUrl?.host.endsWith('coinmarketcap.com') == true) {
+    // 必须锚定到域名边界：裸 endsWith 会让 evilcoinmarketcap.com 也顶着
+    // CoinMarketCap 的来源标签展示给用户。
+    if (_isHostOrSubdomainOf(claimUrl?.host, 'coinmarketcap.com')) {
       return 'CoinMarketCap';
     }
     return 'N42';
+  }
+
+  static bool _isHostOrSubdomainOf(String? host, String domain) {
+    if (host == null || host.isEmpty) return false;
+    final normalized = host.toLowerCase();
+    return normalized == domain || normalized.endsWith('.$domain');
   }
 
   static String _text(dynamic value) => value?.toString().trim() ?? '';

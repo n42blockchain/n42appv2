@@ -65,7 +65,14 @@ class _AirdropHomePageState extends State<AirdropHomePage> {
       if (proceed != true || !mounted) return;
       PhishingDetector.instance.allowForSession(url.toString());
     }
-    final opened = await launchUrl(url, mode: LaunchMode.externalApplication);
+    // 无 URL 处理器的设备上 launchUrl 会抛 PlatformException，未捕获会直接
+    // 崩掉整页；失败与「打不开」走同一条提示。
+    bool opened;
+    try {
+      opened = await launchUrl(url, mode: LaunchMode.externalApplication);
+    } catch (_) {
+      opened = false;
+    }
     if (!opened && mounted) {
       ScaffoldMessenger.of(
         context,
@@ -133,8 +140,7 @@ class _AirdropHomePageState extends State<AirdropHomePage> {
       return _StatusView(
         icon: Icons.inbox_outlined,
         title: S.of(context).g_key_airdrop_no_airdrops,
-        detail:
-            'Open Sources to browse provider-maintained campaign directories.',
+        detail: S.of(context).g_key_airdrop_sources_hint,
       );
     }
 
@@ -162,9 +168,8 @@ class _AirdropHomePageState extends State<AirdropHomePage> {
       separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space8),
       itemBuilder: (context, index) {
         if (index == 0) {
-          return const _InlineWarning(
-            message:
-                'Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.',
+          return _InlineWarning(
+            message: S.of(context).g_key_airdrop_thirdparty_warning,
           );
         }
         final source = AirdropService.sources[index - 1];
@@ -317,9 +322,9 @@ class _InlineWarning extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(AppSpacing.space8),
       decoration: BoxDecoration(
-        color: colors.warning.withAlpha(22),
+        color: colors.warning.withValues(alpha: 0.12),
         borderRadius: AppRadius.brMd,
-        border: Border.all(color: colors.warning.withAlpha(70)),
+        border: Border.all(color: colors.warning.withValues(alpha: 0.30)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
