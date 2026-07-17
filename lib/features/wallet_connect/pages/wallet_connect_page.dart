@@ -1,7 +1,6 @@
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';
-import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/loading_page.dart';
 import 'package:flutter/material.dart';
@@ -22,21 +21,23 @@ class WalletConnectPage extends ConsumerStatefulWidget {
 
 class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
     with WalletConnectWidgetsMixin {
+  late final WalletConnectProvider _connectV2;
+
   @override
   void initState() {
     super.initState();
-    final connectV2 = ref.read(wcpBridgeProvider);
+    _connectV2 = ref.read(wcpBridgeProvider);
     if (widget.uri != "") {
-      connectV2.pageOpen = true;
-      connectV2.viewStateDeal(WalletConnectState.loading, params: widget.uri);
-    } else if (connectV2.walletConnectState == WalletConnectState.loading) {
-      connectV2.viewStateDeal(WalletConnectState.disconnect);
+      _connectV2.pageOpen = true;
+      _connectV2.viewStateDeal(WalletConnectState.loading, params: widget.uri);
+    } else if (_connectV2.walletConnectState == WalletConnectState.loading) {
+      _connectV2.viewStateDeal(WalletConnectState.disconnect);
     }
   }
 
   @override
   void dispose() {
-    ref.read(wcpBridgeProvider).pageOpen = false;
+    _connectV2.pageOpen = false;
     super.dispose();
   }
 
@@ -53,6 +54,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
   Widget build(BuildContext context) {
     final connectV2 = ref.watch(wcpBridgeProvider);
     return Scaffold(
+      key: const ValueKey<String>('wallet_connect_page'),
       appBar: AppBarWidget(text: connectV2.metadata?.name ?? "Wallet Connect"),
       body: SafeArea(
         child: Stack(

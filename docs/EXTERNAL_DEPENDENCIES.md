@@ -1,6 +1,6 @@
 # 外部依赖配置总览（钱包 + Chat）
 
-> 2026-07-03 整理。两份竞品对比报告（`2026钱包市场竞品对比分析报告.md`、`2026_Chat市场竞品对比.md`）中所有
+> 2026-07-14 更新。两份竞品对比报告（`2026钱包市场竞品对比分析报告.md`、`2026_Chat市场竞品对比.md`）中所有
 > "代码就位但需外部依赖才生效"的功能，其**依赖项、配置方式、验证方法**集中在此。
 > 原则：**默认（不配任何 key）构建必须可用**——所有依赖项缺失时功能降级或隐藏，不崩溃。
 
@@ -29,6 +29,8 @@ flutter build apk --release \
 | `ALCHEMY_API_KEY` | 钱包 NFT/RPC 增强 | NFT 元数据/增强 RPC | 走默认 RPC，功能弱化 |
 | `PROXY_BASE_URL` / `PROXY_AUTH_TOKEN` | `core/config/proxy_config.dart` | 行情/gas/explorer/bundler 代理（key 保护 + 缓存）| 默认指向 `api.n42.ai/proxy`；token 空则代理接口 401（T15 logcat 已见）|
 | `IPFS_USERNAME` / `IPFS_PASSWORD` | IPFS 上传 | 去中心化存储上传 | 上传降级 |
+| `AIRDROP_API_BASE_URL` | `features/airdrop/services/airdrop_service.dart` | 结构化空投活动聚合列表 | 默认旧 N42 端点；不可用时如实报错，Sources 目录仍可用 |
+| `LOYALTY_API_BASE_URL` | `features/loyalty/services/loyalty_service.dart` | 主应用签到/任务/推荐/历史/排行/奖励 | 默认 N42 loyalty 路径；服务未部署时如实报错，不生成假积分 |
 
 Chat 社交登录（Twitter 等 SSO key）经 `chatSocialAuthConfig` 传入，同文件。
 
@@ -53,11 +55,13 @@ Chat 增量三家社交登录（2026-07-06，走自建 `backend/social-auth`）�
 | **mautrix 桥接族** | Chat §10 跨协议桥（16 平台，`BridgeManager`）| 客户端管理 UI 完整；每座桥需在服务端部署对应 mautrix-* 进程并在 homeserver 注册 appservice |
 | **swap 后端（`backend/swap/`，Go，仓内）** | 钱包 DEX 聚合报价/兑换历史/限价单存储/**价格预警（2026-07-03 新增：CRUD+CoinGecko 监控+webhook/轮询触达）** | ✅ 仓内自有，Docker 部署，env 清单见 `backend/swap/README.md`。见"三、后端盘点" |
 | **social-auth 后端（`backend/social-auth/`，Go，仓内）** | Chat 第三方登录 **Discord/GitHub/Telegram**（2026-07-06 新增）：OAuth2/Login-Widget 校验 → Matrix shared-secret 无状态签发账号 | ✅ 仓内自有（纯标准库），env 见 `backend/social-auth/README.md`。**外部前置**：Matrix homeserver 开 shared-secret registration + 三家 app 注册。现有五家仍走外部 `api.n42.network`。前端集成见 `SOCIAL_LOGIN_PLAN.md` |
+| **loyalty relayer（`backend/loyalty/`，Go，仓内）** | 主应用不可转让积分：签到、任务、推荐、历史、排行、奖励；官方支付 N42 Gas | ✅ 代码与 Go 测试完成，⚠️ 尚未部署。先部署 `contracts/loyalty/N42LoyaltyPoints.sol`，再按 README 配置 N42 RPC、合约地址、PostgreSQL、认证校验 URL 与 relayer 密钥。密钥只进 secret manager |
+| **空投聚合 API** | 空投 Discover 结构化活动列表 | ⚠️ 客户端已完成，服务端待部署。可在服务端聚合 CoinMarketCap 等授权数据源；第三方 API key 禁止注入 App。接口返回规则见 `BACKEND_REQUIREMENTS.md` |
 | **AA Bundler** | 钱包 §3 AA UserOp 真实发送 | 经 `ProxyConfig.bundler(chainId)` 走代理转发到第三方 bundler（需在代理侧配置上游，如 Pimlico/Alchemy）|
 
 ## 三、仓内后端盘点 + 无法由现有后端补齐的项（需交付物）
 
-**仓内现有后端 = `backend/swap`（Go）一个**（考古确认：全仓 git 历史从未有过其他 Go/Rust/Java 后端，也从未删除过后端代码；`rust/n42_mls` 是客户端 MLS FFI crate 非后端；真正的链后端是独立仓 n42-26。App 调用的 `api.n42.ai` 七个外部服务的接口需求见 [`BACKEND_REQUIREMENTS.md`](BACKEND_REQUIREMENTS.md)）：报价聚合（1inch/Jupiter/Uniswap）、
+**仓内现有 Go 后端包括 `backend/swap`、`backend/social-auth`、`backend/loyalty`**；`rust/n42_mls` 是客户端 MLS FFI crate，不是后端。App 调用的外部服务接口需求见 [`BACKEND_REQUIREMENTS.md`](BACKEND_REQUIREMENTS.md)：报价聚合（1inch/Jupiter/Uniswap）、
 `POST/GET/DELETE /v1/dex/limit`（限价单存取）、成交历史、交易确认监视（`monitor/`）。
 App 的 `dex_swap_api.dart` 已接通这些接口。
 
@@ -72,7 +76,9 @@ App 的 `dex_swap_api.dart` 已接通这些接口。
 | 5 | 直播预测市场**上链结算** | 无托管合约 | 合约团队按 `chain_prediction_repository.dart` 头部注释的即插即用规格交付：合约地址/ABI/测试网 RPC/测试 ERC20。交付前走 mock repo |
 | 6 | Chat §3 实时字幕 | 不是缺 key——通话中麦克风被 WebRTC 独占，`pushAudioChunk` 需要 WebRTC 音频帧 tap（flutter_webrtc 不暴露）| 原生侧音频帧管道（与虚拟背景发布帧同一缺口），配 STT key 才完整 |
 | 7 | 钱包 §2 MPC | Web3Auth Provider 从未注册 + MPC 签名是 POC 桩 | Web3Auth 项目接入（clientId + 注册 Provider）+ 真实门限签名实现，属大改 |
-| 8 | 钱包 §11 法币**出金** | 无 off-ramp 集成（入金 widget 有 key 位）| 第三方 off-ramp 服务商合约 + KYC 合规流程 |
+| 8 | 钱包 §11 法币**出金** | 钱包原生旧模块已删除；当前 Chat `FiatRampPage` 已接 MoonPay/Transak widget | 配置发布 key并完成供应商地区/KYC/回跳真机验收；如需钱包原生入口再做跨模块产品接线 |
+| 9 | 钱包 §7 空投聚合 | 客户端不能安全保存供应商 API key，也不应抓取不稳定网页 | 部署结构化聚合 API、来源许可/缓存/下架机制；领取签名始终留给客户端人工确认 |
+| 10 | 主应用积分生产部署 | 合约与 relayer 已在仓内实现但尚无测试网地址/运行实例 | 部署不可转让积分合约、由官方 relayer 代付 Gas、配置认证绑定校验/PostgreSQL/监控，再做双账号真机验收 |
 
 ## 四、与对比表的对应关系
 

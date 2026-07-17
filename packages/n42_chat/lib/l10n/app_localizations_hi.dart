@@ -21,7 +21,7 @@ class SHi extends S {
   String get chatCallServiceNotInitialized => 'कॉल सेवा प्रारंभ नहीं की गई';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'लॉगिन विफल: $error';
   }
 
@@ -149,7 +149,7 @@ class SHi extends S {
       'माइक्रोफ़ोन की अनुमति अस्वीकार कर दी गई है. ध्वनि संदेशों का उपयोग करने के लिए कृपया इसे सिस्टम सेटिंग्स में सक्षम करें।';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'रिकॉर्डिंग प्रारंभ करने में विफल: $error';
   }
 
@@ -157,7 +157,7 @@ class SHi extends S {
   String get commonRecordingTooShort => 'रिकॉर्डिंग बहुत छोटी है';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'रिकॉर्डिंग रोकने में विफल: $error';
   }
 
@@ -275,7 +275,7 @@ class SHi extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 आईडी: $id';
   }
 
@@ -377,7 +377,7 @@ class SHi extends S {
   String get profileChooseFromGallery => 'गैलरी से चुनें';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'सहेजना विफल: $error';
   }
 
@@ -426,7 +426,7 @@ class SHi extends S {
   String get authEnterServerAddress => 'सर्वर पता दर्ज करें';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverName से जुड़ा';
   }
 
@@ -526,7 +526,7 @@ class SHi extends S {
   String get commonPayment => 'भुगतान';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature जल्द ही आ रहा है';
   }
 
@@ -549,7 +549,7 @@ class SHi extends S {
   String get conversationDeleteConversation => 'वार्तालाप हटाएँ';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\" से वार्तालाप हटाएं?';
   }
 
@@ -600,7 +600,7 @@ class SHi extends S {
   String get commonLocationLabel => 'स्थान';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'अनुशंसा विफल: $error';
   }
 
@@ -611,7 +611,7 @@ class SHi extends S {
   String get contactOpeningChat => 'चैट खुल रही है...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'चैट खोलने में विफल: $error';
   }
 
@@ -680,7 +680,7 @@ class SHi extends S {
   String get searchNoResults => 'कोई परिणाम नहीं';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'सदस्य ($count)';
   }
 
@@ -779,7 +779,7 @@ class SHi extends S {
   String get transferAddressVerified => 'पता सत्यापित';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'उपलब्ध: $balance $symbol';
   }
 
@@ -840,7 +840,7 @@ class SHi extends S {
   String get profileAvatarUpdated => 'अवतार अपडेट किया गया';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'छवि का चयन करने में विफल: $error';
   }
 
@@ -859,7 +859,7 @@ class SHi extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'पता सहेजने में विफल: $error';
   }
 
@@ -882,7 +882,7 @@ class SHi extends S {
   String get profileAddressDeleted => 'पता हटा दिया गया';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'चालान सहेजने में विफल: $error';
   }
 
@@ -938,7 +938,7 @@ class SHi extends S {
   String get commonAddressCopied => 'पता कॉपी किया गया';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'खुला: $content';
   }
 
@@ -1222,7 +1222,7 @@ class SHi extends S {
   String get chatInCall => 'कॉल में';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature सुविधा विकास में है...';
   }
 
@@ -1463,16 +1463,6 @@ class SHi extends S {
 
   @override
   String get chatSaveToGallery => 'गैलरी में सहेजें';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'डाउनलोड विफल: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'शेयर विफल: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'छवि लोड करने में विफल';
@@ -2632,6 +2622,31 @@ class SHi extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'कोई मीडिया यूआरएल उपलब्ध नहीं है';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'डाउनलोड विफल: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'त्रुटि: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'संगीत लिंक';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'लाल पैकेट और स्थानांतरण अग्रेषित नहीं किए जा सकते';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'शेयर विफल: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'पुनः प्रयास करने के लिए टैप करें';
 
   @override
@@ -2658,28 +2673,13 @@ class SHi extends S {
   String get groupEnterGroupAnnouncement => 'समूह घोषणा दर्ज करें';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'त्रुटि: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count सदस्य, समूह आईडी कॉपी करने के लिए क्लिक करें';
   }
 
   @override
-  String get chatMusicLinkLabel => 'संगीत लिंक';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'कोई मीडिया यूआरएल उपलब्ध नहीं है';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'आपके पास समूह का नाम संपादित करने की अनुमति नहीं है';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'लाल पैकेट और स्थानांतरण अग्रेषित नहीं किए जा सकते';
 
   @override
   String get authEmailAddress => 'ईमेल पता';
@@ -2875,11 +2875,12 @@ class SHi extends S {
   @override
   String get authAppleLabel => 'सेब';
 
-
-  @override
-  String get authSsoNotConfigured => 'इस सर्वर ने SSO लॉगिन प्रदाता कॉन्फ़िगर नहीं किए हैं';
   @override
   String get authSsoLabel => 'एसएसओ';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3083,12 +3084,12 @@ class SHi extends S {
   String get contactEnterPhone => 'फ़ोन नंबर दर्ज करें';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'बातचीत: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'संपर्क करें: $userId';
   }
 
@@ -3096,7 +3097,7 @@ class SHi extends S {
   String get commonDiscover => 'खोजें';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(जल्द ही आ रहा है)';
   }
 
@@ -3421,12 +3422,12 @@ class SHi extends S {
   String get callLivekitNotConfigured => 'LiveKit कॉन्फ़िगर नहीं किया गया';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'मीटिंग में शामिल होने में विफल: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'स्क्रीन शेयर विफल: $error';
   }
 
@@ -3678,12 +3679,12 @@ class SHi extends S {
   String get profileSilentMode => 'मौन मोड';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'चलाने में विफल: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'बजाना: $ringtoneName';
   }
 
@@ -3737,7 +3738,7 @@ class SHi extends S {
   String get commonAllRead => 'सभी पढ़ें';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count पढ़ें';
   }
 

@@ -10,6 +10,7 @@ import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/atom_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/cosmos_chain_api.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
@@ -18,11 +19,33 @@ import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
 import 'chain_sender.dart';
 
+bool usesConfiguredCosmosRest(String coinType, String serviceUrl) =>
+    coinType.toUpperCase() != CoinType.ATOM.name &&
+    serviceUrl.trim().isNotEmpty;
+
 /// Cosmos-SDK chain sender.
 /// Handles ATOM, INJ, OSMO, TIA, DYDX, NTRN and all other Cosmos chains.
 class CosmosSender implements ChainSender {
+  final Map<String, dynamic>? _defaultChainConfig;
   final _tokenViewApi = TokenViewApi();
   final _trustdart = Trustdart();
+
+  CosmosSender({Map<String, dynamic>? chainConfig})
+    : _defaultChainConfig = chainConfig;
+
+  /// 端点解析顺序：本次调用带的运行期配置 → 工厂注入的注册表配置。前者是钱包
+  /// 持久化的 coin map，未必带 service；后者兜底。测试网取 service_test，取不到
+  /// 就返回空让调用方失败——绝不能拿主网端点当测试网用。
+  String _resolveServiceUrl(SendParams params) {
+    for (final config in [params.chainConfig, _defaultChainConfig]) {
+      final baseInfo = resolveChainBaseInfo(config);
+      if (baseInfo == null) continue;
+      final view = CoinConfigView(baseInfo);
+      final url = params.isTest ? view.serviceTest : view.service;
+      if (url.trim().isNotEmpty) return url;
+    }
+    return '';
+  }
 
   // Known Cosmos chain metadata: chainId + denom
   static const Map<String, _CosmosChainMeta> _knownChains = {
@@ -65,16 +88,31 @@ class CosmosSender implements ChainSender {
     final coinType = params.coinType.toUpperCase();
     final meta = _knownChains[coinType];
     final denomDecimals = meta?.decimals ?? params.decimals;
+    // 运行期 chainConfig（钱包持久化的 coin map）可能没带 service；工厂注入的
+    // 注册表配置里往往有可用端点，不回退就会把本可发送的链判成缺端点。
+    final serviceUrl = _resolveServiceUrl(params);
+    if (coinType != CoinType.ATOM.name && serviceUrl.trim().isEmpty) {
+      return SendResult.fail('Missing Cosmos REST endpoint for $coinType');
+    }
+    final cosmosApi = usesConfiguredCosmosRest(coinType, serviceUrl)
+        ? CosmosChainApi(
+            serviceUrl,
+            meta?.denom ?? 'u${coinType.toLowerCase()}',
+          )
+        : null;
 
     // Get balance
-    final mmb =
-        await _tokenViewApi.getBalance(
-          BlockchainType.Cosmos.name,
-          CoinType.ATOM.name,
-          params.fromAddress,
-          isTest: false,
-        ) ??
-        MessageModel.error();
+    final mmb = cosmosApi == null
+        ? await _tokenViewApi.getBalance(
+            BlockchainType.Cosmos.name,
+            CoinType.ATOM.name,
+            params.fromAddress,
+            isTest: params.isTest,
+          )
+        : await cosmosApi.getBalance(params.fromAddress);
+    if (mmb == null) {
+      return SendResult.fail('Unable to query $coinType balance');
+    }
     if (mmb.error) return SendResult.fail(mmb.data?.toString());
     final chainBalance = mmb.data as BigInt;
     if (chainBalance == BigInt.zero) {
@@ -86,7 +124,7 @@ class CosmosSender implements ChainSender {
         await _tokenViewApi.getGasPrice(
           BlockchainType.Cosmos.name,
           CoinType.ATOM.name,
-          isTest: false,
+          isTest: params.isTest,
         ) ??
         MessageModel.error();
     if (mmg.error) return SendResult.fail(mmg.data?.toString());
@@ -122,21 +160,11 @@ class CosmosSender implements ChainSender {
       }
     }
 
-    // Get account info
-    final serviceUrl =
-        params.chainConfig?['baseInfo']?['service'] as String? ?? '';
-
     MessageModel amm;
     if (coinType == 'ATOM') {
       amm = await AtomApi().getAccounts(params.fromAddress);
-    } else if (serviceUrl.isNotEmpty) {
-      final api = CosmosChainApi(
-        serviceUrl,
-        meta?.denom ?? 'u${coinType.toLowerCase()}',
-      );
-      amm = await api.getAccount(params.fromAddress);
     } else {
-      amm = await AtomApi().getAccounts(params.fromAddress);
+      amm = await cosmosApi!.getAccount(params.fromAddress);
     }
     if (amm.error) return SendResult.fail(amm.data?.toString());
 
@@ -198,11 +226,8 @@ class CosmosSender implements ChainSender {
     MessageModel sendMm;
     if (coinType == 'ATOM') {
       sendMm = await AtomApi().sendTxs(signStr);
-    } else if (serviceUrl.isNotEmpty) {
-      final api = CosmosChainApi(serviceUrl, denom);
-      sendMm = await api.sendTx(signStr);
     } else {
-      sendMm = await AtomApi().sendTxs(signStr);
+      sendMm = await cosmosApi!.sendTx(signStr);
     }
 
     if (sendMm.error) return SendResult.fail(sendMm.data?.toString());

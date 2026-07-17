@@ -16,6 +16,7 @@ class AppHomeTopBar extends ConsumerStatefulWidget {
   final String? title;
   final List<Widget>? actions;
   final Widget? titleChild;
+  final Key? leftActionKey;
 
   const AppHomeTopBar({
     super.key,
@@ -25,6 +26,7 @@ class AppHomeTopBar extends ConsumerStatefulWidget {
     this.title,
     this.actions,
     this.titleChild,
+    this.leftActionKey,
   });
 
   @override
@@ -51,7 +53,9 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
                 (widget.isText
                     ? Text(
                         widget.title ?? '',
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       )
                     : Image.asset(
                         'assets/images/ast_nft.png',
@@ -80,6 +84,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
   Widget _buildLeftWidget(String? userImage) {
     if (widget.onLeftImageUri == null) {
       return GestureDetector(
+        key: widget.leftActionKey,
         onTap: widget.onLeftImageClick,
         child: Container(
           width: ScreenUtil().setWidth(64.0),
@@ -96,6 +101,7 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
       );
     }
     return GestureDetector(
+      key: widget.leftActionKey,
       behavior: HitTestBehavior.opaque,
       onTap: widget.onLeftImageClick,
       child: Container(

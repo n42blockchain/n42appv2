@@ -336,6 +336,7 @@ class LiveKitService extends ChangeNotifier {
         isLocal: true,
         isMuted: !enableAudio,
         isVideoEnabled: enableVideo,
+        videoTrack: enableVideo ? _getLocalVideoTrack() : null,
       );
 
       _isMuted = !enableAudio;
@@ -833,6 +834,16 @@ class LiveKitService extends ChangeNotifier {
       _notifyParticipantsChanged();
     });
 
+    // Keep the local preview in sync when LiveKit republishes media, including
+    // after a reconnect or a platform-level camera restart.
+    _roomListener!.on<LocalTrackPublishedEvent>((event) {
+      _updateLocalParticipant();
+    });
+
+    _roomListener!.on<LocalTrackUnpublishedEvent>((event) {
+      _updateLocalParticipant();
+    });
+
     // 轨道静音状态变化
     _roomListener!.on<TrackMutedEvent>((event) {
       if (event.participant is RemoteParticipant) {
@@ -880,6 +891,7 @@ class LiveKitService extends ChangeNotifier {
 
     _roomListener!.on<RoomReconnectedEvent>((event) {
       debugLog('LiveKitService: Room reconnected');
+      _updateLocalParticipant();
       _setState(MeetingState.connected);
     });
 

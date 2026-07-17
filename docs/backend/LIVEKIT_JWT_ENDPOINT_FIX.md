@@ -1,109 +1,73 @@
-# 后端修复说明：LiveKit JWT 端点 301→404（阻塞群组视频通话 / 屏幕共享 A/B）
+# MatrixRTC 多人通话换票修复说明
 
-> 提出：2026-06-27（客户端侧）｜优先级：高（阻塞 #9 屏幕共享真机 A/B 与一切群组视频通话）
-> 影响服务：`m.si46.world` 的 LiveKit JWT 签发端点 + `.well-known`
+> 2026-07-14 纠错：此前将 `/livekit/jwt` 基地址的 `301 -> /livekit/jwt/` 和基地址
+> `404` 误判为 JWT 服务未部署。生产复核证明服务正常，真正根因是客户端把服务基地址
+> 当成了 token 端点。
 
-## 一、现象
+## 生产现状
 
-客户端发起群组音视频通话时，需先向 LiveKit **JWT 服务端点** 换取访问令牌。当前：
+`.well-known/matrix/client` 发布：
 
-- `GET/POST https://m.si46.world/livekit/jwt` → **301 重定向**到 `https://m.si46.world/livekit/jwt/`（加尾斜杠）
-- `https://m.si46.world/livekit/jwt/`（带尾斜杠）→ **404 Not Found**
-
-结果：客户端拿不到 token，无法进入 `GroupCallScreen`，群组视频/屏幕共享无法验证。
-
-> 301 还有副作用：HTTP 规范下 301 常把 **POST 降级为 GET 并丢弃请求体**，即使 `/jwt/`
-> 存在也会丢掉房间/身份参数。**端点必须直接命中、不要重定向**。
-
-## 二、客户端契约（请按此实现/修复服务端）
-
-### 1. 发现（`.well-known`）
-客户端 `GET {homeserver}/.well-known/matrix/client`，读取（MSC4143）：
-
-```jsonc
+```json
 {
   "org.matrix.msc4143.rtc_foci": [
     {
       "type": "livekit",
-      "livekit_service_url": "https://m.si46.world/livekit/jwt",  // ← JWT 服务 URL
-      "livekit_alias": "..."
+      "livekit_service_url": "https://m.si46.world/livekit/jwt"
     }
   ]
 }
 ```
 
-- 兼容回退键：`n42.livekit`。
-- 客户端据 `livekit_service_url` 派生 WS：把末段 `jwt` 换为 SFU，例如
-  `https://m.si46.world/livekit/jwt` → `wss://m.si46.world/livekit/sfu`。
-  **请确保该 SFU WS 同样可直连。**
+2026-07-14 实测：
 
-### 2. 取 token 请求
-客户端先 POST，失败再 GET（同一 URL）：
+| 请求 | 结果 | 含义 |
+|---|---|---|
+| `GET /livekit/jwt/healthz` | `200` | MatrixRTC Authorization Service 正常 |
+| `GET /livekit/jwt/sfu/get` | `405` | 路由存在，只允许 POST |
+| 空 JSON `POST /livekit/jwt/sfu/get` | `400 M_BAD_JSON` | 协议处理器正常校验请求 |
+| `GET /livekit/sfu` | `200` | LiveKit SFU 可达 |
 
-- Header：
-  - `Authorization: Bearer <Matrix accessToken>`（用户的 Matrix 访问令牌，服务端需校验）
-  - `Accept: application/json`、`Content-Type: application/json`
-- POST body（JSON）：
-  ```json
-  {
-    "room": "<roomName>",
-    "identity": "<participantId>",
-    "name": "<participantName>",
-    "video": true,
-    "conversation_id": "<conversationId>",
-    "metadata": "{\"conversation_id\":\"...\",\"video\":true}"
-  }
-  ```
-- GET 回退：上述字段作为 query 参数。
+服务基地址本身不是 token API。官方反向代理使用 `/livekit/jwt/` 前缀并剥离该前缀，
+因此访问无斜杠基地址时出现 301 不代表通话故障。
 
-### 3. 期望响应
-`200 OK` + JSON，token 字段名任一即可（客户端按以下顺序取）：
+## 正确客户端流程
+
+1. 从 Matrix homeserver 调用
+   `POST /_matrix/client/v3/user/{userId}/openid/request_token` 获取短期 OpenID 凭据。
+2. 向 `{livekit_service_url}/sfu/get` POST：
 
 ```json
-{ "token": "<livekit-jwt>" }      // 或 "jwt" / "access_token" / "accessToken"
+{
+  "room": "!matrixRoomId:server",
+  "openid_token": {
+    "access_token": "short-lived-openid-token",
+    "token_type": "Bearer",
+    "matrix_server_name": "server",
+    "expires_in": 3600
+  },
+  "device_id": "MATRIX_DEVICE_ID"
+}
 ```
 
-可附带 `url`/`ws_url`（LiveKit SFU WS 地址）；不附则用上面的派生规则。
+3. 使用响应中的 `url` 和 `jwt` 连接 LiveKit。不得自行假设 SFU URL，也不得把 Matrix
+   access token 直接发给 Authorization Service。
 
-## 三、根因与修复
+当前客户端实现在
+`packages/n42_chat/lib/src/services/voip/matrix_rtc_token_service.dart`。旧 N42 自建
+Bearer-token 服务只在官方 `/sfu/get` 明确返回 404/405 时兼容回退；OpenID 或网络失败时
+不得发送 Matrix 长期 access token。
 
-**根因**：反向代理 / 应用路由对 `/livekit/jwt` 强制加尾斜杠重定向（301），而带尾斜杠的
-路径没有注册处理器（404）。
-
-**任一修复即可**：
-
-1. **首选**：在 `/livekit/jwt`（**无尾斜杠**）直接注册 `POST` 与 `GET` 处理器，
-   **不做 301 重定向**；校验 `Authorization` Matrix token，签发 LiveKit JWT 返回 JSON。
-2. 或：让 `.well-known` 的 `livekit_service_url` 指向**能直接命中、不重定向**的规范 URL。
-3. 反向代理（nginx/traefik 等）：去掉对该路径的 `merge_slashes`/自动加斜杠重定向；
-   `proxy_pass` 保留 `Authorization` 头与请求体；放行 `POST`。
-
-附带检查：
-- CORS（若 Web 端用）：允许 `Authorization`、`Content-Type`，方法 `GET,POST,OPTIONS`。
-- SFU WS（`wss://.../livekit/sfu`）可直连、证书有效。
-
-## 四、验收（修好后跑）
+## 验收
 
 ```bash
-# 1. 端点不重定向、直接 200（带合法 Matrix token）
-curl -i -X POST https://m.si46.world/livekit/jwt \
-  -H "Authorization: Bearer <MATRIX_TOKEN>" \
-  -H "Content-Type: application/json" \
-  -d '{"room":"test","identity":"@a:m.si46.world","name":"A","video":true,"conversation_id":"c1"}'
-# 期望：HTTP/1.1 200，body 含 {"token":"..."}；不得出现 301 / 404
+curl -fsS https://m.si46.world/livekit/jwt/healthz
 
-# 2. .well-known 暴露的 URL 与上面一致且可直连
-curl -s https://m.si46.world/.well-known/matrix/client | jq '.["org.matrix.msc4143.rtc_foci"]'
+curl -sS -o /dev/null -w '%{http_code}\n' \
+  -X POST -H 'Content-Type: application/json' -d '{}' \
+  https://m.si46.world/livekit/jwt/sfu/get
+# 期望 400；说明路由存在且拒绝缺字段请求。
 ```
 
-客户端侧验收：两台真机/两账号进同一群 → 发起视频通话能进入 `GroupCallScreen` → A 端
-屏幕共享，B 端可见（#9 T8 的剩余真机 A/B）。
-
-## 五、关联
-
-- 阻塞项：#9 屏幕共享真机 A/B（客户端接线已完成：`docs/device-test-reports/2026-06-27-screen-share.md`）。
-- 客户端取 token 代码：`packages/n42_chat/lib/src/services/voip/call_manager.dart`、
-  URL 规范化/派生：`packages/n42_chat/lib/src/core/utils/livekit_call_utils.dart`、
-  发现：`packages/n42_chat/lib/src/core/services/n42_call_facade.dart`。
-- 旁注（与本端点无关，进度记录）：Codex 已交付 **T9 OpenMLS 移动端打包**（`9a064049`）
-  与 **T10 iOS 本地 AI 验证**（`34518b21`），均编译级通过、已验收。
+最终验收仍需两台真机、两个 Matrix 账号在同一群组完成语音和视频 A/B：三人加入/退出、
+静音、摄像头切换、前后台、断网重连和屏幕共享。

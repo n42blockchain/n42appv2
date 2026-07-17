@@ -140,6 +140,7 @@ extension on _HomePageState {
           "assets/home/tabbar/wallet.png",
           _tabTwo,
           5,
+          automationKey: const ValueKey<String>('home_tab_wallet'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -149,6 +150,7 @@ extension on _HomePageState {
           "assets/home/setting/mining.png",
           _tabThree,
           5,
+          automationKey: const ValueKey<String>('home_tab_mining'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -158,6 +160,7 @@ extension on _HomePageState {
           "assets/home/tabbar/earn.png",
           _tabFour,
           5,
+          automationKey: const ValueKey<String>('home_tab_earn'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -167,6 +170,7 @@ extension on _HomePageState {
           "assets/home/tabbar/news.png",
           _tabSix,
           5,
+          automationKey: const ValueKey<String>('home_tab_market'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -175,6 +179,7 @@ extension on _HomePageState {
           "assets/home/tabbar/chat.png",
           _tabFive,
           5,
+          automationKey: const ValueKey<String>('home_tab_chat'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -187,6 +192,7 @@ extension on _HomePageState {
           "assets/home/tabbar/wallet.png",
           _tabTwo,
           4,
+          automationKey: const ValueKey<String>('home_tab_wallet'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -196,6 +202,7 @@ extension on _HomePageState {
           "assets/home/setting/mining.png",
           _tabThree,
           4,
+          automationKey: const ValueKey<String>('home_tab_mining'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -205,6 +212,7 @@ extension on _HomePageState {
           "assets/home/tabbar/news.png",
           _tabSix,
           4,
+          automationKey: const ValueKey<String>('home_tab_market'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -213,6 +221,7 @@ extension on _HomePageState {
           "assets/home/tabbar/chat.png",
           _tabFive,
           4,
+          automationKey: const ValueKey<String>('home_tab_chat'),
           fixedIconSize: isWide ? iconSize : null,
           fixedFontSize: isWide ? fontSize : null,
         ),
@@ -255,6 +264,7 @@ extension on _HomePageState {
     String imagePath,
     GlobalKey key,
     int pagesLength, {
+    Key? automationKey,
     double? fixedIconSize,
     double? fixedFontSize,
   }) {
@@ -265,6 +275,7 @@ extension on _HomePageState {
 
     // 底部导航是全 App 最高频交互——恢复按压反馈（§5 红线，此前被 transparent 关闭）
     return InkWell(
+      key: automationKey,
       onTap: _navigateToChat,
       highlightColor: AppColorTokens.of(context).brand.withValues(alpha: 0.08),
       child: SizedBox(
@@ -310,6 +321,7 @@ extension on _HomePageState {
     String imagePath,
     GlobalKey key,
     int pagesLength, {
+    Key? automationKey,
     double? fixedIconSize,
     double? fixedFontSize,
   }) {
@@ -323,6 +335,7 @@ extension on _HomePageState {
     final unselectedColor = AppColorTokens.of(context).textTertiary;
 
     return InkWell(
+      key: automationKey,
       onTap: () {
         if (index == currentIndex) return;
         ref.read(homeTabIndexProvider.notifier).state = index;

@@ -22,7 +22,7 @@ class SSw extends S {
       'Huduma ya kupiga simu haijaanzishwa';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Kuingia kumeshindwa: $error';
   }
 
@@ -150,7 +150,7 @@ class SSw extends S {
       'Ruhusa ya maikrofoni imekataliwa. Tafadhali iwashe katika mipangilio ya mfumo ili kutumia ujumbe wa sauti.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Imeshindwa kuanza kurekodi: $error';
   }
 
@@ -158,7 +158,7 @@ class SSw extends S {
   String get commonRecordingTooShort => 'Kurekodi ni fupi mno';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Imeshindwa kuacha kurekodi: $error';
   }
 
@@ -276,7 +276,7 @@ class SSw extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -378,7 +378,7 @@ class SSw extends S {
   String get profileChooseFromGallery => 'Chagua kutoka kwenye Matunzio';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Imeshindwa kuhifadhi: $error';
   }
 
@@ -426,7 +426,7 @@ class SSw extends S {
   String get authEnterServerAddress => 'Ingiza anwani ya seva';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Imeunganishwa kwa $serverName';
   }
 
@@ -526,7 +526,7 @@ class SSw extends S {
   String get commonPayment => 'Malipo';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature inakuja hivi karibuni';
   }
 
@@ -549,7 +549,7 @@ class SSw extends S {
   String get conversationDeleteConversation => 'Futa Mazungumzo';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Je, ungependa kufuta mazungumzo na \"$name\"?';
   }
 
@@ -601,7 +601,7 @@ class SSw extends S {
   String get commonLocationLabel => 'Mahali';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Imeshindwa kupendekeza: $error';
   }
 
@@ -612,7 +612,7 @@ class SSw extends S {
   String get contactOpeningChat => 'Inafungua gumzo...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Imeshindwa kufungua gumzo: $error';
   }
 
@@ -680,7 +680,7 @@ class SSw extends S {
   String get searchNoResults => 'Hakuna Matokeo';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Wanachama ($count)';
   }
 
@@ -780,7 +780,7 @@ class SSw extends S {
   String get transferAddressVerified => 'Anwani imethibitishwa';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Inapatikana: $balance $symbol';
   }
 
@@ -841,7 +841,7 @@ class SSw extends S {
   String get profileAvatarUpdated => 'Avatar imesasishwa';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Imeshindwa kuchagua picha: $error';
   }
 
@@ -860,7 +860,7 @@ class SSw extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Imeshindwa kuhifadhi anwani: $error';
   }
 
@@ -883,7 +883,7 @@ class SSw extends S {
   String get profileAddressDeleted => 'Anwani imefutwa';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Imeshindwa kuhifadhi ankara: $error';
   }
 
@@ -940,7 +940,7 @@ class SSw extends S {
   String get commonAddressCopied => 'Anwani imenakiliwa';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Fungua: $content';
   }
 
@@ -1224,7 +1224,7 @@ class SSw extends S {
   String get chatInCall => 'Katika simu';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Kipengele cha $feature katika maendeleo...';
   }
 
@@ -1466,16 +1466,6 @@ class SSw extends S {
 
   @override
   String get chatSaveToGallery => 'Hifadhi kwenye Matunzio';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Imeshindwa kupakua: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Imeshindwa kushiriki: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Imeshindwa kupakia picha';
@@ -2641,6 +2631,31 @@ class SSw extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'Hakuna URL ya midia inayopatikana';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Imeshindwa kupakua: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Hitilafu: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Kiungo cha muziki';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Vifurushi vyekundu na uhamishaji hauwezi kusambazwa';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Imeshindwa kushiriki: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Gusa ili kujaribu tena';
 
   @override
@@ -2667,28 +2682,13 @@ class SSw extends S {
   String get groupEnterGroupAnnouncement => 'Weka tangazo la kikundi';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Hitilafu: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return 'Wanachama wa $count, bofya ili kunakili kitambulisho cha kikundi';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Kiungo cha muziki';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'Hakuna URL ya midia inayopatikana';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Huna ruhusa ya kuhariri jina la kikundi';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Vifurushi vyekundu na uhamishaji hauwezi kusambazwa';
 
   @override
   String get authEmailAddress => 'Anwani ya Barua Pepe';
@@ -2885,11 +2885,12 @@ class SSw extends S {
   @override
   String get authAppleLabel => 'Apple';
 
-
-  @override
-  String get authSsoNotConfigured => 'Seva hii haijasanidi watoa huduma wa kuingia SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Seva hii haijasanidi watoa huduma wa kuingia SSO';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3094,12 +3095,12 @@ class SSw extends S {
   String get contactEnterPhone => 'Weka nambari ya simu';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Mazungumzo: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Mawasiliano: $userId';
   }
 
@@ -3107,7 +3108,7 @@ class SSw extends S {
   String get commonDiscover => 'Gundua';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Inakuja hivi karibuni)';
   }
 
@@ -3433,12 +3434,12 @@ class SSw extends S {
   String get callLivekitNotConfigured => 'LiveKit haijasanidiwa';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Imeshindwa kujiunga na mkutano: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Imeshindwa kushiriki skrini: $error';
   }
 
@@ -3695,12 +3696,12 @@ class SSw extends S {
   String get profileSilentMode => 'Hali ya kimya';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Imeshindwa kucheza: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Inacheza: $ringtoneName';
   }
 
@@ -3754,7 +3755,7 @@ class SSw extends S {
   String get commonAllRead => 'Wote wamesoma';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return 'Imesomwa kwa $count';
   }
 

@@ -21,7 +21,7 @@ class STr extends S {
   String get chatCallServiceNotInitialized => 'Arama servisi başlatılmadı';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Giriş başarısız: $error';
   }
 
@@ -149,7 +149,7 @@ class STr extends S {
       'Mikrofon izni reddedildi. Sesli mesajları kullanmak için lütfen sistem ayarlarında etkinleştirin.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Kayıt başlatılamadı: $error';
   }
 
@@ -157,7 +157,7 @@ class STr extends S {
   String get commonRecordingTooShort => 'Kayıt çok kısa';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Kayıt durdurulamadı: $error';
   }
 
@@ -275,7 +275,7 @@ class STr extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 Kimliği: $id';
   }
 
@@ -377,7 +377,7 @@ class STr extends S {
   String get profileChooseFromGallery => 'Galeriden Seç';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Kaydetme başarısız: $error';
   }
 
@@ -426,7 +426,7 @@ class STr extends S {
   String get authEnterServerAddress => 'Sunucu adresi girin';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverName sunucusuna bağlandı';
   }
 
@@ -524,7 +524,7 @@ class STr extends S {
   String get commonPayment => 'Ödeme';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature yakında';
   }
 
@@ -547,7 +547,7 @@ class STr extends S {
   String get conversationDeleteConversation => 'Sohbeti Sil';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\" ile sohbeti silmek istiyor musunuz?';
   }
 
@@ -598,7 +598,7 @@ class STr extends S {
   String get commonLocationLabel => 'Konum';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Öneri başarısız: $error';
   }
 
@@ -609,7 +609,7 @@ class STr extends S {
   String get contactOpeningChat => 'Sohbet açılıyor...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Sohbet açılamadı: $error';
   }
 
@@ -677,7 +677,7 @@ class STr extends S {
   String get searchNoResults => 'Sonuç yok';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Üyeler ($count)';
   }
 
@@ -777,7 +777,7 @@ class STr extends S {
   String get transferAddressVerified => 'Adres doğrulandı';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Kullanılabilir: $balance $symbol';
   }
 
@@ -838,7 +838,7 @@ class STr extends S {
   String get profileAvatarUpdated => 'Avatar güncellendi';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Resim seçilemedi: $error';
   }
 
@@ -857,7 +857,7 @@ class STr extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Adres kaydedilemedi: $error';
   }
 
@@ -880,7 +880,7 @@ class STr extends S {
   String get profileAddressDeleted => 'Adres silindi';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Fatura kaydedilemedi: $error';
   }
 
@@ -936,7 +936,7 @@ class STr extends S {
   String get commonAddressCopied => 'Adres kopyalandı';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Aç: $content';
   }
 
@@ -1220,7 +1220,7 @@ class STr extends S {
   String get chatInCall => 'Aramada';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Özellik geliştirme aşamasında...';
   }
 
@@ -1461,16 +1461,6 @@ class STr extends S {
 
   @override
   String get chatSaveToGallery => 'Galeriye Kaydet';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'İndirme başarısız: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Paylaşım başarısız: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Resim yüklenemedi';
@@ -2632,6 +2622,31 @@ class STr extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'Medya URL\'si mevcut değil';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'İndirme başarısız: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Hata: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Müzik bağlantısı';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Kırmızı zarflar ve transferler iletilemez';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Paylaşım başarısız: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Tekrar denemek için dokunun';
 
   @override
@@ -2659,28 +2674,13 @@ class STr extends S {
   String get groupEnterGroupAnnouncement => 'Grup duyurusunu girin';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Hata: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count üye, grup ID\'sini kopyalamak için tıklayın';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Müzik bağlantısı';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'Medya URL\'si mevcut değil';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Grup adını düzenleme izniniz yok';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Kırmızı zarflar ve transferler iletilemez';
 
   @override
   String get authEmailAddress => 'E-posta adresi';
@@ -2875,11 +2875,12 @@ class STr extends S {
   @override
   String get authAppleLabel => 'elma';
 
-
-  @override
-  String get authSsoNotConfigured => 'Bu sunucu SSO oturum açma sağlayıcılarını yapılandırmadı';
   @override
   String get authSsoLabel => 'TOA';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3081,12 +3082,12 @@ class STr extends S {
   String get contactEnterPhone => 'Telefon numarasını girin';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Sohbet: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Kişi: $userId';
   }
 
@@ -3094,7 +3095,7 @@ class STr extends S {
   String get commonDiscover => 'Keşfet';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Yakında)';
   }
 
@@ -3422,12 +3423,12 @@ class STr extends S {
   String get callLivekitNotConfigured => 'LiveKit yapılandırılmadı';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Toplantıya katılınamadı: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Ekran paylaşımı başarısız: $error';
   }
 
@@ -3679,12 +3680,12 @@ class STr extends S {
   String get profileSilentMode => 'Sessiz mod';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Çalınamadı: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Çalıyor: $ringtoneName';
   }
 
@@ -3738,7 +3739,7 @@ class STr extends S {
   String get commonAllRead => 'Tümü okundu';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count okundu';
   }
 

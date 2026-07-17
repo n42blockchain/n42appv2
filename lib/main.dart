@@ -61,6 +61,7 @@ import 'package:n42_wallet/core/security/wallet_data_migration.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/features/widgets/eso_image_cachemanager.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 
 /// Global ProviderContainer for Riverpod
@@ -195,6 +196,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
       unawaited(initN42Chat());
       unawaited(_initPhishingDetector());
       unawaited(_checkDeviceSecurity());
+      unawaited(EsoImageCacheManager.purgeLegacyCaches());
       _startPriceAlertLoop();
     });
   }

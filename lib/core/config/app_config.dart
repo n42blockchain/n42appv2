@@ -45,6 +45,14 @@ class AppConfig {
   /// Use mainnet for mining
   static bool isMainChainMining = true;
 
+  /// Whether swap entry points (Buy N42 / DEX Swap) are shown to the user.
+  /// Apple App Store review (Guideline 3.1.5, cryptocurrency exchanges)
+  /// scrutinizes in-app DEX/exchange features heavily, so iOS builds hide
+  /// all swap entry points; Android keeps them.
+  /// dart:io Platform 在 Web 上直接抛 Unsupported operation，必须先挡 kIsWeb。
+  static bool get swapFeatureEnabled =>
+      kIsWeb || defaultTargetPlatform != TargetPlatform.iOS;
+
   /// Production environment flag.
   /// Use `--dart-define=ENV=development` to switch to test endpoints.
   static const bool isOnline =

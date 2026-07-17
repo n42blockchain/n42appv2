@@ -11914,58 +11914,399 @@ class S {
     return Intl.message('Public Key', name: 'g_key_pubkey', desc: '', args: []);
   }
 
-  /// `Quote service is temporarily unavailable. Please try again later.`
-  String get g_key_dex_quote_unavailable {
+  /// `Airdrops`
+  String get g_key_airdrop_title {
     return Intl.message(
-      'Quote service is temporarily unavailable. Please try again later.',
-      name: 'g_key_dex_quote_unavailable',
+      'Airdrops',
+      name: 'g_key_airdrop_title',
       desc: '',
       args: [],
     );
   }
 
-  /// `Token service is unavailable. Showing a limited offline list.`
-  String get g_key_dex_tokens_offline {
+  /// `Upcoming`
+  String get g_key_airdrop_upcoming {
     return Intl.message(
-      'Token service is unavailable. Showing a limited offline list.',
-      name: 'g_key_dex_tokens_offline',
+      'Upcoming',
+      name: 'g_key_airdrop_upcoming',
       desc: '',
       args: [],
     );
   }
 
-  /// `Request {amount} {symbol} on {network}`
-  String g_key_receive_request_line(
-    Object amount,
-    Object symbol,
-    Object network,
-  ) {
+  /// `Active`
+  String get g_key_airdrop_active {
     return Intl.message(
-      'Request $amount $symbol on $network',
-      name: 'g_key_receive_request_line',
-      desc: '',
-      args: [amount, symbol, network],
-    );
-  }
-
-  /// `Payment request`
-  String get g_key_receive_payment_request {
-    return Intl.message(
-      'Payment request',
-      name: 'g_key_receive_payment_request',
+      'Active',
+      name: 'g_key_airdrop_active',
       desc: '',
       args: [],
     );
   }
 
-  /// `Payment request token or chain is not in this wallet`
-  String get g_key_scan_pay_unsupported {
+  /// `Ended`
+  String get g_key_airdrop_expired {
     return Intl.message(
-      'Payment request token or chain is not in this wallet',
-      name: 'g_key_scan_pay_unsupported',
+      'Ended',
+      name: 'g_key_airdrop_expired',
       desc: '',
       args: [],
     );
+  }
+
+  /// `Pending`
+  String get g_key_airdrop_pending {
+    return Intl.message(
+      'Pending',
+      name: 'g_key_airdrop_pending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No verified campaigns available`
+  String get g_key_airdrop_no_airdrops {
+    return Intl.message(
+      'No verified campaigns available',
+      name: 'g_key_airdrop_no_airdrops',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Discover`
+  String get g_key_airdrop_discover {
+    return Intl.message(
+      'Discover',
+      name: 'g_key_airdrop_discover',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sources`
+  String get g_key_airdrop_sources {
+    return Intl.message(
+      'Sources',
+      name: 'g_key_airdrop_sources',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Distribute`
+  String get g_key_airdrop_distribute {
+    return Intl.message(
+      'Distribute',
+      name: 'g_key_airdrop_distribute',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Points`
+  String get g_key_loyalty_title {
+    return Intl.message(
+      'Points',
+      name: 'g_key_loyalty_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Available Points`
+  String get g_key_loyalty_available_points {
+    return Intl.message(
+      'Available Points',
+      name: 'g_key_loyalty_available_points',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tasks`
+  String get g_key_loyalty_tasks {
+    return Intl.message(
+      'Tasks',
+      name: 'g_key_loyalty_tasks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Referrals`
+  String get g_key_loyalty_referral {
+    return Intl.message(
+      'Referrals',
+      name: 'g_key_loyalty_referral',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `History`
+  String get g_key_loyalty_history {
+    return Intl.message(
+      'History',
+      name: 'g_key_loyalty_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rewards`
+  String get g_key_loyalty_rewards {
+    return Intl.message(
+      'Rewards',
+      name: 'g_key_loyalty_rewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily Check-in`
+  String get g_key_loyalty_daily_checkin {
+    return Intl.message(
+      'Daily Check-in',
+      name: 'g_key_loyalty_daily_checkin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checked in today`
+  String get g_key_loyalty_checked_today {
+    return Intl.message(
+      'Checked in today',
+      name: 'g_key_loyalty_checked_today',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Earn {value} points`
+  String g_key_loyalty_earn_points(Object value) {
+    return Intl.message(
+      'Earn $value points',
+      name: 'g_key_loyalty_earn_points',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Done`
+  String get g_key_loyalty_checkin_done {
+    return Intl.message(
+      'Done',
+      name: 'g_key_loyalty_checkin_done',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check In`
+  String get g_key_loyalty_checkin_btn {
+    return Intl.message(
+      'Check In',
+      name: 'g_key_loyalty_checkin_btn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check-in confirmed on N42`
+  String get g_key_loyalty_checkin_success {
+    return Intl.message(
+      'Check-in confirmed on N42',
+      name: 'g_key_loyalty_checkin_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Check-in failed`
+  String get g_key_loyalty_checkin_failed {
+    return Intl.message(
+      'Check-in failed',
+      name: 'g_key_loyalty_checkin_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Copy`
+  String get g_key_loyalty_copy {
+    return Intl.message('Copy', name: 'g_key_loyalty_copy', desc: '', args: []);
+  }
+
+  /// `Total Earned`
+  String get g_key_loyalty_total_earned {
+    return Intl.message(
+      'Total Earned',
+      name: 'g_key_loyalty_total_earned',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Used`
+  String get g_key_loyalty_used {
+    return Intl.message('Used', name: 'g_key_loyalty_used', desc: '', args: []);
+  }
+
+  /// `No tasks available`
+  String get g_key_loyalty_no_tasks {
+    return Intl.message(
+      'No tasks available',
+      name: 'g_key_loyalty_no_tasks',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No rewards available`
+  String get g_key_loyalty_no_rewards {
+    return Intl.message(
+      'No rewards available',
+      name: 'g_key_loyalty_no_rewards',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leaderboard`
+  String get g_key_loyalty_leaderboard {
+    return Intl.message(
+      'Leaderboard',
+      name: 'g_key_loyalty_leaderboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invite friends`
+  String get g_key_loyalty_invite_friends {
+    return Intl.message(
+      'Invite friends',
+      name: 'g_key_loyalty_invite_friends',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Share your referral code`
+  String get g_key_loyalty_invite_description {
+    return Intl.message(
+      'Share your referral code',
+      name: 'g_key_loyalty_invite_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No referrals yet. Share your code to get started.`
+  String get g_key_loyalty_no_referrals {
+    return Intl.message(
+      'No referrals yet. Share your code to get started.',
+      name: 'g_key_loyalty_no_referrals',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No points history`
+  String get g_key_loyalty_no_history {
+    return Intl.message(
+      'No points history',
+      name: 'g_key_loyalty_no_history',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Leaderboard is empty`
+  String get g_key_loyalty_empty_leaderboard {
+    return Intl.message(
+      'Leaderboard is empty',
+      name: 'g_key_loyalty_empty_leaderboard',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Retry`
+  String get g_key_retry {
+    return Intl.message('Retry', name: 'g_key_retry', desc: '', args: []);
+  }
+
+  /// `Find verified third-party campaigns`
+  String get g_key_earn_claim_free {
+    return Intl.message(
+      'Find verified third-party campaigns',
+      name: 'g_key_earn_claim_free',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Daily on-chain points`
+  String get g_key_earn_daily_bonus {
+    return Intl.message(
+      'Daily on-chain points',
+      name: 'g_key_earn_daily_bonus',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open Sources to browse provider-maintained campaign directories.`
+  String get g_key_airdrop_sources_hint {
+    return Intl.message(
+      'Open Sources to browse provider-maintained campaign directories.',
+      name: 'g_key_airdrop_sources_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.`
+  String get g_key_airdrop_thirdparty_warning {
+    return Intl.message(
+      'Third-party campaigns can be malicious. Verify the project domain and transaction details before signing.',
+      name: 'g_key_airdrop_thirdparty_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active wallet`
+  String get g_key_loyalty_no_wallet {
+    return Intl.message(
+      'No active wallet',
+      name: 'g_key_loyalty_no_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Service unavailable`
+  String get g_key_loyalty_unavailable {
+    return Intl.message(
+      'Service unavailable',
+      name: 'g_key_loyalty_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `HOT`
+  String get g_key_badge_hot {
+    return Intl.message('HOT', name: 'g_key_badge_hot', desc: '', args: []);
+  }
+
+  /// `LIVE`
+  String get g_key_badge_live {
+    return Intl.message('LIVE', name: 'g_key_badge_live', desc: '', args: []);
   }
 }
 

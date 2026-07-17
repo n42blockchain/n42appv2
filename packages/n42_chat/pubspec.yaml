@@ -63,7 +63,7 @@ dependencies:
   # Device Features - 设备功能
   # ============================================
   # MIT License
-  flutter_contacts: ^1.1.7+1
+  flutter_contacts: ^2.0.2
 
   # ============================================
   # Network - 网络请求

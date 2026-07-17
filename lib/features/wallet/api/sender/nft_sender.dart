@@ -9,6 +9,7 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 import 'package:n42_wallet/features/wallet/utils/validation/signature_validator.dart';
@@ -41,8 +42,15 @@ class NftSender implements ChainSender {
       return SendResult.fail('NFT contract address is required');
     }
 
-    final baseInfo = params.chainConfig?['baseInfo'] as Map<String, dynamic>?;
-    final chainId = (baseInfo?['chainId'] as int?) ?? 1;
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
+      params.chainConfig,
+      isTest: params.isTest,
+    );
+    // 测试网缺 chainId_test 时绝不能回退主网 chainId：签出的交易在主网合法。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
     final gas = getCoinGas(coinType, contract: true);
 
     // Chain balance for gas

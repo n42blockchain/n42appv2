@@ -6,9 +6,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/bridge/pages/bridge_home_page.dart';
+import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
 import 'package:n42_wallet/features/earn/provider/earn_provider.dart';
+import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
 import 'package:n42_wallet/features/staking/pages/staking_home_page.dart';
 import 'package:n42_wallet/features/hardware_wallet/pages/hardware_wallet_page.dart';
 import 'package:n42_wallet/features/mining_v2/pages/mining_today_v2.dart';
@@ -57,7 +60,7 @@ mixin EarnPageSectionsMixin
                   subtitle: S.of(context).g_key_earn_up_to_apy(maxApyStr),
                   icon: Icons.account_balance_rounded,
                   gradientColors: const [Color(0xFF11998e), Color(0xFF38ef7d)],
-                  badge: 'HOT',
+                  badge: S.of(context).g_key_badge_hot,
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const StakingHomePage()),
@@ -76,15 +79,22 @@ mixin EarnPageSectionsMixin
                     MaterialPageRoute(builder: (_) => const MiningTodayV2()),
                   ),
                 ),
-                SizedBox(width: AppSpacing.space4),
-                buildFeatureCard(
-                  context,
-                  title: S.of(context).g_key_earn_swap,
-                  subtitle: S.of(context).g_key_earn_buy_n_desc,
-                  icon: Icons.currency_exchange_rounded,
-                  gradientColors: const [Color(0xFF4776E6), Color(0xFF8E54E9)],
-                  onTap: () => navigateToSwap(context),
-                ),
+                // iOS 商店审核对 DEX/交易所类功能审查严格(Guideline 3.1.5),
+                // 该卡片(Buy N42)在 iOS 上隐藏,仅 Android 保留。
+                if (AppConfig.swapFeatureEnabled) ...[
+                  SizedBox(width: AppSpacing.space4),
+                  buildFeatureCard(
+                    context,
+                    title: S.of(context).g_key_earn_swap,
+                    subtitle: S.of(context).g_key_earn_buy_n_desc,
+                    icon: Icons.currency_exchange_rounded,
+                    gradientColors: const [
+                      Color(0xFF4776E6),
+                      Color(0xFF8E54E9),
+                    ],
+                    onTap: () => navigateToSwap(context),
+                  ),
+                ],
                 SizedBox(width: AppSpacing.space4),
                 buildFeatureCard(
                   context,
@@ -95,6 +105,37 @@ mixin EarnPageSectionsMixin
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const BridgeHomePage()),
+                  ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                buildFeatureCard(
+                  context,
+                  title: S.of(context).g_key_airdrop_title,
+                  subtitle: S.of(context).g_key_earn_claim_free,
+                  icon: Icons.card_giftcard_rounded,
+                  gradientColors: const [Color(0xFF00897B), Color(0xFF43A047)],
+                  badge: S.of(context).g_key_badge_live,
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          AirdropHomePage(walletAddress: walletAddress),
+                    ),
+                  ),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                buildFeatureCard(
+                  context,
+                  title: S.of(context).g_key_loyalty_title,
+                  subtitle: S.of(context).g_key_earn_daily_bonus,
+                  icon: Icons.workspace_premium_rounded,
+                  gradientColors: const [Color(0xFF1565C0), Color(0xFFF9A825)],
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) =>
+                          LoyaltyHomePage(walletAddress: walletAddress),
+                    ),
                   ),
                 ),
                 SizedBox(width: AppSpacing.space4),

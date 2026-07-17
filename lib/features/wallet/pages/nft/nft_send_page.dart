@@ -80,9 +80,8 @@ class _NftSendPageState extends State<NftSendPage> {
 
     try {
       final addrType = coinModel.addrType;
-      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final basePath =
+          coinModel.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
 
       final result = await NftSender().send(
@@ -98,6 +97,7 @@ class _NftSendPageState extends State<NftSendPage> {
           nftTokenId: nft.tokenId,
           nftStandard: nft.nftType,
           nftQuantity: quantity,
+          privateKey: coinModel.privateKey,
           chainConfig: coinModel.coin,
         ),
       );

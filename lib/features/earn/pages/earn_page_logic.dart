@@ -14,6 +14,7 @@ import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/earn/pages/earn_page.dart';
+import 'package:n42_wallet/features/loyalty/loyalty_wallet_address.dart';
 
 /// 业务逻辑 mixin：状态加载、导航、工具方法
 mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
@@ -59,9 +60,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
 
   String get walletAddress {
     final wap = ref.read(wapBridgeProvider);
-    return wap.coinList.isNotEmpty
-        ? wap.coinList.first.address?.toString() ?? ''
-        : '';
+    return selectLoyaltyWalletAddress(wap.coinList);
   }
 
   /// Swap 导航：底部弹出选择"买 N"

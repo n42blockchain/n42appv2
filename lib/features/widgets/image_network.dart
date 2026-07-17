@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,6 +12,11 @@ typedef CachedImageBuilder =
 
 ///对图片框架cache network Image 进行封装 方便后期替换
 class ImageNetWork extends StatelessWidget {
+  /// 已经失败过的 URL。errorWidget 每次触发都 removeFile 的话，永久失效的图
+  /// （404、已下架的 logo）会在每次重建时重新下载，还可能并发删同一个文件。
+  static final Set<String> _failedUrls = <String>{};
+  static const _maxFailedUrls = 256;
+
   final CachedImageBuilder? builder;
   final String? placeholder;
   final String imageUrl;
@@ -60,6 +67,10 @@ class ImageNetWork extends StatelessWidget {
           return placeholderImage;
         },
         errorWidget: (context, String url, dynamic error) {
+          if (_failedUrls.add(url)) {
+            if (_failedUrls.length > _maxFailedUrls) _failedUrls.clear();
+            unawaited(EsoImageCacheManager().removeFile(url));
+          }
           return placeholderImage;
         },
         //

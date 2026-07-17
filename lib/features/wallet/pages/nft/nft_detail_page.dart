@@ -170,9 +170,8 @@ class _NftDetailPageState extends State<NftDetailPage> {
       final configCoinType = coinModel.config.coinType;
       final coinType = configCoinType.isNotEmpty ? configCoinType : 'ETH';
       final addrType = coinModel.addrType;
-      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final basePath =
+          coinModel.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
 
       final result = await NftSender().send(
@@ -188,6 +187,7 @@ class _NftDetailPageState extends State<NftDetailPage> {
           nftTokenId: nft.tokenId,
           nftStandard: nft.nftType,
           nftQuantity: nft.balance,
+          privateKey: coinModel.privateKey,
           chainConfig: coinModel.coin,
         ),
       );

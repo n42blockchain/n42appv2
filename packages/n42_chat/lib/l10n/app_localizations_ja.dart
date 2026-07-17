@@ -21,7 +21,7 @@ class SJa extends S {
   String get chatCallServiceNotInitialized => '通話サービスが初期化されていません';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'ログインに失敗しました: $error';
   }
 
@@ -147,7 +147,7 @@ class SJa extends S {
       'マイクの許可が拒否されました。音声メッセージを使用するには、システム設定で有効にしてください。';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return '録音の開始に失敗しました: $error';
   }
 
@@ -155,7 +155,7 @@ class SJa extends S {
   String get commonRecordingTooShort => '録音が短すぎます';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return '録音の停止に失敗しました: $error';
   }
 
@@ -270,7 +270,7 @@ class SJa extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID:$id';
   }
 
@@ -371,7 +371,7 @@ class SJa extends S {
   String get profileChooseFromGallery => 'ギャラリーから選択';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return '保存に失敗しました: $error';
   }
 
@@ -418,7 +418,7 @@ class SJa extends S {
   String get authEnterServerAddress => 'サーバーアドレスを入力';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverNameに接続済み';
   }
 
@@ -513,7 +513,7 @@ class SJa extends S {
   String get commonPayment => '支払い';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$featureは近日公開';
   }
 
@@ -536,7 +536,7 @@ class SJa extends S {
   String get conversationDeleteConversation => '会話を削除';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '「$name」との会話を削除しますか？';
   }
 
@@ -586,7 +586,7 @@ class SJa extends S {
   String get commonLocationLabel => '位置情報';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'おすすめに失敗しました: $error';
   }
 
@@ -597,7 +597,7 @@ class SJa extends S {
   String get contactOpeningChat => 'チャットを開いています...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'チャットを開けませんでした: $error';
   }
 
@@ -665,7 +665,7 @@ class SJa extends S {
   String get searchNoResults => '結果がありません';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'メンバー ($count)';
   }
 
@@ -763,7 +763,7 @@ class SJa extends S {
   String get transferAddressVerified => 'アドレス確認済み';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return '残高: $balance $symbol';
   }
 
@@ -824,7 +824,7 @@ class SJa extends S {
   String get profileAvatarUpdated => 'アバターを更新しました';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return '画像の選択に失敗しました: $error';
   }
 
@@ -843,7 +843,7 @@ class SJa extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return '住所の保存に失敗しました: $error';
   }
 
@@ -866,7 +866,7 @@ class SJa extends S {
   String get profileAddressDeleted => '住所を削除しました';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return '請求書の保存に失敗しました: $error';
   }
 
@@ -922,7 +922,7 @@ class SJa extends S {
   String get commonAddressCopied => 'アドレスをコピーしました';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return '開く: $content';
   }
 
@@ -1203,7 +1203,7 @@ class SJa extends S {
   String get chatInCall => '通話中';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '機能開発中...';
   }
 
@@ -1439,16 +1439,6 @@ class SJa extends S {
 
   @override
   String get chatSaveToGallery => 'ギャラリーに保存';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'ダウンロード失敗: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return '共有に失敗しました: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => '画像の読み込みに失敗しました';
@@ -2578,6 +2568,30 @@ class SJa extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'メディアURLがありません';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'ダウンロード失敗: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'エラー: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => '音楽リンク';
+
+  @override
+  String get chatRedPacketTransferCannotForward => '紅包と送金は転送できません';
+
+  @override
+  String commonShareFailed(String error) {
+    return '共有に失敗しました: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'タップして再試行';
 
   @override
@@ -2602,26 +2616,12 @@ class SJa extends S {
   String get groupEnterGroupAnnouncement => 'グループお知らせを入力';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'エラー: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count人、クリックしてグループIDをコピー';
   }
 
   @override
-  String get chatMusicLinkLabel => '音楽リンク';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'メディアURLがありません';
-
-  @override
   String get groupNoPermissionToEditGroupName => 'グループ名を編集する権限がありません';
-
-  @override
-  String get chatRedPacketTransferCannotForward => '紅包と送金は転送できません';
 
   @override
   String get authEmailAddress => 'メールアドレス';
@@ -2810,11 +2810,11 @@ class SJa extends S {
   @override
   String get authAppleLabel => 'アップル';
 
+  @override
+  String get authSsoLabel => 'SSO';
 
   @override
   String get authSsoNotConfigured => 'このサーバーはSSOログインプロバイダーを設定していません';
-  @override
-  String get authSsoLabel => 'SSO';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3011,12 +3011,12 @@ class SJa extends S {
   String get contactEnterPhone => '電話番号を入力してください';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return '会話: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return '連絡先: $userId';
   }
 
@@ -3024,7 +3024,7 @@ class SJa extends S {
   String get commonDiscover => '発見';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n（近日公開）';
   }
 
@@ -3342,12 +3342,12 @@ class SJa extends S {
   String get callLivekitNotConfigured => 'LiveKitが設定されていません';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'ミーティングへの参加に失敗しました: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return '画面共有に失敗しました: $error';
   }
 
@@ -3599,12 +3599,12 @@ class SJa extends S {
   String get profileSilentMode => 'サイレントモード';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return '再生に失敗しました: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return '再生中: $ringtoneName';
   }
 
@@ -3658,7 +3658,7 @@ class SJa extends S {
   String get commonAllRead => 'すべて既読';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count人が既読';
   }
 

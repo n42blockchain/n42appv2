@@ -3,7 +3,7 @@
 A comprehensive cross-platform cryptocurrency wallet built with Flutter, featuring multi-chain support, DeFi integration, secure messaging, and advanced Web3 capabilities.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.9.2-blue.svg)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.41.9-blue.svg)](https://flutter.dev)
 [![Chains](https://img.shields.io/badge/Chains-238%2B-green.svg)](#multi-chain-wallet)
 
 ## Features Overview
@@ -724,8 +724,8 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | Category | Technology |
 |----------|------------|
-| Framework | Flutter 3.9.2+ |
-| Language | Dart 3.0+ |
+| Framework | Flutter 3.41.9+ |
+| Language | Dart 3.11.5+ |
 | State Management | Riverpod, Provider |
 | Blockchain | web3dart, bitcoin_base, solana |
 | Database | SQLite (drift), Secure Storage |
@@ -741,8 +741,8 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK 3.9.2 or higher
-- Dart SDK 3.0 or higher
+- Flutter SDK 3.41.9 or higher
+- Dart SDK 3.11.5 or higher
 - Android Studio / Xcode
 - iOS 17.0+ / Android 7.0+
 

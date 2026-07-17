@@ -71,6 +71,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const ValueKey<String>('chat_global_search_page'),
       backgroundColor: context.pageBackground,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56),
@@ -115,10 +116,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         children: [
           // 返回按钮
           IconButton(
-            icon: Icon(
-              AppIcons.back,
-              color: context.textPrimary,
-            ),
+            icon: Icon(AppIcons.back, color: context.textPrimary),
             onPressed: () => Navigator.pop(context),
           ),
 
@@ -131,6 +129,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 borderRadius: BorderRadius.circular(18),
               ),
               child: TextField(
+                key: const ValueKey<String>('chat_global_search_input'),
                 controller: _searchController,
                 focusNode: _focusNode,
                 decoration: InputDecoration(
@@ -155,10 +154,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(vertical: 8),
                 ),
-                style: TextStyle(
-                  fontSize: 14,
-                  color: context.textPrimary,
-                ),
+                style: TextStyle(fontSize: 14, color: context.textPrimary),
                 onChanged: _onSearch,
               ),
             ),
@@ -283,10 +279,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
               alignment: Alignment.centerLeft,
               child: Text(
                 'Message filters active: ${state.results.messageFilter!.activeCount}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: context.textSecondary),
               ),
             ),
           ),
@@ -351,9 +344,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
           decoration: BoxDecoration(
-            color: isSelected
-                ? AppColors.primary
-                : context.pageBackground,
+            color: isSelected ? AppColors.primary : context.pageBackground,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(
@@ -364,9 +355,7 @@ class _GlobalSearchPageState extends State<GlobalSearchPage> {
                 style: TextStyle(
                   fontSize: 13,
                   fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-                  color: isSelected
-                      ? Colors.white
-                      : context.textPrimary,
+                  color: isSelected ? Colors.white : context.textPrimary,
                 ),
               ),
               if (count > 0) ...[

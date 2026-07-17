@@ -34,20 +34,21 @@ class WalletConnectSheet extends ConsumerStatefulWidget {
 
 class _WalletConnectSheetState extends ConsumerState<WalletConnectSheet>
     with WalletConnectWidgetsMixin {
+  late final WalletConnectProvider _connectV2;
+
   @override
   void initState() {
     super.initState();
+    _connectV2 = ref.read(wcpBridgeProvider);
     if (widget.uri.isNotEmpty) {
-      ref.read(wcpBridgeProvider).pageOpen = true;
-      ref
-          .read(wcpBridgeProvider)
-          .viewStateDeal(WalletConnectState.loading, params: widget.uri);
+      _connectV2.pageOpen = true;
+      _connectV2.viewStateDeal(WalletConnectState.loading, params: widget.uri);
     }
   }
 
   @override
   void dispose() {
-    ref.read(wcpBridgeProvider).pageOpen = false;
+    _connectV2.pageOpen = false;
     super.dispose();
   }
 

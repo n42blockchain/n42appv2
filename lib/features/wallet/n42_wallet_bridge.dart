@@ -14,19 +14,82 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/api/address_book_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/nft_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:web3dart/web3dart.dart' as web3;
 import 'package:eip712/eip712.dart';
+
+final _walletBridgeHexRegExp = RegExp(r'^[0-9a-fA-F]+$');
+
+/// Resolves the token precision used by the Chat wallet bridge.
+///
+/// Wallet coin records use `decimals`. The singular key is accepted only for
+/// compatibility with older imported records. Parsing must stay aligned with
+/// [CoinConfigView.decimals]（含字符串形态）——此前拒绝字符串直接回退 18，
+/// 存成 "8" 的代币会按 10^10 倍错误精度换算金额。
+int resolveWalletBridgeTokenDecimals(
+  Map<String, dynamic> coin, {
+  int fallback = 18,
+}) {
+  final value = coin['decimals'] ?? coin['decimal'];
+  final num? parsed = switch (value) {
+    num v => v,
+    String v => num.tryParse(v.trim()),
+    _ => null,
+  };
+  if (parsed == null || parsed < 0 || parsed > 255) return fallback;
+  final decimals = parsed.toInt();
+  return parsed == decimals ? decimals : fallback;
+}
+
+String buildErc1155BalanceCalldata(String ownerAddress, BigInt tokenId) {
+  final owner = ownerAddress.replaceFirst(RegExp(r'^0x'), '');
+  if (owner.length != 40 ||
+      !_walletBridgeHexRegExp.hasMatch(owner) ||
+      tokenId.isNegative) {
+    throw ArgumentError('Invalid ERC-1155 balance query');
+  }
+  final ownerWord = owner.padLeft(64, '0');
+  final tokenWord = tokenId.toRadixString(16).padLeft(64, '0');
+  return '0x00fdd58e$ownerWord$tokenWord';
+}
+
+String buildErc721TokenUriCalldata(BigInt tokenId) {
+  if (tokenId.isNegative) throw ArgumentError('Invalid NFT token ID');
+  return '0xc87b56dd${tokenId.toRadixString(16).padLeft(64, '0')}';
+}
+
+String? decodeAbiString(String raw) {
+  final hex = raw.replaceFirst(RegExp(r'^0x'), '');
+  if (hex.length < 128 ||
+      hex.length.isOdd ||
+      !_walletBridgeHexRegExp.hasMatch(hex)) {
+    return null;
+  }
+  try {
+    final offset = int.parse(hex.substring(0, 64), radix: 16) * 2;
+    if (offset < 0 || offset + 64 > hex.length) return null;
+    final length = int.parse(hex.substring(offset, offset + 64), radix: 16);
+    final start = offset + 64;
+    final end = start + length * 2;
+    if (length < 0 || end > hex.length) return null;
+    return utf8.decode(web3.hexToBytes(hex.substring(start, end)));
+  } catch (_) {
+    return null;
+  }
+}
 
 /// N42 钱包桥接实现
 ///
@@ -77,7 +140,7 @@ class N42WalletBridge implements IWalletBridge {
     for (final coinModel in provider.coinModels) {
       final coinType = coinModel.coin['coinType'] as String?;
       final miniName = coinModel.coin['miniName'] as String?;
-      final decimals = coinModel.coin['decimal'] as int? ?? 18;
+      final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
       final icon = coinModel.coin['icon'] as String?;
 
       if (coinType != null) {
@@ -153,18 +216,25 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final addrType = coinModel.addrType;
-      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      // 派生路径取不到时绝不能套用 ETH 路径：非 EVM 币会用一把与 fromAddress
+      // 不对应的密钥签名，签出来的交易要么废掉，要么动到别的账户。
+      final basePath = coinModel.config.pathForAddrType(addrType);
+      if (basePath == null || basePath.isEmpty) {
+        return TransferResult.failure(
+          'Missing derivation path for $token ($addrType)',
+        );
+      }
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
-      final decimals = (coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
-      final coinType = coinModel.coin['coinType'] as String? ?? token;
-      final contractAddress = coinModel.coin['isContract'] == true
-          ? (coinModel.coin['contract'] as String? ?? '')
+      final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
+      final coinType = coinModel.config.coinType.isNotEmpty
+          ? coinModel.config.coinType
+          : token;
+      final contractAddress = coinModel.config.isContract
+          ? coinModel.config.contract
           : '';
 
       final result = await SenderFactory.instance
-          .getSender(coinType)
+          .getSender(coinType, chainConfig: coinModel.coin)
           .send(
             SendParams(
               coinType: coinType,
@@ -173,10 +243,11 @@ class N42WalletBridge implements IWalletBridge {
               amount: value,
               decimals: decimals,
               path: path,
-              isTest: false,
+              isTest: coinModel.isTest,
               contractAddress: contractAddress,
               tokenDecimals: contractAddress.isNotEmpty ? decimals : 0,
               memo: memo,
+              privateKey: coinModel.privateKey,
               chainConfig: coinModel.coin,
             ),
           );
@@ -494,6 +565,7 @@ class N42WalletBridge implements IWalletBridge {
       contractAddress,
       ownerAddress,
       'ERC-20',
+      chainId,
     );
     return BigInt.tryParse(raw) ?? BigInt.zero;
   }
@@ -509,6 +581,7 @@ class N42WalletBridge implements IWalletBridge {
       contractAddress,
       ownerAddress,
       'ERC-721',
+      chainId,
     );
     return int.tryParse(raw) ?? 0;
   }
@@ -520,13 +593,28 @@ class N42WalletBridge implements IWalletBridge {
     required int chainId,
     String? ownerAddress,
   }) async {
-    // ERC-1155 balanceOf(address, tokenId) - query via token API
-    final raw = await _queryTokenBalance(
-      contractAddress,
-      ownerAddress,
-      'ERC-1155',
-    );
-    return BigInt.tryParse(raw) ?? BigInt.zero;
+    final address = ownerAddress ?? walletAddress;
+    final provider = _provider;
+    if (address == null ||
+        provider == null ||
+        !_ethAddressRegExp.hasMatch(contractAddress) ||
+        !_ethAddressRegExp.hasMatch(address)) {
+      return BigInt.zero;
+    }
+    final coinModel = _findEvmChainCoin(provider, chainId);
+    if (coinModel == null) return BigInt.zero;
+    try {
+      final data = buildErc1155BalanceCalldata(address, tokenId);
+      final result = await _ethCall(coinModel, contractAddress, data);
+      if (result.error) return BigInt.zero;
+      final hex = result.data?.toString() ?? '';
+      return hex.startsWith('0x')
+          ? BigInt.tryParse(hex.substring(2), radix: 16) ?? BigInt.zero
+          : BigInt.zero;
+    } catch (e) {
+      AppLogger.w('N42WalletBridge', 'failed to get ERC-1155 balance: $e');
+      return BigInt.zero;
+    }
   }
 
   @override
@@ -535,8 +623,24 @@ class N42WalletBridge implements IWalletBridge {
     required int tokenId,
     required int chainId,
   }) async {
-    // tokenURI requires a dedicated contract call not supported by current API
-    return null;
+    final provider = _provider;
+    if (provider == null || !_ethAddressRegExp.hasMatch(contractAddress)) {
+      return null;
+    }
+    final coinModel = _findEvmChainCoin(provider, chainId);
+    if (coinModel == null) return null;
+    try {
+      final result = await _ethCall(
+        coinModel,
+        contractAddress,
+        buildErc721TokenUriCalldata(BigInt.from(tokenId)),
+      );
+      if (result.error) return null;
+      return decodeAbiString(result.data?.toString() ?? '');
+    } catch (e) {
+      AppLogger.w('N42WalletBridge', 'failed to get ERC-721 token URI: $e');
+      return null;
+    }
   }
 
   @override
@@ -574,9 +678,8 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final addrType = coinModel.addrType;
-      final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-      final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-      final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+      final basePath =
+          coinModel.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
       final coinType = coinModel.coin['coinType'] as String? ?? 'ETH';
       final nftStandard = standard == NftStandard.erc1155
@@ -589,13 +692,14 @@ class N42WalletBridge implements IWalletBridge {
           fromAddress: coinModel.address.toString(),
           toAddress: toAddress,
           amount: 0.0,
-          decimals: (coinModel.coin['decimals'] as num?)?.toInt() ?? 18,
+          decimals: resolveWalletBridgeTokenDecimals(coinModel.coin),
           path: path,
           isTest: coinModel.isTest,
           contractAddress: contractAddress,
           nftTokenId: tokenId,
           nftStandard: nftStandard,
           nftQuantity: standard == NftStandard.erc1155 ? amount : 1,
+          privateKey: coinModel.privateKey,
           chainConfig: coinModel.coin,
         ),
       );
@@ -615,15 +719,26 @@ class N42WalletBridge implements IWalletBridge {
     String contractAddress,
     String? ownerAddress,
     String tokenStandard,
+    int chainId,
   ) async {
     try {
       final address = ownerAddress ?? walletAddress;
-      if (address == null) return '0';
+      final provider = _provider;
+      if (address == null ||
+          provider == null ||
+          !_ethAddressRegExp.hasMatch(contractAddress) ||
+          !_ethAddressRegExp.hasMatch(address)) {
+        return '0';
+      }
+      final coinModel = _findEvmChainCoin(provider, chainId);
+      if (coinModel == null) return '0';
 
       final result = await _tokenViewApi.getBalanceEth(
-        'ETH',
+        coinModel.config.coinType,
         address,
         contractAddress,
+        isTest: coinModel.isTest,
+        rpc: coinModel.config.custom ? coinModel.config.service : null,
       );
       if (!result.error && result.data != null) {
         return result.data.toString();
@@ -638,9 +753,28 @@ class N42WalletBridge implements IWalletBridge {
     }
   }
 
+  Future<MessageModel> _ethCall(
+    CoinModel coinModel,
+    String contractAddress,
+    String data,
+  ) {
+    final rpc = coinModel.config.custom ? coinModel.config.service : null;
+    return EthAPI.init(null, rpc, null).ethCallRaw(
+      contractAddress,
+      data,
+      coinType: coinModel.config.coinType,
+      isTest: coinModel.isTest,
+    );
+  }
+
   CoinModel? _findEvmChainCoin(WalletActionProvider provider, int chainId) {
     for (final coinModel in provider.coinModels) {
-      if (coinModel.coin['isContract'] == true) continue;
+      if (coinModel.config.isContract) continue;
+      // 只按 chainId 匹配会误命中非 EVM 链——Aptos 原生币的 baseInfo 同样
+      // 是 chainId: 1，chainId=1 的 ERC 调用会被路由到 APT 模型上。
+      if (coinModel.config.blockchainType != BlockchainType.Ethereum.name) {
+        continue;
+      }
       final modelChainId = _readChainId(coinModel);
       if (modelChainId == chainId) return coinModel;
     }
@@ -648,9 +782,7 @@ class N42WalletBridge implements IWalletBridge {
   }
 
   int? _readChainId(CoinModel coinModel) {
-    final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-    final raw = baseInfo?['chainId'];
-    if (raw is num) return raw.toInt();
-    return int.tryParse(raw?.toString() ?? '');
+    final chainId = coinModel.config.chainId;
+    return chainId == 0 ? null : chainId;
   }
 }

@@ -377,8 +377,7 @@ class _ChatPageState extends State<ChatPage> {
         break;
       case 'livekit_token_fetch_failed':
         message =
-            l10n?.callJoinMeetingFailed('token') ??
-            'Failed to prepare group call';
+            l10n?.commonConnectionFailed ?? 'Failed to prepare group call';
         break;
       case 'call_rejected':
         message = l10n?.chatCallRejected ?? 'Call rejected';

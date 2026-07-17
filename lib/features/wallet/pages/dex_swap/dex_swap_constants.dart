@@ -11,7 +11,6 @@ const List<Map<String, String>> kDexSupportedChains = [
   {'label': 'ARB', 'value': 'ARB', 'coinType': 'ARB'},
   {'label': 'OP', 'value': 'OP', 'coinType': 'OP'},
   {'label': 'BASE', 'value': 'BASE', 'coinType': 'BASE'},
-  {'label': 'SOL', 'value': 'SOL', 'coinType': 'SOL'},
 ];
 
 /// Lookup coinType for a given DEX chain value.

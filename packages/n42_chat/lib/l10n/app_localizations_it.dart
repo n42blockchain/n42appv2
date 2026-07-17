@@ -22,7 +22,7 @@ class SIt extends S {
       'Servizio chiamate non inizializzato';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Login fallito: $error';
   }
 
@@ -149,7 +149,7 @@ class SIt extends S {
       'L\'autorizzazione al microfono è stata negata. Abilitalo nelle impostazioni di sistema per utilizzare i messaggi vocali.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Impossibile avviare la registrazione: $error';
   }
 
@@ -157,7 +157,7 @@ class SIt extends S {
   String get commonRecordingTooShort => 'Registrazione troppo breve';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Impossibile interrompere la registrazione: $error';
   }
 
@@ -274,7 +274,7 @@ class SIt extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'ID N42: $id';
   }
 
@@ -376,7 +376,7 @@ class SIt extends S {
   String get profileChooseFromGallery => 'Scegli dalla galleria';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Salvataggio fallito: $error';
   }
 
@@ -425,7 +425,7 @@ class SIt extends S {
   String get authEnterServerAddress => 'Inserisci indirizzo server';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Connesso a $serverName';
   }
 
@@ -525,7 +525,7 @@ class SIt extends S {
   String get commonPayment => 'Pagamento';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature prossimamente';
   }
 
@@ -548,7 +548,7 @@ class SIt extends S {
   String get conversationDeleteConversation => 'Elimina conversazione';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Eliminare la conversazione con \"$name\"?';
   }
 
@@ -600,7 +600,7 @@ class SIt extends S {
   String get commonLocationLabel => 'Posizione';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Raccomandazione fallita: $error';
   }
 
@@ -611,7 +611,7 @@ class SIt extends S {
   String get contactOpeningChat => 'Apertura chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Impossibile aprire la chat: $error';
   }
 
@@ -680,7 +680,7 @@ class SIt extends S {
   String get searchNoResults => 'Nessun risultato';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Membri ($count)';
   }
 
@@ -780,7 +780,7 @@ class SIt extends S {
   String get transferAddressVerified => 'Indirizzo verificato';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Disponibile: $balance $symbol';
   }
 
@@ -841,7 +841,7 @@ class SIt extends S {
   String get profileAvatarUpdated => 'Avatar aggiornato';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Selezione immagine fallita: $error';
   }
 
@@ -860,7 +860,7 @@ class SIt extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Salvataggio indirizzo fallito: $error';
   }
 
@@ -883,7 +883,7 @@ class SIt extends S {
   String get profileAddressDeleted => 'Indirizzo eliminato';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Salvataggio fattura fallito: $error';
   }
 
@@ -939,7 +939,7 @@ class SIt extends S {
   String get commonAddressCopied => 'Indirizzo copiato';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Apri: $content';
   }
 
@@ -1224,7 +1224,7 @@ class SIt extends S {
   String get chatInCall => 'In chiamata';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Funzionalità in sviluppo...';
   }
 
@@ -1466,16 +1466,6 @@ class SIt extends S {
 
   @override
   String get chatSaveToGallery => 'Salva nella galleria';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Download fallito: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Condivisione fallita: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Caricamento immagine fallito';
@@ -2639,6 +2629,31 @@ class SIt extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL multimediale non disponibile';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Download fallito: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Errore: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Link musicale';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Le buste rosse e i trasferimenti non possono essere inoltrati';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Condivisione fallita: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Tocca per riprovare';
 
   @override
@@ -2665,28 +2680,13 @@ class SIt extends S {
   String get groupEnterGroupAnnouncement => 'Inserisci l\'annuncio del gruppo';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Errore: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count membri, fai clic per copiare l\'ID del gruppo';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Link musicale';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL multimediale non disponibile';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Non hai il permesso di modificare il nome del gruppo';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Le buste rosse e i trasferimenti non possono essere inoltrati';
 
   @override
   String get authEmailAddress => 'Indirizzo email';
@@ -2882,11 +2882,12 @@ class SIt extends S {
   @override
   String get authAppleLabel => 'mela';
 
-
-  @override
-  String get authSsoNotConfigured => 'Questo server non ha configurato provider di accesso SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Questo server non ha configurato provider di accesso SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3091,12 +3092,12 @@ class SIt extends S {
   String get contactEnterPhone => 'Inserisci il numero di telefono';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Conversazione: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Contatto: $userId';
   }
 
@@ -3104,7 +3105,7 @@ class SIt extends S {
   String get commonDiscover => 'Scopri';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Prossimamente)';
   }
 
@@ -3433,12 +3434,12 @@ class SIt extends S {
   String get callLivekitNotConfigured => 'LiveKit non configurato';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Impossibile partecipare alla riunione: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Condivisione schermo fallita: $error';
   }
 
@@ -3691,12 +3692,12 @@ class SIt extends S {
   String get profileSilentMode => 'Modalità silenziosa';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Riproduzione fallita: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'In riproduzione: $ringtoneName';
   }
 
@@ -3750,7 +3751,7 @@ class SIt extends S {
   String get commonAllRead => 'Tutto letto';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count letto';
   }
 

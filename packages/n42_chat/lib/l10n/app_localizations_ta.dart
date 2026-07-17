@@ -21,7 +21,7 @@ class STa extends S {
   String get chatCallServiceNotInitialized => 'அழைப்பு சேவை தொடங்கப்படவில்லை';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'உள்நுழைவு தோல்வி: $error';
   }
 
@@ -148,7 +148,7 @@ class STa extends S {
       'மைக்ரோஃபோன் அனுமதி மறுக்கப்பட்டது. குரல் செய்திகளைப் பயன்படுத்த, கணினி அமைப்புகளில் அதை இயக்கவும்.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'பதிவைத் தொடங்குவதில் தோல்வி: $error';
   }
 
@@ -156,7 +156,7 @@ class STa extends S {
   String get commonRecordingTooShort => 'மிகக் குறுகிய பதிவு';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'பதிவு செய்வதை நிறுத்த முடியவில்லை: $error';
   }
 
@@ -273,7 +273,7 @@ class STa extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ஐடி: $id';
   }
 
@@ -375,7 +375,7 @@ class STa extends S {
   String get profileChooseFromGallery => 'கேலரியில் இருந்து தேர்வு செய்யவும்';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'சேமிக்க முடியவில்லை: $error';
   }
 
@@ -425,7 +425,7 @@ class STa extends S {
   String get authEnterServerAddress => 'சேவையக முகவரியை உள்ளிடவும்';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverName உடன் இணைக்கப்பட்டது';
   }
 
@@ -526,7 +526,7 @@ class STa extends S {
   String get commonPayment => 'பணம் செலுத்துதல்';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature விரைவில்';
   }
 
@@ -549,7 +549,7 @@ class STa extends S {
   String get conversationDeleteConversation => 'உரையாடலை நீக்கு';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\" உடனான உரையாடலை நீக்கவா?';
   }
 
@@ -600,7 +600,7 @@ class STa extends S {
   String get commonLocationLabel => 'இடம்';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'பரிந்துரைக்கப்படவில்லை: $error';
   }
 
@@ -611,7 +611,7 @@ class STa extends S {
   String get contactOpeningChat => 'அரட்டையைத் திறக்கிறது...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'அரட்டையைத் திறக்க முடியவில்லை: $error';
   }
 
@@ -681,7 +681,7 @@ class STa extends S {
   String get searchNoResults => 'முடிவுகள் இல்லை';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'உறுப்பினர்கள் ($count)';
   }
 
@@ -781,7 +781,7 @@ class STa extends S {
   String get transferAddressVerified => 'முகவரி சரிபார்க்கப்பட்டது';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'கிடைக்கும்: $balance $symbol';
   }
 
@@ -842,7 +842,7 @@ class STa extends S {
   String get profileAvatarUpdated => 'அவதார் புதுப்பிக்கப்பட்டது';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'படத்தைத் தேர்ந்தெடுக்க முடியவில்லை: $error';
   }
 
@@ -861,7 +861,7 @@ class STa extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'முகவரியைச் சேமிப்பதில் தோல்வி: $error';
   }
 
@@ -884,7 +884,7 @@ class STa extends S {
   String get profileAddressDeleted => 'முகவரி நீக்கப்பட்டது';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'விலைப்பட்டியல் சேமிப்பதில் தோல்வி: $error';
   }
 
@@ -941,7 +941,7 @@ class STa extends S {
   String get commonAddressCopied => 'முகவரி நகலெடுக்கப்பட்டது';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'திற: $content';
   }
 
@@ -1226,7 +1226,7 @@ class STa extends S {
   String get chatInCall => 'அழைப்பில்';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature அம்சம் வளர்ச்சியில் உள்ளது...';
   }
 
@@ -1468,16 +1468,6 @@ class STa extends S {
 
   @override
   String get chatSaveToGallery => 'கேலரியில் சேமிக்கவும்';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'பதிவிறக்கம் தோல்வி: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'பகிர்வு தோல்வி: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'படத்தை ஏற்ற முடியவில்லை';
@@ -2657,6 +2647,31 @@ class STa extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'மீடியா URL இல்லை';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'பதிவிறக்கம் தோல்வி: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'பிழை: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'இசை இணைப்பு';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'சிவப்பு பாக்கெட்டுகள் மற்றும் இடமாற்றங்களை அனுப்ப முடியாது';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'பகிர்வு தோல்வி: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'மீண்டும் முயற்சிக்க தட்டவும்';
 
   @override
@@ -2683,28 +2698,13 @@ class STa extends S {
   String get groupEnterGroupAnnouncement => 'குழு அறிவிப்பை உள்ளிடவும்';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'பிழை: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count உறுப்பினர்கள், குழு ஐடியை நகலெடுக்க கிளிக் செய்யவும்';
   }
 
   @override
-  String get chatMusicLinkLabel => 'இசை இணைப்பு';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'மீடியா URL இல்லை';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'குழுவின் பெயரைத் திருத்த உங்களுக்கு அனுமதி இல்லை';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'சிவப்பு பாக்கெட்டுகள் மற்றும் இடமாற்றங்களை அனுப்ப முடியாது';
 
   @override
   String get authEmailAddress => 'மின்னஞ்சல் முகவரி';
@@ -2905,11 +2905,12 @@ class STa extends S {
   @override
   String get authAppleLabel => 'ஆப்பிள்';
 
-
-  @override
-  String get authSsoNotConfigured => 'இந்த சேவையகம் SSO உள்நுழைவு வழங்குநர்களை உள்ளமைக்கவில்லை';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'இந்த சேவையகம் SSO உள்நுழைவு வழங்குநர்களை உள்ளமைக்கவில்லை';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3117,12 +3118,12 @@ class STa extends S {
   String get contactEnterPhone => 'தொலைபேசி எண்ணை உள்ளிடவும்';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'உரையாடல்: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'தொடர்புக்கு: $userId';
   }
 
@@ -3130,7 +3131,7 @@ class STa extends S {
   String get commonDiscover => 'கண்டறியவும்';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(விரைவில்)';
   }
 
@@ -3459,12 +3460,12 @@ class STa extends S {
   String get callLivekitNotConfigured => 'LiveKit உள்ளமைக்கப்படவில்லை';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'சந்திப்பில் சேர முடியவில்லை: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'திரைப் பகிர்வு தோல்வி: $error';
   }
 
@@ -3721,12 +3722,12 @@ class STa extends S {
   String get profileSilentMode => 'அமைதியான முறை';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'விளையாடுவதில் தோல்வி: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'விளையாடுவது: $ringtoneName';
   }
 
@@ -3780,7 +3781,7 @@ class STa extends S {
   String get commonAllRead => 'அனைத்தும் படித்தது';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count படித்தேன்';
   }
 

@@ -22,7 +22,7 @@ class SId extends S {
       'Layanan panggilan belum diinisialisasi';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Login gagal: $error';
   }
 
@@ -150,7 +150,7 @@ class SId extends S {
       'Izin mikrofon telah ditolak. Harap aktifkan di pengaturan sistem untuk menggunakan pesan suara.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Gagal memulai rekaman: $error';
   }
 
@@ -158,7 +158,7 @@ class SId extends S {
   String get commonRecordingTooShort => 'Rekaman terlalu pendek';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Gagal menghentikan rekaman: $error';
   }
 
@@ -275,7 +275,7 @@ class SId extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'ID N42: $id';
   }
 
@@ -377,7 +377,7 @@ class SId extends S {
   String get profileChooseFromGallery => 'Pilih dari Galeri';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Gagal menyimpan: $error';
   }
 
@@ -425,7 +425,7 @@ class SId extends S {
   String get authEnterServerAddress => 'Masukkan alamat server';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Terhubung ke $serverName';
   }
 
@@ -522,7 +522,7 @@ class SId extends S {
   String get commonPayment => 'Pembayaran';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature segera hadir';
   }
 
@@ -545,7 +545,7 @@ class SId extends S {
   String get conversationDeleteConversation => 'Hapus Percakapan';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Hapus percakapan dengan \"$name\"?';
   }
 
@@ -596,7 +596,7 @@ class SId extends S {
   String get commonLocationLabel => 'Lokasi';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Rekomendasi gagal: $error';
   }
 
@@ -607,7 +607,7 @@ class SId extends S {
   String get contactOpeningChat => 'Membuka chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Gagal membuka chat: $error';
   }
 
@@ -676,7 +676,7 @@ class SId extends S {
   String get searchNoResults => 'Tidak ada hasil';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Anggota ($count)';
   }
 
@@ -776,7 +776,7 @@ class SId extends S {
   String get transferAddressVerified => 'Alamat terverifikasi';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Tersedia: $balance $symbol';
   }
 
@@ -837,7 +837,7 @@ class SId extends S {
   String get profileAvatarUpdated => 'Avatar diperbarui';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Gagal memilih gambar: $error';
   }
 
@@ -856,7 +856,7 @@ class SId extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Gagal menyimpan alamat: $error';
   }
 
@@ -879,7 +879,7 @@ class SId extends S {
   String get profileAddressDeleted => 'Alamat dihapus';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Gagal menyimpan faktur: $error';
   }
 
@@ -935,7 +935,7 @@ class SId extends S {
   String get commonAddressCopied => 'Alamat disalin';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Buka: $content';
   }
 
@@ -1220,7 +1220,7 @@ class SId extends S {
   String get chatInCall => 'Dalam panggilan';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Fitur sedang dikembangkan...';
   }
 
@@ -1463,16 +1463,6 @@ class SId extends S {
 
   @override
   String get chatSaveToGallery => 'Simpan ke Galeri';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Unduhan gagal: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Gagal berbagi: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Gagal memuat gambar';
@@ -2634,6 +2624,31 @@ class SId extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL media tidak tersedia';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Unduhan gagal: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Kesalahan: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Link musik';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Angpao dan transfer tidak dapat diteruskan';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Gagal berbagi: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Ketuk untuk mencoba lagi';
 
   @override
@@ -2660,28 +2675,13 @@ class SId extends S {
   String get groupEnterGroupAnnouncement => 'Masukkan pengumuman grup';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Kesalahan: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count anggota, klik untuk menyalin ID grup';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Link musik';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL media tidak tersedia';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Anda tidak memiliki izin untuk mengubah nama grup';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Angpao dan transfer tidak dapat diteruskan';
 
   @override
   String get authEmailAddress => 'Alamat email';
@@ -2877,11 +2877,12 @@ class SId extends S {
   @override
   String get authAppleLabel => 'apel';
 
-
-  @override
-  String get authSsoNotConfigured => 'Server ini belum mengkonfigurasi penyedia login SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Server ini belum mengkonfigurasi penyedia login SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3086,12 +3087,12 @@ class SId extends S {
   String get contactEnterPhone => 'Masukkan nomor telepon';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Percakapan: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Kontak: $userId';
   }
 
@@ -3099,7 +3100,7 @@ class SId extends S {
   String get commonDiscover => 'Jelajahi';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Segera hadir)';
   }
 
@@ -3427,12 +3428,12 @@ class SId extends S {
   String get callLivekitNotConfigured => 'LiveKit belum dikonfigurasi';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Gagal bergabung ke meeting: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Berbagi layar gagal: $error';
   }
 
@@ -3684,12 +3685,12 @@ class SId extends S {
   String get profileSilentMode => 'Mode senyap';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Gagal memutar: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Memutar: $ringtoneName';
   }
 
@@ -3743,7 +3744,7 @@ class SId extends S {
   String get commonAllRead => 'Semua dibaca';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count dibaca';
   }
 

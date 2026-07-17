@@ -302,7 +302,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
 
     setState(() => _replacing = true);
     final result = await SenderFactory.instance
-        .getSender(cm.config.coinType)
+        .getSender(cm.config.coinType, chainConfig: cm.coin)
         .send(params);
     if (!mounted) return;
     setState(() => _replacing = false);

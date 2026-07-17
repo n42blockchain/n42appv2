@@ -122,6 +122,7 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
             nftTokenId: item.nft.tokenId,
             nftStandard: item.nft.nftType,
             nftQuantity: NftBatchTransferUtils.quantityForBatch(item.nft),
+            privateKey: coinModel.privateKey,
             chainConfig: coinModel.coin,
           ),
         );
@@ -153,9 +154,8 @@ class _NftBatchSendPageState extends State<NftBatchSendPage> {
 
   String _derivePath() {
     final addrType = coinModel.addrType;
-    final baseInfo = coinModel.coin['baseInfo'] as Map<String, dynamic>?;
-    final pathMap = baseInfo?['path'] as Map<String, dynamic>?;
-    final basePath = pathMap?[addrType]?.toString() ?? "m/44'/60'/0'/0/0";
+    final basePath =
+        coinModel.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
     return getPathWithIndex(basePath, coinModel.pathIndex);
   }
 

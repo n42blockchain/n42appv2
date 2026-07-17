@@ -22,7 +22,7 @@ class SCs extends S {
       'Služba volání není inicializována';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Přihlášení se nezdařilo: $error';
   }
 
@@ -149,7 +149,7 @@ class SCs extends S {
       'Povolení mikrofonu bylo odepřeno. Chcete-li používat hlasové zprávy, povolte jej v nastavení systému.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Nepodařilo se spustit nahrávání: $error';
   }
 
@@ -157,7 +157,7 @@ class SCs extends S {
   String get commonRecordingTooShort => 'Nahrávání je příliš krátké';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Nepodařilo se zastavit nahrávání: $error';
   }
 
@@ -274,7 +274,7 @@ class SCs extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -376,7 +376,7 @@ class SCs extends S {
   String get profileChooseFromGallery => 'Vyberte si z Galerie';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Uložení se nezdařilo: $error';
   }
 
@@ -425,7 +425,7 @@ class SCs extends S {
   String get authEnterServerAddress => 'Zadejte adresu serveru';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Připojeno k $serverName';
   }
 
@@ -525,7 +525,7 @@ class SCs extends S {
   String get commonPayment => 'Platba';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature již brzy';
   }
 
@@ -548,7 +548,7 @@ class SCs extends S {
   String get conversationDeleteConversation => 'Smazat konverzaci';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Smazat konverzaci s \"$name\"?';
   }
 
@@ -599,7 +599,7 @@ class SCs extends S {
   String get commonLocationLabel => 'Umístění';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Doporučení selhalo: $error';
   }
 
@@ -610,7 +610,7 @@ class SCs extends S {
   String get contactOpeningChat => 'Otevírání chatu...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Chat se nepodařilo otevřít: $error';
   }
 
@@ -680,7 +680,7 @@ class SCs extends S {
   String get searchNoResults => 'Žádné výsledky';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Členové ($count)';
   }
 
@@ -780,7 +780,7 @@ class SCs extends S {
   String get transferAddressVerified => 'Adresa ověřena';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Dostupné: $balance $symbol';
   }
 
@@ -842,7 +842,7 @@ class SCs extends S {
   String get profileAvatarUpdated => 'Avatar aktualizován';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Nepodařilo se vybrat obrázek: $error';
   }
 
@@ -861,7 +861,7 @@ class SCs extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Nepodařilo se uložit adresu: $error';
   }
 
@@ -884,7 +884,7 @@ class SCs extends S {
   String get profileAddressDeleted => 'Adresa smazána';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Fakturu se nepodařilo uložit: $error';
   }
 
@@ -940,7 +940,7 @@ class SCs extends S {
   String get commonAddressCopied => 'Adresa zkopírována';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Otevřeno: $content';
   }
 
@@ -1224,7 +1224,7 @@ class SCs extends S {
   String get chatInCall => 'V hovoru';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Funkce $feature ve vývoji...';
   }
 
@@ -1464,16 +1464,6 @@ class SCs extends S {
 
   @override
   String get chatSaveToGallery => 'Uložit do Galerie';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Stahování se nezdařilo: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Sdílení se nezdařilo: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Načtení obrázku se nezdařilo';
@@ -2635,6 +2625,32 @@ class SCs extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable =>
+      'Není k dispozici žádná adresa URL média';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Stahování se nezdařilo: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Chyba: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Odkaz na hudbu';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Červené pakety a přenosy nelze přeposílat';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Sdílení se nezdařilo: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Klepnutím to zkuste znovu';
 
   @override
@@ -2661,29 +2677,13 @@ class SCs extends S {
   String get groupEnterGroupAnnouncement => 'Zadejte oznámení skupiny';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Chyba: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return 'Členové $count, kliknutím zkopírujte ID skupiny';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Odkaz na hudbu';
-
-  @override
-  String get chatNoMediaUrlAvailable =>
-      'Není k dispozici žádná adresa URL média';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Nemáte oprávnění upravovat název skupiny';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Červené pakety a přenosy nelze přeposílat';
 
   @override
   String get authEmailAddress => 'E-mailová adresa';
@@ -2880,11 +2880,12 @@ class SCs extends S {
   @override
   String get authAppleLabel => 'Jablko';
 
-
-  @override
-  String get authSsoNotConfigured => 'Tento server nenakonfiguroval poskytovatele přihlášení SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Tento server nenakonfiguroval poskytovatele přihlášení SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3090,12 +3091,12 @@ class SCs extends S {
   String get contactEnterPhone => 'Zadejte telefonní číslo';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Konverzace: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Kontakt: $userId';
   }
 
@@ -3103,7 +3104,7 @@ class SCs extends S {
   String get commonDiscover => 'Objevte';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(již brzy)';
   }
 
@@ -3428,12 +3429,12 @@ class SCs extends S {
   String get callLivekitNotConfigured => 'LiveKit není nakonfigurován';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Připojení ke schůzce se nezdařilo: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Sdílení obrazovky se nezdařilo: $error';
   }
 
@@ -3685,12 +3686,12 @@ class SCs extends S {
   String get profileSilentMode => 'Tichý režim';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Nepodařilo se přehrát: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Hraje: $ringtoneName';
   }
 
@@ -3744,7 +3745,7 @@ class SCs extends S {
   String get commonAllRead => 'Vše přečteno';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return 'Čtení $count';
   }
 

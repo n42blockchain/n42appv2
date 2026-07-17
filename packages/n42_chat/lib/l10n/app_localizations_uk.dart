@@ -22,7 +22,7 @@ class SUk extends S {
       'Служба виклику не ініціалізована';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Помилка входу: $error';
   }
 
@@ -149,7 +149,7 @@ class SUk extends S {
       'У дозволі на мікрофон відмовлено. Будь ласка, увімкніть це в налаштуваннях системи, щоб використовувати голосові повідомлення.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Не вдалося почати запис: $error';
   }
 
@@ -157,7 +157,7 @@ class SUk extends S {
   String get commonRecordingTooShort => 'Запис занадто короткий';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Не вдалося зупинити запис: $error';
   }
 
@@ -275,7 +275,7 @@ class SUk extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -377,7 +377,7 @@ class SUk extends S {
   String get profileChooseFromGallery => 'Виберіть із галереї';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Не вдалося зберегти: $error';
   }
 
@@ -427,7 +427,7 @@ class SUk extends S {
   String get authEnterServerAddress => 'Введіть адресу сервера';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Підключено до $serverName';
   }
 
@@ -528,7 +528,7 @@ class SUk extends S {
   String get commonPayment => 'Оплата';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature незабаром';
   }
 
@@ -551,7 +551,7 @@ class SUk extends S {
   String get conversationDeleteConversation => 'Видалити розмову';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Видалити розмову з \"$name\"?';
   }
 
@@ -603,7 +603,7 @@ class SUk extends S {
   String get commonLocationLabel => 'Розташування';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Не вдалося рекомендувати: $error';
   }
 
@@ -614,7 +614,7 @@ class SUk extends S {
   String get contactOpeningChat => 'Відкриття чату...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Не вдалося відкрити чат: $error';
   }
 
@@ -684,7 +684,7 @@ class SUk extends S {
   String get searchNoResults => 'Немає результатів';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Учасники ($count)';
   }
 
@@ -784,7 +784,7 @@ class SUk extends S {
   String get transferAddressVerified => 'Адреса підтверджена';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'В наявності: $balance $symbol';
   }
 
@@ -846,7 +846,7 @@ class SUk extends S {
   String get profileAvatarUpdated => 'Аватар оновлено';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Не вдалося вибрати зображення: $error';
   }
 
@@ -865,7 +865,7 @@ class SUk extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Не вдалося зберегти адресу: $error';
   }
 
@@ -888,7 +888,7 @@ class SUk extends S {
   String get profileAddressDeleted => 'Адреса видалена';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Не вдалося зберегти рахунок-фактуру: $error';
   }
 
@@ -944,7 +944,7 @@ class SUk extends S {
   String get commonAddressCopied => 'Адресу скопійовано';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Відкрити: $content';
   }
 
@@ -1230,7 +1230,7 @@ class SUk extends S {
   String get chatInCall => 'У дзвінку';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Функція $feature у розробці...';
   }
 
@@ -1470,16 +1470,6 @@ class SUk extends S {
 
   @override
   String get chatSaveToGallery => 'Зберегти в галерею';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Помилка завантаження: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Не вдалося поділитися: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Не вдалося завантажити зображення';
@@ -2638,6 +2628,31 @@ class SUk extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'Немає доступної URL-адреси медіа';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Помилка завантаження: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Помилка: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Посилання на музику';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Червоні пакети та перекази не пересилаються';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Не вдалося поділитися: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Торкніться, щоб повторити спробу';
 
   @override
@@ -2665,28 +2680,13 @@ class SUk extends S {
   String get groupEnterGroupAnnouncement => 'Введіть групове оголошення';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Помилка: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return 'Учасники $count, натисніть, щоб скопіювати ідентифікатор групи';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Посилання на музику';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'Немає доступної URL-адреси медіа';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Ви не маєте дозволу редагувати назву групи';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Червоні пакети та перекази не пересилаються';
 
   @override
   String get authEmailAddress => 'Адреса електронної пошти';
@@ -2885,11 +2885,12 @@ class SUk extends S {
   @override
   String get authAppleLabel => 'Яблуко';
 
-
-  @override
-  String get authSsoNotConfigured => 'Цей сервер не налаштував провайдерів входу SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Цей сервер не налаштував провайдерів входу SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3092,12 +3093,12 @@ class SUk extends S {
   String get contactEnterPhone => 'Введіть номер телефону';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Розмова: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Контакт: $userId';
   }
 
@@ -3105,7 +3106,7 @@ class SUk extends S {
   String get commonDiscover => 'Відкрийте для себе';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Незабаром)';
   }
 
@@ -3435,12 +3436,12 @@ class SUk extends S {
   String get callLivekitNotConfigured => 'LiveKit не налаштовано';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Не вдалося приєднатися до зустрічі: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Не вдалося поділитися екраном: $error';
   }
 
@@ -3697,12 +3698,12 @@ class SUk extends S {
   String get profileSilentMode => 'Безшумний режим';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Не вдалося відтворити: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Грає: $ringtoneName';
   }
 
@@ -3756,7 +3757,7 @@ class SUk extends S {
   String get commonAllRead => 'Всі читали';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count читати';
   }
 

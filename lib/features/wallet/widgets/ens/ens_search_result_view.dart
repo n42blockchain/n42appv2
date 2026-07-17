@@ -183,7 +183,7 @@ class EnsSearchResultView extends StatelessWidget {
           ),
           SizedBox(height: AppSpacing.space4),
           Text(
-            availabilityResult!.error!,
+            S.of(context).g_key_error_14,
             style: AppTypography.bodySm.copyWith(
               color: _themeColor(
                 context,
@@ -225,9 +225,7 @@ class EnsSearchResultView extends StatelessWidget {
                 AppThemeKeys.mainBlueColor.name,
               ),
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(

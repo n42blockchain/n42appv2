@@ -21,7 +21,7 @@ class STe extends S {
   String get chatCallServiceNotInitialized => 'కాల్ సేవ ప్రారంభించబడలేదు';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'లాగిన్ విఫలమైంది: $error';
   }
 
@@ -149,7 +149,7 @@ class STe extends S {
       'మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. వాయిస్ సందేశాలను ఉపయోగించడానికి దయచేసి సిస్టమ్ సెట్టింగ్‌లలో దీన్ని ప్రారంభించండి.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'రికార్డింగ్ ప్రారంభించడంలో విఫలమైంది: $error';
   }
 
@@ -157,7 +157,7 @@ class STe extends S {
   String get commonRecordingTooShort => 'రికార్డింగ్ చాలా చిన్నది';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'రికార్డింగ్‌ని ఆపడంలో విఫలమైంది: $error';
   }
 
@@ -275,7 +275,7 @@ class STe extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -378,7 +378,7 @@ class STe extends S {
   String get profileChooseFromGallery => 'గ్యాలరీ నుండి ఎంచుకోండి';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'సేవ్ చేయడం విఫలమైంది: $error';
   }
 
@@ -427,7 +427,7 @@ class STe extends S {
   String get authEnterServerAddress => 'సర్వర్ చిరునామాను నమోదు చేయండి';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverNameకి కనెక్ట్ చేయబడింది';
   }
 
@@ -528,7 +528,7 @@ class STe extends S {
   String get commonPayment => 'చెల్లింపు';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature త్వరలో వస్తుంది';
   }
 
@@ -551,7 +551,7 @@ class STe extends S {
   String get conversationDeleteConversation => 'సంభాషణను తొలగించండి';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\"తో సంభాషణను తొలగించాలా?';
   }
 
@@ -603,7 +603,7 @@ class STe extends S {
   String get commonLocationLabel => 'స్థానం';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'సిఫార్సు విఫలమైంది: $error';
   }
 
@@ -614,7 +614,7 @@ class STe extends S {
   String get contactOpeningChat => 'చాట్‌ని తెరుస్తోంది...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'చాట్ తెరవడంలో విఫలమైంది: $error';
   }
 
@@ -684,7 +684,7 @@ class STe extends S {
   String get searchNoResults => 'ఫలితాలు లేవు';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'సభ్యులు ($count)';
   }
 
@@ -784,7 +784,7 @@ class STe extends S {
   String get transferAddressVerified => 'చిరునామా ధృవీకరించబడింది';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'అందుబాటులో ఉంది: $balance $symbol';
   }
 
@@ -846,7 +846,7 @@ class STe extends S {
   String get profileAvatarUpdated => 'అవతార్ నవీకరించబడింది';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'చిత్రాన్ని ఎంచుకోవడంలో విఫలమైంది: $error';
   }
 
@@ -865,7 +865,7 @@ class STe extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'చిరునామాను సేవ్ చేయడంలో విఫలమైంది: $error';
   }
 
@@ -888,7 +888,7 @@ class STe extends S {
   String get profileAddressDeleted => 'చిరునామా తొలగించబడింది';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'ఇన్‌వాయిస్‌ని సేవ్ చేయడంలో విఫలమైంది: $error';
   }
 
@@ -945,7 +945,7 @@ class STe extends S {
   String get commonAddressCopied => 'చిరునామా కాపీ చేయబడింది';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'తెరువు: $content';
   }
 
@@ -1230,7 +1230,7 @@ class STe extends S {
   String get chatInCall => 'కాల్ లో';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature ఫీచర్ అభివృద్ధిలో ఉంది...';
   }
 
@@ -1474,16 +1474,6 @@ class STe extends S {
 
   @override
   String get chatSaveToGallery => 'గ్యాలరీకి సేవ్ చేయండి';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'డౌన్‌లోడ్ విఫలమైంది: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'భాగస్వామ్యం విఫలమైంది: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'చిత్రాన్ని లోడ్ చేయడంలో విఫలమైంది';
@@ -2652,6 +2642,31 @@ class STe extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'మీడియా URL అందుబాటులో లేదు';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'డౌన్‌లోడ్ విఫలమైంది: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'లోపం: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'సంగీతం లింక్';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'ఎరుపు ప్యాకెట్లు మరియు బదిలీలు ఫార్వార్డ్ చేయబడవు';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'భాగస్వామ్యం విఫలమైంది: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'మళ్లీ ప్రయత్నించడానికి నొక్కండి';
 
   @override
@@ -2679,28 +2694,13 @@ class STe extends S {
   String get groupEnterGroupAnnouncement => 'సమూహ ప్రకటనను నమోదు చేయండి';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'లోపం: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count సభ్యులు, గ్రూప్ IDని కాపీ చేయడానికి క్లిక్ చేయండి';
   }
 
   @override
-  String get chatMusicLinkLabel => 'సంగీతం లింక్';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'మీడియా URL అందుబాటులో లేదు';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'సమూహం పేరును సవరించడానికి మీకు అనుమతి లేదు';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'ఎరుపు ప్యాకెట్లు మరియు బదిలీలు ఫార్వార్డ్ చేయబడవు';
 
   @override
   String get authEmailAddress => 'ఇమెయిల్ చిరునామా';
@@ -2902,11 +2902,12 @@ class STe extends S {
   @override
   String get authAppleLabel => 'ఆపిల్';
 
-
-  @override
-  String get authSsoNotConfigured => 'ఈ సర్వర్ SSO లాగిన్ ప్రొవైడర్‌లను కాన్ఫిగర్ చేయలేదు';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'ఈ సర్వర్ SSO లాగిన్ ప్రొవైడర్‌లను కాన్ఫిగర్ చేయలేదు';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3111,12 +3112,12 @@ class STe extends S {
   String get contactEnterPhone => 'ఫోన్ నంబర్‌ను నమోదు చేయండి';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'సంభాషణ: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'సంప్రదించండి: $userId';
   }
 
@@ -3124,7 +3125,7 @@ class STe extends S {
   String get commonDiscover => 'కనుగొనండి';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(త్వరలో వస్తుంది)';
   }
 
@@ -3457,12 +3458,12 @@ class STe extends S {
   String get callLivekitNotConfigured => 'LiveKit కాన్ఫిగర్ చేయబడలేదు';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'సమావేశంలో చేరడం విఫలమైంది: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'స్క్రీన్ భాగస్వామ్యం విఫలమైంది: $error';
   }
 
@@ -3716,12 +3717,12 @@ class STe extends S {
   String get profileSilentMode => 'సైలెంట్ మోడ్';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'ప్లే చేయడంలో విఫలమైంది: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'ప్లే చేస్తోంది: $ringtoneName';
   }
 
@@ -3775,7 +3776,7 @@ class STe extends S {
   String get commonAllRead => 'అన్నీ చదివారు';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count చదివారు';
   }
 

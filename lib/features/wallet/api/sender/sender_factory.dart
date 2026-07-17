@@ -42,9 +42,18 @@ class SenderFactory {
   /// Returns a sender for the given [coinType].
   ///
   /// Reads [allChainUrlMap] to determine the blockchain type, then returns
-  /// the appropriate [ChainSender] implementation.
-  ChainSender getSender(String coinType) {
+  /// the appropriate [ChainSender] implementation. A runtime [chainConfig]
+  /// allows user-added networks that are not present in the static registry.
+  ///
+  /// NOTE: [chainConfig] only takes effect for coin types absent from
+  /// [allChainUrlMap]. For registry chains the cached registry-backed sender
+  /// wins and the argument is ignored — senders read per-call settings from
+  /// [SendParams.chainConfig], so a runtime override belongs there, not here.
+  ChainSender getSender(String coinType, {Map<String, dynamic>? chainConfig}) {
     final key = coinType.toUpperCase();
+    if (!allChainUrlMap.containsKey(key) && chainConfig != null) {
+      return _createSender(key, chainConfig: chainConfig);
+    }
     if (_cache.containsKey(key)) return _cache[key]!;
 
     final sender = _createSender(key);
@@ -52,21 +61,32 @@ class SenderFactory {
     return sender;
   }
 
-  ChainSender _createSender(String coinType) {
-    final chainConfig = allChainUrlMap[coinType] as Map<String, dynamic>?;
-    final baseInfo = chainConfig?['baseInfo'] as Map<String, dynamic>?;
+  /// Whether [coinType] has a concrete transfer implementation.
+  ///
+  /// Pass [chainConfig] for user-added networks; without it a chain missing
+  /// from the registry always reports unsupported.
+  bool supportsTransfers(String coinType, {Map<String, dynamic>? chainConfig}) =>
+      getSender(coinType, chainConfig: chainConfig) is! _UnsupportedSender;
+
+  ChainSender _createSender(
+    String coinType, {
+    Map<String, dynamic>? chainConfig,
+  }) {
+    final resolvedConfig =
+        chainConfig ?? allChainUrlMap[coinType] as Map<String, dynamic>?;
+    final baseInfo = resolveChainBaseInfo(resolvedConfig);
     final blockchainType = baseInfo == null
         ? ''
         : CoinConfigView(baseInfo).blockchainType;
 
     return switch (blockchainType) {
-      'Ethereum' => EvmSender(),
+      'Ethereum' => EvmSender(chainConfig: resolvedConfig),
       'Bitcoin' => BtcSender(),
-      'Cosmos' => CosmosSender(),
+      'Cosmos' => CosmosSender(chainConfig: resolvedConfig),
       'Solana' => SolSender(),
       'Tron' => TrxSender(),
       'Polkadot' => DotSender(),
-      'Aptos' => AptSender(),
+      'Aptos' => AptSender(chainConfig: resolvedConfig),
       'TheOpenNetwork' => TonSender(),
       'Near' => NearSender(),
       'Sui' => SuiSender(),

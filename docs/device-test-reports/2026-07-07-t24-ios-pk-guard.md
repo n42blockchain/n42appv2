@@ -9,6 +9,25 @@
 - Physical iPhone device id: `00008150-000E2469149A401C`
 - CoreDevice id: `1046FC66-1844-5F30-88D0-7140EBF4A41C`
 
+## Follow-up - 2026-07-09
+
+Retested on `master@2c692b16` with the same physical iPhone over the
+CoreDevice connection. A temporary profile probe used a known Ethereum test
+key/address vector, then passed malformed input `@@bad@@` through the same
+`trustdart.generateAddress` method channel call.
+
+| Item | Result | Detail |
+|---|---:|---|
+| C2 valid imported private key generates address | PASS | Native output matched the independently known Ethereum test address. |
+| C3 invalid private key returns error instead of crash | PASS | Returned `PlatformException.code == invalid_pk`; the process remained alive. |
+
+Probe result copied from the app data container:
+
+`T24_RESULT:C2_VALID_PK:PASS;C3_INVALID_PK:PASS`
+
+The temporary probe was removed after validation. The original result table
+below is retained as the historical record of the 2026-07-07 attempt.
+
 ## Results
 
 | Item | Result | Detail |

@@ -93,6 +93,7 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
                 margin: EdgeInsets.all(AppSpacing.space8),
                 width: double.infinity,
                 child: AppButton(
+                  key: const ValueKey<String>('terms_agree'),
                   label: S.of(context).g_chat_key_50,
                   onPressed: _isBottom ? widget.agreeCallBack : null,
                 ),
@@ -131,8 +132,8 @@ class _TermsOfServiceWidgetState extends State<TermsOfServiceWidget> {
         height: ScreenUtil().setWidth(120),
         decoration: BoxDecoration(
           color: isDark
-            ? AppColorTokens.of(context).textTertiary
-            : Colors.white,
+              ? AppColorTokens.of(context).textTertiary
+              : Colors.white,
           shape: BoxShape.circle,
           boxShadow: [
             BoxShadow(

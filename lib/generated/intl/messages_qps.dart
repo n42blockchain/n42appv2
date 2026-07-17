@@ -1327,7 +1327,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("[# Ɓüŗñ ~~#]"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("[# Ɓüý Ñ ~~#]"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
-      "[# Ɓüý Ñ ŵìťĥ ÀŠŤ ƥŗöťöçöĺ ~~~~~~~~~~~#]",
+      "[# Ɓüý Ñ ŵìťĥ Ñ42 ƥŗöťöçöĺ ~~~~~~~~~~~#]",
     ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "[# Çŗöšš-çĥàìñ ťŗàñšƒéŗ ~~~~~~~~~~#]",

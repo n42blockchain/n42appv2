@@ -51,6 +51,37 @@ void main() {
           reason: 'Reward text should contain N',
         );
       });
+
+      test('buy N protocol text should not use old AST branding', () async {
+        final localizedStrings = [
+          s.g_key_earn_buy_n_desc,
+          (await S.load(const Locale('hi'))).g_key_earn_buy_n_desc,
+          (await S.load(const Locale('qps'))).g_key_earn_buy_n_desc,
+        ];
+
+        for (final text in localizedStrings) {
+          expect(
+            text.contains('AST'),
+            false,
+            reason: 'Buy N protocol text "$text" should not contain AST',
+          );
+          expect(
+            text.contains('एएसटी'),
+            false,
+            reason: 'Buy N protocol text "$text" should not contain Hindi AST',
+          );
+          expect(
+            text.contains('ÀŠŤ'),
+            false,
+            reason: 'Buy N protocol text "$text" should not contain pseudo AST',
+          );
+          expect(
+            text.contains('N42') || text.contains('Ñ42'),
+            true,
+            reason: 'Buy N protocol text "$text" should contain N42',
+          );
+        }
+      });
     });
 
     group('Share Texts', () {

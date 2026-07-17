@@ -527,6 +527,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
         vertical: AppDimensions.spacingS,
       ),
       child: Semantics(
+        key: const ValueKey<String>('chat_global_search_open'),
         button: true,
         label: S.of(context)?.commonSearch ?? 'Search',
         child: GestureDetector(

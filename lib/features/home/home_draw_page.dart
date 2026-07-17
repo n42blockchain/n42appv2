@@ -9,11 +9,15 @@ import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/features/airdrop/pages/airdrop_home_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/setting_home_page.dart';
+import 'package:n42_wallet/features/loyalty/pages/loyalty_home_page.dart';
+import 'package:n42_wallet/features/loyalty/loyalty_wallet_address.dart';
 import 'package:n42_wallet/features/profile/pages/profile_home_page.dart';
 import 'package:n42_wallet/features/wallet/pages/address_book/address_book_list.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
@@ -57,6 +61,8 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
     super.build(context);
 
     final currentUser = ref.watch(currentUserProvider);
+    final wallet = ref.watch(wapBridgeProvider);
+    final walletAddress = selectLoyaltyWalletAddress(wallet.coinList);
 
     return ClipRRect(
       borderRadius: BorderRadius.only(
@@ -113,6 +119,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/profile.png",
                       S.of(context).g_home_key1,
+                      automationKey: const ValueKey<String>('drawer_profile'),
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -124,6 +131,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/manage_wallet.png",
                       S.of(context).g_key_wallet_manage,
+                      automationKey: const ValueKey<String>(
+                        'drawer_wallet_manage',
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -134,6 +144,9 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/address_book.png",
                       S.of(context).g_key_108,
+                      automationKey: const ValueKey<String>(
+                        'drawer_address_book',
+                      ),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -148,6 +161,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/security.png",
                       S.of(context).s_key_11,
+                      automationKey: const ValueKey<String>('drawer_security'),
                       onTap: () {
                         Navigator.pushNamed(context, '/securitySetting');
                       },
@@ -155,6 +169,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/settings.png",
                       S.of(context).g_key_94,
+                      automationKey: const ValueKey<String>('drawer_settings'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -169,8 +184,37 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
                     _menuItem(
+                      "assets/home/tabbar/earn.png",
+                      S.of(context).g_key_loyalty_title,
+                      automationKey: const ValueKey<String>('drawer_loyalty'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                LoyaltyHomePage(walletAddress: walletAddress),
+                          ),
+                        );
+                      },
+                    ),
+                    _menuItem(
+                      "assets/home/money.png",
+                      S.of(context).g_key_airdrop_title,
+                      automationKey: const ValueKey<String>('drawer_airdrop'),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                AirdropHomePage(walletAddress: walletAddress),
+                          ),
+                        );
+                      },
+                    ),
+                    _menuItem(
                       "assets/home/tabbar/news.png",
                       S.of(context).g_browser_key11,
+                      automationKey: const ValueKey<String>('drawer_browser'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -187,6 +231,7 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     _menuItem(
                       "assets/home/about_app.png",
                       S.of(context).s_key_10,
+                      automationKey: const ValueKey<String>('drawer_about'),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -211,12 +256,14 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
   Widget _menuItem(
     String iconPath,
     String actionName, {
+    Key? automationKey,
     Widget? rightWidget,
     GestureTapCallback? onTap,
   }) {
     return Material(
       color: Colors.transparent,
       child: InkWell(
+        key: automationKey,
         onTap: onTap,
         borderRadius: AppRadius.brMd,
         child: Container(

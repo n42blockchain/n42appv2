@@ -4,6 +4,15 @@ import 'package:n42_jmt_verify/n42_jmt_verify.dart';
 
 void main() {
   group('Blake3Hash', () {
+    test('matches the official empty-input BLAKE3 vector', () {
+      final expected = _hexToBytes(
+        'af1349b9f5f9a1a6a0404dea36dcc9499'
+        'bcb25c9adc112b7cc9a93cae41f3262',
+      );
+
+      expect(Blake3Hash.hash(Uint8List(0)), expected);
+    });
+
     test('deterministic hashing', () {
       final data = Uint8List.fromList([1, 2, 3, 4, 5]);
       final hash1 = Blake3Hash.hash(data);
@@ -45,7 +54,8 @@ void main() {
     test('different addresses produce different account keys', () {
       final addr1 = Uint8List(20)..fillRange(0, 20, 0x01);
       final addr2 = Uint8List(20)..fillRange(0, 20, 0x02);
-      expect(Blake3Hash.accountKey(addr1), isNot(equals(Blake3Hash.accountKey(addr2))));
+      expect(Blake3Hash.accountKey(addr1),
+          isNot(equals(Blake3Hash.accountKey(addr2))));
     });
   });
 
@@ -119,16 +129,15 @@ void main() {
     });
 
     test('verifyRoot rejects wrong shard root count', () {
-      final proof = JmtProof(
-        shardIndex: 0,
-        shardRoots: List.generate(15, (_) => Uint8List(32)), // 15 instead of 16
-        proofBytes: Uint8List(0),
-        keyHash: Uint8List(32),
+      expect(
+        () => JmtProof(
+          shardIndex: 0,
+          shardRoots: List.generate(15, (_) => Uint8List(32)),
+          proofBytes: Uint8List(0),
+          keyHash: Uint8List(32),
+        ),
+        throwsA(isA<AssertionError>()),
       );
-
-      // Constructor assertion will fail for shardRoots.length != 16.
-      // But if we bypass, the verify would fail.
-      // For this test, we test the verify path.
     });
   });
 
@@ -145,4 +154,11 @@ void main() {
       expect(proof.leaf, isNotNull);
     });
   });
+}
+
+Uint8List _hexToBytes(String value) {
+  return Uint8List.fromList([
+    for (var i = 0; i < value.length; i += 2)
+      int.parse(value.substring(i, i + 2), radix: 16),
+  ]);
 }

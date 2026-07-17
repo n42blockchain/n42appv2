@@ -57,15 +57,28 @@ class _HomePageState extends ConsumerState<HomePage>
   List<Widget> _buildPages() {
     final useV2 = ref.watch(miningUseV2Provider);
     return [
-      const WalletPage(),
-      useV2 ? const MiningTodayV2() : const MiningHomePage(),
-      if (Platform.isAndroid) const EarnPage(),
+      const KeyedSubtree(
+        key: ValueKey<String>('home_content_wallet'),
+        child: WalletPage(),
+      ),
+      KeyedSubtree(
+        key: const ValueKey<String>('home_content_mining'),
+        child: useV2 ? const MiningTodayV2() : const MiningHomePage(),
+      ),
+      if (Platform.isAndroid)
+        const KeyedSubtree(
+          key: ValueKey<String>('home_content_earn'),
+          child: EarnPage(),
+        ),
       // 行情页四合一（热门/搜索/自选/新闻），双平台一致。
       // 背景：正式发布的 iOS 版本即含 MarketPage（已过 App Store 审核），
       // 2026-05-14（74550da8）曾把它全平台误换成纯 NewsPage——提交名
       // 'restore news localization' 却换掉了整页；2026-07-03 恢复。
       // News 功能由页内 News tab 覆盖，勿再替换。
-      const MarketPage(),
+      const KeyedSubtree(
+        key: ValueKey<String>('home_content_market'),
+        child: MarketPage(),
+      ),
     ];
   }
 
@@ -164,53 +177,56 @@ class _HomePageState extends ConsumerState<HomePage>
     final safeIndex = homeCurrentIndex.clamp(0, pages.length - 1);
     final useSideNav = ResponsiveUtils.useSideNavigation(context);
 
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            if (useSideNav)
-              // iPad 横屏：使用 NavigationRail + 内容区域
-              Row(
-                children: [
-                  buildNavigationRail(safeIndex),
-                  Expanded(
-                    child: IndexedStack(index: safeIndex, children: pages),
-                  ),
-                ],
-              )
-            else ...[
-              // 手机 / iPad 竖屏：保持原有底部导航
-              IndexedStack(index: safeIndex, children: pages),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: buildBottomNavBar(context),
-              ),
-            ],
-            if (showTermsOfService == false)
-              Positioned.fill(
-                child: TermsOfServiceWidget(
-                  '${AppConfig.apiUrl['n42Browser']}/static/terms_of_use.html',
-                  agreeCallBack: () {
-                    SPUtil().setShowTermsOfService(true);
-                    showTermsOfService = true;
-                    if (mounted) {
-                      setState(() {});
-                    }
-                  },
+    return KeyedSubtree(
+      key: const ValueKey<String>('home_page'),
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              if (useSideNav)
+                // iPad 横屏：使用 NavigationRail + 内容区域
+                Row(
+                  children: [
+                    buildNavigationRail(safeIndex),
+                    Expanded(
+                      child: IndexedStack(index: safeIndex, children: pages),
+                    ),
+                  ],
+                )
+              else ...[
+                // 手机 / iPad 竖屏：保持原有底部导航
+                IndexedStack(index: safeIndex, children: pages),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: buildBottomNavBar(context),
                 ),
-              ),
-          ],
+              ],
+              if (showTermsOfService == false)
+                Positioned.fill(
+                  child: TermsOfServiceWidget(
+                    '${AppConfig.apiUrl['n42Browser']}/static/terms_of_use.html',
+                    agreeCallBack: () {
+                      SPUtil().setShowTermsOfService(true);
+                      showTermsOfService = true;
+                      if (mounted) {
+                        setState(() {});
+                      }
+                    },
+                  ),
+                ),
+            ],
+          ),
         ),
-      ),
-      // 默认20 不容易触发 这里调整到60
-      drawerEdgeDragWidth: ScreenUtil().setWidth(120),
-      drawer: const Drawer(
-        backgroundColor: Colors.transparent,
-        child: HomeDrawPage(),
+        // 默认20 不容易触发 这里调整到60
+        drawerEdgeDragWidth: ScreenUtil().setWidth(120),
+        drawer: const Drawer(
+          backgroundColor: Colors.transparent,
+          child: HomeDrawPage(),
+        ),
       ),
     );
   }

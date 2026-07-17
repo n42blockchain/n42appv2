@@ -83,6 +83,7 @@ class _WalletAssistantPageState extends State<WalletAssistantPage> {
   Widget build(BuildContext context) {
     final c = AppColorTokens.of(context);
     return Scaffold(
+      key: const ValueKey<String>('wallet_assistant_page'),
       backgroundColor: c.bgBase,
       appBar: AppBar(
         backgroundColor: c.bgBase,

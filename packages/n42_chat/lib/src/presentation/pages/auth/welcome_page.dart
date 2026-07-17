@@ -31,6 +31,7 @@ class WelcomePage extends StatelessWidget {
     final isDark = context.isDarkMode;
 
     return Scaffold(
+      key: const ValueKey<String>('chat_welcome_page'),
       backgroundColor: isDark ? AppColors.backgroundDark : Colors.white,
       body: SafeArea(
         child: Column(
@@ -90,10 +91,7 @@ class WelcomePage extends StatelessWidget {
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
-              colors: [
-                AppColors.primary,
-                AppColors.primaryLight,
-              ],
+              colors: [AppColors.primary, AppColors.primaryLight],
             ),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
@@ -130,9 +128,7 @@ class WelcomePage extends StatelessWidget {
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           textAlign: TextAlign.center,
-          style: AppTextStyles.bodyLarge.copyWith(
-            color: context.textSecondary,
-          ),
+          style: AppTextStyles.bodyLarge.copyWith(color: context.textSecondary),
         ),
       ],
     );
@@ -143,20 +139,28 @@ class WelcomePage extends StatelessWidget {
       children: [
         _FeatureItem(
           icon: Icons.security,
-          title: S.of(context)?.commonEndToEndEncryption ?? 'End-to-end encryption',
-          description: S.of(context)?.authMessagesOnlyYouCanSee ?? 'Messages visible only to you and the recipient',
+          title:
+              S.of(context)?.commonEndToEndEncryption ??
+              'End-to-end encryption',
+          description:
+              S.of(context)?.authMessagesOnlyYouCanSee ??
+              'Messages visible only to you and the recipient',
         ),
         const SizedBox(height: 20),
         _FeatureItem(
           icon: Icons.public,
           title: S.of(context)?.authDecentralized ?? 'Decentralized',
-          description: S.of(context)?.authBasedOnMatrix ?? 'Built on the Matrix open protocol',
+          description:
+              S.of(context)?.authBasedOnMatrix ??
+              'Built on the Matrix open protocol',
         ),
         const SizedBox(height: 20),
         _FeatureItem(
           icon: Icons.account_balance_wallet,
           title: S.of(context)?.authWalletIntegration ?? 'Wallet Integration',
-          description: S.of(context)?.authEasyCryptoTransfer ?? 'Easy cryptocurrency transfers',
+          description:
+              S.of(context)?.authEasyCryptoTransfer ??
+              'Easy cryptocurrency transfers',
         ),
       ],
     );
@@ -171,6 +175,7 @@ class WelcomePage extends StatelessWidget {
           width: double.infinity,
           height: 50,
           child: ElevatedButton(
+            key: const ValueKey<String>('chat_welcome_login'),
             onPressed: onLogin,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
@@ -197,6 +202,7 @@ class WelcomePage extends StatelessWidget {
           width: double.infinity,
           height: 50,
           child: OutlinedButton(
+            key: const ValueKey<String>('chat_welcome_register'),
             onPressed: onRegister,
             style: OutlinedButton.styleFrom(
               foregroundColor: AppColors.primary,
@@ -342,5 +348,3 @@ class _FeatureItem extends StatelessWidget {
     );
   }
 }
-
-

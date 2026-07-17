@@ -17,9 +17,9 @@ on:
   workflow_dispatch:
 
 env:
-  # Flutter 3.38.x ships Dart 3.10 which satisfies pubspec `sdk: ">=3.9.2"`.
+  # Flutter 3.41.9 ships Dart 3.11.5 and includes physical-device iOS fixes.
   # Java 21 matches android/app/build.gradle.kts compileOptions.
-  FLUTTER_VERSION: '3.38.0'
+  FLUTTER_VERSION: '3.41.9'
   COVERAGE_THRESHOLD: 70
   JAVA_VERSION: '21'
 

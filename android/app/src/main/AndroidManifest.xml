@@ -4,6 +4,9 @@
         android:name="android.hardware.camera"
         android:required="false" />
     <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
         <package android:name="com.tencent.mm"/>
         <package android:name="io.metamask"/>
@@ -48,6 +51,7 @@
 
     <application
         android:allowBackup="false"
+        android:enableOnBackInvokedCallback="true"
         android:label="N42Wallet"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"

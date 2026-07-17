@@ -33,6 +33,7 @@ import 'package:n42_wallet/features/wallet/api/sender/xrp_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/xtz_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/zil_sender.dart';
 import 'package:n42_wallet/features/wallet/api/sender/strk_sender.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 void main() {
   final factory = SenderFactory.instance;
@@ -134,6 +135,28 @@ void main() {
   });
 
   group('SenderFactory contract', () {
+    test('every default wallet network has a concrete sender', () {
+      final unsupported = chainUrlMap.keys
+          .where((coinType) => !factory.supportsTransfers(coinType))
+          .toList();
+
+      expect(unsupported, isEmpty);
+    });
+
+    test('runtime custom EVM config dispatches to EvmSender', () {
+      final sender = factory.getSender(
+        'MYCHAIN',
+        chainConfig: {
+          'blockchainType': 'Ethereum',
+          'coinType': 'MYCHAIN',
+          'chainId': 987654,
+          'service': 'https://rpc.example.com',
+        },
+      );
+
+      expect(sender, isA<EvmSender>());
+    });
+
     test('coinType lookup is case-insensitive', () {
       final upper = factory.getSender('ETH');
       final lower = factory.getSender('eth');

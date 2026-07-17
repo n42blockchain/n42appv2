@@ -34,7 +34,6 @@ import '../group/create_group_page.dart';
 import '../profile/profile_page.dart';
 import '../qrcode/scan_qr_page.dart';
 import '../transfer/receive_page.dart';
-import '../../../core/utils/debug_log.dart';
 
 /// 聊天模块主框架页面
 ///
@@ -204,6 +203,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
   }) {
     final textColor = context.textPrimary;
     return PopupMenuItem<String>(
+      key: ValueKey<String>('chat_add_menu_$value'),
       value: value,
       height: 48,
       child: Row(
@@ -351,12 +351,14 @@ class _ChatMainPageState extends State<ChatMainPage> {
 
           // === 手机模式：保持原有布局 ===
           return Scaffold(
+            key: const ValueKey<String>('chat_main_page'),
             backgroundColor: context.pageBackground,
             appBar: AppBar(
               backgroundColor: bgColor,
               elevation: 0,
               scrolledUnderElevation: 0,
               leading: IconButton(
+                key: const ValueKey<String>('chat_back_to_wallet'),
                 icon: Icon(
                   AppIcons.back,
                   color: textColor,
@@ -376,6 +378,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                 if (_currentIndex == 0) ...[
                   Builder(
                     builder: (ctx) => IconButton(
+                      key: const ValueKey<String>('chat_add_menu'),
                       icon: Icon(
                         Icons.add_circle_outline,
                         color: textColor,
@@ -403,13 +406,25 @@ class _ChatMainPageState extends State<ChatMainPage> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               children: [
-                _ChatTabContent(
-                  conversationBloc: _conversationBloc,
-                  contactBloc: _contactBloc,
+                KeyedSubtree(
+                  key: const ValueKey<String>('chat_content_messages'),
+                  child: _ChatTabContent(
+                    conversationBloc: _conversationBloc,
+                    contactBloc: _contactBloc,
+                  ),
                 ),
-                const _ContactTabContent(),
-                const _DiscoverTabContent(),
-                const _ProfileTabContent(),
+                const KeyedSubtree(
+                  key: ValueKey<String>('chat_content_contacts'),
+                  child: _ContactTabContent(),
+                ),
+                const KeyedSubtree(
+                  key: ValueKey<String>('chat_content_discover'),
+                  child: _DiscoverTabContent(),
+                ),
+                const KeyedSubtree(
+                  key: ValueKey<String>('chat_content_me'),
+                  child: _ProfileTabContent(),
+                ),
               ],
             ),
             bottomNavigationBar: _buildBottomNavigationBar(totalUnread),
@@ -427,6 +442,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
     required String currentTitle,
   }) {
     return Scaffold(
+      key: const ValueKey<String>('chat_main_page'),
       backgroundColor: context.pageBackground,
       body: Row(
         children: [
@@ -442,13 +458,15 @@ class _ChatMainPageState extends State<ChatMainPage> {
                   scrolledUnderElevation: 0,
                   automaticallyImplyLeading: false,
                   leading: IconButton(
+                    key: const ValueKey<String>('chat_back_to_wallet'),
                     icon: Icon(
                       AppIcons.back,
                       color: textColor,
                       size: AppDimensions.iconSizeSmall,
                     ),
-                    tooltip:
-                        MaterialLocalizations.of(context).backButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).backButtonTooltip,
                     onPressed: _handleBack,
                   ),
                   title: Text(
@@ -464,6 +482,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                     if (_currentIndex == 0)
                       Builder(
                         builder: (ctx) => IconButton(
+                          key: const ValueKey<String>('chat_add_menu'),
                           icon: Icon(
                             Icons.add_circle_outline,
                             color: textColor,
@@ -480,8 +499,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                           color: textColor,
                           size: AppDimensions.iconSizeSmall,
                         ),
-                        tooltip:
-                            S.of(context)?.mainAddFriends ?? 'Add Friends',
+                        tooltip: S.of(context)?.mainAddFriends ?? 'Add Friends',
                         onPressed: _navigateToAddFriend,
                       ),
                     const SizedBox(width: AppDimensions.spacingXS),
@@ -511,10 +529,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
             ),
           ),
           // 分隔线
-          VerticalDivider(
-            width: 1,
-            color: context.dividerColor,
-          ),
+          VerticalDivider(width: 1, color: context.dividerColor),
           // --- 右侧面板：聊天内容或空状态 ---
           Expanded(child: _buildRightPanel()),
         ],
@@ -530,11 +545,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.chat_bubble_outline,
-              size: 64,
-              color: placeholderColor,
-            ),
+            Icon(Icons.chat_bubble_outline, size: 64, color: placeholderColor),
             const SizedBox(height: AppDimensions.spacing),
             Text(
               S.of(context)?.commonMessages ?? 'Select a conversation',
@@ -649,6 +660,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
 
     return Expanded(
       child: InkWell(
+        key: ValueKey<String>('chat_tab_$index'),
         onTap: () => _onTabTapped(index),
         splashColor: selectedColor.withValues(alpha: 0.10),
         highlightColor: selectedColor.withValues(alpha: 0.05),
@@ -693,14 +705,9 @@ class _ChatMainPageState extends State<ChatMainPage> {
               duration: const Duration(milliseconds: 200),
               style: AppTextStyles.captionSmall.copyWith(
                 color: color,
-                fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
-              child: Text(
-                label,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
+              child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
             ),
           ],
         ),
@@ -818,9 +825,6 @@ class _ChatTabContent extends StatelessWidget {
       child: ConversationListPage(
         onConversationTap: (conversation) =>
             _navigateToChat(context, conversation),
-        onSearchTap: () {
-          debugLog('Open search');
-        },
         showAppBar: false,
       ),
     );
@@ -848,9 +852,6 @@ class _ChatTabContentSplit extends StatelessWidget {
       child: ConversationListPage(
         onConversationTap: onConversationTap,
         selectedConversationId: selectedConversation?.id,
-        onSearchTap: () {
-          debugLog('Open search');
-        },
         showAppBar: false,
       ),
     );

@@ -1,27 +1,25 @@
 import 'dart:typed_data';
-import 'package:hashlib/hashlib.dart';
+
+import 'package:blake3_dart/blake3_dart.dart';
 
 /// Blake3 hash function wrapper matching Rust n42-jmt's Blake3Hasher.
 ///
-/// Uses the `hashlib` package which provides a pure Dart Blake3 implementation
-/// with SIMD acceleration where available.
+/// Uses a pure Dart implementation that is portable across Flutter platforms.
 class Blake3Hash {
   Blake3Hash._();
 
   /// Compute Blake3 hash of [data], returning 32 bytes.
   static Uint8List hash(Uint8List data) {
-    final digest = blake3.convert(data);
-    return Uint8List.fromList(digest.bytes);
+    return blake3(data);
   }
 
   /// Compute Blake3 hash of concatenated byte arrays.
   static Uint8List hashAll(List<Uint8List> parts) {
-    final sink = blake3.createSink();
+    final bytes = BytesBuilder(copy: false);
     for (final part in parts) {
-      sink.add(part);
+      bytes.add(part);
     }
-    final digest = sink.digest();
-    return Uint8List.fromList(digest.bytes);
+    return blake3(bytes.takeBytes());
   }
 
   /// Domain-separated account key hash: blake3(b"n42:account:" || address).
