@@ -10,6 +10,8 @@
 // 高 decimals 代币的尾数会被悄悄改写。本工具走十进制字符串移位，
 // 完整保留 double.toString() 所表达的全部数位。
 
+import 'package:flutter/services.dart';
+
 /// 把十进制字符串（支持 `-1.23`、`1e-7`、`2.5E+3` 形式）按 [decimals]
 /// 移位转换为链上最小单位整数。超出 decimals 的多余小数位**向零截断**
 /// （宁可少转一个最小单位，绝不多转）。
@@ -70,4 +72,63 @@ BigInt doubleAmountToBigInt(double value, int decimals) {
     throw FormatException('non-finite amount: $value');
   }
   return decimalStringToBigInt(value.toString(), decimals);
+}
+
+/// 输入金额的小数位数是否不超过代币链上精度。
+///
+/// `decimalStringToBigInt` 会截断超出的位数；转账 UI 不应静默截断，因此在
+/// 提交前先用此方法拒绝。这样 18-decimal 代币最多输入 18 位小数，而不是
+/// 允许第 19 位悄悄变成另一笔交易。
+bool hasAtMostDecimalPlaces(String input, int decimals) {
+  if (decimals < 0) return false;
+  final normalized = input.trim();
+  final exponentIndex = normalized.indexOf(RegExp('[eE]'));
+  final mantissa = exponentIndex < 0
+      ? normalized
+      : normalized.substring(0, exponentIndex);
+  final dotIndex = mantissa.indexOf('.');
+  return dotIndex < 0 || mantissa.length - dotIndex - 1 <= decimals;
+}
+
+/// 限制十进制金额输入的格式与小数位数。
+///
+/// 支持用户输入中间态（空字符串、`1.`），但拒绝多个小数点、负数和超过
+/// 链上精度的尾数。金额输入不能静默截断，否则二维码请求会和用户看到的值不同。
+class DecimalPlacesInputFormatter extends TextInputFormatter {
+  DecimalPlacesInputFormatter(this.decimals) : assert(decimals >= 0);
+
+  final int decimals;
+
+  static final RegExp _decimalPattern = RegExp(r'^\d*(?:\.\d*)?$');
+
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final value = newValue.text;
+    if (value.isEmpty) return newValue;
+    if (!_decimalPattern.hasMatch(value) ||
+        !hasAtMostDecimalPlaces(value, decimals)) {
+      return oldValue;
+    }
+    return newValue;
+  }
+}
+
+/// 将链上最小单位精确格式化为十进制字符串，不经由 double。
+///
+/// 用于 MAX：double 只能稳定表示约 15-16 位有效数字，18-decimal 余额经
+/// double 往返会变大或变小，最终出现“明明点了 MAX 仍余额不足”。
+String bigIntToDecimalString(BigInt value, int decimals) {
+  if (decimals < 0) throw FormatException('negative decimals: $decimals');
+  if (decimals == 0) return value.toString();
+
+  final negative = value.isNegative;
+  var digits = value.abs().toString().padLeft(decimals + 1, '0');
+  final split = digits.length - decimals;
+  final whole = digits.substring(0, split);
+  final fraction = digits.substring(split).replaceFirst(RegExp(r'0+$'), '');
+  final result = fraction.isEmpty ? whole : '$whole.$fraction';
+  return negative ? '-$result' : result;
 }

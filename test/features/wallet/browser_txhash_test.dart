@@ -31,6 +31,13 @@ void main() {
       expect(url, contains('5Kd3NBUAdUnh28WwTnT5s9XrJrM2Wm7wzJ9K4tqfN5Qm'));
     });
 
+    test('uses the Sonic explorer transaction path', () {
+      expect(
+        getSafeBrowserTxHashUrl('S', '0xabc', isTest: false),
+        'https://sonicscan.org/tx/0xabc',
+      );
+    });
+
     test('returns empty string for missing payload fields', () {
       expect(getSafeBrowserTxHashUrl(null, '0xabc', isTest: false), isEmpty);
       expect(getSafeBrowserTxHashUrl('ETH', null, isTest: false), isEmpty);

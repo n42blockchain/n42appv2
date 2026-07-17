@@ -248,4 +248,52 @@ void main() {
     // 全买后全卖，交易净额接近 0
     expect(r2.tradeDeltaFor('@a:server'), closeTo(0, 1e-3));
   });
+
+  test('超过单房试玩额度的买单被一致拒绝', () {
+    final r = replayOf([
+      create(),
+      buy(1, '@a:server', 0, 800),
+      buy(2, '@a:server', 1, 300),
+    ]);
+    expect(r.tradeDeltaFor('@a:server'), closeTo(-800, 1e-6));
+    expect(r.positionFor(mkt, '@a:server').sharesOf('o1'), 0);
+  });
+
+  test('事件中未满足的买入滑点保护会被拒绝', () {
+    final r = replayOf([
+      create(),
+      PredEvent(
+        sender: '@a:server',
+        timestamp: at(1),
+        action: 'buy',
+        marketId: mkt,
+        outcomeIndex: 0,
+        collateral: 10,
+        minShares: 1000000,
+      ),
+    ]);
+    expect(r.positionFor(mkt, '@a:server').sharesOf('o0'), 0);
+  });
+
+  test('无效建市输入和非有限事件载荷不会改变重放状态', () {
+    final invalidCreate = PredEvent(
+      sender: '@host:server',
+      timestamp: at(0),
+      action: 'create',
+      marketId: mkt,
+      roomId: room,
+      question: ' ',
+      labels: const ['A', 'A'],
+    );
+    final r = replayOf([invalidCreate]);
+    expect(r.market(mkt, now: at(1)), isNull);
+    expect(
+      PredEvent.tryParse(
+        sender: '@a:server',
+        timestamp: at(1),
+        data: {'t': 'pred', 'a': 'buy', 'm': mkt, 'i': 0, 'c': double.infinity},
+      ),
+      isNull,
+    );
+  });
 }

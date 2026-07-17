@@ -38,6 +38,7 @@ String getBrowserTxHash(String coinType, String txHash, {bool? isTest}) {
   if (path == "") return path;
   switch (coinType) {
     case "ETH":
+    case "S":
     case "BNB":
     case "MATIC":
     case "ETC":

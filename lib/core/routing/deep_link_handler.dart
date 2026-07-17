@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import '../../features/identity/services/id_hub_bind_signer.dart';
 import '../platform/deep_link_service.dart';
 import '../utils/app_logger.dart';
 
@@ -70,6 +71,19 @@ class DeepLinkHandler {
           (data.params['login_token'] ?? '').isNotEmpty ||
           (data.params['token'] ?? '').isNotEmpty;
       if (!hasToken) return;
+    }
+
+    // idHubBind/idHubAuth: require a session id and an allowlisted hub. This is
+    // the anti-phishing gate - a QR whose hub is not on the allowlist is dropped
+    // before any signing UI is shown.
+    if (data.type == DeepLinkType.idHubBind ||
+        data.type == DeepLinkType.idHubAuth) {
+      final sid = data.params['sid'] ?? '';
+      final hub = data.params['hub'] ?? '';
+      if (sid.isEmpty || !IdHubBindSigner.isHubAllowed(hub)) {
+        AppLogger.w('DeepLinkHandler', 'rejected id-hub link: bad sid/hub');
+        return;
+      }
     }
 
     try {

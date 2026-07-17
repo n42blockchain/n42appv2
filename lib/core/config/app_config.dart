@@ -58,6 +58,14 @@ class AppConfig {
   static const bool isOnline =
       String.fromEnvironment('ENV', defaultValue: 'production') != 'development';
 
+  /// Hosts a scanned `n42id://` QR is allowed to point its `hub` param at. A
+  /// hard allowlist so a phishing QR cannot make the wallet POST a signature to
+  /// an attacker-controlled server. Compared by exact host or registrable suffix.
+  static const List<String> idHubAllowedHosts = [
+    'id.n42.ai',
+    'id-dev.n42.ai',
+  ];
+
   // ============ API Endpoints ============
   
   static const Map<String, dynamic> apiUrl = {
@@ -94,6 +102,14 @@ class AppConfig {
     'userInfoHost': {
       'main': 'https://api.n42.ai/user',
       'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
+    },
+
+    // Unified-identity N42 ID Hub. OPTIONAL: leave both empty to keep every ID
+    // Hub feature dark and fall back to current behavior (graceful degradation
+    // kill switch). Fill in once the hub is deployed per environment.
+    'idHubHost': {
+      'main': '',
+      'test': '',
     },
     
     // IPFS — uploads go through the n42 cluster, reads through the public

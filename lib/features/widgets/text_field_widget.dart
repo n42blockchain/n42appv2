@@ -42,7 +42,9 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }
@@ -53,7 +55,9 @@ Widget? _buildMessageWidget(
       width: double.infinity,
       child: Text(
         message,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).brand,
+        ),
       ),
     );
   }
@@ -69,8 +73,7 @@ InputDecoration _buildInputDecoration({
 }) {
   return InputDecoration(
     contentPadding:
-        contentPadding ??
-        EdgeInsets.symmetric(vertical: AppSpacing.space2),
+        contentPadding ?? EdgeInsets.symmetric(vertical: AppSpacing.space2),
     isCollapsed: true,
     hintText: hintText,
     hintStyle: hintStyle,
@@ -89,6 +92,7 @@ Widget textFieldStyle2(
   TextEditingController? controller,
   FocusNode? focusNode,
   bool enabled = true,
+  bool readOnly = false,
   String hintText = "",
   Widget? suffix,
   EdgeInsets? contentPadding,
@@ -129,9 +133,7 @@ Widget textFieldStyle2(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding:
-            padding ??
-            EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? AppRadius.brMd,
           color:
@@ -167,6 +169,7 @@ Widget textFieldStyle2(
                 controller: controller,
                 focusNode: focusNode,
                 enabled: enabled,
+                readOnly: readOnly,
                 style:
                     style ??
                     TextStyle(
@@ -253,9 +256,7 @@ Widget textFieldStyle3(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Container(
-        padding:
-            padding ??
-            EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+        padding: padding ?? EdgeInsets.symmetric(horizontal: AppSpacing.space8),
         decoration: BoxDecoration(
           borderRadius: borderRadius ?? AppRadius.brMd,
           color:
@@ -336,7 +337,9 @@ Widget textFieldStyle3(
               Expanded(
                 child: Text(
                   errorMessage,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).danger,
+                  ),
                 ),
               ),
             ],

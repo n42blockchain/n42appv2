@@ -6,6 +6,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/avatar_decoration_preset.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/matrix_utils.dart' as mx_utils;
 
 /// 微信风格头像组件
 ///
@@ -93,7 +94,7 @@ class N42Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget avatar = _buildAvatar();
+    Widget avatar = _buildAvatar(context);
 
     if (_hasDecoration) {
       avatar = _buildDecorationWrapper(avatar);
@@ -220,7 +221,7 @@ class N42Avatar extends StatelessWidget {
     );
   }
 
-  Widget _buildAvatar() {
+  Widget _buildAvatar(BuildContext context) {
     return Container(
       width: size,
       height: size,
@@ -229,11 +230,11 @@ class N42Avatar extends StatelessWidget {
         borderRadius: BorderRadius.circular(borderRadius),
       ),
       clipBehavior: Clip.antiAlias,
-      child: _buildContent(),
+      child: _buildContent(context),
     );
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     // 如果有名字但没有图片URL，直接显示字母头像
     if ((imageUrl == null || imageUrl!.isEmpty) &&
         name != null &&
@@ -243,15 +244,33 @@ class N42Avatar extends StatelessWidget {
 
     // 优先显示网络图片
     if (imageUrl != null && imageUrl!.isNotEmpty) {
-      // 获取认证头（用于需要认证的 Matrix 媒体）
-      final accessToken = MatrixClientManager.instance.client?.accessToken;
-      final headers = <String, String>{};
-      if (accessToken != null && accessToken.isNotEmpty) {
-        headers['Authorization'] = 'Bearer $accessToken';
+      final client = MatrixClientManager.instance.client;
+      // 缩略图要按物理像素请求：只传逻辑像素的话 2x/3x 屏上头像是糊的。
+      final imageSize = (size * MediaQuery.devicePixelRatioOf(context))
+          .round()
+          .clamp(1, 1024)
+          .toInt();
+      final resolvedImageUrl = imageUrl!.startsWith('mxc://')
+          ? mx_utils.MatrixUtils.getAvatarUrl(
+              imageUrl,
+              client: client,
+              size: imageSize,
+            )
+          : imageUrl;
+
+      // CachedNetworkImage does not understand Matrix's mxc scheme. Convert
+      // it before constructing the provider and authenticate same-origin media.
+      if (resolvedImageUrl == null || resolvedImageUrl.isEmpty) {
+        return _buildFallbackAvatar();
       }
 
+      final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+        resolvedImageUrl,
+        client: client,
+      );
+
       return CachedNetworkImage(
-        imageUrl: imageUrl!,
+        imageUrl: resolvedImageUrl,
         fit: BoxFit.cover,
         httpHeaders: headers,
         cacheManager: _avatarCacheManager,

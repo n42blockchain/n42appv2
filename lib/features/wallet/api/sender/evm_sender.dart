@@ -48,7 +48,6 @@ class EvmSender implements ChainSender {
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
-    final baseInfo = resolveChainBaseInfo(chainConfig);
     final int? resolvedChainId = resolveChainConfigIdOrNull(
       chainConfig,
       isTest: params.isTest,
@@ -64,12 +63,13 @@ class EvmSender implements ChainSender {
     final hasCalldata = (params.calldata ?? '').length > 2;
     final gas = getCoinGas(coinType, contract: isContract || hasCalldata);
 
-    // 自定义链（baseInfo.custom == true）：所有 EVM RPC 调用直连该链自己的
-    // RPC，绕开只认内建 coinType 的 N42 后端。内建链 rpcOverride 恒为 null，
-    // 走原有后端路径，行为完全不变。
-    final String? rpcOverride = (baseInfo?['custom'] == true)
-        ? (baseInfo?['service'] as String?)?.trim()
-        : null;
+    // EVM 链有自己的 RPC 时统一直连。部分新链（包括 Sonic）尚未被旧的
+    // TokenView 后端按 coinType 路由，继续走后端会产生 5xx/521，并可能把
+    // 交易提交到错误的网络。测试网 URL 为空时保留后端回退。
+    final String? rpcOverride = resolveRpcOverride(
+      chainConfig,
+      isTest: params.isTest,
+    );
 
     // Get token balance if contract transfer
     BigInt balance = BigInt.zero;
@@ -256,10 +256,10 @@ class EvmSender implements ChainSender {
     if (!params.isTest &&
         // 加速/取消(nonceOverride)不得进私池:原交易在公共 mempool,私池
         // 替换概率性失效且新 hash 公共 RPC 查不到(接线复审 P1-2);
-        // 自定义链(rpcOverride)必须直连其 RPC,chainId 恰为 1 时也不能
-        // 被劫持到主网 Flashbots(P2-7)。
+        // 非 ETH 链即便配置的 RPC 返回 chainId 1 也不能被劫持到主网
+        // Flashbots；ETH 仍保留原有私有广播路径。
         params.nonceOverride == null &&
-        rpcOverride == null &&
+        (rpcOverride == null || coinType == CoinType.ETH.name) &&
         MevProtectionService.instance.isEnabled &&
         MevProtectionService.isAvailable(chainId) &&
         MevProtectionService.assessRisk(
@@ -385,4 +385,35 @@ class EvmSender implements ChainSender {
   }
 
   static MessageModel _errMM() => MessageModel.error();
+
+  /// 从完整链配置解析当前网络的 EIP-155 chain ID。
+  ///
+  /// 委托 [resolveChainConfigIdOrNull]（含顶层 testnetChainID/mainnetChainID
+  /// 回退与字符串数字解析）。注意：测试网缺配置时**不**回退主网——那样签出的
+  /// 「测试网」交易在主网合法可重放；发送方应先判空拒发（见 _sendSerialized）。
+  static int resolveChainId(
+    Map<String, dynamic>? chainConfig, {
+    required bool isTest,
+    int fallback = 1,
+  }) =>
+      resolveChainConfigIdOrNull(chainConfig, isTest: isTest) ?? fallback;
+
+  /// Returns the configured RPC for the selected EVM network when available.
+  /// Accepts both registry entries and the baseInfo map stored in CoinModel.
+  static String? resolveRpcOverride(
+    Map<String, dynamic>? chainConfig, {
+    required bool isTest,
+  }) {
+    final baseInfo = _baseInfo(chainConfig);
+    final key = isTest ? 'service_test' : 'service';
+    final rpc = baseInfo?[key]?.toString().trim();
+    return rpc == null || rpc.isEmpty ? null : rpc;
+  }
+
+  /// Normalizes callers that provide either a full registry entry or baseInfo.
+  static Map<String, dynamic>? _baseInfo(Map<String, dynamic>? chainConfig) {
+    final nested = chainConfig?['baseInfo'];
+    if (nested is Map<String, dynamic>) return nested;
+    return chainConfig;
+  }
 }

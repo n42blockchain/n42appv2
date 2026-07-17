@@ -1,7 +1,36 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/pages/send/send_utils.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_chain_send_logic.dart';
 
 void main() {
+  group('Max gas estimate guard', () {
+    test('does not block Max from replacing an invalid amount', () {
+      expect(
+        shouldBlockGasEstimateForAmountError(
+          amountErrorMessage: 'Insufficient balance',
+          amountOverride: '0',
+        ),
+        isFalse,
+      );
+      expect(
+        shouldBlockGasEstimateForAmountError(
+          amountErrorMessage: 'Amount is required',
+          amountOverride: '0',
+        ),
+        isFalse,
+      );
+    });
+
+    test('keeps the invalid-amount guard for normal gas estimates', () {
+      expect(
+        shouldBlockGasEstimateForAmountError(
+          amountErrorMessage: 'Insufficient balance',
+        ),
+        isTrue,
+      );
+    });
+  });
+
   group('maxTransferableAmount', () {
     test('returns balance minus fee when spendable balance is positive', () {
       final result = maxTransferableAmount(

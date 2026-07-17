@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/pages/scan_page.dart';
+import 'package:n42_wallet/features/identity/services/id_hub_scan.dart';
 import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
@@ -81,6 +82,8 @@ Future<void> performScanQR(
   );
   if (!context.mounted) return;
   if (scanValue != null) {
+    // n42id:// scan-to-sign QR: route to the deep-link pipeline, not the address.
+    if (tryHandleIdHubScan(scanValue)) return;
     // M2: 若扫到 EIP-681 支付请求，取其收款地址而非原始 URI。
     final address = Eip681.resolveRecipient(scanValue);
     controller.text = address;
@@ -116,7 +119,11 @@ Future<void> showAddressPickerSheet(
     );
     if (!context.mounted) return;
     if (scanValue != null) {
-      onAddressSelected(Eip681.resolveRecipient(scanValue as String));
+      if (tryHandleIdHubScan(scanValue as String)) {
+        if (context.mounted) Navigator.pop(context);
+        return;
+      }
+      onAddressSelected(Eip681.resolveRecipient(scanValue));
     }
     if (context.mounted) Navigator.pop(context);
   }

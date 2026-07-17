@@ -36,6 +36,10 @@ class ImageNetWork extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (imageUrl.startsWith('assets/')) {
+      return Image.asset(imageUrl, width: width, height: height, fit: fit);
+    }
+
     Widget placeholderImage;
     if (placeholder != null) {
       placeholderImage = Image.asset(

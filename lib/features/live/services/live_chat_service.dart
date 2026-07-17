@@ -5,7 +5,7 @@ import 'package:n42_chat/n42_chat.dart';
 // matrix 为 n42_chat 传递依赖；此处仅借用其 Client 类型读写自定义 room state
 // （直播判活心跳），不经 n42_chat 封装（其仓库接口未暴露任意 state event 读写）。
 // ignore: depend_on_referenced_packages
-import 'package:matrix/matrix.dart' show Client;
+import 'package:matrix/matrix.dart' show Client, Membership;
 // 仓库接口未从 n42_chat 公共入口导出，经实现导入访问（集中于本文件）。
 // ignore_for_file: implementation_imports
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
@@ -96,12 +96,21 @@ class LiveChatService {
   /// 与 `topic` 同样存于本地已同步的 `room.states`，零额外订阅成本。
   static const String _liveStateType = 'n42.live.status';
 
+  /// Matrix 公共房目录无法读取自定义 state event，故专用直播房额外在 topic
+  /// 写一条机器可读的短心跳，供未入房的观众发现直播。房内真实判活仍只认
+  /// [_liveStateType]，不会把普通群聊 topic 当作直播信号。
+  static const String _directoryTopicPrefix = 'n42.live.directory:v1:';
+
   /// 直播心跳上报间隔（主播端周期刷新 state event 时间戳）。
   static const Duration heartbeatInterval = Duration(seconds: 30);
 
   /// 直播存活窗口：超过该时长无心跳即判定为已结束（主播崩溃/划掉时自动失活，
   /// 不留幽灵直播间）。须 > [heartbeatInterval] 以容忍一次丢拍。
   static const Duration liveTtl = Duration(seconds: 90);
+
+  /// 允许主播设备略快于本机；超出这个窗口的未来时间戳视为伪造，不允许把
+  /// 直播间长期钉在“直播中”。
+  static const Duration maxFutureHeartbeatSkew = Duration(minutes: 2);
 
   IMessageRepository get _msg => GetIt.instance<IMessageRepository>();
   IConversationRepository get _conv =>
@@ -116,11 +125,20 @@ class LiveChatService {
   Future<void> join(String roomId) async {
     await ensureLiveChatReady();
     await ensureAnonymousLogin();
-    try {
-      await _conv.joinConversation(roomId);
-    } catch (_) {
-      // 已在房内或加入失败时忽略；仍可订阅/发送。
-    }
+    if (_client?.getRoomById(roomId)?.membership == Membership.join) return;
+    await _conv.joinConversation(roomId);
+  }
+
+  /// 创建公开、非端对端加密的直播房。公开视频流需要让陌生观众按房间号加入，
+  /// 加密群房既无法进入公共目录，也不适合承载公开直播。
+  Future<String> createLiveRoom({required String name}) async {
+    await ensureLiveChatReady();
+    await ensureAnonymousLogin();
+    return _group.createGroup(
+      name: name.trim().isEmpty ? '直播' : name.trim(),
+      isPublic: true,
+      enableEncryption: false,
+    );
   }
 
   /// 订阅房间弹幕流（仅文本，按时间升序，取最近 [maxDanmu] 条）。
@@ -181,7 +199,10 @@ class LiveChatService {
         final e = _parseEvent(m);
         if (e != null) events.add(e);
       }
-      events.sort((a, b) => a.timestamp.compareTo(b.timestamp));
+      events.sort((a, b) {
+        final byTime = a.timestamp.compareTo(b.timestamp);
+        return byTime != 0 ? byTime : a.id.compareTo(b.id);
+      });
       return events;
     });
   }
@@ -238,14 +259,21 @@ class LiveChatService {
   /// 主播端：上报/刷新直播心跳（写入自定义 state event 的当前时间戳）。
   /// 开播后立即调一次、之后每 [heartbeatInterval] 调一次。失败静默。
   Future<void> markLive(String roomId) async {
+    final ms = DateTime.now().millisecondsSinceEpoch;
     try {
-      final ms = DateTime.now().millisecondsSinceEpoch;
       await _client?.setRoomStateWithKey(roomId, _liveStateType, '', {
         'live': true,
         'ts': ms,
       });
     } catch (_) {
       // 网络/权限问题；下一拍心跳会重试。
+    }
+    try {
+      await _client?.setRoomStateWithKey(roomId, 'm.room.topic', '', {
+        'topic': '$_directoryTopicPrefix$ms',
+      });
+    } catch (_) {
+      // 不影响房内直播；公共目录下次心跳会重试。
     }
   }
 
@@ -257,6 +285,13 @@ class LiveChatService {
       });
     } catch (_) {
       // 即便写失败，心跳停止后房间也会在 liveTtl 内自动失活。
+    }
+    try {
+      await _client?.setRoomStateWithKey(roomId, 'm.room.topic', '', {
+        'topic': '${_directoryTopicPrefix}ended',
+      });
+    } catch (_) {
+      // 目录最多在 liveTtl 内自然过期。
     }
   }
 
@@ -281,7 +316,7 @@ class LiveChatService {
       try {
         final room = _client?.getRoomById(roomId);
         if (room == null) return true;
-        return _parseLive(room.getState(_liveStateType)?.content);
+        return isLiveState(room.getState(_liveStateType)?.content);
       } catch (_) {
         return true;
       }
@@ -307,16 +342,61 @@ class LiveChatService {
 
   /// 解析自定义 state event 内容的直播标记：`live==true` 且最后心跳时间戳在
   /// [liveTtl] 窗口内才判活。
-  static bool _parseLive(Map<String, dynamic>? content) {
+  static bool isLiveState(Map<String, dynamic>? content, {DateTime? now}) {
     if (content == null || content['live'] != true) return false;
     final ms = content['ts'];
     if (ms is! int) return false;
     final last = DateTime.fromMillisecondsSinceEpoch(ms);
-    return DateTime.now().difference(last) < liveTtl;
+    return _isRecentHeartbeat(last, now ?? DateTime.now());
   }
 
-  /// 进房列表（直播广场）：需先初始化 + 登录，返回已加入的房间。
-  /// 直播客户端的匿名账户仅加入直播间，故这些会话即直播间。
+  /// 判断公共房目录中的 topic 心跳是否仍有效。仅匹配本模块固定前缀，避免
+  /// 误把普通公开聊天房列到直播广场。
+  static bool isDirectoryLiveTopic(String? topic, {DateTime? now}) {
+    if (topic == null || !topic.startsWith(_directoryTopicPrefix)) return false;
+    final ms = int.tryParse(topic.substring(_directoryTopicPrefix.length));
+    if (ms == null) return false;
+    return _isRecentHeartbeat(
+      DateTime.fromMillisecondsSinceEpoch(ms),
+      now ?? DateTime.now(),
+    );
+  }
+
+  static bool _isRecentHeartbeat(DateTime last, DateTime now) {
+    if (last.isAfter(now.add(maxFutureHeartbeatSkew))) return false;
+    return last.add(liveTtl).isAfter(now);
+  }
+
+  /// 发现 Matrix 公共目录中仍有有效直播心跳的房间。目录 topic 只用于未入房
+  /// 的发现；实际进房后仍由 [watchIsRoomLive] 的自定义 state event 判活。
+  Future<List<LiveRoomSummary>> discoverPublicLiveRooms({
+    int limit = 50,
+  }) async {
+    await ensureLiveChatReady();
+    await ensureAnonymousLogin();
+    final response = await _client?.queryPublicRooms(limit: limit);
+    if (response == null) return const <LiveRoomSummary>[];
+    final rooms =
+        response.chunk
+            .where((room) => isDirectoryLiveTopic(room.topic))
+            .map(
+              (room) => LiveRoomSummary(
+                id: room.roomId,
+                name: room.name?.trim().isNotEmpty == true
+                    ? room.name!
+                    : room.roomId,
+                memberCount: room.numJoinedMembers,
+                avatarUrl: room.avatarUrl?.toString(),
+                isLive: true,
+              ),
+            )
+            .toList()
+          ..sort((a, b) => b.memberCount.compareTo(a.memberCount));
+    return rooms;
+  }
+
+  /// 已加入房间的本地流，保留给断网缓存/兼容入口；直播广场应优先调用
+  /// [discoverPublicLiveRooms]，否则新观众无法发现尚未加入的公开直播。
   Future<Stream<List<LiveRoomSummary>>> watchRooms() async {
     await ensureLiveChatReady();
     await ensureAnonymousLogin();
@@ -329,7 +409,7 @@ class LiveChatService {
               name: c.name,
               memberCount: c.memberCount,
               avatarUrl: c.avatarUrl,
-              isLive: _parseLive(
+              isLive: isLiveState(
                 _client?.getRoomById(c.id)?.getState(_liveStateType)?.content,
               ),
             ),

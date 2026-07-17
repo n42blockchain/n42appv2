@@ -1,22 +1,18 @@
-import 'dart:io';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -54,12 +50,13 @@ const Map<String, Color> _kChainColors = {
 final _amountInputRegex = RegExp(r'^\d*\.?\d*');
 
 // ─── QR 数据 URI 构建（BIP-21 / EIP-681 / Solana Pay 等）──────────────────────
-String _buildQrData({
+String buildReceiveQrData({
   required String address,
   required String blockchainType,
   required String amount,
   String? erc20Contract,
   int erc20Decimals = 18,
+  int nativeDecimals = 18,
   int? chainId,
 }) {
   final trimmed = amount.trim();
@@ -82,8 +79,21 @@ String _buildQrData({
     }
   }
 
+  // EIP-681 的 value 必须是最小单位，不能直接把用户输入的 6 写成
+  // `value=6`，否则付款方会被解析为 6 wei 而非 6 个原生币。
+  if (blockchainType == 'Ethereum') {
+    try {
+      return Eip681.buildNative(
+        recipient: address,
+        chainId: chainId,
+        amountWei: decimalStringToBigInt(trimmed, nativeDecimals).toString(),
+      );
+    } catch (_) {
+      return address;
+    }
+  }
+
   final prefix = switch (blockchainType) {
-    'Ethereum' => 'ethereum:$address?value=',
     'Bitcoin' => 'bitcoin:$address?amount=',
     'Solana' => 'solana:$address?amount=',
     'TheOpenNetwork' => 'ton:transfer/$address?amount=',
@@ -116,13 +126,18 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   String blockchainType = ''; // 主链区块链类型（用于 URI 生成）
   String qrData = '';
 
-  final GlobalKey previewKey = GlobalKey();
+  // 当前选中的链/代币。切链后 chainId/decimals/contract 必须跟着走，
+  // 否则金额二维码会带上旧链参数（付款方会付错链/错代币）。
+  late CoinModel _selectedChainModel;
+  CoinModel? _selectedTokenModel;
+
   final TextEditingController amountCtrl = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _initData();
+    _hydrateMissingAddress();
     amountCtrl.addListener(_onAmountChanged);
   }
 
@@ -135,9 +150,11 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   }
 
   void _initData() {
+    _selectedChainModel = widget.chainCoinModel;
+    _selectedTokenModel = widget.tokenCoinModel;
     _applyChainData(
-      widget.chainCoinModel,
-      displayModel: widget.tokenCoinModel ?? widget.chainCoinModel,
+      _selectedChainModel,
+      displayModel: _selectedTokenModel ?? _selectedChainModel,
     );
   }
 
@@ -153,31 +170,68 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     // coinType 始终取主链（用于品牌色；token 地址也在同一链上）
     coinType = chainModel.config.coinType;
     symbol = dm.config.miniName;
-    address = dm.address;
+    // 代币收款始终使用父链账户地址。token 模型本身可能尚未同步 address，
+    // 过去会把空字符串交给二维码组件，结果页面只显示空白。
+    // 取址回退链与 _hasAddress 保持一致（address → addressType[addrType]），
+    // 否则仅 addressType 有值的链通过筛选后会渲染空地址二维码。
+    final chainAddr = _extractAddress(chainModel);
+    address = chainAddr.isNotEmpty ? chainAddr : _extractAddress(dm);
     qrData = address;
   }
 
+  static String _extractAddress(CoinModel coin) {
+    final direct = coin.address?.toString().trim() ?? '';
+    if (direct.isNotEmpty) return direct;
+    return coin.addressType[coin.addrType]?.toString().trim() ?? '';
+  }
+
+  Future<void> _hydrateMissingAddress() async {
+    if (address.isNotEmpty) return;
+    try {
+      await buildCoinWallet(widget.chainCoinModel, ref.read(wapBridgeProvider));
+    } catch (e) {
+      debugPrint('WalletReceiveQr: derive address failed: $e');
+      return;
+    }
+    if (!mounted) return;
+    // 用户可能已切到别的链，补出来的初始链地址不能覆盖当前选择。
+    if (!identical(_selectedChainModel, widget.chainCoinModel)) return;
+    setState(() {
+      _applyChainData(
+        _selectedChainModel,
+        displayModel: _selectedTokenModel ?? _selectedChainModel,
+      );
+    });
+  }
+
   void _onAmountChanged() {
-    final token = widget.tokenCoinModel;
-    final newData = _buildQrData(
+    final token = _selectedTokenModel;
+    final newData = buildReceiveQrData(
       address: address,
       blockchainType: blockchainType,
       amount: amountCtrl.text,
       erc20Contract: token?.config.contract,
       erc20Decimals: token?.config.decimals ?? 18,
-      chainId: widget.chainCoinModel.config.chainId,
+      nativeDecimals: _selectedChainModel.config.decimals,
+      chainId: _selectedChainModel.config.chainId,
     );
     setState(() => qrData = newData);
   }
 
   /// 切换到另一条链接收
   void _switchChain(CoinModel cm) {
-    if (cm.address.isEmpty) return;
+    if (!_hasAddress(cm)) return;
     setState(() {
+      _selectedChainModel = cm;
+      _selectedTokenModel = null; // 切链后收该链原生币
       _applyChainData(cm);
       amountCtrl.clear(); // 不同链单位不同，清空金额
     });
   }
+
+  static bool _hasAddress(CoinModel coin) =>
+      coin.address?.toString().trim().isNotEmpty == true ||
+      coin.addressType[coin.addrType]?.toString().trim().isNotEmpty == true;
 
   // ─── 复制地址 ───────────────────────────────────────────────────────────────
 
@@ -194,41 +248,15 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     );
   }
 
-  // ─── 截图分享（只截 QR 卡片区）────────────────────────────────────────────
-
-  Future<void> _shareScreenshot() async {
-    try {
-      final boundary =
-          previewKey.currentContext!.findRenderObject()
-              as RenderRepaintBoundary;
-      final image = await boundary.toImage(pixelRatio: 3.0);
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      if (byteData == null) return;
-      final bytes = byteData.buffer.asUint8List();
-
-      final tempDir = await getTemporaryDirectory();
-      final file = await File(
-        '${tempDir.path}/receive_qr.png',
-      ).create(recursive: true);
-      await file.writeAsBytes(bytes);
-
-      if (!mounted) return;
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [XFile(file.path, mimeType: 'image/png')],
-          subject: S.of(context).g_key_156, // "Scan to copy address"
-          text: S.of(context).g_key_179, // "This is my wallet address"
-        ),
-      );
-    } catch (e) {
-      AppLogger.w('WalletReceiveQr', 'share failed: $e');
-    }
-  }
-
   /// 分享收款链接（地址文本 / payment URI）
   Future<void> shareLink() async {
-    // 有金额时分享完整 URI（如 ethereum:0x...?value=0.5）；无金额时仅分享地址
-    final shareText = qrData.isNotEmpty ? qrData : address;
+    final amount = amountCtrl.text.trim();
+    final s = S.of(context);
+    final shareText = amount.isEmpty
+        ? '${s.g_key_33} $symbol\n$address'
+        : '${s.g_key_receive_request_line(amount, symbol, network)}\n'
+              '${s.g_key_address}: $address\n'
+              '${s.g_key_receive_payment_request}: $qrData';
     if (!mounted) return;
     await SharePlus.instance.share(
       ShareParams(
@@ -247,27 +275,13 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   @override
   Widget build(BuildContext context) {
     final waValue = ref.watch(wapBridgeProvider);
-    final su = ScreenUtil();
-
     final bgColor = AppColorTokens.of(context).bgBase;
     final mainText = AppColorTokens.of(context).textPrimary;
     final blueColor = AppColorTokens.of(context).brand;
-    final w40 = su.setWidth(40.0);
-
     return Scaffold(
       appBar: AppBarWidget(
         text: '${S.of(context).g_key_33}($symbol)',
-        actions: [
-          InkWell(
-            onTap: _shareScreenshot,
-            child: Container(
-              width: w40,
-              height: w40,
-              margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
-              child: Icon(Icons.share, size: w40, color: blueColor),
-            ),
-          ),
-        ],
+        actions: const [],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

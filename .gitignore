@@ -28,7 +28,8 @@ bin-release/
 build/
 .pub-cache/
 .pub/
-pubspec.lock
+# Application dependency resolution is tracked at the repository root only.
+packages/*/pubspec.lock
 
 # IDE specific
 .idea/

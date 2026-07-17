@@ -2,6 +2,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_utils.dart';
 
 void main() {
+  group('normalizeExplorerPayload', () {
+    test('decodes a JSON response delivered as text', () {
+      expect(normalizeExplorerPayload('{"result":[]}'), {'result': []});
+    });
+
+    test('returns null for a non-JSON explorer error page', () {
+      expect(normalizeExplorerPayload('rate limit exceeded'), isNull);
+    });
+  });
+
   group('extractExplorerItems', () {
     test('flattens TokenView txlist payloads with nested txs', () {
       final items = extractExplorerItems({

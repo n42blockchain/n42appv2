@@ -6,6 +6,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/fil_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xtz_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/zil_api.dart';
+import 'package:n42_wallet/features/wallet/api/sender/evm_sender.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
@@ -76,7 +77,7 @@ class TransactionStateResolver {
 
   Future<int> _resolveEth(TransationRecordModel trm) async {
     final bool isTest = trm.isTest != 0;
-    final String? customRpc = _customRpc(trm);
+    final String? customRpc = _receiptRpc(trm);
     final MessageModel mm = await _tokenViewApi.getTransactionReceiptEth(
       trm.coin['coinType'],
       trm.txHash,
@@ -85,7 +86,9 @@ class TransactionStateResolver {
     );
     if (mm.error) return 0;
 
-    if (trm.coin['coinType'] == CoinType.S.name) {
+    if (customRpc != null) {
+      // eth_getTransactionReceipt 对 pending 交易返回 null，不是错误。
+      if (mm.data == null) return 0;
       return _statusFromHex(mm.data['status']);
     }
     if (mm.data['error']['code'] != 0) return -1;
@@ -153,7 +156,7 @@ class TransactionStateResolver {
 
   Future<int> _resolveEvmCompatible(TransationRecordModel trm) async {
     final bool isTest = trm.isTest != 0;
-    final String? customRpc = _customRpc(trm);
+    final String? customRpc = _receiptRpc(trm);
     final MessageModel mm = await _tokenViewApi.getTransactionReceiptEth(
       trm.coin['coinType'],
       trm.txHash,
@@ -161,6 +164,10 @@ class TransactionStateResolver {
       rpc: customRpc,
     );
     if (mm.error) return 0;
+    if (customRpc != null) {
+      if (mm.data == null) return 0;
+      return _statusFromHex(mm.data['status']);
+    }
     if (mm.data['error']['code'] != 0) return -1;
     return _statusFromHex(mm.data['result']['status']);
   }
@@ -184,9 +191,9 @@ class TransactionStateResolver {
     return 0;
   }
 
-  /// 返回自定义 RPC URL（如有），否则返回 null
-  String? _customRpc(TransationRecordModel trm) {
-    if (trm.coin['custom'] != true) return null;
-    return trm.isTest == 0 ? trm.coin['service'] : trm.coin['service_test'];
-  }
+  /// 返回 EVM 交易记录的链 RPC。与发送侧（EvmSender.resolveRpcOverride）保持
+  /// 同一套解析：凡配置了链 RPC 的都直连查收据，否则经交易在链上广播成功、
+  /// 收据却走不路由该链的 TokenView 后端，会永远停在 pending。
+  String? _receiptRpc(TransationRecordModel trm) =>
+      EvmSender.resolveRpcOverride(trm.coin, isTest: trm.isTest != 0);
 }

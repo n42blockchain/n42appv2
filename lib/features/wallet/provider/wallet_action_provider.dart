@@ -82,6 +82,10 @@ class WalletActionProvider extends ChangeNotifier
 
   Map<int, List<CoinModel>> coinRefreshMap = {};
 
+  // Each asynchronous list rebuild claims a revision. A slower rebuild for a
+  // previously selected network must not replace the latest filtered list.
+  int _coinListBuildRevision = 0;
+
   // ── 置顶同步缓存（避免无变化时重复遍历）────────────────────────────────────
   /// 上次 _syncPinnedState 时的 fingerprint；格式：pinnedHash|coinListLength
   String _lastSyncFingerprint = '';

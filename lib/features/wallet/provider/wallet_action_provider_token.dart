@@ -89,6 +89,13 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   Future<void> buildCoinModelInfo() async {
+    // Callers such as token refresh and chain visibility changes must retain
+    // the user's selected network instead of silently rebuilding every chain.
+    if (walletInfo.networkIndex != -1) {
+      return buildCoinModelInfoWithCoin();
+    }
+
+    final revision = ++_coinListBuildRevision;
     coinList = [];
     _aggregatedCoins = [];
     int ethIndex = -1; // 记录 ETH 的位置，用于后续插入聚合代币
@@ -96,6 +103,9 @@ extension WalletActionProviderToken on WalletActionProvider {
     for (int i = 0; i < _coinModels.length; i++) {
       CoinModel mm = _coinModels[i];
       await buildCoinWallet(mm, this);
+      if (revision != _coinListBuildRevision || walletInfo.networkIndex != -1) {
+        return;
+      }
       applyCachedBalance(mm);
       if (mm.showList) {
         coinList.add(mm);
@@ -112,7 +122,13 @@ extension WalletActionProviderToken on WalletActionProvider {
     }
 
     // 在所有代币添加完成后，插入聚合代币
+    if (revision != _coinListBuildRevision || walletInfo.networkIndex != -1) {
+      return;
+    }
     await _insertAggregatedTokensAt(0); // 先插入，后面会排序
+    if (revision != _coinListBuildRevision || walletInfo.networkIndex != -1) {
+      return;
+    }
 
     // 同步置顶状态并应用优先级排序
     _syncPinnedState();
@@ -144,47 +160,32 @@ extension WalletActionProviderToken on WalletActionProvider {
 
   //加载指定network的币
   Future<void> buildCoinModelInfoWithCoin() async {
+    final selectedNetworkIndex = walletInfo.networkIndex;
+    if (selectedNetworkIndex < 0 ||
+        selectedNetworkIndex >= _coinModels.length) {
+      // A removed/reordered chain can leave a stale persisted index behind.
+      // Fall back to all networks instead of recursing through this method.
+      walletInfo.networkIndex = -1;
+      return buildCoinModelInfo();
+    }
+
+    final revision = ++_coinListBuildRevision;
     coinList = [];
     _aggregatedCoins = [];
-    int ethIndex = -1; // 记录 ETH 的位置
-
-    if (walletInfo.networkIndex == -1) {
-      for (int i = 0; i < _coinModels.length; i++) {
-        CoinModel mm = _coinModels[i];
-        await buildCoinWallet(mm, this);
-        if (mm.showList) {
-          applyCachedBalance(mm);
-          coinList.add(mm);
-
-          // 记录 ETH 的位置
-          if (mm.config.coinType == 'ETH' && ethIndex == -1) {
-            ethIndex = coinList.length;
-          }
-        }
-        for (final token in mm.tokens.values) {
-          coinList.add(buildTokenCoinModel(mm, token));
-        }
-        refresh();
-      }
-
-      // 在所有代币添加完成后，插入聚合代币
-      await _insertAggregatedTokensAt(0);
-
-      // 同步置顶状态并应用优先级排序
-      _syncPinnedState();
-      _applyPriorityOrder();
-      _elevatePinnedToTop();
-    } else {
-      CoinModel mm = _coinModels[walletInfo.networkIndex];
-      if (mm.showList) {
-        applyCachedBalance(mm);
-        coinList.add(mm);
-      }
-      for (final token in mm.tokens.values) {
-        coinList.add(buildTokenCoinModel(mm, token));
-      }
-      _syncPinnedState();
+    CoinModel mm = _coinModels[selectedNetworkIndex];
+    await buildCoinWallet(mm, this);
+    if (revision != _coinListBuildRevision ||
+        walletInfo.networkIndex != selectedNetworkIndex) {
+      return;
     }
+    if (mm.showList) {
+      applyCachedBalance(mm);
+      coinList.add(mm);
+    }
+    for (final token in mm.tokens.values) {
+      coinList.add(buildTokenCoinModel(mm, token));
+    }
+    _syncPinnedState();
     // 排序时保持优先级（如果有自定义排序，之后会覆盖）
     if (walletInfo.coinSort['assets'] == -1 &&
         walletInfo.coinSort['name'] == -1) {
@@ -192,6 +193,10 @@ extension WalletActionProviderToken on WalletActionProvider {
       _elevatePinnedToTop();
     } else {
       coinSortAssets(); // coinSortAssets 内部已调用 _elevatePinnedToTop
+    }
+    if (revision != _coinListBuildRevision ||
+        walletInfo.networkIndex != selectedNetworkIndex) {
+      return;
     }
     refresh();
     calculateBalanceWidthCoinModel();
@@ -218,9 +223,7 @@ extension WalletActionProviderToken on WalletActionProvider {
   Future<void> reBuildCoin(WalletInfo wInfo, String coinType) async {
     _walletInfoLsit[walletIndex] = wInfo;
     saveWalletInfo(walletInfo, walletIndex);
-    final cIndex = _coinModels.indexWhere(
-      (e) => e.config.coinType == coinType,
-    );
+    final cIndex = _coinModels.indexWhere((e) => e.config.coinType == coinType);
     _coinModels[cIndex].coin = walletMap[coinType]['baseInfo'];
     _coinModels[cIndex].pathIndex = walletMap[coinType]['pathIndex'];
     _coinModels[cIndex].addrType = walletMap[coinType]['addrType'];

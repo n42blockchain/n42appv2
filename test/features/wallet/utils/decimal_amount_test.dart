@@ -11,8 +11,14 @@ import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 void main() {
   group('decimalStringToBigInt', () {
     test('integer and plain decimal', () {
-      expect(decimalStringToBigInt('1', 18), BigInt.parse('1000000000000000000'));
-      expect(decimalStringToBigInt('0.5', 18), BigInt.parse('500000000000000000'));
+      expect(
+        decimalStringToBigInt('1', 18),
+        BigInt.parse('1000000000000000000'),
+      );
+      expect(
+        decimalStringToBigInt('0.5', 18),
+        BigInt.parse('500000000000000000'),
+      );
       expect(decimalStringToBigInt('123.456', 6), BigInt.from(123456000));
     });
 
@@ -46,7 +52,10 @@ void main() {
 
     test('USDC-style decimals=6', () {
       expect(decimalStringToBigInt('0.123456', 6), BigInt.from(123456));
-      expect(decimalStringToBigInt('1000000', 6), BigInt.parse('1000000000000'));
+      expect(
+        decimalStringToBigInt('1000000', 6),
+        BigInt.parse('1000000000000'),
+      );
     });
 
     test('rejects malformed input', () {
@@ -65,15 +74,17 @@ void main() {
       expect(doubleAmountToBigInt(0.0000001, 18), BigInt.parse('100000000000'));
     });
 
-    test('large value precision: old float path drifted, string path exact',
-        () {
-      // 12345.678901234567 是 double 可精确往返的值；
-      // 旧实现 (v*1e18).round() 在这个量级误差可达数百 wei。
-      expect(
-        doubleAmountToBigInt(12345.678901234567, 18),
-        BigInt.parse('12345678901234567000000'),
-      );
-    });
+    test(
+      'large value precision: old float path drifted, string path exact',
+      () {
+        // 12345.678901234567 是 double 可精确往返的值；
+        // 旧实现 (v*1e18).round() 在这个量级误差可达数百 wei。
+        expect(
+          doubleAmountToBigInt(12345.678901234567, 18),
+          BigInt.parse('12345678901234567000000'),
+        );
+      },
+    );
 
     test('rejects NaN and infinity', () {
       expect(() => doubleAmountToBigInt(double.nan, 18), throwsFormatException);
@@ -81,6 +92,39 @@ void main() {
         () => doubleAmountToBigInt(double.infinity, 18),
         throwsFormatException,
       );
+    });
+  });
+
+  group('transfer input precision', () {
+    test('rejects a fractional digit beyond the token decimals', () {
+      expect(hasAtMostDecimalPlaces('1.123456', 6), isTrue);
+      expect(hasAtMostDecimalPlaces('1.1234567', 6), isFalse);
+      expect(hasAtMostDecimalPlaces('1.0', 0), isFalse);
+      expect(hasAtMostDecimalPlaces('1', 0), isTrue);
+    });
+
+    test('formats MAX from BigInt without double precision loss', () {
+      expect(
+        bigIntToDecimalString(BigInt.parse('123456789123456789012345678'), 18),
+        '123456789.123456789012345678',
+      );
+      expect(bigIntToDecimalString(BigInt.from(1000000), 6), '1');
+    });
+
+    test('formatter keeps intermediate input but rejects excess decimals', () {
+      final formatter = DecimalPlacesInputFormatter(2);
+      const oldValue = TextEditingValue(text: '1.23');
+      final accepted = formatter.formatEditUpdate(
+        oldValue,
+        const TextEditingValue(text: '1.2'),
+      );
+      final rejected = formatter.formatEditUpdate(
+        oldValue,
+        const TextEditingValue(text: '1.234'),
+      );
+
+      expect(accepted.text, '1.2');
+      expect(rejected.text, oldValue.text);
     });
   });
 }

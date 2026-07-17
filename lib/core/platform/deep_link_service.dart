@@ -30,6 +30,12 @@ enum DeepLinkType {
   /// Chat SSO/OIDC 登录回调
   chatSso,
 
+  /// N42 ID Hub 钱包绑定扫码（n42id://bind?sid=...&hub=...）
+  idHubBind,
+
+  /// N42 ID Hub 跨设备登录授权扫码（n42id://auth?sid=...&hub=...）
+  idHubAuth,
+
   /// 未知类型
   unknown,
 }
@@ -46,6 +52,8 @@ class DeepLinkData {
     'password',
     'privateKey',
     'mnemonic',
+    // n42id bind/auth session id is a capability token - redact from logs.
+    'sid',
   };
 
   /// 链接类型
@@ -120,8 +128,10 @@ class DeepLinkService {
   /// 初始化服务
   Future<void> init() async {
     try {
-      final initialUri = await _appLinks.getInitialLink()
-          .timeout(const Duration(seconds: 5), onTimeout: () => null);
+      final initialUri = await _appLinks.getInitialLink().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => null,
+      );
       if (initialUri != null) _handleUri(initialUri);
     } catch (e) {
       AppLogger.w('DeepLink', 'failed to get initial link: $e');
@@ -137,10 +147,7 @@ class DeepLinkService {
 
   void _handleUri(Uri uri) {
     // 诊断日志默认脱敏 query 参数。
-    AppLogger.d(
-      'DeepLink',
-      'received: ${DeepLinkData.redactUri(uri)}',
-    );
+    AppLogger.d('DeepLink', 'received: ${DeepLinkData.redactUri(uri)}');
 
     final data = _parseUri(uri);
     _lastDeepLink = data;
@@ -151,7 +158,17 @@ class DeepLinkService {
 
   DeepLinkData _parseUri(Uri uri) {
     // Scheme whitelist: only process known safe schemes
-    const allowedSchemes = {'n42', 'n42app', 'astraapp', 'https', 'http', 'wc', ''};
+    const allowedSchemes = {
+      'n42',
+      'n42app',
+      'n42wallet',
+      'n42id',
+      'astraapp',
+      'https',
+      'http',
+      'wc',
+      '',
+    };
     if (!allowedSchemes.contains(uri.scheme.toLowerCase())) {
       AppLogger.w(
         'DeepLink',
@@ -168,8 +185,13 @@ class DeepLinkService {
         params: {'wcUri': parsedWcUri.toString()},
       );
     }
-    if (uri.scheme == 'n42' || uri.scheme == 'n42app') {
+    if (uri.scheme == 'n42' ||
+        uri.scheme == 'n42app' ||
+        uri.scheme == 'n42wallet') {
       return _parseN42Uri(uri);
+    }
+    if (uri.scheme == 'n42id') {
+      return _parseN42IdUri(uri);
     }
     if (uri.scheme == 'astraapp') {
       return _parseAstraAppUri(uri);
@@ -255,6 +277,32 @@ class DeepLinkService {
       type: config.type,
       uri: uri,
       params: {config.key: sanitizedId, ...uri.queryParameters},
+    );
+  }
+
+  /// N42 ID Hub scan-to-sign links:
+  /// - n42id://bind?sid=...&hub=https://id.n42.ai (wallet binding)
+  /// - n42id://auth?sid=...&hub=https://id.n42.ai (cross-device login)
+  ///
+  /// Only sid + hub are carried; the message to sign is fetched from the hub
+  /// later (never embedded here). The hub host is validated downstream against
+  /// the allowlist before any signature is sent.
+  DeepLinkData _parseN42IdUri(Uri uri) {
+    final type = switch (uri.host) {
+      'bind' => DeepLinkType.idHubBind,
+      'auth' => DeepLinkType.idHubAuth,
+      _ => DeepLinkType.unknown,
+    };
+    if (type == DeepLinkType.unknown) {
+      return _unknownLink(uri, uri.queryParameters);
+    }
+    return DeepLinkData(
+      type: type,
+      uri: uri,
+      params: {
+        'sid': _sanitizeId(uri.queryParameters['sid'] ?? ''),
+        'hub': uri.queryParameters['hub'] ?? '',
+      },
     );
   }
 

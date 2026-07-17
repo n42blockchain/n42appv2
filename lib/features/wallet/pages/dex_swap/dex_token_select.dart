@@ -1,5 +1,6 @@
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
@@ -24,6 +25,7 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
   List<DexTokenModel> _filtered = [];
   bool _loading = true;
   String _error = '';
+  bool _usingFallback = false;
 
   bool _remoteSearching = false;
   List<DexTokenModel> _remoteResults = [];
@@ -57,26 +59,57 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
     try {
       final res = await _api.getTokens(widget.chain);
       if (!mounted) return;
+      final fallback = DexFallbackTokens.forChain(widget.chain);
       if (res.error) {
+        final reason = res.data?.toString() ?? 'Load failed';
+        if (fallback.isNotEmpty) {
+          _applyFallback(fallback, reason);
+          return;
+        }
         setState(() {
           _loading = false;
-          _error = res.data?.toString() ?? 'Load failed';
+          _error = reason;
         });
         return;
       }
       final list = _parseTokens(res.data);
+      if (list.isEmpty && fallback.isNotEmpty) {
+        _applyFallback(fallback, 'token service returned an empty list');
+        return;
+      }
       setState(() {
         _loading = false;
+        _usingFallback = false;
         _all = list;
         _filtered = list;
       });
     } catch (e) {
       if (!mounted) return;
+      final fallback = DexFallbackTokens.forChain(widget.chain);
+      if (fallback.isNotEmpty) {
+        _applyFallback(fallback, e.toString());
+        return;
+      }
       setState(() {
         _loading = false;
         _error = e.toString();
       });
     }
+  }
+
+  /// 兜底列表只是「服务不可用时仍能选币」的降级，必须让用户知道看到的不是
+  /// 完整列表，同时把被替换掉的原始错误记进日志。
+  void _applyFallback(List<DexTokenModel> fallback, String reason) {
+    AppLogger.w(
+      'DexTokenSelect',
+      'falling back to offline tokens on ${widget.chain}: $reason',
+    );
+    setState(() {
+      _loading = false;
+      _usingFallback = true;
+      _all = fallback;
+      _filtered = fallback;
+    });
   }
 
   static final _evmHexRe = RegExp(r'^[0-9a-fA-F]{40}$');
@@ -207,7 +240,36 @@ class _DexTokenSelectState extends State<DexTokenSelect> {
               ),
             ),
           ),
+          if (_usingFallback) _buildFallbackBanner(),
           Expanded(child: _buildBody()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFallbackBanner() {
+    final colors = AppColorTokens.of(context);
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space4,
+      ),
+      decoration: BoxDecoration(
+        color: colors.warning.withValues(alpha: 0.12),
+        borderRadius: AppRadius.brSm,
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.cloud_off_rounded, size: 16, color: colors.warning),
+          SizedBox(width: AppSpacing.space4),
+          Expanded(
+            child: Text(
+              S.of(context).g_key_dex_tokens_offline,
+              style: AppTypography.caption.copyWith(color: colors.warning),
+            ),
+          ),
         ],
       ),
     );

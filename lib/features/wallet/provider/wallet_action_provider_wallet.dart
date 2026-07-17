@@ -170,6 +170,48 @@ extension WalletActionProviderWallet on WalletActionProvider {
           if (storedBase is! Map) continue;
 
           bool changed = false;
+          // 早期版本曾把已保存的 S 链 baseInfo 按 ETH 回退，导致 Sonic 资产
+          // 显示为 ETH，并把余额、转账和交易记录请求发到以太坊。链 key 已明确
+          // 是 S，因此以规范 Sonic 元数据修复身份字段；余额缓存保留，稍后会按
+          // Sonic RPC 刷新。
+          if (chainKey == CoinType.S.name &&
+              (storedBase['coinType'] != CoinType.S.name ||
+                  storedBase['name'] != canonicalBase['name'])) {
+            const sonicIdentityKeys = <String>{
+              'blockchainType',
+              'coinType',
+              'icon',
+              'name',
+              'miniName',
+              'unit',
+              'decimals',
+              'mKey',
+              'path',
+              'chainId',
+              'chainId_test',
+              'contract',
+              'contract_test',
+              'canEdit',
+              'rules',
+            };
+            for (final key in sonicIdentityKeys) {
+              if (canonicalBase.containsKey(key) &&
+                  storedBase[key] != canonicalBase[key]) {
+                storedBase[key] = _deepCopyValue(canonicalBase[key]);
+                changed = true;
+              }
+            }
+            for (final key in const <String>[
+              'mainnetChainID',
+              'testnetChainID',
+            ]) {
+              if (chainConfig.containsKey(key) &&
+                  storedChain[key] != chainConfig[key]) {
+                storedChain[key] = chainConfig[key];
+                changed = true;
+              }
+            }
+          }
           final canonicalService = canonicalBase['service'];
           final canonicalServiceTest = canonicalBase['service_test'];
           if (canonicalService != null &&
@@ -181,6 +223,32 @@ extension WalletActionProviderWallet on WalletActionProvider {
               storedBase['service_test'] != canonicalServiceTest) {
             storedBase['service_test'] = canonicalServiceTest;
             changed = true;
+          }
+
+          // 链注册表新增的官方代币也要同步到已有钱包。过去只新增整条链，
+          // 导致已创建钱包永远看不到后来接入的官方 ERC-20（如 N42 上的
+          // S Coin），而新创建的钱包却正常，造成版本间资产展示不一致。
+          final canonicalTokens = chainConfig['mainnets'];
+          final storedTokens = storedChain['mainnets'];
+          if (canonicalTokens is Map && storedTokens is Map) {
+            for (final entry in canonicalTokens.entries) {
+              final canonicalToken = entry.value;
+              final canonicalContract = canonicalToken is Map
+                  ? canonicalToken['contract']?.toString().toLowerCase()
+                  : null;
+              final alreadyAdded =
+                  storedTokens.containsKey(entry.key) ||
+                  (canonicalContract != null &&
+                      storedTokens.values.any((token) {
+                        return token is Map &&
+                            token['contract']?.toString().toLowerCase() ==
+                                canonicalContract;
+                      }));
+              if (!alreadyAdded) {
+                storedTokens[entry.key] = _deepCopyValue(entry.value);
+                changed = true;
+              }
+            }
           }
           if (changed) hasChanges = true;
         }
@@ -198,6 +266,12 @@ extension WalletActionProviderWallet on WalletActionProvider {
         );
       }
     }
+  }
+
+  dynamic _deepCopyValue(dynamic value) {
+    if (value is Map) return _deepCopyMap(value);
+    if (value is List) return _deepCopyList(value);
+    return value;
   }
 
   //创建钱包

@@ -82,7 +82,9 @@ void main() {
           for (final entry in map.entries) {
             if (entry.value is Map) {
               final main = (entry.value as Map)['main'];
-              if (main is String) {
+              // 空字符串是显式的功能开关（如 idHubHost：留空=功能保持关闭
+              // 的优雅降级），只对已配置的 URL 强制 HTTPS。
+              if (main is String && main.isNotEmpty) {
                 expect(
                   main.startsWith('https://'),
                   true,

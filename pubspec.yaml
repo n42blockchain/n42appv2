@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.4+2026070910
+version: 2.4.5+2026070910
 
 environment:
   sdk: ">=3.11.5 <4.0.0"
@@ -108,7 +108,8 @@ dependencies:
   pinput: ^6.0.2
 
   # === QR Code ===
-  qr_code_scanner_plus: ^2.0.14
+  # 2.1.x conflicts with the current iOS generated plugin registrant.
+  qr_code_scanner_plus: 2.0.14
 
   # === Device Info ===
   device_info_plus: ^12.3.0
@@ -166,6 +167,8 @@ dependencies:
 # matrix_dart_sdk which pins an older version via vodozemac dependency chain
 dependency_overrides:
   flutter_secure_storage: ^10.0.0
+  # 7.2.0 conflicts with the current iOS generated plugin registrant.
+  flutter_facebook_auth: 7.1.5
 
 dev_dependencies:
   flutter_test:

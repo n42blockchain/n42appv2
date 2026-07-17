@@ -151,7 +151,8 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
   取最近 100 条（`maxDanmu`，避免高频弹幕整列表重建）。
 - `send(roomId, text)`：`IMessageRepository.sendTextMessage`。
 - `watchEnter(roomId) → Stream<String>`：`IGroupRepository.watchMemberJoinEvents`（进场横幅）。
-- `watchRooms() → Stream<List<LiveRoomSummary>>`：`IConversationRepository.watchConversations`（直播列表；
+- `discoverPublicLiveRooms()`：查询 Matrix 公共目录，筛选专用 `n42.live.directory:v1:<ts>` topic 心跳，
+  使未加入直播房的观众也能发现正在播的公开房；`watchRooms()` 保留为已加入房间的本地缓存/兼容入口。
   匿名账户仅加入直播间，故已加入会话即直播间）。
 
 UI：`danmu_overlay`（半透明滚动、自动到底）、`danmu_input_bar`（发送节流 `minInterval` 默认 800ms 防刷屏）、
@@ -226,7 +227,7 @@ collateral                                                                     /
 ### 6.4b Matrix 事件溯源实现（`data/prediction_replay.dart` + `matrix_prediction_repository.dart`，当前默认）
 跨设备同步靠**事件溯源**：每个动作（create/buy/sell/resolve/cancel/close）作为一条事件经直播间
 Matrix room 的 timeline 广播；各端用纯函数引擎 `PredictionReplay` 按**同一时间线顺序**重放进同一套
-LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.dart` 14 例验证确定性/多用户/结算/
+LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.dart` 覆盖确定性/多用户/结算/
 过期/守护/resolver 鉴权）。
 - `MatrixPredictionRepository`：per-room 常驻订阅维护 `_latest` 重放态，`_changes` tick 驱动所有 `watch*`；
   `marketId` 内嵌 `roomId`（`~` 分隔）以便仅有 marketId 时反解房间；余额 = 初始 + 各房 `tradeDelta(我)` +
@@ -237,9 +238,10 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
   在发送前也做同样的客户端预检（立即报 `PredictionError.notResolver`，不浪费网络往返），并对非法状态
   转移（如对已取消市场开奖）显式抛 `invalidState`（对齐 mock 行为，而非静默丢弃让用户以为操作生效了）；
   真正的强制边界始终在重放层，预检只是即时反馈。
-- **限制**：`minShares` 滑点跨端无法强制（成交份额由各端定序后才定，仅本地预检）；**无余额权威节点**
-  （可超额下注，play-money 演示可接受）；`_ensureRoom` 的订阅只在整个仓库销毁时统一清理，单房间从不
-  单独释放（访问过的房间越多订阅越多，量级有限、影响可控）。真实资金仍须 `ChainPredictionRepository`。
+- **边界与限制**：买/卖事件内含 `minShares`/`minCollateral`，重放层会按最终时间线状态强制执行滑点保护；
+  非法结果、非有限金额和异常建市载荷会被丢弃。每个用户在每个直播房有 `initialBalance` 的试玩额度，
+  超额买单会被所有客户端一致拒绝。它不是跨房账户余额、更不是链上资产；真实资金与统一余额仍须
+  `ChainPredictionRepository` 及托管合约。持续订阅归零时会释放对应房间的重放状态。
   **Matrix 同步链路需两机真机验证**（Codex T14 已验自动化通过，设备闸门待解除）。
 
 ### 6.5 Providers（`prediction/providers/prediction_providers.dart`）
@@ -296,8 +298,9 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 - SFU：`wss://livekit.m.si46.world`；JWT 签发：`https://m.si46.world/livekit/jwt`。
 - 经 `/.well-known/matrix/client` 的 `org.matrix.msc4143.rtc_foci`（type=livekit）或 `n42.livekit` 暴露，供客户端自动发现。
 - JWT 请求（Bearer Matrix accessToken）体含 `room/identity/name/video/role/conversation_id`，需返回含 `token` 的 JSON。
-- 🔴 **上线前必做（安全）**：当前端点**不区分角色**（默认人人可推流）。需按 `role` 签发 grant：
-  主播 `canPublish=true`，观众 `canPublish=false`（客户端已传 `role`，服务端待实现）。否则观众也能抢推流。
+- 🔴 **上线前必做（安全）**：JWT 服务必须按 `role` 签发 grant，并验证 broadcaster 是该直播房的授权创建者：
+  主播 `canPublish=true`，观众 `canPublish=false`。客户端已传 `role`；此仓库没有该外部 JWT 服务的部署源码，
+  必须在服务端完成并以 viewer token 实测拒绝发布，否则观众仍可能抢推流。
 
 ### 9.3 预测市场托管合约（测试网，另一个 repo）
 详见 [`prediction/CHAIN_INTEGRATION.md`](prediction/CHAIN_INTEGRATION.md)：
@@ -309,7 +312,8 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 
 ### 9.4 直播目录后端（可选，P1）
 - 提供 `{matrixRoomId, title, broadcasterId, isLive}` 列表与绑定。
-- 可由 LiveKit `on_publish` webhook 触发建/标直播间。MVP 用 `watchConversations` 客户端列表替代。
+- 可由 LiveKit `on_publish` webhook 触发建/标直播间。当前 MVP 用 Matrix 公共目录 topic 短心跳发现；生产目录应改为
+  有签名的服务端记录，避免客户端时钟和公开 state 写权限成为权威来源。
 
 ---
 

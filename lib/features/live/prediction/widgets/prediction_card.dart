@@ -22,7 +22,13 @@ class PredictionCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final markets = ref.watch(roomMarketsProvider(roomId)).asData?.value;
     if (markets == null || markets.isEmpty) return const SizedBox.shrink();
-    return _Card(market: markets.first); // 最近一个
+    final market = markets.firstWhere(
+      (item) =>
+          item.status == MarketStatus.open ||
+          item.status == MarketStatus.closed,
+      orElse: () => markets.first,
+    );
+    return _Card(market: market);
   }
 }
 
@@ -143,7 +149,12 @@ class _CardState extends ConsumerState<_Card> {
               isWinner: market.isResolved && market.resolvedOutcomeId == o.id,
             ),
           ),
-          if (market.isResolved && position != null && !position.isEmpty)
+          if ((market.isResolved || market.status == MarketStatus.cancelled) &&
+              position != null &&
+              !position.claimed &&
+              (market.isResolved
+                  ? !position.isEmpty
+                  : _hasPotentialRefund(position)))
             Padding(
               padding: EdgeInsets.only(top: AppSpacing.space4),
               child: SizedBox(
@@ -152,7 +163,9 @@ class _CardState extends ConsumerState<_Card> {
                   onPressed: position.claimed
                       ? null
                       : () => _redeem(context, ref),
-                  child: Text(position.claimed ? '已赎回' : '赎回奖金'),
+                  child: Text(
+                    market.status == MarketStatus.cancelled ? '领取退款' : '赎回奖金',
+                  ),
                 ),
               ),
             ),
@@ -185,6 +198,10 @@ class _CardState extends ConsumerState<_Card> {
       }
     }
   }
+
+  /// 取消时仓库按净投入退款。即使某一结果的持仓已卖空，只要其它结果仍有
+  /// 仓位就可能存在可退本金；空仓用户不显示零金额按钮。
+  bool _hasPotentialRefund(UserPosition position) => !position.isEmpty;
 }
 
 class _CountdownText extends StatelessWidget {

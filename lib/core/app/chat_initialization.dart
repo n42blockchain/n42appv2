@@ -227,7 +227,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           socialAuthBaseUrl: chatSocialAuthConfig.socialAuthBaseUrl.isEmpty
               ? null
               : chatSocialAuthConfig.socialAuthBaseUrl,
-          ssoRedirectUrl: 'n42://auth/sso',
+          // 不能使用通用 n42://：若设备同时装有旧版/11X，系统会把 SSO
+          // 回调交给错误的 app。该 scheme 只由当前钱包注册。
+          ssoRedirectUrl: 'n42wallet://auth/sso',
           walletBridge: N42WalletBridge(),
           apiHubBridge: N42ApiHubBridge(),
           // 链上事件通知（Push Protocol，公开只读 REST，只需钱包地址、无 key）。
@@ -537,6 +539,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       case DeepLinkType.walletConnect:
       case DeepLinkType.groupMining:
       case DeepLinkType.fullNode:
+      case DeepLinkType.idHubBind:
+      case DeepLinkType.idHubAuth:
       case DeepLinkType.unknown:
         return;
     }

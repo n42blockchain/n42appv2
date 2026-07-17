@@ -148,6 +148,7 @@ class SendAmountWidget extends StatelessWidget {
     required this.onChanged,
     required this.onEditingComplete,
     required this.onMaxTap,
+    this.isAmountLocked = false,
   });
 
   final CoinModel coinModel;
@@ -158,6 +159,7 @@ class SendAmountWidget extends StatelessWidget {
   final void Function(String value) onChanged;
   final VoidCallback onEditingComplete;
   final VoidCallback onMaxTap;
+  final bool isAmountLocked;
 
   @override
   Widget build(BuildContext context) {
@@ -202,6 +204,7 @@ class SendAmountWidget extends StatelessWidget {
                   context,
                   controller: controller,
                   focusNode: focusNode,
+                  readOnly: isAmountLocked,
                   hintText: S.of(context).g_key_44,
                   hintStyle: AppTypography.displayLg.copyWith(
                     color: AppThemeUtils.getColorByKey(
@@ -226,8 +229,14 @@ class SendAmountWidget extends StatelessWidget {
                   messageMargin: EdgeInsets.symmetric(
                     horizontal: AppSpacing.space8,
                   ),
-                  rightWidget1: const _MaxButton(),
-                  rightOnTap1: onMaxTap,
+                  rightWidget1: isAmountLocked
+                      ? Icon(
+                          Icons.lock_outline_rounded,
+                          color: AppColorTokens.of(context).textSubtitle,
+                          size: su.setWidth(32),
+                        )
+                      : const _MaxButton(),
+                  rightOnTap1: isAmountLocked ? null : onMaxTap,
                 ),
                 Divider(
                   height: su.setWidth(1.0),

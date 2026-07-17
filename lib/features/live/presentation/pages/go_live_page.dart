@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/live/presentation/widgets/online_badge.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -13,7 +12,6 @@ import '../../prediction/domain/prediction_market.dart';
 import '../../prediction/providers/prediction_providers.dart';
 import '../../prediction/widgets/create_prediction_sheet.dart';
 import '../../prediction/widgets/resolve_prediction_sheet.dart';
-import '../../services/live_bootstrap.dart';
 import '../../services/live_chat_service.dart';
 import '../../services/live_video_service.dart';
 import '../widgets/danmu_overlay.dart';
@@ -61,9 +59,7 @@ class _GoLivePageState extends State<GoLivePage> {
       }
 
       // 2. 登录 + 创建直播间（Matrix room）
-      await ensureLiveChatReady();
-      await ensureAnonymousLogin();
-      final roomId = await N42Chat.createGroup(
+      final roomId = await _chat.createLiveRoom(
         name: '直播 ${DateTime.now().toIso8601String()}',
       );
       // 建房后、发布视频前用户退出：房已建但尚无视频/心跳，只需退房。
@@ -82,7 +78,7 @@ class _GoLivePageState extends State<GoLivePage> {
       // 视频发布完成、心跳启动前用户退出：摄像头/麦克风已占用，需退会。
       if (!mounted) return _abortStartup(roomId, videoJoined: true);
 
-      // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新房间 topic 时间戳，
+      // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新 room state/公共目录，
       // 使本房在直播列表判活；停播/崩溃后心跳停止，liveTtl 内自动失活。
       _startHeartbeat(roomId);
       // 心跳已起、最终 setState 前用户退出：三项资源都已建立，全量清理。
@@ -124,7 +120,7 @@ class _GoLivePageState extends State<GoLivePage> {
   }
 
   /// 开始/刷新直播心跳。立即上报一拍，之后每 [LiveChatService.heartbeatInterval]
-  /// 刷新一次房间 topic 时间戳。
+  /// 刷新一次房间 state 和公共目录心跳。
   void _startHeartbeat(String roomId) {
     _heartbeat?.cancel();
     unawaited(_chat.markLive(roomId));

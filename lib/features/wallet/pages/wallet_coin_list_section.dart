@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/token_discovery/token_discovery_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
@@ -15,6 +17,7 @@ class WalletCoinListSliver extends StatelessWidget {
     super.key,
     required this.waValue,
     required this.smallAssetsThreshold,
+    required this.searchQuery,
     required this.discoveredTokens,
     required this.onDiscoveryDismiss,
     required this.onDiscoveryAdded,
@@ -24,6 +27,10 @@ class WalletCoinListSliver extends StatelessWidget {
 
   final WalletActionProvider waValue;
   final double smallAssetsThreshold;
+
+  /// 搜索词以 listenable 传入：每个按键只重建下方列表，不惊动整页
+  /// （行情、资产总览等 sliver 与搜索无关）。
+  final ValueListenable<String> searchQuery;
   final List<DiscoveredToken> discoveredTokens;
   final VoidCallback onDiscoveryDismiss;
   final VoidCallback onDiscoveryAdded;
@@ -37,14 +44,18 @@ class WalletCoinListSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
-        (context, _) => _CoinListBody(
-          waValue: waValue,
-          smallAssetsThreshold: smallAssetsThreshold,
-          discoveredTokens: discoveredTokens,
-          onDiscoveryDismiss: onDiscoveryDismiss,
-          onDiscoveryAdded: onDiscoveryAdded,
-          onShowAllTap: onShowAllTap,
-          coinItemBuilder: coinItemBuilder,
+        (context, _) => ValueListenableBuilder<String>(
+          valueListenable: searchQuery,
+          builder: (context, query, _) => _CoinListBody(
+            waValue: waValue,
+            smallAssetsThreshold: smallAssetsThreshold,
+            searchQuery: query,
+            discoveredTokens: discoveredTokens,
+            onDiscoveryDismiss: onDiscoveryDismiss,
+            onDiscoveryAdded: onDiscoveryAdded,
+            onShowAllTap: onShowAllTap,
+            coinItemBuilder: coinItemBuilder,
+          ),
         ),
         childCount: 1,
       ),
@@ -56,6 +67,7 @@ class _CoinListBody extends StatelessWidget {
   const _CoinListBody({
     required this.waValue,
     required this.smallAssetsThreshold,
+    required this.searchQuery,
     required this.discoveredTokens,
     required this.onDiscoveryDismiss,
     required this.onDiscoveryAdded,
@@ -65,6 +77,7 @@ class _CoinListBody extends StatelessWidget {
 
   final WalletActionProvider waValue;
   final double smallAssetsThreshold;
+  final String searchQuery;
   final List<DiscoveredToken> discoveredTokens;
   final VoidCallback onDiscoveryDismiss;
   final VoidCallback onDiscoveryAdded;
@@ -76,11 +89,21 @@ class _CoinListBody extends StatelessWidget {
   Widget build(BuildContext context) {
     final su = ScreenUtil();
     final bgColor = AppColorTokens.of(context).bgBase;
-    final displayList = smallAssetsThreshold > 0
+    final thresholdList = smallAssetsThreshold > 0
         ? waValue.coinList
               .where((c) => c.value >= smallAssetsThreshold)
               .toList()
         : waValue.coinList;
+    final normalizedQuery = searchQuery.trim().toLowerCase();
+    final displayList = normalizedQuery.isEmpty
+        ? thresholdList
+        : thresholdList.where((coin) {
+            final config = coin.config;
+            return config.miniName.toLowerCase().contains(normalizedQuery) ||
+                config.name.toLowerCase().contains(normalizedQuery) ||
+                config.coinType.toLowerCase().contains(normalizedQuery) ||
+                config.symbol.toLowerCase().contains(normalizedQuery);
+          }).toList();
     final showSkeleton = waValue.coinList.isEmpty && waValue.buildwallet;
 
     return Container(
@@ -105,12 +128,46 @@ class _CoinListBody extends StatelessWidget {
             Container(
               height: su.setWidth(300.0),
               color: bgColor,
-              child: smallAssetsThreshold > 0 && waValue.coinList.isNotEmpty
+              child:
+                  smallAssetsThreshold > 0 &&
+                      waValue.coinList.isNotEmpty &&
+                      normalizedQuery.isEmpty
                   ? _AllHiddenHint(onShowAll: onShowAllTap)
-                  : const EmptyView(),
+                  : _NoSearchResults(
+                      hasSearchQuery: normalizedQuery.isNotEmpty,
+                    ),
             ),
           if (!showSkeleton && displayList.isNotEmpty)
             _CoinListView(list: displayList, coinItemBuilder: coinItemBuilder),
+        ],
+      ),
+    );
+  }
+}
+
+class _NoSearchResults extends StatelessWidget {
+  const _NoSearchResults({required this.hasSearchQuery});
+
+  final bool hasSearchQuery;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!hasSearchQuery) return const EmptyView();
+    final color = AppColorTokens.of(context).textSubtitle;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.search_off_rounded,
+            color: color,
+            size: ScreenUtil().setWidth(56),
+          ),
+          SizedBox(height: AppSpacing.space4),
+          Text(
+            S.of(context).g_market_no_results,
+            style: AppTypography.body.copyWith(color: color),
+          ),
         ],
       ),
     );

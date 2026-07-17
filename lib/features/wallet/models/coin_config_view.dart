@@ -38,6 +38,9 @@ Map<String, dynamic>? resolveChainBaseInfo(Map<String, dynamic>? chainConfig) {
 
 /// Resolves the mainnet/testnet chain ID from either supported config shape.
 /// Returns null when the requested network has no usable chain ID.
+///
+/// Registry entries additionally carry top-level `mainnetChainID` /
+/// `testnetChainID`; they act as a fallback when baseInfo lacks the value.
 int? resolveChainConfigIdOrNull(
   Map<String, dynamic>? chainConfig, {
   bool isTest = false,
@@ -46,7 +49,12 @@ int? resolveChainConfigIdOrNull(
   if (baseInfo == null) return null;
   final view = CoinConfigView(baseInfo);
   final chainId = isTest ? view.chainIdTest : view.chainId;
-  return chainId > 0 ? chainId : null;
+  if (chainId > 0) return chainId;
+  final topLevel = chainConfig?[isTest ? 'testnetChainID' : 'mainnetChainID'];
+  final parsed = topLevel is num
+      ? topLevel.toInt()
+      : int.tryParse(topLevel?.toString() ?? '') ?? 0;
+  return parsed > 0 ? parsed : null;
 }
 
 /// Resolves the mainnet/testnet chain ID from either supported config shape.

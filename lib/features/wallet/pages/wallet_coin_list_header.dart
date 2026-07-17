@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
-import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 
 /// 固定在顶部的代币列表标题栏：包含网络选择、排序、小额过滤。
-class WalletCoinListHeader extends StatelessWidget {
+class WalletCoinListHeader extends StatefulWidget {
   const WalletCoinListHeader({
     super.key,
     required this.waValue,
@@ -20,6 +16,14 @@ class WalletCoinListHeader extends StatelessWidget {
     required this.onAddToken,
     required this.onChangeNetwork,
     required this.onThresholdChanged,
+    required this.searchController,
+    required this.searchFocusNode,
+    required this.isSearchVisible,
+    required this.onSearchVisibilityChanged,
+    required this.onSearchChanged,
+    required this.onRefresh,
+    required this.onMarketTap,
+    required this.onPortfolioTap,
   });
 
   final WalletActionProvider waValue;
@@ -27,8 +31,57 @@ class WalletCoinListHeader extends StatelessWidget {
   final VoidCallback onAddToken;
   final VoidCallback onChangeNetwork;
   final ValueChanged<double> onThresholdChanged;
+  final TextEditingController searchController;
+  final FocusNode searchFocusNode;
+  final bool isSearchVisible;
+  final ValueChanged<bool> onSearchVisibilityChanged;
+  final ValueChanged<String> onSearchChanged;
+  final VoidCallback onRefresh;
+  final VoidCallback onMarketTap;
+  final VoidCallback onPortfolioTap;
+
+  @override
+  State<WalletCoinListHeader> createState() => _WalletCoinListHeaderState();
+}
+
+class _WalletCoinListHeaderState extends State<WalletCoinListHeader>
+    with SingleTickerProviderStateMixin {
+  // 搜索展开时额外显示一行输入框；收起时保持两行紧凑布局。头部是 pinned 的，
+  // 两个高度间必须插值，否则展开/收起时列表整体会突跳一段。
+  static const double _collapsedExtent = 192.0;
+  static const double _expandedExtent = 280.0;
+
+  late final AnimationController _searchAnimController = AnimationController(
+    vsync: this,
+    duration: AppMotion.base,
+    value: widget.isSearchVisible ? 1.0 : 0.0,
+  );
+  late final CurvedAnimation _searchAnim = CurvedAnimation(
+    parent: _searchAnimController,
+    curve: AppMotion.curveStandard,
+  );
+
+  @override
+  void didUpdateWidget(covariant WalletCoinListHeader oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.isSearchVisible != oldWidget.isSearchVisible) {
+      if (widget.isSearchVisible) {
+        _searchAnimController.forward();
+      } else {
+        _searchAnimController.reverse();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchAnim.dispose();
+    _searchAnimController.dispose();
+    super.dispose();
+  }
 
   String _networkLabel(BuildContext context) {
+    final waValue = widget.waValue;
     if (waValue.walletInfo.networkIndex == -1) {
       return S.of(context).g_token_m_key_4;
     }
@@ -37,50 +90,90 @@ class WalletCoinListHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverPersistentHeader(
-      pinned: true,
-      floating: true,
-      delegate: WalletSliverAppBarDelegate(
-        // 192.w - 2*space2 = 176.w → 两行各 88.w（44dp 触控红线）
-        minHeight: ScreenUtil().setWidth(192.0),
-        maxHeight: ScreenUtil().setWidth(192.0),
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space6,
-            vertical: AppSpacing.space2,
+    return AnimatedBuilder(
+      animation: _searchAnim,
+      builder: (context, _) {
+        final t = _searchAnim.value.clamp(0.0, 1.0);
+        final extent = ScreenUtil().setWidth(
+          _collapsedExtent + (_expandedExtent - _collapsedExtent) * t,
+        );
+        return SliverPersistentHeader(
+          pinned: true,
+          floating: true,
+          delegate: WalletSliverAppBarDelegate(
+            minHeight: extent,
+            maxHeight: extent,
+            child: _buildHeaderBody(context, t),
           ),
-          decoration: BoxDecoration(
-            color: AppColorTokens.of(context).bgBase,
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(AppRadius.xl),
-              topLeft: Radius.circular(AppRadius.xl),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.03),
-                blurRadius: 8,
-                offset: const Offset(0, -2),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _TopRow(
-                waValue: waValue,
-                networkLabel: _networkLabel(context),
-                onAddToken: onAddToken,
-                onChangeNetwork: onChangeNetwork,
-              ),
-              _BottomRow(
-                waValue: waValue,
-                smallAssetsThreshold: smallAssetsThreshold,
-                onThresholdChanged: onThresholdChanged,
-              ),
-            ],
-          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildHeaderBody(BuildContext context, double t) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSpacing.space6,
+        vertical: AppSpacing.space2,
+      ),
+      decoration: BoxDecoration(
+        color: AppColorTokens.of(context).bgBase,
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(AppRadius.xl),
+          topLeft: Radius.circular(AppRadius.xl),
         ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.03),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          _TopRow(
+            networkLabel: _networkLabel(context),
+            onAddToken: widget.onAddToken,
+            onChangeNetwork: widget.onChangeNetwork,
+            isSearchVisible: widget.isSearchVisible,
+            onSearchVisibilityChanged: widget.onSearchVisibilityChanged,
+            onMarketTap: widget.onMarketTap,
+            onPortfolioTap: widget.onPortfolioTap,
+          ),
+          // 输入框随高度一起长出/收起：Align 的 heightFactor 让它占位始终
+          // 不超过头部已插值出的高度，收到 0 时整段卸载。
+          if (t > 0)
+            ClipRect(
+              child: Align(
+                alignment: Alignment.topCenter,
+                heightFactor: t,
+                child: Opacity(
+                  opacity: t,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: AppSpacing.space2),
+                      _TokenSearchField(
+                        controller: widget.searchController,
+                        focusNode: widget.searchFocusNode,
+                        onChanged: widget.onSearchChanged,
+                        onClose: () => widget.onSearchVisibilityChanged(false),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          const Spacer(),
+          _BottomRow(
+            waValue: widget.waValue,
+            smallAssetsThreshold: widget.smallAssetsThreshold,
+            onThresholdChanged: widget.onThresholdChanged,
+            onRefresh: widget.onRefresh,
+          ),
+        ],
       ),
     );
   }
@@ -88,16 +181,22 @@ class WalletCoinListHeader extends StatelessWidget {
 
 class _TopRow extends StatelessWidget {
   const _TopRow({
-    required this.waValue,
     required this.networkLabel,
     required this.onAddToken,
     required this.onChangeNetwork,
+    required this.isSearchVisible,
+    required this.onSearchVisibilityChanged,
+    required this.onMarketTap,
+    required this.onPortfolioTap,
   });
 
-  final WalletActionProvider waValue;
   final String networkLabel;
   final VoidCallback onAddToken;
   final VoidCallback onChangeNetwork;
+  final bool isSearchVisible;
+  final ValueChanged<bool> onSearchVisibilityChanged;
+  final VoidCallback onMarketTap;
+  final VoidCallback onPortfolioTap;
 
   @override
   Widget build(BuildContext context) {
@@ -106,18 +205,30 @@ class _TopRow extends StatelessWidget {
 
     return Row(
       children: [
-        Flexible(
-          child: Text(
-            S.of(context).g_token_m_key_11,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTypography.headline.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColorTokens.of(context).textPrimary,
+        SizedBox(
+          // 保留标题的最小展示宽度，避免快捷入口和网络筛选把 Tokens 压成 Tok…
+          width: su.setWidth(124),
+          child: FittedBox(
+            alignment: Alignment.centerLeft,
+            fit: BoxFit.scaleDown,
+            child: Text(
+              S.of(context).g_token_m_key_11,
+              maxLines: 1,
+              style: AppTypography.headline.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
         ),
         SizedBox(width: AppSpacing.space4),
+        _HeaderIconButton(
+          icon: isSearchVisible
+              ? Icons.search_off_rounded
+              : Icons.search_rounded,
+          tooltip: S.of(context).g_token_m_key_12,
+          onTap: () => onSearchVisibilityChanged(!isSearchVisible),
+        ),
         Material(
           color: Colors.transparent,
           child: InkWell(
@@ -145,48 +256,7 @@ class _TopRow extends StatelessWidget {
             ),
           ),
         ),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () {
-              // Markets 本身就是主 tab 之一，切换 tab 而非另开一页
-              final marketTabIndex = Platform.isAndroid ? 3 : 2;
-              ProviderScope.containerOf(context, listen: false)
-                  .read(homeTabIndexProvider.notifier)
-                  .state = marketTabIndex;
-            },
-            borderRadius: AppRadius.brMd,
-            child: SizedBox(
-              width: su.setWidth(88),
-              height: su.setWidth(88),
-              child: Icon(
-                Icons.insights_rounded,
-                size: su.setWidth(36),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
-            ),
-          ),
-        ),
-        SizedBox(width: su.setWidth(4)),
-        Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const PortfolioPage()),
-            ),
-            borderRadius: AppRadius.brMd,
-            child: SizedBox(
-              width: su.setWidth(88),
-              height: su.setWidth(88),
-              child: Icon(
-                Icons.donut_large_rounded,
-                size: su.setWidth(36),
-                color: AppColorTokens.of(context).textSubtitle,
-              ),
-            ),
-          ),
-        ),
+        _MoreMenu(onMarketTap: onMarketTap, onPortfolioTap: onPortfolioTap),
         const Spacer(),
         Material(
           color: Colors.transparent,
@@ -196,7 +266,7 @@ class _TopRow extends StatelessWidget {
             child: Container(
               constraints: BoxConstraints(
                 minHeight: su.setWidth(88),
-                maxWidth: su.setWidth(240),
+                maxWidth: su.setWidth(190),
               ),
               padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               alignment: Alignment.center,
@@ -208,13 +278,16 @@ class _TopRow extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Flexible(
-                    child: Text(
-                      networkLabel,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTypography.caption.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: blueColor,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        networkLabel,
+                        maxLines: 1,
+                        style: AppTypography.caption.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: blueColor,
+                        ),
                       ),
                     ),
                   ),
@@ -233,16 +306,157 @@ class _TopRow extends StatelessWidget {
   }
 }
 
+class _HeaderIconButton extends StatelessWidget {
+  const _HeaderIconButton({
+    required this.icon,
+    required this.tooltip,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String tooltip;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    return Tooltip(
+      message: tooltip,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: SizedBox(
+            width: su.setWidth(88),
+            height: su.setWidth(88),
+            child: Icon(
+              icon,
+              size: su.setWidth(36),
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _MoreMenu extends StatelessWidget {
+  const _MoreMenu({required this.onMarketTap, required this.onPortfolioTap});
+
+  final VoidCallback onMarketTap;
+  final VoidCallback onPortfolioTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    return SizedBox(
+      width: su.setWidth(88),
+      height: su.setWidth(88),
+      child: PopupMenuButton<int>(
+        tooltip: S.of(context).g_key_m_7,
+        icon: Icon(
+          Icons.more_horiz_rounded,
+          size: su.setWidth(36),
+          color: AppColorTokens.of(context).textSubtitle,
+        ),
+        shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+        color: AppColorTokens.of(context).bgSurface,
+        onSelected: (value) {
+          if (value == 0) {
+            onMarketTap();
+          } else {
+            onPortfolioTap();
+          }
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: 0,
+            child: ListTile(
+              leading: const Icon(Icons.insights_rounded),
+              title: Text(S.of(context).g_home_market),
+            ),
+          ),
+          PopupMenuItem(
+            value: 1,
+            child: ListTile(
+              leading: const Icon(Icons.donut_large_rounded),
+              title: Text(S.of(context).g_portfolio_title),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TokenSearchField extends StatelessWidget {
+  const _TokenSearchField({
+    required this.controller,
+    required this.focusNode,
+    required this.onChanged,
+    required this.onClose,
+  });
+
+  final TextEditingController controller;
+  final FocusNode focusNode;
+  final ValueChanged<String> onChanged;
+  final VoidCallback onClose;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = AppColorTokens.of(context);
+    return SizedBox(
+      height: ScreenUtil().setWidth(72),
+      child: TextField(
+        controller: controller,
+        focusNode: focusNode,
+        onChanged: onChanged,
+        textInputAction: TextInputAction.search,
+        style: AppTypography.body.copyWith(color: colors.textPrimary),
+        decoration: InputDecoration(
+          hintText: S.of(context).g_token_m_key_12,
+          hintStyle: AppTypography.body.copyWith(color: colors.textSubtitle),
+          prefixIcon: Icon(Icons.search_rounded, color: colors.textSubtitle),
+          suffixIcon: IconButton(
+            tooltip: S.of(context).g_key_79,
+            onPressed: onClose,
+            icon: Icon(Icons.close_rounded, color: colors.textSubtitle),
+          ),
+          filled: true,
+          fillColor: colors.bgSurface,
+          contentPadding: EdgeInsets.zero,
+          border: OutlineInputBorder(
+            borderRadius: AppRadius.brMd,
+            borderSide: BorderSide(color: colors.border),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: AppRadius.brMd,
+            borderSide: BorderSide(color: colors.border),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: AppRadius.brMd,
+            borderSide: BorderSide(color: colors.brand),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _BottomRow extends StatelessWidget {
   const _BottomRow({
     required this.waValue,
     required this.smallAssetsThreshold,
     required this.onThresholdChanged,
+    required this.onRefresh,
   });
 
   final WalletActionProvider waValue;
   final double smallAssetsThreshold;
   final ValueChanged<double> onThresholdChanged;
+  final VoidCallback onRefresh;
 
   static const List<double> _thresholdCycle = [0.0, 1.0, 5.0, 10.0, 50.0];
 
@@ -268,12 +482,61 @@ class _BottomRow extends StatelessWidget {
           onTap: () => waValue.setCoinSortAssets("change"),
         ),
         const Spacer(),
+        _RefreshButton(
+          isRefreshing:
+              waValue.load == Load.refresh ||
+              waValue.loadBalance == Load.loading,
+          onTap: onRefresh,
+        ),
         _ThresholdButton(
           threshold: smallAssetsThreshold,
           thresholdCycle: _thresholdCycle,
           onChanged: onThresholdChanged,
         ),
       ],
+    );
+  }
+}
+
+class _RefreshButton extends StatelessWidget {
+  const _RefreshButton({required this.isRefreshing, required this.onTap});
+
+  final bool isRefreshing;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final su = ScreenUtil();
+    final color = AppColorTokens.of(context).textSubtitle;
+    return Tooltip(
+      message: S.of(context).g_key_bridge_refresh,
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brMd,
+          child: SizedBox(
+            width: su.setWidth(88),
+            height: su.setWidth(88),
+            child: Center(
+              child: isRefreshing
+                  ? SizedBox(
+                      width: su.setWidth(30),
+                      height: su.setWidth(30),
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColorTokens.of(context).brand,
+                      ),
+                    )
+                  : Icon(
+                      Icons.refresh_rounded,
+                      size: su.setWidth(32),
+                      color: color,
+                    ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -342,55 +605,66 @@ class _ThresholdButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final active = threshold > 0;
-    final label = active ? '< \$${threshold.toInt()}' : '< \$';
+    final label = active ? '< \$${threshold.toInt()}' : S.of(context).g_key_9;
     final blueColor = AppColorTokens.of(context).brand;
     final subColor = AppColorTokens.of(context).textSubtitle;
 
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        onTap: () {
-          final idx = thresholdCycle.indexOf(threshold);
-          final next = thresholdCycle[(idx + 1) % thresholdCycle.length];
-          onChanged(next);
-        },
-        borderRadius: AppRadius.brMd,
-        child: Container(
-          constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
-          alignment: Alignment.center,
-          padding: EdgeInsets.symmetric(
-            horizontal: AppSpacing.space4,
-            vertical: AppSpacing.space2,
-          ),
-          decoration: BoxDecoration(
-            color: active
-                ? blueColor.withValues(alpha: 0.12)
-                : Colors.transparent,
-            borderRadius: AppRadius.brMd,
-            border: active
-                ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
-                : null,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                active
-                    ? Icons.visibility_off_outlined
-                    : Icons.visibility_outlined,
-                size: ScreenUtil().setWidth(24),
+    return PopupMenuButton<double>(
+      tooltip: S.of(context).g_key_9,
+      onSelected: onChanged,
+      shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
+      color: AppColorTokens.of(context).bgSurface,
+      itemBuilder: (context) => thresholdCycle
+          .map(
+            (value) => CheckedPopupMenuItem<double>(
+              value: value,
+              checked: value == threshold,
+              child: Text(
+                value == 0 ? S.of(context).g_key_9 : '< \$${value.toInt()}',
+              ),
+            ),
+          )
+          .toList(),
+      child: Container(
+        constraints: BoxConstraints(minHeight: ScreenUtil().setWidth(88)),
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(
+          horizontal: AppSpacing.space4,
+          vertical: AppSpacing.space2,
+        ),
+        decoration: BoxDecoration(
+          color: active
+              ? blueColor.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: AppRadius.brMd,
+          border: active
+              ? Border.all(color: blueColor.withValues(alpha: 0.25), width: 1)
+              : null,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              active
+                  ? Icons.visibility_off_outlined
+                  : Icons.visibility_outlined,
+              size: ScreenUtil().setWidth(24),
+              color: active ? blueColor : subColor,
+            ),
+            SizedBox(width: AppSpacing.space2),
+            Text(
+              label,
+              style: AppTypography.caption.copyWith(
                 color: active ? blueColor : subColor,
+                fontWeight: active ? FontWeight.w600 : FontWeight.normal,
               ),
-              SizedBox(width: AppSpacing.space2),
-              Text(
-                label,
-                style: AppTypography.caption.copyWith(
-                  color: active ? blueColor : subColor,
-                  fontWeight: active ? FontWeight.w600 : FontWeight.normal,
-                ),
-              ),
-            ],
-          ),
+            ),
+            Icon(
+              Icons.keyboard_arrow_down_rounded,
+              size: ScreenUtil().setWidth(20),
+              color: active ? blueColor : subColor,
+            ),
+          ],
         ),
       ),
     );

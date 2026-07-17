@@ -4,8 +4,8 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 
 import '../../services/live_chat_service.dart';
 
-/// 直播广场。提供：① 输入 roomId 进房；② 加载直播列表（已加入的房间）；
-/// ③ 开始直播。完整目录后端见 task#6。
+/// 直播广场。提供：① 输入 roomId 进房；② 从 Matrix 公共目录发现正在直播的
+/// 公开房间；③ 开始直播。
 class LiveHomePage extends StatefulWidget {
   const LiveHomePage({super.key});
 
@@ -16,7 +16,7 @@ class LiveHomePage extends StatefulWidget {
 class _LiveHomePageState extends State<LiveHomePage> {
   final TextEditingController _roomController = TextEditingController();
   final LiveChatService _chat = LiveChatService();
-  Stream<List<LiveRoomSummary>>? _rooms;
+  List<LiveRoomSummary>? _rooms;
   bool _loadingRooms = false;
   String? _roomsError;
 
@@ -38,8 +38,8 @@ class _LiveHomePageState extends State<LiveHomePage> {
       _roomsError = null;
     });
     try {
-      final stream = await _chat.watchRooms();
-      if (mounted) setState(() => _rooms = stream);
+      final rooms = await _chat.discoverPublicLiveRooms();
+      if (mounted) setState(() => _rooms = rooms);
     } catch (e) {
       if (mounted) setState(() => _roomsError = '$e');
     } finally {
@@ -143,33 +143,21 @@ class _LiveHomePageState extends State<LiveHomePage> {
         message: '点击右上角"加载"',
       );
     }
-    return StreamBuilder<List<LiveRoomSummary>>(
-      stream: _rooms,
-      builder: (context, snapshot) {
-        // 仅展示正在直播的房间：已结束/失活（无心跳超 liveTtl）的房不入列，
-        // 避免观众点进死房空等画面。
-        final rooms = (snapshot.data ?? const <LiveRoomSummary>[])
-            .where((r) => r.isLive)
-            .toList();
-        if (rooms.isEmpty) {
-          return const AppEmptyState(
-            icon: Icons.inbox_outlined,
-            title: '暂无直播间',
-          );
-        }
-        return ListView.separated(
-          itemCount: rooms.length,
-          separatorBuilder: (_, _) => const Divider(height: 1),
-          itemBuilder: (context, i) {
-            final r = rooms[i];
-            return ListTile(
-              leading: const CircleAvatar(child: Icon(Icons.live_tv)),
-              title: Text(r.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-              subtitle: Text('${r.memberCount} 人'),
-              trailing: const _LiveBadge(),
-              onTap: () => _enterRoom(r.id),
-            );
-          },
+    final rooms = _rooms!;
+    if (rooms.isEmpty) {
+      return const AppEmptyState(icon: Icons.inbox_outlined, title: '暂无直播间');
+    }
+    return ListView.separated(
+      itemCount: rooms.length,
+      separatorBuilder: (_, _) => const Divider(height: 1),
+      itemBuilder: (context, i) {
+        final r = rooms[i];
+        return ListTile(
+          leading: const CircleAvatar(child: Icon(Icons.live_tv)),
+          title: Text(r.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+          subtitle: Text('${r.memberCount} 人'),
+          trailing: const _LiveBadge(),
+          onTap: () => _enterRoom(r.id),
         );
       },
     );

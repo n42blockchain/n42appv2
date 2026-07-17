@@ -10,7 +10,7 @@ import 'prediction_replay.dart';
 ///
 /// 主播/观众的每个动作作为一条事件广播到直播间所在的 Matrix room；各端用
 /// [PredictionReplay] 按同一时间线顺序重放，得到一致的价格 / 持仓 / 结算。
-/// 余额为本地 play-money 视角（初始 [initialBalance]，无权威节点校验，仅演示）。
+/// 余额为本地 play-money 视角（每房初始 [initialBalance]，仅演示）。
 ///
 /// 与 [MockPredictionRepository] 的区别：mock 单进程内存、主播观众看不到彼此；
 /// 本实现经 Matrix 真正跨设备同步。真实资金仍须 `ChainPredictionRepository`。
@@ -204,7 +204,10 @@ class MatrixPredictionRepository implements PredictionRepository {
     required List<String> outcomeLabels,
     DateTime? closesAt,
   }) async {
-    if (outcomeLabels.length < 2) {
+    if (!PredictionLimits.hasValidCreateInput(
+      question: question,
+      outcomeLabels: outcomeLabels,
+    )) {
       throw const PredictionException(PredictionError.tooFewOutcomes);
     }
     _ensureRoom(roomId);
@@ -215,8 +218,8 @@ class MatrixPredictionRepository implements PredictionRepository {
       'a': 'create',
       'm': id,
       'room': roomId,
-      'q': question,
-      'o': outcomeLabels,
+      'q': question.trim(),
+      'o': outcomeLabels.map((label) => label.trim()).toList(),
       if (closesAt != null) 'close': closesAt.millisecondsSinceEpoch,
     });
     // 乐观返回（开放、均价）；真实态由事件回显后经流推送。
@@ -307,11 +310,22 @@ class MatrixPredictionRepository implements PredictionRepository {
   }) async {
     final roomId = _roomIdOf(marketId);
     _ensureRoom(roomId);
+    if (!PredictionLimits.isFinitePositive(collateralIn)) {
+      throw const PredictionException(PredictionError.amountTooLow);
+    }
     final r = _replayFor(roomId);
     final i = _outcomeIndex(outcomeId);
-    final q = r?.quoteBuy(marketId, i, collateralIn);
+    if (i < 0) throw const PredictionException(PredictionError.invalidOutcome);
+    final q = r?.quoteBuy(marketId, i, collateralIn, now: DateTime.now());
     if (q == null) {
-      throw const PredictionException(PredictionError.marketNotFound);
+      final market = r?.market(marketId, now: DateTime.now());
+      throw PredictionException(
+        market == null
+            ? PredictionError.marketNotFound
+            : market.isOpen
+            ? PredictionError.invalidOutcome
+            : PredictionError.marketClosed,
+      );
     }
     return q;
   }
@@ -323,7 +337,7 @@ class MatrixPredictionRepository implements PredictionRepository {
     required double collateralIn,
     double? minShares,
   }) async {
-    if (collateralIn <= 0) {
+    if (!PredictionLimits.isFinitePositive(collateralIn)) {
       throw const PredictionException(PredictionError.amountTooLow);
     }
     if (collateralIn > _balance() + 1e-9) {
@@ -338,15 +352,27 @@ class MatrixPredictionRepository implements PredictionRepository {
     if (!market.isOpen) {
       throw const PredictionException(PredictionError.marketClosed);
     }
-    // 注：minShares 滑点保护无法跨端强制（成交份额由各端重放定序后才确定），
-    // 此处仅本地尽力预检；play-money 演示可接受。
     final i = _outcomeIndex(outcomeId);
+    if (i < 0 || market.outcomeById(outcomeId) == null) {
+      throw const PredictionException(PredictionError.invalidOutcome);
+    }
+    if (minShares != null && !PredictionLimits.isFinitePositive(minShares)) {
+      throw const PredictionException(PredictionError.slippage);
+    }
+    final quote = r?.quoteBuy(marketId, i, collateralIn, now: DateTime.now());
+    if (quote == null) {
+      throw const PredictionException(PredictionError.marketClosed);
+    }
+    if (minShares != null && quote.shares + 1e-9 < minShares) {
+      throw const PredictionException(PredictionError.slippage);
+    }
     await _chat.sendEvent(roomId, {
       't': 'pred',
       'a': 'buy',
       'm': marketId,
       'i': i,
       'c': collateralIn,
+      'min': ?minShares,
     });
   }
 
@@ -357,7 +383,7 @@ class MatrixPredictionRepository implements PredictionRepository {
     required double shares,
     double? minCollateral,
   }) async {
-    if (shares <= 0) {
+    if (!PredictionLimits.isFinitePositive(shares)) {
       throw const PredictionException(PredictionError.insufficientShares);
     }
     final roomId = _roomIdOf(marketId);
@@ -371,12 +397,27 @@ class MatrixPredictionRepository implements PredictionRepository {
       throw const PredictionException(PredictionError.marketClosed);
     }
     final i = _outcomeIndex(outcomeId);
+    if (i < 0 || market.outcomeById(outcomeId) == null) {
+      throw const PredictionException(PredictionError.invalidOutcome);
+    }
+    if (minCollateral != null &&
+        !PredictionLimits.isFinitePositive(minCollateral)) {
+      throw const PredictionException(PredictionError.slippage);
+    }
+    final proceeds = r?.quoteSell(marketId, i, shares, now: DateTime.now());
+    if (proceeds == null) {
+      throw const PredictionException(PredictionError.marketClosed);
+    }
+    if (minCollateral != null && proceeds + 1e-9 < minCollateral) {
+      throw const PredictionException(PredictionError.slippage);
+    }
     await _chat.sendEvent(roomId, {
       't': 'pred',
       'a': 'sell',
       'm': marketId,
       'i': i,
       's': shares,
+      'min_out': ?minCollateral,
     });
   }
 
