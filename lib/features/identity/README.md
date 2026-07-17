@@ -13,6 +13,12 @@ in `AppConfig.apiUrl`. Both `main`/`test` ship **empty**, so `isEnabled` is
 locally rather than send a token to an unconfigured host. Fill in `idHubHost` per
 environment to light it up. Unset = app behaves exactly as today.
 
+Deliberate exception: the `n42id://` scan-to-sign flow responds to ANOTHER
+device's request and takes its hub URL from the QR, so it does not consult
+`idHubHost`. Its gate is the hard host allowlist (`AppConfig.idHubAllowedHosts`,
+https-only) enforced at the deep-link handler, the signer service, and the sign
+page. To kill scan-to-sign, empty that allowlist.
+
 ## Modules
 
 | File | Responsibility |

@@ -290,8 +290,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ///
   /// The wallet signs the hub-issued challenge (a server nonce) here. Signing is
   /// deferred to the bloc for both paths (ID Hub challenge here, canonical
-  /// message in the legacy branch), so the wallet prompts exactly once - the UI
-  /// no longer pre-signs.
+  /// message in the legacy branch), so the UI never pre-signs. The wallet
+  /// prompts once on hub success and once on the pure-legacy path; the one
+  /// transitional exception is hub-enabled-but-fell-back (e.g. Matrix bridge
+  /// not live yet), where the hub challenge and then the legacy canonical
+  /// message are each signed - two prompts until the bridge ships.
   Future<bool> _tryIdHubWalletLogin(
     AuthWalletAuthRequested event,
     Emitter<AuthState> emit,

@@ -36,7 +36,12 @@ class IdHubApi {
   bool get isEnabled {
     if (_baseUrl.isEmpty) return false;
     final uri = Uri.tryParse(_baseUrl);
-    return uri != null && (uri.scheme == 'https' || uri.scheme == 'http');
+    if (uri == null) return false;
+    if (uri.scheme == 'https') return true;
+    // Tokens/signatures ride every call: plaintext http is allowed only for
+    // local development loopbacks (10.0.2.2 = Android emulator host).
+    return uri.scheme == 'http' &&
+        const {'localhost', '127.0.0.1', '10.0.2.2'}.contains(uri.host);
   }
 
   void _ensureEnabled() {
@@ -83,7 +88,7 @@ class IdHubApi {
   /// Fetch a bind session after scanning its QR (session id is the capability).
   Future<IdHubBindSession> getBindSession(String sessionId) async {
     _ensureEnabled();
-    final data = await _get('/v1/bind-sessions/$sessionId');
+    final data = await _get('/v1/bind-sessions/${Uri.encodeComponent(sessionId)}');
     return IdHubBindSession.fromJson(data);
   }
 
@@ -94,7 +99,7 @@ class IdHubApi {
     String chain = defaultChainCaip2,
   }) async {
     _ensureEnabled();
-    final data = await _post('/v1/bind-sessions/$sessionId/prepare', {
+    final data = await _post('/v1/bind-sessions/${Uri.encodeComponent(sessionId)}/prepare', {
       'address': address.toLowerCase(),
       'chain': chain,
     });
@@ -111,7 +116,7 @@ class IdHubApi {
   }) async {
     _ensureEnabled();
     await _post(
-      '/v1/bind-sessions/$sessionId/complete',
+      '/v1/bind-sessions/${Uri.encodeComponent(sessionId)}/complete',
       {
         'challenge_id': challengeId,
         'signature': signature,
