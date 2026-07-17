@@ -21,7 +21,7 @@ class SZh extends S {
   String get chatCallServiceNotInitialized => '通話服務未初始化';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return '登錄失敗: $error';
   }
 
@@ -147,7 +147,7 @@ class SZh extends S {
       '麥克風權限已被拒絕，請在系統設置中開啓以使用語音消息功能。';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return '開始錄音失敗: $error';
   }
 
@@ -155,7 +155,7 @@ class SZh extends S {
   String get commonRecordingTooShort => '錄音時間太短';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return '停止錄音失敗: $error';
   }
 
@@ -270,7 +270,7 @@ class SZh extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42號：$id';
   }
 
@@ -371,7 +371,7 @@ class SZh extends S {
   String get profileChooseFromGallery => '從相冊選擇';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return '保存失敗: $error';
   }
 
@@ -418,7 +418,7 @@ class SZh extends S {
   String get authEnterServerAddress => '請輸入服務器地址';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '已連接到 $serverName';
   }
 
@@ -513,7 +513,7 @@ class SZh extends S {
   String get commonPayment => '收付款';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature 功能即將推出';
   }
 
@@ -536,7 +536,7 @@ class SZh extends S {
   String get conversationDeleteConversation => '刪除會話';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '確定要刪除與 $name 的會話嗎？';
   }
 
@@ -586,7 +586,7 @@ class SZh extends S {
   String get commonLocationLabel => '位置';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return '推薦失敗: $error';
   }
 
@@ -597,7 +597,7 @@ class SZh extends S {
   String get contactOpeningChat => '正在打開聊天...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return '打開聊天失敗: $error';
   }
 
@@ -665,7 +665,7 @@ class SZh extends S {
   String get searchNoResults => '無結果';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return '羣成員 ($count)';
   }
 
@@ -763,7 +763,7 @@ class SZh extends S {
   String get transferAddressVerified => '地址已驗證';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return '可用餘額: $balance $symbol';
   }
 
@@ -824,7 +824,7 @@ class SZh extends S {
   String get profileAvatarUpdated => '頭像更新成功';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return '選擇圖片失敗: $error';
   }
 
@@ -843,7 +843,7 @@ class SZh extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return '保存地址失敗: $error';
   }
 
@@ -866,7 +866,7 @@ class SZh extends S {
   String get profileAddressDeleted => '地址已刪除';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return '保存發票抬頭失敗: $error';
   }
 
@@ -922,7 +922,7 @@ class SZh extends S {
   String get commonAddressCopied => '地址已複製';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return '打開: $content';
   }
 
@@ -1202,7 +1202,7 @@ class SZh extends S {
   String get chatInCall => '通話中';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature功能開發中...';
   }
 
@@ -1438,16 +1438,6 @@ class SZh extends S {
 
   @override
   String get chatSaveToGallery => '保存到相冊';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return '下載失敗: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return '分享失敗: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => '圖片加載失敗';
@@ -2570,6 +2560,30 @@ class SZh extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => '沒有可用的媒體鏈接';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return '下載失敗: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return '錯誤: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => '音樂鏈接';
+
+  @override
+  String get chatRedPacketTransferCannotForward => '紅包和轉賬消息無法轉發';
+
+  @override
+  String commonShareFailed(String error) {
+    return '分享失敗: $error';
+  }
+
+  @override
   String get commonTapToRetry => '點擊重試';
 
   @override
@@ -2594,26 +2608,12 @@ class SZh extends S {
   String get groupEnterGroupAnnouncement => '請輸入羣公告';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return '錯誤: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count人，點擊複製羣ID';
   }
 
   @override
-  String get chatMusicLinkLabel => '音樂鏈接';
-
-  @override
-  String get chatNoMediaUrlAvailable => '沒有可用的媒體鏈接';
-
-  @override
   String get groupNoPermissionToEditGroupName => '你沒有權限修改羣名稱';
-
-  @override
-  String get chatRedPacketTransferCannotForward => '紅包和轉賬消息無法轉發';
 
   @override
   String get authEmailAddress => '郵箱地址';
@@ -2796,11 +2796,11 @@ class SZh extends S {
   @override
   String get authAppleLabel => 'Apple';
 
+  @override
+  String get authSsoLabel => 'SSO';
 
   @override
   String get authSsoNotConfigured => '该服务器未配置SSO登录提供商';
-  @override
-  String get authSsoLabel => 'SSO';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -2996,12 +2996,12 @@ class SZh extends S {
   String get contactEnterPhone => '輸入手機號碼';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return '會話: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return '聯繫人: $userId';
   }
 
@@ -3009,7 +3009,7 @@ class SZh extends S {
   String get commonDiscover => '發現';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(開發中)';
   }
 
@@ -3327,12 +3327,12 @@ class SZh extends S {
   String get callLivekitNotConfigured => 'LiveKit 未配置';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return '加入會議失敗: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return '屏幕共享失敗: $error';
   }
 
@@ -3583,12 +3583,12 @@ class SZh extends S {
   String get profileSilentMode => '靜音模式';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return '播放失敗: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return '正在播放: $ringtoneName';
   }
 
@@ -3642,7 +3642,7 @@ class SZh extends S {
   String get commonAllRead => '全部已讀';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count人已讀';
   }
 
@@ -5657,7 +5657,7 @@ class SZhTw extends SZh {
   String get chatCallServiceNotInitialized => '通話服務未初始化';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return '登錄失敗: $error';
   }
 
@@ -5783,7 +5783,7 @@ class SZhTw extends SZh {
       '麥克風權限已被拒絕，請在系統設置中開啓以使用語音消息功能。';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return '開始錄音失敗: $error';
   }
 
@@ -5791,7 +5791,7 @@ class SZhTw extends SZh {
   String get commonRecordingTooShort => '錄音時間太短';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return '停止錄音失敗: $error';
   }
 
@@ -5906,7 +5906,7 @@ class SZhTw extends SZh {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42號：$id';
   }
 
@@ -6007,7 +6007,7 @@ class SZhTw extends SZh {
   String get profileChooseFromGallery => '從相冊選擇';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return '保存失敗: $error';
   }
 
@@ -6054,7 +6054,7 @@ class SZhTw extends SZh {
   String get authEnterServerAddress => '請輸入服務器地址';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '已連接到 $serverName';
   }
 
@@ -6149,7 +6149,7 @@ class SZhTw extends SZh {
   String get commonPayment => '收付款';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature 功能即將推出';
   }
 
@@ -6172,7 +6172,7 @@ class SZhTw extends SZh {
   String get conversationDeleteConversation => '刪除會話';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '確定要刪除與 $name 的會話嗎？';
   }
 
@@ -6222,7 +6222,7 @@ class SZhTw extends SZh {
   String get commonLocationLabel => '位置';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return '推薦失敗: $error';
   }
 
@@ -6233,7 +6233,7 @@ class SZhTw extends SZh {
   String get contactOpeningChat => '正在打開聊天...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return '打開聊天失敗: $error';
   }
 
@@ -6301,7 +6301,7 @@ class SZhTw extends SZh {
   String get searchNoResults => '無結果';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return '羣成員 ($count)';
   }
 
@@ -6399,7 +6399,7 @@ class SZhTw extends SZh {
   String get transferAddressVerified => '地址已驗證';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return '可用餘額: $balance $symbol';
   }
 
@@ -6460,7 +6460,7 @@ class SZhTw extends SZh {
   String get profileAvatarUpdated => '頭像更新成功';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return '選擇圖片失敗: $error';
   }
 
@@ -6479,7 +6479,7 @@ class SZhTw extends SZh {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return '保存地址失敗: $error';
   }
 
@@ -6502,7 +6502,7 @@ class SZhTw extends SZh {
   String get profileAddressDeleted => '地址已刪除';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return '保存發票抬頭失敗: $error';
   }
 
@@ -6558,7 +6558,7 @@ class SZhTw extends SZh {
   String get commonAddressCopied => '地址已複製';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return '打開: $content';
   }
 
@@ -6838,7 +6838,7 @@ class SZhTw extends SZh {
   String get chatInCall => '通話中';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature功能開發中...';
   }
 
@@ -7074,16 +7074,6 @@ class SZhTw extends SZh {
 
   @override
   String get chatSaveToGallery => '保存到相冊';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return '下載失敗: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return '分享失敗: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => '圖片加載失敗';
@@ -8206,6 +8196,30 @@ class SZhTw extends SZh {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => '沒有可用的媒體鏈接';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return '下載失敗: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return '錯誤: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => '音樂鏈接';
+
+  @override
+  String get chatRedPacketTransferCannotForward => '紅包和轉賬消息無法轉發';
+
+  @override
+  String commonShareFailed(String error) {
+    return '分享失敗: $error';
+  }
+
+  @override
   String get commonTapToRetry => '點擊重試';
 
   @override
@@ -8230,26 +8244,12 @@ class SZhTw extends SZh {
   String get groupEnterGroupAnnouncement => '請輸入羣公告';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return '錯誤: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count人，點擊複製羣ID';
   }
 
   @override
-  String get chatMusicLinkLabel => '音樂鏈接';
-
-  @override
-  String get chatNoMediaUrlAvailable => '沒有可用的媒體鏈接';
-
-  @override
   String get groupNoPermissionToEditGroupName => '你沒有權限修改羣名稱';
-
-  @override
-  String get chatRedPacketTransferCannotForward => '紅包和轉賬消息無法轉發';
 
   @override
   String get authEmailAddress => '郵箱地址';
@@ -8432,11 +8432,11 @@ class SZhTw extends SZh {
   @override
   String get authAppleLabel => 'Apple';
 
-
-  @override
-  String get authSsoNotConfigured => '该服务器未配置SSO登录提供商';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured => '該服務器未配置SSO登錄提供商';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -8632,12 +8632,12 @@ class SZhTw extends SZh {
   String get contactEnterPhone => '輸入手機號碼';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return '會話: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return '聯繫人: $userId';
   }
 
@@ -8645,7 +8645,7 @@ class SZhTw extends SZh {
   String get commonDiscover => '發現';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(開發中)';
   }
 
@@ -8963,12 +8963,12 @@ class SZhTw extends SZh {
   String get callLivekitNotConfigured => 'LiveKit 未配置';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return '加入會議失敗: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return '屏幕共享失敗: $error';
   }
 
@@ -9219,12 +9219,12 @@ class SZhTw extends SZh {
   String get profileSilentMode => '靜音模式';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return '播放失敗: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return '正在播放: $ringtoneName';
   }
 
@@ -9278,7 +9278,7 @@ class SZhTw extends SZh {
   String get commonAllRead => '全部已讀';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count人已讀';
   }
 

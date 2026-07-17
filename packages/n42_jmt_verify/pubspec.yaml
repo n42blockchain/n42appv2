@@ -6,7 +6,10 @@ environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
-  blake3_dart: ^1.0.0
+  # 密码学组件锁定精确版本：blake3_dart 无认证发布者，禁止 ^ 范围内静默升级
+  # （供应链风险）。曾计划换回 hashlib，但 hashlib（≤2.3.x）没有 Blake3。
+  # 升级前需人工 diff 新版源码。
+  blake3_dart: 1.0.0
 
 dev_dependencies:
   test: ^1.24.0

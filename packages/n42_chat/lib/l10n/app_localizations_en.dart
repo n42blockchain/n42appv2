@@ -21,7 +21,7 @@ class SEn extends S {
   String get chatCallServiceNotInitialized => 'Call service not initialized';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Login failed: $error';
   }
 
@@ -148,7 +148,7 @@ class SEn extends S {
       'Microphone permission has been denied. Please enable it in system settings to use voice messages.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Failed to start recording: $error';
   }
 
@@ -156,7 +156,7 @@ class SEn extends S {
   String get commonRecordingTooShort => 'Recording too short';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Failed to stop recording: $error';
   }
 
@@ -272,7 +272,7 @@ class SEn extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -374,7 +374,7 @@ class SEn extends S {
   String get profileChooseFromGallery => 'Choose from Gallery';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Save failed: $error';
   }
 
@@ -422,7 +422,7 @@ class SEn extends S {
   String get authEnterServerAddress => 'Enter server address';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Connected to $serverName';
   }
 
@@ -519,7 +519,7 @@ class SEn extends S {
   String get commonPayment => 'Payment';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature coming soon';
   }
 
@@ -542,7 +542,7 @@ class SEn extends S {
   String get conversationDeleteConversation => 'Delete Conversation';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Delete conversation with \"$name\"?';
   }
 
@@ -592,7 +592,7 @@ class SEn extends S {
   String get commonLocationLabel => 'Location';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Recommend failed: $error';
   }
 
@@ -603,7 +603,7 @@ class SEn extends S {
   String get contactOpeningChat => 'Opening chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Failed to open chat: $error';
   }
 
@@ -673,7 +673,7 @@ class SEn extends S {
   String get searchNoResults => 'No Results';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Members ($count)';
   }
 
@@ -772,7 +772,7 @@ class SEn extends S {
   String get transferAddressVerified => 'Address verified';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Available: $balance $symbol';
   }
 
@@ -833,7 +833,7 @@ class SEn extends S {
   String get profileAvatarUpdated => 'Avatar updated';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Failed to select image: $error';
   }
 
@@ -852,7 +852,7 @@ class SEn extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Failed to save address: $error';
   }
 
@@ -875,7 +875,7 @@ class SEn extends S {
   String get profileAddressDeleted => 'Address deleted';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Failed to save invoice: $error';
   }
 
@@ -931,7 +931,7 @@ class SEn extends S {
   String get commonAddressCopied => 'Address copied';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Open: $content';
   }
 
@@ -1214,7 +1214,7 @@ class SEn extends S {
   String get chatInCall => 'In call';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature feature in development...';
   }
 
@@ -1455,16 +1455,6 @@ class SEn extends S {
 
   @override
   String get chatSaveToGallery => 'Save to Gallery';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Download failed: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Share failed: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Failed to load image';
@@ -2616,6 +2606,31 @@ class SEn extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'No media URL available';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Download failed: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Error: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Music link';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Red packets and transfers cannot be forwarded';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Share failed: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Tap to retry';
 
   @override
@@ -2642,28 +2657,13 @@ class SEn extends S {
   String get groupEnterGroupAnnouncement => 'Enter group announcement';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Error: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count members, click to copy group ID';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Music link';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'No media URL available';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'You don\'t have permission to edit group name';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Red packets and transfers cannot be forwarded';
 
   @override
   String get authEmailAddress => 'Email Address';
@@ -2857,11 +2857,12 @@ class SEn extends S {
   @override
   String get authAppleLabel => 'Apple';
 
-
-  @override
-  String get authSsoNotConfigured => 'This server has not configured SSO login providers';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3064,12 +3065,12 @@ class SEn extends S {
   String get contactEnterPhone => 'Enter phone number';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Conversation: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Contact: $userId';
   }
 
@@ -3077,7 +3078,7 @@ class SEn extends S {
   String get commonDiscover => 'Discover';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Coming soon)';
   }
 
@@ -3401,12 +3402,12 @@ class SEn extends S {
   String get callLivekitNotConfigured => 'LiveKit not configured';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Failed to join meeting: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Screen share failed: $error';
   }
 
@@ -3658,12 +3659,12 @@ class SEn extends S {
   String get profileSilentMode => 'Silent mode';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Failed to play: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Playing: $ringtoneName';
   }
 
@@ -3717,7 +3718,7 @@ class SEn extends S {
   String get commonAllRead => 'All read';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count read';
   }
 

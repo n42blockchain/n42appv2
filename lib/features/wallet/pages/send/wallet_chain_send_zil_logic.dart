@@ -50,7 +50,8 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
             (widget.coinModel.privateKey == null ||
                 e.privateKey == widget.coinModel.privateKey),
       );
-      chainModel = wap.coinModels[cIndex];
+      // indexWhere 找不到返回 -1，直接下标会 RangeError。
+      chainModel = cIndex >= 0 ? wap.coinModels[cIndex] : null;
       if (chainModel != null) {
         await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
       }
@@ -238,11 +239,16 @@ mixin _ZilSendLogicMixin on ConsumerState<WalletChainSendZil> {
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
-      final signingCoin = chainModel ?? widget.coinModel;
-      final addrType = signingCoin.addrType;
+      // 派生参数必须跟随发起账户：token 模型的 addrType/pathIndex 复制自其所
+      // 属主链账户，而 chainModel 只是「首个 coinType 匹配」的主链模型，多账
+      // 户时可能属于别的账户——用它的 pathIndex 签名会跟 from 地址对不上。
+      // chainModel 只允许充当 path 模板缺失时的回退来源。
+      final addrType = widget.coinModel.addrType;
       final basePath =
-          signingCoin.config.pathForAddrType(addrType) ?? "m/44'/313'/0'/0/0";
-      final path = getPathWithIndex(basePath, signingCoin.pathIndex);
+          widget.coinModel.config.pathForAddrType(addrType) ??
+          chainModel?.config.pathForAddrType(addrType) ??
+          "m/44'/313'/0'/0/0";
+      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
       final decimals =
           (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
 

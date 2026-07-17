@@ -27,13 +27,20 @@ void main() {
       );
     });
 
+    test('parses string decimals like CoinConfigView does', () {
+      // 拒绝字符串会让存成 "8" 的代币按 18 位精度换算，金额差 10^10 倍。
+      expect(resolveWalletBridgeTokenDecimals({'decimals': '6'}), 6);
+      expect(resolveWalletBridgeTokenDecimals({'decimal': '8'}), 8);
+    });
+
     test('uses the requested fallback for invalid values', () {
       expect(resolveWalletBridgeTokenDecimals({'decimals': -1}), 18);
       expect(
-        resolveWalletBridgeTokenDecimals({'decimals': '6'}, fallback: 12),
+        resolveWalletBridgeTokenDecimals({'decimals': 'abc'}, fallback: 12),
         12,
       );
       expect(resolveWalletBridgeTokenDecimals({'decimals': 6.5}), 18);
+      expect(resolveWalletBridgeTokenDecimals({'decimals': '300'}), 18);
     });
   });
 

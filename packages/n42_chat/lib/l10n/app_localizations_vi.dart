@@ -21,7 +21,7 @@ class SVi extends S {
   String get chatCallServiceNotInitialized => 'Dich vu goi chua khoi tao';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Dang nhap that bai: $error';
   }
 
@@ -150,7 +150,7 @@ class SVi extends S {
       'Quyền sử dụng micrô đã bị từ chối. Vui lòng kích hoạt nó trong cài đặt hệ thống để sử dụng tin nhắn thoại.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Bat dau ghi am that bai: $error';
   }
 
@@ -158,7 +158,7 @@ class SVi extends S {
   String get commonRecordingTooShort => 'Ban ghi qua ngan';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Dung ghi am that bai: $error';
   }
 
@@ -274,7 +274,7 @@ class SVi extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'Mã N42: $id';
   }
 
@@ -376,7 +376,7 @@ class SVi extends S {
   String get profileChooseFromGallery => 'Chon tu thu vien';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Luu that bai: $error';
   }
 
@@ -424,7 +424,7 @@ class SVi extends S {
   String get authEnterServerAddress => 'Nhap dia chi may chu';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Da ket noi toi $serverName';
   }
 
@@ -521,7 +521,7 @@ class SVi extends S {
   String get commonPayment => 'Thanh toan';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature sap ra mat';
   }
 
@@ -544,7 +544,7 @@ class SVi extends S {
   String get conversationDeleteConversation => 'Xoa cuoc tro chuyen';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Xoa cuoc tro chuyen voi \"$name\"?';
   }
 
@@ -595,7 +595,7 @@ class SVi extends S {
   String get commonLocationLabel => 'Vi tri';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Gioi thieu that bai: $error';
   }
 
@@ -606,7 +606,7 @@ class SVi extends S {
   String get contactOpeningChat => 'Dang mo tro chuyen...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Mo tro chuyen that bai: $error';
   }
 
@@ -674,7 +674,7 @@ class SVi extends S {
   String get searchNoResults => 'Khong co ket qua';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Thanh vien ($count)';
   }
 
@@ -773,7 +773,7 @@ class SVi extends S {
   String get transferAddressVerified => 'Dia chi da xac minh';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Kha dung: $balance $symbol';
   }
 
@@ -834,7 +834,7 @@ class SVi extends S {
   String get profileAvatarUpdated => 'Da cap nhat anh dai dien';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Chon hinh anh that bai: $error';
   }
 
@@ -853,7 +853,7 @@ class SVi extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Luu dia chi that bai: $error';
   }
 
@@ -876,7 +876,7 @@ class SVi extends S {
   String get profileAddressDeleted => 'Da xoa dia chi';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Luu hoa don that bai: $error';
   }
 
@@ -932,7 +932,7 @@ class SVi extends S {
   String get commonAddressCopied => 'Da sao chep dia chi';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Mo: $content';
   }
 
@@ -1216,7 +1216,7 @@ class SVi extends S {
   String get chatInCall => 'Dang trong cuoc goi';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Tinh nang dang phat trien...';
   }
 
@@ -1457,16 +1457,6 @@ class SVi extends S {
 
   @override
   String get chatSaveToGallery => 'Luu vao Thu vien';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Tai xuong that bai: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Chia se that bai: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Tai hinh anh that bai';
@@ -2612,6 +2602,31 @@ class SVi extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL phương tiện không khả dụng';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Tai xuong that bai: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Lỗi: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Liên kết nhạc';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Lì xì và chuyển khoản không thể chuyển tiếp';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Chia se that bai: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Nhấn để thử lại';
 
   @override
@@ -2638,28 +2653,13 @@ class SVi extends S {
   String get groupEnterGroupAnnouncement => 'Nhập thông báo nhóm';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Lỗi: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count thành viên, nhấp để sao chép ID nhóm';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Liên kết nhạc';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL phương tiện không khả dụng';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Bạn không có quyền chỉnh sửa tên nhóm';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Lì xì và chuyển khoản không thể chuyển tiếp';
 
   @override
   String get authEmailAddress => 'Địa chỉ email';
@@ -2853,11 +2853,12 @@ class SVi extends S {
   @override
   String get authAppleLabel => 'táo';
 
-
-  @override
-  String get authSsoNotConfigured => 'Máy chủ này chưa cấu hình nhà cung cấp đăng nhập SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Máy chủ này chưa cấu hình nhà cung cấp đăng nhập SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3063,12 +3064,12 @@ class SVi extends S {
   String get contactEnterPhone => 'Nhập số điện thoại';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Cuoc tro chuyen: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Lien he: $userId';
   }
 
@@ -3076,7 +3077,7 @@ class SVi extends S {
   String get commonDiscover => 'Kham pha';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Sap ra mat)';
   }
 
@@ -3403,12 +3404,12 @@ class SVi extends S {
   String get callLivekitNotConfigured => 'LiveKit chua duoc cau hinh';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Tham gia cuoc hop that bai: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Chia se man hinh that bai: $error';
   }
 
@@ -3661,12 +3662,12 @@ class SVi extends S {
   String get profileSilentMode => 'Che do im lang';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Phat that bai: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Dang phat: $ringtoneName';
   }
 
@@ -3720,7 +3721,7 @@ class SVi extends S {
   String get commonAllRead => 'Da doc tat ca';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count da doc';
   }
 

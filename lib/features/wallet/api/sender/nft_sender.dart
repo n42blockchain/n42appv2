@@ -42,10 +42,15 @@ class NftSender implements ChainSender {
       return SendResult.fail('NFT contract address is required');
     }
 
-    final chainId = resolveChainConfigId(
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
       params.chainConfig,
       isTest: params.isTest,
     );
+    // 测试网缺 chainId_test 时绝不能回退主网 chainId：签出的交易在主网合法。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
     final gas = getCoinGas(coinType, contract: true);
 
     // Chain balance for gas

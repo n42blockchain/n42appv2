@@ -61,6 +61,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
   Future<void> initWallet({bool shouldInitCoinInfo = false}) async {
     if (buildwallet == true) return;
     buildwallet = true;
+    // 入口先清空是为了让骨架屏接管；但构建中途抛错的话不能让用户的资产列表
+    // 停在空白——失败时整体回滚到进入前的数据。
+    final prevCoinList = coinList;
+    final prevCoinModels = _coinModels;
+    final prevAggregatedCoins = _aggregatedCoins;
     coinList = [];
     _coinModels = [];
     _aggregatedCoins = [];
@@ -70,6 +75,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
       await _mergeCustomChains();
       await _syncNewChains();
       await buildCoinModel();
+    } catch (_) {
+      coinList = prevCoinList;
+      _coinModels = prevCoinModels;
+      _aggregatedCoins = prevAggregatedCoins;
+      rethrow;
     } finally {
       buildwallet = false;
       refresh();

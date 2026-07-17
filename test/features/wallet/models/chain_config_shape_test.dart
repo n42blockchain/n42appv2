@@ -44,5 +44,26 @@ void main() {
         );
       }
     });
+
+    test('missing testnet chain ID resolves to null, never to mainnet', () {
+      // 测试网缺 chainId_test 时若回退主网值/1，签出的「测试网」交易在
+      // 以太坊主网完全合法（可重放）。发送方据 null 拒发。
+      final config = <String, dynamic>{'chainId': 56};
+      expect(resolveChainConfigIdOrNull(config, isTest: true), isNull);
+      expect(resolveChainConfigIdOrNull(config), 56);
+      expect(resolveChainConfigIdOrNull(null), isNull);
+      expect(
+        resolveChainConfigIdOrNull(
+          <String, dynamic>{'chainId': 56, 'chainId_test': 97},
+          isTest: true,
+        ),
+        97,
+      );
+    });
+
+    test('Aptos config carries the real testnet chain ID', () {
+      final apt = allChainUrlMap['APT']! as Map<String, dynamic>;
+      expect(resolveChainConfigIdOrNull(apt, isTest: true), 2);
+    });
   });
 }

@@ -36,15 +36,22 @@ final _walletBridgeHexRegExp = RegExp(r'^[0-9a-fA-F]+$');
 /// Resolves the token precision used by the Chat wallet bridge.
 ///
 /// Wallet coin records use `decimals`. The singular key is accepted only for
-/// compatibility with older imported records.
+/// compatibility with older imported records. Parsing must stay aligned with
+/// [CoinConfigView.decimals]（含字符串形态）——此前拒绝字符串直接回退 18，
+/// 存成 "8" 的代币会按 10^10 倍错误精度换算金额。
 int resolveWalletBridgeTokenDecimals(
   Map<String, dynamic> coin, {
   int fallback = 18,
 }) {
   final value = coin['decimals'] ?? coin['decimal'];
-  if (value is! num || value < 0 || value > 255) return fallback;
-  final decimals = value.toInt();
-  return value == decimals ? decimals : fallback;
+  final num? parsed = switch (value) {
+    num v => v,
+    String v => num.tryParse(v.trim()),
+    _ => null,
+  };
+  if (parsed == null || parsed < 0 || parsed > 255) return fallback;
+  final decimals = parsed.toInt();
+  return parsed == decimals ? decimals : fallback;
 }
 
 String buildErc1155BalanceCalldata(String ownerAddress, BigInt tokenId) {

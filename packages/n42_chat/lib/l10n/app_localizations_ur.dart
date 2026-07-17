@@ -21,7 +21,7 @@ class SUr extends S {
   String get chatCallServiceNotInitialized => 'کال سروس شروع نہیں کی گئی۔';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'لاگ ان ناکام: $error';
   }
 
@@ -149,7 +149,7 @@ class SUr extends S {
       'مائیکروفون کی اجازت مسترد کر دی گئی ہے۔ صوتی پیغامات استعمال کرنے کے لیے براہ کرم اسے سسٹم کی ترتیبات میں فعال کریں۔';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'ریکارڈنگ شروع کرنے میں ناکام: $error';
   }
 
@@ -157,7 +157,7 @@ class SUr extends S {
   String get commonRecordingTooShort => 'ریکارڈنگ بہت مختصر ہے۔';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'ریکارڈنگ روکنے میں ناکام: $error';
   }
 
@@ -275,7 +275,7 @@ class SUr extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 ID: $id';
   }
 
@@ -377,7 +377,7 @@ class SUr extends S {
   String get profileChooseFromGallery => 'گیلری سے انتخاب کریں۔';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'محفوظ کرنا ناکام ہو گیا: $error';
   }
 
@@ -425,7 +425,7 @@ class SUr extends S {
   String get authEnterServerAddress => 'سرور کا پتہ درج کریں۔';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverName سے منسلک ہے۔';
   }
 
@@ -525,7 +525,7 @@ class SUr extends S {
   String get commonPayment => 'ادائیگی';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature جلد آرہا ہے۔';
   }
 
@@ -548,7 +548,7 @@ class SUr extends S {
   String get conversationDeleteConversation => 'گفتگو کو حذف کریں۔';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\" کے ساتھ گفتگو کو حذف کریں؟';
   }
 
@@ -600,7 +600,7 @@ class SUr extends S {
   String get commonLocationLabel => 'مقام';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'تجویز ناکام ہوئی: $error';
   }
 
@@ -611,7 +611,7 @@ class SUr extends S {
   String get contactOpeningChat => 'چیٹ کھول رہا ہے...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'چیٹ کھولنے میں ناکام: $error';
   }
 
@@ -681,7 +681,7 @@ class SUr extends S {
   String get searchNoResults => 'کوئی نتیجہ نہیں';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'اراکین ($count)';
   }
 
@@ -781,7 +781,7 @@ class SUr extends S {
   String get transferAddressVerified => 'پتہ کی تصدیق ہو گئی۔';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'دستیاب: $balance $symbol';
   }
 
@@ -842,7 +842,7 @@ class SUr extends S {
   String get profileAvatarUpdated => 'اوتار اپ ڈیٹ ہو گیا۔';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'تصویر منتخب کرنے میں ناکام: $error';
   }
 
@@ -861,7 +861,7 @@ class SUr extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'پتہ محفوظ کرنے میں ناکام: $error';
   }
 
@@ -884,7 +884,7 @@ class SUr extends S {
   String get profileAddressDeleted => 'پتہ حذف کر دیا گیا۔';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'انوائس محفوظ کرنے میں ناکام: $error';
   }
 
@@ -940,7 +940,7 @@ class SUr extends S {
   String get commonAddressCopied => 'پتہ کاپی ہو گیا۔';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'کھولیں: $content';
   }
 
@@ -1225,7 +1225,7 @@ class SUr extends S {
   String get chatInCall => 'کال میں';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature خصوصیت ترقی میں ہے...';
   }
 
@@ -1468,16 +1468,6 @@ class SUr extends S {
 
   @override
   String get chatSaveToGallery => 'گیلری میں محفوظ کریں۔';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'ڈاؤن لوڈ ناکام: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'اشتراک ناکام: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'تصویر لوڈ کرنے میں ناکام';
@@ -2636,6 +2626,31 @@ class SUr extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'کوئی میڈیا URL دستیاب نہیں ہے۔';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'ڈاؤن لوڈ ناکام: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'خرابی: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'میوزک لنک';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'ریڈ پیکٹ اور ٹرانسفر فارورڈ نہیں کیے جا سکتے';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'اشتراک ناکام: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'دوبارہ کوشش کرنے کے لیے تھپتھپائیں۔';
 
   @override
@@ -2662,28 +2677,13 @@ class SUr extends S {
   String get groupEnterGroupAnnouncement => 'گروپ کا اعلان درج کریں۔';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'خرابی: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count ممبران، گروپ آئی ڈی کاپی کرنے کے لیے کلک کریں۔';
   }
 
   @override
-  String get chatMusicLinkLabel => 'میوزک لنک';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'کوئی میڈیا URL دستیاب نہیں ہے۔';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'آپ کو گروپ کے نام میں ترمیم کرنے کی اجازت نہیں ہے۔';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'ریڈ پیکٹ اور ٹرانسفر فارورڈ نہیں کیے جا سکتے';
 
   @override
   String get authEmailAddress => 'ای میل ایڈریس';
@@ -2883,11 +2883,12 @@ class SUr extends S {
   @override
   String get authAppleLabel => 'ایپل';
 
-
-  @override
-  String get authSsoNotConfigured => 'اس سرور نے SSO لاگ ان فراہم کنندگان کو ترتیب نہیں دیا ہے';
   @override
   String get authSsoLabel => 'ایس ایس او';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3091,12 +3092,12 @@ class SUr extends S {
   String get contactEnterPhone => 'فون نمبر درج کریں۔';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'گفتگو: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'رابطہ: $userId';
   }
 
@@ -3104,7 +3105,7 @@ class SUr extends S {
   String get commonDiscover => 'دریافت کریں۔';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(جلد آرہا ہے)';
   }
 
@@ -3430,12 +3431,12 @@ class SUr extends S {
   String get callLivekitNotConfigured => 'LiveKit کنفیگر نہیں ہے۔';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'میٹنگ میں شامل ہونے میں ناکام: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'اسکرین کا اشتراک ناکام: $error';
   }
 
@@ -3687,12 +3688,12 @@ class SUr extends S {
   String get profileSilentMode => 'خاموش موڈ';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'چلانے میں ناکام: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'چل رہا ہے: $ringtoneName';
   }
 
@@ -3746,7 +3747,7 @@ class SUr extends S {
   String get commonAllRead => 'سب نے پڑھا۔';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count پڑھا۔';
   }
 

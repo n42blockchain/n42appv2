@@ -49,7 +49,15 @@ class EvmSender implements ChainSender {
     final coinType = params.coinType;
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
     final baseInfo = resolveChainBaseInfo(chainConfig);
-    final chainId = resolveChainConfigId(chainConfig, isTest: params.isTest);
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
+      chainConfig,
+      isTest: params.isTest,
+    );
+    // 测试网缺 chainId_test 时绝不能回退主网 chainId：签出的交易在主网合法。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
     final isContract = params.contractAddress.isNotEmpty;
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
     // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。

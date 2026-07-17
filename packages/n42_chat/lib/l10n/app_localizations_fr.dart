@@ -21,7 +21,7 @@ class SFr extends S {
   String get chatCallServiceNotInitialized => 'Service d\'appel non initialise';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Echec de la connexion : $error';
   }
 
@@ -150,7 +150,7 @@ class SFr extends S {
       'L\'autorisation du microphone a été refusée. Veuillez l\'activer dans les paramètres système pour utiliser les messages vocaux.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Echec du demarrage de l\'enregistrement : $error';
   }
 
@@ -158,7 +158,7 @@ class SFr extends S {
   String get commonRecordingTooShort => 'Enregistrement trop court';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Echec de l\'arret de l\'enregistrement : $error';
   }
 
@@ -276,7 +276,7 @@ class SFr extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'ID N42 : $id';
   }
 
@@ -379,7 +379,7 @@ class SFr extends S {
   String get profileChooseFromGallery => 'Choisir dans la galerie';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Echec de l\'enregistrement : $error';
   }
 
@@ -428,7 +428,7 @@ class SFr extends S {
   String get authEnterServerAddress => 'Entrez l\'adresse du serveur';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Connecte a $serverName';
   }
 
@@ -529,7 +529,7 @@ class SFr extends S {
   String get commonPayment => 'Paiement';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature bientot disponible';
   }
 
@@ -552,7 +552,7 @@ class SFr extends S {
   String get conversationDeleteConversation => 'Supprimer la conversation';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Supprimer la conversation avec \"$name\" ?';
   }
 
@@ -604,7 +604,7 @@ class SFr extends S {
   String get commonLocationLabel => 'Position';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Echec de la recommandation : $error';
   }
 
@@ -615,7 +615,7 @@ class SFr extends S {
   String get contactOpeningChat => 'Ouverture du chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Echec de l\'ouverture du chat : $error';
   }
 
@@ -685,7 +685,7 @@ class SFr extends S {
   String get searchNoResults => 'Aucun resultat';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Membres ($count)';
   }
 
@@ -785,7 +785,7 @@ class SFr extends S {
   String get transferAddressVerified => 'Adresse verifiee';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Disponible : $balance $symbol';
   }
 
@@ -847,7 +847,7 @@ class SFr extends S {
   String get profileAvatarUpdated => 'Avatar mis a jour';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Echec de la selection de l\'image : $error';
   }
 
@@ -866,7 +866,7 @@ class SFr extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Echec de l\'enregistrement de l\'adresse : $error';
   }
 
@@ -889,7 +889,7 @@ class SFr extends S {
   String get profileAddressDeleted => 'Adresse supprimee';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Echec de l\'enregistrement de la facture : $error';
   }
 
@@ -946,7 +946,7 @@ class SFr extends S {
   String get commonAddressCopied => 'Adresse copiee';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Ouvrir : $content';
   }
 
@@ -1233,7 +1233,7 @@ class SFr extends S {
   String get chatInCall => 'En appel';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature en cours de developpement...';
   }
 
@@ -1477,16 +1477,6 @@ class SFr extends S {
 
   @override
   String get chatSaveToGallery => 'Enregistrer dans la galerie';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Échec du téléchargement : $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Échec du partage : $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Echec du chargement de l\'image';
@@ -2663,6 +2653,31 @@ class SFr extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL média non disponible';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Échec du téléchargement : $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Erreur : $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Lien musical';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Les enveloppes rouges et les transferts ne peuvent pas être transférés';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Échec du partage : $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Appuyez pour réessayer';
 
   @override
@@ -2691,28 +2706,13 @@ class SFr extends S {
       'Veuillez saisir l\'annonce du groupe';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Erreur : $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count membres, cliquez pour copier l\'ID du groupe';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Lien musical';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL média non disponible';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Vous n\'avez pas la permission de modifier le nom du groupe';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Les enveloppes rouges et les transferts ne peuvent pas être transférés';
 
   @override
   String get authEmailAddress => 'Adresse e-mail';
@@ -2913,11 +2913,12 @@ class SFr extends S {
   @override
   String get authAppleLabel => 'Pomme';
 
-
-  @override
-  String get authSsoNotConfigured => "Ce serveur n'a pas configuré de fournisseurs de connexion SSO";
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Ce serveur n\'a pas configuré de fournisseurs de connexion SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3124,12 +3125,12 @@ class SFr extends S {
   String get contactEnterPhone => 'Entrez le numéro de téléphone';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Conversation : $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Contact : $userId';
   }
 
@@ -3137,7 +3138,7 @@ class SFr extends S {
   String get commonDiscover => 'Decouvrir';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Bientot disponible)';
   }
 
@@ -3466,12 +3467,12 @@ class SFr extends S {
   String get callLivekitNotConfigured => 'LiveKit non configure';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Echec de la participation a la reunion : $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Echec du partage d\'ecran : $error';
   }
 
@@ -3728,12 +3729,12 @@ class SFr extends S {
   String get profileSilentMode => 'Mode silencieux';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Echec de la lecture : $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Lecture : $ringtoneName';
   }
 
@@ -3787,7 +3788,7 @@ class SFr extends S {
   String get commonAllRead => 'Tout lu';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count lu(s)';
   }
 

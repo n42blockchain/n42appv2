@@ -92,10 +92,15 @@ class AptSender implements ChainSender {
     }
     final lt = (ledgerTimestamp.data as int) ~/ 1000000 + 60;
 
-    final chainId = resolveChainConfigId(
+    final int? resolvedChainId = resolveChainConfigIdOrNull(
       params.chainConfig ?? _defaultChainConfig,
       isTest: params.isTest,
     );
+    // Aptos 测试网 chain_id=2；缺配置时回退 1 签出的交易在主网合法，拒发。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
 
     final signMap = <String, dynamic>{
       'amount': valuePrice.toInt(),

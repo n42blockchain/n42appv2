@@ -106,6 +106,20 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
 
   Future<void> _submit() async {
     if (_submitting) return;
+    // 任何一步（allowance/approve/supply 的网络或签名调用）抛出未捕获异常
+    // 都会让 _submitting 永远停在 true，确认按钮卡死在 Submitting...。
+    try {
+      await _submitInner();
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _submitting = false;
+        _error = e.toString();
+      });
+    }
+  }
+
+  Future<void> _submitInner() async {
     final amountWei = _amountWei();
     if (amountWei == BigInt.zero) {
       setState(() => _error = 'Enter an amount');

@@ -21,7 +21,7 @@ class SBn extends S {
   String get chatCallServiceNotInitialized => 'কল পরিষেবা আরম্ভ করা হয়নি';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'লগইন ব্যর্থ হয়েছে: $error';
   }
 
@@ -149,7 +149,7 @@ class SBn extends S {
       'মাইক্রোফোন অনুমতি অস্বীকার করা হয়েছে. ভয়েস বার্তাগুলি ব্যবহার করতে দয়া করে সিস্টেম সেটিংসে এটি সক্ষম করুন৷';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'রেকর্ডিং শুরু করতে ব্যর্থ হয়েছে: $error';
   }
 
@@ -157,7 +157,7 @@ class SBn extends S {
   String get commonRecordingTooShort => 'রেকর্ডিং খুব ছোট';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'রেকর্ডিং বন্ধ করতে ব্যর্থ হয়েছে: $error';
   }
 
@@ -274,7 +274,7 @@ class SBn extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'N42 আইডি: $id';
   }
 
@@ -376,7 +376,7 @@ class SBn extends S {
   String get profileChooseFromGallery => 'গ্যালারি থেকে চয়ন করুন';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'সংরক্ষণ ব্যর্থ হয়েছে: $error৷';
   }
 
@@ -425,7 +425,7 @@ class SBn extends S {
   String get authEnterServerAddress => 'সার্ভার ঠিকানা লিখুন';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return '$serverName এর সাথে সংযুক্ত';
   }
 
@@ -524,7 +524,7 @@ class SBn extends S {
   String get commonPayment => 'পেমেন্ট';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature শীঘ্রই আসছে';
   }
 
@@ -547,7 +547,7 @@ class SBn extends S {
   String get conversationDeleteConversation => 'কথোপকথন মুছুন';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return '\"$name\" এর সাথে কথোপকথন মুছবেন?';
   }
 
@@ -598,7 +598,7 @@ class SBn extends S {
   String get commonLocationLabel => 'অবস্থান';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'সুপারিশ ব্যর্থ হয়েছে: $error';
   }
 
@@ -609,7 +609,7 @@ class SBn extends S {
   String get contactOpeningChat => 'চ্যাট খোলা হচ্ছে...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'চ্যাট খুলতে ব্যর্থ হয়েছে: $error';
   }
 
@@ -679,7 +679,7 @@ class SBn extends S {
   String get searchNoResults => 'কোন ফলাফল নেই';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'সদস্য ($count)';
   }
 
@@ -779,7 +779,7 @@ class SBn extends S {
   String get transferAddressVerified => 'ঠিকানা যাচাই করা হয়েছে';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'উপলব্ধ: $balance $symbol';
   }
 
@@ -841,7 +841,7 @@ class SBn extends S {
   String get profileAvatarUpdated => 'অবতার আপডেট করা হয়েছে';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'ছবি নির্বাচন করতে ব্যর্থ হয়েছে: $error';
   }
 
@@ -860,7 +860,7 @@ class SBn extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'ঠিকানা সংরক্ষণ করতে ব্যর্থ হয়েছে: $error';
   }
 
@@ -883,7 +883,7 @@ class SBn extends S {
   String get profileAddressDeleted => 'ঠিকানা মুছে ফেলা হয়েছে';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'চালান সংরক্ষণ করতে ব্যর্থ হয়েছে: $error৷';
   }
 
@@ -939,7 +939,7 @@ class SBn extends S {
   String get commonAddressCopied => 'ঠিকানা কপি করা হয়েছে';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'খুলুন: $content';
   }
 
@@ -1223,7 +1223,7 @@ class SBn extends S {
   String get chatInCall => 'কলে';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return '$feature বৈশিষ্ট্য বিকাশে...';
   }
 
@@ -1463,16 +1463,6 @@ class SBn extends S {
 
   @override
   String get chatSaveToGallery => 'গ্যালারিতে সংরক্ষণ করুন';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'ডাউনলোড ব্যর্থ হয়েছে: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'শেয়ার করা ব্যর্থ হয়েছে: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'ছবি লোড করতে ব্যর্থ হয়েছে৷';
@@ -2632,6 +2622,31 @@ class SBn extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'কোনো মিডিয়া URL উপলব্ধ নেই৷';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'ডাউনলোড ব্যর্থ হয়েছে: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'ত্রুটি: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'সঙ্গীত লিঙ্ক';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'লাল প্যাকেট এবং স্থানান্তর ফরোয়ার্ড করা যাবে না';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'শেয়ার করা ব্যর্থ হয়েছে: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'আবার চেষ্টা করতে আলতো চাপুন';
 
   @override
@@ -2658,28 +2673,13 @@ class SBn extends S {
   String get groupEnterGroupAnnouncement => 'গ্রুপ ঘোষণা লিখুন';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'ত্রুটি: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count সদস্য, গ্রুপ আইডি কপি করতে ক্লিক করুন';
   }
 
   @override
-  String get chatMusicLinkLabel => 'সঙ্গীত লিঙ্ক';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'কোনো মিডিয়া URL উপলব্ধ নেই৷';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'আপনার গ্রুপের নাম সম্পাদনা করার অনুমতি নেই';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'লাল প্যাকেট এবং স্থানান্তর ফরোয়ার্ড করা যাবে না';
 
   @override
   String get authEmailAddress => 'ইমেইল ঠিকানা';
@@ -2874,11 +2874,12 @@ class SBn extends S {
   @override
   String get authAppleLabel => 'আপেল';
 
-
-  @override
-  String get authSsoNotConfigured => 'এই সার্ভার SSO লগইন প্রদানকারী কনফিগার করেনি';
   @override
   String get authSsoLabel => 'এসএসও';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0.00';
@@ -3079,12 +3080,12 @@ class SBn extends S {
   String get contactEnterPhone => 'ফোন নম্বর লিখুন';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'কথোপকথন: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'যোগাযোগ: $userId';
   }
 
@@ -3092,7 +3093,7 @@ class SBn extends S {
   String get commonDiscover => 'আবিষ্কার করুন';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(শীঘ্রই আসছে)';
   }
 
@@ -3417,12 +3418,12 @@ class SBn extends S {
   String get callLivekitNotConfigured => 'LiveKit কনফিগার করা হয়নি';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'মিটিংয়ে যোগ দিতে ব্যর্থ হয়েছে: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'স্ক্রীন শেয়ার করা ব্যর্থ হয়েছে: $error';
   }
 
@@ -3674,12 +3675,12 @@ class SBn extends S {
   String get profileSilentMode => 'নীরব মোড';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'খেলতে ব্যর্থ হয়েছে: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'বাজানো: $ringtoneName';
   }
 
@@ -3733,7 +3734,7 @@ class SBn extends S {
   String get commonAllRead => 'সবাই পড়ে';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count পড়া';
   }
 

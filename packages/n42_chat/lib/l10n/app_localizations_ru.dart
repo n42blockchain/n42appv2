@@ -22,7 +22,7 @@ class SRu extends S {
       'Служба вызовов не инициализирована';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Ошибка входа: $error';
   }
 
@@ -151,7 +151,7 @@ class SRu extends S {
       'Разрешение на использование микрофона отклонено. Пожалуйста, включите его в настройках системы, чтобы использовать голосовые сообщения.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Не удалось начать запись: $error';
   }
 
@@ -159,7 +159,7 @@ class SRu extends S {
   String get commonRecordingTooShort => 'Запись слишком короткая';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Не удалось остановить запись: $error';
   }
 
@@ -277,7 +277,7 @@ class SRu extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'Идентификатор N42: $id';
   }
 
@@ -379,7 +379,7 @@ class SRu extends S {
   String get profileChooseFromGallery => 'Выбрать из галереи';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Ошибка сохранения: $error';
   }
 
@@ -428,7 +428,7 @@ class SRu extends S {
   String get authEnterServerAddress => 'Введите адрес сервера';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Подключено к $serverName';
   }
 
@@ -528,7 +528,7 @@ class SRu extends S {
   String get commonPayment => 'Оплата';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature скоро появится';
   }
 
@@ -551,7 +551,7 @@ class SRu extends S {
   String get conversationDeleteConversation => 'Удалить разговор';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Удалить разговор с \"$name\"?';
   }
 
@@ -602,7 +602,7 @@ class SRu extends S {
   String get commonLocationLabel => 'Местоположение';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Ошибка рекомендации: $error';
   }
 
@@ -613,7 +613,7 @@ class SRu extends S {
   String get contactOpeningChat => 'Открытие чата...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Не удалось открыть чат: $error';
   }
 
@@ -683,7 +683,7 @@ class SRu extends S {
   String get searchNoResults => 'Нет результатов';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Участники ($count)';
   }
 
@@ -783,7 +783,7 @@ class SRu extends S {
   String get transferAddressVerified => 'Адрес подтверждён';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Доступно: $balance $symbol';
   }
 
@@ -845,7 +845,7 @@ class SRu extends S {
   String get profileAvatarUpdated => 'Аватар обновлён';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Не удалось выбрать изображение: $error';
   }
 
@@ -864,7 +864,7 @@ class SRu extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Не удалось сохранить адрес: $error';
   }
 
@@ -887,7 +887,7 @@ class SRu extends S {
   String get profileAddressDeleted => 'Адрес удалён';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Не удалось сохранить счёт: $error';
   }
 
@@ -945,7 +945,7 @@ class SRu extends S {
   String get commonAddressCopied => 'Адрес скопирован';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Открыть: $content';
   }
 
@@ -1231,7 +1231,7 @@ class SRu extends S {
   String get chatInCall => 'В разговоре';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Функция в разработке...';
   }
 
@@ -1472,16 +1472,6 @@ class SRu extends S {
 
   @override
   String get chatSaveToGallery => 'Сохранить в галерею';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Ошибка загрузки: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Ошибка при отправке: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Не удалось загрузить изображение';
@@ -2645,6 +2635,31 @@ class SRu extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL медиа недоступен';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Ошибка загрузки: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Ошибка: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Ссылка на музыку';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Красные конверты и переводы нельзя пересылать';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Ошибка при отправке: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Нажмите, чтобы повторить';
 
   @override
@@ -2671,28 +2686,13 @@ class SRu extends S {
   String get groupEnterGroupAnnouncement => 'Введите объявление группы';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Ошибка: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count участников, нажмите для копирования ID группы';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Ссылка на музыку';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL медиа недоступен';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'У вас нет прав для изменения названия группы';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Красные конверты и переводы нельзя пересылать';
 
   @override
   String get authEmailAddress => 'Адрес электронной почты';
@@ -2888,11 +2888,12 @@ class SRu extends S {
   @override
   String get authAppleLabel => 'Яблоко';
 
-
-  @override
-  String get authSsoNotConfigured => 'Этот сервер не настроил провайдеров входа SSO';
   @override
   String get authSsoLabel => 'система единого входа';
+
+  @override
+  String get authSsoNotConfigured =>
+      'This server has not configured SSO login providers';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3095,12 +3096,12 @@ class SRu extends S {
   String get contactEnterPhone => 'Введите номер телефона';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Разговор: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Контакт: $userId';
   }
 
@@ -3108,7 +3109,7 @@ class SRu extends S {
   String get commonDiscover => 'Обзор';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Скоро)';
   }
 
@@ -3438,12 +3439,12 @@ class SRu extends S {
   String get callLivekitNotConfigured => 'LiveKit не настроен';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Не удалось присоединиться к конференции: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Не удалось поделиться экраном: $error';
   }
 
@@ -3696,12 +3697,12 @@ class SRu extends S {
   String get profileSilentMode => 'Беззвучный режим';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Ошибка воспроизведения: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Воспроизведение: $ringtoneName';
   }
 
@@ -3755,7 +3756,7 @@ class SRu extends S {
   String get commonAllRead => 'Все прочитаны';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count прочитано';
   }
 

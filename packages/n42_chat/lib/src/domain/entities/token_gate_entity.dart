@@ -3,6 +3,11 @@ import 'package:equatable/equatable.dart';
 /// 代币标准
 enum TokenStandard { erc20, erc721, erc1155, native }
 
+/// 返回宿主钱包中该链原生资产的 **coinType**（喂给 walletBridge.getBalance）。
+///
+/// 注意这不是链原生 gas 币的币种符号：Optimism/Arbitrum 的 gas 币是 ETH，
+/// 但宿主钱包把「OP 链上的 ETH」记在 coinType 'OP' 名下（unit 才是 ETH）。
+/// 这里若“修正”成 'ETH'，getBalance 会错查以太坊主网余额。
 String nativeTokenSymbolForChainId(int chainId) => switch (chainId) {
   1 => 'ETH',
   10 => 'OP',

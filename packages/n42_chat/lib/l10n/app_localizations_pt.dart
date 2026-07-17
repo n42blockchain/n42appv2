@@ -22,7 +22,7 @@ class SPt extends S {
       'Serviço de chamada não inicializado';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Falha no login: $error';
   }
 
@@ -150,7 +150,7 @@ class SPt extends S {
       'A permissão do microfone foi negada. Ative-o nas configurações do sistema para usar mensagens de voz.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Falha ao iniciar gravação: $error';
   }
 
@@ -158,7 +158,7 @@ class SPt extends S {
   String get commonRecordingTooShort => 'Gravação muito curta';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Falha ao parar gravação: $error';
   }
 
@@ -276,7 +276,7 @@ class SPt extends S {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'ID N42: $id';
   }
 
@@ -378,7 +378,7 @@ class SPt extends S {
   String get profileChooseFromGallery => 'Escolher da Galeria';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Falha ao salvar: $error';
   }
 
@@ -427,7 +427,7 @@ class SPt extends S {
   String get authEnterServerAddress => 'Digite o endereço do servidor';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Conectado a $serverName';
   }
 
@@ -527,7 +527,7 @@ class SPt extends S {
   String get commonPayment => 'Pagamento';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature em breve';
   }
 
@@ -550,7 +550,7 @@ class SPt extends S {
   String get conversationDeleteConversation => 'Excluir Conversa';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Excluir conversa com \"$name\"?';
   }
 
@@ -602,7 +602,7 @@ class SPt extends S {
   String get commonLocationLabel => 'Localização';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Falha na recomendação: $error';
   }
 
@@ -613,7 +613,7 @@ class SPt extends S {
   String get contactOpeningChat => 'Abrindo chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Falha ao abrir chat: $error';
   }
 
@@ -683,7 +683,7 @@ class SPt extends S {
   String get searchNoResults => 'Nenhum resultado';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Membros ($count)';
   }
 
@@ -783,7 +783,7 @@ class SPt extends S {
   String get transferAddressVerified => 'Endereço verificado';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Disponível: $balance $symbol';
   }
 
@@ -845,7 +845,7 @@ class SPt extends S {
   String get profileAvatarUpdated => 'Avatar atualizado';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Falha ao selecionar imagem: $error';
   }
 
@@ -864,7 +864,7 @@ class SPt extends S {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Falha ao salvar endereço: $error';
   }
 
@@ -887,7 +887,7 @@ class SPt extends S {
   String get profileAddressDeleted => 'Endereço excluído';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Falha ao salvar fatura: $error';
   }
 
@@ -944,7 +944,7 @@ class SPt extends S {
   String get commonAddressCopied => 'Endereço copiado';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Abrir: $content';
   }
 
@@ -1231,7 +1231,7 @@ class SPt extends S {
   String get chatInCall => 'Em chamada';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Recurso em desenvolvimento...';
   }
 
@@ -1473,16 +1473,6 @@ class SPt extends S {
 
   @override
   String get chatSaveToGallery => 'Salvar na Galeria';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Falha no download: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Falha ao compartilhar: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Falha ao carregar imagem';
@@ -2653,6 +2643,31 @@ class SPt extends S {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL de mídia não disponível';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Falha no download: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Erro: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Link de música';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Envelopes vermelhos e transferências não podem ser encaminhados';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Falha ao compartilhar: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Toque para tentar novamente';
 
   @override
@@ -2680,28 +2695,13 @@ class SPt extends S {
   String get groupEnterGroupAnnouncement => 'Digite o anúncio do grupo';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Erro: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count membros, clique para copiar ID do grupo';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Link de música';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL de mídia não disponível';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Você não tem permissão para editar o nome do grupo';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Envelopes vermelhos e transferências não podem ser encaminhados';
 
   @override
   String get authEmailAddress => 'Endereço de e-mail';
@@ -2896,11 +2896,12 @@ class SPt extends S {
   @override
   String get authAppleLabel => 'maçã';
 
-
-  @override
-  String get authSsoNotConfigured => 'Este servidor não configurou provedores de login SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Este servidor não configurou provedores de login SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -3105,12 +3106,12 @@ class SPt extends S {
   String get contactEnterPhone => 'Digite o número de telefone';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Conversa: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Contato: $userId';
   }
 
@@ -3118,7 +3119,7 @@ class SPt extends S {
   String get commonDiscover => 'Descobrir';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Em breve)';
   }
 
@@ -3447,12 +3448,12 @@ class SPt extends S {
   String get callLivekitNotConfigured => 'LiveKit não configurado';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Falha ao entrar na reunião: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Falha no compartilhamento de tela: $error';
   }
 
@@ -3706,12 +3707,12 @@ class SPt extends S {
   String get profileSilentMode => 'Modo silencioso';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Falha ao reproduzir: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Reproduzindo: $ringtoneName';
   }
 
@@ -3765,7 +3766,7 @@ class SPt extends S {
   String get commonAllRead => 'Todas lidas';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count lida(s)';
   }
 
@@ -5828,7 +5829,7 @@ class SPtBr extends SPt {
       'Serviço de chamada não inicializado';
 
   @override
-  String authLoginFailed(String error) {
+  String authLoginFailed(Object error) {
     return 'Falha no login: $error';
   }
 
@@ -5956,7 +5957,7 @@ class SPtBr extends SPt {
       'A permissão do microfone foi negada. Ative-o nas configurações do sistema para usar mensagens de voz.';
 
   @override
-  String commonStartRecordingFailed(String error) {
+  String commonStartRecordingFailed(Object error) {
     return 'Falha ao iniciar gravação: $error';
   }
 
@@ -5964,7 +5965,7 @@ class SPtBr extends SPt {
   String get commonRecordingTooShort => 'Gravação muito curta';
 
   @override
-  String commonStopRecordingFailed(String error) {
+  String commonStopRecordingFailed(Object error) {
     return 'Falha ao parar gravação: $error';
   }
 
@@ -6082,7 +6083,7 @@ class SPtBr extends SPt {
   }
 
   @override
-  String contactN42Id(String id) {
+  String contactN42Id(Object id) {
     return 'ID N42: $id';
   }
 
@@ -6184,7 +6185,7 @@ class SPtBr extends SPt {
   String get profileChooseFromGallery => 'Escolher da Galeria';
 
   @override
-  String profileSaveFailed(String error) {
+  String profileSaveFailed(Object error) {
     return 'Falha ao salvar: $error';
   }
 
@@ -6233,7 +6234,7 @@ class SPtBr extends SPt {
   String get authEnterServerAddress => 'Digite o endereço do servidor';
 
   @override
-  String authConnectedTo(String serverName) {
+  String authConnectedTo(Object serverName) {
     return 'Conectado a $serverName';
   }
 
@@ -6333,7 +6334,7 @@ class SPtBr extends SPt {
   String get commonPayment => 'Pagamento';
 
   @override
-  String commonFeatureComingSoon(String feature) {
+  String commonFeatureComingSoon(Object feature) {
     return '$feature em breve';
   }
 
@@ -6356,7 +6357,7 @@ class SPtBr extends SPt {
   String get conversationDeleteConversation => 'Excluir Conversa';
 
   @override
-  String conversationDeleteConversationConfirm(String name) {
+  String conversationDeleteConversationConfirm(Object name) {
     return 'Excluir conversa com \"$name\"?';
   }
 
@@ -6408,7 +6409,7 @@ class SPtBr extends SPt {
   String get commonLocationLabel => 'Localização';
 
   @override
-  String contactRecommendFailed(String error) {
+  String contactRecommendFailed(Object error) {
     return 'Falha na recomendação: $error';
   }
 
@@ -6419,7 +6420,7 @@ class SPtBr extends SPt {
   String get contactOpeningChat => 'Abrindo chat...';
 
   @override
-  String contactOpenChatFailed(String error) {
+  String contactOpenChatFailed(Object error) {
     return 'Falha ao abrir chat: $error';
   }
 
@@ -6489,7 +6490,7 @@ class SPtBr extends SPt {
   String get searchNoResults => 'Nenhum resultado';
 
   @override
-  String commonGroupMembers(int count) {
+  String commonGroupMembers(Object count) {
     return 'Membros ($count)';
   }
 
@@ -6589,7 +6590,7 @@ class SPtBr extends SPt {
   String get transferAddressVerified => 'Endereço verificado';
 
   @override
-  String transferAvailableBalance(String balance, String symbol) {
+  String transferAvailableBalance(Object balance, Object symbol) {
     return 'Disponível: $balance $symbol';
   }
 
@@ -6651,7 +6652,7 @@ class SPtBr extends SPt {
   String get profileAvatarUpdated => 'Avatar atualizado';
 
   @override
-  String commonSelectImageFailed(String error) {
+  String commonSelectImageFailed(Object error) {
     return 'Falha ao selecionar imagem: $error';
   }
 
@@ -6670,7 +6671,7 @@ class SPtBr extends SPt {
   }
 
   @override
-  String profileSaveAddressFailed(String error) {
+  String profileSaveAddressFailed(Object error) {
     return 'Falha ao salvar endereço: $error';
   }
 
@@ -6693,7 +6694,7 @@ class SPtBr extends SPt {
   String get profileAddressDeleted => 'Endereço excluído';
 
   @override
-  String profileSaveInvoiceFailed(String error) {
+  String profileSaveInvoiceFailed(Object error) {
     return 'Falha ao salvar fatura: $error';
   }
 
@@ -6750,7 +6751,7 @@ class SPtBr extends SPt {
   String get commonAddressCopied => 'Endereço copiado';
 
   @override
-  String favoriteOpenItem(String content) {
+  String favoriteOpenItem(Object content) {
     return 'Abrir: $content';
   }
 
@@ -7037,7 +7038,7 @@ class SPtBr extends SPt {
   String get chatInCall => 'Em chamada';
 
   @override
-  String commonFeatureInDevelopment(String feature) {
+  String commonFeatureInDevelopment(Object feature) {
     return 'Recurso em desenvolvimento...';
   }
 
@@ -7279,16 +7280,6 @@ class SPtBr extends SPt {
 
   @override
   String get chatSaveToGallery => 'Salvar na Galeria';
-
-  @override
-  String chatDownloadFailed(String code) {
-    return 'Falha no download: $code';
-  }
-
-  @override
-  String commonShareFailed(String error) {
-    return 'Falha ao compartilhar: $error';
-  }
 
   @override
   String get chatFailedToLoadImage => 'Falha ao carregar imagem';
@@ -8459,6 +8450,31 @@ class SPtBr extends SPt {
   }
 
   @override
+  String get chatNoMediaUrlAvailable => 'URL de mídia não disponível';
+
+  @override
+  String chatDownloadFailed(String code) {
+    return 'Falha no download: $code';
+  }
+
+  @override
+  String chatErrorWithMessage(String message) {
+    return 'Erro: $message';
+  }
+
+  @override
+  String get chatMusicLinkLabel => 'Link de música';
+
+  @override
+  String get chatRedPacketTransferCannotForward =>
+      'Envelopes vermelhos e transferências não podem ser encaminhados';
+
+  @override
+  String commonShareFailed(String error) {
+    return 'Falha ao compartilhar: $error';
+  }
+
+  @override
   String get commonTapToRetry => 'Toque para tentar novamente';
 
   @override
@@ -8486,28 +8502,13 @@ class SPtBr extends SPt {
   String get groupEnterGroupAnnouncement => 'Digite o anúncio do grupo';
 
   @override
-  String chatErrorWithMessage(String message) {
-    return 'Erro: $message';
-  }
-
-  @override
-  String groupMemberCountClickToCopy(int count) {
+  String groupMemberCountClickToCopy(Object count) {
     return '$count membros, clique para copiar ID do grupo';
   }
 
   @override
-  String get chatMusicLinkLabel => 'Link de música';
-
-  @override
-  String get chatNoMediaUrlAvailable => 'URL de mídia não disponível';
-
-  @override
   String get groupNoPermissionToEditGroupName =>
       'Você não tem permissão para editar o nome do grupo';
-
-  @override
-  String get chatRedPacketTransferCannotForward =>
-      'Envelopes vermelhos e transferências não podem ser encaminhados';
 
   @override
   String get authEmailAddress => 'Endereço de e-mail';
@@ -8702,11 +8703,12 @@ class SPtBr extends SPt {
   @override
   String get authAppleLabel => 'maçã';
 
-
-  @override
-  String get authSsoNotConfigured => 'Este servidor não configurou provedores de login SSO';
   @override
   String get authSsoLabel => 'SSO';
+
+  @override
+  String get authSsoNotConfigured =>
+      'Este servidor não configurou provedores de login SSO';
 
   @override
   String get transferAmountHintZero => '0,00';
@@ -8911,12 +8913,12 @@ class SPtBr extends SPt {
   String get contactEnterPhone => 'Digite o número de telefone';
 
   @override
-  String commonConversationWithId(String roomId) {
+  String commonConversationWithId(Object roomId) {
     return 'Conversa: $roomId';
   }
 
   @override
-  String commonContactWithId(String userId) {
+  String commonContactWithId(Object userId) {
     return 'Contato: $userId';
   }
 
@@ -8924,7 +8926,7 @@ class SPtBr extends SPt {
   String get commonDiscover => 'Descobrir';
 
   @override
-  String commonDeveloping(String title) {
+  String commonDeveloping(Object title) {
     return '$title\n(Em breve)';
   }
 
@@ -9253,12 +9255,12 @@ class SPtBr extends SPt {
   String get callLivekitNotConfigured => 'LiveKit não configurado';
 
   @override
-  String callJoinMeetingFailed(String error) {
+  String callJoinMeetingFailed(Object error) {
     return 'Falha ao entrar na reunião: $error';
   }
 
   @override
-  String callScreenShareFailed(String error) {
+  String callScreenShareFailed(Object error) {
     return 'Falha no compartilhamento de tela: $error';
   }
 
@@ -9512,12 +9514,12 @@ class SPtBr extends SPt {
   String get profileSilentMode => 'Modo silencioso';
 
   @override
-  String profilePlayFailed(String ringtoneName) {
+  String profilePlayFailed(Object ringtoneName) {
     return 'Falha ao reproduzir: $ringtoneName';
   }
 
   @override
-  String profilePlaying(String ringtoneName) {
+  String profilePlaying(Object ringtoneName) {
     return 'Reproduzindo: $ringtoneName';
   }
 
@@ -9571,7 +9573,7 @@ class SPtBr extends SPt {
   String get commonAllRead => 'Todas lidas';
 
   @override
-  String commonReadCount(int count) {
+  String commonReadCount(Object count) {
     return '$count lida(s)';
   }
 

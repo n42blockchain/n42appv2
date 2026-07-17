@@ -5,13 +5,6 @@
   "transferWalletNotConnected": "錢包未連接",
   "chatCallServiceNotInitialized": "通話服務未初始化",
   "authLoginFailed": "登錄失敗: {error}",
-  "@authLoginFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatCallBack": "回撥",
   "chatMissedVideoCall": "未接視頻通話",
   "chatMissedVoiceCall": "未接語音通話",
@@ -53,22 +46,8 @@
   "commonMicrophonePermissionRequired": "請允許使用麥克風權限",
   "chatMicrophonePermissionDeniedPermanent": "麥克風權限已被拒絕，請在系統設置中開啓以使用語音消息功能。",
   "commonStartRecordingFailed": "開始錄音失敗: {error}",
-  "@commonStartRecordingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "commonRecordingTooShort": "錄音時間太短",
   "commonStopRecordingFailed": "停止錄音失敗: {error}",
-  "@commonStopRecordingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatReleaseToCancel": "鬆開取消",
   "chatReleaseToSend": "鬆開發送，上滑取消",
   "commonHoldToTalk": "按住 說話",
@@ -76,41 +55,13 @@
   "commonAddFriend": "添加好友",
   "commonChatServiceNotConnected": "聊天服務未連接",
   "contactUserNotFoundHint": "未找到用戶 \"{query}\"\n\n提示：\n• 嘗試輸入完整用戶ID，如 @username:server.com\n• 確認用戶名拼寫正確",
-  "@contactUserNotFoundHint": {
-    "placeholders": {
-      "query": {
-        "type": "String"
-      }
-    }
-  },
   "contactCreateChatFailed": "創建會話失敗: {error}",
-  "@contactCreateChatFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "contactSearchFailed": "搜索失敗: {error}",
-  "@contactSearchFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "contactEnterUserIdOrUsername": "輸入用戶 ID 或用戶名搜索",
   "contactSearching": "搜索中...",
   "contactSearchUserToChat": "搜索用戶開始聊天",
   "contactMatrixIdExample": "可以輸入完整的 Matrix ID\n例如: @user:matrix.n42.network",
   "contactUserNotFound": "未找到用戶 \"{username}\"",
-  "@contactUserNotFound": {
-    "placeholders": {
-      "username": {
-        "type": "String"
-      }
-    }
-  },
   "commonChat": "聊天",
   "commonSettings": "設置",
   "profileEditProfile": "編輯資料",
@@ -138,13 +89,6 @@
     }
   },
   "contactN42Id": "N42號：{id}",
-  "@contactN42Id": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
   "profileN42IdTitle": "N42號",
   "profileN42Bean": "N42豆",
   "contactFriendInfo": "朋友資料",
@@ -178,13 +122,6 @@
   "commonTakePhoto": "拍照",
   "profileChooseFromGallery": "從相冊選擇",
   "profileSaveFailed": "保存失敗: {error}",
-  "@profileSaveFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "authSecureDecentralizedChat": "安全、去中心化的即時通訊",
   "commonEndToEndEncryption": "端到端加密",
   "authMessagesOnlyYouCanSee": "消息僅你和對方可見",
@@ -200,13 +137,6 @@
   "authServerAddress": "服務器地址",
   "authEnterServerAddress": "請輸入服務器地址",
   "authConnectedTo": "已連接到 {serverName}",
-  "@authConnectedTo": {
-    "placeholders": {
-      "serverName": {
-        "type": "String"
-      }
-    }
-  },
   "authUsername": "用戶名",
   "authEnterUsername": "請輸入用戶名",
   "authUsernameOrEmail": "用戶名或郵箱",
@@ -238,13 +168,6 @@
   "commonScan": "掃一掃",
   "commonPayment": "收付款",
   "commonFeatureComingSoon": "{feature} 功能即將推出",
-  "@commonFeatureComingSoon": {
-    "placeholders": {
-      "feature": {
-        "type": "String"
-      }
-    }
-  },
   "conversationMarkAsRead": "標記已讀",
   "commonUnmute": "取消靜音",
   "commonMute": "消息免打擾",
@@ -252,13 +175,6 @@
   "conversationPin": "置頂",
   "conversationDeleteConversation": "刪除會話",
   "conversationDeleteConversationConfirm": "確定要刪除與 {name} 的會話嗎？",
-  "@conversationDeleteConversationConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonNoContacts": "暫無聯繫人",
   "contactAddFriendsToChat": "添加好友開始聊天",
   "contactNotFound": "未找到聯繫人",
@@ -275,23 +191,9 @@
   "commonFileLabel": "文件",
   "commonLocationLabel": "位置",
   "contactRecommendFailed": "推薦失敗: {error}",
-  "@contactRecommendFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "profileEnterRemark": "請輸入備註名",
   "contactOpeningChat": "正在打開聊天...",
   "contactOpenChatFailed": "打開聊天失敗: {error}",
-  "@contactOpenChatFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "contactAddContact": "添加聯繫人",
   "contactEnterUserId": "輸入用戶ID",
   "contactNoFriendRequests": "暫無好友請求",
@@ -314,13 +216,6 @@
   "searchGroups": "羣聊",
   "searchNoResults": "無結果",
   "commonGroupMembers": "羣成員 ({count})",
-  "@commonGroupMembers": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "groupMembersTitle": "羣成員",
   "groupViewAll": "查看全部",
   "groupOwner": "羣主",
@@ -353,29 +248,12 @@
   "transferConfirmTransfer": "確認轉賬",
   "transferAddressVerified": "地址已驗證",
   "transferAvailableBalance": "可用餘額: {balance} {symbol}",
-  "@transferAvailableBalance": {
-    "placeholders": {
-      "balance": {
-        "type": "String"
-      },
-      "symbol": {
-        "type": "String"
-      }
-    }
-  },
   "commonEnterAmount": "請輸入金額",
   "commonRedPacketCountMin": "紅包個數至少爲1",
   "commonViewRedPacketDetails": "查看紅包詳情",
   "commonEnterTransferAmount": "請輸入轉賬金額",
   "commonTransferTo": "轉賬給",
   "commonFromSender": "來自 {name}",
-  "@commonFromSender": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonConfirmReceive": "確認收款",
   "groupProfile": "羣資料",
   "groupRemoveMember": "移出羣聊",
@@ -389,32 +267,11 @@
   "profileQrCode": "二維碼",
   "profileAvatarUpdated": "頭像更新成功",
   "commonSelectImageFailed": "選擇圖片失敗: {error}",
-  "@commonSelectImageFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "profileChangeName": "修改名字",
   "profileMale": "男",
   "profileFemale": "女",
   "chatFeatureInDev": "{feature}功能開發中...",
-  "@chatFeatureInDev": {
-    "placeholders": {
-      "feature": {
-        "type": "String"
-      }
-    }
-  },
   "profileSaveAddressFailed": "保存地址失敗: {error}",
-  "@profileSaveAddressFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "profileAddNew": "新增",
   "profileAddAddress": "添加地址",
   "profileAddressAdded": "地址添加成功",
@@ -422,13 +279,6 @@
   "profileDeleteAddress": "刪除地址",
   "profileAddressDeleted": "地址已刪除",
   "profileSaveInvoiceFailed": "保存發票抬頭失敗: {error}",
-  "@profileSaveInvoiceFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "profileMyInvoices": "我的發票抬頭",
   "profileAddInvoice": "添加發票抬頭",
   "profileInvoiceAdded": "發票抬頭添加成功",
@@ -439,40 +289,12 @@
   "groupSelectAtLeastOne": "請至少選擇一位成員",
   "chatFileNotExist": "文件不存在",
   "chatSendFailed": "發送失敗: {error}",
-  "@chatSendFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatCannotOpenBrowser": "無法打開瀏覽器",
   "chatSelectFileFailed": "選擇文件失敗: {error}",
-  "@chatSelectFileFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "settingsSetupFailed": "設置失敗: {error}",
-  "@settingsSetupFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "transferEnterValidAmount": "請輸入有效的轉賬金額",
   "commonAddressCopied": "地址已複製",
   "favoriteOpenItem": "打開: {content}",
-  "@favoriteOpenItem": {
-    "placeholders": {
-      "content": {
-        "type": "String"
-      }
-    }
-  },
   "favoriteDeleted": "已刪除",
   "profileWallet": "錢包",
   "chatRecording": "錄像",
@@ -555,13 +377,6 @@
   "chatRinging": "響鈴中...",
   "chatInCall": "通話中",
   "commonFeatureInDevelopment": "{feature}功能開發中...",
-  "@commonFeatureInDevelopment": {
-    "placeholders": {
-      "feature": {
-        "type": "String"
-      }
-    }
-  },
   "chatCollectMessages": "已收藏 {count} 條消息",
   "commonMemberCount": "{count} 人",
   "groupDone": "完成({count})",
@@ -577,13 +392,6 @@
   "profileOrdersAndCards": "訂單與卡包",
   "profileStickers": "表情",
   "profileStatusSetTo": "狀態已設置爲：{status}",
-  "@profileStatusSetTo": {
-    "placeholders": {
-      "status": {
-        "type": "String"
-      }
-    }
-  },
   "profileAvatarUploadFailed": "頭像上傳失敗",
   "profilePersonalProfile": "個人信息",
   "profileName": "名字",
@@ -595,57 +403,22 @@
   "profileDefaultRingtone": "默認鈴聲",
   "profileMyAddresses": "我的地址",
   "profileGenderSetTo": "性別已設置爲：{gender}",
-  "@profileGenderSetTo": {
-    "placeholders": {
-      "gender": {
-        "type": "String"
-      }
-    }
-  },
   "profileSelectRegion": "選擇地區",
   "profileSelectCity": "選擇城市",
   "profileRegionSetTo": "地區已設置爲：{region}",
-  "@profileRegionSetTo": {
-    "placeholders": {
-      "region": {
-        "type": "String"
-      }
-    }
-  },
   "profileSetPoke": "設置拍一拍",
   "profileFriendPokedMe": "朋友拍了拍我",
   "profileExample": "示例",
   "profileOnTheShoulder": "的肩膀",
   "profilePokeCleared": "拍一拍已清除",
   "profilePokeSetTo": "拍一拍已設置爲：拍了拍我{suffix}",
-  "@profilePokeSetTo": {
-    "placeholders": {
-      "suffix": {
-        "type": "String"
-      }
-    }
-  },
   "profileEditSignature": "編輯個性簽名",
   "profileIntroduceYourself": "一句話介紹自己",
   "profileSignatureCleared": "個性簽名已清除",
   "profileSignatureUpdated": "個性簽名已更新",
   "profileScanToAddFriend": "掃一掃上面的二維碼圖案，加我爲好友",
   "profileRingtoneSetTo": "來電鈴聲已設置爲：{ringtone}",
-  "@profileRingtoneSetTo": {
-    "placeholders": {
-      "ringtone": {
-        "type": "String"
-      }
-    }
-  },
   "commonConfirmDissolveGroup": "確定要解散羣聊「{name}」嗎？此操作無法撤銷。",
-  "@commonConfirmDissolveGroup": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "authEnterValidServerAddress": "請輸入有效的服務器地址",
   "authEnterServerAddressFirst": "請先輸入服務器地址",
   "authPasskeyRequiresServer": "Passkey登錄需要服務器支持",
@@ -670,41 +443,10 @@
   },
   "contactAddToHomeScreen": "添加到桌面",
   "contactRecommendedCardTo": "已將{contact}的名片推薦給{recipient}",
-  "@contactRecommendedCardTo": {
-    "placeholders": {
-      "contact": {
-        "type": "String"
-      },
-      "recipient": {
-        "type": "String"
-      }
-    }
-  },
   "contactEnterRemarkName": "請輸入備註名",
   "contactRemarkSetTo": "備註已設置爲：{remark}",
-  "@contactRemarkSetTo": {
-    "placeholders": {
-      "remark": {
-        "type": "String"
-      }
-    }
-  },
   "contactAcceptedFriendRequest": "已接受{name}的好友請求",
-  "@contactAcceptedFriendRequest": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "contactRejectedFriendRequest": "已拒絕{name}的好友請求",
-  "@contactRejectedFriendRequest": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonGroupInvites": "羣邀請",
   "commonMyGroups": "我的羣聊 ({count})",
   "@commonMyGroups": {
@@ -716,13 +458,6 @@
   },
   "commonInvitedToJoinGroup": "邀請加入羣聊",
   "commonConfirmLeaveGroup": "確定要退出羣聊「{name}」嗎？",
-  "@commonConfirmLeaveGroup": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonLeave": "離開",
   "commonRecallThisMessage": "撤回該條消息？",
   "commonSavedToGallery": "已保存到相冊",
@@ -731,21 +466,7 @@
   "commonShare": "分享",
   "chatSaveToGallery": "保存到相冊",
   "chatDownloadFailed": "下載失敗: {code}",
-  "@chatDownloadFailed": {
-    "placeholders": {
-      "code": {
-        "type": "String"
-      }
-    }
-  },
   "commonShareFailed": "分享失敗: {error}",
-  "@commonShareFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatFailedToLoadImage": "圖片加載失敗",
   "chatVideoRecordingFailed": "視頻錄製失敗，請重試",
   "profileRedPacket": "紅包",
@@ -806,13 +527,6 @@
   "profileAddToBlacklist": "加入黑名單",
   "contactDeleteContact": "刪除聯繫人",
   "contactDeleteContactConfirm": "確定要刪除 {name} 嗎？",
-  "@contactDeleteContactConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "transferTitle": "轉賬",
   "transferReceiverAddressLabel": "收款地址",
   "transferSelectTokenLabel": "選擇代幣",
@@ -825,33 +539,12 @@
   "transferMyWalletAddress": "我的錢包地址",
   "transferCreatePaymentRequest": "創建收款請求",
   "profileN42IdLabel": "N42號：{id}",
-  "@profileN42IdLabel": {
-    "placeholders": {
-      "id": {
-        "type": "String"
-      }
-    }
-  },
   "commonRedPacketDefaultGreeting": "恭喜發財，大吉大利",
   "commonSenderRedPacket": "{name}的紅包",
-  "@commonSenderRedPacket": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "transferEnterValidAddress": "請輸入有效的收款地址",
   "transferPleaseSelectToken": "請選擇代幣",
   "commonReceivedTransfer": "收到轉賬",
   "commonSenderSentRedPacket": "{name}發出的紅包",
-  "@commonSenderSentRedPacket": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonSavedToBalance": "已存入零錢，可直接轉賬",
   "commonRedPacketExpiredOrEmpty": "紅包已過期/已領完",
   "transferScanFeatureComingSoon": "掃描功能開發中...",
@@ -860,13 +553,6 @@
   "commonClaimedYour": "領取了你的",
   "commonClaimedText": "領取了",
   "commonUserTyping": "{name}正在輸入...",
-  "@commonUserTyping": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "commonTyping": "對方正在輸入...",
   "commonWaitingToReceive": "待對方接收",
   "commonTapToClaim": "點擊領取",
@@ -886,22 +572,8 @@
   "qrcodeCameraPermissionRequired": "掃描二維碼需要相機權限",
   "qrcodeCameraPermissionDenied": "相機權限已被永久拒絕，請在系統設置中開啓。",
   "qrcodePermissionCheckError": "檢查權限時出錯: {error}",
-  "@qrcodePermissionCheckError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "qrcodeInvalidQrCode": "無效的二維碼",
   "qrcodeCannotAddFriend": "無法添加好友: {error}",
-  "@qrcodeCannotAddFriend": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "qrcodeScanQrCode": "掃描二維碼",
   "qrcodeCheckingCameraPermission": "正在檢查相機權限...",
   "qrcodeNeedCameraPermission": "需要相機權限",
@@ -936,13 +608,6 @@
   },
   "chatRemoveFromGroup": "移出羣聊",
   "groupConfirmRemoveMember": "確定要將\"{name}\"移出羣聊嗎？",
-  "@groupConfirmRemoveMember": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "chatUnknownSong": "未知歌曲",
   "chatUnknownArtist": "未知藝術家",
   "chatUnknownContact": "未知聯繫人",
@@ -985,13 +650,6 @@
   "searchEnterKeywordToSearch": "輸入關鍵詞開始搜索",
   "searchClearHistory": "清除",
   "searchNoResultsForQuery": "沒有找到\"{query}\"相關的結果",
-  "@searchNoResultsForQuery": {
-    "placeholders": {
-      "query": {
-        "type": "String"
-      }
-    }
-  },
   "searchAllResults": "全部",
   "searchInChat": "在聊天中搜索",
   "searchContactLabel": "聯繫人",
@@ -1036,23 +694,9 @@
   "settingsExportKeyMessage": "導出的密鑰文件包含您的所有加密密鑰，請妥善保管。",
   "settingsExport": "導出",
   "settingsDeviceIdLabel": "設備ID: {deviceId}",
-  "@settingsDeviceIdLabel": {
-    "placeholders": {
-      "deviceId": {
-        "type": "String"
-      }
-    }
-  },
   "settingsDeviceStatusVerified": "狀態: 已驗證",
   "settingsDeviceStatusUnverified": "狀態: 未驗證",
   "settingsLastActiveLabel": "最後活躍: {lastSeen}",
-  "@settingsLastActiveLabel": {
-    "placeholders": {
-      "lastSeen": {
-        "type": "String"
-      }
-    }
-  },
   "settingsVerifyThisDevice": "驗證此設備",
   "settingsCrossSigningAlreadyEnabled": "跨設備簽名已啓用",
   "settingsCrossSigningSetupSuccess": "跨設備簽名設置成功",
@@ -1076,16 +720,6 @@
   "settingsResetFailed": "重置失敗",
   "callLeaveMeetingConfirm": "確定要離開會議嗎？",
   "chatPokedSomeone": "拍了拍「{name}」{suffix}",
-  "@chatPokedSomeone": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "suffix": {
-        "type": "String"
-      }
-    }
-  },
   "chatNoContactsToAdd": "沒有可添加的聯繫人",
   "chatAddMembers": "添加成員",
   "chatInvitedMembers": "已邀請 {count} 位成員",
@@ -1097,22 +731,8 @@
     }
   },
   "chatInviteFailed": "邀請失敗: {error}",
-  "@chatInviteFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatMemberRemoved": "已移除成員",
   "chatRemoveFailed": "移除失敗: {error}",
-  "@chatRemoveFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatRealTimeLocationShareMessage": "開始共享後，對方將能看到你的實時位置，共享時長爲1小時。",
   "chatStartSharing": "開始共享",
   "chatLocationServiceNotEnabled": "位置服務未開啓",
@@ -1123,82 +743,20 @@
   "chatLocationPermissionDenied": "位置權限被拒絕",
   "chatGettingLocation": "正在獲取位置...",
   "chatGetLocationFailed": "獲取位置失敗: {error}",
-  "@chatGetLocationFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatMapPreview": "地圖預覽",
   "chatSearchLocation": "搜索地點",
   "chatRedPacketSent": "已發送 {amount} {token} 紅包",
-  "@chatRedPacketSent": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "token": {
-        "type": "String"
-      }
-    }
-  },
   "chatTransferDefault": "轉賬",
   "chatTransferSent": "已發送 {amount} {token} 轉賬",
-  "@chatTransferSent": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "token": {
-        "type": "String"
-      }
-    }
-  },
   "chatPickFileFailed": "選擇文件失敗: {error}",
-  "@chatPickFileFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatFileSizeLimit": "文件大小不能超過 50MB",
   "chatFileSending": "文件發送中: {filename}",
-  "@chatFileSending": {
-    "placeholders": {
-      "filename": {
-        "type": "String"
-      }
-    }
-  },
   "chatSendFileFailed": "發送文件失敗: {error}",
-  "@chatSendFileFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatContactCardSent": "已發送 {name} 的名片",
-  "@chatContactCardSent": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "chatFavoritesFeature": "收藏",
   "chatCouponsFeature": "卡券",
   "chatGiftFeature": "禮物",
   "chatSharedMusic": "已分享 {name}",
-  "@chatSharedMusic": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "chatEndPollTitle": "結束投票",
   "chatEndPollConfirmMessage": "確定要結束這個投票嗎？結束後將無法繼續投票。",
   "chatPollEndedMessage": "投票已結束",
@@ -1299,41 +857,13 @@
   "authEmailVerificationTitle": "郵箱驗證",
   "authEnterValidEmailAddress": "請輸入有效的郵箱地址",
   "authVerificationCodeSentTo": "驗證碼已發送到 {email}",
-  "@authVerificationCodeSentTo": {
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
   "authSendCodeFailed": "發送驗證碼失敗: {error}",
-  "@authSendCodeFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "authVerificationSuccess": "驗證成功",
   "authVerificationFailed": "驗證失敗",
   "authVerificationCodeError": "驗證碼錯誤: {error}",
-  "@authVerificationCodeError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "commonEnterVerificationCode": "輸入驗證碼",
   "authEnterYourEmail": "輸入郵箱",
   "authWeSentCodeTo": "我們已向 {email} 發送了\n6位驗證碼",
-  "@authWeSentCodeTo": {
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
   "authEnterEmailForCode": "輸入您的郵箱地址，我們將發送驗證碼",
   "commonSendVerificationCode": "發送驗證碼",
   "authResendVerificationCode": "重新發送驗證碼",
@@ -1350,13 +880,6 @@
   "contactAddingToContacts": "添加中...",
   "contactAddedToContacts": "已添加到通訊錄",
   "contactAddFailedWithError": "添加失敗: {error}",
-  "@contactAddFailedWithError": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "contactAddPhone": "添加電話",
   "contactAddTag": "添加標籤",
   "contactAddText": "添加文字",
@@ -1374,22 +897,8 @@
   "contactDoneButton": "完成",
   "callWaitingForParticipants": "等待參與者加入...",
   "callParticipantMe": "{name}（我）",
-  "@callParticipantMe": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "callSharingLabel": "共享中",
   "callScreenSharingBy": "{name} 正在共享屏幕",
-  "@callScreenSharingBy": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "callParticipantCount": "{count} 人",
   "@callParticipantCount": {
     "placeholders": {
@@ -1409,16 +918,6 @@
   "callParticipantsLabel": "參與者",
   "callJoiningMeeting": "正在加入會議...",
   "chatPollVotesFormat": "{count} 票 ({percentage}%)",
-  "@chatPollVotesFormat": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      },
-      "percentage": {
-        "type": "String"
-      }
-    }
-  },
   "chatPollParticipantsFormat": "{count} 人蔘與",
   "@chatPollParticipantsFormat": {
     "placeholders": {
@@ -1436,21 +935,7 @@
   "groupEditGroupDescription": "編輯羣描述",
   "groupEnterGroupAnnouncement": "請輸入羣公告",
   "chatErrorWithMessage": "錯誤: {message}",
-  "@chatErrorWithMessage": {
-    "placeholders": {
-      "message": {
-        "type": "String"
-      }
-    }
-  },
   "groupMemberCountClickToCopy": "{count}人，點擊複製羣ID",
-  "@groupMemberCountClickToCopy": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "chatMusicLinkLabel": "音樂鏈接",
   "chatNoMediaUrlAvailable": "沒有可用的媒體鏈接",
   "groupNoPermissionToEditGroupName": "你沒有權限修改羣名稱",
@@ -1464,13 +949,6 @@
   "authEnterRegisteredEmail": "請輸入註冊時綁定的郵箱地址",
   "authSendResetCode": "發送重置驗證碼",
   "authResetCodeSent": "重置驗證碼已發送至 {email}",
-  "@authResetCodeSent": {
-    "placeholders": {
-      "email": {
-        "type": "String"
-      }
-    }
-  },
   "authEnterResetCode": "輸入重置驗證碼",
   "authSetNewPassword": "設置新密碼",
   "commonConfirmNewPassword": "確認新密碼",
@@ -1548,13 +1026,6 @@
   "groupNoFiles": "暫無文件",
   "groupNoFilesDescription": "此羣還沒有文件",
   "groupDownloadStarted": "正在下載 {filename}...",
-  "@groupDownloadStarted": {
-    "placeholders": {
-      "filename": {
-        "type": "String"
-      }
-    }
-  },
   "contactNoCommonGroups": "暫無共同羣組",
   "contactNoCommonGroupsDescription": "你們沒有共同加入的羣組",
   "chatVoiceMessage": "語音",
@@ -1567,13 +1038,6 @@
   "contactEditTag": "編輯標籤",
   "contactDeleteTag": "刪除標籤",
   "contactDeleteTagConfirm": "確定要刪除標籤 \"{tagName}\" 嗎？",
-  "@contactDeleteTagConfirm": {
-    "placeholders": {
-      "tagName": {
-        "type": "String"
-      }
-    }
-  },
   "contactNoTags": "暫無標籤",
   "contactFriendPermissions": "朋友權限",
   "contactSetChatOnly": "設爲僅聊天",
@@ -1608,30 +1072,9 @@
   "contactPhotoAdded": "照片已添加",
   "contactEnterPhone": "輸入手機號碼",
   "commonConversationWithId": "會話: {roomId}",
-  "@commonConversationWithId": {
-    "placeholders": {
-      "roomId": {
-        "type": "String"
-      }
-    }
-  },
   "commonContactWithId": "聯繫人: {userId}",
-  "@commonContactWithId": {
-    "placeholders": {
-      "userId": {
-        "type": "String"
-      }
-    }
-  },
   "commonDiscover": "發現",
   "commonDeveloping": "{title}\n(開發中)",
-  "@commonDeveloping": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
   "commonPageNotFound": "頁面不存在",
   "commonBackToHome": "返回首頁",
   "settingsMessageNotifications": "消息通知",
@@ -1666,21 +1109,7 @@
   "settingsContactsOnly": "僅聯繫人",
   "settingsNobody": "無人",
   "settingsWhoCanSeeTitle": "誰可以看到 {title}",
-  "@settingsWhoCanSeeTitle": {
-    "placeholders": {
-      "title": {
-        "type": "String"
-      }
-    }
-  },
   "settingsVersionInfo": "版本 {version}",
-  "@settingsVersionInfo": {
-    "placeholders": {
-      "version": {
-        "type": "String"
-      }
-    }
-  },
   "settingsCheckForUpdates": "檢查更新",
   "settingsOpenSourceLicenses": "開源許可",
   "settingsFeedbackAndSuggestions": "反饋與建議",
@@ -1725,13 +1154,6 @@
   "chatVoteChanged": "投票已更改",
   "chatVoted": "已投票",
   "chatReplyTo": "回覆 {name}",
-  "@chatReplyTo": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "chatCurrentLocation": "當前位置",
   "chatNearbyPlace": "附近地點 {index}",
   "@chatNearbyPlace": {
@@ -1742,13 +1164,6 @@
     }
   },
   "chatApproximateDistance": "約 {distance}",
-  "@chatApproximateDistance": {
-    "placeholders": {
-      "distance": {
-        "type": "String"
-      }
-    }
-  },
   "chatAddress": "地址",
   "chatLatitude": "緯度",
   "chatLongitude": "經度",
@@ -1769,21 +1184,7 @@
   "callFailed": "通話失敗",
   "callLivekitNotConfigured": "LiveKit 未配置",
   "callJoinMeetingFailed": "加入會議失敗: {error}",
-  "@callJoinMeetingFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "callScreenShareFailed": "屏幕共享失敗: {error}",
-  "@callScreenShareFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "profileN42BeanTitle": "N42豆",
   "profileNoN42Bean": "暫無N42豆",
   "profileN42BeanDetails": "N42豆明細",
@@ -1867,21 +1268,7 @@
   "profileVibrateMode": "振動模式",
   "profileSilentMode": "靜音模式",
   "profilePlayFailed": "播放失敗: {ringtoneName}",
-  "@profilePlayFailed": {
-    "placeholders": {
-      "ringtoneName": {
-        "type": "String"
-      }
-    }
-  },
   "profilePlaying": "正在播放: {ringtoneName}",
-  "@profilePlaying": {
-    "placeholders": {
-      "ringtoneName": {
-        "type": "String"
-      }
-    }
-  },
   "profileStop": "停止",
   "profileSelectRingtone": "選擇鈴聲",
   "profileLoadingRingtones": "加載鈴聲中...",
@@ -1901,24 +1288,10 @@
   "commonMore": "更多",
   "commonTranslating": "翻譯中...",
   "commonTranslatedFrom": "翻譯自{language}",
-  "@commonTranslatedFrom": {
-    "placeholders": {
-      "language": {
-        "type": "String"
-      }
-    }
-  },
   "commonTranslation": "翻譯",
   "commonTranslationFailed": "翻譯失敗",
   "commonAllRead": "全部已讀",
   "commonReadCount": "{count}人已讀",
-  "@commonReadCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "commonYouRecalledMessage": "你撤回了一條消息",
   "commonMessageRecalled": "對方撤回了一條消息",
   "commonReEdit": "重新編輯",
@@ -1937,31 +1310,10 @@
   "qrcodeSaveFeatureComingSoon": "保存功能即將推出",
   "qrcodeShareFeatureComingSoon": "分享功能即將推出",
   "qrcodeProcessFailed": "處理二維碼失敗: {error}",
-  "@qrcodeProcessFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "securityDeviceIdRequired": "需要設備 ID",
   "securityVerificationStartFailed": "啓動驗證失敗: {error}",
-  "@securityVerificationStartFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "securityVerificationFailed": "驗證失敗",
   "securityVerificationFailedWithReason": "驗證失敗: {reason}",
-  "@securityVerificationFailedWithReason": {
-    "placeholders": {
-      "reason": {
-        "type": "String"
-      }
-    }
-  },
   "securityEmojiMismatchRejected": "驗證被拒絕 - 表情不匹配",
   "securityWaitingForDeviceAccept": "等待另一臺設備接受...",
   "securityVerifyDevice": "驗證此設備",
@@ -1978,13 +1330,6 @@
   "chatExportTitle": "導出聊天記錄",
   "chatExportSuccess": "導出成功",
   "chatExportFailed": "導出失敗: {error}",
-  "@chatExportFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "chatExportFormat": "導出格式",
   "chatExportHtmlDesc": "可在任何瀏覽器中打開的精美排版",
   "chatExportJsonDesc": "機器可讀的結構化數據格式",
@@ -2069,13 +1414,6 @@
   "chatEditHistory": "編輯歷史",
   "chatOriginalMessage": "原始消息",
   "chatEditedAt": "編輯於 {time}",
-  "@chatEditedAt": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "chatViewOnce": "閱後即焚",
   "chatViewOncePhoto": "閱後即焚照片",
   "chatViewOnceVideo": "閱後即焚視頻",
@@ -2095,13 +1433,6 @@
   },
   "threadReply": "1 條回覆",
   "threadLatestReply": "最新: {preview}",
-  "@threadLatestReply": {
-    "placeholders": {
-      "preview": {
-        "type": "String"
-      }
-    }
-  },
   "threadTitle": "消息線程",
   "threadReplyPlaceholder": "在線程中回覆...",
   "threadParticipants": "{count} 位參與者",
@@ -2130,13 +1461,6 @@
   "voiceRoomApprove": "批准發言",
   "voiceRoomDemote": "移至聽衆",
   "voiceRoomHandRaised": "{name} 舉手了",
-  "@voiceRoomHandRaised": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "voiceRoomName": "房間名稱",
   "voiceRoomTopic": "話題（可選）",
   "voiceRoomNoActive": "暫無活躍的語音房間",
@@ -2283,13 +1607,6 @@
   "settingsRenameFailed": "重命名失敗",
   "settingsRemoteLogout": "遠程登出",
   "settingsRemoteLogoutConfirm": "確定要登出「{deviceName}」嗎？此操作無法撤銷。",
-  "@settingsRemoteLogoutConfirm": {
-    "placeholders": {
-      "deviceName": {
-        "type": "String"
-      }
-    }
-  },
   "settingsDeviceLoggedOut": "設備已登出",
   "settingsLogoutFailed": "登出失敗",
   "settingsLogout": "登出",
@@ -2385,25 +1702,11 @@
   "authPasskeyRegistered": "Passkey 已保存到當前賬號",
   "authPasskeyDeleted": "Passkey 已從當前賬號移除",
   "authPasskeyDeleteConfirm": "刪除 Passkey \"{name}\"？如需後續使用 Passkey 登錄，需要重新註冊。",
-  "@authPasskeyDeleteConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "momentVisibilityPublic": "公開",
   "momentVisibilityPrivate": "私密",
   "momentVisibilityPartial": "部分可見",
   "momentVisibilityExcluded": "不給誰看",
   "momentUserMoments": "{userName}的朋友圈",
-  "@momentUserMoments": {
-    "placeholders": {
-      "userName": {
-        "type": "String"
-      }
-    }
-  },
   "momentForwardTo": "轉發給",
   "momentForwardSuccess": "轉發成功",
   "momentSelectFriends": "選擇好友",
@@ -2420,13 +1723,6 @@
   "momentForwardMoment": "轉發動態",
   "momentAddComment": "寫評論...",
   "momentForwardContent": "[朋友圈] {content}",
-  "@momentForwardContent": {
-    "placeholders": {
-      "content": {
-        "type": "String"
-      }
-    }
-  },
   "momentDeleteMoment": "刪除動態",
   "momentDeleteConfirm": "確定要刪除這條動態嗎？",
   "momentComment": "評論",
@@ -2456,13 +1752,6 @@
   "momentNoComments": "暫無評論",
   "momentFailedToLoad": "圖片加載失敗",
   "momentReplyTo": "回覆 {userName}...",
-  "@momentReplyTo": {
-    "placeholders": {
-      "userName": {
-        "type": "String"
-      }
-    }
-  },
   "momentNoConversations": "暫無會話",
   "momentJustNow": "剛剛",
   "momentMinutesAgo": "{count}分鐘前",
@@ -2554,16 +1843,6 @@
   "storageWarningHigh": "存儲空間較高，建議清理舊文件。",
   "storageWarningCritical": "存儲空間嚴重不足，請立即清理。",
   "storageFreed": "已釋放 {size}（{count} 個文件）",
-  "@storageFreed": {
-    "placeholders": {
-      "size": {
-        "type": "String"
-      },
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "storageDays": "{days} 天",
   "@storageDays": {
     "placeholders": {
@@ -2629,13 +1908,6 @@
     }
   },
   "backupFailed": "備份失敗：{error}",
-  "@backupFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
   "backupPasswordRequired": "此備份需要密碼",
   "blocGroupNotFound": "羣組未找到",
   "blocGroupMembersInvited": "已邀請{count}位成員",
@@ -2707,34 +1979,13 @@
   "spacesNoChannels": "暫無頻道",
   "spacesLeave": "退出社區",
   "spacesLeaveConfirm": "確定要退出「{name}」嗎？",
-  "@spacesLeaveConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "spacesDelete": "解散社區",
   "spacesDeleteConfirm": "此操作將永久刪除「{name}」及其所有頻道，且不可撤銷。",
-  "@spacesDeleteConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "spacesCreateChannel": "創建頻道",
   "spacesChannelName": "頻道名稱",
   "spacesChannelTopic": "話題（可選）",
   "spacesDeleteChannel": "刪除頻道",
   "spacesDeleteChannelConfirm": "確定要刪除頻道「#{name}」嗎？",
-  "@spacesDeleteChannelConfirm": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "spacesEditName": "修改名稱",
   "spacesEditDescription": "修改簡介",
   "spacesViewAllMembers": "查看全部 {count} 位成員",
@@ -2746,21 +1997,7 @@
     }
   },
   "spacesKickMemberTitle": "踢出 {name}",
-  "@spacesKickMemberTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "spacesBanMemberTitle": "封禁 {name}",
-  "@spacesBanMemberTitle": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "spacesPromoteAdmin": "設爲管理員",
   "spacesDemoteAdmin": "撤銷管理員",
   "spacesInviteMember": "邀請成員",
@@ -2804,16 +2041,6 @@
   },
   "redPacketStatsTotal": "共計",
   "redPacketGrabbedViral": "🧧 搶到了紅包 • {amount} {token}",
-  "@redPacketGrabbedViral": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "token": {
-        "type": "String"
-      }
-    }
-  },
   "web3SearchHint": "@matrix:id  •  0x 錢包地址  •  name.eth",
   "web3SearchPlaceholder": "搜索 ID、錢包地址或 ENS...",
   "web3WalletAddress": "錢包地址",
@@ -2825,13 +2052,6 @@
   "web3NftAvatar": "NFT 頭像",
   "web3ResolveFailed": "身份解析失敗",
   "web3EnsNotFound": "ENS 名稱“{name}”未找到",
-  "@web3EnsNotFound": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
   "web3NoN42AccountTitle": "無 N42 賬號",
   "web3NoN42AccountDesc": "該錢包地址尚無 N42 賬號。您可以分享 N42 邀請鏈接邀請對方加入。",
   "web3ShareInvite": "分享邀請",
@@ -2870,22 +2090,8 @@
   "redPacketClaimed": "已領取",
   "redPacketInsufficientBalance": "餘額不足",
   "selfDestructCountdown": "{time} 後銷燬",
-  "@selfDestructCountdown": {
-    "placeholders": {
-      "time": {
-        "type": "String"
-      }
-    }
-  },
   "messageDestroyed": "消息已銷燬",
   "miniAppPermissionDenied": "權限不足：{permission}",
-  "@miniAppPermissionDenied": {
-    "placeholders": {
-      "permission": {
-        "type": "String"
-      }
-    }
-  },
   "aiSuggestionGasFee": "什麼是 Gas 費？",
   "aiSuggestionDefi": "DeFi 入門",
   "aiSuggestionSecurity": "如何檢查合約安全",

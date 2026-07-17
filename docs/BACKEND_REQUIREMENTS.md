@@ -473,6 +473,7 @@ POST /loyalty/v1/check-in  {"wallet":"0x..."}
 | 4 | `total_reward` 在 `/invitee/mining/fullnode` 中是字符串还是浮点数？ | P2 |
 | 5 | DEX Swap 支持哪些链（chain 参数的合法值）？ | P2 |
 | 6 | 兑换的链上签名由 App 端完成还是后端代理签名？ | P0 |
+| 7 | 积分 `check-in` 的「UUID/Token ↔ wallet 绑定校验」（上文第八节）是否已在后端落实？未落实前客户端可替任意地址刷积分（2026-07 审计确认客户端仅发明文地址 + 认证头，无地址所有权签名；若绑定校验不可行，需改为钱包签名 challenge 方案并同步客户端） | P0 |
 
 ---
 
