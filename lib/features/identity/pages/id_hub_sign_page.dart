@@ -67,6 +67,14 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         _fail(idHubRequestExpiredMessage);
         return;
       }
+      // The displayed action must come from the authenticated session, not the
+      // attacker-controlled QR host: reject a bind/auth label mismatch so a QR
+      // cannot present a wallet-binding as a mere sign-in (or vice versa).
+      final expectedType = widget.isLogin ? 'login' : 'wallet-binding';
+      if (session.type != expectedType) {
+        _fail('This request does not match the scanned code.');
+        return;
+      }
       // Fetch the exact message to sign from the hub (never from the QR).
       final challenge = await api.prepareBindSession(
         sessionId: widget.sessionId,
@@ -92,6 +100,14 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
     final api = _api;
     final challenge = _challenge;
     if (api == null || challenge == null) return;
+    // The active wallet may have switched since load; the signature must come
+    // from the address the hub bound the challenge to.
+    final current = _bridge.walletAddress;
+    if (current == null ||
+        current.toLowerCase() != (_address ?? '').toLowerCase()) {
+      _fail('Active wallet changed. Reopen this request.');
+      return;
+    }
     setState(() => _stage = _Stage.signing);
     try {
       // Runs through the wallet's existing unlock/biometric gate.

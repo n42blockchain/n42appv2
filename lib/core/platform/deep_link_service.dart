@@ -301,7 +301,10 @@ class DeepLinkService {
       uri: uri,
       params: {
         'sid': _sanitizeId(uri.queryParameters['sid'] ?? ''),
-        'hub': uri.queryParameters['hub'] ?? '',
+        // Strip control chars so a crafted hub value cannot inject log lines;
+        // the allowlist still decides whether it is trusted.
+        'hub': (uri.queryParameters['hub'] ?? '')
+            .replaceAll(RegExp(r'[\x00-\x1f\x7f]'), ''),
       },
     );
   }

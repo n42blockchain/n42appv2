@@ -74,9 +74,11 @@ class IdTokenStore {
       await _storage.saveIdHubToken(did, jsonEncode(next.toJson()));
       return next.accessToken;
     } on IdHubException catch (e) {
-      // A revoked/invalid refresh is terminal: clear so the next call re-logs-in
-      // rather than looping on a dead refresh.
-      if (e.statusCode == 401) {
+      // A rejected refresh is terminal: clear so the next call re-logs-in rather
+      // than replaying a dead refresh (replaying a rotated token revokes the
+      // whole session family server-side). OAuth-style token endpoints report
+      // this as 400 invalid_grant as well as 401/403.
+      if (e.statusCode == 400 || e.statusCode == 401 || e.statusCode == 403) {
         await _storage.deleteIdHubToken(did);
         return null;
       }
