@@ -80,6 +80,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m73(value) => "領取 ${value} 積分";
 
+  static String m74(amount, symbol, network) =>
+      "請求 ${amount} ${symbol}（${network}）";
+
   static String m28(value) => "預計。氣體：~${value} 單位";
 
   static String m29(reason) => "原因：${reason}";
@@ -853,6 +856,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_price_impact_high": m16,
     "g_key_dex_quote_expires": m17,
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage("報價失敗"),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "報價服務暫時不可用，請稍後再試。",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage("搜尋符號/名稱/地址"),
     "g_key_dex_select_token": MessageLookupByLibrary.simpleMessage("選擇"),
     "g_key_dex_slippage_label": MessageLookupByLibrary.simpleMessage("最大滑點"),
@@ -862,6 +868,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_status_quoted": MessageLookupByLibrary.simpleMessage("引"),
     "g_key_dex_swap_btn": MessageLookupByLibrary.simpleMessage("交換"),
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage("交換提交成功"),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "代幣服務不可用，目前顯示精簡的離線清單。",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("你付錢"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("您收到"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage("活躍產品"),
@@ -1381,8 +1390,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage("從手機圖庫中選擇"),
     "g_key_pubkey": MessageLookupByLibrary.simpleMessage("公鑰"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "付款請求",
+    ),
+    "g_key_receive_request_line": m74,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
     "g_key_retry": MessageLookupByLibrary.simpleMessage("重試"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "此錢包不支援該付款請求的代幣或鏈",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "使用小心",
     ),

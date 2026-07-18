@@ -58,12 +58,26 @@ class AppConfig {
   static const bool isOnline =
       String.fromEnvironment('ENV', defaultValue: 'production') != 'development';
 
+  /// Optional N42 ID Hub URL injected into development/device builds.
+  ///
+  /// Keep this empty in normal builds so unified identity remains behind its
+  /// graceful-degradation kill switch. Example:
+  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`.
+  static const String idHubUrl = String.fromEnvironment('ID_HUB_URL');
+
+  /// Optional additional exact host for device-test QR codes. This must only be
+  /// supplied to development builds and must never replace the permanent hosts.
+  static const String idHubAllowedHost = String.fromEnvironment(
+    'ID_HUB_ALLOWED_HOST',
+  );
+
   /// Hosts a scanned `n42id://` QR is allowed to point its `hub` param at. A
   /// hard allowlist so a phishing QR cannot make the wallet POST a signature to
   /// an attacker-controlled server. Compared by exact host or registrable suffix.
   static const List<String> idHubAllowedHosts = [
     'id.n42.ai',
     'id-dev.n42.ai',
+    if (idHubAllowedHost != '') idHubAllowedHost,
   ];
 
   // ============ API Endpoints ============
@@ -108,8 +122,8 @@ class AppConfig {
     // Hub feature dark and fall back to current behavior (graceful degradation
     // kill switch). Fill in once the hub is deployed per environment.
     'idHubHost': {
-      'main': '',
-      'test': '',
+      'main': idHubUrl,
+      'test': idHubUrl,
     },
     
     // IPFS — uploads go through the n42 cluster, reads through the public

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/features/identity/api/id_hub_api.dart';
 import 'package:n42_wallet/features/identity/models/id_hub_models.dart';
 import 'package:n42_wallet/features/identity/services/id_hub_bind_signer.dart';
@@ -58,6 +59,17 @@ void main() {
       expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai.evil.com'), isFalse);
       expect(IdHubBindSigner.isHubAllowed('http://id.n42.ai'), isFalse);
       expect(IdHubBindSigner.isHubAllowed('not a url'), isFalse);
+    });
+
+    test('honors only the optional compile-time device-test host', () {
+      final host = AppConfig.idHubAllowedHost;
+      if (host.isEmpty) {
+        expect(AppConfig.idHubAllowedHosts, isNot(contains('')));
+      } else {
+        expect(IdHubBindSigner.isHubAllowed('https://$host'), isTrue);
+        expect(IdHubBindSigner.isHubAllowed('http://$host'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://$host.evil.com'), isFalse);
+      }
     });
   });
 

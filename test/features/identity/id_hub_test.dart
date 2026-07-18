@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/features/identity/api/id_hub_api.dart';
 import 'package:n42_wallet/features/identity/models/id_hub_models.dart';
@@ -278,8 +279,8 @@ void main() {
   });
 
   group('IdHubWalletLogin', () {
-    test('default client reports disabled without a configured Hub host', () {
-      expect(IdHubWalletLogin().isEnabled, isFalse);
+    test('default client follows the compile-time Hub URL switch', () {
+      expect(IdHubWalletLogin().isEnabled, AppConfig.idHubUrl.isNotEmpty);
     });
 
     test(
