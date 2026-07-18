@@ -1449,6 +1449,11 @@
   "g_key_msgsign_failed": "簽名失敗",
   "g_key_msgsign_unsupported": "該鏈暫不支持訊息簽名",
   "g_key_pubkey": "公鑰",
+  "g_key_dex_quote_unavailable": "報價服務暫時不可用，請稍後再試。",
+  "g_key_dex_tokens_offline": "代幣服務不可用，目前顯示精簡的離線清單。",
+  "g_key_receive_request_line": "請求 {amount} {symbol}（{network}）",
+  "g_key_receive_payment_request": "付款請求",
+  "g_key_scan_pay_unsupported": "此錢包不支援該付款請求的代幣或鏈",
   "g_key_airdrop_title": "空投",
   "g_key_airdrop_upcoming": "即將開始",
   "g_key_airdrop_active": "進行中",
@@ -1491,10 +1496,5 @@
   "g_key_loyalty_no_wallet": "沒有可用的錢包",
   "g_key_loyalty_unavailable": "服務暫時不可用",
   "g_key_badge_hot": "熱門",
-  "g_key_badge_live": "直播",
-  "g_key_dex_quote_unavailable": "報價服務暫時不可用，請稍後再試。",
-  "g_key_dex_tokens_offline": "代幣服務不可用，目前顯示精簡的離線清單。",
-  "g_key_receive_request_line": "請求 {amount} {symbol}（{network}）",
-  "g_key_receive_payment_request": "付款請求",
-  "g_key_scan_pay_unsupported": "此錢包不支援該付款請求的代幣或鏈"
+  "g_key_badge_live": "直播"
 }

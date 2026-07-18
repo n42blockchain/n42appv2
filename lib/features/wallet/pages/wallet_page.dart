@@ -24,7 +24,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
-import 'package:n42_wallet/features/wallet/pages/wallet_page_loading.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_sheets.dart';
 import 'package:n42_wallet/features/wallet/pages/send/scan_to_pay_utils.dart';
@@ -367,18 +366,13 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: const ValueKey<String>('wallet_page'),
       body: SafeArea(
         child: ResponsiveContainer(
           child: Builder(
             builder: (context) {
               final waValue = ref.watch(wapBridgeProvider);
 
-              if (shouldShowWalletInitialLoading(
-                walletIndex: waValue.walletIndex,
-                isBuilding: waValue.buildwallet,
-                hasCoins: waValue.coinList.isNotEmpty,
-              )) {
+              if (waValue.walletIndex == -1 || waValue.buildwallet) {
                 return Loading();
               }
 

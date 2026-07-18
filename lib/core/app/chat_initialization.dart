@@ -107,6 +107,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       // 端侧 LLM（Gemma）模型源——不配则端侧推理不可用、AI 自动回退云端。
       const envLocalLlmModelUrl = String.fromEnvironment('LOCAL_LLM_MODEL_URL');
       const envLocalLlmHfToken = String.fromEnvironment('LOCAL_LLM_HF_TOKEN');
+      const envIdHubUrl = String.fromEnvironment('ID_HUB_URL');
       final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
       final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
         nativeConfig: nativeSocialAuthConfig,
@@ -142,6 +143,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
       final directLocalLlmModelUrl = normalizedEnv(envLocalLlmModelUrl);
       final directLocalLlmHfToken = normalizedEnv(envLocalLlmHfToken);
+      final idHubUrl = normalizedEnv(envIdHubUrl);
 
       for (final line in chatSocialAuthConfig.diagnostics(
         isAndroid: Platform.isAndroid,
@@ -193,6 +195,8 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           enableGithubLogin: chatSocialAuthConfig.githubConfigured,
           enableTelegramLogin: chatSocialAuthConfig.telegramConfigured,
           enableSsoLogin: true,
+          idHubUrl: idHubUrl,
+          enableIdHubLogin: idHubUrl != null,
           googleClientId: chatSocialAuthConfig.googleClientId.isEmpty
               ? null
               : chatSocialAuthConfig.googleClientId,

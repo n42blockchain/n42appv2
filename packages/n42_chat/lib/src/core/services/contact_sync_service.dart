@@ -11,9 +11,8 @@ import '../utils/debug_log.dart';
 
 final RegExp _phoneNormalizeRegExp = RegExp(r'[\s\-\(\)]');
 final RegExp _phoneDigitsRegExp = RegExp(r'^[+]?[0-9]+$');
-final RegExp _emailValidateRegExp = RegExp(
-  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-);
+final RegExp _emailValidateRegExp =
+    RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
 /// 手机通讯录联系人
 class PhoneContact {
@@ -108,7 +107,9 @@ class ContactSyncService {
   }
 
   /// 获取手机通讯录联系人
-  Future<List<PhoneContact>> getPhoneContacts({bool withPhoto = false}) async {
+  Future<List<PhoneContact>> getPhoneContacts({
+    bool withPhoto = false,
+  }) async {
     try {
       final hasAccess = await requestPermission();
       if (!hasAccess) {
@@ -189,31 +190,28 @@ class ContactSyncService {
           if (!_isValidEmail(email)) continue;
 
           try {
-            final response = await client.searchUserDirectory(email, limit: 3);
+            final response = await client.searchUserDirectory(
+              email,
+              limit: 3,
+            );
 
             for (final user in response.results) {
               if (processedUserIds.contains(user.userId)) continue;
               processedUserIds.add(user.userId);
 
-              matched.add(
-                MatchedContact(
-                  phoneContact: contact,
-                  matrixUserId: user.userId,
-                  matrixDisplayName: user.displayName,
-                  matrixAvatarUrl: user.avatarUrl?.toString(),
-                ),
-              );
+              matched.add(MatchedContact(
+                phoneContact: contact,
+                matrixUserId: user.userId,
+                matrixDisplayName: user.displayName,
+                matrixAvatarUrl: user.avatarUrl?.toString(),
+              ));
             }
 
             // 请求节流
-            await Future<void>.delayed(
-              const Duration(milliseconds: _requestDelayMs),
-            );
+            await Future<void>.delayed(const Duration(milliseconds: _requestDelayMs));
           } catch (e) {
             // 使用哈希保护隐私信息
-            debugLog(
-              'ContactSyncService: Search error for ${_hashForLogging(email)}: $e',
-            );
+            debugLog('ContactSyncService: Search error for ${_hashForLogging(email)}: $e');
           }
         }
 
@@ -233,20 +231,16 @@ class ContactSyncService {
               if (processedUserIds.contains(user.userId)) continue;
               processedUserIds.add(user.userId);
 
-              matched.add(
-                MatchedContact(
-                  phoneContact: contact,
-                  matrixUserId: user.userId,
-                  matrixDisplayName: user.displayName,
-                  matrixAvatarUrl: user.avatarUrl?.toString(),
-                ),
-              );
+              matched.add(MatchedContact(
+                phoneContact: contact,
+                matrixUserId: user.userId,
+                matrixDisplayName: user.displayName,
+                matrixAvatarUrl: user.avatarUrl?.toString(),
+              ));
             }
 
             // 请求节流
-            await Future<void>.delayed(
-              const Duration(milliseconds: _requestDelayMs),
-            );
+            await Future<void>.delayed(const Duration(milliseconds: _requestDelayMs));
           } catch (e) {
             debugLog('ContactSyncService: Search error for phone: $e');
           }

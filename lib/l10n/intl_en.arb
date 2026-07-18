@@ -1460,6 +1460,11 @@
   "g_key_msgsign_failed": "Signing failed",
   "g_key_msgsign_unsupported": "Message signing is not supported for this chain yet",
   "g_key_pubkey": "Public Key",
+  "g_key_dex_quote_unavailable": "Quote service is temporarily unavailable. Please try again later.",
+  "g_key_dex_tokens_offline": "Token service is unavailable. Showing a limited offline list.",
+  "g_key_receive_request_line": "Request {amount} {symbol} on {network}",
+  "g_key_receive_payment_request": "Payment request",
+  "g_key_scan_pay_unsupported": "Payment request token or chain is not in this wallet",
   "g_key_airdrop_title": "Airdrops",
   "g_key_airdrop_upcoming": "Upcoming",
   "g_key_airdrop_active": "Active",
@@ -1502,10 +1507,5 @@
   "g_key_loyalty_no_wallet": "No active wallet",
   "g_key_loyalty_unavailable": "Service unavailable",
   "g_key_badge_hot": "HOT",
-  "g_key_badge_live": "LIVE",
-  "g_key_dex_quote_unavailable": "Quote service is temporarily unavailable. Please try again later.",
-  "g_key_dex_tokens_offline": "Token service is unavailable. Showing a limited offline list.",
-  "g_key_receive_request_line": "Request {amount} {symbol} on {network}",
-  "g_key_receive_payment_request": "Payment request",
-  "g_key_scan_pay_unsupported": "Payment request token or chain is not in this wallet"
+  "g_key_badge_live": "LIVE"
 }

@@ -13,7 +13,6 @@ import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
-import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
@@ -48,7 +47,9 @@ class EvmSender implements ChainSender {
   Future<SendResult> _sendSerialized(SendParams params) async {
     final coinType = params.coinType;
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
-    final int? resolvedChainId = resolveChainConfigIdOrNull(
+    // CoinModel stores baseInfo itself, while other callers may pass a full
+    // registry entry. Normalize both shapes before reading RPC settings.
+    final int? resolvedChainId = resolveChainId(
       chainConfig,
       isTest: params.isTest,
     );
@@ -388,15 +389,28 @@ class EvmSender implements ChainSender {
 
   /// 从完整链配置解析当前网络的 EIP-155 chain ID。
   ///
-  /// 委托 [resolveChainConfigIdOrNull]（含顶层 testnetChainID/mainnetChainID
-  /// 回退与字符串数字解析）。注意：测试网缺配置时**不**回退主网——那样签出的
-  /// 「测试网」交易在主网合法可重放；发送方应先判空拒发（见 _sendSerialized）。
-  static int resolveChainId(
+  /// 配置同时保留 `chainId` 与 `chainId_test`。过去签名始终读取前者，测试网
+  /// 交易会带主网 chain ID，被节点以 `invalid chain id for signer` 拒绝。
+  ///
+  /// 测试网缺独立 chain ID 时返回 null（fail-closed）：绝不能回退主网
+  /// chainId——用主网 chain ID 签出的"测试网"交易在主网合法、可被重放。
+  static int? resolveChainId(
     Map<String, dynamic>? chainConfig, {
     required bool isTest,
-    int fallback = 1,
-  }) =>
-      resolveChainConfigIdOrNull(chainConfig, isTest: isTest) ?? fallback;
+  }) {
+    final baseInfo = _baseInfo(chainConfig);
+
+    int read(dynamic value) {
+      if (value is num) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? 0;
+      return 0;
+    }
+
+    final selected = isTest
+        ? read(baseInfo?['chainId_test'] ?? chainConfig?['testnetChainID'])
+        : read(baseInfo?['chainId'] ?? chainConfig?['mainnetChainID']);
+    return selected > 0 ? selected : null;
+  }
 
   /// Returns the configured RPC for the selected EVM network when available.
   /// Accepts both registry entries and the baseInfo map stored in CoinModel.
