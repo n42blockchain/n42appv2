@@ -49,7 +49,15 @@ class EvmSender implements ChainSender {
     final chainConfig = params.chainConfig ?? _defaultChainConfig;
     // CoinModel stores baseInfo itself, while other callers may pass a full
     // registry entry. Normalize both shapes before reading RPC settings.
-    final chainId = resolveChainId(chainConfig, isTest: params.isTest);
+    final int? resolvedChainId = resolveChainId(
+      chainConfig,
+      isTest: params.isTest,
+    );
+    // 测试网缺 chainId_test 时绝不能回退主网 chainId：签出的交易在主网合法。
+    if (params.isTest && resolvedChainId == null) {
+      return SendResult.fail('Missing testnet chain ID for $coinType');
+    }
+    final chainId = resolvedChainId ?? 1;
     final isContract = params.contractAddress.isNotEmpty;
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
     // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。
@@ -383,7 +391,10 @@ class EvmSender implements ChainSender {
   ///
   /// 配置同时保留 `chainId` 与 `chainId_test`。过去签名始终读取前者，测试网
   /// 交易会带主网 chain ID，被节点以 `invalid chain id for signer` 拒绝。
-  static int resolveChainId(
+  ///
+  /// 测试网缺独立 chain ID 时返回 null（fail-closed）：绝不能回退主网
+  /// chainId——用主网 chain ID 签出的"测试网"交易在主网合法、可被重放。
+  static int? resolveChainId(
     Map<String, dynamic>? chainConfig, {
     required bool isTest,
   }) {
@@ -398,13 +409,7 @@ class EvmSender implements ChainSender {
     final selected = isTest
         ? read(baseInfo?['chainId_test'] ?? chainConfig?['testnetChainID'])
         : read(baseInfo?['chainId'] ?? chainConfig?['mainnetChainID']);
-    if (selected > 0) return selected;
-
-    // 没有独立测试网配置时回退主网，而不是签名 chain ID 0/1。
-    final fallback = read(
-      baseInfo?['chainId'] ?? chainConfig?['mainnetChainID'],
-    );
-    return fallback > 0 ? fallback : 1;
+    return selected > 0 ? selected : null;
   }
 
   /// Returns the configured RPC for the selected EVM network when available.
