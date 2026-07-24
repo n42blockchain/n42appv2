@@ -4,6 +4,8 @@ import 'package:http/http.dart' as http;
 
 import '../../../core/utils/debug_log.dart';
 
+const Duration _defaultRequestTimeout = Duration(seconds: 8);
+
 /// Client for the unified-identity N42 ID Hub wallet-login path.
 ///
 /// The hub is a separate RFC 9457 service (not the `{code:200}` gateway), so
@@ -14,29 +16,50 @@ import '../../../core/utils/debug_log.dart';
 class IdHubApi {
   final String baseUrl;
   final http.Client _client;
+  final Duration _requestTimeout;
 
-  IdHubApi({required String baseUrl, http.Client? client})
-      : baseUrl = baseUrl.replaceAll(RegExp(r'/$'), ''),
-        _client = client ?? http.Client();
+  IdHubApi({
+    required String baseUrl,
+    http.Client? client,
+    Duration requestTimeout = _defaultRequestTimeout,
+  }) : baseUrl = baseUrl.replaceAll(RegExp(r'/$'), ''),
+       _client = client ?? http.Client(),
+       _requestTimeout = requestTimeout;
+
+  void _ensureSecureHub() {
+    final uri = Uri.tryParse(baseUrl);
+    if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
+      throw IdHubException('ID Hub is not configured with a secure HTTPS URL');
+    }
+  }
 
   /// Create a wallet login challenge. Returns the exact message to personal_sign.
   Future<IdHubChallenge> createWalletChallenge({
     required String address,
     String chain = 'eip155:1142',
   }) async {
+    _ensureSecureHub();
     final uri = Uri.parse('$baseUrl/v1/auth/wallet/challenge');
-    final response = await _client.post(
-      uri,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'address': address.toLowerCase(),
-        'chain': chain,
-        'aud': 'chat',
-      }),
-    );
+    final response = await _client
+        .post(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'address': address.toLowerCase(),
+            'chain': chain,
+            'aud': 'chat',
+          }),
+        )
+        .timeout(
+          _requestTimeout,
+          onTimeout: () => throw IdHubException('ID Hub request timed out'),
+        );
     final data = jsonDecode(response.body) as Map<String, dynamic>;
     if (response.statusCode != 200) {
-      throw IdHubException(_detail(data, 'challenge failed'), response.statusCode);
+      throw IdHubException(
+        _detail(data, 'challenge failed'),
+        response.statusCode,
+      );
     }
     return IdHubChallenge(
       challengeId: data['challenge_id'] as String,
@@ -54,16 +77,23 @@ class IdHubApi {
     String signerType = 'eoa',
   }) async {
     try {
+      _ensureSecureHub();
       final uri = Uri.parse('$baseUrl/v1/auth/wallet/verify');
-      final response = await _client.post(
-        uri,
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'challenge_id': challengeId,
-          'signature': signature,
-          'signer_type': signerType,
-        }),
-      );
+      final response = await _client
+          .post(
+            uri,
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'challenge_id': challengeId,
+              'signature': signature,
+              'signer_type': signerType,
+              'aud': 'chat',
+            }),
+          )
+          .timeout(
+            _requestTimeout,
+            onTimeout: () => throw IdHubException('ID Hub request timed out'),
+          );
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       if (response.statusCode != 200) {
         return IdHubWalletResponse.failure(_detail(data, 'verify failed'));
@@ -122,15 +152,14 @@ class IdHubWalletResponse {
     String? matrixAccessToken,
     String? matrixDeviceId,
     String? matrixHomeserver,
-  }) =>
-      IdHubWalletResponse._(
-        success: true,
-        did: did,
-        matrixUserId: matrixUserId,
-        matrixAccessToken: matrixAccessToken,
-        matrixDeviceId: matrixDeviceId,
-        matrixHomeserver: matrixHomeserver,
-      );
+  }) => IdHubWalletResponse._(
+    success: true,
+    did: did,
+    matrixUserId: matrixUserId,
+    matrixAccessToken: matrixAccessToken,
+    matrixDeviceId: matrixDeviceId,
+    matrixHomeserver: matrixHomeserver,
+  );
 
   factory IdHubWalletResponse.failure(String error) =>
       IdHubWalletResponse._(success: false, error: error);

@@ -58,12 +58,16 @@ class AppConfig {
   static const bool isOnline =
       String.fromEnvironment('ENV', defaultValue: 'production') != 'development';
 
-  /// Optional N42 ID Hub URL injected into development/device builds.
+  /// N42 ID Hub URL. Production builds use the deployed service by default.
   ///
-  /// Keep this empty in normal builds so unified identity remains behind its
-  /// graceful-degradation kill switch. Example:
-  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`.
-  static const String idHubUrl = String.fromEnvironment('ID_HUB_URL');
+  /// Device and development builds may override it, for example with
+  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`. Supplying an empty value
+  /// explicitly disables the feature and preserves the graceful-degradation
+  /// path for incident response.
+  static const String idHubUrl = String.fromEnvironment(
+    'ID_HUB_URL',
+    defaultValue: 'https://id.n42.ai',
+  );
 
   /// Optional additional exact host for device-test QR codes. This must only be
   /// supplied to development builds and must never replace the permanent hosts.
@@ -118,9 +122,8 @@ class AppConfig {
       'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
 
-    // Unified-identity N42 ID Hub. OPTIONAL: leave both empty to keep every ID
-    // Hub feature dark and fall back to current behavior (graceful degradation
-    // kill switch). Fill in once the hub is deployed per environment.
+    // Unified-identity N42 ID Hub. A build-time override can point device
+    // testing at id-dev or explicitly disable the integration.
     'idHubHost': {
       'main': idHubUrl,
       'test': idHubUrl,

@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/constants/language_constants.dart';
 import 'package:n42_wallet/core/platform/chat_social_auth_config.dart';
@@ -107,7 +108,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       // 端侧 LLM（Gemma）模型源——不配则端侧推理不可用、AI 自动回退云端。
       const envLocalLlmModelUrl = String.fromEnvironment('LOCAL_LLM_MODEL_URL');
       const envLocalLlmHfToken = String.fromEnvironment('LOCAL_LLM_HF_TOKEN');
-      const envIdHubUrl = String.fromEnvironment('ID_HUB_URL');
+      final envIdHubUrl = AppConfig.idHubUrl;
       final nativeSocialAuthConfig = await SocialAuthNativeConfig.load();
       final chatSocialAuthConfig = ChatSocialAuthConfig.resolve(
         nativeConfig: nativeSocialAuthConfig,

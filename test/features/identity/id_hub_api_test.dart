@@ -71,6 +71,17 @@ void main() {
     expect(adapter.requests, isEmpty);
   });
 
+  test('client rejects a plaintext Hub URL before making a request', () async {
+    final (:api, :adapter) = _client(baseUrl: 'http://id-test.n42.ai');
+
+    expect(api.isEnabled, isFalse);
+    await expectLater(
+      api.createWalletChallenge(address: '0xABC'),
+      throwsA(isA<IdHubException>()),
+    );
+    expect(adapter.requests, isEmpty);
+  });
+
   test(
     'wallet challenge normalizes address and decodes the response',
     () async {
@@ -130,6 +141,7 @@ void main() {
         'signature': '0xsignature',
         'signer_type': 'eoa',
         'chain_id': 1142,
+        'aud': 'wallet-api',
       });
     },
   );

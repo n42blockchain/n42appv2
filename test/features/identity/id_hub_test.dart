@@ -76,6 +76,7 @@ class _FakeIdHubApi extends IdHubApi {
     required String signature,
     String signerType = 'eoa',
     int? chainId,
+    String aud = 'wallet-api',
   }) async {
     verifyCalls++;
     return IdHubWalletLoginResult(

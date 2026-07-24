@@ -21,22 +21,27 @@ class IdHubApi {
   final Dio _dio;
 
   IdHubApi({String? baseUrl, Dio? dio})
-      : _baseUrl = (baseUrl ?? AppConfig.getApiUrlOnline(_hostKey))
-            .replaceAll(RegExp(r'/$'), ''),
-        _dio = dio ??
-            Dio(BaseOptions(
+    : _baseUrl = (baseUrl ?? AppConfig.getApiUrlOnline(_hostKey)).replaceAll(
+        RegExp(r'/$'),
+        '',
+      ),
+      _dio =
+          dio ??
+          Dio(
+            BaseOptions(
               connectTimeout: const Duration(seconds: 20),
               receiveTimeout: const Duration(seconds: 20),
               sendTimeout: const Duration(seconds: 20),
               headers: const {'Accept': 'application/json'},
-            ));
+            ),
+          );
 
-  /// Whether the hub is configured (host set and https/http). When false the
+  /// Whether the hub is configured with a secure HTTPS endpoint. When false the
   /// caller must fall back to the pre-ID-Hub flow.
   bool get isEnabled {
     if (_baseUrl.isEmpty) return false;
     final uri = Uri.tryParse(_baseUrl);
-    return uri != null && (uri.scheme == 'https' || uri.scheme == 'http');
+    return uri != null && uri.scheme == 'https' && uri.host.isNotEmpty;
   }
 
   void _ensureEnabled() {
@@ -66,6 +71,7 @@ class IdHubApi {
     required String signature,
     String signerType = 'eoa',
     int? chainId,
+    String aud = 'wallet-api',
   }) async {
     _ensureEnabled();
     final data = await _post('/v1/auth/wallet/verify', {
@@ -73,6 +79,7 @@ class IdHubApi {
       'signature': signature,
       'signer_type': signerType,
       'chain_id': ?chainId,
+      'aud': aud,
     });
     return IdHubWalletLoginResult(
       token: IdHubTokenResponse.fromJson(data),
@@ -110,16 +117,12 @@ class IdHubApi {
     int? chainId,
   }) async {
     _ensureEnabled();
-    await _post(
-      '/v1/bind-sessions/$sessionId/complete',
-      {
-        'challenge_id': challengeId,
-        'signature': signature,
-        'signer_type': signerType,
-        'chain_id': ?chainId,
-      },
-      allowEmpty: true,
-    );
+    await _post('/v1/bind-sessions/$sessionId/complete', {
+      'challenge_id': challengeId,
+      'signature': signature,
+      'signer_type': signerType,
+      'chain_id': ?chainId,
+    }, allowEmpty: true);
   }
 
   /// Refresh an N42 ID Token with a rotating refresh token.
@@ -166,8 +169,10 @@ class IdHubApi {
       final res = await _dio.get<dynamic>('$_baseUrl$path');
       final body = res.data;
       if (body is Map<String, dynamic>) return body;
-      throw IdHubException('Unexpected ID Hub response',
-          statusCode: res.statusCode);
+      throw IdHubException(
+        'Unexpected ID Hub response',
+        statusCode: res.statusCode,
+      );
     } on DioException catch (e) {
       throw _toIdHubException(e, allowEmpty: false);
     }
@@ -204,7 +209,10 @@ class IdHubApi {
       final body = res.data;
       if (body is Map<String, dynamic>) return body;
       if (allowEmpty) return const <String, dynamic>{};
-      throw IdHubException('Unexpected ID Hub response', statusCode: res.statusCode);
+      throw IdHubException(
+        'Unexpected ID Hub response',
+        statusCode: res.statusCode,
+      );
     } on DioException catch (e) {
       throw _toIdHubException(e, allowEmpty: allowEmpty);
     }
@@ -224,7 +232,10 @@ class IdHubApi {
       final detail = body['detail'] ?? body['title'];
       if (detail is String) message = detail;
     }
-    AppLogger.w('IdHubApi', '${e.requestOptions.path} -> $status $code $message');
+    AppLogger.w(
+      'IdHubApi',
+      '${e.requestOptions.path} -> $status $code $message',
+    );
     return IdHubException(message, statusCode: status, code: code);
   }
 }
