@@ -47,24 +47,17 @@ void main() {
     },
   );
 
-  test(
-    'plaintext Hub URL is rejected before an auth request is sent',
-    () async {
-      final client = _FailingClient();
-      final api = IdHubApi(baseUrl: 'http://id.n42.ai', client: client);
-
-      await expectLater(
-        api.createWalletChallenge(
-          address: '0x0000000000000000000000000000000000000000',
-        ),
-        throwsA(isA<IdHubException>()),
-      );
-      expect(client.requested, isFalse);
-    },
-  );
+  test('plaintext Hub URL is rejected before an auth request is sent', () {
+    final client = _FailingClient();
+    expect(
+      () => IdHubApi(baseUrl: 'http://id.n42.ai', client: client),
+      throwsArgumentError,
+    );
+    expect(client.requested, isFalse);
+  });
 
   test(
-    'wallet verification declares the Chat audience during rollout',
+    'wallet challenge binds the Chat audience and N42 mainnet chain',
     () async {
       late http.Request request;
       final api = IdHubApi(
@@ -73,23 +66,20 @@ void main() {
           request = received;
           return http.Response(
             jsonEncode({
-              'sub': 'did:plc:chatuser',
-              'matrix_user_id': '@chatuser:si46.world',
-              'matrix_access_token': 'matrix-token',
-              'matrix_homeserver': 'https://m.si46.world',
+              'challenge_id': '123e4567-e89b-42d3-a456-426614174000',
+              'message': 'N42 ID v1 ...',
             }),
             200,
           );
         }),
       );
 
-      final response = await api.verifyWalletLogin(
-        challengeId: 'challenge',
-        signature: '0xsignature',
+      await api.createWalletChallenge(
+        address: '0x0000000000000000000000000000000000000000',
       );
 
       expect(jsonDecode(request.body)['aud'], 'chat');
-      expect(response.hasMatrixCredentials, isTrue);
+      expect(jsonDecode(request.body)['chain'], 'eip155:94');
     },
   );
 }

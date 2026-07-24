@@ -224,26 +224,29 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
-    // ID Hub path (graceful degradation): only when explicitly enabled and the
-    // hub returns Matrix credentials. Any miss falls through to the unchanged
-    // legacy derivation below, preserving chat history.
-    if (await _tryIdHubWalletLogin(event, emit)) return;
+    // ID Hub path: only a failure before the Hub challenge is signed may fall
+    // through to legacy. Cancellation and post-signature failures stop here.
+    final idHubOutcome = await _tryIdHubWalletLogin(event, emit);
+    if (idHubOutcome != _IdHubLoginOutcome.fallback) return;
 
     // Legacy path: sign the canonical message now (only reached when ID Hub is
     // disabled or fell back). Signing is deferred to here so the wallet prompts
     // exactly once - the UI no longer pre-signs.
-    final bridge =
-        getIt.isRegistered<IWalletBridge>() ? getIt<IWalletBridge>() : null;
+    final bridge = getIt.isRegistered<IWalletBridge>()
+        ? getIt<IWalletBridge>()
+        : null;
     final signature = bridge == null
         ? null
         : await bridge.signMessage(
             WalletLoginCredentials.canonicalLoginMessage(event.address),
           );
     if (signature == null || signature.isEmpty) {
-      emit(state.copyWith(
-        status: AuthStatus.error,
-        errorMessage: 'Wallet login is not supported by this wallet',
-      ));
+      emit(
+        state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Wallet login is not supported by this wallet',
+        ),
+      );
       return;
     }
 
@@ -285,14 +288,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  /// Attempt wallet login via the N42 ID Hub. Returns true only when it fully
-  /// succeeds (Matrix session established); false means "fall back to legacy".
+  /// Attempt wallet login via the N42 ID Hub.
   ///
   /// The wallet signs the hub-issued challenge (a server nonce) here. Signing is
   /// deferred to the bloc for both paths (ID Hub challenge here, canonical
-  /// message in the legacy branch), so the wallet prompts exactly once - the UI
-  /// no longer pre-signs.
-  Future<bool> _tryIdHubWalletLogin(
+  /// message in the legacy branch), so the UI never pre-signs. Only failures
+  /// before a Hub challenge is signed may fall back to legacy. Cancellation and
+  /// post-signature failures stop here to prevent a second signature prompt.
+  Future<_IdHubLoginOutcome> _tryIdHubWalletLogin(
     AuthWalletAuthRequested event,
     Emitter<AuthState> emit,
   ) async {
@@ -304,24 +307,56 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         !config.enableIdHubLogin ||
         hubUrl == null ||
         hubUrl.isEmpty) {
-      return false;
+      return _IdHubLoginOutcome.fallback;
     }
-    if (!getIt.isRegistered<IWalletBridge>()) return false;
+    if (!getIt.isRegistered<IWalletBridge>()) {
+      return _IdHubLoginOutcome.fallback;
+    }
+
+    IdHubApi? api;
+    IdHubChallenge challenge;
+    try {
+      api = _idHubApiFactory(hubUrl);
+      challenge = await api.createWalletChallenge(
+        address: event.address,
+        chain: config.idHubChainCaip2,
+      );
+    } catch (e) {
+      api?.close();
+      debugLog(
+        'AuthBloc: ID Hub unavailable before signing, falling back - $e',
+      );
+      return _IdHubLoginOutcome.fallback;
+    }
 
     try {
-      final api = _idHubApiFactory(hubUrl);
-      final challenge = await api.createWalletChallenge(address: event.address);
       final signature = await getIt<IWalletBridge>().signMessage(
         challenge.message,
       );
-      if (signature == null || signature.isEmpty) return false;
+      if (signature == null || signature.isEmpty) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: 'Wallet login cancelled',
+          ),
+        );
+        return _IdHubLoginOutcome.cancelled;
+      }
 
       final resp = await api.verifyWalletLogin(
         challengeId: challenge.challengeId,
         signature: signature,
       );
-      // Hub reachable but Matrix bridge not live yet -> fall back to legacy.
-      if (!resp.success || !resp.hasMatrixCredentials) return false;
+      if (!resp.success || !resp.hasMatrixCredentials) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage:
+                resp.error ?? 'Unified login is temporarily unavailable',
+          ),
+        );
+        return _IdHubLoginOutcome.failed;
+      }
 
       final result = await _authRepository.loginWithToken(
         homeserver: resp.matrixHomeserver!,
@@ -331,12 +366,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
       if (result.success && result.user != null) {
         await _completeAuthenticatedFlow(result.user!, emit);
-        return true;
+        return _IdHubLoginOutcome.succeeded;
       }
-      return false;
+      emit(
+        state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: result.errorMessage ?? 'Unified login failed',
+          errorType: result.errorType,
+        ),
+      );
+      return _IdHubLoginOutcome.failed;
     } catch (e) {
-      debugLog('AuthBloc: ID Hub wallet login failed, falling back - $e');
-      return false;
+      debugLog('AuthBloc: ID Hub wallet login failed after signing - $e');
+      emit(
+        state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Unified login failed. Please try again.',
+        ),
+      );
+      return _IdHubLoginOutcome.failed;
+    } finally {
+      api.close();
     }
   }
 
@@ -1096,9 +1146,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       debugLog('AuthBloc: $provider login failed - $e');
-      emit(
-        state.copyWith(status: AuthStatus.error, errorMessage: failureKey),
-      );
+      emit(state.copyWith(status: AuthStatus.error, errorMessage: failureKey));
     }
   }
 
@@ -1687,3 +1735,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return super.close();
   }
 }
+
+enum _IdHubLoginOutcome { succeeded, fallback, cancelled, failed }

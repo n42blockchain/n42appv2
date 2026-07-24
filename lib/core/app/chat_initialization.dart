@@ -197,6 +197,7 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           enableTelegramLogin: chatSocialAuthConfig.telegramConfigured,
           enableSsoLogin: true,
           idHubUrl: idHubUrl,
+          idHubChainCaip2: AppConfig.idHubChainCaip2,
           enableIdHubLogin: idHubUrl != null,
           googleClientId: chatSocialAuthConfig.googleClientId.isEmpty
               ? null

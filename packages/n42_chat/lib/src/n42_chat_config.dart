@@ -195,6 +195,9 @@ class N42ChatConfig {
   /// 为空则所有 ID Hub 功能静默禁用，登录回退到现状（降级兜底开关）。
   final String? idHubUrl;
 
+  /// ID Hub wallet challenge chain (CAIP-2). Production N42 is eip155:94.
+  final String idHubChainCaip2;
+
   /// 是否走 ID Hub 钱包登录路径（默认 false，灰度开）。
   ///
   /// 开启且 [idHubUrl] 已配、且 hub 返回 Matrix 凭据时，钱包登录经 ID Hub 供给
@@ -541,6 +544,7 @@ class N42ChatConfig {
     this.enableSsoLogin = false,
     this.enableWalletLogin = true,
     this.idHubUrl,
+    this.idHubChainCaip2 = 'eip155:94',
     this.enableIdHubLogin = false,
     this.googleClientId,
     this.googleServerClientId,
@@ -634,6 +638,7 @@ class N42ChatConfig {
     bool? enableSsoLogin,
     bool? enableWalletLogin,
     Object? idHubUrl = _copyWithUndefined,
+    String? idHubChainCaip2,
     bool? enableIdHubLogin,
     Object? googleClientId = _copyWithUndefined,
     Object? googleServerClientId = _copyWithUndefined,
@@ -738,6 +743,7 @@ class N42ChatConfig {
       enableSsoLogin: enableSsoLogin ?? this.enableSsoLogin,
       enableWalletLogin: enableWalletLogin ?? this.enableWalletLogin,
       idHubUrl: _nullableCopyWithValue<String>(idHubUrl, this.idHubUrl),
+      idHubChainCaip2: idHubChainCaip2 ?? this.idHubChainCaip2,
       enableIdHubLogin: enableIdHubLogin ?? this.enableIdHubLogin,
       googleClientId: _nullableCopyWithValue<String>(
         googleClientId,

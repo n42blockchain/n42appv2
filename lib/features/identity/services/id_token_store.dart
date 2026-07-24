@@ -20,6 +20,8 @@ class IdTokenStore {
   static const int _refreshSkewSeconds = 60;
 
   final Map<String, Future<String?>> _inflight = {};
+  final Map<String, int> _generations = {};
+  final Set<String> _revoking = {};
 
   IdTokenStore({IdHubApi? api, SecureStorage? storage})
     : _api = api ?? IdHubApi(),
@@ -35,8 +37,16 @@ class IdTokenStore {
     final raw = await _storage.getIdHubToken(did);
     if (raw == null || raw.isEmpty) return null;
     try {
-      return StoredIdToken.fromJson(jsonDecode(raw) as Map<String, dynamic>);
+      final stored = StoredIdToken.fromJson(
+        jsonDecode(raw) as Map<String, dynamic>,
+      );
+      if (stored.accessToken.isEmpty || stored.expiresAt <= 0) {
+        await _storage.deleteIdHubToken(did);
+        return null;
+      }
+      return stored;
     } catch (_) {
+      await _storage.deleteIdHubToken(did);
       return null;
     }
   }
@@ -67,16 +77,20 @@ class IdTokenStore {
 
   Future<String?> _refresh(String did, StoredIdToken stored) async {
     final refreshToken = stored.refreshToken;
-    if (refreshToken == null) return null;
+    if (refreshToken == null || _revoking.contains(did)) return null;
+    final generation = _generations[did] ?? 0;
     try {
-      final res = await _api.refresh(refreshToken);
+      final res = await _api.refresh(refreshToken, expectedDid: did);
       final next = StoredIdToken.fromToken(res, fallbackSid: stored.sid);
+      if (_revoking.contains(did) || (_generations[did] ?? 0) != generation) {
+        return null;
+      }
       await _storage.saveIdHubToken(did, jsonEncode(next.toJson()));
       return next.accessToken;
     } on IdHubException catch (e) {
       // A revoked/invalid refresh is terminal: clear so the next call re-logs-in
       // rather than looping on a dead refresh.
-      if (e.statusCode == 401) {
+      if (e.statusCode == 400 || e.statusCode == 401 || e.statusCode == 403) {
         await _storage.deleteIdHubToken(did);
         return null;
       }
@@ -90,17 +104,26 @@ class IdTokenStore {
 
   /// Revoke the session server-side (best effort) and drop the local token.
   Future<void> revokeAndClear(String did) async {
+    if (_revoking.contains(did)) return;
+    _revoking.add(did);
     final stored = await _read(did);
-    if (stored != null) {
-      try {
-        await _api.revoke(
-          accessToken: stored.accessToken,
-          refreshToken: stored.refreshToken,
-        );
-      } catch (e) {
-        AppLogger.w('IdTokenStore', 'revoke failed: $e');
+    _generations[did] = (_generations[did] ?? 0) + 1;
+    final pending = _inflight[did];
+    try {
+      if (stored != null) {
+        try {
+          await _api.revoke(
+            accessToken: stored.accessToken,
+            refreshToken: stored.refreshToken,
+          );
+        } catch (e) {
+          AppLogger.w('IdTokenStore', 'revoke failed: $e');
+        }
       }
+      if (pending != null) await pending;
+      await _storage.deleteIdHubToken(did);
+    } finally {
+      _revoking.remove(did);
     }
-    await _storage.deleteIdHubToken(did);
   }
 }

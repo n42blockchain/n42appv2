@@ -67,6 +67,11 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         _fail(idHubRequestExpiredMessage);
         return;
       }
+      final expectedType = widget.isLogin ? 'login' : 'wallet-binding';
+      if (session.type != expectedType) {
+        _fail('This request type does not match the scanned code.');
+        return;
+      }
       // Fetch the exact message to sign from the hub (never from the QR).
       final challenge = await api.prepareBindSession(
         sessionId: widget.sessionId,

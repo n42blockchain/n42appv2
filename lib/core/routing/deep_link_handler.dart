@@ -14,9 +14,8 @@ class DeepLinkHandler {
   /// 导航回调 - 由外部注入实际的导航逻辑
   void Function(DeepLinkData data)? onNavigate;
 
-  DeepLinkHandler({
-    required DeepLinkService deepLinkService,
-  }) : _deepLinkService = deepLinkService;
+  DeepLinkHandler({required DeepLinkService deepLinkService})
+    : _deepLinkService = deepLinkService;
 
   /// 开始监听 deep links
   void startListening() {
@@ -52,10 +51,7 @@ class DeepLinkHandler {
     if (requiredKey != null) {
       final value = data.params[requiredKey] ?? '';
       if (value.isEmpty) return;
-      AppLogger.d(
-        'DeepLinkHandler',
-        'navigating to ${data.type.name} $value',
-      );
+      AppLogger.d('DeepLinkHandler', 'navigating to ${data.type.name} $value');
     }
 
     // walletConnect: 需要 wcUri 参数或 URI scheme 为 wc:
@@ -67,7 +63,8 @@ class DeepLinkHandler {
 
     // chatSso: 需要 loginToken / login_token / token 任一存在
     if (data.type == DeepLinkType.chatSso) {
-      final hasToken = (data.params['loginToken'] ?? '').isNotEmpty ||
+      final hasToken =
+          (data.params['loginToken'] ?? '').isNotEmpty ||
           (data.params['login_token'] ?? '').isNotEmpty ||
           (data.params['token'] ?? '').isNotEmpty;
       if (!hasToken) return;
@@ -80,7 +77,8 @@ class DeepLinkHandler {
         data.type == DeepLinkType.idHubAuth) {
       final sid = data.params['sid'] ?? '';
       final hub = data.params['hub'] ?? '';
-      if (sid.isEmpty || !IdHubBindSigner.isHubAllowed(hub)) {
+      if (!IdHubBindSigner.isValidSessionId(sid) ||
+          !IdHubBindSigner.isHubAllowed(hub)) {
         AppLogger.w('DeepLinkHandler', 'rejected id-hub link: bad sid/hub');
         return;
       }

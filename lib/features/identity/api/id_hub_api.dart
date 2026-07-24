@@ -15,15 +15,14 @@ class IdHubApi {
   static const String _hostKey = 'idHubHost';
 
   /// CAIP-2 of the primary N42 chain used for wallet challenges by default.
-  static const String defaultChainCaip2 = 'eip155:1142';
+  static String get defaultChainCaip2 => AppConfig.idHubChainCaip2;
 
   final String _baseUrl;
   final Dio _dio;
 
   IdHubApi({String? baseUrl, Dio? dio})
-    : _baseUrl = (baseUrl ?? AppConfig.getApiUrlOnline(_hostKey)).replaceAll(
-        RegExp(r'/$'),
-        '',
+    : _baseUrl = _normalizeBaseUrl(
+        baseUrl ?? AppConfig.getApiUrlOnline(_hostKey),
       ),
       _dio =
           dio ??
@@ -39,9 +38,22 @@ class IdHubApi {
   /// Whether the hub is configured with a secure HTTPS endpoint. When false the
   /// caller must fall back to the pre-ID-Hub flow.
   bool get isEnabled {
-    if (_baseUrl.isEmpty) return false;
-    final uri = Uri.tryParse(_baseUrl);
-    return uri != null && uri.scheme == 'https' && uri.host.isNotEmpty;
+    return _baseUrl.isNotEmpty;
+  }
+
+  static String _normalizeBaseUrl(String value) {
+    final uri = Uri.tryParse(value);
+    if (uri == null ||
+        uri.scheme != 'https' ||
+        uri.host.isEmpty ||
+        uri.userInfo.isNotEmpty ||
+        (uri.hasPort && uri.port != 443) ||
+        (uri.path.isNotEmpty && uri.path != '/') ||
+        uri.hasQuery ||
+        uri.hasFragment) {
+      return '';
+    }
+    return uri.origin;
   }
 
   void _ensureEnabled() {
@@ -53,13 +65,13 @@ class IdHubApi {
   /// Create a wallet login challenge. Returns the exact message to personal_sign.
   Future<IdHubChallenge> createWalletChallenge({
     required String address,
-    String chain = defaultChainCaip2,
+    String? chain,
     String aud = 'wallet-api',
   }) async {
     _ensureEnabled();
     final data = await _post('/v1/auth/wallet/challenge', {
       'address': address.toLowerCase(),
-      'chain': chain,
+      'chain': chain ?? defaultChainCaip2,
       'aud': aud,
     });
     return IdHubChallenge.fromJson(data);
@@ -82,7 +94,7 @@ class IdHubApi {
       'aud': aud,
     });
     return IdHubWalletLoginResult(
-      token: IdHubTokenResponse.fromJson(data),
+      token: IdHubTokenResponse.fromJson(data, expectedAudience: aud),
       didCreated: data['did_created'] == true,
     );
   }
@@ -90,6 +102,7 @@ class IdHubApi {
   /// Fetch a bind session after scanning its QR (session id is the capability).
   Future<IdHubBindSession> getBindSession(String sessionId) async {
     _ensureEnabled();
+    _ensureSessionId(sessionId);
     final data = await _get('/v1/bind-sessions/$sessionId');
     return IdHubBindSession.fromJson(data);
   }
@@ -98,12 +111,13 @@ class IdHubApi {
   Future<IdHubChallenge> prepareBindSession({
     required String sessionId,
     required String address,
-    String chain = defaultChainCaip2,
+    String? chain,
   }) async {
     _ensureEnabled();
+    _ensureSessionId(sessionId);
     final data = await _post('/v1/bind-sessions/$sessionId/prepare', {
       'address': address.toLowerCase(),
-      'chain': chain,
+      'chain': chain ?? defaultChainCaip2,
     });
     return IdHubChallenge.fromJson(data);
   }
@@ -117,6 +131,7 @@ class IdHubApi {
     int? chainId,
   }) async {
     _ensureEnabled();
+    _ensureSessionId(sessionId);
     await _post('/v1/bind-sessions/$sessionId/complete', {
       'challenge_id': challengeId,
       'signature': signature,
@@ -126,13 +141,30 @@ class IdHubApi {
   }
 
   /// Refresh an N42 ID Token with a rotating refresh token.
-  Future<IdHubTokenResponse> refresh(String refreshToken) async {
+  Future<IdHubTokenResponse> refresh(
+    String refreshToken, {
+    required String expectedDid,
+    String expectedAudience = 'wallet-api',
+  }) async {
     _ensureEnabled();
     final data = await _postForm('/v1/oauth/token', {
       'grant_type': 'refresh_token',
       'refresh_token': refreshToken,
     });
-    return IdHubTokenResponse.fromJson(data);
+    return IdHubTokenResponse.fromJson(
+      data,
+      expectedAudience: expectedAudience,
+      expectedSubject: expectedDid,
+    );
+  }
+
+  void _ensureSessionId(String sessionId) {
+    if (!RegExp(
+      r'^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$',
+      caseSensitive: false,
+    ).hasMatch(sessionId)) {
+      throw IdHubException('Invalid session id', code: 'invalid-session');
+    }
   }
 
   /// Revoke the current session (best effort). [accessToken] authorizes it.
