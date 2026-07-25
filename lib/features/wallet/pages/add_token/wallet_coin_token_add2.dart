@@ -84,6 +84,7 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         ..['mKey'] = coinMap['contract'].toString().toUpperCase()
         ..['unit'] = coinMap['coin_name'].toString()
         ..['decimals'] = coinMap['decimals']
+        ..['decimals_verified'] = false
         ..['canEdit'] = true;
       addSymbol = '$addSymbol,${coinMap['coin_name']}';
       wap.addWalletChainToken(baseToken);

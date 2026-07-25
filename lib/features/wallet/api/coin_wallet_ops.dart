@@ -5,8 +5,24 @@ import 'package:n42_wallet/features/wallet/models/coin_model_build_utils.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 
+/// User-added EVM token metadata may have come from an outdated token
+/// directory. Do not turn its cached raw balance into a display/spend amount
+/// until the contract's decimals have been verified on-chain.
+bool requiresEvmTokenMetadataVerification(CoinModel coin) {
+  return coin.coin['blockchainType'] == 'Ethereum' &&
+      coin.coin['isContract'] == true &&
+      coin.coin['canEdit'] == true &&
+      coin.coin['decimals_verified'] != true;
+}
+
 /// Hydrates [coin]'s balance/price/value fields from cached data in the coin map.
 void applyCachedBalance(CoinModel coin) {
+  if (requiresEvmTokenMetadataVerification(coin)) {
+    coin.balance = BigInt.zero;
+    coin.value = 0.0;
+    coin.loadError = true;
+    return;
+  }
   try {
     if (coin.isTest) {
       coin.balance = BigInt.parse(coin.coin['balance_test']?.toString() ?? '0');

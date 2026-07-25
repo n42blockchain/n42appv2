@@ -41,6 +41,10 @@ class TokenViewApi {
     header = {'content-type': 'application/json'};
   }
 
+  Future<int?> getErc20Decimals(String contractAddress, String rpcUrl) {
+    return EthAPI.getErc20Decimals(contractAddress, rpcUrl);
+  }
+
   // ── 公共列表查询 ───────────────────────────────────────────────────────────
 
   /// 统一的 GET 请求模板：发起请求、校验状态码、提取数据

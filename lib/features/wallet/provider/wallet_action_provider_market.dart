@@ -312,6 +312,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
         .toString();
     _safeUpdateWalletMap(coinModel);
     applyCachedBalance(coinModel);
+    coinModel.loadError = false;
     return false;
   }
 

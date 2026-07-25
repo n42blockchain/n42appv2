@@ -5,6 +5,44 @@ import 'package:n42_wallet/features/wallet/models/coin_model_wallet_access.dart'
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 
 void main() {
+  group('editable EVM token metadata', () {
+    CoinModel token({required bool verified}) {
+      return CoinModel.fromMap({
+        'blockchainType': 'Ethereum',
+        'coinType': 'BNB',
+        'isContract': true,
+        'canEdit': true,
+        'decimals': 6,
+        'decimals_verified': verified,
+        'balance': '502690',
+        'coinPrice': 0.5,
+        'percentage': 0.0,
+      });
+    }
+
+    test('does not display an unverified cached raw balance', () {
+      final coin = token(verified: false);
+
+      applyCachedBalance(coin);
+
+      expect(requiresEvmTokenMetadataVerification(coin), isTrue);
+      expect(coin.balance, BigInt.zero);
+      expect(coin.value, 0.0);
+      expect(coin.loadError, isTrue);
+    });
+
+    test('uses cached balance after decimals are verified on-chain', () {
+      final coin = token(verified: true);
+
+      applyCachedBalance(coin);
+
+      expect(requiresEvmTokenMetadataVerification(coin), isFalse);
+      expect(coin.balanceStringAll(), '0.50269');
+      expect(coin.value, closeTo(0.251345, 0.0000001));
+      expect(coin.loadError, isFalse);
+    });
+  });
+
   group('fetchCoinBalance', () {
     test('keeps failed balance refresh marked as unavailable', () async {
       final coin = CoinModel()

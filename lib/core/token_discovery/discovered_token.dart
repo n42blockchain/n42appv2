@@ -68,6 +68,7 @@ class DiscoveredToken {
     base['mKey'] = contractAddress.toUpperCase();
     base['unit'] = displaySymbol;
     base['decimals'] = decimals;
+    base['decimals_verified'] = false;
     base['icon'] = '';
     base['customer'] = true;
     base['canEdit'] = true;
