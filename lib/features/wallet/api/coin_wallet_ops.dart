@@ -99,11 +99,14 @@ Future<bool> fetchCoinBalance(
       await buildCoinWallet(coin, walletAccess);
     }
     final bool hasError = await walletAccess.getBalanceWithCoinModel(coin);
-    coin.loadError = false;
     if (hasError) {
+      // Cached balances remain visible for reference, but must not be treated
+      // as a current spendable balance after a failed chain read.
+      coin.loadError = true;
       walletAccess.refresh();
       return false;
     }
+    coin.loadError = false;
     walletAccess.calculateBalanceWidthCoinModel();
     return true;
   } catch (e) {

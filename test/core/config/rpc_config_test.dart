@@ -6,7 +6,7 @@ void main() {
   group('RpcConfig', () {
     test('uses a direct Ethereum mainnet RPC by default', () {
       expect(RpcConfig.ethMainnetRpc, isNotEmpty);
-      expect(RpcConfig.ethMainnetRpc, 'https://eth.llamarpc.com');
+      expect(RpcConfig.ethMainnetRpc, 'https://ethereum-rpc.publicnode.com');
     });
 
     test('syncs ETH overrides into wallet chain config at init time', () {

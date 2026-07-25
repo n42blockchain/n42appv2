@@ -373,8 +373,6 @@ extension WalletActionProviderMarket on WalletActionProvider {
         }
       }
 
-      // 网络临时失败时用缓存数据，不显示错误图标
-      coin.loadError = false;
       coin.isRefresh = false;
       refresh();
     }
