@@ -63,8 +63,9 @@ extension WalletActionProviderToken on WalletActionProvider {
   }
 
   /// 拖拽重排链顺序并持久化。
+  /// 重排链顺序。[newIndex] 按 `ReorderableListView.onReorderItem` 语义，即
+  /// **已经**按"移除 [oldIndex] 之后"的下标给出，此处不再做 newIndex-- 补偿。
   void reorderChain(int oldIndex, int newIndex) {
-    if (newIndex > oldIndex) newIndex--;
     final item = _coinModels.removeAt(oldIndex);
     _coinModels.insert(newIndex, item);
     walletInfo.chainOrder = _coinModels

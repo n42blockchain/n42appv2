@@ -1,3 +1,6 @@
+// CupertinoPageTransitionsBuilder 自 Flutter 3.44 起只由 cupertino 库导出
+// （material 不再转出），pageTransitionsTheme 用到它，故显式引入。
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';

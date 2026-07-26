@@ -276,11 +276,10 @@ class _QuickRepliesPageState extends State<QuickRepliesPage> {
     return ReorderableListView.builder(
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: _replies.length,
-      onReorder: (oldIndex, newIndex) {
+      // onReorderItem 取代 onReorder（Flutter 3.41 后弃用）：新回调已按"移除
+      // oldIndex 后"的下标给出 newIndex，故不再需要 newIndex -= 1 的补偿。
+      onReorderItem: (oldIndex, newIndex) {
         _applyRepliesUpdate((current) {
-          if (newIndex > oldIndex) {
-            newIndex -= 1;
-          }
           final item = current.removeAt(oldIndex);
           current.insert(newIndex, item);
           // 更新顺序

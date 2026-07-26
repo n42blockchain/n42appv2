@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+// ScrollCacheExtent（scrollCacheExtent 的参数类型，Flutter 3.44 起取代
+// 裸 double 的 cacheExtent）由 rendering 库导出，material 未转出。
+import 'package:flutter/rendering.dart';
 
 /// 优化的消息列表视图
 ///
@@ -94,7 +97,7 @@ class _OptimizedMessageListViewState extends State<OptimizedMessageListView> {
     return CustomScrollView(
       controller: _scrollController,
       reverse: widget.reverse,
-      cacheExtent: widget.cacheExtent ?? 500,
+      scrollCacheExtent: ScrollCacheExtent.pixels(widget.cacheExtent ?? 500),
       slivers: [
         SliverPadding(
           padding: widget.padding ?? EdgeInsets.zero,

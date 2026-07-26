@@ -26,7 +26,10 @@ class ManageChainsPage extends ConsumerWidget {
       body: ReorderableListView.builder(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         itemCount: wap.coinModels.length,
-        onReorder: (oldIndex, newIndex) {
+        // onReorderItem 取代 onReorder（Flutter 3.41 后弃用）：新回调给出的
+        // newIndex 已按"移除 oldIndex 之后"计算，reorderChain 内部的
+        // newIndex-- 补偿随之移除。
+        onReorderItem: (oldIndex, newIndex) {
           wap.reorderChain(oldIndex, newIndex);
         },
         itemBuilder: (context, i) {

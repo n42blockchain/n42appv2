@@ -146,7 +146,7 @@ class BaseHttp {
           {
           if (header != null)
             ...header.map((key, value) => MapEntry(key, value.toString())),
-          if (userInfo != null) ...userInfo,
+          ...?userInfo,
         }),
       );
 
