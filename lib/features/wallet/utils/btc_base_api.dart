@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:bitcoin_base/bitcoin_base.dart' show ApiService;
 import 'package:blockchain_utils/blockchain_utils.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,18 +18,23 @@ class ApiProviderException implements Exception {
   String toString() => 'status: $statusCode $message ${responseData ?? ""}';
 }
 
-class BitcoinApiService implements ApiService {
+/// Plain HTTP helper for Bitcoin explorer endpoints.
+///
+/// This used to implement `bitcoin_base`'s `ApiService`, which 7.2 replaced
+/// with the `BitcoinServiceProvider` mixin (a `BitcoinRequestDetails`-based
+/// contract). Nothing in the app constructs this class — the live BTC path is
+/// `api/sender/btc_sender.dart` → trustdart/WalletCore + `chain_api/btc_api.dart`
+/// — so the interface was dropped rather than ported to a shape no caller needs.
+class BitcoinApiService {
   BitcoinApiService([http.Client? client]) : _client = client ?? http.Client();
 
   final http.Client _client;
 
-  @override
   Future<T> get<T>(String url) async {
     final response = await _client.get(Uri.parse(url));
     return _readResponse<T>(response);
   }
 
-  @override
   Future<T> post<T>(
     String url, {
     Map<String, String> headers = const {'Content-Type': 'application/json'},

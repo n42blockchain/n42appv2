@@ -91,6 +91,9 @@ class CreateBtcTX2 {
             value: BtcUtils.toSatoshi('0.005'),
             vout: 1,
             scriptType: examplePublicKey.toAddress().type,
+            // bitcoin_base 7.3 made blockHeight required. This is a hardcoded
+            // example UTXO, so 0 ("unconfirmed") is the honest placeholder.
+            blockHeight: 0,
           ),
           ownerDetails: UtxoAddressDetails(
             publicKey: examplePublicKey.toHex(),

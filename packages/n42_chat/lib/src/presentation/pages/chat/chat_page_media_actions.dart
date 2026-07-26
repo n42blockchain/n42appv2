@@ -713,7 +713,7 @@ extension _ChatPageMediaActionsMethods on _ChatPageState {
 
   Future<void> _pickFile({DateTime? scheduledAt}) async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.any,
         allowMultiple: true,
         withReadStream: true,

@@ -139,7 +139,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
   Future<void> _pickFile() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv', 'txt'],
         withReadStream: false,

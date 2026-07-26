@@ -432,7 +432,7 @@ class _RestoreSection extends StatelessWidget {
 
   Future<void> _pickAndRestore(BuildContext context) async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.any,
         allowMultiple: false,
       );

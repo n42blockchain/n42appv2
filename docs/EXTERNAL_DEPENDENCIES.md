@@ -85,3 +85,47 @@ App 的 `dex_swap_api.dart` 已接通这些接口。
 - 钱包报告：§2.3（链支持）、§3.1（AA）、§5（交易）、§14 与附录 B/C 中所有标注"需 key/需服务端/需 native"的行，其配置方式以本文档为准。
 - Chat 报告：附录 C.3（需外部依赖）各行 → 本文档第一、二节；C.6 尾注"剩余均需外部依赖"→ 本文档第三节。
 - 真机验证矩阵（Codex T15-T17）中被资金/账号阻塞的行不属于本文档范围——那是测试资产问题，见 `Codex-N42.md`。
+
+## 五、依赖版本升级阻塞项（2026-07-26 全量核查）
+
+一次性把宿主与 vendored `packages/n42_chat` 的依赖推到当前 SDK 下能到的最高版本后，
+剩余未升级项**全部有据可查**。改动依赖前先看这张表，别重复踩。
+
+**已升级**：`bitcoin_base 7.1→7.3`、`blockchain_utils 6.0→7.1`、
+`file_picker 10→11`（含 Android 路径穿越 CWE-22 修复）、
+`flutter_local_notifications 20→22`、`sign_in_with_apple 7→8`、
+`flutter_vodozemac 0.5→0.6`、`google_mlkit_face_detection 0.13→0.14`
+（连带 `selfie_segmentation 0.10→0.11`）、`qr_code_scanner_plus 2.0.14→2.1.2`
+（修 iOS 恢复期 pop 扫码页崩溃）、`chewie 1.8.5→1.13.1`，以及 dio/mobile_scanner/
+connectivity_plus/decimal 等一批约束内小版本。
+
+**TrustWallet WalletCore（trust core）已是最新 4.7.0**——`ios/Podfile` 与
+`android/app/build.gradle.kts` 双端一致，4.7.0 为 2026-06-30 发布的最新版，无需动作。
+
+| 依赖 | 当前 | 最新 | 阻塞原因 |
+|---|---|---|---|
+| `app_links` | 7.0.0 | 7.2.1 | 需 Flutter ≥3.44 / Dart ≥3.12（本仓 3.41.9 / 3.11.5）|
+| `sqflite` | 2.4.2+1 | 2.4.3 | 同上 |
+| `video_player` | 2.11.1 | 2.13.0 | 同上 |
+| `webview_flutter_android` | 4.12.0 | 4.13.0 | 同上 |
+| `pro_image_editor` | 11.23.0 | 13.2.3 | 同上 |
+| `flutter_new_badger` | 1.1.1 | 2.0.0 | 同上 |
+| `local_auth_android` | 2.0.8 | 2.0.9 | 同上 |
+| `device_info_plus` | 12.4.0 | 13.2.0 | **win32 分裂**：13.1+ 要 win32 ^6，而 `reown_core 1.3.8`（WalletConnect，已是最新）把 `package_info_plus` 钉在 <10，后者要 win32 ^5 |
+| `package_info_plus` | 9.0.1 | 10.2.1 | 同上，`reown_core` 直接封顶 |
+| `share_plus` | 12.0.2 | 13.3.0 | 同上（13.1+ 要 win32 ^6）|
+| `chewie` | 1.13.1 | 1.14.1 | 1.14.1 经 `wakelock_plus 1.6.1` 要 `package_info_plus ^10`，同 win32 链 |
+| `xml` | 6.6.1 | 7.0.1 | `simple_html_css 5.0.0`（已是最新）钉 `xml ^6.5.0` |
+| `intl` | 0.20.2 | 0.20.3 | `flutter_localizations` 随 SDK 精确锁定 |
+| `flutter_callkit_incoming` | 3.0.0 | 3.1.3 | **故意钉死**：3.1.x 移除 `CallKitParams.textAccept/textDecline` 且重命名 `Event` 枚举，`packages/n42_chat/.../voip/call_notification_service.dart` 报 19 处错误。解钉须先改 chat voip 代码 |
+| `flutter_face_api` / `flutter_face_core_basic` | 7.2.x | 8.2.x | **可升但不该升**：全仓 `package:flutter_face` 引用数为 **0**，只有自动生成的 `GeneratedPluginRegistrant` 提到它们。等于白背一整套 Regula 原生 SDK 体积。建议**删除依赖**而非升级 |
+
+### 连带发现（未处理，待决策）
+
+- `bitcoin_base` 的 5 个使用文件是**死代码孤岛**：`btc_base_api.dart` →
+  无人引用；`create_btc_tx_2.dart` → 无人引用；`create_btc_tx_1.dart` → 仅被
+  tx_2 的注释提到；`btc_tx_builder.dart` ← 仅 tx_1；`btc_tx_script.dart` ← 仅
+  builder。真实 BTC 发送路径是 `api/sender/btc_sender.dart` → trustdart/WalletCore
+  + `chain_api/btc_api.dart`，与 `bitcoin_base` 无关。删掉这 5 个文件即可连
+  `bitcoin_base` 依赖一起摘除。本次仅做了让它们在 7.3 下继续编译的最小改动。
+- 升到 Flutter 3.44 可一次性解开上表前 7 项。

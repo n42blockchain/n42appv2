@@ -53,7 +53,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
 
     FilePickerResult? result;
     try {
-      result = await FilePicker.platform.pickFiles(
+      result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: const ['n42backup', 'json'],
         withData: false,

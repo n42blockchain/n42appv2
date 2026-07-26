@@ -57,7 +57,7 @@ class _MusicSelectSheetState extends State<MusicSelectSheet> {
   /// 选择本地音频文件
   Future<void> _pickLocalAudio() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.audio,
         allowMultiple: false,
       );
