@@ -21,10 +21,10 @@ class AppConfig {
   AppConfig._();
 
   // ============ Wallet Constants ============
-  
+
   /// Maximum wallet name length
   static const int walletNameMaxLength = 12;
-  
+
   /// Minimum wallet password length
   static const int walletPasswordLength = 8;
 
@@ -35,7 +35,7 @@ class AppConfig {
   static const String ipfsPassword = String.fromEnvironment('IPFS_PASSWORD');
 
   // ============ Environment Flags ============
-  
+
   /// Whether to enable app update checking
   static bool isOpenAppUpdate = true;
 
@@ -56,14 +56,24 @@ class AppConfig {
   /// Production environment flag.
   /// Use `--dart-define=ENV=development` to switch to test endpoints.
   static const bool isOnline =
-      String.fromEnvironment('ENV', defaultValue: 'production') != 'development';
+      String.fromEnvironment('ENV', defaultValue: 'production') !=
+      'development';
 
-  /// Optional N42 ID Hub URL injected into development/device builds.
+  /// N42 ID Hub URL. Production builds use the deployed service by default.
   ///
-  /// Keep this empty in normal builds so unified identity remains behind its
-  /// graceful-degradation kill switch. Example:
-  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`.
-  static const String idHubUrl = String.fromEnvironment('ID_HUB_URL');
+  /// Device and development builds may override it, for example with
+  /// `--dart-define=ID_HUB_URL=https://id-dev.n42.ai`. Supplying an empty value
+  /// explicitly disables the feature and preserves the graceful-degradation
+  /// path for incident response.
+  static const String idHubUrl = String.fromEnvironment(
+    'ID_HUB_URL',
+    defaultValue: 'https://id.n42.ai',
+  );
+
+  static const String idHubMainnetChainCaip2 = 'eip155:94';
+  static const String idHubTestnetChainCaip2 = 'eip155:1142';
+  static String get idHubChainCaip2 =>
+      isOnline ? idHubMainnetChainCaip2 : idHubTestnetChainCaip2;
 
   /// Optional additional exact host for device-test QR codes. This must only be
   /// supplied to development builds and must never replace the permanent hosts.
@@ -73,7 +83,7 @@ class AppConfig {
 
   /// Hosts a scanned `n42id://` QR is allowed to point its `hub` param at. A
   /// hard allowlist so a phishing QR cannot make the wallet POST a signature to
-  /// an attacker-controlled server. Compared by exact host or registrable suffix.
+  /// an attacker-controlled server. Compared by exact host.
   static const List<String> idHubAllowedHosts = [
     'id.n42.ai',
     'id-dev.n42.ai',
@@ -81,83 +91,86 @@ class AppConfig {
   ];
 
   // ============ API Endpoints ============
-  
+
   static const Map<String, dynamic> apiUrl = {
     'walletName': 'N42Wallet',
     'n42Browser': 'https://www.n42.ai',
     // Onramper proxy. Upstream currently returns 502; tracked server-side.
     'walletBuyHostV2': 'https://api.n42.ai/otc/r/onramper/url',
-    
+
     // Market API
     'marketHost': {
       'main': 'https://api.n42.ai/market/v1',
-      'test': 'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9398/v1', // TODO(production): Replace with domain name
     },
 
     // NFT API
     'nftHost': {
       'main': 'https://api.n42.ai/nft-market',
-      'test': 'https://5.78.28.90:9397', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9397', // TODO(production): Replace with domain name
     },
 
     // Activity API
     'activiteHost': {
       'main': 'https://api.n42.ai/activity/v1',
-      'test': 'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9390/v1', // TODO(production): Replace with domain name
     },
 
     // Mining API
     'groupMiningHost': {
       'main': 'https://api.n42.ai/activity',
-      'test': 'https://5.78.28.90:9390', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9390', // TODO(production): Replace with domain name
     },
 
     // User Center API
     'userInfoHost': {
       'main': 'https://api.n42.ai/user',
-      'test': 'https://5.78.28.90:9393', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9393', // TODO(production): Replace with domain name
     },
 
-    // Unified-identity N42 ID Hub. OPTIONAL: leave both empty to keep every ID
-    // Hub feature dark and fall back to current behavior (graceful degradation
-    // kill switch). Fill in once the hub is deployed per environment.
-    'idHubHost': {
-      'main': idHubUrl,
-      'test': idHubUrl,
-    },
-    
+    // Unified-identity N42 ID Hub. A build-time override can point device
+    // testing at id-dev or explicitly disable the integration.
+    'idHubHost': {'main': idHubUrl, 'test': idHubUrl},
+
     // IPFS — uploads go through the n42 cluster, reads through the public
     // gateway (writable cluster doesn't expose a permissioned read path).
     'ipfsHost': 'https://api.n42.ai',
     'ipfsAddress': 'https://ipfs.io/ipfs/',
-    
+
     // Wallet/Token API
     'tokenViewUri': {
       'main': 'https://api.n42.ai/wallet/',
-      'test': 'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9492/', // TODO(production): Replace with domain name
     },
 
     // Exchange/Swap API
     'exchangeHost': {
       'main': 'https://api.n42.ai/swap',
-      'test': 'https://5.78.28.90:9391', // TODO(production): Replace with domain name
+      'test':
+          'https://5.78.28.90:9391', // TODO(production): Replace with domain name
     },
-    
+
     // News API endpoint key was removed; NewsApi now reads public RSS
     // feeds directly (see lib/features/news/api/news_api.dart).
 
     // TRON API
     'tronUri': 'https://api.trongrid.io',
-    
+
     // 1inch Swap
     'swap1inch': 'https://api.1inch.dev/',
-    
+
     // Block Explorer API
     'blockBrowserHost': {
       'main': 'https://mainnet.n42.world',
       'test': 'https://testnet.n42.world',
     },
-    
+
     // Face API
     'face': 'https://api.n42.ai/face',
 
@@ -208,14 +221,18 @@ class AppConfig {
 
     // 检查 Mining WebSocket
     if (miningWebSocketUrl.startsWith('ws://')) {
-      warnings.add('miningWebSocketUrl uses unencrypted ws:// ($miningWebSocketUrl)'
-          ' — override via --dart-define=MINING_WS_URL=wss://...');
+      warnings.add(
+        'miningWebSocketUrl uses unencrypted ws:// ($miningWebSocketUrl)'
+        ' — override via --dart-define=MINING_WS_URL=wss://...',
+      );
     }
 
     // 检查 Mining RPC
     if (miningRpcUrl.startsWith('http://')) {
-      warnings.add('miningRpcUrl uses unencrypted http:// ($miningRpcUrl)'
-          ' — override via --dart-define=MINING_RPC_URL=https://...');
+      warnings.add(
+        'miningRpcUrl uses unencrypted http:// ($miningRpcUrl)'
+        ' — override via --dart-define=MINING_RPC_URL=https://...',
+      );
     }
 
     if (warnings.isNotEmpty) {

@@ -445,6 +445,25 @@ class WalletActionProvider extends ChangeNotifier
               ? coinModel.config.contractTest
               : coinModel.config.contract)
         : '';
+    final rpcOverride = resolveBalanceRpcOverride(coinModel);
+
+    if (requiresEvmTokenMetadataVerification(coinModel)) {
+      if (contract.isEmpty || rpcOverride == null) {
+        coinModel.loadError = true;
+        return true;
+      }
+      final decimals = await tokenViewApi.getErc20Decimals(
+        contract,
+        rpcOverride,
+      );
+      if (decimals == null) {
+        coinModel.loadError = true;
+        return true;
+      }
+      coinModel.coin['decimals'] = decimals;
+      coinModel.coin['decimals_verified'] = true;
+      _safeUpdateWalletMap(coinModel);
+    }
 
     final MessageModel mm =
         await tokenViewApi.getBalance(
@@ -453,7 +472,7 @@ class WalletActionProvider extends ChangeNotifier
           address,
           contract: contract,
           isTest: coinModel.isTest,
-          rpc: resolveBalanceRpcOverride(coinModel),
+          rpc: rpcOverride,
         ) ??
         MessageModel.error();
 
@@ -465,7 +484,7 @@ class WalletActionProvider extends ChangeNotifier
       );
       _safeUpdateWalletMap(coinModel);
       applyCachedBalance(coinModel);
-      coinModel.loadError = false;
+      coinModel.loadError = true;
       return true;
     }
 
@@ -489,6 +508,7 @@ class WalletActionProvider extends ChangeNotifier
     coinModel.coin[balanceKey] = balance.toString();
     _safeUpdateWalletMap(coinModel);
     applyCachedBalance(coinModel);
+    coinModel.loadError = false;
     return false;
   }
 

@@ -42,7 +42,11 @@ class _FakeIdHubApi extends IdHubApi {
   _FakeIdHubApi() : super(baseUrl: 'https://id-test.n42.ai');
 
   @override
-  Future<IdHubTokenResponse> refresh(String refreshToken) async {
+  Future<IdHubTokenResponse> refresh(
+    String refreshToken, {
+    required String expectedDid,
+    String expectedAudience = 'wallet-api',
+  }) async {
     refreshCalls++;
     if (refreshDelay > Duration.zero) await Future.delayed(refreshDelay);
     if (refreshError != null) throw refreshError!;
@@ -59,7 +63,7 @@ class _FakeIdHubApi extends IdHubApi {
   @override
   Future<IdHubChallenge> createWalletChallenge({
     required String address,
-    String chain = IdHubApi.defaultChainCaip2,
+    String? chain,
     String aud = 'wallet-api',
   }) async {
     challengeCalls++;
@@ -76,6 +80,7 @@ class _FakeIdHubApi extends IdHubApi {
     required String signature,
     String signerType = 'eoa',
     int? chainId,
+    String aud = 'wallet-api',
   }) async {
     verifyCalls++;
     return IdHubWalletLoginResult(
@@ -335,7 +340,7 @@ void main() {
       expect(api.verifyCalls, 0);
     });
 
-    test('does not cache a successful response without a root DID', () async {
+    test('rejects a successful response without a root DID', () async {
       final api = _FakeIdHubApi()..resultSub = null;
       final storage = _FakeSecureStorage();
       final login = IdHubWalletLogin(
@@ -343,12 +348,11 @@ void main() {
         store: IdTokenStore(api: api, storage: storage),
       );
 
-      final result = await login.login(
-        address: '0x1',
-        sign: (_) async => '0xsignature',
+      await expectLater(
+        login.login(address: '0x1', sign: (_) async => '0xsignature'),
+        throwsFormatException,
       );
 
-      expect(result.token.sub, isNull);
       expect(storage.store, isEmpty);
     });
   });

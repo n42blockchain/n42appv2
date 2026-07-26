@@ -2,6 +2,8 @@
 /// wallet app consumes. Mirrors the ID Hub OpenAPI.
 library;
 
+import 'dart:convert';
+
 /// Login/refresh result: an N42 ID Token plus a rotating refresh token.
 class IdHubTokenResponse {
   final String accessToken;
@@ -12,6 +14,7 @@ class IdHubTokenResponse {
   /// Root DID (so the client need not decode the JWT).
   final String? sub;
   final String? sid;
+  final int? jwtExpiresAt;
 
   const IdHubTokenResponse({
     required this.accessToken,
@@ -20,17 +23,51 @@ class IdHubTokenResponse {
     this.scope,
     this.sub,
     this.sid,
+    this.jwtExpiresAt,
   });
 
-  factory IdHubTokenResponse.fromJson(Map<String, dynamic> json) =>
-      IdHubTokenResponse(
-        accessToken: json['access_token'] as String,
-        expiresIn: (json['expires_in'] as num).toInt(),
-        refreshToken: json['refresh_token'] as String?,
-        scope: json['scope'] as String?,
-        sub: json['sub'] as String?,
-        sid: json['sid'] as String?,
-      );
+  factory IdHubTokenResponse.fromJson(
+    Map<String, dynamic> json, {
+    required String expectedAudience,
+    String? expectedSubject,
+  }) {
+    final accessToken = json['access_token'];
+    final expiresIn = json['expires_in'];
+    if (accessToken is! String ||
+        accessToken.isEmpty ||
+        json['token_type'] != 'Bearer' ||
+        expiresIn is! num ||
+        expiresIn <= 0) {
+      throw const FormatException('Invalid ID Hub token response');
+    }
+    final claims = _decodeJwtPayload(accessToken);
+    final issuer = claims['iss'];
+    final subject = claims['sub'];
+    final audience = claims['aud'];
+    final expiresAtSeconds = claims['exp'];
+    final audiences = audience is List
+        ? audience.whereType<String>().toList()
+        : <String>[if (audience is String) audience];
+    if (issuer != 'did:web:id.n42.ai' ||
+        subject is! String ||
+        !subject.startsWith('did:') ||
+        !audiences.contains(expectedAudience) ||
+        expiresAtSeconds is! num ||
+        expiresAtSeconds * 1000 <= DateTime.now().millisecondsSinceEpoch ||
+        (expectedSubject != null && subject != expectedSubject) ||
+        (json['sub'] != null && json['sub'] != subject)) {
+      throw const FormatException('Invalid ID Hub token claims');
+    }
+    return IdHubTokenResponse(
+      accessToken: accessToken,
+      expiresIn: expiresIn.toInt(),
+      refreshToken: json['refresh_token'] as String?,
+      scope: json['scope'] as String?,
+      sub: subject,
+      sid: json['sid'] as String?,
+      jwtExpiresAt: expiresAtSeconds.toInt() * 1000,
+    );
+  }
 }
 
 /// A wallet login challenge: the exact message the wallet must personal_sign.
@@ -46,10 +83,10 @@ class IdHubChallenge {
   });
 
   factory IdHubChallenge.fromJson(Map<String, dynamic> json) => IdHubChallenge(
-        challengeId: json['challenge_id'] as String,
-        message: json['message'] as String,
-        expiresAt: json['expires_at'] as String,
-      );
+    challengeId: json['challenge_id'] as String,
+    message: json['message'] as String,
+    expiresAt: json['expires_at'] as String,
+  );
 }
 
 /// Result of a wallet login: the token plus whether a DID was just provisioned.
@@ -78,27 +115,34 @@ class StoredIdToken {
     this.sid,
   });
 
-  factory StoredIdToken.fromToken(IdHubTokenResponse res, {String? fallbackSid}) =>
-      StoredIdToken(
-        accessToken: res.accessToken,
-        refreshToken: res.refreshToken,
-        expiresAt: DateTime.now().millisecondsSinceEpoch + res.expiresIn * 1000,
-        sid: res.sid ?? fallbackSid,
-      );
+  factory StoredIdToken.fromToken(
+    IdHubTokenResponse res, {
+    String? fallbackSid,
+  }) => StoredIdToken(
+    accessToken: res.accessToken,
+    refreshToken: res.refreshToken,
+    expiresAt: res.jwtExpiresAt == null
+        ? DateTime.now().millisecondsSinceEpoch + res.expiresIn * 1000
+        : [
+            DateTime.now().millisecondsSinceEpoch + res.expiresIn * 1000,
+            res.jwtExpiresAt!,
+          ].reduce((a, b) => a < b ? a : b),
+    sid: res.sid ?? fallbackSid,
+  );
 
   factory StoredIdToken.fromJson(Map<String, dynamic> json) => StoredIdToken(
-        accessToken: json['access_token'] as String,
-        refreshToken: json['refresh_token'] as String?,
-        expiresAt: (json['expires_at'] as num).toInt(),
-        sid: json['sid'] as String?,
-      );
+    accessToken: json['access_token'] as String,
+    refreshToken: json['refresh_token'] as String?,
+    expiresAt: (json['expires_at'] as num).toInt(),
+    sid: json['sid'] as String?,
+  );
 
   Map<String, dynamic> toJson() => <String, dynamic>{
-        'access_token': accessToken,
-        if (refreshToken != null) 'refresh_token': refreshToken,
-        'expires_at': expiresAt,
-        if (sid != null) 'sid': sid,
-      };
+    'access_token': accessToken,
+    if (refreshToken != null) 'refresh_token': refreshToken,
+    'expires_at': expiresAt,
+    if (sid != null) 'sid': sid,
+  };
 }
 
 /// A cross-device bind session as seen by the scanning wallet.
@@ -143,4 +187,21 @@ class IdHubException implements Exception {
 
   @override
   String toString() => 'IdHubException($statusCode $code): $message';
+}
+
+Map<String, dynamic> _decodeJwtPayload(String token) {
+  final parts = token.split('.');
+  if (parts.length != 3) {
+    throw const FormatException('Invalid ID Hub access token');
+  }
+  try {
+    final normalized = base64Url.normalize(parts[1]);
+    final decoded = jsonDecode(utf8.decode(base64Url.decode(normalized)));
+    if (decoded is! Map<String, dynamic>) {
+      throw const FormatException('Invalid ID Hub access token');
+    }
+    return decoded;
+  } catch (_) {
+    throw const FormatException('Invalid ID Hub access token');
+  }
 }

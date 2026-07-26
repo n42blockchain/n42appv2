@@ -12,6 +12,16 @@ import 'package:n42_wallet/features/wallet/models/transaction/explorer_response_
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
 import 'package:web3dart/web3dart.dart';
 
+int? parseErc20DecimalsResult(String hex) {
+  final clean = hex.startsWith('0x') ? hex.substring(2) : hex;
+  if (clean.isEmpty) return null;
+  final value = BigInt.tryParse(clean, radix: 16);
+  if (value == null || value < BigInt.zero || value > BigInt.from(255)) {
+    return null;
+  }
+  return value.toInt();
+}
+
 class EthAPI {
   String? cType;
   String? rpc;
@@ -364,6 +374,32 @@ class EthAPI {
       if (symbol.isEmpty && name.isEmpty) return null;
 
       return (name: name, symbol: symbol, decimals: decimals);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Read only the ERC-20 decimals value.
+  ///
+  /// Some legacy contracts implement `name()` or `symbol()` with non-standard
+  /// return types. Balance normalization must not depend on those optional
+  /// metadata calls.
+  static Future<int?> getErc20Decimals(
+    String contractAddress,
+    String rpcUrl,
+  ) async {
+    try {
+      final result = await EthAPI.init(null, rpcUrl, null).baseRPCEth(
+        'eth_call',
+        [
+          {'to': contractAddress.toLowerCase(), 'data': '0x313ce567'},
+          'latest',
+        ],
+        enableRetry: false,
+      );
+      if (!result.isSuccess) return null;
+      final hex = result.valueOrNull?.toString() ?? '';
+      return parseErc20DecimalsResult(hex);
     } catch (_) {
       return null;
     }

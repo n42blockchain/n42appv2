@@ -16,8 +16,8 @@ class IdHubWalletLogin {
   final IdTokenStore _store;
 
   IdHubWalletLogin({IdHubApi? api, IdTokenStore? store})
-      : _api = api ?? IdHubApi(),
-        _store = store ?? IdTokenStore();
+    : _api = api ?? IdHubApi(),
+      _store = store ?? IdTokenStore();
 
   bool get isEnabled => _api.isEnabled;
 
@@ -27,7 +27,7 @@ class IdHubWalletLogin {
   Future<IdHubWalletLoginResult> login({
     required String address,
     required MessageSigner sign,
-    String chain = IdHubApi.defaultChainCaip2,
+    String? chain,
     String signerType = 'eoa',
     String aud = 'wallet-api',
   }) async {
@@ -48,12 +48,14 @@ class IdHubWalletLogin {
       challengeId: challenge.challengeId,
       signature: signature,
       signerType: signerType,
+      aud: aud,
     );
 
     final did = result.token.sub;
-    if (did != null && did.isNotEmpty) {
-      await _store.save(did, result.token);
+    if (did == null || did.isEmpty) {
+      throw const FormatException('ID Hub response is missing a root DID');
     }
+    await _store.save(did, result.token);
     return result;
   }
 }

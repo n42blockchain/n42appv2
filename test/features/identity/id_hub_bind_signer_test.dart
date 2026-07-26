@@ -24,13 +24,12 @@ class _FakeApi extends IdHubApi {
   Future<IdHubChallenge> prepareBindSession({
     required String sessionId,
     required String address,
-    String chain = IdHubApi.defaultChainCaip2,
-  }) async =>
-      const IdHubChallenge(
-        challengeId: 'ch1',
-        message: 'N42 ID v1 bind ...',
-        expiresAt: '2099-01-01T00:00:00Z',
-      );
+    String? chain,
+  }) async => const IdHubChallenge(
+    challengeId: 'ch1',
+    message: 'N42 ID v1 bind ...',
+    expiresAt: '2099-01-01T00:00:00Z',
+  );
 
   @override
   Future<void> completeBindSession({
@@ -48,15 +47,23 @@ class _FakeApi extends IdHubApi {
 
 void main() {
   group('isHubAllowed', () {
-    test('accepts allowlisted hosts and subdomains over https', () {
-      expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai'), isTrue);
-      expect(IdHubBindSigner.isHubAllowed('https://id-dev.n42.ai'), isTrue);
-      expect(IdHubBindSigner.isHubAllowed('https://a.id.n42.ai'), isTrue);
-    });
+    test(
+      'accepts only exact allowlisted hosts over canonical https origins',
+      () {
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai'), isTrue);
+        expect(IdHubBindSigner.isHubAllowed('https://id-dev.n42.ai'), isTrue);
+        expect(IdHubBindSigner.isHubAllowed('https://a.id.n42.ai'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai/path'), isFalse);
+        expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai:8443'), isFalse);
+      },
+    );
 
     test('rejects unknown hosts, http, and garbage', () {
       expect(IdHubBindSigner.isHubAllowed('https://evil.com'), isFalse);
-      expect(IdHubBindSigner.isHubAllowed('https://id.n42.ai.evil.com'), isFalse);
+      expect(
+        IdHubBindSigner.isHubAllowed('https://id.n42.ai.evil.com'),
+        isFalse,
+      );
       expect(IdHubBindSigner.isHubAllowed('http://id.n42.ai'), isFalse);
       expect(IdHubBindSigner.isHubAllowed('not a url'), isFalse);
     });
@@ -79,7 +86,7 @@ void main() {
       final signer = IdHubBindSigner();
       String? signed;
       final out = await signer.completeBind(
-        sessionId: 'sid1',
+        sessionId: '11111111-1111-4111-8111-111111111111',
         hubUrl: 'https://id.n42.ai',
         address: '0xABC',
         apiFactory: (_) => api,
@@ -97,7 +104,7 @@ void main() {
     test('refuses an untrusted hub without calling the api', () async {
       final api = _FakeApi();
       final out = await IdHubBindSigner().completeBind(
-        sessionId: 'sid1',
+        sessionId: '11111111-1111-4111-8111-111111111111',
         hubUrl: 'https://evil.com',
         address: '0xABC',
         apiFactory: (_) => api,
@@ -111,7 +118,7 @@ void main() {
     test('fails when the session is not pending', () async {
       final api = _FakeApi()..sessionStatus = 'expired';
       final out = await IdHubBindSigner().completeBind(
-        sessionId: 'sid1',
+        sessionId: '11111111-1111-4111-8111-111111111111',
         hubUrl: 'https://id.n42.ai',
         address: '0xABC',
         apiFactory: (_) => api,
@@ -122,35 +129,42 @@ void main() {
       expect(api.completed, isFalse);
     });
 
-    test('fails (declined) and does not complete when signing returns null',
-        () async {
-      final api = _FakeApi();
-      final out = await IdHubBindSigner().completeBind(
-        sessionId: 'sid1',
-        hubUrl: 'https://id.n42.ai',
-        address: '0xABC',
-        apiFactory: (_) => api,
-        sign: (_) async => null,
-      );
-      expect(out.success, isFalse);
-      expect(out.code, 'declined');
-      expect(api.completed, isFalse);
-    });
+    test(
+      'fails (declined) and does not complete when signing returns null',
+      () async {
+        final api = _FakeApi();
+        final out = await IdHubBindSigner().completeBind(
+          sessionId: '11111111-1111-4111-8111-111111111111',
+          hubUrl: 'https://id.n42.ai',
+          address: '0xABC',
+          apiFactory: (_) => api,
+          sign: (_) async => null,
+        );
+        expect(out.success, isFalse);
+        expect(out.code, 'declined');
+        expect(api.completed, isFalse);
+      },
+    );
 
-    test('surfaces the hub error code on completion (binding-conflict)',
-        () async {
-      final api = _FakeApi()
-        ..completeThrows =
-            IdHubException('already bound', statusCode: 409, code: 'binding-conflict');
-      final out = await IdHubBindSigner().completeBind(
-        sessionId: 'sid1',
-        hubUrl: 'https://id.n42.ai',
-        address: '0xABC',
-        apiFactory: (_) => api,
-        sign: (_) async => '0xsig',
-      );
-      expect(out.success, isFalse);
-      expect(out.code, 'binding-conflict');
-    });
+    test(
+      'surfaces the hub error code on completion (binding-conflict)',
+      () async {
+        final api = _FakeApi()
+          ..completeThrows = IdHubException(
+            'already bound',
+            statusCode: 409,
+            code: 'binding-conflict',
+          );
+        final out = await IdHubBindSigner().completeBind(
+          sessionId: '11111111-1111-4111-8111-111111111111',
+          hubUrl: 'https://id.n42.ai',
+          address: '0xABC',
+          apiFactory: (_) => api,
+          sign: (_) async => '0xsig',
+        );
+        expect(out.success, isFalse);
+        expect(out.code, 'binding-conflict');
+      },
+    );
   });
 }

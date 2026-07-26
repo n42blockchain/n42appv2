@@ -40,7 +40,7 @@ class RpcConfig {
   /// Ethereum Mainnet RPC
   static const String ethMainnetRpc = String.fromEnvironment(
     'ETH_RPC_URL',
-    defaultValue: 'https://eth.llamarpc.com',
+    defaultValue: 'https://ethereum-rpc.publicnode.com',
   );
 
   /// Ethereum Sepolia Testnet RPC

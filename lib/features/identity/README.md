@@ -8,10 +8,11 @@ Upstream design: the unified-DID identity design + `p3-wallet-chat-changes.md`.
 ## Graceful degradation (the fallback contract)
 
 Everything is gated on `IdHubApi.isEnabled`, derived from the `idHubHost` entry
-in `AppConfig.apiUrl`. Both `main`/`test` ship **empty**, so `isEnabled` is
-`false`: callers skip the hub and use the pre-ID-Hub flow, and `IdHubApi` throws
-locally rather than send a token to an unconfigured host. Fill in `idHubHost` per
-environment to light it up. Unset = app behaves exactly as today.
+in `AppConfig.apiUrl`. Production defaults to `https://id.n42.ai`; callers can
+override it with `--dart-define=ID_HUB_URL=https://id-dev.n42.ai` for device
+testing, or explicitly supply an empty value to disable the hub and retain the
+pre-ID-Hub fallback. The client throws locally when disabled and never sends a
+token to an unconfigured host.
 
 Deliberate exception: the `n42id://` scan-to-sign flow responds to ANOTHER
 device's request and takes its hub URL from the QR, so it does not consult

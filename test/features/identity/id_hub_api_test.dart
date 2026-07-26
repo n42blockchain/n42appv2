@@ -6,6 +6,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/identity/api/id_hub_api.dart';
 import 'package:n42_wallet/features/identity/models/id_hub_models.dart';
 
+const _did = 'did:plc:aaaaaaaaaaaaaaaaaaaaaaaa';
+const _sessionId = '11111111-1111-4111-8111-111111111111';
+
+String _hubToken({String aud = 'wallet-api', String sub = _did}) {
+  String encode(Object value) =>
+      base64Url.encode(utf8.encode(jsonEncode(value))).replaceAll('=', '');
+  return '${encode({'alg': 'ES256', 'typ': 'JWT'})}.'
+      '${encode({'iss': 'did:web:id.n42.ai', 'sub': sub, 'aud': aud, 'exp': DateTime.now().millisecondsSinceEpoch ~/ 1000 + 900})}.signature';
+}
+
 class _QueuedResponse {
   const _QueuedResponse(this.statusCode, this.data);
 
@@ -71,6 +81,41 @@ void main() {
     expect(adapter.requests, isEmpty);
   });
 
+  test('client rejects a plaintext Hub URL before making a request', () async {
+    final (:api, :adapter) = _client(baseUrl: 'http://id-test.n42.ai');
+
+    expect(api.isEnabled, isFalse);
+    await expectLater(
+      api.createWalletChallenge(address: '0xABC'),
+      throwsA(isA<IdHubException>()),
+    );
+    expect(adapter.requests, isEmpty);
+  });
+
+  test('client allows plaintext http only for dev loopback hosts', () {
+    for (final url in const [
+      'http://localhost:8080',
+      'http://127.0.0.1:8080',
+      'http://10.0.2.2:8080',
+    ]) {
+      expect(_client(baseUrl: url).api.isEnabled, isTrue, reason: url);
+    }
+  });
+
+  test('client rejects non-canonical Hub URLs', () {
+    for (final url in const [
+      'https://user:pw@id.n42.ai', // credentials smuggled into every request
+      'https://id.n42.ai:8443', // non-default port
+      'https://id.n42.ai/v2', // path prefix
+      'https://id.n42.ai?x=1', // query
+      'https://id.n42.ai#f', // fragment
+      'ftp://id.n42.ai',
+      'not a url',
+    ]) {
+      expect(_client(baseUrl: url).api.isEnabled, isFalse, reason: url);
+    }
+  });
+
   test(
     'wallet challenge normalizes address and decodes the response',
     () async {
@@ -105,11 +150,12 @@ void main() {
     () async {
       final (:api, :adapter) = _client();
       adapter.enqueue(200, {
-        'access_token': 'access-token',
+        'access_token': _hubToken(),
+        'token_type': 'Bearer',
         'expires_in': 900,
         'refresh_token': 'refresh-token',
         'scope': 'openid',
-        'sub': 'did:plc:test',
+        'sub': _did,
         'sid': 'session-1',
         'did_created': true,
       });
@@ -122,14 +168,15 @@ void main() {
       );
 
       expect(result.didCreated, isTrue);
-      expect(result.token.accessToken, 'access-token');
+      expect(result.token.accessToken, startsWith('ey'));
       expect(result.token.refreshToken, 'refresh-token');
-      expect(result.token.sub, 'did:plc:test');
+      expect(result.token.sub, _did);
       expect(adapter.requests.single.data, {
         'challenge_id': 'challenge-1',
         'signature': '0xsignature',
         'signer_type': 'eoa',
         'chain_id': 1142,
+        'aud': 'wallet-api',
       });
     },
   );
@@ -140,7 +187,7 @@ void main() {
       final (:api, :adapter) = _client();
       adapter
         ..enqueue(200, {
-          'session_id': 'bind-1',
+          'session_id': _sessionId,
           'type': 'wallet-binding',
           'status': 'pending',
           'message': 'Bind this wallet',
@@ -153,13 +200,13 @@ void main() {
         })
         ..enqueue(204);
 
-      final session = await api.getBindSession('bind-1');
+      final session = await api.getBindSession(_sessionId);
       final challenge = await api.prepareBindSession(
-        sessionId: 'bind-1',
+        sessionId: _sessionId,
         address: '0xAABB',
       );
       await api.completeBindSession(
-        sessionId: 'bind-1',
+        sessionId: _sessionId,
         challengeId: challenge.challengeId,
         signature: '0xsig',
       );
@@ -168,9 +215,9 @@ void main() {
       expect(session.message, 'Bind this wallet');
       expect(challenge.challengeId, 'challenge-2');
       expect(adapter.requests.map((request) => request.uri.path), [
-        '/v1/bind-sessions/bind-1',
-        '/v1/bind-sessions/bind-1/prepare',
-        '/v1/bind-sessions/bind-1/complete',
+        '/v1/bind-sessions/$_sessionId',
+        '/v1/bind-sessions/$_sessionId/prepare',
+        '/v1/bind-sessions/$_sessionId/complete',
       ]);
       expect(adapter.requests[1].data, {
         'address': '0xaabb',
@@ -185,19 +232,21 @@ void main() {
       final (:api, :adapter) = _client();
       adapter
         ..enqueue(200, {
-          'access_token': 'next-access',
+          'access_token': _hubToken(),
+          'token_type': 'Bearer',
           'expires_in': 900,
           'refresh_token': 'next-refresh',
+          'sub': _did,
         })
         ..enqueue(204);
 
-      final refreshed = await api.refresh('current-refresh');
+      final refreshed = await api.refresh('current-refresh', expectedDid: _did);
       await api.revoke(
         accessToken: 'current-access',
         refreshToken: 'next-refresh',
       );
 
-      expect(refreshed.accessToken, 'next-access');
+      expect(refreshed.accessToken, startsWith('ey'));
       expect(
         adapter.requests[0].contentType,
         Headers.formUrlEncodedContentType,
@@ -225,7 +274,7 @@ void main() {
       });
 
       await expectLater(
-        api.prepareBindSession(sessionId: 'bind-1', address: '0xAABB'),
+        api.prepareBindSession(sessionId: _sessionId, address: '0xAABB'),
         throwsA(
           isA<IdHubException>()
               .having((error) => error.statusCode, 'status', 409)
@@ -245,7 +294,7 @@ void main() {
     adapter.enqueue(200, ['unexpected']);
 
     await expectLater(
-      api.getBindSession('bind-1'),
+      api.getBindSession(_sessionId),
       throwsA(
         isA<IdHubException>().having(
           (error) => error.message,

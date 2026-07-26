@@ -72,7 +72,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
       // cannot present a wallet-binding as a mere sign-in (or vice versa).
       final expectedType = widget.isLogin ? 'login' : 'wallet-binding';
       if (session.type != expectedType) {
-        _fail('This request does not match the scanned code.');
+        _fail('This request type does not match the scanned code.');
         return;
       }
       // Fetch the exact message to sign from the hub (never from the QR).
