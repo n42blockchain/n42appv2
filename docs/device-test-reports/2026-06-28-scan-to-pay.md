@@ -50,3 +50,13 @@ session.
 | B device scans QR | Recipient, token, chain, and decimal amount are all prefilled. |
 | B signs/sends on testnet | Transaction submits successfully. |
 | Requested token not in wallet | User sees an error and no unsafe amount guess occurs. |
+
+## 2026-07-01 Android Retest
+
+See `2026-07-01-missed-install-runtime.md` for the full retest log.
+
+| Scenario | Runtime Result | Notes |
+|---|---:|---|
+| Scanner entry | PASS | QR scanner page opened and camera preview was reached. |
+| Receive QR source | BLOCKED | Receive flow was blocked by the seed phrase backup modal. |
+| Cross-device EIP-681 handoff | BLOCKED | Still requires a second installed/logged-in device, backed-up wallet, recipient, and test funds. |

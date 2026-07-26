@@ -2,11 +2,13 @@
 
 ## Branch
 - `feat/live-gift-prediction-sync`
-- Verified head after rebase: `b667776b feat(live): 预测链上托管合约即插即用切换 + 零歧义 ABI 规格`
+- Verified head after T14 v2 re-run: `d8280f7d fix(live): 主播画面锚定+预测房间归属鉴权+订阅引用计数释放`
 - Included upstream T14 additions:
   - `56e1ee8f` live room heartbeat / gift broadcast / prediction Matrix replay sync.
   - `6c1a6d54` gift coin economy and event-sourced tally.
   - `b667776b` optional chain-backed prediction repository switch and ABI spec.
+  - `92e8d578` resolver auth, gift anti-forgery replay, video async race fixes, liveness state event.
+  - `d8280f7d` host-video anchoring, prediction room ownership auth, subscription ref-count release.
 
 ## Automated Verification
 - Re-run at `2026-06-30 23:57 EDT` after confirming no newer T14 task text or branch commits.
@@ -17,10 +19,20 @@
   - Built `build/app/outputs/flutter-apk/app-debug.apk`.
 - PASS: `flutter build ios --debug --no-codesign --no-pub`
   - Built `build/ios/iphoneos/Runner.app`.
+- Re-run at `2026-07-01 00:17 EDT` after T14 v2 fixes (`92e8d578` + `d8280f7d`):
+  - PASS: `flutter test test/features/live/ --no-pub`
+    - 42 tests passed, including new resolver auth, room ownership auth, and gift anti-forgery replay coverage.
+  - PASS: `flutter analyze lib/features/live --no-fatal-infos`
+  - PASS: `flutter build apk --debug --target-platform android-arm64 --no-pub`
+    - Built `build/app/outputs/flutter-apk/app-debug.apk`.
+  - PASS: `flutter build ios --debug --no-codesign --no-pub`
+    - Built `build/ios/iphoneos/Runner.app`.
 
 ## Device Availability
 - Android: Redmi Note 15 / `38f4f08a` / Android 16 API 36.
 - iPhone wireless: `00008150-000E2469149A401C` / iOS 27.0.
+- Re-run at `2026-07-01 00:17 EDT`: `flutter devices` no longer lists Android; `adb devices -l` returns no attached devices and `adb -s 38f4f08a get-state` returns `device '38f4f08a' not found`.
+- Re-run at `2026-07-01 16:47 EDT`: Android `38f4f08a` is online again and the latest T14 v2 APK installed successfully.
 
 ## Device Blockers
 - Android install BLOCKED by device policy:
@@ -34,6 +46,13 @@
     - `adb -s 38f4f08a install -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
     - `flutter install -d 38f4f08a --debug`
     - All still fail with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`.
+  - Re-run at `2026-07-01 00:17 EDT` after T14 v2 fixes: install could not be retried because Android is no longer visible to ADB.
+  - Re-run at `2026-07-01 16:47 EDT`: `adb -s 38f4f08a install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk` succeeded.
+    - Installed `ai.n42.www` versionName `2.4.3`, versionCode `2026062617`.
+    - Launch via `adb -s 38f4f08a shell monkey -p ai.n42.www -c android.intent.category.LAUNCHER 1` succeeded.
+    - `pidof ai.n42.www` returned `12767`.
+    - Foreground activity confirmed as `ai.n42.www/.MainActivity`.
+    - Recent logcat scan found no `FATAL EXCEPTION` / `AndroidRuntime` crash for the launched app.
 - Android settings inspection:
   - Developer options and USB debugging are enabled.
   - `USB调试（安全设置）` is enabled.
@@ -70,3 +89,29 @@
 - Manually enable Android Developer options -> `USB安装`, then rerun:
   - `adb -s 38f4f08a install --no-streaming -r -t -d build/app/outputs/flutter-apk/app-debug.apk`
 - For iPhone, open `ios/Runner.xcworkspace` in Xcode once and run `Runner` on the wireless device to clear the Automation/project control failure, then rerun `flutter run`.
+
+## 2026-07-01 Android Retest
+
+See `2026-07-01-missed-install-runtime.md` for the full retest log.
+
+- Android build `2026062617` was already installed and launched successfully.
+- Chat entry opened to the unauthenticated N42 Chat welcome/login page.
+- Reproduced the welcome page top-left back button no-op on device.
+- Fixed the package integration by passing a root-navigator back handler into
+  the chat/profile `WelcomePage`.
+- Rebuilt Android debug APK and installed versionCode `2026062619` via
+  `flutter install -d 38f4f08a --debug`.
+- Direct ADB install still failed with `INSTALL_FAILED_USER_RESTRICTED`.
+- After reinstall, MIUI blocks automated input:
+  `persist.security.adbinput=0`; `adb shell input tap ...` fails with
+  `SecurityException: Injecting input events requires ... INJECT_EVENTS permission`.
+
+T14 live/gift/prediction cross-device scenarios remain blocked until two
+logged-in device sessions are available and Android simulated input/security
+debugging is enabled.
+
+Post-commit retry at `2026-07-01 17:43 EDT`: rebuilt pushed head `5275fefb`
+as `2.4.3+2026062620`, but `flutter install -d 38f4f08a --debug` uninstalled
+the old app and then failed with `INSTALL_FAILED_USER_RESTRICTED`. Repeated
+`adb install --no-streaming -r -t -d ...` attempts failed the same way. Final
+Android state: `ai.n42.www` is not installed.
