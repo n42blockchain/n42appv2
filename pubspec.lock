@@ -200,14 +200,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.2.2"
-  bitcoin_base:
-    dependency: "direct main"
-    description:
-      name: bitcoin_base
-      sha256: "6a419a007727295ca612a1ad0d3034795512615591f6e06a2d10d441c6dbbb95"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.3.0"
   bloc:
     dependency: transitive
     description:
@@ -922,22 +914,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_face_api:
-    dependency: "direct main"
-    description:
-      name: flutter_face_api
-      sha256: ccc3b1433aec3c378b1e374a0a11a75801b250b12953165cbe8bd5e30b266524
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.716"
-  flutter_face_core_basic:
-    dependency: "direct main"
-    description:
-      name: flutter_face_core_basic
-      sha256: "9f67442b395787a7ab58a99ef9b48c5b9073837c3bca90c777604474f9972a33"
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.2.235"
   flutter_facebook_auth:
     dependency: "direct overridden"
     description:

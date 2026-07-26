@@ -58,7 +58,6 @@ dependencies:
   flutter_cache_manager: ^3.4.1
 
   # === Blockchain & Crypto ===
-  bitcoin_base: ^7.3.0
   eip712: ^1.0.1  # 替换 eth_sig_util，支持 EIP-712 typed data signing
   web3dart: ^3.0.1
   web3auth_flutter: ^6.3.0
@@ -101,8 +100,6 @@ dependencies:
   permission_handler: ^12.0.1
   # encrypt 包已被 pointycastle 直接实现替代
   aes_crypt_null_safe: ^3.0.0
-  flutter_face_api: ^7.2.626
-  flutter_face_core_basic: ^7.2.235
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^8.1.0
   pinput: ^6.0.2
@@ -203,7 +200,6 @@ flutter:
     - assets/browser/
     - assets/wallet/
     - assets/wallet/swap/
-    - assets/face/
     - assets/login/
     - assets/mining/
     - assets/chat/
