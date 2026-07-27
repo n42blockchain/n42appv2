@@ -17,6 +17,8 @@ import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/main.dart' as app;
 
+const _runManualSystemUi = bool.fromEnvironment('T26_RUN_MANUAL_SYSTEM_UI');
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -50,24 +52,32 @@ void main() {
         () => _verifyQuickReplyReorder(tester),
         failures,
       );
-      await _runStep(
-        tester,
-        'B2 Face ID',
-        () => _verifyFaceIdToggle(tester),
-        failures,
-      );
+      if (_runManualSystemUi) {
+        await _runStep(
+          tester,
+          'B2 Face ID',
+          () => _verifyFaceIdToggle(tester),
+          failures,
+        );
+      } else {
+        debugPrint('T26_STEP B2 Face ID: MANUAL REQUIRED (not requested)');
+      }
       await _runStep(
         tester,
         'B4 scanner',
         () => _verifyScannerReentry(tester),
         failures,
       );
-      await _runStep(
-        tester,
-        'B4 file picker',
-        () => _verifyFilePickerOpenCancel(tester),
-        failures,
-      );
+      if (_runManualSystemUi) {
+        await _runStep(
+          tester,
+          'B4 file picker',
+          () => _verifyFilePickerOpenCancel(tester),
+          failures,
+        );
+      } else {
+        debugPrint('T26_STEP B4 file picker: MANUAL REQUIRED (not requested)');
+      }
 
       _expectNoException(tester, 'final T26 B1-B4 state');
       expect(find.byKey(const ValueKey<String>('home_page')), findsOneWidget);

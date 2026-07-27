@@ -394,3 +394,52 @@ guard that fails if the old decrement is restored. The remaining follow-up is:
 1. fix and rerun the `WalletPage.initState -> initWallet -> refresh` assertion;
 2. manually complete one successful Face ID prompt;
 3. manually open and cancel one native file picker.
+
+## Post-frame fix physical rerun (master `0a9fed31`)
+
+The same wired iPhone and command were used after the provider fix. The
+original `Tried to modify a provider while the widget tree was building`
+assertion did not recur. Chat Quick Replies reordered successfully again, and
+the scanner opened and closed three times without a Flutter exception or
+crash.
+
+The wallet Manage Chains result remains **NOT VERIFIED**, because moving
+`initWallet` into a post-frame callback exposed a different first-frame race:
+
+```text
+Bad state: Invalid walletIndex (0) for list of 0 wallets.
+
+#0 WalletActionProvider.walletInfo
+   package:n42_wallet/features/wallet/provider/wallet_action_provider.dart:114
+#1 WalletActionProvider.walletMap
+   package:n42_wallet/features/wallet/provider/wallet_action_provider.dart:161
+#2 _WalletPageState._runTokenDiscovery
+   package:n42_wallet/features/wallet/pages/wallet_page.dart:139
+#3 _WalletPageState.build.<anonymous closure>.<anonymous closure>
+   package:n42_wallet/features/wallet/pages/wallet_page.dart:387
+#4 SchedulerBinding._invokeFrameCallback
+   package:flutter/src/scheduler/binding.dart:1430
+```
+
+The first build sees the previously loaded wallet and schedules token
+discovery. Earlier in the same post-frame callback queue, `initWallet` clears
+the wallet and coin lists synchronously before its first `await`, leaving
+`walletIndex == 0` while the wallet list is temporarily empty. The already
+scheduled discovery callback then reads `walletMap` in that transient state.
+This ordering did not exist when `initWallet` ran synchronously from
+`initState`, because the first build saw `buildwallet == true` and returned the
+loading view before it could schedule discovery.
+
+The stable-order gate later reached 65 chains, but background initialization
+still changed the visible prefix during the gesture (`N > BTC > ETH` became
+`N > BTC > SOL`), so no drag-placement conclusion is inferred from that run.
+
+Face ID and file-picker automation are now opt-in with
+`--dart-define=T26_RUN_MANUAL_SYSTEM_UI=true`. The default device regression
+run records both as `MANUAL REQUIRED` without opening system UI that the Flutter
+test driver cannot operate.
+
+No new TestFlight build was uploaded from `0a9fed31`: the already uploaded
+`2026072603` predates the provider fix, while current master has the reproducible
+token-discovery startup race above. Upload should follow the race fix and a
+clean physical smoke run.
