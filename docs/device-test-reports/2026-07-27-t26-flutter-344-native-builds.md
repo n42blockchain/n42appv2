@@ -22,14 +22,17 @@ This report distinguishes build/static evidence from physical-device evidence.
 | A2 Android Flutter 3.44.8 release build | PASS | `flutter build apk --release` completed `assembleRelease` in 299.4 seconds and produced a signed 735,285,533-byte APK. |
 | A3 iOS Flutter 3.44.8 App Store IPA build | PASS | `./scripts/build_ipa.sh --no-bump` completed archive, framework repair, and second App Store export. The archive was 507.0 MB and the final IPA was 124,416,863 bytes. |
 | A4 Runner/extension version consistency | PASS | The final IPA was unpacked and inspected. `Runner.app` and `N42Extension.appex` both report `CFBundleShortVersionString=2.4.8` and `CFBundleVersion=2026072602`. Deep strict code-sign verification passed. |
-| B1 wallet/chat drag destination | BLOCKED (device) / STATIC PASS | Flutter 3.44.8 source adjusts `newIndex` before invoking `onReorderItem`; both call sites and `reorderChain` omit the old manual decrement. Physical drag/drop on Manage Chains and Chat Quick Replies was not run because the iPhone was unavailable. |
-| B2 face unlock after Regula removal | BLOCKED (device) / BUILD PASS | Release artifacts build with `local_auth`; the IPA contains `local_auth_darwin_privacy.bundle`. No `com.regula`, `FaceSDK`, or `flutter_face_api` reference remains in app/native dependency sources. A real Face ID prompt was not run because the iPhone was unavailable. |
-| B3 BTC send/receive after `bitcoin_base` removal | BLOCKED (device) / BUILD PASS | Android and iOS release builds compile the WalletCore/trustdart BTC path, and no `bitcoin_base` dependency remains. BTC Send/Receive UI and signing were not exercised on the disconnected iPhone; no transaction was broadcast. |
-| B4 scanner and file picker regression | BLOCKED (device) / BUILD PASS | `qr_code_scanner_plus` and file picker native integration compile into both release builds. The IPA contains `file_picker_ios_privacy.bundle`; all eight Dart call sites use static `FilePicker.pickFiles`. Repeated scanner entry/exit and an actual picker open/cancel were not run because the iPhone was unavailable. |
-| B5 19-chain Cosmos live balances | BLOCKED (device) / UNIT PASS | Registry tests discover exactly 19 configured Cosmos chains, resolve each to its own REST service and native denom, and reject ATOM fallback for unknown chains. Live balances using device-wallet addresses were not queried because the iPhone was unavailable. |
+| B1 wallet/chat drag destination | BLOCKED (automation) / STATIC PASS | Flutter 3.44.8 source adjusts `newIndex` before invoking `onReorderItem`; both call sites and `reorderChain` omit the old manual decrement. The iPhone reconnected and accepted the test build, but the test runner could not attach because macOS denied local-network access to the Dart VM service. No physical drag/drop was executed. |
+| B2 face unlock after Regula removal | BLOCKED (automation) / BUILD PASS | Release artifacts build with `local_auth`; the IPA contains `local_auth_darwin_privacy.bundle`. No `com.regula`, `FaceSDK`, or `flutter_face_api` reference remains in app/native dependency sources. The blocked runner did not reach a real Face ID prompt. |
+| B3 BTC send/receive after `bitcoin_base` removal | BLOCKED (automation) / BUILD PASS | Android and iOS release builds compile the WalletCore/trustdart BTC path, and no `bitcoin_base` dependency remains. The blocked runner did not reach BTC Send/Receive; no transaction was broadcast. |
+| B4 scanner and file picker regression | BLOCKED (automation) / BUILD PASS | `qr_code_scanner_plus` and file picker native integration compile into both release builds. The IPA contains `file_picker_ios_privacy.bundle`; all eight Dart call sites use static `FilePicker.pickFiles`. The blocked runner did not reach repeated scanner entry/exit or picker open/cancel. |
+| B5 19-chain Cosmos live balances | BLOCKED (automation) / UNIT PASS | Registry tests discover exactly 19 configured Cosmos chains, resolve each to its own REST service and native denom, and reject ATOM fallback for unknown chains. The blocked runner did not execute live device balance reads. |
 
-At validation time, `xcrun devicectl list devices` reported the iPhone as
-`unavailable`. Reconnect and unlock that device to clear B1-B5.
+The iPhone initially appeared as `unavailable`, then recovered after restarting
+the local CoreDevice services. Device pairing, unlock state, Release
+installation, and Release launch passed. B1-B5 remain blocked because macOS
+Local Network privacy denied the wireless Flutter VM-service connection before
+any test body ran.
 
 ## Commands and build evidence
 
@@ -158,9 +161,52 @@ A later cleanup can add a dedicated extension xcconfig (including Flutter's
 generated values) and then remove the duplicated PBX assignments. That change
 must be followed by another Archive and the same IPA-level A4 inspection.
 
+## Physical iPhone retry
+
+Retry window: 2026-07-27 04:27-04:47 EDT.
+
+1. `xcrun devicectl list devices` initially showed the paired iPhone as
+   `unavailable`, although the user had unlocked it.
+2. Restarting the current user's `CoreDeviceService` and
+   `CoreDeviceDDIUpdaterService` restored the local-network tunnel. Flutter then
+   discovered physical device `00008150-000E2469149A401C`, iOS 27.0.
+3. `devicectl device info lockState` reported `passcodeRequired: false` and
+   `unlockedSinceBoot: true`.
+4. A fresh current-source `flutter build ios --release` passed. The resulting
+   development-signed `Runner.app` installed and launched successfully.
+   `devicectl` reported N42Wallet `2.4.8 (2026072602)`, and both Runner and
+   N42Extension processes were alive.
+5. Direct `flutter test ... -d <UDID>` stopped before running tests because
+   wireless iOS requires a published VM-service port.
+6. The documented wireless route was then used:
+
+   ```sh
+   flutter drive --no-pub \
+     --driver=test_driver/integration_test.dart \
+     --target=integration_test/device_full_flow_test.dart \
+     -d 00008150-000E2469149A401C \
+     --publish-port
+   ```
+
+   Xcode built the Debug test app in 205.6 seconds and installed/launched it.
+   Flutter then failed before executing the test body:
+
+   ```text
+   Flutter could not access the local network.
+   SocketException: Send failed (OS Error: No route to host, errno = 65),
+   address = 0.0.0.0, port = 5353
+   ```
+
+   The required host-side permission is macOS **System Settings → Privacy &
+   Security → Local Network** for the terminal/Codex process. Unlocking the
+   iPhone does not grant this Mac permission.
+7. After the failed Driver attempt, a clean Release was rebuilt, reinstalled,
+   and launched. No Debug/test-define build was left on the phone.
+
 ## Device follow-up
 
-After reconnecting and unlocking the iPhone:
+After granting the Mac terminal/Codex process Local Network permission (or
+connecting the iPhone over a working USB data cable):
 
 1. B1: drag the first chain downward by two rows and back; repeat in Chat Quick
    Replies. Record the before/after labels to prove there is no one-row offset.
