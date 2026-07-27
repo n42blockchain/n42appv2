@@ -108,6 +108,17 @@ class WalletActionProvider extends ChangeNotifier
   List<WalletInfo> get walletInfoLsit => _walletInfoLsit;
   @override
   List<WalletInfo> get walletInfoList => _walletInfoLsit;
+  /// 现在读 [walletInfo] / [walletMap] 是否安全。
+  ///
+  /// [initWallet] 在第一个 await 之前就同步清空列表（让骨架屏接管），
+  /// 期间 `walletIndex` 仍指向旧位置，此时读 [walletInfo] 会抛。任何**延迟执行**
+  /// 的消费者（post-frame 回调、Timer、await 之后的续体）都必须在真正读取前用
+  /// 本 getter 重新判一次，不能沿用调度时捕获的快照——调度与执行之间状态会变。
+  bool get isWalletReady =>
+      !buildwallet &&
+      walletIndex >= 0 &&
+      walletIndex < _walletInfoLsit.length;
+
   @override
   WalletInfo get walletInfo {
     if (walletIndex < 0 || walletIndex >= _walletInfoLsit.length) {

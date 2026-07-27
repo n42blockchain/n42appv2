@@ -377,14 +377,23 @@ class _WalletPageState extends ConsumerState<WalletPage> {
             builder: (context) {
               final waValue = ref.watch(wapBridgeProvider);
 
-              if (waValue.walletIndex == -1 || waValue.buildwallet) {
+              if (!waValue.isWalletReady) {
                 return Loading();
               }
 
               if (!_discoveryScanned) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   if (!mounted) return;
-                  _runTokenDiscovery(waValue);
+                  // 闸门要在回调里**重新判**，不能只靠 build 时的快照：
+                  // initWallet 也挂在 post-frame 队列上（且注册更早），它在第一个
+                  // await 之前会同步清空钱包/币列表。若沿用 build 时捕获的
+                  // waValue 直接跑，discovery 会撞上 walletIndex 仍为 0 而钱包
+                  // 列表已空的瞬时态，walletInfo 抛
+                  // 「Invalid walletIndex (0) for list of 0 wallets」。
+                  // 此处不置 _discoveryScanned，下一帧条件满足时会自然重试。
+                  final wap = ref.read(wapBridgeProvider);
+                  if (!wap.isWalletReady) return;
+                  _runTokenDiscovery(wap);
                 });
               }
 
