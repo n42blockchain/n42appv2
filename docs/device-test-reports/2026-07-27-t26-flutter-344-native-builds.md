@@ -332,18 +332,65 @@ the widget tree is building during deferred price/balance initialization.
 | --- | --- | --- |
 | B1 wallet chain reorder | NOT VERIFIED | The drag gesture ran, but the asynchronously rebuilding source list changed from `N > BTC > ETH` to `N > BTC > SOL` during the gesture. That result cannot distinguish reorder semantics from initialization mutation. The repeatable test now waits for both `coinList` completion and eight stable order samples before the next run. |
 | B1 Chat Quick Replies | PASS | Deterministic rows changed from `t26_a > t26_b > t26_c` to `t26_b > t26_c > t26_a` after dragging the first row down two positions. The original persisted quick replies were restored in `finally`. |
-| B2 Face ID toggle | DEVICE FAIL | The original toggle value was `false`. Enabling it did not reach `true` within 60 seconds, so no successful native authentication can be claimed. The persisted value remained `false`. |
+| B2 Face ID toggle | MANUAL REQUIRED | The original toggle value was `false`. `local_auth` presents Face ID outside Flutter's view hierarchy, so `integration_test` cannot complete the native system prompt. The correct negative-path behavior was observed: without successful system authentication the switch remained `false`. A person must complete the prompt to verify the positive path. |
 | B4 scanner re-entry | PASS | `ScanPage` opened and closed three consecutive times on the iPhone with no Flutter exception or crash. |
-| B4 file picker | INCOMPLETE | `FilePicker.pickFiles(type: FileType.image)` entered the native call and waited for the system picker result. No cancel result returned before the nine-minute run was stopped; therefore open/cancel is not marked PASS. |
+| B4 file picker | MANUAL REQUIRED | `FilePicker.pickFiles(type: FileType.image)` entered the native system picker and waited for its result. The picker is outside Flutter's view hierarchy, so the automation cannot press its Cancel control. A person must complete the open/cancel step; no product failure is inferred. |
 
 The test run also repeatedly printed Flutter's Local Network warning
 (`0.0.0.0:5353`, `No route to host`), but the wired VM-service fallback
 connected and the test body executed.
 
 No wallet-chain PASS is inferred from the interrupted source list, and no Face
-ID or file-picker PASS is inferred from merely opening/waiting. The next
-physical run still needs:
+ID or file-picker positive-path PASS is inferred from merely opening/waiting.
+The Face ID and picker rows are manual steps rather than device failures.
 
-1. wallet Manage Chains drag after the new source-list stability gate;
-2. one successful Face ID prompt;
-3. one returned file-picker cancel.
+## Provider-modified-during-build stack (follow-up)
+
+A dedicated physical-iPhone probe reproduced the deferred wallet error and
+captured its originating stack. The actionable frames are:
+
+```text
+The following assertion was thrown while dispatching notifications for
+LegacyWalletActionProviderAdapter:
+Tried to modify a provider while the widget tree was building.
+
+#0  _UncontrolledProviderScopeState._debugCanModifyProviders
+    package:flutter_riverpod/src/core/provider_scope.dart:374
+#1  ProviderElement._debugAssertNotificationAllowed
+    package:riverpod/src/core/element.dart:805
+#2  ProviderElement._notifyListeners
+    package:riverpod/src/core/element.dart:854
+#3  Ref.notifyListeners
+    package:riverpod/src/core/ref.dart:422
+#4  _ChangeNotifierProviderElement.create.listener
+    package:flutter_riverpod/src/providers/legacy/change_notifier_provider.dart:230
+#5  ChangeNotifier.notifyListeners
+    package:flutter/src/foundation/change_notifier.dart:435
+#6  SafeChangeNotifierMixin.notifyListeners
+    package:n42_wallet/core/utils/safe_change_notifier.dart:11
+#7  WalletActionProvider.refresh
+    package:n42_wallet/features/wallet/provider/wallet_action_provider.dart:80
+#8  WalletActionProviderWallet.initWallet
+    package:n42_wallet/features/wallet/provider/wallet_action_provider_wallet.dart:72
+#9  _WalletPageState.initState
+    package:n42_wallet/features/wallet/pages/wallet_page.dart:85
+#10 StatefulElement._firstBuild
+    package:flutter/src/widgets/framework.dart:5950
+#11 ComponentElement.mount
+    package:flutter/src/widgets/framework.dart:5793
+#12 ConsumerStatefulElement.mount
+    package:flutter_riverpod/src/core/consumer.dart:389
+```
+
+This rules out the later `buildCoinModelInfo` refresh candidates for this
+specific assertion. `WalletPage.initState` synchronously calls `initWallet()`;
+`initWallet` reaches `refresh()` at line 72 while the consumer element is still
+mounting.
+
+The wallet reorder index contract is now locked by the real
+`ReorderableListView` widget tests added in `04161d33`, including the reverse
+guard that fails if the old decrement is restored. The remaining follow-up is:
+
+1. fix and rerun the `WalletPage.initState -> initWallet -> refresh` assertion;
+2. manually complete one successful Face ID prompt;
+3. manually open and cancel one native file picker.
