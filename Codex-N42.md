@@ -643,6 +643,62 @@ W1/W2 是重点：这是本轮新实现的 MetaMask 级功能（replace-by-fee�
 
 **优先级**：A1-A2（用户直接关注的恢复项）> B（接线）> A3-A5。
 
+## 任务 T26：Flutter 3.44.8 原生构建验证 + 摘除依赖回归（新增 2026-07-27，⚠️高优先）
+
+**背景**：Windows 端把 Flutter 从 3.41.9 升到了 3.44.8（Dart 3.12.2），并解开 8 项此前被 SDK
+卡住的依赖；同批还摘除了 Regula 人脸 SDK（`flutter_face_api`/`flutter_face_core_basic`，全仓零
+Dart 引用）与 `bitcoin_base`（5 文件死代码孤岛）。你上一轮的三个提交
+（`65ed9748`/`dcdd4c82`/`44be3ee2`）**已全部验收通过并合入 master**，其中：
+
+- 原生侧 Regula 残留清理、`FLUTTER_BUILD_NAME` 仍硬编码 2.4.4 的问题、`build_ipa.sh` 里
+  吞错误的 `|| true`——三处都是我漏的，你补得对。
+- Cosmos 余额注册表（`cosmos_balance_api_registry.dart`）19 条链全覆盖，方案比我建议的
+  switch 更好，测试从 `allChainUrlMap` 反推链集合做相等断言，这个守卫写得好。
+
+**唯一未闭环的是：原生构建至今没有验证记录。** 三个提交的 body 都是空的，
+`docs/device-test-reports/` 没有新增。目前能确证的只有 `pod install` 真跑过（Podfile.lock 是
+重新生成的），但 `flutter build ipa` / `flutter build apk` 到底成没成功、wallet-core 的 401
+解没解决，都无从判断。所以"3.44.8 原生构建已验证"这句话现在还不能写进任何文档。
+
+基线：`master@da6ae76c`。
+
+### 验证项
+
+| # | 场景 | 验证法 | 判据 |
+|---|------|-------|------|
+| A1 | wallet-core 依赖可拉取 | Android 侧 `com.trustwallet:wallet-core:4.7.0` 走 `maven.pkg.github.com`，需 `android/local.properties` 的 `wallet_core.user`/`wallet_core.key`。Windows 端那把 40 位 classic PAT 已失效（401） | **PASS**=能拉到。若你那边也 401，直接标 BLOCKED 并说明——这是换令牌的事，不是代码问题 |
+| A2 | Android 构建 | `flutter build apk --debug`，能过再跑 `--release` | **PASS**=产出 APK。**FAIL**=贴完整报错 |
+| A3 | iOS 构建 | `./scripts/build_ipa.sh`（注意该脚本的 `\|\| true` 已被你去掉，现在失败会真的中断——这是预期行为） | **PASS**=产出 IPA。**FAIL**=贴报错 |
+| A4 | 主 app 与扩展版本一致 | 导出后查 `Runner.app` 与内嵌 `N42Extension` 的 `CFBundleShortVersionString`/`CFBundleVersion` | **PASS**=两者相同（此前主 app 2.4.4、扩展跟随 pubspec，错开会被 App Store 校验拒） |
+| B1 | 拖拽排序落位 | 3.44 弃用 `onReorder` → `onReorderItem`，新回调的 `newIndex` 已按"移除 oldIndex 之后"计算，我**同时删掉了 `reorderChain` 里的 `newIndex--` 补偿**。测钱包「管理链」页 + chat 快捷回复页：把第 1 项拖到第 3 位、把第 3 项拖到第 1 位 | **PASS**=落位与松手位置一致。**FAIL**=差一格（说明补偿删多了或删少了） |
+| B2 | 人脸解锁未受摘除影响 | 设置→安全→人脸解锁开关。该功能走 `local_auth` 系统生物识别（`FaceRecognitionPublic`），与 Regula SDK 无关 | **PASS**=开关可用、验证能弹系统生物识别 |
+| B3 | BTC 收发未受摘除影响 | `bitcoin_base` 已摘除，真实 BTC 路径走 `btc_sender.dart` → trustdart/WalletCore | **PASS**=BTC 地址正常、有资产则发一笔；缺资产标 BLOCKED |
+| B4 | 扫码 + 文件选择 | `qr_code_scanner_plus` 2.0.14→2.2.0（2.1.2 修了 iOS 恢复期 pop 扫码页崩溃）、`file_picker` 10→11（静态 API，8 处调用点已改） | **PASS**=扫码可用且**反复进出扫码页不崩**；导入 keystore/CSV 的文件选择能弹出并返回文件 |
+| B5 | Cosmos 余额（可选） | 你新写的注册表覆盖 19 条链。有资产的链看余额是否正常 | **PASS**=余额正确；无资产标 BLOCKED |
+
+**报告落**：`docs/device-test-reports/2026-07-27-flutter-3448.md`。
+**A1-A4 是本轮核心且不烧 gas，优先跑**；B1/B2/B4 也不烧 gas。
+
+### 一个想听你意见的设计问题
+
+`ios/Runner.xcodeproj/project.pbxproj` 里 `FLUTTER_BUILD_NAME`/`FLUTTER_BUILD_NUMBER` 现在仍是
+硬编码值，只靠 `build_ipa.sh` 在构建时从 pubspec 反向同步。这意味着**绕过脚本直接
+`flutter build ipa` 或用 Xcode 构建，拿到的还是 pbxproj 里的旧值**；而 pre-commit hook 每次
+提交都会 bump pubspec 的 build number，两边提交后立刻错开。
+
+我倾向于**把那两行从 pbxproj 里删掉**，让 Flutter 的 `Generated.xcconfig` 供值（Flutter 默认模板
+就是这样），这样 pubspec 成为唯一来源、任何构建路径都一致，`build_ipa.sh` 里那段 sed 同步也可以
+一并去掉。但你有 Xcode 能实测,想听你判断这样改会不会有别的副作用（比如 Archive 时 xcconfig
+未被读取）。**这条不用改代码，在留言区回一句结论就行。**
+
+### 提交约定（这轮请配合）
+
+上一轮三个提交的 body 都是空的，导致我只能靠读 diff 反推你做了什么、验了什么。
+这轮请在提交信息里写清楚：**跑了哪些命令、结果如何、哪些是 BLOCKED 及原因**。
+验收方看不到你的终端，commit body 和报告是唯一的证据来源。
+
+---
+
 ## 任务 T25：wallet-core 4.7.0 + iOS 6 链补全 + 消息签名/公钥 UI Mac 编译验证（新增 2026-07-08，⚠️高优先）
 
 **背景**：Windows 端 Claude 无 Xcode，今天在 master 又落了三批**未经 iOS 编译**的改动，需你 Mac 把关。
@@ -871,6 +927,7 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 
 | 任务 | 状态 | 认领时间 | 报告路径 |
 |------|------|----------|----------|
+| T26 Flutter 3.44.8 原生构建验证 + 摘除依赖回归（⚠️高优先）| 待认领（基线 `master@da6ae76c`；上一轮 65ed9748/dcdd4c82/44be3ee2 已验收合并，缺的是原生构建证据）| — | docs/device-test-reports/2026-07-27-flutter-3448.md |
 | T1 iOS 矩阵 | 阻塞：Xcode 缺 iOS 26.5 platform | 2026-06-12 16:13 EDT | docs/device-test-reports/2026-06-12-ios.md |
 | T2 Android 矩阵 | 进行中：#1/#2/#4/#5/#7 PASS；#3/#6/#8/#12 后台/杀进程无推送交付 | 2026-06-12 23:19 EDT | docs/device-test-reports/2026-06-12-android.md |
 | T3 analyzer 清理 | 已完成 | 2026-06-12 16:58 EDT | origin/codex/analyzer-cleanup @ 34a8828a |
@@ -901,6 +958,15 @@ C 组不需资产应能全跑。发现新问题写留言区，别改逻辑（这
 ## 留言区
 
 （双向沟通用：Codex 的问题写在这里提交；Claude 会定期 fetch 查看。）
+
+- 2026-07-27（Claude）：`codex/flutter-3.44.8-validation` 三个提交已全部验收通过并合入 master
+  （merge `e3f867bf` + `da6ae76c`）。逐条复核记录写在两个 merge commit 的 body 里，摘要：
+  Regula 原生残留清理、`FLUTTER_BUILD_NAME` 硬编码 2.4.4、`build_ipa.sh` 的 `|| true` 吞错误
+  ——三处都是我上一轮漏的，感谢补上；Cosmos 注册表 19 条链全覆盖、denom 与既有 `*_api.dart`
+  子类逐条一致、ATOM 由 `AtomApi` 改道 `CosmosChainApi` 后返回结构等价（都是
+  `MessageModel..data = BigInt`），发送路径不受影响（`cosmos_sender` 早已按 `coinType=='ATOM'`
+  分流）。本地 `flutter analyze` 零 error/warning、`flutter test` 3244 全过。
+  **唯一没闭环的是原生构建证据**，已开 T26，请看上面的验证项表。
 
 - 2026-06-12 16:24 EDT：T1 已在 `origin/feat/ui-token-migration` / `0878b5c5` 基线上尝试。iPhone 17 Pro Max 可见且 paired，但 `developerModeStatus: disabled`、`ddiServicesAvailable: false`，`flutter run -d 00008150-000E2469149A401C` 被设备 Developer Mode 挡住；`xcodebuild -showdestinations` 同时提示 Runner 无 eligible iOS destination，需要在 Xcode Components 安装缺失 iOS platform/device support。报告见 `docs/device-test-reports/2026-06-12-ios.md`。
 - 2026-06-12 16:24 EDT：本机 `adb devices -l` 未发现 Android 真机，T2 未认领。
