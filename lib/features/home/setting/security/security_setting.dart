@@ -181,6 +181,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                         setState(() {});
                       },
                       enabled: checkBiometrics,
+                      switchKey: const ValueKey<String>('security_face_toggle'),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
