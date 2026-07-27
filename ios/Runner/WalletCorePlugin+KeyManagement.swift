@@ -342,6 +342,60 @@ extension WalletCorePlugin {
         case "ATOM":
             coinType=CoinType.cosmos
             break
+        case "INJ":
+            coinType=CoinType.nativeInjective
+            break
+        case "TIA":
+            coinType=CoinType.tia
+            break
+        case "DYDX":
+            coinType=CoinType.dydx
+            break
+        case "OSMO":
+            coinType=CoinType.osmosis
+            break
+        case "AKT":
+            coinType=CoinType.akash
+            break
+        case "NTRN":
+            coinType=CoinType.neutron
+            break
+        case "SCRT":
+            coinType=CoinType.secret
+            break
+        case "STRD":
+            coinType=CoinType.stride
+            break
+        case "JUNO":
+            coinType=CoinType.juno
+            break
+        case "KUJI":
+            coinType=CoinType.kujira
+            break
+        case "XPRT":
+            coinType=CoinType.persistence
+            break
+        case "RUNE":
+            coinType=CoinType.thorchain
+            break
+        case "KAVA2":
+            coinType=CoinType.kava
+            break
+        case "SEI2":
+            coinType=CoinType.sei
+            break
+        case "CRE":
+            coinType=CoinType.crescent
+            break
+        case "SOMM":
+            coinType=CoinType.sommelier
+            break
+        case "MARS":
+            coinType=CoinType.mars
+            break
+        case "CMDX":
+            coinType=CoinType.comdex
+            break
         case "ZETA":
             coinType=CoinType.ethereum
             break
@@ -545,6 +599,11 @@ extension WalletCorePlugin {
             chainType="Ripple"
             break
         case "ATOM":
+            chainType="Cosmos"
+            break
+        case "INJ", "TIA", "DYDX", "OSMO", "AKT", "NTRN", "SCRT", "STRD",
+             "JUNO", "KUJI", "XPRT", "RUNE", "KAVA2", "SEI2", "CRE", "SOMM",
+             "MARS", "CMDX":
             chainType="Cosmos"
             break
         case "ZETA":
