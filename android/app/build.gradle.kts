@@ -147,12 +147,6 @@ android {
         disable.add("InvalidPackage")
     }
 
-    packaging {
-        resources {
-            // 指定不压缩的文件
-            excludes += setOf("!Regula/faceSdkResource.dat")
-        }
-    }
 }
 
 dependencies {

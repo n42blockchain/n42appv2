@@ -757,8 +757,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -786,8 +786,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker_ios\"",
@@ -803,18 +801,12 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/FaceCoreBasic\"",
-					"\"${PODS_ROOT}/FaceSDK\"",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleAppMeasurement/Frameworks\"",
-					"\"${PODS_ROOT}/RegulaCommon\"",
 					"\"${PODS_ROOT}/TrustWalletCore\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceCoreBasic\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceSDK\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FirebaseAnalytics/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/WithoutAdIdSupport\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/RegulaCommon\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/TrustWalletCore/Core\"",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -845,8 +837,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics/firebase_crashlytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api/flutter_face_api.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic/flutter_face_core_basic.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger/flutter_new_badger.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
@@ -901,8 +891,6 @@
 					"-framework",
 					"\"FBLPromises\"",
 					"-framework",
-					"\"FaceSDK\"",
-					"-framework",
 					"\"FirebaseAnalytics\"",
 					"-framework",
 					"\"FirebaseCore\"",
@@ -933,15 +921,11 @@
 					"-framework",
 					"\"ImageIO\"",
 					"-framework",
-					"\"Liveness\"",
-					"-framework",
 					"\"Photos\"",
 					"-framework",
 					"\"Promises\"",
 					"-framework",
 					"\"QuartzCore\"",
-					"-framework",
-					"\"RegulaCommon\"",
 					"-framework",
 					"\"SDWebImage\"",
 					"-framework",
@@ -972,10 +956,6 @@
 					"\"firebase_crashlytics\"",
 					"-framework",
 					"\"firebase_messaging\"",
-					"-framework",
-					"\"flutter_face_api\"",
-					"-framework",
-					"\"flutter_face_core_basic\"",
 					"-framework",
 					"\"flutter_local_notifications\"",
 					"-framework",
@@ -1095,8 +1075,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = N42/Info.plist;
@@ -1140,8 +1120,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = N42/Info.plist;
@@ -1182,8 +1162,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_USER_SCRIPT_SANDBOXING = YES;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = N42/Info.plist;
@@ -1333,8 +1313,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1362,8 +1342,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker_ios\"",
@@ -1379,18 +1357,12 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/FaceCoreBasic\"",
-					"\"${PODS_ROOT}/FaceSDK\"",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleAppMeasurement/Frameworks\"",
-					"\"${PODS_ROOT}/RegulaCommon\"",
 					"\"${PODS_ROOT}/TrustWalletCore\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceCoreBasic\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceSDK\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FirebaseAnalytics/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/WithoutAdIdSupport\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/RegulaCommon\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/TrustWalletCore/Core\"",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1421,8 +1393,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics/firebase_crashlytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api/flutter_face_api.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic/flutter_face_core_basic.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger/flutter_new_badger.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
@@ -1477,8 +1447,6 @@
 					"-framework",
 					"\"FBLPromises\"",
 					"-framework",
-					"\"FaceSDK\"",
-					"-framework",
 					"\"FirebaseAnalytics\"",
 					"-framework",
 					"\"FirebaseCore\"",
@@ -1509,15 +1477,11 @@
 					"-framework",
 					"\"ImageIO\"",
 					"-framework",
-					"\"Liveness\"",
-					"-framework",
 					"\"Photos\"",
 					"-framework",
 					"\"Promises\"",
 					"-framework",
 					"\"QuartzCore\"",
-					"-framework",
-					"\"RegulaCommon\"",
 					"-framework",
 					"\"SDWebImage\"",
 					"-framework",
@@ -1548,10 +1512,6 @@
 					"\"firebase_crashlytics\"",
 					"-framework",
 					"\"firebase_messaging\"",
-					"-framework",
-					"\"flutter_face_api\"",
-					"-framework",
-					"\"flutter_face_core_basic\"",
 					"-framework",
 					"\"flutter_local_notifications\"",
 					"-framework",
@@ -1615,8 +1575,8 @@
 				DEVELOPMENT_TEAM = CFRXH38L48;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				FLUTTER_BUILD_NAME = 2.4.4;
-				FLUTTER_BUILD_NUMBER = 202607104;
+				FLUTTER_BUILD_NAME = 2.4.8;
+				FLUTTER_BUILD_NUMBER = 2026072602;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/DKImagePickerController\"",
@@ -1644,8 +1604,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/image_picker_ios\"",
@@ -1661,18 +1619,12 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/video_player_avfoundation\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/wakelock_plus\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/webview_flutter_wkwebview\"",
-					"\"${PODS_ROOT}/FaceCoreBasic\"",
-					"\"${PODS_ROOT}/FaceSDK\"",
 					"\"${PODS_ROOT}/FirebaseAnalytics/Frameworks\"",
 					"\"${PODS_ROOT}/GoogleAppMeasurement/Frameworks\"",
-					"\"${PODS_ROOT}/RegulaCommon\"",
 					"\"${PODS_ROOT}/TrustWalletCore\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceCoreBasic\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FaceSDK\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/FirebaseAnalytics/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/AdIdSupport\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/GoogleAppMeasurement/WithoutAdIdSupport\"",
-					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/RegulaCommon\"",
 					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/TrustWalletCore/Core\"",
 				);
 				HEADER_SEARCH_PATHS = (
@@ -1703,8 +1655,6 @@
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_core/firebase_core.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_crashlytics/firebase_crashlytics.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/firebase_messaging/firebase_messaging.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_api/flutter_face_api.framework/Headers\"",
-					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_face_core_basic/flutter_face_core_basic.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_local_notifications/flutter_local_notifications.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/flutter_new_badger/flutter_new_badger.framework/Headers\"",
 					"\"${PODS_CONFIGURATION_BUILD_DIR}/fluttertoast/fluttertoast.framework/Headers\"",
@@ -1759,8 +1709,6 @@
 					"-framework",
 					"\"FBLPromises\"",
 					"-framework",
-					"\"FaceSDK\"",
-					"-framework",
 					"\"FirebaseAnalytics\"",
 					"-framework",
 					"\"FirebaseCore\"",
@@ -1791,15 +1739,11 @@
 					"-framework",
 					"\"ImageIO\"",
 					"-framework",
-					"\"Liveness\"",
-					"-framework",
 					"\"Photos\"",
 					"-framework",
 					"\"Promises\"",
 					"-framework",
 					"\"QuartzCore\"",
-					"-framework",
-					"\"RegulaCommon\"",
 					"-framework",
 					"\"SDWebImage\"",
 					"-framework",
@@ -1830,10 +1774,6 @@
 					"\"firebase_crashlytics\"",
 					"-framework",
 					"\"firebase_messaging\"",
-					"-framework",
-					"\"flutter_face_api\"",
-					"-framework",
-					"\"flutter_face_core_basic\"",
 					"-framework",
 					"\"flutter_local_notifications\"",
 					"-framework",
