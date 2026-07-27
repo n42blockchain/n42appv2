@@ -263,6 +263,41 @@ After the failed test, `flutter build ios --release --no-pub` completed in
 launched over the wired tunnel; device inspection confirmed N42Wallet
 `2.4.8 (2026072602)`. No Debug test build was left installed.
 
+## TestFlight upload
+
+The repository pre-commit hook advanced the next build number to
+`2026072603`. That exact version was rebuilt with:
+
+```sh
+./scripts/build_ipa.sh --no-bump
+```
+
+The new archive passed App Settings Validation and produced an IPA with:
+
+```text
+CFBundleShortVersionString: 2.4.8
+CFBundleVersion: 2026072603
+size: 124417095 bytes
+SHA-256:
+2bbb5e45b61b91f51636263cd1f48164286f90cfbc3d10ca53f063a9007bcdff
+```
+
+An initial upload of build `2026072602` was rejected because that build number
+was already present in App Store Connect. Build `2026072603` was then uploaded
+from the repaired archive with `xcodebuild -exportArchive`; App Store Connect
+returned:
+
+```text
+Uploaded package is processing.
+Upload succeeded.
+Uploaded Runner
+** EXPORT SUCCEEDED **
+```
+
+The uploader warned that prebuilt `WebRTC.framework` and
+`flutter_vodozemac.framework` did not include matching dSYMs. These symbol
+upload warnings did not reject the app binary.
+
 ## Device follow-up
 
 After fixing the DEVICE-01 `FlutterError.onError`/audio initialization failure:
