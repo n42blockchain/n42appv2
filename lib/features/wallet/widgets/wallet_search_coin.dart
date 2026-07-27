@@ -4,6 +4,7 @@ import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';

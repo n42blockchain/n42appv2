@@ -43,6 +43,39 @@ void main() {
     });
   });
 
+  group('balance load warning', () {
+    test('hides transient refresh errors for a zero balance', () {
+      final coin = CoinModel()..loadError = true;
+
+      expect(shouldShowBalanceLoadWarning(coin), isFalse);
+    });
+
+    test('warns when a non-zero cached balance may be stale', () {
+      final coin = CoinModel()
+        ..loadError = true
+        ..balance = BigInt.one;
+
+      expect(shouldShowBalanceLoadWarning(coin), isTrue);
+    });
+
+    test('warns when editable EVM token metadata is unverified', () {
+      final coin = CoinModel.fromMap({
+        'blockchainType': 'Ethereum',
+        'coinType': 'ETH',
+        'isContract': true,
+        'canEdit': true,
+      })..loadError = true;
+
+      expect(shouldShowBalanceLoadWarning(coin), isTrue);
+    });
+
+    test('does not warn after a successful refresh', () {
+      final coin = CoinModel()..balance = BigInt.one;
+
+      expect(shouldShowBalanceLoadWarning(coin), isFalse);
+    });
+  });
+
   group('fetchCoinBalance', () {
     test('keeps failed balance refresh marked as unavailable', () async {
       final coin = CoinModel()
