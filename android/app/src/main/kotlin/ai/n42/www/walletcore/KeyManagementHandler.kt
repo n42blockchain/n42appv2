@@ -441,6 +441,24 @@ class KeyManagementHandler {
             "ALGO" -> CoinType.ALGORAND
             "XRP" -> CoinType.XRP
             "ATOM" -> CoinType.COSMOS
+            "INJ" -> CoinType.NATIVEINJECTIVE
+            "TIA" -> CoinType.TIA
+            "DYDX" -> CoinType.DYDX
+            "OSMO" -> CoinType.OSMOSIS
+            "AKT" -> CoinType.AKASH
+            "NTRN" -> CoinType.NEUTRON
+            "SCRT" -> CoinType.SECRET
+            "STRD" -> CoinType.STRIDE
+            "JUNO" -> CoinType.JUNO
+            "KUJI" -> CoinType.KUJIRA
+            "XPRT" -> CoinType.PERSISTENCE
+            "RUNE" -> CoinType.THORCHAIN
+            "KAVA2" -> CoinType.KAVA
+            "SEI2" -> CoinType.SEI
+            "CRE" -> CoinType.CRESCENT
+            "SOMM" -> CoinType.SOMMELIER
+            "MARS" -> CoinType.MARS
+            "CMDX" -> CoinType.COMDEX
             "ZETA" -> CoinType.ETHEREUM
             "BASE" -> CoinType.BASE
             "FIL" -> CoinType.FILECOIN
@@ -522,6 +540,9 @@ class KeyManagementHandler {
             "ALGO" -> "Algorand"
             "XRP" -> "Ripple"
             "ATOM" -> "Cosmos"
+            "INJ", "TIA", "DYDX", "OSMO", "AKT", "NTRN", "SCRT", "STRD",
+            "JUNO", "KUJI", "XPRT", "RUNE", "KAVA2", "SEI2", "CRE", "SOMM",
+            "MARS", "CMDX" -> "Cosmos"
             "ZETA" -> "Ethereum"
             "BASE" -> "Ethereum"
             "FIL" -> "Filecoin"
