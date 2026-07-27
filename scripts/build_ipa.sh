@@ -6,9 +6,9 @@
 #   --set-version X Set App Store version (CFBundleShortVersionString), e.g. --set-version 1.0.17
 #
 # Version strategy:
-#   - App Store Version (CFBundleShortVersionString): manual, change with --set-version
-#   - App Store Build   (CFBundleVersion):            auto-increment each build
-#   - Flutter version in pubspec.yaml:                auto-increment (internal tracking)
+#   - pubspec.yaml is the single source of truth for both version fields.
+#   - App Store Version (CFBundleShortVersionString): manual, change with --set-version.
+#   - App Store Build   (CFBundleVersion): auto-increment each build unless --no-bump.
 
 set -e
 
@@ -37,16 +37,16 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-# === Read current App Store version from pbxproj ===
-CURRENT_BUILD_NAME=$(grep 'FLUTTER_BUILD_NAME' "$PBXPROJ" | head -1 | sed 's/.*= *//;s/ *;.*//')
-CURRENT_BUILD_NUMBER=$(grep 'FLUTTER_BUILD_NUMBER' "$PBXPROJ" | head -1 | sed 's/.*= *//;s/ *;.*//')
+# === Read the canonical version from pubspec.yaml ===
+CURRENT_PUBSPEC=$(grep '^version:' "$PUBSPEC" | sed 's/version: //')
+CURRENT_BUILD_NAME=$(echo "$CURRENT_PUBSPEC" | cut -d'+' -f1)
+CURRENT_BUILD_NUMBER=$(echo "$CURRENT_PUBSPEC" | cut -d'+' -f2)
 
 echo "=== Current App Store version: $CURRENT_BUILD_NAME ($CURRENT_BUILD_NUMBER) ==="
 
 # === Update App Store Version if requested ===
 if [ -n "$NEW_APP_VERSION" ]; then
   echo "=== Updating App Store version: $CURRENT_BUILD_NAME -> $NEW_APP_VERSION ==="
-  sed -i '' "s/FLUTTER_BUILD_NAME = $CURRENT_BUILD_NAME/FLUTTER_BUILD_NAME = $NEW_APP_VERSION/g" "$PBXPROJ"
   CURRENT_BUILD_NAME="$NEW_APP_VERSION"
 fi
 
@@ -54,24 +54,23 @@ fi
 if [ "$NO_BUMP" = false ]; then
   NEW_BUILD_NUMBER=$((CURRENT_BUILD_NUMBER + 1))
   echo "=== Build number: $CURRENT_BUILD_NUMBER -> $NEW_BUILD_NUMBER ==="
-  sed -i '' "s/FLUTTER_BUILD_NUMBER = $CURRENT_BUILD_NUMBER/FLUTTER_BUILD_NUMBER = $NEW_BUILD_NUMBER/g" "$PBXPROJ"
   CURRENT_BUILD_NUMBER="$NEW_BUILD_NUMBER"
-
-  # Also increment pubspec.yaml for internal tracking
-  CURRENT_PUBSPEC=$(grep '^version:' "$PUBSPEC" | sed 's/version: //')
-  PUB_VERSION_NAME=$(echo "$CURRENT_PUBSPEC" | cut -d'+' -f1)
-  PUB_BUILD_NUM=$(echo "$CURRENT_PUBSPEC" | cut -d'+' -f2)
-  PUB_MAJOR=$(echo "$PUB_VERSION_NAME" | cut -d'.' -f1)
-  PUB_MINOR=$(echo "$PUB_VERSION_NAME" | cut -d'.' -f2)
-  PUB_PATCH=$(echo "$PUB_VERSION_NAME" | cut -d'.' -f3)
-  NEW_PUB_PATCH=$((PUB_PATCH + 1))
-  NEW_PUB_BUILD=$((PUB_BUILD_NUM + 1))
-  NEW_PUB_VERSION="$PUB_MAJOR.$PUB_MINOR.$NEW_PUB_PATCH+$NEW_PUB_BUILD"
-  sed -i '' "s/^version: .*/version: $NEW_PUB_VERSION/" "$PUBSPEC"
-  echo "=== Flutter version: $CURRENT_PUBSPEC -> $NEW_PUB_VERSION ==="
 else
   echo "=== No bump (using existing build number: $CURRENT_BUILD_NUMBER) ==="
 fi
+
+RESOLVED_VERSION="$CURRENT_BUILD_NAME+$CURRENT_BUILD_NUMBER"
+if [ "$RESOLVED_VERSION" != "$CURRENT_PUBSPEC" ]; then
+  sed -i '' "s/^version: .*/version: $RESOLVED_VERSION/" "$PUBSPEC"
+  echo "=== Flutter version: $CURRENT_PUBSPEC -> $RESOLVED_VERSION ==="
+fi
+
+# Target-level values override Flutter's generated xcconfig. Keep every Runner
+# and NotificationExtension build configuration synchronized with pubspec.
+sed -E -i '' \
+  "s/FLUTTER_BUILD_NAME = [^;]+;/FLUTTER_BUILD_NAME = $CURRENT_BUILD_NAME;/g; \
+   s/FLUTTER_BUILD_NUMBER = [^;]+;/FLUTTER_BUILD_NUMBER = $CURRENT_BUILD_NUMBER;/g" \
+  "$PBXPROJ"
 
 echo ""
 echo "=== Building IPA: $CURRENT_BUILD_NAME ($CURRENT_BUILD_NUMBER) ==="
@@ -80,8 +79,7 @@ echo ""
 echo "=== Building iOS archive ==="
 flutter build ipa \
   --build-name="$CURRENT_BUILD_NAME" \
-  --build-number="$CURRENT_BUILD_NUMBER" \
-  2>&1 || true
+  --build-number="$CURRENT_BUILD_NUMBER"
 
 echo "=== Fixing objective_c.framework in archive ==="
 ARCHIVE_PATH="build/ios/archive/Runner.xcarchive"

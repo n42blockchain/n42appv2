@@ -5,6 +5,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
+import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info.dart';
@@ -81,7 +82,7 @@ class WalletCoinItem extends ConsumerWidget {
         ? AppColorTokens.of(context).danger
         : AppColorTokens.of(context).textTertiary;
 
-    final Widget refreshWidget = coinInfo.loadError
+    final Widget refreshWidget = shouldShowBalanceLoadWarning(coinInfo)
         ? Container(
             height: su.setWidth(32.0),
             width: su.setWidth(32.0),

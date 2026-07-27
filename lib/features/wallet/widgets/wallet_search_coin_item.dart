@@ -36,7 +36,7 @@ extension _CoinItemWidgets on _WalletSearchCoinState {
           )
         : null;
 
-    final Widget errorBadge = coinInfo.loadError
+    final Widget errorBadge = shouldShowBalanceLoadWarning(coinInfo)
         ? Container(
             height: su.setWidth(30.0),
             width: su.setWidth(30.0),

@@ -47,8 +47,6 @@
 
 # ==================== 自定义 AAR 库 ====================
 # mobile-sdk-android.aar
--keep class com.regula.** { *; }
--dontwarn com.regula.**
 
 # evm.aar
 -keep class ai.n42.evm.** { *; }

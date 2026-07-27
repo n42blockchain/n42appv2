@@ -6,15 +6,21 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/algo_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/akt_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/apt_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/atom_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/btc_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/dot_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/dydx_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/fil_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/inj_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/near_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/ntrn_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/osmo_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sui_api.dart';
+import 'package:n42_wallet/features/wallet/api/chain_api/tia_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/ton_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/trx_api.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/xrp_api.dart';
@@ -162,7 +168,22 @@ class TokenViewApi {
       case 'Ripple':
         return await XrpApi().getAccountInfoXrp(address, isTest);
       case 'Cosmos':
-        return await AtomApi().getBalance(address, contract);
+        switch (coinType) {
+          case 'INJ':
+            return await InjApi(isTest: isTest).getBalance(address);
+          case 'OSMO':
+            return await OsmoApi(isTest: isTest).getBalance(address);
+          case 'TIA':
+            return await TiaApi(isTest: isTest).getBalance(address);
+          case 'DYDX':
+            return await DydxApi(isTest: isTest).getBalance(address);
+          case 'NTRN':
+            return await NtrnApi(isTest: isTest).getBalance(address);
+          case 'AKT':
+            return await AktApi(isTest: isTest).getBalance(address);
+          default:
+            return await AtomApi().getBalance(address, contract);
+        }
       case 'Filecoin':
         return await FilApi().getBalance(address, isTest: isTest);
       case 'Polkadot':

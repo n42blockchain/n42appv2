@@ -15,6 +15,19 @@ bool requiresEvmTokenMetadataVerification(CoinModel coin) {
       coin.coin['decimals_verified'] != true;
 }
 
+/// Whether a row needs a prominent balance warning.
+///
+/// A failed refresh for a zero-balance coin does not make the displayed value
+/// stale or unsafe, so showing a warning on every such row creates a wall of
+/// false alarms. Keep the warning when a non-zero cached balance is being
+/// shown, or when an editable EVM token still needs on-chain metadata
+/// verification.
+bool shouldShowBalanceLoadWarning(CoinModel coin) {
+  return coin.loadError &&
+      (coin.balance != BigInt.zero ||
+          requiresEvmTokenMetadataVerification(coin));
+}
+
 /// Hydrates [coin]'s balance/price/value fields from cached data in the coin map.
 void applyCachedBalance(CoinModel coin) {
   if (requiresEvmTokenMetadataVerification(coin)) {
