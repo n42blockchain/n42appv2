@@ -82,13 +82,18 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   @override
   void initState() {
     super.initState();
-    ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
     _scrollController = ScrollController()..addListener(_onScroll);
     SPUtil().getSmallAssetsThreshold().then((v) {
       if (mounted) setState(() => _smallAssetsThreshold = v);
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      // initWallet 必须推迟到首帧之后：它虽是 async，但在第一个 await 之前就
+      // 同步清空列表并 refresh()（notifyListeners）。直接在 initState 里调，
+      // 通知会发生在 ConsumerStatefulElement 还在 mount 的过程中，触发
+      // Riverpod 的「Tried to modify a provider while the widget tree was
+      // building」断言——T26 真机探针抓到的就是这条。
+      ref.read(wapBridgeProvider).initWallet(shouldInitCoinInfo: true);
       _startPriceTimer();
     });
   }
