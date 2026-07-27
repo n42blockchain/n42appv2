@@ -443,3 +443,54 @@ No new TestFlight build was uploaded from `0a9fed31`: the already uploaded
 `2026072603` predates the provider fix, while current master has the reproducible
 token-discovery startup race above. Upload should follow the race fix and a
 clean physical smoke run.
+
+## Final physical closure and TestFlight upload
+
+Master `93d195d8` was installed and exercised on the same wired iPhone after
+the `isWalletReady` post-frame recheck fix.
+
+| Item | Final result | Evidence |
+| --- | --- | --- |
+| Startup assertions | PASS | Neither `Tried to modify a provider while the widget tree was building` nor `Invalid walletIndex (0) for list of 0 wallets` appeared in the physical-device runs. |
+| Wallet Manage Chains drag | PASS | A person dragged `N` from row 1 to row 3; the probe observed the exact target order `BTC > ETH > N` and no Flutter exception. The order was subsequently restored. |
+| Chat Quick Replies drag | PASS | The deterministic `t26_a > t26_b > t26_c` fixture again became `t26_b > t26_c > t26_a`; original preferences were restored. |
+| Face ID positive path | PASS | With `T26_RUN_MANUAL_SYSTEM_UI=true`, native Face ID authentication returned successfully and the switch reached `true`; the probe restored its original `false` state. |
+| Scanner re-entry | PASS | Three consecutive open/close cycles completed without a Flutter exception or crash. |
+| File picker positive path | PASS | A direct call to the migrated `FilePicker.pickFiles(type: FileType.image)` API opened the native iOS picker; manual Cancel returned `null` and the probe completed with `All tests passed`. |
+
+The automated wallet `timedDrag` was not used as the final placement evidence:
+a temporary callback probe showed that it grabbed row index 2 and reported
+`oldIndex=2, newIndex=4` while the test expected to drag row 0. The manual
+gesture above exercised the actual drag handle and produced the expected order.
+All temporary probes and logging were removed before the release build.
+
+The final IPA was built from master `93d195d8` with:
+
+```sh
+./scripts/build_ipa.sh --no-bump
+```
+
+Validation before upload:
+
+```text
+Runner.app:       2.4.8 (2026072604)
+N42Extension:     2.4.8 (2026072604)
+IPA size:         124424580 bytes
+IPA SHA-256:      4c63a34ea74e42975c3daff82c63794f32779bcc9b3a88570dd7e33c6b7f86f8
+IPA codesign:     valid on disk; satisfies its Designated Requirement
+```
+
+The upload used `destination=upload` with
+`manageAppVersionAndBuildNumber=false`, preserving the validated build number.
+App Store Connect returned:
+
+```text
+Uploaded package is processing.
+Upload succeeded.
+Uploaded Runner
+** EXPORT SUCCEEDED **
+```
+
+As with build `2026072603`, symbol upload warned that prebuilt
+`WebRTC.framework` and `flutter_vodozemac.framework` lacked matching dSYMs.
+These warnings did not reject the app binary.
