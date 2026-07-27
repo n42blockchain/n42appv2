@@ -54,6 +54,7 @@ class NavSelectImage extends StatelessWidget {
         ),
         Divider(height: 1, color: AppColorTokens.of(context).border),
         InkWell(
+          key: const ValueKey<String>('nav_select_image_file_picker'),
           onTap: () async {
             final navigator = Navigator.of(context);
             //从相册选择

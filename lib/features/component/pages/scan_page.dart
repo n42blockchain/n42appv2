@@ -60,6 +60,7 @@ class _ScanPageState extends State<ScanPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: const ValueKey<String>('scan_page'),
       appBar: AppBarWidget(
         text: S.of(context).g_key_4,
         actions: [
@@ -91,7 +92,9 @@ class _ScanPageState extends State<ScanPage> {
         children: [
           Text(
             S.of(context).g_key_195,
-            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
           SizedBox(height: ScreenUtil().setWidth(36.0)),
           TextButton(
@@ -102,7 +105,9 @@ class _ScanPageState extends State<ScanPage> {
             },
             child: Text(
               S.of(context).g_face_5,
-              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).brand,
+              ),
             ),
           ),
         ],

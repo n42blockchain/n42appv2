@@ -121,12 +121,15 @@ void main() async {
   initAppConfig();
   RequestUrl.initializeApiKeys();
 
+  final previousFlutterErrorHandler = FlutterError.onError;
   FlutterError.onError = (errorDetails) {
     FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    previousFlutterErrorHandler?.call(errorDetails);
   };
+  final previousPlatformErrorHandler = PlatformDispatcher.instance.onError;
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: false);
-    return true;
+    return previousPlatformErrorHandler?.call(error, stack) ?? true;
   };
 
   runApp(

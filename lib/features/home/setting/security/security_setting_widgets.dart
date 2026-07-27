@@ -79,6 +79,7 @@ extension on _SecuritySettingState {
     bool value,
     Function valueChange, {
     bool enabled = true,
+    Key? switchKey,
   }) {
     final titleColor = AppThemeUtils.getColorByKey(
       context,
@@ -98,6 +99,7 @@ extension on _SecuritySettingState {
             ),
           ),
           Switch(
+            key: switchKey,
             activeTrackColor: AppThemeUtils.getColorByKey(
               context,
               AppThemeKeys.mainButtonBgColor.name,

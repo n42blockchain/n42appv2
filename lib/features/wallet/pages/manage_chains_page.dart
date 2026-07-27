@@ -16,6 +16,7 @@ class ManageChainsPage extends ConsumerWidget {
     final wap = ref.watch(wapBridgeProvider);
 
     return Scaffold(
+      key: const ValueKey<String>('manage_chains_page'),
       appBar: AppBar(
         title: Text(
           S.of(context).g_key_manage_chains,

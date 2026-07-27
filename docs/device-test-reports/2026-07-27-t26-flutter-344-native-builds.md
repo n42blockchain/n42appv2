@@ -311,3 +311,39 @@ After fixing the DEVICE-01 `FlutterError.onError`/audio initialization failure:
    file picker from one migrated call site.
 5. B5: refresh configured Cosmos-family balances and record per-chain success
    without logging full wallet addresses.
+
+## B1-B4 follow-up run (2026-07-27)
+
+Device:
+
+- iPhone `00008150-000E2469149A401C`, iOS 27.0, wired and unlocked.
+- Command:
+  `flutter test integration_test/t26_b_device_regression_test.dart -d
+  00008150-000E2469149A401C --no-pub`
+- Targeted analyze: no issues.
+
+The VoiceService eager-platform-object failure is no longer the startup
+blocker. DEVICE-01 entered its home and market steps. Chaining the app
+Crashlytics handlers to the handlers installed by `flutter_test` then exposed
+the previously hidden first Flutter error: a wallet provider is modified while
+the widget tree is building during deferred price/balance initialization.
+
+| Item | Result | Physical-device evidence |
+| --- | --- | --- |
+| B1 wallet chain reorder | NOT VERIFIED | The drag gesture ran, but the asynchronously rebuilding source list changed from `N > BTC > ETH` to `N > BTC > SOL` during the gesture. That result cannot distinguish reorder semantics from initialization mutation. The repeatable test now waits for both `coinList` completion and eight stable order samples before the next run. |
+| B1 Chat Quick Replies | PASS | Deterministic rows changed from `t26_a > t26_b > t26_c` to `t26_b > t26_c > t26_a` after dragging the first row down two positions. The original persisted quick replies were restored in `finally`. |
+| B2 Face ID toggle | DEVICE FAIL | The original toggle value was `false`. Enabling it did not reach `true` within 60 seconds, so no successful native authentication can be claimed. The persisted value remained `false`. |
+| B4 scanner re-entry | PASS | `ScanPage` opened and closed three consecutive times on the iPhone with no Flutter exception or crash. |
+| B4 file picker | INCOMPLETE | `FilePicker.pickFiles(type: FileType.image)` entered the native call and waited for the system picker result. No cancel result returned before the nine-minute run was stopped; therefore open/cancel is not marked PASS. |
+
+The test run also repeatedly printed Flutter's Local Network warning
+(`0.0.0.0:5353`, `No route to host`), but the wired VM-service fallback
+connected and the test body executed.
+
+No wallet-chain PASS is inferred from the interrupted source list, and no Face
+ID or file-picker PASS is inferred from merely opening/waiting. The next
+physical run still needs:
+
+1. wallet Manage Chains drag after the new source-list stability gate;
+2. one successful Face ID prompt;
+3. one returned file-picker cancel.
