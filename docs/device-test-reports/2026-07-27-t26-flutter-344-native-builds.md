@@ -22,17 +22,18 @@ This report distinguishes build/static evidence from physical-device evidence.
 | A2 Android Flutter 3.44.8 release build | PASS | `flutter build apk --release` completed `assembleRelease` in 299.4 seconds and produced a signed 735,285,533-byte APK. |
 | A3 iOS Flutter 3.44.8 App Store IPA build | PASS | `./scripts/build_ipa.sh --no-bump` completed archive, framework repair, and second App Store export. The archive was 507.0 MB and the final IPA was 124,416,863 bytes. |
 | A4 Runner/extension version consistency | PASS | The final IPA was unpacked and inspected. `Runner.app` and `N42Extension.appex` both report `CFBundleShortVersionString=2.4.8` and `CFBundleVersion=2026072602`. Deep strict code-sign verification passed. |
-| B1 wallet/chat drag destination | BLOCKED (automation) / STATIC PASS | Flutter 3.44.8 source adjusts `newIndex` before invoking `onReorderItem`; both call sites and `reorderChain` omit the old manual decrement. The iPhone reconnected and accepted the test build, but the test runner could not attach because macOS denied local-network access to the Dart VM service. No physical drag/drop was executed. |
-| B2 face unlock after Regula removal | BLOCKED (automation) / BUILD PASS | Release artifacts build with `local_auth`; the IPA contains `local_auth_darwin_privacy.bundle`. No `com.regula`, `FaceSDK`, or `flutter_face_api` reference remains in app/native dependency sources. The blocked runner did not reach a real Face ID prompt. |
-| B3 BTC send/receive after `bitcoin_base` removal | BLOCKED (automation) / BUILD PASS | Android and iOS release builds compile the WalletCore/trustdart BTC path, and no `bitcoin_base` dependency remains. The blocked runner did not reach BTC Send/Receive; no transaction was broadcast. |
-| B4 scanner and file picker regression | BLOCKED (automation) / BUILD PASS | `qr_code_scanner_plus` and file picker native integration compile into both release builds. The IPA contains `file_picker_ios_privacy.bundle`; all eight Dart call sites use static `FilePicker.pickFiles`. The blocked runner did not reach repeated scanner entry/exit or picker open/cancel. |
-| B5 19-chain Cosmos live balances | BLOCKED (automation) / UNIT PASS | Registry tests discover exactly 19 configured Cosmos chains, resolve each to its own REST service and native denom, and reject ATOM fallback for unknown chains. The blocked runner did not execute live device balance reads. |
+| B1 wallet/chat drag destination | NOT RUN / STATIC PASS | Flutter 3.44.8 source adjusts `newIndex` before invoking `onReorderItem`; both call sites and `reorderChain` omit the old manual decrement. The second iPhone run entered the test body, but failed during startup before either drag surface was exercised. |
+| B2 face unlock after Regula removal | NOT RUN / BUILD PASS | Release artifacts build with `local_auth`; the IPA contains `local_auth_darwin_privacy.bundle`. No `com.regula`, `FaceSDK`, or `flutter_face_api` reference remains in app/native dependency sources. The second run failed before a real Face ID prompt. |
+| B3 BTC send/receive after `bitcoin_base` removal | NOT RUN / BUILD PASS | Android and iOS release builds compile the WalletCore/trustdart BTC path, and no `bitcoin_base` dependency remains. The second run failed before BTC Send/Receive; no transaction was broadcast. |
+| B4 scanner and file picker regression | NOT RUN / BUILD PASS | `qr_code_scanner_plus` and file picker native integration compile into both release builds. The IPA contains `file_picker_ios_privacy.bundle`; all eight Dart call sites use static `FilePicker.pickFiles`. The second run failed before repeated scanner entry/exit or picker open/cancel. |
+| B5 19-chain Cosmos live balances | DEVICE FAIL / UNIT PASS | Registry tests discover exactly 19 configured Cosmos chains and route each to its own REST service and native denom. On the iPhone, startup wallet logs reported native address-generation failure for INJ, OSMO, TIA, DYDX, and NTRN, so those chains could not proceed to a valid live balance read. |
 
 The iPhone initially appeared as `unavailable`, then recovered after restarting
 the local CoreDevice services. Device pairing, unlock state, Release
-installation, and Release launch passed. B1-B5 remain blocked because macOS
-Local Network privacy denied the wireless Flutter VM-service connection before
-any test body ran.
+installation, and Release launch passed. macOS Local Network privacy initially
+denied the wireless Flutter VM-service connection. After the permission was
+enabled and USB connected, a second run entered the test body; its separate
+failure and the remaining B-item status are recorded below.
 
 ## Commands and build evidence
 
@@ -203,10 +204,103 @@ Retry window: 2026-07-27 04:27-04:47 EDT.
 7. After the failed Driver attempt, a clean Release was rebuilt, reinstalled,
    and launched. No Debug/test-define build was left on the phone.
 
+## Physical iPhone retry after Local Network permission and USB
+
+Retry window: 2026-07-27 04:52-04:58 EDT.
+
+The iPhone was connected over a wired CoreDevice tunnel and was unlocked:
+
+```text
+transport: wired
+passcodeRequired: false
+unlockedSinceBoot: true
+```
+
+This command built, installed, attached to, and entered the real test body:
+
+```sh
+flutter test integration_test/device_full_flow_test.dart \
+  -d 00008150-000E2469149A401C --no-pub
+```
+
+The Local Network warning was no longer fatal. The runner printed both
+`DEVICE_STEP home: navigate primary tabs` and
+`DEVICE_STEP market: tabs and search input`, proving that device attachment and
+test execution worked.
+
+The test nevertheless failed at startup because application initialization
+replaced `FlutterError.onError` while `VoiceService` eagerly constructed an
+`audioplayers` `AudioPlayer`. Flutter's test binding reported:
+
+```text
+A test overrode FlutterError.onError but either failed to return it to its
+original state, or had uncaught errors that it could not handle.
+
+AudioPlayer._create
+VoiceService.new
+configureChatDependencies
+```
+
+Final result after stopping the already-failed run:
+
+```text
+01:23 +0 -1: Some tests failed.
+DEVICE-01 ... [E]
+(tearDownAll) - did not complete [E]
+```
+
+This is no longer a Mac permission, USB, pairing, or unlock blocker. It is a
+test-harness/application-initialization failure. DEVICE-01 never reached its
+wallet action or drawer stages, so it provides no physical PASS evidence for
+B1-B4.
+
+During the same run, wallet initialization logged failed native address
+generation for INJ, OSMO, TIA, DYDX, and NTRN. B5 is therefore recorded as a
+device failure for those chains, not as an automation-only block.
+
+After the failed test, `flutter build ios --release --no-pub` completed in
+216.3 seconds. The resulting current-source Release app was installed and
+launched over the wired tunnel; device inspection confirmed N42Wallet
+`2.4.8 (2026072602)`. No Debug test build was left installed.
+
+## TestFlight upload
+
+The repository pre-commit hook advanced the next build number to
+`2026072603`. That exact version was rebuilt with:
+
+```sh
+./scripts/build_ipa.sh --no-bump
+```
+
+The new archive passed App Settings Validation and produced an IPA with:
+
+```text
+CFBundleShortVersionString: 2.4.8
+CFBundleVersion: 2026072603
+size: 124417095 bytes
+SHA-256:
+2bbb5e45b61b91f51636263cd1f48164286f90cfbc3d10ca53f063a9007bcdff
+```
+
+An initial upload of build `2026072602` was rejected because that build number
+was already present in App Store Connect. Build `2026072603` was then uploaded
+from the repaired archive with `xcodebuild -exportArchive`; App Store Connect
+returned:
+
+```text
+Uploaded package is processing.
+Upload succeeded.
+Uploaded Runner
+** EXPORT SUCCEEDED **
+```
+
+The uploader warned that prebuilt `WebRTC.framework` and
+`flutter_vodozemac.framework` did not include matching dSYMs. These symbol
+upload warnings did not reject the app binary.
+
 ## Device follow-up
 
-After granting the Mac terminal/Codex process Local Network permission (or
-connecting the iPhone over a working USB data cable):
+After fixing the DEVICE-01 `FlutterError.onError`/audio initialization failure:
 
 1. B1: drag the first chain downward by two rows and back; repeat in Chat Quick
    Replies. Record the before/after labels to prove there is no one-row offset.
