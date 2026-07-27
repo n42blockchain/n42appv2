@@ -19,9 +19,28 @@ import '../utils/debug_log.dart';
 /// 提供语音录制和播放功能
 /// 生命周期由 DI 容器管理，不使用 singleton 模式
 class VoiceService {
-  final AudioRecorder _recorder = AudioRecorder();
-  final AudioPlayer _player = AudioPlayer();
+  // 录音器/播放器都是平台通道对象，**不能在字段初始化时构造**。
+  // 本服务由 configureChatDependencies 在 App 启动期建立，若此处直接 new
+  // AudioPlayer()，audioplayers 的 `AudioPlayer._create` 会在启动阶段接触平台
+  // 通道；一旦它抛错，异常经 FlutterError 冒泡，集成测试绑定会判定
+  // "a test overrode FlutterError.onError ... had uncaught errors"，
+  // 导致 integration_test 在任何用例体执行前就整体失败（T26 DEVICE-01）。
+  // 改为首次真正录音/播放时才创建。
+  AudioRecorder? _recorderInstance;
+  AudioPlayer? _playerInstance;
   final _uuid = const Uuid();
+
+  AudioRecorder get _recorder => _recorderInstance ??= AudioRecorder();
+
+  /// 惰性创建播放器，并在创建时补挂状态订阅（原本在 [initialize] 里挂）。
+  AudioPlayer get _player {
+    final existing = _playerInstance;
+    if (existing != null) return existing;
+    final created = AudioPlayer();
+    _playerInstance = created;
+    _attachPlayerStateListener(created);
+    return created;
+  }
 
   // 录音状态
   bool _isRecording = false;
@@ -62,12 +81,21 @@ class VoiceService {
   bool _isInitialized = false;
 
   /// 初始化
+  ///
+  /// 只置位标记，**不接触平台通道**。播放器的状态订阅移到播放器真正被创建时
+  /// （见 [_player] getter），否则启动期就会实例化 audioplayers。
   Future<void> initialize() async {
     if (_isInitialized) return;
     _isInitialized = true;
 
-    await _playerStateSubscription?.cancel();
-    _playerStateSubscription = _player.onPlayerStateChanged.listen((state) {
+    // 已经播放过（播放器早于 initialize 被创建）时补挂订阅。
+    final player = _playerInstance;
+    if (player != null) _attachPlayerStateListener(player);
+  }
+
+  void _attachPlayerStateListener(AudioPlayer player) {
+    unawaited(_playerStateSubscription?.cancel());
+    _playerStateSubscription = player.onPlayerStateChanged.listen((state) {
       _isPlaying = state == PlayerState.playing;
       if (state == PlayerState.completed || state == PlayerState.stopped) {
         _currentPlayingUrl = null;
@@ -396,8 +424,12 @@ class VoiceService {
     await _playerStateSubscription?.cancel();
     _playerStateSubscription = null;
     await _cleanupDownloadedPlaybackFile();
-    await _recorder.dispose();
-    await _player.dispose();
+    // 只销毁真正创建过的平台对象——用 getter 会把从未用过的录音器/播放器
+    // 在 dispose 时反而实例化出来。
+    await _recorderInstance?.dispose();
+    _recorderInstance = null;
+    await _playerInstance?.dispose();
+    _playerInstance = null;
     await _recordingStateController.close();
     await _playbackStateController.close();
     await _amplitudeController.close();
