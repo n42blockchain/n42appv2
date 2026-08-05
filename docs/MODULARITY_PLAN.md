@@ -74,7 +74,24 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 | 3 | core 服务解耦：token_discovery/tx_simulation/legacy_wallet_adapter 归位 wallet；rpc_config 覆盖同步移至 wallet 侧；core→features 清零（composition root 豁免） | ✅ 2026-08-05 |
 | 4 | 推送导航注册制：shared `PushRouteRegistry` + composition root `push_route_wiring`；utils→feature 页面清零 | ✅ 2026-08-05 |
 | 5 | 循环依赖逐对治理（决议见上表）：`InAppBrowser` 抽象 + profile 并回 home + SettingShare 下移 component | ✅ 2026-08-05 |
-| 6 | 测试洼地补覆盖（component/home/mining_v2/widgets 优先，纯逻辑先行） | 进行中 |
+| 6 | 测试洼地补覆盖：硬件钱包签名链路 108 测（UrCodec/Keystone/Ledger APDU，原为**零覆盖**且旧 ledger_utils_test 是假覆盖）+ DApp 安全 54 测（方法路由/地址冒名/审批闸门/URL 拦截）+ staking 交易构建 18 测 + mining_v2 状态派生与生命周期 24 测 + LineChart 标度 8 测，共 212 个新测试；另有架构守护测试 7 条 | ✅ 2026-08-05 |
+
+## 批次 6 发现的生产代码缺陷登记（测试已用 skip 固化，待排期修复）
+
+**P0 硬件钱包（Keystone 互操作性存疑，`hardware_wallet/crypto/ur_codec.dart`）**
+1. bytewords `_wordList` 有 286 词（规范恰 256），含 'brisk'(5字母)/'odd'(3字母)非规范词；索引 255 应为 'zoom' 实为 'ugly'。
+2. `bytewordsDecode` 对索引 256–285 静默 mod 256 截断——不同 QR 可解出同一字节流且 CRC 通过。
+3. UR body 用空格分隔完整词而非规范的 minimal bytewords；多帧只识别 `1-of-3/` 非规范 `1-3/`。→ 与真机 Keystone 配对大概率失败，需按 BC-UR 规范重写词表与编码。
+4. `keystone_service.dart:59,74` 用 `codeUnits`（UTF-16）而非 `utf8.encode`，非 ASCII personal_sign/typedData 签名数据损坏。
+5. `toDevice()` 在 fingerprint null 且 xpub<8 字符时 RangeError；`validateScannedUr` 前缀匹配过宽。
+
+**P1 其他**
+- `widgets/line_chart.dart:_calcMaxValue` 以 0.0 起始，全负数序列 max 错误为 0；difference=0 时 paint 期除零。
+- `staking/api/atom_staking_api.dart:375` APY 异常吞掉后返回假数据且 error=false；stakingRatio=0 除零。
+- `mining_v2/provider/mining_v2_provider_beacon.dart:130,149` `rmm.data[...]` 缺 `?.`，data null 会抛。
+- `mining_v2_provider_state.dart:resetData` 不清 privateKey/miningKeypart——换钱包依赖外部重设。
+- `ledger_apdu_utils.dart:buildEthSignTxApdu` Lc 单字节，payload>255 静默截断。
+- `dapp_request_handler.dart:154` 大写 `0X` hex 前缀被拒（EIP-1193 兼容性）；空 params 报 -32603 而非 -32602。
 
 ## 依赖方向的自动守护
 
