@@ -1,6 +1,7 @@
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
 import 'package:n42_wallet/features/browser/models/browser_search_history_model.dart';
+import 'package:n42_wallet/features/browser/data/browser_dao.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
 
 class BrowserApi {

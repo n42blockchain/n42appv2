@@ -3,6 +3,7 @@ import 'package:n42_wallet/core/error/failures.dart';
 import 'package:n42_wallet/features/browser/domain/entities/browser_entity.dart';
 import 'package:n42_wallet/features/browser/domain/repositories/browser_repository.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
+import 'package:n42_wallet/features/browser/data/browser_dao.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 import 'package:n42_wallet/features/browser/models/browser_history_model.dart';
 

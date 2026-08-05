@@ -7,6 +7,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
+import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
