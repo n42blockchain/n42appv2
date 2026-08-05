@@ -10,15 +10,11 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/utils/chat_push_routing.dart';
 import 'package:n42_wallet/features/utils/chat_tap_dedup.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
-import 'package:n42_wallet/features/home/setting/about_app.dart';
-import 'package:n42_wallet/features/home/setting/personal_setting.dart';
-import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
+import 'package:n42_wallet/shared/utils/push_route_registry.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
 import 'package:n42_wallet/features/utils/background_delivery_guide.dart';
-import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:n42_chat/n42_chat.dart'

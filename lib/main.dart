@@ -13,6 +13,7 @@ import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/deep_link_handler.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/app/chat_initialization.dart';
+import 'package:n42_wallet/core/app/push_route_wiring.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/security/device_security.dart';
@@ -295,6 +296,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
 
   Future<void> _initPushServices() async {
     try {
+      registerHostPushRoutes();
       await AppPushUtils.init();
     } catch (e) {
       AppLogger.w('main', 'FCM push init failed: $e');
