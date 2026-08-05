@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';

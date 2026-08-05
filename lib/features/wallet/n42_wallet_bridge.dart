@@ -9,7 +9,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:n42_chat/n42_chat.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';

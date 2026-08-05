@@ -1,5 +1,5 @@
 //获取浏览器地址，根据币类型、地址和合约
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 
 String getBrowserTokenAddress(

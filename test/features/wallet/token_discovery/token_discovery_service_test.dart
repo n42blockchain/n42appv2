@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/core/token_discovery/token_discovery_service.dart';
+import 'package:n42_wallet/features/wallet/token_discovery/token_discovery_service.dart';
 
 void main() {
   group('TokenDiscoveryService.matchesTrackedContract', () {

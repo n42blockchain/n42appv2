@@ -6,7 +6,7 @@ import 'package:n42_wallet/features/mining_v1/pages/today_mining_page.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
 import 'package:n42_wallet/features/widgets/keep_state_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';

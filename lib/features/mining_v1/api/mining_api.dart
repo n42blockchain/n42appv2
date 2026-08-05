@@ -9,7 +9,7 @@ import 'package:n42_wallet/features/mining_v1/provider/mining_v1_providers.dart'
 import 'package:n42_wallet/features/mining_v1/utils/mining_cache_utils.dart';
 import 'package:n42_wallet/features/mining_v1/utils/mining_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:http/http.dart';
 import 'package:wallet/wallet.dart' show EthereumAddress;

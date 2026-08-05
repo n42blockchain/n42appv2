@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v1/provider/mining_provider.dart';

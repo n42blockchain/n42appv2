@@ -1,5 +1,5 @@
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/mining_v1/api/mining_api.dart';
 import 'package:n42_wallet/features/mining_v1/models/mining_type.dart';

@@ -22,7 +22,7 @@ import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/home/home_page.dart';
 import 'package:n42_wallet/features/identity/pages/id_hub_sign_page.dart';
 import 'package:n42_wallet/features/splash/splash_page.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/transaction_providers.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/mining/presentation/providers/mining_providers.dart';
@@ -54,6 +54,7 @@ import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/core/config/api_keys_config.dart';
 import 'package:n42_wallet/core/config/rpc_config.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/core/security/phishing_detector.dart';
 import 'package:n42_wallet/core/security/security_config.dart';
 import 'package:n42_wallet/core/security/secure_storage.dart';
@@ -118,6 +119,7 @@ void main() async {
   // SECURITY: Initialize and validate API keys / RPC / config
   initApiKeys();
   initRpcConfig();
+  syncRpcOverridesToChainUrlMap();
   initAppConfig();
   RequestUrl.initializeApiKeys();
 

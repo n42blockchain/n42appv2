@@ -1,4 +1,4 @@
-import 'package:n42_wallet/core/token_discovery/discovered_token.dart';
+import 'package:n42_wallet/features/wallet/token_discovery/discovered_token.dart';
 import 'package:n42_wallet/core/storage/sp_util.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';

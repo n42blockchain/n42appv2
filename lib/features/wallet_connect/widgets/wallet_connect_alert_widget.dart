@@ -3,7 +3,7 @@
 import 'package:n42_wallet/core/security/address_label_service.dart';
 import 'package:n42_wallet/core/security/tx_risk_analyzer.dart';
 import 'package:n42_wallet/core/security/tx_simulation_result.dart';
-import 'package:n42_wallet/core/security/tx_simulation_service.dart';
+import 'package:n42_wallet/features/wallet/services/tx_simulation_service.dart';
 import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_provider.dart';

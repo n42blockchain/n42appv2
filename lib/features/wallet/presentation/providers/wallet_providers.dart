@@ -12,7 +12,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart'
     show spUtilProvider;
 export 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 
 /// Wallet Info Data for Provider
 /// Lightweight representation for state management

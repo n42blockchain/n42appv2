@@ -1,5 +1,5 @@
 //获取浏览器地址，根据交易hash
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 
 String getSafeBrowserTxHashUrl(

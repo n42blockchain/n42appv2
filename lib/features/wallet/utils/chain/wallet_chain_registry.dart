@@ -1,5 +1,6 @@
 //walletList中使用
 import 'package:decimal/decimal.dart';
+import 'package:n42_wallet/core/config/rpc_config.dart';
 import 'package:wallet/wallet.dart';
 import 'configs/wallet_chain_configs_part1.dart';
 import 'configs/wallet_chain_configs_part2.dart';
@@ -124,4 +125,22 @@ BigInt ethToWeiString(String eth, int decimals) {
     Decimal rValue = Decimal.parse(eth) * multiplier;
     return rValue.toBigInt();
   }
+}
+
+/// 把 `RpcConfig` 的编译期覆盖同步进 `chainUrlMap`（ETH 主网/测试网 RPC）。
+///
+/// 由 composition root（main.dart）在 `initRpcConfig()` 之后调用；
+/// 放在 wallet 侧是为了让 core/config 不反向依赖 wallet 的链注册表。
+void syncRpcOverridesToChainUrlMap() {
+  final eth = chainUrlMap['ETH'];
+  if (eth is! Map<String, dynamic>) return;
+
+  final baseInfo = eth['baseInfo'];
+  if (baseInfo is! Map<String, dynamic>) return;
+
+  // 仅在 ETH_RPC_URL 编译变量非空时才覆盖，避免用 N42 的 RPC 错误替代 ETH 配置
+  if (RpcConfig.ethMainnetRpc.isNotEmpty) {
+    baseInfo['service'] = RpcConfig.ethMainnetRpc;
+  }
+  baseInfo['service_test'] = RpcConfig.ethSepoliaRpc;
 }

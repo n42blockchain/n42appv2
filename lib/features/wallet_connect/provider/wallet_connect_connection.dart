@@ -16,7 +16,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:n42_wallet/core/providers/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
 import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;

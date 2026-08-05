@@ -5,7 +5,6 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
-import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 
 /// RPC 端点配置
 ///
@@ -100,21 +99,10 @@ class RpcConfig {
 }
 
 /// 初始化 RPC 配置
+///
+/// 注意：ETH RPC 覆盖同步已移至 wallet 侧
+/// `syncRpcOverridesToChainUrlMap()`（wallet_chain_registry），由
+/// composition root（main.dart）在本函数之后调用——core 不依赖 features。
 void initRpcConfig() {
-  _syncWalletChainRpcOverrides();
   RpcConfig.validateSecurityInDebug();
-}
-
-void _syncWalletChainRpcOverrides() {
-  final eth = chainUrlMap['ETH'];
-  if (eth is! Map<String, dynamic>) return;
-
-  final baseInfo = eth['baseInfo'];
-  if (baseInfo is! Map<String, dynamic>) return;
-
-  // 仅在 ETH_RPC_URL 编译变量非空时才覆盖，避免用 N42 的 RPC 错误替代 ETH 配置
-  if (RpcConfig.ethMainnetRpc.isNotEmpty) {
-    baseInfo['service'] = RpcConfig.ethMainnetRpc;
-  }
-  baseInfo['service_test'] = RpcConfig.ethSepoliaRpc;
 }
