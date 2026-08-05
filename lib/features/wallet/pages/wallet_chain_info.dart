@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
@@ -347,12 +347,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
                 sendTap: handleSend,
                 receiveTap: handleReceive,
                 browserTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BrowserPage(browserUrl),
-                    ),
-                  );
+                  InAppBrowser.open(context, browserUrl);
                 },
               ),
               if ((marketInfo?['coin_gecko_id'] ?? '').toString().isNotEmpty)

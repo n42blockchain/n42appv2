@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
-import 'package:n42_wallet/features/home/setting/setting_share.dart';
+import 'package:n42_wallet/features/component/pages/setting_share.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 
 import 'package:n42_wallet/shared/domain/entities/user_info.dart';

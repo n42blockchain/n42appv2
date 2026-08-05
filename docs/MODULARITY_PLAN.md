@@ -36,16 +36,16 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 
 ### 特性间循环/横向依赖（批次 5 目标）
 
-| 依赖对 | 强度（import 数） | 备注 |
+| 依赖对 | 强度（import 数） | 处置（2026-08-05 批次 5 决议） |
 |---|---|---|
-| wallet ↔ browser | 9 ↔ 4 | 大对，需接口化 |
-| wallet ↔ wallet_connect | 5 ↔ 12 | 大对 |
-| mining ↔ mining_v2 | 3 ↔ 9 | mining 是 v2 的 Clean-Arch 桥，方向需理顺 |
-| loyalty ↔ home | 1 ↔ 2 | 小对 |
-| profile → home | 4 | home → profile 1，循环 |
-| news → browser | 1 | 单向，评估必要性 |
-| utils → home | 3 | 归入批次 4 |
-| earn → staking/loyalty/mining_v2/bridge/airdrop/hardware_wallet | 聚合页 | earn 是聚合入口，单向可接受，记录即可 |
+| wallet ↔ browser | 9 ↔ 4 | ✅ 已断：wallet→browser 9 处全是「打开站内浏览器」，改走 shared `InAppBrowser`（composition root `navigation_wiring` 注册页面构造器）；browser→wallet（DApp 请求处理）保留为单向 |
+| wallet ↔ wallet_connect | 5 ↔ 12 | 📌 接受：WC 是钱包卫星模块（同发版、深度共生）。方向规则：wallet_connect→wallet 任意；wallet→wallet_connect 仅限 wallet_page 入口/providers |
+| mining ↔ mining_v2 | 3 ↔ 9 | 📌 接受（分层枢纽）：mining/domain+services ← mining_v2 ← mining/data（桥实现）。子层无环；mining/presentation↔mining_v2 的残余环等 v1/v2 收敛决策（CLEANUP 阶段5）一并处理 |
+| loyalty → home | 1 | ✅ 已断：SettingShare+share_list 移入 component（通用「分享 App」页） |
+| profile ↔ home | 4 ↔ 1 | ✅ 已消解：profile（2 文件、唯一入口 home 抽屉）并回 `home/profile/`——它不是独立特性 |
+| news → browser | 1 | ✅ 已断：改走 `InAppBrowser` |
+| utils → home | 3 | ✅ 批次 4 已断 |
+| home → X / earn → X | 聚合 | 📌 接受：home/earn 是 App 外壳与聚合页，单向向下依赖是其职责；红线是 X→home/X→earn 反向边（已清零） |
 
 ### 测试覆盖基线（dart 文件数 / 测试文件数）
 
@@ -69,12 +69,12 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 
 | 批次 | 内容 | 状态 |
 |---|---|---|
-| 1 | 共享层纯度：`ohlc_point`/`device_login_info`/`user_info` 下移 `shared/domain/entities` + 三模型序列化测试 | 进行中 |
-| 2 | sqlite 表 schema 注册制，`app_database` 不再认识 feature 模型 + 单测 | 待办 |
-| 3 | core 服务解耦：token_discovery / tx_simulation / rpc_config 的 wallet 依赖接口化或归位 | 待办 |
-| 4 | app_push_utils push 路由注册制（utils 不再 import feature 页面）+ 分发单测 | 待办 |
-| 5 | 循环依赖逐对治理（上表），每对配回归测试 | 待办 |
-| 6 | 测试洼地补覆盖（component/profile/home/mining_v2/widgets 优先，纯逻辑先行） | 待办 |
+| 1 | 共享层纯度：`ohlc_point`/`device_login_info`/`user_info` 下移 `shared/domain/entities` + 三模型序列化测试 | ✅ 2026-08-05 |
+| 2 | sqlite DAO 按 feature 下放为 extension（browser_dao/transaction_record_dao），`app_database` 只留连接/schema/通用查询；顺手删除零引用的 core/storage 加密版 AppDatabase 死代码 | ✅ 2026-08-05 |
+| 3 | core 服务解耦：token_discovery/tx_simulation/legacy_wallet_adapter 归位 wallet；rpc_config 覆盖同步移至 wallet 侧；core→features 清零（composition root 豁免） | ✅ 2026-08-05 |
+| 4 | 推送导航注册制：shared `PushRouteRegistry` + composition root `push_route_wiring`；utils→feature 页面清零 | ✅ 2026-08-05 |
+| 5 | 循环依赖逐对治理（决议见上表）：`InAppBrowser` 抽象 + profile 并回 home + SettingShare 下移 component | ✅ 2026-08-05 |
+| 6 | 测试洼地补覆盖（component/home/mining_v2/widgets 优先，纯逻辑先行） | 进行中 |
 
 ## 贯穿护栏
 

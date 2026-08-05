@@ -1,4 +1,4 @@
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
@@ -58,7 +58,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
       _buildSheetItem(
         icon: Image.asset('assets/wallet/w_explorer.png', color: _blue),
         label: s.g_key_196,
-        onTap: () => pushThenPop(BrowserPage(browserUrl)),
+        onTap: () => pushThenPop(InAppBrowser.page(browserUrl)),
       ),
     ];
 

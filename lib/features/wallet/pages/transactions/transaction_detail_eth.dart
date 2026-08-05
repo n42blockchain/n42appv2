@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/sqlite/app_database.dart';
@@ -371,12 +371,7 @@ class _TransactionDetailEthState extends State<TransactionDetailEth> {
                 IconButton(
                   icon: const Icon(Icons.open_in_browser_outlined),
                   tooltip: S.of(context).g_key_196,
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => BrowserPage(_explorerUrl),
-                    ),
-                  ),
+                  onPressed: () => InAppBrowser.open(context, _explorerUrl),
                 ),
               ]
             : null,

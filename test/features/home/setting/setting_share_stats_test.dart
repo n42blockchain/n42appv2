@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:n42_wallet/features/home/setting/setting_share.dart';
+import 'package:n42_wallet/features/component/pages/setting_share.dart';
 
 void main() {
   group('setting share stats helpers', () {

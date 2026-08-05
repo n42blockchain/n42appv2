@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
@@ -340,10 +340,7 @@ class _MarketCoinInfoState extends ConsumerState<MarketCoinInfo> {
 
   void _openUrl(BuildContext context, String url) {
     AppLogger.d('MarketCoinInfo', 'open $url');
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => BrowserPage(url)),
-    );
+    InAppBrowser.open(context, url);
   }
 
   @override

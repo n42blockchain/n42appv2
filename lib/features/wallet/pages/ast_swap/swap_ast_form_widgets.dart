@@ -1,6 +1,6 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
@@ -158,14 +158,7 @@ class SwapAstCheckWidget extends StatelessWidget {
                     baseline: TextBaseline.alphabetic,
                     child: InkWell(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BrowserPage(
-                              "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use.html",
-                            ),
-                          ),
-                        );
+                        InAppBrowser.open(context, "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use.html");
                       },
                       // 行内链接：补按压反馈 + 垂直外扩命中区（§5 红线）
                       child: Padding(

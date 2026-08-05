@@ -5,7 +5,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/personal_setting.dart';
-import 'package:n42_wallet/features/home/setting/setting_share.dart';
+import 'package:n42_wallet/features/component/pages/setting_share.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/shared/utils/push_route_registry.dart';
 

@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
-import 'package:n42_wallet/features/home/setting/setting_share.dart';
+import 'package:n42_wallet/features/component/pages/setting_share.dart';
 import 'package:n42_wallet/features/loyalty/models/loyalty_models.dart';
 import 'package:n42_wallet/features/loyalty/services/loyalty_service.dart';
 import 'package:n42_wallet/generated/l10n.dart';

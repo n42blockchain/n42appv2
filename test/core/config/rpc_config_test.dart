@@ -9,7 +9,10 @@ void main() {
       expect(RpcConfig.ethMainnetRpc, 'https://ethereum-rpc.publicnode.com');
     });
 
-    test('syncs ETH overrides into wallet chain config at init time', () {
+    // 启动链约定：main() 中 initRpcConfig() 之后必须紧跟
+    // syncRpcOverridesToChainUrlMap()（覆盖同步已移至 wallet 侧，
+    // core 不再依赖 features）。此测试守护这对组合的行为不变。
+    test('startup pair syncs ETH overrides into wallet chain config', () {
       final eth = chainUrlMap['ETH'] as Map<String, dynamic>;
       final baseInfo = eth['baseInfo'] as Map<String, dynamic>;
       final originalMainnet = baseInfo['service'];
@@ -20,6 +23,7 @@ void main() {
         baseInfo['service_test'] = 'https://placeholder-test.invalid';
 
         initRpcConfig();
+        syncRpcOverridesToChainUrlMap();
 
         expect(baseInfo['service'], RpcConfig.ethMainnetRpc);
         expect(baseInfo['service_test'], RpcConfig.ethSepoliaRpc);

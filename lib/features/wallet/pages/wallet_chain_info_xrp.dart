@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -317,12 +317,7 @@ class _WalletChainInfoXRPState extends ConsumerState<WalletChainInfoXRP>
                 sendTap: () async => handleSend(),
                 receiveTap: () async => handleReceive(),
                 browserTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => BrowserPage(browserUrl),
-                    ),
-                  );
+                  InAppBrowser.open(context, browserUrl);
                 },
               ),
               Divider(

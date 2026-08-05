@@ -11,7 +11,7 @@ import 'package:n42_wallet/features/wallet/presentation/providers/wallet_provide
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -126,7 +126,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
     addItem(
       icon: Image.asset('assets/wallet/w_explorer.png', color: _blue),
       label: l10n.g_key_196,
-      onTap: () => pushAndClose(BrowserPage(browserUrl)),
+      onTap: () => pushAndClose(InAppBrowser.page(browserUrl)),
     );
     // Batch Transfer — EVM chains only
     if (coinModel.config.blockchainType == BlockchainType.Ethereum.name) {

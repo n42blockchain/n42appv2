@@ -1,4 +1,4 @@
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/news/api/news_api.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_home_top_bar.dart';
@@ -43,12 +43,7 @@ class _NewsPageState extends State<NewsPage> {
                       dateTimeSte,
                       onTap: link.isNotEmpty
                           ? () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => BrowserPage(link),
-                                ),
-                              );
+                              InAppBrowser.open(context, link);
                             }
                           : null,
                     );

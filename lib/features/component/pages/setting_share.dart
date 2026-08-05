@@ -13,7 +13,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/home/widgets/share_list.dart';
+import 'package:n42_wallet/features/component/widgets/share_list.dart';
 import 'package:n42_wallet/features/widgets/prompt_widget.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/generated/l10n.dart';

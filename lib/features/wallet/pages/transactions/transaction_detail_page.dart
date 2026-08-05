@@ -1,6 +1,6 @@
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
-import 'package:n42_wallet/features/browser/pages/browser_page.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
@@ -70,10 +70,7 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                 IconButton(
                   icon: const Icon(Icons.open_in_browser_outlined),
                   tooltip: s.g_key_196,
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => BrowserPage(explorerUrl)),
-                  ),
+                  onPressed: () => InAppBrowser.open(context, explorerUrl),
                 ),
               ]
             : null,
