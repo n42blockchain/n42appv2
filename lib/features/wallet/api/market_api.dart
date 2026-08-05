@@ -4,7 +4,7 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/external_http.dart';
 import 'package:n42_wallet/features/wallet/api/market_api_payload_utils.dart';
-import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
+import 'package:n42_wallet/shared/domain/entities/ohlc_point.dart';
 
 class MarketApi {
   final String _url;

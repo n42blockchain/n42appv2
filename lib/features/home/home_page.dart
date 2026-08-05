@@ -6,7 +6,7 @@ import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
-import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
+import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
 import 'package:n42_wallet/features/mining_v1/pages/mining_home_page.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/device_login_dialog.dart';
 import 'package:n42_wallet/features/home/home_draw_page.dart';

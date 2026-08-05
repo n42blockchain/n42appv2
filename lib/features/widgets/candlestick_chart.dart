@@ -1,10 +1,10 @@
 import 'dart:math';
 import 'package:flutter/foundation.dart' show listEquals;
 import 'package:flutter/material.dart';
-import 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
+import 'package:n42_wallet/shared/domain/entities/ohlc_point.dart';
 
 // Re-export so callers only need to import this file.
-export 'package:n42_wallet/features/wallet/models/ohlc_point.dart';
+export 'package:n42_wallet/shared/domain/entities/ohlc_point.dart';
 
 /// Candlestick (K-line) chart widget with optional volume bars below.
 ///

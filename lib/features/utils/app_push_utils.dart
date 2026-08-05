@@ -15,7 +15,7 @@ import 'package:n42_wallet/features/home/setting/about_app.dart';
 import 'package:n42_wallet/features/home/setting/personal_setting.dart';
 import 'package:n42_wallet/features/home/setting/setting_share.dart';
 import 'package:n42_wallet/core/utils/event_bus.dart';
-import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
+import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
 import 'package:n42_wallet/features/utils/device_info_util.dart';
 import 'package:n42_wallet/features/utils/background_delivery_guide.dart';
 import 'package:n42_wallet/features/wallet/utils/browser/browser_txhash.dart';

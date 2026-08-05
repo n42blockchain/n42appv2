@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/features/auth/data/models/device_login_info.dart';
+import 'package:n42_wallet/shared/domain/entities/device_login_info.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/shared/widgets/tips_dialog_3.dart';
 
