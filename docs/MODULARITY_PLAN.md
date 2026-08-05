@@ -76,6 +76,13 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 | 5 | 循环依赖逐对治理（决议见上表）：`InAppBrowser` 抽象 + profile 并回 home + SettingShare 下移 component | ✅ 2026-08-05 |
 | 6 | 测试洼地补覆盖（component/home/mining_v2/widgets 优先，纯逻辑先行） | 进行中 |
 
+## 依赖方向的自动守护
+
+`test/quality/dependency_rules_test.dart` 扫描 lib/ 全部 import 强制执行上述
+方向规则（core/shared 纯度、共享 UI 层纯度、sqlite 零 feature 依赖、
+X→home 禁止、wallet→browser 禁止、wallet→wallet_connect 白名单）。
+新增违规 = 测试红。放宽规则须同步改测试 allowlist 并更新本文档。
+
 ## 贯穿护栏
 
 - 每批只做结构移动/接线，不混入行为改动；资金路径（send/transfer/签名）
