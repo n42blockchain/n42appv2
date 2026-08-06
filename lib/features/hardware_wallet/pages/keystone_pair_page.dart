@@ -24,6 +24,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
 
   bool _isProcessing = false;
   String? _error;
+  KeystoneScanSession _scanSession = KeystoneScanSession();
 
   void _onDetected(BarcodeCapture capture) {
     if (_isProcessing) return;
@@ -31,11 +32,26 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
     final raw = capture.barcodes.firstOrNull?.rawValue;
     if (raw == null || raw.isEmpty) return;
 
+    // 明文 xpub 等非 UR 格式：单帧直接解析（会话只认 ur: 前缀）
+    final isUr = raw.toLowerCase().trim().startsWith('ur:');
+    if (isUr) {
+      final accepted = _scanSession.receive(raw);
+      if (!_scanSession.isComplete) {
+        // 多帧进行中（crypto-account 动画 QR）：刷新进度继续扫
+        if (accepted) setState(() => _error = null);
+        return;
+      }
+    }
+
     setState(() => _isProcessing = true);
     _controller.stop();
 
     try {
-      final info = _keystoneService.parseSyncQr(raw);
+      final source = isUr ? _scanSession.completedUr : raw;
+      if (source == null) {
+        throw Exception(_scanSession.error ?? 'Failed to decode multi-part QR');
+      }
+      final info = _keystoneService.parseSyncQr(source);
       if (mounted) {
         widget.onPaired(info.xpub, info.masterFingerprint);
       }
@@ -43,6 +59,7 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
       setState(() {
         _error = 'Failed to parse Keystone QR: $e';
         _isProcessing = false;
+        _scanSession = KeystoneScanSession();
       });
       _controller.start();
     }
@@ -73,6 +90,33 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
               child: Stack(
                 children: [
                   MobileScanner(controller: _controller, onDetect: _onDetected),
+                  // 多帧动画 QR 接收进度
+                  if (_scanSession.expectedPartCount != null && !_isProcessing)
+                    Positioned(
+                      top: AppSpacing.space4,
+                      left: 0,
+                      right: 0,
+                      child: Center(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: AppSpacing.space4,
+                            vertical: AppSpacing.space2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withAlpha(160),
+                            borderRadius: AppRadius.brMd,
+                          ),
+                          child: Text(
+                            '${_scanSession.receivedPartCount} / '
+                            '${_scanSession.expectedPartCount}',
+                            style: AppTypography.body.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   if (_error != null)
                     Positioned(
                       bottom: ScreenUtil().setWidth(40),

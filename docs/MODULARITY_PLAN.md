@@ -82,8 +82,14 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 1-3. `ur_codec.dart` 按 BC-UR 规范重写：词表替换为 BCR-2020-012 官方 256 词
    （以规范附录 62 字符黄金向量逐字节验证）；UR 正文改 minimal bytewords
    （2 字母/字节），旧全词格式保留解码兼容；多帧 UR（total>1）显式报错，
-   单帧序号 `1-1/`、`1-of-1/` 可解。**注意：仍无 fountain 多帧解码器，
-   大 payload 动画 QR 需后续实现；真机 Keystone 联调仍待验证。**
+   单帧序号 `1-1/`、`1-of-1/` 可解。
+   **2026-08-06 补齐 fountain 多帧**：`ur_fountain.dart` 逐比特移植 bc-ur
+   参考实现（Xoshiro256\*\*/Vose alias 采样/chooseFragments/Fountain
+   Encoder+Decoder/UrEncoder+UrDecoder），23 项官方测试向量全绿（RNG 序列、
+   采样 500、洗牌、分片 hex、20 帧 CBOR/UR 黄金串、32767 字节全混合帧
+   round-trip）；`KeystoneScanSession` 接入 sign/pair 扫码页（多帧累积+
+   进度显示），请求侧超长 payload 自动 fountain 分帧轮播动画 QR。
+   **真机 Keystone 联调仍待验证。**
 4. `keystone_service.dart` `codeUnits`→`utf8.encode`，非 ASCII 签名数据不再损坏。
 5. `toDevice()` xpub 越界修复；`validateScannedUr` 改精确类型段匹配。
 

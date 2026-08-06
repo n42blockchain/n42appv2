@@ -9,6 +9,7 @@ import 'dart:typed_data';
 import 'package:blockchain_utils/utils/binary/utils.dart';
 
 import '../crypto/ur_codec.dart';
+import '../crypto/ur_fountain.dart';
 import '../models/hardware_wallet_models.dart';
 
 /// Service for interacting with Keystone air-gapped hardware wallets via QR codes.
@@ -24,6 +25,22 @@ import '../models/hardware_wallet_models.dart';
 /// QR display and camera scanning are handled by the UI layer
 /// (`KeystoneSignPage`).
 class KeystoneService {
+  // ==================== 多帧（fountain）支持 ====================
+
+  /// 为展示侧构造动画 QR 编码器。
+  ///
+  /// 传入 build*Request 产出的单帧 UR：payload 不超过 [maxFragmentLen]
+  /// 时 [UrEncoder.isSinglePart] 为 true（静态展示即可）；超过则由
+  /// fountain 分帧，UI 以定时器轮播 `nextPart()` 直到对端扫毕。
+  UrEncoder createUrEncoder(String singlePartUr, {int maxFragmentLen = 200}) {
+    final decoded = UrCodec.decode(singlePartUr);
+    return UrEncoder(
+      decoded.type,
+      decoded.data,
+      maxFragmentLen: maxFragmentLen,
+    );
+  }
+
   // ==================== Signing request builders ====================
 
   /// Build an `ur:eth-sign-request` UR string for an EVM transaction.
@@ -225,5 +242,45 @@ class KeystoneAccountInfo {
       isConnected: true,
       lastConnectedAt: DateTime.now(),
     );
+  }
+}
+
+/// 多帧扫码会话：把逐帧扫码结果喂给 [receive]，同时兼容单帧 UR 与
+/// fountain 多帧动画 QR（Keystone 大 payload，如 crypto-account 同步）。
+///
+/// 完成后 [completedUr] 重建为单帧 UR 字符串，直接交给既有的
+/// `parseEthSignature` / `parseSyncQr` 解析——单帧与多帧共用一条
+/// 解析与校验路径。
+class KeystoneScanSession {
+  final UrDecoder _decoder = UrDecoder();
+  String? _lastRaw;
+
+  bool get isComplete => _decoder.isComplete;
+
+  /// 首帧到达后为总帧数；此前为 null
+  int? get expectedPartCount => _decoder.expectedPartCount;
+
+  /// 已集齐的纯片段数
+  int get receivedPartCount => _decoder.receivedPartCount;
+
+  /// [0,1] 估算进度（完成恒为 1）
+  double get progress => _decoder.estimatedPercentComplete;
+
+  /// 解码失败原因（校验和不匹配等）；正常进行中为 null
+  String? get error => _decoder.error;
+
+  /// 喂入一帧扫码结果；返回该帧是否被采纳。
+  /// 动画 QR 连续识别到同一帧时直接忽略（返回 false）。
+  bool receive(String raw) {
+    if (raw == _lastRaw) return false;
+    _lastRaw = raw;
+    return _decoder.receivePart(raw);
+  }
+
+  /// 完成后重建单帧 UR（未完成或解码失败返回 null）
+  String? get completedUr {
+    final r = _decoder.result;
+    if (r == null) return null;
+    return UrCodec.encode(r.type, r.data);
   }
 }

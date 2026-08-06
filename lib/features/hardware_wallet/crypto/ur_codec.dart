@@ -102,6 +102,15 @@ class UrCodec {
     return table;
   }
 
+  /// Compute CRC-32 checksum as an unsigned 32-bit integer
+  static int crc32Int(Uint8List data) {
+    var crc = 0xFFFFFFFF;
+    for (final byte in data) {
+      crc = _crc32Table[(crc ^ byte) & 0xFF] ^ (crc >> 8);
+    }
+    return (crc ^ 0xFFFFFFFF) & 0xFFFFFFFF;
+  }
+
   /// Compute CRC-32 checksum (returns big-endian bytes)
   static Uint8List crc32Bytes(Uint8List data) {
     var crc = 0xFFFFFFFF;
@@ -183,13 +192,35 @@ class UrCodec {
   ///
   /// [type] should be lowercase, e.g. `'eth-sign-request'`
   static String encode(String type, Uint8List data) {
+    return 'UR:${type.toUpperCase()}/${encodeBytewordsBody(data).toUpperCase()}';
+  }
+
+  /// 把 payload 编成 UR 正文：minimal bytewords(payload + CRC32)。
+  /// （对应参考实现 `Bytewords::encode(minimal, ...)`，CRC 内含）
+  static String encodeBytewordsBody(Uint8List data) {
     final checksum = crc32Bytes(data);
     final payload = Uint8List(data.length + 4);
     payload.setRange(0, data.length, data);
     payload.setRange(data.length, data.length + 4, checksum);
+    return bytewordsEncodeMinimal(payload);
+  }
 
-    final encoded = bytewordsEncodeMinimal(payload).toUpperCase();
-    return 'UR:${type.toUpperCase()}/$encoded';
+  /// 解 UR 正文（minimal 或 standard bytewords），校验并剥离尾部 CRC32。
+  static Uint8List decodeBytewordsBody(String body) {
+    final trimmed = body.trim();
+    final payload = _whitespaceRegex.hasMatch(trimmed)
+        ? bytewordsDecode(trimmed)
+        : bytewordsDecodeMinimal(trimmed);
+    if (payload.length < 4) {
+      throw UrCodecException('UR payload too short (missing CRC)');
+    }
+    final data = Uint8List.sublistView(payload, 0, payload.length - 4);
+    final receivedCrc = Uint8List.sublistView(payload, payload.length - 4);
+    final expectedCrc = crc32Bytes(data);
+    if (!listEquals(receivedCrc, expectedCrc)) {
+      throw UrCodecException('CRC-32 mismatch: data may be corrupted');
+    }
+    return data;
   }
 
   /// Decode a UR string.
@@ -228,22 +259,7 @@ class UrCodec {
 
     // 规范正文为 minimal bytewords（无空白）；含空白视为 standard
     // 全词风格（本 App 旧版本产出的格式，保留解码兼容）。
-    final payload = _whitespaceRegex.hasMatch(bodyStr)
-        ? bytewordsDecode(bodyStr)
-        : bytewordsDecodeMinimal(bodyStr);
-    if (payload.length < 4) {
-      throw UrCodecException('UR payload too short (missing CRC)');
-    }
-
-    final data = Uint8List.sublistView(payload, 0, payload.length - 4);
-    final receivedCrc = Uint8List.sublistView(payload, payload.length - 4);
-    final expectedCrc = crc32Bytes(data);
-
-    if (!listEquals(receivedCrc, expectedCrc)) {
-      throw UrCodecException('CRC-32 mismatch: data may be corrupted');
-    }
-
-    return (type: type, data: data);
+    return (type: type, data: decodeBytewordsBody(bodyStr));
   }
 }
 

@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -69,8 +70,14 @@ enum _SignStep { showRequest, scanResponse }
 class _KeystoneSignPageState extends State<KeystoneSignPage> {
   final KeystoneService _keystoneService = KeystoneService();
 
+  /// 动画 QR 帧间隔（Keystone 扫描以 4-5 帧/秒 较稳）
+  static const Duration _frameInterval = Duration(milliseconds: 250);
+
   _SignStep _step = _SignStep.showRequest;
   late String _requestUr;
+  late String _currentQrFrame;
+  Timer? _frameTimer;
+  KeystoneScanSession _scanSession = KeystoneScanSession();
   bool _isScanning = false;
   String? _scanError;
 
@@ -85,10 +92,21 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
       derivationPath: widget.derivationPath,
       fromAddress: widget.fromAddress,
     );
+    _currentQrFrame = _requestUr;
+    // 大额 payload（长 calldata 等）单帧 QR 放不下：fountain 分帧轮播
+    final urEncoder = _keystoneService.createUrEncoder(_requestUr);
+    if (!urEncoder.isSinglePart) {
+      _currentQrFrame = urEncoder.nextPart().toUpperCase();
+      _frameTimer = Timer.periodic(_frameInterval, (_) {
+        if (!mounted || _step != _SignStep.showRequest) return;
+        setState(() => _currentQrFrame = urEncoder.nextPart().toUpperCase());
+      });
+    }
   }
 
   @override
   void dispose() {
+    _frameTimer?.cancel();
     _scannerController?.dispose();
     super.dispose();
   }
@@ -98,6 +116,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
       _step = _SignStep.scanResponse;
       _scanError = null;
       _isScanning = false;
+      _scanSession = KeystoneScanSession();
     });
     _scannerController = MobileScannerController(
       detectionSpeed: DetectionSpeed.normal,
@@ -111,28 +130,50 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
     final raw = capture.barcodes.firstOrNull?.rawValue;
     if (raw == null || raw.isEmpty) return;
 
-    setState(() => _isScanning = true);
-    _scannerController?.stop();
+    final accepted = _scanSession.receive(raw);
 
-    final validationError = _keystoneService.validateScannedUr(raw);
-    if (validationError != null) {
-      setState(() {
-        _scanError = validationError;
-        _isScanning = false;
-      });
-      _scannerController?.start();
+    if (_scanSession.isComplete) {
+      setState(() => _isScanning = true);
+      _scannerController?.stop();
+
+      final completedUr = _scanSession.completedUr;
+      // 多帧解码失败（校验和不匹配）或类型不符：报错并允许重扫
+      final validationError = completedUr == null
+          ? (_scanSession.error ?? 'Failed to decode multi-part QR')
+          : _keystoneService.validateScannedUr(completedUr);
+      if (validationError != null) {
+        setState(() {
+          _scanError = validationError;
+          _isScanning = false;
+          _scanSession = KeystoneScanSession();
+        });
+        _scannerController?.start();
+        return;
+      }
+
+      final response = _keystoneService.parseEthSignature(completedUr!);
+      if (!mounted) return;
+      Navigator.pop(context, response);
       return;
     }
 
-    final response = _keystoneService.parseEthSignature(raw);
-    if (!mounted) return;
-    Navigator.pop(context, response);
+    if (accepted) {
+      // 多帧进行中：刷新进度显示，继续扫描
+      setState(() => _scanError = null);
+    } else if (_scanSession.expectedPartCount == null) {
+      // 尚无任何有效帧且此帧无效：提示但不中断相机
+      final err = _keystoneService.validateScannedUr(raw);
+      if (err != null && err != _scanError) {
+        setState(() => _scanError = err);
+      }
+    }
   }
 
   void _retryScanning() {
     setState(() {
       _scanError = null;
       _isScanning = false;
+      _scanSession = KeystoneScanSession();
     });
     _scannerController?.start();
   }
@@ -219,7 +260,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
         ],
       ),
       child: QrImageView(
-        data: _requestUr,
+        data: _currentQrFrame,
         version: QrVersions.auto,
         size: ScreenUtil().setWidth(280),
         backgroundColor: Colors.white,
@@ -259,6 +300,33 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
               else
                 const Center(child: CircularProgressIndicator()),
               _ScanOverlayPainter.buildOverlay(context),
+              // 多帧动画 QR 接收进度
+              if (_scanSession.expectedPartCount != null && !_isScanning)
+                Positioned(
+                  top: AppSpacing.space4,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.space4,
+                        vertical: AppSpacing.space2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withAlpha(160),
+                        borderRadius: AppRadius.brMd,
+                      ),
+                      child: Text(
+                        '${_scanSession.receivedPartCount} / '
+                        '${_scanSession.expectedPartCount}',
+                        style: AppTypography.body.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               if (_scanError != null)
                 Positioned(
                   bottom: ScreenUtil().setWidth(120),
