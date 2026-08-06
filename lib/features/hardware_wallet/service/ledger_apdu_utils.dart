@@ -55,6 +55,16 @@ class LedgerApduUtils {
       payload = data.toList();
     }
 
+    // Lc 为单字节（最大 255）：超长会静默截断导致签名数据错误。
+    // 调用方须先用 splitIntoChunks 分块后逐块调用本方法。
+    if (payload.length > 0xFF) {
+      throw ArgumentError.value(
+        payload.length,
+        'payload.length',
+        'APDU payload 超过单字节 Lc 上限 255，调用方须先 splitIntoChunks 分块',
+      );
+    }
+
     return Uint8List.fromList([
       0xE0, // CLA
       0x04, // INS: SIGN

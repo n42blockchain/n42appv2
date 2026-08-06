@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:meta/meta.dart';
 import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/staking/models/staking_models.dart';
@@ -362,21 +363,50 @@ class AtomStakingApi {
         }
       }
 
-      // APY = 通胀率 / 质押比例
-      final apy = inflation / stakingRatio * 100;
-
-      return MessageModel()
-        ..error = false
-        ..data = {
-          'inflation': inflation * 100,
-          'stakingRatio': stakingRatio * 100,
-          'apy': apy,
-        };
+      return buildInflationApyResult(inflation, stakingRatio);
     } catch (e) {
-      return MessageModel()
-        ..error = false
-        ..data = {'inflation': 15.0, 'stakingRatio': 60.0, 'apy': 15.0};
+      // 网络异常走兜底：error 必须为 true，调用方据此忽略兜底数据
+      return fallbackInflationApyResult();
     }
+  }
+
+  /// 兜底估算结果（网络异常或链上数据不可用时返回）。
+  ///
+  /// error 必须为 true：三处调用方（earn_provider._fetchAtomApy、
+  /// staking_provider._tryUpdateApy、staking_home_page_logic.loadLiveApys）
+  /// 均以 `!result.error` 作为采信条件，error=true 时各自回落到本地默认
+  /// APY，不会把这里的估算值当成真实链上数据展示。
+  @visibleForTesting
+  static MessageModel fallbackInflationApyResult() {
+    return MessageModel()
+      ..error = true
+      ..data = {'inflation': 15.0, 'stakingRatio': 60.0, 'apy': 15.0};
+  }
+
+  /// 由通胀率与质押比例计算 APY 结果。
+  ///
+  /// [inflation]/[stakingRatio] 均为 0~1 的小数比例。
+  /// stakingRatio 非正时相除会得 Infinity（历史缺陷：bonded_tokens 为 0
+  /// 时 stakingRatio==0），此时走兜底并置 error=true。
+  @visibleForTesting
+  static MessageModel buildInflationApyResult(
+    double inflation,
+    double stakingRatio,
+  ) {
+    if (stakingRatio <= 0) {
+      return fallbackInflationApyResult();
+    }
+
+    // APY = 通胀率 / 质押比例
+    final apy = inflation / stakingRatio * 100;
+
+    return MessageModel()
+      ..error = false
+      ..data = {
+        'inflation': inflation * 100,
+        'stakingRatio': stakingRatio * 100,
+        'apy': apy,
+      };
   }
 
   /// 构建委托交易消息

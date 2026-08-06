@@ -127,7 +127,9 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         }
       }
 
-      final int timestamp = rmm.data['activation_timestamp'];
+      // data 可能为 null（JSON-RPC result 为 null 时 error 仍为 false），
+      // 与前文 data?['balance_in_beacon'] 保持一致的 null 安全访问
+      final int timestamp = rmm.data?['activation_timestamp'] ?? 0;
       if (timestamp == 0) {
         activationTime = null;
         showRedemption = false;
@@ -146,7 +148,8 @@ mixin _MiningBeaconMixin on _MiningStateMixin {
         }
       }
 
-      final int eTimestamp = rmm.data['exit_timestamp'];
+      // 同上：null 安全访问，缺失按 0（未退出）处理
+      final int eTimestamp = rmm.data?['exit_timestamp'] ?? 0;
       exitTimestamp = eTimestamp;
       if (eTimestamp == 0) {
         showRedemption2 = true;

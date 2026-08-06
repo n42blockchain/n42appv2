@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:blockchain_utils/utils/binary/utils.dart';
@@ -56,7 +57,7 @@ class KeystoneService {
   }) {
     final pathInts = EthSignRequest.parsePath(derivationPath);
     final request = EthSignRequest.typedData(
-      typedDataJson: Uint8List.fromList(typedDataJson.codeUnits),
+      typedDataJson: Uint8List.fromList(utf8.encode(typedDataJson)),
       chainId: chainId,
       derivationPath: pathInts,
       fromAddress: fromAddress,
@@ -71,7 +72,7 @@ class KeystoneService {
     String? fromAddress,
   }) {
     final pathInts = EthSignRequest.parsePath(derivationPath);
-    final messageBytes = Uint8List.fromList(message.codeUnits);
+    final messageBytes = Uint8List.fromList(utf8.encode(message));
     final request = EthSignRequest.personalMessage(
       messageBytes: messageBytes,
       derivationPath: pathInts,
@@ -111,11 +112,11 @@ class KeystoneService {
     if (!lower.startsWith('ur:')) {
       return 'Not a valid UR QR code';
     }
-    if (!lower.startsWith('ur:eth-signature')) {
-      final typeEnd = lower.indexOf('/', 3);
-      final type = typeEnd > 0
-          ? lower.substring(3, typeEnd)
-          : lower.substring(3);
+    // 精确取出 type 段比较：前缀匹配会把 'eth-signature-xxx'
+    // 之类的其他类型误判通过。
+    final typeEnd = lower.indexOf('/', 3);
+    final type = typeEnd > 0 ? lower.substring(3, typeEnd) : lower.substring(3);
+    if (type != 'eth-signature') {
       return 'Unexpected UR type: "$type" (expected eth-signature)';
     }
     return null;
@@ -214,7 +215,9 @@ class KeystoneAccountInfo {
 
   /// Convert to a HardwareWalletDevice for persistent storage
   HardwareWalletDevice toDevice() {
-    final id = 'keystone_${masterFingerprint ?? xpub.substring(0, 8)}';
+    // fingerprint 缺失时回退 xpub 前缀；xpub 不足 8 字符不得 substring 越界
+    final fallback = xpub.length >= 8 ? xpub.substring(0, 8) : xpub;
+    final id = 'keystone_${masterFingerprint ?? fallback}';
     return HardwareWalletDevice(
       id: id,
       name: deviceName,

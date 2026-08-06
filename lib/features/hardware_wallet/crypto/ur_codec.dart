@@ -27,304 +27,63 @@ class UrCodec {
 
   // ==================== Bytewords Table ====================
 
-  /// Full bytewords word list (256 entries, BC-UR spec §2.1).
+  /// Full bytewords word list (256 entries, BCR-2020-012).
   /// Each byte (0-255) maps to a unique 4-letter lowercase English word.
-  static const List<String> _wordList = [
-    'able',
-    'acid',
-    'also',
-    'apex',
-    'aqua',
-    'arch',
-    'atom',
-    'aunt',
-    'awry',
-    'axis',
-    'back',
-    'ball',
-    'barn',
-    'belt',
-    'beta',
-    'bias',
-    'blue',
-    'body',
-    'boos',
-    'brew',
-    'brisk',
-    'bulb',
-    'buzz',
-    'calm',
-    'cash',
-    'cats',
-    'chat',
-    'city',
-    'clap',
-    'clay',
-    'club',
-    'code',
-    'cola',
-    'cook',
-    'cost',
-    'crux',
-    'curl',
-    'cusp',
-    'cyan',
-    'dark',
-    'data',
-    'days',
-    'daze',
-    'dead',
-    'deal',
-    'dear',
-    'deck',
-    'deep',
-    'deli',
-    'dice',
-    'diet',
-    'diff',
-    'digs',
-    'dunk',
-    'dusk',
-    'dust',
-    'duty',
-    'each',
-    'edge',
-    'epic',
-    'even',
-    'exam',
-    'exit',
-    'eyes',
-    'fact',
-    'fair',
-    'fern',
-    'figs',
-    'film',
-    'fine',
-    'fist',
-    'fizz',
-    'flap',
-    'flew',
-    'flit',
-    'flow',
-    'flux',
-    'foxy',
-    'free',
-    'frog',
-    'fuel',
-    'fund',
-    'gala',
-    'game',
-    'gems',
-    'gift',
-    'girl',
-    'glow',
-    'good',
-    'gray',
-    'grim',
-    'grip',
-    'gush',
-    'gyro',
-    'half',
-    'hang',
-    'hard',
-    'hawk',
-    'heat',
-    'high',
-    'hill',
-    'holy',
-    'hope',
-    'horn',
-    'huts',
-    'icon',
-    'idea',
-    'inch',
-    'into',
-    'iron',
-    'item',
-    'jade',
-    'jolt',
-    'jowl',
-    'judo',
-    'jugs',
-    'jump',
-    'junk',
-    'jury',
-    'keep',
-    'keys',
-    'kick',
-    'kiln',
-    'king',
-    'kite',
-    'kiwi',
-    'knob',
-    'lamb',
-    'lava',
-    'lazy',
-    'leaf',
-    'lean',
-    'left',
-    'legs',
-    'liar',
-    'lids',
-    'limp',
-    'lion',
-    'list',
-    'logo',
-    'loud',
-    'love',
-    'luck',
-    'lung',
-    'main',
-    'many',
-    'math',
-    'maze',
-    'mean',
-    'memo',
-    'menu',
-    'meow',
-    'mild',
-    'mint',
-    'miss',
-    'monk',
-    'moon',
-    'more',
-    'most',
-    'move',
-    'much',
-    'muse',
-    'musk',
-    'myth',
-    'navy',
-    'need',
-    'noon',
-    'nose',
-    'note',
-    'numb',
-    'obey',
-    'oboe',
-    'odd',
-    'omen',
-    'open',
-    'oval',
-    'owls',
-    'pact',
-    'paid',
-    'part',
-    'past',
-    'pave',
-    'pear',
-    'perp',
-    'pick',
-    'pink',
-    'pipe',
-    'plan',
-    'play',
-    'plus',
-    'poem',
-    'pool',
-    'pose',
-    'post',
-    'puff',
-    'pump',
-    'puns',
-    'puny',
-    'purr',
-    'quad',
-    'quiz',
-    'race',
-    'ramp',
-    'real',
-    'redo',
-    'reef',
-    'rich',
-    'road',
-    'rock',
-    'roof',
-    'room',
-    'ruin',
-    'runs',
-    'rust',
-    'safe',
-    'saga',
-    'sand',
-    'scar',
-    'sets',
-    'silk',
-    'skew',
-    'slot',
-    'soap',
-    'solo',
-    'some',
-    'song',
-    'sort',
-    'stab',
-    'stew',
-    'stop',
-    'stub',
-    'such',
-    'surf',
-    'swan',
-    'taco',
-    'tail',
-    'task',
-    'taxi',
-    'tent',
-    'tied',
-    'time',
-    'tiny',
-    'toil',
-    'tomb',
-    'tops',
-    'torq',
-    'town',
-    'trap',
-    'tray',
-    'trim',
-    'trip',
-    'tuck',
-    'tuft',
-    'tuna',
-    'twin',
-    'ugly',
-    'undo',
-    'unit',
-    'unto',
-    'urge',
-    'user',
-    'veto',
-    'vial',
-    'view',
-    'visa',
-    'void',
-    'vows',
-    'waxy',
-    'webs',
-    'what',
-    'when',
-    'whiz',
-    'wolf',
-    'work',
-    'yank',
-    'yawn',
-    'yell',
-    'yoga',
-    'yurt',
-    'zaps',
-    'zeal',
-    'zero',
-    'zest',
-    'zinc',
-    'zone',
-    'zoom',
-  ];
+  static final List<String> _wordList = _officialWords.split(' ');
+
+  /// BCR-2020-012 官方词表原文（32 行 × 8 词 = 256 词，索引即字节值）。
+  /// 词表的 (首字母,末字母) 对同样全表唯一——这是 minimal（2 字母/字节）
+  /// 编码成立的前提。修改任何一个词都会破坏与真机硬件钱包的互操作性。
+  static const String _officialWords =
+      'able acid also apex aqua arch atom aunt '
+      'away axis back bald barn belt beta bias '
+      'blue body brag brew bulb buzz calm cash '
+      'cats chef city claw code cola cook cost '
+      'crux curl cusp cyan dark data days deli '
+      'dice diet door down draw drop drum dull '
+      'duty each easy echo edge epic even exam '
+      'exit eyes fact fair fern figs film fish '
+      'fizz flap flew flux foxy free frog fuel '
+      'fund gala game gear gems gift girl glow '
+      'good gray grim guru gush gyro half hang '
+      'hard hawk heat help high hill holy hope '
+      'horn huts iced idea idle inch inky into '
+      'iris iron item jade jazz join jolt jowl '
+      'judo jugs jump junk jury keep keno kept '
+      'keys kick kiln king kite kiwi knob lamb '
+      'lava lazy leaf legs liar limp lion list '
+      'logo loud love luau luck lung main many '
+      'math maze memo menu meow mild mint miss '
+      'monk nail navy need news next noon note '
+      'numb obey oboe omit onyx open oval owls '
+      'paid part peck play plus poem pool pose '
+      'puff puma purr quad quiz race ramp real '
+      'redo rich road rock roof ruby ruin runs '
+      'rust safe saga scar sets silk skew slot '
+      'soap solo song stub surf swan taco task '
+      'taxi tent tied time tiny toil tomb toys '
+      'trip tuna twin ugly undo unit urge user '
+      'vast very veto vial vibe view visa void '
+      'vows wall wand warm wasp wave waxy webs '
+      'what when whiz wolf work yank yawn yell '
+      'yoga yurt zaps zero zest zinc zone zoom';
 
   /// Build reverse lookup map (word → byte value)
   static final Map<String, int> _wordToIndex = {
     for (var i = 0; i < _wordList.length; i++) _wordList[i]: i,
   };
 
+  /// (首字母+末字母) → 字节值，minimal 编码（2 字母/字节）的解码表。
+  static final Map<String, int> _minimalToIndex = {
+    for (var i = 0; i < _wordList.length; i++)
+      '${_wordList[i][0]}${_wordList[i][3]}': i,
+  };
+
   static final RegExp _whitespaceRegex = RegExp(r'\s+');
-  static final RegExp _multipartRegex = RegExp(r'^\d+-of-\d+/(.+)$');
+
+  /// 多帧 UR 序号段：规范格式 `seq-total/`（如 `1-3/`），
+  /// 兼容识别旧自有格式 `seq-of-total/`。
+  static final RegExp _sequenceRegex = RegExp(r'^(\d+)-(?:of-)?(\d+)/(.+)$');
 
   // ==================== CRC-32 ====================
 
@@ -359,12 +118,13 @@ class UrCodec {
 
   // ==================== Bytewords encode/decode ====================
 
-  /// Encode bytes to bytewords string (space-separated full words)
+  /// Encode bytes to bytewords string (space-separated full words,
+  /// BCR-2020-012 "standard" style — 调试/展示用，UR 正文用 minimal)
   static String bytewordsEncode(Uint8List data) {
     return data.map((byte) => _wordList[byte]).join(' ');
   }
 
-  /// Decode bytewords string to bytes
+  /// Decode bytewords string to bytes (standard style)
   ///
   /// Throws [UrCodecException] if any word is not in the word list.
   static Uint8List bytewordsDecode(String encoded) {
@@ -380,11 +140,46 @@ class UrCodec {
     return result;
   }
 
+  /// Encode bytes to minimal bytewords（每字节 = 词的首末 2 字母，无分隔，
+  /// BCR-2020-005 规定 UR 正文必须用此风格）
+  static String bytewordsEncodeMinimal(Uint8List data) {
+    final sb = StringBuffer();
+    for (final byte in data) {
+      final word = _wordList[byte];
+      sb.write(word[0]);
+      sb.write(word[3]);
+    }
+    return sb.toString();
+  }
+
+  /// Decode minimal bytewords to bytes
+  ///
+  /// Throws [UrCodecException] on odd length or unknown letter pair.
+  static Uint8List bytewordsDecodeMinimal(String encoded) {
+    final s = encoded.toLowerCase().trim();
+    if (s.length.isOdd) {
+      throw UrCodecException(
+        'Invalid minimal bytewords: odd length ${s.length}',
+      );
+    }
+    final result = Uint8List(s.length ~/ 2);
+    for (var i = 0; i < result.length; i++) {
+      final pair = s.substring(i * 2, i * 2 + 2);
+      final idx = _minimalToIndex[pair];
+      if (idx == null) {
+        throw UrCodecException('Unknown byteword: minimal pair "$pair"');
+      }
+      result[i] = idx;
+    }
+    return result;
+  }
+
   // ==================== UR encode/decode ====================
 
   /// Encode CBOR data as a UR string.
   ///
-  /// Result format: `UR:{TYPE}/{bytewords(data + crc32)}`
+  /// Result format: `UR:{TYPE}/{minimal-bytewords(data + crc32)}`
+  /// （大写输出以便 QR 使用高密度 alphanumeric 模式；UR 本身大小写不敏感）
   ///
   /// [type] should be lowercase, e.g. `'eth-sign-request'`
   static String encode(String type, Uint8List data) {
@@ -393,7 +188,7 @@ class UrCodec {
     payload.setRange(0, data.length, data);
     payload.setRange(data.length, data.length + 4, checksum);
 
-    final encoded = bytewordsEncode(payload);
+    final encoded = bytewordsEncodeMinimal(payload).toUpperCase();
     return 'UR:${type.toUpperCase()}/$encoded';
   }
 
@@ -414,15 +209,28 @@ class UrCodec {
     }
 
     final type = withoutPrefix.substring(0, slashIdx);
-    final bodyStr = withoutPrefix.substring(slashIdx + 1);
+    var bodyStr = withoutPrefix.substring(slashIdx + 1).trim();
 
-    // Multi-part UR: skip  (e.g. "1-of-3/body" — not supported yet)
-    final multipartMatch = _multipartRegex.firstMatch(bodyStr);
-    final encodedBody = multipartMatch != null
-        ? multipartMatch.group(1)!
-        : bodyStr;
+    // 多帧 UR（fountain 编码）：total==1 时片段即完整 payload，直接解；
+    // total>1 需要 fountain 解码器（未实现）——显式报错优于把单个片段
+    // 误当作完整消息解出错误数据。
+    final seqMatch = _sequenceRegex.firstMatch(bodyStr);
+    if (seqMatch != null) {
+      final total = int.parse(seqMatch.group(2)!);
+      if (total > 1) {
+        throw UrCodecException(
+          'Multi-part UR not supported '
+          '(part ${seqMatch.group(1)} of $total)',
+        );
+      }
+      bodyStr = seqMatch.group(3)!;
+    }
 
-    final payload = bytewordsDecode(encodedBody);
+    // 规范正文为 minimal bytewords（无空白）；含空白视为 standard
+    // 全词风格（本 App 旧版本产出的格式，保留解码兼容）。
+    final payload = _whitespaceRegex.hasMatch(bodyStr)
+        ? bytewordsDecode(bodyStr)
+        : bytewordsDecodeMinimal(bodyStr);
     if (payload.length < 4) {
       throw UrCodecException('UR payload too short (missing CRC)');
     }

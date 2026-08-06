@@ -204,26 +204,23 @@ void main() {
       expect(handler.selectedChainIndex, 0);
     });
 
-    test('大写前缀 0X89 现状被拒（-32602）——现状断言', () {
-      // 现状：_handleSwitchChain 用 replaceFirst('0x', '') 剥前缀，
-      // 无法处理大写 "0X"，int.tryParse('0X89', radix:16) 得 null → -32602。
-      // 按 EIP-695/1193 hex 数量值语义，大写前缀合规钱包多数也接受，
-      // 此处为生产代码兼容性缺口的现状固化断言（详见测试报告）。
-      expect(
-        () => handler.handleRequest(
-          'wallet_switchEthereumChain',
-          [
-            {'chainId': '0X89'},
-          ],
-        ),
-        throwsRpcError(-32602),
+    test('大写前缀 0X89 与 0x89 等效（EIP-1193 hex quantity 大小写不敏感）', () async {
+      // 修复后：剥前缀大小写不敏感，'0X89' 与 '0x89' 都解析为 137
+      final result = await handler.handleRequest(
+        'wallet_switchEthereumChain',
+        [
+          {'chainId': '0X89'},
+        ],
       );
+      expect(result, isNull); // EIP-3326：成功返回 null
+      expect(handler.selectedChainIndex, 1);
+      expect(handler.chainIdHex, '0x89');
     });
 
-    test('空 params 抛 Missing params', () {
+    test('空 params 抛 -32602（invalid params，而非裸字符串→-32603）', () {
       expect(
         () => handler.handleRequest('wallet_switchEthereumChain', []),
-        throwsA('Missing params'),
+        throwsRpcError(-32602),
       );
     });
 

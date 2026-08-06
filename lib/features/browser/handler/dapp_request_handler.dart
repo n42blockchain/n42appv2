@@ -142,7 +142,9 @@ class DAppRequestHandler {
   // ── Chain switching ────────────────────────────────────────────────────────
 
   String? _handleSwitchChain(List<dynamic> params) {
-    if (params.isEmpty) throw 'Missing params';
+    if (params.isEmpty) {
+      throw {'code': -32602, 'message': 'Missing params'};
+    }
     final chainParam = params[0];
     if (chainParam is! Map) {
       throw {'code': -32602, 'message': 'Invalid chain params'};
@@ -151,10 +153,13 @@ class DAppRequestHandler {
     if (chainIdRaw is! String) {
       throw {'code': -32602, 'message': 'Invalid chainId'};
     }
-    final targetChainId = int.tryParse(
-      chainIdRaw.replaceFirst('0x', ''),
-      radix: 16,
-    );
+    // EIP-1193 hex quantity 的 "0x" 前缀大小写均合法，剥前缀需大小写不敏感
+    // （十六进制数字本身 int.tryParse(radix:16) 已天然兼容大小写）
+    final chainIdStripped =
+        chainIdRaw.startsWith('0x') || chainIdRaw.startsWith('0X')
+        ? chainIdRaw.substring(2)
+        : chainIdRaw;
+    final targetChainId = int.tryParse(chainIdStripped, radix: 16);
     if (targetChainId == null) {
       throw {'code': -32602, 'message': 'Invalid chainId format'};
     }
@@ -177,7 +182,10 @@ class DAppRequestHandler {
   // ── Signing methods ────────────────────────────────────────────────────────
 
   Future<String> _handlePersonalSign(List<dynamic> params) async {
-    if (params.length < 2) throw 'Invalid params';
+    // 裸字符串会被上层归一化为 -32603，参数校验失败按规范应报 -32602
+    if (params.length < 2) {
+      throw {'code': -32602, 'message': 'Invalid params'};
+    }
     final rawData = params[0] as String;
     // Verify the requested address matches our wallet
     final requestedAddress = (params[1] as String).toLowerCase();
@@ -210,7 +218,9 @@ class DAppRequestHandler {
     String method,
     List<dynamic> params,
   ) async {
-    if (params.length < 2) throw 'Invalid params';
+    if (params.length < 2) {
+      throw {'code': -32602, 'message': 'Invalid params'};
+    }
     final requestedAddress = (params[0] as String).toLowerCase();
     if (requestedAddress != address.toLowerCase()) {
       throw {'code': -32602, 'message': 'Address mismatch'};
@@ -244,7 +254,9 @@ class DAppRequestHandler {
   // ── Transaction methods ────────────────────────────────────────────────────
 
   Future<String> _handleSendTransaction(List<dynamic> params) async {
-    if (params.isEmpty) throw 'Invalid params';
+    if (params.isEmpty) {
+      throw {'code': -32602, 'message': 'Invalid params'};
+    }
     final txMap = params[0] as Map<String, dynamic>;
 
     // Validate the from address matches our wallet to prevent spoofing
@@ -275,7 +287,9 @@ class DAppRequestHandler {
   }
 
   Future<String> _handleSignTransaction(List<dynamic> params) async {
-    if (params.isEmpty) throw 'Invalid params';
+    if (params.isEmpty) {
+      throw {'code': -32602, 'message': 'Invalid params'};
+    }
     final txMap = params[0] as Map<String, dynamic>;
 
     // Validate the from address matches our wallet to prevent spoofing

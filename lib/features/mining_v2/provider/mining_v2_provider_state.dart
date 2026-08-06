@@ -111,6 +111,10 @@ mixin _MiningStateMixin on ChangeNotifier {
     bool redeem = false,
   }) async {}
 
+  /// 仅测试用：注入 MiningApi 替身（生产代码禁止调用）
+  @visibleForTesting
+  set debugMiningApi(MiningApi? api) => _mining = api;
+
   void resetData() {
     _mining = null;
     _web3 = null;
@@ -118,6 +122,14 @@ mixin _MiningStateMixin on ChangeNotifier {
     miningStatus = false;
     walletName = "";
     address = null;
+    // 换钱包/重置时必须一并清掉旧钱包的密钥与挖矿数据：
+    // 唯一调用方 mining_today_v2_logic.initDataWallet 在 resetData 后
+    // 会经 checkAddressMiningStatus → getWalletPrivateKey/getMiningData
+    // 重新派生这三个字段；若不清空，外部一旦忘记重设，web3 getter 会
+    // 用旧私钥重建客户端（资金安全问题）。
+    privateKey = null;
+    miningKeypart = null;
+    miningData = null;
     notifyListeners();
   }
 

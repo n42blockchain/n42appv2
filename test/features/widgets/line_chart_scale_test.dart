@@ -7,9 +7,11 @@
 // _calcMaxValue/_calcMinValue 静态方法算出，构造 widget 即可断言，
 // 无需 pumpWidget。
 //
-// 已知真 bug：_calcMaxValue 以 0.0 为起始值做比较，全负数序列会错误
-// 返回 0（而非序列真实最大值），对应测试以 skip 固化（见 MODULARITY_PLAN 批次6）。
+// 历史缺陷（已修复，MODULARITY_PLAN 批次6）：_calcMaxValue 曾以 0.0 为
+// 起始值做比较，全负数序列会错误返回 0；现改为以首元素起始，空列表
+// 保持返回 0.0 的现状语义。
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/widgets/line_chart.dart';
 
@@ -58,22 +60,46 @@ void main() {
       expect(chart.difference, 5.0);
     });
 
-    test(
-      '全负数序列 maxValue 应为序列最大值',
-      () {
-        // 期望行为：max = -1.0；当前实现返回 0.0（0.0 起始值污染）
-        final chart = LineChart([-5.0, -1.0, -3.0], false, 100, 10);
-        expect(chart.maxValue, -1.0);
-      },
-      skip: '已知缺陷：_calcMaxValue 以 0.0 起始，全负数序列错误返回 0（见 MODULARITY_PLAN 批次6）',
-    );
+    test('全负数序列 maxValue 为序列最大值（修复后不再被 0.0 起始值污染）', () {
+      final chart = LineChart([-5.0, -1.0, -3.0], false, 100, 10);
+      expect(chart.maxValue, -1.0);
+    });
 
-    test('全负数序列 minValue 现状正确（起始值取 values[0]）', () {
-      // _calcMinValue 以 values[0] 为起始值，不受 0.0 污染
+    test('全负数序列 minValue 正确（起始值取 values[0]）', () {
       final chart = LineChart([-5.0, -1.0, -3.0], false, 100, 10);
       expect(chart.minValue, -5.0);
-      // 现状断言：difference = 被污染的 max(0.0) - min(-5.0) = 5.0
-      expect(chart.difference, 5.0);
+      // 修复后：difference = max(-1.0) - min(-5.0) = 4.0
+      expect(chart.difference, 4.0);
+    });
+  });
+
+  group('LineChart paint 期除零保护（真实渲染）', () {
+    Future<void> pumpChart(WidgetTester tester, List<dynamic> values) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 200,
+              child: LineChart(values, true, 100, 10),
+            ),
+          ),
+        ),
+      );
+    }
+
+    testWidgets('全等值序列（difference==0）渲染不抛异常', (tester) async {
+      await pumpChart(tester, [3.0, 3.0, 3.0]);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('单元素序列（unitWidth 除零场景）渲染不抛异常', (tester) async {
+      await pumpChart(tester, [7.0]);
+      expect(tester.takeException(), isNull);
+    });
+
+    testWidgets('空列表渲染不抛异常', (tester) async {
+      await pumpChart(tester, []);
+      expect(tester.takeException(), isNull);
     });
   });
 }

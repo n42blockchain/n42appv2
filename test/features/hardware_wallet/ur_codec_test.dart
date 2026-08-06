@@ -7,10 +7,9 @@
 // - EthSignRequest parsePath/toCbor/toUr（CBOR 字段反解验证）
 // - EthSignature fromCbor/fromUr/signatureHex/vrs
 //
-// 已知缺陷（不修生产代码，规范不变量测试用 skip 固化）：
-// - _wordList 含 286 词（BC-UR 规范应恰 256 词），其中 'brisk'(索引20)
-//   与 'odd'(索引172) 非 4 字母词；索引 256-285 的词（'undo'..'zoom'）
-//   encode 不可达，decode 时被 Uint8List 截断为 idx & 0xFF。
+// 2026-08-05 修复后更新：词表已替换为 BCR-2020-012 官方 256 词，
+// UR 正文改为规范 minimal bytewords（2 字母/字节），原 skip 的规范
+// 不变量测试转为常规测试；新增官方黄金向量测试。
 
 import 'dart:typed_data';
 
@@ -95,52 +94,84 @@ void main() {
     });
   });
 
-  group('UrCodec bytewords 规范不变量（已知缺陷，skip 固化）', () {
-    test(
-      '每个可编码词恰为 4 字母（BC-UR 规范 §2.1）',
-      () {
-        final all = Uint8List.fromList(List.generate(256, (i) => i));
-        final words = UrCodec.bytewordsEncode(all).split(' ');
-        // 实际：索引 20 = 'brisk'（5 字母）、索引 172 = 'odd'（3 字母）
-        expect(words.where((w) => w.length != 4), isEmpty);
-      },
-      skip: '已知缺陷：wordList 含 286 词与非 4 字母词，待修复（见 MODULARITY_PLAN 批次6）',
-    );
+  group('UrCodec bytewords 规范不变量（BCR-2020-012）', () {
+    test('每个可编码词恰为 4 字母（BC-UR 规范 §2.1）', () {
+      final all = Uint8List.fromList(List.generate(256, (i) => i));
+      final words = UrCodec.bytewordsEncode(all).split(' ');
+      expect(words.where((w) => w.length != 4), isEmpty);
+    });
 
-    test(
-      'wordList 恰 256 词：任何可解码词应能 round-trip 回自身',
-      () {
-        // 规范列表只有 256 词，字节 255 应为 'zoom'。
-        // 实际实现列表含 286 词：'zoom' 位于索引 285，decode 时被
-        // Uint8List 截断为 29，重新 encode 得到 'clay' 而非 'zoom'。
-        final decoded = UrCodec.bytewordsDecode('zoom');
-        expect(UrCodec.bytewordsEncode(decoded), 'zoom');
-      },
-      skip: '已知缺陷：wordList 含 286 词与非 4 字母词，待修复（见 MODULARITY_PLAN 批次6）',
-    );
+    test('字节 255 = "zoom" 且可 round-trip 回自身', () {
+      final decoded = UrCodec.bytewordsDecode('zoom');
+      expect(decoded, [255]);
+      expect(UrCodec.bytewordsEncode(decoded), 'zoom');
+    });
 
-    test(
-      'BC-UR 官方测试向量 [0,1,2,128,255] -> "able acid also lava zoom"',
-      () {
-        final encoded = UrCodec.bytewordsEncode(
-          Uint8List.fromList([0, 1, 2, 128, 255]),
-        );
-        // 实际实现字节 255 编码为 'ugly'（因多出 30 个词导致表偏移）
-        expect(encoded, 'able acid also lava zoom');
-      },
-      skip: '已知缺陷：wordList 含 286 词与非 4 字母词，待修复（见 MODULARITY_PLAN 批次6）',
-    );
+    test('BC-UR 官方测试向量 [0,1,2,128,255] -> "able acid also lava zoom"', () {
+      final encoded = UrCodec.bytewordsEncode(
+        Uint8List.fromList([0, 1, 2, 128, 255]),
+      );
+      expect(encoded, 'able acid also lava zoom');
+    });
+
+    test('(首字母,末字母) 对全表唯一——minimal 编码的成立前提', () {
+      final all = Uint8List.fromList(List.generate(256, (i) => i));
+      final words = UrCodec.bytewordsEncode(all).split(' ');
+      final pairs = words.map((w) => '${w[0]}${w[3]}').toSet();
+      expect(pairs.length, 256);
+    });
+
+    test('minimal 编解码 round-trip 全部 256 字节值', () {
+      final all = Uint8List.fromList(List.generate(256, (i) => i));
+      final minimal = UrCodec.bytewordsEncodeMinimal(all);
+      expect(minimal.length, 512);
+      expect(UrCodec.bytewordsDecodeMinimal(minimal), all);
+    });
+
+    test('BCR-2020-012 官方 minimal 黄金向量（128位种子+CRC，62字符）', () {
+      // 输入：d99d6ca20150c7098580125e2ab0981253468b2dbc5202c11947da
+      // 规范附录给出其（含 CRC32 c904f40b）minimal 编码结果
+      final seed = Uint8List.fromList(
+        BytesUtils.fromHexString(
+          'd99d6ca20150c7098580125e2ab0981253468b2dbc5202c11947da',
+        ),
+      );
+      expect(UrCodec.crc32Bytes(seed), [0xC9, 0x04, 0xF4, 0x0B]);
+      final payload = Uint8List.fromList([...seed, 0xC9, 0x04, 0xF4, 0x0B]);
+      expect(
+        UrCodec.bytewordsEncodeMinimal(payload),
+        'tantjzoeadgdstaslplabghydrpfmkbggufgludprfgmaosecffltnsoaawkbd',
+      );
+    });
+
+    test('minimal 解码：奇数长度与未知字母对抛异常', () {
+      expect(
+        () => UrCodec.bytewordsDecodeMinimal('aea'),
+        throwsA(isA<UrCodecException>()),
+      );
+      expect(
+        () => UrCodec.bytewordsDecodeMinimal('qq'),
+        throwsA(
+          isA<UrCodecException>().having(
+            (e) => e.message,
+            'message',
+            contains('Unknown byteword'),
+          ),
+        ),
+      );
+    });
   });
 
   group('UrCodec.encode / decode', () {
     final sampleData = Uint8List.fromList([0xDE, 0xAD, 0xBE, 0xEF, 0x42]);
 
-    test('encode 产出 "UR:{TYPE大写}/{bytewords}" 格式', () {
+    test('encode 产出 "UR:{TYPE大写}/{minimal bytewords}" 格式', () {
       final ur = UrCodec.encode('eth-sign-request', sampleData);
       expect(ur, startsWith('UR:ETH-SIGN-REQUEST/'));
-      // body 为空格分隔的 bytewords（数据 5 字节 + CRC 4 字节 = 9 词）
+      // body 为规范 minimal bytewords（数据 5 字节 + CRC 4 字节 = 18 字母，无空格）
       final body = ur.substring(ur.indexOf('/') + 1);
-      expect(body.split(' ').length, 9);
+      expect(body.length, 18);
+      expect(body.contains(' '), isFalse);
     });
 
     test('encode -> decode round-trip 还原 type 与 data', () {
@@ -184,31 +215,52 @@ void main() {
       expect(UrCodec.decode('  $ur \n').data, sampleData);
     });
 
-    test('decode 支持多帧前缀 "1-of-3/"（当前实现直接剥离）', () {
+    test('decode 接受单帧序号 "1-1/"（规范格式，片段即完整 payload）', () {
       final ur = UrCodec.encode('eth-sign-request', sampleData);
       final slash = ur.indexOf('/');
-      final multipart =
-          '${ur.substring(0, slash)}/1-of-3/${ur.substring(slash + 1)}';
-      final decoded = UrCodec.decode(multipart);
+      final singlePart =
+          '${ur.substring(0, slash)}/1-1/${ur.substring(slash + 1)}';
+      final decoded = UrCodec.decode(singlePart);
       expect(decoded.type, 'eth-sign-request');
       expect(decoded.data, sampleData);
     });
 
-    test('decode 支持多位数多帧前缀 "12-of-34/"', () {
+    test('decode 接受旧格式单帧序号 "1-of-1/"', () {
       final ur = UrCodec.encode('bar', sampleData);
       final slash = ur.indexOf('/');
-      final multipart =
-          '${ur.substring(0, slash)}/12-of-34/${ur.substring(slash + 1)}';
-      expect(UrCodec.decode(multipart).data, sampleData);
+      final singlePart =
+          '${ur.substring(0, slash)}/1-of-1/${ur.substring(slash + 1)}';
+      expect(UrCodec.decode(singlePart).data, sampleData);
     });
 
-    test('CRC 篡改（替换一个数据词）抛 CRC-32 mismatch', () {
+    test('decode 对多帧 UR（total>1）显式报错而非错解片段', () {
+      final ur = UrCodec.encode('eth-sign-request', sampleData);
+      final slash = ur.indexOf('/');
+      for (final seq in ['1-3', '2-of-3', '12-34']) {
+        final multipart =
+            '${ur.substring(0, slash)}/$seq/${ur.substring(slash + 1)}';
+        expect(
+          () => UrCodec.decode(multipart),
+          throwsA(
+            isA<UrCodecException>().having(
+              (e) => e.message,
+              'message',
+              contains('Multi-part UR not supported'),
+            ),
+          ),
+          reason: 'seq=$seq 应报多帧不支持',
+        );
+      }
+    });
+
+    test('CRC 篡改（替换第一个数据字节的字母对）抛 CRC-32 mismatch', () {
       final ur = UrCodec.encode('foo', sampleData);
       final slash = ur.indexOf('/');
-      final words = ur.substring(slash + 1).split(' ');
-      // 把第一个数据词替换为另一个合法词
-      words[0] = words[0] == 'able' ? 'acid' : 'able';
-      final tampered = '${ur.substring(0, slash)}/${words.join(' ')}';
+      final body = ur.substring(slash + 1).toLowerCase();
+      // 把第一个 2 字母对替换为另一个合法对（able→ae / acid→ad）
+      final firstPair = body.substring(0, 2);
+      final newPair = firstPair == 'ae' ? 'ad' : 'ae';
+      final tampered = '${ur.substring(0, slash)}/$newPair${body.substring(2)}';
       expect(
         () => UrCodec.decode(tampered),
         throwsA(
@@ -221,13 +273,14 @@ void main() {
       );
     });
 
-    test('CRC 篡改（替换 CRC 尾词）同样被检出', () {
+    test('CRC 篡改（替换 CRC 尾部字母对）同样被检出', () {
       final ur = UrCodec.encode('foo', sampleData);
       final slash = ur.indexOf('/');
-      final words = ur.substring(slash + 1).split(' ');
-      final last = words.length - 1;
-      words[last] = words[last] == 'able' ? 'acid' : 'able';
-      final tampered = '${ur.substring(0, slash)}/${words.join(' ')}';
+      final body = ur.substring(slash + 1).toLowerCase();
+      final lastPair = body.substring(body.length - 2);
+      final newPair = lastPair == 'ae' ? 'ad' : 'ae';
+      final tampered =
+          '${ur.substring(0, slash)}/${body.substring(0, body.length - 2)}$newPair';
       expect(
         () => UrCodec.decode(tampered),
         throwsA(
@@ -280,9 +333,10 @@ void main() {
       );
     });
 
-    test('单词 payload（1 字节）同样抛 too short', () {
+    test('minimal 正文不足 4 字节（缺 CRC）抛 too short', () {
+      // 'aeae' = 2 字节 < 4
       expect(
-        () => UrCodec.decode('ur:foo/able'),
+        () => UrCodec.decode('ur:foo/aeae'),
         throwsA(
           isA<UrCodecException>().having(
             (e) => e.message,

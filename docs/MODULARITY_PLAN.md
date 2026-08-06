@@ -76,22 +76,24 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
 | 5 | 循环依赖逐对治理（决议见上表）：`InAppBrowser` 抽象 + profile 并回 home + SettingShare 下移 component | ✅ 2026-08-05 |
 | 6 | 测试洼地补覆盖：硬件钱包签名链路 108 测（UrCodec/Keystone/Ledger APDU，原为**零覆盖**且旧 ledger_utils_test 是假覆盖）+ DApp 安全 54 测（方法路由/地址冒名/审批闸门/URL 拦截）+ staking 交易构建 18 测 + mining_v2 状态派生与生命周期 24 测 + LineChart 标度 8 测，共 212 个新测试；另有架构守护测试 7 条 | ✅ 2026-08-05 |
 
-## 批次 6 发现的生产代码缺陷登记（测试已用 skip 固化，待排期修复）
+## 批次 6 缺陷登记（**2026-08-05 全部修复**，skip 测试全部转绿）
 
-**P0 硬件钱包（Keystone 互操作性存疑，`hardware_wallet/crypto/ur_codec.dart`）**
-1. bytewords `_wordList` 有 286 词（规范恰 256），含 'brisk'(5字母)/'odd'(3字母)非规范词；索引 255 应为 'zoom' 实为 'ugly'。
-2. `bytewordsDecode` 对索引 256–285 静默 mod 256 截断——不同 QR 可解出同一字节流且 CRC 通过。
-3. UR body 用空格分隔完整词而非规范的 minimal bytewords；多帧只识别 `1-of-3/` 非规范 `1-3/`。→ 与真机 Keystone 配对大概率失败，需按 BC-UR 规范重写词表与编码。
-4. `keystone_service.dart:59,74` 用 `codeUnits`（UTF-16）而非 `utf8.encode`，非 ASCII personal_sign/typedData 签名数据损坏。
-5. `toDevice()` 在 fingerprint null 且 xpub<8 字符时 RangeError；`validateScannedUr` 前缀匹配过宽。
+**P0 硬件钱包 ✅**
+1-3. `ur_codec.dart` 按 BC-UR 规范重写：词表替换为 BCR-2020-012 官方 256 词
+   （以规范附录 62 字符黄金向量逐字节验证）；UR 正文改 minimal bytewords
+   （2 字母/字节），旧全词格式保留解码兼容；多帧 UR（total>1）显式报错，
+   单帧序号 `1-1/`、`1-of-1/` 可解。**注意：仍无 fountain 多帧解码器，
+   大 payload 动画 QR 需后续实现；真机 Keystone 联调仍待验证。**
+4. `keystone_service.dart` `codeUnits`→`utf8.encode`，非 ASCII 签名数据不再损坏。
+5. `toDevice()` xpub 越界修复；`validateScannedUr` 改精确类型段匹配。
 
-**P1 其他**
-- `widgets/line_chart.dart:_calcMaxValue` 以 0.0 起始，全负数序列 max 错误为 0；difference=0 时 paint 期除零。
-- `staking/api/atom_staking_api.dart:375` APY 异常吞掉后返回假数据且 error=false；stakingRatio=0 除零。
-- `mining_v2/provider/mining_v2_provider_beacon.dart:130,149` `rmm.data[...]` 缺 `?.`，data null 会抛。
-- `mining_v2_provider_state.dart:resetData` 不清 privateKey/miningKeypart——换钱包依赖外部重设。
-- `ledger_apdu_utils.dart:buildEthSignTxApdu` Lc 单字节，payload>255 静默截断。
-- `dapp_request_handler.dart:154` 大写 `0X` hex 前缀被拒（EIP-1193 兼容性）；空 params 报 -32603 而非 -32602。
+**P1 ✅**
+- line_chart：min/max 以首元素起始（全负数正确）；paint 期 difference=0/单元素/空列表除零保护。
+- atom_staking_api：APY 计算抽 `buildInflationApyResult`（ratio≤0 走兜底防 Infinity）；catch 兜底 error=true（3 处调用方均以 `!error` 采信，行为安全）。
+- mining_v2 beacon：`rmm.data?[...] ?? 0` 空安全；新增 MiningApi 替身注入测试。
+- resetData：一并清空 privateKey/miningKeypart/miningData（唯一调用方为换钱包路径，随后立即重新派生）。
+- ledger buildEthSignTxApdu：payload>255 抛 ArgumentError（生产唯一调用方已 150 分块，无现网影响）。
+- dapp_request_handler：hex 前缀大小写不敏感；裸字符串 throw 改 `{'code': -32602}` 错误对象（上层按 Map 形状序列化回 DApp）。
 
 ## 依赖方向的自动守护
 

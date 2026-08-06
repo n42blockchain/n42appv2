@@ -103,22 +103,15 @@ void main() {
       expect((map[2] as CborBytesValue).value, message.codeUnits);
     });
 
-    test(
-      '非 ASCII 消息应按 UTF-8 编码进 signData',
-      () {
-        // 实际实现用 String.codeUnits（UTF-16 码元）塞进 Uint8List，
-        // 中文等 >0xFF 的码元会被截断为低 8 位，签名数据损坏。
-        const message = '你好 N42';
-        final ur = service.buildEthPersonalSignRequest(
-          message: message,
-          derivationPath: path,
-        );
-        final map = decodeUrToIntMap(ur, 'eth-sign-request');
-        expect((map[2] as CborBytesValue).value, utf8.encode(message));
-      },
-      skip: '已知缺陷：buildEthPersonalSignRequest/buildEthTypedDataRequest 用 '
-          'codeUnits 而非 utf8.encode，非 ASCII 消息字节被截断，待修复',
-    );
+    test('非 ASCII 消息按 UTF-8 编码进 signData（2026-08-05 修复）', () {
+      const message = '你好 N42';
+      final ur = service.buildEthPersonalSignRequest(
+        message: message,
+        derivationPath: path,
+      );
+      final map = decodeUrToIntMap(ur, 'eth-sign-request');
+      expect((map[2] as CborBytesValue).value, utf8.encode(message));
+    });
   });
 
   group('parseEthSignature', () {
@@ -168,9 +161,10 @@ void main() {
     test('CRC 损坏的 UR 返回 error 响应', () {
       final ur = buildSignatureUr();
       final slash = ur.indexOf('/');
-      final words = ur.substring(slash + 1).split(' ');
-      words[0] = words[0] == 'able' ? 'acid' : 'able';
-      final tampered = '${ur.substring(0, slash)}/${words.join(' ')}';
+      final body = ur.substring(slash + 1).toLowerCase();
+      final firstPair = body.substring(0, 2);
+      final newPair = firstPair == 'ae' ? 'ad' : 'ae';
+      final tampered = '${ur.substring(0, slash)}/$newPair${body.substring(2)}';
       final resp = service.parseEthSignature(tampered);
       expect(resp.success, isFalse);
       expect(resp.error, contains('CRC-32 mismatch'));
@@ -239,9 +233,10 @@ void main() {
         Uint8List.fromList([1, 2, 3, 4, 5]),
       );
       final slash = ur.indexOf('/');
-      final words = ur.substring(slash + 1).split(' ');
-      words[0] = words[0] == 'able' ? 'acid' : 'able';
-      final tampered = '${ur.substring(0, slash)}/${words.join(' ')}';
+      final body = ur.substring(slash + 1).toLowerCase();
+      final firstPair = body.substring(0, 2);
+      final newPair = firstPair == 'ae' ? 'ad' : 'ae';
+      final tampered = '${ur.substring(0, slash)}/$newPair${body.substring(2)}';
       expect(
         () => service.parseSyncQr(tampered),
         throwsA(isA<UrCodecException>()),

@@ -3,7 +3,8 @@
 // MiningV2Provider 状态生命周期测试。
 //
 // 覆盖 lib/features/mining_v2/provider/mining_v2_provider_state.dart：
-//   - resetData（114-122 行）：换钱包时必须清掉 _mining/_web3 惰性缓存，
+//   - resetData：换钱包时必须清掉 _mining/_web3 惰性缓存，以及
+//     privateKey/miningKeypart/miningData 三个旧钱包数据字段，
 //     否则新钱包会复用旧私钥构建的 web3 客户端（资金安全问题）。
 //   - disposeState（124-137 行）：幂等，Timer 全 null 或已清理时连调不抛。
 // 不触网：MiningApi.init() 仅构造 MethodChannel 包装，MiningWeb3.init()
@@ -78,6 +79,22 @@ void main() {
       expect(p.walletName, '');
       expect(p.address, isNull);
       expect(notified, 1);
+    });
+
+    test('resetData 清空旧钱包密钥与挖矿数据（privateKey/miningKeypart/miningData）', () {
+      final p = MiningV2Provider();
+      p.privateKey = fakePrivateKey(1);
+      p.miningKeypart = {'publicKey': '0xabc'};
+      p.miningData = {
+        '0xdead': {'isMining': true},
+      };
+
+      p.resetData();
+
+      expect(p.privateKey, isNull,
+          reason: '不清空则外部忘记重设时 web3 getter 会用旧私钥重建客户端');
+      expect(p.miningKeypart, isNull);
+      expect(p.miningData, isNull);
     });
   });
 

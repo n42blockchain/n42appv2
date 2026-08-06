@@ -13,8 +13,11 @@ class LineChart extends StatefulWidget {
   final double difference; //最大值和最小值之间的差值
 
   static double _calcMaxValue(List<dynamic> values) {
-    double maxVal = 0.0;
-    for (int i = 0; i < values.length; i++) {
+    // 空列表保持现状语义：返回 0.0
+    if (values.isEmpty) return 0.0;
+    // 以首元素为起始值，避免 0.0 起始污染全负数序列（曾错误返回 0）
+    double maxVal = values[0] * 1.0;
+    for (int i = 1; i < values.length; i++) {
       if (maxVal < values[i]) {
         maxVal = values[i] * 1.0;
       }
@@ -23,11 +26,11 @@ class LineChart extends StatefulWidget {
   }
 
   static double _calcMinValue(List<dynamic> values) {
-    double minVal = 0.0;
-    if (values.isNotEmpty) {
-      minVal = values[0] * 1.0;
-    }
-    for (int i = 0; i < values.length; i++) {
+    // 空列表保持现状语义：返回 0.0
+    if (values.isEmpty) return 0.0;
+    // 与 _calcMaxValue 对称：以首元素起始
+    double minVal = values[0] * 1.0;
+    for (int i = 1; i < values.length; i++) {
       if (minVal > values[i]) {
         minVal = values[i] * 1.0;
       }
@@ -120,7 +123,10 @@ class DrawLineChart extends CustomPainter {
 
     width = size.width;
     height = size.height;
-    dianValue = (height - bottomMargin * 2) / difference;
+    // 全等值/单元素序列 difference 为 0：置 0 防除零，getY 中画中位平线
+    dianValue = difference == 0 ? 0 : (height - bottomMargin * 2) / difference;
+    // 少于 2 个点无法构成折线（unitWidth 也会除零），只保留背景不画线
+    if (values.length < 2) return;
     unitWidth = width / (values.length - 1);
 
     painter.style = PaintingStyle.stroke;
@@ -199,6 +205,8 @@ class DrawLineChart extends CustomPainter {
 
   /// 获取Y轴坐标
   double getY(double value) {
+    // 全等值序列（difference==0）没有纵向缩放比例，统一画在垂直居中位置
+    if (difference == 0) return height / 2;
     return height - (((value - minValue) * dianValue) + bottomMargin);
   }
 

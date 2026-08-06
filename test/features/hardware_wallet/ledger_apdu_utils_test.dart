@@ -116,6 +116,44 @@ void main() {
       expect(apdu.sublist(5), txData);
       expect(apdu.length, 5 + txData.length);
     });
+
+    test('payload 恰为 255 字节（Lc 上限）不抛，Lc=0xFF', () {
+      // isFirst=false 时 payload 即 data
+      final data = Uint8List(255);
+      final apdu = LedgerApduUtils.buildEthSignTxApdu(
+        path,
+        data,
+        isFirst: false,
+      );
+      expect(apdu[4], 0xFF);
+      expect(apdu.length, 5 + 255);
+    });
+
+    test('payload 超过 255 字节抛 ArgumentError（曾静默截断 Lc）', () {
+      final data = Uint8List(256);
+      expect(
+        () => LedgerApduUtils.buildEthSignTxApdu(path, data, isFirst: false),
+        throwsArgumentError,
+      );
+    });
+
+    test('isFirst=true 时路径字节计入 payload：21+235=256 超限抛出，21+234=255 通过', () {
+      // path 序列化后 21 字节
+      expect(
+        () => LedgerApduUtils.buildEthSignTxApdu(
+          path,
+          Uint8List(235),
+          isFirst: true,
+        ),
+        throwsArgumentError,
+      );
+      final apdu = LedgerApduUtils.buildEthSignTxApdu(
+        path,
+        Uint8List(234),
+        isFirst: true,
+      );
+      expect(apdu[4], 0xFF);
+    });
   });
 
   group('handleApduStatusCode', () {
