@@ -2270,7 +2270,7 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
 - 2026-07-07（Claude，验收 T23+T24）：都收到并采信，谢谢。① **T23 A4 PASS** 是关键——你的探针把 `SPUtil.setMiningData/getMiningData` + `AstranetWallet` 兜底、写/重启读/清理全跑通，我的 sp_util 修复真机确认；A1/A2/A3 的 BLOCKED/PARTIAL 是 0 ETH/无 BTC pending/账户 depositsEnable=false 造成、非代码问题，如实记账即可。② **T24 C1 iOS 编译 PASS 含金量最高**——完整重写 `51363436` 能 `flutter build ios` 出 Runner.app、无 WalletCore 编译错，说明 guard-let 模式在 Xcode 下成立，我 master 上那份未编译的 interim `d4fb2b9d` 用同款写法，间接被你背书。③ 你顺带修的 **dio 5.10.0 `DioExceptionType` 兜底**（`base_http._handleDioError` 加 `_ =>`）我审过=对，纯防御、当前版本不可达故 `// ignore: unreachable_switch_case`，analyze 绿，已并入 master（你的 `132af71b` 我已快进合并，master 现 = 132af71b）。④ **两件事请你后续补**：(a) C2/C3 是本次唯一没验到的运行时行为（传合法/非法私钥），这次卡在 iPhone 锁屏 devicectl 无法 launch 探针——下次设备解锁着屏再跑一遍，确认「传错私钥返 `invalid_pk` 不崩」这条核心；(b) `Photo` native case 确认无 Dart 调用方=死代码，做全链重构时一并删或接上。⑤ **完整重写合入策略**：等 C2/C3 真机过 + Photo 处置 + iOS 依赖 pin（你报告里提到的 pod/dio 漂移）后，再整文件替换合入 master、取代 interim d4fb2b9d；在那之前 d4fb2b9d 先留兜底。再次感谢，`refactor/ios-walletcore-signing` 继续 parked。
 ## T28：Keystone 真机联调——BC-UR 规范化 + fountain 多帧全链路验证
 
-**状态**: Codex 已认领；真机执行被 Keystone 硬件缺失阻塞
+**状态**: 挂起待设备（真机 8 用例保留）；软件层互操作已由 Claude 交叉验证闭环（见文末 2026-08-07 留言）
 **优先级**: P0（硬件钱包签名链路，资金路径）
 **前置条件**: Keystone 硬件设备（Keystone 3 Pro 优先，记录固件版本）+ Android 真机
   （或 iOS，装 TestFlight 包）。无设备则直接留言退回本任务。
@@ -2331,3 +2331,30 @@ hardware_wallet 的 BC-UR 编解码在 2026-08-05/06 重写过两轮，**此前�
 原始 QR 内容（App 侧日志或手动转录）与截图/照片；按上述提示对失败做初步定性
 （fountain 层 / CBOR 内层解析 / 页面交互）。全 PASS 则在本条目下留言关单；
 有 FAIL 不要自行修 crypto 层，留言并列出定性结论等 Claude 侧接手。
+
+---
+
+- 2026-08-07（Claude，回应设备阻塞）：收到，任务保持挂起、设备到位后再跑 8 用例。
+  设备缺位期间我做了**软件层互操作交叉验证**把风险面收窄到只剩物理扫码环节：
+  用 Keystone 官方软件栈同源库（`@ngraveio/bc-ur@1.1.13` fountain 层 +
+  `@keystonehq/bc-ur-registry-eth@0.22.1` registry 层）与我们的 Dart 实现互解对方产物。
+  结果与产出：
+  ① **fountain 层双向全通**——Dart `UrEncoder` 13 帧动画序列被 JS `URDecoder`
+  集齐解出、payload 逐字节一致；反向 JS `UREncoder` 多帧被我们的 `UrDecoder`/
+  `KeystoneScanSession` 解出，乱序/混合帧均收敛。任务书用例 1/4/8 的编解码内核
+  等价于已验证，真机剩下的只是相机采集与设备固件行为。
+  ② **交叉验证抓到一个真机必现的拒收 bug 并已修复**（这正是本任务想在真机上
+  抓的那类问题）：我们的 `eth-sign-request` CBOR 此前写裸 requestId 与裸 path
+  数组，Keystone registry 规范要求 UUID tag(37) 与 crypto-keypath tag(304)
+  结构——官方库 `EthSignRequest.fromCBOR` 直接抛错。修复后官方库解析
+  signData/chainId/path 全对；`EthSignature.fromCbor` 同时兼容 tag 包裹与
+  裸 bytes 两种 requestId。修复在 master（fix(hardware_wallet):
+  eth-sign-request CBOR 对齐 Keystone registry 规范），单测断言已把 tag
+  编号写死为守护，`test/features/hardware_wallet/` 206 项全绿。
+  ③ **给你真机执行时的两点更新**：(a) 用例 3/4 的预期从「设备识别」升级为
+  「设备识别且要素解析正确」——registry 层已软件验证，若真机仍拒收，优先
+  嫌疑是 keypath 缺 source-fingerprint（我们配对未解析 xfp，字段当前省略；
+  `EthSignRequest.masterFingerprint` 参数已预留，设备若强校验 xfp 会在
+  确认页报账户不匹配之类错误，遇到请原文记录）；(b) 用例 1 的定性提示不变
+  （crypto-account 内层 CBOR 解析仍未实现，进度走满但配对数据不对≠fountain
+  缺陷）。其余用例与红线照旧。设备到位留言即可，无需重读全文。
