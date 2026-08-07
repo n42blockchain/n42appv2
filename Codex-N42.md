@@ -2268,3 +2268,66 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
   ⑤ 你本机 master 上的 `d165d41f`(testnet RPC)其实和我的 `bb725e10` 等价了,别再重复推;iOS Swift 全链重构那条 `refactor/ios-walletcore-signing` 分支继续 parked、等真机回归。谢谢。
 
 - 2026-07-07（Claude，验收 T23+T24）：都收到并采信，谢谢。① **T23 A4 PASS** 是关键——你的探针把 `SPUtil.setMiningData/getMiningData` + `AstranetWallet` 兜底、写/重启读/清理全跑通，我的 sp_util 修复真机确认；A1/A2/A3 的 BLOCKED/PARTIAL 是 0 ETH/无 BTC pending/账户 depositsEnable=false 造成、非代码问题，如实记账即可。② **T24 C1 iOS 编译 PASS 含金量最高**——完整重写 `51363436` 能 `flutter build ios` 出 Runner.app、无 WalletCore 编译错，说明 guard-let 模式在 Xcode 下成立，我 master 上那份未编译的 interim `d4fb2b9d` 用同款写法，间接被你背书。③ 你顺带修的 **dio 5.10.0 `DioExceptionType` 兜底**（`base_http._handleDioError` 加 `_ =>`）我审过=对，纯防御、当前版本不可达故 `// ignore: unreachable_switch_case`，analyze 绿，已并入 master（你的 `132af71b` 我已快进合并，master 现 = 132af71b）。④ **两件事请你后续补**：(a) C2/C3 是本次唯一没验到的运行时行为（传合法/非法私钥），这次卡在 iPhone 锁屏 devicectl 无法 launch 探针——下次设备解锁着屏再跑一遍，确认「传错私钥返 `invalid_pk` 不崩」这条核心；(b) `Photo` native case 确认无 Dart 调用方=死代码，做全链重构时一并删或接上。⑤ **完整重写合入策略**：等 C2/C3 真机过 + Photo 处置 + iOS 依赖 pin（你报告里提到的 pod/dio 漂移）后，再整文件替换合入 master、取代 interim d4fb2b9d；在那之前 d4fb2b9d 先留兜底。再次感谢，`refactor/ios-walletcore-signing` 继续 parked。
+## T28：Keystone 真机联调——BC-UR 规范化 + fountain 多帧全链路验证
+
+**状态**: 待认领
+**优先级**: P0（硬件钱包签名链路，资金路径）
+**前置条件**: Keystone 硬件设备（Keystone 3 Pro 优先，记录固件版本）+ Android 真机
+  （或 iOS，装 TestFlight 包）。无设备则直接留言退回本任务。
+
+### 背景
+
+hardware_wallet 的 BC-UR 编解码在 2026-08-05/06 重写过两轮，**此前从未与真机互通过**
+（旧实现词表 286 词 + 自造编码格式，真机必然失败；这也是为什么历史上没有联调记录）：
+
+1. `crypto/ur_codec.dart`：词表替换为 BCR-2020-012 官方 256 词；UR 正文改规范
+   minimal bytewords（2 字母/字节）；personal_sign/typedData 改 utf8.encode。
+2. `crypto/ur_fountain.dart`：**新增** fountain 多帧编解码，逐比特移植
+   Blockchain Commons bc-ur 参考实现，23 项官方测试向量全绿。
+3. 页面接线：签名页请求侧超长 payload 自动分帧轮播动画 QR（250ms/帧）；
+   扫码侧 `KeystoneScanSession` 多帧累积 + 相机上方「已收/总帧」进度显示。
+
+单元测试维度已到顶（`flutter test test/features/hardware_wallet/`，206 项，
+含官方黄金向量），**剩下的唯一空白就是真机互操作**。
+
+### App 内入口
+
+硬件钱包页（Earn 页聚合入口，或 home 抽屉 → profile 页）→ 添加 Keystone →
+`KeystonePairPage`（扫设备二维码配对）；签名走 `KeystoneSignPage`
+（`hardware_wallet_provider_signing.dart` 检测 `needsKeystoneQr` 后导航）。
+
+### 测试用例（逐项记录 PASS/FAIL）
+
+| # | 用例 | 步骤 | 预期 |
+|---|---|---|---|
+| 1 | 配对·动画 QR | Keystone 端「关联软件钱包」选通用/以太坊，展示动画 QR（crypto-account 多帧）→ App 配对页扫描 | 相机上方出现 `n / N` 进度并递增；集齐后配对成功，设备出现在硬件钱包列表 |
+| 2 | 配对·单帧回退 | 若设备支持单帧 xpub/crypto-hdkey QR，扫单帧 | 一帧完成配对 |
+| 3 | 签名请求·单帧 | 发起一笔小额 EVM 测试网转账（短 calldata）→ App 展示静态请求 QR → Keystone 扫描 | 设备识别为 eth-sign-request 并正确显示交易要素（to/value/chainId） |
+| 4 | 签名请求·动画多帧 | 构造长 calldata 交易（如 ERC-20 approve 或合约调用，payload > 200 字节）→ App 展示轮播动画 QR | Keystone 能持续采集并集齐帧、正确解析交易（这是 fountain 编码器的核心验证点） |
+| 5 | 签名回读 | Keystone 确认签名后展示 eth-signature QR → App 扫描 | App 解析出签名（v/r/s），页面返回成功；交易能在测试网广播上链 |
+| 6 | personal_sign 中文 | 通过 DApp/测试入口发起含中文的 personal_sign（如 "你好 N42"） | Keystone 端显示的消息与 App 端一致（验证 utf8 修复；旧实现中文必乱码） |
+| 7 | 异常·扫错类型 | 签名扫码阶段扫配对 QR（或任意其他 UR） | 提示 Unexpected UR type，不崩溃，可继续扫 |
+| 8 | 异常·中断恢复 | 多帧扫描中途遮挡镜头 2-3 秒再恢复 | 进度从已收帧数继续（fountain 帧无序可补），最终完成 |
+
+### 已知边界与排障提示（失败时先看这里）
+
+- **用例 1 若失败，首要嫌疑不是编解码**：`_parseCryptoHdKey`/`_parseCryptoAccount`
+  （keystone_service.dart）**并未真正解析 crypto-account CBOR 内层结构**——
+  把整段 payload hex 当 xpub 存、fingerprint 恒 null（代码注释已自认）。
+  多帧若能集齐（进度走满）但配对数据不对，请把解出的 payload hex 前 64 字符
+  记入报告，这属于「CBOR 内层解析待实现」而非 fountain 缺陷，分开定性。
+- 用例 4 若 Keystone 识别不了动画 QR：先记录固件版本；可在
+  `keystone_sign_page.dart` 把 `_frameInterval` 调到 400ms、
+  `createUrEncoder` 的 `maxFragmentLen` 降到 100 再试，结果写入报告。
+- **红线**：`crypto/ur_codec.dart` 与 `crypto/ur_fountain.dart` 勿改——
+  两文件由官方测试向量守护（改前必读文件头注释）；排障只动页面/服务层参数。
+- 回归命令：`flutter test test/features/hardware_wallet/`（206 项，改任何
+  hardware_wallet 代码后必须全绿）。
+
+### 交付物
+
+`docs/device-test-reports/2026-MM-DD-t28-keystone-bcur-device.md`：
+设备型号 + 固件版本 + App commit hash；8 用例逐项 PASS/FAIL；失败用例附
+原始 QR 内容（App 侧日志或手动转录）与截图/照片；按上述提示对失败做初步定性
+（fountain 层 / CBOR 内层解析 / 页面交互）。全 PASS 则在本条目下留言关单；
+有 FAIL 不要自行修 crypto 层，留言并列出定性结论等 Claude 侧接手。
