@@ -89,7 +89,13 @@ chat_initialization、main 启动链）是接线点，允许 import features 实
    采样 500、洗牌、分片 hex、20 帧 CBOR/UR 黄金串、32767 字节全混合帧
    round-trip）；`KeystoneScanSession` 接入 sign/pair 扫码页（多帧累积+
    进度显示），请求侧超长 payload 自动 fountain 分帧轮播动画 QR。
-   **真机 Keystone 联调仍待验证。**
+   **2026-08-07 软件层互操作已闭环**：与 Keystone 官方软件栈同源库
+   （@ngraveio/bc-ur + @keystonehq/bc-ur-registry-eth）双向交叉验证——
+   fountain 多帧互解全通；并借此抓到 eth-sign-request CBOR 缺 UUID tag(37)/
+   crypto-keypath tag(304) 的真机必现拒收 bug（已修，tag 断言入测试守护）。
+   真机 8 用例挂起待设备（T28，codex-n42），剩余风险面仅物理扫码与设备固件行为；
+   已知缺口：配对侧 crypto-account 内层 CBOR 解析未实现（xfp 取不到，
+   keypath source-fingerprint 暂省略）。
 4. `keystone_service.dart` `codeUnits`→`utf8.encode`，非 ASCII 签名数据不再损坏。
 5. `toDevice()` xpub 越界修复；`validateScannedUr` 改精确类型段匹配。
 
