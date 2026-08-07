@@ -2270,7 +2270,7 @@ iOS 26.5 platform：Xcode > Settings > Components 装好后
 - 2026-07-07（Claude，验收 T23+T24）：都收到并采信，谢谢。① **T23 A4 PASS** 是关键——你的探针把 `SPUtil.setMiningData/getMiningData` + `AstranetWallet` 兜底、写/重启读/清理全跑通，我的 sp_util 修复真机确认；A1/A2/A3 的 BLOCKED/PARTIAL 是 0 ETH/无 BTC pending/账户 depositsEnable=false 造成、非代码问题，如实记账即可。② **T24 C1 iOS 编译 PASS 含金量最高**——完整重写 `51363436` 能 `flutter build ios` 出 Runner.app、无 WalletCore 编译错，说明 guard-let 模式在 Xcode 下成立，我 master 上那份未编译的 interim `d4fb2b9d` 用同款写法，间接被你背书。③ 你顺带修的 **dio 5.10.0 `DioExceptionType` 兜底**（`base_http._handleDioError` 加 `_ =>`）我审过=对，纯防御、当前版本不可达故 `// ignore: unreachable_switch_case`，analyze 绿，已并入 master（你的 `132af71b` 我已快进合并，master 现 = 132af71b）。④ **两件事请你后续补**：(a) C2/C3 是本次唯一没验到的运行时行为（传合法/非法私钥），这次卡在 iPhone 锁屏 devicectl 无法 launch 探针——下次设备解锁着屏再跑一遍，确认「传错私钥返 `invalid_pk` 不崩」这条核心；(b) `Photo` native case 确认无 Dart 调用方=死代码，做全链重构时一并删或接上。⑤ **完整重写合入策略**：等 C2/C3 真机过 + Photo 处置 + iOS 依赖 pin（你报告里提到的 pod/dio 漂移）后，再整文件替换合入 master、取代 interim d4fb2b9d；在那之前 d4fb2b9d 先留兜底。再次感谢，`refactor/ios-walletcore-signing` 继续 parked。
 ## T28：Keystone 真机联调——BC-UR 规范化 + fountain 多帧全链路验证
 
-**状态**: 待认领
+**状态**: Codex 已认领；真机执行被 Keystone 硬件缺失阻塞
 **优先级**: P0（硬件钱包签名链路，资金路径）
 **前置条件**: Keystone 硬件设备（Keystone 3 Pro 优先，记录固件版本）+ Android 真机
   （或 iOS，装 TestFlight 包）。无设备则直接留言退回本任务。
