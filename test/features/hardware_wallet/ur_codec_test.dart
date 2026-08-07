@@ -411,19 +411,30 @@ void main() {
       );
       final map = decodeCborIntMap(req.toCbor());
 
-      // key 1: requestId — UUID v4 的 16 字节
-      expect((map[1] as CborBytesValue).value.length, 16);
+      // key 1: requestId — registry 规范要求 UUID tag(37) 包裹的 16 字节
+      final reqIdTag = map[1] as CborTagValue;
+      expect(reqIdTag.tags, [EthSignRequest.uuidTag]);
+      expect((reqIdTag.value as CborBytesValue).value.length, 16);
       // key 2: signData
       expect((map[2] as CborBytesValue).value, rlp);
       // key 3: dataType = 1 (transaction)
       expect((map[3] as CborIntValue).value, 1);
       // key 4: chainId
       expect((map[4] as CborIntValue).value, 1);
-      // key 5: derivationPath（含硬化位的整数列表）
-      final pathList = (map[5] as CborListValue).value
-          .map((e) => (e as CborIntValue).value)
-          .toList();
-      expect(pathList, path);
+      // key 5: derivationPath — crypto-keypath tag(304)：
+      //   {1: [childIndex, hardened, ...]}，裸 int 数组会被真机拒收
+      final keypathTag = map[5] as CborTagValue;
+      expect(keypathTag.tags, [EthSignRequest.cryptoKeypathTag]);
+      final keypathMap = keypathTag.value as CborMapValue;
+      final components =
+          (keypathMap.value[const CborIntValue(1)] as CborListValue).value;
+      final rebuiltPath = <int>[];
+      for (var i = 0; i < components.length; i += 2) {
+        final index = (components[i] as CborIntValue).value;
+        final hardened = (components[i + 1] as CborBoleanValue).value;
+        rebuiltPath.add(hardened ? (0x80000000 | index) : index);
+      }
+      expect(rebuiltPath, path);
       // key 6: address（0x 前缀被剥离后的 20 字节）
       expect(
         (map[6] as CborBytesValue).value,

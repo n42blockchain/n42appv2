@@ -50,14 +50,27 @@ void main() {
       expect(ur, startsWith('UR:ETH-SIGN-REQUEST/'));
 
       final map = decodeUrToIntMap(ur, 'eth-sign-request');
-      expect((map[1] as CborBytesValue).value.length, 16); // requestId
+      // requestId：UUID tag(37) 包裹（registry 规范）
+      final reqIdTag = map[1] as CborTagValue;
+      expect(reqIdTag.tags, [EthSignRequest.uuidTag]);
+      expect((reqIdTag.value as CborBytesValue).value.length, 16);
       expect((map[2] as CborBytesValue).value, rlp); // signData
       expect((map[3] as CborIntValue).value, 1); // dataType=transaction
       expect((map[4] as CborIntValue).value, 1); // chainId
-      final pathList = (map[5] as CborListValue).value
-          .map((e) => (e as CborIntValue).value)
-          .toList();
-      expect(pathList, expectedPathInts);
+      // derivationPath：crypto-keypath tag(304) 结构
+      final keypathTag = map[5] as CborTagValue;
+      expect(keypathTag.tags, [EthSignRequest.cryptoKeypathTag]);
+      final components =
+          ((keypathTag.value as CborMapValue).value[const CborIntValue(1)]
+                  as CborListValue)
+              .value;
+      final rebuilt = <int>[];
+      for (var i = 0; i < components.length; i += 2) {
+        final index = (components[i] as CborIntValue).value;
+        final hardened = (components[i + 1] as CborBoleanValue).value;
+        rebuilt.add(hardened ? (0x80000000 | index) : index);
+      }
+      expect(rebuilt, expectedPathInts);
       expect((map[6] as CborBytesValue).value.length, 20); // address
       expect((map[7] as CborStringValue).value, 'N42'); // origin
     });

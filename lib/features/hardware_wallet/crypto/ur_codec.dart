@@ -291,6 +291,12 @@ enum EthSignDataType {
 /// Encodes an ETH transaction signing request as a BC-UR `eth-sign-request`
 /// CBOR structure, ready to display as a QR code on the app side.
 class EthSignRequest {
+  /// CBOR tag：RFC 9562 UUID（registry 要求 requestId 必须带此 tag）
+  static const int uuidTag = 37;
+
+  /// CBOR tag：BC-UR crypto-keypath（BCR-2020-007）
+  static const int cryptoKeypathTag = 304;
+
   final Uint8List requestId;
   final Uint8List signData;
   final EthSignDataType dataType;
@@ -301,6 +307,10 @@ class EthSignRequest {
   final String? address;
   final String? origin;
 
+  /// 设备主密钥指纹（配对时从 crypto-account 获得）。Keystone 用它确认
+  /// 请求归属；暂缺时省略 keypath 的 source-fingerprint 字段。
+  final int? masterFingerprint;
+
   const EthSignRequest({
     required this.requestId,
     required this.signData,
@@ -309,6 +319,7 @@ class EthSignRequest {
     required this.derivationPath,
     this.address,
     this.origin,
+    this.masterFingerprint,
   });
 
   /// Create a sign request for an ETH transaction
@@ -391,16 +402,37 @@ class EthSignRequest {
   static CborIntValue _key(int k) => CborIntValue(k);
 
   /// Encode to CBOR bytes
+  /// derivationPath → crypto-keypath（tag 304）结构：
+  /// `{1: [childIndex, hardened, ...], 2: source-fingerprint?}`
+  /// Keystone registry 只认这个格式，裸 int 数组会被设备拒收。
+  CborTagValue _buildCryptoKeypath() {
+    final components = <CborObject>[];
+    for (final i in derivationPath) {
+      components.add(CborIntValue(i & 0x7FFFFFFF));
+      components.add(CborBoleanValue(i & 0x80000000 != 0));
+    }
+    final keypathMap = <CborObject, CborObject>{
+      const CborIntValue(1): CborListValue.definite(components),
+      if (masterFingerprint != null)
+        const CborIntValue(2): CborIntValue(masterFingerprint!),
+    };
+    return CborTagValue(
+      CborMapValue.definite(keypathMap),
+      const [cryptoKeypathTag],
+    );
+  }
+
   Uint8List toCbor() {
     final map = <CborObject, CborObject>{
-      _key(EthSignRequestKeys.requestId): CborBytesValue(requestId),
+      _key(EthSignRequestKeys.requestId): CborTagValue(
+        CborBytesValue(requestId),
+        const [uuidTag],
+      ),
       _key(EthSignRequestKeys.signData): CborBytesValue(signData),
       _key(EthSignRequestKeys.dataType): CborIntValue(dataType.value),
       if (chainId != null)
         _key(EthSignRequestKeys.chainId): CborIntValue(chainId!),
-      _key(EthSignRequestKeys.derivationPath): CborListValue.definite(
-        derivationPath.map((i) => CborIntValue(i) as CborObject).toList(),
-      ),
+      _key(EthSignRequestKeys.derivationPath): _buildCryptoKeypath(),
       if (address case final addr?)
         _key(EthSignRequestKeys.address): CborBytesValue(
           BytesUtils.fromHexString(
@@ -464,13 +496,23 @@ class EthSignature {
     Uint8List? signature;
     String? origin;
 
+    // 真机响应的 requestId 按 registry 规范带 UUID tag(37)；
+    // 也兼容裸 bytes（旧实现/宽松设备）。
+    Uint8List asBytes(CborObject v) {
+      final unwrapped = v is CborTagValue ? v.value : v;
+      if (unwrapped is! CborBytesValue) {
+        throw UrCodecException('eth-signature field is not bytes');
+      }
+      return Uint8List.fromList(unwrapped.value);
+    }
+
     for (final entry in cbor.value.entries) {
       final key = (entry.key as CborIntValue).value;
       switch (key) {
         case EthSignatureKeys.requestId:
-          requestId = Uint8List.fromList((entry.value as CborBytesValue).value);
+          requestId = asBytes(entry.value);
         case EthSignatureKeys.signature:
-          signature = Uint8List.fromList((entry.value as CborBytesValue).value);
+          signature = asBytes(entry.value);
         case EthSignatureKeys.origin:
           origin = (entry.value as CborStringValue).value;
       }
