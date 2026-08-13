@@ -32,6 +32,11 @@ target 'Runner' do
   use_modular_headers!
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
   pod  'TrustWalletCore', '4.7.0'
+  # n42_chat image OCR scripts beyond the plugin's default Latin model.
+  pod 'GoogleMLKit/TextRecognitionChinese', '~> 9.0.0'
+  pod 'GoogleMLKit/TextRecognitionDevanagari', '~> 9.0.0'
+  pod 'GoogleMLKit/TextRecognitionJapanese', '~> 9.0.0'
+  pod 'GoogleMLKit/TextRecognitionKorean', '~> 9.0.0'
   target 'RunnerTests' do
     inherit! :search_paths
   end

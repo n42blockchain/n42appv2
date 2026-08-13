@@ -23,7 +23,7 @@
 | 3 | ~~WebM / 视频贴纸~~ ✅ **完成 2026-06-27** | VideoStickerView(video_player 循环/静音/回退)接入选择器+消息渲染；动画 WebP/GIF 经 Flutter Image 已支持；iOS WebM 受编解码限制(诚实标注) |
 | 4 | ~~贴纸搜索 / 输入联想~~ ✅ **完成 2026-06-27** | 贴纸面板搜索框(`searchStickers` 按名称/emoji 排序命中) + 输入框打字按词联想推荐贴纸条(`StickerSuggestionBar`/`StickerSuggestionUtils`) + 抽出复用 `StickerThumb` + 20 单测 |
 | 5 | ~~自定义动画 emoji~~ ✅ **完成 2026-06-27** | `:shortcode:` 内联动画 emoji（Discord/TG 型）：内置 16 个 Noto Lottie 动画集+别名(`BuiltinCustomEmojis`)、纯解析器(`CustomEmojiParser`)、消息气泡内联渲染(`CustomEmojiText`/`WidgetSpan` 按字号缩放)、输入 `:partial` 联想条(`CustomEmojiSuggestionBar`)+16 单测；markdown 文本路径暂不内联(诚实标注) |
-| 6 | ~~图像理解 / OCR~~ ✅ **完成 2026-06-27** | 云端视觉(`describeImage`)+图片查看器「AI describe/OCR」入口+4 测试 |
+| 6 | ~~结构化 OCR + 图片翻译~~ ✅ **实现 2026-08-12** | 聊天图片长按/预览双入口；Android/iOS ML Kit 中英日韩/Devanagari 结构化 OCR；原图框选、逐块选择、复制/分享/转发/收藏/搜索；端侧翻译优先、明确授权后仅发送 OCR 文本作云端回退；Matrix E2EE 图片 hash 校验与本地解密；阅后即焚保护。待双真机补 OCR 精度矩阵，方案与验收见 `docs/N42_CHAT_IMAGE_OCR_TRANSLATION_PLAN.md` |
 | 7 | ~~图像生成~~ ✅ **接口+消费者已就位** | `AiService.generateImage` + AI 贴纸(#1)消费；如需「生成并作为消息发送」可后续小增 |
 | 8 | ~~优先通知 / 智能过滤~~ ✅ **完成 2026-06-27** | 客户端规则：优先关键词/优先发送者(强制通知，绕过仅提及/静音/免打扰) + 屏蔽关键词(抑制)；纯判定+JSON(`NotificationFilterRules`)、SharedPreferences 持久化(`NotificationFilterStore`)、接入 `FirebasePushService` 通知闸门、设置页「Smart Filter」管理 UI + 10 单测 |
 | 9 | 屏幕共享 | 🚧 **Android 原生前台服务接线已完成，真机 A/B 被 LiveKit JWT 阻塞** | `group_call_screen` 切换按钮/共享浮层/参与者渲染 + `livekit_service.start/stop/toggleScreenShare` 均就位；Codex T8 已加 `flutter_background`、`FOREGROUND_SERVICE_MEDIA_PROJECTION`、`mediaProjection` 前台服务，Android 开播前先 `Helper.requestCapturePermission()` 再起服务并发布屏幕轨道，停止/离会会关服务。`flutter analyze --no-fatal-infos` + debug APK build PASS；Android 16 debug APK 已安装，`FOREGROUND_SERVICE_MEDIA_PROJECTION` 已授权。实测群聊 `bdns` 的入口为「回形针 -> Video Call」，但 `.well-known` 暴露的 `https://m.si46.world/livekit/jwt` 返回 301 到 `/livekit/jwt/`，带 slash 返回 404，导致群通话未进入 `GroupCallScreen`；详见 `docs/device-test-reports/2026-06-27-screen-share.md`。剩余：修复 LiveKit JWT 签发端点后做 Android/iPhone A/B；iOS Broadcast Upload Extension 后续。 |
@@ -66,8 +66,8 @@
 
 ## 优先级建议
 
-- **先打近期 1 + 6/7**（AI 生成贴纸 / 图像理解 / 图像生成）：都接已有云端 AI 通道、
-  纯客户端，直接补上「AI 真实分」与「表达力前沿」，性价比最高。
+- **近期优先补 6**（结构化 OCR + 图片翻译）：端侧 OCR 不应依赖云端 AI，先修 E2EE
+  媒体字节解析，再接坐标级识别、选择与翻译；详见专项方案。
 - **近期 12（直播间真视频）优先确保可用**。
 - 中期 14/15/16 是本季真补的收尾（MLS 打包、虚拟背景发布、iOS 本地AI），建议 Codex
   在 NDK/macOS 环境推进。
