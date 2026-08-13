@@ -422,5 +422,6 @@ ML Kit 文档说明输入和输出内容在设备上处理，不会发送到 Goo
 宿主 `flutter analyze --no-fatal-infos` 无 error/warning（仅仓库既有 info lint）；Android
 debug APK 与 iOS 无签名 device build 均成功。Android 16 真机安装被设备端用户安装限制取消，
 因此 OCR 精度、离线模型和复杂版面仍须在可安装的 Android/iPhone 上按第 9 节矩阵验收。
-独立仓同步提交已生成（本地 commit `192d1cb`），但当前环境没有 GitHub 凭据，推送被
-GitHub 拒绝；为避免写入不存在的远端对象，宿主 `pubspec.yaml` 的 git ref 暂未改动。
+独立 `n42_chat` 仓的功能提交 `192d1cb` 已合并并通过 SSH 推送到 GitHub `main`，
+合并提交为 `970486915fe85946bf2babb5ee0d2cc574ec11d0`；宿主 `pubspec.yaml` 已锁定该
+主分支合并提交，确保依赖对象可从远端复现。
