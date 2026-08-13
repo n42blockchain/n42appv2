@@ -192,6 +192,12 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
                 );
               }
             : null,
+        onExtractText: _canProcessImageText(message)
+            ? () => _openImageText(message, ImageTextMode.extract)
+            : null,
+        onTranslateImage: _canProcessImageText(message)
+            ? () => _openImageText(message, ImageTextMode.translate)
+            : null,
         onReport: message.isFromMe
             ? null
             : () {
@@ -216,6 +222,62 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
     );
 
     overlay.insert(overlayEntry);
+  }
+
+  bool _canProcessImageText(MessageEntity message) =>
+      message.type == MessageType.image &&
+      !message.isExpired &&
+      !message.isSelfDestructing &&
+      getIt.isRegistered<ImageTextRecognitionService>() &&
+      getIt<ImageTextRecognitionService>().isSupported;
+
+  void _openImageText(MessageEntity message, ImageTextMode mode) {
+    final chatState = context.read<ChatBloc>().state;
+    final targetLanguage = chatState.defaultTargetLanguage.isNotEmpty
+        ? chatState.defaultTargetLanguage
+        : getTargetLanguage(null);
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ImageTextPage(
+          message: message,
+          initialMode: mode,
+          initialTargetLanguage: targetLanguage,
+          onForwardText: (text) => _forwardMessage(
+            _imageTextMessage(message, text),
+          ),
+          onFavoriteText: (text) => _favoriteImageText(message, text),
+          onSearchText: (text) => unawaited(
+            _openChatHistorySearch(initialQuery: text),
+          ),
+        ),
+      ),
+    );
+  }
+
+  MessageEntity _imageTextMessage(MessageEntity source, String text) =>
+      MessageEntity(
+        id: '${source.id}:ocr:${text.hashCode}',
+        roomId: source.roomId,
+        senderId: source.senderId,
+        senderName: source.senderName,
+        senderAvatarUrl: source.senderAvatarUrl,
+        content: text,
+        type: MessageType.text,
+        timestamp: source.timestamp,
+        status: MessageStatus.sent,
+        isFromMe: source.isFromMe,
+      );
+
+  void _favoriteImageText(MessageEntity source, String text) {
+    getIt<MessageActionBloc>().add(
+      action_event.SaveMessage(_imageTextMessage(source, text)),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(ImageTextL10n.of(context).favorited),
+        duration: const Duration(seconds: 1),
+      ),
+    );
   }
 
   /// 朗读文本消息（TTS）。TtsService 为进程级单例，再点同一条即停止。

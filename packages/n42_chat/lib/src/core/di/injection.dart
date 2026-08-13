@@ -49,6 +49,12 @@ import '../services/url_preview_service.dart';
 import '../services/storage_manager_service.dart';
 import '../services/speech_to_text_service.dart';
 import '../services/voice_service.dart';
+import '../services/chat_media_bytes_resolver.dart';
+import '../services/image_text_recognition_service.dart';
+import '../services/image_text_session_service.dart';
+import '../services/mlkit_image_text_recognition_service.dart';
+import '../services/on_device_translation_service.dart';
+import '../services/image_translation_coordinator.dart';
 import '../../data/datasources/local/archive_database.dart';
 import '../../data/datasources/local/media_metadata_database.dart';
 import '../../data/datasources/remote/social_auth_api.dart';
@@ -226,6 +232,25 @@ Future<void> _registerServices(N42ChatConfig config) async {
     dispose: (manager) => manager.dispose(),
   );
 
+  getIt.registerLazySingleton<ChatMediaBytesResolver>(
+    () => ChatMediaBytesResolver(clientManager: clientManager),
+    dispose: (resolver) => resolver.dispose(),
+  );
+  getIt.registerLazySingleton<ImageTextRecognitionService>(
+    () => MlKitImageTextRecognitionService(),
+    dispose: (service) => service.dispose(),
+  );
+  getIt.registerLazySingleton<OnDeviceTranslationService>(
+    () => OnDeviceTranslationService(),
+  );
+  getIt.registerLazySingleton<ImageTextSessionService>(
+    () => ImageTextSessionService(
+      mediaResolver: getIt<ChatMediaBytesResolver>(),
+      recognizer: getIt<ImageTextRecognitionService>(),
+    ),
+    dispose: (service) => service.clear(),
+  );
+
   // 语音服务（生命周期由 DI 管理）
   final voiceService = VoiceService();
   await voiceService.initialize();
@@ -401,6 +426,12 @@ Future<void> _registerServices(N42ChatConfig config) async {
       storageDataSource: getIt<PreferencesDataSource>(),
     );
   });
+  getIt.registerLazySingleton<ImageTranslationCoordinator>(
+    () => ImageTranslationCoordinator(
+      onDevice: getIt<OnDeviceTranslationService>(),
+      remote: getIt<ITranslationService>(),
+    ),
+  );
 
   // 游戏分数服务
   getIt.registerLazySingleton<GameScoreService>(() => GameScoreService());

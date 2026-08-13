@@ -63,6 +63,8 @@ class A11yL10n {
 
   // —— 图片 ——
   String get image => _pick('图片', '圖片', 'Image');
+  String get extractText => _pick('提取文字', '擷取文字', 'Extract text');
+  String get translateImage => _pick('翻译图片', '翻譯圖片', 'Translate image');
   String imageIndex(int index) => _pick('图片 $index', '圖片 $index', 'Image $index');
   String imageIndexMore(int index, int more) => _pick(
         '图片 $index，还有 $more 张',

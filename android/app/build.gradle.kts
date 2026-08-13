@@ -150,6 +150,12 @@ android {
 }
 
 dependencies {
+    // n42_chat image OCR: the Flutter package includes Latin by default;
+    // bundle the additional scripts used by chat image extraction.
+    implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
+    implementation("com.google.mlkit:text-recognition-devanagari:16.0.1")
+    implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
+    implementation("com.google.mlkit:text-recognition-korean:16.0.1")
     // ✅ 加入 desugar_jdk_libs，解决 flutter_local_notifications 的需求
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
     implementation("com.trustwallet:wallet-core:4.7.0")

@@ -444,8 +444,18 @@ extension _ChatPageEventHandlersMethods on _ChatPageState {
     Navigator.push(
       context,
       MaterialPageRoute<void>(
-        builder: (context) =>
-            ImageViewerPage(imageUrl: imageUrl!, heroTag: message.id),
+        builder: (context) => ImageViewerPage(
+          imageUrl: imageUrl!,
+          heroTag: message.id,
+          message: message,
+          onForwardText: (text) => _forwardMessage(
+            _imageTextMessage(message, text),
+          ),
+          onFavoriteText: (text) => _favoriteImageText(message, text),
+          onSearchText: (text) => unawaited(
+            _openChatHistorySearch(initialQuery: text),
+          ),
+        ),
       ),
     );
   }

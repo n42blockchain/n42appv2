@@ -211,6 +211,14 @@ PODS:
     - Flutter
     - google_mlkit_commons
     - GoogleMLKit/SegmentationSelfie (~> 9.0.0)
+  - google_mlkit_text_recognition (0.16.0):
+    - Flutter
+    - google_mlkit_commons
+    - GoogleMLKit/TextRecognition (~> 9.0.0)
+  - google_mlkit_translation (0.14.0):
+    - Flutter
+    - google_mlkit_commons
+    - GoogleMLKit/Translate (~> 9.0.0)
   - google_sign_in_ios (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -254,6 +262,24 @@ PODS:
   - GoogleMLKit/SegmentationSelfie (9.0.0):
     - GoogleMLKit/MLKitCore
     - MLKitSegmentationSelfie (~> 1.0.0-beta14)
+  - GoogleMLKit/TextRecognition (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTextRecognition (~> 7.0.0)
+  - GoogleMLKit/TextRecognitionChinese (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTextRecognitionChinese (~> 6.0.0)
+  - GoogleMLKit/TextRecognitionDevanagari (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTextRecognitionDevanagari (~> 6.0.0)
+  - GoogleMLKit/TextRecognitionJapanese (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTextRecognitionJapanese (~> 6.0.0)
+  - GoogleMLKit/TextRecognitionKorean (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTextRecognitionKorean (~> 6.0.0)
+  - GoogleMLKit/Translate (9.0.0):
+    - GoogleMLKit/MLKitCore
+    - MLKitTranslate (~> 8.0.0)
   - GoogleSignIn (9.2.0):
     - AppAuth (~> 2.1)
     - AppCheckCore (~> 11.0)
@@ -263,6 +289,8 @@ PODS:
   - GoogleToolboxForMac/Logger (4.2.1):
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - "GoogleToolboxForMac/NSData+zlib (4.2.1)":
+    - GoogleToolboxForMac/Defines (= 4.2.1)
+  - GoogleToolboxForMac/StringEncoding (4.2.1):
     - GoogleToolboxForMac/Defines (= 4.2.1)
   - GoogleUtilities/AppDelegateSwizzler (8.1.2):
     - GoogleUtilities/Environment
@@ -342,11 +370,43 @@ PODS:
   - MLKitFaceDetection (8.0.0):
     - MLKitCommon (~> 14.0)
     - MLKitVision (~> 10.0)
+  - MLKitNaturalLanguage (10.0.0):
+    - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
+    - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
+    - GoogleToolboxForMac/StringEncoding (< 5.0, >= 4.2.1)
+    - GTMSessionFetcher/Core (< 4.0, >= 3.3.2)
+    - MLKitCommon (~> 14.0)
   - MLKitSegmentationCommon (1.0.0-beta14):
     - MLKitCommon (~> 14.0)
     - MLKitXenoCommon (= 1.0.0-beta16)
   - MLKitSegmentationSelfie (1.0.0-beta14):
     - MLKitSegmentationCommon (= 1.0.0-beta14)
+  - MLKitTextRecognition (7.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitTextRecognitionCommon (= 6.0.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTextRecognitionChinese (6.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitTextRecognitionCommon (= 6.0.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTextRecognitionCommon (6.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTextRecognitionDevanagari (6.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitTextRecognitionCommon (= 6.0.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTextRecognitionJapanese (6.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitTextRecognitionCommon (= 6.0.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTextRecognitionKorean (6.0.0):
+    - MLKitCommon (~> 14.0)
+    - MLKitTextRecognitionCommon (= 6.0.0)
+    - MLKitVision (~> 10.0)
+  - MLKitTranslate (8.0.0):
+    - MLKitNaturalLanguage (~> 10.0)
+    - SSZipArchive (< 3.0, >= 2.5.5)
   - MLKitVision (10.0.0):
     - GoogleToolboxForMac/Logger (< 5.0, >= 4.2.1)
     - "GoogleToolboxForMac/NSData+zlib (< 5.0, >= 4.2.1)"
@@ -435,6 +495,7 @@ PODS:
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
     - sqlite3/session
+  - SSZipArchive (2.6.0)
   - SwiftyGif (5.4.5)
   - TensorFlowLiteC (0.0.1-nightly.20250619):
     - TensorFlowLiteC/Core (= 0.0.1-nightly.20250619)
@@ -519,7 +580,13 @@ DEPENDENCIES:
   - google_mlkit_commons (from `.symlinks/plugins/google_mlkit_commons/ios`)
   - google_mlkit_face_detection (from `.symlinks/plugins/google_mlkit_face_detection/ios`)
   - google_mlkit_selfie_segmentation (from `.symlinks/plugins/google_mlkit_selfie_segmentation/ios`)
+  - google_mlkit_text_recognition (from `.symlinks/plugins/google_mlkit_text_recognition/ios`)
+  - google_mlkit_translation (from `.symlinks/plugins/google_mlkit_translation/ios`)
   - google_sign_in_ios (from `.symlinks/plugins/google_sign_in_ios/darwin`)
+  - GoogleMLKit/TextRecognitionChinese (~> 9.0.0)
+  - GoogleMLKit/TextRecognitionDevanagari (~> 9.0.0)
+  - GoogleMLKit/TextRecognitionJapanese (~> 9.0.0)
+  - GoogleMLKit/TextRecognitionKorean (~> 9.0.0)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - in_app_purchase_storekit (from `.symlinks/plugins/in_app_purchase_storekit/darwin`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
@@ -593,8 +660,16 @@ SPEC REPOS:
     - MLImage
     - MLKitCommon
     - MLKitFaceDetection
+    - MLKitNaturalLanguage
     - MLKitSegmentationCommon
     - MLKitSegmentationSelfie
+    - MLKitTextRecognition
+    - MLKitTextRecognitionChinese
+    - MLKitTextRecognitionCommon
+    - MLKitTextRecognitionDevanagari
+    - MLKitTextRecognitionJapanese
+    - MLKitTextRecognitionKorean
+    - MLKitTranslate
     - MLKitVision
     - MLKitXenoCommon
     - nanopb
@@ -604,6 +679,7 @@ SPEC REPOS:
     - SDWebImage
     - SQLCipher
     - sqlite3
+    - SSZipArchive
     - SwiftyGif
     - TensorFlowLiteC
     - TensorFlowLiteSelectTfOps
@@ -677,6 +753,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_mlkit_face_detection/ios"
   google_mlkit_selfie_segmentation:
     :path: ".symlinks/plugins/google_mlkit_selfie_segmentation/ios"
+  google_mlkit_text_recognition:
+    :path: ".symlinks/plugins/google_mlkit_text_recognition/ios"
+  google_mlkit_translation:
+    :path: ".symlinks/plugins/google_mlkit_translation/ios"
   google_sign_in_ios:
     :path: ".symlinks/plugins/google_sign_in_ios/darwin"
   image_picker_ios:
@@ -795,6 +875,8 @@ SPEC CHECKSUMS:
   google_mlkit_commons: b4dfe2f6ae4cbf24010dc6640a28984d01343c86
   google_mlkit_face_detection: 21baa82ab858694c846f0e0bfa64e3a3ca7bceda
   google_mlkit_selfie_segmentation: 7fc41b3ef8ba238abf8dc76724da50e44de8aaf0
+  google_mlkit_text_recognition: 9b164471713e3afdb4c129cabe6d1d64fef7e817
+  google_mlkit_translation: 32f759ac50c38fc2eada2cf15fefc86b38faf0f7
   google_sign_in_ios: 000870aa06da9b28d1d0bf7ef70ff0213059dd28
   GoogleAdsOnDeviceConversion: e3b71da24ff4cf01cf520756ac1c2b93c07b86ff
   GoogleAppMeasurement: a6d37949071d456e9147dac6789c4342e0e7a8c5
@@ -818,8 +900,16 @@ SPEC CHECKSUMS:
   MLImage: 0de5c6c2bf9e93b80ef752e2797f0836f03b58c0
   MLKitCommon: 47d47b50a031d00db62f1b0efe5a1d8b09a3b2e6
   MLKitFaceDetection: 32549f1e70e6e7731261bf9cea2b74095e2531cb
+  MLKitNaturalLanguage: 498154f2461f97abb00eb161eb773670ffc46250
   MLKitSegmentationCommon: f634fb3c20c1d8bace22a2c026bdaa0ca17613d9
   MLKitSegmentationSelfie: 62371f35c33d49c3e7474443677b6a0c7ac9c98b
+  MLKitTextRecognition: c0ad24510481dfc8893ad15dfcb8a5f05ed9e826
+  MLKitTextRecognitionChinese: b69210723ed8cc9bc7b2e7847001880b0dcbb7f8
+  MLKitTextRecognitionCommon: 234ceb1cfdfb5fceb4fd664943046609a2961cc2
+  MLKitTextRecognitionDevanagari: 326281ad520172466dd6dd6a784fa03fb8ab9e37
+  MLKitTextRecognitionJapanese: 965f89fd8ad3a02eb466106522ed08ea19f30f61
+  MLKitTextRecognitionKorean: 22c8d6a73f519fa9732873993a30b067f8deccb1
+  MLKitTranslate: fcb283a2cbaaa595e1cf1d3fedffcea2e97a1168
   MLKitVision: 39a5a812db83c4a0794445088e567f3631c11961
   MLKitXenoCommon: 1a4268c1222a6043047af5bb9435028206c63287
   mobile_scanner: 9157936403f5a0644ca3779a38ff8404c5434a93
@@ -845,6 +935,7 @@ SPEC CHECKSUMS:
   SQLCipher: eb79c64049cb002b4e9fcb30edb7979bf4706dfc
   sqlite3: a51c07cf16e023d6c48abd5e5791a61a47354921
   sqlite3_flutter_libs: b3e120efe9a82017e5552a620f696589ed4f62ab
+  SSZipArchive: 8a6ee5677c8e304bebc109e39cf0da91ccef22ea
   SwiftyGif: 706c60cf65fa2bc5ee0313beece843c8eb8194d4
   TensorFlowLiteC: 215ef57653dd0fa09a474e7d94d79ae64a870b28
   TensorFlowLiteSelectTfOps: c71d7dcd063f5d66ae1b9a85cc5aa993f824eff9
@@ -866,6 +957,6 @@ SPEC CHECKSUMS:
   WechatOpenSDK-XCFramework: ff342ae616bb86df3d236aca38059dfd4bc4a949
   YttriumWrapper: cbddb60c835ebc4232d9f57064084ab30686a18e
 
-PODFILE CHECKSUM: 56273fcb1213510af55c0e099fef3651cdf99799
+PODFILE CHECKSUM: 265eac9cd35a42bfcf50676cd405702576f022e2
 
 COCOAPODS: 1.16.2
