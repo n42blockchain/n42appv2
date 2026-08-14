@@ -725,7 +725,8 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         val toAddress: String = txData["toAddress"] as String
         val amount: String = txData["amount"] as String
         val erc721Or1155: String = txData["erc721Or1155"] as String
-        val messageData: String = txData["msgData"] as String
+        // ERC721/1155 分支不使用 msgData，缺键时不能让 `as String` 抛异常。
+        val messageData: String = txData["msgData"] as? String ?: ""
         val is1559: String = txData["is1559"] as String
 
         val chainIdBS: ByteString = ByteString.copyFrom(BigInteger(chainId, 16).toByteArray())
@@ -734,7 +735,11 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         val gasPrice2BS: ByteString = ByteString.copyFrom(BigInteger(gasPrice2, 16).toByteArray())
         val nonceBS: ByteString = ByteString.copyFrom(BigInteger(nonce, 16).toByteArray())
         val amountBS: ByteString = ByteString.copyFrom(BigInteger(amount, 16).toByteArray())
-        val messageDataBS: ByteString = ByteString.copyFrom(messageData.toByteArray())
+        // msgData 由 Dart 侧统一下发为不带 0x 的 hex（calldata 与 memo 皆然）。
+        // 此前用 toByteArray() 按 UTF-8 编码，会把 hex 文本本身当字符串写进
+        // tx data——所有合约调用（swap/approve/staking）上链必 revert 却报成功。
+        val messageDataBS: ByteString =
+            ByteString.copyFrom(Numeric.hexStringToByteArray(messageData))
         val privateKeyBS: ByteString = ByteString.copyFrom(privateKey.data())
         val input = Ethereum.SigningInput.newBuilder()
             .setChainId(chainIdBS)
@@ -828,7 +833,11 @@ class TransactionSignerHandler(private val keyHandler: KeyManagementHandler) {
         val gasPrice2BS: ByteString = ByteString.copyFrom(BigInteger(gasPrice2, 16).toByteArray())
         val nonceBS: ByteString = ByteString.copyFrom(BigInteger(nonce, 16).toByteArray())
         val amountBS: ByteString = ByteString.copyFrom(BigInteger(amount, 16).toByteArray())
-        val messageDataBS: ByteString = ByteString.copyFrom(messageData.toByteArray())
+        // msgData 由 Dart 侧统一下发为不带 0x 的 hex（calldata 与 memo 皆然）。
+        // 此前用 toByteArray() 按 UTF-8 编码，会把 hex 文本本身当字符串写进
+        // tx data——所有合约调用（swap/approve/staking）上链必 revert 却报成功。
+        val messageDataBS: ByteString =
+            ByteString.copyFrom(Numeric.hexStringToByteArray(messageData))
         val privateKeyBS: ByteString = ByteString.copyFrom(privateKey.data())
         val input = Ethereum.SigningInput.newBuilder()
             .setTxMode(Ethereum.TransactionMode.Enveloped)

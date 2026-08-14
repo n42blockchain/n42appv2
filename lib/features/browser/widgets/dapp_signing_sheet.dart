@@ -24,11 +24,17 @@ class DAppSigningSheet extends StatelessWidget {
     super.key,
   });
 
+  /// 连接授权请求（`eth_requestAccounts`）——不是签名，展示必须区别于签名，
+  /// 否则用户看到的是标题 "Sign Message"、内容空白的框，既看不懂也不像授权。
+  bool get _isConnect => method == 'eth_requestAccounts';
+
   @override
   Widget build(BuildContext context) {
     final s = S.of(context);
     final isTransaction = method.contains('Transaction');
-    final title = isTransaction ? 'Transaction' : 'Sign Message';
+    final title = _isConnect
+        ? s.g_key_dapp_connect_title
+        : (isTransaction ? 'Transaction' : 'Sign Message');
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -67,13 +73,14 @@ class DAppSigningSheet extends StatelessWidget {
         // 标题+说明+风险等级+关键字段高亮（复用 WalletConnect 签名流程同款
         // TxRiskBannerWidget，视觉一致）。解码失败时静默回退，不影响下方原始
         // 数据展示——用户始终能看到真实请求内容。
-        Builder(
-          builder: (context) {
-            final analysis = _decode();
-            if (analysis == null) return const SizedBox.shrink();
-            return TxRiskBannerWidget(analysis: analysis);
-          },
-        ),
+        if (!_isConnect)
+          Builder(
+            builder: (context) {
+              final analysis = _decode();
+              if (analysis == null) return const SizedBox.shrink();
+              return TxRiskBannerWidget(analysis: analysis);
+            },
+          ),
 
         // Scrollable content
         Flexible(
@@ -85,23 +92,46 @@ class DAppSigningSheet extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _itemWidget(context, 'Method', method),
-                if (isTransaction) ...[
-                  if (details['from'] != null)
-                    _itemWidget(context, 'From', details['from'].toString()),
-                  if (details['to'] != null)
-                    _itemWidget(context, 'To', details['to'].toString()),
-                  if (details['value'] != null && details['value'] != '0x0')
-                    _itemWidget(context, 'Value', details['value'].toString()),
-                  if (details['data'] != null && details['data'] != '0x')
+                if (_isConnect) ...[
+                  Padding(
+                    padding: EdgeInsets.only(bottom: AppSpacing.space4),
+                    child: Text(
+                      s.g_key_dapp_connect_desc,
+                      style: AppTypography.body.copyWith(
+                        color: AppColorTokens.of(context).textPrimary,
+                      ),
+                    ),
+                  ),
+                  if (details['address'] != null)
                     _itemWidget(
                       context,
-                      'Data',
-                      _truncate(details['data'].toString(), 200),
+                      s.g_key_dapp_connect_account,
+                      details['address'].toString(),
                     ),
                 ] else ...[
-                  _itemWidget(context, 'Data', _formatSignData(details)),
+                  _itemWidget(context, 'Method', method),
                 ],
+                if (!_isConnect)
+                  if (isTransaction) ...[
+                    if (details['from'] != null)
+                      _itemWidget(context, 'From', details['from'].toString()),
+                    if (details['to'] != null)
+                      _itemWidget(context, 'To', details['to'].toString()),
+                    if (details['value'] != null && details['value'] != '0x0')
+                      _itemWidget(
+                        context,
+                        'Value',
+                        details['value'].toString(),
+                      ),
+                    if (details['data'] != null && details['data'] != '0x')
+                      _itemWidget(
+                        context,
+                        'Data',
+                        _truncate(details['data'].toString(), 200),
+                      ),
+                  ] else ...[
+                    _itemWidget(context, 'Data', _formatSignData(details)),
+                  ],
               ],
             ),
           ),

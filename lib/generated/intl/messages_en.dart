@@ -1059,6 +1059,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tap to show all",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Recent"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage(
+      "Account",
+    ),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "This site is requesting to view your wallet address and suggest transactions. It cannot move funds without your approval.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Connect Wallet",
+    ),
     "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
       "This device appears to be rooted or jailbroken. Using a wallet on a compromised device increases the risk of key theft and unauthorized access. Proceed with caution.",
     ),

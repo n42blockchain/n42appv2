@@ -198,6 +198,10 @@ class NftSender implements ChainSender {
       'nonce': nonceHex,
       'contract': contractAddress.toLowerCase(),
       'amount': amountHex,
+      // 两端原生在函数开头即强制读取 msgData（Kotlin `as String` / Swift
+      // `as!`），缺键会直接抛类型异常，NFT 转账在原生边界失败。ERC721/1155
+      // 分支本就不使用它，显式给空串。
+      'msgData': '',
       'erc721Or1155': nftStandard,
       'tokenId': tokenIdHex,
       'trValue': trValueHex,

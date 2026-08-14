@@ -26,6 +26,19 @@ import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
 
 typedef ConnectDAPP = void Function(String url);
 
+/// 一个浏览器标签的稳定身份 + 当前 URL。
+///
+/// JS channel 与导航回调直接捕获它，所以「请求来自哪个页面」不依赖
+/// `wvcList.indexOf(controller)`：provider 重建、标签增删、或页面在
+/// controller 入列前就开始发消息（`loadRequest` 与 `wvcList.add` 之间的
+/// 竞态）都不会让请求失去 origin 归属而被误拒。
+class _BrowserTab {
+  _BrowserTab(this.url);
+
+  /// 该标签当前加载的 URL，由 onPageStarted / onUrlChange 持续更新。
+  String url;
+}
+
 /// Callback to show a DApp signing/transaction confirmation sheet.
 /// Returns `true` if the user approved, `false` if rejected.
 /// Set by [BrowserPage]; funnels to the shared [DAppSigningSheet].
@@ -193,9 +206,11 @@ class BrowserProvider extends ChangeNotifier {
     webViewController = WebViewController.fromPlatformCreationParams(params);
 
     // Capture the controller reference for use in navigation callbacks.
-    // All callbacks look up their tab index dynamically via _indexOfController
-    // to avoid stale closure captures of wListIndex.
+    // UI 状态（title/progress/openUrl）仍按 _indexOfController 动态查表，
+    // 避免闭包捕获过期的 wListIndex；而 origin 归属改用下面的 tab 句柄，
+    // 不受列表增删/重建影响。
     final wvc = webViewController;
+    final tab = _BrowserTab(url);
 
     webViewController
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -209,25 +224,29 @@ class BrowserProvider extends ChangeNotifier {
             _safeNotify();
           },
           onPageStarted: (String url) {
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
             AppLogger.d('Browser', 'page started loading: $url');
-            wInfoList[idx]['load'] = true;
-            // Re-inject on every navigation so SPAs don't lose the interceptor.
+            // origin 归属先于一切更新，且不依赖标签是否已入列。
+            tab.url = url;
+            // 注入按 controller 进行，不需要列表索引——此前 idx<0 时会整个
+            // 跳过注入，页面就彻底拿不到 window.ethereum。
             _injectWcClipboardScript(wvc);
             // Inject the EIP-1193 provider as early as possible so DApps that
             // probe window.ethereum at document-start find it.
             _injectEthereumProvider(wvc, url);
+            final idx = _indexOfController(wvc);
+            if (idx < 0) return;
+            wInfoList[idx]['load'] = true;
             _safeNotify();
           },
           onPageFinished: (String url) async {
+            tab.url = url;
+            // Inject again after full load in case onPageStarted fired too early.
+            await _injectWcClipboardScript(wvc);
+            await _injectEthereumProvider(wvc, url);
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['load'] = false;
             wInfoList[idx]['progress'] = 0;
-            // Inject again after full load in case onPageStarted fired too early.
-            await _injectWcClipboardScript(wvc);
-            await _injectEthereumProvider(wvc, url);
             // Fetch title for this tab
             final t = await wvc.getTitle();
             if (t != null) {
@@ -258,6 +277,7 @@ class BrowserProvider extends ChangeNotifier {
                 : NavigationDecision.prevent;
           },
           onUrlChange: (UrlChange change) {
+            tab.url = change.url ?? tab.url;
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
             wInfoList[idx]['openUrl'] = change.url ?? "";
@@ -291,7 +311,7 @@ class BrowserProvider extends ChangeNotifier {
       ..addJavaScriptChannel(
         'N42Wallet',
         onMessageReceived: (JavaScriptMessage message) {
-          _handleProviderMessage(wvc, message.message);
+          _handleProviderMessage(wvc, tab, message.message);
         },
       )
       // Use a desktop user agent so DApps (e.g. Uniswap/@reown/appkit) present
@@ -312,7 +332,6 @@ class BrowserProvider extends ChangeNotifier {
     // Both operations are queued on the same platform channel in FIFO order,
     // so clearLocalStorage is guaranteed to complete first.
     unawaited(webViewController.clearLocalStorage());
-    unawaited(webViewController.loadRequest(Uri.parse(url)));
 
     // #docregion platform_features
     if (webViewController.platform is AndroidWebViewController) {
@@ -332,6 +351,10 @@ class BrowserProvider extends ChangeNotifier {
     wInfoList.add({"openUrl": url});
     showWList = false;
     wListIndex = wvcList.length - 1;
+
+    // 入列之后再发起加载：否则页面回调（onPageStarted / JS channel）可能在
+    // controller 进入 wvcList 之前就到达，UI 状态更新会被整个跳过。
+    unawaited(webViewController.loadRequest(Uri.parse(url)));
     _safeNotify();
   }
 
@@ -583,7 +606,11 @@ class BrowserProvider extends ChangeNotifier {
   /// Handle one `N42Wallet.postMessage(json)` from the injected provider:
   /// route to [DAppRequestHandler] and resolve/reject the JS Promise via
   /// `window.ethereum._n42Cb(id, resultJson, errorJson)`.
-  Future<void> _handleProviderMessage(WebViewController wvc, String raw) async {
+  Future<void> _handleProviderMessage(
+    WebViewController wvc,
+    _BrowserTab tab,
+    String raw,
+  ) async {
     int? id;
     try {
       final msg = json.decode(raw) as Map<String, dynamic>;
@@ -594,19 +621,16 @@ class BrowserProvider extends ChangeNotifier {
 
       final handler = _ensureDappHandler();
       if (handler == null) {
+        AppLogger.w('Browser', 'provider request $method: no EVM account');
         await _rejectProvider(wvc, id, -32603, 'No EVM account available');
         return;
       }
 
-      // Origin/安全检查必须基于发起请求的标签，而不是当前活跃标签——后台
-      // 标签的 JS 仍在运行，否则恶意后台页可借前台可信页的 origin 弹签名框、
-      // 并绕过对自身 origin 的钓鱼拦截。
-      final tabIndex = _indexOfController(wvc);
-      if (tabIndex < 0) {
-        await _rejectProvider(wvc, id, 4001, 'Tab closed');
-        return;
-      }
-      final requestUrl = wInfoList[tabIndex]['openUrl'] as String? ?? '';
+      // Origin/安全检查基于发起请求的标签，而不是当前活跃标签——后台标签的
+      // JS 仍在运行，否则恶意后台页可借前台可信页的 origin 弹签名框、并绕过
+      // 对自身 origin 的钓鱼拦截。归属取自标签句柄（不是 wvcList 查表），
+      // 因此标签增删/provider 重建都不会让请求失去归属。
+      final requestUrl = tab.url;
       final origin = _originOf(requestUrl);
       if (_isSensitiveMethod(method)) {
         final sec = DAppSecurityService.check(requestUrl);
@@ -641,21 +665,32 @@ class BrowserProvider extends ChangeNotifier {
         case 'eth_requestAccounts':
           if (!_connectedOrigins.contains(origin)) {
             final cb = onSigningRequest;
-            final approved =
-                cb != null &&
-                await cb(
-                  origin: origin,
-                  method: 'eth_requestAccounts',
-                  details: {
-                    'address': handler.address,
-                    'chainId': handler.chainIdHex,
-                  },
-                );
+            if (cb == null) {
+              // 回调未接线时若静默拒绝，DApp 只会看到"连接失败"而用户什么
+              // 都没看到——留痕以便定位。
+              AppLogger.e(
+                'Browser',
+                'eth_requestAccounts from $origin but no approval UI wired',
+              );
+              await _rejectProvider(wvc, id, 4001, 'User rejected');
+              return;
+            }
+            AppLogger.i('Browser', 'connect request from $origin');
+            final approved = await cb(
+              origin: origin,
+              method: 'eth_requestAccounts',
+              details: {
+                'address': handler.address,
+                'chainId': handler.chainIdHex,
+              },
+            );
             if (!approved) {
+              AppLogger.i('Browser', 'connect rejected for $origin');
               await _rejectProvider(wvc, id, 4001, 'User rejected');
               return;
             }
             _connectedOrigins.add(origin);
+            AppLogger.i('Browser', 'connect approved for $origin');
           }
           // Push the now-exposed account into the page's provider so
           // selectedAddress/eth_accounts fast-paths see it too.

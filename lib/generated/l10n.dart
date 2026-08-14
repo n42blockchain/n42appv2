@@ -9329,6 +9329,36 @@ class S {
     );
   }
 
+  /// `Connect Wallet`
+  String get g_key_dapp_connect_title {
+    return Intl.message(
+      'Connect Wallet',
+      name: 'g_key_dapp_connect_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This site is requesting to view your wallet address and suggest transactions. It cannot move funds without your approval.`
+  String get g_key_dapp_connect_desc {
+    return Intl.message(
+      'This site is requesting to view your wallet address and suggest transactions. It cannot move funds without your approval.',
+      name: 'g_key_dapp_connect_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account`
+  String get g_key_dapp_connect_account {
+    return Intl.message(
+      'Account',
+      name: 'g_key_dapp_connect_account',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Quote failed`
   String get g_key_dex_quote_failed {
     return Intl.message(

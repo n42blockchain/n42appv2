@@ -3,8 +3,10 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/network/mev_protection.dart';
@@ -340,12 +342,11 @@ class EvmSender implements ChainSender {
 
     if (gasPrice == BigInt.zero) return SendResult.fail('Gas price error');
 
-    String messageHex = '';
-    if (calldata != null) {
-      messageHex = calldata; // raw hex ABI calldata — use as-is, no encoding
-    } else if (message != null) {
-      messageHex = Platform.isAndroid ? message : bytesToHex(message.codeUnits);
-    }
+    final messageHex = buildMsgData(
+      calldata: calldata,
+      message: message,
+      isAndroid: Platform.isAndroid,
+    );
 
     final signMap = <String, String>{
       'chainId': chainIdHex,
@@ -383,6 +384,30 @@ class EvmSender implements ChainSender {
 
     if (signStr.isEmpty) return SendResult.fail(S.current.g_key_wallet_m6);
     return '0x$signStr';
+  }
+
+  /// 把 calldata / memo 规范化为原生签名层期望的「不带 0x 前缀的 hex」。
+  ///
+  /// 此前 calldata 原样（含 0x）下发：Android 原生对它做 `toByteArray()`
+  /// （UTF-8），等于把 hex 文本本身当字符串写进 tx data——所有合约调用
+  /// （swap/approve/staking）上链必 revert，却仍返回 txHash 报成功、白烧 gas；
+  /// iOS 的 `handHexData` 也不剥离 0x。统一在此规范化后，两端一律按 hex 解码。
+  ///
+  /// memo 一律先按 UTF-8 编码再转 hex，与 Android 原生此前的字节语义一致
+  /// （原生对原始字符串做 UTF-8）。iOS 此前传的是 `codeUnits`(UTF-16) 的 hex：
+  /// ASCII 下与 UTF-8 等价，但中文等非 ASCII memo 的码点超出单字节范围，会产出
+  /// 错误/非法的 hex——统一为 UTF-8 同时修掉这一点。
+  ///
+  /// [isAndroid] 保留用于平台差异回归定位；当前两端契约已统一。
+  @visibleForTesting
+  static String buildMsgData({
+    String? calldata,
+    String? message,
+    required bool isAndroid,
+  }) {
+    if (calldata != null) return strip0x(calldata);
+    if (message != null) return bytesToHex(utf8.encode(message));
+    return '';
   }
 
   static MessageModel _errMM() => MessageModel.error();

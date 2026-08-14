@@ -825,6 +825,11 @@ class MessageLookup extends MessageLookupByLibrary {
       "點選即可顯示全部",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("最近的"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage("帳戶"),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "此網站請求查看您的錢包地址並發起交易建議。未經您批准，它無法轉移資金。",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage("連接錢包"),
     "g_key_device_security_warning_message":
         MessageLookupByLibrary.simpleMessage(
           "偵測到本裝置疑似已 Root/越獄。在存在安全風險的裝置上使用錢包會增加私鑰洩露與未授權存取的風險，請謹慎操作。",
