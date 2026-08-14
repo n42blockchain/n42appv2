@@ -212,11 +212,114 @@ class BrowserProvider extends ChangeNotifier {
     final wvc = webViewController;
     final tab = _BrowserTab(url);
 
-    webViewController
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(const Color(0x00000000))
-      ..setNavigationDelegate(
-        NavigationDelegate(
+    final navigationDelegate = _buildNavigationDelegate(wvc, tab);
+    final channels = <String, void Function(JavaScriptMessage)>{
+      'FlutterWcClipboard': (JavaScriptMessage message) {
+        if (kDebugMode) {
+          final preview = message.message.length > 80
+              ? '${message.message.substring(0, 80)}…'
+              : message.message;
+          AppLogger.d('Browser', 'JS clipboard intercept: $preview');
+        }
+        _tryHandleWalletConnect(message.message);
+      },
+      // Injected EIP-1193 provider bridge: window.ethereum.request(...) →
+      // N42Wallet.postMessage(json) → here → DAppRequestHandler → callback
+      // into JS via window.ethereum._n42Cb(...). This is the direct
+      // connect/sign/send path, complementing the WalletConnect QR flow.
+      'N42Wallet': (JavaScriptMessage message) {
+        _handleProviderMessage(wvc, tab, message.message);
+      },
+    };
+
+    // #docregion platform_features
+    if (webViewController.platform is AndroidWebViewController) {
+      final androidController =
+          webViewController.platform as AndroidWebViewController;
+      if (kDebugMode) {
+        AndroidWebViewController.enableDebugging(true);
+      }
+      androidController.setMediaPlaybackRequiresUserGesture(false);
+      // Use compatibility mode instead of alwaysAllow to prevent MITM injection
+      // of malicious HTTP resources into HTTPS DApp pages
+      androidController.setMixedContentMode(MixedContentMode.compatibilityMode);
+      // Enable wide viewport for better page rendering
+      androidController.setUseWideViewPort(true);
+    }
+
+    wvcList.add(webViewController);
+    wInfoList.add({"openUrl": url});
+    showWList = false;
+    wListIndex = wvcList.length - 1;
+
+    // 配置与首次加载必须串行 await——见 _setUpAndLoad 的说明。
+    unawaited(
+      _setUpAndLoad(
+        webViewController,
+        url,
+        navigationDelegate: navigationDelegate,
+        channels: channels,
+      ),
+    );
+    _safeNotify();
+  }
+
+  /// 按顺序完成 WebView 配置，**全部就绪后**才发起首次加载。
+  ///
+  /// 这一步必须串行 await，不能用 `..` 级联：iOS(WKWebView) 的
+  /// `addJavaScriptChannel` 是靠注入一段 `atDocumentStart` 的 `WKUserScript`
+  /// （`window.X = webkit.messageHandlers.X;`）来暴露 channel 的，内部需要
+  /// 多次平台往返（getUserContentController → addUserScript +
+  /// addScriptMessageHandler），而 `loadRequest` 只需一次。级联不等待时
+  /// loadRequest 会抢跑，页面加载时 user script 尚未注册，`window.N42Wallet`
+  /// 就是 undefined——注入的 provider 调 `N42Wallet.postMessage` 直接抛异常，
+  /// DApp 只看到 "-32603 Native bridge unavailable"，请求根本进不了 Dart。
+  /// （`window.ethereum` 却仍在，因为它走 runJavaScript，不受 document-start
+  /// 时机限制——这正是该故障看起来像"路由问题"的原因。）
+  Future<void> _setUpAndLoad(
+    WebViewController wvc,
+    String url, {
+    required NavigationDelegate navigationDelegate,
+    required Map<String, void Function(JavaScriptMessage)> channels,
+  }) async {
+    try {
+      await wvc.setJavaScriptMode(JavaScriptMode.unrestricted);
+      await wvc.setBackgroundColor(const Color(0x00000000));
+      await wvc.setNavigationDelegate(navigationDelegate);
+      for (final entry in channels.entries) {
+        await wvc.addJavaScriptChannel(
+          entry.key,
+          onMessageReceived: entry.value,
+        );
+      }
+      // Use a desktop user agent so DApps (e.g. Uniswap/@reown/appkit) present
+      // the QR-code flow instead of the mobile deep-link flow, which fails
+      // inside a WebView because wc:// cannot be handled by an external wallet.
+      await wvc.setUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
+        'AppleWebKit/605.1.15 (KHTML, like Gecko) '
+        'Version/17.0 Safari/605.1.15',
+      );
+      await wvc.setOnConsoleMessage((JavaScriptConsoleMessage msg) {
+        AppLogger.d('DApp', '[${msg.level.name}] ${msg.message}');
+      });
+      // Clear localStorage via the native WebKit data store BEFORE loading the
+      // page so stale WalletConnect sessions (which may carry invalid "null"
+      // addresses from a previous pairing) are gone before any page JS runs.
+      await wvc.clearLocalStorage();
+    } catch (e) {
+      AppLogger.e('Browser', 'WebView setup failed: $e');
+    }
+    await wvc.loadRequest(Uri.parse(url));
+  }
+
+  /// 该标签的导航回调。UI 状态按 `_indexOfController` 动态查表（避免闭包
+  /// 捕获过期的 wListIndex），origin 归属则写入 [tab] 句柄。
+  NavigationDelegate _buildNavigationDelegate(
+    WebViewController wvc,
+    _BrowserTab tab,
+  ) {
+    return NavigationDelegate(
           onProgress: (int progress) {
             final idx = _indexOfController(wvc);
             if (idx < 0) return;
@@ -290,72 +393,7 @@ class BrowserProvider extends ChangeNotifier {
           onHttpError: (HttpResponseError error) {
             AppLogger.w('Browser', 'HTTP error: ${error.response?.statusCode}');
           },
-        ),
-      )
-      ..addJavaScriptChannel(
-        'FlutterWcClipboard',
-        onMessageReceived: (JavaScriptMessage message) {
-          if (kDebugMode) {
-            final preview = message.message.length > 80
-                ? '${message.message.substring(0, 80)}…'
-                : message.message;
-            AppLogger.d('Browser', 'JS clipboard intercept: $preview');
-          }
-          _tryHandleWalletConnect(message.message);
-        },
-      )
-      // Injected EIP-1193 provider bridge: window.ethereum.request(...) →
-      // N42Wallet.postMessage(json) → here → DAppRequestHandler → callback
-      // into JS via window.ethereum._n42Cb(...). This is the direct
-      // connect/sign/send path, complementing the WalletConnect QR flow.
-      ..addJavaScriptChannel(
-        'N42Wallet',
-        onMessageReceived: (JavaScriptMessage message) {
-          _handleProviderMessage(wvc, tab, message.message);
-        },
-      )
-      // Use a desktop user agent so DApps (e.g. Uniswap/@reown/appkit) present
-      // the QR-code flow instead of the mobile deep-link flow, which fails
-      // inside a WebView because wc:// cannot be handled by an external wallet.
-      ..setUserAgent(
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
-        'AppleWebKit/605.1.15 (KHTML, like Gecko) '
-        'Version/17.0 Safari/605.1.15',
-      )
-      ..setOnConsoleMessage((JavaScriptConsoleMessage msg) {
-        AppLogger.d('DApp', '[${msg.level.name}] ${msg.message}');
-      });
-
-    // Clear localStorage via the native WebKit data store BEFORE loading the
-    // page so stale WalletConnect sessions (which may carry invalid "null"
-    // addresses from a previous pairing) are gone before any page JS runs.
-    // Both operations are queued on the same platform channel in FIFO order,
-    // so clearLocalStorage is guaranteed to complete first.
-    unawaited(webViewController.clearLocalStorage());
-
-    // #docregion platform_features
-    if (webViewController.platform is AndroidWebViewController) {
-      final androidController =
-          webViewController.platform as AndroidWebViewController;
-      if (kDebugMode) {
-        AndroidWebViewController.enableDebugging(true);
-      }
-      androidController.setMediaPlaybackRequiresUserGesture(false);
-      // Use compatibility mode instead of alwaysAllow to prevent MITM injection
-      // of malicious HTTP resources into HTTPS DApp pages
-      androidController.setMixedContentMode(MixedContentMode.compatibilityMode);
-      // Enable wide viewport for better page rendering
-      androidController.setUseWideViewPort(true);
-    }
-    wvcList.add(webViewController);
-    wInfoList.add({"openUrl": url});
-    showWList = false;
-    wListIndex = wvcList.length - 1;
-
-    // 入列之后再发起加载：否则页面回调（onPageStarted / JS channel）可能在
-    // controller 进入 wvcList 之前就到达，UI 状态更新会被整个跳过。
-    unawaited(webViewController.loadRequest(Uri.parse(url)));
-    _safeNotify();
+    );
   }
 
   void loadRequest({String url = ""}) {

@@ -50,6 +50,27 @@ class EthereumProviderJs {
     return err;
   }
 
+  // 解析原生桥。Android 上 window.N42Wallet 是 addJavascriptInterface 注入的
+  // 真实对象，始终可用；iOS(WKWebView) 上它只是一段 atDocumentStart 的
+  // WKUserScript 起的别名（window.N42Wallet = webkit.messageHandlers.N42Wallet），
+  // 若该 user script 在页面开始加载时尚未注册完成，别名就会缺失，整条 DApp
+  // 通道表现为 "-32603 Native bridge unavailable"。消息处理器本身此时已经
+  // 可用，因此直接回退到 webkit.messageHandlers 兜底。
+  function _bridge() {
+    try {
+      if (typeof N42Wallet !== "undefined" && N42Wallet && N42Wallet.postMessage) {
+        return N42Wallet;
+      }
+    } catch(e) {}
+    try {
+      if (window.webkit && window.webkit.messageHandlers &&
+          window.webkit.messageHandlers.N42Wallet) {
+        return window.webkit.messageHandlers.N42Wallet;
+      }
+    } catch(e) {}
+    return null;
+  }
+
   // NOTE: isMetaMask is intentionally true for DApp compatibility.
   // Many legacy DApps only check `window.ethereum.isMetaMask` to detect
   // an injected wallet. Setting false causes "Install MetaMask" prompts.
@@ -133,8 +154,14 @@ class EthereumProviderJs {
       var id = _nextId++;
       return new Promise(function(resolve, reject) {
         _cbs[id] = { resolve: resolve, reject: reject };
+        var bridge = _bridge();
+        if (!bridge) {
+          delete _cbs[id];
+          reject(ProviderRpcError(-32603, "Native bridge unavailable"));
+          return;
+        }
         try {
-          N42Wallet.postMessage(JSON.stringify({
+          bridge.postMessage(JSON.stringify({
             id: id,
             method: method,
             params: params
@@ -236,6 +263,24 @@ class EthereumProviderJs {
 
     listeners: function(event) {
       return (_evts[event] || []).slice();
+    },
+
+    // 诊断用：返回当前使用的原生桥类型 —— "direct"(window.N42Wallet)、
+    // "webkit"(回退到 webkit.messageHandlers)、"none"(桥不可用)。
+    // 真机排障时可在 Safari/Chrome inspector 里直接调用。
+    _n42BridgeStatus: function() {
+      try {
+        if (typeof N42Wallet !== "undefined" && N42Wallet && N42Wallet.postMessage) {
+          return "direct";
+        }
+      } catch(e) {}
+      try {
+        if (window.webkit && window.webkit.messageHandlers &&
+            window.webkit.messageHandlers.N42Wallet) {
+          return "webkit";
+        }
+      } catch(e) {}
+      return "none";
     },
 
     // ── Native callback: resolve a pending request ───────────────────
