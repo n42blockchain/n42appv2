@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
 import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/api/market_api.dart';
@@ -18,6 +19,7 @@ import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_action_buttons.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_constants.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_router_whitelist.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_history.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_order_form.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_limit_orders_page.dart';
@@ -346,9 +348,29 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Approve ───────────────────────────────────────────────────────────────
 
+  /// 校验报价里的 router 是否受信任。不信任后端返回的任意地址——恶意 router
+  /// 会让 approve 授权给攻击者、swap 把币打进攻击者合约。返回 false 时已置错误
+  /// 文案，调用方直接中止。
+  bool _assertTrustedRouter(DexQuoteModel q) {
+    if (DexRouterWhitelist.isTrusted(q.routerAddr)) return true;
+    AppLogger.e(
+      'DexSwap',
+      'Untrusted router from backend, aborting: ${q.routerAddr}',
+    );
+    setState(() {
+      _approveLoad = Load.finish;
+      _swapLoad = Load.finish;
+      _errorMsg = S.of(context).g_key_dex_untrusted_router;
+    });
+    return false;
+  }
+
   Future<void> _executeApprove() async {
     final DexQuoteModel? q = _quote;
     if (q == null || _approveLoad == Load.loading) return;
+
+    // 授权前先校验 spender(=router) 受信任，避免把额度授权给恶意合约。
+    if (!_assertTrustedRouter(q)) return;
 
     setState(() {
       _approveLoad = Load.loading;
@@ -419,6 +441,9 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   Future<void> _executeSwap() async {
     final DexQuoteModel? q = _quote;
     if (q == null || _swapLoad == Load.loading) return;
+
+    // 广播前校验交易 to(=router) 受信任，避免把资金打进后端伪造的恶意合约。
+    if (!_assertTrustedRouter(q)) return;
 
     setState(() {
       _swapLoad = Load.loading;
@@ -510,13 +535,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     // Build batch calls: approve (if needed) + swap
     final batchCalls = <ExecuteCall>[];
 
-    // Add approve call if needed (max uint256)
+    // Add approve call if needed. 尊重用户的 exactApprove 勾选：默认按本次卖出
+    // 数量精确授权，而非硬编码 max uint256 的无限授权。
     if (_needsApproval && _tokenIn != null) {
+      BigInt approveAmount = _maxUint256;
+      if (_exactApprove) {
+        final wei = dexToWei(_amountCtrl.text.trim(), _tokenIn!.decimals);
+        if (wei > BigInt.zero) approveAmount = wei;
+      }
       batchCalls.add(
         ExecuteCall.erc20Approve(
           token: _tokenIn!.address,
           spender: quote.routerAddr,
-          amount: _maxUint256,
+          amount: approveAmount,
         ),
       );
     }

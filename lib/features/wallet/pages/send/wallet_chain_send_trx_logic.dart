@@ -335,7 +335,9 @@ mixin _TrxSendLogicMixin on ConsumerState<WalletChainSendTrx> {
               sendMax: false,
               isTest: widget.coinModel.isTest,
               contractAddress: trModel.contract,
-              tokenDecimals: 0,
+              // TRC20 金额按 token 真实 decimals 换算——此前硬编码 0 会把
+              // 1.5 USDT 签成 1 个最小单位（0.000001 USDT），上链成功但金额错误。
+              tokenDecimals: decimals,
               memo: trModel.message,
               privateKey: widget.coinModel.privateKey,
               chainConfig: widget.coinModel.coin,

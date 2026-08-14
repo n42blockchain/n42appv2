@@ -77,10 +77,19 @@ class AtomApi {
         defaultReturn: false,
         header: _jsonHeader,
       );
-      return MessageModel()
-        ..data = data['tx_response'] == null
-            ? data['message']
-            : data['tx_response']['txhash'];
+      final txResponse = data['tx_response'];
+      if (txResponse == null) {
+        return MessageModel()..data = data['message'];
+      }
+      // CheckTx 失败（gas 不足/余额不足等）时 code≠0：必须当作错误返回，否则
+      // 广播被节点拒绝、UI 却拿到 txhash 报"成功"（假成功）。simulate 端点不
+      // 返回 tx_response，不受影响。
+      final code = txResponse['code'];
+      if (code is num && code != 0) {
+        final rawLog = txResponse['raw_log']?.toString() ?? 'code $code';
+        return MessageModel.error()..data = rawLog;
+      }
+      return MessageModel()..data = txResponse['txhash'];
     } catch (e) {
       return MessageModel.error()..data = e;
     }

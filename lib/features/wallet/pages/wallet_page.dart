@@ -357,6 +357,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     }
     final flag = await tipsDialog7(context);
     if (!mounted || flag != true) return;
+    // 身份验证门禁在 BackupOne 揭示助记词前统一执行（覆盖全部备份入口）。
     Navigator.push(
       context,
       MaterialPageRoute(

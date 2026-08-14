@@ -15,6 +15,7 @@ import 'package:n42_wallet/features/wallet/api/sender/aa_transfer_handler.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/paymaster_select_page.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/aa_transaction_preview.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/gas_sponsorship_badge.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';

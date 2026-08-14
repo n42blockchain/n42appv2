@@ -326,7 +326,10 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
               sendMax: false,
               isTest: widget.coinModel.isTest,
               contractAddress: trModel.contract,
-              tokenDecimals: 0,
+              // SPL 金额与 TransferChecked 的 decimals 都必须用 token 真实
+              // decimals——此前硬编码 0 会截断金额、且与 mint 的 decimals 不符
+              // 导致 preflight 拒绝，SPL 代币转账整体失败。
+              tokenDecimals: decimals,
               memo: trModel.message,
               privateKey: widget.coinModel.privateKey,
               chainConfig: widget.coinModel.coin,

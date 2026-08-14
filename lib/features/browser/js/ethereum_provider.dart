@@ -1,15 +1,12 @@
 /// Builds the JavaScript IIFE that defines `window.ethereum` (EIP-1193).
 ///
-/// **Status: designed but not wired (2026-06 audit).** `buildProviderScript`
-/// has zero call sites — no WebView registers the `N42Wallet`
-/// JavaScriptChannel and nothing injects this script, so the in-app DApp
-/// browser currently exposes no `window.ethereum`. DApps connect via
-/// WalletConnect instead. Wiring this up requires: registering the
-/// channel in browser_provider, injecting this script on page start, and
-/// routing messages into DAppRequestHandler (which is fully implemented
-/// and unit-ready). Until then, do not assume in-page provider support.
+/// **Status: live (wired 2026-07+).** `BrowserProvider` registers the
+/// `N42Wallet` JavaScriptChannel, injects this script on page start/finish,
+/// and routes messages into `DAppRequestHandler`. [accounts] is only seeded
+/// for origins the user has connected — other pages get an empty list and
+/// must go through `eth_requestAccounts` (native connect approval).
 ///
-/// Injection strategy (when wired):
+/// Injection strategy:
 ///   1. iOS WKWebView: injected as WKUserScript at document-start time
 ///   2. Android WebView: `runJavaScript` at both onPageStarted + onPageFinished
 ///   3. The IIFE is idempotent — safe to run multiple times
@@ -89,11 +86,30 @@ class EthereumProviderJs {
         case "eth_accounts":
           return Promise.resolve(_accounts.slice());
         case "eth_requestAccounts":
-          return Promise.resolve(_accounts.slice());
+          // Only fast-path once connected; first call must reach native so
+          // the user sees the connect approval sheet.
+          if (_accounts.length > 0) return Promise.resolve(_accounts.slice());
+          break;
         case "eth_coinbase":
           return Promise.resolve(_accounts.length > 0 ? _accounts[0] : null);
         case "wallet_requestPermissions":
+          // Not yet connected: route through eth_requestAccounts so the
+          // native connect approval runs, then report the granted permission.
+          if (_accounts.length === 0) {
+            return ethereum.request({ method: "eth_requestAccounts" })
+              .then(function(accs) {
+                return [{
+                  parentCapability: "eth_accounts",
+                  caveats: [{type: "restrictReturnedAccounts", value: accs}]
+                }];
+              });
+          }
+          return Promise.resolve([{
+            parentCapability: "eth_accounts",
+            caveats: [{type: "restrictReturnedAccounts", value: _accounts.slice()}]
+          }]);
         case "wallet_getPermissions":
+          if (_accounts.length === 0) return Promise.resolve([]);
           return Promise.resolve([{
             parentCapability: "eth_accounts",
             caveats: [{type: "restrictReturnedAccounts", value: _accounts.slice()}]

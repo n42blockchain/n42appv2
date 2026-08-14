@@ -178,6 +178,8 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m71(value) => "${value}地址測試連結失敗！";
 
+  static String m75(value) => "RPC 回報的 Chain ID 為 ${value}，與您填寫的不一致。";
+
   static String m72(value) => "0~${value} 個字符";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -870,6 +872,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage("交換提交成功"),
     "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
       "代幣服務不可用，目前顯示精簡的離線清單。",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "交換已攔截：路由合約地址無法識別，為保障資金安全已取消本次交易。",
     ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("你付錢"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("您收到"),
@@ -2025,6 +2030,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("代幣符號"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("代幣十進位"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("匯入"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "此 Chain ID 已被其他網路占用。",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("警告"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高風險"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全的"),

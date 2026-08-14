@@ -215,6 +215,15 @@ mixin _AASendLogicMixin on State<AASendPage> {
       return;
     }
 
+    // 签名并广播 UserOperation 前必须过身份验证，与普通转账
+    // （wallet_base_send 的 WalletSecurityVerification 门禁）对齐。此前 AA
+    // 转账只弹预览即签名发送，绕过了钱包密码/生物识别。
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+    );
+    if (!mounted || verified != true) return;
+
     setState(() => isSending = true);
 
     // 与批量交易页同一真实通道：AATransferHandler 构建 UserOperation →

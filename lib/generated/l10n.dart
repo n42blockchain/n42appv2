@@ -1599,6 +1599,26 @@ class S {
     );
   }
 
+  /// `This Chain ID is already in use by another network.`
+  String get g_token_m_key_chainid_conflict {
+    return Intl.message(
+      'This Chain ID is already in use by another network.',
+      name: 'g_token_m_key_chainid_conflict',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The RPC reports Chain ID {value}, which does not match the value you entered.`
+  String g_token_m_key_chainid_mismatch(Object value) {
+    return Intl.message(
+      'The RPC reports Chain ID $value, which does not match the value you entered.',
+      name: 'g_token_m_key_chainid_mismatch',
+      desc: '',
+      args: [value],
+    );
+  }
+
   /// `Tokens can only be sent within the same network. Sending from other networks may result in loss.`
   String get g_app_share_key_1 {
     return Intl.message(
@@ -9294,6 +9314,16 @@ class S {
     return Intl.message(
       'Swap submitted successfully',
       name: 'g_key_dex_swap_success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap blocked: the router address is not recognized. For your safety, this transaction was cancelled.`
+  String get g_key_dex_untrusted_router {
+    return Intl.message(
+      'Swap blocked: the router address is not recognized. For your safety, this transaction was cancelled.',
+      name: 'g_key_dex_untrusted_router',
       desc: '',
       args: [],
     );

@@ -1,6 +1,7 @@
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_two.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,18 @@ class _BackupOneState extends State<BackupOne> {
   void initState() {
     super.initState();
     mnemonicWordsList = parseBackupMnemonicWords(widget.walletInfo.mnemonic);
+  }
+
+  /// 揭示助记词前强制身份验证（密码/生物识别/手势/Google Authenticator）。
+  /// 与私钥、keystore 导出一致——助记词是最敏感的凭据，不能仅凭一个文案警告
+  /// 就明文展示给任何拿到已解锁手机的人。
+  Future<void> _revealMnemonic() async {
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+    );
+    if (!mounted || verified != true) return;
+    setState(() => showMnemonic = true);
   }
 
   @override
@@ -182,9 +195,7 @@ class _BackupOneState extends State<BackupOne> {
 
     final itemTextColor = AppColorTokens.of(context).textItem;
     return InkWell(
-      onTap: mnemonicWordsList.isEmpty
-          ? null
-          : () => setState(() => showMnemonic = true),
+      onTap: mnemonicWordsList.isEmpty ? null : _revealMnemonic,
       child: Container(
         width: double.infinity,
         height: ScreenUtil().setWidth(400),

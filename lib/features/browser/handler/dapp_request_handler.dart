@@ -31,8 +31,9 @@ class DAppRequestHandler {
 
   web3.Web3Client? _web3client;
 
-  /// The origin URL of the DApp currently being browsed.
-  /// Set by BrowserPage so signing dialogs show the actual requesting site.
+  /// Fallback origin when [handleRequest] is called without one.
+  /// 多标签浏览器必须改用 handleRequest 的 origin 参数——该字段是共享可变
+  /// 状态，等待用户确认期间会被另一标签的请求覆盖。
   String dappOrigin = 'DApp';
 
   DAppRequestHandler({required this.ethCoinModels, int initialChainIndex = 0})
@@ -73,7 +74,15 @@ class DAppRequestHandler {
 
   /// Handle a DApp JSON-RPC request and return the result.
   /// Throws on error (caller converts to JSON-RPC error).
-  Future<dynamic> handleRequest(String method, List<dynamic> params) async {
+  ///
+  /// [origin] 是发起请求页面的 origin；多标签场景每个请求都必须显式传入，
+  /// 否则回落到共享的 [dappOrigin]（可能被并发请求覆盖）。
+  Future<dynamic> handleRequest(
+    String method,
+    List<dynamic> params, {
+    String? origin,
+  }) async {
+    final requestOrigin = origin ?? dappOrigin;
     switch (method) {
       case 'eth_requestAccounts':
       case 'eth_accounts':
@@ -96,7 +105,7 @@ class DAppRequestHandler {
         return _handleSwitchChain(params);
 
       case 'personal_sign':
-        return _handlePersonalSign(params);
+        return _handlePersonalSign(params, requestOrigin);
 
       case 'eth_sign':
         // eth_sign is dangerous (signs arbitrary data) — reject by default
@@ -107,13 +116,13 @@ class DAppRequestHandler {
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
       case 'eth_signTypedData_v4':
-        return _handleSignTypedData(method, params);
+        return _handleSignTypedData(method, params, requestOrigin);
 
       case 'eth_sendTransaction':
-        return _handleSendTransaction(params);
+        return _handleSendTransaction(params, requestOrigin);
 
       case 'eth_signTransaction':
-        return _handleSignTransaction(params);
+        return _handleSignTransaction(params, requestOrigin);
 
       // RPC pass-through methods
       case 'eth_call':
@@ -181,7 +190,7 @@ class DAppRequestHandler {
 
   // ── Signing methods ────────────────────────────────────────────────────────
 
-  Future<String> _handlePersonalSign(List<dynamic> params) async {
+  Future<String> _handlePersonalSign(List<dynamic> params, String origin) async {
     // 裸字符串会被上层归一化为 -32603，参数校验失败按规范应报 -32602
     if (params.length < 2) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -194,7 +203,7 @@ class DAppRequestHandler {
     }
     // Ask user for approval — show the actual DApp origin
     final approved = await _requestApproval(
-      origin: dappOrigin,
+      origin: origin,
       method: 'personal_sign',
       details: {'message': rawData},
     );
@@ -217,6 +226,7 @@ class DAppRequestHandler {
   Future<String> _handleSignTypedData(
     String method,
     List<dynamic> params,
+    String origin,
   ) async {
     if (params.length < 2) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -228,7 +238,7 @@ class DAppRequestHandler {
     final jsonData = params[1] as String;
 
     final approved = await _requestApproval(
-      origin: dappOrigin,
+      origin: origin,
       method: method,
       details: {'data': jsonData},
     );
@@ -253,7 +263,10 @@ class DAppRequestHandler {
 
   // ── Transaction methods ────────────────────────────────────────────────────
 
-  Future<String> _handleSendTransaction(List<dynamic> params) async {
+  Future<String> _handleSendTransaction(
+    List<dynamic> params,
+    String origin,
+  ) async {
     if (params.isEmpty) {
       throw {'code': -32602, 'message': 'Invalid params'};
     }
@@ -268,7 +281,7 @@ class DAppRequestHandler {
     }
 
     final approved = await _requestApproval(
-      origin: dappOrigin,
+      origin: origin,
       method: 'eth_sendTransaction',
       details: txMap,
     );
@@ -286,7 +299,10 @@ class DAppRequestHandler {
     );
   }
 
-  Future<String> _handleSignTransaction(List<dynamic> params) async {
+  Future<String> _handleSignTransaction(
+    List<dynamic> params,
+    String origin,
+  ) async {
     if (params.isEmpty) {
       throw {'code': -32602, 'message': 'Invalid params'};
     }
@@ -301,7 +317,7 @@ class DAppRequestHandler {
     }
 
     final approved = await _requestApproval(
-      origin: dappOrigin,
+      origin: origin,
       method: 'eth_signTransaction',
       details: txMap,
     );

@@ -209,6 +209,54 @@ void main() {
     });
   });
 
+  group('FountainPart 边界校验（防恶意 QR DoS）', () {
+    // 手工拼一个 [seqNum, seqLen, messageLen, checksum, data] 的 fountain 帧 CBOR。
+    Uint8List craft({
+      required int seqNum,
+      required int seqLen,
+      required int messageLen,
+      int checksum = 0x12345678,
+      int dataLen = 5,
+    }) {
+      return Uint8List.fromList(
+        CborListValue.definite(<CborObject>[
+          CborIntValue(seqNum),
+          CborIntValue(seqLen),
+          CborIntValue(messageLen),
+          CborIntValue(checksum),
+          CborBytesValue(Uint8List(dataLen)),
+        ]).encode(),
+      );
+    }
+
+    test('巨大 seqLen 被拒（不会分配数十亿元素）', () {
+      final cbor = craft(seqNum: 1, seqLen: 2000000000, messageLen: 100);
+      expect(() => FountainPart.fromCbor(cbor), throwsA(isA<UrCodecException>()));
+    });
+
+    test('巨大 messageLen 被拒', () {
+      final cbor = craft(seqNum: 1, seqLen: 4, messageLen: 999999999);
+      expect(() => FountainPart.fromCbor(cbor), throwsA(isA<UrCodecException>()));
+    });
+
+    test('seqLen < 1 被拒', () {
+      final cbor = craft(seqNum: 1, seqLen: 0, messageLen: 100);
+      expect(() => FountainPart.fromCbor(cbor), throwsA(isA<UrCodecException>()));
+    });
+
+    test('空 data 分片被拒', () {
+      final cbor = craft(seqNum: 1, seqLen: 4, messageLen: 100, dataLen: 0);
+      expect(() => FountainPart.fromCbor(cbor), throwsA(isA<UrCodecException>()));
+    });
+
+    test('合法边界帧仍可解析', () {
+      final cbor = craft(seqNum: 1, seqLen: 4, messageLen: 20, dataLen: 5);
+      final part = FountainPart.fromCbor(cbor);
+      expect(part.seqLen, 4);
+      expect(part.messageLen, 20);
+    });
+  });
+
   group('UrEncoder / UrDecoder（官方向量）', () {
     test('单帧 UR 黄金串（50 字节消息）', () {
       final cbor = makeMessageUrCbor(50);

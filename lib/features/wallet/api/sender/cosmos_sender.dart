@@ -179,7 +179,9 @@ class CosmosSender implements ChainSender {
       'toAddress': params.toAddress,
       'accountNumber': accountNumber,
       'sequence': sequence,
-      'memo': params.memo ?? 'memo',
+      // 缺省 memo 必须为空串——此前的字面量 'memo' 会写进链上交易，向依赖
+      // memo 记账的交易所充值时产生噪音/误导。
+      'memo': params.memo ?? '',
       'fee': {
         'gas': totalGasPrice.toString(),
         'amount': '5000',

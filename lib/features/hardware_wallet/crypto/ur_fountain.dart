@@ -226,14 +226,53 @@ class FountainPart {
     if (dataField is! CborBytesValue) {
       throw UrCodecException('Invalid fountain part: expected bytes field');
     }
+
+    final seqNum = asInt(items[0]);
+    final seqLen = asInt(items[1]);
+    final messageLen = asInt(items[2]);
+
+    // 边界校验：seqLen/messageLen 由二维码内容自报，全部攻击者可控。首帧的
+    // seqLen 会直接用来构造 {0..seqLen} 的 Set（并驱动 chooseFragments/degree
+    // 的循环），无上限时一帧 seqLen=2e9 即触发数十亿元素分配 → OOM/卡死。
+    // 在解析处拒绝越界帧，上层按 UrCodecException 安全失败、不崩 UI。
+    if (seqNum < 1 || seqLen < 1 || seqLen > _maxSeqLen) {
+      throw UrCodecException('Invalid fountain part: seqLen out of range');
+    }
+    if (seqNum > seqLen && seqLen > 1) {
+      // 纯片段序号不得超过 seqLen；混合帧（seqNum > seqLen）由 PRNG 生成，
+      // 合法，但仍受 _maxSeqNum 兜底防止 Xoshiro 种子被无意义放大。
+      if (seqNum > _maxSeqNum) {
+        throw UrCodecException('Invalid fountain part: seqNum out of range');
+      }
+    }
+    if (messageLen < 1 || messageLen > _maxMessageLen) {
+      throw UrCodecException('Invalid fountain part: messageLen out of range');
+    }
+    if (dataField.value.isEmpty || dataField.value.length > _maxFragmentLen) {
+      throw UrCodecException('Invalid fountain part: fragment length invalid');
+    }
+
     return FountainPart(
-      seqNum: asInt(items[0]),
-      seqLen: asInt(items[1]),
-      messageLen: asInt(items[2]),
+      seqNum: seqNum,
+      seqLen: seqLen,
+      messageLen: messageLen,
       checksum: asInt(items[3]),
       data: Uint8List.fromList(dataField.value),
     );
   }
+
+  /// 最大分片数。BC-UR 动画二维码正常 seqLen 为个位到几十；1024 已远超
+  /// 任何真实 Keystone 签名请求的分片数。
+  static const int _maxSeqLen = 1024;
+
+  /// 混合帧序号上限（远大于任何真实轮播圈数，仅作 PRNG 种子放大的兜底）。
+  static const int _maxSeqNum = 1 << 24;
+
+  /// 单个待签 message 上限（8 MiB）——远超任何 eth-sign-request / crypto-hdkey。
+  static const int _maxMessageLen = 8 * 1024 * 1024;
+
+  /// 单帧分片字节上限（二维码单帧容量约 KB 级，64 KiB 已很宽松）。
+  static const int _maxFragmentLen = 64 * 1024;
 
   String get description =>
       'seqNum:$seqNum, seqLen:$seqLen, messageLen:$messageLen, '
@@ -423,6 +462,14 @@ class FountainDecoder {
   bool _validatePart(FountainPart p) {
     final expected = _expectedPartIndexes;
     if (expected == null) {
+      // messageLen 与 seqLen×fragmentLen 必须自洽：joinFragments 会
+      // sublistView(0, messageLen)，若 messageLen 超过总字节数会抛未捕获的
+      // RangeError。要求 (seqLen-1)*fragLen < messageLen <= seqLen*fragLen。
+      final fragLen = p.data.length;
+      final total = p.seqLen * fragLen;
+      if (p.messageLen > total || p.messageLen <= total - fragLen) {
+        return false;
+      }
       _expectedPartIndexes = {for (var i = 0; i < p.seqLen; i++) i};
       _expectedMessageLen = p.messageLen;
       _expectedChecksum = p.checksum;

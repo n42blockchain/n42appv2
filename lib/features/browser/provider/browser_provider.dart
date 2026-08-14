@@ -217,7 +217,7 @@ class BrowserProvider extends ChangeNotifier {
             _injectWcClipboardScript(wvc);
             // Inject the EIP-1193 provider as early as possible so DApps that
             // probe window.ethereum at document-start find it.
-            _injectEthereumProvider(wvc);
+            _injectEthereumProvider(wvc, url);
             _safeNotify();
           },
           onPageFinished: (String url) async {
@@ -227,7 +227,7 @@ class BrowserProvider extends ChangeNotifier {
             wInfoList[idx]['progress'] = 0;
             // Inject again after full load in case onPageStarted fired too early.
             await _injectWcClipboardScript(wvc);
-            await _injectEthereumProvider(wvc);
+            await _injectEthereumProvider(wvc, url);
             // Fetch title for this tab
             final t = await wvc.getTitle();
             if (t != null) {
@@ -556,16 +556,23 @@ class BrowserProvider extends ChangeNotifier {
     }
   }
 
-  /// Inject the EIP-1193 `window.ethereum` provider into [wvc], seeded with
-  /// the wallet's current EVM chain id + address. No-op when there is no EVM
-  /// account (nothing to expose).
-  Future<void> _injectEthereumProvider(WebViewController wvc) async {
+  /// Origins the user has explicitly connected (approved `eth_requestAccounts`)
+  /// this session. Only these origins get the wallet address exposed —
+  /// every other page sees an empty account list until it asks and the user
+  /// approves, matching MetaMask semantics (no silent address leak).
+  final Set<String> _connectedOrigins = {};
+
+  /// Inject the EIP-1193 `window.ethereum` provider into [wvc]. The address
+  /// is only seeded for origins the user has connected; other pages get an
+  /// empty account list. No-op when there is no EVM account.
+  Future<void> _injectEthereumProvider(WebViewController wvc, String url) async {
     final handler = _ensureDappHandler();
     if (handler == null) return;
     try {
+      final connected = _connectedOrigins.contains(_originOf(url));
       final script = EthereumProviderJs.buildProviderScript(
         handler.chainIdHex,
-        [handler.address],
+        connected ? [handler.address] : const [],
       );
       await wvc.runJavaScript(script);
     } catch (e) {
@@ -591,11 +598,18 @@ class BrowserProvider extends ChangeNotifier {
         return;
       }
 
-      // Block signing/sending on known-phishing origins before anything else.
-      final origin = _originOf(_currentUrl);
-      handler.dappOrigin = origin;
+      // Origin/安全检查必须基于发起请求的标签，而不是当前活跃标签——后台
+      // 标签的 JS 仍在运行，否则恶意后台页可借前台可信页的 origin 弹签名框、
+      // 并绕过对自身 origin 的钓鱼拦截。
+      final tabIndex = _indexOfController(wvc);
+      if (tabIndex < 0) {
+        await _rejectProvider(wvc, id, 4001, 'Tab closed');
+        return;
+      }
+      final requestUrl = wInfoList[tabIndex]['openUrl'] as String? ?? '';
+      final origin = _originOf(requestUrl);
       if (_isSensitiveMethod(method)) {
-        final sec = DAppSecurityService.check(_currentUrl);
+        final sec = DAppSecurityService.check(requestUrl);
         if (sec.level == DAppSecurityLevel.blocked) {
           await _rejectProvider(
             wvc,
@@ -607,7 +621,55 @@ class BrowserProvider extends ChangeNotifier {
         }
       }
 
-      final result = await handler.handleRequest(method, params);
+      // 账户暴露走按 origin 的连接授权（MetaMask 语义）：未经用户批准的
+      // 站点拿不到地址，eth_requestAccounts 首次调用弹连接确认。
+      switch (method) {
+        case 'eth_accounts':
+          await _resolveProvider(
+            wvc,
+            id,
+            _connectedOrigins.contains(origin) ? [handler.address] : const [],
+          );
+          return;
+        case 'eth_coinbase':
+          await _resolveProvider(
+            wvc,
+            id,
+            _connectedOrigins.contains(origin) ? handler.address : null,
+          );
+          return;
+        case 'eth_requestAccounts':
+          if (!_connectedOrigins.contains(origin)) {
+            final cb = onSigningRequest;
+            final approved =
+                cb != null &&
+                await cb(
+                  origin: origin,
+                  method: 'eth_requestAccounts',
+                  details: {
+                    'address': handler.address,
+                    'chainId': handler.chainIdHex,
+                  },
+                );
+            if (!approved) {
+              await _rejectProvider(wvc, id, 4001, 'User rejected');
+              return;
+            }
+            _connectedOrigins.add(origin);
+          }
+          // Push the now-exposed account into the page's provider so
+          // selectedAddress/eth_accounts fast-paths see it too.
+          try {
+            await wvc.runJavaScript(
+              'window.ethereum && window.ethereum._n42SetAccounts('
+              '${json.encode([handler.address])})',
+            );
+          } catch (_) {}
+          await _resolveProvider(wvc, id, [handler.address]);
+          return;
+      }
+
+      final result = await handler.handleRequest(method, params, origin: origin);
       await _resolveProvider(wvc, id, result);
     } catch (e) {
       if (id == null) return;

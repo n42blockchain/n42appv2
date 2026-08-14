@@ -189,6 +189,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m71(value) => "${value} address test link failed!";
 
+  static String m75(value) =>
+      "The RPC reports Chain ID ${value}, which does not match the value you entered.";
+
   static String m72(value) => "0~${value} characters";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
@@ -1130,6 +1133,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
       "Token service is unavailable. Showing a limited offline list.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Swap blocked: the router address is not recognized. For your safety, this transaction was cancelled.",
     ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("You Pay"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
@@ -2829,6 +2835,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token symbol"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token decimal"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Import"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "This Chain ID is already in use by another network.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Caution"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("High Risk"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Safe"),

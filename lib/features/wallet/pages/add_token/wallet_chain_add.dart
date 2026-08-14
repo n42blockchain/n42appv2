@@ -140,10 +140,28 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     if (decimal < 0 || decimal > 18) {
       return _setFieldError((v) => decimalErrorMessage = v, s.g_token_m_key_2);
     }
-    if (!isURL(rpcStr)) {
+    // 强制 https：http 明文 RPC 会让余额/nonce/gas 查询与已签名交易广播全程
+    // 可被 MITM 篡改（配合假余额诱导或替换广播目标网络）。
+    if (!isURL(rpcStr) || !rpcStr.toLowerCase().startsWith('https://')) {
       return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
     }
     return true;
+  }
+
+  /// 已存在任一 EVM 链（内建或自定义）使用相同 chainId？用于阻止创建与内建
+  /// 链 chainId 冲突的并行自定义链（nonce/转账语义混乱 + 重放风险）。仅比对
+  /// EVM(Ethereum) 类型，避免与非 EVM 链的小整数 chainId 误撞。
+  bool _chainIdExists(int chainId) {
+    for (final entry in allChainUrlMap.values) {
+      if (entry is! Map) continue;
+      final base = entry['baseInfo'];
+      if (base is! Map) continue;
+      if (base['blockchainType'] != BlockchainType.Ethereum.name) continue;
+      final cid = base['chainId'];
+      if (cid is int && cid == chainId) return true;
+      if (cid is String && int.tryParse(cid) == chainId) return true;
+    }
+    return false;
   }
 
   Future<void> addChain() async {
@@ -172,9 +190,18 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       }
       return;
     }
+    // 按 chainId 判重：symbol 判重（上方 allChainUrlMap[mKey]）挡不住"换个
+    // symbol、chainId 撞内建链"的并行链。
+    if (_chainIdExists(chainId)) {
+      setState(() {
+        chainIdErrorMessage = S.of(context).g_token_m_key_chainid_conflict;
+      });
+      return;
+    }
     errorMessage = "";
 
     setState(() => load = Load.loading);
+    // RPC 探活。
     final rmm = await EthAPI.init(null, rpcStr, null).getGasPrice();
     if (!mounted) return;
     if (rmm.error) {
@@ -185,6 +212,38 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
         load = Load.finish;
       });
       ToastUtils.show(errorMessage);
+      return;
+    }
+
+    // chainId 交叉校验：向 RPC 查 eth_chainId，必须与用户填写的 chainId 一致。
+    // 否则攻击者可诱导用户把恶意 RPC 绑到主网 chainId——余额走恶意 RPC 显示
+    // 假数据，签名却用主网 chainId、签出的交易可被重放到真主网。
+    final cidRes = await EthAPI.init(null, rpcStr, null).baseRPCEth(
+      'eth_chainId',
+      [],
+      enableRetry: false,
+    );
+    if (!mounted) return;
+    final reportedHex = cidRes.valueOrNull?.toString() ?? '';
+    final reportedChainId = reportedHex.startsWith('0x')
+        ? int.tryParse(reportedHex.substring(2), radix: 16)
+        : int.tryParse(reportedHex);
+    if (cidRes.isFailure || reportedChainId == null) {
+      setState(() {
+        errorMessage = S
+            .of(context)
+            .g_token_m_key_24(S.of(context).g_token_m_key_17);
+        load = Load.finish;
+      });
+      ToastUtils.show(errorMessage);
+      return;
+    }
+    if (reportedChainId != chainId) {
+      setState(() {
+        chainIdErrorMessage =
+            S.of(context).g_token_m_key_chainid_mismatch(reportedChainId);
+        load = Load.finish;
+      });
       return;
     }
 

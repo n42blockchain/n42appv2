@@ -28,11 +28,23 @@ class NftSender implements ChainSender {
   final _trustdart = Trustdart();
   final _dataUtils = DataUtils();
 
+  /// 把调用方的 NFT 标准（'ERC721'/'ERC1155' 或已是 '721'/'1155'）归一化为
+  /// 原生签名层的标记。默认按 ERC721 处理。
+  static String _normalizeNftStandard(String? raw) {
+    final s = (raw ?? '').toLowerCase();
+    if (s.contains('1155')) return '1155';
+    return '721';
+  }
+
   @override
   Future<SendResult> send(SendParams params) async {
     final coinType = params.coinType;
     final tokenId = params.nftTokenId ?? '';
-    final nftStandard = params.nftStandard ?? 'ERC721';
+    // 归一化为原生签名层认识的标记 '721'/'1155'。调用方传的是 SimpleHash
+    // 的 nftType（'ERC721'/'ERC1155'），而 Android/iOS 原生只比对 '721'/'1155'
+    // ——不匹配会落进 ERC20Transfer 兜底分支，把 NFT 转移签成 amount=0 的 ERC20
+    // 转账、tokenId 被丢弃，上链 revert 却仍报成功（假成功、烧 gas）。
+    final nftStandard = _normalizeNftStandard(params.nftStandard);
     final nftQuantity = params.nftQuantity ?? 1;
 
     if (tokenId.isEmpty) {
