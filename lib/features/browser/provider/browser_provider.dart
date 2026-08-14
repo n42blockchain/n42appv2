@@ -538,29 +538,45 @@ class BrowserProvider extends ChangeNotifier {
   // to detect a mobile WebView, then fall back to deep-link mode (wc://) which
   // fails inside a WebView. We hide webkit ONCE per page load so DApps treat
   // this as a standard desktop browser and show the QR-code flow instead.
-  // FlutterWcClipboard is already registered as a global by the framework;
-  // we patch its postMessage to hold a direct reference to the native handler
-  // so it keeps working after webkit is hidden.
+  // 隐藏 webkit 之前，必须把每个 channel 固定成一个独立的包装对象。
+  //
+  // ⚠️ 关键陷阱：iOS 上 window.X 是 atDocumentStart 的 WKUserScript 注入的
+  // 别名，`window.X === webkit.messageHandlers.X`——**同一个对象**。因此绝不
+  // 能写成 window.X.postMessage = function(m){ handler.postMessage(m); }：
+  // 那等于把该对象自己的 postMessage 换成一个调用自身的函数，形成无限递归、
+  // 栈溢出，调用方只会看到 "Native bridge unavailable"，请求根本到不了 Dart。
+  // 正确做法是先取出原生 postMessage「函数本身」，再挂到一个新对象上，并以
+  // 原 handler 作为 receiver 调用。
   if (!window.__flutterWebkitHidden) {
     window.__flutterWebkitHidden = true;
     try {
       if (window.webkit && window.webkit.messageHandlers) {
-        var _nativeHandler = window.webkit.messageHandlers['FlutterWcClipboard'];
-        if (window.FlutterWcClipboard && _nativeHandler) {
-          window.FlutterWcClipboard.postMessage = function(msg) {
-            _nativeHandler.postMessage([String(msg)]);
+        var _mh = window.webkit.messageHandlers;
+        var _pin = function(name) {
+          var handler = _mh[name];
+          if (!handler || typeof handler.postMessage !== 'function') return false;
+          var rawPost = handler.postMessage;
+          window[name] = {
+            postMessage: function(msg) {
+              // 传字符串,与 Android 及未隐藏 webkit 时的别名行为保持一致。
+              // 传数组会让 Dart 侧 message.body.toString() 得到 "[...]",
+              // JSON 解析失败(provider)或 wc: 前缀判断失败(剪贴板)。
+              rawPost.call(handler, String(msg));
+            }
           };
+          return true;
+        };
+        _pin('FlutterWcClipboard');
+        // provider 桥同样要固定,否则隐藏 webkit 后 connect/sign/send 全废。
+        // 注意这一步也顺带兜住了「别名 user script 尚未注册」的情况——直接
+        // 从 messageHandlers 取 handler 建立 window.N42Wallet。
+        var _n42Pinned = _pin('N42Wallet');
+        // 隐藏 webkit 只为让 DApp 走 QR 流程(而非在 WebView 里必然失败的
+        // wc:// deep-link)。若 provider 桥没能固定住,隐藏 webkit 会连
+        // messageHandlers 兜底一起断掉,钱包彻底不可用——那就宁可不隐藏。
+        if (_n42Pinned) {
+          Object.defineProperty(window, 'webkit', { get: function() { return undefined; }, configurable: true });
         }
-        // Preserve the injected-provider bridge too, otherwise hiding
-        // window.webkit below breaks N42Wallet.postMessage on iOS and every
-        // connect/sign/send request silently hangs.
-        var _n42Handler = window.webkit.messageHandlers['N42Wallet'];
-        if (window.N42Wallet && _n42Handler) {
-          window.N42Wallet.postMessage = function(msg) {
-            _n42Handler.postMessage([String(msg)]);
-          };
-        }
-        Object.defineProperty(window, 'webkit', { get: function() { return undefined; }, configurable: true });
       }
     } catch(e) {}
     // Report as a non-touch desktop device (prevents touch-based mobile detection)
