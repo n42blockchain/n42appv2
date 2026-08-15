@@ -27,12 +27,21 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
   void initState() {
     super.initState();
     _connectV2 = ref.read(wcpBridgeProvider);
-    if (widget.uri != "") {
-      _connectV2.pageOpen = true;
-      _connectV2.viewStateDeal(WalletConnectState.loading, params: widget.uri);
-    } else if (_connectV2.walletConnectState == WalletConnectState.loading) {
-      _connectV2.viewStateDeal(WalletConnectState.disconnect);
-    }
+    // 必须推迟到首帧之后：viewStateDeal 会 notifyListeners()，在 initState 里
+    // 同步调用等于在 widget 树构建期间修改 provider，Riverpod 会抛
+    // "Tried to modify a provider while the widget tree was building" 断言。
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      if (widget.uri != "") {
+        _connectV2.pageOpen = true;
+        _connectV2.viewStateDeal(
+          WalletConnectState.loading,
+          params: widget.uri,
+        );
+      } else if (_connectV2.walletConnectState == WalletConnectState.loading) {
+        _connectV2.viewStateDeal(WalletConnectState.disconnect);
+      }
+    });
   }
 
   @override
