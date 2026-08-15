@@ -116,6 +116,7 @@ class ChatMessageMenuSheet extends StatelessWidget {
   final VoidCallback? onForward;
   final VoidCallback? onDelete;
   final VoidCallback? onSpeak;
+  final VoidCallback? onReadingMode;
 
   const ChatMessageMenuSheet({
     super.key,
@@ -125,6 +126,7 @@ class ChatMessageMenuSheet extends StatelessWidget {
     this.onForward,
     this.onDelete,
     this.onSpeak,
+    this.onReadingMode,
   });
 
   @override
@@ -160,6 +162,16 @@ class ChatMessageMenuSheet extends StatelessWidget {
                 icon: Icons.volume_up,
                 title: S.of(context)?.chatReadAloud ?? 'Read Aloud',
                 onTap: onSpeak,
+              ),
+            // 长文阅读模式：与微信风格主菜单对齐（此前 fallback 菜单缺该项，
+            // RenderBox 不可用时长文用户找不到 Reading 入口）。
+            if (onReadingMode != null)
+              _buildMenuItem(
+                context,
+                icon: Icons.chrome_reader_mode_outlined,
+                // 与微信风格主菜单同款硬编码文案（该项尚无 l10n key）
+                title: 'Reading',
+                onTap: onReadingMode,
               ),
             _buildMenuItem(
               context,

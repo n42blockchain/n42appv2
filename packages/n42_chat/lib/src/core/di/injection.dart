@@ -322,13 +322,21 @@ Future<void> _registerServices(N42ChatConfig config) async {
     () => LocalLlmService(getIt<LocalLlmBridge>()),
     dispose: (s) => s.dispose(),
   );
-  // AI 云↔端路由（端侧就绪走本地，否则云端；端侧失败回退云端）
-  getIt.registerLazySingleton<AiProviderRouter>(
-    () => AiProviderRouter(
-      cloud: getIt.isRegistered<AiService>() ? getIt<AiService>() : null,
+  // AI 云↔端路由（端侧就绪走本地，否则云端；端侧失败回退云端）。
+  // cloud 只在真配了云端（key/代理）时取 AiService——仅端侧场景下
+  // AiService 本身就是 Router(cloud:null)，直接取会套一层无意义的自包装。
+  getIt.registerLazySingleton<AiProviderRouter>(() {
+    final cfg = getIt<N42ChatConfig>();
+    final cloudConfigured =
+        (cfg.aiApiKey != null && cfg.aiApiKey!.isNotEmpty) ||
+        cfg.aiUseProxyEndpoint;
+    return AiProviderRouter(
+      cloud: cloudConfigured && getIt.isRegistered<AiService>()
+          ? getIt<AiService>()
+          : null,
       local: getIt<LocalLlmService>(),
-    ),
-  );
+    );
+  });
 
   // MLS 双栈调度（默认 Olm；底层 OpenMLS FFI 未绑定时 mlsAvailable=false）
   final mlsProtocol = FfiMlsProtocol();
@@ -566,9 +574,20 @@ Future<void> _registerServices(N42ChatConfig config) async {
     () => SyncOptimizationService(clientManager: getIt<MatrixClientManager>()),
   );
 
-  // AI 服务（配置了 API Key 或代理端点时注册）
-  if ((config.aiApiKey != null && config.aiApiKey!.isNotEmpty) ||
-      config.aiUseProxyEndpoint) {
+  // AI 服务：云端（API Key/代理端点）或端侧模型任一配置即注册。
+  //
+  // ⚠️ 此前仅云端 key 非空才注册 AiService，而 7 处 AI 入口（摘要/改写/
+  // 智能回复/AI 贴纸/链接摘要/图像理解/「+」面板 AI 项）全部用
+  // isRegistered<AiService>() 门控——**配了端侧 LLM 也救不回任何入口**，
+  // 附录 C 的端侧接线形同虚设。现在仅端侧场景注册 AiProviderRouter
+  // (cloud=null) 充当 AiService：文本能力走本地模型，图像理解等视觉能力
+  // 仍需云端（调用时明确报 unavailable，而非入口消失）。
+  final hasCloudAi =
+      (config.aiApiKey != null && config.aiApiKey!.isNotEmpty) ||
+      config.aiUseProxyEndpoint;
+  final hasLocalLlm =
+      config.localLlmModelUrl != null && config.localLlmModelUrl!.isNotEmpty;
+  if (hasCloudAi) {
     getIt.registerLazySingleton<AiService>(
       () => AiDatasource(
         apiKey: config.aiApiKey ?? '',
@@ -577,6 +596,10 @@ Future<void> _registerServices(N42ChatConfig config) async {
         useProxyEndpoint: config.aiUseProxyEndpoint,
       ),
       dispose: (service) => service.dispose(),
+    );
+  } else if (hasLocalLlm) {
+    getIt.registerLazySingleton<AiService>(
+      () => AiProviderRouter(cloud: null, local: getIt<LocalLlmService>()),
     );
   }
 

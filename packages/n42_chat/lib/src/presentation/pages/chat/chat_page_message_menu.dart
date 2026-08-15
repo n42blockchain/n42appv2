@@ -20,6 +20,15 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
                 _speakMessage(message);
               }
             : null,
+        // 长文阅读模式：条件与微信风格主菜单保持一致，避免 fallback 缺项。
+        onReadingMode:
+            (message.type == MessageType.text &&
+                ArticleReaderUtils.isLongArticle(message.content))
+            ? () {
+                Navigator.pop(ctx);
+                _openReadingMode(message);
+              }
+            : null,
         onReply: () {
           Navigator.pop(ctx);
           context.read<ChatBloc>().add(SetReplyTarget(message));

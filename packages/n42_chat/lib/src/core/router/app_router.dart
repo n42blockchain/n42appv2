@@ -265,9 +265,12 @@ class N42ChatRouter {
         if (imageUrl == null || imageUrl.isEmpty) {
           return _ErrorPage(error: Exception('Missing imageUrl'));
         }
+        // message 必须透传：OCR/图片翻译入口依赖它（message 为空时预览页的
+        // 「提取文字」菜单项静默消失），E2EE 图片解密也需要其元数据。
         return ImageViewerPage(
           imageUrl: imageUrl,
           heroTag: extra?['heroTag'] as String? ?? imageUrl,
+          message: extra?['message'] as MessageEntity?,
         );
       },
     ),

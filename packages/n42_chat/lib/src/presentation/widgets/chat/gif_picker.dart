@@ -297,8 +297,9 @@ class _GifPickerState extends State<GifPicker> {
               ),
             ),
             SizedBox(height: 4),
+            // Giphy 与 Tenor 任一 key 即可启用，文案不要只提 Giphy 误导配置。
             Text(
-              'Please configure Giphy API key',
+              'Set GIPHY_API_KEY or TENOR_API_KEY at build time',
               style: TextStyle(
                 fontSize: 12,
                 color: AppColors.textTertiary,

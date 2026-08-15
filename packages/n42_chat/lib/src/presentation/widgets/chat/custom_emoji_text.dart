@@ -52,6 +52,26 @@ class CustomEmojiText extends StatelessWidget {
     this.style,
   });
 
+  /// 把含 `:shortcode:` 的文本拆成 spans：命中内置动画 emoji 的段落渲染为
+  /// 内联 Lottie（[CustomEmojiInline]），其余保持文本。供本 widget 与
+  /// 消息气泡真实渲染链（message_item 的地址富文本路径）共用，避免两处
+  /// 各自实现解析逻辑。
+  static List<InlineSpan> spansFor(String text, {required double emojiSize}) {
+    final tokens = CustomEmojiParser.parse(text);
+    return tokens.map<InlineSpan>((token) {
+      if (token.isEmoji) {
+        return WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 1),
+            child: CustomEmojiInline(emoji: token.emoji!, size: emojiSize),
+          ),
+        );
+      }
+      return TextSpan(text: token.text);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!CustomEmojiParser.hasKnownEmoji(text)) {
@@ -60,24 +80,9 @@ class CustomEmojiText extends StatelessWidget {
 
     final fontSize = style?.fontSize ?? 16;
     final emojiSize = fontSize * 1.35;
-    final tokens = CustomEmojiParser.parse(text);
 
     return Text.rich(
-      TextSpan(
-        style: style,
-        children: tokens.map((token) {
-          if (token.isEmoji) {
-            return WidgetSpan(
-              alignment: PlaceholderAlignment.middle,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 1),
-                child: CustomEmojiInline(emoji: token.emoji!, size: emojiSize),
-              ),
-            );
-          }
-          return TextSpan(text: token.text);
-        }).toList(),
-      ),
+      TextSpan(style: style, children: spansFor(text, emojiSize: emojiSize)),
     );
   }
 }

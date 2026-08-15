@@ -99,6 +99,9 @@ class WeChatMessageMenu extends StatelessWidget {
     final menuWidth = (screenWidth - 24.0).clamp(300.0, 420.0);
     final left = _calculateLeft(context, menuWidth);
     final top = _calculateTop(context);
+    final media = MediaQuery.of(context);
+    final availableHeight =
+        media.size.height - media.viewInsets.bottom - media.padding.bottom;
 
     return GestureDetector(
       onTap: onDismiss,
@@ -112,7 +115,21 @@ class WeChatMessageMenu extends StatelessWidget {
               left: left,
               top: top,
               width: menuWidth,
-              child: _buildMenuContent(context, menuWidth),
+              // 定位用的 menuHeight 是估算常量（450），长文消息的菜单项可达
+              // 3 行（Reading/Speak/Translate 恰在底部），实际高度会超估——
+              // 无约束时超出部分被推出屏幕、底部项不可点。加最大高度 + 超高
+              // 可滚动，保证所有菜单项始终可达。
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: (availableHeight - top - 12).clamp(
+                    200.0,
+                    double.infinity,
+                  ),
+                ),
+                child: SingleChildScrollView(
+                  child: _buildMenuContent(context, menuWidth),
+                ),
+              ),
             ),
           ],
         ),

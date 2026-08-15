@@ -35,6 +35,8 @@ import '../../widgets/chat/message_reaction_bar.dart';
 import '../../widgets/chat/edit_history_sheet.dart';
 import '../../widgets/chat/thread_indicator.dart';
 import '../../widgets/chat/code_block_message_widget.dart';
+import '../../widgets/chat/custom_emoji_text.dart';
+import '../../../core/utils/custom_emoji_parser.dart';
 import 'message_item_helpers.dart';
 import '../../../core/utils/debug_log.dart';
 
@@ -2479,17 +2481,29 @@ class MessageItem extends StatelessWidget {
     Color textColor,
     BuildContext context,
   ) {
+    final style = TextStyle(
+      fontSize: messageFontSize ?? 16,
+      color: textColor,
+      height: 1.4,
+    );
+    // 自定义动画 emoji（:shortcode:）在此接入真实渲染链。此前解析器/联想条
+    // 都在，但气泡渲染走的是普通 Text——发出去只显示纯文本短代码，动画
+    // 永远看不到（含 CustomEmojiText 的 TextMessageBubble 是零调用死代码）。
+    final emojiSize = (messageFontSize ?? 16) * 1.35;
+    final hasCustomEmoji = CustomEmojiParser.hasKnownEmoji(text);
+
     final matches = _addressRegex.allMatches(text).toList();
     if (matches.isEmpty) {
-      return Text(
-        text,
-        style: TextStyle(
-          fontSize: messageFontSize ?? 16,
-          color: textColor,
-          height: 1.4,
-        ),
-      );
+      if (hasCustomEmoji) {
+        return CustomEmojiText(text: text, style: style);
+      }
+      return Text(text, style: style);
     }
+
+    // 普通片段经 emoji 感知 spans（无 emoji 时退化为单个 TextSpan）。
+    List<InlineSpan> plainSpans(String segment) => hasCustomEmoji
+        ? CustomEmojiText.spansFor(segment, emojiSize: emojiSize)
+        : [TextSpan(text: segment)];
 
     final spans = <InlineSpan>[];
     var lastEnd = 0;
@@ -2497,7 +2511,7 @@ class MessageItem extends StatelessWidget {
     for (final match in matches) {
       // 添加匹配前的普通文本
       if (match.start > lastEnd) {
-        spans.add(TextSpan(text: text.substring(lastEnd, match.start)));
+        spans.addAll(plainSpans(text.substring(lastEnd, match.start)));
       }
 
       // 添加可点击的地址 span
@@ -2527,19 +2541,10 @@ class MessageItem extends StatelessWidget {
 
     // 添加最后一段普通文本
     if (lastEnd < text.length) {
-      spans.add(TextSpan(text: text.substring(lastEnd)));
+      spans.addAll(plainSpans(text.substring(lastEnd)));
     }
 
-    return Text.rich(
-      TextSpan(
-        style: TextStyle(
-          fontSize: messageFontSize ?? 16,
-          color: textColor,
-          height: 1.4,
-        ),
-        children: spans,
-      ),
-    );
+    return Text.rich(TextSpan(style: style, children: spans));
   }
 
   /// 显示地址操作选项
