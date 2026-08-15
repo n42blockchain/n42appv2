@@ -204,12 +204,24 @@ extension WalletActionProviderWallet on WalletActionProvider {
             for (final key in const <String>[
               'mainnetChainID',
               'testnetChainID',
+              // supportTest 决定该链是否暴露测试网入口。此前不同步，已创建的
+              // 钱包会一直保留建钱包时的旧值——链后来关闭测试网支持（如 ATOM
+              // 无可用测试网端点）时，运行时 CoinModel 仍是 true，用户能切进
+              // 一个实际不可用的测试网。
+              'supportTest',
             ]) {
               if (chainConfig.containsKey(key) &&
                   storedChain[key] != chainConfig[key]) {
                 storedChain[key] = chainConfig[key];
                 changed = true;
               }
+            }
+            // 若该链已不支持测试网，必须把停留在测试网的钱包拉回主网，
+            // 否则会卡在一个没有入口可切回、且 RPC/chainId 均不可用的状态。
+            if (chainConfig['supportTest'] == false &&
+                storedChain['isTest'] == true) {
+              storedChain['isTest'] = false;
+              changed = true;
             }
           }
           final canonicalService = canonicalBase['service'];

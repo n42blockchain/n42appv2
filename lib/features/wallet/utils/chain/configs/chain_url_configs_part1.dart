@@ -456,7 +456,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
       // Ropsten(3) 已于 2022-12 关停。权威表 chainUrlMap 早已切到 Sepolia,
       // 运行时还会被 syncRpcOverridesToChainUrlMap() 覆盖为 RpcConfig 的值;
       // 此处同步更新,避免这份目录副本与实际行为矛盾、误导后续排查。
-      "service_test": "https://eth-sepolia.public.blastapi.io",
+      "service_test": "https://ethereum-sepolia-rpc.publicnode.com",
       "chainId": 1,
       "chainId_test": 11155111,
       "contract": "",
@@ -470,7 +470,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "testnets": [
       {
         "testnetWS": "",
-        "testnetRPC": "https://eth-sepolia.public.blastapi.io",
+        "testnetRPC": "https://ethereum-sepolia-rpc.publicnode.com",
         "testnetChainID": 11155111,
         "testnetContract": <String, dynamic>{},
       },
@@ -1088,7 +1088,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
       "path": {"legacy": "m/44'/60'/0'/0/0"},
       "service": "https://polygon-rpc.com/",
       // Mumbai(80001) 已于 2024-04 关停,继任测试网为 Amoy(80002)。
-      "service_test": "https://rpc-amoy.polygon.technology",
+      "service_test": "https://polygon-amoy-bor-rpc.publicnode.com",
       "chainId": 137,
       "chainId_test": 80002,
       "contract": "",
@@ -1102,7 +1102,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
     "testnets": [
       {
         "testnetWS": "",
-        "testnetRPC": "https://rpc-amoy.polygon.technology",
+        "testnetRPC": "https://polygon-amoy-bor-rpc.publicnode.com",
         "testnetChainID": 80002,
         "testnetContract": <String, dynamic>{},
       },

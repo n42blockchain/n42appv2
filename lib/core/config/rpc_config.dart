@@ -43,7 +43,13 @@ class RpcConfig {
   );
 
   /// Ethereum Sepolia Testnet RPC
-  static const String ethSepoliaRpc = 'https://eth-sepolia.public.blastapi.io';
+  ///
+  /// 原 `eth-sepolia.public.blastapi.io` 已停服(返回 403/-32000)，导致 Sepolia
+  /// 测试网整体不可用。改用 PublicNode，与上面的主网端点同一提供方；已实测
+  /// eth_chainId/blockNumber/gasPrice/getBalance/getTransactionCount/
+  /// estimateGas/maxPriorityFeePerGas 均可用。
+  static const String ethSepoliaRpc =
+      'https://ethereum-sepolia-rpc.publicnode.com';
 
   /// BSC Mainnet RPC
   static const String bscMainnetRpc = 'https://bsc-dataseed1.binance.org/';

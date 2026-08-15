@@ -172,7 +172,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       "isContract": false,
       "path": {"legacy": "m/44'/60'/0'/0/0"},
       "service": "https://ethereum-rpc.publicnode.com",
-      "service_test": "https://eth-sepolia.public.blastapi.io",
+      "service_test": "https://ethereum-sepolia-rpc.publicnode.com",
       "chainId": 1,
       "chainId_test": 11155111,
       "contract": "",
@@ -185,8 +185,8 @@ Map<String, dynamic> walletChainConfigsPart1 = {
     "testnetIndex": 0,
     "testnets": [
       {
-        "testnetWS": "https://eth-sepolia.public.blastapi.io",
-        "testnetRPC": "https://eth-sepolia.public.blastapi.io",
+        "testnetWS": "https://ethereum-sepolia-rpc.publicnode.com",
+        "testnetRPC": "https://ethereum-sepolia-rpc.publicnode.com",
         "testnetChainID": 11155111,
         "testnetContract": <String, dynamic>{
           "0X6C30A50430CC615C4659DF2DBE3E42036583BE7E": <String, dynamic>{
@@ -205,7 +205,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
             "isContract": true,
             "path": {"legacy": "m/44'/60'/0'/0/0"},
             "service": "https://ethereum-rpc.publicnode.com",
-            "service_test": "https://eth-sepolia.public.blastapi.io",
+            "service_test": "https://ethereum-sepolia-rpc.publicnode.com",
             "chainId": 1,
             "chainId_test": 11155111,
             "contract": "0x6c30A50430cC615C4659DF2dBe3E42036583bE7E",
@@ -272,7 +272,9 @@ Map<String, dynamic> walletChainConfigsPart1 = {
   CoinType.BNB.name: <String, dynamic>{
     "showList": true,
     "isTest": false,
-    "supportTest": false,
+    // BSC 测试网可用(chainId 97 + data-seed-prebsc 端点实测正常)，此前被关掉
+    // 导致 App 内根本切不过去；目录表 allChainUrlMap 一直是 true，两表矛盾。
+    "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],
@@ -569,7 +571,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       // Mumbai(80001) 已于 2024-04 关停,RPC 与浏览器均已下线;Polygon 官方
       // 继任测试网为 Amoy(80002)。留着旧值会让测试网签名带错误 chainId、
       // 被节点以 invalid chain id 拒绝。
-      "service_test": "https://rpc-amoy.polygon.technology",
+      "service_test": "https://polygon-amoy-bor-rpc.publicnode.com",
       "chainId_test": 80002,
       "contract": "",
       "contract_test": "",
@@ -582,7 +584,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
     "testnets": [
       {
         "testnetWS": "",
-        "testnetRPC": "https://rpc-amoy.polygon.technology",
+        "testnetRPC": "https://polygon-amoy-bor-rpc.publicnode.com",
         "testnetChainID": 80002,
         "testnetContract": <String, dynamic>{},
       },
@@ -644,7 +646,9 @@ Map<String, dynamic> walletChainConfigsPart1 = {
   CoinType.TRX.name: <String, dynamic>{
     "showList": true,
     "isTest": false,
-    "supportTest": false,
+    // TRON Nile 测试网可用(nile.trongrid.io 实测返回最新区块)，此前被关掉
+    // 导致 App 内切不过去；目录表 allChainUrlMap 一直是 true，两表矛盾。
+    "supportTest": true,
     "addrType": "legacy",
     "pathIndex": 0,
     "pathList": [0],

@@ -86,5 +86,41 @@ void main() {
         );
       }
     });
+
+    test('已验证可用的测试网必须开放入口（supportTest）', () {
+      // supportTest 决定 App 内能否切到该链测试网。权威表驱动行为，若它为
+      // false，即便 RPC/chainId 都正确，用户也切不过去——BNB(97) 与 TRX(Nile)
+      // 都曾因此被关掉，而目录表一直是 true，两表长期矛盾。
+      for (final key in const ['ETH', 'MATIC', 'BNB', 'TRX', 'SOL']) {
+        final chain = chainUrlMap[key];
+        if (chain is! Map) continue;
+        expect(
+          chain['supportTest'],
+          isTrue,
+          reason: '$key 的测试网已验证可用，supportTest 不应为 false',
+        );
+      }
+    });
+
+    test('无测试网的链必须同时关闭入口并置零 chainId_test', () {
+      // 两者要一致：supportTest=false 却留着主网 chainId，一旦开关被打开
+      // 就会签出可重放交易（见 BASE）。
+      for (final entry in chainUrlMap.entries) {
+        final chain = entry.value;
+        if (chain is! Map) continue;
+        if (chain['supportTest'] != false) continue;
+        final base = chain['baseInfo'];
+        if (base is! Map) continue;
+        if (base['blockchainType'] != BlockchainType.Ethereum.name) continue;
+        final main = asInt(base['chainId']);
+        final test = asInt(base['chainId_test']);
+        if (main == null || test == null) continue;
+        expect(
+          test == 0 || test != main,
+          isTrue,
+          reason: '${entry.key} 不支持测试网，但 chainId_test 等于主网 $main',
+        );
+      }
+    });
   });
 }

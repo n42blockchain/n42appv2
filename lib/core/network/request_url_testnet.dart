@@ -17,7 +17,7 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
   'MATIC': {
     'api': 'https://api-amoy.polygonscan.com/api?',
     'browser': 'https://amoy.polygonscan.com/',
-    'rpc': 'https://rpc-amoy.polygon.technology',
+    'rpc': 'https://polygon-amoy-bor-rpc.publicnode.com',
   },
   'SOL': {
     'api': 'https://api-testnet.solscan.io/',
