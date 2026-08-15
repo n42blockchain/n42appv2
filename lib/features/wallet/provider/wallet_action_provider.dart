@@ -29,8 +29,6 @@ import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_testnet_migration.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
-import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
-import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/safe_change_notifier.dart';

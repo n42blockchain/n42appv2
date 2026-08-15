@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-N42 Wallet — a Flutter-based enterprise cryptocurrency wallet app (package: `n42_wallet`). Supports Android, iOS, macOS, Web, and Windows. The app includes wallet management, token swaps, DApp browser, mining (v1/v2), staking, chat (via `n42_chat` package), WalletConnect, and social auth.
+N42 Wallet — a Flutter-based enterprise cryptocurrency wallet app (package: `n42_wallet`). Supports Android, iOS, macOS, Web, and Windows.
 
 ## Related Repositories
 
@@ -20,9 +20,6 @@ N42 Wallet — a Flutter-based enterprise cryptocurrency wallet app (package: `n
 # First-time setup (installs git hooks for auto build-number bump)
 make setup
 
-# Install dependencies
-flutter pub get
-
 # Run in debug mode (auto-bumps build number)
 make run                    # default device
 make run-android            # target Android
@@ -36,8 +33,6 @@ dart format lib test
 
 # Run tests
 make test                   # unit tests (with build-number bump)
-flutter test --coverage     # with coverage report
-flutter test integration_test/  # integration tests
 
 # Code generation (after modifying models, DI, freezed, or l10n)
 flutter pub run build_runner build --delete-conflicting-outputs   # DI/models/freezed
@@ -54,85 +49,45 @@ make build-ipa              # iOS IPA via scripts/build_ipa.sh
 
 ### Layer Structure (`lib/`)
 
-The app follows a layered architecture with feature-based organization. Top
-level: `core/`, `features/`, `generated/`, `l10n/`, `main.dart`, `presentation/`,
-`shared/`.
+Layered architecture with feature-based organization. The directory layout is
+discoverable with `ls lib/` — the notes below are only what the code does NOT
+tell you on its own.
 
-- **`core/`** — Framework-level infrastructure shared across all features:
-  - `di/` — Composition root (`injection.dart`); registers wallet/mining service
-    impls into the cross-feature Riverpod registry. No longer uses GetIt — the
+- **`core/`**:
+  - `di/` — Composition root (`injection.dart`). No longer uses GetIt — the
     service registry is plain module-level state in `core/providers/service_providers.dart`.
-  - `providers/` — Global Riverpod providers split across `core_providers.dart`
-    (+ part files `_ui`, `_security`), `service_providers.dart` (cross-feature
-    service registry: `walletServiceProvider`, `miningServiceProvider`,
-    `deepLinkServiceProvider`), and `legacy_wallet_adapter.dart` (ChangeNotifier-to-Riverpod bridge).
-  - `network/` — Dio HTTP client, retry/circuit-breaker interceptors, RPC URL
-    configs (mainnet/testnet), MEV protection (Flashbots).
-  - `wallet_sdk/` — Low-level blockchain operations (key management, signing,
-    address derivation).
-  - `passkey/` — WebAuthn Passkey support (config, credentials, platform
-    adapter, service) for app auth. AA-side Passkey signing
+  - `passkey/` — WebAuthn Passkey for app auth. AA-side Passkey signing
     (`features/wallet/aa/provider/passkey_signer_provider.dart`) is **designed
     but not wired** — production AA signing currently goes through ECDSA via
     `trustdart.signMessage` in `aa_transfer_handler`.
-  - `security/` — Secure storage, device security, phishing detection,
-    transaction risk analysis, DApp security, signature decoder.
-  - `storage/` — SQLite (`app_database.dart`), SharedPreferences (`sp_util.dart`),
-    encrypted preferences.
-  - `config/`, `api_hub/`, `routing/`, `market/`, `platform/` — see directory.
 
-- **`features/`** — Feature modules. Each typically has its own
-  `data/`, `domain/`, `presentation/`, `provider/`, `pages/`:
-  - `wallet/` — Core wallet: create/import, send/receive, token management,
-    transaction history (含 pending 交易加速/取消 replace-by-fee), account
-    abstraction (`aa/` with Passkey + social recovery), lending (Aave V3),
-    perpetuals (Hyperliquid), custom EVM chains。**自定义链注意**：真正可达的
-    加链路径是 `add_token/wallet_chain_add.dart`（`addWalletChain` 持久化进钱包
-    coinInfo）；`pages/network/` 下的 `CustomChainService`/`AddCustomChainPage`
-    是无导航入口的死并行系统（勿基于它做新功能，详见钱包竞品报告 §2.3 勘误）。
+- **`features/`** — one directory per feature:
+  - `wallet/` — **自定义链注意**：真正可达的加链路径是
+    `add_token/wallet_chain_add.dart`（`addWalletChain` 持久化进钱包 coinInfo）；
+    曾存在的死并行系统 `pages/network/`（`CustomChainService`/
+    `AddCustomChainPage`，从未有导航入口）已于 2026-08-15 删除；
+    如需考古见 git 历史 9713293d 与钱包竞品报告 §2.3 勘误。
     Transfer is dispatched through `api/sender/sender_factory.dart` →
-    `ChainSender` implementations keyed by `blockchainType` (EVM / BTC /
-    Cosmos / Solana / TRON / Polkadot / Aptos / TON / NEAR / SUI / Ripple /
-    Algorand / Tezos / Zilliqa / Filecoin / Stellar / Cardano / VeChain /
-    MultiversX / Hedera / Starknet). Per-chain read APIs live under
-    `api/chain_api/` — 19 Cosmos-family chains share `CosmosChainApi` as a
-    LCD REST base, EVM/BTC/SOL/etc. have dedicated clients.
-  - `wallet_connect/` — WalletConnect v2 (`reown_walletkit`), via a 3-layer
-    mixin chain on `ChangeNotifier` (Connection + Session + Signing).
-  - `mining/`, `mining_v1/`, `mining_v2/` — Mining protocol versions. The
-    `features/mining/` layer is a Clean-Arch bridge wrapping
-    `MiningV2Provider` (exposed through `miningRepositoryProvider`).
+    `ChainSender` implementations keyed by `blockchainType`; per-chain read
+    APIs live under `api/chain_api/`, where the Cosmos-family chains share
+    `CosmosChainApi` as a LCD REST base.
+  - `mining/`, `mining_v1/`, `mining_v2/` — `features/mining/` is a Clean-Arch
+    bridge wrapping `MiningV2Provider` (via `miningRepositoryProvider`).
     **Both v1 and v2 are live**: a user-facing switch in
     `setting_home_page.dart` (`miningUseV2Provider`) selects which page
     the home tab renders. New mining features go into v2 only; v1 is
     maintenance-only until the product decision to remove the switch
     (tracked in `docs/CLEANUP_PLAN.md` stage 5).
-  - `browser/` — DApp browser with JS bridge, WebView integration.
-  - `auth/` — Authentication flows. Login state is read/written through
-    `AppGlobals.userInfo` and `currentUserProvider` (a never-wired
-    `IAuthService`/`AuthServiceImpl` pair was removed in 2026-06 cleanup;
-    recover from git history if a service abstraction is ever needed).
-  - `bridge/`, `staking/`, `earn/`, `hardware_wallet/` — DeFi & device features.
-  - `home/`, `splash/`, `news/`, `profile/` — top-level screens.
-  - `component/`, `widgets/`, `utils/` — shared UI / utility code.
-  - `proto/` — Protocol Buffer definitions (`.proto` + generated `.pb.dart`).
-  - `sqlite/` — Feature-level database ops.
+  - `auth/` — Login state is read/written through `AppGlobals.userInfo` and
+    `currentUserProvider` (a never-wired `IAuthService`/`AuthServiceImpl` pair
+    was removed in 2026-06 cleanup; recover from git history if a service
+    abstraction is ever needed).
 
-- **`shared/`** — Cross-feature abstractions:
-  - `domain/entities/` — Shared entities (`SharedWalletInfo`, `MessageModel`).
-  - `domain/services/` — Service interfaces (`IWalletService`,
-    `IMiningService`).
-  - `events/` — EventBus-based `CrossFeatureEvent` subclasses + `EventManager`.
-  - `utils/` — `wallet_connect_uri.dart` and other cross-feature helpers.
-  - `widgets/` — Shared widgets (e.g., `tips_dialog_3`).
-  - (A zero-implementor `contracts/` interface set and its
-    `FeatureInitializer` were removed in the 2026-06 cleanup — see
-    `docs/CLEANUP_PLAN.md`; recover from git history if a module-system
-    bootstrap is revived.)
-
-- **`presentation/themes/`** — Theme configuration and adapters.
-- **`generated/`** — Auto-generated l10n code (do NOT edit manually).
-- **`l10n/`** — Localization ARB files (25+ languages).
+- **`shared/`** — cross-feature abstractions (entities, service interfaces,
+  EventBus events, shared widgets). A zero-implementor `contracts/` interface
+  set and its `FeatureInitializer` were removed in the 2026-06 cleanup — see
+  `docs/CLEANUP_PLAN.md`; recover from git history if a module-system
+  bootstrap is revived.
 
 ### State Management
 
@@ -210,8 +165,6 @@ Features communicate through:
 ## Key Conventions
 
 - Generated files (`*.g.dart`, `*.freezed.dart`, `lib/generated/`) — never edit, regenerate with `build_runner`
-- Analyzer excludes generated files; `constant_identifier_names` disabled (crypto symbols like BTC/ETH)
-- Lint config: `package:flutter_lints/flutter.yaml` base
 - New features go under `lib/features/<feature>/` with parallel tests in `test/features/<feature>/`
 - Prefer Riverpod providers over GetIt for new code
 - **UI 一律走设计系统令牌**：`lib/core/design_system/`（AppColorTokens/AppTypography/

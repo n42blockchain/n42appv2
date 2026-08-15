@@ -34,21 +34,15 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
     'browser': 'https://testnet2.n42.world/',
     'rpc': 'https://testrpc2.n42.world',
   },
-  'ETC': {
-    'api': 'https://blockscout.com/etc/kotti/api?',
-    'browser': 'https://blockscout.com/etc/kotti/',
-    'rpc': 'https://www.ethercluster.com/kotti',
-  },
+  // ETC Kotti 测试网 2022 年已关停,端点置空(过时内容清理 2026-08-15)
+  'ETC': {'api': '', 'browser': '', 'rpc': ''},
   'AVAX': {
     'api': 'https://api-testnet.snowtrace.io/api?',
     'browser': 'https://testnet.snowtrace.io/',
     'rpc': 'https://api.avax-test.network/ext/bc/C/rpc',
   },
-  'HT': {
-    'api': 'https://api-testnet.hecoinfo.com/api?',
-    'browser': 'https://testnet.hecoinfo.com/',
-    'rpc': 'https://http-testnet.hecochain.com',
-  },
+  // Heco 链 2024 年已停运,测试网端点全部失效(过时内容清理 2026-08-15)
+  'HT': {'api': '', 'browser': '', 'rpc': ''},
   'FTM': {
     'api': 'https://api-testnet.ftmscan.com/api?',
     'browser': 'https://testnet.ftmscan.com/',
@@ -64,11 +58,8 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
     'browser': 'https://testnet-explorer.callisto.network/',
     'rpc': 'https://testnet-rpc.callisto.network/',
   },
-  'POA': {
-    'api': 'https://blockscout.com/poa/sokol/api?',
-    'browser': 'https://blockscout.com/poa/sokol/',
-    'rpc': 'https://sokol.poa.network',
-  },
+  // POA Sokol 测试网 2022 年已关停(过时内容清理 2026-08-15)
+  'POA': {'api': '', 'browser': '', 'rpc': ''},
   'TOMO': {'api': '', 'browser': '', 'rpc': ''},
   'TT': {'api': '', 'browser': '', 'rpc': ''},
   'GO': {'api': '', 'browser': '', 'rpc': 'https://testnet-rpc.gochain.io'},

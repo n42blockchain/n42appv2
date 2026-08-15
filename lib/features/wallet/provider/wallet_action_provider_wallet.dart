@@ -72,7 +72,6 @@ extension WalletActionProviderWallet on WalletActionProvider {
     refresh();
     try {
       await getWalletInfo();
-      await _mergeCustomChains();
       await _syncNewChains();
       await buildCoinModel();
     } catch (_) {
@@ -97,32 +96,11 @@ extension WalletActionProviderWallet on WalletActionProvider {
     await refreshWalletListNotifier();
   }
 
-  /// 把用户添加的自定义 EVM 链合并进链注册表。
-  ///
-  /// 自定义链此前只存独立的 SharedPreferences（`custom_evm_chains`），与真正
-  /// 驱动余额/转账的 `chainUrlMap`/`allChainUrlMap` 不通。这里在建 coinModel
-  /// 前把它们注入两张表——之后 [_syncNewChains] 会像对待内建新链一样自动把
-  /// 它们加进每个钱包的 coinInfo，`SenderFactory` 也能按 coinType 查到
-  /// blockchainType=Ethereum 分派给 EvmSender。EVM 的派生/签名/查询/广播在
-  /// Dart 与 native 两端都链无关（未知 coinType 兜底 Ethereum 曲线，chainId
-  /// 走 txData），发送时经 baseInfo.custom 标志走自定义 RPC（见 EvmSender）。
-  Future<void> _mergeCustomChains() async {
-    try {
-      final customChains = await CustomChainService.getCustomChains();
-      for (final chain in customChains) {
-        final key = CustomChainService.coinTypeKey(chain.chainId);
-        // 不覆盖内建链（key 以 C<chainId> 前缀，本就不会与枚举名冲突）。
-        if (chainUrlMap.containsKey(key)) continue;
-        final entry = CustomChainService.toRegistryEntry(chain);
-        chainUrlMap[key] = entry;
-        allChainUrlMap[key] = entry;
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        debugPrint('WalletActionProvider: _mergeCustomChains error: $e');
-      }
-    }
-  }
+  // 2026-08-15 清理：删除 _mergeCustomChains——它读取 SharedPreferences 的
+  // `custom_evm_chains` 表，而唯一写入方 AddCustomChainPage 自引入起（9713293d，
+  // 2026-04）从未有过任何导航调用方，该表在所有历史版本中恒为空。真正可达的
+  // 加链路径是 add_token/wallet_chain_add.dart（addWalletChain 直接持久化进
+  // 钱包 coinInfo），不经过这张表。死系统三文件已一并删除。
 
   /// 同步新链到现有钱包
   /// 检查 chainUrlMap 中是否有新链不在当前钱包中，如果有则自动添加。

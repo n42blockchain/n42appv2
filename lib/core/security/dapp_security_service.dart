@@ -3,12 +3,12 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 //
-// **Status: designed but not wired (2026-06 audit).** DAppSecurityService /
-// DAppPermissionsTracker have no production call sites — the signing flow
-// (DAppRequestHandler) never calls check(), so the security-level scoring
-// is dormant. PhishingDetector IS live on browser navigation; this service
-// was meant to grade DApp origins at signing time. Wire it inside
-// DAppRequestHandler when the JS bridge lands (see ethereum_provider.dart).
+// **Status: live (wired 2026-07+, 头注释于 2026-08-15 更正).** 此前声称
+// "designed but not wired" 已过时：BrowserProvider._handleProviderMessage
+// 对每个敏感方法调用 DAppSecurityService.check() 做钓鱼拦截（按发起标签的
+// origin），WalletConnect 连接/签名界面经 DAppSecurityBadge 展示评级。
+// 注意：WC 路径的评级基于 DApp 自报 metadata.url，不可当作来源验证
+// （见 Chat/钱包审计 2026-08 的 WC 徽章告警项）。
 
 import 'dart:convert';
 
