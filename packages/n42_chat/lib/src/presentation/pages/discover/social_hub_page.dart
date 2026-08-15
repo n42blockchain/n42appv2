@@ -15,8 +15,11 @@ import '../../blocs/story/story_event.dart';
 import '../../blocs/story/story_state.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../widgets/story/story_bar.dart';
+import '../../../integration/wallet_bridge.dart';
+import '../../blocs/social/social_graph_bloc.dart';
 import '../game/game_center_page.dart';
 import '../moment/create_moment_page.dart';
+import '../social/social_graph_page.dart';
 import '../moment/moment_list_page.dart';
 import '../profile/avatar_studio_page.dart';
 import '../story/create_story_page.dart';
@@ -117,6 +120,13 @@ class _SocialHubView extends StatelessWidget {
                       icon: Icons.face_retouching_natural,
                       color: const Color(0xFF8B5CF6),
                       onTap: () => _openAvatarStudio(context),
+                    ),
+                    _QuickAction(
+                      title: 'Social Graph',
+                      subtitle: 'On-chain follows, fans and connections.',
+                      icon: Icons.hub_outlined,
+                      color: const Color(0xFF0EA5E9),
+                      onTap: () => _openSocialGraph(context),
                     ),
                   ],
                 ),
@@ -234,6 +244,31 @@ class _SocialHubView extends StatelessWidget {
     Navigator.of(
       context,
     ).push(MaterialPageRoute<void>(builder: (_) => const GameCenterPage()));
+  }
+
+  /// 链上社交图谱（关注/粉丝/推荐）。页面/bloc/数据层此前全部就位，但全仓
+  /// 零导航入口（附录 C 误标 ✅，2026-08-15 复核发现）——在此接线。
+  /// 需要钱包地址：宿主未注入钱包桥或未创建钱包时给出明确提示而非空白页。
+  void _openSocialGraph(BuildContext context) {
+    final address = getIt.isRegistered<IWalletBridge>()
+        ? getIt<IWalletBridge>().walletAddress
+        : null;
+    if (address == null || address.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Connect a wallet to view your social graph'),
+        ),
+      );
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider(
+          create: (_) => getIt<SocialGraphBloc>(),
+          child: SocialGraphPage(address: address),
+        ),
+      ),
+    );
   }
 
   void _openAvatarStudio(BuildContext context) {

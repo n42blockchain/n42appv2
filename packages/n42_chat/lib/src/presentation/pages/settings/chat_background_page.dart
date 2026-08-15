@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
@@ -149,6 +153,20 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
                 ),
                 const SizedBox(height: 12),
                 _buildGradientGrid(),
+
+                const SizedBox(height: 24),
+
+                // 自定义照片背景（对标 iMessage iOS 26）
+                Text(
+                  'From Photos',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: context.textPrimary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _buildPhotoOption(),
               ],
             ),
           ),
@@ -160,6 +178,123 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
               child: LinearProgressIndicator(minHeight: 2),
             ),
         ],
+      ),
+    );
+  }
+
+  /// 从相册选一张照片作为聊天背景（对标 iMessage iOS 26 的会话背景）。
+  ///
+  /// 相册返回的是临时/沙箱路径，直接存 key 会在系统清理后失效——先复制进
+  /// 应用文档目录的稳定路径再落库；替换/取消图片背景时顺手清理旧文件。
+  Future<void> _pickImageBackground() async {
+    if (_isSaving) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final saveFailedMessage = S.of(context)?.commonSaveFailed ?? 'Save failed';
+    try {
+      final picked = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 2160,
+        imageQuality: 90,
+      );
+      if (picked == null || !mounted) return;
+
+      final docs = await getApplicationDocumentsDirectory();
+      final dir = Directory('${docs.path}/chat_backgrounds');
+      await dir.create(recursive: true);
+      final scope = widget.roomId ?? 'default';
+      final ext = picked.path.contains('.')
+          ? picked.path.substring(picked.path.lastIndexOf('.'))
+          : '.jpg';
+      final dest = File(
+        '${dir.path}/bg_${scope.hashCode.toRadixString(16)}'
+        '_${DateTime.now().millisecondsSinceEpoch}$ext',
+      );
+      await File(picked.path).copy(dest.path);
+
+      final previous = _selectedBackground;
+      if (!mounted) return;
+      await _selectBackground(
+        '${ChatBackgroundPresets.imageKeyPrefix}${dest.path}',
+      );
+      // 替换成功后清理上一张自定义图片，避免文档目录累积孤儿文件。
+      if (ChatBackgroundPresets.isImageKey(previous) &&
+          _selectedBackground != previous) {
+        final old = File(
+          previous!.substring(ChatBackgroundPresets.imageKeyPrefix.length),
+        );
+        try {
+          if (await old.exists()) await old.delete();
+        } catch (_) {}
+      }
+    } catch (e) {
+      debugLog('ChatBackgroundPage: pick image background failed: $e');
+      if (!mounted) return;
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(saveFailedMessage),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
+  Widget _buildPhotoOption() {
+    final isImage = ChatBackgroundPresets.isImageKey(_selectedBackground);
+    final decoration = isImage
+        ? ChatBackgroundPresets.resolveDecoration(_selectedBackground)
+        : null;
+
+    return Semantics(
+      button: true,
+      label: 'Choose photo background',
+      excludeSemantics: true,
+      child: GestureDetector(
+        onTap: _isSaving ? null : _pickImageBackground,
+        child: Container(
+          height: 80,
+          decoration:
+              (decoration ??
+                      BoxDecoration(color: context.surfaceColor))
+                  .copyWith(
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: isImage ? AppColors.primary : context.dividerColor,
+                      width: isImage ? 2 : 1,
+                    ),
+                  ),
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 12,
+                vertical: 6,
+              ),
+              decoration: isImage
+                  ? BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(8),
+                    )
+                  : null,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.photo_library_outlined,
+                    size: 18,
+                    color: isImage ? Colors.white : context.textPrimary,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    isImage ? 'Change photo' : 'Choose from gallery',
+                    style: TextStyle(
+                      color: isImage ? Colors.white : context.textPrimary,
+                      fontSize: 15,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

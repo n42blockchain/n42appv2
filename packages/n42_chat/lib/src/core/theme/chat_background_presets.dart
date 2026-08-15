@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 /// 聊天背景预设常量
@@ -45,8 +47,26 @@ abstract class ChatBackgroundPresets {
           ),
         );
       }
+    } else if (key.startsWith(imageKeyPrefix)) {
+      // 自定义图片背景（对标 iMessage iOS 26 的"照片做会话背景"）。
+      // key 携带的是已复制进应用文档目录的稳定路径；文件被系统清理/迁移
+      // 丢失时安全回退默认背景，不抛错。
+      final path = key.substring(imageKeyPrefix.length);
+      final file = File(path);
+      if (path.isNotEmpty && file.existsSync()) {
+        return BoxDecoration(
+          image: DecorationImage(image: FileImage(file), fit: BoxFit.cover),
+        );
+      }
     }
 
     return null;
   }
+
+  /// 自定义图片背景 key 前缀：`image_<绝对路径>`
+  static const String imageKeyPrefix = 'image_';
+
+  /// [key] 是否为自定义图片背景
+  static bool isImageKey(String? key) =>
+      key != null && key.startsWith(imageKeyPrefix);
 }
