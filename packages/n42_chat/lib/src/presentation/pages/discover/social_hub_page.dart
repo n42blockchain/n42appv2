@@ -250,6 +250,17 @@ class _SocialHubView extends StatelessWidget {
   /// 零导航入口（附录 C 误标 ✅，2026-08-15 复核发现）——在此接线。
   /// 需要钱包地址：宿主未注入钱包桥或未创建钱包时给出明确提示而非空白页。
   void _openSocialGraph(BuildContext context) {
+    // SocialGraphBloc 仅在宿主开 enableSocialGraph（依赖 DeBank key）时注册。
+    // 八测在治理入口踩过同构崩溃（无条件入口 + 条件注册 = 点击即
+    // GetIt not registered），此处必须先判注册再取。
+    if (!getIt.isRegistered<SocialGraphBloc>()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Social graph is not configured on this build'),
+        ),
+      );
+      return;
+    }
     final address = getIt.isRegistered<IWalletBridge>()
         ? getIt<IWalletBridge>().walletAddress
         : null;

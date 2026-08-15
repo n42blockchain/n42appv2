@@ -270,6 +270,13 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           debankApiKey: directDebankApiKey,
           debankBaseUrl: 'https://open-api.debank.com/v1',
           debankUseProxyEndpoint: false,
+          // 治理走 Snapshot 公开 GraphQL（hub.snapshot.org，无 key 无成本），
+          // 直接启用；此前默认 false 导致 GovernanceBloc 整条 DI 链不注册，
+          // 八测真机点治理入口即 GetIt not registered 崩溃。
+          enableGovernance: true,
+          // 社交图谱依赖 DeBank API，开关跟 key 走：没配 key 时保持关闭，
+          // chat 侧入口会按未注册优雅降级（提示而非崩溃）。
+          enableSocialGraph: directDebankApiKey != null,
           alchemyApiKey: directAlchemyApiKey,
           alchemyBaseUrl: 'https://eth-mainnet.g.alchemy.com/v2',
           alchemyUseProxyEndpoint: false,
