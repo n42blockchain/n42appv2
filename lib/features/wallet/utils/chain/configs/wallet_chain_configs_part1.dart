@@ -442,7 +442,11 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       "service": "https://mainnet.base.org",
       "service_test": "https://mainnet.base.org",
       "chainId": 8453,
-      "chainId_test": 8453,
+      // BASE 未接入测试网(supportTest:false)。这里必须填 0 而不是主网 8453:
+      // resolveChainId 对 0 返回 null,EvmSender 随即 fail-closed 拒绝发送;
+      // 若填主网 chainId,一旦 supportTest 被打开,"测试网"签出的交易在主网
+      // 同样合法、可被重放。0 是纵深防御。
+      "chainId_test": 0,
       "contract": "",
       "contract_test": "",
       "canEdit": false,
@@ -478,7 +482,9 @@ Map<String, dynamic> walletChainConfigsPart1 = {
         "service": "https://mainnet.base.org",
         "service_test": "https://mainnet.base.org",
         "chainId": 8453,
-        "chainId_test": 8453,
+        // 同上：BASE 无测试网,填 0 让 EvmSender fail-closed,避免"测试网"
+        // 交易带主网 chainId 而可被重放。
+        "chainId_test": 0,
         "contract": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
         "contract_test": "0x833589fcd6edb6e08f4c7c32d4f71b54bda02913",
         "canEdit": true,
@@ -560,21 +566,24 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       "mKey": "MATIC",
       "path": {"legacy": "m/44'/60'/0'/0/0"},
       "service": "https://polygon-rpc.com/",
-      "service_test": "https://matic-mumbai.chainstacklabs.com",
-      "chainId_test": 80001,
+      // Mumbai(80001) 已于 2024-04 关停,RPC 与浏览器均已下线;Polygon 官方
+      // 继任测试网为 Amoy(80002)。留着旧值会让测试网签名带错误 chainId、
+      // 被节点以 invalid chain id 拒绝。
+      "service_test": "https://rpc-amoy.polygon.technology",
+      "chainId_test": 80002,
       "contract": "",
       "contract_test": "",
       "canEdit": true,
       "rules": "ERC20",
     },
     "mainnetChainID": 137,
-    "testnetChainID": 80001,
+    "testnetChainID": 80002,
     "testnetIndex": 0,
     "testnets": [
       {
         "testnetWS": "",
-        "testnetRPC": "https://matic-mumbai.chainstacklabs.com",
-        "testnetChainID": 80001,
+        "testnetRPC": "https://rpc-amoy.polygon.technology",
+        "testnetChainID": 80002,
         "testnetContract": <String, dynamic>{},
       },
     ],

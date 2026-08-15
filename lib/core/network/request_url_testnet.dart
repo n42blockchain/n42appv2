@@ -12,10 +12,12 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
     'browser': 'https://sepolia.etherscan.io/',
     'rpc': 'https://sepolia.infura.io/v3/', // 由 initializeApiKeys() 更新
   },
+  // Mumbai(80001) 已于 2024-04 关停,继任测试网为 Amoy(80002)；
+  // 链注册表侧由 chain_testnet_config_guard_test 守护。
   'MATIC': {
-    'api': 'https://api-testnet.polygonscan.com/api?',
-    'browser': 'https://mumbai.polygonscan.com/',
-    'rpc': 'https://rpc-mumbai.matic.today',
+    'api': 'https://api-amoy.polygonscan.com/api?',
+    'browser': 'https://amoy.polygonscan.com/',
+    'rpc': 'https://rpc-amoy.polygon.technology',
   },
   'SOL': {
     'api': 'https://api-testnet.solscan.io/',
