@@ -96,7 +96,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
   CoinType.BTC.name: <String, dynamic>{
     "showList": true,
     "isTest": false,
-    "supportTest": false,
+    "supportTest": true,
     "addrType": "segwit",
     "pathIndex": 0,
     "pathList": [0],
@@ -181,7 +181,7 @@ Map<String, dynamic> walletChainConfigsPart1 = {
       "rules": "ERC20",
     },
     "mainnetChainID": 1,
-    "testnetChainID": 3,
+    "testnetChainID": 11155111,
     "testnetIndex": 0,
     "testnets": [
       {

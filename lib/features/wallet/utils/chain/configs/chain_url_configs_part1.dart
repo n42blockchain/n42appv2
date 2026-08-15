@@ -204,7 +204,7 @@ final Map<String, dynamic> chainUrlConfigsPart1 = <String, dynamic>{
   },
   CoinType.BTC.name: <String, dynamic>{
     "isTest": false,
-    "supportTest": false,
+    "supportTest": true,
     "addrType": "segwit",
     "pathIndex": 0,
     "pathList": [0],

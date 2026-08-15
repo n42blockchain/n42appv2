@@ -27,6 +27,7 @@ import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_delete_utils.dart';
 import 'package:n42_wallet/features/wallet/provider/watch_only_wallet_utils.dart';
 import 'package:n42_wallet/core/wallet_sdk/trustdart.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/chain_testnet_migration.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/wallet/pages/network/custom_chain_service.dart';

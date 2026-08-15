@@ -198,9 +198,12 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       );
     }
 
-    // Network switch
-    const supportedNetworkSwitch = {'N', 'ETH', 'BTC', 'DOT', 'ZIL'};
-    if (supportedNetworkSwitch.contains(coinModel.config.coinType)) {
+    // Network switch —— 由链配置的 supportTest 驱动，不再用硬编码白名单。
+    // 七测真机证实旧白名单 {N,ETH,BTC,DOT,ZIL} 与配置完全脱节：MATIC/BNB/
+    // TRX/SOL 测试网 RPC 全部可用却没有切换入口；ZIL 配置已关闭测试网
+    // (chainId_test=0)却被放行。supportTest 现在有权威表守护测试
+    // (chain_testnet_config_guard_test)+旧钱包迁移(_syncNewChains)兜底。
+    if (coinModel.supportTest) {
       childs.add(_divider());
       childs.add(_buildNetworkSwitchRow());
     }

@@ -30,6 +30,10 @@ extension WalletActionProviderToken on WalletActionProvider {
       CoinModel cm = CoinModel.fromMap(chain['baseInfo']);
       cm.showList = chain['showList'];
       cm.isTest = chain['isTest'];
+      // supportTest 存在链条目**顶层**（不在 baseInfo 里），fromMap 取不到会
+      // 落回 CoinModel 默认 true——七测真机证实 ATOM 运行时因此错误显示为
+      // 支持测试网。必须显式复制顶层值。
+      cm.supportTest = chain['supportTest'] as bool? ?? cm.supportTest;
       cm.addrType = chain['addrType'];
       cm.custom = chain['baseInfo']['custom'] ?? false;
       cm.pathIndex = chain['pathIndex'] ?? 0;

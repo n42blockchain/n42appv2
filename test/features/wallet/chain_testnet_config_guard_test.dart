@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
@@ -71,6 +73,24 @@ void main() {
       });
     });
   }
+
+  group('网络切换入口与配置一致性', () {
+    test('切换入口必须由 supportTest 驱动，禁止硬编码链白名单', () {
+      // 七测真机证实：旧的 supportedNetworkSwitch = {N,ETH,BTC,DOT,ZIL}
+      // 与配置完全脱节——MATIC/BNB/TRX/SOL 测试网 RPC 全部可用却没有
+      // 切换入口。结构性守护：该文件不得再出现硬编码白名单。
+      final src = File(
+        'lib/features/wallet/pages/wallet_chain_info_actions.dart',
+      ).readAsStringSync();
+      expect(
+        src.contains('supportedNetworkSwitch'),
+        isFalse,
+        reason: '网络切换入口应由 coinModel.supportTest 驱动，'
+            '不要恢复硬编码链白名单',
+      );
+      expect(src.contains('coinModel.supportTest'), isTrue);
+    });
+  });
 
   group('两套注册表一致性', () {
     test('主要 EVM 链的 chainId_test 在两表中一致', () {
