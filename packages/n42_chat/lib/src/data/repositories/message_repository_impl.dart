@@ -505,11 +505,17 @@ class MessageRepositoryImpl implements IMessageRepository {
     String messageId, {
     String? reason,
   }) async {
-    return await _messageDataSource.redactMessage(
+    final ok = await _messageDataSource.redactMessage(
       roomId,
       messageId,
       reason: reason,
     );
+    // 撤回/自毁成功后一并从归档全文库删除，否则焚毁的明文会在 archive.db
+    // 里永久留存并被跨会话搜索命中（安全整改 2026-08）。
+    if (ok) {
+      await _archiveService?.deleteArchivedMessage(messageId);
+    }
+    return ok;
   }
 
   @override

@@ -448,10 +448,13 @@ class N42ChatConfig {
 
   /// 是否与所有设备（含未验证）共享 E2EE 密钥
   ///
-  /// - `true`（默认）：向所有未被阻止的设备分享 Megolm 会话密钥，
-  ///   避免"The sender has not sent us the session key"错误，兼容性最好。
-  /// - `false`：仅与已完成交叉验证的设备共享密钥，安全性更高，
-  ///   适用于安全敏感部署，但未验证设备无法解密历史消息。
+  /// - `false`（默认，2026-08 安全整改后收紧）：仅与已完成交叉验证的设备共享
+  ///   Megolm 会话密钥（= Matrix SDK 的 crossVerifiedIfEnabled 语义）。防止
+  ///   仅凭账号密码登录的未验证新设备静默收到后续所有房间密钥——SAS 设备
+  ///   验证才真正决定机密性。代价：新增/未验证设备需先做 SAS 验证才能解密
+  ///   新消息。
+  /// - `true`：向所有未被阻止的设备分享密钥，兼容性最好但等于盲信未验证设备，
+  ///   仅在明确接受该风险的部署里显式开启。
   final bool shareE2eeKeysWithAllDevices;
 
   // ─────────────────────────────────────────────────────────────────────────────
@@ -600,7 +603,7 @@ class N42ChatConfig {
     this.marketUseProxyEndpoint = false,
     this.storageManagement = const StorageManagementConfig(),
     this.pushProtocol,
-    this.shareE2eeKeysWithAllDevices = true,
+    this.shareE2eeKeysWithAllDevices = false,
     this.enableProtocolAbstraction = false,
     this.enableGovernance = false,
     this.snapshotHubUrl,

@@ -35,7 +35,10 @@ class MatrixClientManager {
   Completer<void>? _initCompleter;
   Duration _syncWaitTimeout = const Duration(seconds: 3);
 
-  static final _heicHeifRegExp = RegExp(r'\.(heic|heif)$', caseSensitive: false);
+  static final _heicHeifRegExp = RegExp(
+    r'\.(heic|heif)$',
+    caseSensitive: false,
+  );
 
   /// 获取Matrix客户端实例
   Client? get client => _client;
@@ -74,8 +77,9 @@ class MatrixClientManager {
       _client?.onLoginStateChanged.stream;
 
   /// 房间更新流
-  Stream<String>? get onRoomUpdate =>
-      _client?.onSync.stream.map((sync) => sync.rooms?.join?.keys.firstOrNull ?? '');
+  Stream<String>? get onRoomUpdate => _client?.onSync.stream.map(
+    (sync) => sync.rooms?.join?.keys.firstOrNull ?? '',
+  );
 
   // ============================================
   // 初始化
@@ -143,8 +147,8 @@ class MatrixClientManager {
       final dbPathFuture = databasePath == null
           ? _getDefaultDatabasePath()
           : null;
-      final privacySettingsFuture =
-          preferencesDataSource?.getPrivacySettingsModel();
+      final privacySettingsFuture = preferencesDataSource
+          ?.getPrivacySettingsModel();
 
       if (vodozemacFuture != null) {
         await vodozemacFuture;
@@ -180,10 +184,10 @@ class MatrixClientManager {
         );
       }
 
-      // 读取 E2EE 密钥共享策略：
-      // - shareE2eeKeysWithAllDevices=true (默认)：向所有未阻止设备共享，兼容性最好
-      // - shareE2eeKeysWithAllDevices=false：仅与已交叉验证设备共享，安全性更高
-      final shareKeysWith = (config?.shareE2eeKeysWithAllDevices ?? true)
+      // 读取 E2EE 密钥共享策略（默认 crossVerified，2026-08 收紧）：
+      // - false (默认)：仅与已交叉验证设备共享，未验证新设备需先 SAS 验证
+      // - true：向所有未阻止设备共享，兼容性最好但盲信未验证设备
+      final shareKeysWith = (config?.shareE2eeKeysWithAllDevices ?? false)
           ? ShareKeysWith.all
           : ShareKeysWith.crossVerified;
       final syncFilterConfig = config?.syncFilter ?? const SyncFilterConfig();
@@ -342,7 +346,9 @@ class MatrixClientManager {
             password: password,
             initialDeviceDisplayName: deviceName ?? 'N42Chat',
           );
-          debugLog('MatrixClientManager: Login successful - ${response.userId}');
+          debugLog(
+            'MatrixClientManager: Login successful - ${response.userId}',
+          );
           return response;
         } on MatrixException catch (e) {
           if (e.errcode != 'M_UNKNOWN') rethrow;
@@ -685,10 +691,7 @@ class MatrixClientManager {
         lowerFilename.endsWith('.heif')) {
       // HEIC/HEIF 需要转换为 JPEG，因为 Matrix 服务器可能不支持
       mimeType = 'image/jpeg';
-      actualFilename = actualFilename.replaceAll(
-        _heicHeifRegExp,
-        '.jpg',
-      );
+      actualFilename = actualFilename.replaceAll(_heicHeifRegExp, '.jpg');
     }
 
     debugLog('Final filename: $actualFilename');

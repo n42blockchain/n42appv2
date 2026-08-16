@@ -26,6 +26,7 @@
 		690ACF662F1628CC00F9B66D /* MobileSdk.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */; };
 		691MLS012F90000100000002 /* N42Mls.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 691MLS012F90000100000001 /* N42Mls.xcframework */; };
 		691MLS022F90000100000002 /* N42MlsHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691MLS022F90000100000001 /* N42MlsHandler.swift */; };
+		691SPH010000000000000002 /* ScreenProtectionHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691SPH010000000000000001 /* ScreenProtectionHandler.swift */; };
 		6980C3142F74E2520072AF1D /* WalletCorePlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3112F74E2520072AF1D /* WalletCorePlugin.swift */; };
 		6980C3152F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3122F74E2520072AF1D /* WalletCorePlugin+KeyManagement.swift */; };
 		6980C3162F74E2520072AF1D /* WalletCorePlugin+Signing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6980C3132F74E2520072AF1D /* WalletCorePlugin+Signing.swift */; };
@@ -102,6 +103,7 @@
 		691MLS002F90000100000001 /* n42_mls.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = n42_mls.h; sourceTree = "<group>"; };
 		691MLS012F90000100000001 /* N42Mls.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = N42Mls.xcframework; sourceTree = "<group>"; };
 		691MLS022F90000100000001 /* N42MlsHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = N42MlsHandler.swift; sourceTree = "<group>"; };
+		691SPH010000000000000001 /* ScreenProtectionHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenProtectionHandler.swift; sourceTree = "<group>"; };
 		69240F802EE6C4CD00C6CEE7 /* mobile_sdk.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mobile_sdk.h; sourceTree = "<group>"; };
 		69240F822EE6C4CD00C6CEE7 /* MobileSdk.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = MobileSdk.xcframework; sourceTree = "<group>"; };
 		69240F832EE6C4CD00C6CEE7 /* MobileSdk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobileSdk.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				1498D2331E8E89220040F4C2 /* GeneratedPluginRegistrant.m */,
 				74858FAE1ED2DC5600515810 /* AppDelegate.swift */,
 				691MLS022F90000100000001 /* N42MlsHandler.swift */,
+				691SPH010000000000000001 /* ScreenProtectionHandler.swift */,
 				69PK0000PasskeyHandler000 /* PasskeyHandler.swift */,
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 				526F3A0B2C10463F00FF9273 /* permissionsUtil.swift */,
@@ -652,6 +655,7 @@
 				6A42CA112F7A000100000002 /* N42ChatCallAttributes.swift in Sources */,
 				74858FAF1ED2DC5600515810 /* AppDelegate.swift in Sources */,
 				691MLS022F90000100000002 /* N42MlsHandler.swift in Sources */,
+				691SPH010000000000000002 /* ScreenProtectionHandler.swift in Sources */,
 				69PK0001PasskeyHandler000 /* PasskeyHandler.swift in Sources */,
 				1498D2341E8E89220040F4C2 /* GeneratedPluginRegistrant.m in Sources */,
 			);

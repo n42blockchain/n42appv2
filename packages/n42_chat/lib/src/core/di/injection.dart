@@ -305,10 +305,8 @@ Future<void> _registerServices(N42ChatConfig config) async {
 
   // 实时字幕服务（复用 STT + Voice；音频源可插拔——通话音频管道/麦克风喂 chunk）
   getIt.registerLazySingleton<LiveCaptionService>(
-    () => LiveCaptionService(
-      getIt<SpeechToTextService>(),
-      getIt<VoiceService>(),
-    ),
+    () =>
+        LiveCaptionService(getIt<SpeechToTextService>(), getIt<VoiceService>()),
     dispose: (svc) => svc.dispose(),
   );
 
@@ -400,10 +398,12 @@ Future<void> _registerServices(N42ChatConfig config) async {
   // 法币出入金（配置了 key 才注册；未注册时入口/页面降级提示）
   if (config.fiatRampApiKey != null && config.fiatRampApiKey!.isNotEmpty) {
     getIt.registerLazySingleton<FiatRampService>(
-      () => FiatRampService(FiatRampConfig(
-        provider: config.fiatRampProvider,
-        apiKey: config.fiatRampApiKey!,
-      )),
+      () => FiatRampService(
+        FiatRampConfig(
+          provider: config.fiatRampProvider,
+          apiKey: config.fiatRampApiKey!,
+        ),
+      ),
     );
   }
 
@@ -837,23 +837,20 @@ Future<void> _registerDataSources() async {
 /// 注册仓库
 void _registerRepositories() {
   // 认证仓库
-  getIt.registerLazySingleton<IAuthRepository>(
-    () {
-      final cfg = getIt<N42ChatConfig>();
-      final backendBaseUrl = cfg.socialAuthBaseUrl?.trim();
-      return AuthRepositoryImpl(
-        authDataSource: getIt<MatrixAuthDataSource>(),
-        secureStorage: getIt<SecureStorageDataSource>(),
-        // 新三家（discord/github/telegram）指向自建 backend/social-auth；
-        // 未配置则回退默认实例，配合 gating 保证按钮隐藏、不会误发到 api.n42.network。
-        socialAuthBackendApi:
-            (backendBaseUrl != null && backendBaseUrl.isNotEmpty)
-            ? SocialAuthApi(baseUrl: backendBaseUrl)
-            : null,
-      );
-    },
-    dispose: (repo) => (repo as AuthRepositoryImpl).dispose(),
-  );
+  getIt.registerLazySingleton<IAuthRepository>(() {
+    final cfg = getIt<N42ChatConfig>();
+    final backendBaseUrl = cfg.socialAuthBaseUrl?.trim();
+    return AuthRepositoryImpl(
+      authDataSource: getIt<MatrixAuthDataSource>(),
+      secureStorage: getIt<SecureStorageDataSource>(),
+      // 新三家（discord/github/telegram）指向自建 backend/social-auth；
+      // 未配置则回退默认实例，配合 gating 保证按钮隐藏、不会误发到 api.n42.network。
+      socialAuthBackendApi:
+          (backendBaseUrl != null && backendBaseUrl.isNotEmpty)
+          ? SocialAuthApi(baseUrl: backendBaseUrl)
+          : null,
+    );
+  }, dispose: (repo) => (repo as AuthRepositoryImpl).dispose());
 
   // 会话仓库
   getIt.registerLazySingleton<IConversationRepository>(
@@ -912,6 +909,8 @@ void _registerRepositories() {
       archiveSearch: getIt.isRegistered<ArchiveSearchService>()
           ? getIt<ArchiveSearchService>()
           : null,
+      // 隐藏/加锁会话过滤源：全局搜索排除这些房间的会话项与消息命中
+      preferences: getIt<PreferencesDataSource>(),
     ),
   );
 

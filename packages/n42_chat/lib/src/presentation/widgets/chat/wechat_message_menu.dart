@@ -213,7 +213,10 @@ class WeChatMessageMenu extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 12, 8, 8),
                 child: _buildMenuGrid([
-                  if (message.type == MessageType.text)
+                  // 自毁/查看一次消息禁止一切外泄类操作（复制/保存/转发/收藏/引用）：
+                  // 这些动作会把「阅后即焚」的内容固化或外传，破坏自毁语义。
+                  if (message.type == MessageType.text &&
+                      !message.isSelfDestructing)
                     _buildMenuItem(
                       icon: Icons.content_copy_outlined,
                       label: s?.chatCopy ?? 'Copy',
@@ -222,8 +225,9 @@ class WeChatMessageMenu extends StatelessWidget {
                         onCopy?.call();
                       },
                     )
-                  else if (message.type == MessageType.image ||
-                      message.type == MessageType.video)
+                  else if ((message.type == MessageType.image ||
+                          message.type == MessageType.video) &&
+                      !message.isSelfDestructing)
                     _buildMenuItem(
                       icon: Icons.download_outlined,
                       label: s?.commonSave ?? 'Save',
@@ -232,7 +236,7 @@ class WeChatMessageMenu extends StatelessWidget {
                         onSave?.call();
                       },
                     ),
-                  if (onForward != null)
+                  if (onForward != null && !message.isSelfDestructing)
                     _buildMenuItem(
                       icon: Icons.shortcut_outlined,
                       label: s?.commonForward ?? 'Forward',
@@ -241,17 +245,20 @@ class WeChatMessageMenu extends StatelessWidget {
                         onForward?.call();
                       },
                     ),
-                  _buildMenuItem(
-                    icon: isFavorited ? Icons.star : Icons.star_border_outlined,
-                    label: isFavorited
-                        ? (s?.commonUnfavorite ?? 'Unfav')
-                        : (s?.commonFavorite ?? 'Fav'),
-                    isHighlighted: isFavorited,
-                    onTap: () {
-                      onDismiss();
-                      onFavorite?.call();
-                    },
-                  ),
+                  if (!message.isSelfDestructing)
+                    _buildMenuItem(
+                      icon: isFavorited
+                          ? Icons.star
+                          : Icons.star_border_outlined,
+                      label: isFavorited
+                          ? (s?.commonUnfavorite ?? 'Unfav')
+                          : (s?.commonFavorite ?? 'Fav'),
+                      isHighlighted: isFavorited,
+                      onTap: () {
+                        onDismiss();
+                        onFavorite?.call();
+                      },
+                    ),
                   if (message.isFromMe &&
                       message.status == MessageStatus.failed)
                     _buildMenuItem(
@@ -301,14 +308,16 @@ class WeChatMessageMenu extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 12),
                 child: _buildMenuGrid([
-                  _buildMenuItem(
-                    icon: Icons.format_quote_outlined,
-                    label: s?.commonQuote ?? 'Quote',
-                    onTap: () {
-                      onDismiss();
-                      onQuote?.call();
-                    },
-                  ),
+                  // 自毁消息禁止引用（引用会把原文复制进新消息永久留存）。
+                  if (!message.isSelfDestructing)
+                    _buildMenuItem(
+                      icon: Icons.format_quote_outlined,
+                      label: s?.commonQuote ?? 'Quote',
+                      onTap: () {
+                        onDismiss();
+                        onQuote?.call();
+                      },
+                    ),
                   if (onRemindMe != null)
                     _buildMenuItem(
                       icon: Icons.alarm_add_outlined,

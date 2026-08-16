@@ -571,6 +571,31 @@ class FirebasePushService implements IPushNotificationService {
   }
 
   /// 处理前台消息
+  /// 房间是否为隐藏 / 加锁会话——这些会话绝不弹通知，否则通知栏的标题+
+  /// 预览会把「藏起来 / 需验证才可见」的会话内容泄露给旁观者。
+  ///
+  /// 直接读 SharedPreferences（不经 DI），因为后台推送 isolate 拿不到 DI 容器。
+  /// 键值是 [PreferencesDataSource]（隐藏）与 [ChatLockService]（加锁）的存储契约，
+  /// 改动那两处存储键时须同步这里。
+  static Future<bool> _isPrivacyRestrictedRoom(String? roomId) async {
+    if (roomId == null || roomId.isEmpty) return false;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      // 隐藏会话：PreferencesDataSource 以 JSON list 存 'n42_chat_hidden_chats'
+      final hiddenRaw = prefs.getString('n42_chat_hidden_chats');
+      if (hiddenRaw != null) {
+        final decoded = json.decode(hiddenRaw);
+        if (decoded is List && decoded.contains(roomId)) return true;
+      }
+      // 加锁会话：ChatLockService 以 StringList 存 'chat_lock_locked_chats'
+      final locked = prefs.getStringList('chat_lock_locked_chats');
+      if (locked != null && locked.contains(roomId)) return true;
+    } catch (e) {
+      debugLog('FirebasePushService: privacy-room check failed: $e');
+    }
+    return false;
+  }
+
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     // 检查通知配置
     if (!_notificationConfig.enabled) return;
@@ -596,11 +621,13 @@ class FirebasePushService implements IPushNotificationService {
         debugLog(
           'FirebasePushService: CallManager not handling call, showing CallKit as fallback',
         );
-        unawaited(_showBackgroundCallKit(message).catchError((Object e) {
-          debugLog(
-            'FirebasePushService: Failed to show foreground CallKit fallback: $e',
-          );
-        }));
+        unawaited(
+          _showBackgroundCallKit(message).catchError((Object e) {
+            debugLog(
+              'FirebasePushService: Failed to show foreground CallKit fallback: $e',
+            );
+          }),
+        );
       }
       return;
     }
@@ -631,6 +658,15 @@ class FirebasePushService implements IPushNotificationService {
       debugLog(
         'FirebasePushService: Ignoring non-chat foreground message '
         '(${message.messageId})',
+      );
+      return;
+    }
+
+    // 隐藏/加锁会话不弹通知（避免标题+预览泄露隐私会话内容）。
+    // 放在去重标记之前：这类会话根本不该产生任何通知痕迹。
+    if (await _isPrivacyRestrictedRoom(roomId)) {
+      debugLog(
+        'FirebasePushService: Skipping notification for hidden/locked room',
       );
       return;
     }
@@ -795,6 +831,16 @@ class FirebasePushService implements IPushNotificationService {
         debugLog(
           'FirebasePushService: Ignoring non-chat background message '
           '(${message.messageId})',
+        );
+        return;
+      }
+
+      // 隐藏/加锁会话不弹通知（后台 isolate 同样过滤，直接读 SharedPreferences）。
+      // 放在去重标记之前：这类会话不该产生任何通知痕迹。
+      if (await _isPrivacyRestrictedRoom(roomId)) {
+        debugLog(
+          'FirebasePushService: Skipping background notification for '
+          'hidden/locked room',
         );
         return;
       }
@@ -1085,6 +1131,15 @@ class FirebasePushService implements IPushNotificationService {
     final room = _client.getRoomById(roomId);
     if (room == null) return;
 
+    // 隐藏/加锁会话不弹通知（sync 路径同样过滤）。放在去重标记之前：
+    // 这类会话不该产生任何通知痕迹，也不应消耗去重标记。
+    if (await _isPrivacyRestrictedRoom(roomId)) {
+      debugLog(
+        'FirebasePushService: Skipping sync notification for hidden/locked room',
+      );
+      return;
+    }
+
     // 跨通道去重：同一事件可能已由 FCM 前台/后台路径弹过。
     if (!await PushDedupStore.instance.tryMarkNotified(event.eventId)) {
       debugLog(
@@ -1200,7 +1255,7 @@ class FirebasePushService implements IPushNotificationService {
     pushLog(
       'REG',
       'Config: appId=$appId, type=$pushkeyType, '
-      'gateway=$pushGatewayUrl, pushkey=${_truncateToken(pushkey)}',
+          'gateway=$pushGatewayUrl, pushkey=${_truncateToken(pushkey)}',
     );
 
     for (var attempt = 1; attempt <= maxAttempts; attempt++) {
@@ -1278,7 +1333,7 @@ class FirebasePushService implements IPushNotificationService {
         pushLog(
           'VERIFY_FAIL',
           'Pusher NOT found on server after registration! '
-          'Registered ${pushers.length} pushers, none match appId=$appId',
+              'Registered ${pushers.length} pushers, none match appId=$appId',
         );
       }
     } catch (e) {

@@ -216,6 +216,15 @@ class MessageArchiveService {
     return _db.getQuarterlyStats(roomId);
   }
 
+  /// 消息被撤回/自毁后从归档全文库删除，避免焚毁的明文经全文搜索"复活"。
+  Future<void> deleteArchivedMessage(String eventId) async {
+    try {
+      await _db.deleteByEventId(eventId);
+    } catch (_) {
+      // 归档删除失败不应影响撤回主流程（归档只是本地搜索缓存）。
+    }
+  }
+
   /// 获取归档状态
   Future<ArchiveStatus> getArchiveStatus(String roomId) async {
     final metadata = await _db.getMetadata(roomId);
@@ -290,6 +299,13 @@ class MessageArchiveService {
     // 跳过编辑替换事件
     final relatesTo = event.content['m.relates_to'];
     if (relatesTo is Map && relatesTo['rel_type'] == 'm.replace') {
+      return false;
+    }
+
+    // 自毁 / 查看一次消息绝不入归档（2026-08 安全整改）：归档库是明文全文
+    // 索引，一旦入库，redaction 焚毁后明文仍永久留存并可被全局搜索"复活"。
+    // view once = after==1 属同一字段的特例，排除整个字段即覆盖两者。
+    if (event.content['n42.self_destruct'] != null) {
       return false;
     }
 

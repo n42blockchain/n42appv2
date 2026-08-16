@@ -73,4 +73,49 @@ void main() {
     expect(find.text('Extract text'), findsNothing);
     expect(find.text('Translate image'), findsNothing);
   });
+
+  testWidgets('self-destruct text message hides copy/forward/favorite/quote', (
+    tester,
+  ) async {
+    MessageEntity textMsg({int? selfDestructAfter}) => MessageEntity(
+      id: 'text-event',
+      roomId: 'room',
+      senderId: 'alice',
+      senderName: 'Alice',
+      content: 'secret',
+      type: MessageType.text,
+      timestamp: DateTime(2026),
+      selfDestructAfter: selfDestructAfter,
+    );
+
+    await tester.binding.setSurfaceSize(const Size(430, 900));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+
+    Widget menu(MessageEntity m) => MaterialApp(
+      home: WeChatMessageMenu(
+        message: m,
+        position: const Offset(100, 600),
+        messageSize: const Size(160, 60),
+        onDismiss: () {},
+        onCopy: () {},
+        onForward: () {},
+        onFavorite: () {},
+        onQuote: () {},
+      ),
+    );
+
+    // 普通文本消息：外泄类操作都在。
+    await tester.pumpWidget(menu(textMsg()));
+    expect(find.text('Copy'), findsOneWidget);
+    expect(find.text('Forward'), findsOneWidget);
+    expect(find.text('Fav'), findsOneWidget);
+    expect(find.text('Quote'), findsOneWidget);
+
+    // 自毁文本消息：复制/转发/收藏/引用全部消失。
+    await tester.pumpWidget(menu(textMsg(selfDestructAfter: 30)));
+    expect(find.text('Copy'), findsNothing);
+    expect(find.text('Forward'), findsNothing);
+    expect(find.text('Fav'), findsNothing);
+    expect(find.text('Quote'), findsNothing);
+  });
 }

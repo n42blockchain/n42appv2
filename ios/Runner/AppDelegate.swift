@@ -5,6 +5,7 @@ import UIKit
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var mlsHandler: N42MlsHandler?
+  private var screenProtectionHandler: ScreenProtectionHandler?
 
   private func normalizeConfigValue(_ value: Any?) -> String? {
     guard let stringValue = value as? String else { return nil }
@@ -92,6 +93,10 @@ import UIKit
     }
 
     mlsHandler = N42MlsHandler(binaryMessenger: messenger)
+
+    // iOS 截屏 / 录屏防护（对应 Android FLAG_SECURE）：注册
+    // ai.n42.www/window_flags 通道的原生处理器。强引用持有，防止被回收。
+    screenProtectionHandler = ScreenProtectionHandler(binaryMessenger: messenger)
   }
 
   /// 处理 n42_chat 系统集成通道：仅接管 iOS Live Activity 相关方法。
