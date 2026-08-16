@@ -432,6 +432,9 @@ PODS:
     - Flutter
   - permission_handler_apple (9.4.8):
     - Flutter
+  - photo_manager (3.12.0):
+    - Flutter
+    - FlutterMacOS
   - pro_image_editor (12.0.8):
     - Flutter
     - FlutterMacOS
@@ -598,6 +601,7 @@ DEPENDENCIES:
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - pdfx (from `.symlinks/plugins/pdfx/ios`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - photo_manager (from `.symlinks/plugins/photo_manager/darwin`)
   - pro_image_editor (from `.symlinks/plugins/pro_image_editor/darwin`)
   - qr_code_scanner_plus (from `.symlinks/plugins/qr_code_scanner_plus/ios`)
   - quick_actions_ios (from `.symlinks/plugins/quick_actions_ios/ios`)
@@ -781,6 +785,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/pdfx/ios"
   permission_handler_apple:
     :path: ".symlinks/plugins/permission_handler_apple/ios"
+  photo_manager:
+    :path: ".symlinks/plugins/photo_manager/darwin"
   pro_image_editor:
     :path: ".symlinks/plugins/pro_image_editor/darwin"
   qr_code_scanner_plus:
@@ -918,6 +924,7 @@ SPEC CHECKSUMS:
   package_info_plus: af8e2ca6888548050f16fa2f1938db7b5a5df499
   pdfx: 77f4dddc48361fbb01486fa2bdee4532cbb97ef3
   permission_handler_apple: 92d754bbaa7361d436db2d6c3c1c2a0fdcec462e
+  photo_manager: c303e4476f6c220274119f0212a7753e45edd4a2
   pro_image_editor: e57a76b305fd8c2e06d57f92aec82b9c6a6e8d9f
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
   PromisesSwift: 217dea0fd5d2ad65222a109c48698add13cc1c5b
