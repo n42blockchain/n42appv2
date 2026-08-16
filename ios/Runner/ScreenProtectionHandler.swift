@@ -8,19 +8,22 @@ import UIKit
 /// FLAG_SECURE，这里用业界通行的「secure UITextField 图层寄生」手法达到等效：
 /// 把 window 的 layer 挂到一个 `isSecureTextEntry = true` 的隐藏文本框的安全
 /// 画布下，系统截屏 / 录屏 / 后台快照对该图层渲染为空白，用户看到的实时内容
-/// 不受影响。关闭时把 `isSecureTextEntry` 置回 false 即恢复正常渲染。
+/// 不受影响。
+///
+/// ⚠️ 关键：开启时若 `window.layer.superlayer` 为 nil，则**跳过**图层寄生
+/// （否则 window.layer 会同时挂在 window 与 secure 画布下，形成 CALayer 环，
+/// 关闭时抛 CALayerInvalid 崩溃——2026-08 真机确认）。关闭时**先**把
+/// window.layer 还原回原父层，**再**拆除 secure field，保证拆除前环已解开。
 ///
 /// 另监听 `capturedDidChangeNotification`：开启防护且屏幕正被录制 / 镜像时
-/// 一并遮蔽（录屏比截屏更容易整段外泄）。截屏发生时回调 Dart `onScreenshotTaken`，
-/// 供上层做审计 / 提示（Dart 侧未监听时无副作用）。
-///
-/// ⚠️ 原生代码，需真机验证：secure-field 图层寄生在不同 iOS 版本 / 多 window
-/// 场景下表现需实机确认（模拟器截屏不走该路径）。
+/// 叠加遮罩（录屏比截屏更容易整段外泄）。截屏发生回调 Dart `onScreenshotTaken`。
 final class ScreenProtectionHandler {
   private let channel: FlutterMethodChannel
-  private let secureField = UITextField()
-  private var enabled = false
+  private var secureField: UITextField?
+  private weak var protectedWindow: UIWindow?
+  private var originalSuperlayer: CALayer?
   private var blurView: UIVisualEffectView?
+  private var enabled = false
 
   init(binaryMessenger: FlutterBinaryMessenger) {
     channel = FlutterMethodChannel(
@@ -74,29 +77,63 @@ final class ScreenProtectionHandler {
 
   private func setProtection(_ enable: Bool) {
     enabled = enable
-    guard let window = keyWindow() else { return }
-
-    // 首次装配 secure-field 的图层寄生（只挂一次，之后靠 isSecureTextEntry 开关）。
-    if secureField.superview == nil {
-      secureField.isUserInteractionEnabled = false
-      secureField.backgroundColor = .clear
-      window.addSubview(secureField)
-      secureField.translatesAutoresizingMaskIntoConstraints = false
-      NSLayoutConstraint.activate([
-        secureField.centerXAnchor.constraint(equalTo: window.centerXAnchor),
-        secureField.centerYAnchor.constraint(equalTo: window.centerYAnchor),
-      ])
-      window.layer.superlayer?.addSublayer(secureField.layer)
-      if let last = secureField.layer.sublayers?.last {
-        last.addSublayer(window.layer)
+    // 图层操作必须在主线程。
+    if Thread.isMainThread {
+      enable ? applySecure() : removeSecure()
+    } else {
+      DispatchQueue.main.async { [weak self] in
+        enable ? self?.applySecure() : self?.removeSecure()
       }
     }
-    secureField.isSecureTextEntry = enable
+  }
+
+  /// 开启：装配 secure-field 图层寄生（幂等，只装一次）。
+  private func applySecure() {
+    guard secureField == nil, let window = keyWindow() else { return }
+
+    let field = UITextField()
+    field.isUserInteractionEnabled = false
+    field.backgroundColor = .clear
+    field.isSecureTextEntry = true
+    window.addSubview(field)
+    field.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      field.centerXAnchor.constraint(equalTo: window.centerXAnchor),
+      field.centerYAnchor.constraint(equalTo: window.centerYAnchor),
+    ])
+
+    // 记录 window.layer 的原始父层，供关闭时还原。
+    let superlayer = window.layer.superlayer
+    originalSuperlayer = superlayer
+    // 仅当存在有效父层时才做寄生：superlayer 为 nil 时寄生会造成层级环，
+    // 宁可放弃遮蔽也不冒崩溃风险（真机可见 window 一般都有父层）。
+    if let superlayer = superlayer,
+       let canvas = field.layer.sublayers?.first {
+      superlayer.addSublayer(field.layer)
+      canvas.addSublayer(window.layer)
+    }
+
+    secureField = field
+    protectedWindow = window
+  }
+
+  /// 关闭：先解环（还原 window.layer 到原父层），再拆除 secure field。
+  private func removeSecure() {
+    guard let field = secureField else { return }
+    if let window = protectedWindow, let superlayer = originalSuperlayer {
+      // 关键顺序：先把 window.layer 挪回原父层，断开与 secure 画布的父子
+      // 关系；此时再销毁 field 就不会留下悬挂在已失效画布下的 window.layer。
+      superlayer.addSublayer(window.layer)
+    }
+    field.isSecureTextEntry = false
+    field.removeFromSuperview()
+    secureField = nil
+    originalSuperlayer = nil
+    protectedWindow = nil
   }
 
   @available(iOS 11.0, *)
   @objc private func onCaptureChanged() {
-    // 仅在防护开启时对录屏 / 镜像做额外遮蔽。
     guard enabled else { removeBlur(); return }
     if UIScreen.main.isCaptured {
       addBlur()
@@ -111,6 +148,7 @@ final class ScreenProtectionHandler {
     let view = UIVisualEffectView(effect: effect)
     view.frame = window.bounds
     view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    view.isUserInteractionEnabled = false
     window.addSubview(view)
     blurView = view
   }

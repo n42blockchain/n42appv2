@@ -174,7 +174,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     await customStatement(
       'CREATE TRIGGER IF NOT EXISTS archive_fts_delete '
       'AFTER DELETE ON archived_messages BEGIN '
-      "INSERT INTO archive_fts(archive_fts, rowid, body) "
+      'INSERT INTO archive_fts(archive_fts, rowid, body) '
       "VALUES ('delete', old.rowid, COALESCE(old.body, '')); "
       'END',
     );
@@ -473,17 +473,29 @@ Future<LazyDatabase> _openConnection() async {
     }
     final file = File(p.join(dbDir.path, 'archive.db'));
 
-    // Android 老版本需切换到 SQLCipher 提供的 libsqlite3。iOS/macOS 由
-    // sqlcipher_flutter_libs 在链接期覆盖，无需手动 override。
+    // Android 老版本需切换到 SQLCipher 提供的 libsqlite3。
+    // ⚠️ iOS：并非「链接期自动覆盖」——firebase_messaging / sqflite 会通过
+    // `-l sqlite3` 引入系统 libsqlite3 并遮蔽 SQLCipher，导致 PRAGMA key 静默
+    // 失效、明文落盘（2026-08 真机确认）。修复靠 ios Runner 的
+    // `-framework SQLCipher` linker flag（见 Podfile / project.pbxproj）。
     if (Platform.isAndroid) {
       await applyWorkaroundToOpenSqlCipherOnOldAndroidVersions();
       open.overrideForAll(openCipherOnAndroid);
     }
 
+    // 硬校验 SQLCipher 真的可用：不可用绝不继续，否则会把 E2EE 明文全文
+    // 索引写成明文库。这是把「静默明文」变成「响亮失败」的关键闸门。
+    if (!_isSqlCipherAvailable()) {
+      throw StateError(
+        'SQLCipher unavailable: refusing to open archive.db as plaintext '
+        '(check `-framework SQLCipher` linker flag on iOS).',
+      );
+    }
+
     final passphrase = await _resolveArchivePassphrase();
 
-    // 迁移：若已有明文库，原地转成密文（archive 只是可重建缓存，迁移失败
-    // 时退化为「备份旧文件 + 重建空库」也不会丢失不可恢复的数据）。
+    // 迁移：若已有明文库，原地转成密文。迁移失败时保留旧明文库、不删除，
+    // 避免丢失用户历史（2026-08 首版曾因删旧库导致 iOS 历史丢失）。
     await _migratePlaintextArchiveIfNeeded(file, passphrase);
 
     // 同步（非后台）打开：后台 isolate 不继承本 isolate 的 open override，
@@ -493,17 +505,33 @@ Future<LazyDatabase> _openConnection() async {
       setup: (db) {
         // 原始密钥形式（64 hex = 32 字节），跳过 PBKDF2 口令派生。
         db.execute("PRAGMA key = \"x'$passphrase'\";");
-        // 触发一次读以在设置阶段暴露密钥错误（而非首个业务查询才炸）。
-        db.execute('PRAGMA cipher_memory_security = ON;');
+        // 二次确认本连接确实走 SQLCipher：cipher_version 为空即落到了系统
+        // sqlite，明文风险，直接失败而非静默明文。
+        if (db.select('PRAGMA cipher_version;').isEmpty) {
+          throw StateError('SQLCipher not active for archive.db');
+        }
       },
     );
   });
 }
 
+/// 探测 SQLCipher 是否真的被链接（open 一个内存库看 cipher_version）。
+/// 必须在 Android 的 open override 之后调用。
+bool _isSqlCipherAvailable() {
+  try {
+    final probe = raw_sqlite.sqlite3.openInMemory();
+    final rows = probe.select('PRAGMA cipher_version;');
+    probe.dispose();
+    return rows.isNotEmpty;
+  } catch (_) {
+    return false;
+  }
+}
+
 /// 取出（或首次生成）归档库口令，返回 64 位十六进制字符串。
 Future<String> _resolveArchivePassphrase() async {
   const storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    aOptions: AndroidOptions(),
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
     ),
@@ -570,10 +598,11 @@ Future<void> _migratePlaintextArchiveIfNeeded(
   } catch (e) {
     debugLog('ArchiveDatabase: SQLCipher migration failed: $e');
     db?.dispose();
-    // 迁移失败：删掉半成品密文文件与明文旧库，让上层重建空密文库。
-    // archive 是可从 Matrix 时间线重新归档的缓存，宁可重建也不留明文。
+    // 迁移失败：只清理半成品密文文件，保留明文旧库不删除，避免像 2026-08
+    // 首版那样把用户历史直接删掉。rethrow 让归档初始化响亮失败、下次启动
+    // 重试；数据宁可暂留（本地明文）也绝不无声丢失。
     if (encFile.existsSync()) encFile.deleteSync();
-    if (file.existsSync()) file.deleteSync();
+    rethrow;
   }
 }
 

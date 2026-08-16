@@ -101,6 +101,18 @@ post_install do |installer|
         # MLImage.framework (Google MLKit) has no arm64 simulator slice — use Rosetta (x86_64)
         config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
 
+        # 强制链接 SQLCipher，使其 sqlite3_* 符号覆盖 firebase_messaging / sqflite
+        # 通过 `-l sqlite3` 引入的系统 libsqlite3。否则 chat 归档库在 iOS 上会
+        # 静默以「明文」打开（PRAGMA key 在系统 sqlite 上是 no-op），2026-08 真机
+        # 实测确认（nm 里无 sqlite3_key 符号）。见 sqlcipher_flutter_libs advisory。
+        # 放在 $(inherited) 之后、系统 sqlite 之前，保证被 force-load 且符号优先。
+        ldflags = config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
+        ldflags = [ldflags] if ldflags.is_a?(String)
+        unless ldflags.include?('SQLCipher')
+          ldflags += ['-framework', 'SQLCipher']
+        end
+        config.build_settings['OTHER_LDFLAGS'] = ldflags
+
         # Exclude MobileSdk.xcframework linking on simulator
         # The Swift code uses #if targetEnvironment(simulator) to provide mock implementations
         xcconfig_path = config.base_configuration_reference&.real_path

@@ -878,6 +878,8 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					"\"SQLCipher\"",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"sqlite3\"",
@@ -1434,6 +1436,8 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					"\"SQLCipher\"",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"sqlite3\"",
@@ -1696,6 +1700,8 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
+					"-framework",
+					"\"SQLCipher\"",
 					"-ObjC",
 					"-l\"c++\"",
 					"-l\"sqlite3\"",
