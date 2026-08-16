@@ -170,6 +170,9 @@ class ChatInputBar extends StatefulWidget {
   /// 是否显示更多按钮
   final bool showMoreButton;
 
+  /// 附件扩展面板是否已打开；打开时附件按钮切换为键盘入口。
+  final bool isMorePanelOpen;
+
   /// 是否显示快捷回复按钮
   final bool showQuickReplyButton;
 
@@ -208,6 +211,7 @@ class ChatInputBar extends StatefulWidget {
     this.showVoiceButton = true,
     this.showEmojiButton = true,
     this.showMoreButton = true,
+    this.isMorePanelOpen = false,
     this.showQuickReplyButton = true,
     this.enabled = true,
     this.maxLines = 5,
@@ -654,9 +658,13 @@ class ChatInputBarState extends State<ChatInputBar> {
                       ? _buildSendButton()
                       : (widget.showMoreButton
                             ? _buildIconButton(
-                                icon: Icons.attach_file,
+                                icon: widget.isMorePanelOpen
+                                    ? Icons.keyboard_alt_outlined
+                                    : Icons.attach_file,
                                 onPressed: widget.onMorePressed,
-                                semanticLabel: A11yL10n.of(context).attachments,
+                                semanticLabel: widget.isMorePanelOpen
+                                    ? A11yL10n.of(context).switchToKeyboard
+                                    : A11yL10n.of(context).attachments,
                               )
                             : const SizedBox.shrink()),
                 ],

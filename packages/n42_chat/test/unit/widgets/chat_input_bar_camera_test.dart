@@ -29,4 +29,26 @@ void main() {
     expect(find.byIcon(Icons.camera_alt_outlined), findsNothing);
     expect(find.byIcon(Icons.send), findsOneWidget);
   });
+
+  testWidgets('附件面板打开时附件按钮切换为键盘入口', (tester) async {
+    var pressed = false;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ChatInputBar(
+            showVoiceButton: false,
+            showQuickReplyButton: false,
+            showEmojiButton: false,
+            isMorePanelOpen: true,
+            onMorePressed: () => pressed = true,
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byIcon(Icons.keyboard_alt_outlined), findsOneWidget);
+    expect(find.byIcon(Icons.attach_file), findsNothing);
+    await tester.tap(find.byIcon(Icons.keyboard_alt_outlined));
+    expect(pressed, isTrue);
+  });
 }

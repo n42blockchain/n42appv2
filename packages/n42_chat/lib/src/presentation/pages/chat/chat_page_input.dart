@@ -58,6 +58,7 @@ extension _ChatPageInputMethods on _ChatPageState {
       onVoicePressed: _onVoicePressed,
       onEmojiPressed: _onEmojiPressed,
       onMorePressed: _onMorePressed,
+      isMorePanelOpen: _showMorePanel,
       onCameraPressed: () {
         _hideMorePanel();
         _takePhoto();
@@ -583,13 +584,17 @@ extension _ChatPageInputMethods on _ChatPageState {
   }
 
   void _onMorePressed() {
-    // 隐藏键盘
-    _inputFocusNode.unfocus();
-    // 切换更多功能面板
+    final shouldShowPanel = !_showMorePanel;
+    if (shouldShowPanel) _inputFocusNode.unfocus();
     setState(() {
-      _showMorePanel = !_showMorePanel;
+      _showMorePanel = shouldShowPanel;
       _showEmojiPicker = false;
     });
+    if (!shouldShowPanel) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _inputFocusNode.requestFocus();
+      });
+    }
   }
 
   /// 代码块输入对话框 → 发送 n42.code_block 消息
