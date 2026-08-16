@@ -49,13 +49,14 @@ abstract class ChatBackgroundPresets {
       }
     } else if (key.startsWith(imageKeyPrefix)) {
       // 自定义图片背景（对标 iMessage iOS 26 的"照片做会话背景"）。
-      // key 携带的是已复制进应用文档目录的稳定路径；文件被系统清理/迁移
-      // 丢失时安全回退默认背景，不抛错。
-      final path = key.substring(imageKeyPrefix.length);
-      final file = File(path);
-      if (path.isNotEmpty && file.existsSync()) {
+      // 文件丢失/迁移时安全回退默认背景，不抛错。
+      final path = resolveImagePath(key);
+      if (path != null && File(path).existsSync()) {
         return BoxDecoration(
-          image: DecorationImage(image: FileImage(file), fit: BoxFit.cover),
+          image: DecorationImage(
+            image: FileImage(File(path)),
+            fit: BoxFit.cover,
+          ),
         );
       }
     }
@@ -63,8 +64,29 @@ abstract class ChatBackgroundPresets {
     return null;
   }
 
-  /// 自定义图片背景 key 前缀：`image_<绝对路径>`
+  /// 自定义图片背景 key 前缀。key 值为**相对文件名**（`image_<basename>`），
+  /// 运行时用 [documentsPath] 拼成绝对路径——iOS 应用容器 UUID 每次更新即变，
+  /// 存绝对路径会导致更新后背景丢失且旧文件成孤儿。历史上曾存绝对路径，
+  /// 故解析时向后兼容：含路径分隔符的按绝对路径直接用。
   static const String imageKeyPrefix = 'image_';
+
+  /// 自定义背景文件所在子目录（相对 [documentsPath]）。
+  static const String imageSubDir = 'chat_backgrounds';
+
+  /// 应用文档目录绝对路径，由 chat 初始化（injection）注入一次。
+  static String? documentsPath;
+
+  /// 把 image_ key 解析为磁盘绝对路径（不检查存在性）。null = 无法解析。
+  static String? resolveImagePath(String? key) {
+    if (!isImageKey(key)) return null;
+    final raw = key!.substring(imageKeyPrefix.length);
+    if (raw.isEmpty) return null;
+    // 向后兼容：历史绝对路径 key（含 '/' 或 Windows 盘符）直接用。
+    if (raw.contains('/') || raw.contains('\\')) return raw;
+    final base = documentsPath;
+    if (base == null || base.isEmpty) return null;
+    return '$base/$imageSubDir/$raw';
+  }
 
   /// [key] 是否为自定义图片背景
   static bool isImageKey(String? key) =>

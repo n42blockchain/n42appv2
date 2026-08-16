@@ -149,6 +149,8 @@ import '../../domain/repositories/points_repository.dart';
 import '../services/points_tracking_service.dart';
 import '../../presentation/blocs/points/points_bloc.dart';
 import '../utils/debug_log.dart';
+import '../theme/chat_background_presets.dart';
+import 'package:path_provider/path_provider.dart';
 
 /// 全局GetIt实例
 final GetIt getIt = GetIt.instance;
@@ -162,6 +164,15 @@ Future<void> configureDependencies(
 }) async {
   // 注册配置
   getIt.registerSingleton<N42ChatConfig>(config);
+
+  // 注入应用文档目录，供自定义聊天背景把相对文件名解析为绝对路径
+  // （存相对名而非绝对路径，避免 iOS 更新后容器 UUID 变化导致背景丢失）。
+  try {
+    ChatBackgroundPresets.documentsPath =
+        (await getApplicationDocumentsDirectory()).path;
+  } catch (_) {
+    // 极端平台取不到目录时，背景解析回退默认，不阻断初始化。
+  }
 
   // 注册钱包桥接
   getIt.registerSingleton<IWalletBridge>(
@@ -1153,6 +1164,15 @@ Future<void> resetDependencies() async {
 
 /// 检查是否已注册
 bool isRegistered<T extends Object>() => getIt.isRegistered<T>();
+
+/// AI 功能入口的统一门控：不仅要注册，还要**当前真的可用**。
+///
+/// 仅端侧 LLM 场景下 AiService 会注册（AiProviderRouter(cloud:null)），但
+/// `isAvailable = cloud可用 ∥ local.isReady`——local 未启用/未就绪时为 false。
+/// 若入口只判 isRegistered，用户会看到 AI 按钮却得到静默的原文回显/空结果。
+/// 用本函数门控，可用才显示，避免假成功。
+bool aiServiceAvailable() =>
+    getIt.isRegistered<AiService>() && getIt<AiService>().isAvailable;
 
 /// 扩展方法：简化获取依赖
 extension GetItExtension on GetIt {

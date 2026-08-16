@@ -897,7 +897,7 @@ extension _ChatPageInputMethods on _ChatPageState {
         );
       },
       storageDataSource: getIt<PreferencesDataSource>(),
-      smartReplyLoader: getIt.isRegistered<AiService>()
+      smartReplyLoader: aiServiceAvailable()
           ? _loadAiSmartReplies
           : null,
     );

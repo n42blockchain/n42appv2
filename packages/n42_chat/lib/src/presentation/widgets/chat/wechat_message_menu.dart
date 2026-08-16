@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -173,7 +175,12 @@ class WeChatMessageMenu extends StatelessWidget {
         top = (topPadding + 60 + availableHeight - menuHeight) / 2;
       }
     }
-    top = top.clamp(topPadding + 20, availableHeight - menuHeight - 20);
+    // 小屏 + 键盘展开时 availableHeight-menuHeight-20 可能 < 下界（top+20），
+    // 直接 clamp 会因 lowerLimit>upperLimit 抛 ArgumentError（长按即崩）。
+    // 用 math.max 保证上界 ≥ 下界；此时菜单由外层 ConstrainedBox 限高+滚动。
+    final lower = topPadding + 20;
+    final upper = math.max(lower, availableHeight - menuHeight - 20);
+    top = top.clamp(lower, upper);
     return top;
   }
 

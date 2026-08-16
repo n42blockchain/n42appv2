@@ -30,7 +30,6 @@ import '../../widgets/chat/chat_widgets.dart';
 import '../../widgets/chat/contact_card_message_widget.dart';
 import '../../widgets/chat/video_sticker_view.dart';
 import '../../widgets/chat/url_preview_widget.dart';
-import '../../../core/services/ai_service.dart';
 import '../../widgets/chat/message_reaction_bar.dart';
 import '../../widgets/chat/edit_history_sheet.dart';
 import '../../widgets/chat/thread_indicator.dart';
@@ -591,7 +590,7 @@ class MessageItem extends StatelessWidget {
             ),
           if (urlMatch != null &&
               showLinkPreview &&
-              getIt.isRegistered<AiService>())
+              aiServiceAvailable())
             AiLinkSummaryWrapper(url: urlMatch.group(0)!),
         ],
       );
@@ -608,7 +607,7 @@ class MessageItem extends StatelessWidget {
             url: urlMatch.group(0)!,
             previewService: getIt<UrlPreviewService>(),
           ),
-          if (getIt.isRegistered<AiService>())
+          if (aiServiceAvailable())
             AiLinkSummaryWrapper(url: urlMatch.group(0)!),
         ],
       );

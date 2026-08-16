@@ -205,26 +205,43 @@ class _ChatBackgroundPageState extends State<ChatBackgroundPage> {
       final ext = picked.path.contains('.')
           ? picked.path.substring(picked.path.lastIndexOf('.'))
           : '.jpg';
-      final dest = File(
-        '${dir.path}/bg_${scope.hashCode.toRadixString(16)}'
-        '_${DateTime.now().millisecondsSinceEpoch}$ext',
-      );
+      // 文件名只用 basename，key 存相对名（见 ChatBackgroundPresets 说明）。
+      final fileName =
+          'bg_${scope.hashCode.toRadixString(16)}'
+          '_${DateTime.now().millisecondsSinceEpoch}$ext';
+      final dest = File('${dir.path}/$fileName');
       await File(picked.path).copy(dest.path);
 
       final previous = _selectedBackground;
-      if (!mounted) return;
-      await _selectBackground(
-        '${ChatBackgroundPresets.imageKeyPrefix}${dest.path}',
-      );
-      // 替换成功后清理上一张自定义图片，避免文档目录累积孤儿文件。
-      if (ChatBackgroundPresets.isImageKey(previous) &&
-          _selectedBackground != previous) {
-        final old = File(
-          previous!.substring(ChatBackgroundPresets.imageKeyPrefix.length),
-        );
+      if (!mounted) {
+        // 页面已销毁，无法落库——删掉刚拷贝的文件避免孤儿。
         try {
-          if (await old.exists()) await old.delete();
+          await dest.delete();
         } catch (_) {}
+        return;
+      }
+      final saved = _selectedBackground; // 记录落库前值，用于判断是否真成功
+      await _selectBackground('${ChatBackgroundPresets.imageKeyPrefix}$fileName');
+      // 仅当确实切换成功（当前值 == 新 key）才清理旧图；失败回滚时不动旧图，
+      // 且要把这次拷贝的新文件删掉。
+      final newKey = '${ChatBackgroundPresets.imageKeyPrefix}$fileName';
+      if (_selectedBackground == newKey) {
+        if (ChatBackgroundPresets.isImageKey(previous) && previous != newKey) {
+          final oldPath = ChatBackgroundPresets.resolveImagePath(previous);
+          if (oldPath != null) {
+            try {
+              final old = File(oldPath);
+              if (await old.exists()) await old.delete();
+            } catch (_) {}
+          }
+        }
+      } else {
+        // 保存失败（已回滚到 saved）：删除本次孤儿拷贝。
+        if (_selectedBackground == saved) {
+          try {
+            await dest.delete();
+          } catch (_) {}
+        }
       }
     } catch (e) {
       debugLog('ChatBackgroundPage: pick image background failed: $e');

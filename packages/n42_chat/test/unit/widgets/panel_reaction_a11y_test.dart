@@ -11,10 +11,11 @@ void main() {
   Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   testWidgets('attachment grid items are labeled buttons', (tester) async {
-    await tester.pumpWidget(wrap(ChatMorePanel(onTransferPressed: () {})));
+    await tester.pumpWidget(wrap(ChatMorePanel(onPhotoPressed: () {})));
 
-    // 'Transfer'（commonTransfer 的英文兜底）在首页第一行，稳定可断言。
-    final node = tester.getSemantics(find.bySemanticsLabel('Transfer'));
+    // 'Photos'（contactPhotos 的英文兜底）是首页第一格、无条件渲染，
+    // 稳定可断言。（原断言 'Transfer' 在面板重构后已不在首页第一行。）
+    final node = tester.getSemantics(find.bySemanticsLabel('Photos'));
     expect(node.flagsCollection.isButton, isTrue);
   });
 

@@ -83,7 +83,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
             if (messageIndex == state.messages.length) {
               final isGroup =
                   widget.conversation.type == ConversationType.group;
-              final aiAvailable = getIt.isRegistered<AiService>();
+              final aiAvailable = aiServiceAvailable();
               return Column(
                 children: [
                   _buildEncryptionNotice(),

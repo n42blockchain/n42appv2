@@ -265,8 +265,10 @@ class _ChatPageState extends State<ChatPage> {
   String? _smartReplyAnchorMessageId;
   String? _dismissedSmartReplyAnchorMessageId;
 
-  // 聊天背景 key（如 solid_0, gradient_1, default 等）
-  String? _backgroundKey;
+  // 缓存解析后的背景装饰：resolveDecoration 对图片背景会做同步 existsSync，
+  // 若在每次 build（尤其键盘动画每帧）都调用会有 IO jank。只在背景 key 变化
+  // 时（_loadBackground）重算一次。
+  BoxDecoration? _backgroundDecoration;
 
   // 消息字体大小
   double _messageFontSize = 16.0;
@@ -460,7 +462,11 @@ class _ChatPageState extends State<ChatPage> {
     // 如果没有，尝试默认背景
     bg ??= await storage.getDefaultChatBackground();
     if (mounted && bg != null) {
-      setState(() => _backgroundKey = bg);
+      // 只在此处（背景 key 变化时）解析一次，build 直接用缓存。
+      setState(
+        () => _backgroundDecoration =
+            ChatBackgroundPresets.resolveDecoration(bg),
+      );
     }
   }
 
@@ -528,7 +534,7 @@ class _ChatPageState extends State<ChatPage> {
 
   /// 构建聊天背景装饰
   BoxDecoration? _buildBackgroundDecoration() {
-    return ChatBackgroundPresets.resolveDecoration(_backgroundKey);
+    return _backgroundDecoration;
   }
 
   /// 切换人脸模糊设置

@@ -43,7 +43,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
   }
 
   void _onRewriteTone(AiTone tone) {
-    if (!getIt.isRegistered<AiService>()) return;
+    if (!aiServiceAvailable()) return;
     setState(() {
       _selectedTone = tone;
       _isRewriting = true;
@@ -71,7 +71,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
 
   void _showAiRewriteBar() {
     final text = _inputController.text.trim();
-    if (text.isEmpty || !getIt.isRegistered<AiService>()) return;
+    if (text.isEmpty || !aiServiceAvailable()) return;
     setState(() {
       _resetAiSmartReplyState();
       _rewriteOriginalText = text;
@@ -89,7 +89,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
 
   /// 群聊消息摘要
   void _summarizeRecentMessages() {
-    if (!getIt.isRegistered<AiService>() || _isAiSummarizing) return;
+    if (!aiServiceAvailable() || _isAiSummarizing) return;
     final messages = context.read<ChatBloc>().state.messages;
     final textMessages = messages
         .where((m) => m.type == MessageType.text && m.content.trim().isNotEmpty)
@@ -140,7 +140,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
   }
 
   void _handleSmartReplyStateChanged(ChatState state) {
-    if (!mounted || !getIt.isRegistered<AiService>()) {
+    if (!mounted || !aiServiceAvailable()) {
       return;
     }
 
@@ -183,7 +183,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
     ChatState? state,
     bool force = false,
   }) async {
-    if (!mounted || !getIt.isRegistered<AiService>()) {
+    if (!mounted || !aiServiceAvailable()) {
       return;
     }
 
@@ -257,7 +257,7 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
   }
 
   Future<List<String>> _loadAiSmartReplies() async {
-    if (!getIt.isRegistered<AiService>()) {
+    if (!aiServiceAvailable()) {
       return const [];
     }
 
