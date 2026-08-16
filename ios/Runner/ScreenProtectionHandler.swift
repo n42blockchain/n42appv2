@@ -6,22 +6,21 @@ import UIKit
 /// Dart 侧 `ScreenshotProtectionService` 通过 MethodChannel
 /// `ai.n42.www/window_flags` 调用 `setScreenProtection`(bool)。iOS 没有
 /// FLAG_SECURE，这里用业界通行的「secure UITextField 图层寄生」手法达到等效：
-/// 把 window 的 layer 挂到一个 `isSecureTextEntry = true` 的隐藏文本框的安全
-/// 画布下，系统截屏 / 录屏 / 后台快照对该图层渲染为空白，用户看到的实时内容
-/// 不受影响。
-///
-/// ⚠️ 关键：开启时若 `window.layer.superlayer` 为 nil，则**跳过**图层寄生
-/// （否则 window.layer 会同时挂在 window 与 secure 画布下，形成 CALayer 环，
-/// 关闭时抛 CALayerInvalid 崩溃——2026-08 真机确认）。关闭时**先**把
-/// window.layer 还原回原父层，**再**拆除 secure field，保证拆除前环已解开。
+/// 把 Flutter 内容 layer 挂到一个 `isSecureTextEntry = true` 的文本框安全画布
+/// 下，系统截屏 / 录屏 / 后台快照对该图层渲染为空白，用户看到的实时内容不受
+/// 影响。不要移动 `UIWindow.layer`：iOS 26 会因此破坏 UIWindow 的 Auto Layout
+/// engine，第二次开启时在约束激活处 EXC_BAD_ACCESS。secure field 只装配一次，
+/// 开关仅在 window 与安全画布之间移动 Flutter 内容 layer。
 ///
 /// 另监听 `capturedDidChangeNotification`：开启防护且屏幕正被录制 / 镜像时
 /// 叠加遮罩（录屏比截屏更容易整段外泄）。截屏发生回调 Dart `onScreenshotTaken`。
 final class ScreenProtectionHandler {
   private let channel: FlutterMethodChannel
-  private var secureField: UITextField?
+  private let secureField = UITextField()
   private weak var protectedWindow: UIWindow?
-  private var originalSuperlayer: CALayer?
+  private weak var protectedContentView: UIView?
+  private weak var originalContentSuperlayer: CALayer?
+  private weak var secureCanvasLayer: CALayer?
   private var blurView: UIVisualEffectView?
   private var enabled = false
 
@@ -79,57 +78,103 @@ final class ScreenProtectionHandler {
     enabled = enable
     // 图层操作必须在主线程。
     if Thread.isMainThread {
-      enable ? applySecure() : removeSecure()
+      if enable {
+        applySecure()
+      } else {
+        removeSecure()
+        removeBlur()
+      }
     } else {
       DispatchQueue.main.async { [weak self] in
-        enable ? self?.applySecure() : self?.removeSecure()
+        if enable {
+          self?.applySecure()
+        } else {
+          self?.removeSecure()
+          self?.removeBlur()
+        }
       }
     }
   }
 
-  /// 开启：装配 secure-field 图层寄生（幂等，只装一次）。
-  private func applySecure() {
-    guard secureField == nil, let window = keyWindow() else { return }
-
-    let field = UITextField()
-    field.isUserInteractionEnabled = false
-    field.backgroundColor = .clear
-    field.isSecureTextEntry = true
-    window.addSubview(field)
-    field.translatesAutoresizingMaskIntoConstraints = false
-    NSLayoutConstraint.activate([
-      field.centerXAnchor.constraint(equalTo: window.centerXAnchor),
-      field.centerYAnchor.constraint(equalTo: window.centerYAnchor),
-    ])
-
-    // 记录 window.layer 的原始父层，供关闭时还原。
-    let superlayer = window.layer.superlayer
-    originalSuperlayer = superlayer
-    // 仅当存在有效父层时才做寄生：superlayer 为 nil 时寄生会造成层级环，
-    // 宁可放弃遮蔽也不冒崩溃风险（真机可见 window 一般都有父层）。
-    if let superlayer = superlayer,
-       let canvas = field.layer.sublayers?.first {
-      superlayer.addSublayer(field.layer)
-      canvas.addSublayer(window.layer)
+  /// 找出 UITextField 内由系统标记为安全内容的 canvas。
+  /// 不依赖某个固定的 sublayer 下标，以兼容不同 iOS 版本的内部层级。
+  private func findSecureCanvas(in view: UIView) -> UIView? {
+    for subview in view.subviews {
+      if String(describing: type(of: subview)).localizedCaseInsensitiveContains("canvas") {
+        return subview
+      }
+      if let nested = findSecureCanvas(in: subview) {
+        return nested
+      }
     }
-
-    secureField = field
-    protectedWindow = window
+    return nil
   }
 
-  /// 关闭：先解环（还原 window.layer 到原父层），再拆除 secure field。
-  private func removeSecure() {
-    guard let field = secureField else { return }
-    if let window = protectedWindow, let superlayer = originalSuperlayer {
-      // 关键顺序：先把 window.layer 挪回原父层，断开与 secure 画布的父子
-      // 关系；此时再销毁 field 就不会留下悬挂在已失效画布下的 window.layer。
-      superlayer.addSublayer(window.layer)
+  /// secure field 只装配一次。把它保留在 window 内可避免反复销毁 UIKit 私有
+  /// canvas；关闭防护时 canvas 为空，不会影响普通截屏。
+  private func prepareSecureCanvas(in window: UIWindow) -> Bool {
+    if protectedWindow === window,
+       protectedContentView != nil,
+       originalContentSuperlayer != nil,
+       secureCanvasLayer != nil {
+      return true
     }
-    field.isSecureTextEntry = false
-    field.removeFromSuperview()
-    secureField = nil
-    originalSuperlayer = nil
-    protectedWindow = nil
+
+    // Scene / key window 发生切换时，先恢复旧窗口再重新装配，不能把旧窗口的
+    // Flutter 内容留在即将迁移的 secure field canvas 内。
+    if protectedWindow != nil, protectedWindow !== window {
+      removeSecure()
+      secureField.removeFromSuperview()
+      protectedWindow = nil
+      protectedContentView = nil
+      originalContentSuperlayer = nil
+      secureCanvasLayer = nil
+    }
+
+    guard let contentView = window.rootViewController?.view,
+          let originalSuperlayer = contentView.layer.superlayer else {
+      return false
+    }
+
+    secureField.isUserInteractionEnabled = false
+    secureField.backgroundColor = .clear
+    secureField.borderStyle = .none
+    secureField.isSecureTextEntry = true
+    secureField.frame = window.bounds
+    secureField.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    window.addSubview(secureField)
+    window.sendSubviewToBack(secureField)
+    secureField.layoutIfNeeded()
+
+    guard let canvas = findSecureCanvas(in: secureField) else {
+      secureField.removeFromSuperview()
+      return false
+    }
+    canvas.clipsToBounds = false
+
+    protectedWindow = window
+    protectedContentView = contentView
+    originalContentSuperlayer = originalSuperlayer
+    secureCanvasLayer = canvas.layer
+    return true
+  }
+
+  /// 开启：只移动 Flutter 根视图 layer，不触碰 UIWindow.layer / 约束引擎。
+  private func applySecure() {
+    guard let window = keyWindow(), prepareSecureCanvas(in: window),
+          let contentLayer = protectedContentView?.layer,
+          let canvasLayer = secureCanvasLayer,
+          contentLayer.superlayer !== canvasLayer else { return }
+    canvasLayer.addSublayer(contentLayer)
+  }
+
+  /// 关闭：把 Flutter 内容 layer 放回 window；secure field 与安全 canvas 保留，
+  /// 避免下一次开启重新创建私有 UIKit 层级。
+  private func removeSecure() {
+    guard let contentLayer = protectedContentView?.layer,
+          let originalSuperlayer = originalContentSuperlayer,
+          contentLayer.superlayer !== originalSuperlayer else { return }
+    originalSuperlayer.addSublayer(contentLayer)
   }
 
   @available(iOS 11.0, *)

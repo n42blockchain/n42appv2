@@ -105,11 +105,16 @@ post_install do |installer|
         # 通过 `-l sqlite3` 引入的系统 libsqlite3。否则 chat 归档库在 iOS 上会
         # 静默以「明文」打开（PRAGMA key 在系统 sqlite 上是 no-op），2026-08 真机
         # 实测确认（nm 里无 sqlite3_key 符号）。见 sqlcipher_flutter_libs advisory。
-        # 放在 $(inherited) 之后、系统 sqlite 之前，保证被 force-load 且符号优先。
+        # SQLCipher 是 static framework；仅写 `-framework SQLCipher` 时，前面的
+        # `-l sqlite3` 已经满足 sqlite3_* 未定义符号，链接器不会从 archive 拉取
+        # SQLCipher 对象。必须 force-load framework binary，才能让 Runner 自身
+        # 定义 sqlite3_key/sqlcipher_export 并覆盖系统 libsqlite3。
         ldflags = config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
         ldflags = [ldflags] if ldflags.is_a?(String)
-        unless ldflags.include?('SQLCipher')
-          ldflags += ['-framework', 'SQLCipher']
+        sqlcipher_binary = '$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher'
+        unless ldflags.include?(sqlcipher_binary)
+          inherited_index = ldflags.index('$(inherited)') || -1
+          ldflags.insert(inherited_index + 1, '-force_load', sqlcipher_binary)
         end
         config.build_settings['OTHER_LDFLAGS'] = ldflags
 
@@ -164,4 +169,18 @@ post_install do |installer|
     end
   end
   runner_project.save
+end
+
+# CocoaPods 会在 post_install 之后再次序列化聚合 xcconfig，所以必须在
+# post_integrate 最终清理系统 sqlite 和普通 SQLCipher archive 链接项。Runner
+# 已 force-load SQLCipher（完整兼容 SQLite API）；保留任一项会造成 463 个重复符号。
+post_integrate do |installer|
+  Dir.glob(
+    "#{installer.sandbox.root}/Target Support Files/Pods-Runner/*.xcconfig"
+  ).each do |xcconfig_path|
+    contents = File.read(xcconfig_path)
+    contents = contents.gsub(/ -l"sqlite3(?:\.0)?"/, '')
+    contents = contents.gsub(/ -framework "SQLCipher"/, '')
+    File.write(xcconfig_path, contents)
+  end
 end

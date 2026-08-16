@@ -357,6 +357,7 @@ class WeChatMessageMenu extends StatelessWidget {
                       },
                     ),
                   if (message.type == MessageType.image &&
+                      !message.isSelfDestructing &&
                       onExtractText != null)
                     _buildMenuItem(
                       icon: Icons.text_snippet_outlined,
@@ -367,6 +368,7 @@ class WeChatMessageMenu extends StatelessWidget {
                       },
                     ),
                   if (message.type == MessageType.image &&
+                      !message.isSelfDestructing &&
                       onTranslateImage != null)
                     _buildMenuItem(
                       icon: Icons.translate,

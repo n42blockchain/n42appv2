@@ -43,7 +43,7 @@ void main() {
     expect(translated, isTrue);
   });
 
-  testWidgets('image OCR actions are absent when callbacks are withheld', (
+  testWidgets('self-destruct image hides save and OCR actions defensively', (
     tester,
   ) async {
     final message = MessageEntity(
@@ -66,10 +66,14 @@ void main() {
           position: const Offset(100, 600),
           messageSize: const Size(160, 120),
           onDismiss: () {},
+          onSave: () {},
+          onExtractText: () {},
+          onTranslateImage: () {},
         ),
       ),
     );
 
+    expect(find.text('Save'), findsNothing);
     expect(find.text('Extract text'), findsNothing);
     expect(find.text('Translate image'), findsNothing);
   });

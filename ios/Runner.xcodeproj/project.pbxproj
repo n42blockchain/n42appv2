@@ -878,11 +878,10 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"SQLCipher\"",
+					"-force_load",
+					"$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher",
 					"-ObjC",
 					"-l\"c++\"",
-					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
 					"\"AVFoundation\"",
@@ -1436,11 +1435,10 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"SQLCipher\"",
+					"-force_load",
+					"$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher",
 					"-ObjC",
 					"-l\"c++\"",
-					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
 					"\"AVFoundation\"",
@@ -1700,11 +1698,10 @@
 				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"SQLCipher\"",
+					"-force_load",
+					"$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher",
 					"-ObjC",
 					"-l\"c++\"",
-					"-l\"sqlite3\"",
 					"-l\"z\"",
 					"-framework",
 					"\"AVFoundation\"",
