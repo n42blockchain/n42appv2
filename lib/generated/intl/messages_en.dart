@@ -87,6 +87,9 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m74(amount, symbol, network) =>
       "Request ${amount} ${symbol} on ${network}";
 
+  static String m75(value) =>
+      "Remove custom network ${value}? Balances on this network will no longer be shown. Your assets on chain are not affected.";
+
   static String m28(value) => "Est. gas: ~${value} units";
 
   static String m29(reason) => "Reason: ${reason}";
@@ -189,7 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m71(value) => "${value} address test link failed!";
 
-  static String m75(value) =>
+  static String m76(value) =>
       "The RPC reports Chain ID ${value}, which does not match the value you entered.";
 
   static String m72(value) => "0~${value} characters";
@@ -910,6 +913,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Total Amount",
     ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "Block Explorer URL (optional)",
+    ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Chain not supported",
     ),
@@ -1045,6 +1051,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_steps": MessageLookupByLibrary.simpleMessage("Steps:"),
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "To burn an NFT, please go to the NFT details page and tap the \"Burn\" button.",
+    ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Popular networks (tap to fill)",
     ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "This chain does not support transfers yet, stay tuned",
@@ -1919,6 +1928,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Payment request",
     ),
     "g_key_receive_request_line": m74,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage(
+      "Remove Network",
+    ),
+    "g_key_remove_network_confirm": m75,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Reset"),
     "g_key_retry": MessageLookupByLibrary.simpleMessage("Retry"),
     "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
@@ -2847,7 +2860,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
       "This Chain ID is already in use by another network.",
     ),
-    "g_token_m_key_chainid_mismatch": m75,
+    "g_token_m_key_chainid_mismatch": m76,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Caution"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("High Risk"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Safe"),

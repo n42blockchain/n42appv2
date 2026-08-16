@@ -4,6 +4,7 @@ import 'package:n42_wallet/features/widgets/login_title.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/eth_api.dart';
+import 'package:n42_wallet/features/wallet/pages/add_token/evm_chain_presets.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_url_registry.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -29,17 +30,76 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
   late final decimalController = TextEditingController();
   late final chainIdController = TextEditingController();
   late final rpcController = TextEditingController();
+  late final browserController = TextEditingController();
   late final nameNode = FocusNode();
   late final symbolNode = FocusNode();
   late final decimalNode = FocusNode();
   late final chainIdNode = FocusNode();
   late final rpcNode = FocusNode();
+  late final browserNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // RPC 填完失焦时自动探测 eth_chainId 回填（仅当 chainId 为空，绝不覆盖
+    // 用户已填的值）——减少手抄 chainId 出错；提交时仍有强制交叉校验兜底。
+    rpcNode.addListener(_onRpcFocusChanged);
+  }
+
+  void _onRpcFocusChanged() {
+    if (!rpcNode.hasFocus) _probeChainId();
+  }
+
+  bool _probing = false;
+
+  Future<void> _probeChainId() async {
+    final rpc = rpcController.text.trim();
+    if (_probing ||
+        chainIdController.text.trim().isNotEmpty ||
+        !rpc.toLowerCase().startsWith('https://')) {
+      return;
+    }
+    _probing = true;
+    try {
+      final res = await EthAPI.init(
+        null,
+        rpc,
+        null,
+      ).baseRPCEth('eth_chainId', [], enableRetry: false);
+      final hex = res.valueOrNull?.toString() ?? '';
+      final id = hex.startsWith('0x')
+          ? int.tryParse(hex.substring(2), radix: 16)
+          : int.tryParse(hex);
+      if (mounted && id != null && chainIdController.text.trim().isEmpty) {
+        setState(() => chainIdController.text = id.toString());
+      }
+    } catch (_) {
+      // 静默：探测只是便利功能，失败不打扰；提交时的校验会给出明确错误。
+    } finally {
+      _probing = false;
+    }
+  }
+
+  /// 预设一键填充（仅填表，提交仍走全部校验）。
+  void _applyPreset(EvmChainPreset p) {
+    setState(() {
+      nameController.text = p.name;
+      symbolController.text = p.symbol;
+      chainIdController.text = p.chainId.toString();
+      decimalController.text = p.decimals.toString();
+      rpcController.text = p.rpcUrl;
+      browserController.text = p.explorerUrl;
+      nameErrorMessage = symbolErrorMessage = decimalErrorMessage =
+          chainIdErrorMessage = rpcErrorMessage = errorMessage = '';
+    });
+  }
 
   String nameErrorMessage = "";
   String symbolErrorMessage = "";
   String decimalErrorMessage = "";
   String chainIdErrorMessage = "";
   String rpcErrorMessage = "";
+  String browserErrorMessage = "";
   String errorMessage = "";
   Load load = Load.finish;
 
@@ -90,16 +150,19 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
 
   @override
   void dispose() {
+    rpcNode.removeListener(_onRpcFocusChanged);
     nameController.dispose();
     symbolController.dispose();
     decimalController.dispose();
     chainIdController.dispose();
     rpcController.dispose();
+    browserController.dispose();
     nameNode.dispose();
     symbolNode.dispose();
     decimalNode.dispose();
     chainIdNode.dispose();
     rpcNode.dispose();
+    browserNode.dispose();
     super.dispose();
   }
 
@@ -144,6 +207,16 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     // 可被 MITM 篡改（配合假余额诱导或替换广播目标网络）。
     if (!isURL(rpcStr) || !rpcStr.toLowerCase().startsWith('https://')) {
       return _setFieldError((v) => rpcErrorMessage = v, s.g_token_m_key_21);
+    }
+    // 区块浏览器 URL 可选；填了就必须是 https URL。
+    final browserStr = browserController.text.trim();
+    if (browserStr.isNotEmpty &&
+        (!isURL(browserStr) ||
+            !browserStr.toLowerCase().startsWith('https://'))) {
+      return _setFieldError(
+        (v) => browserErrorMessage = v,
+        s.g_token_m_key_21,
+      );
     }
     return true;
   }
@@ -248,6 +321,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     }
 
     final baseInfo = ethMap['baseInfo'] as Map<String, dynamic>;
+    final browserStr = browserController.text.trim();
     baseInfo
       ..['mKey'] = mKey
       ..['custom'] = true
@@ -257,7 +331,12 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
       ..['name'] = name
       ..['decimals'] = decimal
       ..['chainId'] = chainId
-      ..['service'] = rpcStr;
+      ..['service'] = rpcStr
+      // 区块浏览器（EIP-3085 blockExplorerUrls 对应物）：自定义链不在网络层
+      // URL 表里，getBrowserAddress 会回退读这里（空则该链无浏览器跳转）。
+      ..['browser'] = browserStr.isEmpty
+          ? ''
+          : (browserStr.endsWith('/') ? browserStr : '$browserStr/');
 
     await ref.read(wapBridgeProvider).addWalletChain(ethMap);
     if (!mounted) return;
@@ -337,6 +416,42 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // 热门链一键填充（仅填表；提交仍走全部校验）
+                    Text(
+                      s.g_key_chain_presets,
+                      style: AppTypography.caption.copyWith(
+                        color: AppColorTokens.of(context).textSubtitle,
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.space2),
+                    SizedBox(
+                      height: ScreenUtil().setWidth(64),
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: evmChainPresets.length,
+                        separatorBuilder: (_, _) =>
+                            SizedBox(width: AppSpacing.space2),
+                        itemBuilder: (context, i) {
+                          final p = evmChainPresets[i];
+                          return Semantics(
+                            button: true,
+                            label: p.name,
+                            child: ActionChip(
+                              label: Text(
+                                p.name,
+                                style: AppTypography.caption.copyWith(
+                                  color: AppColorTokens.of(
+                                    context,
+                                  ).textPrimary,
+                                ),
+                              ),
+                              onPressed: () => _applyPreset(p),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    SizedBox(height: AppSpacing.space4),
                     _buildField(
                       title: s.g_token_m_key_13,
                       controller: nameController,
@@ -379,8 +494,32 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                       focusNode: rpcNode,
                       hintText: s.g_token_m_key_17,
                       errorMsg: rpcErrorMessage,
-                      nextFocus: null,
+                      nextFocus: browserNode,
                       useStyle3: false,
+                    ),
+                    // 区块浏览器 URL（可选，EIP-3085 blockExplorerUrls）
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        LoginTitle(
+                          title: s.g_key_block_explorer_optional,
+                          must: false,
+                        ),
+                        SizedBox(height: AppSpacing.space2),
+                        textFieldStyle2(
+                          context,
+                          controller: browserController,
+                          focusNode: browserNode,
+                          hintText: 'https://…',
+                          maxLines: 1,
+                          height: ScreenUtil().setWidth(88.0),
+                          errorMessage: browserErrorMessage,
+                          onEditingComplete: () =>
+                              FocusScope.of(context).unfocus(),
+                          onChanged: (_) {},
+                        ),
+                        SizedBox(height: AppSpacing.space4),
+                      ],
                     ),
                     SizedBox(height: AppSpacing.space2),
                     if (errorMessage.isNotEmpty)

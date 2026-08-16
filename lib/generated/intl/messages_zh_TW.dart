@@ -83,6 +83,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m74(amount, symbol, network) =>
       "請求 ${amount} ${symbol}（${network}）";
 
+  static String m75(value) => "移除自訂網路 ${value}？該網路的餘額將不再顯示，鏈上資產不受影響。";
+
   static String m28(value) => "預計。氣體：~${value} 單位";
 
   static String m29(reason) => "原因：${reason}";
@@ -178,7 +180,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m71(value) => "${value}地址測試連結失敗！";
 
-  static String m75(value) => "RPC 回報的 Chain ID 為 ${value}，與您填寫的不一致。";
+  static String m76(value) => "RPC 回報的 Chain ID 為 ${value}，與您填寫的不一致。";
 
   static String m72(value) => "0~${value} 個字符";
 
@@ -710,6 +712,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage("大量傳輸"),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage("總金額"),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "區塊瀏覽器 URL（選填）",
+    ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "不支援鏈",
     ),
@@ -814,6 +819,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "要刻錄 NFT，請進入 NFT 詳細資料頁面並點擊「刻錄」按鈕。",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage("熱門網路（點擊填入）"),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "該鏈暫不支援轉賬，敬請期待",
     ),
@@ -1404,6 +1410,8 @@ class MessageLookup extends MessageLookupByLibrary {
       "付款請求",
     ),
     "g_key_receive_request_line": m74,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage("移除網路"),
+    "g_key_remove_network_confirm": m75,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("重置"),
     "g_key_retry": MessageLookupByLibrary.simpleMessage("重試"),
     "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
@@ -2038,7 +2046,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
       "此 Chain ID 已被其他網路占用。",
     ),
-    "g_token_m_key_chainid_mismatch": m75,
+    "g_token_m_key_chainid_mismatch": m76,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("警告"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("高風險"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("安全的"),

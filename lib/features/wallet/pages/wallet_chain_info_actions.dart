@@ -10,6 +10,7 @@ import 'package:n42_wallet/features/wallet/pages/nft/nft_list_page.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/provider/batch_transfer_provider.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
+import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_2.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
 import 'package:n42_wallet/shared/utils/in_app_browser.dart';
 import 'package:flutter/material.dart';
@@ -195,6 +196,39 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
             navigator.pop();
           }
         },
+      );
+    }
+
+    // Remove custom network —— 仅用户自行添加的 EVM 兼容链（custom 标志）。
+    // 内建链不可删（addWalletChain 路径写入的 custom:true 才显示）。删除即
+    // removeWalletChain：从当前钱包 coinInfo 移除并持久化；自定义链不在
+    // chainUrlMap 注册表里，不会被 _syncNewChains 自动加回。
+    if (coinModel.custom && coinModel.coin['isContract'] != true) {
+      final danger = AppColorTokens.of(context).danger;
+      childs.add(_divider());
+      childs.add(
+        _buildSheetItem(
+          icon: Icon(Icons.delete_outline, color: danger, size: sw(40.0)),
+          label: S.of(context).g_key_remove_network,
+          onTap: () async {
+            final confirmed = await tipsDialog2(
+              context,
+              S
+                  .of(context)
+                  .g_key_remove_network_confirm(coinModel.config.mKey),
+            );
+            if (!mounted || confirmed != true) return;
+            final wap = ref.read(wapBridgeProvider);
+            wap.removeWalletChain(
+              coinModel.config.mKey,
+              coinModel.coin['unit']?.toString().toLowerCase() ??
+                  coinModel.config.mKey.toLowerCase(),
+            );
+            if (!mounted || !navigator.mounted) return;
+            navigator.pop(); // 关闭动作面板
+            navigator.pop(); // 退出链详情页（该链已不存在）
+          },
+        ),
       );
     }
 

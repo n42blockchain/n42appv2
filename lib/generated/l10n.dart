@@ -1609,6 +1609,46 @@ class S {
     );
   }
 
+  /// `Remove Network`
+  String get g_key_remove_network {
+    return Intl.message(
+      'Remove Network',
+      name: 'g_key_remove_network',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Remove custom network {value}? Balances on this network will no longer be shown. Your assets on chain are not affected.`
+  String g_key_remove_network_confirm(Object value) {
+    return Intl.message(
+      'Remove custom network $value? Balances on this network will no longer be shown. Your assets on chain are not affected.',
+      name: 'g_key_remove_network_confirm',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Popular networks (tap to fill)`
+  String get g_key_chain_presets {
+    return Intl.message(
+      'Popular networks (tap to fill)',
+      name: 'g_key_chain_presets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Block Explorer URL (optional)`
+  String get g_key_block_explorer_optional {
+    return Intl.message(
+      'Block Explorer URL (optional)',
+      name: 'g_key_block_explorer_optional',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `The RPC reports Chain ID {value}, which does not match the value you entered.`
   String g_token_m_key_chainid_mismatch(Object value) {
     return Intl.message(

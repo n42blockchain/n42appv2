@@ -9,7 +9,19 @@ String getBrowserAddress(String coinType, String address, {bool? isTest}) {
     isTest = coinMap['isTest'];
   }
   String path = RequestUrl().getUrl2(coinType, "browser", isTest: isTest);
-  if (path == "") return path;
+  // 自定义 EVM 链不在网络层 URL 表里——回退读加链时用户填的
+  // baseInfo['browser']（EIP-3085 blockExplorerUrls），按 etherscan 系
+  // 通用格式拼地址页。未填浏览器则维持空串（调用方隐藏跳转入口）。
+  if (path == "") {
+    final chain = globalWapAdapter.walletMap[coinType];
+    final base = (chain is Map) ? chain['baseInfo'] : null;
+    if (base is Map &&
+        base['custom'] == true &&
+        (base['browser'] ?? '').toString().isNotEmpty) {
+      return '${base['browser']}address/$address';
+    }
+    return path;
+  }
   switch (coinType) {
     case "ETH":
     case "BNB":
