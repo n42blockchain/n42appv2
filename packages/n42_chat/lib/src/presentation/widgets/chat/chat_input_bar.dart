@@ -143,6 +143,9 @@ class ChatInputBar extends StatefulWidget {
   /// 更多按钮点击回调
   final VoidCallback? onMorePressed;
 
+  /// 输入框为空时显示的相机快捷入口
+  final VoidCallback? onCameraPressed;
+
   /// 快捷回复按钮点击回调
   final VoidCallback? onQuickReplyPressed;
 
@@ -196,6 +199,7 @@ class ChatInputBar extends StatefulWidget {
     this.onVoicePressed,
     this.onEmojiPressed,
     this.onMorePressed,
+    this.onCameraPressed,
     this.onQuickReplyPressed,
     this.onScheduledSend,
     this.onChanged,
@@ -635,6 +639,14 @@ class ChatInputBarState extends State<ChatInputBar> {
                       icon: Icons.emoji_emotions_outlined,
                       onPressed: widget.onEmojiPressed,
                       semanticLabel: A11yL10n.of(context).emoji,
+                    ),
+
+                  // 与主流聊天应用一致：无文本时保留相机快捷入口。
+                  if (!_hasText && widget.onCameraPressed != null)
+                    _buildIconButton(
+                      icon: Icons.camera_alt_outlined,
+                      onPressed: widget.onCameraPressed,
+                      semanticLabel: S.of(context)?.commonTakePhoto ?? 'Camera',
                     ),
 
                   // 附件/更多 或 发送

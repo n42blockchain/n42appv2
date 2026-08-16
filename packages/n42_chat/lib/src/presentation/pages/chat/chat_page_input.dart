@@ -13,10 +13,7 @@ extension _ChatPageInputMethods on _ChatPageState {
         decoration: BoxDecoration(
           color: isDark ? AppColors.surfaceDark : AppColors.background,
           border: Border(
-            top: BorderSide(
-              color: context.dividerColor,
-              width: 0.5,
-            ),
+            top: BorderSide(color: context.dividerColor, width: 0.5),
           ),
         ),
         child: SafeArea(
@@ -61,6 +58,10 @@ extension _ChatPageInputMethods on _ChatPageState {
       onVoicePressed: _onVoicePressed,
       onEmojiPressed: _onEmojiPressed,
       onMorePressed: _onMorePressed,
+      onCameraPressed: () {
+        _hideMorePanel();
+        _takePhoto();
+      },
       onQuickReplyPressed: _onQuickReplyPressed,
       onCommandPoll: _createPoll,
       onScheduledSend: _scheduleComposerText,
@@ -180,7 +181,11 @@ extension _ChatPageInputMethods on _ChatPageState {
                     S.of(context)?.chatTapToCancel ?? 'Tap to cancel',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: Colors.white70, fontSize: 14, height: 1.3),
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                      height: 1.3,
+                    ),
                   ),
                 ),
               ],
@@ -357,6 +362,10 @@ extension _ChatPageInputMethods on _ChatPageState {
     );
 
     return ChatMorePanel(
+      recentMediaLoader: _loadRecentMedia,
+      onRecentMediaSend: _sendRecentMediaSelection,
+      onManageRecentMediaAccess: _manageRecentMediaAccess,
+      maxRecentMediaSelection: _isViewOnce ? 1 : 9,
       onPhotoPressed: () {
         _hideMorePanel();
         _showPhotoPickerOptions();
@@ -636,8 +645,8 @@ extension _ChatPageInputMethods on _ChatPageState {
       final lang = langController.text.trim();
       final fenced = '```$lang\n${codeController.text}\n```';
       context.read<ChatBloc>().add(
-            SendCustomMessage(content: fenced, type: MessageType.codeBlock),
-          );
+        SendCustomMessage(content: fenced, type: MessageType.codeBlock),
+      );
     }
     codeController.dispose();
     langController.dispose();

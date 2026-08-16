@@ -250,6 +250,16 @@ dependencies:
 
 <!-- 麦克风权限（用于语音消息） -->
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+<!-- 发送扩展栏的最近照片/视频（Android 13+） -->
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+<!-- Android 14+ 的有限照片授权 -->
+<uses-permission android:name="android.permission.READ_MEDIA_VISUAL_USER_SELECTED" />
+<!-- Android 12 及以下 -->
+<uses-permission
+    android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
 ```
 
 确保 `MainActivity` 继承自 `FlutterFragmentActivity`（生物识别需要）：
@@ -280,6 +290,10 @@ class MainActivity: FlutterFragmentActivity()
 <!-- 相册权限 -->
 <key>NSPhotoLibraryUsageDescription</key>
 <string>用于发送图片</string>
+
+<!-- 可选：由扩展栏中的“设置”按钮主动管理有限照片授权 -->
+<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+<true/>
 ```
 
 ### 初始化

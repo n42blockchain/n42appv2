@@ -127,6 +127,8 @@
 	<string>N42 Wallet needs permission to save QR codes and images to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>N42 Wallet needs photo library access to select images for your profile picture and to share files in chat.</string>
+	<key>PHPhotoLibraryPreventAutomaticLimitedAccessAlert</key>
+	<true/>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>

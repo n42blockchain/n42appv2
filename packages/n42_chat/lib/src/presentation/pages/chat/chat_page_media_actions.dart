@@ -17,6 +17,116 @@ class _PersistedScheduledAttachment {
 extension _ChatPageMediaActionsMethods on _ChatPageState {
   static const int _maxEncryptedRoomFileBytes = 64 * 1024 * 1024;
 
+  static const PermissionRequestOption _recentMediaPermission =
+      PermissionRequestOption(
+        androidPermission: AndroidPermission(
+          type: RequestType.common,
+          mediaLocation: false,
+        ),
+      );
+
+  Future<ChatRecentMediaSnapshot> _loadRecentMedia() async {
+    if (kIsWeb || !(Platform.isAndroid || Platform.isIOS || Platform.isMacOS)) {
+      return const ChatRecentMediaSnapshot(
+        access: ChatRecentMediaAccess.unsupported,
+      );
+    }
+
+    final permission = await PhotoManager.requestPermissionExtend(
+      requestOption: _recentMediaPermission,
+    );
+    if (!permission.hasAccess) {
+      return const ChatRecentMediaSnapshot(
+        access: ChatRecentMediaAccess.denied,
+      );
+    }
+
+    final albums = await PhotoManager.getAssetPathList(
+      onlyAll: true,
+      type: RequestType.common,
+    );
+    if (albums.isEmpty) {
+      return ChatRecentMediaSnapshot(
+        access: permission == PermissionState.limited
+            ? ChatRecentMediaAccess.limited
+            : ChatRecentMediaAccess.available,
+      );
+    }
+
+    final assets = await albums.first.getAssetListPaged(page: 0, size: 24);
+    final items = await Future.wait(
+      assets.map((asset) async {
+        final thumbnail = await asset.thumbnailDataWithSize(
+          const ThumbnailSize.square(256),
+          quality: 82,
+        );
+        if (thumbnail == null || thumbnail.isEmpty) return null;
+        return ChatRecentMediaItem(
+          id: asset.id,
+          thumbnailBytes: thumbnail,
+          isVideo: asset.type == AssetType.video,
+          duration: Duration(seconds: asset.duration),
+        );
+      }),
+    );
+
+    return ChatRecentMediaSnapshot(
+      access: permission == PermissionState.limited
+          ? ChatRecentMediaAccess.limited
+          : ChatRecentMediaAccess.available,
+      items: items.whereType<ChatRecentMediaItem>().toList(growable: false),
+    );
+  }
+
+  Future<void> _manageRecentMediaAccess() async {
+    final permission = await PhotoManager.getPermissionState(
+      requestOption: _recentMediaPermission,
+    );
+    if (permission == PermissionState.limited) {
+      await PhotoManager.presentLimited(type: RequestType.common);
+    } else {
+      await PhotoManager.openSetting();
+    }
+  }
+
+  Future<void> _sendRecentMediaSelection(List<String> assetIds) async {
+    _hideMorePanel();
+    var failedCount = 0;
+    for (final assetId in assetIds) {
+      try {
+        final asset = await AssetEntity.fromId(assetId);
+        final file = await asset?.file;
+        if (asset == null || file == null || !await file.exists()) {
+          failedCount++;
+          continue;
+        }
+        final name = asset.title?.trim().isNotEmpty == true
+            ? asset.title!
+            : file.path.split(Platform.pathSeparator).last;
+        final media = XFile(file.path, name: name);
+        if (asset.type == AssetType.video) {
+          await _sendVideo(media);
+        } else {
+          await _sendImage(media);
+        }
+      } catch (error) {
+        failedCount++;
+        debugLog('Send recent media failed for $assetId: $error');
+      }
+    }
+
+    if (failedCount > 0 && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            '$failedCount selected media item(s) could not be sent',
+          ),
+          backgroundColor: AppColors.error,
+        ),
+      );
+    }
+  }
+
   /// 录制圆形视频留言（Video Note）：相机录短视频 → 以 `n42note_` 前缀文件名
   /// 走既有视频发送链路；渲染端据文件名前缀圆形渲染。
   Future<void> _recordVideoNote() async {

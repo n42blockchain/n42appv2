@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/chat_more_panel.dart';
@@ -7,6 +9,10 @@ import 'package:n42_chat/src/presentation/widgets/chat/chat_more_panel.dart';
 /// 静默丢弃，用户彻底点不到（被感知为"功能消失"）。修复后按 8 项/页
 /// 自动分页，本测试锁定：所有条目（含曾丢失的四项）滑页后都能找到。
 void main() {
+  final thumbnail = base64Decode(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
+  );
+
   Widget wrap(Widget child) {
     return MaterialApp(
       home: Scaffold(
@@ -70,9 +76,7 @@ void main() {
     return seen;
   }
 
-  testWidgets('曾被静默丢弃的四项（Contact/Code/Tip/View Once）可达', (
-    tester,
-  ) async {
+  testWidgets('曾被静默丢弃的四项（Contact/Code/Tip/View Once）可达', (tester) async {
     await tester.pumpWidget(wrap(fullPanel()));
     await tester.pumpAndSettle();
 
@@ -92,19 +96,159 @@ void main() {
 
     final labels = await collectAllLabels(tester);
     const all = [
-      'Photos', 'Camera', 'Video Call', 'Location',
-      'Red Packet', 'Transfer', 'Apps', 'File',
-      'Contact', 'Code', 'Tip',
-      'Favorites', 'Music', 'Receive', 'Shop', 'Poll', 'Event', 'GIF',
-      'Stickers', 'View Once',
-      'Face Blur', 'Live Location', 'Timer', 'Scheduled',
-      'Whiteboard', 'Video note', 'AI',
+      'Photos',
+      'Camera',
+      'Video Call',
+      'Location',
+      'Red Packet',
+      'Transfer',
+      'Apps',
+      'File',
+      'Contact',
+      'Code',
+      'Tip',
+      'Favorites',
+      'Music',
+      'Receive',
+      'Shop',
+      'Poll',
+      'Event',
+      'GIF',
+      'Stickers',
+      'View Once',
+      'Face Blur',
+      'Live Location',
+      'Timer',
+      'Scheduled',
+      'Whiteboard',
+      'Video note',
+      'AI',
     ];
     final missing = all.where((l) => !labels.contains(l)).toList();
-    expect(
-      missing,
-      isEmpty,
-      reason: '以下条目在任何页都找不到（被分页逻辑丢弃）：$missing',
+    expect(missing, isEmpty, reason: '以下条目在任何页都找不到（被分页逻辑丢弃）：$missing');
+  });
+
+  testWidgets('首屏优先展示通用分享动作', (tester) async {
+    await tester.pumpWidget(wrap(fullPanel()));
+    await tester.pumpAndSettle();
+
+    for (final label in [
+      'Photos',
+      'Camera',
+      'Location',
+      'Contact',
+      'File',
+      'Poll',
+      'Event',
+      'Apps',
+    ]) {
+      expect(find.text(label), findsOneWidget, reason: '$label 应固定在首屏');
+    }
+    expect(find.text('Video Call'), findsNothing);
+  });
+
+  testWidgets('最近媒体按选择顺序发送并显示序号', (tester) async {
+    List<String>? sentIds;
+    final panel = ChatMorePanel(
+      onPhotoPressed: () {},
+      recentMediaLoader: () async => ChatRecentMediaSnapshot(
+        access: ChatRecentMediaAccess.available,
+        items: [
+          ChatRecentMediaItem(id: 'a', thumbnailBytes: thumbnail),
+          ChatRecentMediaItem(
+            id: 'b',
+            thumbnailBytes: thumbnail,
+            isVideo: true,
+            duration: const Duration(seconds: 65),
+          ),
+        ],
+      ),
+      onRecentMediaSend: (ids) async => sentIds = ids,
     );
+
+    await tester.pumpWidget(wrap(panel));
+    await tester.pumpAndSettle();
+    final tiles = find.bySemanticsLabel(RegExp('Recent (photo|video)'));
+    expect(tiles, findsNWidgets(2));
+
+    await tester.tap(tiles.at(1));
+    await tester.tap(tiles.at(0));
+    await tester.pump();
+    expect(find.text('1'), findsOneWidget);
+    expect(find.text('2'), findsOneWidget);
+    expect(find.text('1:05'), findsOneWidget);
+
+    await tester.tap(find.textContaining('(2)'));
+    await tester.pumpAndSettle();
+    expect(sentIds, ['b', 'a']);
+  });
+
+  testWidgets('最近媒体遵守最大选择数量', (tester) async {
+    final panel = ChatMorePanel(
+      recentMediaLoader: () async => ChatRecentMediaSnapshot(
+        access: ChatRecentMediaAccess.available,
+        items: [
+          ChatRecentMediaItem(id: 'a', thumbnailBytes: thumbnail),
+          ChatRecentMediaItem(id: 'b', thumbnailBytes: thumbnail),
+        ],
+      ),
+      onRecentMediaSend: (_) async {},
+      maxRecentMediaSelection: 1,
+    );
+    await tester.pumpWidget(wrap(panel));
+    await tester.pumpAndSettle();
+
+    final tiles = find.bySemanticsLabel('Recent photo');
+    await tester.tap(tiles.at(0));
+    await tester.tap(tiles.at(1));
+    await tester.pump();
+
+    expect(find.textContaining('(1)'), findsOneWidget);
+    expect(find.text('Select up to 1 items'), findsOneWidget);
+  });
+
+  testWidgets('窄屏有限授权且已选择媒体时顶栏不溢出', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final panel = ChatMorePanel(
+      onPhotoPressed: () {},
+      recentMediaLoader: () async => ChatRecentMediaSnapshot(
+        access: ChatRecentMediaAccess.limited,
+        items: [ChatRecentMediaItem(id: 'a', thumbnailBytes: thumbnail)],
+      ),
+      onRecentMediaSend: (_) async {},
+      onManageRecentMediaAccess: () async {},
+    );
+
+    await tester.pumpWidget(wrap(panel));
+    await tester.pumpAndSettle();
+    await tester.tap(find.bySemanticsLabel('Recent photo'));
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byTooltip('Send (1)'), findsOneWidget);
+  });
+
+  testWidgets('窄屏拒绝相册权限时提供系统相册与设置降级入口', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 568));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    var photosOpened = 0;
+    var settingsOpened = 0;
+    final panel = ChatMorePanel(
+      onPhotoPressed: () => photosOpened++,
+      recentMediaLoader: () async =>
+          const ChatRecentMediaSnapshot(access: ChatRecentMediaAccess.denied),
+      onManageRecentMediaAccess: () async => settingsOpened++,
+    );
+
+    await tester.pumpWidget(wrap(panel));
+    await tester.pumpAndSettle();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Photo access is needed to show recent media'), findsOne);
+
+    await tester.tap(find.text('Open Photos'));
+    await tester.tap(find.text('Settings'));
+    expect(photosOpened, 1);
+    expect(settingsOpened, 1);
   });
 }
