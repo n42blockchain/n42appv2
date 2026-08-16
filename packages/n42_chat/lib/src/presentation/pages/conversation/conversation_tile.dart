@@ -35,20 +35,23 @@ class ConversationTile extends StatelessWidget {
     this.isSelected = false,
     this.isLocked = false,
   });
-  
+
   /// 获取显示名称（私聊时优先使用备注名）
   String _getDisplayName() {
     // 群聊直接使用会话名称
     if (conversation.type == ConversationType.group) {
       return conversation.name;
     }
-    
+
     // 私聊：直接使用 conversation.directUserId 获取备注名
     final otherUserId = conversation.directUserId;
     if (otherUserId != null) {
-      return RemarkService.instance.getDisplayName(otherUserId, conversation.name);
+      return RemarkService.instance.getDisplayName(
+        otherUserId,
+        conversation.name,
+      );
     }
-    
+
     return conversation.name;
   }
 
@@ -62,8 +65,9 @@ class ConversationTile extends StatelessWidget {
     final msg = _getLastMessageText();
     if (msg.isNotEmpty) parts.add(msg);
     if (conversation.lastMessageTime != null) {
-      parts.add(N42DateUtils.formatConversationTime(
-          conversation.lastMessageTime!));
+      parts.add(
+        N42DateUtils.formatConversationTime(conversation.lastMessageTime!),
+      );
     }
     if (conversation.isMuted) parts.add(a11y.muted);
     final unread = conversation.unreadCount;
@@ -92,6 +96,7 @@ class ConversationTile extends StatelessWidget {
           // 避免屏幕阅读器把名称、图标、消息、时间拆成多段零碎播报。
           child: MergeSemantics(
             child: Semantics(
+              key: ValueKey<String>('chat_conversation_${conversation.id}'),
               button: true,
               selected: isSelected,
               label: _semanticLabel(context),
@@ -109,9 +114,7 @@ class ConversationTile extends StatelessWidget {
                         const SizedBox(width: 14),
 
                         // 内容
-                        Expanded(
-                          child: _buildContent(context, isDark),
-                        ),
+                        Expanded(child: _buildContent(context, isDark)),
                       ],
                     ),
                   ),
@@ -158,8 +161,9 @@ class ConversationTile extends StatelessWidget {
     }
 
     // 检测桥接平台
-    final bridgePlatform =
-        BridgeDetectionUtils.detectFromConversation(conversation);
+    final bridgePlatform = BridgeDetectionUtils.detectFromConversation(
+      conversation,
+    );
 
     final hasUnread = conversation.unreadCount > 0;
     final hasBridge = bridgePlatform != null;
@@ -172,11 +176,7 @@ class ConversationTile extends StatelessWidget {
         avatarWidget,
         // 未读红点
         if (hasUnread)
-          Positioned(
-            top: -4,
-            right: -4,
-            child: _buildUnreadBadge(),
-          ),
+          Positioned(top: -4, right: -4, child: _buildUnreadBadge()),
         // 桥接平台 badge
         if (hasBridge)
           Positioned(
@@ -200,19 +200,16 @@ class ConversationTile extends StatelessWidget {
         ),
       );
     }
-    
+
     // 未读数 > 99 显示 99+
     final count = conversation.unreadCount;
     final text = count > 99 ? '99+' : '$count';
-    
+
     // 根据数字位数调整宽度
     final minWidth = text.length > 2 ? 26.0 : (text.length > 1 ? 20.0 : 18.0);
-    
+
     return Container(
-      constraints: BoxConstraints(
-        minWidth: minWidth,
-        minHeight: 18,
-      ),
+      constraints: BoxConstraints(minWidth: minWidth, minHeight: 18),
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
       decoration: BoxDecoration(
         color: AppColors.badge,
@@ -234,7 +231,7 @@ class ConversationTile extends StatelessWidget {
 
   Widget _buildContent(BuildContext context, bool isDark) {
     final displayName = _getDisplayName();
-    
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -287,7 +284,8 @@ class ConversationTile extends StatelessWidget {
             if (conversation.lastMessageTime != null)
               Text(
                 N42DateUtils.formatConversationTime(
-                    conversation.lastMessageTime!),
+                  conversation.lastMessageTime!,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
@@ -391,13 +389,7 @@ class _BridgeBadge extends StatelessWidget {
           ),
         ],
       ),
-      child: Center(
-        child: Icon(
-          info.icon,
-          size: 11,
-          color: info.brandColor,
-        ),
-      ),
+      child: Center(child: Icon(info.icon, size: 11, color: info.brandColor)),
     );
   }
 }

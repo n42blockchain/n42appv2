@@ -38,6 +38,19 @@ class MessageRepositoryImpl implements IMessageRepository {
   static const Duration _messageCacheExpiry = Duration(minutes: 5);
   final Map<String, (MessageEntity, DateTime)> _messageEntityCache = {};
 
+  // Timeline.getTimeline() asks the Matrix SDK to recover missing Megolm keys
+  // from online backup only. When no backup is configured, the SDK records the
+  // session as already requested and a later Timeline.requestKeys() call cannot
+  // fall back to the sender's other devices. Keep our own small retry window and
+  // call KeyManager.request() directly so active devices can share the key.
+  static const Duration _missingKeyRetryInterval = Duration(minutes: 1);
+  final Map<String, DateTime> _missingKeyRequestTimes = {};
+
+  // Timeline updates are not always accompanied by /sync. In particular, a
+  // room key arriving through to-device messages decrypts events in-place and
+  // only invokes Timeline.onUpdate. Expose that signal to watchMessages().
+  final Map<String, StreamController<void>> _timelineUpdateControllers = {};
+
   MessageRepositoryImpl(
     this._messageDataSource,
     this._clientManager,
@@ -111,6 +124,8 @@ class MessageRepositoryImpl implements IMessageRepository {
       }
     }
 
+    _requestMissingTimelineKeys(room, timeline);
+
     final events = displayableEvents.take(limit).toList();
     final messages = events
         .map((e) => _messageDataSource.mapEventToMessage(e, room))
@@ -164,18 +179,25 @@ class MessageRepositoryImpl implements IMessageRepository {
     final timeline = await _getOrCreateTimeline(roomId);
     if (timeline == null) return;
 
+    _requestMissingTimelineKeys(room, timeline);
+
     // 初始消息
     yield _getMessagesFromTimeline(timeline, room);
 
-    // 通过 client 的同步事件监听更新
-    final syncStream = _client?.onSync.stream;
-    if (syncStream != null) {
-      await for (final sync in syncStream) {
+    final updates = StreamController<matrix.SyncUpdate?>();
+    final timelineUpdates = _timelineUpdateControllers[roomId];
+    final timelineSubscription = timelineUpdates?.stream.listen(
+      (_) => updates.add(null),
+    );
+    final syncSubscription = _client?.onSync.stream.listen(updates.add);
+
+    try {
+      await for (final sync in updates.stream) {
         // Matrix 协议中 limited=true 表示 sync 存在时间线缺口（如通话期间大量
         // 信令事件）。SDK 的 Timeline._removeEventsNotInThisSync 会在此时清空
         // 本地缓存，只保留本次 sync 的少量事件，导致消息列表骤减。
         // 检测到 limited sync 后主动补充历史，恢复完整消息列表。
-        if (sync.rooms?.join?[roomId]?.timeline?.limited == true) {
+        if (sync?.rooms?.join?[roomId]?.timeline?.limited == true) {
           try {
             await timeline.requestHistory(historyCount: 50);
           } catch (e) {
@@ -184,8 +206,13 @@ class MessageRepositoryImpl implements IMessageRepository {
             );
           }
         }
+        _requestMissingTimelineKeys(room, timeline);
         yield _getMessagesFromTimeline(timeline, room);
       }
+    } finally {
+      await timelineSubscription?.cancel();
+      await syncSubscription?.cancel();
+      await updates.close();
     }
   }
 
@@ -202,10 +229,16 @@ class MessageRepositoryImpl implements IMessageRepository {
       yield initialMessage;
     }
 
-    // 通过 client 的同步事件监听更新
-    final syncStream = _client?.onSync.stream;
-    if (syncStream != null) {
-      await for (final _ in syncStream) {
+    final updates = StreamController<void>();
+    final timelineUpdates = _timelineUpdateControllers[roomId];
+    final timelineSubscription = timelineUpdates?.stream.listen(updates.add);
+    final syncSubscription = _client?.onSync.stream.listen(
+      (_) => updates.add(null),
+    );
+
+    try {
+      await for (final _ in updates.stream) {
+        _requestMissingTimelineKeys(room, timeline);
         final updatedMessage = _findMessageInTimeline(
           timeline,
           room,
@@ -215,6 +248,10 @@ class MessageRepositoryImpl implements IMessageRepository {
           yield updatedMessage;
         }
       }
+    } finally {
+      await timelineSubscription?.cancel();
+      await syncSubscription?.cancel();
+      await updates.close();
     }
   }
 
@@ -235,6 +272,7 @@ class MessageRepositoryImpl implements IMessageRepository {
     );
 
     await timeline.requestHistory(historyCount: limit);
+    _requestMissingTimelineKeys(room, timeline);
 
     final afterCount = timeline.events.length;
     debugLog(
@@ -1102,14 +1140,28 @@ class MessageRepositoryImpl implements IMessageRepository {
     while (_timelines.length >= _maxTimelineCacheSize &&
         _timelineAccessOrder.isNotEmpty) {
       final oldestRoomId = _timelineAccessOrder.removeAt(0);
-      _timelines.remove(oldestRoomId);
+      final oldestTimeline = _timelines.remove(oldestRoomId);
+      oldestTimeline?.cancelSubscriptions();
+      final controller = _timelineUpdateControllers.remove(oldestRoomId);
+      unawaited(controller?.close());
+      _missingKeyRequestTimes.removeWhere(
+        (key, _) => key.startsWith('$oldestRoomId|'),
+      );
       debugLog(
         'MessageRepositoryImpl: Evicted timeline cache for room $oldestRoomId (LRU)',
       );
     }
 
-    final timeline = await room.getTimeline();
+    final updateController = StreamController<void>.broadcast();
+    final timeline = await room.getTimeline(
+      onUpdate: () {
+        if (!updateController.isClosed) {
+          updateController.add(null);
+        }
+      },
+    );
     _timelines[roomId] = timeline;
+    _timelineUpdateControllers[roomId] = updateController;
 
     // 自动请求历史消息以确保有足够的消息显示
     // 优化：降低阈值和请求数量，减少约 60% 网络请求
@@ -1128,7 +1180,60 @@ class MessageRepositoryImpl implements IMessageRepository {
       }
     }
 
+    _requestMissingTimelineKeys(room, timeline);
+
     return timeline;
+  }
+
+  void _requestMissingTimelineKeys(matrix.Room room, matrix.Timeline timeline) {
+    final keyManager = room.client.encryption?.keyManager;
+    if (!room.client.encryptionEnabled || keyManager == null) {
+      return;
+    }
+
+    final now = DateTime.now();
+    for (final event in timeline.events) {
+      if (event.type != matrix.EventTypes.Encrypted ||
+          event.messageType != matrix.MessageTypes.BadEncrypted ||
+          event.content['can_request_session'] != true) {
+        continue;
+      }
+
+      final sessionId = event.content['session_id'];
+      final senderKey = event.content['sender_key'];
+      if (sessionId is! String || sessionId.isEmpty) {
+        continue;
+      }
+
+      final requestKey = '${room.id}|$sessionId';
+      final lastRequest = _missingKeyRequestTimes[requestKey];
+      if (lastRequest != null &&
+          now.difference(lastRequest) < _missingKeyRetryInterval) {
+        continue;
+      }
+      _missingKeyRequestTimes[requestKey] = now;
+
+      debugLog(
+        'MessageRepositoryImpl: Requesting missing Megolm session '
+        '$sessionId for ${room.id}',
+      );
+      unawaited(
+        keyManager
+            .request(
+              room,
+              sessionId,
+              senderKey is String ? senderKey : null,
+              tryOnlineBackup: true,
+              onlineKeyBackupOnly: false,
+            )
+            .catchError((Object error) {
+              _missingKeyRequestTimes.remove(requestKey);
+              debugLog(
+                'MessageRepositoryImpl: Missing key request failed: $error',
+              );
+            }),
+      );
+    }
   }
 
   List<MessageEntity> _getMessagesFromTimeline(
@@ -1151,6 +1256,18 @@ class MessageRepositoryImpl implements IMessageRepository {
     DateTime now,
   ) {
     final eventId = event.eventId;
+
+    // Never cache the user-facing decryption failure. When the session key
+    // arrives, Timeline replaces this event in-place using the same event ID;
+    // caching it would keep the green error bubble visible for five minutes.
+    final isMissingSessionKey =
+        event.type == matrix.EventTypes.Encrypted &&
+        event.messageType == matrix.MessageTypes.BadEncrypted;
+    if (isMissingSessionKey) {
+      _messageEntityCache.remove(eventId);
+      return _messageDataSource.mapEventToMessage(event, room);
+    }
+
     final cached = _messageEntityCache[eventId];
 
     // 检查缓存是否存在且未过期
@@ -1297,14 +1414,25 @@ class MessageRepositoryImpl implements IMessageRepository {
 
   /// 清理时间线缓存
   void disposeTimeline(String roomId) {
-    _timelines.remove(roomId);
+    _timelines.remove(roomId)?.cancelSubscriptions();
     _timelineAccessOrder.remove(roomId);
+    final controller = _timelineUpdateControllers.remove(roomId);
+    unawaited(controller?.close());
+    _missingKeyRequestTimes.removeWhere((key, _) => key.startsWith('$roomId|'));
   }
 
   /// 清理所有时间线缓存
   void disposeAllTimelines() {
+    for (final timeline in _timelines.values) {
+      timeline.cancelSubscriptions();
+    }
+    for (final controller in _timelineUpdateControllers.values) {
+      unawaited(controller.close());
+    }
     _timelines.clear();
     _timelineAccessOrder.clear();
+    _timelineUpdateControllers.clear();
+    _missingKeyRequestTimes.clear();
     _messageEntityCache.clear();
   }
 

@@ -202,6 +202,9 @@ class MessageItem extends StatelessWidget {
 
     Widget bubble = MessageBubble(
       isSelf: message.isFromMe,
+      bubbleColor: message.type == MessageType.encrypted
+          ? (isDark ? AppColors.bubbleOtherDark : AppColors.bubbleOther)
+          : null,
       status: status,
       timestamp: message.timestamp,
       showTimestamp: false,
@@ -443,7 +446,7 @@ class MessageItem extends StatelessWidget {
         content = _buildEventMessage(isDark, context);
         break;
       case MessageType.encrypted:
-        content = _buildEncryptedMessage(isDark);
+        content = _buildEncryptedMessage(context);
         break;
       default:
         content = _buildTextMessage(isDark, context);
@@ -2273,17 +2276,18 @@ class MessageItem extends StatelessWidget {
     );
   }
 
-  Widget _buildEncryptedMessage(bool isDark) {
-    return const Row(
+  Widget _buildEncryptedMessage(BuildContext context) {
+    return Row(
+      key: const ValueKey<String>('chat_encrypted_placeholder'),
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.lock, size: 16, color: AppColors.textSecondary),
-        SizedBox(width: 4),
+        const Icon(Icons.lock, size: 16, color: AppColors.textSecondary),
+        const SizedBox(width: 4),
         Text(
-          '[加密消息]',
+          A11yL10n.of(context).encrypted,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 16,
             height: 1.3,
             color: AppColors.textSecondary,

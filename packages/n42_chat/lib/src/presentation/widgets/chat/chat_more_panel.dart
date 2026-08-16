@@ -340,6 +340,7 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
     final pages = _paginate(_buildAllItems(context));
 
     return Container(
+      key: const ValueKey<String>('chat_more_panel'),
       // 固定高度 = 内容高度 + 底部安全区域
       height: contentHeight + bottomPadding,
       decoration: BoxDecoration(

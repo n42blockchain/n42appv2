@@ -658,6 +658,9 @@ class ChatInputBarState extends State<ChatInputBar> {
                       ? _buildSendButton()
                       : (widget.showMoreButton
                             ? _buildIconButton(
+                                key: const ValueKey<String>(
+                                  'chat_input_attachment_toggle',
+                                ),
                                 icon: widget.isMorePanelOpen
                                     ? Icons.keyboard_alt_outlined
                                     : Icons.attach_file,
@@ -760,6 +763,7 @@ class ChatInputBarState extends State<ChatInputBar> {
   }
 
   Widget _buildIconButton({
+    Key? key,
     required IconData icon,
     required VoidCallback? onPressed,
     String? semanticLabel,
@@ -767,6 +771,7 @@ class ChatInputBarState extends State<ChatInputBar> {
     final color = context.textSecondary;
     final effectiveCallback = widget.enabled ? onPressed : null;
     return Semantics(
+      key: key,
       button: true,
       enabled: effectiveCallback != null,
       label: semanticLabel,

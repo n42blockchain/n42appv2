@@ -60,6 +60,7 @@ class MatrixEventMapper {
     final sender = room.unsafeGetUserFromMemoryOrFallback(event.senderId);
     final resolvedDisplay = _resolveDisplayText(event);
     final replyTargetId = event.inReplyToEventId(includingFallback: false);
+    final messageType = mapMessageType(event);
 
     // 解析消息内容，处理回复格式
     final parsedContent = _parseMessageContent(
@@ -100,7 +101,9 @@ class MatrixEventMapper {
 
     // 对 n42.contact_card 消息，从 event.content 提取完整名片信息构建多行格式 body
     // 使得 message_item.dart 中 _parseContactCard 可以正确解析 userId/displayName/avatarUrl
-    String messageContent = parsedContent.content;
+    String messageContent = messageType == MessageType.encrypted
+        ? ''
+        : parsedContent.content;
     if (event.content['msgtype'] == 'n42.contact_card') {
       final contactUserId = event.content['user_id'] as String? ?? '';
       final contactDisplayName = event.content['display_name'] as String? ?? '';
@@ -130,7 +133,7 @@ class MatrixEventMapper {
       senderAvatarUrl: avatarHttpUrl,
       content: messageContent,
       formattedContent: resolvedDisplay.formattedBody,
-      type: mapMessageType(event),
+      type: messageType,
       timestamp: event.originServerTs,
       status: mapMessageStatus(event),
       isFromMe: event.senderId == _client?.userID,
@@ -329,6 +332,13 @@ class MatrixEventMapper {
 
     // 处理加密消息
     if (event.type == matrix.EventTypes.Encrypted) {
+      // The SDK exposes the decryption exception through body/plaintextBody.
+      // It is not user-authored text and must never be rendered as a normal
+      // outgoing bubble (which previously made this error appear green).
+      if (event.messageType == matrix.MessageTypes.BadEncrypted) {
+        return MessageType.encrypted;
+      }
+
       final contentMsgType = event.content['msgtype'] as String?;
       final body = event.body;
       final plaintextBody = event.plaintextBody;
