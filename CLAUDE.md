@@ -156,6 +156,13 @@ Features communicate through:
 - **提交模板**: `GIT_COMMITTER_NAME="Nyxen" GIT_COMMITTER_EMAIL="40690755+MiraWells@users.noreply.github.com" git commit --author="Nyxen <40690755+MiraWells@users.noreply.github.com>" -m "message"`
 - **重要**: 所有 git 提交不要包含 "Claude" 或 "Co-Authored-By: Claude" 等字样
 - Commit style: Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`)
+- **English only**: commit messages (subject + body) and code comments are
+  written in English. Conversations with the user stay in Chinese — this rule
+  covers what lands in the repository, not how we talk. Applies to
+  `packages/n42_chat` (vendored) and its upstream repo as well.
+  History before 2026-08-17 was rewritten to English subjects; bodies of
+  commits older than that may still be Chinese (intentionally left as the
+  original engineering record).
 - Pre-commit hook auto-bumps build number in `pubspec.yaml` (installed via `make setup`)
 - Push 到 Gitee 时可能触发邮箱隐藏拒绝错误，Push 失败时立即重写 commit author 信息
 - **跨机协作（Codex）**：`origin/codex-n42` 分支上的 `Codex-N42.md` 是任务书
