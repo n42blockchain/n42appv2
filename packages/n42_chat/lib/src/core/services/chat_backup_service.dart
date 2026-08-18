@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:drift/drift.dart';
 import 'package:crypto/crypto.dart';
+import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:pointycastle/export.dart' as pc;
@@ -284,6 +285,7 @@ class ChatBackupService {
           final timeline = await room.getTimeline();
           final events = timeline.events
               .where((e) => e.type == 'm.room.message')
+              .where((e) => !_isEphemeralEvent(e))
               .take(1000)
               .map(
                 (e) => {
@@ -515,6 +517,7 @@ class ChatBackupService {
           final timeline = await room.getTimeline();
           for (final e in timeline.events) {
             if (e.type != 'm.room.message') continue;
+            if (_isEphemeralEvent(e)) continue;
             final ts = e.originServerTs.millisecondsSinceEpoch;
             if (lastBackupTs > 0 && ts <= lastBackupTs) continue;
             addMessage({
@@ -884,10 +887,36 @@ class ChatBackupService {
     return migrated;
   }
 
+  /// Whether [event] carries a lifetime that a backup must not outlive.
+  ///
+  /// Self-destruct ({seconds}) and view-once ({after:1}) messages share the
+  /// same metadata field. Writing their plaintext into a backup file would
+  /// preserve it long after the message burned in-app, so they are excluded at
+  /// export time — the archive already excludes them, this closes the timeline
+  /// path that feeds backups directly.
+  static bool _isEphemeralEvent(dynamic event) =>
+      (event.content as Map?)?['n42.self_destruct'] != null;
+
+  /// Whether a message entry from a backup file must not be restored.
+  ///
+  /// Current exports never contain these, but a legacy or hand-crafted backup
+  /// could, and the archive schema has no self-destruct column to catch them
+  /// later — so they are rejected on the way in.
+  static bool _isEphemeralBackupEntry(Map<String, dynamic> msgMap) =>
+      msgMap['n42.self_destruct'] != null ||
+      msgMap['selfDestruct'] != null ||
+      msgMap['isSelfDestructing'] == true ||
+      msgMap['isViewOnce'] == true;
+
+  @visibleForTesting
+  static bool isEphemeralBackupEntryForTest(Map<String, dynamic> msgMap) =>
+      _isEphemeralBackupEntry(msgMap);
+
   ArchivedMessagesCompanion? _backupMessageToArchiveCompanion(
     String roomId,
     Map<String, dynamic> msgMap,
   ) {
+    if (_isEphemeralBackupEntry(msgMap)) return null;
     final eventId = msgMap['eventId']?.toString();
     final senderId = msgMap['sender']?.toString();
     final ts =

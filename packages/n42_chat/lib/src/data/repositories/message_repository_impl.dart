@@ -1529,21 +1529,39 @@ class MessageRepositoryImpl implements IMessageRepository {
       );
 
       // 撤回过期消息
+      final redacted = <String>[];
       for (final messageId in expiredMessageIds) {
+        var ok = false;
         try {
-          await redactMessage(roomId, messageId, reason: 'Self-destructed');
+          ok = await redactMessage(roomId, messageId, reason: 'Self-destructed');
         } catch (e) {
           debugLog(
             'MessageRepositoryImpl: Failed to redact message $messageId: $e',
           );
         }
+        if (ok) {
+          redacted.add(messageId);
+          continue;
+        }
+        // Server-side redaction can fail (offline, permissions, already
+        // redacted), but the message's lifetime has expired either way and the
+        // local promise is that its content is gone. Drop the archived copy
+        // regardless so its plaintext cannot be searched, and keep the
+        // destruction record so the redaction is retried later.
+        try {
+          await _archiveService?.deleteArchivedMessage(messageId);
+        } catch (e) {
+          debugLog(
+            'MessageRepositoryImpl: Failed to purge archived copy of '
+            '$messageId: $e',
+          );
+        }
       }
 
-      // 清除销毁时间记录
-      await _secureStorage.clearMessageDestructionTimes(
-        roomId,
-        expiredMessageIds,
-      );
+      // 清除销毁时间记录（仅已成功撤回的；失败的保留以便下次重试）
+      if (redacted.isNotEmpty) {
+        await _secureStorage.clearMessageDestructionTimes(roomId, redacted);
+      }
     } catch (e) {
       debugLog('MessageRepositoryImpl: Error destroying expired messages: $e');
     }
