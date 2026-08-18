@@ -21,7 +21,13 @@ fi
 NEW_BUILD=$((BUILD_NUM + 1))
 NEW_VERSION="${VERSION_NAME}+${NEW_BUILD}"
 
-sed -i '' "s/^version: .*/version: ${NEW_VERSION}/" "$PUBSPEC"
+# Portable in-place edit: `sed -i ''` is BSD/macOS-only and fails on the GNU
+# sed shipped with Git Bash / Linux ("can't read s/..."), which would abort the
+# pre-commit hook on those machines. Write to a temp file and move it back so
+# the script works on every platform.
+TMP="${PUBSPEC}.bump.tmp"
+sed "s/^version: .*/version: ${NEW_VERSION}/" "$PUBSPEC" > "$TMP"
+mv "$TMP" "$PUBSPEC"
 
 if [ "$1" != "--quiet" ]; then
   echo "Version bumped: ${CURRENT} → ${NEW_VERSION}"
