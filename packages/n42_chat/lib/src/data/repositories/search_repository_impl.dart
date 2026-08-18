@@ -54,7 +54,7 @@ class SearchRepositoryImpl implements ISearchRepository {
       return null;
     }
     try {
-      excluded.addAll(await _chatLockService.getLockedChatIds());
+      excluded.addAll(await _chatLockService.getLockedChatIdsStrict());
     } catch (e) {
       debugLog('SearchRepository: load locked chats failed: $e');
       return null;
@@ -335,11 +335,16 @@ class SearchRepositoryImpl implements ISearchRepository {
     final archive = _archiveSearch;
     if (archive == null) return const [];
     try {
-      final hits = await archive.search(query, limit: limit);
+      final hits = await archive.search(
+        query,
+        excludeRoomIds: excludeRoomIds,
+        limit: limit,
+      );
       final items = <SearchResultItem>[];
       for (final hit in hits) {
         final msg = hit.message;
         if (excludeIds.contains(msg.id)) continue;
+        // Defense in depth: the exclusion is already applied in SQL above.
         if (excludeRoomIds.contains(msg.roomId)) continue;
         final room = _clientManager.client?.getRoomById(msg.roomId);
         items.add(

@@ -179,6 +179,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           return;
         }
         await _chatLockService.lockChat(widget.conversation.id, pin: pin);
+        await _applyLockPushRule(widget.conversation.id, locked: true);
         if (mounted) {
           setState(() => _isChatLocked = true);
           ScaffoldMessenger.of(context).showSnackBar(
@@ -208,6 +209,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
       if (verified) {
         await _chatLockService.unlockChat(widget.conversation.id);
+        await _applyLockPushRule(widget.conversation.id, locked: false);
         if (mounted) {
           setState(() => _isChatLocked = false);
           ScaffoldMessenger.of(context).showSnackBar(
@@ -217,6 +219,30 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
           );
         }
       }
+    }
+  }
+
+  /// Mirrors the chat lock into a server-side push rule.
+  ///
+  /// The local notification filter only runs while Dart is awake. On iOS the
+  /// pusher is registered without event_id_only, so the push gateway delivers a
+  /// full APNs alert that the OS renders without waking the app — no local
+  /// filter can suppress it. Muting the room server-side stops the notification
+  /// at the source on every platform. Unlocking only unmutes when the user had
+  /// not muted the conversation independently.
+  Future<void> _applyLockPushRule(
+    String conversationId, {
+    required bool locked,
+  }) async {
+    try {
+      final repository = getIt<IConversationRepository>();
+      if (locked) {
+        await repository.setMuted(conversationId, true);
+      } else if (!widget.conversation.isMuted) {
+        await repository.setMuted(conversationId, false);
+      }
+    } catch (e) {
+      debugLog('Failed to sync lock push rule for $conversationId: $e');
     }
   }
 

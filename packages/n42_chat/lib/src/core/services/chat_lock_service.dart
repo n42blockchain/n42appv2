@@ -73,6 +73,23 @@ class ChatLockService {
     return prefs.getStringList(_lockedChatsKey) ?? [];
   }
 
+  /// Same as [getLockedChatIds] but throws when the stored value exists and is
+  /// not a string list, instead of silently reporting "nothing is locked".
+  ///
+  /// Privacy filters (global search, notification suppression) must fail closed
+  /// on corrupted state rather than expose a locked room, so they use this
+  /// variant. A missing key still means "no locked chats", which is the normal
+  /// state for a user who never locked one.
+  Future<List<String>> getLockedChatIdsStrict() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!prefs.containsKey(_lockedChatsKey)) return const [];
+    final value = prefs.get(_lockedChatsKey);
+    if (value is! List) {
+      throw const FormatException('Locked chat IDs must be a string list');
+    }
+    return value.cast<String>();
+  }
+
   /// 使用生物识别验证
   Future<bool> verifyWithBiometric({String? reason}) async {
     final result = await _biometricService.authenticate(

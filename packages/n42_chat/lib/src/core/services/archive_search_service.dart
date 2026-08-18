@@ -41,6 +41,7 @@ class ArchiveSearchService {
     String? roomId,
     DateTime? after,
     DateTime? before,
+    Set<String> excludeRoomIds = const {},
     int limit = 20,
     int offset = 0,
     String? currentUserId,
@@ -53,6 +54,7 @@ class ArchiveSearchService {
         roomId: roomId,
         afterTimestamp: after?.millisecondsSinceEpoch,
         beforeTimestamp: before?.millisecondsSinceEpoch,
+        excludeRoomIds: excludeRoomIds,
         limit: limit,
         offset: offset,
       );

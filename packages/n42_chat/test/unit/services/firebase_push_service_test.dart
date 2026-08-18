@@ -479,6 +479,50 @@ void main() {
       },
     );
 
+    test('self-destruct message body never reaches the notification', () {
+      matrix.MatrixEvent event(Map<String, Object?> content) =>
+          matrix.MatrixEvent(
+            type: 'm.room.message',
+            eventId: r'$evt:example.org',
+            senderId: '@sender:example.org',
+            originServerTs: DateTime.fromMillisecondsSinceEpoch(0),
+            roomId: '!room:example.org',
+            content: content,
+          );
+
+      // Plain text still renders normally.
+      expect(
+        FirebasePushService.notificationBodyForTest(
+          event({'msgtype': 'm.text', 'body': 'hello'}),
+        ),
+        'hello',
+      );
+
+      // Self-destruct ({seconds}) and view-once ({after:1}) must not leak the
+      // plaintext into the shade / lock screen, where it would outlive the
+      // message itself.
+      expect(
+        FirebasePushService.notificationBodyForTest(
+          event({
+            'msgtype': 'm.text',
+            'body': 'secret',
+            'n42.self_destruct': {'seconds': 10},
+          }),
+        ),
+        isNot(contains('secret')),
+      );
+      expect(
+        FirebasePushService.notificationBodyForTest(
+          event({
+            'msgtype': 'm.text',
+            'body': 'secret',
+            'n42.self_destruct': {'after': 1},
+          }),
+        ),
+        isNot(contains('secret')),
+      );
+    });
+
     test('malformed hidden-room state still honors locked rooms', () async {
       SharedPreferences.setMockInitialValues({
         'n42_chat_hidden_chats': '{"unexpected":true}',

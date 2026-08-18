@@ -628,6 +628,10 @@ class FirebasePushService implements IPushNotificationService {
   static Future<bool> isPrivacyRestrictedRoomForTest(String? roomId) =>
       _isPrivacyRestrictedRoom(roomId);
 
+  @visibleForTesting
+  static String notificationBodyForTest(matrix.MatrixEvent event) =>
+      _getNotificationBody(event);
+
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     // 检查通知配置
     if (!_notificationConfig.enabled) return;
@@ -1201,9 +1205,17 @@ class FirebasePushService implements IPushNotificationService {
     );
   }
 
-  String _getNotificationBody(matrix.MatrixEvent event) {
+  static String _getNotificationBody(matrix.MatrixEvent event) {
     final content = event.content;
     final msgType = content['msgtype'] as String?;
+
+    // Self-destruct / view-once messages must never render their plaintext in
+    // a notification: the shade and lock screen keep that copy after the
+    // message has already burned in-app, outliving the content it protects.
+    // Covers both {seconds} self-destruct and {after:1} view-once.
+    if (content['n42.self_destruct'] != null) {
+      return '[Message]';
+    }
 
     switch (msgType) {
       case 'm.text':

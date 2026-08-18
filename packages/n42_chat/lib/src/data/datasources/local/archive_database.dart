@@ -344,6 +344,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     String? roomId,
     int? afterTimestamp,
     int? beforeTimestamp,
+    Set<String> excludeRoomIds = const {},
     int limit = 20,
     int offset = 0,
   }) async {
@@ -354,6 +355,15 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     if (roomId != null) {
       conditions.add('am.room_id = ?');
       variables.add(Variable.withString(roomId));
+    }
+    // Excluded (hidden/locked) rooms are filtered in SQL rather than in Dart
+    // so that LIMIT applies to visible rows only. Filtering afterwards both
+    // pulls hidden-room plaintext into memory and silently under-returns when
+    // the first `limit` FTS hits all belong to excluded rooms.
+    if (excludeRoomIds.isNotEmpty) {
+      final placeholders = List.filled(excludeRoomIds.length, '?').join(', ');
+      conditions.add('am.room_id NOT IN ($placeholders)');
+      variables.addAll(excludeRoomIds.map(Variable.withString));
     }
     if (afterTimestamp != null) {
       conditions.add('am.origin_server_ts >= ?');

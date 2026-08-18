@@ -413,6 +413,31 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
     return (pinned, normal);
   }
 
+  /// Applies (or lifts) the server-side push rule that backs chat hiding.
+  ///
+  /// Failures are logged but never rethrown: the local hide already succeeded
+  /// and must not be rolled back just because the homeserver call failed.
+  Future<void> _applyHiddenPushRule(
+    String conversationId, {
+    required bool hidden,
+  }) async {
+    try {
+      if (hidden) {
+        await _conversationRepository.setMuted(conversationId, true);
+        return;
+      }
+      final wasMutedByUser = state.conversations
+          .where((c) => c.id == conversationId)
+          .map((c) => c.isMuted)
+          .firstOrNull;
+      if (wasMutedByUser != true) {
+        await _conversationRepository.setMuted(conversationId, false);
+      }
+    } catch (e) {
+      debugLog('Failed to sync hidden push rule for $conversationId: $e');
+    }
+  }
+
   /// 设置会话隐藏状态
   Future<void> _onSetHidden(
     SetConversationHidden event,
@@ -424,6 +449,16 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
       } else {
         await _storageDataSource.unhideChat(event.conversationId);
       }
+
+      // Mute the room server-side as well, not just in local preferences.
+      // The client-side notification filter only runs when Dart is awake; on
+      // iOS the pusher is registered without event_id_only so the push gateway
+      // delivers a full APNs alert that the OS renders without waking the app,
+      // which no local filter can suppress. A server push rule stops the
+      // notification at the source, so hiding holds on every platform.
+      // Unhiding restores the room's own mute preference rather than blindly
+      // unmuting a conversation the user had muted themselves.
+      await _applyHiddenPushRule(event.conversationId, hidden: event.hidden);
 
       // 更新会话的隐藏状态
       final updatedConversations = state.conversations.map((conv) {
