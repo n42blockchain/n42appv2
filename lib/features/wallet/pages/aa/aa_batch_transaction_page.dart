@@ -18,6 +18,7 @@ import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_add_operation_sheet
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_paymaster_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_templates_sheet.dart';
 import 'package:n42_wallet/features/wallet/pages/aa/aa_batch_transaction_body.dart';
+import 'package:n42_wallet/features/wallet/pages/send/wallet_security_verification.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/batch_operation_item.dart';
 import 'package:n42_wallet/features/wallet/widgets/aa/paymaster_option_card.dart';
 import 'package:web3dart/web3dart.dart' show hexToBytes;
@@ -224,6 +225,18 @@ class _AABatchTransactionPageState extends State<AABatchTransactionPage> {
   Future<void> _sendBatch() async {
     final calls = _validateAndBuildCalls(onError: _showErrorSnackBar);
     if (calls == null) return;
+
+    // Sign+broadcast of the batch UserOperation must pass identity
+    // verification, mirroring the single-transfer path
+    // (aa_send_page_logic._sendTransaction). This page shares the same real
+    // signing channel (AATransferHandler.transfer), so without this gate a
+    // batch could be signed and broadcast on an unlocked device with no wallet
+    // password / biometric.
+    final verified = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const WalletSecurityVerification()),
+    );
+    if (!mounted || verified != true) return;
 
     setState(() => _isSending = true);
 

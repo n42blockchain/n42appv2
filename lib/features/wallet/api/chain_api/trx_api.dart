@@ -226,10 +226,17 @@ class TrxApi {
         header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
         timeout: _kProxyWriteTimeout,
       );
+      final err = _trxBroadcastError(proxyData);
+      if (err != null) {
+        return MessageModel()
+          ..error = true
+          ..data = err;
+      }
       final txid = proxyData['txid']?.toString() ?? '';
-      if (proxyData['result'] != false && txid.isNotEmpty) {
+      if (txid.isNotEmpty) {
         return MessageModel()..data = txid;
       }
+      // No error code and no txid: fall through to the direct endpoint.
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
       AppLogger.w('TrxApi', 'sendTxTrx proxy error: $e');
@@ -247,15 +254,64 @@ class TrxApi {
         data: requestBody,
         header: header,
       );
-      if (rData['result'] == false) {
+      final err = _trxBroadcastError(rData);
+      if (err != null) {
         return MessageModel()
           ..error = true
-          ..data = rData['Error'];
+          ..data = err;
       }
-      return MessageModel()..data = rData['txid'];
+      final txid = rData['txid']?.toString() ?? '';
+      if (txid.isEmpty) {
+        return MessageModel()
+          ..error = true
+          ..data = 'TRX broadcast returned no txid';
+      }
+      return MessageModel()..data = txid;
     } catch (e) {
       return MessageModel.error()..data = e.toString();
     }
+  }
+
+  String? _trxBroadcastError(dynamic data) => trxBroadcastError(data);
+
+  /// Returns a human-readable error string when a TRON broadcast response
+  /// signals rejection, or null on success. TRON's broadcasttransaction
+  /// returns `{result:true, txid}` on success; on rejection it returns an
+  /// error `code` (SIGERROR, BANDWIDTH_ERROR, TAPOS_ERROR,
+  /// DUP_TRANSACTION_ERROR, CONTRACT_VALIDATE_ERROR, ...) and often still
+  /// echoes a `txid`, so a bare txid check reports false success.
+  static String? trxBroadcastError(dynamic data) {
+    if (data is! Map) return 'Invalid TRX broadcast response';
+    if (data['result'] == false || data['result'] == 'false') {
+      return _trxErrorText(data) ?? 'TRX broadcast rejected';
+    }
+    final code = data['code']?.toString();
+    if (code != null && code.isNotEmpty && code != 'SUCCESS') {
+      return _trxErrorText(data) ?? code;
+    }
+    return null;
+  }
+
+  static String? _trxErrorText(Map data) {
+    final raw = (data['message'] ?? data['Error'] ?? data['code'])?.toString();
+    if (raw == null || raw.isEmpty) return null;
+    // TRON often hex-encodes the human message; decode when it looks like hex.
+    final hex = raw.startsWith('0x') ? raw.substring(2) : raw;
+    if (hex.isNotEmpty &&
+        hex.length.isEven &&
+        RegExp(r'^[0-9a-fA-F]+$').hasMatch(hex)) {
+      try {
+        final bytes = <int>[];
+        for (var i = 0; i < hex.length; i += 2) {
+          bytes.add(int.parse(hex.substring(i, i + 2), radix: 16));
+        }
+        final decoded = utf8.decode(bytes, allowMalformed: true);
+        if (decoded.trim().isNotEmpty) return decoded;
+      } catch (_) {
+        // Fall back to the raw string below.
+      }
+    }
+    return raw;
   }
 
   Future<Result<dynamic, AppError>> baseRPCEth(

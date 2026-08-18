@@ -158,6 +158,12 @@ class EvmSender implements ChainSender {
     if (coinType == CoinType.OP.name || coinType == CoinType.BOBA.name) {
       gasLimit = (gasLimit * 1.5).toInt();
     }
+    // Apply the safety buffer here (once) so the balance check below reserves
+    // exactly what will be signed. Previously the ×1.2 buffer lived only in
+    // _sign, so a MAX native send (value = balance - fee at 1.0×) signed a tx
+    // whose fee ceiling was 1.2× fee and got rejected by the node for
+    // insufficient funds.
+    gasLimit = (gasLimit * 1.2).ceil();
 
     final totalGasPrice = gasPrice * BigInt.from(gasLimit);
 
@@ -318,8 +324,11 @@ class EvmSender implements ChainSender {
       BigInt.from(chainId),
       need0x: false,
     );
+    // gasLimit already includes the safety buffer (applied in the send path);
+    // do not re-multiply here or the signed limit would drift from the value
+    // reserved by the balance check.
     final gasLimitHex = _dataUtils.bigIntToHex(
-      BigInt.from((gasLimit * 1.2).ceil()),
+      BigInt.from(gasLimit),
       need0x: false,
     );
 

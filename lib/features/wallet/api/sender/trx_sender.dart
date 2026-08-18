@@ -215,6 +215,10 @@ class TrxSender implements ChainSender {
   String _extractTrxBroadcastHash(dynamic data) {
     if (data is String) return data;
     if (data is Map) {
+      // A rejected broadcast often still echoes a txid alongside an error
+      // code (SIGERROR / TAPOS_ERROR / ...). Treat those as failure so the
+      // caller does not record a false success.
+      if (TrxApi.trxBroadcastError(data) != null) return '';
       final direct = data['txid']?.toString();
       if (direct != null && direct.isNotEmpty) return direct;
       final nested = data['transaction'] is Map

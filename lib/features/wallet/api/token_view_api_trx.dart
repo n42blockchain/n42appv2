@@ -125,7 +125,10 @@ extension TokenViewApiTrx on TokenViewApi {
     try {
       final sign = Map<String, dynamic>.from(json.decode(signHash));
       sign['visible'] = false;
-      sign['net_mode'] = 'main';
+      // Honor the caller's network selection. Hardcoding 'main' broadcast
+      // testnet-signed transactions (ref block from Shasta) to mainnet, where
+      // the node rejects them for TAPOS mismatch while still returning a txid.
+      sign['net_mode'] = netMode == 'test' ? 'test' : 'main';
       final a = await BaseApi.requestEmptyH.post(
         '${url}v1/trx/broadcast/transaction',
         params: sign,

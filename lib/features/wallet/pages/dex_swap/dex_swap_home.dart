@@ -438,12 +438,42 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Swap execution ────────────────────────────────────────────────────────
 
+  /// Validates that the swap calldata routes its output back to the wallet
+  /// owner, not a backend-injected third party. Blocks only on a recognized
+  /// selector whose recipient is a concrete foreign address; unrecognized
+  /// selectors are logged and allowed (the router whitelist stays the primary
+  /// defense). Returns false and sets an error message when the swap must abort.
+  bool _assertSwapRecipient(DexQuoteModel q) {
+    final check = DexSwapCalldataGuard.checkRecipient(q.calldata, _userAddr);
+    if (check == SwapRecipientCheck.mismatch) {
+      AppLogger.e(
+        'DexSwap',
+        'Swap calldata recipient does not match owner, aborting',
+      );
+      setState(() {
+        _swapLoad = Load.finish;
+        _errorMsg = S.of(context).g_key_dex_untrusted_router;
+      });
+      return false;
+    }
+    if (check == SwapRecipientCheck.unknown) {
+      AppLogger.w(
+        'DexSwap',
+        'Swap calldata selector not recognized; recipient not verified',
+      );
+    }
+    return true;
+  }
+
   Future<void> _executeSwap() async {
     final DexQuoteModel? q = _quote;
     if (q == null || _swapLoad == Load.loading) return;
 
     // 广播前校验交易 to(=router) 受信任，避免把资金打进后端伪造的恶意合约。
     if (!_assertTrustedRouter(q)) return;
+    // 并校验 calldata 里的 output recipient 指向本人，防受信 router + 篡改
+    // recipient 的组合把换出资金导走。
+    if (!_assertSwapRecipient(q)) return;
 
     setState(() {
       _swapLoad = Load.loading;

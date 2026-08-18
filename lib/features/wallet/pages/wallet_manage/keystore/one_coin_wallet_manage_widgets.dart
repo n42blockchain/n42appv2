@@ -637,9 +637,24 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
       await Clipboard.setData(ClipboardData(text: pkHex));
       if (!mounted) return;
       ToastUtils.show(S.of(context).copy);
+      _scheduleClipboardClear(pkHex);
     } catch (_) {
       if (!mounted) return;
       ToastUtils.show(S.of(context).g_key_210);
     }
+  }
+
+  /// Auto-clears an exported secret from the system clipboard after a delay so
+  /// the raw private key does not linger for background apps, clipboard
+  /// history, or cross-device clipboard sync. Only clears when the clipboard
+  /// still holds this exact value, to avoid wiping something the user copied
+  /// afterwards. Mirrors the auto-clear used by ExportKeystorePage.
+  void _scheduleClipboardClear(String secret) {
+    Future.delayed(const Duration(seconds: 60), () async {
+      final current = await Clipboard.getData(Clipboard.kTextPlain);
+      if (current?.text == secret) {
+        await Clipboard.setData(const ClipboardData(text: ''));
+      }
+    });
   }
 }
