@@ -51,7 +51,7 @@ class MessageMenuSheet extends StatelessWidget {
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
-            // 自毁/查看一次消息禁止复制（外泄会破坏阅后即焚语义）。
+            // Copying self-destruct/view-once content would defeat its lifetime.
             if (message.type == MessageType.text && !message.isSelfDestructing)
               _buildMenuItem(
                 context,

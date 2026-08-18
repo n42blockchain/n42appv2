@@ -6,8 +6,8 @@ import '../../../core/theme/app_colors.dart';
 
 /// 斜杠命令条目
 class SlashCommandItem {
-  final String command;    // 命令名（不含 /）
-  final String usage;      // 完整用法
+  final String command; // 命令名（不含 /）
+  final String usage; // 完整用法
   final String description;
   final IconData icon;
 
@@ -48,13 +48,15 @@ class SlashCommandPicker extends StatelessWidget {
       SlashCommandItem(
         command: 'balance',
         usage: '/balance',
-        description: l10n?.chatCommandBalance ?? '/balance — Show wallet balance',
+        description:
+            l10n?.chatCommandBalance ?? '/balance — Show wallet balance',
         icon: Icons.account_balance_wallet_outlined,
       ),
       SlashCommandItem(
         command: 'chains',
         usage: '/chains',
-        description: l10n?.chatCommandChains ?? '/chains — List 236+ supported chains',
+        description:
+            l10n?.chatCommandChains ?? '/chains — List 236+ supported chains',
         icon: Icons.hub_outlined,
       ),
       SlashCommandItem(
@@ -66,13 +68,15 @@ class SlashCommandPicker extends StatelessWidget {
       SlashCommandItem(
         command: 'announce',
         usage: '/announce <message>',
-        description: l10n?.chatCommandAnnounce ?? '/announce — Send announcement',
+        description:
+            l10n?.chatCommandAnnounce ?? '/announce — Send announcement',
         icon: Icons.campaign_outlined,
       ),
       SlashCommandItem(
         command: 'welcome',
         usage: '/welcome',
-        description: l10n?.chatCommandWelcome ?? '/welcome — Set welcome message',
+        description:
+            l10n?.chatCommandWelcome ?? '/welcome — Set welcome message',
         icon: Icons.waving_hand_outlined,
       ),
     ];
@@ -81,9 +85,9 @@ class SlashCommandPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final commands = _buildCommands(context)
-        .where((c) => c.command.startsWith(query.toLowerCase()))
-        .toList();
+    final commands = _buildCommands(
+      context,
+    ).where((c) => c.command.startsWith(query.toLowerCase())).toList();
 
     if (commands.isEmpty) return const SizedBox.shrink();
 
@@ -91,11 +95,7 @@ class SlashCommandPicker extends StatelessWidget {
       constraints: const BoxConstraints(maxHeight: 220),
       decoration: BoxDecoration(
         color: context.surfaceColor,
-        border: Border(
-          top: BorderSide(
-            color: context.dividerColor,
-          ),
-        ),
+        border: Border(top: BorderSide(color: context.dividerColor)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.08),
@@ -107,35 +107,28 @@ class SlashCommandPicker extends StatelessWidget {
       child: ListView.separated(
         shrinkWrap: true,
         itemCount: commands.length,
-        separatorBuilder: (context, index) => Divider(
-          height: 1,
-          indent: 56,
-          color: context.dividerColor,
-        ),
+        separatorBuilder: (context, index) =>
+            Divider(height: 1, indent: 56, color: context.dividerColor),
         itemBuilder: (context, index) {
           final item = commands[index];
-          return ListTile(
-            dense: true,
-            leading: Icon(
-              item.icon,
-              color: AppColors.primary,
-              size: 20,
-            ),
-            title: Text(
-              '/${item.command}',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryOf(isDark),
+          return Material(
+            color: Colors.transparent,
+            child: ListTile(
+              dense: true,
+              leading: Icon(item.icon, color: AppColors.primary, size: 20),
+              title: Text(
+                '/${item.command}',
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimaryOf(isDark),
+                ),
               ),
-            ),
-            subtitle: Text(
-              item.description,
-              style: TextStyle(
-                fontSize: 12,
-                color: context.textSecondary,
+              subtitle: Text(
+                item.description,
+                style: TextStyle(fontSize: 12, color: context.textSecondary),
               ),
+              onTap: () => onSelect(item),
             ),
-            onTap: () => onSelect(item),
           );
         },
       ),

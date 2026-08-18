@@ -184,9 +184,8 @@ class MatrixClientManager {
         );
       }
 
-      // 读取 E2EE 密钥共享策略（默认 crossVerified，2026-08 收紧）：
-      // - false (默认)：仅与已交叉验证设备共享，未验证新设备需先 SAS 验证
-      // - true：向所有未阻止设备共享，兼容性最好但盲信未验证设备
+      // Default to cross-verified devices. Opting into all devices improves
+      // compatibility but explicitly trusts unverified sessions.
       final shareKeysWith = (config?.shareE2eeKeysWithAllDevices ?? false)
           ? ShareKeysWith.all
           : ShareKeysWith.crossVerified;

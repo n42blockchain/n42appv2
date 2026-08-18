@@ -299,7 +299,11 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 14, height: 1.4, color: subtitleColor),
+                  style: TextStyle(
+                    fontSize: 14,
+                    height: 1.4,
+                    color: subtitleColor,
+                  ),
                 ),
 
                 const SizedBox(height: 24),
@@ -372,11 +376,12 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
       context: context,
       backgroundColor: Colors.transparent,
       builder: (sheetContext) {
-        return Container(
-          decoration: BoxDecoration(
-            color: sheetContext.surfaceColor,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        return Material(
+          color: sheetContext.surfaceColor,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
           ),
+          clipBehavior: Clip.antiAlias,
           child: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,

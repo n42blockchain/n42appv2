@@ -843,8 +843,9 @@ void _registerRepositories() {
     return AuthRepositoryImpl(
       authDataSource: getIt<MatrixAuthDataSource>(),
       secureStorage: getIt<SecureStorageDataSource>(),
-      // 新三家（discord/github/telegram）指向自建 backend/social-auth；
-      // 未配置则回退默认实例，配合 gating 保证按钮隐藏、不会误发到 api.n42.network。
+      // Discord, GitHub, and Telegram use the self-hosted social-auth backend.
+      // Without a URL, feature gating hides their buttons and avoids sending
+      // requests to api.n42.network by mistake.
       socialAuthBackendApi:
           (backendBaseUrl != null && backendBaseUrl.isNotEmpty)
           ? SocialAuthApi(baseUrl: backendBaseUrl)
@@ -909,7 +910,7 @@ void _registerRepositories() {
       archiveSearch: getIt.isRegistered<ArchiveSearchService>()
           ? getIt<ArchiveSearchService>()
           : null,
-      // 隐藏/加锁会话过滤源：全局搜索排除这些房间的会话项与消息命中
+      // Exclude hidden and locked rooms from global conversation/message hits.
       preferences: getIt<PreferencesDataSource>(),
     ),
   );

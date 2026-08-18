@@ -847,7 +847,9 @@ class PreferencesDataSource {
   }
 
   /// 获取房间的所有定时消息
-  Future<List<ScheduledMessageDraft>> getScheduledMessages(String roomId) async {
+  Future<List<ScheduledMessageDraft>> getScheduledMessages(
+    String roomId,
+  ) async {
     try {
       final p = await prefs;
       final data = p.getString(_keyScheduledMessages);
@@ -859,9 +861,10 @@ class PreferencesDataSource {
 
       return roomMessages
           .whereType<Map<dynamic, dynamic>>()
-          .map((item) => ScheduledMessageDraft.fromJson(
-            Map<String, dynamic>.from(item),
-          ))
+          .map(
+            (item) =>
+                ScheduledMessageDraft.fromJson(Map<String, dynamic>.from(item)),
+          )
           .toList(growable: false);
     } catch (e) {
       prefsLog('Failed to read scheduled messages - $e');
@@ -884,9 +887,11 @@ class PreferencesDataSource {
         final roomId = entry.key;
         final messages = (entry.value as List<dynamic>)
             .whereType<Map<dynamic, dynamic>>()
-            .map((item) => ScheduledMessageDraft.fromJson(
-              Map<String, dynamic>.from(item),
-            ));
+            .map(
+              (item) => ScheduledMessageDraft.fromJson(
+                Map<String, dynamic>.from(item),
+              ),
+            );
 
         for (final msg in messages) {
           final scheduledAt = msg.scheduledAt;
@@ -1048,14 +1053,27 @@ class PreferencesDataSource {
   /// 获取隐藏的聊天 ID 集合
   Future<Set<String>> getHiddenChatIds() async {
     try {
-      final p = await prefs;
-      final data = p.getString(_keyHiddenChats);
-      if (data == null) return {};
-      return (jsonDecode(data) as List).cast<String>().toSet();
+      return await getHiddenChatIdsStrict();
     } catch (e) {
       prefsLog('Failed to read hidden chats - $e');
       return {};
     }
+  }
+
+  /// Reads hidden chat IDs without swallowing storage or format errors.
+  ///
+  /// Privacy-sensitive consumers such as global search must fail closed when
+  /// this state cannot be read. Regular UI callers can continue using
+  /// [getHiddenChatIds], which preserves the historical empty-set fallback.
+  Future<Set<String>> getHiddenChatIdsStrict() async {
+    final p = await prefs;
+    final data = p.getString(_keyHiddenChats);
+    if (data == null) return {};
+    final decoded = jsonDecode(data);
+    if (decoded is! List) {
+      throw const FormatException('Hidden chat IDs must be a JSON list');
+    }
+    return decoded.cast<String>().toSet();
   }
 
   /// 隐藏聊天

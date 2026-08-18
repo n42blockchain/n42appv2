@@ -108,14 +108,14 @@ void main() {
       ),
     );
 
-    // 普通文本消息：外泄类操作都在。
+    // Normal text messages retain all outbound actions.
     await tester.pumpWidget(menu(textMsg()));
     expect(find.text('Copy'), findsOneWidget);
     expect(find.text('Forward'), findsOneWidget);
     expect(find.text('Fav'), findsOneWidget);
     expect(find.text('Quote'), findsOneWidget);
 
-    // 自毁文本消息：复制/转发/收藏/引用全部消失。
+    // Self-destruct text messages expose no outbound actions.
     await tester.pumpWidget(menu(textMsg(selfDestructAfter: 30)));
     expect(find.text('Copy'), findsNothing);
     expect(find.text('Forward'), findsNothing);

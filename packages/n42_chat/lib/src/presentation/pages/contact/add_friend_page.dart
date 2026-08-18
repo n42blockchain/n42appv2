@@ -386,10 +386,7 @@ class _AddFriendPageState extends State<AddFriendPage> {
                 Text(
                   S.of(context)?.web3SearchHint ??
                       '@matrix:id  •  0x wallet address  •  name.eth',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: context.textSecondary,
-                  ),
+                  style: TextStyle(fontSize: 13, color: context.textSecondary),
                 ),
                 const SizedBox(height: 12),
                 Row(
@@ -473,39 +470,36 @@ class _AddFriendPageState extends State<AddFriendPage> {
           Container(
             color: context.surfaceColor,
             margin: const EdgeInsets.only(top: 8),
-            child: ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+            child: Material(
+              color: Colors.transparent,
+              child: ListTile(
+                leading: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.contacts,
+                    color: AppColors.primary,
+                    size: 22,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.contacts,
-                  color: AppColors.primary,
-                  size: 22,
+                title: Text(
+                  'From Contacts',
+                  style: TextStyle(
+                    color: context.textPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
-              ),
-              title: Text(
-                'From Contacts',
-                style: TextStyle(
-                  color: context.textPrimary,
-                  fontWeight: FontWeight.w500,
+                subtitle: Text(
+                  'Find friends from your phone contacts',
+                  style: TextStyle(fontSize: 13, color: context.textSecondary),
                 ),
+                trailing: Icon(AppIcons.chevron, color: context.textSecondary),
+                onTap: _openPhoneContacts,
               ),
-              subtitle: Text(
-                'Find friends from your phone contacts',
-                style: TextStyle(
-                  fontSize: 13,
-                  color: context.textSecondary,
-                ),
-              ),
-              trailing: Icon(
-                AppIcons.chevron,
-                color: context.textSecondary,
-              ),
-              onTap: _openPhoneContacts,
             ),
           ),
 
@@ -603,10 +597,7 @@ class _AddFriendPageState extends State<AddFriendPage> {
       ),
       subtitle: Text(
         userId,
-        style: TextStyle(
-          fontSize: 13,
-          color: context.textSecondary,
-        ),
+        style: TextStyle(fontSize: 13, color: context.textSecondary),
       ),
       trailing: OutlinedButton(
         onPressed: () => _startDirectChat(userId),

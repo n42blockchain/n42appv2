@@ -51,12 +51,10 @@ dependencies:
   # ============================================
   # MIT License
   drift: ^2.15.0
-  # 归档库（archive.db）走 SQLCipher 整库加密：解密后的 E2EE 明文全文索引落盘，
-  # 必须加密（2026-08 安全整改）。sqlcipher_flutter_libs 是 sqlite3 的超集，
-  # 同时为 Matrix SDK 的明文 DB 供符号——不设 key 时行为与普通 sqlite3 一致，
-  # 故替换 sqlite3_flutter_libs 不影响其它未加密库。
+  # Encrypt archive.db because it indexes decrypted E2EE plaintext. SQLCipher
+  # remains compatible with the Matrix SDK's unkeyed SQLite databases.
   sqlcipher_flutter_libs: ^0.6.4
-  sqlite3: ^2.4.0  # 显式：明文→密文迁移用原生连接（sqlcipher_export）
+  sqlite3: ^2.4.0  # Native connection for sqlcipher_export migration.
   sqflite: ^2.4.3
   # BSD-3-Clause License
   flutter_secure_storage: ^10.0.0

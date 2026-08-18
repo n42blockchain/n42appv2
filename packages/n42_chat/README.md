@@ -272,6 +272,35 @@ class MainActivity: FlutterFragmentActivity()
 
 #### iOS
 
+归档搜索库使用 SQLCipher。宿主若同时依赖 `sqflite`、Firebase 等会链接系统
+`sqlite3` 的插件，需要在 `Podfile` 的 `post_install` 中对 SQLCipher 静态 framework
+使用 `-force_load`；否则 `PRAGMA key` 可能落到系统 SQLite。在
+`post_install do |installer|` 内加入：
+
+```ruby
+runner_project = installer.aggregate_targets.first.user_project
+runner_project.targets.each do |target|
+  next unless target.name == 'Runner'
+
+  target.build_configurations.each do |config|
+    ldflags = config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
+    ldflags = [ldflags] if ldflags.is_a?(String)
+    binary = '$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher'
+    unless ldflags.include?(binary)
+      inherited_index = ldflags.index('$(inherited)') || -1
+      ldflags.insert(inherited_index + 1, '-force_load', binary)
+    end
+    config.build_settings['OTHER_LDFLAGS'] = ldflags
+  end
+end
+```
+
+执行 `pod install` 后再构建。真机产物可用以下命令确认链接成功：
+
+```bash
+nm -gU Runner.app/Runner | grep -i sqlite3_key
+```
+
 在 `ios/Runner/Info.plist` 添加：
 
 ```xml

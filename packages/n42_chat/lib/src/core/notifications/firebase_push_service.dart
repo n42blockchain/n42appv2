@@ -570,31 +570,37 @@ class FirebasePushService implements IPushNotificationService {
     return null;
   }
 
-  /// 处理前台消息
-  /// 房间是否为隐藏 / 加锁会话——这些会话绝不弹通知，否则通知栏的标题+
-  /// 预览会把「藏起来 / 需验证才可见」的会话内容泄露给旁观者。
+  /// Returns whether notifications for [roomId] must be suppressed.
   ///
-  /// 直接读 SharedPreferences（不经 DI），因为后台推送 isolate 拿不到 DI 容器。
-  /// 键值是 [PreferencesDataSource]（隐藏）与 [ChatLockService]（加锁）的存储契约，
-  /// 改动那两处存储键时须同步这里。
+  /// This reads SharedPreferences directly because a background push isolate
+  /// cannot use the main isolate's DI container. The keys mirror
+  /// PreferencesDataSource and ChatLockService and must stay in sync.
+  /// Storage or decoding errors fail closed to avoid leaking protected room
+  /// names or message previews on the lock screen.
   static Future<bool> _isPrivacyRestrictedRoom(String? roomId) async {
     if (roomId == null || roomId.isEmpty) return false;
     try {
       final prefs = await SharedPreferences.getInstance();
-      // 隐藏会话：PreferencesDataSource 以 JSON list 存 'n42_chat_hidden_chats'
       final hiddenRaw = prefs.getString('n42_chat_hidden_chats');
       if (hiddenRaw != null) {
         final decoded = json.decode(hiddenRaw);
-        if (decoded is List && decoded.contains(roomId)) return true;
+        if (decoded is! List) {
+          throw const FormatException('Hidden chat IDs must be a JSON list');
+        }
+        if (decoded.contains(roomId)) return true;
       }
-      // 加锁会话：ChatLockService 以 StringList 存 'chat_lock_locked_chats'
       final locked = prefs.getStringList('chat_lock_locked_chats');
       if (locked != null && locked.contains(roomId)) return true;
     } catch (e) {
       debugLog('FirebasePushService: privacy-room check failed: $e');
+      return true;
     }
     return false;
   }
+
+  @visibleForTesting
+  static Future<bool> isPrivacyRestrictedRoomForTest(String? roomId) =>
+      _isPrivacyRestrictedRoom(roomId);
 
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     // 检查通知配置
@@ -662,8 +668,8 @@ class FirebasePushService implements IPushNotificationService {
       return;
     }
 
-    // 隐藏/加锁会话不弹通知（避免标题+预览泄露隐私会话内容）。
-    // 放在去重标记之前：这类会话根本不该产生任何通知痕迹。
+    // Suppress hidden/locked rooms before deduplication so they leave no
+    // notification trace and cannot leak a title or preview.
     if (await _isPrivacyRestrictedRoom(roomId)) {
       debugLog(
         'FirebasePushService: Skipping notification for hidden/locked room',
@@ -835,8 +841,8 @@ class FirebasePushService implements IPushNotificationService {
         return;
       }
 
-      // 隐藏/加锁会话不弹通知（后台 isolate 同样过滤，直接读 SharedPreferences）。
-      // 放在去重标记之前：这类会话不该产生任何通知痕迹。
+      // Apply the same privacy filter in the background isolate before
+      // deduplication so protected rooms leave no notification trace.
       if (await _isPrivacyRestrictedRoom(roomId)) {
         debugLog(
           'FirebasePushService: Skipping background notification for '
@@ -1131,8 +1137,7 @@ class FirebasePushService implements IPushNotificationService {
     final room = _client.getRoomById(roomId);
     if (room == null) return;
 
-    // 隐藏/加锁会话不弹通知（sync 路径同样过滤）。放在去重标记之前：
-    // 这类会话不该产生任何通知痕迹，也不应消耗去重标记。
+    // Apply the privacy filter on the sync path before deduplication as well.
     if (await _isPrivacyRestrictedRoom(roomId)) {
       debugLog(
         'FirebasePushService: Skipping sync notification for hidden/locked room',

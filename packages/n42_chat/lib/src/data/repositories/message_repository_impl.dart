@@ -510,8 +510,8 @@ class MessageRepositoryImpl implements IMessageRepository {
       messageId,
       reason: reason,
     );
-    // 撤回/自毁成功后一并从归档全文库删除，否则焚毁的明文会在 archive.db
-    // 里永久留存并被跨会话搜索命中（安全整改 2026-08）。
+    // Remove successfully redacted/self-destructed content from the archive
+    // so global search cannot resurrect its plaintext.
     if (ok) {
       await _archiveService?.deleteArchivedMessage(messageId);
     }

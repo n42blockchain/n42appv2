@@ -39,21 +39,25 @@ class SearchRepositoryImpl implements ISearchRepository {
        _preferences = preferences,
        _chatLockService = chatLockService ?? ChatLockService();
 
-  /// 隐藏 / 加锁会话的房间 ID 集合——全局搜索绝不能把这些会话的会话项或
-  /// 消息命中暴露出来（隐藏会话本就是要藏，加锁会话未验证身份不得泄露内容）。
-  /// 单会话内搜索（searchInChat/指定 roomId）不过滤：用户已进入该会话。
-  Future<Set<String>> _excludedRoomIds() async {
+  /// Returns hidden and locked room IDs for global-search filtering.
+  ///
+  /// `null` means the privacy state could not be loaded. Global search must
+  /// then fail closed instead of exposing a protected room. Search within an
+  /// explicitly opened room remains unaffected.
+  Future<Set<String>?> _excludedRoomIds() async {
     final excluded = <String>{};
     try {
-      final hidden = await _preferences?.getHiddenChatIds();
+      final hidden = await _preferences?.getHiddenChatIdsStrict();
       if (hidden != null) excluded.addAll(hidden);
     } catch (e) {
       debugLog('SearchRepository: load hidden chats failed: $e');
+      return null;
     }
     try {
       excluded.addAll(await _chatLockService.getLockedChatIds());
     } catch (e) {
       debugLog('SearchRepository: load locked chats failed: $e');
+      return null;
     }
     return excluded;
   }
@@ -198,6 +202,7 @@ class SearchRepositoryImpl implements ISearchRepository {
     int limit = 20,
   }) async {
     final excluded = await _excludedRoomIds();
+    if (excluded == null) return const [];
     final rooms = _searchDataSource
         .searchLocalGroups(query)
         .where((room) => !excluded.contains(room.id));
@@ -217,6 +222,7 @@ class SearchRepositoryImpl implements ISearchRepository {
     int limit = 20,
   }) async {
     final excluded = await _excludedRoomIds();
+    if (excluded == null) return const [];
     final rooms = _searchDataSource
         .searchLocalConversations(query)
         .where((room) => !excluded.contains(room.id));
@@ -276,8 +282,9 @@ class SearchRepositoryImpl implements ISearchRepository {
               limit: limit,
             );
 
-      // 隐藏/加锁会话不得出现在全局搜索里（live 与归档两条路都过滤）。
+      // Filter both live and archived results for hidden or locked rooms.
       final excluded = await _excludedRoomIds();
+      if (excluded == null) return const [];
       final liveItems = results
           .where((result) => !excluded.contains(result.room.id))
           .map((result) {

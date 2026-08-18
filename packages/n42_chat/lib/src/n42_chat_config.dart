@@ -448,13 +448,11 @@ class N42ChatConfig {
 
   /// 是否与所有设备（含未验证）共享 E2EE 密钥
   ///
-  /// - `false`（默认，2026-08 安全整改后收紧）：仅与已完成交叉验证的设备共享
-  ///   Megolm 会话密钥（= Matrix SDK 的 crossVerifiedIfEnabled 语义）。防止
-  ///   仅凭账号密码登录的未验证新设备静默收到后续所有房间密钥——SAS 设备
-  ///   验证才真正决定机密性。代价：新增/未验证设备需先做 SAS 验证才能解密
-  ///   新消息。
-  /// - `true`：向所有未被阻止的设备分享密钥，兼容性最好但等于盲信未验证设备，
-  ///   仅在明确接受该风险的部署里显式开启。
+  /// - `false` (default): share Megolm session keys only with cross-verified
+  ///   devices. New sessions must complete SAS verification before receiving
+  ///   keys, preventing a password-only login from silently gaining access.
+  /// - `true`: share with every unblocked device. This improves compatibility
+  ///   but explicitly trusts unverified devices and must be opt-in.
   final bool shareE2eeKeysWithAllDevices;
 
   // ─────────────────────────────────────────────────────────────────────────────

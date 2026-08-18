@@ -150,11 +150,7 @@ class _AutoDownloadSettingsPageState extends State<AutoDownloadSettingsPage> {
           ),
         ),
         leading: IconButton(
-          icon: Icon(
-            AppIcons.back,
-            color: context.textPrimary,
-            size: 20,
-          ),
+          icon: Icon(AppIcons.back, color: context.textPrimary, size: 20),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.pop(context),
         ),
@@ -266,7 +262,7 @@ class _AutoDownloadSettingsPageState extends State<AutoDownloadSettingsPage> {
     required IconData icon,
     required List<Widget> children,
   }) {
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

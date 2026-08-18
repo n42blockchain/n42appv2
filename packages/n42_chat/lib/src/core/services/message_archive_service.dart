@@ -216,12 +216,16 @@ class MessageArchiveService {
     return _db.getQuarterlyStats(roomId);
   }
 
-  /// 消息被撤回/自毁后从归档全文库删除，避免焚毁的明文经全文搜索"复活"。
+  /// Removes redacted/self-destructed content from the full-text archive.
   Future<void> deleteArchivedMessage(String eventId) async {
     try {
       await _db.deleteByEventId(eventId);
-    } catch (_) {
-      // 归档删除失败不应影响撤回主流程（归档只是本地搜索缓存）。
+    } catch (e) {
+      // Redaction must still complete if the local search cache is damaged,
+      // but keep an observable signal for the residual plaintext risk.
+      debugLog(
+        'MessageArchiveService: failed to remove redacted event $eventId: $e',
+      );
     }
   }
 
@@ -302,9 +306,8 @@ class MessageArchiveService {
       return false;
     }
 
-    // 自毁 / 查看一次消息绝不入归档（2026-08 安全整改）：归档库是明文全文
-    // 索引，一旦入库，redaction 焚毁后明文仍永久留存并可被全局搜索"复活"。
-    // view once = after==1 属同一字段的特例，排除整个字段即覆盖两者。
+    // Never archive self-destruct or view-once messages. Both use the same
+    // metadata field, and persisting either would defeat their lifetime.
     if (event.content['n42.self_destruct'] != null) {
       return false;
     }

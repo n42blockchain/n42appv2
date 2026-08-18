@@ -122,7 +122,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) async {
       await m.createAll();
-      // 创建复合索引
+      // Create query indexes.
       await customStatement(
         'CREATE INDEX IF NOT EXISTS idx_archived_room_ts '
         'ON archived_messages (room_id, origin_server_ts DESC)',
@@ -135,13 +135,13 @@ class ArchiveDatabase extends _$ArchiveDatabase {
         'CREATE INDEX IF NOT EXISTS idx_archived_room_type '
         'ON archived_messages (room_id, type)',
       );
-      // FTS5 全文搜索虚拟表
+      // Create the FTS5 external-content table.
       await customStatement(
         'CREATE VIRTUAL TABLE IF NOT EXISTS archive_fts USING fts5('
         'body, content=archived_messages, content_rowid=rowid'
         ')',
       );
-      // FTS 触发器：插入时自动同步
+      // Synchronize inserted rows into FTS5.
       await customStatement(
         'CREATE TRIGGER IF NOT EXISTS archive_fts_insert '
         'AFTER INSERT ON archived_messages BEGIN '
@@ -160,16 +160,13 @@ class ArchiveDatabase extends _$ArchiveDatabase {
           'v${details.versionBefore} to v${details.versionNow}',
         );
       }
-      // 幂等补建 FTS delete 触发器：早期版本只建了 insert 触发器，
-      // deleteQuarter/deleteByEventId 删主表后 FTS5 影子表仍残留明文
-      // token，被 redact/自毁的消息可经全文搜索"复活"。老库在此补上。
+      // Older databases had only the insert trigger. Install the delete
+      // trigger idempotently so removed plaintext cannot survive in FTS5.
       await _createFtsDeleteTrigger();
     },
   );
 
-  /// 建立 FTS5 external-content 表的删除同步触发器。删除主表行时，用
-  /// FTS5 的 'delete' 命令把对应 rowid 的索引项移除（external content 表
-  /// 必须显式传 old.body 才能定位待删项）。
+  /// Keeps an external-content FTS5 table synchronized on row deletion.
   Future<void> _createFtsDeleteTrigger() async {
     await customStatement(
       'CREATE TRIGGER IF NOT EXISTS archive_fts_delete '
@@ -318,8 +315,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     )..where((t) => t.quarter.equals(quarter))).go();
   }
 
-  /// 按 eventId 删除单条归档（消息被 redact/自毁后回删，避免焚毁的明文
-  /// 在归档全文库里永久留存并被搜索"复活"）。FTS 影子表由删除触发器同步。
+  /// Deletes one archived event; the FTS trigger removes its indexed text.
   Future<int> deleteByEventId(String eventId) async {
     return (delete(
       archivedMessages,
@@ -454,16 +450,14 @@ class ArchiveDatabase extends _$ArchiveDatabase {
   }
 }
 
-/// 归档库 SQLCipher 口令在 secure storage 里的键
+/// Secure-storage key for the archive SQLCipher passphrase.
 const String _kArchiveDbKeyStorageKey = 'n42_chat_archive_db_key';
 
-/// 归档库整库加密（SQLCipher）。归档表持有 E2EE 解密后的明文全文索引，
-/// 落盘绝不能是明文——设备被取证/root/越狱即可全量泄露历史。
+/// Opens the full-text archive with SQLCipher because it contains decrypted
+/// E2EE message text.
 ///
-/// - 口令：256-bit 随机，存于 flutter_secure_storage（Keychain/Keystore）。
-/// - 迁移：老用户的 archive.db 是明文，用 sqlcipher_export 原地导出为密文后替换。
-/// - 兼容：sqlcipher_flutter_libs 对未设 key 的库行为同普通 sqlite3，
-///   故不影响 Matrix SDK 等其它明文库。
+/// The 256-bit random key lives in Keychain/Keystore. Existing plaintext
+/// archives are converted in place with sqlcipher_export.
 Future<LazyDatabase> _openConnection() async {
   return LazyDatabase(() async {
     final appDir = await getApplicationDocumentsDirectory();
@@ -473,18 +467,15 @@ Future<LazyDatabase> _openConnection() async {
     }
     final file = File(p.join(dbDir.path, 'archive.db'));
 
-    // Android 老版本需切换到 SQLCipher 提供的 libsqlite3。
-    // ⚠️ iOS：并非「链接期自动覆盖」——firebase_messaging / sqflite 会通过
-    // `-l sqlite3` 引入系统 libsqlite3 并遮蔽 SQLCipher，导致 PRAGMA key 静默
-    // 失效、明文落盘（2026-08 真机确认）。修复靠 ios Runner 的
-    // `-framework SQLCipher` linker flag（见 Podfile / project.pbxproj）。
+    // Older Android versions need sqlcipher_flutter_libs' sqlite3 override.
+    // On iOS, the host must force-load SQLCipher so another plugin's system
+    // sqlite3 link cannot shadow PRAGMA key and sqlcipher_export.
     if (Platform.isAndroid) {
       await applyWorkaroundToOpenSqlCipherOnOldAndroidVersions();
       open.overrideForAll(openCipherOnAndroid);
     }
 
-    // 硬校验 SQLCipher 真的可用：不可用绝不继续，否则会把 E2EE 明文全文
-    // 索引写成明文库。这是把「静默明文」变成「响亮失败」的关键闸门。
+    // Fail loudly if the process resolved system SQLite instead of SQLCipher.
     if (!_isSqlCipherAvailable()) {
       throw StateError(
         'SQLCipher unavailable: refusing to open archive.db as plaintext '
@@ -492,21 +483,21 @@ Future<LazyDatabase> _openConnection() async {
       );
     }
 
-    final passphrase = await _resolveArchivePassphrase();
+    _recoverInterruptedArchiveMigration(file);
+    final passphrase = await _resolveArchivePassphrase(file);
 
-    // 迁移：若已有明文库，原地转成密文。迁移失败时保留旧明文库、不删除，
-    // 避免丢失用户历史（2026-08 首版曾因删旧库导致 iOS 历史丢失）。
+    // Convert a legacy plaintext archive without deleting it on failure.
     await _migratePlaintextArchiveIfNeeded(file, passphrase);
+    _removeMigrationBackupWhenSafe(file, passphrase);
 
-    // 同步（非后台）打开：后台 isolate 不继承本 isolate 的 open override，
-    // 会导致 Android 加载到系统 sqlite 而非 SQLCipher。归档查询非热点路径。
+    // Open synchronously because background isolates do not inherit sqlite3
+    // overrides on Android. Archive queries are not latency-critical.
     return NativeDatabase(
       file,
       setup: (db) {
-        // 原始密钥形式（64 hex = 32 字节），跳过 PBKDF2 口令派生。
+        // Use the 32-byte raw key form and skip passphrase derivation.
         db.execute("PRAGMA key = \"x'$passphrase'\";");
-        // 二次确认本连接确实走 SQLCipher：cipher_version 为空即落到了系统
-        // sqlite，明文风险，直接失败而非静默明文。
+        // Verify again on the actual archive connection.
         if (db.select('PRAGMA cipher_version;').isEmpty) {
           throw StateError('SQLCipher not active for archive.db');
         }
@@ -515,21 +506,24 @@ Future<LazyDatabase> _openConnection() async {
   });
 }
 
-/// 探测 SQLCipher 是否真的被链接（open 一个内存库看 cipher_version）。
-/// 必须在 Android 的 open override 之后调用。
+/// Probes cipher_version after applying Android's sqlite3 override.
 bool _isSqlCipherAvailable() {
+  raw_sqlite.Database? probe;
   try {
-    final probe = raw_sqlite.sqlite3.openInMemory();
+    probe = raw_sqlite.sqlite3.openInMemory();
     final rows = probe.select('PRAGMA cipher_version;');
-    probe.dispose();
     return rows.isNotEmpty;
   } catch (_) {
     return false;
+  } finally {
+    probe?.dispose();
   }
 }
 
-/// 取出（或首次生成）归档库口令，返回 64 位十六进制字符串。
-Future<String> _resolveArchivePassphrase() async {
+/// Returns the existing archive passphrase or creates one for a new/plaintext
+/// archive. An invalid stored key is never overwritten, and an encrypted file
+/// without its key fails closed instead of being assigned an unrelated key.
+Future<String> _resolveArchivePassphrase(File file) async {
   const storage = FlutterSecureStorage(
     aOptions: AndroidOptions(),
     iOptions: IOSOptions(
@@ -537,9 +531,22 @@ Future<String> _resolveArchivePassphrase() async {
     ),
   );
   final existing = await storage.read(key: _kArchiveDbKeyStorageKey);
-  if (existing != null && existing.length == 64) {
-    return existing;
+  if (existing != null) {
+    if (!_isValidArchivePassphrase(existing)) {
+      throw StateError('Stored archive.db passphrase is invalid');
+    }
+    return existing.toLowerCase();
   }
+
+  if (file.existsSync() && file.lengthSync() > 0) {
+    final plaintext = await _hasPlaintextSqliteHeader(file);
+    if (!plaintext) {
+      throw StateError(
+        'archive.db is encrypted but its secure-storage key is unavailable',
+      );
+    }
+  }
+
   final rng = Random.secure();
   final bytes = List<int>.generate(32, (_) => rng.nextInt(256));
   final hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
@@ -548,7 +555,80 @@ Future<String> _resolveArchivePassphrase() async {
   return hex;
 }
 
-/// 若 archive.db 是历史明文库，用 SQLCipher 的 sqlcipher_export 原地迁移到密文。
+bool _isValidArchivePassphrase(String value) =>
+    RegExp(r'^[0-9a-fA-F]{64}$').hasMatch(value);
+
+Future<bool> _hasPlaintextSqliteHeader(File file) async {
+  try {
+    final head = await file.openRead(0, 16).first;
+    return String.fromCharCodes(head).startsWith('SQLite format 3');
+  } catch (e) {
+    throw StateError('Unable to inspect archive.db header: $e');
+  }
+}
+
+/// Restores the plaintext source if the process stopped after renaming it to
+/// `.plaintext.bak` but before installing the encrypted replacement.
+void _recoverInterruptedArchiveMigration(File file) {
+  final backup = File('${file.path}.plaintext.bak');
+  if (!file.existsSync() && backup.existsSync()) {
+    backup.renameSync(file.path);
+    debugLog('ArchiveDatabase: restored interrupted migration backup');
+  }
+}
+
+/// Deletes a leftover plaintext backup only after proving that the installed
+/// archive can be opened with the retained key.
+void _removeMigrationBackupWhenSafe(File file, String passphrase) {
+  final backup = File('${file.path}.plaintext.bak');
+  if (!backup.existsSync() || !file.existsSync()) return;
+
+  try {
+    _verifyEncryptedArchive(file, passphrase);
+    backup.deleteSync();
+    debugLog('ArchiveDatabase: removed verified plaintext migration backup');
+  } catch (e) {
+    debugLog('ArchiveDatabase: retained migration backup after verify: $e');
+  }
+}
+
+/// Proves that [file] is a readable SQLCipher database with a valid schema.
+///
+/// This check runs both before installation and before deleting the plaintext
+/// backup so a truncated or otherwise corrupt export cannot replace history.
+void _verifyEncryptedArchive(File file, String passphrase) {
+  raw_sqlite.Database? db;
+  try {
+    db = raw_sqlite.sqlite3.open(file.path);
+    db.execute("PRAGMA key = \"x'$passphrase'\";");
+    if (db.select('PRAGMA cipher_version;').isEmpty) {
+      throw StateError('SQLCipher is not active for exported archive.db');
+    }
+    db.select('SELECT count(*) FROM sqlite_master;');
+    final integrity = db.select('PRAGMA integrity_check;');
+    if (integrity.isEmpty || integrity.first.values.first != 'ok') {
+      throw StateError('Encrypted archive.db failed integrity_check');
+    }
+  } finally {
+    db?.dispose();
+  }
+}
+
+void _replacePlaintextArchive(File file, File encryptedFile) {
+  final backup = File('${file.path}.plaintext.bak');
+  if (backup.existsSync()) backup.deleteSync();
+  file.renameSync(backup.path);
+  try {
+    encryptedFile.renameSync(file.path);
+  } catch (_) {
+    if (!file.existsSync() && backup.existsSync()) {
+      backup.renameSync(file.path);
+    }
+    rethrow;
+  }
+}
+
+/// Converts a legacy plaintext archive with SQLCipher's sqlcipher_export.
 Future<void> _migratePlaintextArchiveIfNeeded(
   File file,
   String passphrase,
@@ -556,16 +636,8 @@ Future<void> _migratePlaintextArchiveIfNeeded(
   if (!file.existsSync() || file.lengthSync() == 0) {
     return; // 新库，直接以密文创建。
   }
-  // 明文库的头 16 字节是 "SQLite format 3 "；密文库整头被加密，不含此魔数。
-  try {
-    final head = await file.openRead(0, 16).first;
-    final magic = String.fromCharCodes(head);
-    if (!magic.startsWith('SQLite format 3')) {
-      return; // 已是密文（或非法头），无需迁移。
-    }
-  } catch (_) {
-    return; // 读头失败，交给后续打开逻辑处理。
-  }
+  // An encrypted database does not contain SQLite's plaintext file header.
+  if (!await _hasPlaintextSqliteHeader(file)) return;
 
   debugLog('ArchiveDatabase: migrating plaintext archive.db to SQLCipher');
   final encPath = '${file.path}.enc';
@@ -576,7 +648,7 @@ Future<void> _migratePlaintextArchiveIfNeeded(
 
   raw_sqlite.Database? db;
   try {
-    // 以明文打开旧库（不设 key），ATTACH 一个带 key 的新库并整体导出。
+    // Open the source unkeyed, attach a keyed destination, and export it.
     db = raw_sqlite.sqlite3.open(file.path);
     final escapedPath = encPath.replaceAll("'", "''");
     db.execute(
@@ -587,24 +659,34 @@ Future<void> _migratePlaintextArchiveIfNeeded(
     db.dispose();
     db = null;
 
-    // 用密文库替换明文库。
-    final backup = File('${file.path}.plaintext.bak');
-    if (backup.existsSync()) backup.deleteSync();
-    file.renameSync(backup.path);
-    encFile.renameSync(file.path);
-    // 迁移成功后立即抹掉明文备份，避免明文继续留存。
-    if (backup.existsSync()) backup.deleteSync();
+    // Verify the export before it can replace the only readable source.
+    _verifyEncryptedArchive(encFile, passphrase);
+
+    // Install the encrypted copy with rollback if the second rename fails.
+    // Keep the plaintext backup until the caller verifies the installed file.
+    _replacePlaintextArchive(file, encFile);
     debugLog('ArchiveDatabase: migration to SQLCipher completed');
   } catch (e) {
     debugLog('ArchiveDatabase: SQLCipher migration failed: $e');
     db?.dispose();
-    // 迁移失败：只清理半成品密文文件，保留明文旧库不删除，避免像 2026-08
-    // 首版那样把用户历史直接删掉。rethrow 让归档初始化响亮失败、下次启动
-    // 重试；数据宁可暂留（本地明文）也绝不无声丢失。
+    // Delete only the incomplete destination. Preserve the source and retry
+    // on a later launch rather than silently losing history.
     if (encFile.existsSync()) encFile.deleteSync();
     rethrow;
   }
 }
+
+@visibleForTesting
+bool isValidArchivePassphraseForTest(String value) =>
+    _isValidArchivePassphrase(value);
+
+@visibleForTesting
+void recoverInterruptedArchiveMigrationForTest(File file) =>
+    _recoverInterruptedArchiveMigration(file);
+
+@visibleForTesting
+void replacePlaintextArchiveForTest(File file, File encryptedFile) =>
+    _replacePlaintextArchive(file, encryptedFile);
 
 // ============================================
 // 辅助数据类
