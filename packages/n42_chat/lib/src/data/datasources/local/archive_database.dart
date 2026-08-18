@@ -585,11 +585,67 @@ void _removeMigrationBackupWhenSafe(File file, String passphrase) {
 
   try {
     _verifyEncryptedArchive(file, passphrase);
-    backup.deleteSync();
+    _shredPlaintextFile(backup);
     debugLog('ArchiveDatabase: removed verified plaintext migration backup');
   } catch (e) {
+    // The backup is the only way back if the encrypted archive turns out to be
+    // unreadable, so it is kept — but a verify failure that repeats on every
+    // launch would otherwise retain a full cleartext database forever with only
+    // a debug log. Once the encrypted archive has been the live database for
+    // longer than the grace period, the plaintext copy is no longer a useful
+    // rollback and its disclosure risk outweighs it.
     debugLog('ArchiveDatabase: retained migration backup after verify: $e');
+    _shredStaleMigrationBackup(backup);
   }
+}
+
+/// How long an unverifiable plaintext backup may linger before it is shredded.
+const Duration _kPlaintextBackupGrace = Duration(days: 7);
+
+void _shredStaleMigrationBackup(File backup) {
+  try {
+    final age = DateTime.now().difference(backup.lastModifiedSync());
+    if (age < _kPlaintextBackupGrace) return;
+    _shredPlaintextFile(backup);
+    debugLog('ArchiveDatabase: shredded stale plaintext migration backup');
+  } catch (e) {
+    debugLog('ArchiveDatabase: could not shred stale backup: $e');
+  }
+}
+
+/// Overwrites [file] with zeros before unlinking it.
+///
+/// A plain delete only unlinks the inode, leaving the cleartext archive (full
+/// history plus FTS plaintext tokens) carvable from storage. Overwriting first
+/// is best effort — wear-levelled flash may retain the original blocks — but it
+/// removes the trivially recoverable copy.
+void _shredPlaintextFile(File file) {
+  try {
+    final length = file.lengthSync();
+    if (length > 0) {
+      final sink = file.openSync(mode: FileMode.writeOnly);
+      try {
+        const chunkSize = 64 * 1024;
+        final zeros = Uint8List(chunkSize);
+        var written = 0;
+        while (written < length) {
+          final remaining = length - written;
+          sink.writeFromSync(
+            zeros,
+            0,
+            remaining < chunkSize ? remaining : chunkSize,
+          );
+          written += chunkSize;
+        }
+        sink.flushSync();
+      } finally {
+        sink.closeSync();
+      }
+    }
+  } catch (e) {
+    debugLog('ArchiveDatabase: overwrite before delete failed: $e');
+  }
+  file.deleteSync();
 }
 
 /// Proves that [file] is a readable SQLCipher database with a valid schema.

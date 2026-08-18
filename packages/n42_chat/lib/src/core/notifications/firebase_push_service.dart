@@ -579,8 +579,22 @@ class FirebasePushService implements IPushNotificationService {
   /// names or message previews on the lock screen.
   static Future<bool> _isPrivacyRestrictedRoom(String? roomId) async {
     if (roomId == null || roomId.isEmpty) return false;
+    final SharedPreferences prefs;
     try {
-      final prefs = await SharedPreferences.getInstance();
+      prefs = await SharedPreferences.getInstance();
+    } catch (e) {
+      // Storage itself is unavailable: hidden/locked state is unknowable, so
+      // fail closed rather than risk a protected room on the lock screen.
+      debugLog('FirebasePushService: privacy-room storage unavailable: $e');
+      return true;
+    }
+
+    // A malformed hidden-chats blob is global, not per-room. Failing closed on
+    // it would suppress notifications for EVERY room until the key is cleared,
+    // with no user-visible signal. Treat corruption as "no hidden rooms
+    // recorded" and drop the bad value so the state becomes decidable again;
+    // the locked-chat check below still applies.
+    try {
       final hiddenRaw = prefs.getString('n42_chat_hidden_chats');
       if (hiddenRaw != null) {
         final decoded = json.decode(hiddenRaw);
@@ -589,10 +603,22 @@ class FirebasePushService implements IPushNotificationService {
         }
         if (decoded.contains(roomId)) return true;
       }
+    } catch (e) {
+      debugLog('FirebasePushService: hidden-chat list unreadable, clearing: $e');
+      try {
+        await prefs.remove('n42_chat_hidden_chats');
+      } catch (_) {
+        // Best effort: a failed cleanup only means we retry next push.
+      }
+    }
+
+    try {
       final locked = prefs.getStringList('chat_lock_locked_chats');
       if (locked != null && locked.contains(roomId)) return true;
     } catch (e) {
-      debugLog('FirebasePushService: privacy-room check failed: $e');
+      // Locked state is per-key and small; if it cannot be read at all the
+      // room may be locked, so fail closed here.
+      debugLog('FirebasePushService: locked-chat check failed: $e');
       return true;
     }
     return false;

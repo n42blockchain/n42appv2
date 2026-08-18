@@ -4,17 +4,25 @@ part of 'chat_page.dart';
 /// 消息菜单相关方法（长按菜单、举报、搜索选项）
 extension _ChatPageMessageMenuMethods on _ChatPageState {
   void _showMessageMenu(MessageEntity message) {
+    // Self-destruct / view-once content must not be copied, spoken, read in a
+    // non-ephemeral page, or forwarded — doing so would outlive or exfiltrate
+    // the message and defeat its lifetime. The main WeChatMessageMenu already
+    // gates some of these; this fallback sheet had no gating at all, so gate at
+    // the callback source here (null callback => hidden item).
+    final blockExfil = message.isSelfDestructing;
     // 使用旧的底部菜单作为 fallback
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (ctx) => ChatMessageMenuSheet(
         message: message,
-        onCopy: () {
-          Navigator.pop(ctx);
-          _copyMessage(message);
-        },
-        onSpeak: message.type == MessageType.text
+        onCopy: blockExfil
+            ? null
+            : () {
+                Navigator.pop(ctx);
+                _copyMessage(message);
+              },
+        onSpeak: (message.type == MessageType.text && !blockExfil)
             ? () {
                 Navigator.pop(ctx);
                 _speakMessage(message);
@@ -23,6 +31,7 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
         // 长文阅读模式：条件与微信风格主菜单保持一致，避免 fallback 缺项。
         onReadingMode:
             (message.type == MessageType.text &&
+                !blockExfil &&
                 ArticleReaderUtils.isLongArticle(message.content))
             ? () {
                 Navigator.pop(ctx);
@@ -34,7 +43,8 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
           context.read<ChatBloc>().add(SetReplyTarget(message));
         },
         onForward:
-            (message.type == MessageType.redPacket ||
+            (blockExfil ||
+                message.type == MessageType.redPacket ||
                 message.type == MessageType.transfer ||
                 message.type == MessageType.paymentRequest)
             ? null
@@ -83,6 +93,13 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
     final isPinned = chatState.pinnedMessages.any((m) => m.id == message.id);
     final canPin = chatState.canPinMessages;
 
+    // The menu widget itself gates copy/save/forward/favorite/quote on
+    // isSelfDestructing, but translate / search / speak / reading-mode are not
+    // gated there and each moves the plaintext somewhere that outlives the
+    // message (external translation API, search field and history, TTS service,
+    // a plain reader page). Gate them here at the source.
+    final blockExfil = message.isSelfDestructing;
+
     overlayEntry = OverlayEntry(
       builder: (ctx) => WeChatMessageMenu(
         message: message,
@@ -129,10 +146,12 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
           debugLog('Remind clicked');
           _remindMessage(message);
         },
-        onSearch: () {
-          debugLog('Search clicked');
-          _searchMessage(message);
-        },
+        onSearch: blockExfil
+            ? null
+            : () {
+                debugLog('Search clicked');
+                _searchMessage(message);
+              },
         onRemindMe: () {
           debugLog('Remind me clicked');
           _remindMe(message);
@@ -185,7 +204,8 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
         },
         onTranslate:
             (getIt.isRegistered<ITranslationService>() &&
-                message.type == MessageType.text)
+                message.type == MessageType.text &&
+                !blockExfil)
             ? () {
                 debugLog('Translate clicked');
                 final chatBloc = context.read<ChatBloc>();
@@ -215,13 +235,14 @@ extension _ChatPageMessageMenuMethods on _ChatPageState {
               },
         onReadingMode:
             (message.type == MessageType.text &&
+                !blockExfil &&
                 ArticleReaderUtils.isLongArticle(message.content))
             ? () {
                 debugLog('Reading mode clicked');
                 _openReadingMode(message);
               }
             : null,
-        onSpeak: message.type == MessageType.text
+        onSpeak: (message.type == MessageType.text && !blockExfil)
             ? () {
                 debugLog('Read aloud clicked');
                 _speakMessage(message);
