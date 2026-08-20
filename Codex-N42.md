@@ -2358,3 +2358,141 @@ hardware_wallet 的 BC-UR 编解码在 2026-08-05/06 重写过两轮，**此前�
   确认页报账户不匹配之类错误，遇到请原文记录）；(b) 用例 1 的定性提示不变
   （crypto-account 内层 CBOR 解析仍未实现，进度走满但配对数据不对≠fountain
   缺陷）。其余用例与红线照旧。设备到位留言即可，无需重读全文。
+
+---
+
+## T29：直播全功能真机验证 + 授权修复（新增 2026-08-20）
+
+**基线：`master`（本条写就时 HEAD = `c6f19e06`），不是分支。** T14 那条
+`feat/live-gift-prediction-sync` 已并入 master 且分支已删，直接
+`git fetch origin && git checkout master && git pull` 即可。
+
+**本任务已获用户授权：发现问题你可以直接修**（不像 T28 那样只报不修）。红线见文末。
+
+### 先读这一段，否则你会找不到直播入口
+
+1. **直播是独立 App 入口，不在钱包主 App 里**：
+   `flutter run -t lib/main_live.dart`（`main_live.dart` 头注释写明「功能成熟后
+   再合入主 App 底部 tab」）。我已 grep 确认：主 app 侧 **没有任何**对
+   `GoLivePage`/`LiveRouter` 的引用。**装了主钱包 App 是绝对找不到直播的**——
+   T14 时代的设备矩阵阻塞里有多少是栽在这上面，请顺手确认一下。
+2. **打赏与预测默认都是 play-money，不是真钱**：
+   - 金币：`LiveGiftEconomy.initialCoins = 1000`，**全局钱包（跨直播间统一，
+     不按房间隔离）**，礼物有定价表（`gift_catalog.dart`，🌹玫瑰/👍点赞=1 币起）。
+   - 预测：`predictionRepositoryProvider` 按 `liveChainPredictionConfig` 二选一——
+     **配置为空（默认）→ `MatrixPredictionRepository`（Matrix 事件溯源，play-money，
+     跨设备一致）**；配置非空 → `ChainPredictionRepository`。
+   - ⚠️ **不要去配 `liveChainPredictionConfig`**：`ChainPredictionRepository` 的
+     `redeem`/`watchBalance`/`watchMarkets` 等**全是 `_todo()` 直接抛
+     `UnimplementedError`**（见 `chain_prediction_repository.dart:62`），一配就崩。
+     链上路径属未实现，不在本次测试范围，不要报它 FAIL。
+3. **视频画面（🎥 标记项）可能整体 BLOCKED，但其余全部可测**：
+   礼物/预测/弹幕/进场/判活**全走 Matrix，不依赖 LiveKit**。
+   视频依赖 `N42Chat.liveKitJwtUrl`，而该值**不是打包参数，是登录后从 homeserver
+   的 `.well-known` 自动发现的**（`n42_call_facade.dart:95-144`，读
+   `org.matrix.msc4143.rtc_foci` 里 type=livekit 的 `livekit_service_url`，
+   备选 `n42.livekit.jwt_url`）。T8/T14 记录该端点曾 301→404。
+   **所以视频不通时先判断是服务端 well-known 没配还是端点挂了**，
+   在报告里贴出 `liveKitJwtUrl` 实际值（日志 `N42Chat: Found LiveKit JWT service:`），
+   这属于服务端/运维项，不要在客户端硬修。
+
+### 回归基线（改任何 live 代码后必须复跑）
+
+- `flutter test test/features/live/ --no-pub` → **47 例全绿**（我刚在 master 上实测 47；
+  T14 时代是 42、更早 29——数字对不上就是没拉到最新代码）。
+- `flutter analyze lib/features/live --no-fatal-infos` 零问题。
+- 改到 `packages/n42_chat` 的话：`cd packages/n42_chat && flutter test` → **419 例**。
+  ⚠️ 注意 chat 是 **vendored 构建**（`pubspec_overrides.yaml` 把 n42_chat 覆盖成本地
+  `packages/n42_chat`），**改这里才进构建，改 pubspec.yaml 的 git ref 没用**。
+
+### 设备与账号
+
+两台设备（或两机 + 两个账号）：**A = 主播**（`GoLivePage` 开播），**B = 观众**（进同一房）。
+Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registration_token` 门禁，
+若两个账号开不出来，先报这一项阻塞，别硬刚。
+
+### 用例矩阵
+
+**建立直播**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 1 | A 从直播首页进 `GoLivePage` 开播 | 能创建直播间并进入房间页；权限弹窗（相机/麦克风）正常 |
+| 2 🎥 | 开播后本机预览 | A 看到自己画面（JWT 端点通才可验，否则记 BLOCKED 并贴 jwtUrl 值） |
+| 3 | B 在直播列表看到 A 的房 | 列表出现 A 的房 + LIVE 徽标 |
+| 4 🎥 | B 进 A 的直播间 | <1s 看到 A 画面 |
+| 5 | A 开播过程中途退出/切后台再回 | 摄像头与心跳不脱管（此前有异步窗口期脱管只能杀进程的问题，已修 `dispose()`+取消检查，本项是复验） |
+
+**浮层消息（弹幕）**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 6 | A/B 互发弹幕 | 双端实时显示；**结构化事件（礼物/预测）不得混进弹幕列表** |
+| 7 | 弹幕高频刷屏 | 浮层不堆爆、不卡顿、旧消息正常滚出 |
+| 8 | 进场消息 | B 进房时双端可见进场提示 |
+
+**打赏（礼物）**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 9 | B 送「🌹玫瑰」 | **双端**都弹飞行动画 + 左下「B 送出 🌹玫瑰」；B 金币扣减 |
+| 10 | B 连点多个不同礼物 | 双端并发动画不堆爆（上限 12）、提示滚动更新 |
+| 11 | **超额送礼** | 把金币送到不足再送：超出 `initialCoins` 累计余额的礼物**一律判无效**——不播动画、不计主播收益。这是安全属性，重点验 |
+| 12 | **伪造礼物事件** | 若能在弹幕框直接发 `n42live:{"t":"gift","g":"crown"}` 这类文本：**不应**播动画、**不应**计收益 |
+| 13 | 金币余额全局性 | B 换一个直播间，金币**不应**恢复满额（全局钱包非按房隔离） |
+
+**预测**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 14 | A 开预测（问题 + 2 结果，可选时限） | B 端卡片实时出现，问题/结果/价格一致 |
+| 15 | B 买入某结果 | 双端价格随成交移动且一致；B 持仓增加、余额扣减 |
+| 16 | A 与 B 各买不同结果 | 双端价格/各自持仓一致（事件溯源定序） |
+| 17 | 设了时限的预测到点 | 双端显示「待开奖」并禁止下注 |
+| 18 | **非建市者伪造开奖** | B（非建市者）若能构造 resolve 事件：**所有端一致丢弃**（resolver 鉴权） |
+| 19 | **跨房串号伪造** | 用 A 房的 marketId 在 B 房发事件：应被房间归属鉴权丢弃 |
+
+**结算**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 20 | A 开奖选赢家 | 双端显示已开奖 + 赢家；B 押中点「赎回奖金」余额按 1:1 入账，押错为 0 |
+| 21 | A 取消预测 | 双端显示已取消；B 赎回退回**净投入本金** |
+| 22 | 已开奖后再取消 | 被拒（终态守护；UI 已隐藏入口，如有路径应报错且不改状态） |
+| 23 | 赎回幂等 | 同一市场重复点赎回不应重复入账 |
+
+**下播与判活**
+
+| # | 场景 | 期望 |
+|---|------|------|
+| 24 | A 点停止结束直播 | ≤90s 内从 B 的列表消失；B 再进该房显示「直播已结束」 |
+| 25 | A 直接划掉/杀进程 | 同上，≤90s 自动失活（心跳停 + TTL）——崩溃自愈关键项 |
+| 26 | A 下播时 B 在房内 | B 端画面与心跳**双双**失活（不是各自独立表现） |
+| 27 | B 反复进退 | 成员数不虚涨 |
+
+### 授权修复的范围与红线
+
+**可以直接修**：UI/交互缺陷、导航入口缺失、空指针/异常、状态不同步、动画堆叠、
+文案与 l10n、`lib/features/live/` 下的业务逻辑、`packages/n42_chat` 里直播相关代码。
+
+**修完必须**：跑上面的回归基线（live 47 + 必要时 chat 419 + analyze），
+提交信息**标题和正文一律英文**（这是本仓规则，正文中文会被要求改写），
+**不要包含 Claude 字样**，提交模板见 CLAUDE.md。
+
+**红线（改前先留言，别自己动）**：
+- `ChainPredictionRepository` / `liveChainPredictionConfig` —— 链上路径未实现，
+  本次不测不修；发现问题记录即可。
+- 判活心跳的事件类型（`n42.live.status` 专用 state event）与礼物重放引擎的
+  定序语义 —— 这两处是 T14 两轮对抗审计的产物，改动会动摇跨端一致性，
+  发现疑似缺陷先留言给出复现，等 Windows 侧确认。
+- LiveKit JWT 端点相关 —— 服务端/运维项，客户端不硬修。
+- 已知非缺陷（确认即可，不必报 FAIL）：观众用 viewer token 仍能推流 =
+  服务端 JWT 未按 role 签发 `canPublish`，客户端已正确传 role。
+
+### 交付物
+
+`docs/device-test-reports/2026-MM-DD-t29-live-full.md`：
+设备型号 + 系统版本 + App commit hash；27 项逐条 PASS/FAIL/BLOCKED/PARTIAL；
+失败项附复现步骤 + 日志/截图；**自己修掉的问题列出 commit hash 与根因**；
+视频类 BLOCKED 请贴 `liveKitJwtUrl` 实际值与 well-known 响应，便于定位是服务端还是客户端。
+全部跑完在本条目下留言，我这边做代码验收。
