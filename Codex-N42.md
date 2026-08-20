@@ -2496,3 +2496,76 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
 失败项附复现步骤 + 日志/截图；**自己修掉的问题列出 commit hash 与根因**；
 视频类 BLOCKED 请贴 `liveKitJwtUrl` 实际值与 well-known 响应，便于定位是服务端还是客户端。
 全部跑完在本条目下留言，我这边做代码验收。
+
+### T29 补充与更正（2026-08-20，Claude 派发当日追加——**开测前必读，第 1 条是更正**）
+
+派发后我做了一轮更深的代码摸底，有一条**要更正原文**，其余是能省你大量真机时间的事实。
+
+**① 更正：主 App 内也能进直播，原文「装了主钱包 App 绝对找不到直播」不准确。**
+我当时 grep 的是 `GoLivePage`/`LiveRouter`（确实零引用），**漏了 `LiveApp`**。
+实际有两条入口：
+- **A 路径（独立 App）**：`flutter run -t lib/main_live.dart -d <device>`。自建
+  ProviderContainer、强制竖屏，**不跑**宿主 `chat_initialization`（无主题/语言同步、
+  无推送、**不用宿主账号**）。
+- **B 路径（主 App 内，可达）**：首页聊天图标（`home_page.dart:86-90`）→
+  `N42Chat.chatWidget()` → 发现页 →「直播」（`discover_page.dart:106-112` →
+  `_openLive` :436-440）→ `N42Chat.invokeOpenLive` → 宿主 handler
+  `chat_initialization.dart:358-362` push `LiveApp`。
+  前置：chat 已初始化且已登录；否则发现页显示登录页，或「直播」回退到**语音房列表**。
+
+**② ⚠️ 视频这一项请当作第 1 个 gate 单独先测，且大概率失败——原因比我原文写的更具体。**
+`live_video_service.dart:241-249` **恒传 `role: 'broadcaster'|'viewer'`**；而
+`matrix_rtc_token_service.dart:45-64` 规定：**带 role 的请求只走 N42 legacy 端点，
+失败即抛错，绝不回退官方 `/sfu/get`**。而 `backend/livekit-jwt/README.md:3-5` 自述
+生产 `m.si46.world` 用的是 **Element 官方 MatrixRTC 服务**（`/livekit/jwt/sfu/get`）。
+→ **若生产未部署 legacy `/livekit/jwt`，直播视频必失败**，错误形如
+`livekit_token_fetch_failed`（开播页/房间页会直接显示原始异常串）。
+旁证：聊天群通话（走官方端点、不带 role）在 `2026-07-13-wallet-chat-devices.md:67` 真机是成功的。
+请把这一项的失败**定性为服务端/客户端 role 协商不匹配**，贴出实际报错与 well-known 响应，
+**不要在客户端硬改**（红线）。
+附带：即便部署了 legacy 服务，`backend/livekit-jwt/handler.go:54` 也是无条件
+`CanPublish: true` —— 「观众限权」在服务端**未实现**，原文「已知非缺陷」那条依然成立。
+
+**③ 视频挂了不影响其余 20+ 项。** 视频失败只替换视频层（`live_room_page.dart:197-207`
+的 `_ErrorView`），**弹幕/礼物/预测层照常叠加**。所以 gate 失败就跳过 🎥，其余照跑。
+
+**④ play-money 的两个「重启归零」特性，别误判成 FAIL：**
+- 礼物面板的**「充值」按钮是纯本地假充值**：`gift_picker_sheet.dart:64-67` →
+  `gift_economy.dart:167-172` 只加本端内存变量，类注释自陈 "本地展示性 mock"，
+  **无持久化，重启归零**。
+- 预测**赎回仅本端内存记账**：`matrix_prediction_repository.dart:424-440`，
+  注释明说「结算入账只发生在本端，无需广播」，**同样重启归零**。
+  → 用例 20/21/23 验的是「账面结果跨端一致」，不是「资金到账」。**主播收益也只是计数器，
+  仓内无任何 payout/withdraw/绑定钱包地址代码**（`ARCHITECTURE.md:371` 列为 P2 待办）。
+
+**⑤ 两机联调技巧（比等直播广场刷新可靠）：** 广场靠 `queryPublicRooms` + topic 心跳
+前缀过滤（`live_chat_service.dart:372-396`），依赖 homeserver 公共房目录可读。
+更稳的是**主播端复制房号 chip**（`go_live_page.dart:315-362`）→ **观众端手动粘贴进房**
+（`live_home_page.dart:76-94`）。用例 3（列表可见）单独验，别让它挡住 4~27。
+
+**⑥ 两条路径各自的副作用，选路前先知道：**
+- **B 路径用的是用户真实 Matrix 账号** → **开播会在真实账号下创建一个公开群**，
+  会出现在其会话列表里，观众进房＝加入该公开群。用测试账号，别用你的主账号。
+- **B 路径切房会重建 CallManager**（`live_video_service.dart:135-143` 调
+  `disposeCallManager()`+`initializeCallManager()`）→ 会掀掉宿主聊天的通话管理器/TURN 刷新。
+  测试期间别同时开着聊天通话，否则是已知干扰源。
+- **A 路径每次启动都新建匿名账号**（无凭据持久化，`live_bootstrap.dart:64-76`）→
+  homeserver 必须**开放匿名注册**；若开了 registration token，**A 路径直接不可用**，
+  这时改走 B 路径 + 测试账号。A 路径 homeserver 硬编码
+  `live_bootstrap.dart:11 = https://m.si46.world`，无覆盖开关。
+- 权限已就绪，无需改工程：Android `CAMERA/RECORD_AUDIO/INTERNET`；iOS
+  `NSCameraUsageDescription/NSMicrophoneUsageDescription` 均已声明。iOS 跑 A 路径用同一
+  Runner 工程 `flutter run -t lib/main_live.dart -d <udid>`，**无需单独 scheme**
+  （注意：`scripts/build_ipa.sh`/Makefile **无 live target**，只支持开发期 run，出不了包）。
+
+**⑦ 顺带确认了几处与用例相关的实现事实：**
+- 主播端**只有弹幕展示层、没有输入框**（`go_live_page.dart:273-279`），用例 6 的
+  「A/B 互发」实际是 B 发 A 收；A 要发言需用第三个账号或从观众端进自己的房。
+- 点赞飘心是**纯本地动画、不跨端**（`like_burst.dart`），别期待对端看到。
+- 死房 TTL 90s（`live_chat_service.dart:105-113, 310-341`），用例 24/25 的 ≤90s 有代码依据。
+- `mock_prediction_repository.dart`（419 行）**App 侧零调用方**，仅单测使用——
+  真机测的一定是 `MatrixPredictionRepository`，若你看到「单机演示」行为说明选错了实现。
+- `ARCHITECTURE.md:378-386` 写的「42 例 / replay 18 例」**数字已过时**，以实跑
+  47 例为准（gift_tally 9 + live_chat_service 2 + mock_prediction 15 + replay 21）。
+- **直播从未在真机跑通过**：`2026-06-30-live-gift-prediction.md` 的 14 项全 BLOCKED，
+  `integration_test/` 对直播零覆盖。所以任何一项 PASS 都是这个功能的首次真机验证。
