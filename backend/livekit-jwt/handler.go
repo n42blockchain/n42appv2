@@ -37,16 +37,25 @@ const roleBroadcaster = "broadcaster"
 
 // canPublishFor decides the LiveKit publish grant.
 //
-// The client-supplied role is a hint, never an authorisation: a viewer can
-// trivially send role=broadcaster. Publishing is granted only when the
-// requester is the room's creator, which the homeserver writes into
-// m.room.create and no client can forge. Requests without a role keep the
-// historical behaviour (group calls, where every participant publishes).
-func canPublishFor(request tokenRequest, creator string) bool {
-	if strings.TrimSpace(request.Role) == "" {
+// The decision is keyed on the room, never on the client-supplied role. Role
+// is attacker-controlled in both directions: a viewer can claim
+// role=broadcaster, and - more dangerously - can simply omit role entirely, so
+// any rule of the form "no role means publish" is a bypass, not a default.
+//
+// Live rooms are public (publicChat/JoinRules.public) so strangers can join;
+// group-call rooms are invite-only. Therefore:
+//
+//   - public room  -> only the room creator publishes (the broadcaster)
+//   - private room -> every joined member publishes (group call)
+//
+// Within a public room an explicit non-broadcaster role still downgrades the
+// grant, so a broadcaster's own viewer-role request cannot publish either.
+func canPublishFor(request tokenRequest, creator string, roomIsPublic bool) bool {
+	if !roomIsPublic {
 		return true
 	}
-	if !strings.EqualFold(strings.TrimSpace(request.Role), roleBroadcaster) {
+	role := strings.TrimSpace(request.Role)
+	if role != "" && !strings.EqualFold(role, roleBroadcaster) {
 		return false
 	}
 	return creator != "" && request.Identity == creator
@@ -144,10 +153,25 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 		payload.Name = userID
 	}
 
-	// Role-bearing requests come from the live client. Resolve the broadcaster
-	// from room state so a viewer cannot self-declare publish rights.
-	if strings.TrimSpace(payload.Role) != "" {
-		creator, creatorErr := h.matrix.RoomCreator(
+	// Resolve publish rights from room state. This runs for every request,
+	// including ones that carry no role at all - omitting the field must not
+	// be a way around the check.
+	roomIsPublic, publicErr := h.matrix.RoomIsPublic(
+		request.Context(),
+		accessToken,
+		payload.ConversationID,
+	)
+	if publicErr != nil && !errors.Is(publicErr, errMatrixUpstream) {
+		writeMatrixError(response, publicErr)
+		return
+	}
+	// On an upstream read failure RoomIsPublic reports true, which applies the
+	// stricter creator-only rule rather than handing out a publish grant.
+
+	var creator string
+	if roomIsPublic {
+		var creatorErr error
+		creator, creatorErr = h.matrix.RoomCreator(
 			request.Context(),
 			accessToken,
 			payload.ConversationID,
@@ -157,10 +181,8 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 			return
 		}
 		// An unresolvable creator must not silently grant publish rights.
-		payload.canPublish = canPublishFor(payload, creator)
-	} else {
-		payload.canPublish = true
 	}
+	payload.canPublish = canPublishFor(payload, creator, roomIsPublic)
 
 	token, err := h.issuer.Issue(payload)
 	if err != nil {

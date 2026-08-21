@@ -19,6 +19,8 @@ type fakeMatrixVerifier struct {
 	joinErr    error
 	creator    string
 	creatorErr error
+	isPublic   bool
+	publicErr  error
 }
 
 func (f fakeMatrixVerifier) WhoAmI(context.Context, string) (string, error) {
@@ -37,6 +39,14 @@ func (f fakeMatrixVerifier) RoomCreator(
 	return f.creator, f.creatorErr
 }
 
+func (f fakeMatrixVerifier) RoomIsPublic(
+	context.Context,
+	string,
+	string,
+) (bool, error) {
+	return f.isPublic, f.publicErr
+}
+
 // capturingIssuer records the request the handler resolved, so tests can
 // assert on the publish decision rather than only on the returned string.
 type capturingIssuer struct {
@@ -53,7 +63,11 @@ func publishDecision(t *testing.T, role, identity, creator string) bool {
 	t.Helper()
 	issuer := &capturingIssuer{token: "tok"}
 	handler := tokenHandler{
-		matrix: fakeMatrixVerifier{userID: identity, creator: creator},
+		matrix: fakeMatrixVerifier{
+			userID:   identity,
+			creator:  creator,
+			isPublic: true,
+		},
 		issuer: issuer,
 	}
 	const conversation = "!live:m.example"
@@ -106,12 +120,80 @@ func TestUnknownRoleIsTreatedAsViewer(t *testing.T) {
 	}
 }
 
-// Group calls send no role at all and every participant publishes; that
+// The bypass that keying on the role's presence would have left wide open:
+// an attacker simply omits the field. In a live room a non-creator must be
+// denied whether or not a role is supplied.
+func TestOmittedRoleCannotBypassInLiveRoom(t *testing.T) {
+	if publishDecision(t, "", "@viewer:m.example", "@streamer:m.example") {
+		t.Fatal("omitting the role must not grant publish rights in a live room")
+	}
+}
+
+// The creator of a live room still publishes when no role is supplied.
+func TestOmittedRoleStillAllowsCreator(t *testing.T) {
+	const streamer = "@streamer:m.example"
+	if !publishDecision(t, "", streamer, streamer) {
+		t.Fatal("the creator must publish even without an explicit role")
+	}
+}
+
+// Group calls run in invite-only rooms where every participant speaks; that
 // behaviour must survive this change.
-func TestRolelessRequestKeepsPublishing(t *testing.T) {
-	const user = "@member:m.example"
-	if !publishDecision(t, "", user, "@someone-else:m.example") {
-		t.Fatal("a request without a role must keep the historical grant")
+func TestPrivateRoomParticipantsKeepPublishing(t *testing.T) {
+	issuer := &capturingIssuer{token: "tok"}
+	handler := tokenHandler{
+		matrix: fakeMatrixVerifier{
+			userID:   "@member:m.example",
+			creator:  "@someone-else:m.example",
+			isPublic: false,
+		},
+		issuer: issuer,
+	}
+	const conversation = "!group:m.example"
+	body, _ := json.Marshal(map[string]any{
+		"room":            buildLiveKitRoomName(conversation),
+		"identity":        "@member:m.example",
+		"conversation_id": conversation,
+	})
+	request := httptest.NewRequest(http.MethodPost, "/livekit/jwt", strings.NewReader(string(body)))
+	request.Header.Set("Authorization", "Bearer matrix-token")
+	recorder := httptest.NewRecorder()
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", recorder.Code)
+	}
+	if !issuer.last.canPublish {
+		t.Fatal("a group-call participant must keep publishing")
+	}
+}
+
+// If the join rule cannot be read we must not fall back to granting publish.
+func TestUnreadableJoinRuleAppliesCreatorOnlyRule(t *testing.T) {
+	issuer := &capturingIssuer{token: "tok"}
+	handler := tokenHandler{
+		matrix: fakeMatrixVerifier{
+			userID:    "@viewer:m.example",
+			creator:   "@streamer:m.example",
+			isPublic:  true,
+			publicErr: errMatrixUpstream,
+		},
+		issuer: issuer,
+	}
+	const conversation = "!live:m.example"
+	body, _ := json.Marshal(map[string]any{
+		"room":            buildLiveKitRoomName(conversation),
+		"identity":        "@viewer:m.example",
+		"conversation_id": conversation,
+	})
+	request := httptest.NewRequest(http.MethodPost, "/livekit/jwt", strings.NewReader(string(body)))
+	request.Header.Set("Authorization", "Bearer matrix-token")
+	recorder := httptest.NewRecorder()
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", recorder.Code)
+	}
+	if issuer.last.canPublish {
+		t.Fatal("an unreadable join rule must not grant publish rights")
 	}
 }
 
@@ -123,6 +205,7 @@ func TestUnresolvableCreatorDeniesPublish(t *testing.T) {
 		matrix: fakeMatrixVerifier{
 			userID:     "@streamer:m.example",
 			creatorErr: errMatrixNoCreator,
+			isPublic:   true,
 		},
 		issuer: issuer,
 	}
