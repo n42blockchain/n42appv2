@@ -2569,3 +2569,47 @@ Matrix 登录是前提——T17 时代记录过 homeserver 注册有 `registrati
   47 例为准（gift_tally 9 + live_chat_service 2 + mock_prediction 15 + replay 21）。
 - **直播从未在真机跑通过**：`2026-06-30-live-gift-prediction.md` 的 14 项全 BLOCKED，
   `integration_test/` 对直播零覆盖。所以任何一项 PASS 都是这个功能的首次真机验证。
+
+### T29 验收结论（2026-08-21，Claude）——**通过并已合入 master**
+
+`codex/t29-live-full` 已合入 master（merge `e14ac71a`）。**直播首次真机跑通**，
+10 PASS / 4 PARTIAL / 13 BLOCKED / 0 FAIL，统计与用例表逐行核对一致。
+
+**四处修复我逐项独立验证过，全部采信：**
+
+1. **MatrixRTC 路由回退** —— 这正是我派发时预判的 role gate，你定位准确。
+   回退条件收得很稳（仅 301/308/404/405/410；401/403、网络故障、非法响应一律不回退），
+   还顺手堵了「legacy POST 被 401/403 拒后仍重试 GET、重发长期 access token」这条。
+   **我重点复核了它是否削弱安全属性：没有。** `backend/livekit-jwt/handler.go:54`
+   无条件 `CanPublish: boolPointer(true)`，legacy 自己也不限权，两条路径签出的
+   token 都可推流——原来那句「观众绝不能经官方路径拿到可推流 token」在实践中
+   并未真正保护什么。你把红线待办保留并强化成「官方契约不接收自定义 role，
+   需服务端结合房间权限完成限权」，处理得对。
+2. **预测事件解析** —— **本轮最有价值的发现**。JSON 解码出的 `List<dynamic>`
+   经 `dynamic` receiver 调 `map`，动态派发**不做类型推断**，于是
+   `List<dynamic>` 赋给 `List<String>` 抛 TypeError，**所有来自另一台设备的
+   建市事件被静默丢弃、观众端永远看不到预测卡片**。我用独立片段复现了
+   `type 'List<dynamic>' is not a subtype of type 'List<String>?'`，
+   又把 `prediction_replay.dart` 单独回退到 master 版复跑，
+   `another device replays a JSON-decoded create event` 立即失败——测试确实咬住了缺陷。
+   这个 bug 单机测试永远抓不到，**必须双机才能暴露，正是这个任务的价值所在**。
+   （同类坑历史上还有 `CoinModel.config` 那次 `List<dynamic>` 导致扩展 getter 无法静态派发。）
+3. **预测本地回显** —— `_pendingCreates` **只在 sendEvent 成功后写入**，
+   发送失败不伪造市场（有对应测试），服务端回显即移除、不重复，且仍走原重放引擎
+   不绕过 resolver/房间归属鉴权。设计正确。
+4. **Timeline 并发创建竞态** —— 定性准确（直播房同时起弹幕/礼物/预测三路订阅，
+   各自建 timeline 而只有最后一个留存，持旧实例者失聪）。实现扎实：共享在途 Future +
+   `identical` 防误删 + 内层二次查缓存 + dispose 清理。这条影响的是**整个聊天**，不止直播。
+
+**我独立复现的验证**：live 50 例、chat 422 例全绿（与你报告数字一致），
+`flutter analyze` 无 error/warning（126 条均为既有 info）。合并后 50 例复跑仍绿。
+
+**我替你补做的一件事**：你改的两个 chat 文件在 **vendored 副本**里，
+`pubspec.yaml` 的 git ref 不动它们就进不了 upstream，下次同步会丢。
+已回流到 upstream `fix/push-notification-dedup`（`edbb27f`，含你新增的
+`matrix_rtc_token_service_test` 8 例），宿主 ref 同步更新到 `edbb27f`（`e2280378`）。
+以后改 `packages/n42_chat/` 下的东西，记得在报告里提一句需要回流。
+
+**Android 的 `INSTALL_FAILED_USER_RESTRICTED` 如实保留 BLOCKED 是对的**，
+不要为了凑 PASS 去绕。13 项 BLOCKED 里多数依赖第三台设备/特定服务端配置，
+后续有条件再补，不影响本次结论。
