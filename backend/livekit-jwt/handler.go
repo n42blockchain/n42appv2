@@ -42,16 +42,16 @@ const roleBroadcaster = "broadcaster"
 // role=broadcaster, and - more dangerously - can simply omit role entirely, so
 // any rule of the form "no role means publish" is a bypass, not a default.
 //
-// Live rooms are public (publicChat/JoinRules.public) so strangers can join;
-// group-call rooms are invite-only. Therefore:
+// A live room is identified by the n42.live.status marker the broadcaster
+// writes; everything else is an ordinary room hosting a group call.
 //
-//   - public room  -> only the room creator publishes (the broadcaster)
-//   - private room -> every joined member publishes (group call)
+//   - live room  -> only the room creator publishes (the broadcaster)
+//   - other room -> every joined member publishes (group call)
 //
-// Within a public room an explicit non-broadcaster role still downgrades the
+// Within a live room an explicit non-broadcaster role still downgrades the
 // grant, so a broadcaster's own viewer-role request cannot publish either.
-func canPublishFor(request tokenRequest, creator string, roomIsPublic bool) bool {
-	if !roomIsPublic {
+func canPublishFor(request tokenRequest, creator string, roomIsLive bool) bool {
+	if !roomIsLive {
 		return true
 	}
 	role := strings.TrimSpace(request.Role)
@@ -156,20 +156,20 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 	// Resolve publish rights from room state. This runs for every request,
 	// including ones that carry no role at all - omitting the field must not
 	// be a way around the check.
-	roomIsPublic, publicErr := h.matrix.RoomIsPublic(
+	roomIsLive, liveErr := h.matrix.RoomIsLive(
 		request.Context(),
 		accessToken,
 		payload.ConversationID,
 	)
-	if publicErr != nil && !errors.Is(publicErr, errMatrixUpstream) {
-		writeMatrixError(response, publicErr)
+	if liveErr != nil && !errors.Is(liveErr, errMatrixUpstream) {
+		writeMatrixError(response, liveErr)
 		return
 	}
-	// On an upstream read failure RoomIsPublic reports true, which applies the
+	// On an upstream read failure RoomIsLive reports true, which applies the
 	// stricter creator-only rule rather than handing out a publish grant.
 
 	var creator string
-	if roomIsPublic {
+	if roomIsLive {
 		var creatorErr error
 		creator, creatorErr = h.matrix.RoomCreator(
 			request.Context(),
@@ -182,7 +182,7 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 		}
 		// An unresolvable creator must not silently grant publish rights.
 	}
-	payload.canPublish = canPublishFor(payload, creator, roomIsPublic)
+	payload.canPublish = canPublishFor(payload, creator, roomIsLive)
 
 	token, err := h.issuer.Issue(payload)
 	if err != nil {

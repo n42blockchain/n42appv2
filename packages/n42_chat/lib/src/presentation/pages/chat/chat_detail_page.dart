@@ -16,6 +16,7 @@ import '../../../core/services/storage_manager_service.dart';
 import '../../../core/services/storage_monitor_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/entities/message_entity.dart';
@@ -236,9 +237,26 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   }) async {
     try {
       final repository = getIt<IConversationRepository>();
+      final prefs = getIt<PreferencesDataSource>();
       if (locked) {
+        // widget.conversation is a snapshot taken at navigation time, so it
+        // cannot be trusted on unlock. Record the state now, once, and read it
+        // back later instead of re-deriving it from a mute we wrote ourselves.
+        await prefs.rememberPrivacyMuteOrigin(
+          conversationId,
+          widget.conversation.isMuted,
+        );
         await repository.setMuted(conversationId, true);
-      } else if (!widget.conversation.isMuted) {
+        return;
+      }
+
+      // Hiding and locking share one room-level push rule; if the chat is
+      // still hidden, unlocking must not lift the mute and re-expose it.
+      final hidden = await prefs.isChatHidden(conversationId);
+      if (hidden) return;
+
+      final wasMutedBefore = await prefs.takePrivacyMuteOrigin(conversationId);
+      if (wasMutedBefore == false) {
         await repository.setMuted(conversationId, false);
       }
     } catch (e) {

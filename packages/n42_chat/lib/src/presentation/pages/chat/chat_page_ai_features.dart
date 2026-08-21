@@ -92,7 +92,14 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
     if (!aiServiceAvailable() || _isAiSummarizing) return;
     final messages = context.read<ChatBloc>().state.messages;
     final textMessages = messages
-        .where((m) => m.type == MessageType.text && m.content.trim().isNotEmpty)
+        .where(
+          (m) =>
+              m.type == MessageType.text &&
+              m.content.trim().isNotEmpty &&
+              // Summaries go to an external AI endpoint; self-destruct content
+              // must not be part of the payload.
+              !m.isSelfDestructing,
+        )
         .take(50)
         .toList()
         .reversed;

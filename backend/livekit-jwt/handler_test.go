@@ -19,8 +19,8 @@ type fakeMatrixVerifier struct {
 	joinErr    error
 	creator    string
 	creatorErr error
-	isPublic   bool
-	publicErr  error
+	isLive     bool
+	liveErr    error
 }
 
 func (f fakeMatrixVerifier) WhoAmI(context.Context, string) (string, error) {
@@ -39,12 +39,12 @@ func (f fakeMatrixVerifier) RoomCreator(
 	return f.creator, f.creatorErr
 }
 
-func (f fakeMatrixVerifier) RoomIsPublic(
+func (f fakeMatrixVerifier) RoomIsLive(
 	context.Context,
 	string,
 	string,
 ) (bool, error) {
-	return f.isPublic, f.publicErr
+	return f.isLive, f.liveErr
 }
 
 // capturingIssuer records the request the handler resolved, so tests can
@@ -64,9 +64,9 @@ func publishDecision(t *testing.T, role, identity, creator string) bool {
 	issuer := &capturingIssuer{token: "tok"}
 	handler := tokenHandler{
 		matrix: fakeMatrixVerifier{
-			userID:   identity,
-			creator:  creator,
-			isPublic: true,
+			userID:  identity,
+			creator: creator,
+			isLive:  true,
 		},
 		issuer: issuer,
 	}
@@ -139,13 +139,13 @@ func TestOmittedRoleStillAllowsCreator(t *testing.T) {
 
 // Group calls run in invite-only rooms where every participant speaks; that
 // behaviour must survive this change.
-func TestPrivateRoomParticipantsKeepPublishing(t *testing.T) {
+func TestNonLiveRoomParticipantsKeepPublishing(t *testing.T) {
 	issuer := &capturingIssuer{token: "tok"}
 	handler := tokenHandler{
 		matrix: fakeMatrixVerifier{
-			userID:   "@member:m.example",
-			creator:  "@someone-else:m.example",
-			isPublic: false,
+			userID:  "@member:m.example",
+			creator: "@someone-else:m.example",
+			isLive:  false,
 		},
 		issuer: issuer,
 	}
@@ -167,15 +167,15 @@ func TestPrivateRoomParticipantsKeepPublishing(t *testing.T) {
 	}
 }
 
-// If the join rule cannot be read we must not fall back to granting publish.
-func TestUnreadableJoinRuleAppliesCreatorOnlyRule(t *testing.T) {
+// If the live marker cannot be read we must not fall back to granting publish.
+func TestUnreadableLiveMarkerAppliesCreatorOnlyRule(t *testing.T) {
 	issuer := &capturingIssuer{token: "tok"}
 	handler := tokenHandler{
 		matrix: fakeMatrixVerifier{
-			userID:    "@viewer:m.example",
-			creator:   "@streamer:m.example",
-			isPublic:  true,
-			publicErr: errMatrixUpstream,
+			userID:  "@viewer:m.example",
+			creator: "@streamer:m.example",
+			isLive:  true,
+			liveErr: errMatrixUpstream,
 		},
 		issuer: issuer,
 	}
@@ -193,7 +193,7 @@ func TestUnreadableJoinRuleAppliesCreatorOnlyRule(t *testing.T) {
 		t.Fatalf("expected 200, got %d", recorder.Code)
 	}
 	if issuer.last.canPublish {
-		t.Fatal("an unreadable join rule must not grant publish rights")
+		t.Fatal("an unreadable live marker must not grant publish rights")
 	}
 }
 
@@ -205,7 +205,7 @@ func TestUnresolvableCreatorDeniesPublish(t *testing.T) {
 		matrix: fakeMatrixVerifier{
 			userID:     "@streamer:m.example",
 			creatorErr: errMatrixNoCreator,
-			isPublic:   true,
+			isLive:     true,
 		},
 		issuer: issuer,
 	}

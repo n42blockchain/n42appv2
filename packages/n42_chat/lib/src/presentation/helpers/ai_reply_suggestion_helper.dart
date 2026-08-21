@@ -53,7 +53,11 @@ abstract final class AiReplySuggestionHelper {
 
   static bool _isEligibleTextMessage(MessageEntity message) {
     return message.type == MessageType.text &&
-        message.content.trim().isNotEmpty;
+        message.content.trim().isNotEmpty &&
+        // Self-destruct content must never leave the device for an external AI
+        // endpoint. Smart replies refresh automatically on state changes, so
+        // without this the plaintext is shipped with no user action at all.
+        !message.isSelfDestructing;
   }
 
   static AiMessage _toAiMessage(MessageEntity message) {

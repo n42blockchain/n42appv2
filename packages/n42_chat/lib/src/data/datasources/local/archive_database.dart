@@ -633,7 +633,13 @@ void _shredPlaintextFile(File file) {
   try {
     final length = file.lengthSync();
     if (length > 0) {
-      final sink = file.openSync(mode: FileMode.writeOnly);
+      // writeOnly implies O_TRUNC: it would drop the file to zero bytes at
+      // open, releasing the original blocks, and the zeros would then land in
+      // freshly allocated ones - leaving the cleartext exactly as recoverable
+      // as before. Open for append and rewind so the writes land on top of the
+      // existing bytes.
+      final sink = file.openSync(mode: FileMode.writeOnlyAppend);
+      sink.setPositionSync(0);
       try {
         const chunkSize = 64 * 1024;
         final zeros = Uint8List(chunkSize);
@@ -655,7 +661,14 @@ void _shredPlaintextFile(File file) {
   } catch (e) {
     debugLog('ArchiveDatabase: overwrite before delete failed: $e');
   }
-  file.deleteSync();
+  try {
+    file.deleteSync();
+  } catch (e) {
+    // A locked or read-only file must not surface as a verification failure;
+    // the caller would then refresh its mtime and restart the grace period,
+    // keeping a zero-filled backup around forever.
+    debugLog('ArchiveDatabase: could not delete plaintext backup: $e');
+  }
 }
 
 /// Proves that [file] is a readable SQLCipher database with a valid schema.

@@ -845,6 +845,10 @@ extension _ChatPageMessageActionsMethods on _ChatPageState {
         .where(
           (m) =>
               _selectedMessageIds.contains(m.id) &&
+              // Multi-select is a second forward path around the single-message
+              // menu gate: without this a self-destruct message can be selected
+              // and re-sent as an ordinary message, outliving its own lifetime.
+              !m.isSelfDestructing &&
               m.type != MessageType.redPacket &&
               m.type != MessageType.transfer &&
               m.type != MessageType.paymentRequest,

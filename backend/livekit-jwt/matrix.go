@@ -22,7 +22,7 @@ type matrixVerifier interface {
 	WhoAmI(context.Context, string) (string, error)
 	RequireJoined(context.Context, string, string, string) error
 	RoomCreator(context.Context, string, string) (string, error)
-	RoomIsPublic(context.Context, string, string) (bool, error)
+	RoomIsLive(context.Context, string, string) (bool, error)
 }
 
 type matrixClient struct {
@@ -153,24 +153,28 @@ func (m *matrixClient) RoomCreator(
 	return creator, nil
 }
 
-// RoomIsPublic reports whether the room is publicly joinable.
+// RoomIsLive reports whether the room is an N42 live room.
 //
-// This is what separates a live room from a group call: live rooms are created
-// as publicChat/JoinRules.public so strangers can find and join them, while
-// chat rooms carrying group calls are invite-only. Publish rights must be
-// decided from that server-side fact rather than from a client-supplied role,
-// which an attacker can simply omit.
+// Live rooms carry the n42.live.status state event that the broadcaster writes
+// on air and flips to live:false when ending. Its presence - not its value -
+// marks the room as a stream for the lifetime of that room.
 //
-// A room whose join rule cannot be read is treated as public, so the stricter
-// creator-only rule applies. Failing closed here can only cost a group-call
-// participant their microphone; failing open would let anyone hijack a stream.
-func (m *matrixClient) RoomIsPublic(
+// This is deliberately not keyed on the join rule. That is a user-facing
+// setting a moderator can flip, and plenty of ordinary group chats are public
+// too, so using it would both let a stream be un-restricted by changing a
+// toggle and silently mute every non-creator in a public group call.
+//
+// A room whose marker cannot be read is reported as live, so the stricter
+// creator-only rule applies. Failing that way can cost a group-call
+// participant their microphone; failing the other way lets anyone hijack a
+// stream.
+func (m *matrixClient) RoomIsLive(
 	ctx context.Context,
 	accessToken string,
 	roomID string,
 ) (bool, error) {
 	endpoint := m.homeserver + "/_matrix/client/v3/rooms/" +
-		url.PathEscape(roomID) + "/state/m.room.join_rules/"
+		url.PathEscape(roomID) + "/state/n42.live.status/"
 	request, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return true, fmt.Errorf("%w: %v", errMatrixUpstream, err)
@@ -185,17 +189,15 @@ func (m *matrixClient) RoomIsPublic(
 	if response.StatusCode == http.StatusUnauthorized || response.StatusCode == http.StatusForbidden {
 		return true, errMatrixUnauthorized
 	}
+	// The only response that proves this is not a live room: the homeserver
+	// says the state event does not exist.
+	if response.StatusCode == http.StatusNotFound {
+		return false, nil
+	}
 	if response.StatusCode != http.StatusOK {
-		return true, fmt.Errorf("%w: join_rules returned %d", errMatrixUpstream, response.StatusCode)
+		return true, fmt.Errorf("%w: live state returned %d", errMatrixUpstream, response.StatusCode)
 	}
-
-	var body struct {
-		JoinRule string `json:"join_rule"`
-	}
-	if err := decodeResponseJSON(response.Body, &body); err != nil {
-		return true, fmt.Errorf("%w: invalid join_rules response", errMatrixUpstream)
-	}
-	return strings.TrimSpace(body.JoinRule) == "public", nil
+	return true, nil
 }
 
 func decodeRequestJSON(reader io.Reader, target any) error {

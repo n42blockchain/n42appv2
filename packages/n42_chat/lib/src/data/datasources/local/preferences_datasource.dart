@@ -20,6 +20,8 @@ class PreferencesDataSource {
   static const String _keyNotificationSettings =
       'n42_chat_notification_settings';
   static const String _keyStrongReminders = 'n42_chat_strong_reminders';
+  static const String _keyPrivacyMuteRestore =
+      'n42_chat_privacy_mute_restore';
   static const String _keyLocallyDeletedMessages =
       'n42_chat_locally_deleted_messages';
   static const String _keyMessageDestructionTimes =
@@ -1074,6 +1076,50 @@ class PreferencesDataSource {
       throw const FormatException('Hidden chat IDs must be a JSON list');
     }
     return decoded.cast<String>().toSet();
+  }
+
+  /// Remembers whether a room was already muted before a privacy feature
+  /// (hiding or locking) muted it server-side.
+  ///
+  /// Without this, unhiding reads back the mute that hiding itself wrote,
+  /// concludes the user had muted the room, and leaves it silenced forever.
+  /// Recorded only on the first privacy mute so a later feature cannot
+  /// overwrite the genuine preference.
+  Future<void> rememberPrivacyMuteOrigin(String roomId, bool wasMuted) async {
+    try {
+      final p = await prefs;
+      final map = _decodePrivacyMuteRestore(p.getString(_keyPrivacyMuteRestore));
+      if (map.containsKey(roomId)) return;
+      map[roomId] = wasMuted;
+      await p.setString(_keyPrivacyMuteRestore, jsonEncode(map));
+    } catch (e) {
+      prefsLog('Failed to remember privacy mute origin - $e');
+    }
+  }
+
+  /// Returns and clears the remembered pre-privacy mute state.
+  ///
+  /// A missing entry yields null, which callers treat as "leave the current
+  /// notification setting alone" rather than guessing.
+  Future<bool?> takePrivacyMuteOrigin(String roomId) async {
+    try {
+      final p = await prefs;
+      final map = _decodePrivacyMuteRestore(p.getString(_keyPrivacyMuteRestore));
+      if (!map.containsKey(roomId)) return null;
+      final value = map.remove(roomId);
+      await p.setString(_keyPrivacyMuteRestore, jsonEncode(map));
+      return value;
+    } catch (e) {
+      prefsLog('Failed to read privacy mute origin - $e');
+      return null;
+    }
+  }
+
+  Map<String, bool> _decodePrivacyMuteRestore(String? raw) {
+    if (raw == null || raw.isEmpty) return <String, bool>{};
+    final decoded = jsonDecode(raw);
+    if (decoded is! Map) return <String, bool>{};
+    return decoded.map((key, value) => MapEntry('$key', value == true));
   }
 
   /// 隐藏聊天

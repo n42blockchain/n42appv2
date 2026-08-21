@@ -78,10 +78,15 @@ class MatrixEventMapper {
       method: 'crop',
     );
 
-    // 解析阅后即焚字段
+    // 解析阅后即焚字段。
+    // 两种线格式都必须认：图文用 {'after': n}，而语音/文件走
+    // matrix_media_sender 发的是 {'seconds': n}。只读 after 会让语音/文件的
+    // 自毁消息 isSelfDestructing 恒为 false，于是复制/转发/保存门禁、媒体字节
+    // 解析与自毁倒计时全部失效——即整条自毁语义对这两类消息形同虚设。
     final selfDestructData =
         event.content['n42.self_destruct'] as Map<String, dynamic>?;
-    final selfDestructAfter = selfDestructData?['after'] as int?;
+    final selfDestructAfter =
+        (selfDestructData?['after'] ?? selfDestructData?['seconds']) as int?;
 
     // 解析 m.mentions 字段
     final mentionsData = event.content['m.mentions'] as Map<String, dynamic>?;

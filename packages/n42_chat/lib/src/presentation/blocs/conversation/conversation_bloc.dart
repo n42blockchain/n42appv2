@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/services/chat_lock_service.dart';
 import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/repositories/conversation_repository.dart';
@@ -423,18 +424,46 @@ class ConversationBloc extends Bloc<ConversationEvent, ConversationState> {
   }) async {
     try {
       if (hidden) {
+        // Capture the genuine preference before overwriting it, otherwise
+        // unhiding would read back this very mute and conclude the user had
+        // silenced the room themselves - leaving it muted forever.
+        final currentlyMuted = state.conversations
+            .where((c) => c.id == conversationId)
+            .map((c) => c.isMuted)
+            .firstOrNull;
+        await _storageDataSource.rememberPrivacyMuteOrigin(
+          conversationId,
+          currentlyMuted == true,
+        );
         await _conversationRepository.setMuted(conversationId, true);
         return;
       }
-      final wasMutedByUser = state.conversations
-          .where((c) => c.id == conversationId)
-          .map((c) => c.isMuted)
-          .firstOrNull;
-      if (wasMutedByUser != true) {
+
+      // Hiding and locking share one room-level push rule. If the chat is
+      // still locked, unhiding must not lift the mute and re-expose it.
+      final stillLocked = await _isChatStillLocked(conversationId);
+      if (stillLocked) return;
+
+      final wasMutedBefore = await _storageDataSource.takePrivacyMuteOrigin(
+        conversationId,
+      );
+      if (wasMutedBefore == false) {
         await _conversationRepository.setMuted(conversationId, false);
       }
+      // wasMutedBefore == true  -> the user had muted it themselves; keep it.
+      // wasMutedBefore == null  -> nothing recorded; leave the setting alone.
     } catch (e) {
       debugLog('Failed to sync hidden push rule for $conversationId: $e');
+    }
+  }
+
+  Future<bool> _isChatStillLocked(String conversationId) async {
+    try {
+      return await ChatLockService().isChatLocked(conversationId);
+    } catch (e) {
+      // Unknown lock state must not lift a privacy mute.
+      debugLog('Failed to read lock state for $conversationId: $e');
+      return true;
     }
   }
 
