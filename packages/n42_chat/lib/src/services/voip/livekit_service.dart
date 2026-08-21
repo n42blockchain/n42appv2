@@ -568,6 +568,30 @@ class LiveKitService extends ChangeNotifier {
   bool get isBackgroundProcessingEnabled =>
       _config.backgroundMode != BackgroundMode.none;
 
+  /// 当前美颜/滤镜配置。视频处理发生在原生摄像头发布链路，远端和本地
+  /// 预览看到的是同一条处理后的轨道，不是 UI 叠色假效果。
+  double get beautySmooth => _config.beautyStrength;
+  double get beautyBrightness => _config.beautyBrightness;
+  double get beautyRosy => _config.beautyRosy;
+  String get videoFilter => _config.videoFilter;
+  double get videoFilterStrength => _config.videoFilterStrength;
+
+  Future<void> setBeautySettings({
+    required double smooth,
+    required double brightness,
+    required double rosy,
+    required String filter,
+    required double filterStrength,
+  }) async {
+    _config.beautyStrength = smooth;
+    _config.beautyBrightness = brightness;
+    _config.beautyRosy = rosy;
+    _config.videoFilter = filter;
+    _config.videoFilterStrength = filterStrength;
+    await _cameraProcessor.pushConfigToNative();
+    notifyListeners();
+  }
+
   /// 启用背景模糊
   ///
   /// [radius] 模糊半径 (0.0 - 1.0)

@@ -1,5 +1,6 @@
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../../core/utils/friendly_display_name.dart';
 import '../../../../core/utils/matrix_utils.dart';
 import '../../../../domain/entities/message_entity.dart';
 import 'matrix_metadata_extractor.dart';
@@ -129,7 +130,10 @@ class MatrixEventMapper {
       id: event.eventId,
       roomId: room.id,
       senderId: event.senderId,
-      senderName: sender.calcDisplayname(),
+      senderName: FriendlyDisplayName.resolve(
+        displayName: sender.calcDisplayname(),
+        userId: event.senderId,
+      ),
       senderAvatarUrl: avatarHttpUrl,
       content: messageContent,
       formattedContent: resolvedDisplay.formattedBody,

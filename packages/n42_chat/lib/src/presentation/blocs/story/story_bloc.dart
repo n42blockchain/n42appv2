@@ -107,6 +107,16 @@ class StoryBloc extends Bloc<StoryEvent, StoryState> {
         media: mediaDataList.isNotEmpty ? mediaDataList : null,
         backgroundColor: event.backgroundColor,
         textColor: event.textColor,
+        music: event.music == null
+            ? null
+            : StoryMusicData(
+                bytes: event.music!.bytes,
+                filename: event.music!.filename,
+                mimeType: event.music!.mimeType,
+                title: event.music!.title,
+                artist: event.music!.artist,
+                startAtSeconds: event.music!.startAtSeconds,
+              ),
       );
 
       if (story != null) {

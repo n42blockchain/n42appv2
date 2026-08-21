@@ -94,12 +94,66 @@ class LiveVideoService {
   /// 麦克风是否静音（主播端）。
   bool get isMuted => _service?.isMuted ?? false;
 
+  bool get isVideoEnabled => _service?.isVideoEnabled ?? false;
+
+  bool _torchEnabled = false;
+  bool get isTorchEnabled => _torchEnabled;
+
   /// 切换前后摄像头（主播端）。
-  Future<void> switchCamera() => _service?.switchCamera() ?? Future.value();
+  Future<void> switchCamera() async {
+    if (_torchEnabled) {
+      final track = localVideoTrack;
+      if (track is LocalVideoTrack) {
+        try {
+          await track.mediaStreamTrack.setTorch(false);
+        } catch (_) {}
+      }
+      _torchEnabled = false;
+    }
+    await _service?.switchCamera();
+  }
 
   /// 切换麦克风静音（主播端）。
   Future<void> toggleMicrophone() =>
       _service?.toggleMicrophone() ?? Future.value();
+
+  /// 暂停/恢复摄像头发布（保留直播房与音频）。
+  Future<void> toggleCamera() => _service?.toggleCamera() ?? Future.value();
+
+  /// 后摄补光灯。前摄或设备不支持时返回 false，不伪装成功。
+  Future<bool> toggleTorch() async {
+    final track = localVideoTrack;
+    if (track is! LocalVideoTrack) return false;
+    final options = track.currentOptions;
+    if (options is! CameraCaptureOptions ||
+        options.cameraPosition != CameraPosition.back) {
+      return false;
+    }
+    try {
+      _torchEnabled = !_torchEnabled;
+      await track.mediaStreamTrack.setTorch(_torchEnabled);
+      return true;
+    } catch (_) {
+      _torchEnabled = false;
+      return false;
+    }
+  }
+
+  Future<void> setBeautySettings({
+    required double smooth,
+    required double brightness,
+    required double rosy,
+    required String filter,
+    required double filterStrength,
+  }) =>
+      _service?.setBeautySettings(
+        smooth: smooth,
+        brightness: brightness,
+        rosy: rosy,
+        filter: filter,
+        filterStrength: filterStrength,
+      ) ??
+      Future.value();
 
   /// 以观众身份加入直播间（仅订阅）。
   Future<LiveKitService> joinAsViewer(String matrixRoomId) =>
@@ -160,7 +214,7 @@ class LiveVideoService {
         .getRoomById(matrixRoomId)
         ?.getState(EventTypes.RoomCreate)
         ?.senderId;
-    final displayName = N42Chat.currentUser?.displayName;
+    final displayName = N42Chat.currentUser?.effectiveDisplayName;
     final participantName =
         (displayName != null && displayName.trim().isNotEmpty)
         ? displayName.trim()

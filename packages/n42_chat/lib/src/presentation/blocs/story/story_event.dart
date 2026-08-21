@@ -41,15 +41,43 @@ class PostStory extends StoryEvent {
   /// 文字颜色
   final int? textColor;
 
+  /// Optional music selected for this Story.
+  final StoryMusicInput? music;
+
   const PostStory({
     this.content,
     this.media = const [],
     this.backgroundColor,
     this.textColor,
+    this.music,
   });
 
   @override
-  List<Object?> get props => [content, media, backgroundColor, textColor];
+  List<Object?> get props => [
+    content,
+    media,
+    backgroundColor,
+    textColor,
+    music,
+  ];
+}
+
+class StoryMusicInput {
+  final Uint8List bytes;
+  final String filename;
+  final String? mimeType;
+  final String title;
+  final String? artist;
+  final int startAtSeconds;
+
+  const StoryMusicInput({
+    required this.bytes,
+    required this.filename,
+    this.mimeType,
+    required this.title,
+    this.artist,
+    this.startAtSeconds = 0,
+  });
 }
 
 /// 删除 Story

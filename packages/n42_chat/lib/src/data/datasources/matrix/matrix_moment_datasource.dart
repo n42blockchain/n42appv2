@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/utils/friendly_display_name.dart';
 import '../../../core/utils/matrix_utils.dart';
 import '../../../domain/entities/moment_entity.dart';
 import 'matrix_client_manager.dart';
@@ -298,7 +299,10 @@ class MatrixMomentDataSource {
     };
 
     final now = DateTime.now();
-    final sentEventId = await room.sendEvent(eventContent, type: momentEventType);
+    final sentEventId = await room.sendEvent(
+      eventContent,
+      type: momentEventType,
+    );
 
     // Update index immediately so subsequent operations can find it
     _momentRoomIndex[momentId] = room.id;
@@ -316,8 +320,12 @@ class MatrixMomentDataSource {
       return MomentMedia(
         url: mxcUrl,
         httpUrl: _getHttpUrlFromMxc(mxcUrl),
-        thumbnailUrl: thumbMxcUrl != null ? _getHttpUrlFromMxc(thumbMxcUrl) : null,
-        type: m['type'] == 'video' ? MomentMediaType.video : MomentMediaType.image,
+        thumbnailUrl: thumbMxcUrl != null
+            ? _getHttpUrlFromMxc(thumbMxcUrl)
+            : null,
+        type: m['type'] == 'video'
+            ? MomentMediaType.video
+            : MomentMediaType.image,
         width: m['width'] as int?,
         height: m['height'] as int?,
         duration: m['duration'] as int?,
@@ -329,7 +337,10 @@ class MatrixMomentDataSource {
     final entity = MomentEntity(
       id: momentId,
       userId: userId,
-      userName: user.displayName ?? userId,
+      userName: FriendlyDisplayName.resolve(
+        displayName: user.displayName,
+        userId: userId,
+      ),
       userAvatarUrl: user.avatarUrl?.toString(),
       content: content,
       media: mediaEntities,
@@ -414,7 +425,9 @@ class MatrixMomentDataSource {
     if (_cachedMoments.isEmpty) {
       await getMoments(limit: 100);
     }
-    final userMoments = _cachedMoments.where((m) => m.userId == userId).toList();
+    final userMoments = _cachedMoments
+        .where((m) => m.userId == userId)
+        .toList();
     int startIndex = 0;
     if (beforeId != null) {
       startIndex = userMoments.indexWhere((m) => m.id == beforeId) + 1;
@@ -606,7 +619,10 @@ class MatrixMomentDataSource {
           likes.add(
             MomentLike(
               userId: event.senderId,
-              userName: user.displayName ?? event.senderId,
+              userName: FriendlyDisplayName.resolve(
+                displayName: user.displayName,
+                userId: event.senderId,
+              ),
               userAvatarUrl: user.avatarUrl?.toString(),
               timestamp: event.originServerTs,
             ),
@@ -642,7 +658,10 @@ class MatrixMomentDataSource {
             MomentComment(
               id: content['comment_id'] as String,
               userId: event.senderId,
-              userName: user.displayName ?? event.senderId,
+              userName: FriendlyDisplayName.resolve(
+                displayName: user.displayName,
+                userId: event.senderId,
+              ),
               userAvatarUrl: user.avatarUrl?.toString(),
               content: content['content'] as String,
               timestamp: event.originServerTs,
@@ -731,7 +750,10 @@ class MatrixMomentDataSource {
       return MomentEntity(
         id: content['moment_id'] as String? ?? event.eventId,
         userId: event.senderId,
-        userName: user.displayName ?? event.senderId,
+        userName: FriendlyDisplayName.resolve(
+          displayName: user.displayName,
+          userId: event.senderId,
+        ),
         userAvatarUrl: user.avatarUrl?.toString(),
         content: content['content'] as String?,
         media: mediaList,

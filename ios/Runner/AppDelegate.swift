@@ -1,11 +1,15 @@
 import Flutter
 import ActivityKit
+import CoreImage
 import UIKit
+import WebRTC
+import flutter_webrtc
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
   private var mlsHandler: N42MlsHandler?
   private var screenProtectionHandler: ScreenProtectionHandler?
+  private var videoBeautyHandler: N42VideoBeautyHandler?
 
   private func normalizeConfigValue(_ value: Any?) -> String? {
     guard let stringValue = value as? String else { return nil }
@@ -97,6 +101,9 @@ import UIKit
     // iOS 截屏 / 录屏防护（对应 Android FLAG_SECURE）：注册
     // ai.n42.www/window_flags 通道的原生处理器。强引用持有，防止被回收。
     screenProtectionHandler = ScreenProtectionHandler(binaryMessenger: messenger)
+    // Applies beauty/filter settings before WebRTC publishes camera frames.
+    // The local preview and remote viewers therefore observe the same output.
+    videoBeautyHandler = N42VideoBeautyHandler(binaryMessenger: messenger)
   }
 
   /// 处理 n42_chat 系统集成通道：仅接管 iOS Live Activity 相关方法。
@@ -166,5 +173,236 @@ import UIKit
       // flashWindow 等交给 Dart 侧插件兜底
       result(FlutterMethodNotImplemented)
     }
+  }
+}
+
+/// Owns the n42.chat/virtual_background method channel on iOS and attaches a
+/// Core Image processor to flutter_webrtc's local camera track. Background
+/// replacement remains a separate capability; this handler intentionally
+/// implements only the beauty/filter settings it can apply to the real stream.
+private final class N42VideoBeautyHandler {
+  private let channel: FlutterMethodChannel
+  private let processor = N42VideoBeautyProcessor()
+  private weak var attachedTrack: LocalVideoTrack?
+  private var attachedTrackId: String?
+
+  init(binaryMessenger: FlutterBinaryMessenger) {
+    channel = FlutterMethodChannel(
+      name: "n42.chat/virtual_background",
+      binaryMessenger: binaryMessenger
+    )
+    channel.setMethodCallHandler { [weak self] call, result in
+      self?.handle(call, result: result)
+    }
+  }
+
+  private func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    switch call.method {
+    case "setBackgroundConfig":
+      guard let args = call.arguments as? [String: Any] else {
+        result(false)
+        return
+      }
+      processor.update(args)
+      let enabled = args["enabled"] as? Bool ?? false
+      guard enabled else {
+        detach()
+        result(true)
+        return
+      }
+      guard let trackId = args["trackId"] as? String, !trackId.isEmpty else {
+        result(false)
+        return
+      }
+      result(attach(to: trackId))
+
+    case "clearBackground":
+      processor.reset()
+      detach()
+      result(true)
+
+    default:
+      result(FlutterMethodNotImplemented)
+    }
+  }
+
+  private func attach(to trackId: String) -> Bool {
+    if attachedTrackId == trackId, attachedTrack != nil { return true }
+    detach()
+    guard
+      let plugin = FlutterWebRTCPlugin.sharedSingleton(),
+      let track = plugin.localTracks?[trackId] as? LocalVideoTrack
+    else {
+      return false
+    }
+    track.addProcessing(processor)
+    attachedTrack = track
+    attachedTrackId = trackId
+    return true
+  }
+
+  private func detach() {
+    attachedTrack?.removeProcessing(processor)
+    attachedTrack = nil
+    attachedTrackId = nil
+  }
+}
+
+private final class N42VideoBeautyProcessor: NSObject, ExternalVideoProcessingDelegate {
+  private let context = CIContext(options: [.cacheIntermediates: true])
+  private var smooth: Double = 0
+  private var brightness: Double = 0
+  private var rosy: Double = 0
+  private var filterName = "none"
+  private var filterStrength: Double = 0
+  private var pool: CVPixelBufferPool?
+  private var poolSize = CGSize.zero
+
+  func update(_ args: [String: Any]) {
+    smooth = Self.unit(args["beauty"])
+    brightness = Self.unit(args["brightness"])
+    rosy = Self.unit(args["rosy"])
+    filterName = args["filter"] as? String ?? "none"
+    filterStrength = Self.unit(args["filterStrength"])
+  }
+
+  func reset() {
+    smooth = 0
+    brightness = 0
+    rosy = 0
+    filterName = "none"
+    filterStrength = 0
+  }
+
+  @objc func onFrame(_ frame: RTCVideoFrame) -> RTCVideoFrame {
+    guard smooth > 0 || brightness > 0 || rosy > 0 ||
+      (filterName != "none" && filterStrength > 0),
+      let rtcBuffer = frame.buffer as? RTCCVPixelBuffer
+    else {
+      return frame
+    }
+
+    let sourceBuffer = rtcBuffer.pixelBuffer
+    let width = CVPixelBufferGetWidth(sourceBuffer)
+    let height = CVPixelBufferGetHeight(sourceBuffer)
+    let source = CIImage(cvPixelBuffer: sourceBuffer)
+    var output = source
+
+    if smooth > 0, let noise = CIFilter(name: "CINoiseReduction") {
+      noise.setValue(output, forKey: kCIInputImageKey)
+      noise.setValue(0.01 + smooth * 0.055, forKey: "inputNoiseLevel")
+      noise.setValue(0.45 - smooth * 0.15, forKey: "inputSharpness")
+      if let image = noise.outputImage {
+        output = blend(source: output, effect: image, amount: smooth * 0.7)
+      }
+    }
+
+    if brightness > 0, let controls = CIFilter(name: "CIColorControls") {
+      controls.setValue(output, forKey: kCIInputImageKey)
+      controls.setValue(brightness * 0.16, forKey: kCIInputBrightnessKey)
+      controls.setValue(1.0 + brightness * 0.025, forKey: kCIInputSaturationKey)
+      output = controls.outputImage ?? output
+    }
+
+    if rosy > 0, let matrix = CIFilter(name: "CIColorMatrix") {
+      matrix.setValue(output, forKey: kCIInputImageKey)
+      matrix.setValue(CIVector(x: 1, y: 0, z: 0, w: 0), forKey: "inputRVector")
+      matrix.setValue(CIVector(x: 0, y: 1, z: 0, w: 0), forKey: "inputGVector")
+      matrix.setValue(CIVector(x: 0, y: 0, z: 1, w: 0), forKey: "inputBVector")
+      matrix.setValue(
+        CIVector(x: rosy * 0.07, y: rosy * 0.012, z: -rosy * 0.018, w: 0),
+        forKey: "inputBiasVector"
+      )
+      output = matrix.outputImage ?? output
+    }
+
+    output = applyFilter(to: output)
+    guard let destination = makePixelBuffer(width: width, height: height) else {
+      return frame
+    }
+    context.render(output, to: destination, bounds: source.extent, colorSpace: CGColorSpaceCreateDeviceRGB())
+    let processed = RTCCVPixelBuffer(pixelBuffer: destination)
+    return RTCVideoFrame(
+      buffer: processed,
+      rotation: frame.rotation,
+      timeStampNs: frame.timeStampNs
+    )
+  }
+
+  private func applyFilter(to source: CIImage) -> CIImage {
+    guard filterStrength > 0, filterName != "none" else { return source }
+    let effect: CIImage?
+    switch filterName {
+    case "natural":
+      effect = colorControls(source, saturation: 1.06, contrast: 1.025, brightness: 0.012)
+    case "warm":
+      effect = colorBias(source, red: 0.055, green: 0.012, blue: -0.055)
+    case "cool":
+      effect = colorBias(source, red: -0.045, green: 0.008, blue: 0.06)
+    case "vivid":
+      effect = colorControls(source, saturation: 1.38, contrast: 1.08, brightness: 0)
+    case "mono":
+      let mono = CIFilter(name: "CIPhotoEffectMono")
+      mono?.setValue(source, forKey: kCIInputImageKey)
+      effect = mono?.outputImage
+    default:
+      effect = nil
+    }
+    guard let effect else { return source }
+    return blend(source: source, effect: effect, amount: filterStrength)
+  }
+
+  private func colorControls(
+    _ image: CIImage,
+    saturation: Double,
+    contrast: Double,
+    brightness: Double
+  ) -> CIImage? {
+    let controls = CIFilter(name: "CIColorControls")
+    controls?.setValue(image, forKey: kCIInputImageKey)
+    controls?.setValue(saturation, forKey: kCIInputSaturationKey)
+    controls?.setValue(contrast, forKey: kCIInputContrastKey)
+    controls?.setValue(brightness, forKey: kCIInputBrightnessKey)
+    return controls?.outputImage
+  }
+
+  private func colorBias(_ image: CIImage, red: Double, green: Double, blue: Double) -> CIImage? {
+    let matrix = CIFilter(name: "CIColorMatrix")
+    matrix?.setValue(image, forKey: kCIInputImageKey)
+    matrix?.setValue(CIVector(x: red, y: green, z: blue, w: 0), forKey: "inputBiasVector")
+    return matrix?.outputImage
+  }
+
+  private func blend(source: CIImage, effect: CIImage, amount: Double) -> CIImage {
+    let transition = CIFilter(name: "CIDissolveTransition")
+    transition?.setValue(source, forKey: kCIInputImageKey)
+    transition?.setValue(effect, forKey: kCIInputTargetImageKey)
+    transition?.setValue(amount, forKey: kCIInputTimeKey)
+    return transition?.outputImage ?? effect
+  }
+
+  private func makePixelBuffer(width: Int, height: Int) -> CVPixelBuffer? {
+    let size = CGSize(width: width, height: height)
+    if pool == nil || poolSize != size {
+      let attributes: [String: Any] = [
+        kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA,
+        kCVPixelBufferWidthKey as String: width,
+        kCVPixelBufferHeightKey as String: height,
+        kCVPixelBufferIOSurfacePropertiesKey as String: [:],
+      ]
+      var newPool: CVPixelBufferPool?
+      CVPixelBufferPoolCreate(nil, nil, attributes as CFDictionary, &newPool)
+      pool = newPool
+      poolSize = size
+    }
+    var buffer: CVPixelBuffer?
+    guard let pool, CVPixelBufferPoolCreatePixelBuffer(nil, pool, &buffer) == kCVReturnSuccess else {
+      return nil
+    }
+    return buffer
+  }
+
+  private static func unit(_ value: Any?) -> Double {
+    min(1, max(0, (value as? NSNumber)?.doubleValue ?? 0))
   }
 }

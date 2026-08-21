@@ -1,40 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../data/datasources/matrix/matrix_client_manager.dart';
+import '../../../n42_chat.dart';
 import '../../widgets/common/common_widgets.dart';
 
-/// 频道分类
-enum ChannelCategory {
-  all,
-  tech,
-  defi,
-  nft,
-  social,
-}
+enum ChannelCategory { all, tech, defi, nft, social }
 
-/// 推荐频道数据
-class _RecommendedChannel {
+class _PublicChannel {
+  final String roomId;
   final String name;
   final String description;
-  final String alias;
+  final String? avatarUrl;
   final int subscriberCount;
   final ChannelCategory category;
 
-  const _RecommendedChannel({
+  const _PublicChannel({
+    required this.roomId,
     required this.name,
     required this.description,
-    required this.alias,
+    this.avatarUrl,
     required this.subscriberCount,
     required this.category,
   });
 }
 
-/// 频道发现页面
-///
-/// 展示公开频道列表，支持按分类筛选和搜索。
+/// Live Matrix room-directory browser. It intentionally contains no hardcoded
+/// rooms: every visible channel can be joined and opened.
 class ChannelDiscoverPage extends StatefulWidget {
   const ChannelDiscoverPage({super.key});
 
@@ -45,83 +41,15 @@ class ChannelDiscoverPage extends StatefulWidget {
 class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
   ChannelCategory _selectedCategory = ChannelCategory.all;
   final _searchController = TextEditingController();
-  String _searchQuery = '';
+  List<_PublicChannel> _channels = const [];
+  final Set<String> _joining = <String>{};
+  bool _loading = true;
+  String? _error;
 
-  // 内置推荐频道列表（后续接 Matrix room directory）
-  static const _channels = <_RecommendedChannel>[
-    _RecommendedChannel(
-      name: 'N42 Announcements',
-      description: 'Official announcements and updates from N42',
-      alias: '#announcements:n42.ai',
-      subscriberCount: 5200,
-      category: ChannelCategory.tech,
-    ),
-    _RecommendedChannel(
-      name: 'DeFi Alpha',
-      description: 'DeFi opportunities, yield strategies, and protocol updates',
-      alias: '#defi-alpha:n42.ai',
-      subscriberCount: 3800,
-      category: ChannelCategory.defi,
-    ),
-    _RecommendedChannel(
-      name: 'NFT Drops',
-      description: 'Upcoming NFT drops, mints, and collection highlights',
-      alias: '#nft-drops:n42.ai',
-      subscriberCount: 2900,
-      category: ChannelCategory.nft,
-    ),
-    _RecommendedChannel(
-      name: 'Web3 Dev Hub',
-      description: 'Smart contract development, tools, and best practices',
-      alias: '#web3-dev:n42.ai',
-      subscriberCount: 4100,
-      category: ChannelCategory.tech,
-    ),
-    _RecommendedChannel(
-      name: 'Crypto News',
-      description: 'Breaking news and market analysis',
-      alias: '#crypto-news:n42.ai',
-      subscriberCount: 8700,
-      category: ChannelCategory.social,
-    ),
-    _RecommendedChannel(
-      name: 'N42 Community',
-      description: 'General discussion and community events',
-      alias: '#community:n42.ai',
-      subscriberCount: 6300,
-      category: ChannelCategory.social,
-    ),
-    _RecommendedChannel(
-      name: 'Yield Farming',
-      description: 'Yield farming strategies across chains',
-      alias: '#yield:n42.ai',
-      subscriberCount: 2100,
-      category: ChannelCategory.defi,
-    ),
-    _RecommendedChannel(
-      name: 'Security Alerts',
-      description: 'Smart contract vulnerabilities and security advisories',
-      alias: '#security:n42.ai',
-      subscriberCount: 3400,
-      category: ChannelCategory.tech,
-    ),
-  ];
-
-  List<_RecommendedChannel> get _filteredChannels {
-    var filtered = _channels.toList();
-    if (_selectedCategory != ChannelCategory.all) {
-      filtered =
-          filtered.where((c) => c.category == _selectedCategory).toList();
-    }
-    if (_searchQuery.isNotEmpty) {
-      final query = _searchQuery.toLowerCase();
-      filtered = filtered
-          .where((c) =>
-              c.name.toLowerCase().contains(query) ||
-              c.description.toLowerCase().contains(query))
-          .toList();
-    }
-    return filtered;
+  @override
+  void initState() {
+    super.initState();
+    _loadChannels();
   }
 
   @override
@@ -130,10 +58,112 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
     super.dispose();
   }
 
+  List<_PublicChannel> get _filteredChannels =>
+      _selectedCategory == ChannelCategory.all
+      ? _channels
+      : _channels
+            .where((channel) => channel.category == _selectedCategory)
+            .toList();
+
+  Future<void> _loadChannels() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    final client = MatrixClientManager.instance.client;
+    if (client == null || !client.isLogged()) {
+      setState(() {
+        _loading = false;
+        _error = 'Sign in to discover public channels';
+      });
+      return;
+    }
+
+    try {
+      final query = _searchController.text.trim();
+      final response = await client.queryPublicRooms(
+        limit: 50,
+        filter: query.isEmpty
+            ? null
+            : matrix.PublicRoomQueryFilter(genericSearchTerm: query),
+      );
+      final channels =
+          response.chunk
+              .where((room) => room.roomType != 'm.space')
+              .map(_mapChannel)
+              .toList()
+            ..sort((a, b) => b.subscriberCount.compareTo(a.subscriberCount));
+      if (!mounted) return;
+      setState(() {
+        _channels = channels;
+        _loading = false;
+      });
+    } catch (error) {
+      if (!mounted) return;
+      setState(() {
+        _loading = false;
+        _error = error.toString();
+      });
+    }
+  }
+
+  _PublicChannel _mapChannel(matrix.PublishedRoomsChunk room) {
+    final name = room.name?.trim().isNotEmpty == true
+        ? room.name!
+        : room.roomId;
+    final topic = room.topic?.trim() ?? '';
+    return _PublicChannel(
+      roomId: room.roomId,
+      name: name,
+      description: topic,
+      avatarUrl: room.avatarUrl?.toString(),
+      subscriberCount: room.numJoinedMembers,
+      category: _inferCategory('$name $topic'),
+    );
+  }
+
+  ChannelCategory _inferCategory(String value) {
+    final text = value.toLowerCase();
+    if (text.contains('nft') || text.contains('collectible')) {
+      return ChannelCategory.nft;
+    }
+    if (text.contains('defi') ||
+        text.contains('yield') ||
+        text.contains('token')) {
+      return ChannelCategory.defi;
+    }
+    if (text.contains('tech') ||
+        text.contains('develop') ||
+        text.contains('security')) {
+      return ChannelCategory.tech;
+    }
+    return ChannelCategory.social;
+  }
+
+  Future<void> _joinChannel(_PublicChannel channel) async {
+    if (_joining.contains(channel.roomId)) return;
+    setState(() => _joining.add(channel.roomId));
+    try {
+      final client = MatrixClientManager.instance.client;
+      if (client == null || !client.isLogged()) {
+        throw Exception('Sign in first');
+      }
+      await client.joinRoom(channel.roomId);
+      if (!mounted) return;
+      await N42Chat.openConversation(channel.roomId, context: context);
+    } catch (error) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Unable to join ${channel.name}: $error')),
+      );
+    } finally {
+      if (mounted) setState(() => _joining.remove(channel.roomId));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = S.of(context);
-
     return Scaffold(
       backgroundColor: context.pageBackground,
       appBar: N42AppBar(
@@ -141,51 +171,45 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
       ),
       body: Column(
         children: [
-          // 搜索栏
-          _buildSearchBar(context, l10n),
-          // 分类标签
+          Padding(
+            padding: const EdgeInsets.all(12),
+            child: TextField(
+              controller: _searchController,
+              textInputAction: TextInputAction.search,
+              onSubmitted: (_) => _loadChannels(),
+              decoration: InputDecoration(
+                hintText: l10n?.channelDiscoverSearch ?? 'Search channels...',
+                prefixIcon: const Icon(AppIcons.search, size: 20),
+                suffixIcon: IconButton(
+                  tooltip: 'Search',
+                  onPressed: _loadChannels,
+                  icon: const Icon(Icons.arrow_forward),
+                ),
+                filled: true,
+                fillColor: context.surfaceColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+            ),
+          ),
           _buildCategoryTabs(context),
-          // 频道列表
+          const SizedBox(height: 4),
           Expanded(child: _buildChannelList(context, l10n)),
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context, S? l10n) {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: TextField(
-        controller: _searchController,
-        onChanged: (v) => setState(() => _searchQuery = v),
-        decoration: InputDecoration(
-          hintText: l10n?.channelDiscoverSearch ?? 'Search channels...',
-          hintStyle: TextStyle(
-            color: context.textSecondary,
-            fontSize: 14,
-          ),
-          prefixIcon: const Icon(AppIcons.search, size: 20),
-          filled: true,
-          fillColor: context.surfaceColor,
-          contentPadding: const EdgeInsets.symmetric(vertical: 8),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide.none,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _buildCategoryTabs(BuildContext context) {
-    final labels = {
+    const labels = {
       ChannelCategory.all: 'All',
       ChannelCategory.tech: 'Tech',
       ChannelCategory.defi: 'DeFi',
       ChannelCategory.nft: 'NFT',
       ChannelCategory.social: 'Social',
     };
-
     return SizedBox(
       height: 40,
       child: ListView(
@@ -198,8 +222,7 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
             child: ChoiceChip(
               label: Text(entry.value),
               selected: selected,
-              onSelected: (_) =>
-                  setState(() => _selectedCategory = entry.key),
+              onSelected: (_) => setState(() => _selectedCategory = entry.key),
               selectedColor: AppColors.primary,
               labelStyle: TextStyle(
                 color: selected ? Colors.white : context.textPrimary,
@@ -207,7 +230,6 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
               ),
               backgroundColor: context.surfaceColor,
               side: BorderSide.none,
-              padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
           );
         }).toList(),
@@ -216,124 +238,110 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
   }
 
   Widget _buildChannelList(BuildContext context, S? l10n) {
+    if (_loading) return const Center(child: CircularProgressIndicator());
+    if (_error != null) {
+      return _DirectoryMessage(
+        icon: Icons.cloud_off_outlined,
+        message: _error!,
+        onRetry: _loadChannels,
+      );
+    }
     final channels = _filteredChannels;
-
     if (channels.isEmpty) {
-      return Center(
-        child: Text(
-          'No channels found',
-          style: TextStyle(
-            color: context.textSecondary,
-          ),
-        ),
+      return _DirectoryMessage(
+        icon: Icons.campaign_outlined,
+        message: 'No public channels found',
+        onRetry: _loadChannels,
       );
     }
 
-    return ListView.separated(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      itemCount: channels.length,
-      separatorBuilder: (_, _) => Divider(
-        height: 1,
-        indent: 76,
-        color: context.dividerColor,
+    return RefreshIndicator(
+      onRefresh: _loadChannels,
+      child: ListView.separated(
+        physics: const AlwaysScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: channels.length,
+        separatorBuilder: (_, _) =>
+            Divider(height: 1, indent: 76, color: context.dividerColor),
+        itemBuilder: (context, index) {
+          final channel = channels[index];
+          final joining = _joining.contains(channel.roomId);
+          return ListTile(
+            leading: N42Avatar(
+              name: channel.name,
+              imageUrl: channel.avatarUrl,
+              size: 48,
+              borderRadius: 12,
+            ),
+            title: Text(
+              channel.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontWeight: FontWeight.w600),
+            ),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (channel.description.isNotEmpty)
+                  Text(
+                    channel.description,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                Text(
+                  '${_formatCount(channel.subscriberCount)} '
+                  '${l10n?.channelSubscribers ?? 'subscribers'}',
+                  style: TextStyle(color: context.textSecondary, fontSize: 11),
+                ),
+              ],
+            ),
+            trailing: OutlinedButton(
+              onPressed: joining ? null : () => _joinChannel(channel),
+              child: joining
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  : Text(l10n?.channelJoin ?? 'Join'),
+            ),
+          );
+        },
       ),
-      itemBuilder: (context, index) {
-        final channel = channels[index];
-        return _buildChannelTile(context, channel, l10n);
-      },
     );
   }
 
-  Widget _buildChannelTile(
-    BuildContext context,
-    _RecommendedChannel channel,
-    S? l10n,
-  ) {
-    return ListTile(
-      leading: Container(
-        width: 48,
-        height: 48,
-        decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.12),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: const Icon(
-          Icons.campaign,
-          color: AppColors.primary,
-          size: 24,
-        ),
-      ),
-      title: Text(
-        channel.name,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 15,
-          height: 1.3,
-          fontWeight: FontWeight.w600,
-          color: context.textPrimary,
-        ),
-      ),
-      subtitle: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+  String _formatCount(int count) => count >= 1000
+      ? '${(count / 1000).toStringAsFixed(1)}K'
+      : count.toString();
+}
+
+class _DirectoryMessage extends StatelessWidget {
+  final IconData icon;
+  final String message;
+  final VoidCallback onRetry;
+
+  const _DirectoryMessage({
+    required this.icon,
+    required this.message,
+    required this.onRetry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 2),
-          Text(
-            channel.description,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 13,
-              height: 1.35,
-              color: context.textSecondary,
-            ),
+          Icon(icon, size: 56, color: context.textTertiary),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32),
+            child: Text(message, textAlign: TextAlign.center),
           ),
-          const SizedBox(height: 4),
-          Text(
-            '${_formatCount(channel.subscriberCount)} ${l10n?.channelSubscribers ?? 'subscribers'}',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 11,
-              height: 1.3,
-              color: context.textSecondary,
-            ),
-          ),
+          const SizedBox(height: 14),
+          OutlinedButton(onPressed: onRetry, child: const Text('Retry')),
         ],
-      ),
-      trailing: OutlinedButton(
-        onPressed: () => _joinChannel(channel),
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.primary,
-          side: const BorderSide(color: AppColors.primary),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          minimumSize: const Size(0, 32),
-        ),
-        child: Text(
-          l10n?.channelJoin ?? 'Join',
-          style: const TextStyle(fontSize: 13),
-        ),
-      ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    );
-  }
-
-  String _formatCount(int count) {
-    if (count >= 10000) {
-      return '${(count / 1000).toStringAsFixed(1)}K';
-    }
-    if (count >= 1000) {
-      return '${(count / 1000).toStringAsFixed(1)}K';
-    }
-    return count.toString();
-  }
-
-  void _joinChannel(_RecommendedChannel channel) {
-    // TODO: 通过 Matrix room directory 加入频道
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Joining ${channel.name}...'),
-        duration: const Duration(seconds: 2),
       ),
     );
   }

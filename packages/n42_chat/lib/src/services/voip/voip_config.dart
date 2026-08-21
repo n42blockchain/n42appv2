@@ -131,11 +131,33 @@ class VoIPConfig {
   /// 可以是本地文件路径或网络 URL
   String? virtualBackgroundUrl;
 
-  /// 美颜强度 (0.0 - 1.0)
-  /// 0.0 = 关闭, 复用人像分割 mask 对人像区域磨皮+提亮，与背景处理独立可叠加。
+  /// 磨皮强度 (0.0 - 1.0)。保留 `beautyStrength` 名称以兼容既有调用。
   double _beautyStrength = 0.0;
   double get beautyStrength => _beautyStrength;
   set beautyStrength(double value) => _beautyStrength = value.clamp(0.0, 1.0);
+
+  /// 提亮 / 红润强度 (0.0 - 1.0)。三项均由原生视频处理器作用于发布帧。
+  double _beautyBrightness = 0.0;
+  double get beautyBrightness => _beautyBrightness;
+  set beautyBrightness(double value) =>
+      _beautyBrightness = value.clamp(0.0, 1.0);
+
+  double _beautyRosy = 0.0;
+  double get beautyRosy => _beautyRosy;
+  set beautyRosy(double value) => _beautyRosy = value.clamp(0.0, 1.0);
+
+  /// 直播滤镜：none / natural / warm / cool / vivid / mono。
+  String _videoFilter = 'none';
+  String get videoFilter => _videoFilter;
+  set videoFilter(String value) => _videoFilter =
+      const {'none', 'natural', 'warm', 'cool', 'vivid', 'mono'}.contains(value)
+      ? value
+      : 'none';
+
+  double _videoFilterStrength = 0.0;
+  double get videoFilterStrength => _videoFilterStrength;
+  set videoFilterStrength(double value) =>
+      _videoFilterStrength = value.clamp(0.0, 1.0);
 
   /// 预设虚拟背景列表
   List<String> presetBackgrounds = [];

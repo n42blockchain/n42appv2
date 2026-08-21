@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../../core/utils/friendly_display_name.dart';
+
 /// A locally stored Matrix account that can be resumed on this device.
 class StoredAccountEntity extends Equatable {
   final String userId;
@@ -19,11 +21,10 @@ class StoredAccountEntity extends Equatable {
   });
 
   String get effectiveDisplayName {
-    final normalized = displayName?.trim();
-    if (normalized != null && normalized.isNotEmpty) {
-      return normalized;
-    }
-    return userId.split(':').first.replaceFirst('@', '');
+    return FriendlyDisplayName.resolve(
+      displayName: displayName,
+      userId: userId,
+    );
   }
 
   @override

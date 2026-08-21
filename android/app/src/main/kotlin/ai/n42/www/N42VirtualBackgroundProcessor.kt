@@ -37,6 +37,11 @@ class N42VirtualBackgroundProcessor : LocalVideoTrack.ExternalVideoFrameProcessi
     @Volatile private var solidColor: Int = Color.rgb(0x07, 0xC1, 0x60)
     @Volatile private var backgroundBitmap: Bitmap? = null
     @Volatile private var latestMask: MaskData? = null
+    @Volatile private var beauty: Float = 0f
+    @Volatile private var brightness: Float = 0f
+    @Volatile private var rosy: Float = 0f
+    @Volatile private var filter: String = MODE_NONE
+    @Volatile private var filterStrength: Float = 0f
 
     private val processingMask = AtomicBoolean(false)
     @Volatile private var lastSegmentationAtMs = 0L
@@ -53,14 +58,26 @@ class N42VirtualBackgroundProcessor : LocalVideoTrack.ExternalVideoFrameProcessi
         blurRadius: Float,
         solidColor: String?,
         backgroundImageBytes: ByteArray?,
+        beauty: Float,
+        brightness: Float,
+        rosy: Float,
+        filter: String,
+        filterStrength: Float,
     ) {
         this.mode = mode
         this.blurRadius = blurRadius.coerceIn(0f, 1f)
         this.solidColor = parseColor(solidColor) ?: Color.rgb(0x07, 0xC1, 0x60)
-        this.backgroundBitmap = backgroundImageBytes
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { bytes -> BitmapFactory.decodeByteArray(bytes, 0, bytes.size) }
-        if (mode == MODE_NONE) {
+        if (backgroundImageBytes != null) {
+            this.backgroundBitmap = backgroundImageBytes
+                .takeIf { it.isNotEmpty() }
+                ?.let { bytes -> BitmapFactory.decodeByteArray(bytes, 0, bytes.size) }
+        }
+        this.beauty = beauty.coerceIn(0f, 1f)
+        this.brightness = brightness.coerceIn(0f, 1f)
+        this.rosy = rosy.coerceIn(0f, 1f)
+        this.filter = filter
+        this.filterStrength = filterStrength.coerceIn(0f, 1f)
+        if (mode == MODE_NONE && this.beauty <= 0f) {
             latestMask = null
         }
     }
@@ -69,17 +86,23 @@ class N42VirtualBackgroundProcessor : LocalVideoTrack.ExternalVideoFrameProcessi
         mode = MODE_NONE
         latestMask = null
         backgroundBitmap = null
+        beauty = 0f
+        brightness = 0f
+        rosy = 0f
+        filter = MODE_NONE
+        filterStrength = 0f
     }
 
     override fun onFrame(frame: VideoFrame): VideoFrame {
         val currentMode = mode
-        if (currentMode == MODE_NONE) return frame
+        val hasBeauty = beauty > 0f || brightness > 0f || rosy > 0f
+        val hasFilter = filter != MODE_NONE && filterStrength > 0f
+        if (currentMode == MODE_NONE && !hasBeauty && !hasFilter) return frame
 
         val bitmap = frameToBitmap(frame) ?: return frame
-        requestMask(bitmap)
+        if (currentMode != MODE_NONE || hasBeauty) requestMask(bitmap)
 
-        val mask = latestMask ?: return frame
-        val composed = compose(bitmap, mask, currentMode)
+        val composed = compose(bitmap, latestMask, currentMode)
         val buffer = bitmapToI420(composed) ?: return frame
         return VideoFrame(buffer, frame.rotation, frame.timestampNs)
     }
@@ -103,7 +126,7 @@ class N42VirtualBackgroundProcessor : LocalVideoTrack.ExternalVideoFrameProcessi
             }
     }
 
-    private fun compose(originalBitmap: Bitmap, mask: MaskData, currentMode: String): Bitmap {
+    private fun compose(originalBitmap: Bitmap, mask: MaskData?, currentMode: String): Bitmap {
         val original = originalBitmap.copy(Bitmap.Config.ARGB_8888, true)
         val width = original.width
         val height = original.height
@@ -111,29 +134,104 @@ class N42VirtualBackgroundProcessor : LocalVideoTrack.ExternalVideoFrameProcessi
             MODE_SOLID -> solidBackground(width, height)
             MODE_VIRTUAL -> coverBackground(width, height) ?: blurBackground(original)
             MODE_BLUR -> blurBackground(original)
-            else -> return original
+            else -> null
         }
 
         val originalPixels = IntArray(width * height)
-        val backgroundPixels = IntArray(width * height)
+        val backgroundPixels = background?.let { IntArray(width * height) }
+        val smoothPixels = if (beauty > 0f) IntArray(width * height) else null
         original.getPixels(originalPixels, 0, width, 0, 0, width, height)
-        background.getPixels(backgroundPixels, 0, width, 0, 0, width, height)
+        if (background != null && backgroundPixels != null) {
+            background.getPixels(backgroundPixels, 0, width, 0, 0, width, height)
+        }
+        if (smoothPixels != null) {
+            val divisor = (5 + beauty * 11).roundToInt().coerceIn(5, 16)
+            val small = Bitmap.createScaledBitmap(
+                original,
+                (width / divisor).coerceAtLeast(1),
+                (height / divisor).coerceAtLeast(1),
+                true,
+            )
+            val smooth = Bitmap.createScaledBitmap(small, width, height, true)
+            smooth.getPixels(smoothPixels, 0, width, 0, 0, width, height)
+        }
 
-        val scaleX = mask.width.toFloat() / width.toFloat()
-        val scaleY = mask.height.toFloat() / height.toFloat()
+        val scaleX = (mask?.width ?: width).toFloat() / width.toFloat()
+        val scaleY = (mask?.height ?: height).toFloat() / height.toFloat()
         for (y in 0 until height) {
-            val maskY = (y * scaleY).toInt().coerceIn(0, mask.height - 1)
-            val maskRow = maskY * mask.width
+            val maskY = (y * scaleY).toInt().coerceIn(0, (mask?.height ?: height) - 1)
+            val maskRow = maskY * (mask?.width ?: width)
             val row = y * width
             for (x in 0 until width) {
-                val maskX = (x * scaleX).toInt().coerceIn(0, mask.width - 1)
-                if (mask.confidences[maskRow + maskX] < FOREGROUND_THRESHOLD) {
-                    originalPixels[row + x] = backgroundPixels[row + x]
+                val index = row + x
+                val maskX = (x * scaleX).toInt().coerceIn(0, (mask?.width ?: width) - 1)
+                val isPerson = mask == null ||
+                    mask.confidences[maskRow + maskX] >= FOREGROUND_THRESHOLD
+                var pixel = originalPixels[index]
+                if (!isPerson && backgroundPixels != null) {
+                    pixel = backgroundPixels[index]
+                } else if (isPerson) {
+                    pixel = applyBeauty(pixel, smoothPixels?.get(index))
                 }
+                originalPixels[index] = applyFilter(pixel)
             }
         }
         original.setPixels(originalPixels, 0, width, 0, 0, width, height)
         return original
+    }
+
+    private fun applyBeauty(pixel: Int, smoothPixel: Int?): Int {
+        val smoothBlend = beauty * 0.55f
+        fun blend(original: Int, softened: Int): Int {
+            val smoothed = original + (softened - original) * smoothBlend
+            return (smoothed + (255f - smoothed) * brightness * 0.18f)
+                .roundToInt()
+                .coerceIn(0, 255)
+        }
+
+        val softened = smoothPixel ?: pixel
+        val red = (blend(Color.red(pixel), Color.red(softened)) + rosy * 18f)
+            .roundToInt()
+            .coerceIn(0, 255)
+        val green = blend(Color.green(pixel), Color.green(softened))
+        val blue = (blend(Color.blue(pixel), Color.blue(softened)) - rosy * 5f)
+            .roundToInt()
+            .coerceIn(0, 255)
+        return Color.argb(Color.alpha(pixel), red, green, blue)
+    }
+
+    private fun applyFilter(pixel: Int): Int {
+        val amount = filterStrength
+        if (amount <= 0f || filter == MODE_NONE) return pixel
+        val r = Color.red(pixel).toFloat()
+        val g = Color.green(pixel).toFloat()
+        val b = Color.blue(pixel).toFloat()
+        val target = when (filter) {
+            "natural" -> floatArrayOf(r * 1.03f + 3f, g * 1.01f + 2f, b * 0.98f)
+            "warm" -> floatArrayOf(r * 1.10f + 6f, g * 1.02f + 2f, b * 0.88f)
+            "cool" -> floatArrayOf(r * 0.92f, g * 1.01f + 2f, b * 1.10f + 6f)
+            "vivid" -> {
+                val luminance = 0.299f * r + 0.587f * g + 0.114f * b
+                floatArrayOf(
+                    luminance + (r - luminance) * 1.28f,
+                    luminance + (g - luminance) * 1.28f,
+                    luminance + (b - luminance) * 1.28f,
+                )
+            }
+            "mono" -> {
+                val gray = 0.299f * r + 0.587f * g + 0.114f * b
+                floatArrayOf(gray, gray, gray)
+            }
+            else -> return pixel
+        }
+        fun mix(source: Float, destination: Float): Int =
+            (source + (destination - source) * amount).roundToInt().coerceIn(0, 255)
+        return Color.argb(
+            Color.alpha(pixel),
+            mix(r, target[0]),
+            mix(g, target[1]),
+            mix(b, target[2]),
+        )
     }
 
     private fun solidBackground(width: Int, height: Int): Bitmap {

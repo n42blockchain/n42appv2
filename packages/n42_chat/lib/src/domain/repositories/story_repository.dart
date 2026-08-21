@@ -36,6 +36,7 @@ abstract class IStoryRepository {
     List<StoryMediaData>? media,
     int? backgroundColor,
     int? textColor,
+    StoryMusicData? music,
   });
 
   /// 删除 Story
@@ -55,6 +56,27 @@ abstract class IStoryRepository {
   /// [storyId] - Story ID
   /// 返回查看过该 Story 的用户列表
   Future<List<StoryViewer>> getViewers(String storyId);
+}
+
+/// Music uploaded with a Story. Bytes are uploaded to Matrix before the Story
+/// event is sent so Listen works across devices (never with a sender-local
+/// filesystem path).
+class StoryMusicData {
+  final Uint8List bytes;
+  final String filename;
+  final String? mimeType;
+  final String title;
+  final String? artist;
+  final int startAtSeconds;
+
+  const StoryMusicData({
+    required this.bytes,
+    required this.filename,
+    this.mimeType,
+    required this.title,
+    this.artist,
+    this.startAtSeconds = 0,
+  });
 }
 
 /// Story 媒体上传数据

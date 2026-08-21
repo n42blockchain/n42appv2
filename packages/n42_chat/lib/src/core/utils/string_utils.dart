@@ -1,9 +1,8 @@
-final RegExp _matrixIdRegExp =
-    RegExp(r'^@[a-zA-Z0-9._=\-/]+:[a-zA-Z0-9.\-]+$');
-final RegExp _roomIdRegExp =
-    RegExp(r'^![a-zA-Z0-9]+:[a-zA-Z0-9.\-]+$');
-final RegExp _roomAliasRegExp =
-    RegExp(r'^#[a-zA-Z0-9._=\-]+:[a-zA-Z0-9.\-]+$');
+import 'friendly_display_name.dart';
+
+final RegExp _matrixIdRegExp = RegExp(r'^@[a-zA-Z0-9._=\-/]+:[a-zA-Z0-9.\-]+$');
+final RegExp _roomIdRegExp = RegExp(r'^![a-zA-Z0-9]+:[a-zA-Z0-9.\-]+$');
+final RegExp _roomAliasRegExp = RegExp(r'^#[a-zA-Z0-9._=\-]+:[a-zA-Z0-9.\-]+$');
 final RegExp _whitespaceRegExp = RegExp(r'\s+');
 final RegExp _urlExtractRegExp = RegExp(
   r'https?://[^\s<>\[\]{}|\\^`"]+',
@@ -54,7 +53,9 @@ abstract class StringUtils {
   ///
   /// user, server.com -> @user:server.com
   static String createMatrixId(String username, String server) {
-    final cleanUsername = username.startsWith('@') ? username.substring(1) : username;
+    final cleanUsername = username.startsWith('@')
+        ? username.substring(1)
+        : username;
     final cleanServer = server.startsWith(':') ? server.substring(1) : server;
     return '@$cleanUsername:$cleanServer';
   }
@@ -62,17 +63,21 @@ abstract class StringUtils {
   /// 截断字符串
   ///
   /// 超过maxLength时添加省略号
-  static String truncate(String text, int maxLength, {String ellipsis = '...'}) {
+  static String truncate(
+    String text,
+    int maxLength, {
+    String ellipsis = '...',
+  }) {
     if (text.length <= maxLength) return text;
     return '${text.substring(0, maxLength - ellipsis.length)}$ellipsis';
   }
 
   /// 获取显示名称（如果为空则使用用户名）
   static String getDisplayName(String? displayName, String userId) {
-    if (displayName != null && displayName.isNotEmpty) {
-      return displayName;
-    }
-    return extractUsername(userId);
+    return FriendlyDisplayName.resolve(
+      displayName: displayName,
+      userId: userId,
+    );
   }
 
   /// 获取姓名首字母（用于头像）
@@ -114,9 +119,7 @@ abstract class StringUtils {
   ///
   /// 替换换行为空格，限制长度
   static String formatMessagePreview(String content, {int maxLength = 50}) {
-    final preview = content
-        .replaceAll(_whitespaceRegExp, ' ')
-        .trim();
+    final preview = content.replaceAll(_whitespaceRegExp, ' ').trim();
     return truncate(preview, maxLength);
   }
 
@@ -163,10 +166,12 @@ abstract class StringUtils {
       if (index > start) {
         parts.add(TextPart(text.substring(start, index), isHighlight: false));
       }
-      parts.add(TextPart(
-        text.substring(index, index + keyword.length),
-        isHighlight: true,
-      ));
+      parts.add(
+        TextPart(
+          text.substring(index, index + keyword.length),
+          isHighlight: true,
+        ),
+      );
       start = index + keyword.length;
       index = lowerText.indexOf(lowerKeyword, start);
     }
@@ -186,4 +191,3 @@ class TextPart {
 
   const TextPart(this.text, {required this.isHighlight});
 }
-

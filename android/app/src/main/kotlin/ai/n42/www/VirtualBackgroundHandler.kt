@@ -46,15 +46,26 @@ class VirtualBackgroundHandler private constructor() :
         val blurRadius = (args["blurRadius"] as? Number)?.toFloat() ?: 0.5f
         val solidColor = args["solidColor"] as? String
         val backgroundImageBytes = args["backgroundImageBytes"] as? ByteArray
+        val beauty = (args["beauty"] as? Number)?.toFloat() ?: 0f
+        val brightness = (args["brightness"] as? Number)?.toFloat() ?: 0f
+        val rosy = (args["rosy"] as? Number)?.toFloat() ?: 0f
+        val filter = args["filter"] as? String ?: MODE_NONE
+        val filterStrength = (args["filterStrength"] as? Number)?.toFloat() ?: 0f
+        val enabled = args["enabled"] as? Boolean ?: (mode != MODE_NONE)
 
         processor.updateConfig(
             mode = mode,
             blurRadius = blurRadius,
             solidColor = solidColor,
             backgroundImageBytes = backgroundImageBytes,
+            beauty = beauty,
+            brightness = brightness,
+            rosy = rosy,
+            filter = filter,
+            filterStrength = filterStrength,
         )
 
-        if (mode == MODE_NONE) {
+        if (!enabled) {
             clearBackground()
             return true
         }

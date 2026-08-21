@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 import 'avatar_decoration_preset.dart';
+import '../../core/utils/friendly_display_name.dart';
 
 final _whitespaceRegExp = RegExp(r'\s+');
 
@@ -110,7 +111,10 @@ class UserEntity extends Equatable {
 
   /// 获取显示名称（如果为空则使用用户名）
   String get effectiveDisplayName {
-    return displayName.isNotEmpty ? displayName : username;
+    return FriendlyDisplayName.resolve(
+      displayName: displayName,
+      userId: userId,
+    );
   }
 
   /// 获取名称首字母（用于头像）

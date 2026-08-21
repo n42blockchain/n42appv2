@@ -43,6 +43,7 @@ import 'status_page.dart';
 import '../moment/moment_list_page.dart';
 import '../sticker/sticker_store_page.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/friendly_display_name.dart';
 
 /// 我的页面
 class ProfilePage extends StatefulWidget {
@@ -110,8 +111,9 @@ class _ProfilePageState extends State<ProfilePage> {
         if (!mounted || loadVersion != _loadVersion) return;
         setState(() {
           _userId = client.userID;
-          _displayName =
-              client.userID?.split(':').first.replaceFirst('@', '') ?? 'User';
+          _displayName = FriendlyDisplayName.resolve(
+            userId: client.userID ?? '',
+          );
         });
 
         try {
@@ -132,7 +134,7 @@ class _ProfilePageState extends State<ProfilePage> {
               _statusText = status;
               _boundEmail = email;
               _boundPhoneNumber = phoneNumber;
-              _displayName = profile?.displayName ?? _displayName;
+              _displayName = profile?.effectiveDisplayName ?? _displayName;
               _avatarUrl = profile?.avatarUrl ?? _avatarUrl;
               _isNftAvatar = profile?.hasNftAvatar ?? false;
               _avatarDecorationPreset =
@@ -259,9 +261,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 iconColor: const Color(0xFF2ECC71),
                 title: 'Buy / Sell crypto',
                 onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const FiatRampPage(),
-                  ),
+                  MaterialPageRoute<void>(builder: (_) => const FiatRampPage()),
                 ),
               ),
               _buildDivider(context),
@@ -308,7 +308,12 @@ class _ProfilePageState extends State<ProfilePage> {
     Color textColor,
     Color subtitleColor,
   ) {
-    final n42Id = _userId?.split(':').first.replaceFirst('@', '') ?? '--';
+    final rawId = _userId?.split(':').first.replaceFirst('@', '') ?? '';
+    final n42Id = rawId.isEmpty
+        ? '--'
+        : FriendlyDisplayName.isOpaque(rawId, userId: _userId)
+        ? 'Set a username'
+        : rawId;
 
     return Container(
       color: cardColor,
@@ -538,11 +543,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 16,
-                    height: 1.3,
-                    color: textColor,
-                  ),
+                  style: TextStyle(fontSize: 16, height: 1.3, color: textColor),
                 ),
               ),
               if (badge != null)
@@ -567,11 +568,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-              Icon(
-                AppIcons.chevron,
-                color: context.textSecondary,
-                size: 20,
-              ),
+              Icon(AppIcons.chevron, color: context.textSecondary, size: 20),
             ],
           ),
         ),
@@ -582,10 +579,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildDivider(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 58),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 
@@ -707,11 +701,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   _openEditProfile(context);
                 },
               ),
-              Divider(
-                height: 1,
-                indent: 56,
-                color: context.dividerColor,
-              ),
+              Divider(height: 1, indent: 56, color: context.dividerColor),
               ListTile(
                 leading: const Icon(
                   Icons.auto_awesome,

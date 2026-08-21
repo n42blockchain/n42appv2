@@ -1,11 +1,15 @@
 import 'package:equatable/equatable.dart';
 
+import '../../core/utils/friendly_display_name.dart';
+
 /// 在线状态
 enum PresenceStatus {
   /// 在线
   online,
+
   /// 离线
   offline,
+
   /// 忙碌
   unavailable,
 }
@@ -102,10 +106,10 @@ class ContactEntity extends Equatable {
     if (remark != null && remark!.isNotEmpty) {
       return remark!;
     }
-    if (displayName.isNotEmpty) {
-      return displayName;
-    }
-    return username;
+    return FriendlyDisplayName.resolve(
+      displayName: displayName,
+      userId: userId,
+    );
   }
 
   /// 获取名称首字母（用于头像）
@@ -174,21 +178,21 @@ class ContactEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        userId,
-        displayName,
-        avatarUrl,
-        presence,
-        lastActiveTime,
-        statusMessage,
-        remark,
-        isBlocked,
-        isFriend,
-        directRoomId,
-        tags,
-        n42Username,
-        walletAddress,
-        ensName,
-      ];
+    userId,
+    displayName,
+    avatarUrl,
+    presence,
+    lastActiveTime,
+    statusMessage,
+    remark,
+    isBlocked,
+    isFriend,
+    directRoomId,
+    tags,
+    n42Username,
+    walletAddress,
+    ensName,
+  ];
 
   ContactEntity copyWith({
     String? userId,
@@ -224,4 +228,3 @@ class ContactEntity extends Equatable {
     );
   }
 }
-

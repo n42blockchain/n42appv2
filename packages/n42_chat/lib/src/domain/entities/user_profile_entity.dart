@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart' show ThemeMode;
 
 import 'avatar_decoration_preset.dart';
+import '../../core/utils/friendly_display_name.dart';
 
 final _whitespaceRegExp = RegExp(r'\s+');
 
@@ -84,12 +85,10 @@ class UserProfileEntity extends Equatable {
 
   /// 获取有效显示名称
   String get effectiveDisplayName {
-    if (displayName != null && displayName!.isNotEmpty) {
-      return displayName!;
-    }
-    // 从userId中提取用户名
-    final localpart = userId.split(':').first;
-    return localpart.startsWith('@') ? localpart.substring(1) : localpart;
+    return FriendlyDisplayName.resolve(
+      displayName: displayName,
+      userId: userId,
+    );
   }
 
   /// 获取名字首字母

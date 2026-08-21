@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/utils/friendly_display_name.dart';
 import '../../../core/utils/room_metadata_utils.dart';
 import '../../../domain/entities/group_entity.dart';
 import '../../../domain/entities/space_entity.dart';
@@ -451,7 +452,10 @@ class MatrixSpaceDataSource {
   GroupMember matrixUserToMember(matrix.User user) {
     return GroupMember(
       userId: user.id,
-      displayName: user.displayName ?? user.id,
+      displayName: FriendlyDisplayName.resolve(
+        displayName: user.displayName,
+        userId: user.id,
+      ),
       avatarUrl: user.avatarUrl?.toString(),
       role: _powerLevelToGroupRole(user.powerLevel),
     );

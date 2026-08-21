@@ -339,7 +339,10 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
   /// 当前是否启用了背景处理
   bool get isEnabled =>
       _config.backgroundMode != BackgroundMode.none ||
-      _config.beautyStrength > 0;
+      _config.beautyStrength > 0 ||
+      _config.beautyBrightness > 0 ||
+      _config.beautyRosy > 0 ||
+      (_config.videoFilter != 'none' && _config.videoFilterStrength > 0);
 
   /// 预加载虚拟背景图片字节（供后续合成使用）
   set backgroundImageBytes(Uint8List? bytes) => _backgroundImageBytes = bytes;
@@ -406,7 +409,8 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
     // 只在虚拟背景图模式携带图片字节;且仅当字节自上次下发后变化时才带,
     // 否则切模糊/纯色/摄像头 restart 等无关操作也会把 MB 级图重过通道
     // (编解码双侧拷贝,复审 P2)。
-    final needImage = _config.backgroundMode == BackgroundMode.virtualBackground &&
+    final needImage =
+        _config.backgroundMode == BackgroundMode.virtualBackground &&
         bytes != null;
     final sig = bytes == null
         ? null
@@ -423,6 +427,11 @@ class VoipCameraProcessor implements TrackProcessor<VideoProcessorOptions> {
       // 仅在需要且变化时携带,否则传 null,原生保留上次已缓存的图。
       if (needImage && changed) 'backgroundImageBytes': bytes,
       'beauty': _config.beautyStrength,
+      'brightness': _config.beautyBrightness,
+      'rosy': _config.beautyRosy,
+      'filter': _config.videoFilter,
+      'filterStrength': _config.videoFilterStrength,
+      'enabled': isEnabled,
       // 本地相机轨道 id：原生据此定位 libwebrtc VideoSource 挂处理器
       // （见 docs/virtual-background-frame-injection.md §3.4）。
       'trackId': _sourceTrack?.id,

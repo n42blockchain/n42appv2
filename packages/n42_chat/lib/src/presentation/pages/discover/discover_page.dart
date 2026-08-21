@@ -17,12 +17,15 @@ import '../../widgets/common/common_widgets.dart';
 import '../game/game_center_page.dart';
 import '../mini_app/mini_app_market_page.dart';
 import '../moment/moment_list_page.dart';
+import '../moment/video_feed_page.dart';
 import '../qrcode/scan_qr_page.dart';
 import '../search/global_search_page.dart';
 import 'social_hub_page.dart';
 import '../space/space_list_page.dart';
 import '../voice_room/voice_room_list_page.dart';
 import 'channel_discover_page.dart';
+import 'listen_page.dart';
+import 'nearby_page.dart';
 
 /// 发现页面（仿微信）
 class DiscoverPage extends StatelessWidget {
@@ -116,8 +119,7 @@ class DiscoverPage extends StatelessWidget {
                 isDark: isDark,
                 iconWidget: _MusicIcon(),
                 title: l10n?.discoverListen ?? 'Listen',
-                onTap: () =>
-                    _showComingSoon(context, l10n?.discoverListen ?? 'Listen'),
+                onTap: () => _openListen(context),
               ),
               _buildDivider(context, isDark),
               _buildMenuItem(
@@ -125,8 +127,7 @@ class DiscoverPage extends StatelessWidget {
                 isDark: isDark,
                 iconWidget: _WatchIcon(),
                 title: l10n?.discoverWatch ?? 'Watch',
-                onTap: () =>
-                    _showComingSoon(context, l10n?.discoverWatch ?? 'Watch'),
+                onTap: () => _openWatch(context),
               ),
             ],
           ),
@@ -208,10 +209,7 @@ class DiscoverPage extends StatelessWidget {
                 isDark: isDark,
                 iconWidget: _NearbyIcon(),
                 title: l10n?.discoverNearbyPeople ?? 'Nearby',
-                onTap: () => _showComingSoon(
-                  context,
-                  l10n?.discoverNearbyPeople ?? 'Nearby',
-                ),
+                onTap: () => _openNearby(context),
               ),
             ],
           ),
@@ -286,11 +284,7 @@ class DiscoverPage extends StatelessWidget {
                 ),
               ),
               ?trailing,
-              Icon(
-                AppIcons.chevron,
-                color: context.textTertiary,
-                size: 20,
-              ),
+              Icon(AppIcons.chevron, color: context.textTertiary, size: 20),
             ],
           ),
         ),
@@ -301,10 +295,7 @@ class DiscoverPage extends StatelessWidget {
   Widget _buildDivider(BuildContext context, bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(left: 58),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 
@@ -460,16 +451,22 @@ class DiscoverPage extends StatelessWidget {
     );
   }
 
-  void _showComingSoon(BuildContext context, String feature) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S.of(context)?.commonFeatureComingSoon(feature) ??
-              '$feature coming soon',
-        ),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+  void _openListen(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => const ListenPage()));
+  }
+
+  void _openWatch(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => const VideoFeedPage()));
+  }
+
+  void _openNearby(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => const NearbyPage()));
   }
 }
 

@@ -7,6 +7,9 @@ import 'package:n42_chat/src/presentation/blocs/moment/moment_bloc.dart';
 import 'package:n42_chat/src/presentation/blocs/moment/moment_state.dart';
 import 'package:n42_chat/src/core/theme/app_icons.dart';
 import 'package:n42_chat/src/presentation/pages/discover/discover_page.dart';
+import 'package:n42_chat/src/presentation/pages/discover/listen_page.dart';
+import 'package:n42_chat/src/presentation/pages/discover/nearby_page.dart';
+import 'package:n42_chat/src/presentation/pages/moment/video_feed_page.dart';
 
 class MockMomentBloc extends Mock implements MomentBloc {
   @override
@@ -81,6 +84,24 @@ void main() {
       expect(find.text('Watch'), findsOneWidget);
       expect(find.text('Nearby'), findsOneWidget);
     });
+
+    for (final target in const <(String, Type)>[
+      ('Nearby', NearbyPage),
+      ('Watch', VideoFeedPage),
+      ('Listen', ListenPage),
+    ]) {
+      testWidgets('${target.$1} opens a real feature page', (tester) async {
+        useTallViewport(tester);
+        await tester.pumpWidget(buildTestWidget(const DiscoverPage()));
+        await tester.pumpAndSettle();
+
+        await tester.ensureVisible(find.text(target.$1));
+        await tester.tap(find.text(target.$1));
+        await tester.pump();
+        await tester.pump(const Duration(milliseconds: 400));
+        expect(find.byType(target.$2), findsOneWidget);
+      });
+    }
 
     testWidgets('shows AppBar with Discover title when showAppBar is true', (
       tester,

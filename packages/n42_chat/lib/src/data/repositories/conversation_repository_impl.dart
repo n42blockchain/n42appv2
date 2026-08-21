@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../core/utils/friendly_display_name.dart';
 import '../../core/utils/matrix_utils.dart';
 import '../../domain/entities/conversation_entity.dart';
 import '../../domain/repositories/conversation_repository.dart';
@@ -176,8 +177,10 @@ class ConversationRepositoryImpl implements IConversationRepository {
   Stream<int> watchTotalUnreadCount() {
     // .distinct() 防止未读数未变也触发下游 Tab badge widget 重建。
     return watchConversations()
-        .map((conversations) =>
-            conversations.fold<int>(0, (sum, conv) => sum + conv.unreadCount))
+        .map(
+          (conversations) =>
+              conversations.fold<int>(0, (sum, conv) => sum + conv.unreadCount),
+        )
         .distinct();
   }
 
@@ -255,15 +258,22 @@ class ConversationRepositoryImpl implements IConversationRepository {
     final typingUsers = room.typingUsers
         .where((user) => user.id != currentUserId)
         .map((user) {
-          final displayName = user.calcDisplayname().trim();
-          return displayName.isNotEmpty ? displayName : user.id;
+          return FriendlyDisplayName.resolve(
+            displayName: user.calcDisplayname(),
+            userId: user.id,
+          );
         })
         .toSet()
         .toList(growable: false);
 
     return ConversationEntity(
       id: room.id,
-      name: _roomDataSource.getRoomDisplayName(room),
+      name: room.isDirectChat
+          ? FriendlyDisplayName.resolve(
+              displayName: _roomDataSource.getRoomDisplayName(room),
+              userId: directUserId ?? _roomDataSource.getRoomDisplayName(room),
+            )
+          : _roomDataSource.getRoomDisplayName(room),
       avatarUrl: avatarUrl,
       type: room.isDirectChat
           ? ConversationType.direct

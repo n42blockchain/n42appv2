@@ -12,8 +12,10 @@ import '../../prediction/domain/prediction_market.dart';
 import '../../prediction/providers/prediction_providers.dart';
 import '../../prediction/widgets/create_prediction_sheet.dart';
 import '../../prediction/widgets/resolve_prediction_sheet.dart';
+import '../../domain/live_beauty_settings.dart';
 import '../../services/live_chat_service.dart';
 import '../../services/live_video_service.dart';
+import '../widgets/live_beauty_sheet.dart';
 import '../widgets/danmu_overlay.dart';
 import '../widgets/gift_overlay.dart';
 import '../widgets/gift_providers.dart';
@@ -33,6 +35,8 @@ class _GoLivePageState extends State<GoLivePage> {
   final LiveChatService _chat = LiveChatService();
   Stream<List<LiveDanmu>>? _danmu;
   Timer? _heartbeat;
+  final LiveBeautySettingsStore _beautyStore = LiveBeautySettingsStore();
+  LiveBeautySettings _beauty = const LiveBeautySettings();
 
   bool _starting = false;
   bool _live = false;
@@ -40,6 +44,16 @@ class _GoLivePageState extends State<GoLivePage> {
   String? _roomId;
   String? _error;
   String? _videoError;
+
+  @override
+  void initState() {
+    super.initState();
+    unawaited(
+      _beautyStore.load().then((settings) {
+        if (mounted) setState(() => _beauty = settings);
+      }),
+    );
+  }
 
   Future<void> _startLive() async {
     if (_starting) return;
@@ -84,6 +98,7 @@ class _GoLivePageState extends State<GoLivePage> {
       try {
         await _video.joinAsBroadcaster(roomId);
         videoJoined = true;
+        await _applyBeauty(_beauty);
       } catch (e) {
         videoError = '$e';
         // join 可能已创建了部分本地 LiveKit 状态；尽力清理，但保留该 service
@@ -164,6 +179,50 @@ class _GoLivePageState extends State<GoLivePage> {
       await _chat.leave(roomId);
     }
     if (mounted) context.pop();
+  }
+
+  Future<void> _applyBeauty(LiveBeautySettings settings) =>
+      _video.setBeautySettings(
+        smooth: settings.smooth,
+        brightness: settings.brightness,
+        rosy: settings.rosy,
+        filter: settings.filter.name,
+        filterStrength: settings.filterStrength,
+      );
+
+  Future<void> _showBeautySheet() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) => LiveBeautySheet(
+        initial: _beauty,
+        onChanged: (settings) {
+          setState(() => _beauty = settings);
+          unawaited(_applyBeauty(settings));
+          unawaited(_beautyStore.save(settings));
+        },
+        onCompareChanged: (comparing) {
+          unawaited(
+            _applyBeauty(comparing ? const LiveBeautySettings.off() : _beauty),
+          );
+        },
+      ),
+    );
+    // Pointer-up can be lost if the sheet is dismissed while comparing.
+    await _applyBeauty(_beauty);
+  }
+
+  Future<void> _toggleTorch() async {
+    final supported = await _video.toggleTorch();
+    if (!mounted) return;
+    if (!supported) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('请切换到支持补光灯的后置摄像头')));
+    } else {
+      setState(() {});
+    }
   }
 
   @override
@@ -313,7 +372,7 @@ class _GoLivePageState extends State<GoLivePage> {
             child: _BroadcasterPredictionButton(roomId: _roomId!),
           ),
 
-        // 主播控制：切换摄像头 / 麦克风
+        // 主播控制：美颜 / 暂停画面 / 翻转 / 补光 / 麦克风。
         if (_videoJoined)
           Positioned(
             right: 12,
@@ -321,13 +380,45 @@ class _GoLivePageState extends State<GoLivePage> {
             child: Column(
               children: [
                 _CircleButton(
-                  icon: Icons.cameraswitch,
-                  onTap: _video.switchCamera,
+                  label: '美颜与滤镜',
+                  icon: _beauty.isEnabled
+                      ? Icons.face_retouching_natural
+                      : Icons.face_retouching_off,
+                  onTap: _showBeautySheet,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 ListenableBuilder(
                   listenable: _video.listenable ?? const _NullListenable(),
                   builder: (context, _) => _CircleButton(
+                    label: _video.isVideoEnabled ? '暂停画面' : '恢复画面',
+                    icon: _video.isVideoEnabled
+                        ? Icons.videocam
+                        : Icons.videocam_off,
+                    onTap: _video.toggleCamera,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _CircleButton(
+                  label: '切换摄像头',
+                  icon: Icons.cameraswitch,
+                  onTap: () async {
+                    await _video.switchCamera();
+                    if (mounted) setState(() {});
+                  },
+                ),
+                const SizedBox(height: 10),
+                _CircleButton(
+                  label: _video.isTorchEnabled ? '关闭补光灯' : '打开补光灯',
+                  icon: _video.isTorchEnabled
+                      ? Icons.flash_on
+                      : Icons.flash_off,
+                  onTap: _toggleTorch,
+                ),
+                const SizedBox(height: 10),
+                ListenableBuilder(
+                  listenable: _video.listenable ?? const _NullListenable(),
+                  builder: (context, _) => _CircleButton(
+                    label: _video.isMuted ? '打开麦克风' : '静音',
                     icon: _video.isMuted ? Icons.mic_off : Icons.mic,
                     onTap: _video.toggleMicrophone,
                   ),
@@ -438,23 +529,35 @@ class _RoomIdChip extends StatelessWidget {
 }
 
 class _CircleButton extends StatelessWidget {
-  const _CircleButton({required this.icon, required this.onTap});
+  const _CircleButton({
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+  final String label;
   final IconData icon;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      customBorder: const CircleBorder(),
-      child: Container(
-        width: 48,
-        height: 48,
-        decoration: const BoxDecoration(
-          color: AppColorTokens.overlay,
-          shape: BoxShape.circle,
+    return Semantics(
+      button: true,
+      label: label,
+      child: Tooltip(
+        message: label,
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const CircleBorder(),
+          child: Container(
+            width: 48,
+            height: 48,
+            decoration: const BoxDecoration(
+              color: AppColorTokens.overlay,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
+          ),
         ),
-        child: Icon(icon, color: AppColorTokens.onOverlayPrimary),
       ),
     );
   }

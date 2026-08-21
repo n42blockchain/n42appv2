@@ -5,13 +5,18 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/services/red_packet_service.dart';
+import '../../../domain/entities/red_packet_entity.dart';
+import '../../../domain/repositories/message_repository.dart';
 import '../../../domain/repositories/contact_repository.dart';
+import '../../../integration/wallet_bridge.dart';
 import '../../../n42_chat.dart';
 import '../../blocs/transfer/transfer_bloc.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../widgets/chat/contact_card_select_sheet.dart';
 import '../transfer/receive_page.dart';
 import '../transfer/transfer_page.dart';
+import '../red_packet/send_red_packet_page.dart';
 import 'n42_bean_page.dart';
 
 /// 服务页面
@@ -76,6 +81,100 @@ class ServicesPage extends StatelessWidget {
     }
   }
 
+  Future<void> _openRedPacket(BuildContext context) async {
+    final l10n = S.of(context);
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => ContactCardSelectSheet(
+        isDark: context.isDarkMode,
+        selectContactText: l10n?.chatSelectContact ?? 'Select Contact',
+        searchContactHintText: l10n?.chatSearchContactHint ?? 'Search contacts',
+        noContactsFoundText:
+            l10n?.contactNoContactsFound ?? 'No contacts found',
+      ),
+    );
+    if (result == null || !context.mounted) return;
+
+    final userId = result['id'] as String?;
+    final receiverName = result['name'] as String? ?? userId ?? '';
+    if (userId == null || userId.isEmpty) return;
+
+    try {
+      final contactRepository = getIt<IContactRepository>();
+      final roomId = await contactRepository.startDirectChat(userId);
+      if (!context.mounted) return;
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute<void>(
+          builder: (_) => SendRedPacketPage(
+            receiverName: receiverName,
+            onSend: (amount, token, greeting, count, isLucky) => _sendRedPacket(
+              roomId: roomId,
+              amount: amount,
+              token: token,
+              greeting: greeting,
+              count: count,
+              isLucky: isLucky,
+            ),
+          ),
+        ),
+      );
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open a chat for this contact')),
+      );
+    }
+  }
+
+  Future<bool> _sendRedPacket({
+    required String roomId,
+    required String amount,
+    required String token,
+    required String greeting,
+    required int count,
+    required bool isLucky,
+  }) async {
+    final amountValue = double.tryParse(amount) ?? 0;
+    if (amountValue <= 0) return false;
+
+    final wallet = getIt<IWalletBridge>();
+    try {
+      final balance = double.tryParse(await wallet.getBalance(token)) ?? 0;
+      if (balance < amountValue) return false;
+    } catch (_) {
+      // Some host bridges cannot expose a read balance. Creation/send still
+      // uses the same local red-packet service as the in-chat flow.
+    }
+
+    final messages = getIt<IMessageRepository>();
+    final senderId = await messages.getCurrentUserId() ?? '';
+    final senderName = N42Chat.currentUser?.displayName ?? senderId;
+    final packet = await getIt<IRedPacketService>().createRedPacket(
+      roomId: roomId,
+      totalAmount: amountValue,
+      totalCount: count,
+      token: token,
+      type: isLucky ? RedPacketType.lucky : RedPacketType.normal,
+      greeting: greeting,
+      senderId: senderId,
+      senderName: senderName,
+    );
+    final eventId = await messages.sendCustomMessage(
+      roomId,
+      msgType: 'n42.red_packet',
+      content: greeting,
+      additionalData: {
+        'amount': amount,
+        'token': token,
+        'status': 'pending',
+        'red_packet_id': packet.id,
+      },
+    );
+    return eventId != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final cardColor = context.surfaceColor;
@@ -121,17 +220,7 @@ class ServicesPage extends StatelessWidget {
               label: S.of(context)?.profileRedPacket ?? 'Red Packet',
               cardColor: cardColor,
               textColor: textColor,
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                      S.of(context)?.chatSendRedPacketInChat ??
-                          'Please send red packet in chat',
-                    ),
-                    duration: const Duration(seconds: 2),
-                  ),
-                );
-              },
+              onTap: () => _openRedPacket(context),
             ),
             _buildServiceItem(
               context,

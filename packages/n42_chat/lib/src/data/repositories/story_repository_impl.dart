@@ -5,6 +5,7 @@ import '../../domain/repositories/story_repository.dart';
 import '../datasources/local/preferences_datasource.dart';
 import '../datasources/matrix/matrix_story_datasource.dart';
 import '../../core/utils/debug_log.dart';
+import '../../core/utils/friendly_display_name.dart';
 
 /// Story 仓库实现
 ///
@@ -53,10 +54,12 @@ class StoryRepositoryImpl implements IStoryRepository {
     List<StoryMediaData>? media,
     int? backgroundColor,
     int? textColor,
+    StoryMusicData? music,
   }) async {
     // 验证至少有内容或媒体
     if ((content == null || content.isEmpty) &&
-        (media == null || media.isEmpty)) {
+        (media == null || media.isEmpty) &&
+        music == null) {
       return null;
     }
 
@@ -69,12 +72,26 @@ class StoryRepositoryImpl implements IStoryRepository {
       }
     }
 
+    String? musicUrl;
+    if (music != null) {
+      musicUrl = await _storyDataSource.uploadMusic(
+        bytes: music.bytes,
+        filename: music.filename,
+        contentType: music.mimeType,
+      );
+      if (musicUrl == null) return null;
+    }
+
     // 发布 Story
     final eventId = await _storyDataSource.postStory(
       content: content,
       media: mediaData,
       backgroundColor: backgroundColor,
       textColor: textColor,
+      musicUrl: musicUrl,
+      musicTitle: music?.title,
+      musicArtist: music?.artist,
+      musicStartAt: music?.startAtSeconds,
     );
 
     if (eventId == null) {
@@ -137,7 +154,10 @@ class StoryRepositoryImpl implements IStoryRepository {
     return viewersData.map((data) {
       return StoryViewer(
         userId: data['user_id'] as String? ?? '',
-        userName: data['user_name'] as String? ?? '',
+        userName: FriendlyDisplayName.resolve(
+          displayName: data['user_name'] as String?,
+          userId: data['user_id'] as String? ?? '',
+        ),
         avatarUrl: data['avatar_url'] as String?,
         viewedAt:
             DateTime.tryParse(data['viewed_at'] as String? ?? '') ??
@@ -199,7 +219,10 @@ class StoryRepositoryImpl implements IStoryRepository {
       userStoriesList.add(
         UserStories(
           userId: userId,
-          userName: info['user_name'] as String? ?? userId,
+          userName: FriendlyDisplayName.resolve(
+            displayName: info['user_name'] as String?,
+            userId: userId,
+          ),
           avatarUrl: info['user_avatar_url'] as String?,
           stories: stories,
           allViewed: allViewed,
@@ -250,11 +273,15 @@ class StoryRepositoryImpl implements IStoryRepository {
     // 判断是否已查看
     final isViewed = viewedIds.contains(id) || viewedIds.contains(eventId);
 
+    final userId = data['user_id'] as String? ?? '';
     return StoryEntity(
       id: id,
       eventId: eventId,
-      userId: data['user_id'] as String? ?? '',
-      userName: data['user_name'] as String? ?? '',
+      userId: userId,
+      userName: FriendlyDisplayName.resolve(
+        displayName: data['user_name'] as String?,
+        userId: userId,
+      ),
       userAvatarUrl: data['user_avatar_url'] as String?,
       content: data['content'] as String?,
       media: mediaList,
@@ -264,6 +291,10 @@ class StoryRepositoryImpl implements IStoryRepository {
       isViewed: isViewed,
       backgroundColor: data['background_color'] as int?,
       textColor: data['text_color'] as int?,
+      musicUrl: data['music_url'] as String?,
+      musicTitle: data['music_title'] as String?,
+      musicArtist: data['music_artist'] as String?,
+      musicStartAt: data['music_start_at'] as int?,
     );
   }
 

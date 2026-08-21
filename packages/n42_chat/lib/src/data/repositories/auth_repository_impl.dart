@@ -5,6 +5,7 @@ import 'package:matrix/matrix.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../core/utils/debug_log.dart';
+import '../../core/utils/friendly_display_name.dart';
 import '../../core/utils/matrix_utils.dart';
 import '../../domain/entities/avatar_decoration_preset.dart';
 import '../../domain/entities/stored_account_entity.dart';
@@ -223,9 +224,7 @@ class AuthRepositoryImpl implements IAuthRepository {
       if (_authDataSource.isLoggedIn) {
         _clearCachedUserProfile();
         final sdkUserId = _authDataSource.userId;
-        authLog(
-          'Matrix SDK already logged in as $sdkUserId, fast restore',
-        );
+        authLog('Matrix SDK already logged in as $sdkUserId, fast restore');
 
         _startMonitoringLoginState();
 
@@ -409,11 +408,27 @@ class AuthRepositoryImpl implements IAuthRepository {
   }) async {
     try {
       final username = await _generateAnonymousUsername(homeserver);
-      return register(
+      final result = await register(
         homeserver: homeserver,
         username: username,
         password: password,
         registrationToken: registrationToken,
+      );
+      if (!result.success || result.user == null) return result;
+
+      // Anonymous Matrix localparts are deliberately random and should never
+      // become the visible nickname. Persist a readable, stable guest name so
+      // other devices see the same label in live rooms and chat timelines.
+      final displayName =
+          'Live Guest ${FriendlyDisplayName.shortCode(result.user!.userId)}';
+      final updated = await updateDisplayName(displayName);
+      if (!updated) {
+        authLog(
+          'Anonymous account created but guest display name update failed',
+        );
+      }
+      return AuthResult.success(
+        UserEntity(userId: result.user!.userId, displayName: displayName),
       );
     } catch (e) {
       authLog('Anonymous registration failed - $e');

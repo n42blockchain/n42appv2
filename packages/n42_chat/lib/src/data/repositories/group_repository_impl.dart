@@ -15,6 +15,7 @@ import '../datasources/matrix/matrix_group_datasource.dart';
 import '../datasources/matrix/matrix_client_manager.dart';
 import '../datasources/matrix/matrix_message_datasource.dart';
 import '../../core/utils/debug_log.dart';
+import '../../core/utils/friendly_display_name.dart';
 import '../../core/utils/matrix_utils.dart';
 import '../../core/utils/room_metadata_utils.dart';
 
@@ -616,7 +617,10 @@ class GroupRepositoryImpl implements IGroupRepository {
 
     return GroupMember(
       userId: user.id,
-      displayName: user.calcDisplayname(),
+      displayName: FriendlyDisplayName.resolve(
+        displayName: user.calcDisplayname(),
+        userId: user.id,
+      ),
       avatarUrl: avatarUrl,
       role: role,
       powerLevel: powerLevel,

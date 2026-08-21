@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/utils/friendly_display_name.dart';
 import '../../../core/utils/matrix_utils.dart';
 import 'matrix_client_manager.dart';
 import '../../../core/utils/debug_log.dart';
@@ -237,6 +239,36 @@ class MatrixStoryDataSource {
     }
   }
 
+  Future<String?> uploadMusic({
+    required Uint8List bytes,
+    required String filename,
+    String? contentType,
+  }) async {
+    final client = _client;
+    const maxMusicBytes = 20 * 1024 * 1024;
+    if (client == null ||
+        !client.isLogged() ||
+        bytes.isEmpty ||
+        bytes.length > maxMusicBytes) {
+      return null;
+    }
+    final uri = await client.uploadContent(
+      bytes,
+      filename: filename,
+      contentType: contentType ?? _musicMimeType(filename),
+    );
+    return uri.toString();
+  }
+
+  String _musicMimeType(String filename) {
+    final lower = filename.toLowerCase();
+    if (lower.endsWith('.m4a') || lower.endsWith('.mp4')) return 'audio/mp4';
+    if (lower.endsWith('.wav')) return 'audio/wav';
+    if (lower.endsWith('.ogg') || lower.endsWith('.opus')) return 'audio/ogg';
+    if (lower.endsWith('.flac')) return 'audio/flac';
+    return 'audio/mpeg';
+  }
+
   /// 删除 Story
   Future<void> deleteStory(String eventId) async {
     final room = _storyRoom ?? await _getOrCreateStoryRoom();
@@ -333,7 +365,10 @@ class MatrixStoryDataSource {
           final user = room.unsafeGetUserFromMemoryOrFallback(event.senderId);
           viewers.add({
             'user_id': event.senderId,
-            'user_name': user.displayName ?? event.senderId,
+            'user_name': FriendlyDisplayName.resolve(
+              displayName: user.displayName,
+              userId: event.senderId,
+            ),
             'avatar_url': user.avatarUrl?.toString(),
             'viewed_at': content['viewed_at'] as String?,
           });
@@ -382,7 +417,10 @@ class MatrixStoryDataSource {
         'id': content['story_id'] as String? ?? event.eventId,
         'event_id': event.eventId,
         'user_id': event.senderId,
-        'user_name': user.displayName ?? event.senderId,
+        'user_name': FriendlyDisplayName.resolve(
+          displayName: user.displayName,
+          userId: event.senderId,
+        ),
         'user_avatar_url': user.avatarUrl?.toString(),
         'content': content['content'] as String?,
         'media': mediaList,

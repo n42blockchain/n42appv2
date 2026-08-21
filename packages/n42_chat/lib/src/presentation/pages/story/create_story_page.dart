@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -365,15 +366,11 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 hintText: s?.storySendMessageHint ?? 'Add a caption...',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: context.dividerColor,
-                  ),
+                  borderSide: BorderSide(color: context.dividerColor),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(
-                    color: context.dividerColor,
-                  ),
+                  borderSide: BorderSide(color: context.dividerColor),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -386,9 +383,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
                 fillColor: isDark
                     ? AppColors.backgroundDark
                     : AppColors.inputBackground,
-                counterStyle: TextStyle(
-                  color: context.textSecondary,
-                ),
+                counterStyle: TextStyle(color: context.textSecondary),
               ),
             ),
           ),
@@ -406,10 +401,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         decoration: BoxDecoration(
           color: context.surfaceColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: context.dividerColor,
-            width: 2,
-          ),
+          border: Border.all(color: context.dividerColor, width: 2),
         ),
         child: Center(
           child: Column(
@@ -571,7 +563,7 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
     }
   }
 
-  void _postStory() {
+  Future<void> _postStory() async {
     final storyBloc = context.read<StoryBloc>();
     if (!_canPost || storyBloc.state.isPosting) return;
 
@@ -585,6 +577,34 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
           mimeType: _imageMimeType ?? 'image/jpeg',
         ),
       );
+    }
+
+    StoryMusicInput? music;
+    final selection = _musicSelection;
+    if (selection?.filePath != null && selection!.isEmpty != true) {
+      try {
+        final file = File(selection.filePath!);
+        const maxMusicBytes = 20 * 1024 * 1024;
+        if (await file.length() > maxMusicBytes) {
+          throw const FormatException('Music must be 20 MB or smaller');
+        }
+        final bytes = await file.readAsBytes();
+        if (!mounted) return;
+        final parsed = _parseMusicName(selection.fileName);
+        music = StoryMusicInput(
+          bytes: bytes,
+          filename: selection.fileName,
+          mimeType: _musicMimeType(selection.fileName),
+          title: parsed.$2,
+          artist: parsed.$1,
+        );
+      } catch (error) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Unable to read selected music: $error')),
+        );
+        return;
+      }
     }
 
     storyBloc.add(
@@ -601,8 +621,29 @@ class _CreateStoryPageState extends State<CreateStoryPage> {
         textColor: _mode == StoryMode.text
             ? _currentTextColor.toARGB32()
             : null,
+        music: music,
       ),
     );
+  }
+
+  (String?, String) _parseMusicName(String filename) {
+    final dot = filename.lastIndexOf('.');
+    final base = dot > 0 ? filename.substring(0, dot) : filename;
+    final separator = base.indexOf(' - ');
+    if (separator <= 0 || separator >= base.length - 3) return (null, base);
+    return (
+      base.substring(0, separator).trim(),
+      base.substring(separator + 3).trim(),
+    );
+  }
+
+  String _musicMimeType(String filename) {
+    final lower = filename.toLowerCase();
+    if (lower.endsWith('.m4a') || lower.endsWith('.mp4')) return 'audio/mp4';
+    if (lower.endsWith('.wav')) return 'audio/wav';
+    if (lower.endsWith('.ogg') || lower.endsWith('.opus')) return 'audio/ogg';
+    if (lower.endsWith('.flac')) return 'audio/flac';
+    return 'audio/mpeg';
   }
 
   Widget _buildMusicBar() {
