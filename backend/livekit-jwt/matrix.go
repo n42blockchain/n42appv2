@@ -14,12 +14,14 @@ import (
 var (
 	errMatrixUnauthorized = errors.New("matrix authentication failed")
 	errMatrixNotJoined    = errors.New("matrix user is not joined to the room")
+	errMatrixNoCreator    = errors.New("matrix room has no resolvable creator")
 	errMatrixUpstream     = errors.New("matrix upstream failed")
 )
 
 type matrixVerifier interface {
 	WhoAmI(context.Context, string) (string, error)
 	RequireJoined(context.Context, string, string, string) error
+	RoomCreator(context.Context, string, string) (string, error)
 }
 
 type matrixClient struct {
@@ -95,6 +97,59 @@ func (m *matrixClient) RequireJoined(
 		return errMatrixNotJoined
 	}
 	return nil
+}
+
+// RoomCreator returns the Matrix user who created the room.
+//
+// The creator is written by the homeserver itself into m.room.create and
+// cannot be forged by a client, which makes it the authoritative signal for
+// "who is the broadcaster of this live room". The Flutter client anchors the
+// broadcaster's video track on the same field, so both sides agree without
+// trusting any client-supplied role.
+func (m *matrixClient) RoomCreator(
+	ctx context.Context,
+	accessToken string,
+	roomID string,
+) (string, error) {
+	endpoint := m.homeserver + "/_matrix/client/v3/rooms/" +
+		url.PathEscape(roomID) + "/state/m.room.create/"
+	request, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+	if err != nil {
+		return "", fmt.Errorf("%w: %v", errMatrixUpstream, err)
+	}
+	request.Header.Set("Authorization", "Bearer "+accessToken)
+
+	response, err := m.httpClient.Do(request)
+	if err != nil {
+		return "", fmt.Errorf("%w: %v", errMatrixUpstream, err)
+	}
+	defer response.Body.Close()
+	if response.StatusCode == http.StatusUnauthorized || response.StatusCode == http.StatusForbidden {
+		return "", errMatrixUnauthorized
+	}
+	if response.StatusCode == http.StatusNotFound {
+		return "", errMatrixNoCreator
+	}
+	if response.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("%w: create state returned %d", errMatrixUpstream, response.StatusCode)
+	}
+
+	var body struct {
+		Creator string `json:"creator"`
+		Sender  string `json:"sender"`
+	}
+	if err := decodeResponseJSON(response.Body, &body); err != nil {
+		return "", fmt.Errorf("%w: invalid create state response", errMatrixUpstream)
+	}
+	// room v11+ drops the creator field and the sender carries it instead.
+	creator := strings.TrimSpace(body.Creator)
+	if creator == "" {
+		creator = strings.TrimSpace(body.Sender)
+	}
+	if creator == "" {
+		return "", errMatrixNoCreator
+	}
+	return creator, nil
 }
 
 func decodeRequestJSON(reader io.Reader, target any) error {

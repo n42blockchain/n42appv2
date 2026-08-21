@@ -21,10 +21,35 @@ type tokenRequest struct {
 	ConversationID string `json:"conversation_id"`
 	Metadata       string `json:"metadata,omitempty"`
 	Role           string `json:"role,omitempty"`
+
+	// canPublish is resolved server-side before issuing and is never parsed
+	// from the request body.
+	canPublish bool
 }
 
 type tokenIssuer interface {
 	Issue(tokenRequest) (string, error)
+}
+
+// roleBroadcaster is the only role allowed to publish media. Anything else
+// (including an absent or unknown role) is treated as a viewer.
+const roleBroadcaster = "broadcaster"
+
+// canPublishFor decides the LiveKit publish grant.
+//
+// The client-supplied role is a hint, never an authorisation: a viewer can
+// trivially send role=broadcaster. Publishing is granted only when the
+// requester is the room's creator, which the homeserver writes into
+// m.room.create and no client can forge. Requests without a role keep the
+// historical behaviour (group calls, where every participant publishes).
+func canPublishFor(request tokenRequest, creator string) bool {
+	if strings.TrimSpace(request.Role) == "" {
+		return true
+	}
+	if !strings.EqualFold(strings.TrimSpace(request.Role), roleBroadcaster) {
+		return false
+	}
+	return creator != "" && request.Identity == creator
 }
 
 type liveKitIssuer struct {
@@ -49,9 +74,11 @@ func (i liveKitIssuer) Issue(request tokenRequest) (string, error) {
 		SetMetadata(string(metadata)).
 		SetValidFor(i.ttl).
 		SetVideoGrant(&auth.VideoGrant{
-			RoomJoin:     true,
-			Room:         request.Room,
-			CanPublish:   boolPointer(true),
+			RoomJoin: true,
+			Room:     request.Room,
+			// Resolved by the handler from Matrix room state, never from the
+			// client-supplied role.
+			CanPublish:   boolPointer(request.canPublish),
 			CanSubscribe: boolPointer(true),
 		})
 	return token.ToJWT()
@@ -116,6 +143,25 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 	if payload.Name == "" {
 		payload.Name = userID
 	}
+
+	// Role-bearing requests come from the live client. Resolve the broadcaster
+	// from room state so a viewer cannot self-declare publish rights.
+	if strings.TrimSpace(payload.Role) != "" {
+		creator, creatorErr := h.matrix.RoomCreator(
+			request.Context(),
+			accessToken,
+			payload.ConversationID,
+		)
+		if creatorErr != nil && !errors.Is(creatorErr, errMatrixNoCreator) {
+			writeMatrixError(response, creatorErr)
+			return
+		}
+		// An unresolvable creator must not silently grant publish rights.
+		payload.canPublish = canPublishFor(payload, creator)
+	} else {
+		payload.canPublish = true
+	}
+
 	token, err := h.issuer.Issue(payload)
 	if err != nil {
 		writeError(response, http.StatusInternalServerError, "token_issue_failed")

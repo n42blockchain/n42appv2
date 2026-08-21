@@ -14,9 +14,11 @@ import (
 )
 
 type fakeMatrixVerifier struct {
-	userID  string
-	whoErr  error
-	joinErr error
+	userID     string
+	whoErr     error
+	joinErr    error
+	creator    string
+	creatorErr error
 }
 
 func (f fakeMatrixVerifier) WhoAmI(context.Context, string) (string, error) {
@@ -25,6 +27,150 @@ func (f fakeMatrixVerifier) WhoAmI(context.Context, string) (string, error) {
 
 func (f fakeMatrixVerifier) RequireJoined(context.Context, string, string, string) error {
 	return f.joinErr
+}
+
+func (f fakeMatrixVerifier) RoomCreator(
+	context.Context,
+	string,
+	string,
+) (string, error) {
+	return f.creator, f.creatorErr
+}
+
+// capturingIssuer records the request the handler resolved, so tests can
+// assert on the publish decision rather than only on the returned string.
+type capturingIssuer struct {
+	token string
+	last  tokenRequest
+}
+
+func (c *capturingIssuer) Issue(request tokenRequest) (string, error) {
+	c.last = request
+	return c.token, nil
+}
+
+func publishDecision(t *testing.T, role, identity, creator string) bool {
+	t.Helper()
+	issuer := &capturingIssuer{token: "tok"}
+	handler := tokenHandler{
+		matrix: fakeMatrixVerifier{userID: identity, creator: creator},
+		issuer: issuer,
+	}
+	const conversation = "!live:m.example"
+	body, err := json.Marshal(map[string]any{
+		"room":            buildLiveKitRoomName(conversation),
+		"identity":        identity,
+		"name":            "display",
+		"video":           true,
+		"conversation_id": conversation,
+		"role":            role,
+	})
+	if err != nil {
+		t.Fatalf("marshal: %v", err)
+	}
+	request := httptest.NewRequest(http.MethodPost, "/livekit/jwt", strings.NewReader(string(body)))
+	request.Header.Set("Authorization", "Bearer matrix-token")
+	recorder := httptest.NewRecorder()
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", recorder.Code, recorder.Body.String())
+	}
+	return issuer.last.canPublish
+}
+
+func TestBroadcasterPublishesOnlyWhenRoomCreator(t *testing.T) {
+	const streamer = "@streamer:m.example"
+	if !publishDecision(t, "broadcaster", streamer, streamer) {
+		t.Fatal("the room creator claiming broadcaster must be allowed to publish")
+	}
+}
+
+func TestViewerNeverPublishes(t *testing.T) {
+	if publishDecision(t, "viewer", "@viewer:m.example", "@streamer:m.example") {
+		t.Fatal("a viewer must never receive a publish grant")
+	}
+}
+
+// The whole point of the server-side check: the role field is attacker
+// controlled, so a viewer sending role=broadcaster must still be denied.
+func TestForgedBroadcasterRoleIsDenied(t *testing.T) {
+	if publishDecision(t, "broadcaster", "@viewer:m.example", "@streamer:m.example") {
+		t.Fatal("a non-creator claiming broadcaster must not be able to publish")
+	}
+}
+
+func TestUnknownRoleIsTreatedAsViewer(t *testing.T) {
+	const streamer = "@streamer:m.example"
+	if publishDecision(t, "co-host", streamer, streamer) {
+		t.Fatal("an unrecognised role must not grant publish rights")
+	}
+}
+
+// Group calls send no role at all and every participant publishes; that
+// behaviour must survive this change.
+func TestRolelessRequestKeepsPublishing(t *testing.T) {
+	const user = "@member:m.example"
+	if !publishDecision(t, "", user, "@someone-else:m.example") {
+		t.Fatal("a request without a role must keep the historical grant")
+	}
+}
+
+// A room whose creator cannot be resolved must fail closed for live roles
+// rather than silently handing out a publish grant.
+func TestUnresolvableCreatorDeniesPublish(t *testing.T) {
+	issuer := &capturingIssuer{token: "tok"}
+	handler := tokenHandler{
+		matrix: fakeMatrixVerifier{
+			userID:     "@streamer:m.example",
+			creatorErr: errMatrixNoCreator,
+		},
+		issuer: issuer,
+	}
+	const conversation = "!live:m.example"
+	body, _ := json.Marshal(map[string]any{
+		"room":            buildLiveKitRoomName(conversation),
+		"identity":        "@streamer:m.example",
+		"conversation_id": conversation,
+		"role":            "broadcaster",
+	})
+	request := httptest.NewRequest(http.MethodPost, "/livekit/jwt", strings.NewReader(string(body)))
+	request.Header.Set("Authorization", "Bearer matrix-token")
+	recorder := httptest.NewRecorder()
+	handler.ServeHTTP(recorder, request)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d", recorder.Code)
+	}
+	if issuer.last.canPublish {
+		t.Fatal("an unresolvable creator must not grant publish rights")
+	}
+}
+
+// Ensures the decision actually reaches the signed JWT, not just the struct.
+func TestIssuedJWTCarriesViewerRestriction(t *testing.T) {
+	issuer := liveKitIssuer{apiKey: "key", apiSecret: "secret-secret-secret-secret", ttl: time.Minute}
+	jwt, err := issuer.Issue(tokenRequest{
+		Room:       "live-room",
+		Identity:   "@viewer:m.example",
+		Role:       "viewer",
+		canPublish: false,
+	})
+	if err != nil {
+		t.Fatalf("issue: %v", err)
+	}
+	verifier, err := auth.ParseAPIToken(jwt)
+	if err != nil {
+		t.Fatalf("parse: %v", err)
+	}
+	_, grants, err := verifier.Verify("secret-secret-secret-secret")
+	if err != nil {
+		t.Fatalf("verify: %v", err)
+	}
+	if grants.Video.CanPublish == nil || *grants.Video.CanPublish {
+		t.Fatal("viewer JWT must carry CanPublish=false")
+	}
+	if grants.Video.CanSubscribe == nil || !*grants.Video.CanSubscribe {
+		t.Fatal("viewer JWT must still allow subscribing")
+	}
 }
 
 type fakeIssuer struct {
