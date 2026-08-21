@@ -115,9 +115,11 @@ test/features/live/prediction/mock_prediction_repository_test.dart   # 结算单
 2. `N42Chat.initializeCallManager()`（触发 `/.well-known` 的 LiveKit 配置发现，幂等）。
 3. 校验 `callManager.config.hasLiveKitConfig`，取 `liveKitService`。
 4. 取 Matrix `Client`（`GetIt.instance<MatrixClientManager>().client`）拿 `userID`/`accessToken`。
-5. `_fetchToken(...)`：先向 Matrix homeserver 获取短期 OpenID token，再向
+5. `_fetchToken(...)`：直播角色请求优先走可限制 `broadcaster/viewer`
+   权限的旧 N42 Bearer-token 协议。若服务端明确返回 301/308/404/405/410
+   表示旧路由已迁移，才向 Matrix homeserver 获取短期 OpenID token，再向
    `{N42Chat.liveKitJwtUrl}/sfu/get` POST Matrix room ID、OpenID 和 device ID；使用响应的
-   `url/jwt` 连接。只有官方端点不存在时才回退旧 N42 Bearer-token 协议。
+   `url/jwt` 连接。401/403、网络异常或非法响应均不会触发回退。
 6. `liveKitService.joinMeeting(roomName, token, enableVideo, enableAudio)`。
    > 注意：**绕开 `CallManager.joinMeeting`**——后者成功后会强制导航到 n42_chat 自带的 `GroupCallScreen`（网格通话 UI），
    > 不符合"主播全屏 + 弹幕叠加"的需求；故直接驱动底层 `LiveKitService`，UI 自绘。
@@ -297,7 +299,10 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
 ### 9.2 LiveKit SFU + JWT 端点
 - SFU：`wss://livekit.m.si46.world`；JWT 签发：`https://m.si46.world/livekit/jwt`。
 - 经 `/.well-known/matrix/client` 的 `org.matrix.msc4143.rtc_foci`（type=livekit）或 `n42.livekit` 暴露，供客户端自动发现。
-- JWT 请求（Bearer Matrix accessToken）体含 `room/identity/name/video/role/conversation_id`，需返回含 `token` 的 JSON。
+- 兼容的 legacy JWT 请求（Bearer Matrix accessToken）体含
+  `room/identity/name/video/role/conversation_id`，需返回含 `token` 的 JSON。
+  生产环境当前可仅部署 MatrixRTC `/sfu/get`，客户端会在 legacy 路由
+  明确不存在时改用短期 OpenID 换票。
 - 🔴 **上线前必做（安全）**：JWT 服务必须按 `role` 签发 grant，并验证 broadcaster 是该直播房的授权创建者：
   主播 `canPublish=true`，观众 `canPublish=false`。客户端已传 `role`；此仓库没有该外部 JWT 服务的部署源码，
   必须在服务端完成并以 viewer token 实测拒绝发布，否则观众仍可能抢推流。
@@ -363,10 +368,13 @@ LMSR 状态机，得到一致的价格/持仓/结算（`prediction_replay_test.d
   `.autoDispose.family`，使 Riverpod 在无 widget 监听时真正取消订阅（否则 `finally` 永不触发，修复无效）。
 
 **待办（多为出仓/服务端/硬件）**
-- 🔴 LiveKit JWT 按 `role` 锁 `canPublish`（§9.2）。
+- 🔴 LiveKit JWT 按 `role` 锁 `canPublish`（§9.2）；MatrixRTC 官方换票
+  契约不接收本项目的自定义 `role`，服务端需结合 Matrix 房间权限或扩展
+  签发服务完成主播发布限权。
 - 🔴 预测真实合约 + `ChainPredictionRepository`（§9.3 / CHAIN_INTEGRATION.md）。
-- 🔧 两台真机联调（视频+弹幕+下注开奖+礼物），含判活/退房清理全流程（Codex T14 自动化已验通过，
-  设备真机矩阵待安装闸门解除）。
+- ✅ T29 已完成两台 iPhone 真机联调：MatrixRTC 视频、直播列表、跨端弹幕、
+  礼物、预测下注/开奖/赎回及主动下播判活均已跑通；Android 仍受设备侧
+  `INSTALL_FAILED_USER_RESTRICTED` 阻塞。
 - 产品决策：AMM(LMSR) vs 平注池(parimutuel)。
 - P2：礼物真实充值/提现（需先做"主播绑定钱包地址"）/ 关注社交图 / 内容审核 / LiveKit Egress→HLS-CDN
   大基数 / 合入主 App 底部 tab。

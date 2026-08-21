@@ -29,6 +29,17 @@ class MatrixPredictionRepository implements PredictionRepository {
   /// roomId -> 最新重放态。
   final Map<String, PredictionReplay> _latest = {};
 
+  /// roomId -> 最近一次 Matrix 流已回显的事件。创建市场成功后，
+  /// SDK 可能延迟到下一次 sync 才把本机自发消息推给 watchMessages；
+  /// 保留这份服务端观测态，与 [_pendingCreates] 合并重放，避免 UI
+  /// 在已发送成功后仍长时间显示“开预测”。
+  final Map<String, List<PredEvent>> _observedEvents = {};
+
+  /// 已被 Matrix sendEvent 确认、但本地 timeline 尚未回显的 create。
+  /// marketId 本身全局唯一；服务端同 id create 到达后立即移除。
+  /// 这里不在发送前写入，因此网络/权限失败不会伪造市场。
+  final Map<String, Map<String, PredEvent>> _pendingCreates = {};
+
   /// roomId -> 当前活跃的"持续关注者"数（`watchMarkets`/`watchMarket`/
   /// `watchPosition` 的活跃订阅数）。归零时才真正取消该房间的订阅、释放
   /// `_latest` 态——此前只在整个仓库 `dispose()` 时统一清理，访问过的房间
@@ -53,6 +64,8 @@ class MatrixPredictionRepository implements PredictionRepository {
     }
     _subs.clear();
     _latest.clear();
+    _observedEvents.clear();
+    _pendingCreates.clear();
     _watcherCounts.clear();
     if (!_changes.isClosed) _changes.close();
   }
@@ -83,12 +96,31 @@ class MatrixPredictionRepository implements PredictionRepository {
         );
         if (p != null) parsed.add(p);
       }
-      _latest[roomId] = PredictionReplay(
-        initialBalance: initialBalance,
-        trustedRoomId: roomId,
-      )..replay(parsed);
-      _emit();
+      _observedEvents[roomId] = parsed;
+      final observedCreateIds = parsed
+          .where((event) => event.action == 'create')
+          .map((event) => event.marketId)
+          .toSet();
+      _pendingCreates[roomId]?.removeWhere(
+        (marketId, _) => observedCreateIds.contains(marketId),
+      );
+      if (_pendingCreates[roomId]?.isEmpty == true) {
+        _pendingCreates.remove(roomId);
+      }
+      _rebuildRoom(roomId);
     });
+  }
+
+  void _rebuildRoom(String roomId) {
+    final merged = <PredEvent>[
+      ...?_observedEvents[roomId],
+      ...?_pendingCreates[roomId]?.values,
+    ]..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    _latest[roomId] = PredictionReplay(
+      initialBalance: initialBalance,
+      trustedRoomId: roomId,
+    )..replay(merged);
+    _emit();
   }
 
   /// 登记一个持续关注者（进入某个 watch* 流时调用）。
@@ -108,6 +140,8 @@ class MatrixPredictionRepository implements PredictionRepository {
     _watcherCounts.remove(roomId);
     _subs.remove(roomId)?.cancel();
     _latest.remove(roomId);
+    _observedEvents.remove(roomId);
+    _pendingCreates.remove(roomId);
   }
 
   PredictionReplay? _replayFor(String roomId) => _latest[roomId];
@@ -213,7 +247,7 @@ class MatrixPredictionRepository implements PredictionRepository {
     _ensureRoom(roomId);
     final id =
         '$roomId~${DateTime.now().millisecondsSinceEpoch}${_rand.nextInt(1 << 20)}';
-    await _chat.sendEvent(roomId, {
+    final payload = <String, dynamic>{
       't': 'pred',
       'a': 'create',
       'm': id,
@@ -221,8 +255,25 @@ class MatrixPredictionRepository implements PredictionRepository {
       'q': question.trim(),
       'o': outcomeLabels.map((label) => label.trim()).toList(),
       if (closesAt != null) 'close': closesAt.millisecondsSinceEpoch,
-    });
-    // 乐观返回（开放、均价）；真实态由事件回显后经流推送。
+    };
+    await _chat.sendEvent(roomId, payload);
+
+    // sendEvent 已返回才纳入本地重放；不在网络往返前伪造。
+    // 真实 Matrix 事件回显时 _ensureRoom 会按 marketId 去重并移除。
+    final sender = _me;
+    if (sender != null && sender.isNotEmpty) {
+      final pending = PredEvent.tryParse(
+        sender: sender,
+        timestamp: DateTime.now(),
+        data: payload,
+      );
+      if (pending != null) {
+        (_pendingCreates[roomId] ??= {})[id] = pending;
+        _rebuildRoom(roomId);
+      }
+    }
+
+    // 乐观返回（开放、均价）；返回的前提仍是 Matrix 发送成功。
     final n = outcomeLabels.length;
     return PredictionMarket(
       id: id,
