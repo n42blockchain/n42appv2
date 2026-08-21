@@ -31,6 +31,13 @@ class MessageRepositoryImpl implements IMessageRepository {
   // 增加缓存大小可提升约 30% 房间切换速度
   static const int _maxTimelineCacheSize = 15;
   final Map<String, matrix.Timeline> _timelines = {};
+  // room.getTimeline is asynchronous. A live room starts danmu, gifts and
+  // predictions together, so several watchMessages calls can otherwise all
+  // observe a cache miss and create separate timelines for the same room.
+  // Only the last timeline remains in [_timelines]; listeners holding an older
+  // instance then stop seeing updates. Share the in-flight creation as well as
+  // the completed cache entry.
+  final Map<String, Future<matrix.Timeline?>> _timelineCreations = {};
   final List<String> _timelineAccessOrder = []; // 记录访问顺序，实现 LRU
 
   // 消息实体缓存：避免重复 mapEventToMessage 转换，提升约 40% 滚动流畅度
@@ -1139,6 +1146,29 @@ class MessageRepositoryImpl implements IMessageRepository {
       return _timelines[roomId];
     }
 
+    final pending = _timelineCreations[roomId];
+    if (pending != null) return pending;
+
+    final creation = _createTimeline(roomId, requestHistory: requestHistory);
+    _timelineCreations[roomId] = creation;
+    try {
+      return await creation;
+    } finally {
+      if (identical(_timelineCreations[roomId], creation)) {
+        _timelineCreations.remove(roomId);
+      }
+    }
+  }
+
+  Future<matrix.Timeline?> _createTimeline(
+    String roomId, {
+    required bool requestHistory,
+  }) async {
+    // A previous creation may have completed between the outer cache check and
+    // this task starting. Reuse it rather than replacing a live timeline.
+    final cached = _timelines[roomId];
+    if (cached != null) return cached;
+
     final room = _client?.getRoomById(roomId);
     if (room == null) return null;
 
@@ -1436,6 +1466,7 @@ class MessageRepositoryImpl implements IMessageRepository {
       unawaited(controller.close());
     }
     _timelines.clear();
+    _timelineCreations.clear();
     _timelineAccessOrder.clear();
     _timelineUpdateControllers.clear();
     _missingKeyRequestTimes.clear();

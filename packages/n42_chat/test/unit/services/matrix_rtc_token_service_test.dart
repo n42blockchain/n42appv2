@@ -167,6 +167,129 @@ void main() {
     expect(credentials.serverUrl, isNull);
     expect(requestCount, 2);
   });
+
+  test(
+    'falls back from a migrated role route to MatrixRTC with OpenID',
+    () async {
+      var legacyPostCount = 0;
+      var legacyGetCount = 0;
+      var officialCount = 0;
+      final client = _clientWithOpenId(
+        MockClient((request) async {
+          if (request.url.path.endsWith('/sfu/get')) {
+            officialCount++;
+            expect(request.method, 'POST');
+            expect(request.headers['authorization'], isNull);
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            expect(body['room'], '!room:m.example');
+            expect(body['device_id'], 'DEVICE');
+            expect(body['openid_token'], isA<Map<String, dynamic>>());
+            return http.Response(
+              jsonEncode({'url': 'wss://m.example/livekit/sfu', 'jwt': _jwt}),
+              200,
+            );
+          }
+
+          expect(request.url.path, '/livekit/jwt');
+          expect(
+            request.headers['authorization'],
+            'Bearer matrix-access-token',
+          );
+          if (request.method == 'POST') {
+            legacyPostCount++;
+            final body = jsonDecode(request.body) as Map<String, dynamic>;
+            expect(body['role'], 'broadcaster');
+            return http.Response('', 301);
+          }
+          legacyGetCount++;
+          return http.Response('{}', 404);
+        }),
+        accessToken: 'matrix-access-token',
+      );
+
+      final credentials = await const MatrixRtcTokenService().fetch(
+        client: client,
+        serviceUrl: 'https://m.example/livekit/jwt',
+        roomId: '!room:m.example',
+        legacyRoomName: 'mx__room_m_example',
+        participantName: 'Alice',
+        enableVideo: true,
+        role: 'broadcaster',
+      );
+
+      expect(credentials.token, _jwt);
+      expect(credentials.serverUrl, 'wss://m.example/livekit/sfu');
+      expect(legacyPostCount, 1);
+      expect(legacyGetCount, 1);
+      expect(officialCount, 1);
+      verify(
+        () => client.requestOpenIdToken('@alice:m.example', const {}),
+      ).called(1);
+    },
+  );
+
+  test('does not bypass a legacy role authorization rejection', () async {
+    var requestCount = 0;
+    final client = _clientWithOpenId(
+      MockClient((request) async {
+        requestCount++;
+        expect(request.url.path, '/livekit/jwt');
+        return http.Response('{}', 403);
+      }),
+      accessToken: 'matrix-access-token',
+    );
+
+    await expectLater(
+      const MatrixRtcTokenService().fetch(
+        client: client,
+        serviceUrl: 'https://m.example/livekit/jwt',
+        roomId: '!room:m.example',
+        legacyRoomName: 'mx__room_m_example',
+        participantName: 'Alice',
+        enableVideo: false,
+        role: 'viewer',
+      ),
+      throwsA(
+        isA<MatrixRtcTokenException>().having(
+          (error) => error.statusCode,
+          'statusCode',
+          403,
+        ),
+      ),
+    );
+    expect(requestCount, 1);
+    verifyNever(() => client.requestOpenIdToken('@alice:m.example', const {}));
+  });
+
+  test('viewer also uses OpenID when the role route was removed', () async {
+    var officialCount = 0;
+    final client = _clientWithOpenId(
+      MockClient((request) async {
+        if (request.url.path.endsWith('/sfu/get')) {
+          officialCount++;
+          return http.Response(
+            jsonEncode({'url': 'wss://m.example/livekit/sfu', 'jwt': _jwt}),
+            200,
+          );
+        }
+        return http.Response('{}', 404);
+      }),
+      accessToken: 'matrix-access-token',
+    );
+
+    final credentials = await const MatrixRtcTokenService().fetch(
+      client: client,
+      serviceUrl: 'https://m.example/livekit/jwt',
+      roomId: '!room:m.example',
+      legacyRoomName: 'mx__room_m_example',
+      participantName: 'Alice',
+      enableVideo: false,
+      role: 'viewer',
+    );
+
+    expect(credentials.token, _jwt);
+    expect(officialCount, 1);
+  });
 }
 
 _MockMatrixClient _clientWithOpenId(

@@ -39,9 +39,10 @@ final class MatrixRtcTokenService {
       throw const MatrixRtcTokenException('call_not_initialized');
     }
 
-    // 角色限权（直播 broadcaster/viewer）只有 N42 legacy 服务实现；官方
-    // /sfu/get 无 role 概念，签出的 token 默认可发布。观众绝不能经官方
-    // 路径拿到可推流 token——带 role 的请求只走 legacy，失败就失败。
+    // 角色限权（直播 broadcaster/viewer）优先走 N42 legacy 服务。
+    // 生产部署可能只提供 MatrixRTC /sfu/get；此时只在服务端明确
+    // 表明 legacy 路由已迁移/不存在时，才用短期 OpenID 换取官方
+    // token。鉴权拒绝、网络故障和响应格式异常都不允许解锁回退。
     final trimmedRole = role?.trim();
     if (trimmedRole != null && trimmedRole.isNotEmpty) {
       final roleResult = await _fetchLegacy(
@@ -57,6 +58,26 @@ final class MatrixRtcTokenService {
       if (roleResult.credentials != null) {
         return roleResult.credentials!;
       }
+
+      if (_legacyRouteUnavailable(roleResult.statusCode)) {
+        final officialResult = await _fetchOfficial(
+          client: client,
+          serviceUrl: serviceUrl,
+          roomId: roomId,
+        );
+        if (officialResult.credentials != null) {
+          debugLog(
+            'MatrixRtcTokenService: legacy role route unavailable; '
+            'official token issued for room=$roomId role=$trimmedRole',
+          );
+          return officialResult.credentials!;
+        }
+        throw MatrixRtcTokenException(
+          'livekit_token_fetch_failed',
+          statusCode: officialResult.statusCode ?? roleResult.statusCode,
+        );
+      }
+
       throw MatrixRtcTokenException(
         'livekit_token_fetch_failed',
         statusCode: roleResult.statusCode,
@@ -135,9 +156,7 @@ final class MatrixRtcTokenService {
       _log('openid request rejected', e);
       // Only an explicit M_UNRECOGNIZED proves the homeserver predates
       // OpenID — that is the one case where the legacy fallback may run.
-      return _TokenAttempt(
-        openIdUnsupported: e.errcode == 'M_UNRECOGNIZED',
-      );
+      return _TokenAttempt(openIdUnsupported: e.errcode == 'M_UNRECOGNIZED');
     } catch (e) {
       // Network failures must NOT unlock the legacy fallback (it would ship
       // the long-lived access token); surface the failure instead.
@@ -209,6 +228,12 @@ final class MatrixRtcTokenService {
       final result = _parseResponse(response);
       if (result.credentials != null) return result;
       lastStatusCode = result.statusCode;
+      // An explicit authentication/authorization rejection is authoritative.
+      // Retrying the deprecated GET contract would resend the same long-lived
+      // Matrix access token without any chance of changing that decision.
+      if (lastStatusCode == 401 || lastStatusCode == 403) {
+        return result;
+      }
     } catch (e) {
       // Fall through to the historical GET contract.
       _log('legacy POST request failed', e);
@@ -261,6 +286,13 @@ final class MatrixRtcTokenService {
 
 const _httpStatusNotFound = 404;
 const _httpStatusMethodNotAllowed = 405;
+
+bool _legacyRouteUnavailable(int? statusCode) =>
+    statusCode == 301 ||
+    statusCode == 308 ||
+    statusCode == _httpStatusNotFound ||
+    statusCode == _httpStatusMethodNotAllowed ||
+    statusCode == 410;
 
 final class _TokenAttempt {
   const _TokenAttempt({

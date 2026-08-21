@@ -339,8 +339,11 @@ class PredEvent {
 
       final closeMs = data.containsKey('close') ? toI(data['close']) : null;
       if (data.containsKey('close') && closeMs == null) return null;
-      final labels = data['o'];
-      if (labels != null && labels is! List) return null;
+      final rawLabels = data['o'];
+      if (rawLabels != null && rawLabels is! List) return null;
+      final labels = rawLabels is List
+          ? rawLabels.map<String>((value) => '$value').toList(growable: false)
+          : null;
       final outcomeIndex = data.containsKey('i') ? toI(data['i']) : null;
       final collateral = data.containsKey('c') ? toD(data['c']) : null;
       final shares = data.containsKey('s') ? toD(data['s']) : null;
@@ -371,7 +374,7 @@ class PredEvent {
         marketId: marketId,
         roomId: data['room'] as String?,
         question: data['q'] as String?,
-        labels: labels?.map((e) => '$e').toList(),
+        labels: labels,
         closesAt: closeMs == null
             ? null
             : DateTime.fromMillisecondsSinceEpoch(closeMs),

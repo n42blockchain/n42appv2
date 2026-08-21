@@ -36,14 +36,17 @@ class _GoLivePageState extends State<GoLivePage> {
 
   bool _starting = false;
   bool _live = false;
+  bool _videoJoined = false;
   String? _roomId;
   String? _error;
+  String? _videoError;
 
   Future<void> _startLive() async {
     if (_starting) return;
     setState(() {
       _starting = true;
       _error = null;
+      _videoError = null;
     });
     try {
       // 1. 权限
@@ -65,18 +68,32 @@ class _GoLivePageState extends State<GoLivePage> {
       // 建房后、发布视频前用户退出：房已建但尚无视频/心跳，只需退房。
       if (!mounted) return _abortStartup(roomId);
 
-      // 3. 弹幕 + 以主播身份发布。任一步失败则回滚（离开刚建的房间），
-      //    否则每次重试都会新建 Matrix room，遗留一堆空直播间。
+      // 3. 先建立 Matrix 直播层，再尝试发布视频。Matrix 失败必须回滚刚建的
+      //    房间；LiveKit 是可降级的视频层，失败时仍允许弹幕、礼物、预测和
+      //    判活继续工作，避免一个视频服务故障瘫痪整场直播。
       try {
         await _chat.join(roomId);
         _danmu = _chat.watchDanmu(roomId);
-        await _video.joinAsBroadcaster(roomId);
       } catch (_) {
         await _chat.leave(roomId);
         rethrow;
       }
-      // 视频发布完成、心跳启动前用户退出：摄像头/麦克风已占用，需退会。
-      if (!mounted) return _abortStartup(roomId, videoJoined: true);
+
+      var videoJoined = false;
+      String? videoError;
+      try {
+        await _video.joinAsBroadcaster(roomId);
+        videoJoined = true;
+      } catch (e) {
+        videoError = '$e';
+        // join 可能已创建了部分本地 LiveKit 状态；尽力清理，但保留该 service
+        // 实例供页面最终 dispose，不影响已经建立的 Matrix 直播层。
+        await _video.leave();
+      }
+      // 视频尝试完成、心跳启动前用户退出：按实际加入状态清理。
+      if (!mounted) {
+        return _abortStartup(roomId, videoJoined: videoJoined);
+      }
 
       // 发布成功后开始上报直播心跳：立即一拍 + 周期刷新 room state/公共目录，
       // 使本房在直播列表判活；停播/崩溃后心跳停止，liveTtl 内自动失活。
@@ -85,11 +102,17 @@ class _GoLivePageState extends State<GoLivePage> {
       // 此前的真实 bug——dispose() 因 `_roomId`/`_heartbeat` 尚未赋值而误判
       // "无需清理"，导致这三项资源在后台永久脱管运行，只能杀进程才能停止。
       if (!mounted) {
-        return _abortStartup(roomId, videoJoined: true, heartbeatStarted: true);
+        return _abortStartup(
+          roomId,
+          videoJoined: videoJoined,
+          heartbeatStarted: true,
+        );
       }
 
       setState(() {
         _live = true;
+        _videoJoined = videoJoined;
+        _videoError = videoError;
         _roomId = roomId;
         _starting = false;
       });
@@ -230,8 +253,12 @@ class _GoLivePageState extends State<GoLivePage> {
     return Stack(
       fit: StackFit.expand,
       children: [
-        // 本地摄像头预览
-        LivePlayerView(videoService: _video, showLocal: true),
+        // 本地摄像头预览。视频服务不可用时保留 Matrix 直播能力，并明确展示
+        // 降级状态，避免黑屏被误认为整场直播已经失败。
+        if (_videoJoined)
+          LivePlayerView(videoService: _video, showLocal: true)
+        else
+          _VideoUnavailableBackdrop(error: _videoError),
 
         // 礼物动画层（观众送出、经确定性重放校验的礼物，主播同屏可见）
         if (_roomId != null) GiftOverlay(roomId: _roomId!),
@@ -287,27 +314,76 @@ class _GoLivePageState extends State<GoLivePage> {
           ),
 
         // 主播控制：切换摄像头 / 麦克风
-        Positioned(
-          right: 12,
-          bottom: 24,
+        if (_videoJoined)
+          Positioned(
+            right: 12,
+            bottom: 24,
+            child: Column(
+              children: [
+                _CircleButton(
+                  icon: Icons.cameraswitch,
+                  onTap: _video.switchCamera,
+                ),
+                const SizedBox(height: 16),
+                ListenableBuilder(
+                  listenable: _video.listenable ?? const _NullListenable(),
+                  builder: (context, _) => _CircleButton(
+                    icon: _video.isMuted ? Icons.mic_off : Icons.mic,
+                    onTap: _video.toggleMicrophone,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _VideoUnavailableBackdrop extends StatelessWidget {
+  const _VideoUnavailableBackdrop({this.error});
+
+  final String? error;
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: Colors.black,
+      child: Center(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppSpacing.space16),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              _CircleButton(
-                icon: Icons.cameraswitch,
-                onTap: _video.switchCamera,
+              const Icon(
+                Icons.videocam_off_outlined,
+                color: AppColorTokens.onOverlaySecondary,
+                size: 56,
               ),
-              const SizedBox(height: 16),
-              ListenableBuilder(
-                listenable: _video.listenable ?? const _NullListenable(),
-                builder: (context, _) => _CircleButton(
-                  icon: _video.isMuted ? Icons.mic_off : Icons.mic,
-                  onTap: _video.toggleMicrophone,
+              SizedBox(height: AppSpacing.space8),
+              Text(
+                '视频暂不可用，其他直播功能可继续使用',
+                textAlign: TextAlign.center,
+                style: AppTypography.body.copyWith(
+                  color: AppColorTokens.onOverlayPrimary,
                 ),
               ),
+              if (error != null && error!.isNotEmpty) ...[
+                SizedBox(height: AppSpacing.space4),
+                Text(
+                  error!,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.onOverlaySecondary,
+                  ),
+                ),
+              ],
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
