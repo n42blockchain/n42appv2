@@ -226,17 +226,22 @@ class TrxApi {
         header: ProxyConfig.mergeAuthHeaders(proxyUrl, header),
         timeout: _kProxyWriteTimeout,
       );
-      final err = _trxBroadcastError(proxyData);
-      if (err != null) {
-        return MessageModel()
-          ..error = true
-          ..data = err;
+      // A shape we cannot interpret is not a rejection - fall through to the
+      // direct endpoint rather than turning the proxy's oddity into a hard
+      // failure and losing the TronGrid fallback entirely.
+      if (proxyData is Map) {
+        final err = _trxBroadcastError(proxyData);
+        if (err != null) {
+          return MessageModel()
+            ..error = true
+            ..data = err;
+        }
+        final txid = proxyData['txid']?.toString() ?? '';
+        if (txid.isNotEmpty) {
+          return MessageModel()..data = txid;
+        }
       }
-      final txid = proxyData['txid']?.toString() ?? '';
-      if (txid.isNotEmpty) {
-        return MessageModel()..data = txid;
-      }
-      // No error code and no txid: fall through to the direct endpoint.
+      // Unusable proxy response: fall through to the direct endpoint.
     } catch (e) {
       // Fall back to direct TronGrid when proxy is unavailable.
       AppLogger.w('TrxApi', 'sendTxTrx proxy error: $e');
@@ -282,14 +287,28 @@ class TrxApi {
   /// echoes a `txid`, so a bare txid check reports false success.
   static String? trxBroadcastError(dynamic data) {
     if (data is! Map) return 'Invalid TRX broadcast response';
+    final code = data['code']?.toString();
+    // A duplicate is not a failure: the transaction is already on chain, which
+    // means an earlier broadcast of this exact signed payload succeeded. This
+    // is reached whenever the first attempt times out after the node accepted
+    // it and the retry re-submits. Reporting failure here pushes the user to
+    // send a new transaction with a new txID - turning a harmless retry into
+    // an actual double spend.
+    if (_isDuplicateBroadcast(code)) return null;
     if (data['result'] == false || data['result'] == 'false') {
       return _trxErrorText(data) ?? 'TRX broadcast rejected';
     }
-    final code = data['code']?.toString();
     if (code != null && code.isNotEmpty && code != 'SUCCESS') {
       return _trxErrorText(data) ?? code;
     }
     return null;
+  }
+
+  static bool _isDuplicateBroadcast(String? code) {
+    if (code == null) return false;
+    final normalized = code.trim().toUpperCase();
+    return normalized == 'DUP_TRANSACTION_ERROR' ||
+        normalized == 'DUPLICATE_TRANSACTION_ERROR';
   }
 
   static String? _trxErrorText(Map data) {

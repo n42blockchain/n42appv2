@@ -267,7 +267,11 @@ class MatrixPredictionRepository implements PredictionRepository {
         timestamp: DateTime.now(),
         data: payload,
       );
-      if (pending != null) {
+      // 离房竞态:sendEvent 往返期间用户可能已退出该房,_releaseWatcher 已
+      // 取消订阅并清掉了该房的所有态。此时再写 pending 会为一个没有订阅者的
+      // 房间重建 _latest,泄漏到 dispose 才释放,且下次进房会看到陈旧态。
+      final stillWatching = (_watcherCounts[roomId] ?? 0) > 0;
+      if (pending != null && stillWatching) {
         (_pendingCreates[roomId] ??= {})[id] = pending;
         _rebuildRoom(roomId);
       }

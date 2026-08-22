@@ -220,7 +220,11 @@ void main() {
       expect(credentials.token, _jwt);
       expect(credentials.serverUrl, 'wss://m.example/livekit/sfu');
       expect(legacyPostCount, 1);
-      expect(legacyGetCount, 1);
+      // The deprecated GET contract is deliberately not retried on a redirect:
+      // that request follows redirects automatically, which would replay the
+      // long-lived Matrix access token to whatever host the redirect names.
+      // The redirect alone already proves the legacy route moved.
+      expect(legacyGetCount, 0);
       expect(officialCount, 1);
       verify(
         () => client.requestOpenIdToken('@alice:m.example', const {}),

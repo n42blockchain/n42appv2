@@ -234,6 +234,16 @@ final class MatrixRtcTokenService {
       if (lastStatusCode == 401 || lastStatusCode == 403) {
         return result;
       }
+      // A redirect means the route moved, not that this contract is broken.
+      // The GET retry follows redirects automatically, which would replay the
+      // long-lived Matrix access token to whatever host the redirect names.
+      // Report the redirect and let the caller decide instead.
+      if (lastStatusCode == 301 ||
+          lastStatusCode == 302 ||
+          lastStatusCode == 307 ||
+          lastStatusCode == 308) {
+        return result;
+      }
     } catch (e) {
       // Fall through to the historical GET contract.
       _log('legacy POST request failed', e);

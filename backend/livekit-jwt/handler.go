@@ -1,8 +1,10 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
 	"regexp"
 	"strings"
@@ -30,6 +32,12 @@ type tokenRequest struct {
 type tokenIssuer interface {
 	Issue(tokenRequest) (string, error)
 }
+
+// handlerBudget bounds the total time spent talking to the homeserver while
+// issuing a single token. It must stay comfortably under the server's
+// WriteTimeout so failures surface as a status code rather than a dropped
+// connection.
+const handlerBudget = 6 * time.Second
 
 // roleBroadcaster is the only role allowed to publish media. Anything else
 // (including an absent or unknown role) is treated as a viewer.
@@ -114,6 +122,16 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 		return
 	}
 
+	// Issuing one token costs up to four serial homeserver round trips
+	// (whoami, membership, live marker, creator). With a per-call timeout only,
+	// a slow homeserver keeps the handler alive past the server's write
+	// deadline: the connection is cut and the client sees a transport error
+	// rather than a status code, which its fallback logic cannot classify.
+	// Bound the whole request instead.
+	ctx, cancel := context.WithTimeout(request.Context(), handlerBudget)
+	defer cancel()
+	request = request.WithContext(ctx)
+
 	accessToken := bearerToken(request.Header.Get("Authorization"))
 	if accessToken == "" {
 		writeError(response, http.StatusUnauthorized, "missing_matrix_token")
@@ -183,6 +201,16 @@ func (h tokenHandler) ServeHTTP(response http.ResponseWriter, request *http.Requ
 		// An unresolvable creator must not silently grant publish rights.
 	}
 	payload.canPublish = canPublishFor(payload, creator, roomIsLive)
+	// A denied publish is indistinguishable from a healthy grant on the wire
+	// (both are 200 + a token), so record the decision. Without this a
+	// broadcaster silently demoted to viewer - because the creator lookup
+	// failed, say - looks identical to "streaming just doesn't work".
+	if roomIsLive && !payload.canPublish {
+		log.Printf(
+			"livekit-jwt: publish denied room=%s identity=%s role=%q creator=%q",
+			payload.ConversationID, payload.Identity, payload.Role, creator,
+		)
+	}
 
 	token, err := h.issuer.Issue(payload)
 	if err != nil {
