@@ -105,16 +105,28 @@ post_install do |installer|
         # 通过 `-l sqlite3` 引入的系统 libsqlite3。否则 chat 归档库在 iOS 上会
         # 静默以「明文」打开（PRAGMA key 在系统 sqlite 上是 no-op），2026-08 真机
         # 实测确认（nm 里无 sqlite3_key 符号）。见 sqlcipher_flutter_libs advisory。
-        # SQLCipher 是 static framework；仅写 `-framework SQLCipher` 时，前面的
-        # `-l sqlite3` 已经满足 sqlite3_* 未定义符号，链接器不会从 archive 拉取
-        # SQLCipher 对象。必须 force-load framework binary，才能让 Runner 自身
-        # 定义 sqlite3_key/sqlcipher_export 并覆盖系统 libsqlite3。
+        # SQLCipher is a static framework. Referencing sqlite3_key as an
+        # undefined symbol makes the linker pull SQLCipher's sqlite3 object,
+        # including sqlcipher_export and the full compatible SQLite API. This
+        # avoids an absolute -force_load input path, which Xcode 26 validates
+        # before a clean Archive has built the Pods products.
         ldflags = config.build_settings['OTHER_LDFLAGS'] || ['$(inherited)']
         ldflags = [ldflags] if ldflags.is_a?(String)
         sqlcipher_binary = '$(PODS_CONFIGURATION_BUILD_DIR)/SQLCipher/SQLCipher.framework/SQLCipher'
-        unless ldflags.include?(sqlcipher_binary)
+        legacy_index = ldflags.each_index.find do |index|
+          ldflags[index] == '-force_load' && ldflags[index + 1] == sqlcipher_binary
+        end
+        ldflags.slice!(legacy_index, 2) if legacy_index
+        ldflags.delete("-Wl,-force_load,#{sqlcipher_binary}")
+        sqlcipher_anchor = '-Wl,-u,_sqlite3_key'
+        unless ldflags.include?(sqlcipher_anchor)
           inherited_index = ldflags.index('$(inherited)') || -1
-          ldflags.insert(inherited_index + 1, '-force_load', sqlcipher_binary)
+          ldflags.insert(
+            inherited_index + 1,
+            sqlcipher_anchor,
+            '-framework',
+            'SQLCipher'
+          )
         end
         config.build_settings['OTHER_LDFLAGS'] = ldflags
 
