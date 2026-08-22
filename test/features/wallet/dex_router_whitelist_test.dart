@@ -103,15 +103,27 @@ void main() {
       );
     });
 
-    test('MSG_SENDER / ADDRESS_THIS / zero 自引用 → ok', () {
-      for (final self in [
+    test('MSG_SENDER(0x1) 自引用 → ok', () {
+      expect(
+        DexSwapCalldataGuard.checkRecipient(
+          exactInputSingle('0000000000000000000000000000000000000001'),
+          owner,
+        ),
+        SwapRecipientCheck.ok,
+      );
+    });
+
+    test('ADDRESS_THIS(0x2) 与零地址不是自引用 → mismatch', () {
+      // 0x2 让换出资金留在 router 里等 sweepToken 收走——单条调用走到这里
+      // 就是任何人可 sweep；0x0 对 SwapRouter02 无特殊语义，是销毁地址。
+      for (final unsafe in [
         '0000000000000000000000000000000000000000',
-        '0000000000000000000000000000000000000001',
         '0000000000000000000000000000000000000002',
       ]) {
         expect(
-          DexSwapCalldataGuard.checkRecipient(exactInputSingle(self), owner),
-          SwapRecipientCheck.ok,
+          DexSwapCalldataGuard.checkRecipient(exactInputSingle(unsafe), owner),
+          SwapRecipientCheck.mismatch,
+          reason: 'recipient $unsafe must not be treated as the owner',
         );
       }
     });

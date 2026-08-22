@@ -60,8 +60,17 @@ enum SwapRecipientCheck {
 ///
 /// Coverage is intentionally partial: unrecognized selectors return
 /// [SwapRecipientCheck.unknown] rather than a false [mismatch], so that new
-/// aggregator payloads are never blocked by an incomplete decoder. Extending
-/// coverage (notably 1inch `dstReceiver`) is tracked as follow-up.
+/// aggregator payloads are never blocked by an incomplete decoder.
+///
+/// KNOWN GAP - 1inch is not covered. Its calldata is passed through verbatim
+/// from the aggregator API (`backend/swap/services/inch.go:106`) and its
+/// router is on the trusted list, so the exact combination this guard exists
+/// to stop (trusted router + tampered recipient) is currently unguarded on
+/// that branch. It is left undecoded on purpose: guessing the selector and
+/// the `SwapDescription.dstReceiver` word offset would turn every legitimate
+/// 1inch swap into a blocked transaction if the guess is off by one field.
+/// Add it only against a real captured calldata, with a test built from that
+/// payload.
 class DexSwapCalldataGuard {
   DexSwapCalldataGuard._();
 
@@ -74,13 +83,17 @@ class DexSwapCalldataGuard {
     '09b81346': 2, // exactOutput(struct{bytes path, recipient, ...})
   };
 
-  // Recipients that are safe self-references rather than a payout address:
-  // 0x0 (defaults to caller on some routers), ADDRESS_THIS (0x1) and
-  // MSG_SENDER (0x2) sentinels used by SwapRouter02.
+  // The only recipient constant that pays out to us: SwapRouter02's
+  // MSG_SENDER sentinel (0x1), which resolves to the caller at execution.
+  //
+  // The two neighbours are deliberately excluded, despite looking like
+  // siblings:
+  //   0x2 is ADDRESS_THIS - the output stays in the router, to be collected by
+  //       a later sweepToken in the same multicall. A single call ending there
+  //       leaves the funds sweepable by anyone.
+  //   0x0 has no special meaning to SwapRouter02; it is the burn address.
   static const Set<String> _selfRecipients = {
-    '0000000000000000000000000000000000000000',
     '0000000000000000000000000000000000000001',
-    '0000000000000000000000000000000000000002',
   };
 
   /// Checks that [calldata]'s output recipient is [expectedOwner].

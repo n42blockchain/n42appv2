@@ -511,6 +511,7 @@ class MessageRepositoryImpl implements IMessageRepository {
     String roomId,
     String messageId, {
     String? reason,
+    bool purgeArchiveRegardless = false,
   }) async {
     final ok = await _messageDataSource.redactMessage(
       roomId,
@@ -519,8 +520,18 @@ class MessageRepositoryImpl implements IMessageRepository {
     );
     // Remove successfully redacted/self-destructed content from the archive
     // so global search cannot resurrect its plaintext.
-    if (ok) {
-      await _archiveService?.deleteArchivedMessage(messageId);
+    //
+    // For an expired self-destruct message the archived copy is dropped even
+    // when the server-side redaction failed (offline, permissions, already
+    // redacted): the lifetime is over either way and the local promise is that
+    // the content is gone. The caller keeps the destruction record so the
+    // redaction itself is retried later.
+    if (ok || purgeArchiveRegardless) {
+      try {
+        await _archiveService?.deleteArchivedMessage(messageId);
+      } catch (e) {
+        debugLog('MessageRepositoryImpl: archive purge failed for $messageId: $e');
+      }
     }
     return ok;
   }
@@ -1450,6 +1461,10 @@ class MessageRepositoryImpl implements IMessageRepository {
 
   /// 清理时间线缓存
   void disposeTimeline(String roomId) {
+    // A creation may still be in flight; without dropping it the completed
+    // task writes the timeline back into the cache after disposal, reviving a
+    // room the user already left with no one left to cancel its subscriptions.
+    _timelineCreations.remove(roomId);
     _timelines.remove(roomId)?.cancelSubscriptions();
     _timelineAccessOrder.remove(roomId);
     final controller = _timelineUpdateControllers.remove(roomId);

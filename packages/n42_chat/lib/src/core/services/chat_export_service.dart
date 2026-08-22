@@ -117,12 +117,18 @@ List<MessageEntity> filterMessagesForExport(
   DateTime? customStart,
   DateTime? customEnd,
 ) {
+  // Self-destruct content must never reach an export: the file is written to
+  // the temp dir and handed to the OS share sheet, so it would outlive the
+  // message it is supposed to burn. Filtered here rather than at the call
+  // sites so every range, including "all", is covered.
+  final exportable = messages.where((m) => !m.isSelfDestructing).toList();
+
   final now = DateTime.now();
   DateTime? start;
 
   switch (range) {
     case ExportDateRange.all:
-      return List<MessageEntity>.from(messages);
+      return exportable;
     case ExportDateRange.lastWeek:
       start = now.subtract(const Duration(days: 7));
     case ExportDateRange.lastMonth:
@@ -133,7 +139,7 @@ List<MessageEntity> filterMessagesForExport(
       start = customStart;
   }
 
-  return messages
+  return exportable
       .where((message) {
         if (start != null && message.timestamp.isBefore(start)) {
           return false;

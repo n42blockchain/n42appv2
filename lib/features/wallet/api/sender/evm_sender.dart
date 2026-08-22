@@ -180,8 +180,19 @@ class EvmSender implements ChainSender {
       } else {
         valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
       }
-      if (valuePrice == chainBalance && params.sendMax) {
-        valuePrice = valuePrice - totalGasPrice;
+      // Send-max reconciliation. The caller computes the max transferable
+      // amount with its own fee estimate, but this sender applies the ×1.2
+      // safety buffer, so the two disagree by 0.2×fee and the balance check
+      // below would reject a legitimate max send that the caller just offered
+      // the user. Whenever the requested value sits in [balance - fee,
+      // balance] the intent is "send as much as possible", so settle it
+      // against the fee actually being signed. A value above the balance is
+      // still a genuine shortfall and falls through to the failure below.
+      final maxSendable = chainBalance - totalGasPrice;
+      if (valuePrice <= chainBalance &&
+          maxSendable > BigInt.zero &&
+          valuePrice >= maxSendable) {
+        valuePrice = maxSendable;
         adjustedValue = toEther(
           valuePrice.toString(),
           params.decimals,

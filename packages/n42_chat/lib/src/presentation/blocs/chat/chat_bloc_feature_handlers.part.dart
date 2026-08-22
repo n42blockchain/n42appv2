@@ -94,23 +94,31 @@ extension ChatBlocFeatureHandlers on ChatBloc {
     }
 
     // 异步撤回消息（不阻塞 UI）
+    final redacted = <String>[];
     for (final messageId in expiredMessageIds) {
+      var ok = false;
       try {
-        await _messageRepository.redactMessage(
+        ok = await _messageRepository.redactMessage(
           _currentRoomId!,
           messageId,
           reason: 'Self-destructed',
+          // The lifetime has expired, so the archived plaintext must go even
+          // if the homeserver rejects the redaction.
+          purgeArchiveRegardless: true,
         );
       } catch (e) {
         debugLog('ChatBloc: Failed to redact expired message $messageId: $e');
       }
+      if (ok) redacted.add(messageId);
     }
 
-    // 清除销毁时间记录
-    await _secureStorage.clearMessageDestructionTimes(
-      _currentRoomId!,
-      expiredMessageIds,
-    );
+    // 清除销毁时间记录（仅已成功撤回的；失败的保留以便下次重试）
+    if (redacted.isNotEmpty) {
+      await _secureStorage.clearMessageDestructionTimes(
+        _currentRoomId!,
+        redacted,
+      );
+    }
   }
 
   /// 更新阅后即焚消息的倒计时状态

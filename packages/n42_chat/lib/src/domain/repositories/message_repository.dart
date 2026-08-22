@@ -115,7 +115,16 @@ abstract class IMessageRepository {
   Future<bool> resendMessage(String roomId, String messageId);
 
   /// 撤回消息
-  Future<bool> redactMessage(String roomId, String messageId, {String? reason});
+  Future<bool> redactMessage(
+    String roomId,
+    String messageId, {
+    String? reason,
+
+    /// Drop the archived copy even if the server-side redaction fails.
+    /// Used for expired self-destruct messages, whose local content must go
+    /// regardless of what the homeserver accepted.
+    bool purgeArchiveRegardless = false,
+  });
 
   /// 删除发送失败的消息（从本地和服务器）
   Future<bool> deleteFailedMessage(String roomId, String messageId);
