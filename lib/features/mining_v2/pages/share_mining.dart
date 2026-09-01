@@ -87,8 +87,8 @@ class _ShareMiningState extends State<ShareMining>
           decoration: BoxDecoration(
             gradient: LinearGradient(
               colors: isDark
-                  ? [const Color(0xFF1A1A2E), const Color(0xFF16213E)]
-                  : [const Color(0xFFF8FAFC), const Color(0xFFE2E8F0)],
+                  ? [const Color(0xFF101828), const Color(0xFF0F1D38)]
+                  : [const Color(0xFFFFFFFF), const Color(0xFFEDEFF2)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),

@@ -37,8 +37,8 @@ class BatchTransferSelectPage extends ConsumerWidget {
     'MATIC': Color(0xFF8247E5),
     'ARB': Color(0xFF28A0F0),
     'OP': Color(0xFFFF0420),
-    'AVAX': Color(0xFFE84142),
-    'FTM': Color(0xFF1969FF),
+    'AVAX': Color(0xFFEF4444),
+    'FTM': Color(0xFF1E5EFF),
     'CRO': Color(0xFF002D74),
     'CELO': Color(0xFF35D07F),
   };
@@ -162,7 +162,7 @@ class BatchTransferSelectPage extends ConsumerWidget {
     final name = (coin.coin['name'] ?? chainSymbol) as String;
     final decimals = (coin.coin['decimals'] ?? 18) as int;
     final chainColor =
-        _chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF607D8B);
+        _chainColors[chainSymbol.toUpperCase()] ?? const Color(0xFF6B7280);
     final mainText = AppColorTokens.of(context).textPrimary;
     final subtitleText = AppColorTokens.of(context).textSubtitle;
 

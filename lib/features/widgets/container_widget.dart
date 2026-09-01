@@ -27,7 +27,7 @@ Widget containerStyle1(
         borderRadius: AppRadius.brMd,
         boxShadow: [
           BoxShadow(
-            color: Color(0xff101828).withAlpha((0.05 * 255).round()), //底色,阴影颜色
+            color: Color(0xFF101828).withAlpha((0.05 * 255).round()), //底色,阴影颜色
             offset: Offset(0, 1), //阴影位置,从什么位置开始
             blurRadius: ScreenUtil().setWidth(4.0), // 阴影模糊层度
             spreadRadius: 0,

@@ -99,7 +99,7 @@ class _ChooseCoinsPageState extends ConsumerState<ChooseCoinsPage> {
       placeholder: S.of(context).g_key_address_7,
       placeholderStyle: AppTypography.headline.copyWith(
         fontWeight: FontWeight.w400,
-        color: const Color(0xffcccccc),
+        color: const Color(0xFFCCCCCC),
       ),
       controller: controller,
       inputFormatters: [LengthLimitingTextInputFormatter(32)],

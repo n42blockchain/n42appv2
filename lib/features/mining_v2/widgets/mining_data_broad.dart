@@ -77,7 +77,7 @@ class MiningDataBroad extends StatelessWidget {
     } else if (titleText.contains('Total') ||
         titleText.toLowerCase().contains('总')) {
       return (
-        const Color(0xFF2196F3),
+        const Color(0xFF28A0F0),
         Icons.account_balance_outlined,
       ); // Blue - total rewards
     } else if (titleText.contains('Value') ||

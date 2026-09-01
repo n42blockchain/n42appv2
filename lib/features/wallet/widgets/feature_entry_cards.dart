@@ -59,7 +59,7 @@ class FeatureEntrySection extends StatelessWidget {
                     gradient: const LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
+                      colors: [Color(0xFF5E97F6), Color(0xFF8B5CF6)],
                     ),
                     borderRadius: AppRadius.brSm,
                   ),
@@ -144,7 +144,7 @@ class FeatureEntryHorizontal extends StatelessWidget {
             subtitle: ensName != null
                 ? S.of(context).g_key_ens_your_identity
                 : S.of(context).g_key_ens_register_now,
-            gradientColors: const [Color(0xFF5B8DEF), Color(0xFF8B5CF6)],
+            gradientColors: const [Color(0xFF5E97F6), Color(0xFF8B5CF6)],
             onTap: onEnsTap,
             enabled: ensEnabled,
             showBadge: ensName != null,

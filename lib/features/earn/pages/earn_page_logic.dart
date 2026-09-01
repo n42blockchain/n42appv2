@@ -188,7 +188,7 @@ mixin EarnPageLogicMixin on ConsumerState<EarnPage> {
       case StakingChainType.solana:
         return const Color(0xFF9945FF);
       case StakingChainType.cosmos:
-        return const Color(0xFF2E3148);
+        return const Color(0xFF232A52);
       case StakingChainType.polkadot:
         return const Color(0xFFE6007A);
     }

@@ -138,7 +138,7 @@ mixin _SummaryPageWidgetsMixin on State<SummaryPage>, _SummaryPageLogicMixin {
             onTap: unLockAstMining,
             child: Container(
               decoration: BoxDecoration(
-                color: const Color(0xffD1E4FE),
+                color: const Color(0xFFD1E4FE),
                 borderRadius: BorderRadius.circular(ScreenUtil().setWidth(86)),
               ),
               padding: EdgeInsets.symmetric(

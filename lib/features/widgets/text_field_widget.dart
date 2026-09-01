@@ -145,7 +145,7 @@ Widget textFieldStyle2(
           boxShadow: [
             boxShadow ??
                 BoxShadow(
-                  color: Color(0xff101828).withAlpha((0.05 * 255).round()),
+                  color: Color(0xFF101828).withAlpha((0.05 * 255).round()),
                   offset: Offset(0, 1),
                   blurRadius: ScreenUtil().setWidth(4.0),
                   spreadRadius: 0,

@@ -58,8 +58,8 @@ class _CandlestickPainter extends CustomPainter {
   final bool isDark;
   final double volumeHeightRatio;
 
-  static const Color _upColor = Color(0xff44A677);
-  static const Color _downColor = Color(0xffd9445a);
+  static const Color _upColor = Color(0xFF44A677);
+  static const Color _downColor = Color(0xFFD9445A);
   static const Color _gridColor = Color(0x1A888888);
   static const Color _labelColor = Color(0x66888888);
 
@@ -75,7 +75,7 @@ class _CandlestickPainter extends CustomPainter {
     // Background
     final bgPaint = Paint()
       ..style = PaintingStyle.fill
-      ..color = isDark ? const Color(0xff1A1A1A) : Colors.white;
+      ..color = isDark ? const Color(0xFF222222) : Colors.white;
     canvas.drawRect(Offset.zero & size, bgPaint);
 
     final n = ohlcData.length;

@@ -27,9 +27,9 @@ class SelectPlan extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: const LinearGradient(
             colors: <Color>[
-              Color(0xff87A1FF),
-              Color(0xff3C85FF),
-              Color(0xff1976F9),
+              Color(0xFF87A1FF),
+              Color(0xFF3C85FF),
+              Color(0xFF1976F9),
             ],
             begin: Alignment.bottomLeft,
             end: Alignment.topRight,

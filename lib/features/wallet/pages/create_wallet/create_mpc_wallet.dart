@@ -29,13 +29,13 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
       type: MpcLoginType.google,
       icon: Icons.g_mobiledata,
       label: 'Google',
-      color: Color(0xFF4285F4),
+      color: Color(0xFF3C85FF),
     ),
     (
       type: MpcLoginType.apple,
       icon: Icons.apple,
       label: 'Apple',
-      color: Color(0xFF333333),
+      color: Color(0xFF373739),
     ),
     (
       type: MpcLoginType.email,
@@ -53,13 +53,13 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
       type: MpcLoginType.twitter,
       icon: Icons.close,
       label: 'X (Twitter)',
-      color: Color(0xFF1DA1F2),
+      color: Color(0xFF28A0F0),
     ),
     (
       type: MpcLoginType.discord,
       icon: Icons.discord,
       label: 'Discord',
-      color: Color(0xFF5865F2),
+      color: Color(0xFF6366F1),
     ),
   ];
 

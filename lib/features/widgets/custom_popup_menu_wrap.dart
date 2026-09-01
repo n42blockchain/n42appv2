@@ -30,7 +30,7 @@ class CustomPopupMenuWrap extends StatelessWidget {
       pressType: pressType ?? PressType.singleClick,
       verticalMargin: verticalMargin ?? 0,
       controller: controller,
-      arrowColor: arrowColor ?? const Color(0xFF4C4C4C),
+      arrowColor: arrowColor ?? const Color(0xFF444444),
       child: defView,
     );
   }

@@ -453,7 +453,7 @@ class _ValidatorListPageState extends State<ValidatorListPage> {
 
   static const _rankColors = {
     1: Color(0xFFFFD700), // Gold
-    2: Color(0xFFC0C0C0), // Silver
+    2: Color(0xFFBEBEBE), // Silver
     3: Color(0xFFCD7F32), // Bronze
   };
 

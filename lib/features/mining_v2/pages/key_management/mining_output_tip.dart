@@ -104,7 +104,7 @@ class MiningOutputTip extends StatelessWidget {
                       context,
                       Icons.no_photography_outlined,
                       S.of(context).g_mining_key_93,
-                      const Color(0xFFFF7043),
+                      const Color(0xFFFF6B4A),
                     ),
                     SizedBox(height: AppSpacing.space4),
                     _buildTipItem(

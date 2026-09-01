@@ -51,11 +51,11 @@ mixin _SectionsMixin on _WidgetsMixin {
             },
             S.of(context).g_key_wallet_c4,
             mpValue.depositsEnable == true
-                ? const Color(0xffD1E4FE)
-                : const Color(0xffEDEFF2),
+                ? const Color(0xFFD1E4FE)
+                : const Color(0xFFEDEFF2),
             mpValue.depositsEnable == true
-                ? const Color(0xff1976F9)
-                : const Color(0xffBAC2CC),
+                ? const Color(0xFF1976F9)
+                : const Color(0xFFBAC2CC),
             height: ScreenUtil().setWidth(55),
             borderRadius: ScreenUtil().setWidth(55),
             fontSize: ScreenUtil().setSp(22),

@@ -96,7 +96,7 @@ class EnsEntryCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasEns = ensName != null && ensName!.isNotEmpty;
-    const ensBlue = Color(0xFF5B8DEF);
+    const ensBlue = Color(0xFF5E97F6);
     const ensPurple = Color(0xFF8B5CF6);
     final su = ScreenUtil();
     final mainText = AppColorTokens.of(context).textPrimary;

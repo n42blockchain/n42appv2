@@ -164,7 +164,7 @@ class ContractSecurityCard extends StatelessWidget {
   Widget _buildRiskChip(GoplusRisk risk) {
     final color = risk.level == GoplusRiskLevel.danger
         ? const Color(0xFFEF5350)
-        : const Color(0xFFFFA726);
+        : const Color(0xFFF9A825);
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: AppSpacing.space2,

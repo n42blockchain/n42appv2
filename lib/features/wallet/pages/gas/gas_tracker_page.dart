@@ -91,7 +91,7 @@ class _GasTrackerPageState extends State<GasTrackerPage> {
       symbol: 'AVAX',
       name: 'Avalanche',
       icon: '▲',
-      color: Color(0xFFE84142),
+      color: Color(0xFFEF4444),
     ),
   ];
 

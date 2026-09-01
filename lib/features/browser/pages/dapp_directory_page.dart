@@ -220,10 +220,10 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
   /// Generate a deterministic color from a letter for the avatar.
   Color _colorForLetter(String letter) {
     const colors = [
-      Color(0xFF5B8DEF), // Blue
-      Color(0xFFE74C3C), // Red
+      Color(0xFF5E97F6), // Blue
+      Color(0xFFEF4444), // Red
       Color(0xFF2ECC71), // Green
-      Color(0xFFF39C12), // Orange
+      Color(0xFFF7931A), // Orange
       Color(0xFF9B59B6), // Purple
       Color(0xFF1ABC9C), // Teal
       Color(0xFFE67E22), // Dark orange

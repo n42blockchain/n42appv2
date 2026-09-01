@@ -122,7 +122,7 @@ class AstLevel extends StatelessWidget {
 
   Widget _buildTag(BuildContext context, String iconAsset, String label) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final tagBg = isDark ? const Color(0xff373739) : const Color(0xffEDEFF2);
+    final tagBg = isDark ? const Color(0xFF373739) : const Color(0xFFEDEFF2);
     final textColor = AppColorTokens.of(context).textPrimary;
 
     return Container(

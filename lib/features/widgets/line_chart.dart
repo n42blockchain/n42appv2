@@ -61,7 +61,7 @@ class LineChartState extends State<LineChart> with TickerProviderStateMixin {
       widget.bottomMargin,
     );
     return Container(
-      color: Color(0xff999999),
+      color: Color(0xFF9E9E9E),
       key: anchorKey,
       height: widget.height,
       width: double.infinity,
@@ -117,7 +117,7 @@ class DrawLineChart extends CustomPainter {
     canvas.clipRect(rect);
     painter.color = theme.brightness == Brightness.light
         ? Colors.white
-        : Color(0xff222222);
+        : Color(0xFF222222);
     painter.style = PaintingStyle.fill;
     canvas.drawRect(rect, painter);
 
@@ -131,7 +131,7 @@ class DrawLineChart extends CustomPainter {
 
     painter.style = PaintingStyle.stroke;
     painter.strokeWidth = 1.5;
-    painter.color = isUp ? Color(0xff44A677) : Color(0xffd9445a);
+    painter.color = isUp ? Color(0xFF44A677) : Color(0xFFD9445A);
     drawValueLine(canvas);
 
     painter.style = PaintingStyle.fill;
@@ -148,7 +148,7 @@ class DrawLineChart extends CustomPainter {
               Color.fromRGBO(217, 68, 90, 0.0),
             ],
     );
-    painter.color = Color(0xff000000);
+    painter.color = Color(0xFF000000);
     drawValueLineFill(canvas);
     painter.shader = null;
   }

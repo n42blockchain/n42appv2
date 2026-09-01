@@ -60,7 +60,7 @@ class ShowImage extends StatelessWidget {
     final watermarkHeight = ScreenUtil().setWidth(240);
 
     return Scaffold(
-      backgroundColor: const Color(0xff000000),
+      backgroundColor: const Color(0xFF000000),
       appBar: AppBar(
         centerTitle: false,
         title: Text(

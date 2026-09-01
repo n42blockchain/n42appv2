@@ -59,7 +59,7 @@ mixin EarnPageSectionsMixin
                   title: S.of(context).g_key_stake_stake,
                   subtitle: S.of(context).g_key_earn_up_to_apy(maxApyStr),
                   icon: Icons.account_balance_rounded,
-                  gradientColors: const [Color(0xFF11998e), Color(0xFF38ef7d)],
+                  gradientColors: const [Color(0xFF11998E), Color(0xFF38EF7D)],
                   badge: S.of(context).g_key_badge_hot,
                   onTap: () => Navigator.push(
                     context,
@@ -72,7 +72,7 @@ mixin EarnPageSectionsMixin
                   title: S.of(context).g_key_earn_mining,
                   subtitle: S.of(context).g_key_earn_node_mining_desc,
                   icon: Icons.developer_board_rounded,
-                  gradientColors: const [Color(0xFFf7971e), Color(0xFFffd200)],
+                  gradientColors: const [Color(0xFFF7931A), Color(0xFFFFD700)],
                   badge: 'N42',
                   onTap: () => Navigator.push(
                     context,
@@ -101,7 +101,7 @@ mixin EarnPageSectionsMixin
                   title: S.of(context).g_key_bridge_title,
                   subtitle: S.of(context).g_key_earn_cross_chain,
                   icon: Icons.swap_horiz_rounded,
-                  gradientColors: const [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+                  gradientColors: const [Color(0xFF9333EA), Color(0xFF4A00E0)],
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const BridgeHomePage()),
@@ -185,7 +185,7 @@ mixin EarnPageSectionsMixin
                   context,
                   icon: Icons.security_rounded,
                   label: s.g_key_earn_ledger,
-                  color: const Color(0xFF607D8B),
+                  color: const Color(0xFF6B7280),
                   onTap: () => Navigator.push(
                     context,
                     MaterialPageRoute(

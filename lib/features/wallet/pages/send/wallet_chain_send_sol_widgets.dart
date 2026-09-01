@@ -69,7 +69,7 @@ mixin _SolSendWidgetsMixin on _SolSendLogicMixin {
               color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xff101828).withAlpha(13),
+                  color: const Color(0xFF101828).withAlpha(13),
                   offset: const Offset(0, 1),
                   blurRadius: ScreenUtil().setWidth(4.0),
                 ),

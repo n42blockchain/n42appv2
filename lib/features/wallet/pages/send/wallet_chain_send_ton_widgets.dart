@@ -125,7 +125,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
               color: AppColorTokens.of(context).bgSurface,
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xff101828).withAlpha(0),
+                  color: const Color(0xFF101828).withAlpha(0),
                   offset: const Offset(0, 1),
                   blurRadius: ScreenUtil().setWidth(4.0),
                   spreadRadius: 0,
@@ -157,7 +157,7 @@ mixin _TonSendWidgetsMixin on _TonSendLogicMixin {
                   fontSize: ScreenUtil().setWidth(70.0),
                   height: ScreenUtil().setWidth(120.0),
                   boxShadow: BoxShadow(
-                    color: const Color(0xff101828).withAlpha(0),
+                    color: const Color(0xFF101828).withAlpha(0),
                     offset: const Offset(0, 0),
                     blurRadius: ScreenUtil().setWidth(0),
                     spreadRadius: 0,

@@ -224,7 +224,7 @@ class MiningBoardWidget extends StatelessWidget {
             "assets/mining/grid-lock.png",
             S.current.g_mining_key_34,
             S.current.g_mining_key_74,
-            const Color(0xFFFF7043),
+            const Color(0xFFFF6B4A),
           ),
         ],
       ),

@@ -425,7 +425,7 @@ mixin _MiningFullNodeV2WidgetsMixin
   Widget _buildRadioCircle(bool isSelected) {
     return _buildSelectionCircle(
       isSelected: isSelected,
-      fillColor: const Color(0xff32D74B),
+      fillColor: const Color(0xFF32D74B),
       borderColor: AppColorTokens.of(context).textSubtitle,
       checkColor: Colors.white,
     );

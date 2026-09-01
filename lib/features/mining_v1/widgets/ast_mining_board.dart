@@ -233,7 +233,7 @@ class ASTMiningBoard extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       decoration: BoxDecoration(
-        color: isDark ? const Color(0xff373739) : const Color(0xffEDEFF2),
+        color: isDark ? const Color(0xFF373739) : const Color(0xFFEDEFF2),
         borderRadius: AppRadius.brXl,
       ),
       padding: EdgeInsets.symmetric(

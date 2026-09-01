@@ -30,7 +30,7 @@ class ReplyEmptyWidget extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        color: Color(0xff104B9E),
+                        color: Color(0xFF104B9E),
                         borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(ScreenUtil().setWidth(4)),
                           bottomLeft: Radius.circular(ScreenUtil().setWidth(4)),

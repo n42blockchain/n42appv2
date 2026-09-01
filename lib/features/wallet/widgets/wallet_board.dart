@@ -78,7 +78,7 @@ class _WalletBoardState extends State<WalletBoard> {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: isDark
-              ? [const Color(0xFF0F2044), const Color(0xFF1A0B3B)]
+              ? [const Color(0xFF0F1D38), const Color(0xFF1A0B3B)]
               : [const Color(0xFF1565C0), const Color(0xFF7B1FA2)],
           stops: const [0.0, 1.0],
         ),

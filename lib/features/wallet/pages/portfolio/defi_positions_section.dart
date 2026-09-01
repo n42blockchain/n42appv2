@@ -141,7 +141,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         _CategoryChip(
           'Lending',
           portfolio.lendingValue,
-          const Color(0xFF3B82F6),
+          const Color(0xFF3C85FF),
         ),
       );
     }

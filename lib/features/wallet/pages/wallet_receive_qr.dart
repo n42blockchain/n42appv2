@@ -28,23 +28,23 @@ const Map<String, Color> _kChainColors = {
   'ARB': Color(0xFF28A0F0),
   'OP': Color(0xFFFF0420),
   'BASE': Color(0xFF0052FF),
-  'AVAX': Color(0xFFE84142),
+  'AVAX': Color(0xFFEF4444),
   'MATIC': Color(0xFF8247E5),
   'TON': Color(0xFF0098EA),
   'TRX': Color(0xFFEF0027),
   'XRP': Color(0xFF346AA9),
-  'ATOM': Color(0xFF6F6F76),
+  'ATOM': Color(0xFF6B7280),
   'DOT': Color(0xFFE6007A),
   'FIL': Color(0xFF0090FF),
   'SUI': Color(0xFF6FBCF0),
-  'APT': Color(0xFF2DC17B),
-  'ALGO': Color(0xFF1B1B1B),
+  'APT': Color(0xFF2ECC71),
+  'ALGO': Color(0xFF222222),
   'XTZ': Color(0xFF2C7DF7),
-  'LTC': Color(0xFFA6A9AA),
+  'LTC': Color(0xFF9E9E9E),
   'DOGE': Color(0xFFBA9F33),
   'NEAR': Color(0xFF3DC28E),
   'ZIL': Color(0xFF29CCC4),
-  'ETC': Color(0xFF328432),
+  'ETC': Color(0xFF388E3C),
 };
 
 final _amountInputRegex = RegExp(r'^\d*\.?\d*');
@@ -268,7 +268,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   // ─── 链品牌色 ───────────────────────────────────────────────────────────────
 
-  Color get chainColor => _kChainColors[coinType] ?? const Color(0xFF6C7689);
+  Color get chainColor => _kChainColors[coinType] ?? const Color(0xFF6B7280);
 
   // ─── Build ──────────────────────────────────────────────────────────────────
 

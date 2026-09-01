@@ -53,8 +53,8 @@ class MiningStatusWidget extends StatelessWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: isDark
-                    ? [const Color(0xFF0D2A18), const Color(0xFF0A2010)]
-                    : [const Color(0xFFE8F5E9), const Color(0xFFF1F8E9)],
+                    ? [const Color(0xFF0D2A18), const Color(0xFF0D2A18)]
+                    : [const Color(0xFFEDEFF2), const Color(0xFFEDEFF2)],
               )
             : null,
         color: isActive ? null : AppColorTokens.of(context).bgSurface,

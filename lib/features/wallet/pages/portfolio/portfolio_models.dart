@@ -11,15 +11,15 @@ import 'package:intl/intl.dart';
 const portfolioSliceColors = [
   Color(0xFF1976F9), // blue
   Color(0xFF22C55E), // green
-  Color(0xFFFF8C00), // orange
+  Color(0xFFFF9800), // orange
   Color(0xFF9333EA), // purple
   Color(0xFFEF4444), // red
-  Color(0xFF06B6D4), // cyan
-  Color(0xFFF59E0B), // amber
+  Color(0xFF00BCD4), // cyan
+  Color(0xFFFF9800), // amber
   Color(0xFFEC4899), // pink
   Color(0xFF10B981), // emerald
   Color(0xFF6366F1), // indigo
-  Color(0xFF94A3B8), // slate (Others)
+  Color(0xFF8A9AAC), // slate (Others)
 ];
 
 // ─── Data model ──────────────────────────────────────────────────────────────

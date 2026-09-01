@@ -45,7 +45,7 @@ class AppColorTokens {
   Color get success => _key(AppThemeKeys.rightTextColor); // #44A677
   Color get danger => _key(AppThemeKeys.errorTextColor); // #F03450
   Color get warning => _key(AppThemeKeys.textColorOrange); // #FF6F16
-  Color get info => _tone(const Color(0xFF2E90FA), const Color(0xFF52A6FF));
+  Color get info => _tone(const Color(0xFF2E90FA), const Color(0xFF4FACFE));
 
   /// 危险态背景填充（errorBgColor）——错误提示卡 / 横幅底。
   Color get dangerBg => _key(AppThemeKeys.errorBgColor);
@@ -54,7 +54,7 @@ class AppColorTokens {
   Color get bgBase => _key(AppThemeKeys.backGroundColor);
   Color get bgSurface => _key(AppThemeKeys.itemBgColor);
   Color get bgElevated =>
-      _tone(const Color(0xFFFFFFFF), const Color(0xFF1E212B));
+      _tone(const Color(0xFFFFFFFF), const Color(0xFF222222));
   Color get border => _key(AppThemeKeys.dividerColor);
   Color get textPrimary => _key(AppThemeKeys.mainTextColor);
   Color get textSecondary =>

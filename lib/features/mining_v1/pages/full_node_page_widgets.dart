@@ -115,7 +115,7 @@ mixin _FullNodePageWidgets on State<FullNodePage> {
       height: ScreenUtil().setWidth(36),
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: isSelected ? const Color(0xff32D74B) : Colors.transparent,
+        color: isSelected ? const Color(0xFF32D74B) : Colors.transparent,
         border: Border.all(
           color: isSelected
               ? Colors.transparent

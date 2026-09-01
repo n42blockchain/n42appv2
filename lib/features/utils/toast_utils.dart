@@ -11,7 +11,7 @@ class ToastUtils {
       gravity: ToastGravity.CENTER,
       timeInSecForIosWeb: 7,
       backgroundColor: const Color.fromRGBO(0, 0, 0, 0.5),
-      textColor: const Color(0xffffffff),
+      textColor: const Color(0xFFFFFFFF),
       fontSize: 14.0,
     );
   }

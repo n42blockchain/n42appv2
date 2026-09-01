@@ -27,7 +27,7 @@ import 'package:n42_wallet/features/widgets/image_network.dart';
 part 'address_book_list_item.dart';
 
 const List<Color> _kAvatarColors = [
-  Color(0xFF5B86E5),
+  Color(0xFF627EEA),
   Color(0xFF36D1C4),
   Color(0xFFFF7B54),
   Color(0xFFF9A825),
