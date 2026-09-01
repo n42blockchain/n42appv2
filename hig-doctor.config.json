@@ -1,0 +1,32 @@
+{
+  "overrides": [
+    {
+      "files": [
+        "**/theme/**",
+        "**/themes/**",
+        "**/*theme*.dart",
+        "**/*colors*.dart",
+        "**/*typography*.dart",
+        "**/*palette*.dart"
+      ],
+      "rules": {
+        "flutter/hardcoded-color": "off",
+        "flutter/colors-red-blue": "off",
+        "flutter/hardcoded-font-size": "off"
+      }
+    },
+    {
+      "files": [
+        "test/**",
+        "integration_test/**",
+        "**/*_test.dart",
+        "**/test/**"
+      ],
+      "rules": {
+        "flutter/hardcoded-color": "off",
+        "flutter/colors-red-blue": "off",
+        "flutter/hardcoded-font-size": "off"
+      }
+    }
+  ]
+}
