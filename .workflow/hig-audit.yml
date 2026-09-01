@@ -1,0 +1,32 @@
+version: '1.0'
+name: hig-audit
+displayName: HIG 无障碍审计
+
+# 审计 UI 代码是否符合 Apple HIG 与 Web 无障碍规则。
+# 忽略清单与豁免规则都在仓库根目录的 hig-doctor.config.json 里，
+# 所以这里和本地跑的是同一条命令。
+# 每条规则为什么被关掉，见 hig-doctor.config.md。
+
+triggers:
+  push:
+    branches:
+      precise:
+        - master
+  pr:
+    branches:
+      precise:
+        - master
+
+stages:
+  - stage:
+      name: audit
+      displayName: 无障碍审计
+      steps:
+        - step: shell@agent
+          name: hig_doctor
+          displayName: hig-doctor
+          commands:
+            - node -v
+            # --fail-on serious：critical 与 serious 一旦新增就红灯；
+            # moderate 存量已记入基线，不卡门禁。
+            - npx -y hig-doctor@2.0.1 . --fail-on serious

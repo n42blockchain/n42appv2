@@ -1,0 +1,28 @@
+name: HIG audit
+
+# Audits the UI against Apple's Human Interface Guidelines and web
+# accessibility rules. The ignore list and every rule exemption live in
+# hig-doctor.config.json, so this is the same command you run locally;
+# hig-doctor.config.md says why each one is off.
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: hig-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # Fails on anything critical or serious that is newly introduced.
+      # The moderate backlog is held in .hig-baseline.json and does not gate.
+      - run: npx -y hig-doctor@2.0.1 . --fail-on serious

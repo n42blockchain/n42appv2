@@ -1,6 +1,6 @@
 # HIG audit: what is configured, and what is left
 
-`npx hig-doctor . --exclude "build/**,**/generated/**,**/*.g.dart,**/*.freezed.dart,ios/**,android/**,macos/**,windows/**,linux/**,audit_results/**,chrome-extension/**,backend/**"`
+`npx hig-doctor .`
 
 audits this app against Apple's Human Interface Guidelines. Three findings were
 fixed outright; the rest are held at a baseline rather than papered over.
@@ -62,9 +62,14 @@ move its literals onto `AppColors` / `AppTypography`. Then re-run with
 ## In CI
 
 ```bash
-npx hig-doctor . --exclude "<the list above>" --fail-on moderate
+npx hig-doctor@2.0.1 . --fail-on serious
 ```
 
-With the baseline in place this passes today and fails the moment new hardcoded
-colour or type is introduced — which is the point: stop the bleeding first, then
-work the existing count down file by file.
+The ignore list and the rule exemptions live in `hig-doctor.config.json`, so
+this is the same command locally and in CI - nothing to keep in sync by hand.
+
+`--fail-on serious` means the build goes red on anything critical or serious
+that is newly introduced. It passes today, and the moderate backlog held in `.hig-baseline.json`
+does not gate it.
+
+Pipelines: `.workflow/hig-audit.yml` (Gitee Go) and `.github/workflows/hig-audit.yml`.

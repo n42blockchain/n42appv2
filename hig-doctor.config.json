@@ -1,4 +1,18 @@
 {
+  "ignore": [
+    "build/**",
+    "**/generated/**",
+    "**/*.g.dart",
+    "**/*.freezed.dart",
+    "ios/**",
+    "android/**",
+    "macos/**",
+    "windows/**",
+    "linux/**",
+    "audit_results/**",
+    "chrome-extension/**",
+    "backend/**"
+  ],
   "overrides": [
     {
       "files": [
