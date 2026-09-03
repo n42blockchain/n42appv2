@@ -363,14 +363,23 @@ class N42Chat {
     return true;
   }
 
-  /// 内部/页面通用：返回宿主应用；没有宿主回调时退回根 Navigator。
+  /// 内部/页面通用：返回宿主应用。
+  ///
+  /// Chat 通常作为独立路由挂在宿主根 Navigator 上，因此优先弹出该路由。
+  /// 只有根 Navigator 已无路由可退（例如 Chat 直接嵌入宿主 Tab）时，才交给
+  /// 宿主回调切换页面。不能优先调用宿主回调：VoidCallback 无法报告是否真的
+  /// 完成导航，会把失效回调误判为成功并留下一个看似无响应的返回按钮。
   static Future<bool> backToHostOrPop(BuildContext context) async {
+    final rootNavigator = Navigator.of(context, rootNavigator: true);
+    if (await rootNavigator.maybePop()) return true;
+    if (!context.mounted) return false;
+
     final cb = _onBackToHost;
     if (cb != null) {
       cb();
       return true;
     }
-    return Navigator.of(context, rootNavigator: true).maybePop();
+    return false;
   }
 
   /// 同步 UI 回调包装：返回宿主应用。

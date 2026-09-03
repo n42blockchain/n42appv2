@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/n42_chat.dart';
-import 'package:n42_chat/src/core/theme/app_colors.dart';
 
 void main() {
   group('N42Chat', () {
@@ -20,6 +19,81 @@ void main() {
 
     test('should throw when accessing routes before initialization', () {
       expect(() => N42Chat.routes(), throwsA(isA<StateError>()));
+    });
+  });
+
+  group('N42Chat host navigation', () {
+    tearDown(() => N42Chat.setBackToHostHandler(null));
+
+    testWidgets('pops the root chat route before using the host fallback', (
+      tester,
+    ) async {
+      var hostBackCalls = 0;
+      N42Chat.setBackToHostHandler(() => hostBackCalls++);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (homeContext) => Scaffold(
+              body: TextButton(
+                key: const ValueKey('open-chat'),
+                onPressed: () => Navigator.of(homeContext).push<void>(
+                  MaterialPageRoute<void>(
+                    builder: (chatContext) => Scaffold(
+                      body: TextButton(
+                        key: const ValueKey('back-from-chat'),
+                        onPressed: () => N42Chat.requestBackToHost(chatContext),
+                        child: const Text('Back'),
+                      ),
+                    ),
+                  ),
+                ),
+                child: const Text('Open chat'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('open-chat')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const ValueKey('back-from-chat')), findsOneWidget);
+
+      await tester.tap(find.byKey(const ValueKey('back-from-chat')));
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('open-chat')), findsOneWidget);
+      expect(hostBackCalls, 0);
+    });
+
+    testWidgets('uses the host fallback when chat is embedded at root', (
+      tester,
+    ) async {
+      var hostBackCalls = 0;
+      N42Chat.setBackToHostHandler(() => hostBackCalls++);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Builder(
+            builder: (context) => Scaffold(
+              body: TextButton(
+                key: const ValueKey('back-from-embedded-chat'),
+                onPressed: () => N42Chat.requestBackToHost(context),
+                child: const Text('Back'),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(const ValueKey('back-from-embedded-chat')));
+      await tester.pump();
+
+      expect(hostBackCalls, 1);
+      expect(
+        find.byKey(const ValueKey('back-from-embedded-chat')),
+        findsOneWidget,
+      );
     });
   });
 
