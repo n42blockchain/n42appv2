@@ -75,3 +75,24 @@ navigation, on-chain prediction and in-app Sui payment acceptance still have gap
 recorded in earlier audits. Previous device evidence applies to its recorded
 source hashes; this final review does not relabel it as a new device run. No
 mainnet transaction is broadcast as part of this release.
+
+## Gas-cap follow-up before upload
+
+The actual WalletConnect transaction handler ignored JSON-RPC `gas` and passed
+null to web3dart, allowing estimation to replace the explicit cap. The handler
+and confirmation preview now share a parser, prefer `gas`, retain the legacy
+`gasLimit` alias and reject malformed or inexact caps before accessing a key.
+The gas field follows the [Ethereum JSON-RPC transaction specification](https://ethereum.org/developers/docs/apis/json-rpc/#eth-signtransaction).
+
+Thirty regressions execute the production transaction handler and confirmation
+mapper with fake RPC only: signing and sending preserve the cap, both aliases
+and quantity formats agree, invalid values cannot fall back to estimation,
+and legacy/EIP-1559 fees remain denominated in wei. The first archive attempt
+was cancelled before upload so this correction can ship with a new build number.
+The original release tag is retained; the follow-up receives a separate tag.
+
+Follow-up verification: **4,141 tests passed in 3m37s**; static analysis returned
+0 errors, 0 warnings and 145 infos. Localization and 15 script regressions passed.
+Full LCOV: **59,032/130,694 lines
+(45.17%)**. See
+[follow-up coverage](testing/coverage-release-r2-2026-09-11.md).

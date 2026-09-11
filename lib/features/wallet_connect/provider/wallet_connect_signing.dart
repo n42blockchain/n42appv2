@@ -9,6 +9,7 @@ import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_gas_limit.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_session.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
@@ -388,7 +389,7 @@ mixin WalletConnectSigning
     final gasPrice = parameters['gasPrice'] as String?;
     final maxFeePerGas = parameters['maxFeePerGas'] as String?;
     final maxPriorityFeePerGas = parameters['maxPriorityFeePerGas'] as String?;
-    final gasLimit = parameters['gasLimit'] as String?;
+    final gasLimit = walletConnectGasLimit(parameters);
     final data = parameters['data'] as String?;
 
     final transaction = web3.Transaction(
@@ -418,7 +419,7 @@ mixin WalletConnectSigning
               _parseHexOrDecBigInt(maxPriorityFeePerGas),
             )
           : null,
-      maxGas: gasLimit != null ? _parseHexOrDecInt(gasLimit) : null,
+      maxGas: gasLimit,
       nonce: nonce != null ? _parseHexOrDecInt(nonce) : null,
       data: (data != null && data != '0x') ? web3.hexToBytes(data) : null,
     );

@@ -8,9 +8,9 @@ import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_connection.dart';
+import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_gas_limit.dart';
 import 'package:n42_wallet/features/wallet_connect/provider/wallet_connect_state.dart';
 import 'package:reown_walletkit/reown_walletkit.dart' as wallet_connect;
-import 'package:web3dart/web3dart.dart' as web3;
 
 /// Mixin: WalletConnect session event subscriptions, chain registration,
 /// namespace building, and request dispatch.
@@ -467,7 +467,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
         actionDataMap = {
           "network": networkName,
           "coinType": coinModels[coinModelsIndex].config.coinType,
-          "gas": web3.hexToInt(trMap['gas'] ?? "0x0").toInt().toString(),
+          "gas": (walletConnectGasLimit(trMap) ?? 0).toString(),
           "from": trMap['from'] ?? "0x",
           "to": trMap['to'] ?? "0x",
           "data": trMap['data'] ?? "0x",
