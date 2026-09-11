@@ -67,7 +67,7 @@ class DAppSecurityInfo {
 /// 3. HTTPS enforcement (HTTP downgrades to Caution)
 /// 4. Suspicious domain-name heuristics (keyword patterns / risky TLDs)
 ///
-/// Results are cached in memory for 5 minutes per host.
+/// Results are cached in memory for 5 minutes per scheme and host.
 class DAppSecurityService {
   // ── Trusted domains extracted from recommended_dapps.dart ───────────────
   static const Set<String> _trustedDomains = {
@@ -115,12 +115,13 @@ class DAppSecurityService {
   ];
 
   // ── Risky TLD endings ────────────────────────────────────────────────────
-  static final RegExp _riskyTld =
-      RegExp(r'\.(xyz|live|click|monster|buzz|top|gq|ml|cf|ga|tk)$',
-          caseSensitive: false);
+  static final RegExp _riskyTld = RegExp(
+    r'\.(xyz|live|click|monster|buzz|top|gq|ml|cf|ga|tk)$',
+    caseSensitive: false,
+  );
 
-  // ── 5-minute in-memory cache keyed by lowercase host ─────────────────────
-  static final Map<String, _CacheEntry> _cache = {};
+  // HTTP must never reuse the verified result of the same host over HTTPS.
+  static final Map<(String, String), _CacheEntry> _cache = {};
 
   /// Maximum number of cached entries to prevent unbounded memory growth.
   static const int _maxCacheSize = 200;
@@ -134,9 +135,10 @@ class DAppSecurityService {
     }
 
     final host = uri.host.toLowerCase();
+    final cacheKey = (uri.scheme.toLowerCase(), host);
 
     // Cache hit?
-    final cached = _cache[host];
+    final cached = _cache[cacheKey];
     if (cached != null && !cached.isExpired) return cached.info;
 
     // Evict expired entries and enforce size limit
@@ -144,7 +146,9 @@ class DAppSecurityService {
       _cache.removeWhere((_, entry) => entry.isExpired);
       // If still over limit after evicting expired, remove oldest entries
       if (_cache.length >= _maxCacheSize) {
-        final keysToRemove = _cache.keys.take(_cache.length - _maxCacheSize + 1).toList();
+        final keysToRemove = _cache.keys
+            .take(_cache.length - _maxCacheSize + 1)
+            .toList();
         for (final key in keysToRemove) {
           _cache.remove(key);
         }
@@ -157,7 +161,9 @@ class DAppSecurityService {
     if (PhishingDetector.instance.checkUrl(url) ==
         PhishingCheckResult.phishing) {
       result = const DAppSecurityInfo(
-          DAppSecurityLevel.blocked, 'Known phishing site');
+        DAppSecurityLevel.blocked,
+        'Known phishing site',
+      );
     }
     // 2. Trusted list + HTTPS → Verified
     else if (_isInTrustedList(host) && uri.isScheme('https')) {
@@ -166,19 +172,23 @@ class DAppSecurityService {
     // 3. Not HTTPS → Caution
     else if (!uri.isScheme('https')) {
       result = const DAppSecurityInfo(
-          DAppSecurityLevel.caution, 'Not using HTTPS');
+        DAppSecurityLevel.caution,
+        'Not using HTTPS',
+      );
     }
     // 4. Suspicious patterns or risky TLD → Caution
     else if (_hasSuspiciousPattern(host) || _riskyTld.hasMatch(host)) {
       result = const DAppSecurityInfo(
-          DAppSecurityLevel.caution, 'Suspicious domain name');
+        DAppSecurityLevel.caution,
+        'Suspicious domain name',
+      );
     }
     // 5. Safe
     else {
       result = DAppSecurityInfo.safe;
     }
 
-    _cache[host] = _CacheEntry(result);
+    _cache[cacheKey] = _CacheEntry(result);
     return result;
   }
 

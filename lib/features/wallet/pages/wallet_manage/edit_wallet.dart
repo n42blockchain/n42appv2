@@ -131,7 +131,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
         children: [
           SizedBox(height: AppSpacing.space4),
           Text(
-            'Tags',
+            S.of(context).g_ui_tags,
             style: AppTypography.body.copyWith(
               color: textColor,
               fontWeight: FontWeight.w600,
@@ -147,10 +147,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
               children: _tags
                   .map(
                     (tag) => Chip(
-                      label: Text(
-                        tag,
-                        style: AppTypography.caption,
-                      ),
+                      label: Text(tag, style: AppTypography.caption),
                       deleteIcon: Icon(Icons.close, size: 16, color: subColor),
                       onDeleted: () => _removeTag(tag),
                       backgroundColor: blueColor.withValues(alpha: 0.1),
@@ -198,7 +195,7 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                       controller: _tagController,
                       style: AppTypography.caption,
                       decoration: InputDecoration(
-                        hintText: 'Custom tag...',
+                        hintText: S.of(context).g_ui_custom_tag,
                         hintStyle: AppTypography.caption.copyWith(
                           color: subColor,
                         ),
@@ -223,7 +220,10 @@ class _EditWalletState extends ConsumerState<EditWallet> {
                   height: 36,
                   child: TextButton(
                     onPressed: () => _addTag(_tagController.text),
-                    child: Text('Add', style: TextStyle(color: blueColor)),
+                    child: Text(
+                      S.of(context).g_key_token_discovery_add,
+                      style: TextStyle(color: blueColor),
+                    ),
                   ),
                 ),
               ],

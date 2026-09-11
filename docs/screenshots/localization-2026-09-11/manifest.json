@@ -1,0 +1,45 @@
+{
+  "kind": "Flutter widget render; no physical-device claim",
+  "logical_viewport": [
+    320,
+    900
+  ],
+  "pixel_ratio": 2,
+  "text_scale": 1.3,
+  "font": "Arial Unicode",
+  "test": "test/screenshots/localized_wallet_screenshot_test.dart",
+  "files": [
+    {
+      "file": "ar-import-backup.png",
+      "sha256": "abec024fcbefad62317d462f0df1a7a08ce259a383146304e996bdba9cdd987e"
+    },
+    {
+      "file": "ar-limit-form.png",
+      "sha256": "31754d2ab7b2f4c313552f1616c642af8d02fa294d34ef79a9041b80c5b35325"
+    },
+    {
+      "file": "de-import-backup.png",
+      "sha256": "5d10da245b787755168185e251074ca3dff522cffde256be45ccb4f33cc832d9"
+    },
+    {
+      "file": "de-limit-form.png",
+      "sha256": "b60a5522a051c9094145302feb3411e0d84b25359f0e53bc98a42e814a71fe12"
+    },
+    {
+      "file": "sw-import-backup.png",
+      "sha256": "0ad346572862668b5984dabad3d9c741d8fa9764675111c823f4e308351feea5"
+    },
+    {
+      "file": "sw-limit-form.png",
+      "sha256": "3a0e3cc507001c63674e6d8664ecc3f8fe17e82ddfc20051b67fe5c85701b11a"
+    },
+    {
+      "file": "ur-import-backup.png",
+      "sha256": "69bd7e6cbc2a9a525c547cf50fc550a332c8d87337cafb4555a19c80217e4730"
+    },
+    {
+      "file": "ur-limit-form.png",
+      "sha256": "1ecfa47d43fca8a485138abdc605f42681cac55fc547f1aa5f4015e5d82e34de"
+    }
+  ]
+}

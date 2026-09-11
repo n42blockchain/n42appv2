@@ -70,7 +70,7 @@ class _WalletConnectPageState extends ConsumerState<WalletConnectPage>
           children: [
             Positioned.fill(child: buildDAppConnectWidget(connectV2)),
             if (connectV2.load == Load.loading)
-              Positioned.fill(child: LoadingPage()),
+              const Positioned.fill(child: AbsorbPointer(child: LoadingPage())),
           ],
         ),
       ),

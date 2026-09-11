@@ -300,41 +300,14 @@ mixin _SolSendLogicMixin on ConsumerState<WalletChainSendSol> {
     bool completedWithExit = false;
     try {
       final coinType = widget.coinModel.config.coinType;
-      // 派生参数必须跟随发起账户：token 模型的 addrType/pathIndex 复制自其所
-      // 属主链账户，而 chainModel 只是「首个 coinType 匹配」的主链模型，多账
-      // 户时可能属于别的账户——用它的 pathIndex 签名会跟 from 地址对不上。
-      // chainModel 只允许充当 path 模板缺失时的回退来源。
-      final addrType = widget.coinModel.addrType;
-      final basePath =
-          widget.coinModel.config.pathForAddrType(addrType) ??
-          chainModel?.config.pathForAddrType(addrType) ??
-          "m/44'/501'/0'";
-      final path = getPathWithIndex(basePath, widget.coinModel.pathIndex);
-      final decimals =
-          (widget.coinModel.coin['decimals'] as num?)?.toInt() ?? 18;
-
+      final request = solSendRequest(
+        widget.coinModel,
+        trModel,
+        parent: chainModel,
+      );
       final result = await SenderFactory.instance
           .getSender(coinType)
-          .send(
-            SendParams(
-              coinType: coinType,
-              fromAddress: trModel.from1,
-              toAddress: trModel.to1,
-              amount: toEther(trModel.price.toString(), decimals).toDouble(),
-              decimals: decimals,
-              path: path,
-              sendMax: false,
-              isTest: widget.coinModel.isTest,
-              contractAddress: trModel.contract,
-              // SPL 金额与 TransferChecked 的 decimals 都必须用 token 真实
-              // decimals——此前硬编码 0 会截断金额、且与 mint 的 decimals 不符
-              // 导致 preflight 拒绝，SPL 代币转账整体失败。
-              tokenDecimals: decimals,
-              memo: trModel.message,
-              privateKey: widget.coinModel.privateKey,
-              chainConfig: widget.coinModel.coin,
-            ),
-          );
+          .send(request);
 
       if (!mounted) return;
       if (result.success) {

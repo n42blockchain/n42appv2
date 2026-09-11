@@ -1,0 +1,15 @@
+{
+  "lib/features/wallet/pages/wallet_page.dart": "083ecdad6f8e2a42c53566f9a59fdb8a105122adf04429e5fb2d7ed80c449ed1",
+  "lib/features/wallet/pages/wallet_coin_item.dart": "e0d82afb68ab3cf7ff4c23b7f144792cfb4783b598f18c666e41940f56656fe2",
+  "lib/features/wallet/pages/wallet_coin_list_header.dart": "90749def3baef79e3dcaedd9a9deb231295be2d0101714e635c53e52c7fff0c7",
+  "lib/features/wallet/pages/wallet_coin_list_section.dart": "2ab3d541b5038ebc8329eb3b0b5b5fd58c187606bcd26b55416ea250fbf45b85",
+  "lib/features/wallet/pages/wallet_page_helpers.dart": "390dd3b8c96aa8b108dc60649df009979de4fe5289f3e1e26dcb3239a9b8439c",
+  "lib/features/wallet/widgets/wallet_board.dart": "b7965f6726861a0af542b54854cf91cb264d708171e3f327c5072c4a926a09d1",
+  "lib/features/wallet/widgets/feature_entry_cards.dart": "3efc3377ba26effd456f9774f513cb7ecc15cee5190995e65d1a4a96ebe06334",
+  "lib/features/wallet/provider/wallet_action_provider.dart": "bd65ab8d4166fe86ba847e7e4d3b6d465fa061984fc94dd516d82500f7180efe",
+  "lib/features/wallet/provider/wallet_action_provider_market.dart": "6d770fae9e4d37580c01f572fa3a50c9f62bd587ec7c1e4851adc509695f81b5",
+  "lib/features/wallet/provider/wallet_price_refresh_scheduler.dart": "2785ec5ee29f3cfb925ea764eba0e4da2b0cf0c4383646374fc5c5a62ea9e763",
+  "lib/l10n/intl_en.arb": "45eca27c46da391d4952f6fa3a6bd9a3e45f3a673c59810abb307dc9f0b03482",
+  "lib/l10n/intl_zh_TW.arb": "7dd175f979a3f00a7d52f42678fd2a7c957c342e6901e4fd046183ba6a9cae68",
+  "integration_test/device_full_flow_test.dart": "b1beb3d1ef8dec57d841da6f0e3b70ba357c4dd3035d55ad60cbca1168d7aaa9"
+}

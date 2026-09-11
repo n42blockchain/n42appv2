@@ -29,6 +29,20 @@ mixin BridgeExecutionMixin on ChangeNotifier {
   void _startStatusPolling();
   Future<void> _savePersisted();
 
+  bool _executionInProgress = false;
+  Object get _executionKey => (
+    _fromChain?.chainId,
+    _toChain?.chainId,
+    _fromToken,
+    _toToken,
+    _fromAmount,
+    _slippage,
+    _selectedRoute,
+  );
+
+  bool _executionIsCurrent(Object key) =>
+      !_isDisposedFlag && key == _executionKey;
+
   /// 构造错误 MessageModel 并设置内部错误状态
   MessageModel _errorResult(String message) {
     _setError(message);
@@ -43,6 +57,13 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     required String toAddress,
     required Future<String?> Function(Map<String, dynamic> txData) signAndSend,
   }) async {
+    if (_isDisposedFlag) {
+      return MessageModel.error()..data = 'Bridge request cancelled';
+    }
+    if (_executionInProgress) {
+      return MessageModel.error()
+        ..data = 'Bridge execution already in progress';
+    }
     if (_selectedRoute == null) {
       return MessageModel.error()..data = 'No route selected';
     }
@@ -56,11 +77,24 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       return MessageModel.error()..data = 'Incomplete bridge configuration';
     }
 
+    final executionKey = _executionKey;
+    final fromChain = _fromChain!;
+    final toChain = _toChain!;
+    final fromToken = _fromToken!;
+    final toToken = _toToken!;
+    final fromAmount = _fromAmount;
+    final route = _selectedRoute!;
+    if ((BigInt.tryParse(_parseAmount(fromAmount, fromToken.decimals)) ??
+            BigInt.zero) <=
+        BigInt.zero) {
+      return _errorResult('Invalid amount');
+    }
+    _executionInProgress = true;
     _setState(BridgeState.executing);
     _clearError();
 
     try {
-      final step = _selectedRoute!.steps.first;
+      final step = route.steps.first;
       final stepJson = {
         'type': step.type,
         'tool': step.tool,
@@ -86,6 +120,9 @@ mixin BridgeExecutionMixin on ChangeNotifier {
         );
       }
 
+      if (!_executionIsCurrent(executionKey)) {
+        return _errorResult('Bridge selection changed');
+      }
       final txResponse = txResult.data as BridgeTransactionResponse;
       if (!txResponse.isSuccess || txResponse.txData == null) {
         return _errorResult(txResponse.error ?? 'Invalid transaction data');
@@ -97,6 +134,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
           fromAddress,
           txResponse,
           signAndSend,
+          executionKey,
         );
         if (!approved) {
           return MessageModel.error()
@@ -108,22 +146,23 @@ mixin BridgeExecutionMixin on ChangeNotifier {
         _setState(BridgeState.executing);
       }
 
-      final txHash = await signAndSend(txResponse.txData!);
-      if (_isDisposedFlag) {
-        return MessageModel.error()..data = 'Bridge request cancelled';
+      if (!_executionIsCurrent(executionKey)) {
+        return _errorResult('Bridge selection changed');
       }
-      if (txHash == null) {
+      final txHash = await signAndSend(txResponse.txData!);
+      if (txHash == null || txHash.trim().isEmpty) {
         return _errorResult('Transaction cancelled or failed');
       }
 
+      // A completed broadcast still belongs in history after its view closes.
       final transaction = BridgeTransaction(
         txHash: txHash,
-        fromChainId: _fromChain!.chainId,
-        toChainId: _toChain!.chainId,
-        fromToken: _fromToken!,
-        toToken: _toToken!,
-        fromAmount: _fromAmount,
-        toAmount: _selectedRoute!.toAmount,
+        fromChainId: fromChain.chainId,
+        toChainId: toChain.chainId,
+        fromToken: fromToken,
+        toToken: toToken,
+        fromAmount: fromAmount,
+        toAmount: route.toAmount,
         fromAddress: fromAddress,
         toAddress: toAddress,
         status: BridgeTransactionStatus.pending,
@@ -134,7 +173,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       _transactions.insert(0, transaction);
       _pendingTxHashes.add(transaction.txHash);
       _setState(BridgeState.completed);
-      unawaited(_savePersisted());
+      await _savePersisted();
       _startStatusPolling();
 
       return MessageModel()
@@ -142,6 +181,8 @@ mixin BridgeExecutionMixin on ChangeNotifier {
         ..data = txHash;
     } catch (e) {
       return _errorResult(e.toString());
+    } finally {
+      _executionInProgress = false;
     }
   }
 
@@ -150,6 +191,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     String fromAddress,
     BridgeTransactionResponse txResponse,
     Future<String?> Function(Map<String, dynamic> txData) signAndSend,
+    Object executionKey,
   ) async {
     _setState(BridgeState.approving);
 
@@ -174,7 +216,10 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       walletAddress: fromAddress,
       spenderAddress: spenderAddress,
     );
-    if (_isDisposedFlag) return false;
+    if (!_executionIsCurrent(executionKey)) {
+      if (!_isDisposedFlag) _setError('Bridge selection changed');
+      return false;
+    }
 
     if (approvalResult.error || approvalResult.data == null) {
       _setError(
@@ -205,9 +250,16 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       return false;
     }
 
+    if (!_executionIsCurrent(executionKey)) {
+      if (!_isDisposedFlag) _setError('Bridge selection changed');
+      return false;
+    }
     final approveTxData = approveTxResult.data as Map<String, dynamic>;
     final approveTxHash = await signAndSend(approveTxData);
-    if (_isDisposedFlag) return false;
+    if (!_executionIsCurrent(executionKey)) {
+      if (!_isDisposedFlag) _setError('Bridge selection changed');
+      return false;
+    }
 
     if (approveTxHash == null) {
       _setError('Approval transaction cancelled');
@@ -219,6 +271,7 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       fromAddress,
       spenderAddress,
       fromAmountBig,
+      executionKey,
     );
     if (!approved) {
       _setError('Approval not confirmed in time');
@@ -232,18 +285,19 @@ mixin BridgeExecutionMixin on ChangeNotifier {
     String fromAddress,
     String spenderAddress,
     BigInt requiredAmount,
+    Object executionKey,
   ) async {
     for (var i = 0; i < 20; i++) {
-      if (_isDisposedFlag) return false;
+      if (!_executionIsCurrent(executionKey)) return false;
       await Future.delayed(const Duration(seconds: 3));
-      if (_isDisposedFlag) return false;
+      if (!_executionIsCurrent(executionKey)) return false;
       final updated = await _lifiApi.getTokenApproval(
         chainId: _fromChain!.chainId,
         tokenAddress: _fromToken!.address,
         walletAddress: fromAddress,
         spenderAddress: spenderAddress,
       );
-      if (_isDisposedFlag) return false;
+      if (!_executionIsCurrent(executionKey)) return false;
       if (!updated.error && updated.data != null) {
         final newAllowance = _parseAllowance(
           updated.data as Map<String, dynamic>,
@@ -269,52 +323,64 @@ mixin BridgeExecutionMixin on ChangeNotifier {
       status == BridgeTransactionStatus.failed;
 
   /// 检查单笔交易状态，更新记录并在终态时触发回调+持久化
+  final Set<String> _statusRequests = {};
+
   Future<void> checkTransactionStatus(BridgeTransaction transaction) async {
-    if (_isDisposedFlag) return;
-    final result = await _lifiApi.getStatus(
-      txHash: transaction.txHash,
-      fromChainId: transaction.fromChainId,
-      toChainId: transaction.toChainId,
-      bridge: transaction.bridgeTool ?? '',
-    );
-    if (_isDisposedFlag) return;
-    if (result.error) return;
+    if (_isDisposedFlag || !_statusRequests.add(transaction.txHash)) return;
+    try {
+      final existing = _transactions
+          .where((tx) => tx.txHash == transaction.txHash)
+          .firstOrNull;
+      if (existing == null || _isTerminalStatus(existing.status)) return;
+      final result = await _lifiApi.getStatus(
+        txHash: transaction.txHash,
+        fromChainId: transaction.fromChainId,
+        toChainId: transaction.toChainId,
+        bridge: transaction.bridgeTool ?? '',
+      );
+      if (_isDisposedFlag) return;
+      if (result.error) return;
 
-    final statusResp = result.data as BridgeStatusResponse;
-    final index = _transactions.indexWhere(
-      (t) => t.txHash == transaction.txHash,
-    );
-    if (index < 0) return;
+      final statusResp = result.data as BridgeStatusResponse;
+      final index = _transactions.indexWhere(
+        (t) => t.txHash == transaction.txHash,
+      );
+      if (index < 0) return;
 
-    final oldStatus = _transactions[index].status;
-    final newStatus = statusResp.status;
+      final oldStatus = _transactions[index].status;
+      final newStatus = statusResp.status;
 
-    final updated = BridgeTransaction(
-      txHash: transaction.txHash,
-      fromChainId: transaction.fromChainId,
-      toChainId: transaction.toChainId,
-      fromToken: transaction.fromToken,
-      toToken: transaction.toToken,
-      fromAmount: transaction.fromAmount,
-      toAmount: transaction.toAmount,
-      fromAddress: transaction.fromAddress,
-      toAddress: transaction.toAddress,
-      status: newStatus,
-      createdAt: transaction.createdAt,
-      bridgeTool: transaction.bridgeTool,
-      destinationTxHash: statusResp.destinationTxHash,
-    );
-    _transactions[index] = updated;
+      final updated = BridgeTransaction(
+        txHash: transaction.txHash,
+        fromChainId: transaction.fromChainId,
+        toChainId: transaction.toChainId,
+        fromToken: transaction.fromToken,
+        toToken: transaction.toToken,
+        fromAmount: transaction.fromAmount,
+        toAmount: transaction.toAmount,
+        fromAddress: transaction.fromAddress,
+        toAddress: transaction.toAddress,
+        status: newStatus,
+        createdAt: transaction.createdAt,
+        bridgeTool: transaction.bridgeTool,
+        destinationTxHash: statusResp.destinationTxHash,
+      );
+      _transactions[index] = updated;
 
-    if (_isTerminalStatus(newStatus)) {
-      _pendingTxHashes.remove(transaction.txHash);
-      unawaited(_savePersisted());
-      if (newStatus != oldStatus) {
-        onStatusChanged?.call(updated, newStatus);
+      if (_isTerminalStatus(newStatus)) {
+        _pendingTxHashes.remove(transaction.txHash);
+        unawaited(_savePersisted());
+        if (newStatus != oldStatus) {
+          onStatusChanged?.call(updated, newStatus);
+        }
       }
-    }
 
-    _notifySafely();
+      _notifySafely();
+    } catch (_) {
+      // Retain the last known status; the next poll can retry transport errors.
+    } finally {
+      _statusRequests.remove(transaction.txHash);
+    }
   }
 
   /// 主动刷新所有 pending/inProgress 交易状态（供下拉刷新使用）

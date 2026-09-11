@@ -89,9 +89,13 @@ class _WalletTitleButton extends StatelessWidget {
                   size: su.setWidth(28),
                 ),
               ),
-            Text(
-              walletName,
-              style: AppTypography.headline.copyWith(color: blueColor),
+            Flexible(
+              child: Text(
+                walletName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.headline.copyWith(color: blueColor),
+              ),
             ),
             SizedBox(
               height: su.setWidth(40),
@@ -186,7 +190,7 @@ class _WalletAssistantButton extends StatelessWidget {
     // 触控 ≥88.w(44dp 红线):外层命中区扩大,图标视觉 44.w 不变
     // (与兄弟 _WalletConnectButton 一致,接线复审第二轮 P2)。
     return Tooltip(
-      message: 'Wallet AI',
+      message: S.of(context).g_ui_wallet_ai,
       child: InkWell(
         key: const ValueKey<String>('wallet_assistant'),
         onTap: onTap,

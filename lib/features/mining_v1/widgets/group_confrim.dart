@@ -58,7 +58,7 @@ class GroupConfirm extends StatelessWidget {
             ),
             SizedBox(height: ScreenUtil().setWidth(80)),
             Text(
-              "Confirmation",
+              S.of(context).g_mining_key_114,
               style: AppTypography.titleLg.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -68,7 +68,9 @@ class GroupConfirm extends StatelessWidget {
               // "Are you sure you want to lock $num AsT until $lockDate to run a node?",
               S.of(context).g_mining_key76(num.toString(), lockDate),
               textAlign: TextAlign.center,
-              style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
             SizedBox(height: ScreenUtil().setWidth(90)),
             SizedBox(

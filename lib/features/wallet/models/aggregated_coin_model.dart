@@ -3,13 +3,17 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
-import 'dart:convert';
+import 'dart:async';
+import 'dart:math' as math;
 
-import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import 'package:n42_wallet/features/wallet/models/aggregated_token.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:wallet/wallet.dart' show EthereumAddress;
-import 'package:web3dart/web3dart.dart';
+import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
+import 'package:n42_wallet/features/wallet/services/aggregated_balance_reader.dart';
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
+
+enum AggregateBalanceStatus { unavailable, loading, ready, stale, error }
 
 /// 链上余额信息
 class ChainBalance {
@@ -51,36 +55,52 @@ class AggregatedCoinModel extends CoinModel {
   /// 是否为聚合代币
   bool get isAggregated => true;
 
-  /// 获取总余额（所有链余额之和，转换为统一 6 位精度）
-  BigInt get totalBalance {
-    BigInt total = BigInt.zero;
-    for (final cb in chainBalances.values) {
-      final diff = cb.decimals - 6;
-      if (diff > 0) {
-        total += cb.balance ~/ BigInt.from(10).pow(diff);
-      } else if (diff < 0) {
-        total += cb.balance * BigInt.from(10).pow(-diff);
-      } else {
-        total += cb.balance;
-      }
-    }
-    return total;
+  final Map<String, AggregateBalanceStatus> statuses = {};
+  final Future<BigInt> Function(ChainTokenConfig, String) _readBalance;
+  Map<String, String> _addresses = {};
+  Future<void>? _pending;
+  int _revision = 0;
+
+  int get _totalDecimals =>
+      tokenConfig.chains.fold(6, (n, c) => math.max(n, c.decimals));
+  BigInt get _preciseTotal => chainBalances.values.fold(
+    BigInt.zero,
+    (sum, entry) =>
+        sum +
+        entry.balance * BigInt.from(10).pow(_totalDecimals - entry.decimals),
+  );
+  BigInt get totalBalance =>
+      _preciseTotal ~/ BigInt.from(10).pow(_totalDecimals - 6);
+  String get totalBalanceString =>
+      bigIntToDecimalString(_preciseTotal, _totalDecimals);
+  String balanceStringForAddresses(Map<String, String> addresses) {
+    final total = chainBalances.entries
+        .where((entry) => addresses[entry.key] == entry.value.address)
+        .fold(
+          BigInt.zero,
+          (sum, entry) =>
+              sum +
+              entry.value.balance *
+                  BigInt.from(10).pow(_totalDecimals - entry.value.decimals),
+        );
+    return bigIntToDecimalString(total, _totalDecimals);
   }
 
-  /// 获取总余额（浮点数）
-  double get totalBalanceDouble {
-    final bal = totalBalance;
-    final divisor = BigInt.from(10).pow(6);
-    final intPart = bal ~/ divisor;
-    final fracPart = bal.remainder(divisor);
-    return intPart.toDouble() + fracPart.toDouble() / divisor.toDouble();
-  }
+  double get totalBalanceDouble => double.parse(totalBalanceString);
+  bool get hasIncompleteBalance => tokenConfig.chains.any(
+    (c) => statuses[c.chainSymbol] != AggregateBalanceStatus.ready,
+  );
+  AggregateBalanceStatus statusFor(String chain) =>
+      statuses[chain.toUpperCase()] ?? AggregateBalanceStatus.unavailable;
 
   /// 支持的链列表
   List<String> get supportedChains =>
       tokenConfig.chains.map((c) => c.chainSymbol).toList();
 
-  AggregatedCoinModel({required this.tokenConfig}) {
+  AggregatedCoinModel({
+    required this.tokenConfig,
+    Future<BigInt> Function(ChainTokenConfig, String)? balanceReader,
+  }) : _readBalance = balanceReader ?? AggregatedBalanceReader().read {
     // 初始化 coin 基本信息
     // 注意：coinPrice 初始化为 0.0，会从 API 获取真实价格
     coin = {
@@ -125,8 +145,9 @@ class AggregatedCoinModel extends CoinModel {
     String address,
   ) {
     final config = tokenConfig.chains
-        .where((c) => c.chainSymbol == chainSymbol)
+        .where((c) => c.chainSymbol == chainSymbol.toUpperCase())
         .firstOrNull;
+    if (newBalance.isNegative) throw const FormatException('Negative balance');
     if (config == null) return; // 不支持的链静默返回
 
     chainBalances[chainSymbol.toUpperCase()] = ChainBalance(
@@ -138,152 +159,75 @@ class AggregatedCoinModel extends CoinModel {
       address: address,
     );
 
-    // 更新总余额
+    statuses[config.chainSymbol] = AggregateBalanceStatus.ready;
+    _updateTotals();
+  }
+
+  void _updateTotals() {
     balance = totalBalance;
     value = totalBalanceDouble * coinPrice;
+    loadError = statuses.values.any(
+      (s) =>
+          s == AggregateBalanceStatus.error ||
+          s == AggregateBalanceStatus.stale,
+    );
   }
 
-  /// 获取各链余额（异步）
-  Future<void> fetchAllBalances(Map<String, String> addressByChain) async {
-    for (final chainConfig in tokenConfig.chains) {
-      final address = addressByChain[chainConfig.chainSymbol];
-      if (address == null || address.isEmpty) continue;
-
-      try {
-        final bal = await _fetchTokenBalance(chainConfig, address);
-        updateChainBalance(chainConfig.chainSymbol, bal, address);
-      } catch (e) {
-        // 单链查询失败不影响其他链，静默处理
-      }
-    }
-  }
-
-  /// 查询单链代币余额
-  Future<BigInt> _fetchTokenBalance(
-    ChainTokenConfig config,
-    String address,
-  ) async {
-    return switch (config.rules) {
-      'SPL' => _fetchSplTokenBalance(config, address),
-      'TRC20' => _fetchTrc20Balance(config, address),
-      _ => _fetchErc20Balance(config, address),
+  /// Coalesces equal requests; changed address sets invalidate late responses.
+  Future<void> fetchAllBalances(
+    Map<String, String> addressByChain, {
+    VoidCallback? onChanged,
+  }) {
+    final addresses = <String, String>{
+      for (final entry in addressByChain.entries)
+        if (supportedChains.contains(entry.key.toUpperCase()) &&
+            entry.value.trim().isNotEmpty)
+          entry.key.toUpperCase(): entry.value.trim(),
     };
-  }
-
-  /// HTTP 请求超时时间
-  static const Duration _httpTimeout = Duration(seconds: 10);
-
-  /// ERC20 余额查询
-  Future<BigInt> _fetchErc20Balance(
-    ChainTokenConfig config,
-    String address,
-  ) async {
-    final httpClient = http.Client();
-    final client = Web3Client(config.rpcUrl, httpClient);
-    try {
-      final contract = DeployedContract(
-        ContractAbi.fromJson(
-          '[{"constant":true,"inputs":[{"name":"_owner","type":"address"}],"name":"balanceOf","outputs":[{"name":"balance","type":"uint256"}],"type":"function"}]',
-          'ERC20',
-        ),
-        EthereumAddress.fromHex(config.contract),
-      );
-
-      final balanceFunction = contract.function('balanceOf');
-      final result = await client
-          .call(
-            contract: contract,
-            function: balanceFunction,
-            params: [EthereumAddress.fromHex(address)],
-          )
-          .timeout(_httpTimeout);
-
-      return result[0] as BigInt;
-    } finally {
-      client.dispose();
-      httpClient.close();
+    if (_pending != null && mapEquals(addresses, _addresses)) return _pending!;
+    _addresses = addresses;
+    final revision = ++_revision;
+    chainBalances.removeWhere(
+      (chain, balance) => addresses[chain] != balance.address,
+    );
+    for (final config in tokenConfig.chains) {
+      statuses[config.chainSymbol] = addresses.containsKey(config.chainSymbol)
+          ? AggregateBalanceStatus.loading
+          : AggregateBalanceStatus.unavailable;
     }
-  }
-
-  /// SPL Token 余额查询 (Solana)
-  Future<BigInt> _fetchSplTokenBalance(
-    ChainTokenConfig config,
-    String address,
-  ) async {
-    try {
-      final response = await http
-          .post(
-            Uri.parse(config.rpcUrl),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'jsonrpc': '2.0',
-              'id': 1,
-              'method': 'getTokenAccountsByOwner',
-              'params': [
-                address,
-                {'mint': config.contract},
-                {'encoding': 'jsonParsed'},
-              ],
-            }),
-          )
-          .timeout(_httpTimeout);
-
-      final data = jsonDecode(response.body) as Map<String, dynamic>?;
-      if (data == null) return BigInt.zero;
-
-      final result = data['result'] as Map<String, dynamic>?;
-      final accounts = result?['value'] as List?;
-      if (accounts == null || accounts.isEmpty) return BigInt.zero;
-
-      final account = accounts[0] as Map<String, dynamic>?;
-      final accountData =
-          account?['account']?['data']?['parsed']?['info']?['tokenAmount'];
-      if (accountData == null) return BigInt.zero;
-
-      return BigInt.tryParse(accountData['amount']?.toString() ?? '0') ??
-          BigInt.zero;
-    } catch (e) {
-      return BigInt.zero;
-    }
-  }
-
-  /// TRC20 余额查询 (Tron)
-  Future<BigInt> _fetchTrc20Balance(
-    ChainTokenConfig config,
-    String address,
-  ) async {
-    try {
-      final base = config.rpcUrl.endsWith('/')
-          ? config.rpcUrl.substring(0, config.rpcUrl.length - 1)
-          : config.rpcUrl;
-      final apiUrl = '$base/wallet/triggerconstantcontract';
-
-      final response = await http
-          .post(
-            Uri.parse(apiUrl),
-            headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({
-              'owner_address': address,
-              'contract_address': config.contract,
-              'function_selector': 'balanceOf(address)',
-              'parameter': address.replaceFirst('T', '').padLeft(64, '0'),
-            }),
-          )
-          .timeout(_httpTimeout);
-
-      final data = jsonDecode(response.body) as Map<String, dynamic>?;
-      if (data == null) return BigInt.zero;
-
-      final results = data['constant_result'] as List?;
-      if (results == null || results.isEmpty) return BigInt.zero;
-
-      final result = results[0]?.toString();
-      if (result == null || result.isEmpty) return BigInt.zero;
-
-      return BigInt.tryParse(result, radix: 16) ?? BigInt.zero;
-    } catch (e) {
-      return BigInt.zero;
-    }
+    isRefresh = addresses.isNotEmpty;
+    _updateTotals();
+    onChanged?.call();
+    final operation = Future.wait(
+      tokenConfig.chains.map((config) async {
+        final address = addresses[config.chainSymbol];
+        if (address == null) return;
+        try {
+          final amount = await _readBalance(
+            config,
+            address,
+          ).timeout(const Duration(seconds: 15));
+          if (revision != _revision) return;
+          updateChainBalance(config.chainSymbol, amount, address);
+        } catch (_) {
+          if (revision != _revision) return;
+          statuses[config.chainSymbol] =
+              chainBalances.containsKey(config.chainSymbol)
+              ? AggregateBalanceStatus.stale
+              : AggregateBalanceStatus.error;
+          _updateTotals();
+        }
+        onChanged?.call();
+      }),
+    ).then<void>((_) {});
+    final tracked = operation.whenComplete(() {
+      if (revision != _revision) return;
+      isRefresh = false;
+      _pending = null;
+      onChanged?.call();
+    });
+    _pending = tracked;
+    return tracked;
   }
 
   @override
@@ -293,6 +237,27 @@ class AggregatedCoinModel extends CoinModel {
 
   @override
   String balanceString() {
-    return totalBalanceDouble.toStringAsFixed(2);
+    return totalBalanceString;
   }
+}
+
+/// Match deployed contracts, never ticker text alone (which can be spoofed).
+AggregatedToken? aggregatedTokenForCoin(CoinModel coin) {
+  if (coin is AggregatedCoinModel) return coin.tokenConfig;
+  if (coin.isTest ||
+      coin.custom ||
+      coin.coin['custom'] == true ||
+      !coin.config.isContract) {
+    return null;
+  }
+  for (final token in AggregatedTokens.all) {
+    for (final chain in token.chains) {
+      if (chain.chainSymbol != coin.config.coinType) continue;
+      final matches = chain.rules == 'ERC20' || chain.rules == 'BEP20'
+          ? chain.contract.toLowerCase() == coin.config.contract.toLowerCase()
+          : chain.contract == coin.config.contract;
+      if (matches && coin.config.decimals == chain.decimals) return token;
+    }
+  }
+  return null;
 }

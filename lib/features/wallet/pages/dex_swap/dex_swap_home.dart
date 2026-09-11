@@ -1,8 +1,13 @@
 import 'dart:async';
+import 'package:n42_wallet/core/providers/core_providers.dart'
+    show currentUserProvider;
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_execution_guard.dart';
+
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_quote_validity.dart';
+import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_approval_confirmation.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider, Consumer;
-import 'package:n42_wallet/core/app/app_globals.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
@@ -37,14 +42,19 @@ import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 class DexSwapHome extends ConsumerStatefulWidget {
-  const DexSwapHome({super.key});
+  const DexSwapHome({super.key, this.api, this.senderForChain});
+  final DexSwapApi? api;
+  final ChainSender Function(String chain)? senderForChain;
 
   @override
   ConsumerState<DexSwapHome> createState() => _DexSwapHomeState();
 }
 
 class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
-  final DexSwapApi _dexApi = DexSwapApi();
+  late final DexSwapApi _dexApi = widget.api ?? DexSwapApi();
+  ChainSender _sender(String chain) =>
+      widget.senderForChain?.call(chain) ??
+      SenderFactory.instance.getSender(chain);
   final TextEditingController _amountCtrl = TextEditingController();
 
   Timer? _debounce;
@@ -59,6 +69,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   DexQuoteModel? _quote;
   Load _quoteLoad = Load.finish;
   int _quoteSecsLeft = 0;
+  DateTime? _quoteExpiresAt;
 
   // ── Slippage (baked into quote calldata — must re-fetch on change) ────────
   // Options: 10 = 0.1%, 50 = 0.5%, 100 = 1%, 200 = 2%
@@ -70,7 +81,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   Load _approveLoad = Load.finish;
 
   /// When true, approves exact amountIn instead of MaxUint256.
-  bool _exactApprove = false;
+  bool _exactApprove = true;
 
   // ── Swap / error state ────────────────────────────────────────────────────
   Load _swapLoad = Load.finish;
@@ -86,19 +97,37 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   bool _isLimitMode = false;
 
   // ── Gas-free (AA / Paymaster) state ────────────────────────────────────────
-  bool _gasFreeEnabled = false;
+  bool _useSmartAccount = false;
 
   /// Max uint256 for unlimited ERC-20 approvals
   static final BigInt _maxUint256 = BigInt.two.pow(256) - BigInt.one;
 
-  // ── Wallet addresses by chain ─────────────────────────────────────────────
-  String _evmAddr = '';
-  String _solAddr = '';
-
-  String get _userAddr => _chain == 'SOL' ? _solAddr : _evmAddr;
+  Object? _quoteAccountKey;
+  Object? _requestAccountKey;
+  CoinModel? get _signingCoin => _chainCoinModel(dexCoinTypeForChain(_chain));
+  String get _userAddr => _useSmartAccount
+      ? _smartAccount?.address ?? ''
+      : _signingCoin?.address?.toString() ?? '';
+  Object get _executionKey {
+    final wallet = ref.read(wapBridgeProvider).walletInfo;
+    final coin = _signingCoin;
+    return (
+      ref.read(currentUserProvider)?.uuid,
+      wallet.timestamp,
+      wallet.walletUuid,
+      wallet.watchOnly,
+      _chain,
+      coin?.address,
+      coin?.pathIndex,
+      coin?.addrType,
+      coin?.isTest,
+      _useSmartAccount,
+      _userAddr,
+    );
+  }
 
   /// Check if current chain supports AA Gas-free swaps
-  bool get _canUseGasFree {
+  bool get _canUseSmartAccount {
     return _smartAccount != null;
   }
 
@@ -106,16 +135,22 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   SmartAccount? get _smartAccount {
     final walletInfo = ref.read(wapBridgeProvider).walletInfo;
     if (!walletInfo.hasAAAccounts) return null;
-    final chainId = AAConfig.chainIds[_chain];
+    if (_signingCoin?.isTest != false) return null;
+    final chainId = AAConfig.chainIds[dexCoinTypeForChain(_chain)];
     if (chainId == null) return null;
-    return walletInfo.getPrimarySmartAccount(chainId);
+    final account = walletInfo.getPrimarySmartAccount(chainId);
+    if (account?.signerType != SignerType.eoa) return null;
+    if (account?.ownerAddress.toLowerCase() !=
+        _signingCoin?.address?.toString().toLowerCase()) {
+      return null;
+    }
+    return account;
   }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   @override
   void initState() {
     super.initState();
-    _initAddresses();
     _amountCtrl.addListener(_onAmountChanged);
   }
 
@@ -129,53 +164,29 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Address resolution ────────────────────────────────────────────────────
 
-  void _initAddresses() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-      final WalletActionProvider wa = ref.read(wapBridgeProvider);
-      for (final CoinModel cm in wa.coinModels) {
-        if (_evmAddr.isNotEmpty && _solAddr.isNotEmpty) break;
-        final addr = cm.address ?? '';
-        if (addr.isEmpty) continue;
-        if (addr.startsWith('0x') && _evmAddr.isEmpty) {
-          _evmAddr = addr;
-        } else if (_solAddr.isEmpty && addr.length >= 32 && addr.length <= 44) {
-          _solAddr = addr;
-        }
-      }
-      if (mounted) setState(() {});
-    });
-  }
-
-  /// Builds the HD path for [chainCoinType] from the wallet's coin models.
-  /// Returns null if the coin model cannot be found.
   String? _buildChainPath(String chainCoinType) {
-    final wa = ref.read(wapBridgeProvider);
-    for (final cm in wa.coinModels) {
-      if ((cm.coin['coinType'] as String? ?? '') == chainCoinType) {
-        final addrType = cm.addrType;
-        final basePath =
-            cm.config.pathForAddrType(addrType) ?? "m/44'/60'/0'/0/0";
-        return getPathWithIndex(basePath, cm.pathIndex);
-      }
-    }
-    return null;
+    final coin = _chainCoinModel(chainCoinType);
+    if (coin == null) return null;
+    final base = coin.config.pathForAddrType(coin.addrType);
+    return base == null || base.isEmpty
+        ? null
+        : getPathWithIndex(base, coin.pathIndex);
   }
 
-  CoinModel? _chainCoinModel(String chainCoinType) {
-    final wa = ref.read(wapBridgeProvider);
-    for (final cm in wa.coinModels) {
-      if (cm.config.coinType == chainCoinType) return cm;
-    }
-    return null;
-  }
+  CoinModel? _chainCoinModel(String chainCoinType) =>
+      dexSigningCoin(ref.read(wapBridgeProvider).coinModels, chainCoinType);
 
   // ── Quote state helpers ───────────────────────────────────────────────────
 
   void _clearQuote() {
     _expiryTicker?.cancel();
+    ++_quoteRequestId;
     setState(() {
       _quote = null;
+      _quoteAccountKey = null;
+      _requestAccountKey = null;
+      _quoteExpiresAt = null;
+      _quoteLoad = Load.finish;
       _needsApproval = false;
       _errorMsg = '';
       _quoteSecsLeft = 0;
@@ -202,13 +213,14 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _tokenIn = null;
       _tokenOut = null;
       _chartPrices = [];
-      _gasFreeEnabled = false;
+      _useSmartAccount = false;
     });
     _amountCtrl.clear();
   }
 
   void _onAmountChanged() {
     _debounce?.cancel();
+    _clearQuote();
     _debounce = Timer(const Duration(milliseconds: 600), () {
       if (_tokenIn != null && _tokenOut != null) {
         _tryFetchQuote();
@@ -257,13 +269,29 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   int _quoteRequestId = 0;
 
   Future<void> _fetchQuote(String amountHuman) async {
-    if (_tokenIn == null || _tokenOut == null || _userAddr.isEmpty) return;
+    if (_approveLoad == Load.loading || _swapLoad == Load.loading) return;
+    if (_tokenIn == null || _tokenOut == null) return;
+    if (_signingCoin == null || _signingCoin!.isTest || _userAddr.isEmpty) {
+      _clearQuote();
+      setState(() => _errorMsg = S.of(context).g_dex_account_unavailable);
+      return;
+    }
 
+    if (_tokenIn!.chain != _chain || _tokenOut!.chain != _chain) {
+      _clearQuote();
+      setState(() => _errorMsg = S.of(context).g_dex_execution_invalid);
+      return;
+    }
     final BigInt amountWei = dexToWei(amountHuman, _tokenIn!.decimals);
     if (amountWei == BigInt.zero) return;
 
-    final requestId = ++_quoteRequestId;
     _clearQuote();
+    final requestId = ++_quoteRequestId;
+    final accountKey = _executionKey;
+    _requestAccountKey = accountKey;
+    final expiresAt = DateTime.now().add(
+      const Duration(seconds: kDexQuoteTtlSeconds),
+    );
     setState(() => _quoteLoad = Load.loading);
 
     final MessageModel res = await _dexApi.getQuote(
@@ -274,7 +302,11 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       userAddr: _userAddr,
       slippageBps: _slippageBps,
     );
-    if (!mounted || requestId != _quoteRequestId) return;
+    if (!mounted ||
+        requestId != _quoteRequestId ||
+        accountKey != _executionKey) {
+      return;
+    }
 
     if (res.error) {
       setState(() {
@@ -285,18 +317,47 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return;
     }
 
-    final quote = DexQuoteModel.fromJson(
-      res.data as Map<String, dynamic>,
-      slippageBps: _slippageBps,
-    );
+    final DexQuoteModel quote;
+    try {
+      quote = DexQuoteModel.fromJson(
+        {
+          ...res.data as Map<String, dynamic>,
+          // Input display comes from the request that this response belongs to.
+          'amount_in': amountHuman,
+          'user_addr': _userAddr,
+          'token_in_symbol': _tokenIn!.symbol,
+          'token_out_symbol': _tokenOut!.symbol,
+        },
+        slippageBps: _slippageBps,
+        outputDecimals: _tokenOut!.decimals,
+      );
+      validatedDexValue(
+        quote: quote,
+        chain: _chain,
+        tokenAddress: _tokenIn!.address,
+        amountIn: amountWei,
+      );
+    } catch (_) {
+      setState(() {
+        _quoteLoad = Load.finish;
+        _errorMsg = S.of(context).g_key_dex_quote_failed;
+      });
+      return;
+    }
 
     // For EVM non-native tokens, check if approval is needed
     final bool needsApprove = await _checkApprovalNeeded(amountWei, quote);
-    if (!mounted || requestId != _quoteRequestId) return;
+    if (!mounted ||
+        requestId != _quoteRequestId ||
+        accountKey != _executionKey) {
+      return;
+    }
 
     setState(() {
       _quoteLoad = Load.finish;
       _quote = quote;
+      _quoteAccountKey = accountKey;
+      _quoteExpiresAt = expiresAt;
       _needsApproval = needsApprove;
       _quoteSecsLeft = kDexQuoteTtlSeconds;
     });
@@ -306,12 +367,19 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
   // ── Quote expiry timer ────────────────────────────────────────────────────
 
   void _startExpiryTimer(String amountHuman) {
+    _expiryTicker?.cancel();
     _expiryTicker = Timer.periodic(const Duration(seconds: 1), (_) {
       if (!mounted) {
         _expiryTicker?.cancel();
         return;
       }
-      setState(() => _quoteSecsLeft--);
+      setState(
+        () => _quoteSecsLeft =
+            (_quoteExpiresAt?.difference(DateTime.now()).inSeconds ?? 0).clamp(
+              0,
+              kDexQuoteTtlSeconds,
+            ),
+      );
       if (_quoteSecsLeft <= 0) {
         _expiryTicker?.cancel();
         _fetchQuote(amountHuman);
@@ -330,7 +398,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     final coinType = dexCoinTypeForChain(_chain);
     // Skip approval for: native tokens, Solana, or missing context
     if (tokenAddr.isEmpty ||
-        tokenAddr == '0x0000000000000000000000000000000000000000' ||
+        isDexNativeToken(tokenAddr) ||
         _chain == 'SOL' ||
         coinType.isEmpty ||
         _userAddr.isEmpty ||
@@ -365,9 +433,53 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     return false;
   }
 
+  bool _isCurrentQuote(DexQuoteModel quote) => isCurrentDexQuote(
+    confirmed: quote,
+    current: _quote,
+    expiresAt: _quoteExpiresAt,
+    now: DateTime.now(),
+    confirmedAccountKey: _quoteAccountKey,
+    currentAccountKey: _executionKey,
+  );
+
+  bool _assertExecutableAccount() {
+    if (ref.read(wapBridgeProvider).walletInfo.watchOnly ||
+        _signingCoin == null ||
+        _signingCoin!.isTest ||
+        _userAddr.isEmpty) {
+      setState(() => _errorMsg = S.of(context).g_dex_account_unavailable);
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _executeApprove() async {
+    if (_approveLoad == Load.loading ||
+        _swapLoad == Load.loading ||
+        !_assertExecutableAccount()) {
+      return;
+    }
+    try {
+      await _approve();
+    } catch (e) {
+      if (mounted) setState(() => _errorMsg = S.of(context).g_key_175);
+    } finally {
+      if (mounted) {
+        setState(() => _approveLoad = Load.finish);
+        if (_quote != null) _startExpiryTimer(_amountCtrl.text.trim());
+      }
+    }
+  }
+
+  Future<void> _approve() async {
     final DexQuoteModel? q = _quote;
-    if (q == null || _approveLoad == Load.loading) return;
+    if (q == null ||
+        _approveLoad == Load.loading ||
+        _swapLoad == Load.loading ||
+        !_isCurrentQuote(q)) {
+      return;
+    }
+    _expiryTicker?.cancel();
 
     // 授权前先校验 spender(=router) 受信任，避免把额度授权给恶意合约。
     if (!_assertTrustedRouter(q)) return;
@@ -376,6 +488,26 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       _approveLoad = Load.loading;
       _errorMsg = '';
     });
+
+    final approved = await confirmDexApproval(
+      context,
+      tokenSymbol: _tokenIn!.symbol,
+      tokenAddress: _tokenIn!.address,
+      spender: q.routerAddr,
+      chain: _chain,
+      amountLabel: _exactApprove
+          ? _amountCtrl.text.trim()
+          : S.of(context).g_key_dex_approve_unlimited,
+    );
+    if (!mounted) return;
+    if (!approved || !_isCurrentQuote(q)) {
+      setState(() {
+        _approveLoad = Load.finish;
+        if (approved) _errorMsg = S.of(context).g_audit_quote_changed;
+      });
+      _startExpiryTimer(_amountCtrl.text.trim());
+      return;
+    }
 
     BigInt? exactAmount;
     if (_exactApprove && _tokenIn != null) {
@@ -394,25 +526,37 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       return;
     }
 
-    final approveResult = await SenderFactory.instance
-        .getSender(coinType)
-        .send(
-          SendParams(
-            coinType: coinType,
-            fromAddress: _userAddr,
-            toAddress: _tokenIn!.address,
-            amount: 0.0,
-            decimals: 18,
-            path: path,
-            isTest: chainCoin?.isTest ?? false,
-            privateKey: chainCoin?.privateKey,
-            chainConfig: chainCoin?.coin,
-            calldata: DexSwapApi.buildApproveCalldata(
-              q.routerAddr,
-              amount: exactAmount,
-            ),
+    final SendResult approveResult;
+    if (_useSmartAccount) {
+      final result = await _sendAACalls(q.routerAddr, [
+        ExecuteCall.erc20Approve(
+          token: _tokenIn!.address,
+          spender: q.routerAddr,
+          amount: exactAmount ?? _maxUint256,
+        ),
+      ]);
+      approveResult = result.error
+          ? SendResult.fail(result.data?.toString())
+          : SendResult.ok(result.data['txHash'] as String?);
+    } else {
+      approveResult = await _sender(coinType).send(
+        SendParams(
+          coinType: coinType,
+          fromAddress: _userAddr,
+          toAddress: _tokenIn!.address,
+          amount: 0.0,
+          decimals: 18,
+          path: path,
+          isTest: chainCoin?.isTest ?? false,
+          privateKey: chainCoin?.privateKey,
+          chainConfig: chainCoin?.coin,
+          calldata: DexSwapApi.buildApproveCalldata(
+            q.routerAddr,
+            amount: exactAmount,
           ),
-        );
+        ),
+      );
+    }
     if (!mounted) return;
 
     if (!approveResult.success) {
@@ -420,14 +564,16 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         _approveLoad = Load.finish;
         _errorMsg = approveResult.error ?? S.of(context).g_key_175;
       });
+      _startExpiryTimer(_amountCtrl.text.trim());
       return;
     }
 
     setState(() {
       _approveLoad = Load.finish;
-      _needsApproval = false;
       _errorMsg = '';
     });
+    _clearQuote();
+    _tryFetchQuote();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(S.of(context).g_key_dex_approval_success),
@@ -465,9 +611,52 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     return true;
   }
 
-  Future<void> _executeSwap() async {
-    final DexQuoteModel? q = _quote;
-    if (q == null || _swapLoad == Load.loading) return;
+  Future<void> _executeSwap(DexQuoteModel confirmedQuote) async {
+    if (_approveLoad == Load.loading ||
+        _swapLoad == Load.loading ||
+        !_assertExecutableAccount()) {
+      return;
+    }
+    try {
+      await _swap(confirmedQuote);
+    } catch (e) {
+      if (mounted) {
+        setState(() => _errorMsg = S.of(context).g_dex_execution_invalid);
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _swapLoad = Load.finish);
+        if (_quote != null) _startExpiryTimer(_amountCtrl.text.trim());
+      }
+    }
+  }
+
+  Future<void> _swap(DexQuoteModel confirmedQuote) async {
+    if (!mounted || _swapLoad == Load.loading || _approveLoad == Load.loading) {
+      return;
+    }
+    if (!_isCurrentQuote(confirmedQuote)) {
+      setState(() => _errorMsg = S.of(context).g_audit_quote_changed);
+      return;
+    }
+    if (_needsApproval) {
+      setState(
+        () => _errorMsg = S
+            .of(context)
+            .g_key_dex_approve_required(_tokenIn!.symbol),
+      );
+      return;
+    }
+    final q = confirmedQuote;
+    final executionUserId = ref.read(currentUserProvider)?.uuid ?? '';
+    final executionKey = _executionKey;
+    final value = validatedDexValue(
+      quote: q,
+      chain: _chain,
+      tokenAddress: _tokenIn!.address,
+      amountIn: dexToWei(_amountCtrl.text.trim(), _tokenIn!.decimals),
+    );
+    _expiryTicker?.cancel();
 
     // 广播前校验交易 to(=router) 受信任，避免把资金打进后端伪造的恶意合约。
     if (!_assertTrustedRouter(q)) return;
@@ -482,11 +671,17 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
     String txHash;
 
-    // Gas-free path: route through AA handler with Paymaster
-    if (_gasFreeEnabled && _smartAccount != null) {
-      final txRes = await _executeAASwap(q);
-      if (!mounted) return;
+    // Smart account path: attach the verified native value to the call.
+    if (_useSmartAccount && _smartAccount != null) {
+      final txRes = await _sendAACalls(q.routerAddr, [
+        ExecuteCall(
+          target: q.routerAddr,
+          value: value,
+          data: hexToBytes(q.calldata.replaceFirst('0x', '')),
+        ),
+      ]);
       if (txRes.error) {
+        if (!mounted) return;
         setState(() {
           _swapLoad = Load.finish;
           _errorMsg = txRes.data?.toString() ?? S.of(context).g_key_175;
@@ -495,7 +690,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       }
       txHash = txRes.data['txHash'] as String? ?? '';
     } else {
-      final swapChain = dexCoinTypeForChain(_tokenIn?.chain ?? _chain);
+      final swapChain = dexCoinTypeForChain(_chain);
       final chainCoin = _chainCoinModel(swapChain);
       final path = _buildChainPath(swapChain);
       if (path == null) {
@@ -505,24 +700,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
         });
         return;
       }
-      final swapResult = await SenderFactory.instance
-          .getSender(swapChain)
-          .send(
-            SendParams(
-              coinType: swapChain,
-              fromAddress: _userAddr,
-              toAddress: q.routerAddr,
-              amount: 0.0,
-              decimals: 18,
-              path: path,
-              isTest: chainCoin?.isTest ?? false,
-              privateKey: chainCoin?.privateKey,
-              chainConfig: chainCoin?.coin,
-              calldata: q.calldata,
-            ),
-          );
-      if (!mounted) return;
+      final swapResult = await _sender(swapChain).send(
+        SendParams(
+          coinType: swapChain,
+          fromAddress: _userAddr,
+          toAddress: q.routerAddr,
+          amount: 0.0,
+          decimals: 18,
+          path: path,
+          isTest: chainCoin?.isTest ?? false,
+          privateKey: chainCoin?.privateKey,
+          chainConfig: chainCoin?.coin,
+          calldata: q.calldata,
+          valueWeiOverride: value,
+        ),
+      );
       if (!swapResult.success) {
+        if (!mounted) return;
         setState(() {
           _swapLoad = Load.finish;
           _errorMsg = swapResult.error ?? S.of(context).g_key_175;
@@ -531,76 +725,61 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
       }
       txHash = swapResult.txHash ?? '';
     }
-    if (!mounted) return;
-
-    await _dexApi.commit(AppGlobals.userInfo?.uuid ?? '', q.orderId, txHash);
-    if (!mounted) return;
-
-    _clearQuote();
+    // A broadcast quote must never become executable again if recording fails.
+    if (mounted && identical(_quote, q)) {
+      _clearQuote();
+      _amountCtrl.clear();
+    }
+    if (txHash.isEmpty) {
+      if (mounted) {
+        setState(() => _errorMsg = S.of(context).g_dex_execution_invalid);
+      }
+      return;
+    }
+    var recorded = false;
+    try {
+      final result = await _dexApi.commit(executionUserId, q.orderId, txHash);
+      recorded = !result.error;
+    } catch (_) {
+      // The broadcast succeeded; a history-service error must not invite resend.
+    }
+    if (!mounted || executionKey != _executionKey) return;
     setState(() => _swapLoad = Load.finish);
-    _amountCtrl.clear();
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(S.of(context).g_key_dex_swap_success)),
+      SnackBar(
+        content: Text(
+          recorded
+              ? S.of(context).g_key_dex_swap_success
+              : '${S.of(context).g_dex_history_record_failed}\n$txHash',
+        ),
+      ),
     );
   }
 
-  /// Execute swap via Account Abstraction (ERC-4337) with Paymaster
-  Future<MessageModel> _executeAASwap(DexQuoteModel quote) async {
-    final smartAccount = _smartAccount;
-    if (smartAccount == null) {
-      return MessageModel.error()..data = 'No smart account available';
+  Future<MessageModel> _sendAACalls(
+    String target,
+    List<ExecuteCall> calls,
+  ) async {
+    final account = _smartAccount;
+    final coin = _signingCoin;
+    final chain = dexCoinTypeForChain(_chain);
+    if (account == null || coin == null || !AAConfig.isChainSupported(chain)) {
+      return MessageModel.error()
+        ..data = S.of(context).g_dex_account_unavailable;
     }
-
-    final normalizedChain = switch (_chain.toUpperCase()) {
-      'BSC' => 'BNB',
-      'AVAXC' => 'AVAX',
-      'OPTIMISM' => 'OP',
-      final s => s,
-    };
-    if (!AAConfig.isChainSupported(normalizedChain)) {
-      return MessageModel.error()..data = 'AA not supported for $_chain';
-    }
-    final handler = AATransferHandler(normalizedChain);
-
-    // Build batch calls: approve (if needed) + swap
-    final batchCalls = <ExecuteCall>[];
-
-    // Add approve call if needed. 尊重用户的 exactApprove 勾选：默认按本次卖出
-    // 数量精确授权，而非硬编码 max uint256 的无限授权。
-    if (_needsApproval && _tokenIn != null) {
-      BigInt approveAmount = _maxUint256;
-      if (_exactApprove) {
-        final wei = dexToWei(_amountCtrl.text.trim(), _tokenIn!.decimals);
-        if (wei > BigInt.zero) approveAmount = wei;
-      }
-      batchCalls.add(
-        ExecuteCall.erc20Approve(
-          token: _tokenIn!.address,
-          spender: quote.routerAddr,
-          amount: approveAmount,
-        ),
-      );
-    }
-
-    // Add swap call with the DEX calldata
-    batchCalls.add(
-      ExecuteCall(
-        target: quote.routerAddr,
-        value: BigInt.zero,
-        data: hexToBytes(quote.calldata.replaceFirst('0x', '')),
+    return AATransferHandler(chain).transfer(
+      AATransferParams(
+        chainSymbol: chain,
+        fromAddress: account.address,
+        toAddress: target,
+        value: 0,
+        smartAccount: account,
+        batchCalls: calls,
+        privateKey: coin.privateKey,
+        pathIndex: coin.pathIndex,
+        chainMap: {...coin.coin, 'path': _buildChainPath(chain) ?? ''},
       ),
     );
-
-    final params = AATransferParams(
-      chainSymbol: _chain,
-      fromAddress: smartAccount.address,
-      toAddress: quote.routerAddr,
-      value: 0.0,
-      smartAccount: smartAccount,
-      batchCalls: batchCalls,
-    );
-
-    return handler.transfer(params);
   }
 
   // ── Token selection helpers ───────────────────────────────────────────────
@@ -683,7 +862,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
 
   // ── Gas-free toggle widget ─────────────────────────────────────────────────
 
-  Widget _buildGasFreeToggle() {
+  Widget _buildSmartAccountToggle() {
     final c = AppColorTokens.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
@@ -692,22 +871,29 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
           Icon(
             Icons.local_gas_station_outlined,
             size: 18,
-            color: _gasFreeEnabled ? c.success : c.textTertiary,
+            color: _useSmartAccount ? c.success : c.textTertiary,
           ),
           SizedBox(width: AppSpacing.space2),
           Text(
-            'Gas-free Swap',
+            S.of(context).g_dex_use_smart_account,
             style: AppTypography.bodySm.copyWith(
               fontWeight: FontWeight.w500,
-              color: _gasFreeEnabled ? c.success : c.textTertiary,
+              color: _useSmartAccount ? c.success : c.textTertiary,
             ),
           ),
           const Spacer(),
           SizedBox(
             height: 28,
             child: Switch.adaptive(
-              value: _gasFreeEnabled,
-              onChanged: (v) => setState(() => _gasFreeEnabled = v),
+              value: _useSmartAccount,
+              onChanged:
+                  _approveLoad == Load.loading || _swapLoad == Load.loading
+                  ? null
+                  : (v) {
+                      _clearQuote();
+                      setState(() => _useSmartAccount = v);
+                      _tryFetchQuote();
+                    },
               activeTrackColor: c.success,
             ),
           ),
@@ -716,10 +902,21 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
     );
   }
 
+  void _accountChanged() {
+    if (!mounted) return;
+    if (_requestAccountKey != null && _requestAccountKey != _executionKey) {
+      _clearQuote();
+      _tryFetchQuote();
+    }
+  }
+
   // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(wapBridgeProvider, (_, _) => _accountChanged());
+    ref.listen(currentUserProvider, (_, _) => _accountChanged());
+    ref.watch(wapBridgeProvider);
     final s = S.of(context);
     return Scaffold(
       appBar: AppBarWidget(
@@ -735,7 +932,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               context,
               MaterialPageRoute(
                 builder: (_) => _isLimitMode
-                    ? const DexLimitOrdersPage()
+                    ? DexLimitOrdersPage(api: _dexApi)
                     : const DexSwapHistory(),
               ),
             ),
@@ -763,7 +960,7 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
               ),
               SizedBox(height: AppSpacing.space4),
               if (_isLimitMode)
-                DexLimitOrderForm(chain: _chain)
+                DexLimitOrderForm(chain: _chain, api: _dexApi)
               else ...[
                 if (_showChart) ...[
                   SizedBox(height: AppSpacing.space4),
@@ -784,10 +981,23 @@ class _DexSwapHomeState extends ConsumerState<DexSwapHome> {
                   selectedBps: _slippageBps,
                   onChanged: _onSlippageChanged,
                 ),
-                if (_canUseGasFree) ...[
+                if (_canUseSmartAccount) ...[
                   SizedBox(height: AppSpacing.space4),
-                  _buildGasFreeToggle(),
+                  _buildSmartAccountToggle(),
+                  if (_useSmartAccount)
+                    Text(
+                      s.g_dex_smart_account_fees,
+                      style: AppTypography.caption,
+                    ),
                 ],
+                if (_userAddr.isNotEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: Text(
+                      '${s.g_dex_spending_account}: $_userAddr',
+                      style: AppTypography.caption,
+                    ),
+                  ),
                 SizedBox(height: AppSpacing.space6),
                 DexTokenCard(
                   label: s.g_swap_key_3,

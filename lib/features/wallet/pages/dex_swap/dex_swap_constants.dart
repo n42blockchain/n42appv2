@@ -31,7 +31,11 @@ const int kDexQuoteTtlSeconds = 30;
 BigInt dexToWei(String amount, int decimals) {
   try {
     final trimmed = amount.trim();
-    if (trimmed.isEmpty) return BigInt.zero;
+    if (decimals < 0 ||
+        decimals > 255 ||
+        !RegExp(r'^(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)$').hasMatch(trimmed)) {
+      return BigInt.zero;
+    }
 
     final dotIdx = trimmed.indexOf('.');
     final String intStr;

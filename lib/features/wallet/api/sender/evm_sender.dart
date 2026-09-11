@@ -133,6 +133,14 @@ class EvmSender implements ChainSender {
       gasPrice = params.gasPriceOverride!;
     }
 
+    // Finalize both replacement fee caps before estimation and reservation.
+    // Raising the fee cap after the balance check under-reserves the signed fee.
+    var effectiveTip = baseFee;
+    if (params.tipOverride != null && params.tipOverride! > effectiveTip) {
+      effectiveTip = params.tipOverride!;
+      if (gasPrice < effectiveTip) gasPrice = effectiveTip;
+    }
+
     // Estimate gas
     final effectiveDecimals = isContract
         ? params.tokenDecimals
@@ -226,14 +234,6 @@ class EvmSender implements ChainSender {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     }
-    // 1559 tip 下限(RBF):tipCap 也须 ≥ 原值×1.1,取 max(网络, 期望)。
-    var effectiveTip = baseFee;
-    if (params.tipOverride != null && params.tipOverride! > effectiveTip) {
-      effectiveTip = params.tipOverride!;
-      // maxFee 不得低于 tip
-      if (gasPrice < effectiveTip) gasPrice = effectiveTip;
-    }
-
     // Sign and broadcast
     final signResult = await _sign(
       coinType: coinType,

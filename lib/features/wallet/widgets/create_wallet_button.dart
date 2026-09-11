@@ -85,8 +85,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
         // MPC 无助记词创建
         _buildMenuItem(
           icon: Icons.shield_outlined,
-          title: 'No Seed Phrase',
-          subtitle: 'Create with social login (MPC)',
+          title: s.g_ui_mpc_no_phrase,
+          subtitle: s.g_ui_mpc_intro,
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(
@@ -127,8 +127,8 @@ class _CreateWalletButtonState extends State<CreateWalletButton> {
         // iCloud / Google Drive 加密备份导入
         _buildMenuItem(
           icon: Icons.cloud_download_outlined,
-          title: 'Cloud Backup',
-          subtitle: 'Import from iCloud / Google Drive',
+          title: s.g_ui_backup_import,
+          subtitle: s.g_ui_backup_restore_hint,
           blueColor: blueColor,
           subtitleColor: subtitleText,
           onTap: () => _navigateAndCallback(

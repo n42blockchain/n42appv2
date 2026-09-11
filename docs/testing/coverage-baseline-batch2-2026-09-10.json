@@ -1,0 +1,505 @@
+{
+  "label": "Batch 2 baseline: full suite 3711 passing tests",
+  "overall": {
+    "hit": 21491,
+    "found": 121410,
+    "files": 908
+  },
+  "features": {
+    "core": {
+      "hit": 2312,
+      "found": 4273,
+      "files": 99
+    },
+    "features/ai_assistant": {
+      "hit": 89,
+      "found": 315,
+      "files": 5
+    },
+    "features/airdrop": {
+      "hit": 201,
+      "found": 289,
+      "files": 3
+    },
+    "features/auth": {
+      "hit": 52,
+      "found": 52,
+      "files": 1
+    },
+    "features/bridge": {
+      "hit": 493,
+      "found": 1530,
+      "files": 11
+    },
+    "features/browser": {
+      "hit": 489,
+      "found": 2161,
+      "files": 22
+    },
+    "features/component": {
+      "hit": 8,
+      "found": 306,
+      "files": 3
+    },
+    "features/earn": {
+      "hit": 29,
+      "found": 872,
+      "files": 8
+    },
+    "features/hardware_wallet": {
+      "hit": 676,
+      "found": 2685,
+      "files": 20
+    },
+    "features/home": {
+      "hit": 566,
+      "found": 2347,
+      "files": 25
+    },
+    "features/identity": {
+      "hit": 282,
+      "found": 422,
+      "files": 8
+    },
+    "features/live": {
+      "hit": 611,
+      "found": 2629,
+      "files": 35
+    },
+    "features/loyalty": {
+      "hit": 294,
+      "found": 423,
+      "files": 4
+    },
+    "features/mining": {
+      "hit": 77,
+      "found": 272,
+      "files": 5
+    },
+    "features/mining_v1": {
+      "hit": 28,
+      "found": 2681,
+      "files": 34
+    },
+    "features/mining_v2": {
+      "hit": 118,
+      "found": 3112,
+      "files": 36
+    },
+    "features/news": {
+      "hit": 41,
+      "found": 67,
+      "files": 1
+    },
+    "features/splash": {
+      "hit": 6,
+      "found": 108,
+      "files": 2
+    },
+    "features/sqlite": {
+      "hit": 3,
+      "found": 39,
+      "files": 1
+    },
+    "features/staking": {
+      "hit": 105,
+      "found": 1996,
+      "files": 15
+    },
+    "features/utils": {
+      "hit": 91,
+      "found": 497,
+      "files": 10
+    },
+    "features/wallet": {
+      "hit": 8547,
+      "found": 52241,
+      "files": 473
+    },
+    "features/wallet_connect": {
+      "hit": 161,
+      "found": 1972,
+      "files": 14
+    },
+    "features/widgets": {
+      "hit": 188,
+      "found": 1419,
+      "files": 31
+    },
+    "generated": {
+      "hit": 5736,
+      "found": 38110,
+      "files": 28
+    },
+    "main.dart": {
+      "hit": 1,
+      "found": 187,
+      "files": 1
+    },
+    "presentation": {
+      "hit": 135,
+      "found": 139,
+      "files": 1
+    },
+    "shared": {
+      "hit": 152,
+      "found": 266,
+      "files": 12
+    }
+  },
+  "scopes": {
+    "history": {
+      "hit": 414,
+      "found": 418,
+      "files": 6
+    },
+    "dex": {
+      "hit": 992,
+      "found": 1852,
+      "files": 20
+    },
+    "security": {
+      "hit": 919,
+      "found": 1205,
+      "files": 18
+    },
+    "bridge": {
+      "hit": 493,
+      "found": 1530,
+      "files": 11
+    },
+    "wallet_connect": {
+      "hit": 161,
+      "found": 1972,
+      "files": 14
+    },
+    "history/data": {
+      "hit": 151,
+      "found": 151,
+      "files": 3
+    },
+    "history/ui": {
+      "hit": 263,
+      "found": 267,
+      "files": 3
+    },
+    "dex/swap_page": {
+      "hit": 336,
+      "found": 541,
+      "files": 1
+    },
+    "dex/limit_orders": {
+      "hit": 1,
+      "found": 267,
+      "files": 2
+    },
+    "bridge/provider": {
+      "hit": 223,
+      "found": 399,
+      "files": 3
+    },
+    "wallet_connect/session_page": {
+      "hit": 1,
+      "found": 189,
+      "files": 1
+    },
+    "security/signature_decoder": {
+      "hit": 267,
+      "found": 272,
+      "files": 1
+    },
+    "security/secure_memory": {
+      "hit": 52,
+      "found": 53,
+      "files": 1
+    },
+    "security/secure_storage": {
+      "hit": 111,
+      "found": 111,
+      "files": 1
+    },
+    "security/dapp_security": {
+      "hit": 71,
+      "found": 79,
+      "files": 1
+    }
+  },
+  "files": {
+    "lib/core/security/address_label_service.dart": {
+      "hit": 1,
+      "found": 18
+    },
+    "lib/core/security/dapp_security_service.dart": {
+      "hit": 71,
+      "found": 79
+    },
+    "lib/core/security/device_security.dart": {
+      "hit": 20,
+      "found": 32
+    },
+    "lib/core/security/goplus_security_result.dart": {
+      "hit": 49,
+      "found": 49
+    },
+    "lib/core/security/goplus_security_service.dart": {
+      "hit": 4,
+      "found": 35
+    },
+    "lib/core/security/phishing_detector.dart": {
+      "hit": 48,
+      "found": 89
+    },
+    "lib/core/security/phishing_warning_dialog.dart": {
+      "hit": 0,
+      "found": 81
+    },
+    "lib/core/security/secure_memory.dart": {
+      "hit": 52,
+      "found": 53
+    },
+    "lib/core/security/secure_storage.dart": {
+      "hit": 111,
+      "found": 111
+    },
+    "lib/core/security/security_config.dart": {
+      "hit": 22,
+      "found": 54
+    },
+    "lib/core/security/signature_decoder.dart": {
+      "hit": 267,
+      "found": 272
+    },
+    "lib/core/security/totp_util.dart": {
+      "hit": 7,
+      "found": 41
+    },
+    "lib/core/security/tx_risk_analyzer.dart": {
+      "hit": 71,
+      "found": 72
+    },
+    "lib/core/security/tx_risk_decoders.dart": {
+      "hit": 69,
+      "found": 70
+    },
+    "lib/core/security/tx_risk_formatters.dart": {
+      "hit": 45,
+      "found": 47
+    },
+    "lib/core/security/tx_risk_models.dart": {
+      "hit": 3,
+      "found": 3
+    },
+    "lib/core/security/tx_simulation_result.dart": {
+      "hit": 1,
+      "found": 7
+    },
+    "lib/core/security/wallet_data_migration.dart": {
+      "hit": 78,
+      "found": 92
+    },
+    "lib/features/bridge/api/lifi_api.dart": {
+      "hit": 7,
+      "found": 143
+    },
+    "lib/features/bridge/models/bridge_models.dart": {
+      "hit": 95,
+      "found": 156
+    },
+    "lib/features/bridge/pages/bridge_history_page.dart": {
+      "hit": 0,
+      "found": 190
+    },
+    "lib/features/bridge/pages/bridge_home_page.dart": {
+      "hit": 40,
+      "found": 43
+    },
+    "lib/features/bridge/pages/bridge_home_page_logic.dart": {
+      "hit": 0,
+      "found": 135
+    },
+    "lib/features/bridge/pages/bridge_home_page_sections.dart": {
+      "hit": 34,
+      "found": 184
+    },
+    "lib/features/bridge/pages/bridge_home_page_widgets.dart": {
+      "hit": 94,
+      "found": 165
+    },
+    "lib/features/bridge/pages/bridge_select_chain_page.dart": {
+      "hit": 0,
+      "found": 115
+    },
+    "lib/features/bridge/provider/_bridge_execution.dart": {
+      "hit": 59,
+      "found": 158
+    },
+    "lib/features/bridge/provider/_bridge_persistence.dart": {
+      "hit": 7,
+      "found": 39
+    },
+    "lib/features/bridge/provider/bridge_provider.dart": {
+      "hit": 157,
+      "found": 202
+    },
+    "lib/features/wallet/api/dex_swap_api.dart": {
+      "hit": 10,
+      "found": 88
+    },
+    "lib/features/wallet/data/transaction_history_csv.dart": {
+      "hit": 47,
+      "found": 47
+    },
+    "lib/features/wallet/data/transaction_history_query.dart": {
+      "hit": 44,
+      "found": 44
+    },
+    "lib/features/wallet/data/transaction_history_repository.dart": {
+      "hit": 60,
+      "found": 60
+    },
+    "lib/features/wallet/models/dex/dex_history_model.dart": {
+      "hit": 18,
+      "found": 18
+    },
+    "lib/features/wallet/models/dex/dex_limit_order_model.dart": {
+      "hit": 0,
+      "found": 24
+    },
+    "lib/features/wallet/models/dex/dex_quote_model.dart": {
+      "hit": 49,
+      "found": 49
+    },
+    "lib/features/wallet/models/dex/dex_token_model.dart": {
+      "hit": 31,
+      "found": 32
+    },
+    "lib/features/wallet/pages/dex_swap/dex_approval_confirmation.dart": {
+      "hit": 20,
+      "found": 24
+    },
+    "lib/features/wallet/pages/dex_swap/dex_execution_guard.dart": {
+      "hit": 14,
+      "found": 14
+    },
+    "lib/features/wallet/pages/dex_swap/dex_limit_order_form.dart": {
+      "hit": 0,
+      "found": 133
+    },
+    "lib/features/wallet/pages/dex_swap/dex_limit_orders_page.dart": {
+      "hit": 1,
+      "found": 134
+    },
+    "lib/features/wallet/pages/dex_swap/dex_quote_validity.dart": {
+      "hit": 3,
+      "found": 3
+    },
+    "lib/features/wallet/pages/dex_swap/dex_router_whitelist.dart": {
+      "hit": 23,
+      "found": 25
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_action_buttons.dart": {
+      "hit": 20,
+      "found": 26
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_confirm.dart": {
+      "hit": 81,
+      "found": 90
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_constants.dart": {
+      "hit": 21,
+      "found": 24
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart": {
+      "hit": 87,
+      "found": 157
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_history.dart": {
+      "hit": 1,
+      "found": 68
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_home.dart": {
+      "hit": 336,
+      "found": 541
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_quote_card.dart": {
+      "hit": 100,
+      "found": 128
+    },
+    "lib/features/wallet/pages/dex_swap/dex_swap_token_card.dart": {
+      "hit": 61,
+      "found": 61
+    },
+    "lib/features/wallet/pages/dex_swap/dex_token_select.dart": {
+      "hit": 116,
+      "found": 213
+    },
+    "lib/features/wallet/pages/transactions/transaction_history_list.dart": {
+      "hit": 81,
+      "found": 81
+    },
+    "lib/features/wallet/pages/transactions/transaction_history_list_logic.dart": {
+      "hit": 59,
+      "found": 59
+    },
+    "lib/features/wallet/pages/transactions/transaction_history_list_widgets.dart": {
+      "hit": 123,
+      "found": 127
+    },
+    "lib/features/wallet_connect/models/wc_eth_sign_message.dart": {
+      "hit": 1,
+      "found": 1
+    },
+    "lib/features/wallet_connect/models/wc_eth_sign_transcation.dart": {
+      "hit": 12,
+      "found": 12
+    },
+    "lib/features/wallet_connect/pages/wallet_connect_page.dart": {
+      "hit": 0,
+      "found": 31
+    },
+    "lib/features/wallet_connect/pages/wallet_connect_sheet.dart": {
+      "hit": 0,
+      "found": 44
+    },
+    "lib/features/wallet_connect/pages/wallet_connect_widgets_mixin.dart": {
+      "hit": 0,
+      "found": 297
+    },
+    "lib/features/wallet_connect/pages/wc_session_list_page.dart": {
+      "hit": 1,
+      "found": 189
+    },
+    "lib/features/wallet_connect/presentation/providers/wallet_connect_providers.dart": {
+      "hit": 0,
+      "found": 3
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_connection.dart": {
+      "hit": 5,
+      "found": 200
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_provider.dart": {
+      "hit": 47,
+      "found": 105
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_session.dart": {
+      "hit": 0,
+      "found": 416
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_signing.dart": {
+      "hit": 0,
+      "found": 329
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_state.dart": {
+      "hit": 0,
+      "found": 3
+    },
+    "lib/features/wallet_connect/widgets/tx_risk_banner_widget.dart": {
+      "hit": 95,
+      "found": 98
+    },
+    "lib/features/wallet_connect/widgets/wallet_connect_alert_widget.dart": {
+      "hit": 0,
+      "found": 244
+    }
+  }
+}

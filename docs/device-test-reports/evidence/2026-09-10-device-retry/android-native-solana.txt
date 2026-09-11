@@ -1,0 +1,2 @@
+NATIVE_SOLANA_VERIFIED network=testnet address=5WQuPtwVzRWrxTVFh4qQUJNbsu34EUbjz6e4A41pRqBA feeLamports=5000 broadcast=false
+00:02 +1: All tests passed!

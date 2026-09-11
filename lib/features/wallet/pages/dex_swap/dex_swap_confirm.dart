@@ -19,21 +19,15 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarWidget(text: S.of(context).g_key_dex_confirm_title),
-      body: Padding(
-        padding: EdgeInsets.fromLTRB(
-          ScreenUtil().setWidth(30),
-          ScreenUtil().setWidth(30),
-          ScreenUtil().setWidth(30),
-          0,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.all(AppSpacing.space6),
+          child: _summaryCard(),
         ),
-        child: Column(
-          children: [
-            _summaryCard(),
-            const Spacer(),
-            _actionRow(),
-            SizedBox(height: ScreenUtil().setWidth(36)),
-          ],
-        ),
+      ),
+      bottomNavigationBar: SafeArea(
+        minimum: EdgeInsets.all(AppSpacing.space6),
+        child: _actionRow(),
       ),
     );
   }
@@ -64,6 +58,8 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
           _row(S.of(context).g_key_dex_gas_estimate, q.gasEstimate),
           _row(S.of(context).g_key_dex_best_source, q.source),
           _row(S.of(context).g_key_dex_chain, q.chain),
+          if (q.accountAddress.isNotEmpty)
+            _row(S.of(context).g_dex_spending_account, q.accountAddress),
         ],
       ),
     );
@@ -74,17 +70,22 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
       child: Row(
         children: [
-          Text(
-            label,
-            style: AppTypography.body.copyWith(
-              color: AppColorTokens.of(context).textSubtitle,
+          Expanded(
+            child: Text(
+              label,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: AppTypography.body.copyWith(
-              color: AppColorTokens.of(context).textPrimary,
+          SizedBox(width: AppSpacing.space4),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTypography.body.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
         ],
@@ -115,7 +116,7 @@ class _DexSwapConfirmState extends State<DexSwapConfirm> {
           ),
           const Spacer(),
           Text(
-            q.priceImpact,
+            q.priceImpact.isEmpty ? '—' : q.priceImpact,
             style: AppTypography.body.copyWith(
               color: valueColor,
               fontWeight: impact >= 1.0 ? FontWeight.w600 : FontWeight.normal,

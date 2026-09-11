@@ -39,6 +39,8 @@ class WcSessionListPage extends ConsumerStatefulWidget {
 }
 
 class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
+  final Set<String> _disconnecting = {};
+  bool _disconnectingAll = false;
   Future<void> _scanNewConnection() async {
     final scanStr = await Navigator.push<String>(
       context,
@@ -86,21 +88,45 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
   }
 
   Future<void> _confirmDisconnect(String topic, String dAppName) async {
-    final confirmed = await _showConfirmDialog(
-      title: dAppName,
-      content: S.of(context).g_wc_disconnect_confirm,
-    );
-    if (confirmed && mounted) {
-      await ref.read(wcpBridgeProvider).disconnectSessionByTopic(topic);
+    if (_disconnectingAll || !_disconnecting.add(topic)) return;
+    setState(() {});
+    try {
+      final confirmed = await _showConfirmDialog(
+        title: dAppName,
+        content: S.of(context).g_wc_disconnect_confirm,
+      );
+      if (confirmed && mounted) {
+        await ref.read(wcpBridgeProvider).disconnectSessionByTopic(topic);
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
+      }
+    } finally {
+      if (mounted) setState(() => _disconnecting.remove(topic));
     }
   }
 
   Future<void> _confirmDisconnectAll() async {
-    final confirmed = await _showConfirmDialog(
-      content: S.of(context).g_wc_disconnect_all_confirm,
-    );
-    if (confirmed && mounted) {
-      await ref.read(wcpBridgeProvider).disconnectAllSessions();
+    if (_disconnectingAll || _disconnecting.isNotEmpty) return;
+    setState(() => _disconnectingAll = true);
+    try {
+      final confirmed = await _showConfirmDialog(
+        content: S.of(context).g_wc_disconnect_all_confirm,
+      );
+      if (confirmed && mounted) {
+        await ref.read(wcpBridgeProvider).disconnectAllSessions();
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(S.of(context).g_key_175)));
+      }
+    } finally {
+      if (mounted) setState(() => _disconnectingAll = false);
     }
   }
 
@@ -124,7 +150,9 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
         actions: entries.isNotEmpty
             ? [
                 IconButton(
-                  onPressed: _confirmDisconnectAll,
+                  onPressed: _disconnectingAll || _disconnecting.isNotEmpty
+                      ? null
+                      : _confirmDisconnectAll,
                   icon: Icon(
                     Icons.link_off,
                     color: AppColorTokens.of(context).danger,
@@ -318,7 +346,10 @@ class _WcSessionListPageState extends ConsumerState<WcSessionListPage> {
             ),
             // Disconnect button
             IconButton(
-              onPressed: () => _confirmDisconnect(session.topic, meta.name),
+              onPressed:
+                  _disconnectingAll || _disconnecting.contains(session.topic)
+                  ? null
+                  : () => _confirmDisconnect(session.topic, meta.name),
               icon: Icon(
                 Icons.link_off,
                 color: AppColorTokens.of(context).danger,

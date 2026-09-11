@@ -226,7 +226,7 @@ class _WalletChainSendState extends ConsumerState<WalletChainSend>
       currentCoin: widget.coinModel,
     );
     if (resolution == null) {
-      ToastUtils.show('Payment request token or chain is not in this wallet');
+      ToastUtils.show(S.of(context).g_key_scan_pay_unsupported);
       return;
     }
 

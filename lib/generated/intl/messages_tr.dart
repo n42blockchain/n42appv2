@@ -82,111 +82,179 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "\"${name}\" dosyasını kayıtlı cihazlardan kaldırmak istediğinizden emin misiniz?";
 
-  static String m28(value) => "Tahmini gaz: ~${value} birimleri";
+  static String m28(value) => "${value} puan kazan";
 
-  static String m29(reason) => "Sebep: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "${network} üzerinde ${amount} ${symbol} talep et";
 
-  static String m30(value) => "${value}d bağı çözüldü";
+  static String m30(value) =>
+      "Özel ağ ${value} kaldırılsın mı? Bu ağdaki bakiyeler artık gösterilmeyecek. Zincir üzerindeki varlıklarınız etkilenmez.";
 
-  static String m31(value) => "${value} gün kaldı";
+  static String m31(value) => "Tahmini gaz: ~${value} birimleri";
 
-  static String m32(value) =>
+  static String m32(reason) => "Sebep: ${reason}";
+
+  static String m33(value) => "${value}d bağı çözüldü";
+
+  static String m34(value) => "${value} gün kaldı";
+
+  static String m35(value) =>
       "Stake kaldırmak ${value} gün sürer. Bu süre zarfında jetonlarınız kilitlenecektir.";
 
-  static String m33(value) => "Yeterli \"${value}\" bakiyeniz yok";
+  static String m36(value) => "Yeterli \"${value}\" bakiyeniz yok";
 
-  static String m34(value) => "\"${value}\" hesabı alınamadı";
+  static String m37(value) => "\"${value}\" hesabı alınamadı";
 
-  static String m35(value) => "İlk transfer için minimum ${value} XRP";
+  static String m38(value) => "İlk transfer için minimum ${value} XRP";
 
-  static String m36(count) => "Ekle (${count})";
+  static String m39(count) => "Ekle (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: '1 yeni jeton algılandı', other: '${count} yeni tokenlar tespit edildi')} — incelemek için dokunun";
 
-  static String m38(value) => "${value} zinciri eklenmedi.";
+  static String m41(value) => "${value} zinciri eklenmedi.";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "${value} için tamamlanmamış işlemler var, lütfen daha sonra tekrar deneyin.";
 
-  static String m40(value) => "${value} için adres bulunamadı.";
+  static String m43(value) => "${value} için adres bulunamadı.";
 
-  static String m41(value) => "${value} bakiyesi yetersiz.";
+  static String m44(value) => "${value} bakiyesi yetersiz.";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "Her XRP hesabı, harcanamayan temel olarak ${value} XRP (${value1} damla) ayırmalıdır.";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "Hesabın sahip olduğu her nesne için ${value} XRP (${value1} damla) rezerve eklenir.";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "Bu hesap ${value} nesneye sahip, yani ek ${value1} XRP ayrılmış.";
 
-  static String m45(message) => "Odaya girilemedi\n${message}";
+  static String m48(message) => "Odaya girilemedi\n${message}";
 
-  static String m46(value) => "Yanlış desen, ${value} deneme kaldı";
+  static String m49(value) => "Yanlış desen, ${value} deneme kaldı";
 
-  static String m47(value) => "Yanlış desen, ${value} deneme kaldı";
+  static String m50(value) => "Yanlış desen, ${value} deneme kaldı";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "Başarıyla bir ${value} kurdunuz ve N42Wallet ile doğrulamaya başlayacaksınız!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "@N42Wallet\'ta ${value} grubuma katılarak bir Layer 1 zincirinin erken madencisi olun ve telefonunuzda kripto kazanın!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "${value1} tarihine kadar bir düğüm çalıştırmak için ${value} N\'yi kilitlemek istediğinizden emin misiniz?";
 
-  static String m51(value) => "İçe aktarma başarısız:${value}";
+  static String m54(value) => "İçe aktarma başarısız:${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "Ödül kazanmak için en az ${value} staking bakiyesi gereklidir.";
 
-  static String m53(value, value1) =>
+  static String m56(value, value1) =>
       "Her ${value1} blok kazıldığında ${value} N";
 
-  static String m54(value) => "${value} karakter olmalı";
+  static String m57(value) => "${value} karakter olmalı";
 
-  static String m55(symbol) => "Tutar (${symbol})";
+  static String m58(symbol) => "Tutar (${symbol})";
 
-  static String m56(amount, symbol) => "Bakiye: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "Bakiye: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "“${label}” kazanan ilan edilip ödensin mi? Geri alınamaz.";
 
-  static String m58(n) => "${n} dk";
+  static String m61(n) => "${n} dk";
 
-  static String m59(n) => "Sonuç ${n}";
+  static String m62(n) => "Sonuç ${n}";
 
-  static String m60(label, pct) => "${label} kazanır (${pct}%)";
+  static String m63(label, pct) => "${label} kazanır (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "Tahmini ${shares} pay · ort ${avg}% · sonra ${after}%";
 
-  static String m62(reason) => "Kullanım başarısız: ${reason}";
+  static String m65(reason) => "Kullanım başarısız: ${reason}";
 
-  static String m63(label) => "Sonuç: ${label}";
+  static String m66(label) => "Sonuç: ${label}";
 
-  static String m64(n) => "Sat ${n}";
+  static String m67(n) => "Sat ${n}";
 
-  static String m65(value) => "${value} Yetersiz Bakiye.";
+  static String m68(value) => "${value} Yetersiz Bakiye.";
 
-  static String m66(value) => "${value} geliyor...";
-
-  static String m67(value) =>
-      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
-
-  static String m68(value) => "Maksimum ${value} karakter";
-
-  static String m69(value) =>
-      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+  static String m69(value) => "${value} geliyor...";
 
   static String m70(value) =>
+      "Uygulama içinde takas edilen ${value}, kısa süre içinde cüzdanınıza dağıtılacak ve bu işlemle satılamaz. Düğüm çalıştırmak için kullanılabilir.";
+
+  static String m71(value) => "Maksimum ${value} karakter";
+
+  static String m72(value) =>
+      "${value} zinciri uygulama tarafından zaten destekleniyor!";
+
+  static String m73(value) =>
       "${value} zinciri uygulama tarafından zaten destekleniyor, eklemek istiyor musunuz?";
 
-  static String m71(value) => "${value} adres test bağlantısı başarısız!";
+  static String m74(value) => "${value} adres test bağlantısı başarısız!";
 
-  static String m72(value) => "0~${value} karakter";
+  static String m75(value) =>
+      "RPC, girdiğiniz değerle eşleşmeyen ${value} Chain ID değerini bildiriyor.";
+
+  static String m76(asset, contract, address) =>
+      "Varlık ${asset} (${contract}), hesap ${address} ekleme yapılmadı.";
+
+  static String m77(imported, skipped) =>
+      "Cüzdanlar içe aktarıldı: ${imported}. Atlananlar: ${skipped}.";
+
+  static String m78(value) => "Bakiye: ${value}";
+
+  static String m79(value) => "Temel Ücret: ${value} Gwei";
+
+  static String m80(value) =>
+      "${value} saniye içinde panoya otomatik temizlenir";
+
+  static String m81(value) => "${value} satırında eksik alanlar var";
+
+  static String m82(value) => "${value}g";
+
+  static String m83(value) => "${value} cihazına bağlandı";
+
+  static String m84(value) => "Gas: ${value}";
+
+  static String m85(value) => "${value}sa";
+
+  static String m86(value) => "Geçerli alıcılar içe aktarıldı (${value})";
+
+  static String m87(quote, base) => "Limit Fiyatı (${quote} başına ${base})";
+
+  static String m88(value) => "Limit ${value}";
+
+  static String m89(value) => "Piyasalar (${value})";
+
+  static String m90(value) => "Minimum bakiye: ${value}";
+
+  static String m91(value) => "Siparişler (${value})";
+
+  static String m92(value) => "Pozisyonlar (${value})";
+
+  static String m93(value) => "Alıcılar: ${value}";
+
+  static String m94(value) => "Token bulundu: ${value}";
+
+  static String m95(value) => "Token: ${value}";
+
+  static String m96(value) => "İşlem: ${value}";
+
+  static String m97(valid, issues) => "Geçerli: ${valid}. Sorunlar: ${issues}.";
+
+  static String m98(value) => "… ve ${value} daha fazla sorun";
+
+  static String m99(volume, interest) => "Hacim: ${volume} · OI: ${interest}";
+
+  static String m100(value) => "Cüzdan ${value}";
+
+  static String m101(value) => "${value} saat önce güncellendi";
+
+  static String m102(value) => "${value} dakika önce güncellendi";
+
+  static String m103(value) => "0~${value} karakter";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -207,6 +275,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Yeni Cihaz Girişi",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Dosya"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "Kaydedilmiş bakiye · yenileme başarısız oldu",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "Bilinen bakiye",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "Sadece ana ağ bakiyeleri. Eksik veya başarısız ağ sorguları sıfır olarak sayılmaz.",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "Ağa göre bakiyeler",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "Bu ağ için etkin ana ağ hesabı yok",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "Bakiye yüklenemedi",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage("Ağı aç"),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Bu varlık seçilen cüzdan için artık mevcut değil. Varlık seçmek için cüzdana dönün.",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Yukarıya Çıkıyor ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Aşağıya Düşer ↓"),
     "g_alert_current_price": m1,
@@ -231,6 +321,112 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Almak için tarayın",
+    ),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "Bu akıllı hesabın zincir üzerindeki etkinliğini görüntülemek için blok keşif aracını açın.",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "Sürüm, web sitesi ve destek",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "İşlem geçmişi yüklenemedi.",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "Cüzdanlarınızda yer alan yerel işlem geçmişi. En son etkinliği senkronize etmek için bir varlık açın.",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("Hepsi"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "Harcama izni için",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "Token sözleşmesi",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage("Toplu transfer"),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Birden fazla alıcıya gönderin veya CSV içeri aktarın",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Biyometrik kimlik doğrulama",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Yüz Tanıma / Parmak İzi Ayarları",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "Oturumları yönetin; bağlantıyı kesmek token onaylarını iptal etmez.",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage(
+      "Görüntüleme kuru",
+    ),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "Portföy değerleri şu anda ABD Doları cinsinden gösterilmektedir.",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "DeFi pozisyonları yüklenemedi. Tekrar denemek için dokunun.",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "DeFi pozisyonları yükleniyor…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "DeFi pozisyonları",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "Uygulama görüntü dili",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "Şifrelenmiş bir cüzdan yedeklemesi dışa aktarın",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage(
+      "Mevcut fonlama oranı",
+    ),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage("Gas izleyici"),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Ağ ücretleri ve fiyat uyarıları",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage("Donanım cüzdanı"),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage(
+      "Daha fazla yükle",
+    ),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Ana ağ"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "Cüzdanınız ve tercihlerinizin yönetimi",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "Cüzdan oluşturun, içeri aktarın ve yönetin",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage("İşaret fiyatı"),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "Maksimum kaldıraç",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "Ağları ve RPC uç noktalarını yönetin",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage("Açık faiz"),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "Orakül fiyatı",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "Kimlik doğrulama ve cüzdan koruma",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "Takas fiyatı teklifi değişti veya süresi doldu. Onaylamadan önce en son takas fiyatı teklifini kontrol edin.",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage("N42’i Değerlendirin"),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "Uygulama mağazasını açın",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "Kaydedilmiş alıcı adresleri",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage("Daha az göster"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Test ağı"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "Görünüm ve görüntü modu",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage(
+      "24 saat hacmi (USD)",
+    ),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "Cüzdan yönetimi",
     ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("Lütfen URL girin"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("Açıklama girin"),
@@ -295,6 +491,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "Doğrulandı",
     ),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Bu ağ için harcama yapabilir ana anahtar cüzdanı seçin. İzleme sadece hesaplar takas imzalamaya izin vermez.",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "İşlem parametreleri geçersiz veya yürütme başarısız oldu. Takas fiyatı teklifini yenile ve tekrar dene.",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "Değişim gönderildi, ancak geçmişi güncellenemedi. Tekrar göndermeyin.",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "Ağ ücretleri bu akıllı hesap tarafından ödenir.",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "Harcama hesabı",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Akıllı hesap kullan",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "Kodu yeniden gönder",
     ),
@@ -335,10 +549,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
       "Bağlama başarılı",
     ),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage(
+      "Tarihleri temizle",
+    ),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "Yerel kayıtları içeren tüm eşleşen kayıtları dışa aktar (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "İşlem geçmişi dışa aktarılamadı. Lütfen tekrar deneyin.",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "Filtreler ve CSV dışa aktarma, bu cihazda kaydedilen tüm eşleşen kayıtları içerir. Daha yeni blok zinciri etkinliğini senkronize etmek için varlığı açın.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Haberler"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Doğrulama"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Arkadaş davet et"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Piyasalar"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("İptal edildi"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Ağ bağlantınızı kontrol edin ve yeniden deneyin",
@@ -681,6 +908,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "Tekrar dene",
     ),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Gas sponsorluğu henüz kullanılamıyor. Lütfen gas ücretini hesap bakiyenizden ödeyin.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Beklemede"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("İzin"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -718,6 +948,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Seçildi"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Akıllı hesabınızı kullanarak jeton gönderin",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "İşlem başarısız",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 Gün"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 Saat"),
@@ -829,6 +1062,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Gelişmiş Özellikler",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Aktif"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("Keşfet"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage("Dağıt"),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
+      "Sonlandırıldı",
+    ),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Doğrulanmış kampanya bulunamadı",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("Beklemede"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Kaynaklar"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Kurumlar tarafından yönetilen kampanya dizinlerini görüntülemek için Kaynaklar’ı aç.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Üçüncü taraf kampanyaları zararlı olabilir. İmzalamadan önce proje alan adını ve işlem detaylarını doğrula.",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
+      "Hediye Dağıtımı",
+    ),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage(
+      "Yakında olacak",
+    ),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("POPÜLER"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("CANLI"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Alıcı Ekle",
     ),
@@ -891,6 +1149,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage("Toplu Transfer"),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Toplam Miktar",
+    ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "Blok gezgini URL adresi (isteğe bağlı)",
     ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Zincir desteklenmiyor",
@@ -1028,6 +1289,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Bir NFT yazmak için lütfen NFT ayrıntıları sayfasına gidin ve \"Yaz\" düğmesine dokunun.",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Popüler ağlar (doldurmak için dokunun)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Bu zincir henüz aktarımları desteklemiyor, bizi izlemeye devam edin",
     ),
@@ -1041,6 +1305,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tümünü göstermek için dokunun",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Son"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage("Hesap"),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "Bu site cüzdan adresinizi görüntülemek ve işlem önermek için izin istiyor. Onayınız olmadan para taşıyamaz.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Cüzdanı bağla",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "Bu cihaz kök (root) veya jailbreak edilmiş görünüyor. Zarar görmüş bir cihazda cüzdan kullanmak anahtar çalınma ve yetkisiz erişim riskini artırır. Dikkatli olun.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Cihaz Güvenliği Uyarısı",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Onaylandı! Devam etmek için Değiştir\'e dokunun.",
     ),
@@ -1087,6 +1364,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Fiyat teklifi başarısız",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "takas fiyat teklif hizmeti geçici olarak kullanılamıyor. Lütfen daha sonra tekrar deneyin.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Sembol / isim / adres ara",
     ),
@@ -1110,19 +1390,34 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Swap başarıyla gönderildi",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Token hizmeti kullanılamıyor. Sınırlı çevrimdışı liste gösteriliyor.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Takas engellendi: yönlendirici adresi tanınmıyor. Güvenliğiniz için bu işlem iptal edildi.",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Aldığınız"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Aktif Ürünler",
     ),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Toplu Transfer"),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage(
+      "En İyi Yıllık Getiri Oranı (APY)",
+    ),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Yak"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N Satın Al"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "N42 protokolü ile N satın al",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Doğrulanmış üçüncü taraf kampanyalarını bul",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Çapraz zincir transferi",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Günlük zincir üzerindeki puanlar",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX Takas"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Gaz"),
@@ -1146,12 +1441,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Düğüm madenciliğine katılarak ödül kazanın",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage(
+      "Süresiz vadeli işlemler",
+    ),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Hızlı Araçlar",
     ),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage("Önerilen"),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Takas Türü Seçin",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Yatır",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "USDC / USDT / DAI üzerinde günlük getiri kazanın",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "Şu an stabil para birimi piyasası bulunmuyor",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Stabil Para Birimi Kazan",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "ETH\'yi Lido ile Stake Edin",
@@ -1707,6 +2017,66 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Uygulamadan çıkmak istediğinizden emin misiniz?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Kullanılabilir Puanlar",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Bugün giriş yapıldı",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Giriş Yap",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Bitti"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Giriş başarısız",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Giriş N42\'de onaylandı",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Kopyala"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Günlük Giriş",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Sıralama tablosu boş",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("Geçmiş"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Referans kodunu paylaş",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Dostlarını davet et",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Sıralama Tablosu",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "Puan geçmişi yok",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "Henüz davet yok. Başlamak için kodunu paylaş.",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Mevcut ödül yok",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Mevcut görev yok",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Etkin cüzdan yok",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("İlanlar"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Ödüller"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Görevler"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Puanlar"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Toplam Kazanılan",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Hizmet kullanılamıyor",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Kullanıldı"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("heyecan"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1733,6 +2103,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Lütfen kurtarma ifadesini girin",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("İmzala"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Lütfen önce bir mesaj girin",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "İmzalama başarısız oldu",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "İmzalanacak mesajı girin",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("İmza"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage("İmza İste"),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Bu zincir için mesaj imzalama henüz desteklenmiyor",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Sadece tamamen güveneceğiniz mesajları imzalayın. Kötü amaçlı bir mesaj, sizin adınıza hareketler yapmak için kullanılabilir.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Toplam"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Ad"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Geri"),
@@ -1755,6 +2143,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("video"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Kat"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT Galerisi"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage("Spam gizle"),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("Yazı #"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
       "Hiçbir NFT bulunamadı",
@@ -1779,13 +2168,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("Jeton Kimliği"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Tür"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage(
+      "Diğerleri",
+    ),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Şifreler eşleşmiyor",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Piyasa verileri yalnızca görüntülenebilir. Bu sürümde emir vermek desteklenmiyor.",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Telefon galerisinden seç",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Genel Anahtar"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Ödeme talebi",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage("Ağı kaldır"),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Sıfırla"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Yeniden dene"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Ödeme talebi token\'ı veya zinciri bu cüzdan içinde bulunmuyor",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Dikkatli Kullanın",
     ),
@@ -1812,11 +2218,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Paylaşım yöntemi",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "İşlem muhtemelen başarısız olacak",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "İşlem simüle ediliyor…",
     ),
@@ -1837,9 +2243,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Ort. APY"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "İşlem oluşturuldu, ancak bu zincirde cüzdan içinden yayınlama henüz desteklenmiyor.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Komisyon"),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Tahmini Günlük Ödül",
     ),
@@ -1900,6 +2309,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Staking\'i başlat",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Staking işlemi gönderildi",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Staking"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "İşlem başarıyla hazırlandı",
@@ -1907,7 +2319,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Kilidi Açılıyor",
     ),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Stake Çıkar"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "Güncelleniyor...",
@@ -1925,7 +2337,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Gas başına maksimum ücret",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Beklemede"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Başarısız"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Devam"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Cüzdan şifresi"),
@@ -1942,7 +2354,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "0\'dan büyük tam sayı girin.",
     ),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("Veri alınamadı"),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Alıcı adres hesabını kontrol et",
     ),
@@ -1953,18 +2365,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Hesap doğrulaması başarılı",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Alıcı adresin hesabı yok ve ilk transfer en az 10XRP olmalıdır",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Kullanılan Gas"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Gaz"),
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("Ekle"),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Jeton eklendi",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Tümünün seçimini kaldır",
     ),
@@ -2119,8 +2531,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("bir kez"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Hızlandır"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Not"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Mevcut token eklenmedi.",
     ),
@@ -2130,14 +2542,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "Cüzdan İçe Aktar",
     ),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Mevcut token bakiyesi yetersiz.",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("İmzalama hatası"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Cüzdanı Yönet",
+    ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "Aynı nonce ve yaklaşık %20 daha yüksek gaz ücretiyle bir değiştirme işlemi yayınlanacaktır. Bu yalnızca orijinal işlem hâlâ bekliyorken geçerli olur.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Değiştirme işlemi gönderildi",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage(
+      "Hızlandır",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Ethereum adresini girin (0x...)",
@@ -2151,20 +2572,23 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Ayrılmış"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Temel Rezerv"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Artımlı Rezerv"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Sahip Olunan Nesne Sayısı",
     ),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Toplam ayrılmış miktar nasıl hesaplanır",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Toplam Rezerv = Temel Rezerv + (Sahip Olunan Nesne Sayısı × Artımlı Rezerv)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "Canlı yayın sona erdi",
+    ),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Takip et"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "Takip özelliği yakında",
@@ -2181,7 +2605,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Desen şablonunuzu onaylayın",
     ),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("Mevcut deseni çizin"),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Desen şifresini sıfırla",
     ),
@@ -2191,12 +2615,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Cüzdan Şifresi Eklensin mi?",
     ),
-    "g_lock_key25": m47,
+    "g_lock_key25": m50,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
+      "Transfer doğrulaması",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "Her cüzdan transferini onaylamak için biyometrik doğrulama (Face ID / parmak izi) iste.",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "Desen şifresi ayarlanmamış",
@@ -2269,12 +2693,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Arkadaşlarla paylaş",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Devam"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "@N42Wallet\'ta bir düğüm kurdum ve mobil cihazlarda doğrulamaya başladım! Gel bana katıl. Merkeziyetsiz gelecek mobilde!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Maden"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Düğüm"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Ağ"),
@@ -2309,7 +2733,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Desteklenmeyen şifreli veri biçimi!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Dünkü Ödüller"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("Şifreli veri"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage(
@@ -2325,7 +2749,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Kullanım biraz zaman alır, lütfen bekleyin!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Ödül her gün birikir ve yalnızca ~0.5 N\'ye ulaştığında N cüzdanınıza gönderilir.",
     ),
@@ -2399,7 +2823,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blok/gün~15 dakika",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "Kontrol başına 128 saniye",
     ),
@@ -2467,7 +2891,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Lütfen şifreleme şifresini girin",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Doğruluğundan emin olmak için lütfen şifrenizi tekrar girin",
     ),
@@ -2540,8 +2964,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_portfolio_title": MessageLookupByLibrary.simpleMessage("Portföy"),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Toplam Değer"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Sonuç ekle"),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("Al"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "İptal et ve iade et",
@@ -2553,7 +2977,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "Sonucu onayla",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Tahmini Başlat",
     ),
@@ -2571,6 +2995,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Geçersiz sonuç",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Piyasa zaten sonuçlandırıldı, bu işlem izin verilmiyor",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Piyasa kapalı, işlem yapılamaz",
     ),
@@ -2579,6 +3006,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Piyasa sonuçlanmadı, kullanılamaz",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Bu işlemi yalnızca bu piyasayı yaratan sunucu yapabilir",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "En az iki geçerli sonuç",
@@ -2589,10 +3019,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "Kayma aşıldı, tekrar deneyin",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Hayır"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Sonuçlar"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "Ödemek için kazanan sonucu seçin (fonlar sonuca göre)",
@@ -2602,11 +3032,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Tahmin sorusu, örn.: Bu turu kim kazanır?",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Sonuçlandı"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Sınırsız (elle kapat)",
     ),
@@ -2645,7 +3075,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Bağlantı"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kod"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Coin fiyatı alınamadı.",
     ),
@@ -2659,7 +3089,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Takasınız kısa süre içinde dağıtılacaktır. Lütfen sabırlı olun.",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Düğüm çalıştırma maliyetleri: Grup Doğrulaması 1-49 N Temel Düğüm: 50 N Premium Düğüm: 100 N Pro Düğüm: 500 N.",
     ),
@@ -2671,7 +3101,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Yeni Bakiye"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Ödediğiniz"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Tarih"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Takaslar ilgili zincir gezginlerinde (Etherscan, BscScan, TRONSCAN ve kendi gezginimiz) görüntülenebilir.",
     ),
@@ -2684,7 +3114,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Varsayılana sıfırla",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Görünüm"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Stil"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("Özel"),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Herkes mevcut tokenlerin sahte sürümleri dahil token oluşturabilir. İçe aktarmadan önce her zaman bir tokeni araştırın.",
     ),
@@ -2701,9 +3134,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 birim"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Token Ekle"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Biçim Hatası!"),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Token içe aktar"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tüm ağlar"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Özel Token"),
@@ -2711,15 +3144,371 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("Token sembolü"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("Token ondalık"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("İçe Aktar"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "Bu Chain ID başka bir ağ tarafından zaten kullanılıyor.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Dikkat"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Yüksek Risk"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Güvenli"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
+      "Aave V3 Kredi Verme",
+    ),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
+      "Hesap e-posta adresi",
+    ),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "Bu varlığı eklemek bir ağ ücreti gerektirir. Devam etmek için Ekle\'ye dokunun.",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "Bakiye, portföy, gas hakkında soru sorun",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("Kodu geri al"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage(
+      "E-postaya geri dön",
+    ),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "Yedek Oluştur ve Kaydet",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "Yedek dosyasında cüzdan bulunamadı",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "Yedek dosyanız AES-256 + PBKDF2 ile şifrelendi. Sadece doğru şifreyle kurtarılabilir.",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "Lütfen yedek şifresini girin",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "Bulut Yedeklemesini İhracat Et",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "Yedek oluşturulamadı. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage("Yedek Dosyası"),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "Seçilen dosyaya erişilemiyor",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "Bulut Yedeklemesini İçe Aktar",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "Yedek geri yüklenemedi. Şifre ve yedek dosyasını kontrol edip tekrar deneyin.",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "Cüzdanları İçe Aktar",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "Geçerli bir N42Wallet yedek dosyası değil",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "Dosya seçilmedi",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "Yedekleme için geçerli cüzdan seçilmedi",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "Yedek Şifresi",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Güçlü bir yedek şifresi belirleyin (en az 8 karakter)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "Şifre en az 8 karakter olmalıdır",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "Yedek şifresini tekrar girin",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "iCloud Drive veya Google Drive’da saklanan şifrelenmiş bir yedekten cüzdanlarınızı kurtarın.",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "Bu yedekten cüzdan kurtarılamadı",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Yedek oluşturulurken kullanılan şifreyi girin",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Lütfen önce bir yedek dosyası seçin",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "Yedeklemek için en az bir cüzdan seçin",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "Yedeklemek İçin Cüzdanları Seçin",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "N42Wallet Yedekleme",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "Bu yedek, özel anahtarlarınızı / anımsatıcı kelimelerinizi, cüzdan şifrenizi ve cüzdan ayarlarınızı içerir. Yedek dosyasını ve şifreyi güvenli bir yerde saklayın. Kimseyle asla paylaşmayın.",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "N42 protokolüyle N satın alın",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "Bir kodu taramak için kamera izni gereklidir.",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage(
+      "Siparişi İptal Et",
+    ),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage(
+      "E-posta Değiştir",
+    ),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "Onay kontrol ediliyor…",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage("Pano boş"),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Coinler yüklenemedi. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Şifreyi Onayla",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "Güncellemeyi Onayla",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "Sözleşme Bilgisi",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage(
+      "Cüzdan Oluştur",
+    ),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "Veri satırı bulunamadı (sadece başlık tespit edildi).",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "Yorumlar kaldırıldıktan sonra veri bulunamadı.",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("Özel etiket..."),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
+      "Hedef Etiketi",
+    ),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Uniswap / 1inch / Jupiter üzerinden tokenları değiştirin",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama kodu kabul edildi",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama kodu isteği gönderildi",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "ENS yenileme fiyatları yüklenemedi. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "ENS yenileme başarısız oldu. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage("Giriş Fiyatı"),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("Süresi doldu:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage("Korku & Açlık"),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "Dosya seçici açılamadı. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "Seçilen dosya okunamadı. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("Serbest"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "Bir sonraki Blok Gas Tahmini",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "Geçerli bir e-posta adresi girin",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("Sorunlar:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Keystone başarıyla eşleştirildi",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Limit Siparişleri",
+    ),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("Limit Fiyatı"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "Sıvılama Fiyatı",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage(
+      "Kullanım oranı",
+    ),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Not"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("Mesaj"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "Anlamlı kelime cüzdanı",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "Güvenli bir MPC cüzdanı oluşturmak için sosyal hesabınızla giriş yapın. Özel anahtarınız, şifrelenmiş parçalara ayrıldı — kaybedilebilecek bir kurtarma cümlesi yok.",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "Kurtarma Cümlesi Gerekmiyor",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "MPC-TSS teknolojisiyle destekleniyor. Anahtarınız, cihazınız, sunucularımız ve bir kurtarma yedeklemesi olmak üzere üç şifrelenmiş parçaya ayrılır.",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage(
+      "Yeni e-posta adresi",
+    ),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "Bu cihazda önbelleğe alınmış e-posta yok",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage("Henüz coin yok"),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("DApp yok"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Limit siparişi yok",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage("Açık sipariş yok"),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Açık pozisyon yok",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage("Henüz Cüzdan Yok"),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("İsteğe Bağlı"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "İptal başarısız oldu",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Sipariş iptal edildi",
+    ),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Sipariş oluşturulamadı",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "Limit siparişi oluşturuldu",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage(
+      "Gerçekleştirildi",
+    ),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "Limit Siparişi Ver",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("Tetiklendi"),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Limit siparişleri yüklenemedi",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "Şifreler eşleşmiyor",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "Bağlantı bağlantısını yapıştırın",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "Bekleniyor (Mempool)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage(
+      "Popüler Tokenler",
+    ),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("Büyüklük"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "Özel anahtar cüzdanı",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("Sadece Okunabilir"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("OdA Kimliği"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Kaydetme başarısız. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("Kodu gönder"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "İstek gönderiliyor...",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage("Swap Modu Seç"),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("Etiketler"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "Şablon kopyalandı",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "Token Sözleşmesi (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "Token bilgisi aranıyor…",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "Token listesinde bulunamadı — simge ve ondalık değerleri manuel olarak doldurun",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "İşlem silinemedi. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "İşlem kaydedilemedi. Lütfen tekrar deneyin.",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
+      "Bilinmeyen durum",
+    ),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("Güncelle"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
+      "E-postayı güncelle",
+    ),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama Sorunları",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Doğrulama kodu",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("Kodu doğrula"),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "Piyasa Verilerini Görüntüle",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("24 saat hacmi"),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("Cüzdan AI"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "Başlamak için bir cüzdan oluşturun veya içeri aktarın",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Cüzdan yüklenemedi",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "Cüzdan yükleniyor...",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("Sonra"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "Bakiye yenilenemedi",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD Cüzdan · Anımsatıcı",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "Tek Zincir · İçe aktarıldı",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage("Token sabitle"),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "Kaydedilmiş fiyatlar",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "Şimdi güncellendi",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "Kısmi fiyatlar",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Fiyatlar mevcut değil",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "Token sabitini kaldır",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Bağlantı kesildi. Lütfen yeniden bağlanın.",
@@ -2758,7 +3547,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-posta"),
     "login_password": MessageLookupByLibrary.simpleMessage("Şifre"),
     "next": MessageLookupByLibrary.simpleMessage("Sonraki"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Profili Düzenle",
     ),
@@ -2767,10 +3556,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Lütfen Adres Girin",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "Bu cihaz arka planda çalışan uygulamaları kısıtlar. Uygulama arka plandayken veya kapalıyken sohbet mesajlarını ve transfer bildirimlerini kaçırabilirsiniz.\n\nArka plan etkinliğine izin vermek için “Ayarlara Git”e dokunun, ardından bu uygulama için otomatik başlatmayı etkinleştirin.",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "Arka Plan Teslimatı Kısıtlanabilir",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Bir daha hatırlatma",

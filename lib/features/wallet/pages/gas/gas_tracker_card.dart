@@ -129,9 +129,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           ] else
             Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSpacing.space2,
-                ),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
                 child: Text(
                   S.of(context).g_key_106,
                   style: AppTypography.caption.copyWith(color: subtitleColor),
@@ -303,17 +301,11 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
         children: [
           Row(
             children: [
-              Icon(
-                Icons.auto_graph,
-                size: su.setWidth(36),
-                color: c.warning,
-              ),
+              Icon(Icons.auto_graph, size: su.setWidth(36), color: c.warning),
               SizedBox(width: su.setWidth(8)),
               Text(
-                'Next Block Gas Prediction',
-                style: AppTypography.bodyStrong.copyWith(
-                  color: textColor,
-                ),
+                S.of(context).g_ui_gas_prediction,
+                style: AppTypography.bodyStrong.copyWith(color: textColor),
               ),
             ],
           ),
@@ -390,7 +382,7 @@ extension _GasTrackerCardBuilders on _GasTrackerPageState {
           ),
           SizedBox(width: su.setWidth(6)),
           Text(
-            'Mempool',
+            S.of(context).g_ui_mempool,
             style: AppTypography.caption.copyWith(color: subtitleColor),
           ),
           SizedBox(width: su.setWidth(8)),

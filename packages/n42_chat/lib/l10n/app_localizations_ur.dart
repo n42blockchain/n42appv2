@@ -801,7 +801,7 @@ class SUr extends S {
   String get commonTransferTo => 'میں منتقل کریں۔';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name سے';
   }
 
@@ -2888,7 +2888,7 @@ class SUr extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'اس سرور پر SSO لاگ اِن فراہم کنندگان ترتیب نہیں دیے گئے';
 
   @override
   String get transferAmountHintZero => '0.00';

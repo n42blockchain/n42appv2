@@ -1,5 +1,6 @@
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 
+import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:math';
 
@@ -18,8 +19,7 @@ class SecureMemory {
   static Uint8List createSecureBytes(int length) => Uint8List(length);
 
   /// Securely copy data into a new Uint8List
-  static Uint8List secureClone(List<int> data) =>
-      Uint8List.fromList(data);
+  static Uint8List secureClone(List<int> data) => Uint8List.fromList(data);
 
   /// Zero out a byte array to remove sensitive data from memory
   ///
@@ -48,7 +48,7 @@ class SecureMemory {
 
   /// Convert string to secure bytes (UTF-8 encoded)
   static Uint8List stringToSecureBytes(String str) =>
-      Uint8List.fromList(str.codeUnits);
+      Uint8List.fromList(utf8.encode(str));
 
   /// Compare two byte arrays in constant time to prevent timing attacks
   static bool constantTimeEquals(Uint8List a, Uint8List b) {
@@ -85,7 +85,7 @@ class SecureString {
   /// WARNING: This creates a new String object. Use sparingly.
   String get value {
     if (_data == null) throw StateError('SecureString has been disposed');
-    return String.fromCharCodes(_data!);
+    return utf8.decode(_data!);
   }
 
   /// Get the raw bytes

@@ -282,22 +282,22 @@ void showSwapModeSheet(BuildContext context) {
 
   sheetBottom(
     context,
-    'Select Swap Mode',
+    S.of(context).g_ui_swap_mode,
     Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         ListTile(
           leading: const Icon(Icons.currency_exchange),
-          title: const Text('Buy N'),
-          subtitle: const Text('Purchase N via N42 protocol'),
+          title: Text(S.of(context).g_key_earn_buy_n),
+          subtitle: Text(S.of(context).g_ui_buy_n_description),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () => pushAndClose(SwapAstHome()),
         ),
         const Divider(height: 1),
         ListTile(
           leading: const Icon(Icons.swap_horiz),
-          title: const Text('DEX Swap'),
-          subtitle: const Text('Swap any token via Uniswap / 1inch / Jupiter'),
+          title: Text(S.of(context).g_key_earn_dex_swap),
+          subtitle: Text(S.of(context).g_ui_dex_description),
           trailing: const Icon(Icons.arrow_forward_ios, size: 16),
           onTap: () => pushAndClose(const DexSwapHome()),
         ),

@@ -92,7 +92,9 @@ mixin BridgePersistenceMixin on ChangeNotifier {
 
       final list = jsonDecode(raw) as List<dynamic>;
       _transactions.addAll(
-        list.map((e) => BridgeTransaction.fromJson(e as Map<String, dynamic>)),
+        list
+            .map((e) => BridgeTransaction.fromJson(e as Map<String, dynamic>))
+            .toList(),
       );
 
       // 恢复 pending/inProgress 到轮询集合

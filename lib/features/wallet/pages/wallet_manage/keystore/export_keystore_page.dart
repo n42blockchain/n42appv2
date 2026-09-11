@@ -213,7 +213,7 @@ class _ClipboardCountdownHint extends StatelessWidget {
         ),
         SizedBox(width: AppSpacing.space2),
         Text(
-          'Clipboard auto-clears in ${seconds}s',
+          S.of(context).g_ui_clipboard_clear(seconds),
           style: AppTypography.caption.copyWith(color: textColor),
         ),
       ],

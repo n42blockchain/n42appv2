@@ -43,39 +43,32 @@ class _AppHomeTopBarState extends ConsumerState<AppHomeTopBar> {
       color: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: isWide ? 16.0 : 8.0),
       height: isWide ? 56.0 : ScreenUtil().setWidth(110.0),
-      child: Stack(
-        alignment: Alignment.center,
+      child: Row(
         children: [
-          // 标题绝对居中于整个顶部栏
-          Center(
-            child:
-                widget.titleChild ??
-                (widget.isText
-                    ? Text(
-                        widget.title ?? '',
-                        style: AppTypography.headline.copyWith(
+          _buildLeftWidget(userInfo?.image),
+          Expanded(
+            child: Center(
+              child:
+                  widget.titleChild ??
+                  (widget.isText
+                      ? Text(
+                          widget.title ?? '',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.headline.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
+                        )
+                      : Image.asset(
+                          'assets/images/ast_nft.png',
+                          width: ScreenUtil().setWidth(64.0),
+                          height: ScreenUtil().setWidth(64.0),
+                          fit: BoxFit.cover,
                           color: AppColorTokens.of(context).textPrimary,
-                        ),
-                      )
-                    : Image.asset(
-                        'assets/images/ast_nft.png',
-                        width: ScreenUtil().setWidth(64.0),
-                        height: ScreenUtil().setWidth(64.0),
-                        fit: BoxFit.cover,
-                        color: AppColorTokens.of(context).textPrimary,
-                      )),
+                        )),
+            ),
           ),
-          // 左右两侧按钮叠加在标题上方
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildLeftWidget(userInfo?.image),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: widget.actions ?? [],
-              ),
-            ],
-          ),
+          ...?widget.actions,
         ],
       ),
     );

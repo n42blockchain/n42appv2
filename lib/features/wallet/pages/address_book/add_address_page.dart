@@ -122,14 +122,14 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           GestureDetector(
             onTap: handlerData,
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               color: Colors.transparent,
               child: Center(
                 child: Text(
                   S.of(context).g_key_115,
-                  style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainBlueColor)),
+                  style: AppTypography.body.copyWith(
+                    color: _themeColor(AppThemeKeys.mainBlueColor),
+                  ),
                 ),
               ),
             ),
@@ -153,7 +153,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
           const SizedBox(height: 18),
           Text(
             S.of(context).address_Information,
-            style: AppTypography.body.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
+            style: AppTypography.body.copyWith(
+              color: _themeColor(AppThemeKeys.mainTextColor),
+            ),
           ),
           const SizedBox(height: 10),
           _buildAddressView(context),
@@ -264,9 +266,7 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
       },
       boxShadow: _noShadow,
       bgColor: _themeColor(AppThemeKeys.itemBgColor),
-      messageMargin: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space8,
-      ),
+      messageMargin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       rightWidget1: Container(
         width: ScreenUtil().setWidth(60.0),
         height: ScreenUtil().setWidth(60.0),
@@ -298,7 +298,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
         ),
         child: Text(
           S.of(context).g_key_166,
-          style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainWhiteColor)),
+          style: AppTypography.bodySm.copyWith(
+            color: _themeColor(AppThemeKeys.mainWhiteColor),
+          ),
         ),
       ),
       rightOnTap2: () async {
@@ -373,9 +375,9 @@ class _AddAddressPageState extends ConsumerState<AddAddressPage> {
     } catch (e) {
       AppLogger.w('AddAddressPage', 'save failed: $e');
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Save failed. Please try again.')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(S.of(context).g_ui_save_failed)));
       }
     }
   }

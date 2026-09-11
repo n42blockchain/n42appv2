@@ -805,7 +805,7 @@ class STe extends S {
   String get commonTransferTo => 'కు బదిలీ చేయండి';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name నుండి';
   }
 

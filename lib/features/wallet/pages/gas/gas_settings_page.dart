@@ -156,9 +156,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  vertical: AppSpacing.space4,
-                ),
+                padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -251,13 +249,11 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               children: [
                 Text(
                   status.text,
-                  style: AppTypography.bodyStrong.copyWith(
-                    color: status.color,
-                  ),
+                  style: AppTypography.bodyStrong.copyWith(color: status.color),
                 ),
                 if (baseFee != null)
                   Text(
-                    'Base Fee: ${_formatGwei(baseFee)} Gwei',
+                    S.of(context).g_ui_base_fee_value(_formatGwei(baseFee)),
                     style: AppTypography.caption.copyWith(
                       color: _themeColor(
                         context,
@@ -363,10 +359,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTypography.bodySm.copyWith(color: subtitleColor),
-        ),
+        Text(label, style: AppTypography.bodySm.copyWith(color: subtitleColor)),
         SizedBox(height: su.setWidth(8)),
         TextField(
           controller: controller,
@@ -384,9 +377,7 @@ class _GasSettingsPageState extends State<GasSettingsPage> {
               borderSide: BorderSide.none,
             ),
             suffixText: suffix,
-            suffixStyle: AppTypography.bodySm.copyWith(
-              color: subtitleColor,
-            ),
+            suffixStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
           ),
           style: AppTypography.body.copyWith(
             color: _themeColor(context, AppThemeKeys.mainTextColor),

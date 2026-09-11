@@ -165,7 +165,8 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
         border: Border.all(color: borderColor.withAlpha(50)),
         boxShadow: [
           BoxShadow(
-            color: (isUnbonding ? AppColorTokens.of(context).warning : color).withAlpha(18),
+            color: (isUnbonding ? AppColorTokens.of(context).warning : color)
+                .withAlpha(18),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -215,11 +216,13 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
                           vertical: su.setWidth(2),
                         ),
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).warning.withAlpha(30),
+                          color: AppColorTokens.of(
+                            context,
+                          ).warning.withAlpha(30),
                           borderRadius: BorderRadius.circular(su.setWidth(8)),
                         ),
                         child: Text(
-                          'Unbonding',
+                          S.of(context).g_key_stake_unbonding,
                           style: AppTypography.captionSm.copyWith(
                             color: AppColorTokens.of(context).warning,
                           ),
@@ -347,67 +350,67 @@ mixin EarnPageProductsMixin on ConsumerState<EarnPage>, EarnPageLogicMixin {
         onTap: onTap,
         borderRadius: BorderRadius.circular(su.setWidth(16)),
         child: Container(
-        padding: EdgeInsets.all(su.setWidth(16)),
-        decoration: BoxDecoration(
-          color: itemBg,
-          borderRadius: BorderRadius.circular(su.setWidth(16)),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: su.setWidth(52),
-              height: su.setWidth(52),
-              decoration: BoxDecoration(
-                color: color.withAlpha(30),
-                borderRadius: BorderRadius.circular(su.setWidth(14)),
-              ),
-              child: Icon(
-                Icons.account_balance,
-                color: color,
-                size: su.setWidth(28),
-              ),
-            ),
-            SizedBox(width: su.setWidth(12)),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: AppTypography.bodyStrong.copyWith(color: mainText),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    description,
-                    style: AppTypography.caption.copyWith(color: subtitle),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: su.setWidth(12),
-                vertical: su.setWidth(6),
-              ),
-              decoration: BoxDecoration(
-                color: AppColorTokens.of(context).success.withAlpha(20),
-                borderRadius: BorderRadius.circular(su.setWidth(8)),
-              ),
-              child: Text(
-                apy,
-                style: AppTypography.caption.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: AppColorTokens.of(context).success,
+          padding: EdgeInsets.all(su.setWidth(16)),
+          decoration: BoxDecoration(
+            color: itemBg,
+            borderRadius: BorderRadius.circular(su.setWidth(16)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: su.setWidth(52),
+                height: su.setWidth(52),
+                decoration: BoxDecoration(
+                  color: color.withAlpha(30),
+                  borderRadius: BorderRadius.circular(su.setWidth(14)),
+                ),
+                child: Icon(
+                  Icons.account_balance,
+                  color: color,
+                  size: su.setWidth(28),
                 ),
               ),
-            ),
-            SizedBox(width: su.setWidth(8)),
-            Icon(Icons.chevron_right, color: subtitle),
-          ],
-        ),
+              SizedBox(width: su.setWidth(12)),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: AppTypography.bodyStrong.copyWith(color: mainText),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      description,
+                      style: AppTypography.caption.copyWith(color: subtitle),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: su.setWidth(12),
+                  vertical: su.setWidth(6),
+                ),
+                decoration: BoxDecoration(
+                  color: AppColorTokens.of(context).success.withAlpha(20),
+                  borderRadius: BorderRadius.circular(su.setWidth(8)),
+                ),
+                child: Text(
+                  apy,
+                  style: AppTypography.caption.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: AppColorTokens.of(context).success,
+                  ),
+                ),
+              ),
+              SizedBox(width: su.setWidth(8)),
+              Icon(Icons.chevron_right, color: subtitle),
+            ],
+          ),
         ),
       ),
     );

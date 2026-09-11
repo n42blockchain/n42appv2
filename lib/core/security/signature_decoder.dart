@@ -28,7 +28,9 @@ class SignatureDecoder {
   /// - Permit2 (Uniswap's batch permit)
   /// - Seaport orders (OpenSea)
   /// - Safe transaction hashes
-  static SignatureDecodedResult decodeTypedData(Map<String, dynamic> typedData) {
+  static SignatureDecodedResult decodeTypedData(
+    Map<String, dynamic> typedData,
+  ) {
     final primaryType = typedData['primaryType'] as String? ?? '';
     final message = typedData['message'] as Map<String, dynamic>? ?? {};
     final domain = typedData['domain'] as Map<String, dynamic>? ?? {};
@@ -82,21 +84,24 @@ class SignatureDecoder {
     if (decoded.contains('Terms of Service') || decoded.contains('I accept')) {
       return SignatureDecodedResult(
         title: 'Accept Terms',
-        description: decoded.length > 200 ? '${decoded.substring(0, 200)}...' : decoded,
+        description: decoded.length > 200
+            ? '${decoded.substring(0, 200)}...'
+            : decoded,
         riskLevel: TxRiskLevel.safe,
         fields: [],
         warnings: [],
       );
     }
 
-    if (decoded.contains('Sign in') || decoded.contains('Login') || decoded.contains('Nonce:')) {
+    if (decoded.contains('Sign in') ||
+        decoded.contains('Login') ||
+        decoded.contains('Nonce:')) {
       return SignatureDecodedResult(
         title: 'Sign In to DApp',
-        description: 'This signature verifies your identity. It does NOT approve any transaction.',
+        description:
+            'This signature verifies your identity. It does NOT approve any transaction.',
         riskLevel: TxRiskLevel.safe,
-        fields: [
-          if (decoded.length <= 500) DecodedField('Message', decoded),
-        ],
+        fields: [if (decoded.length <= 500) DecodedField('Message', decoded)],
         warnings: [],
       );
     }
@@ -104,7 +109,9 @@ class SignatureDecoder {
     // Generic
     return SignatureDecodedResult(
       title: 'Sign Message',
-      description: decoded.length > 200 ? '${decoded.substring(0, 200)}...' : decoded,
+      description: decoded.length > 200
+          ? '${decoded.substring(0, 200)}...'
+          : decoded,
       riskLevel: TxRiskLevel.safe,
       fields: [],
       warnings: decoded.length > 500
@@ -126,7 +133,8 @@ class SignatureDecoder {
       final ethValue = value != null ? _formatWei(value) : '0';
       return SignatureDecodedResult(
         title: 'Send ETH',
-        description: 'Transfer $ethValue ETH to ${_shortAddress(contractAddress ?? '')}',
+        description:
+            'Transfer $ethValue ETH to ${_shortAddress(contractAddress ?? '')}',
         riskLevel: TxRiskLevel.safe,
         fields: [
           if (contractAddress != null) DecodedField('To', contractAddress),
@@ -175,7 +183,9 @@ class SignatureDecoder {
           fields: [
             if (contractAddress != null) DecodedField('Token', contractAddress),
           ],
-          warnings: ['Raises how many tokens a spender may move on your behalf'],
+          warnings: [
+            'Raises how many tokens a spender may move on your behalf',
+          ],
         );
       case 'a457c2d7': // decreaseAllowance(address,uint256)
         return SignatureDecodedResult(
@@ -238,8 +248,10 @@ class SignatureDecoder {
           description: 'Exchange tokens via DEX router',
           riskLevel: TxRiskLevel.safe,
           fields: [
-            if (contractAddress != null) DecodedField('Router', _shortAddress(contractAddress)),
-            if (value != null && value != '0x0') DecodedField('ETH Value', _formatWei(value)),
+            if (contractAddress != null)
+              DecodedField('Router', _shortAddress(contractAddress)),
+            if (value != null && value != '0x0')
+              DecodedField('ETH Value', _formatWei(value)),
           ],
           warnings: [],
         );
@@ -253,7 +265,9 @@ class SignatureDecoder {
           description: 'Multiple operations in a single transaction',
           riskLevel: TxRiskLevel.caution,
           fields: [],
-          warnings: ['Contains multiple bundled operations — review each carefully'],
+          warnings: [
+            'Contains multiple bundled operations — review each carefully',
+          ],
         );
 
       // ── Permit2（Uniswap 通用授权，常见于现代 swap）──
@@ -306,12 +320,15 @@ class SignatureDecoder {
       default:
         return SignatureDecodedResult(
           title: 'Contract Interaction',
-          description: 'Calling function 0x$selector on ${_shortAddress(contractAddress ?? '')}',
+          description:
+              'Calling function 0x$selector on ${_shortAddress(contractAddress ?? '')}',
           riskLevel: TxRiskLevel.caution,
           fields: [
             DecodedField('Function', '0x$selector'),
-            if (contractAddress != null) DecodedField('Contract', contractAddress),
-            if (value != null && value != '0x0') DecodedField('ETH Value', _formatWei(value)),
+            if (contractAddress != null)
+              DecodedField('Contract', contractAddress),
+            if (value != null && value != '0x0')
+              DecodedField('ETH Value', _formatWei(value)),
           ],
           warnings: ['Unknown contract function — review carefully'],
         );
@@ -341,12 +358,17 @@ class SignatureDecoder {
       fields: [
         DecodedField('Token', tokenName),
         DecodedField('Spender', spender),
-        DecodedField('Amount', isUnlimited ? 'UNLIMITED' : value, isHighlighted: isUnlimited),
+        DecodedField(
+          'Amount',
+          isUnlimited ? 'UNLIMITED' : value,
+          isHighlighted: isUnlimited,
+        ),
         if (deadlineDate != null) DecodedField('Expires', deadlineDate),
       ],
       warnings: [
         'This is an off-chain approval — no gas fee but just as powerful as on-chain approve',
-        if (isUnlimited) 'UNLIMITED approval — the spender can drain all your $tokenName',
+        if (isUnlimited)
+          'UNLIMITED approval — the spender can drain all your $tokenName',
       ],
     );
   }
@@ -387,7 +409,8 @@ class SignatureDecoder {
   ) {
     return SignatureDecodedResult(
       title: 'Safe Multisig Transaction',
-      description: 'Confirm a transaction for your Safe (Gnosis) multisig wallet',
+      description:
+          'Confirm a transaction for your Safe (Gnosis) multisig wallet',
       riskLevel: TxRiskLevel.caution,
       fields: [
         DecodedField('To', message['to']?.toString() ?? ''),
@@ -398,7 +421,10 @@ class SignatureDecoder {
     );
   }
 
-  static SignatureDecodedResult _decodeApprove(String calldata, String? contract) {
+  static SignatureDecodedResult _decodeApprove(
+    String calldata,
+    String? contract,
+  ) {
     if (calldata.length < 138) {
       return SignatureDecodedResult(
         title: 'Token Approve',
@@ -411,7 +437,8 @@ class SignatureDecoder {
 
     final spender = '0x${calldata.substring(34, 74)}';
     final amountHex = calldata.substring(74, 138);
-    final isUnlimited = amountHex == 'f' * 64 ||
+    final isUnlimited =
+        amountHex == 'f' * 64 ||
         BigInt.tryParse(amountHex, radix: 16) == BigInt.parse(_maxUint256Str);
 
     return SignatureDecodedResult(
@@ -422,8 +449,11 @@ class SignatureDecoder {
       riskLevel: isUnlimited ? TxRiskLevel.danger : TxRiskLevel.caution,
       fields: [
         DecodedField('Spender', spender),
-        DecodedField('Amount', isUnlimited ? 'UNLIMITED' : _formatHexAmount(amountHex),
-            isHighlighted: isUnlimited),
+        DecodedField(
+          'Amount',
+          isUnlimited ? 'UNLIMITED' : _formatHexAmount(amountHex),
+          isHighlighted: isUnlimited,
+        ),
         if (contract != null) DecodedField('Token Contract', contract),
       ],
       warnings: isUnlimited
@@ -435,7 +465,10 @@ class SignatureDecoder {
     );
   }
 
-  static SignatureDecodedResult _decodeTransfer(String calldata, String? contract) {
+  static SignatureDecodedResult _decodeTransfer(
+    String calldata,
+    String? contract,
+  ) {
     if (calldata.length < 138) {
       return SignatureDecodedResult(
         title: 'Token Transfer',
@@ -467,11 +500,16 @@ class SignatureDecoder {
       description: 'Transfer tokens on behalf of another address',
       riskLevel: TxRiskLevel.caution,
       fields: [],
-      warnings: ['This moves tokens from another address using a prior approval'],
+      warnings: [
+        'This moves tokens from another address using a prior approval',
+      ],
     );
   }
 
-  static SignatureDecodedResult _decodeSetApprovalForAll(String calldata, String? contract) {
+  static SignatureDecodedResult _decodeSetApprovalForAll(
+    String calldata,
+    String? contract,
+  ) {
     if (calldata.length < 138) {
       return SignatureDecodedResult(
         title: 'NFT Approval For All',
@@ -487,15 +525,20 @@ class SignatureDecoder {
     final isApproved = BigInt.tryParse(approvedHex, radix: 16) != BigInt.zero;
 
     return SignatureDecodedResult(
-      title: isApproved ? 'Grant NFT Operator Access' : 'Revoke NFT Operator Access',
+      title: isApproved
+          ? 'Grant NFT Operator Access'
+          : 'Revoke NFT Operator Access',
       description: isApproved
           ? 'Allow ${_shortAddress(operator)} to transfer ALL your NFTs in this collection'
           : 'Revoke ${_shortAddress(operator)}\'s access to your NFTs',
       riskLevel: isApproved ? TxRiskLevel.danger : TxRiskLevel.safe,
       fields: [
         DecodedField('Operator', operator),
-        DecodedField('Approved', isApproved ? 'YES — All NFTs' : 'NO — Revoked',
-            isHighlighted: isApproved),
+        DecodedField(
+          'Approved',
+          isApproved ? 'YES — All NFTs' : 'NO — Revoked',
+          isHighlighted: isApproved,
+        ),
         if (contract != null) DecodedField('Collection', contract),
       ],
       warnings: isApproved
@@ -527,11 +570,17 @@ class SignatureDecoder {
   static String _formatWei(String hexValue) {
     try {
       final wei = BigInt.parse(hexValue.replaceFirst('0x', ''), radix: 16);
-      final eth = wei / BigInt.from(10).pow(18);
-      final remainder = wei % BigInt.from(10).pow(18);
+      final divisor = BigInt.from(10).pow(18);
+      final eth = wei ~/ divisor;
+      final remainder = wei.remainder(divisor);
       if (remainder == BigInt.zero) return '$eth';
-      final decimal = remainder.toString().padLeft(18, '0').substring(0, 6);
-      return '$eth.$decimal';
+      final decimal = remainder
+          .abs()
+          .toString()
+          .padLeft(18, '0')
+          .replaceFirst(RegExp(r'0+$'), '');
+      final sign = wei.isNegative ? '-' : '';
+      return '$sign${eth.abs()}.$decimal';
     } catch (_) {
       return hexValue;
     }
@@ -560,12 +609,17 @@ class SignatureDecoder {
     }
   }
 
-  static List<DecodedField> _flattenMessage(Map<String, dynamic> message, {String prefix = ''}) {
+  static List<DecodedField> _flattenMessage(
+    Map<String, dynamic> message, {
+    String prefix = '',
+  }) {
     final fields = <DecodedField>[];
     for (final entry in message.entries) {
       final key = prefix.isEmpty ? entry.key : '$prefix.${entry.key}';
       if (entry.value is Map<String, dynamic>) {
-        fields.addAll(_flattenMessage(entry.value as Map<String, dynamic>, prefix: key));
+        fields.addAll(
+          _flattenMessage(entry.value as Map<String, dynamic>, prefix: key),
+        );
       } else {
         fields.add(DecodedField(key, entry.value?.toString() ?? 'null'));
       }

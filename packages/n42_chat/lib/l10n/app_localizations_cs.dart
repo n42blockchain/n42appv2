@@ -801,7 +801,7 @@ class SCs extends S {
   String get commonTransferTo => 'Přenést do';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return 'Od $name';
   }
 

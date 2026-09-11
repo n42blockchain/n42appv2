@@ -801,7 +801,7 @@ class STa extends S {
   String get commonTransferTo => 'இடமாற்றம்';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name இலிருந்து';
   }
 

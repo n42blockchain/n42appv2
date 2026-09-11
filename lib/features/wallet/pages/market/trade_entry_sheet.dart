@@ -120,9 +120,9 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
       await _loadTrades();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Save trade failed: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui_trade_save_failed)),
+        );
       }
     } finally {
       if (mounted) {
@@ -139,9 +139,9 @@ class _TradeEntrySheetState extends State<_TradeEntrySheet> {
       await _loadTrades();
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Delete trade failed: $e')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui_trade_delete_failed)),
+        );
       }
     }
   }

@@ -30,10 +30,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTypography.body.copyWith(color: mainText),
-        ),
+        Text(label, style: AppTypography.body.copyWith(color: mainText)),
         Container(
           alignment: Alignment.center,
           padding: EdgeInsets.only(
@@ -189,7 +186,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
           ),
           SizedBox(width: su.setWidth(12)),
           Text(
-            'Looking up token info…',
+            S.of(context).g_ui_token_lookup,
             style: AppTypography.caption.copyWith(
               color: _formColor(AppThemeKeys.itemSubtitleTextColor.name),
             ),
@@ -206,7 +203,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
           SizedBox(width: gap),
           Expanded(
             child: Text(
-              'Token found: $_contractHint',
+              S.of(context).g_ui_token_found(_contractHint),
               style: AppTypography.caption.copyWith(
                 color: AppColorTokens.of(context).success,
               ),
@@ -222,7 +219,7 @@ extension _WalletCoinAddAllImportFormUI on _WalletCoinAddAllState {
             SizedBox(width: gap),
             Expanded(
               child: Text(
-                'Token not found in list — fill symbol & decimals manually',
+                S.of(context).g_ui_token_manual,
                 style: AppTypography.caption.copyWith(color: orange),
               ),
             ),

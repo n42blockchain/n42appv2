@@ -71,36 +71,39 @@ func (u *UniswapAdapter) Quote(
 	}
 	defer client.Close()
 
+	fee := int64(3000)
 	amountOut, err := u.callQuoterV2(
 		ctx, client,
 		common.HexToAddress(quoterAddr),
 		common.HexToAddress(req.TokenIn),
 		common.HexToAddress(req.TokenOut),
 		req.AmountInWei,
-		3000, // 默认 0.3% pool，失败时可 fallback 到 500/10000
+		fee, // 默认 0.3% pool
 	)
 	if err != nil {
 		// fallback：尝试 0.05% pool
+		fee = 500
 		amountOut, err = u.callQuoterV2(
 			ctx, client,
 			common.HexToAddress(quoterAddr),
 			common.HexToAddress(req.TokenIn),
 			common.HexToAddress(req.TokenOut),
 			req.AmountInWei,
-			500,
+			fee,
 		)
 		if err != nil {
 			return nil, fmt.Errorf("uniswap: quote: %w", err)
 		}
 	}
 
-	calldata, err := u.buildSwapCalldata(req, amountOut)
+	calldata, err := u.buildSwapCalldata(req, amountOut, fee)
 	if err != nil {
 		return nil, fmt.Errorf("uniswap: build calldata: %w", err)
 	}
 
 	return &models.QuoteResp{
 		Source:       "Uniswap V3",
+		TxValue:      "0",
 		AmountOutWei: amountOut,
 		AmountOut:    weiToHuman(amountOut, 18), // 调用者可按实际 decimals 覆盖
 		Calldata:     fmt.Sprintf("0x%x", calldata),
@@ -181,6 +184,7 @@ func (u *UniswapAdapter) callQuoterV2(
 func (u *UniswapAdapter) buildSwapCalldata(
 	req models.QuoteReq,
 	amountOut *big.Int,
+	fee int64,
 ) ([]byte, error) {
 	const routerABI = `[{
 		"inputs":[{
@@ -222,7 +226,7 @@ func (u *UniswapAdapter) buildSwapCalldata(
 	params := ExactInputSingleParams{
 		TokenIn:           common.HexToAddress(req.TokenIn),
 		TokenOut:          common.HexToAddress(req.TokenOut),
-		Fee:               big.NewInt(3000),
+		Fee:               big.NewInt(fee),
 		Recipient:         common.HexToAddress(req.UserAddr),
 		AmountIn:          req.AmountInWei,
 		AmountOutMinimum:  minOut,

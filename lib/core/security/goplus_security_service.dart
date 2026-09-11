@@ -7,15 +7,9 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/security/goplus_security_result.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 
-/// GoPlus Security API 客户端
-///
-/// 文档: https://docs.gopluslabs.io/reference/api-overview
-/// 免费层无需 API Key，限速 30 req/min。
-/// 结果缓存 5 分钟，避免重复请求。
+/// Shared GoPlus client used by transfer screens.
 class GoplusSecurityService {
-  static const String _base = 'https://api.gopluslabs.io/api/v1';
-
-  /// coinType（内部枚举）→ GoPlus chain ID 映射
+  static final _client = GoplusSecurityClient();
   static const Map<String, int> _chainIds = {
     'ETH': 1,
     'BSC': 56,
@@ -29,80 +23,101 @@ class GoplusSecurityService {
     'GNOSIS': 100,
   };
 
-  // 内存缓存（key = "chainId_contractAddress"）
-  static final Map<String, _CacheEntry> _cache = {};
-  static const int _maxCacheSize = 200;
-
-  static int? _chainId(String coinType) =>
-      _chainIds[coinType.toUpperCase()];
-
-  /// 当前链是否支持 GoPlus token security 检查
   static bool supportsChain(String coinType) =>
-      _chainId(coinType) != null;
+      _chainIds.containsKey(coinType.toUpperCase());
 
-  /// 检查 ERC-20 合约安全性。
-  ///
-  /// Fail-open 设计：链不支持或网络错误时返回 null，不阻断交易。
+  /// Unsupported chains and unavailable results return null, not a safe rating.
   static Future<GoplusSecurityResult?> checkToken(
     String coinType,
     String contractAddress,
-  ) async {
-    final chainId = _chainId(coinType);
-    if (chainId == null || contractAddress.isEmpty) return null;
+  ) => _client.checkToken(coinType, contractAddress);
+}
 
-    final normalizedAddr = contractAddress.toLowerCase();
-    final cacheKey = '${chainId}_$normalizedAddr';
+/// Token-risk lookup with a bounded five-minute cache and in-flight deduplication.
+/// Transport and time are injectable so error and cache behavior can be verified
+/// without external requests or waiting for wall-clock expiry.
+class GoplusSecurityClient {
+  GoplusSecurityClient({
+    Future<dynamic> Function(int chainId, String address)? request,
+    DateTime Function()? now,
+  }) : _request = request ?? _fetchToken,
+       _now = now ?? DateTime.now;
 
-    final cached = _cache[cacheKey];
-    if (cached != null && !cached.isExpired) return cached.result;
+  final Future<dynamic> Function(int, String) _request;
+  final DateTime Function() _now;
+  final _cache = <String, _CacheEntry>{};
+  final _pending = <String, Future<GoplusSecurityResult?>>{};
+  static const _maxCacheSize = 200;
 
-    try {
-      final raw = await BaseApi.requestEmptyH.get<dynamic>(
-        '$_base/token_security/$chainId',
-        params: {'contract_addresses': normalizedAddr},
+  static Future<dynamic> _fetchToken(int chainId, String address) =>
+      BaseApi.requestEmptyH.get<dynamic>(
+        'https://api.gopluslabs.io/api/v1/token_security/$chainId',
+        params: {'contract_addresses': address},
         header: <String, dynamic>{},
       );
 
-      if (raw == null || raw is! Map) return null;
-      if (raw['code'] != 1) return null;
-
-      final resultMap = raw['result'] as Map<String, dynamic>?;
-      if (resultMap == null || resultMap.isEmpty) return null;
-
-      // GoPlus returns the key as the contract address used in the request.
-      // Add a fallback: try original case, then first entry (single-query responses
-      // always return exactly one entry).
-      final tokenData = (resultMap[normalizedAddr] ??
-              resultMap[contractAddress] ??
-              (resultMap.length == 1 ? resultMap.values.first : null))
-          as Map<String, dynamic>?;
-      if (tokenData == null) return null;
-
-      final result = GoplusSecurityResult.fromTokenJson(tokenData);
-      if (_cache.length >= _maxCacheSize) {
-        _cache.removeWhere((_, entry) => entry.isExpired);
+  Future<GoplusSecurityResult?> checkToken(
+    String coinType,
+    String contractAddress,
+  ) {
+    final chainId = GoplusSecurityService._chainIds[coinType.toUpperCase()];
+    final address = contractAddress.toLowerCase();
+    if (chainId == null || !RegExp(r'^0x[0-9a-f]{40}$').hasMatch(address)) {
+      return Future.value(null);
+    }
+    final key = '${chainId}_$address';
+    final cached = _cache[key];
+    if (cached != null && !cached.isExpired(_now())) {
+      return Future.value(cached.result);
+    }
+    return _pending.putIfAbsent(key, () async {
+      try {
+        final raw = await _request(chainId, address);
+        if (raw is! Map || raw['code'] != 1) return null;
+        final results = raw['result'];
+        if (results is! Map) return null;
+        // A single-entry response can still belong to a different contract.
+        // Only an unambiguous address match may populate this token's cache.
+        final matches = results.entries
+            .where(
+              (entry) =>
+                  entry.key is String &&
+                  (entry.key as String).toLowerCase() == address,
+            )
+            .toList();
+        if (matches.length != 1) return null;
+        final tokenData = matches.single.value;
+        if (tokenData is! Map<String, dynamic> || tokenData.isEmpty) {
+          return null;
+        }
+        final result = GoplusSecurityResult.fromTokenJson(tokenData);
+        final now = _now();
         if (_cache.length >= _maxCacheSize) {
-          final keysToRemove = _cache.keys.take(_cache.length ~/ 4).toList();
-          for (final k in keysToRemove) {
-            _cache.remove(k);
+          _cache.removeWhere((_, entry) => entry.isExpired(now));
+          if (_cache.length >= _maxCacheSize) {
+            final oldest = _cache.keys.take(_cache.length ~/ 4).toList();
+            for (final key in oldest) {
+              _cache.remove(key);
+            }
           }
         }
+        _cache[key] = _CacheEntry(result, now);
+        return result;
+      } catch (e) {
+        AppLogger.w('GoplusSecurity', 'checkToken error: $e');
+        return null;
+      } finally {
+        _pending.remove(key);
       }
-      _cache[cacheKey] = _CacheEntry(result);
-      return result;
-    } catch (e) {
-      AppLogger.w('GoplusSecurity', 'checkToken error: $e');
-      return null;
-    }
+    });
   }
 }
 
 class _CacheEntry {
   final GoplusSecurityResult result;
-  final DateTime _createdAt = DateTime.now();
+  final DateTime createdAt;
+  _CacheEntry(this.result, this.createdAt);
 
-  _CacheEntry(this.result);
-
-  bool get isExpired =>
-      DateTime.now().difference(_createdAt) > const Duration(minutes: 5);
+  bool isExpired(DateTime now) =>
+      !now.isBefore(createdAt.add(const Duration(minutes: 5)));
 }

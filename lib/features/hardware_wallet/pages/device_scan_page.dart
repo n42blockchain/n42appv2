@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -82,7 +83,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: 'Find Device'),
+      appBar: AppBarWidget(text: S.of(context).g_key_hw_connect_new_device),
       body: SafeArea(
         child: ListenableBuilder(
           listenable: widget.provider,
@@ -365,7 +366,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Connected to ${device.name}'),
+          content: Text(S.of(context).g_ui_device_connected(device.name)),
           backgroundColor: AppColorTokens.of(context).success,
         ),
       );
@@ -387,14 +388,14 @@ class _DeviceScanPageState extends State<DeviceScanPage>
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(S.of(context).g_key_79),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
             _startScan();
           },
-          child: const Text('Try Again'),
+          child: Text(S.of(context).g_swap_key_6),
         ),
       ],
     );
@@ -408,7 +409,7 @@ class _DeviceScanPageState extends State<DeviceScanPage>
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('OK'),
+          child: Text(S.of(context).g_key_78),
         ),
       ],
     );

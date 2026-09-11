@@ -1,0 +1,87 @@
+{
+  "full_suite": "07:14 +4013: All tests passed!",
+  "line_coverage": {
+    "hit": 24795,
+    "found": 122163,
+    "files": 914
+  },
+  "full_suite_scopes": {
+    "wallet_aggregate": {
+      "hit": 603,
+      "found": 702,
+      "files": 7
+    },
+    "wallet_home": {
+      "hit": 781,
+      "found": 1004,
+      "files": 6
+    },
+    "wallet_refresh": {
+      "hit": 402,
+      "found": 628,
+      "files": 4
+    }
+  },
+  "module_suite": {
+    "tests": 84,
+    "hit": 597,
+    "found": 702,
+    "files": 7
+  },
+  "device_navigation": {
+    "android": "01:38 +1: All tests passed!",
+    "ios": "01:25 +1: All tests passed!"
+  },
+  "device_aggregate": {
+    "android": true,
+    "ios": true,
+    "source": "ordinary USDC",
+    "routes": [
+      "network balances",
+      "ETH receive QR",
+      "ETH network asset"
+    ]
+  },
+  "live_manual_refresh": {
+    "android": {
+      "complete": false,
+      "partial": true,
+      "statusVerified": true
+    },
+    "ios": {
+      "complete": false,
+      "partial": true,
+      "statusVerified": true
+    }
+  },
+  "normal_apps_installed": {
+    "android": true,
+    "ios": true
+  },
+  "installed_version": {
+    "name": "2.4.8",
+    "code": "2026072637",
+    "bundle": "ai.n42.www",
+    "mode": "Profile",
+    "entrypoint": "lib/main.dart"
+  },
+  "checks": {
+    "analyze_errors": 0,
+    "analyze_warnings": 0,
+    "analyze_infos": 160,
+    "dart_format_files": 11,
+    "dart_format_changes": 0,
+    "python_tests": 8,
+    "feature_inventory_current": true
+  },
+  "mainnet_broadcast": false,
+  "authenticated_chat_tested": false,
+  "screenshots": {
+    "android_detail": "android-detail.png",
+    "ios_detail": "ios-detail.png",
+    "android_normal": "android-after.png",
+    "ios_normal": "ios-after.png"
+  },
+  "source_hashes_match": true,
+  "completed_at_utc": "2026-09-11T06:37:24.251155+00:00"
+}

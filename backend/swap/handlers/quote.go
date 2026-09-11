@@ -36,6 +36,10 @@ func (h *QuoteHandler) Quote(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, models.Fail("missing required fields"))
 		return
 	}
+	if req.SlippageBps < 0 || req.SlippageBps > 10000 {
+		c.JSON(http.StatusBadRequest, models.Fail("invalid slippage_bps"))
+		return
+	}
 	if req.SlippageBps == 0 {
 		req.SlippageBps = 50 // 默认 0.5%
 	}
@@ -61,7 +65,13 @@ func (h *QuoteHandler) Quote(c *gin.Context) {
 
 	// gas 估算：简单以 source 类型给出固定估算文字（可接 RPC 查实际 gas）
 	resp.GasEstimate = estimateGas(req.Chain, resp.Source)
-	resp.PriceImpact = "< 1%"
+	// Never invent a low-risk price impact. Preserve adapter evidence or leave
+	// it unavailable. Clients normalize the raw output using token decimals.
+	if resp.AmountOutWei == nil || resp.AmountOutWei.Sign() <= 0 {
+		c.JSON(http.StatusBadGateway, models.Fail("invalid quote output"))
+		return
+	}
+	resp.AmountOutRaw = resp.AmountOutWei.String()
 
 	// 写入数据库（status=0 quoted）
 	if err := h.db.InsertOrder(

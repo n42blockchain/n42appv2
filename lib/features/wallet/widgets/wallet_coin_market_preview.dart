@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -121,7 +122,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
             Align(
               alignment: Alignment.centerRight,
               child: Text(
-                'View Market Data \u2192',
+                S.of(context).g_ui_view_market,
                 style: AppTypography.caption.copyWith(color: blueColor),
               ),
             ),
@@ -198,7 +199,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
       children: [
         if (marketCap != null) ...[
           _buildMetric(
-            'MCap',
+            S.of(context).g_key_m_2,
             _formatLargeNumber(marketCap),
             subtitleColor,
             textColor,
@@ -208,7 +209,7 @@ class _WalletCoinMarketPreviewState extends State<WalletCoinMarketPreview> {
         ],
         if (volume24h != null)
           _buildMetric(
-            '24h Vol',
+            S.of(context).g_ui_volume_24h,
             _formatLargeNumber(volume24h),
             subtitleColor,
             textColor,

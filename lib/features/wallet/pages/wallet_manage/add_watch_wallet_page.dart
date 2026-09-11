@@ -165,7 +165,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
             ),
             SizedBox(height: AppSpacing.space8),
             _buildTextField(
-              label: 'Name',
+              label: S.of(context).g_key_nft_2,
               controller: _nameCtrl,
               hint: s.g_key_watch_wallet,
               fontSize: 28,
@@ -175,7 +175,7 @@ class _AddWatchWalletPageState extends ConsumerState<AddWatchWalletPage> {
             ),
             SizedBox(height: AppSpacing.space6),
             _buildTextField(
-              label: 'Address',
+              label: S.of(context).g_key_address,
               controller: _addressCtrl,
               hint: s.g_key_watch_address_hint,
               fontSize: 26,

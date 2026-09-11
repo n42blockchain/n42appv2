@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -62,7 +63,7 @@ class _LendingPageState extends State<LendingPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Aave V3 Lending',
+          S.of(context).g_ui_aave_lending,
           style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,

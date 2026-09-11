@@ -1,0 +1,10 @@
+{
+  "outcome": "test connection stalled before test execution",
+  "native_app_running": true,
+  "screen": "native launch screen",
+  "debug_port_probe": "timeout",
+  "test_case_markers_observed": false,
+  "action": "terminated only the stalled test process and its remaining port forward; retried without uninstall",
+  "source_changes_between_attempts": false,
+  "uninstalled": false
+}

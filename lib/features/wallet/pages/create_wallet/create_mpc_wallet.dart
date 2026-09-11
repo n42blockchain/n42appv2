@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart' hide Provider;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -129,7 +130,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
     final subColor = AppColorTokens.of(context).textSubtitle;
 
     return Scaffold(
-      appBar: AppBarWidget(text: 'Create Wallet'),
+      appBar: AppBarWidget(text: S.of(context).g_ui_create_wallet),
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(AppSpacing.space8),
@@ -142,7 +143,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               Icon(Icons.shield_outlined, size: 48, color: blueColor),
               SizedBox(height: AppSpacing.space4),
               Text(
-                'No Seed Phrase Needed',
+                S.of(context).g_ui_mpc_no_phrase,
                 style: AppTypography.titleLg.copyWith(
                   fontWeight: FontWeight.w600,
                   color: textColor,
@@ -150,8 +151,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
               ),
               SizedBox(height: AppSpacing.space4),
               Text(
-                'Sign in with your social account to create a secure MPC wallet. '
-                'Your private key is split into encrypted shares — no seed phrase to lose.',
+                S.of(context).g_ui_mpc_intro,
                 style: AppTypography.bodySm.copyWith(
                   color: subColor,
                   height: 1.5,
@@ -179,9 +179,9 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                 Container(
                   padding: EdgeInsets.all(AppSpacing.space4),
                   decoration: BoxDecoration(
-                    color: AppColorTokens.of(context).danger.withValues(
-                      alpha: 0.1,
-                    ),
+                    color: AppColorTokens.of(
+                      context,
+                    ).danger.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Text(
@@ -208,7 +208,7 @@ class _CreateMpcWalletState extends ConsumerState<CreateMpcWallet> {
                     SizedBox(width: AppSpacing.space4),
                     Expanded(
                       child: Text(
-                        'Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.',
+                        S.of(context).g_ui_mpc_security,
                         style: AppTypography.caption.copyWith(
                           color: subColor,
                           height: 1.4,

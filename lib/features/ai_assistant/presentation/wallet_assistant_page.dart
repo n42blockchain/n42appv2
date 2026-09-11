@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -90,7 +91,7 @@ class _WalletAssistantPageState extends State<WalletAssistantPage> {
         elevation: 0,
         foregroundColor: c.textPrimary,
         title: Text(
-          'Wallet AI',
+          S.of(context).g_ui_wallet_ai,
           style: AppTypography.headline.copyWith(
             color: c.textPrimary,
             letterSpacing: 0,
@@ -197,7 +198,7 @@ class _SnapshotHeader extends StatelessWidget {
           ),
           SizedBox(width: AppSpacing.space4),
           Text(
-            'Read-only',
+            S.of(context).g_ui_read_only,
             style: AppTypography.captionSm.copyWith(
               color: c.textTertiary,
               letterSpacing: 0,
@@ -360,7 +361,7 @@ class _Composer extends StatelessWidget {
                 letterSpacing: 0,
               ),
               decoration: InputDecoration(
-                hintText: 'Ask about balance, portfolio, gas',
+                hintText: S.of(context).g_ui_assistant_hint,
                 hintStyle: AppTypography.body.copyWith(
                   color: c.textTertiary,
                   letterSpacing: 0,
@@ -390,7 +391,7 @@ class _Composer extends StatelessWidget {
           IconButton.filled(
             onPressed: loading ? null : () => onSubmitted(controller.text),
             icon: const Icon(Icons.arrow_upward_rounded),
-            tooltip: 'Send',
+            tooltip: S.of(context).g_key_48,
           ),
         ],
       ),

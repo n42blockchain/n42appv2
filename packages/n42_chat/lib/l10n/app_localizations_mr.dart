@@ -799,7 +799,7 @@ class SMr extends S {
   String get commonTransferTo => 'कडे हस्तांतरित करा';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name वरून';
   }
 

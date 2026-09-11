@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Zobacz szczegoly czerwonej koperty",
   "commonEnterTransferAmount": "Wprowadz kwote przelewu",
   "commonTransferTo": "Przelew do",
-  "commonFromSender": "Od {senderName}",
+  "commonFromSender": "Od {name}",
   "commonConfirmReceive": "Potwierdz odbiór",
   "groupProfile": "Informacje o grupie",
   "groupRemoveMember": "Usun z grupy",
@@ -397,7 +397,7 @@
   "chatCalling": "Dzwonie...",
   "chatRinging": "Dzwoni...",
   "chatInCall": "W trakcie polaczenia",
-  "commonFeatureInDevelopment": "Funkcja w trakcie rozwoju...",
+  "commonFeatureInDevelopment": "Funkcja {feature} jest w trakcie rozwoju…",
   "chatCollectMessages": "Zebrano {count} wiadomosci",
   "commonMemberCount": "{count} czlonkow",
   "groupDone": "Gotowe({count})",
@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "Nie udało się zmienić adresu e-mail",
   "blocAuthVerificationCodeInvalid": "Kod weryfikacyjny jest nieprawidłowy lub wygasł",
   "blocAuthSessionExpired": "Sesja wygasła. Zaloguj się ponownie",
-  "blocAuthSessionIncomplete": "Dane sesji są niekompletne. Proszę zalogować się ponownie"
+  "blocAuthSessionIncomplete": "Dane sesji są niekompletne. Proszę zalogować się ponownie",
+  "authSsoNotConfigured": "Na tym serwerze nie skonfigurowano dostawców logowania SSO"
 }

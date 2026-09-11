@@ -4,6 +4,7 @@
 // See LICENSE file in the project root for full license information.
 
 import 'package:flutter/material.dart';
+import 'package:n42_wallet/features/wallet/pages/perps/perp_market_details_sheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/pages/perps/hyperliquid_service.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -73,7 +74,7 @@ class _PerpsPageState extends State<PerpsPage>
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Perpetuals',
+          S.of(context).g_key_earn_perps,
           style: AppTypography.title.copyWith(
             fontWeight: FontWeight.w600,
             color: AppColorTokens.of(context).textPrimary,
@@ -88,14 +89,18 @@ class _PerpsPageState extends State<PerpsPage>
           ),
         ],
         bottom: TabBar(
+          isScrollable: true,
+          tabAlignment: TabAlignment.start,
           controller: _tabController,
           indicatorColor: AppColorTokens.of(context).brand,
           labelColor: AppColorTokens.of(context).textPrimary,
           unselectedLabelColor: AppColorTokens.of(context).textSubtitle,
           tabs: [
-            Tab(text: 'Markets (${_markets.length})'),
-            Tab(text: 'Positions (${_positions.length})'),
-            Tab(text: 'Orders (${_orders.length})'),
+            Tab(text: S.of(context).g_ui_markets_count('${_markets.length}')),
+            Tab(
+              text: S.of(context).g_ui_positions_count('${_positions.length}'),
+            ),
+            Tab(text: S.of(context).g_ui_orders_count('${_orders.length}')),
           ],
         ),
       ),
@@ -162,16 +167,19 @@ class _PerpsPageState extends State<PerpsPage>
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildMarginItem(
-            'Account',
+            S.of(context).g_key_dapp_connect_account,
             '\$${margin.accountValue.toStringAsFixed(2)}',
           ),
           _buildMarginItem(
-            'Used',
+            S.of(context).g_key_loyalty_used,
             '\$${margin.totalMarginUsed.toStringAsFixed(2)}',
           ),
-          _buildMarginItem('Free', '\$${margin.freeMargin.toStringAsFixed(2)}'),
           _buildMarginItem(
-            'Util',
+            S.of(context).g_ui_free_margin,
+            '\$${margin.freeMargin.toStringAsFixed(2)}',
+          ),
+          _buildMarginItem(
+            S.of(context).g_ui_margin_utilization,
             '${margin.marginUtilization.toStringAsFixed(1)}%',
           ),
         ],
@@ -216,7 +224,12 @@ class _PerpsPageState extends State<PerpsPage>
             ),
           ),
           subtitle: Text(
-            'Vol: \$${_formatCompact(m.volume24h)} · OI: \$${_formatCompact(m.openInterest)}',
+            S
+                .of(context)
+                .g_ui_volume_interest(
+                  '\$${_formatCompact(m.volume24h)}',
+                  '\$${_formatCompact(m.openInterest * m.markPrice)}',
+                ),
             style: AppTypography.captionSm.copyWith(
               color: AppColorTokens.of(context).textSubtitle,
             ),
@@ -243,9 +256,7 @@ class _PerpsPageState extends State<PerpsPage>
               ),
             ],
           ),
-          onTap: () {
-            // TODO: Navigate to trading detail page
-          },
+          onTap: () => showPerpMarketDetails(context, m),
         );
       },
     );
@@ -255,7 +266,7 @@ class _PerpsPageState extends State<PerpsPage>
     if (_positions.isEmpty) {
       return Center(
         child: Text(
-          'No open positions',
+          S.of(context).g_ui_no_positions,
           style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
@@ -331,13 +342,16 @@ class _PerpsPageState extends State<PerpsPage>
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildPosDetail('Size', p.size.abs().toStringAsFixed(4)),
                   _buildPosDetail(
-                    'Entry',
+                    S.of(context).g_ui_position_size,
+                    p.size.abs().toStringAsFixed(4),
+                  ),
+                  _buildPosDetail(
+                    S.of(context).g_ui_entry_price,
                     '\$${p.entryPrice.toStringAsFixed(2)}',
                   ),
                   _buildPosDetail(
-                    'Liq',
+                    S.of(context).g_ui_liquidation_price,
                     '\$${p.liquidationPrice.toStringAsFixed(2)}',
                   ),
                 ],
@@ -372,7 +386,7 @@ class _PerpsPageState extends State<PerpsPage>
     if (_orders.isEmpty) {
       return Center(
         child: Text(
-          'No open orders',
+          S.of(context).g_ui_no_orders,
           style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );
@@ -399,7 +413,7 @@ class _PerpsPageState extends State<PerpsPage>
             ),
           ),
           subtitle: Text(
-            'Limit \$${o.price.toStringAsFixed(2)}',
+            S.of(context).g_ui_limit_value('\$${o.price.toStringAsFixed(2)}'),
             style: AppTypography.captionSm.copyWith(
               color: AppColorTokens.of(context).textSubtitle,
             ),

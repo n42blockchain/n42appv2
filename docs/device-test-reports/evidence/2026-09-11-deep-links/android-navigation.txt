@@ -1,0 +1,33 @@
+DEVICE_STEP deep link: cold startup, duplicate, untrusted origin
+DEVICE_DEEP_LINK cold=true duplicateBlocked=true untrustedBlocked=true signed=false
+DEVICE_PROXY verified trendingCoins=15 authenticated=true readOnly=true
+DEVICE_STEP home: navigate primary tabs
+DEVICE_STEP market: tabs and search input
+DEVICE_STEP wallet: account, assistant, connect, and actions
+DEVICE_STEP wallet: wallet_select_account
+DEVICE_STEP wallet: wallet_assistant
+DEVICE_STEP wallet: wallet_connect
+DEVICE_STEP wallet: wallet_qr_menu
+DEVICE_STEP wallet: wallet_action_send
+DEVICE_STEP wallet: wallet_action_receive
+DEVICE_STEP wallet: wallet_action_swap
+DEVICE_STEP wallet: wallet_feature_ens
+DEVICE_STEP wallet: wallet_feature_smart_account
+DEVICE_STEP wallet: compact token row opens asset details
+DEVICE_HOME tokenRowHeight=53.748
+DEVICE_STEP wallet: manual price refresh
+DEVICE_HOME manualRefresh complete=false partial=true statusVerified=true banner=false
+DEVICE_STEP wallet: stablecoin network balances
+DEVICE_AGGREGATE detail=true receive=true network=true readOnly=true
+DEVICE_STEP drawer: open every non-destructive destination
+DEVICE_STEP drawer: drawer_profile
+DEVICE_STEP drawer: drawer_wallet_manage
+DEVICE_STEP drawer: drawer_address_book
+DEVICE_STEP drawer: drawer_security
+DEVICE_STEP drawer: drawer_settings
+DEVICE_STEP drawer: drawer_loyalty
+DEVICE_STEP drawer: drawer_airdrop
+DEVICE_STEP drawer: drawer_browser
+DEVICE_STEP drawer: drawer_about
+DEVICE_SCOPE authenticated Chat excluded from this run
+01:28 +1: All tests passed!

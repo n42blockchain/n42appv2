@@ -1,5 +1,7 @@
 import 'dart:math' show max;
 
+import 'package:n42_wallet/generated/l10n.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -45,26 +47,37 @@ class WalletPinIconButton extends StatelessWidget {
     required this.onTap,
   });
 
+  static double get touchExtent => max(44, ScreenUtil().setWidth(88));
+
   final bool isPinned;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    // InkWell + ≥88.w 命中区（44dp 触控红线）；图标视觉尺寸不变。
-    return InkWell(
-      onTap: onTap,
-      borderRadius: AppRadius.brPill,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minWidth: ScreenUtil().setWidth(88),
-          minHeight: ScreenUtil().setWidth(88),
-        ),
-        child: Icon(
-          isPinned ? Icons.push_pin : Icons.push_pin_outlined,
-          size: ScreenUtil().setWidth(32),
-          color: isPinned
-              ? AppColorTokens.of(context).brand
-              : AppColorTokens.of(context).textTertiary,
+    final label = isPinned
+        ? S.of(context).g_wallet_unpin_token
+        : S.of(context).g_wallet_pin_token;
+    return Tooltip(
+      message: label,
+      child: Semantics(
+        button: true,
+        toggled: isPinned,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: AppRadius.brPill,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: touchExtent,
+              minHeight: touchExtent,
+            ),
+            child: Icon(
+              isPinned ? Icons.push_pin : Icons.push_pin_outlined,
+              size: ScreenUtil().setWidth(32),
+              color: isPinned
+                  ? AppColorTokens.of(context).brand
+                  : AppColorTokens.of(context).textTertiary,
+            ),
+          ),
         ),
       ),
     );
@@ -135,14 +148,22 @@ class WalletSkeletonCoinRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: AppColorTokens.of(context).border.withValues(alpha: 0.55),
+            width: 0.5,
+          ),
+        ),
+      ),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            width: ScreenUtil().setWidth(48),
-            height: ScreenUtil().setWidth(48),
+            width: ScreenUtil().setWidth(64),
+            height: ScreenUtil().setWidth(64),
             margin: EdgeInsets.only(right: AppSpacing.space4),
             decoration: BoxDecoration(
               color: shimmerColor,
@@ -150,21 +171,28 @@ class WalletSkeletonCoinRow extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_shimmerBox(80, 22), _shimmerBox(60, 22)],
-                ),
-                SizedBox(height: AppSpacing.space2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [_shimmerBox(100, 18), _shimmerBox(50, 18)],
-                ),
-              ],
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: WalletPinIconButton.touchExtent,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [_shimmerBox(80, 22), _shimmerBox(60, 22)],
+                  ),
+                  SizedBox(height: AppSpacing.space2),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [_shimmerBox(100, 18), _shimmerBox(50, 18)],
+                  ),
+                ],
+              ),
             ),
           ),
+          SizedBox.square(dimension: WalletPinIconButton.touchExtent),
         ],
       ),
     );

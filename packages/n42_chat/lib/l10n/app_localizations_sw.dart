@@ -800,7 +800,7 @@ class SSw extends S {
   String get commonTransferTo => 'Hamisha hadi';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return 'Kutoka $name';
   }
 

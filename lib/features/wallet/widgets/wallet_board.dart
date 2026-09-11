@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +16,8 @@ class WalletBoard extends StatefulWidget {
 
   /// 最后成功更新价格的时间（用于展示"更新于 X 分钟前"）
   final DateTime? priceLastUpdated;
+  final bool priceRefreshFailed;
+  final bool hasPartialPrices;
   //swap
   final GestureTapCallback? swapTap;
   //send
@@ -28,6 +32,8 @@ class WalletBoard extends StatefulWidget {
     required this.accountPrice,
     this.usdToCnyRate = 7.3,
     this.priceLastUpdated,
+    this.priceRefreshFailed = false,
+    this.hasPartialPrices = false,
     this.swapTap,
     this.walletName,
     this.receiveTap,
@@ -49,17 +55,6 @@ class _WalletBoardState extends State<WalletBoard> {
     if (usd >= 1e9) return '\$${(usd / 1e9).toStringAsFixed(2)}B';
     if (usd >= 1e6) return '\$${(usd / 1e6).toStringAsFixed(2)}M';
     return '\$${oCcy.format(usd)}';
-  }
-
-  /// 返回 "更新于 X 分钟前" / "刚刚" 文本
-  String _lastUpdatedLabel() {
-    final t = widget.priceLastUpdated;
-    if (t == null) return '';
-    final minutes = DateTime.now().difference(t).inMinutes;
-    if (minutes < 1) return 'Just updated';
-    if (minutes < 60) return 'Updated ${minutes}m ago';
-    final hours = minutes ~/ 60;
-    return 'Updated ${hours}h ago';
   }
 
   @override
@@ -123,7 +118,7 @@ class _WalletBoardState extends State<WalletBoard> {
           ),
           // 主内容
           Padding(
-            padding: EdgeInsets.all(AppSpacing.space8),
+            padding: EdgeInsets.all(AppSpacing.space6),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -148,7 +143,10 @@ class _WalletBoardState extends State<WalletBoard> {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 // CNY + 更新时间行
-                Row(
+                Wrap(
+                  spacing: AppSpacing.space6,
+                  runSpacing: AppSpacing.space2,
+                  crossAxisAlignment: WrapCrossAlignment.center,
                   children: [
                     if (widget.accountPrice > 0) ...[
                       Text(
@@ -157,35 +155,24 @@ class _WalletBoardState extends State<WalletBoard> {
                           color: AppColorTokens.onOverlaySecondary,
                         ),
                       ),
-                      SizedBox(width: AppSpacing.space6),
                     ],
-                    if (widget.priceLastUpdated != null)
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: AppSpacing.space4,
-                          vertical: AppSpacing.space2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColorTokens.onOverlayBorder,
-                          borderRadius: AppRadius.brSm,
-                        ),
-                        child: Text(
-                          _lastUpdatedLabel(),
-                          style: AppTypography.captionSm.copyWith(
-                            color: AppColorTokens.onOverlaySecondary,
-                          ),
-                        ),
-                      ),
+                    WalletPriceStatus(
+                      updated: widget.priceLastUpdated,
+                      failed: widget.priceRefreshFailed,
+                      partial: widget.hasPartialPrices,
+                    ),
                   ],
                 ),
-                SizedBox(height: AppSpacing.space8),
+                SizedBox(height: AppSpacing.space4),
                 // 分割线
                 Container(height: 1, color: AppColorTokens.onOverlayBorder),
-                SizedBox(height: AppSpacing.space6),
+                SizedBox(height: AppSpacing.space4),
                 // 操作按钮行(4 个按钮 spaceEvenly 均匀分布)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: buttonList(),
+                  children: [
+                    for (final button in buttonList()) Expanded(child: button),
+                  ],
                 ),
               ],
             ),
@@ -249,38 +236,152 @@ class _WalletBoardState extends State<WalletBoard> {
   }
 
   Widget _actionBtnBody(String label, String imagePath) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: ScreenUtil().setWidth(96),
-          height: ScreenUtil().setWidth(96),
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 44),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
+        child: Ink(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSpacing.space4,
+            vertical: AppSpacing.space4,
+          ),
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.11),
-            borderRadius: AppRadius.brLg,
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.16),
-              width: 1,
-            ),
+            color: Colors.white.withValues(alpha: 0.09),
+            borderRadius: AppRadius.brMd,
+            border: Border.all(color: AppColorTokens.onOverlayBorder),
           ),
-          child: Center(
-            child: Image.asset(
-              imagePath,
-              width: ScreenUtil().setWidth(44),
-              height: ScreenUtil().setWidth(44),
-              color: Colors.white,
-            ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                imagePath,
+                width: ScreenUtil().setWidth(36),
+                height: ScreenUtil().setWidth(36),
+                color: Colors.white,
+              ),
+              SizedBox(width: AppSpacing.space4),
+              Flexible(
+                child: Text(
+                  label,
+                  textAlign: TextAlign.center,
+                  style: AppTypography.caption.copyWith(
+                    color: AppColorTokens.onOverlayPrimary,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: AppSpacing.space2),
-        Text(
-          label,
-          style: AppTypography.captionSm.copyWith(
-            color: AppColorTokens.onOverlayPrimary,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
+      ),
+    );
+  }
+}
+
+/// Advances only the age label; never requests quotes or rebuilds asset rows.
+class WalletPriceStatus extends StatefulWidget {
+  const WalletPriceStatus({
+    super.key,
+    this.updated,
+    this.failed = false,
+    this.partial = false,
+    this.now,
+  });
+
+  final DateTime? updated;
+  final bool failed;
+  final bool partial;
+  final DateTime Function()? now;
+
+  @override
+  State<WalletPriceStatus> createState() => _WalletPriceStatusState();
+}
+
+class _WalletPriceStatusState extends State<WalletPriceStatus>
+    with WidgetsBindingObserver {
+  Timer? _timer;
+
+  DateTime get _now => (widget.now ?? DateTime.now)();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _schedule();
+  }
+
+  @override
+  void didUpdateWidget(WalletPriceStatus oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _schedule();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    _schedule();
+    if (state == AppLifecycleState.resumed) setState(() {});
+  }
+
+  void _schedule() {
+    _timer?.cancel();
+    final lifecycle = WidgetsBinding.instance.lifecycleState;
+    if (widget.updated == null ||
+        widget.partial ||
+        widget.failed ||
+        !TickerMode.of(context) ||
+        (lifecycle != null && lifecycle != AppLifecycleState.resumed))
+      return;
+    final age = _now.difference(widget.updated!);
+    // Align to the displayed minute/hour boundary, including after resume.
+    final unit = age.inHours >= 1
+        ? const Duration(hours: 1)
+        : const Duration(minutes: 1);
+    final elapsed = age.isNegative ? 0 : age.inMicroseconds;
+    final delay = Duration(
+      microseconds: unit.inMicroseconds - elapsed % unit.inMicroseconds,
+    );
+    _timer = Timer(delay, () {
+      if (!mounted) return;
+      setState(() {});
+      _schedule();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    final minutes = widget.updated == null
+        ? 0
+        : _now.difference(widget.updated!).inMinutes;
+    final label = widget.partial
+        ? s.g_wallet_prices_partial
+        : widget.updated == null
+        ? s.g_wallet_prices_unavailable
+        : widget.failed
+        ? s.g_wallet_prices_cached
+        : minutes < 1
+        ? s.g_wallet_prices_just_updated
+        : minutes < 60
+        ? s.g_wallet_prices_minutes(minutes)
+        : s.g_wallet_prices_hours(minutes ~/ 60);
+    return Text(
+      label,
+      key: const ValueKey('wallet_price_status'),
+      style: AppTypography.captionSm.copyWith(
+        color: AppColorTokens.onOverlaySecondary,
+      ),
     );
   }
 }

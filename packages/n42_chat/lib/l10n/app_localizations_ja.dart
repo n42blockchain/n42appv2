@@ -783,8 +783,8 @@ class SJa extends S {
   String get commonTransferTo => '送金先';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return '$senderNameから';
+  String commonFromSender(String name) {
+    return '$nameから';
   }
 
   @override
@@ -1204,7 +1204,7 @@ class SJa extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return '機能開発中...';
+    return '$feature機能は開発中です…';
   }
 
   @override
@@ -4750,7 +4750,7 @@ class SJa extends S {
 
   @override
   String momentCommentsCount(int count) {
-    return 'コメント';
+    return 'コメント$count件';
   }
 
   @override

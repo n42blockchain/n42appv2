@@ -1,246 +1,116 @@
 part of 'transaction_history_list.dart';
 
-/// Data loading, filter logic, and CSV export mixin for
-/// [_TransactionHistoryListState].
-///
-/// Holds all mutable state fields and provides data manipulation methods.
-/// Applied before [_TransactionHistoryWidgetsMixin] in the with-clause.
-mixin _TransactionHistoryLogicMixin on State<TransactionHistoryList> {
-  AppDatabase? _db;
-  AppDatabase get db => _db ??= AppDatabase();
-
-  late final String addr;
-  late final bool isBtcChain;
-
-  static const int _pageSize = 50;
-
-  List<dynamic> allRecords = [];
-  _TxFilter filter = const _TxFilter();
+mixin _TransactionHistoryLogicMixin on State<_TransactionHistoryView> {
+  late final _repository = widget.repository ?? TransactionHistoryRepository();
+  final List<Object> allRecords = [];
+  TransactionHistoryFilter filter = const TransactionHistoryFilter();
   bool isLoading = true;
   bool isExporting = false;
-  int _currentPage = 1;
   bool _hasMore = true;
   bool _isLoadingMore = false;
+  bool _loadFailed = false;
+  int _generation = 0;
 
-  List<dynamic> get filtered => _applyFilter(allRecords);
+  Future<void> loadAll() => _load(reset: true);
+  Future<void> loadMore() => _load();
 
-  void initLogic() {
-    addr = widget.coinModel.address.toString();
-    isBtcChain =
-        widget.coinModel.config.blockchainType == BlockchainType.Bitcoin.name;
-  }
-
-  Future<List<dynamic>> _queryPage(int page) async {
-    final coinKey = widget.coinModel.config.coinType;
-    final contract = resolveCoinContractForNetwork(
-      coin: widget.coinModel.coin,
-      isTest: widget.coinModel.isTest,
-    );
-
-    if (isBtcChain) {
-      return await db.selectBtcTransationRecord(
-        AppGlobals.userInfo?.uuid ?? '',
-        addr,
-        coinKey,
-        0,
-        pageSize: _pageSize,
-        pageNum: page,
-      );
-    } else {
-      return await db.selectTransationRecordMiniName(
-        addr,
-        coinKey,
-        0,
-        contract: contract,
-        pageSize: _pageSize,
-        pageNum: page,
-        isTest: widget.coinModel.isTest ? 1 : 0,
-      );
+  Future<void> _load({bool reset = false}) async {
+    if (!mounted || (!reset && (isLoading || _isLoadingMore || !_hasMore))) {
+      return;
     }
-  }
-
-  Future<void> loadAll() async {
-    if (!mounted) return;
+    final generation = ++_generation;
     setState(() {
-      isLoading = true;
-      _currentPage = 1;
-      _hasMore = true;
+      _loadFailed = false;
+      if (reset) {
+        allRecords.clear();
+        isLoading = true;
+        _isLoadingMore = false;
+        _hasMore = true;
+      } else {
+        _isLoadingMore = true;
+      }
     });
-
     try {
-      final list = await _queryPage(1);
-      if (mounted) {
-        setState(() {
-          allRecords = list;
-          _hasMore = list.length >= _pageSize;
-          isLoading = false;
-        });
-      }
+      final page = await _repository.load(
+        scope: widget.scope,
+        filter: filter,
+        offset: allRecords.length,
+      );
+      if (!mounted || generation != _generation) return;
+      setState(() {
+        allRecords.addAll(page.records);
+        _hasMore = page.hasMore;
+      });
     } catch (e) {
-      AppLogger.w('TxHistory', '_loadAll error: $e');
-      if (mounted) setState(() => isLoading = false);
-    }
-  }
-
-  Future<void> loadMore() async {
-    if (!mounted || _isLoadingMore || !_hasMore) return;
-    setState(() => _isLoadingMore = true);
-
-    try {
-      final nextPage = _currentPage + 1;
-      final list = await _queryPage(nextPage);
-      if (mounted) {
-        setState(() {
-          allRecords.addAll(list);
-          _currentPage = nextPage;
-          _hasMore = list.length >= _pageSize;
-        });
+      AppLogger.w('TxHistory', 'load error: $e');
+      if (mounted && generation == _generation) {
+        setState(() => _loadFailed = true);
       }
-    } catch (e) {
-      AppLogger.w('TxHistory', 'loadMore error: $e');
     } finally {
-      if (mounted) setState(() => _isLoadingMore = false);
+      if (mounted && generation == _generation) {
+        setState(() {
+          isLoading = false;
+          _isLoadingMore = false;
+        });
+      }
     }
   }
 
-  List<dynamic> _applyFilter(List<dynamic> records) {
-    if (!filter.isActive) return records;
-
-    return records.where((tx) {
-      // --- Direction filter ---
-      if (filter.direction != null) {
-        final bool isSent;
-        if (tx is BtcTransactionRecodeModel) {
-          isSent = tx.inputsAddressList.any(
-            (a) => a.toUpperCase() == addr.toUpperCase(),
-          );
-        } else if (tx is TransationRecordModel) {
-          isSent = tx.from1.toLowerCase() == addr.toLowerCase();
-        } else {
-          isSent = false;
-        }
-        if (filter.direction == 'out' && !isSent) return false;
-        if (filter.direction == 'in' && isSent) return false;
-      }
-
-      // --- Status filter ---
-      if (filter.status != null) {
-        // Both models have a `state` field accessible via dynamic dispatch
-        final int txState = (tx as dynamic).state as int;
-        if (txState != filter.status) return false;
-      }
-
-      // --- Date filter ---
-      if (filter.dateFrom != null || filter.dateTo != null) {
-        final tsMs = txTimestampMs(tx);
-        final dt = DateTime.fromMillisecondsSinceEpoch(tsMs);
-        if (filter.dateFrom != null && dt.isBefore(filter.dateFrom!)) {
-          return false;
-        }
-        if (filter.dateTo != null &&
-            dt.isAfter(filter.dateTo!.add(const Duration(days: 1)))) {
-          return false;
-        }
-      }
-
-      return true;
-    }).toList();
-  }
-
-  /// BTC stores seconds-precision timestamps; EVM stores milliseconds.
-  /// Detect by magnitude: < 10^12 = seconds.
-  int txTimestampMs(dynamic tx) {
-    final String raw;
-    if (tx is BtcTransactionRecodeModel) {
-      raw = tx.txTime;
-    } else {
-      raw = (tx as TransationRecordModel).txTime;
-    }
-    final int ts = int.tryParse(raw) ?? 0;
-    return ts < 1000000000000 ? ts * 1000 : ts;
-  }
-
-  Future<void> exportCsv() async {
+  Future<void> exportCsv(BuildContext anchor) async {
+    if (isExporting || !widget.scope.isValid) return;
+    final exportFilter = filter;
+    final box = anchor.findRenderObject() as RenderBox?;
+    final origin = box == null
+        ? null
+        : box.localToGlobal(Offset.zero) & box.size;
     setState(() => isExporting = true);
+    File? file;
+    IOSink? sink;
+    bool readyToShare = false;
     try {
-      final rows = filtered;
-      final buf = StringBuffer('\uFEFF'); // UTF-8 BOM for Excel compatibility
-      buf.writeln('No,Time,Direction,Status,Amount,Token,From,To,TxHash');
-
-      final dtFmt = DateFormat('yyyy-MM-dd HH:mm:ss');
-
-      for (var i = 0; i < rows.length; i++) {
-        final tx = rows[i];
-
-        final tsMs = txTimestampMs(tx);
-        final time = dtFmt.format(DateTime.fromMillisecondsSinceEpoch(tsMs));
-
-        final bool isSent;
-        final String fromAddr;
-        final String toAddr;
-
-        if (tx is BtcTransactionRecodeModel) {
-          isSent = tx.inputsAddressList.any(
-            (a) => a.toUpperCase() == addr.toUpperCase(),
-          );
-          fromAddr = addr;
-          toAddr = tx.to1;
-        } else if (tx is TransationRecordModel) {
-          isSent = tx.from1.toLowerCase() == addr.toLowerCase();
-          fromAddr = tx.from1;
-          toAddr = tx.to1;
-        } else {
-          continue;
-        }
-
-        final amount = (tx as dynamic).priceDouble() as double;
-        final coin = (tx as dynamic).coin as Map<String, dynamic>;
-        final token =
-            (coin['unit'] as String? ?? (tx as dynamic).coinMiniName as String)
-                .toUpperCase();
-        final int state = (tx as dynamic).state as int;
-        final String txHash = (tx as dynamic).txHash as String;
-
-        final direction = isSent ? 'Send' : 'Receive';
-        final status = _statusStr(state);
-
-        buf.writeln(
-          '${i + 1},$time,$direction,$status,$amount,$token,'
-          '${_csvField(fromAddr)},${_csvField(toAddr)},${_csvField(txHash)}',
-        );
-      }
-
       final tempDir = await getTemporaryDirectory();
-      final ts = DateTime.now().millisecondsSinceEpoch;
-      final fileName = 'txhistory_$ts.csv';
-      final file = File('${tempDir.path}/$fileName');
-      await file.writeAsString(buf.toString());
-
       if (!mounted) return;
+      final fileName = 'txhistory_${DateTime.now().microsecondsSinceEpoch}.csv';
+      file = File('${tempDir.path}/$fileName');
+      final output = file.openWrite();
+      sink = output;
+      await _repository.exportCsv(
+        scope: widget.scope,
+        filter: exportFilter,
+        writeChunk: (chunk) async {
+          if (!mounted) throw StateError('History account changed');
+          output.write(chunk);
+          await output.flush();
+        },
+      );
+      await output.close();
+      sink = null;
+      if (!mounted) return;
+      readyToShare = true;
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path, mimeType: 'text/csv', name: fileName)],
-          subject: S.of(context).g_key_batch_export_csv,
+          subject: S.of(context).g_history_export_all,
+          sharePositionOrigin: origin,
         ),
       );
     } catch (e) {
-      AppLogger.w('TxHistory', 'exportCsv error: $e');
+      AppLogger.w('TxHistory', 'export error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_history_export_error)),
+        );
+      }
     } finally {
+      try {
+        await sink?.close();
+        if (!readyToShare && file != null && await file.exists()) {
+          await file.delete();
+        }
+      } catch (_) {
+        // Best-effort cleanup of an interrupted temporary export.
+      }
       if (mounted) setState(() => isExporting = false);
     }
   }
-
-  String _csvField(String s) {
-    if (s.contains(',') || s.contains('"') || s.contains('\n')) {
-      return '"${s.replaceAll('"', '""')}"';
-    }
-    return s;
-  }
-
-  String _statusStr(int state) => switch (state) {
-    0 => 'Pending',
-    1 => 'Success',
-    2 => 'Failed',
-    _ => 'Unknown',
-  };
 }

@@ -806,8 +806,8 @@ class SFr extends S {
   String get commonTransferTo => 'Transferer a';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'De $senderName';
+  String commonFromSender(String name) {
+    return 'De $name';
   }
 
   @override

@@ -54,13 +54,13 @@ class DeBankDatasource {
       );
 
       if (response.statusCode != 200 || response.data is! List) {
-        return DeFiPortfolio.empty();
+        throw const FormatException('Invalid DeFi portfolio response');
       }
 
       return DeFiPortfolio.fromDeBankResponse(response.data as List<dynamic>);
     } catch (e) {
       AppLogger.w('DeBank', 'portfolio error: $e');
-      return DeFiPortfolio.empty();
+      rethrow;
     }
   }
 

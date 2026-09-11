@@ -1,0 +1,18 @@
+{
+  "lib/features/wallet/widgets/wallet_board.dart": "452ad440f71c2528533af94e6bf1bf2a2c488dee4a8034db444128e4a49a4659",
+  "lib/features/wallet/pages/wallet_page_helpers.dart": "f326a4fc54c0f0b374e6f687a13812e55f5df808999e2d4f3c7c256461760e95",
+  "lib/features/wallet/provider/wallet_price_refresh_scheduler.dart": "8645bd154097e596227ed16ee263ec2486d42a041f196287b45abbc24ab8dc71",
+  "lib/features/wallet/provider/wallet_action_provider_market.dart": "51ecdd20d8588815290708feee455ab6b26ad00e8eb580d3ce7946e4b8e319aa",
+  "test/features/wallet/widgets/wallet_board_freshness_test.dart": "57b2f3f41217b2f606c8453f2fe7f49975e25fe5bd99665d082a092035d08e23",
+  "test/features/wallet/pages/wallet_compact_home_test.dart": "918b99de4ff66d4f379cfcd9a203dafe0d876892cfb243f465a65519c66e91e6",
+  "test/features/wallet/provider/wallet_price_refresh_scheduler_test.dart": "29f4249c672c8a2b4882b8083210e4d5ddb97f7861d8b048d1b3335d960cb7d0",
+  "test/features/wallet/provider/wallet_market_refresh_test.dart": "821b8ea6f9268aabd0516f13cbd87bac1f3c61e3e70516faff93ffac6d449bd4",
+  "integration_test/device_full_flow_test.dart": "68cfd63b24bed14152ea90c15a47c8141edd28a7d387bb51668acd70038a5a10",
+  "lib/features/wallet/provider/wallet_action_provider.dart": "fb110fa861e98f1bae1f40e1b60201f573521d49875c34afcfd91eca19b96e76",
+  "lib/features/wallet/pages/wallet_page.dart": "9777604ab9d0bf6d04ace861bd8d168688123deb210a36027b66482bb8033243",
+  "lib/l10n/intl_en.arb": "5946cd0d970615fa77c0769f4083a86285aebf928bf13bc6c3cb06cc09507c0f",
+  "lib/l10n/intl_zh_TW.arb": "b4d55fb44315f6a5ff7d02ee38b5d9aa0aaa1810667ee9a60b2bc3d0ad446319",
+  "lib/generated/l10n.dart": "7a17cf18f7a7dcc0e945d12df3a72512207350364b9e978ca7fc8de3e95e2fd4",
+  "lib/generated/intl/messages_en.dart": "1e15dba0a9d34829d58845265af7bf6bfc2c2b9ff298047089c8f899d6f88b03",
+  "lib/generated/intl/messages_zh_TW.dart": "1ed2bb4a11f5c681664134faeb00498e03992bd818301938cd0f388f821b5ac5"
+}

@@ -6,20 +6,44 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/core/config/proxy_config.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
+import 'package:n42_wallet/features/identity/pages/id_hub_sign_page.dart';
+import 'package:n42_wallet/features/wallet/api/market_api.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_chain_info.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_aggregate_detail_page.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_receive_qr.dart';
+import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
+import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+import 'package:n42_wallet/core/enums/load.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 const _chatUsername = String.fromEnvironment('N42_E2E_CHAT_USERNAME');
 const _chatPassword = String.fromEnvironment('N42_E2E_CHAT_PASSWORD');
+const _includeChat = bool.fromEnvironment(
+  'N42_E2E_INCLUDE_CHAT',
+  defaultValue: true,
+);
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   testWidgets(
-    'DEVICE-01 clicks the safe Wallet, Market, drawer, and Chat flows',
+    _includeChat
+        ? 'DEVICE-01 clicks the safe Wallet, Market, drawer, and Chat flows'
+        : 'DEVICE-NAV-01 clicks Wallet, Market and drawer (Chat excluded)',
     (tester) async {
-      app.main();
+      await app.main();
+      if (const bool.fromEnvironment('N42_E2E_CHECK_DEEP_LINKS')) {
+        // Inject before the first app frame, exercising the actual startup
+        // backlog and host router. This is not an OS universal-link claim.
+        await _exerciseColdDeepLink(tester);
+      }
       await _waitForKey(
         tester,
         'home_page',
@@ -27,16 +51,72 @@ void main() {
       );
       await _acceptTermsIfNeeded(tester);
 
+      if (const bool.fromEnvironment('N42_E2E_CHECK_PROXY')) {
+        expect(
+          ProxyConfig.authToken.isNotEmpty,
+          isTrue,
+          reason: 'Provide the local proxy define file for this check',
+        );
+        final trending = await MarketApi().getTrendingCoins();
+        expect(
+          trending,
+          isNotEmpty,
+          reason: 'Authenticated market proxy returned no data',
+        );
+        debugPrint(
+          'DEVICE_PROXY verified trendingCoins=${trending.length} authenticated=true readOnly=true',
+        );
+      }
       await _exerciseHomeTabs(tester);
       await _exerciseMarket(tester);
       await _exerciseWallet(tester);
       await _exerciseDrawer(tester);
-      await _exerciseChat(tester);
+      if (_includeChat) {
+        await _exerciseChat(tester);
+      } else {
+        debugPrint('DEVICE_SCOPE authenticated Chat excluded from this run');
+      }
 
       _expectNoException(tester, 'final device state');
       expect(find.byKey(const ValueKey<String>('home_page')), findsOneWidget);
     },
     timeout: const Timeout(Duration(minutes: 8)),
+  );
+}
+
+Future<void> _exerciseColdDeepLink(WidgetTester tester) async {
+  debugPrint(
+    'DEVICE_STEP deep link: cold startup, duplicate, untrusted origin',
+  );
+  final service = app.globalProviderContainer.read(deepLinkServiceProvider);
+  final link = Uri.parse(
+    'n42id://bind?sid=00000000-0000-4000-8000-000000000000&hub=https://id.n42.ai',
+  );
+  service.handleUri(link);
+  await _waitFor(
+    tester,
+    find.byType(IdHubSignPage),
+    timeout: const Duration(seconds: 60),
+  );
+  final page = tester.widget<IdHubSignPage>(find.byType(IdHubSignPage));
+  expect(page.sessionId, '00000000-0000-4000-8000-000000000000');
+  expect(page.hubUrl, 'https://id.n42.ai');
+  expect(page.isLogin, isFalse);
+  service.handleUri(link);
+  await tester.pump(const Duration(milliseconds: 500));
+  expect(find.byType(IdHubSignPage, skipOffstage: false), findsOneWidget);
+  await _dismissTopRoute(tester);
+  await _waitForKey(tester, 'home_page');
+  service.handleUri(
+    Uri.parse(
+      'n42id://bind?sid=00000000-0000-4000-8000-000000000000&hub=https://untrusted.invalid',
+    ),
+  );
+  await tester.pump(const Duration(milliseconds: 500));
+  expect(find.byType(IdHubSignPage, skipOffstage: false), findsNothing);
+  _expectNoException(tester, 'deep link navigation');
+  debugPrint(
+    'DEVICE_DEEP_LINK cold=true duplicateBlocked=true untrustedBlocked=true signed=false',
   );
 }
 
@@ -82,7 +162,7 @@ Future<void> _exerciseMarket(WidgetTester tester) async {
   await tester.pump(const Duration(seconds: 2));
   expect(find.byKey(const ValueKey<String>('market_page')), findsOneWidget);
   FocusManager.instance.primaryFocus?.unfocus();
-  tester.testTextInput.hide();
+  await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
   await tester.pump(const Duration(milliseconds: 300));
 
   await _tapKey(tester, 'market_tab_watchlist');
@@ -102,12 +182,14 @@ Future<void> _exerciseWallet(WidgetTester tester) async {
 
   await _tapAndDismissRoute(tester, 'wallet_select_account');
 
+  debugPrint('DEVICE_STEP wallet: wallet_assistant');
   await _tapKey(tester, 'wallet_assistant');
   await _waitForKey(tester, 'wallet_assistant_page');
   await tester.pageBack();
-  await _waitForKey(tester, 'wallet_page');
+  await _waitForKey(tester, 'home_content_wallet');
   _expectNoException(tester, 'close wallet connect');
 
+  debugPrint('DEVICE_STEP wallet: wallet_connect');
   await _tapKey(tester, 'wallet_connect');
   await _waitForKey(
     tester,
@@ -115,8 +197,9 @@ Future<void> _exerciseWallet(WidgetTester tester) async {
     timeout: const Duration(seconds: 30),
   );
   await tester.pageBack();
-  await _waitForKey(tester, 'wallet_page');
+  await _waitForKey(tester, 'home_content_wallet');
 
+  debugPrint('DEVICE_STEP wallet: wallet_qr_menu');
   await _tapKey(tester, 'wallet_qr_menu');
   await _waitForKey(tester, 'wallet_qr_menu_item_1');
   await _tapKey(tester, 'wallet_qr_menu_item_1');
@@ -135,7 +218,129 @@ Future<void> _exerciseWallet(WidgetTester tester) async {
 
   await _tapAndDismissRoute(tester, 'wallet_feature_ens');
   await _tapAndDismissRoute(tester, 'wallet_feature_smart_account');
+  debugPrint('DEVICE_STEP wallet: compact token row opens asset details');
+  await _waitFor(tester, find.byType(WalletCoinItem).first);
+  final firstRow = find.byType(WalletCoinItem).first;
+  await tester.ensureVisible(firstRow);
+  await tester.pump(const Duration(milliseconds: 500));
+  final rowHeight = tester.getSize(firstRow).height;
+  expect(rowHeight, greaterThanOrEqualTo(44));
+  debugPrint('DEVICE_HOME tokenRowHeight=$rowHeight');
+  final rowKey = tester.widget<WalletCoinItem>(firstRow).itemKey;
+  await _tapKey(tester, 'wallet_coin_open_$rowKey');
+  await _waitFor(tester, find.byType(WalletChainInfo));
+  await _dismissTopRoute(tester);
+  if (const bool.fromEnvironment('N42_E2E_CHECK_PROXY')) {
+    debugPrint('DEVICE_STEP wallet: manual price refresh');
+    final wap = app.globalProviderContainer.read(wapBridgeProvider);
+    final previous = wap.priceLastUpdated;
+    final refreshButton = find
+        .byTooltip(S.current.g_key_bridge_refresh)
+        .hitTestable();
+    await _waitFor(tester, refreshButton);
+    await tester.tap(refreshButton);
+    await tester.pump();
+    final deadline = DateTime.now().add(const Duration(seconds: 40));
+    while (wap.load == Load.refresh && DateTime.now().isBefore(deadline)) {
+      await tester.pump(const Duration(milliseconds: 250));
+    }
+    expect(wap.load, isNot(Load.refresh));
+    if (wap.priceRefreshFailed) {
+      expect(
+        wap.priceLastUpdated,
+        previous,
+        reason: 'Incomplete or failed quotes must not claim a fresh portfolio',
+      );
+    } else {
+      expect(wap.priceLastUpdated, isNotNull);
+      if (previous != null) {
+        expect(wap.priceLastUpdated!.isAfter(previous), isTrue);
+      }
+    }
+    expect(find.text(S.current.g_key_208), findsNothing);
+    // The list can scroll the balance card out of the sliver viewport.
+    // Return to its actual scroll origin before inspecting the status text.
+    final walletScroll = tester.widget<CustomScrollView>(
+      find.byType(CustomScrollView).hitTestable().first,
+    );
+    walletScroll.controller!.jumpTo(0);
+    await tester.pump(const Duration(milliseconds: 250));
+    await _waitForKey(tester, 'wallet_price_status');
+    final status = tester.widget<Text>(
+      find.byKey(const ValueKey('wallet_price_status')),
+    );
+    if (wap.priceRefreshFailed) {
+      expect(
+        status.data,
+        wap.hasPartialPrices
+            ? S.current.g_wallet_prices_partial
+            : previous == null
+            ? S.current.g_wallet_prices_unavailable
+            : S.current.g_wallet_prices_cached,
+      );
+    } else {
+      expect(status.data, S.current.g_wallet_prices_just_updated);
+    }
+    debugPrint(
+      'DEVICE_HOME manualRefresh complete=${!wap.priceRefreshFailed} '
+      'partial=${wap.hasPartialPrices} statusVerified=true banner=false',
+    );
+  }
+  await _exerciseAggregateDetail(tester);
   _expectNoException(tester, 'wallet safe actions');
+}
+
+Future<void> _exerciseAggregateDetail(WidgetTester tester) async {
+  debugPrint('DEVICE_STEP wallet: stablecoin network balances');
+  final stableRow = find
+      .byWidgetPredicate(
+        (widget) =>
+            widget is WalletCoinItem &&
+            aggregatedTokenForCoin(widget.coinInfo) != null,
+      )
+      .first;
+  await _waitFor(tester, stableRow);
+  await tester.ensureVisible(stableRow);
+  await tester.pump(const Duration(milliseconds: 500));
+  final row = tester.widget<WalletCoinItem>(stableRow);
+  await _tapKey(tester, 'wallet_coin_open_${row.itemKey}');
+  final direct = row.coinInfo is AggregatedCoinModel;
+  if (!direct) {
+    await _waitFor(tester, find.byType(WalletChainInfo));
+    await _tapKey(tester, 'asset_network_balances');
+  }
+  await _waitFor(tester, find.byType(WalletAggregateDetailPage));
+  await _waitForKey(tester, 'aggregate_balance_ETH');
+  final refresh = find.byKey(const ValueKey('aggregate_refresh'));
+  final deadline = DateTime.now().add(const Duration(seconds: 25));
+  while (tester.widget<IconButton>(refresh).onPressed == null &&
+      DateTime.now().isBefore(deadline)) {
+    await tester.pump(const Duration(milliseconds: 250));
+  }
+  expect(tester.widget<IconButton>(refresh).onPressed, isNotNull);
+  final total = tester
+      .widget<SelectableText>(find.byKey(const ValueKey('aggregate_total')))
+      .data!;
+  expect(total.contains('NaN'), isFalse);
+  if (const bool.fromEnvironment('N42_E2E_CAPTURE_AGGREGATE')) {
+    debugPrint('DEVICE_AGGREGATE screenshotReady=true');
+    await tester.pump(const Duration(seconds: 12));
+  }
+  await _tapKey(tester, 'aggregate_receive_ETH');
+  await _waitFor(tester, find.byType(WalletReceiveQr));
+  final qr = tester.widget<WalletReceiveQr>(find.byType(WalletReceiveQr));
+  expect(qr.tokenCoinModel, isNotNull);
+  expect(qr.tokenCoinModel!.privateKey, isNull);
+  expect(qr.chainCoinModel.isTest, isFalse);
+  await _dismissTopRoute(tester);
+  await _tapKey(tester, 'aggregate_network_ETH');
+  await _waitFor(tester, find.byType(WalletChainInfo).hitTestable());
+  await _dismissTopRoute(tester);
+  await _dismissTopRoute(tester);
+  if (!direct) await _dismissTopRoute(tester);
+  debugPrint(
+    'DEVICE_AGGREGATE detail=true receive=true network=true readOnly=true',
+  );
 }
 
 Future<void> _exerciseDrawer(WidgetTester tester) async {
@@ -154,6 +359,7 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
     'drawer_browser',
     'drawer_about',
   ]) {
+    debugPrint('DEVICE_STEP drawer: $destination');
     final finder = find.byKey(ValueKey<String>(destination));
     await tester.ensureVisible(finder);
     await tester.pump(const Duration(milliseconds: 250));
@@ -161,12 +367,27 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
     await tester.pump(const Duration(seconds: 1));
     expect(finder, findsNothing, reason: '$destination did not open a page');
     _expectNoException(tester, destination);
-    await tester.pageBack();
+    if (destination == 'drawer_browser') {
+      final closeBrowser = find.image(
+        const AssetImage('assets/browser/close.png'),
+      );
+      expect(closeBrowser, findsOneWidget);
+      await tester.tap(closeBrowser);
+    } else {
+      await tester.pageBack();
+    }
     await _waitForKey(tester, destination);
   }
 
-  await tester.pageBack();
-  await _waitForKey(tester, 'wallet_page');
+  final closeDrawer = find.descendant(
+    of: find.byType(Drawer),
+    matching: find.widgetWithIcon(IconButton, Icons.close_rounded),
+  );
+  expect(closeDrawer, findsOneWidget);
+  await tester.tap(closeDrawer);
+  await tester.pump(const Duration(milliseconds: 750));
+  expect(find.byKey(const ValueKey<String>('drawer_profile')), findsNothing);
+  await _waitForKey(tester, 'home_content_wallet');
 }
 
 Future<void> _exerciseChat(WidgetTester tester) async {
@@ -256,16 +477,17 @@ Future<void> _exerciseChat(WidgetTester tester) async {
 }
 
 Future<void> _tapAndDismissRoute(WidgetTester tester, String key) async {
+  debugPrint('DEVICE_STEP wallet: $key');
   await _tapKey(tester, key);
   await tester.pump(const Duration(seconds: 1));
   _expectNoException(tester, key);
   await _dismissTopRoute(tester);
-  await _waitForKey(tester, 'wallet_page');
+  await _waitForKey(tester, 'home_content_wallet');
 }
 
 Future<void> _dismissTopRoute(WidgetTester tester) async {
   final navigator = tester.state<NavigatorState>(find.byType(Navigator).first);
-  if (!navigator.canPop()) return;
+  expect(navigator.canPop(), isTrue, reason: 'Expected an opened destination');
   navigator.pop();
   await tester.pump(const Duration(milliseconds: 750));
 }
@@ -275,6 +497,9 @@ Future<void> _tapKey(WidgetTester tester, String key) async {
   await _waitFor(tester, finder);
   await tester.ensureVisible(finder);
   await tester.pump(const Duration(milliseconds: 150));
+  // A route can expose the previous page before its exit animation stops
+  // intercepting taps. Wait for the actual target to receive pointer events.
+  await _waitFor(tester, finder.hitTestable());
   await tester.tap(finder);
   await tester.pump(const Duration(milliseconds: 500));
 }

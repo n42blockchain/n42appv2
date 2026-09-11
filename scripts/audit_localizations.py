@@ -7,6 +7,7 @@ import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import unquote, urljoin, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +43,20 @@ class AuditSpec:
     excluded_names: tuple[str, ...] = ()
 
 
+def resolved_chat_base(project_root: Path = ROOT) -> Path:
+    """Audit the Chat package used by Flutter, including a pinned git checkout."""
+    config = project_root / '.dart_tool' / 'package_config.json'
+    if config.exists():
+        packages = json.loads(config.read_text(encoding='utf-8')).get('packages', [])
+        for package in packages:
+            if package.get('name') != 'n42_chat':
+                continue
+            uri = urlsplit(urljoin(config.resolve().as_uri(), package['rootUri']))
+            if uri.scheme == 'file':
+                return Path(unquote(uri.path)) / 'lib' / 'l10n' / 'app_en.arb'
+    return project_root / 'packages' / 'n42_chat' / 'lib' / 'l10n' / 'app_en.arb'
+
+
 SPECS = {
     'wallet': AuditSpec(
         name='wallet',
@@ -50,7 +65,7 @@ SPECS = {
     ),
     'chat': AuditSpec(
         name='chat',
-        base_path=(ROOT / '..' / 'n42_chat' / 'lib' / 'l10n' / 'app_en.arb').resolve(),
+        base_path=resolved_chat_base(),
         locale_glob='app_*.arb',
         excluded_names=('app_localizations',),
     ),
@@ -85,11 +100,11 @@ def main() -> int:
     fatal = False
     for spec_name, report in reports.items():
         print_report(spec_name, report)
-        if report['missing'] or report['extra'] or report['empty']:
+        if any(report[name] for name in ('missing', 'extra', 'empty', 'placeholders')):
             fatal = True
 
     if fatal:
-        print('Audit failed: missing/extra/empty localization entries detected.', file=sys.stderr)
+        print('Audit failed: missing, extra, empty or invalid-placeholder entries detected.', file=sys.stderr)
         return 1
 
     current_baseline = {
@@ -157,6 +172,7 @@ def audit_spec(spec: AuditSpec) -> dict[str, dict[str, dict[str, str]]]:
     extra: dict[str, dict[str, str]] = {}
     empty: dict[str, dict[str, str]] = {}
     identical: dict[str, dict[str, str]] = {}
+    placeholders: dict[str, dict[str, str]] = {}
 
     for path in sorted(locale_dir.glob(spec.locale_glob)):
         if path == spec.base_path:
@@ -190,21 +206,72 @@ def audit_spec(spec: AuditSpec) -> dict[str, dict[str, dict[str, str]]]:
         if identical_keys:
             identical[locale] = dict(sorted(identical_keys.items()))
 
+        invalid_placeholders = {
+            key: value
+            for key, value in data.items()
+            if key in base and placeholder_names(value) != placeholder_names(base[key])
+        }
+        if invalid_placeholders:
+            placeholders[locale] = invalid_placeholders
+
     return {
         'missing': missing,
         'extra': extra,
         'empty': empty,
         'identical': identical,
+        'placeholders': placeholders,
     }
 
 
 def load_messages(path: Path) -> dict[str, str]:
-    raw = json.loads(path.read_text(encoding='utf-8'))
+    def unique_pairs(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:
+                raise ValueError(f'Duplicate localization key in {path.name}: {key}')
+            result[key] = value
+        return result
+
+    raw = json.loads(path.read_text(encoding='utf-8'), object_pairs_hook=unique_pairs)
     return {
         key: value
         for key, value in raw.items()
         if not key.startswith('@') and isinstance(value, str)
     }
+
+
+def placeholder_names(value: str) -> set[str]:
+    names: set[str] = set()
+
+    def closing(text: str, start: int) -> int:
+        depth = 1
+        for index in range(start + 1, len(text)):
+            depth += (text[index] == '{') - (text[index] == '}')
+            if depth == 0:
+                return index
+        return len(text)
+
+    def collect(text: str) -> None:
+        cursor = 0
+        while (start := text.find('{', cursor)) >= 0:
+            end = closing(text, start)
+            content = text[start + 1:end]
+            header = re.match(r'^(\w+)\s*,\s*(plural|select|selectordinal)\s*,', content)
+            if header:
+                names.add(header[1])
+                body = content[header.end():]
+                # Branch braces enclose literal text, not argument names.
+                branch_cursor = 0
+                while (branch := body.find('{', branch_cursor)) >= 0:
+                    branch_end = closing(body, branch)
+                    collect(body[branch + 1:branch_end])
+                    branch_cursor = branch_end + 1
+            elif re.fullmatch(r'\w+', content):
+                names.add(content)
+            cursor = end + 1
+
+    collect(value)
+    return names
 
 
 def is_unexpected_identical(value: str) -> bool:
@@ -238,10 +305,11 @@ def print_report(spec_name: str, report: dict[str, dict[str, dict[str, str]]]) -
     extra_count = sum(len(entries) for entries in report['extra'].values())
     empty_count = sum(len(entries) for entries in report['empty'].values())
     identical_count = sum(len(entries) for entries in report['identical'].values())
+    placeholder_count = sum(len(entries) for entries in report['placeholders'].values())
     print(
         f'[{spec_name}] '
         f'missing={missing_count} extra={extra_count} empty={empty_count} '
-        f'identical={identical_count}'
+        f'identical={identical_count} invalid_placeholders={placeholder_count}'
     )
 
 

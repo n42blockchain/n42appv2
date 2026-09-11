@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
@@ -193,7 +194,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         _row('Server', _hubHost, colors),
         const SizedBox(height: 16),
         Text(
-          'Message',
+          S.of(context).g_ui_message,
           style: AppTypography.caption.copyWith(color: colors.textSecondary),
         ),
         const SizedBox(height: 6),
@@ -223,7 +224,7 @@ class _IdHubSignPageState extends State<IdHubSignPage> {
         TextButton(
           onPressed: signing ? null : () => Navigator.of(context).maybePop(),
           child: Text(
-            'Cancel',
+            S.of(context).g_key_79,
             style: AppTypography.body.copyWith(color: colors.textSecondary),
           ),
         ),

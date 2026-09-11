@@ -578,7 +578,7 @@ class ConfirmReceiveDialog extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              S.of(context)?.commonFromSender(senderName, senderName) ??
+              S.of(context)?.commonFromSender(senderName) ??
                   'From $senderName',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

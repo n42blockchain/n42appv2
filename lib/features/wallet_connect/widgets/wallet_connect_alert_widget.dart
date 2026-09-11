@@ -480,7 +480,7 @@ class _WalletConnectAlertWidgetState
                   ),
                   SizedBox(width: su.setWidth(8)),
                   Text(
-                    'Contract Info',
+                    S.of(context).g_ui_contract_info,
                     style: AppTypography.caption.copyWith(
                       fontWeight: FontWeight.w600,
                       color: AppColorTokens.of(context).textPrimary,

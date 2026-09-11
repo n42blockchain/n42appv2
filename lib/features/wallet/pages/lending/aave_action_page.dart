@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -291,7 +292,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
             SizedBox(height: AppSpacing.space6),
             AppTextField(
               controller: _amountCtrl,
-              label: 'Amount',
+              label: S.of(context).g_key_stake_amount,
               hint: '0.0',
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
@@ -302,7 +303,7 @@ class _AaveActionPageState extends ConsumerState<AaveActionPage> {
             if (_checkingApproval) ...[
               SizedBox(height: AppSpacing.space2),
               Text(
-                'Checking approval…',
+                S.of(context).g_ui_checking_approval,
                 style: AppTypography.caption.copyWith(color: c.textSubtitle),
               ),
             ],

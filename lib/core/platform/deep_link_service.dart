@@ -43,16 +43,16 @@ enum DeepLinkType {
 /// Deep Link 数据
 class DeepLinkData {
   static const Set<String> _sensitiveParams = {
-    'loginToken',
-    'login_token',
+    'logintoken',
     'token',
-    'access_token',
-    'symKey',
-    'wcUri',
+    'accesstoken',
+    'refreshtoken',
+    'symkey',
+    'wcuri',
+    'uri',
     'password',
-    'privateKey',
+    'privatekey',
     'mnemonic',
-    // n42id bind/auth session id is a capability token - redact from logs.
     'sid',
   };
 
@@ -77,29 +77,28 @@ class DeepLinkData {
       params.map((key, value) => MapEntry(key, _redactParamValue(key, value)));
 
   static Uri redactUri(Uri uri) {
-    if (uri.queryParameters.isEmpty) return uri;
-    return uri.replace(
-      queryParameters: uri.queryParameters.map(
-        (key, value) => MapEntry(key, _redactParamValue(key, value)),
-      ),
-    );
+    try {
+      return uri.replace(
+        userInfo: uri.userInfo.isEmpty ? '' : 'redacted',
+        queryParameters: uri.hasQuery
+            ? uri.queryParametersAll.map(
+                (key, values) => MapEntry(
+                  key,
+                  values.map((value) => _redactParamValue(key, value)).toList(),
+                ),
+              )
+            : null,
+        // Fragments can carry raw or nested pairing / login capabilities.
+        fragment: uri.hasFragment ? '[redacted]' : null,
+      );
+    } catch (_) {
+      return Uri(scheme: uri.scheme, path: '[redacted]');
+    }
   }
 
   static String _redactParamValue(String key, String value) {
-    if (key == 'wcUri' || key == 'uri') {
-      final normalizedWcUri = normalizeWalletConnectUriString(value);
-      if (normalizedWcUri != null) {
-        final nestedUri = Uri.tryParse(normalizedWcUri);
-        if (nestedUri != null) {
-          return redactUri(nestedUri).toString();
-        }
-        return '[redacted]';
-      }
-    }
-    if (_sensitiveParams.contains(key)) {
-      return '[redacted]';
-    }
-    return value;
+    final normalizedKey = key.toLowerCase().replaceAll(RegExp(r'[_-]'), '');
+    return _sensitiveParams.contains(normalizedKey) ? '[redacted]' : value;
   }
 
   @override
@@ -111,7 +110,17 @@ class DeepLinkData {
 ///
 /// 统一处理 Android 和 iOS 的 Deep Link
 class DeepLinkService {
-  final _appLinks = AppLinks();
+  DeepLinkService({
+    Future<Uri?> Function()? getInitialLink,
+    Stream<Uri>? uriLinkStream,
+  }) : _getInitialLink = getInitialLink ?? AppLinks().getInitialLink,
+       _uriLinkStream = (() => uriLinkStream ?? AppLinks().uriLinkStream);
+
+  final Future<Uri?> Function() _getInitialLink;
+  final Stream<Uri> Function() _uriLinkStream;
+  Future<void>? _initialization;
+  bool _disposed = false;
+  int _receivedRevision = 0;
   StreamSubscription<Uri>? _subscription;
 
   /// Deep Link 流控制器
@@ -126,34 +135,61 @@ class DeepLinkService {
   DeepLinkData? get lastDeepLink => _lastDeepLink;
 
   /// 初始化服务
-  Future<void> init() async {
+  Future<void> init() {
+    if (_disposed) return Future.value();
+    return _initialization ??= _initialize();
+  }
+
+  Future<void> _initialize() async {
+    // Subscribe first: a live link received while awaiting startup wins over
+    // an older initial link. Repeated init calls share this subscription.
+    final revision = _receivedRevision;
+    // A handler may already have consumed the cached intent before init.
+    final hadPendingLink = _receivedRevision > 0;
+    _subscription = _uriLinkStream().listen(
+      _handleUri,
+      onError: (Object error) {
+        AppLogger.w('DeepLink', 'stream error: ${error.runtimeType}');
+      },
+    );
     try {
-      final initialUri = await _appLinks.getInitialLink().timeout(
+      final initialUri = await _getInitialLink().timeout(
         const Duration(seconds: 5),
         onTimeout: () => null,
       );
-      if (initialUri != null) _handleUri(initialUri);
-    } catch (e) {
-      AppLogger.w('DeepLink', 'failed to get initial link: $e');
+      if (!_disposed &&
+          !hadPendingLink &&
+          revision == _receivedRevision &&
+          initialUri != null) {
+        _handleUri(initialUri);
+      }
+    } catch (error) {
+      AppLogger.w('DeepLink', 'initial link error: ${error.runtimeType}');
     }
-
-    _subscription = _appLinks.uriLinkStream.listen(
-      _handleUri,
-      onError: (e) {
-        AppLogger.w('DeepLink', 'stream error: $e');
-      },
-    );
   }
 
   void _handleUri(Uri uri) {
-    // 诊断日志默认脱敏 query 参数。
-    AppLogger.d('DeepLink', 'received: ${DeepLinkData.redactUri(uri)}');
-
-    final data = _parseUri(uri);
-    _lastDeepLink = data;
-    if (!_deepLinkController.isClosed) {
-      _deepLinkController.add(data);
+    if (_disposed) return;
+    _receivedRevision++;
+    DeepLinkData data;
+    try {
+      final invalid =
+          uri.toString().length > 16384 ||
+          uri.queryParametersAll.values.any(
+            (values) =>
+                values.length != 1 ||
+                values.any(
+                  (value) => RegExp(r'[\x00-\x1f\x7f]').hasMatch(value),
+                ),
+          );
+      data = invalid ? _unknownLink(uri, const {}) : _parseUri(uri);
+    } catch (_) {
+      data = _unknownLink(uri, const {});
     }
+    // Never log inbound URIs: pairing and login links contain capabilities.
+    AppLogger.d('DeepLink', 'received type: ${data.type.name}');
+    _lastDeepLink = data;
+    _deepLinkController.add(data);
   }
 
   DeepLinkData _parseUri(Uri uri) {
@@ -188,12 +224,23 @@ class DeepLinkService {
     if (uri.scheme == 'n42' ||
         uri.scheme == 'n42app' ||
         uri.scheme == 'n42wallet') {
+      if (uri.userInfo.isNotEmpty || uri.hasPort) {
+        return _unknownLink(uri, const {});
+      }
       return _parseN42Uri(uri);
     }
     if (uri.scheme == 'n42id') {
+      if (uri.userInfo.isNotEmpty ||
+          uri.hasPort ||
+          (uri.path.isNotEmpty && uri.path != '/')) {
+        return _unknownLink(uri, const {});
+      }
       return _parseN42IdUri(uri);
     }
     if (uri.scheme == 'astraapp') {
+      if (uri.userInfo.isNotEmpty || uri.hasPort) {
+        return _unknownLink(uri, const {});
+      }
       return _parseAstraAppUri(uri);
     }
     return _unknownLink(uri, uri.queryParameters);
@@ -206,7 +253,7 @@ class DeepLinkService {
         return DeepLinkData(
           type: DeepLinkType.groupMining,
           uri: uri,
-          params: {'groupId': params['id'] ?? ''},
+          params: {'groupId': _sanitizeId(params['id'] ?? '')},
         );
       case 'full_node':
         return DeepLinkData(
@@ -219,7 +266,7 @@ class DeepLinkService {
           type: DeepLinkType.friendCard,
           uri: uri,
           params: {
-            'userId': params['userid'] ?? '',
+            'userId': _sanitizeId(params['userid'] ?? ''),
             'email': params['email'] ?? '',
           },
         );
@@ -234,8 +281,8 @@ class DeepLinkService {
   /// - n42://group/{groupId} - 打开群组
   DeepLinkData _parseN42Uri(Uri uri) {
     if (uri.host == 'auth' &&
-        uri.pathSegments.isNotEmpty &&
-        uri.pathSegments.first == 'sso') {
+        uri.pathSegments.length == 1 &&
+        uri.pathSegments.single == 'sso') {
       return DeepLinkData(
         type: DeepLinkType.chatSso,
         uri: uri,
@@ -256,12 +303,14 @@ class DeepLinkService {
     String action;
     String id;
 
-    if (host.isNotEmpty && actionConfig.containsKey(host)) {
+    if (host.isNotEmpty &&
+        actionConfig.containsKey(host) &&
+        uri.pathSegments.length == 1) {
       action = host;
-      id = uri.pathSegments.isNotEmpty ? uri.pathSegments.first : '';
-    } else if (uri.pathSegments.isNotEmpty) {
+      id = uri.pathSegments.single;
+    } else if (host.isEmpty && uri.pathSegments.length == 2) {
       action = uri.pathSegments.first;
-      id = uri.pathSegments.length > 1 ? uri.pathSegments[1] : '';
+      id = uri.pathSegments[1];
     } else {
       return _unknownLink(uri, uri.queryParameters);
     }
@@ -276,7 +325,7 @@ class DeepLinkService {
     return DeepLinkData(
       type: config.type,
       uri: uri,
-      params: {config.key: sanitizedId, ...uri.queryParameters},
+      params: {...uri.queryParameters, config.key: sanitizedId},
     );
   }
 
@@ -300,23 +349,25 @@ class DeepLinkService {
       type: type,
       uri: uri,
       params: {
-        'sid': _sanitizeId(uri.queryParameters['sid'] ?? ''),
-        // Strip control chars so a crafted hub value cannot inject log lines;
-        // the allowlist still decides whether it is trusted.
-        'hub': (uri.queryParameters['hub'] ?? '')
-            .replaceAll(RegExp(r'[\x00-\x1f\x7f]'), ''),
+        // Preserve exact capability / origin values for downstream validation.
+        'sid': uri.queryParameters['sid'] ?? '',
+        'hub': uri.queryParameters['hub'] ?? '',
       },
     );
   }
 
-  /// Sanitize an ID parameter from a deep link to prevent injection attacks.
-  /// Strips path separators and control characters; keeps alphanumeric,
-  /// hyphens, underscores, dots, colons, and @ (for Matrix-style IDs).
+  /// Reject malformed identifiers instead of silently selecting another target.
+  /// Retains the existing identifier alphabet, including Matrix-style IDs.
   static final RegExp _unsafeIdChars = RegExp(r'[^a-zA-Z0-9._\-:@!]');
 
-  static String _sanitizeId(String id) {
-    return id.replaceAll(_unsafeIdChars, '');
-  }
+  static bool isValidTargetId(String id) =>
+      id.isNotEmpty &&
+      id.length <= 1024 &&
+      id != '.' &&
+      id != '..' &&
+      !_unsafeIdChars.hasMatch(id);
+
+  static String _sanitizeId(String id) => isValidTargetId(id) ? id : '';
 
   DeepLinkData _unknownLink(Uri uri, Map<String, String> params) =>
       DeepLinkData(type: DeepLinkType.unknown, uri: uri, params: params);
@@ -332,6 +383,8 @@ class DeepLinkService {
   /// 销毁服务。允许重复调用——同一服务可能同时被 [deepLinkServiceProvider]
   /// 的 onDispose 与 `_N42AppV2State.dispose` 持有引用，两者都会触发销毁。
   Future<void> dispose() async {
+    _disposed = true;
+    _lastDeepLink = null;
     await _subscription?.cancel();
     _subscription = null;
     if (!_deepLinkController.isClosed) {

@@ -146,8 +146,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                     _selectedType == BatchOperationType.approve) ...[
                   TextField(
                     controller: _tokenAddressController,
-                    decoration: const InputDecoration(
-                      labelText: 'Token Contract (0x...)',
+                    decoration: InputDecoration(
+                      labelText: S.of(context).g_ui_token_contract_hint,
                       hintText: '0x...',
                       border: OutlineInputBorder(),
                     ),
@@ -173,8 +173,8 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
                 TextField(
                   controller: _calldataController,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: 'Calldata (hex)',
+                  decoration: InputDecoration(
+                    labelText: S.of(context).g_ui_calldata_hex,
                     hintText: '0x...',
                     border: OutlineInputBorder(),
                   ),
@@ -184,9 +184,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
               ElevatedButton(
                 onPressed: _add,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   backgroundColor: const Color(0xFFFF9800),
                   foregroundColor: Colors.white,
                 ),
@@ -205,7 +203,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Type',
+          S.of(context).g_key_nft_type,
           style: AppTypography.caption.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
           ),
@@ -234,7 +232,7 @@ class _AddOperationSheetState extends State<AddOperationSheet> {
     const tokens = ['ETH', 'USDT', 'USDC', 'DAI', 'WBTC'];
     return DropdownButtonFormField<String>(
       initialValue: _selectedToken,
-      decoration: const InputDecoration(
+      decoration: InputDecoration(
         labelText: 'Token',
         border: OutlineInputBorder(),
       ),

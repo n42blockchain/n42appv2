@@ -21,7 +21,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
           Row(
             children: [
               Text(
-                'Destination Tag',
+                S.of(context).g_ui_destination_tag,
                 style: AppTypography.body.copyWith(color: mainText),
               ),
               SizedBox(width: AppSpacing.space2),
@@ -389,9 +389,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
             ),
           ),
           Padding(
-            padding: EdgeInsets.symmetric(
-              vertical: AppSpacing.space4,
-            ),
+            padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
             child: Text(
               accountXrp['account'],
               style: AppTypography.caption.copyWith(color: buttonColor),

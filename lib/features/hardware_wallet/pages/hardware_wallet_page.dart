@@ -52,7 +52,7 @@ class _HardwareWalletPageState extends State<HardwareWalletPage> {
   Widget build(BuildContext context) {
     final s = S.of(context);
     return Scaffold(
-      appBar: AppBarWidget(text: 'Hardware Wallet'),
+      appBar: AppBarWidget(text: S.of(context).g_audit_hardware),
       body: SafeArea(
         child: ListenableBuilder(
           listenable: _provider,

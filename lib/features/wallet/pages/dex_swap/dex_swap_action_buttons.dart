@@ -36,7 +36,7 @@ class DexActionButtons extends StatelessWidget {
   final VoidCallback onApprove;
 
   /// Called after the confirm screen returns `true`.
-  final VoidCallback onSwapConfirmed;
+  final ValueChanged<DexQuoteModel> onSwapConfirmed;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class DexActionButtons extends StatelessWidget {
 
     if (needsApproval && hasQuote) {
       return _sizedButton(
-        onTap: approveLoad == Load.finish ? onApprove : null,
+        onTap: !loading ? onApprove : null,
         label: approveLoad == Load.loading
             ? s.g_key_dex_approving
             : s.g_key_dex_approve_required(tokenInSymbol),
@@ -59,14 +59,17 @@ class DexActionButtons extends StatelessWidget {
     return _sizedButton(
       onTap: hasQuote && !loading
           ? () async {
+              final displayedQuote = quote!;
               FocusScope.of(context).unfocus();
               final bool? confirmed = await Navigator.push<bool>(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => DexSwapConfirm(quote: quote!),
+                  builder: (_) => DexSwapConfirm(quote: displayedQuote),
                 ),
               );
-              if (confirmed == true) onSwapConfirmed();
+              if (context.mounted && confirmed == true) {
+                onSwapConfirmed(displayedQuote);
+              }
             }
           : null,
       label: s.g_key_dex_swap_btn,

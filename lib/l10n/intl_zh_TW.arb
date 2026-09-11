@@ -1482,7 +1482,11 @@
   "g_key_loyalty_daily_checkin": "每日簽到",
   "g_key_loyalty_checked_today": "今日已簽到",
   "g_key_loyalty_earn_points": "領取 {value} 積分",
-  "@g_key_loyalty_earn_points": {"placeholders":{"value":{}}},
+  "@g_key_loyalty_earn_points": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "g_key_loyalty_checkin_done": "已完成",
   "g_key_loyalty_checkin_btn": "簽到",
   "g_key_loyalty_checkin_success": "已在 N42 鏈確認簽到",
@@ -1506,5 +1510,293 @@
   "g_key_loyalty_no_wallet": "沒有可用的錢包",
   "g_key_loyalty_unavailable": "服務暫時不可用",
   "g_key_badge_hot": "熱門",
-  "g_key_badge_live": "直播"
+  "g_key_badge_live": "直播",
+  "g_audit_defi_positions": "DeFi 持倉",
+  "g_audit_defi_loading": "正在載入 DeFi 持倉…",
+  "g_audit_defi_error": "無法載入 DeFi 持倉，點擊重試。",
+  "g_audit_show_less": "收起",
+  "g_audit_activity_local": "所有錢包的本機交易記錄。開啟資產頁可同步最新交易。",
+  "g_audit_activity_error": "無法載入交易記錄。",
+  "g_audit_all": "全部",
+  "g_audit_load_more": "載入更多",
+  "g_audit_testnet": "測試網",
+  "g_audit_mainnet": "主網",
+  "g_audit_manage_settings": "管理錢包與偏好設定",
+  "g_audit_wallet_management": "錢包管理",
+  "g_audit_manage_wallets": "建立、匯入及管理錢包",
+  "g_audit_hardware": "硬體錢包",
+  "g_audit_saved_addresses": "已儲存的收款地址",
+  "g_audit_protect_wallet": "身分驗證與錢包保護",
+  "g_audit_encrypted_backup": "匯出加密錢包備份",
+  "g_audit_biometrics": "生物辨識驗證",
+  "g_audit_biometrics_desc": "Face ID／指紋設定",
+  "g_audit_display_language": "應用程式顯示語言",
+  "g_audit_theme_desc": "外觀與顯示模式",
+  "g_audit_network_desc": "管理網路與 RPC 端點",
+  "g_audit_rate": "評價 N42",
+  "g_audit_rate_desc": "開啟應用程式商店",
+  "g_audit_about_desc": "版本、網站與支援",
+  "g_audit_currency": "顯示貨幣",
+  "g_audit_currency_usd": "資產估值目前以美元顯示。",
+  "g_audit_gas": "Gas 追蹤",
+  "g_audit_gas_desc": "網路費用與價格提醒",
+  "g_audit_batch": "批次轉帳",
+  "g_audit_batch_desc": "向多個收款人轉帳或匯入 CSV",
+  "g_audit_connections_desc": "管理連線；中斷連線不會撤銷代幣授權。",
+  "g_audit_aa_history_external": "開啟區塊瀏覽器以查看此智慧帳戶的鏈上交易。",
+  "g_audit_mark_price": "標記價格",
+  "g_audit_oracle_price": "預言機價格",
+  "g_audit_volume": "24 小時成交量（美元）",
+  "g_audit_open_interest": "未平倉量",
+  "g_audit_funding": "目前資金費率",
+  "g_audit_max_leverage": "最高槓桿",
+  "g_audit_quote_changed": "報價已變更或過期，請檢查最新報價後再確認。",
+  "g_audit_approval_token": "代幣合約",
+  "g_audit_approval_spender": "獲得支出權限的合約",
+  "g_history_export_all": "匯出符合條件的本機記錄（CSV）",
+  "g_history_local_scope": "篩選與 CSV 匯出包含此裝置上所有符合條件的記錄。請開啟資產頁同步最新鏈上活動。",
+  "g_history_clear_dates": "清除日期",
+  "g_history_export_error": "無法匯出交易記錄，請重試。",
+  "g_dex_account_unavailable": "請選擇此網路可支出的主網錢包，觀察帳戶無法簽署兌換。",
+  "g_dex_execution_invalid": "交易參數無效或執行失敗，請重新取得報價後重試。",
+  "g_dex_spending_account": "支出帳戶",
+  "g_dex_use_smart_account": "使用智慧帳戶",
+  "g_dex_smart_account_fees": "網路費用由此智慧帳戶支付。",
+  "g_dex_history_record_failed": "兌換已提交，但未能更新歷史記錄。請勿重複提交。",
+  "g_wallet_prices_unavailable": "行情暫不可用",
+  "g_wallet_prices_cached": "使用快取行情",
+  "g_wallet_prices_just_updated": "剛剛更新",
+  "g_wallet_prices_minutes": "{value} 分鐘前更新",
+  "@g_wallet_prices_minutes": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "g_wallet_prices_hours": "{value} 小時前更新",
+  "@g_wallet_prices_hours": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "g_wallet_pin_token": "置頂幣種",
+  "g_wallet_unpin_token": "取消置頂",
+  "g_wallet_balance_warning": "餘額未能更新",
+  "g_wallet_prices_partial": "部分行情",
+  "g_aggregate_network_balances": "各網路餘額",
+  "g_aggregate_known_balance": "已知餘額",
+  "g_aggregate_mainnet_note": "僅顯示主網餘額。未取得或查詢失敗的網路不會視為零餘額。",
+  "g_aggregate_unavailable": "所選錢包已無此資產，請返回錢包重新選擇。",
+  "g_aggregate_no_mainnet": "此網路沒有可用的主網帳戶",
+  "g_aggregate_not_loaded": "尚未取得餘額",
+  "g_aggregate_cached_balance": "快取餘額 · 更新失敗",
+  "g_aggregate_open_network": "開啟網路",
+  "g_ui_order_create_failed": "建立訂單失敗",
+  "g_ui_order_created": "已建立限價單",
+  "g_ui_order_place": "下限價單",
+  "g_ui_limit_price": "限價",
+  "g_ui_limit_price_pair": "限價（每 {base} 的 {quote} 價格）",
+  "@g_ui_limit_price_pair": {
+    "placeholders": {
+      "quote": {
+        "type": "String"
+      },
+      "base": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_expires_in": "有效期限：",
+  "g_ui_hours": "{value} 小時",
+  "@g_ui_hours": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_days": "{value} 天",
+  "@g_ui_days": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_order_cancelled": "已取消訂單",
+  "g_ui_order_cancel_failed": "取消失敗",
+  "g_ui_orders_load_failed": "無法載入限價單",
+  "g_ui_limit_orders": "限價單",
+  "g_ui_no_limit_orders": "沒有限價單",
+  "g_ui_cancel_order": "取消訂單",
+  "g_ui_order_triggered": "已觸發",
+  "g_ui_unknown_status": "未知狀態",
+  "g_ui_swap_mode": "選擇兌換方式",
+  "g_ui_buy_n_description": "透過 N42 協議購買 N",
+  "g_ui_dex_description": "透過 Uniswap / 1inch / Jupiter 兌換代幣",
+  "g_ui_view_market": "查看行情資料",
+  "g_ui_volume_24h": "24 小時成交量",
+  "g_ui_markets_count": "行情（{value}）",
+  "@g_ui_markets_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_positions_count": "持倉（{value}）",
+  "@g_ui_positions_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_orders_count": "訂單（{value}）",
+  "@g_ui_orders_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_no_positions": "沒有未平倉部位",
+  "g_ui_no_orders": "沒有未完成訂單",
+  "g_ui_free_margin": "可用",
+  "g_ui_margin_utilization": "使用率",
+  "g_ui_position_size": "數量",
+  "g_ui_entry_price": "開倉價",
+  "g_ui_liquidation_price": "清算價",
+  "g_ui_limit_value": "限價 {value}",
+  "@g_ui_limit_value": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_volume_interest": "成交量：{volume} · 未平倉量：{interest}",
+  "@g_ui_volume_interest": {
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_optional": "選填",
+  "g_ui_memo": "備註",
+  "g_ui_account_email": "帳戶電子郵件",
+  "g_ui_new_email": "新的電子郵件地址",
+  "g_ui_verification_code": "驗證碼",
+  "g_ui_confirm_update": "確認更新",
+  "g_ui_order_executed": "已執行",
+  "g_ui_email_code_sent": "已送出驗證碼請求",
+  "g_ui_email_code_accepted": "驗證碼已通過驗證",
+  "g_ui_sending_request": "正在傳送請求…",
+  "g_ui_invalid_email": "請輸入有效的電子郵件地址",
+  "g_ui_change_email": "變更電子郵件",
+  "g_ui_no_cached_email": "此裝置沒有儲存電子郵件地址",
+  "g_ui_verify_code": "驗證驗證碼",
+  "g_ui_update": "更新",
+  "g_ui_send_code": "傳送驗證碼",
+  "g_ui_back_email": "返回電子郵件",
+  "g_ui_update_email": "更新電子郵件",
+  "g_ui_back_code": "返回驗證碼",
+  "g_ui_tags": "標籤",
+  "g_ui_custom_tag": "自訂標籤…",
+  "g_ui_popular_tokens": "熱門代幣",
+  "g_ui_token_lookup": "正在查詢代幣資訊…",
+  "g_ui_token_manual": "清單中找不到代幣，請手動填寫符號與小數位數",
+  "g_ui_token_found": "已找到代幣：{value}",
+  "g_ui_gas_prediction": "下一區塊 Gas 預測",
+  "g_ui_mempool": "交易記憶池",
+  "g_ui_base_fee_value": "基礎費用：{value} Gwei",
+  "g_ui_pending_mempool": "待處理（交易記憶池）",
+  "g_ui_checking_approval": "正在檢查授權…",
+  "g_ui_aave_lending": "Aave V3 借貸",
+  "g_ui_fear_greed": "恐懼與貪婪",
+  "g_ui_save_failed": "儲存失敗，請重試。",
+  "g_ui_destination_tag": "目的地標籤",
+  "g_ui_token_contract_hint": "代幣合約（0x…）",
+  "g_ui_calldata_hex": "呼叫資料（十六進位）",
+  "g_ui_wallet_ai": "錢包 AI",
+  "g_ui_read_only": "唯讀",
+  "g_ui_assistant_hint": "詢問餘額、投資組合或 Gas 費用",
+  "g_ui_no_dapps": "沒有 DApp",
+  "g_ui_paste_connection": "貼上連線連結",
+  "g_ui_contract_info": "合約資訊",
+  "g_ui_keystone_paired": "已成功配對 Keystone",
+  "g_ui_device_connected": "已連線至 {value}",
+  "g_ui_clipboard_clear": "剪貼簿將於 {value} 秒後自動清除",
+  "g_ui_message": "訊息",
+  "g_ui_room_id": "房間 ID",
+  "g_ui_backup_select_wallet": "請至少選擇一個要備份的錢包",
+  "g_ui_backup_password_min": "密碼至少需要 8 個字元",
+  "g_ui_password_mismatch": "兩次密碼不一致",
+  "g_ui_backup_no_selection": "沒有選取可備份的有效錢包",
+  "g_ui_backup_export": "匯出雲端備份",
+  "g_ui_backup_select_wallets": "選擇要備份的錢包",
+  "g_ui_backup_password": "備份密碼",
+  "g_ui_backup_password_hint": "設定安全的備份密碼（至少 8 個字元）",
+  "g_ui_confirm_password": "確認密碼",
+  "g_ui_backup_password_repeat": "再次輸入備份密碼",
+  "g_ui_mnemonic_wallet": "助記詞錢包",
+  "g_ui_private_key_wallet": "私鑰錢包",
+  "g_ui_backup_create_save": "建立並儲存備份",
+  "g_ui_backup_share_subject": "N42Wallet 備份",
+  "g_ui_backup_warning": "此備份包含您的私鑰／助記詞、錢包密碼與錢包設定。請妥善保管備份檔案和密碼，切勿與任何人分享。",
+  "g_ui_wallet_number": "錢包 {value}",
+  "g_ui_backup_file_access": "無法存取所選檔案",
+  "g_ui_backup_invalid_file": "不是有效的 N42Wallet 備份檔案",
+  "g_ui_backup_select_file_first": "請先選擇備份檔案",
+  "g_ui_backup_enter_password": "請輸入備份密碼",
+  "g_ui_backup_empty": "備份檔案中沒有錢包",
+  "g_ui_backup_restore_none": "無法從此備份還原任何錢包",
+  "g_ui_backup_import": "匯入雲端備份",
+  "g_ui_backup_restore_hint": "從 iCloud Drive 或 Google Drive 中的加密備份還原錢包。",
+  "g_ui_backup_file": "備份檔案",
+  "g_ui_backup_no_file": "尚未選擇檔案",
+  "g_ui_backup_restore_password_hint": "輸入建立備份時使用的密碼",
+  "g_ui_backup_encryption_hint": "您的備份使用 AES-256 + PBKDF2 加密，只有正確的密碼才能還原。",
+  "g_ui_backup_import_wallets": "匯入錢包",
+  "g_ui_file_picker_failed": "無法開啟檔案選擇器，請重試。",
+  "g_ui_file_read_failed": "無法讀取所選檔案，請重試。",
+  "g_ui_backup_import_result": "已匯入錢包：{imported}。已略過：{skipped}。",
+  "g_ui_backup_export_failed": "無法建立備份，請重試。",
+  "g_ui_backup_import_failed": "無法還原備份，請檢查密碼和備份檔案後重試。",
+  "g_ui_csv_no_data": "移除註解後沒有資料。",
+  "g_ui_csv_header_only": "沒有資料列（僅偵測到標題列）。",
+  "g_ui_clipboard_empty": "剪貼簿是空的",
+  "g_ui_validation_issues": "驗證問題",
+  "g_ui_issues_label": "問題：",
+  "g_ui_csv_missing_fields": "第 {value} 列：缺少欄位",
+  "g_ui_template_copied": "已複製範本",
+  "g_ui_validation_counts": "有效：{valid}。問題：{issues}。",
+  "g_ui_validation_more": "…另有 {value} 個問題",
+  "g_ui_import_valid": "匯入有效收款人（{value}）",
+  "g_ui_recipients_count": "收款人：{value}",
+  "g_ui_token_value": "代幣：{value}",
+  "g_ui_gas_value": "Gas 費用：{value}",
+  "g_ui_ens_price_failed": "無法載入 ENS 續期價格，請重試。",
+  "g_ui_ens_renew_failed": "ENS 續期失敗，請重試。",
+  "g_ui_transaction_hash_value": "交易：{value}",
+  "g_ui_trade_save_failed": "無法儲存交易，請重試。",
+  "g_ui_trade_delete_failed": "無法刪除交易，請重試。",
+  "g_ui_algo_asset_missing": "帳戶 {address} 尚未新增資產 {asset}（{contract}）。",
+  "g_ui_algo_asset_add_fee": "新增此資產需要支付網路費用。點選「新增」以繼續。",
+  "g_ui_balance_value": "餘額：{value}",
+  "g_ui_min_balance_value": "最低餘額：{value}",
+  "g_ui_camera_permission": "掃描 QR 碼需要相機權限。",
+  "g_ui_no_coins": "尚無幣種",
+  "g_ui_wallet_loading": "正在載入錢包…",
+  "g_ui_wallet_load_failed": "錢包載入失敗",
+  "g_ui_no_wallet": "尚無錢包",
+  "g_ui_wallet_get_started": "建立或匯入錢包以開始使用",
+  "g_ui_create_wallet": "建立錢包",
+  "g_ui_coins_load_failed": "幣種載入失敗，請重試。",
+  "g_ui_mpc_no_phrase": "無需助記詞",
+  "g_ui_mpc_intro": "使用社群帳戶登入以建立安全的 MPC 錢包。您的私鑰會拆分為加密分片，無需保管助記詞。",
+  "g_ui_mpc_security": "採用 MPC-TSS 技術。您的私鑰會拆分為 3 份加密分片，分別存放於您的裝置、我們的伺服器及復原備份。"
 }

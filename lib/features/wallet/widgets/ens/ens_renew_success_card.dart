@@ -105,7 +105,11 @@ class _EnsRenewSuccessCardState extends State<EnsRenewSuccessCard> {
                 borderRadius: AppRadius.brSm,
               ),
               child: Text(
-                'Tx: ${_shortenHash(widget.renewResult.txHash!)}',
+                S
+                    .of(context)
+                    .g_ui_transaction_hash_value(
+                      _shortenHash(widget.renewResult.txHash!),
+                    ),
                 style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
                   color: AppColorTokens.of(context).textSubtitle,

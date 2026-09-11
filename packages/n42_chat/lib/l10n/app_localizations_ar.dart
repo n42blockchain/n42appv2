@@ -794,7 +794,7 @@ class SAr extends S {
   String get commonTransferTo => 'نقل إلى';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return 'من $name';
   }
 
@@ -2868,7 +2868,7 @@ class SAr extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'لم يُعِدّ هذا الخادم أي مزوّد لتسجيل الدخول عبر SSO';
 
   @override
   String get transferAmountHintZero => '0.00';

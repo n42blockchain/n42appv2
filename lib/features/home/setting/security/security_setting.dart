@@ -124,7 +124,7 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                   borderRadius: AppRadius.brMd,
                 ),
                 child: buildNavigationWidget(
-                  title: 'Change Email',
+                  title: S.of(context).g_ui_change_email,
                   subtitle:
                       AppGlobals.currentUserEmail ?? 'Update account email',
                   icon: Icons.mail_outline,

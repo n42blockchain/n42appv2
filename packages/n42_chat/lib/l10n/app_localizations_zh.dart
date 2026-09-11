@@ -783,7 +783,7 @@ class SZh extends S {
   String get commonTransferTo => '轉賬給';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '來自 $name';
   }
 
@@ -6419,7 +6419,7 @@ class SZhTw extends SZh {
   String get commonTransferTo => '轉賬給';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '來自 $name';
   }
 

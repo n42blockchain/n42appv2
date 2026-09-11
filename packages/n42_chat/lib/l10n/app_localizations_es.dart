@@ -802,8 +802,8 @@ class SEs extends S {
   String get commonTransferTo => 'Transferir a';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'De $senderName';
+  String commonFromSender(String name) {
+    return 'De $name';
   }
 
   @override
@@ -1228,7 +1228,7 @@ class SEs extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Funcion en desarrollo...';
+    return 'La función $feature está en desarrollo…';
   }
 
   @override

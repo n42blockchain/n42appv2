@@ -1,0 +1,12 @@
+[
+  {
+    "authenticated": false,
+    "status": 401,
+    "coinCount": null
+  },
+  {
+    "authenticated": true,
+    "status": 200,
+    "coinCount": 15
+  }
+]

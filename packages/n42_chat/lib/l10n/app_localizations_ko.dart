@@ -784,8 +784,8 @@ class SKo extends S {
   String get commonTransferTo => '받는 사람';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return '$senderName님으로부터';
+  String commonFromSender(String name) {
+    return '$name님으로부터';
   }
 
   @override
@@ -1205,7 +1205,7 @@ class SKo extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return '기능 개발 중...';
+    return '$feature 기능은 개발 중입니다…';
   }
 
   @override

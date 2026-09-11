@@ -3,10 +3,12 @@ part of 'wallet_action_provider.dart';
 /// Market prices, balance fetching, coin refresh, and stablecoin pricing.
 extension WalletActionProviderMarket on WalletActionProvider {
   /// 从 CoinGecko 获取稳定币价格
-  Future<void> _fetchStablecoinPrices() async {
+  Future<void> _fetchStablecoinPrices({bool force = false}) async {
     // 检查缓存是否有效
-    if (_stablecoinPricesFetchTime != null &&
-        DateTime.now().difference(_stablecoinPricesFetchTime!) <
+    if (!force &&
+        _stablecoinPricesFetchTime != null &&
+        !_now().difference(_stablecoinPricesFetchTime!).isNegative &&
+        _now().difference(_stablecoinPricesFetchTime!) <
             WalletActionProvider._stablecoinCacheDuration &&
         _stablecoinPrices.isNotEmpty) {
       if (kDebugMode) {
@@ -26,9 +28,9 @@ extension WalletActionProviderMarket on WalletActionProvider {
       final url =
           '$baseUrl/simple/price?ids=$geckoIds&vs_currencies=usd,cny&include_24hr_change=true';
 
-      final response = await ExternalHttp.get(
+      final response = await _stablecoinPriceRequest(
         url,
-      ).timeout(const Duration(seconds: 8), onTimeout: () => null);
+      ).timeout(const Duration(seconds: 8));
 
       if (response != null && response is Map) {
         final newPrices = <String, Map<String, double>>{};
@@ -75,7 +77,7 @@ extension WalletActionProviderMarket on WalletActionProvider {
 
         if (newPrices.isNotEmpty) {
           _stablecoinPrices = newPrices;
-          _stablecoinPricesFetchTime = DateTime.now();
+          _stablecoinPricesFetchTime = _now();
         }
       }
     } catch (e, stackTrace) {
@@ -90,67 +92,100 @@ extension WalletActionProviderMarket on WalletActionProvider {
   }
 
   ///获取钱包 币的基本数据，成功后初始化主页币列表
-  Future<void> getCoinInfo() async {
-    //钱包币列表，默认查询币种的当前价格等基本信息
-    final coinSelectPriceKeys = coinList
-        .map((cm) => cm.config.miniName.toLowerCase())
-        .join(',');
+  Future<void> getCoinInfo({bool force = false}) {
+    if (isDisposed) return Future<void>.value();
+    final pending = _priceRefreshInFlight;
+    if (pending != null) return pending;
+    final operation = _updateCoinInfo(force: force);
+    final tracked = operation.whenComplete(() => _priceRefreshInFlight = null);
+    _priceRefreshInFlight = tracked;
+    return tracked;
+  }
 
-    // 先获取稳定币价格（从 CoinGecko，含 CNY 汇率推导，有 5 分钟缓存）
-    await _fetchStablecoinPrices();
-
-    // 市场数据防重复请求：30s 内已有新鲜数据则跳过网络请求，直接用缓存重算总余额
-    final now = DateTime.now();
-    final marketDataFresh =
-        _coinMarketInfoFetchTime != null &&
-        now.difference(_coinMarketInfoFetchTime!) <
-            WalletActionProvider._marketInfoMinInterval &&
-        _coinMarketInfo.isNotEmpty;
-
-    if (!marketDataFresh) {
-      //查询coins中的币种信息
-      var list = await MarketApi().getWalletCoinsInfo(coinSelectPriceKeys);
-      if (list['error'] == true) {
-        if (kDebugMode) {
-          debugPrint(
-            'WalletActionProvider: getCoinInfo failed: ${list['data']}',
+  Future<void> _updateCoinInfo({required bool force}) async {
+    final requestedSymbols = coinList
+        .map((cm) => cm.config.miniName.trim().toLowerCase())
+        .where((symbol) => symbol.isNotEmpty)
+        .toSet();
+    try {
+      await _fetchStablecoinPrices(force: force);
+      if (isDisposed) return;
+      final now = _now();
+      final cacheAge = _coinMarketInfoFetchTime == null
+          ? null
+          : now.difference(_coinMarketInfoFetchTime!);
+      final marketDataFresh =
+          !force &&
+          cacheAge != null &&
+          !cacheAge.isNegative &&
+          cacheAge < WalletActionProvider._marketInfoMinInterval &&
+          _coinMarketInfo.isNotEmpty &&
+          _marketRequestedSymbols.containsAll(requestedSymbols);
+      if (!marketDataFresh && requestedSymbols.isNotEmpty) {
+        final result = await _marketApi
+            .getWalletCoinsInfo(requestedSymbols.join(','))
+            .timeout(const Duration(seconds: 15));
+        if (isDisposed) return;
+        final items = result['error'] == false
+            ? extractMarketCoinItems(result['data']).where((item) {
+                final symbol = item['coin']?.toString().trim() ?? '';
+                final price = parseMarketDouble(item['price'], double.nan);
+                return symbol.isNotEmpty && price.isFinite && price >= 0;
+              }).toList()
+            : <Map<String, dynamic>>[];
+        final relevantItems = items.where((item) {
+          final symbol = item['coin'].toString().trim().toLowerCase();
+          return coinList.any(
+            (coin) =>
+                coin.config.unit.trim().toLowerCase() == symbol ||
+                coin.config.miniName.trim().toLowerCase() == symbol,
           );
-        }
-        // 静默失败：保留旧缓存价格，不打扰用户（仅首次无数据时才 Toast）
-        if (_coinMarketInfo.isEmpty) {
-          ToastUtils.show(S.current.g_key_5);
-        }
-      } else {
-        final data = list['data'];
-        final marketItems = extractMarketCoinItems(data);
-        if (marketItems.isNotEmpty) {
-          _coinMarketInfo = marketItems;
-          _coinMarketInfoFetchTime = now;
-          if (kDebugMode) {
-            debugPrint(
-              'WalletActionProvider: Loaded ${_coinMarketInfo.length} coins market info',
-            );
-          }
+        }).toList();
+        if (relevantItems.isEmpty) {
+          _priceRefreshFailed = true;
+        } else {
+          // Keep quotes omitted by a partial response, but do not present them
+          // as freshly updated. Cache the attempt to avoid hammering unsupported
+          // symbols on every balance/UI update; manual refresh still bypasses it.
+          final bySymbol = <String, Map<String, dynamic>>{
+            for (final item in _coinMarketInfo)
+              item['coin'].toString().trim().toLowerCase(): item,
+            for (final item in relevantItems)
+              item['coin'].toString().trim().toLowerCase(): {
+                ...item,
+                'coin': item['coin'].toString().trim().toLowerCase(),
+              },
+          };
+          _coinMarketInfo = bySymbol.values.toList();
+          _marketRequestedSymbols = requestedSymbols;
+          _coinMarketInfoFetchTime = _now();
+          final returnedSymbols = relevantItems
+              .map((item) => item['coin'].toString().trim().toLowerCase())
+              .toSet();
+          final complete = coinList.every(
+            (coin) =>
+                returnedSymbols.contains(
+                  coin.config.unit.trim().toLowerCase(),
+                ) ||
+                returnedSymbols.contains(
+                  coin.config.miniName.trim().toLowerCase(),
+                ),
+          );
+          _priceRefreshFailed = !complete;
+          _hasPartialPrices = !complete;
+          if (complete) _priceLastUpdated = _coinMarketInfoFetchTime;
         }
       }
-    } else {
-      if (kDebugMode) {
-        debugPrint(
-          'WalletActionProvider: Market data fresh (${now.difference(_coinMarketInfoFetchTime!).inSeconds}s old), skip fetch',
-        );
-      }
+    } catch (_) {
+      if (isDisposed) return;
+      _priceRefreshFailed = true;
     }
-
-    // 无论是否重新拉取，都用最新缓存重算价格和总余额
-    for (CoinModel cm in coinList) {
+    if (isDisposed) return;
+    for (final cm in coinList) {
       getCoinPrice(cm);
     }
     calculateBalanceWidthCoinModel();
-    // 记录本次成功更新时间（用于 UI 展示"更新于 X 分钟前"）
-    _priceLastUpdated = now;
     refresh();
-
-    addCoinRefreshMap();
   }
 
   //获取币的 美元价格
@@ -260,19 +295,27 @@ extension WalletActionProviderMarket on WalletActionProvider {
     if (refresh) {
       setBalanceTotal(0);
     }
-    refreshWalletCoinInfo(refresh: refresh);
+    await refreshWalletCoinInfo(refresh: refresh);
   }
 
   //刷新钱包中币的余额与当前价格
-  Future<void> refreshWalletCoinInfo({bool refresh = true}) async {
+  Future<void> refreshWalletCoinInfo({
+    bool refresh = true,
+    bool forcePrices = false,
+  }) async {
     if (refresh) {
       _load = Load.refresh;
       this.refresh();
     }
-    await getCoinInfo();
-    if (refresh) {
-      _load = Load.finish;
-      this.refresh();
+    try {
+      await getCoinInfo(force: forcePrices);
+      addCoinRefreshMap();
+      await refreshAggregatedBalances();
+    } finally {
+      if (refresh) {
+        _load = Load.finish;
+        this.refresh();
+      }
     }
   }
 
@@ -317,7 +360,11 @@ extension WalletActionProviderMarket on WalletActionProvider {
   }
 
   void addCoinRefreshMap() {
-    if (coinRefreshMap.containsKey(walletIndex)) return;
+    if (isDisposed ||
+        !isWalletReady ||
+        coinRefreshMap.containsKey(walletIndex)) {
+      return;
+    }
 
     for (final cm in coinList) {
       if (cm is! AggregatedCoinModel && cm.address == null) cm.loadError = true;

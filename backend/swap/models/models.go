@@ -22,6 +22,8 @@ type QuoteReq struct {
 
 // QuoteResp 报价响应（最优来源）
 type QuoteResp struct {
+	TxValue      string   `json:"tx_value"`       // native transaction value in wei
+	AmountOutRaw string   `json:"amount_out_raw"` // exact output in token base units
 	OrderID      string   `json:"order_id"`
 	AmountOut    string   `json:"amount_out"` // 人类可读
 	AmountOutWei *big.Int `json:"-"`

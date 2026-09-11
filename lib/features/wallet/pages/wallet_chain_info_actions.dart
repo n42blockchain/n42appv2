@@ -135,7 +135,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
       childs.add(
         _buildSheetItem(
           icon: Icon(Icons.groups, color: _blue, size: sw(40.0)),
-          label: 'Batch Transfer',
+          label: S.of(context).g_key_batch_title,
           onTap: () async {
             await handleBatchTransfer();
             if (!mounted || !navigator.mounted) return;
@@ -213,9 +213,7 @@ mixin WalletChainInfoActionsMixin<T extends ConsumerStatefulWidget>
           onTap: () async {
             final confirmed = await tipsDialog2(
               context,
-              S
-                  .of(context)
-                  .g_key_remove_network_confirm(coinModel.config.mKey),
+              S.of(context).g_key_remove_network_confirm(coinModel.config.mKey),
             );
             if (!mounted || confirmed != true) return;
             final wap = ref.read(wapBridgeProvider);

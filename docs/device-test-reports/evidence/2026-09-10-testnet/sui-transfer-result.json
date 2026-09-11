@@ -1,0 +1,9 @@
+{
+  "network": "Sui Devnet",
+  "validation": "Official SDK transaction, not N42 native signing or UI acceptance",
+  "url": "https://fullnode.devnet.sui.io:443",
+  "from": "0xe5302bcfed048b9eb7fbb526e91e2741fc87126165d49b64226f28c1fe2d167e",
+  "to": "0x39b8daed511e0a35de508ca0e3847f488094a13784e090c862c8ee53c5340af0",
+  "amountMist": "10000000",
+  "error": "Method not found. JSON-RPC on public fullnodes has been deprecated. Please migrate to gRPC or GraphQL endpoints. See https://docs.sui.io/develop/accessing-data/json-rpc-migration for more information."
+}

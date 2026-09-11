@@ -48,13 +48,6 @@ extension WalletActionProviderSort on WalletActionProvider {
   /// 添加聚合代币 (USDT, USDC) 到列表，并进行去重检查
   /// [insertIndex] 参数已废弃，现在使用 _applyPriorityOrder 进行排序
   Future<void> _insertAggregatedTokensAt(int insertIndex) async {
-    // 获取各链地址
-    final addressByChain = {
-      for (final cm in _coinModels)
-        if (cm.coin['coinType'] != null && cm.address != null)
-          cm.coin['coinType'] as String: cm.address.toString(),
-    };
-
     // 收集 coinList 中所有代币的符号（用于去重）
     final existingTokenSymbols = coinList
         .whereType<CoinModel>()
@@ -76,17 +69,18 @@ extension WalletActionProviderSort on WalletActionProvider {
       }
 
       final aggregatedCoin = AggregatedCoinModel(tokenConfig: tokenConfig);
+      if (_aggregateAddresses(aggregatedCoin).isEmpty) continue;
       _aggregatedCoins.add(aggregatedCoin);
       toAdd.add(aggregatedCoin);
-
-      // 异步获取余额（不阻塞 UI）
-      aggregatedCoin.fetchAllBalances(addressByChain).then((_) {
-        refresh();
-      });
     }
 
     if (toAdd.isNotEmpty) {
       coinList.addAll(toAdd);
+      for (final coin in toAdd) {
+        getCoinPrice(coin);
+      }
+      // The model enters the active list before callbacks can notify it.
+      refreshAggregatedBalances();
     }
   }
 

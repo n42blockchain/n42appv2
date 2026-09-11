@@ -17,6 +17,16 @@ import 'package:n42_wallet/features/home/setting/setting_theme.dart';
 import 'package:n42_wallet/features/wallet/pages/manage_chains_page.dart';
 import 'package:n42_wallet/features/home/setting/about_app.dart';
 
+import 'package:n42_wallet/core/constants/language_constants.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/features/wallet/pages/transactions/wallet_activity_page.dart';
+import 'package:n42_wallet/features/wallet/pages/gas/gas_tracker_page.dart';
+import 'package:n42_wallet/features/wallet/pages/batch_transfer/batch_transfer_select_page.dart';
+import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
+import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
+import 'package:n42_wallet/generated/l10n.dart';
+import 'package:rate_us_on_store/rate_us_on_store.dart';
+
 part 'profile_home_page_widgets.dart';
 
 /// 我的页面
@@ -28,6 +38,7 @@ class ProfileHomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      appBar: AppBar(title: Text(S.of(context).g_key_94)),
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
@@ -41,7 +52,7 @@ class ProfileHomePage extends ConsumerWidget {
             SliverToBoxAdapter(child: _buildSecuritySection(context)),
 
             // 通用设置
-            SliverToBoxAdapter(child: _buildGeneralSection(context)),
+            SliverToBoxAdapter(child: _buildGeneralSection(context, ref)),
 
             // 关于与支持
             SliverToBoxAdapter(child: _buildAboutSection(context)),
@@ -90,7 +101,7 @@ class ProfileHomePage extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'My Wallet',
+                  S.of(context).g_key_6,
                   style: AppTypography.title.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
@@ -98,7 +109,7 @@ class ProfileHomePage extends ConsumerWidget {
                 ),
                 SizedBox(height: AppSpacing.space2),
                 Text(
-                  'Manage your settings',
+                  S.of(context).g_audit_manage_settings,
                   style: AppTypography.bodySm.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
@@ -112,65 +123,109 @@ class ProfileHomePage extends ConsumerWidget {
   }
 
   Widget _buildWalletSection(BuildContext context) {
-    return _buildSection(context, 'Wallet', [
+    return _buildSection(context, S.of(context).g_key_6, [
       _buildMenuItem(
         context,
-        'Wallet Management',
-        'Manage your wallets',
+        S.of(context).g_audit_wallet_management,
+        S.of(context).g_audit_manage_wallets,
         Icons.account_balance_wallet,
         AppColorTokens.of(context).brand,
         () => _navigateToWalletManagement(context),
       ),
       _buildMenuItem(
         context,
-        'Hardware Wallet',
-        'Connect Ledger device',
+        S.of(context).g_audit_hardware,
+        'Ledger · Keystone · Trezor',
         Icons.usb,
         Colors.purple,
         () => _navigateToHardwareWallet(context),
-        isNew: true,
       ),
       _buildMenuItem(
         context,
-        'Address Book',
-        'Saved addresses',
+        S.of(context).g_key_108,
+        S.of(context).g_audit_saved_addresses,
         Icons.contacts,
         AppColorTokens.of(context).success,
         () => _navigateToAddressBook(context),
       ),
       _buildMenuItem(
         context,
-        'Transaction History',
-        'View all transactions',
+        S.of(context).g_key_tran_1,
+        S.of(context).g_audit_activity_local,
         Icons.history,
         AppColorTokens.of(context).warning,
         () => _navigateToTransactionHistory(context),
+      ),
+      _buildMenuItem(
+        context,
+        S.of(context).g_portfolio_title,
+        S.of(context).g_portfolio_all_holdings,
+        Icons.pie_chart_outline,
+        AppColorTokens.of(context).brand,
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const PortfolioPage()),
+        ),
+      ),
+      _buildMenuItem(
+        context,
+        S.of(context).g_audit_gas,
+        S.of(context).g_audit_gas_desc,
+        Icons.local_gas_station_outlined,
+        AppColorTokens.of(context).warning,
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const GasTrackerPage()),
+        ),
+      ),
+      _buildMenuItem(
+        context,
+        S.of(context).g_audit_batch,
+        S.of(context).g_audit_batch_desc,
+        Icons.playlist_add_check,
+        AppColorTokens.of(context).brand,
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const BatchTransferSelectPage()),
+        ),
       ),
     ]);
   }
 
   Widget _buildSecuritySection(BuildContext context) {
-    return _buildSection(context, 'Security', [
+    return _buildSection(context, S.of(context).s_key_11, [
       _buildMenuItem(
         context,
-        'Security Settings',
-        'Protect your wallet',
+        'WalletConnect',
+        S.of(context).g_audit_connections_desc,
+        Icons.link,
+        AppColorTokens.of(context).brand,
+        () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const WcSessionListPage()),
+        ),
+      ),
+
+      _buildMenuItem(
+        context,
+        S.of(context).s_key_11,
+        S.of(context).g_audit_protect_wallet,
         Icons.security,
         AppColorTokens.of(context).danger,
         () => _navigateToSecuritySettings(context),
       ),
       _buildMenuItem(
         context,
-        'Backup Wallet',
-        'Backup your recovery phrase',
+        S.of(context).g_key_wallet_c38,
+        S.of(context).g_audit_encrypted_backup,
         Icons.backup,
         AppColorTokens.of(context).warning,
         () => _navigateToBackupWallet(context),
       ),
       _buildMenuItem(
         context,
-        'Biometric Auth',
-        'Face ID / Fingerprint',
+        S.of(context).g_audit_biometrics,
+        S.of(context).g_audit_biometrics_desc,
         Icons.fingerprint,
         Colors.teal,
         () => _navigateToBiometricSettings(context),
@@ -178,48 +233,45 @@ class ProfileHomePage extends ConsumerWidget {
     ]);
   }
 
-  Widget _buildGeneralSection(BuildContext context) {
-    return _buildSection(context, 'General', [
+  Widget _buildGeneralSection(BuildContext context, WidgetRef ref) {
+    return _buildSection(context, S.of(context).g_key_94, [
       _buildMenuItem(
         context,
-        'Language',
-        'Display language',
+        S.of(context).s_key_4,
+        S.of(context).g_audit_display_language,
         Icons.language,
         Colors.indigo,
-        () => _navigateToLanguageSettings(context),
+        () => _navigateToLanguageSettings(context, ref),
         trailing: Text(
-          'English',
+          getLanguageByCode(
+            languageCodeFromLocale(ref.watch(localeProvider)),
+          ).name,
           style: AppTypography.bodySm.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
           ),
         ),
       ),
-      _buildMenuItem(
-        context,
-        'Currency',
-        'Display currency',
-        Icons.attach_money,
-        AppColorTokens.of(context).success,
-        () => _navigateToCurrencySettings(context),
-        trailing: Text(
-          'USD',
-          style: AppTypography.bodySm.copyWith(
-            color: AppColorTokens.of(context).textSubtitle,
-          ),
+      ListTile(
+        leading: Icon(
+          Icons.attach_money,
+          color: AppColorTokens.of(context).success,
         ),
+        title: Text(S.of(context).g_audit_currency),
+        subtitle: Text(S.of(context).g_audit_currency_usd),
+        trailing: const Text('USD'),
       ),
       _buildMenuItem(
         context,
-        'Theme',
-        'Light / Dark mode',
+        S.of(context).g_key_126,
+        S.of(context).g_audit_theme_desc,
         Icons.palette,
         Colors.pink,
         () => _navigateToThemeSettings(context),
       ),
       _buildMenuItem(
         context,
-        'Network',
-        'RPC settings',
+        S.of(context).g_mining_key84,
+        S.of(context).g_audit_network_desc,
         Icons.wifi,
         Colors.cyan,
         () => _navigateToNetworkSettings(context),
@@ -228,19 +280,19 @@ class ProfileHomePage extends ConsumerWidget {
   }
 
   Widget _buildAboutSection(BuildContext context) {
-    return _buildSection(context, 'About', [
+    return _buildSection(context, S.of(context).g_key_m_6, [
       _buildMenuItem(
         context,
-        'Rate Us',
-        'Love the app? Rate us!',
+        S.of(context).g_audit_rate,
+        S.of(context).g_audit_rate_desc,
         Icons.star_outline,
         AppColorTokens.of(context).warning,
         () => _rateApp(context),
       ),
       _buildMenuItem(
         context,
-        'About N42',
-        'Version 2.0.0',
+        S.of(context).g_key_m_6,
+        S.of(context).g_audit_about_desc,
         Icons.info_outline,
         AppColorTokens.of(context).textTertiary,
         () => _navigateToAbout(context),

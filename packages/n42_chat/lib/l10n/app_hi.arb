@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "ईमेल बदलने में विफल",
   "blocAuthVerificationCodeInvalid": "सत्यापन कोड ग़लत है या समाप्त हो गया है",
   "blocAuthSessionExpired": "सत्र समाप्त हो गया, कृपया पुनः लॉगिन करें",
-  "blocAuthSessionIncomplete": "सत्र डेटा अधूरा, कृपया पुनः लॉगिन करें"
+  "blocAuthSessionIncomplete": "सत्र डेटा अधूरा, कृपया पुनः लॉगिन करें",
+  "authSsoNotConfigured": "इस सर्वर पर SSO लॉगिन प्रदाता कॉन्फ़िगर नहीं किए गए हैं"
 }

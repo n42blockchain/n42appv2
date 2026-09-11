@@ -77,13 +77,15 @@ class _WalletListState extends ConsumerState<WalletList>
               padding: const EdgeInsets.only(right: 8),
               child: ChoiceChip(
                 label: Text(
-                  'All',
+                  S.of(context).g_audit_all,
                   style: AppTypography.caption,
                 ),
                 selected: _selectedTag == null,
                 onSelected: (_) => setState(() => _selectedTag = null),
                 selectedColor: AppColorTokens.of(context).brand,
-                labelStyle: AppTypography.caption.copyWith(color: _selectedTag == null ? Colors.white : null),
+                labelStyle: AppTypography.caption.copyWith(
+                  color: _selectedTag == null ? Colors.white : null,
+                ),
                 side: BorderSide.none,
                 materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                 visualDensity: VisualDensity.compact,
@@ -93,14 +95,13 @@ class _WalletListState extends ConsumerState<WalletList>
               (tag) => Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: ChoiceChip(
-                  label: Text(
-                    tag,
-                    style: AppTypography.caption,
-                  ),
+                  label: Text(tag, style: AppTypography.caption),
                   selected: _selectedTag == tag,
                   onSelected: (_) => setState(() => _selectedTag = tag),
                   selectedColor: AppColorTokens.of(context).brand,
-                  labelStyle: AppTypography.caption.copyWith(color: _selectedTag == tag ? Colors.white : null),
+                  labelStyle: AppTypography.caption.copyWith(
+                    color: _selectedTag == tag ? Colors.white : null,
+                  ),
                   side: BorderSide.none,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   visualDensity: VisualDensity.compact,
@@ -155,7 +156,9 @@ class _WalletListState extends ConsumerState<WalletList>
                       ),
                       child: Text(
                         S.of(context).g_key_ex_keystore_13,
-                        style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.headline.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                     ),
                     _buildList(),

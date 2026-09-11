@@ -171,7 +171,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
               // 粘贴 URI:桌面 DApp 只显示 WC 链接文本(无二维码可扫)、或从其他
               // App 复制的链接,此前仅扫码入口无法连接(T22 暴露的可用性缺口)。
               IconButton(
-                tooltip: 'Paste connection link',
+                tooltip: S.of(context).g_ui_paste_connection,
                 icon: Icon(
                   Icons.content_paste_rounded,
                   color: AppColorTokens.of(context).brand,
@@ -408,10 +408,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
       padding: EdgeInsets.all(su.setWidth(30)),
       child: Row(
         children: [
-          Text(
-            title,
-            style: AppTypography.body.copyWith(color: textColor),
-          ),
+          Text(title, style: AppTypography.body.copyWith(color: textColor)),
           SizedBox(width: su.setWidth(20)),
           Expanded(
             child: Text(
@@ -530,9 +527,7 @@ mixin WalletConnectWidgetsMixin<T extends StatefulWidget> on State<T> {
           if (dAppDesc != "")
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               alignment: Alignment.center,
               child: Text(
                 dAppDesc,

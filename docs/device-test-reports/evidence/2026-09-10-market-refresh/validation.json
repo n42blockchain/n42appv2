@@ -1,0 +1,34 @@
+{
+  "androidNavigationPassed": true,
+  "androidAuthenticatedTrendingCount": 15,
+  "mainnetBroadcast": false,
+  "automaticUninstall": false,
+  "privateDefineFileCommitted": false,
+  "moduleTestsPassed": 35,
+  "addedFlutterTests": 29,
+  "pythonTestsPassed": 8,
+  "analyzeErrors": 0,
+  "analyzeWarnings": 0,
+  "analyzeInfos": 139,
+  "iosNavigationPassed": true,
+  "iosAuthenticatedTrendingCount": 15,
+  "androidNormalProfileInstalled": true,
+  "androidVersion": "2.4.8+2026072637",
+  "androidPriceStatusVisuallyVerified": true,
+  "fullSuitePassed": 3937,
+  "fullSuiteSeconds": 453,
+  "overallCoverage": {
+    "hit": 23389,
+    "found": 121704,
+    "files": 910
+  },
+  "walletRefreshCoverage": {
+    "hit": 248,
+    "found": 542,
+    "files": 3
+  },
+  "iosNormalProfileInstalled": true,
+  "iosVersion": "2.4.8+2026072637",
+  "iosPriceStatusVisuallyVerified": true,
+  "iosSystemPermissionPromptVisible": false
+}

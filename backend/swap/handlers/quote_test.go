@@ -186,3 +186,36 @@ func (c *captureStub) Quote(_ context.Context, req models.QuoteReq) (*models.Quo
 	*c.capture = req
 	return c.resp, nil
 }
+
+func TestQuote_RawOutputAndUnknownPriceImpact(t *testing.T) {
+	agg := services.NewAggregator(&stubAdapter{chains: []string{"ETH"}, resp: goodResp()})
+	r := newQuoteRouter(agg, &fakeStore{})
+	w := doPost(r, "/v1/dex/quote", `{"chain":"ETH","token_in":"0xA","token_out":"0xB","amount_in":"1000000","user_addr":"0xU"}`)
+	var result struct {
+		Data struct {
+			Raw    string `json:"amount_out_raw"`
+			Impact string `json:"price_impact"`
+		} `json:"data"`
+	}
+	if err := json.Unmarshal(w.Body.Bytes(), &result); err != nil {
+		t.Fatal(err)
+	}
+	if result.Data.Raw != "500000000000000000" {
+		t.Fatalf("missing exact amount: %s", w.Body.String())
+	}
+	if result.Data.Impact != "" {
+		t.Fatal("must not manufacture a low-risk price impact")
+	}
+}
+
+func TestQuote_RejectInvalidSlippage(t *testing.T) {
+	r := newQuoteRouter(services.NewAggregator(), &fakeStore{})
+	for _, body := range []string{
+		`{"chain":"ETH","token_in":"0xA","token_out":"0xB","amount_in":"1","user_addr":"0xU","slippage_bps":-1}`,
+		`{"chain":"ETH","token_in":"0xA","token_out":"0xB","amount_in":"1","user_addr":"0xU","slippage_bps":10001}`,
+	} {
+		if w := doPost(r, "/v1/dex/quote", body); w.Code != http.StatusBadRequest {
+			t.Fatalf("got %d", w.Code)
+		}
+	}
+}

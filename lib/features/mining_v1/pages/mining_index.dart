@@ -123,7 +123,7 @@ class _MiningIndexState extends State<MiningIndex>
                   borderRadius: AppRadius.brSm,
                 ),
                 child: Text(
-                  "The test chain is being upgraded and blocks cannot be verified temporarily.",
+                  S.of(context).g_mining_key_74,
                   style: AppTypography.bodySm.copyWith(
                     color: AppColorTokens.of(context).danger,
                   ),
@@ -215,9 +215,7 @@ class _MiningIndexState extends State<MiningIndex>
             constraints: BoxConstraints(
               maxHeight: ScreenUtil().setWidth(500.0),
             ),
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
             child: ListView.builder(
               itemCount: walletValue.walletInfoLsit.length,
               itemBuilder: (context, int index) {

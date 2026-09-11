@@ -82,110 +82,179 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "کیا آپ واقعی \"${name}\" کو محفوظ کردہ آلات سے ہٹانا چاہتے ہیں؟";
 
-  static String m28(value) => "تخمینہ گیس: ~${value} یونٹس";
+  static String m28(value) => "${value} پوائنٹس کمائیں";
 
-  static String m29(reason) => "وجہ: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "${network} پر ${amount} ${symbol} کی درخواست کریں";
 
-  static String m30(value) => "${value}d انبانڈ";
+  static String m30(value) =>
+      "کسٹم نیٹ ورک ${value} ہٹائیں؟ اس نیٹ ورک کے بیلنس اب نہیں دکھائے جائیں گے۔ چین پر موجود آپ کے اثاثے متاثر نہیں ہوں گے۔";
 
-  static String m31(value) => "${value} دن باقی ہیں۔";
+  static String m31(value) => "تخمینہ گیس: ~${value} یونٹس";
 
-  static String m32(value) =>
+  static String m32(reason) => "وجہ: ${reason}";
+
+  static String m33(value) => "${value}d انبانڈ";
+
+  static String m34(value) => "${value} دن باقی ہیں۔";
+
+  static String m35(value) =>
       "انسٹاک کرنے میں ${value} دن لگتے ہیں۔ اس مدت کے دوران آپ کے ٹوکن مقفل ہو جائیں گے۔";
 
-  static String m33(value) => "آپ کے پاس کافی \"${value}\" نہیں ہے";
+  static String m36(value) => "آپ کے پاس کافی \"${value}\" نہیں ہے";
 
-  static String m34(value) => "\"${value}\" اکاؤنٹ حاصل کرنے میں ناکام";
+  static String m37(value) => "\"${value}\" اکاؤنٹ حاصل کرنے میں ناکام";
 
-  static String m35(value) => "پہلی منتقلی کے لیے کم از کم ${value} XRP";
+  static String m38(value) => "پہلی منتقلی کے لیے کم از کم ${value} XRP";
 
-  static String m36(count) => "شامل کریں (${count})";
+  static String m39(count) => "شامل کریں (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: '1 نئے ٹوکن کا پتہ چلا', other: '${count} نئے ٹوکنز کا پتہ چلا')} — جائزہ لینے کے لیے تھپتھپائیں۔";
 
-  static String m38(value) => "کوئی ${value} سلسلہ شامل نہیں کیا گیا۔";
+  static String m41(value) => "کوئی ${value} سلسلہ شامل نہیں کیا گیا۔";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "${value} کے نامکمل لین دین ہیں، براہ کرم بعد میں دوبارہ کوشش کریں۔";
 
-  static String m40(value) => "${value} کا کوئی پتہ نہیں ملا۔";
+  static String m43(value) => "${value} کا کوئی پتہ نہیں ملا۔";
 
-  static String m41(value) => "${value} کا ناکافی بیلنس۔";
+  static String m44(value) => "${value} کا ناکافی بیلنس۔";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "ہر XRP اکاؤنٹ کو ${value} XRP (${value1} ڈراپس) کو بیس لائن کے طور پر ریزرو کرنا چاہیے، جسے خرچ نہیں کیا جا سکتا۔";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "اکاؤنٹ کے مالک ہر چیز کے لیے، ${value} XRP (${value1} ڈراپس) ریزرو میں شامل کیا جاتا ہے۔";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "یہ اکاؤنٹ ${value} اشیاء کا مالک ہے، جس کا مطلب ہے کہ ایک اضافی ${value1} XRP محفوظ ہے۔";
 
-  static String m45(message) => "روم میں داخلہ ناکام\n${message}";
+  static String m48(message) => "روم میں داخلہ ناکام\n${message}";
 
-  static String m46(value) => "غلط نمونہ، ${value} کوششیں باقی ہیں";
+  static String m49(value) => "غلط نمونہ، ${value} کوششیں باقی ہیں";
 
-  static String m47(value) => "غلط نمونہ، ${value} کوشش باقی ہے";
+  static String m50(value) => "غلط نمونہ، ${value} کوشش باقی ہے";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "آپ نے کامیابی کے ساتھ ایک ${value} ترتیب دیا ہے اور N42Wallet کے ساتھ تصدیق شروع کریں گے!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "ایک پرت 1 چین کے ابتدائی کان کن بننے کے لیے @N42Wallet پر میرے ${value} گروپ میں شامل ہوں، اور اپنے فون پر کریپٹو حاصل کریں!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "کیا آپ واقعی نوڈ چلانے کے لیے ${value} N کو ${value1} تک مقفل کرنا چاہتے ہیں؟";
 
-  static String m51(value) => "درآمد ناکام:${value}";
+  static String m54(value) => "درآمد ناکام:${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "انعامات حاصل کرنے کے لیے کم از کم ${value} کا بیلنس درکار ہے۔";
 
-  static String m53(value, value1) =>
+  static String m56(value, value1) =>
       "${value} N ہر ${value1} بلاکس کی کان کنی کی جاتی ہے۔";
 
-  static String m54(value) => "${value} حروف کا ہونا ضروری ہے۔";
+  static String m57(value) => "${value} حروف کا ہونا ضروری ہے۔";
 
-  static String m55(symbol) => "رقم (${symbol})";
+  static String m58(symbol) => "رقم (${symbol})";
 
-  static String m56(amount, symbol) => "بیلنس: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "بیلنس: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "«${label}» کو فاتح قرار دے کر تصفیہ کریں؟ یہ واپس نہیں ہو سکتا۔";
 
-  static String m58(n) => "${n} منٹ";
+  static String m61(n) => "${n} منٹ";
 
-  static String m59(n) => "نتیجہ ${n}";
+  static String m62(n) => "نتیجہ ${n}";
 
-  static String m60(label, pct) => "${label} جیتتا ہے (${pct}%)";
+  static String m63(label, pct) => "${label} جیتتا ہے (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "تخمینی ${shares} حصص · اوسط ${avg}% · بعد ${after}%";
 
-  static String m62(reason) => "ریڈیم ناکام: ${reason}";
+  static String m65(reason) => "ریڈیم ناکام: ${reason}";
 
-  static String m63(label) => "نتیجہ: ${label}";
+  static String m66(label) => "نتیجہ: ${label}";
 
-  static String m64(n) => "فروخت ${n}";
+  static String m67(n) => "فروخت ${n}";
 
-  static String m65(value) => "${value} ناکافی بیلنس۔";
+  static String m68(value) => "${value} ناکافی بیلنس۔";
 
-  static String m66(value) => "${value} آنے والی...";
-
-  static String m67(value) =>
-      "${value} تبدیل شدہ ایپ آپ کے بٹوے میں جلد ہی تقسیم کر دی جائے گی اور اس عمل کے ذریعے فروخت نہیں کی جا سکتی۔ اسے نوڈ چلانے کے لیے استعمال کیا جا سکتا ہے۔";
-
-  static String m68(value) => "زیادہ سے زیادہ ${value} حروف";
-
-  static String m69(value) => "${value} چین اے پی پی پہلے ہی تعاون یافتہ ہے!";
+  static String m69(value) => "${value} آنے والی...";
 
   static String m70(value) =>
+      "${value} تبدیل شدہ ایپ آپ کے بٹوے میں جلد ہی تقسیم کر دی جائے گی اور اس عمل کے ذریعے فروخت نہیں کی جا سکتی۔ اسے نوڈ چلانے کے لیے استعمال کیا جا سکتا ہے۔";
+
+  static String m71(value) => "زیادہ سے زیادہ ${value} حروف";
+
+  static String m72(value) => "${value} چین اے پی پی پہلے ہی تعاون یافتہ ہے!";
+
+  static String m73(value) =>
       "${value} چین ایپ پہلے سے ہی تعاون یافتہ ہے، کیا آپ اسے شامل کرنا چاہتے ہیں؟";
 
-  static String m71(value) => "${value} ایڈریس ٹیسٹ لنک ناکام ہوگیا!";
+  static String m74(value) => "${value} ایڈریس ٹیسٹ لنک ناکام ہوگیا!";
 
-  static String m72(value) => "0~${value} حروف";
+  static String m75(value) =>
+      "RPC کے مطابق Chain ID ${value} ہے، جو آپ کی درج کردہ قدر سے مختلف ہے۔";
+
+  static String m76(asset, contract, address) =>
+      "اثاثہ ${asset} (${contract}) اکاؤنٹ ${address} میں شامل نہیں کیا گیا۔";
+
+  static String m77(imported, skipped) =>
+      "درآمد شدہ والیٹس: ${imported}۔ چھوڑے گئے: ${skipped}۔";
+
+  static String m78(value) => "بیلنس: ${value}";
+
+  static String m79(value) => "بنیادی فیس: ${value} Gwei";
+
+  static String m80(value) =>
+      "کلپ بورڈ ${value} سیکنڈ بعد خود بخود صاف ہو جائے گا";
+
+  static String m81(value) => "قطار ${value}: خانے نامکمل ہیں";
+
+  static String m82(value) => "${value} دن";
+
+  static String m83(value) => "${value} سے جڑ گیا";
+
+  static String m84(value) => "گیس فیس: ${value}";
+
+  static String m85(value) => "${value} گھنٹے";
+
+  static String m86(value) => "درست وصول کنندگان درآمد کریں (${value})";
+
+  static String m87(quote, base) => "حد قیمت (فی ${base}، ${quote} میں)";
+
+  static String m88(value) => "حد قیمت ${value}";
+
+  static String m89(value) => "مارکیٹس (${value})";
+
+  static String m90(value) => "کم از کم بیلنس: ${value}";
+
+  static String m91(value) => "آرڈرز (${value})";
+
+  static String m92(value) => "پوزیشنز (${value})";
+
+  static String m93(value) => "وصول کنندگان: ${value}";
+
+  static String m94(value) => "ٹوکن مل گیا: ${value}";
+
+  static String m95(value) => "ٹوکن: ${value}";
+
+  static String m96(value) => "ٹرانزیکشن: ${value}";
+
+  static String m97(valid, issues) => "درست: ${valid}۔ مسائل: ${issues}۔";
+
+  static String m98(value) => "…اور مزید ${value} مسائل";
+
+  static String m99(volume, interest) =>
+      "تجارتی حجم: ${volume} · کھلے معاہدے: ${interest}";
+
+  static String m100(value) => "والیٹ ${value}";
+
+  static String m101(value) => "${value} گھنٹے پہلے اپ ڈیٹ ہوا";
+
+  static String m102(value) => "${value} منٹ پہلے اپ ڈیٹ ہوا";
+
+  static String m103(value) => "0~${value} حروف";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -208,6 +277,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "نیا ڈیوائس لاگ ان",
     ),
     "file": MessageLookupByLibrary.simpleMessage("فائل"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "محفوظ کردہ بیلنس · تازہ کرنے میں ناکامی",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "معلوم بیلنس",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "صرف مین نیٹ کے بیلنس۔ نیٹ ورک کی نامکمل یا ناکام درخواستوں کا بیلنس صفر شمار نہیں کیا جاتا۔",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورک کے لحاظ سے بیلنس",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "اس نیٹ ورک کے لیے کوئی فعال مین نیٹ اکاؤنٹ نہیں",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "بیلنس لوڈ نہیں ہوا",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورک کھولیں",
+    ),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "یہ اثاثہ منتخب والیٹ میں اب دستیاب نہیں۔ اثاثہ منتخب کرنے کے لیے والیٹ پر واپس جائیں۔",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("اوپر جاتا ہے ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("نیچے قطرے ↓"),
     "g_alert_current_price": m1,
@@ -232,6 +325,112 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "وصول کرنے کے لیے اسکین کریں۔",
+    ),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "اس اسمارٹ اکاؤنٹ کی آن چین سرگرمی دیکھنے کے لیے بلاک ایکسپلورر کھولیں۔",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "ورژن، ویب سائٹ اور معاونت",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "ٹرانزیکشن ہسٹری لوڈ نہیں ہو سکی۔",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "آپ کے والیٹس کی مقامی ٹرانزیکشن ہسٹری۔ تازہ ترین سرگرمی حاصل کرنے کے لیے کوئی اثاثہ کھولیں۔",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("تمام"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "خرچ کرنے کی اجازت برائے",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن کا معاہدہ",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage(
+      "ایک ساتھ متعدد منتقلیاں",
+    ),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "متعدد وصول کنندگان کو بھیجیں یا CSV درآمد کریں",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "بایومیٹرک تصدیق",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Face ID / فنگر پرنٹ کی ترتیبات",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "سیشنز کا انتظام کریں؛ کنکشن منقطع کرنے سے ٹوکن خرچ کرنے کی اجازتیں منسوخ نہیں ہوتیں۔",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage("ڈسپلے کی کرنسی"),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "پورٹ فولیو کی قیمتیں فی الحال امریکی ڈالر میں دکھائی جاتی ہیں۔",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "DeFi پوزیشنز لوڈ نہیں ہو سکیں۔ دوبارہ کوشش کے لیے دبائیں۔",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "DeFi پوزیشنز لوڈ ہو رہی ہیں…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "DeFi پوزیشنز",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "ایپ کی زبان",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "والیٹ کا مرموز بیک اپ برآمد کریں",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage("موجودہ فنڈنگ ریٹ"),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage("گیس فیس ٹریکر"),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورک فیس اور قیمت کے الرٹس",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage("ہارڈویئر والیٹ"),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage("مزید لوڈ کریں"),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("مین نیٹ"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "اپنے والیٹ اور ترجیحات کا انتظام کریں",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "والیٹس بنائیں، درآمد کریں اور ان کا انتظام کریں",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage("مارک پرائس"),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "زیادہ سے زیادہ لیوریج",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورکس اور RPC اینڈ پوائنٹس کا انتظام کریں",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage(
+      "کھلے معاہدوں کی مجموعی مالیت",
+    ),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "اوریکل کی قیمت",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "شناخت کی تصدیق اور والیٹ کی حفاظت",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "سواپ کی پیش کردہ قیمت بدل گئی ہے یا اس کی مدت ختم ہو گئی ہے۔ تصدیق سے پہلے تازہ ترین پیشکش دیکھیں۔",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage(
+      "N42 کی درجہ بندی کریں",
+    ),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "ایپ اسٹور کھولیں",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "وصول کنندگان کے محفوظ کردہ پتے",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage("کم دکھائیں"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("ٹیسٹ نیٹ"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "ظاہری شکل اور ڈسپلے موڈ",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage(
+      "24 گھنٹے کا تجارتی حجم (USD)",
+    ),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "والیٹ کا انتظام",
     ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "براہ کرم URL درج کریں۔",
@@ -298,6 +497,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "تصدیق شدہ",
     ),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "اس نیٹ ورک کے لیے ایسا مین نیٹ والیٹ منتخب کریں جس سے رقم خرچ کی جا سکے۔ صرف دیکھنے والے اکاؤنٹس سواپ پر دستخط نہیں کر سکتے۔",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "ٹرانزیکشن کے پیرامیٹرز درست نہیں یا عمل ناکام ہو گیا۔ سواپ کی قیمت تازہ کریں اور دوبارہ کوشش کریں۔",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "سواپ ارسال ہو گیا، لیکن ٹرانزیکشن کا ریکارڈ اپ ڈیٹ نہیں ہو سکا۔ اسے دوبارہ ارسال نہ کریں۔",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورک فیس اس اسمارٹ اکاؤنٹ سے ادا کی جاتی ہے۔",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "رقم خرچ کرنے والا اکاؤنٹ",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "اسمارٹ اکاؤنٹ استعمال کریں",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "کوڈ دوبارہ بھیجیں۔",
     ),
@@ -334,12 +551,25 @@ class MessageLookup extends MessageLookupByLibrary {
       "Google Authenticator ترتیب نہیں دیا گیا",
     ),
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage("لنک کامیاب"),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage(
+      "تاریخیں صاف کریں",
+    ),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "مطابق مقامی ریکارڈ برآمد کریں (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "ٹرانزیکشن ہسٹری برآمد نہیں ہو سکی۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "فلٹرز اور CSV برآمد میں اس ڈیوائس پر محفوظ تمام مطابق ریکارڈ شامل ہیں۔ نئی آن چین سرگرمی حاصل کرنے کے لیے اثاثہ کھولیں۔",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("پروفائل"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("خبریں"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("تصدیق"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage(
       "کسی دوست کو مدعو کریں۔",
     ),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("مارکیٹس"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("منسوخ کر دیا"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "اپنا نیٹ ورک کنکشن چیک کریں اور دوبارہ کوشش کریں",
@@ -694,6 +924,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "دوبارہ کوشش کریں۔",
     ),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "گیس فیس کی اسپانسرشپ ابھی دستیاب نہیں۔ براہ کرم اپنے اکاؤنٹ کے بیلنس سے گیس فیس ادا کریں۔",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("زیر التواء"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("اجازت"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -733,6 +966,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("منتخب"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "اپنے سمارٹ اکاؤنٹ کا استعمال کرتے ہوئے ٹوکن بھیجیں۔",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "لین دین ناکام ہو گیا۔",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 دن"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 گھنٹہ"),
@@ -842,6 +1078,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "اعلی درجے کی خصوصیات",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("فعال"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage(
+      "دریافت کریں",
+    ),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "تقسیم کریں",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("ختم شدہ"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "کوئی تصدیق شدہ مہم دستیاب نہیں",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("زیر التواء"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("ذرائع"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "فراہم کنندگان کی مرتب کردہ مہمات کی فہرستیں دیکھنے کے لیے ذرائع کھولیں۔",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "تیسرے فریق کی مہمات بدنیتی پر مبنی ہو سکتی ہیں۔ دستخط کرنے سے پہلے منصوبے کے ڈومین اور ٹرانزیکشن کی تفصیلات کی تصدیق کریں۔",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("ایئر ڈراپس"),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("آنے والے"),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("مقبول"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("براہِ راست"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "وصول کنندہ شامل کریں۔",
     ),
@@ -905,6 +1164,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage("بیچ ٹرانسفر"),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage("کل رقم"),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "بلاک ایکسپلورر کا URL (اختیاری)",
+    ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "سلسلہ تعاون یافتہ نہیں ہے۔",
     ),
@@ -1041,6 +1303,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "NFT کو جلانے کے لیے، براہ کرم NFT تفصیلات کے صفحہ پر جائیں اور \"برن\" بٹن کو تھپتھپائیں۔",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "مقبول نیٹ ورک (تفصیلات بھرنے کے لیے دبائیں)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "یہ سلسلہ ابھی تک منتقلی کی حمایت نہیں کرتا ہے، دیکھتے رہیں",
     ),
@@ -1054,6 +1319,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "سب دکھانے کے لیے تھپتھپائیں۔",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("حالیہ"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage(
+      "اکاؤنٹ",
+    ),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "یہ ویب سائٹ آپ کے والیٹ کا پتہ دیکھنے اور ٹرانزیکشنز تجویز کرنے کی اجازت مانگ رہی ہے۔ یہ آپ کی منظوری کے بغیر رقم منتقل نہیں کر سکتی۔",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "والیٹ جوڑیں",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "ایسا لگتا ہے کہ یہ ڈیوائس روٹ یا جیل بریک کی گئی ہے۔ غیر محفوظ ڈیوائس پر والیٹ استعمال کرنے سے کلید کی چوری اور غیر مجاز رسائی کا خطرہ بڑھ جاتا ہے۔ احتیاط سے آگے بڑھیں۔",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "ڈیوائس کی سیکیورٹی کا انتباہ",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "منظور! جاری رکھنے کے لیے Swap کو تھپتھپائیں۔",
     ),
@@ -1102,6 +1382,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "اقتباس ناکام ہوگیا۔",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "سواپ کی قیمت فراہم کرنے والی سروس عارضی طور پر دستیاب نہیں۔ بعد میں دوبارہ کوشش کریں۔",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "تلاش کی علامت / نام / پتہ",
     ),
@@ -1125,6 +1408,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "تبادلہ کامیابی کے ساتھ جمع کرایا گیا۔",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن سروس دستیاب نہیں۔ ایک محدود آف لائن فہرست دکھائی جا رہی ہے۔",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "سواپ روک دیا گیا: راؤٹر کا پتہ قابلِ شناخت نہیں۔ آپ کی حفاظت کے لیے یہ ٹرانزیکشن منسوخ کر دی گئی۔",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage(
       "آپ ادائیگی کریں۔",
     ),
@@ -1135,13 +1424,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "فعال مصنوعات",
     ),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("بیچ"),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage(
+      "بہترین سالانہ شرحِ منافع (APY)",
+    ),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("جلنا"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("N خریدیں۔"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "N42 پروٹوکول کے ساتھ N خریدیں۔",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "تیسرے فریق کی تصدیق شدہ مہمات تلاش کریں",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "کراس چین ٹرانسفر",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "روزانہ آن چین پوائنٹس",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage(
       "ڈی ای ایکس سویپ",
@@ -1165,12 +1463,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "نوڈ مائننگ میں حصہ لے کر انعامات حاصل کریں۔",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage("دائمی فیوچرز"),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage("فوری ٹولز"),
     "g_key_earn_recommended": MessageLookupByLibrary.simpleMessage(
       "تجویز کردہ",
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "سویپ کی قسم منتخب کریں۔",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "جمع کریں",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "USDC / USDT / DAI پر روزانہ منافع کمائیں",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "فی الحال کوئی اسٹیبل کوائن مارکیٹ دستیاب نہیں",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "اسٹیبل کوائن سے آمدنی",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Lido کے ساتھ ETH کو داؤ پر لگا دیں۔",
@@ -1723,6 +2034,68 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "کیا آپ واقعی ایپ سے باہر نکلنا چاہتے ہیں؟",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "دستیاب پوائنٹس",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "آج حاضری ہو چکی ہے",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "حاضری لگائیں",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
+      "ہو گیا",
+    ),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "حاضری ناکام ہو گئی",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "N42 پر حاضری کی تصدیق ہو گئی",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("کاپی"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "روزانہ حاضری",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "درجہ بندی خالی ہے",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("تاریخ"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "اپنا دعوتی کوڈ شیئر کریں",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "دوستوں کو دعوت دیں",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "درجہ بندی",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "پوائنٹس کا کوئی ریکارڈ نہیں",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "ابھی کوئی دعوت قبول نہیں ہوئی۔ شروع کرنے کے لیے اپنا کوڈ شیئر کریں۔",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "کوئی انعام دستیاب نہیں",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "کوئی کام دستیاب نہیں",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "کوئی فعال والیٹ نہیں",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("دعوتیں"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("انعامات"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("کام"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("پوائنٹس"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "کل کمائے گئے",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "سروس دستیاب نہیں",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("استعمال شدہ"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("فیس بک"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("ٹویٹر"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1751,6 +2124,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "براہ کرم بیج کا جملہ درج کریں۔",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("دستخط کریں"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "پہلے کوئی پیغام درج کریں",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "دستخط ناکام ہو گئے",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "دستخط کرنے کے لیے پیغام درج کریں",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("دستخط"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage(
+      "پیغام پر دستخط کریں",
+    ),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "اس چین پر پیغام پر دستخط کرنے کی سہولت ابھی دستیاب نہیں",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "صرف ان پیغامات پر دستخط کریں جن پر آپ کو مکمل اعتماد ہو۔ بدنیتی پر مبنی پیغام آپ کی جانب سے اقدامات کی اجازت دینے کے لیے استعمال ہو سکتا ہے۔",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("کل"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("نام"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("پیچھے"),
@@ -1775,6 +2168,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("ویڈیو"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("فرش"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("NFT گیلری"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage(
+      "اسپیم چھپائیں",
+    ),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("نوشتہ #"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
       "کوئی NFTs نہیں ملے",
@@ -1799,13 +2195,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("ٹوکن آئی ڈی"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("قسم"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("دوسرے"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "پاس ورڈز مماثل نہیں ہیں۔",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ کا ڈیٹا صرف دیکھا جا سکتا ہے۔ اس ورژن میں آرڈر دینے کی سہولت نہیں ہے۔",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "فون گیلری سے منتخب کریں۔",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("عوامی کلید"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "ادائیگی کی درخواست",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage(
+      "نیٹ ورک ہٹائیں",
+    ),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("دوبارہ ترتیب دیں۔"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("دوبارہ کوشش کریں"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "ادائیگی کی درخواست کا ٹوکن یا چین اس والیٹ میں موجود نہیں",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "احتیاط برتیں۔",
     ),
@@ -1832,11 +2245,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "بانٹنے کا طریقہ",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "ممکنہ طور پر لین دین ناکام ہو جائے گا۔",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "نقلی لین دین…",
     ),
@@ -1857,9 +2270,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("اے پی وائی"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("اوسط APY"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "ٹرانزیکشن تیار ہے، لیکن اس چین پر والیٹ سے اسے نشر کرنے کی سہولت ابھی دستیاب نہیں۔",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("کمیشن"),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "تخمینہ روزانہ اجر",
     ),
@@ -1920,12 +2336,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "اسٹیک کرنا شروع کریں۔",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "اسٹیکنگ کی ٹرانزیکشن ارسال کر دی گئی",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("سٹیکنگ"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "لین دین کامیابی سے تیار ہو گیا۔",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage("ان بانڈنگ"),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("اُتارنا"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "اپ ڈیٹ ہو رہا ہے...",
@@ -1945,7 +2364,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "فی گیس زیادہ سے زیادہ فیس",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("زیر التواء"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("ناکامی"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("آگے بڑھیں۔"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("والیٹ پاس ورڈ"),
@@ -1964,7 +2383,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "ڈیٹا حاصل کرنے میں ناکام",
     ),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "وصول کرنے والے ایڈریس اکاؤنٹ کو چیک کریں۔",
     ),
@@ -1975,7 +2394,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "اکاؤنٹ کی تصدیق کامیاب ہو گئی۔",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "وصول کرنے والے پتے کا کوئی اکاؤنٹ نہیں ہے، اور پہلی منتقلی کم از کم 10XRP ہے۔",
     ),
@@ -1984,11 +2403,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage(
       "شامل کریں۔",
     ),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "ٹوکن شامل کیا گیا۔",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "سبھی کو غیر منتخب کریں۔",
     ),
@@ -2163,8 +2582,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("غیر"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("تیز کرنا"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("نوٹ"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "موجودہ ٹوکن شامل نہیں کیا گیا ہے۔",
     ),
@@ -2172,16 +2591,25 @@ class MessageLookup extends MessageLookupByLibrary {
       "خالی جگہوں سے الگ کیے گئے الفاظ کے ساتھ اپنا بیج کا جملہ درج کریں۔",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("پرس درآمد کریں۔"),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "موجودہ ٹوکن بیلنس ناکافی ہے۔",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage(
       "دستخط کرنے میں خرابی۔",
     ),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Wallet کا نظم کریں۔",
+    ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "ایک متبادل ٹرانزیکشن اسی nonce اور تقریباً 20٪ زیادہ گیس فیس کے ساتھ نشر کی جائے گی۔ یہ صرف اس وقت مؤثر ہوگی جب اصل ٹرانزیکشن ابھی زیرِ التوا ہو۔",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "متبادل ٹرانزیکشن ارسال کر دی گئی",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage(
+      "رفتار بڑھائیں",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "ایتھریم ایڈریس درج کریں (0x...)",
@@ -2195,18 +2623,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("محفوظ"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("بیس ریزرو"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("انکریمنٹل ریزرو"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage("ملکیتی اشیاء کی گنتی"),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "کل محفوظ رقم کا حساب کیسے لگائیں۔",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "ٹوٹل ریزرو = بیس ریزرو + (ملکی اشیاء کا شمار × انکریمنٹل ریزرو)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "لائیو نشریات ختم ہو گئیں",
+    ),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("فالو"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "فالو فیچر جلد آ رہا ہے",
@@ -2225,7 +2656,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "اپنے اشاری نمونے کی تصدیق کریں",
     ),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("موجودہ اشارہ بنائیں"),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "اشاری پاس ورڈ دوبارہ ترتیب دیں",
     ),
@@ -2235,12 +2666,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "والیٹ پاس ورڈ شامل کریں؟",
     ),
-    "g_lock_key25": m47,
-    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
-    ),
+    "g_lock_key25": m50,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage("منتقلی کی تصدیق"),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "والیٹ کی ہر منتقلی کی تصدیق کے لیے بایومیٹرک شناخت (Face ID / فنگر پرنٹ) لازم کریں۔",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "اشاری پاس ورڈ ترتیب نہیں دیا گیا",
@@ -2313,12 +2742,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "دوستوں کے ساتھ شیئر کریں۔",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("جاری رکھیں"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "میں نے ابھی @N42Wallet پر ایک نوڈ ترتیب دیا ہے اور موبائل آلات پر تصدیق شروع کر دی ہے! آؤ اور میرے ساتھ شامل ہو جاؤ۔ وکندریقرت مستقبل موبائل ہے!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("معدنی"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("نوڈ"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("نیٹ ورک"),
@@ -2351,7 +2780,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "غیر تعاون یافتہ انکرپٹڈ ڈیٹا فارمیٹ!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("کل کے انعامات"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("خفیہ کردہ ڈیٹا"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage(
@@ -2367,7 +2796,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "چھٹکارے میں کچھ وقت لگتا ہے، براہ کرم ایک لمحہ انتظار کریں!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "انعام روزانہ جمع ہوتا ہے اور صرف آپ کے N والیٹ کو بھیجا جاتا ہے جب یہ ~0.5 N تک پہنچ جاتا ہے۔",
     ),
@@ -2441,7 +2870,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 بلاکس فی دن ~ 15 منٹ",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage("128 سیکنڈ فی چیک"),
     "g_mining_key_74": MessageLookupByLibrary.simpleMessage(
       "ٹیسٹ چین کو اپ گریڈ کیا جا رہا ہے اور بلاکس کی عارضی طور پر تصدیق نہیں کی جا سکتی۔",
@@ -2501,7 +2930,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "براہ کرم خفیہ کاری کا پاس ورڈ درج کریں۔",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "براہ کرم اپنا پاس ورڈ درست کرنے کے لیے دوبارہ درج کریں۔",
     ),
@@ -2576,8 +3005,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
       "نتیجہ شامل کریں",
     ),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("خریدیں"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "منسوخ اور رقم واپس",
@@ -2589,7 +3018,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "تصفیہ کی تصدیق",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "پیشگوئی شروع کریں",
     ),
@@ -2607,6 +3036,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "غلط نتیجہ",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ کا تصفیہ ہو چکا ہے، اس عمل کی اجازت نہیں",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "مارکیٹ بند، ٹریڈنگ دستیاب نہیں",
     ),
@@ -2615,6 +3047,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "مارکیٹ طے نہیں، ریڈیم نہیں ہو سکتا",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "صرف یہ مارکیٹ بنانے والا میزبان یہ عمل کر سکتا ہے",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "کم از کم دو درست نتائج",
@@ -2625,10 +3060,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "سلپیج سے تجاوز، دوبارہ کوشش کریں",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("نہیں"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("نتائج"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "تصفیہ کے لیے جیتنے والا نتیجہ منتخب کریں (رقم نتیجہ کے مطابق)",
@@ -2638,11 +3073,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "پیشگوئی سوال، مثلاً: یہ راؤنڈ کون جیتے گا؟",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("طے شدہ"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "لامحدود (دستی بندش)",
     ),
@@ -2679,7 +3114,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("لنک"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("کوڈ"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "سکے کی قیمت کی خرابی حاصل کریں۔",
     ),
@@ -2691,7 +3126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "آپ کا تبادلہ جلد ہی کیا جائے گا۔ براہ کرم صبر کریں۔",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "نوڈ چلانے کے اخراجات: گروپ تصدیق 1-49 N بنیادی نوڈ: 50 N پریمیم نوڈ: 100 N پرو نوڈ: 500 N۔",
     ),
@@ -2703,7 +3138,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("نیا بیلنس"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("تم ادا کرو"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("تاریخ"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "تبدیلیاں متعلقہ چین ایکسپلوررز (ایتھرسکین، بی ایس سی اسکین، ٹرونسکین اور ہمارے اپنے) پر دیکھی جا سکتی ہیں۔",
     ),
@@ -2716,7 +3151,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "ڈیفالٹ پر ری سیٹ کریں۔",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("ظاہری شکل"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("انداز"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("حسب ضرورت"),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "موجودہ ٹوکن کے جعلی ورژن بنانے سمیت کوئی بھی ٹوکن بنا سکتا ہے۔ اسے درآمد کرنے سے پہلے ہمیشہ ایک ٹوکن کی تحقیق کریں۔",
     ),
@@ -2737,9 +3175,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "فارمیٹ کی خرابی!",
     ),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("ٹوکن درآمد کریں۔"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("تمام نیٹ ورکس"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("حسب ضرورت ٹوکن"),
@@ -2747,15 +3185,387 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_7": MessageLookupByLibrary.simpleMessage("ٹوکن کی علامت"),
     "g_token_m_key_8": MessageLookupByLibrary.simpleMessage("ٹوکن اعشاریہ"),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("درآمد کریں۔"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "یہ Chain ID پہلے سے کسی دوسرے نیٹ ورک کے استعمال میں ہے۔",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("احتیاط"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("ہائی رسک"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("محفوظ"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
+      "Aave V3 قرض دہی",
+    ),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
+      "اکاؤنٹ کا ای میل",
+    ),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "یہ اثاثہ شامل کرنے کے لیے نیٹ ورک فیس درکار ہے۔ جاری رکھنے کے لیے شامل کریں دبائیں۔",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "بیلنس، پورٹ فولیو اور گیس فیس کے بارے میں پوچھیں",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("کوڈ پر واپس جائیں"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage(
+      "ای میل پر واپس جائیں",
+    ),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ بنائیں اور محفوظ کریں",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ فائل میں کوئی والیٹ نہیں ملا",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "آپ کا بیک اپ AES-256 + PBKDF2 سے مرموز ہے۔ صرف درست پاس ورڈ سے ہی اسے بحال کیا جا سکتا ہے۔",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "براہ کرم بیک اپ کا پاس ورڈ درج کریں",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "کلاؤڈ بیک اپ برآمد کریں",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ نہیں بن سکا۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage("بیک اپ فائل"),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "منتخب فائل تک رسائی ممکن نہیں",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "کلاؤڈ بیک اپ درآمد کریں",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ بحال نہیں ہو سکا۔ پاس ورڈ اور بیک اپ فائل کی جانچ کر کے دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "والیٹس درآمد کریں",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "یہ درست N42Wallet بیک اپ فائل نہیں",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "کوئی فائل منتخب نہیں",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ کے لیے کوئی درست والیٹ منتخب نہیں کیا گیا",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ کا پاس ورڈ",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ کا مضبوط پاس ورڈ مقرر کریں (کم از کم 8 حروف)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "پاس ورڈ میں کم از کم 8 حروف ہونے چاہییں",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ کا پاس ورڈ دوبارہ درج کریں",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "iCloud Drive یا Google Drive پر محفوظ مرموز بیک اپ سے اپنے والیٹس بحال کریں۔",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "اس بیک اپ سے کوئی والیٹ بحال نہیں ہو سکا",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ بناتے وقت استعمال کیا گیا پاس ورڈ درج کریں",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "براہ کرم پہلے بیک اپ فائل منتخب کریں",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "براہ کرم بیک اپ کے لیے کم از کم ایک والیٹ منتخب کریں",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "بیک اپ کے لیے والیٹس منتخب کریں",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "N42Wallet بیک اپ",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "اس بیک اپ میں آپ کی نجی کلیدیں / بازیابی کے الفاظ، والیٹ کے پاس ورڈ اور والیٹ کی ترتیبات شامل ہیں۔ بیک اپ فائل اور پاس ورڈ محفوظ رکھیں۔ انہیں کبھی کسی کے ساتھ شیئر نہ کریں۔",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "N42 پروٹوکول کے ذریعے N خریدیں",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "کال ڈیٹا (ہیکس)",
+    ),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "کوڈ اسکین کرنے کے لیے کیمرے کی اجازت درکار ہے۔",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage(
+      "آرڈر منسوخ کریں",
+    ),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage(
+      "ای میل تبدیل کریں",
+    ),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "اجازت کی جانچ ہو رہی ہے…",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
+      "کلپ بورڈ خالی ہے",
+    ),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "کوائن لوڈ نہیں ہو سکے۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "پاس ورڈ کی تصدیق کریں",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "تبدیلی کی تصدیق کریں",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "معاہدے کی معلومات",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage("والیٹ بنائیں"),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "ڈیٹا کی کوئی قطار نہیں ملی (صرف عنوان کی قطار ملی ہے)۔",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "تبصرے ہٹانے کے بعد کوئی ڈیٹا نہیں ملا۔",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage(
+      "اپنی مرضی کا ٹیگ…",
+    ),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage("منزل کا ٹیگ"),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Uniswap / 1inch / Jupiter کے ذریعے ٹوکن تبدیل کریں",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "تصدیقی کوڈ قبول ہو گیا",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "تصدیقی کوڈ کی درخواست بھیج دی گئی",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "ENS کی تجدید کی قیمتیں لوڈ نہیں ہو سکیں۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "ENS کی تجدید ناکام ہو گئی۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage(
+      "پوزیشن کھولنے کی قیمت",
+    ),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("مدتِ اعتبار:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage("خوف اور لالچ"),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "فائل منتخب کرنے کا آلہ نہیں کھل سکا۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "منتخب فائل پڑھی نہیں جا سکی۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("دستیاب"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "اگلے بلاک کی گیس فیس کی پیش گوئی",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "درست ای میل پتہ درج کریں",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("مسائل:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Keystone کامیابی سے پیئر ہو گیا",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "حد قیمت والے آرڈرز",
+    ),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("حد قیمت"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "لیکویڈیشن کی قیمت",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage(
+      "استعمال کی شرح",
+    ),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("یادداشت"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage(
+      "زیرِ التوا ٹرانزیکشنز کا پول",
+    ),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("پیغام"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "بازیابی کے الفاظ والا والیٹ",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "محفوظ MPC والیٹ بنانے کے لیے اپنے سوشل اکاؤنٹ سے سائن اِن کریں۔ آپ کی نجی کلید مرموز حصوں میں تقسیم ہوتی ہے، اس لیے بازیابی کے الفاظ کھونے کا خطرہ نہیں۔",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "بازیابی کے الفاظ کی ضرورت نہیں",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "MPC-TSS استعمال ہوتا ہے۔ آپ کی کلید 3 مرموز حصوں میں تقسیم ہو کر آپ کی ڈیوائس، ہمارے سرورز اور بازیابی کے بیک اپ میں رکھی جاتی ہے۔",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage("نیا ای میل پتہ"),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "اس ڈیوائس پر کوئی ای میل محفوظ نہیں",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage(
+      "ابھی کوئی کوائن نہیں",
+    ),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("کوئی DApp نہیں"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "کوئی حد قیمت والا آرڈر نہیں",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage(
+      "کوئی کھلا آرڈر نہیں",
+    ),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "کوئی کھلی پوزیشن نہیں",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "ابھی کوئی والیٹ نہیں",
+    ),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("اختیاری"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "منسوخی ناکام ہو گئی",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage(
+      "آرڈر منسوخ ہو گیا",
+    ),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "آرڈر بنانا ناکام ہو گیا",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "حد قیمت والا آرڈر بن گیا",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage(
+      "عمل مکمل ہو گیا",
+    ),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "حد قیمت والا آرڈر دیں",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage(
+      "فعال کر دیا گیا",
+    ),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "حد قیمت والے آرڈرز لوڈ نہیں ہو سکے",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "پاس ورڈ ایک جیسے نہیں ہیں",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "کنکشن کا لنک پیسٹ کریں",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "زیرِ التوا (ٹرانزیکشن پول)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage("مقبول ٹوکن"),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("مقدار"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "نجی کلید والا والیٹ",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("صرف دیکھنے کے لیے"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("کمرے کی ID"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "محفوظ کرنا ناکام ہو گیا۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("کوڈ بھیجیں"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "درخواست بھیجی جا رہی ہے…",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage(
+      "سواپ کا طریقہ منتخب کریں",
+    ),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("ٹیگز"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "نمونہ کاپی ہو گیا",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن کا معاہدہ (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن کی معلومات تلاش کی جا رہی ہیں…",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن فہرست میں نہیں ملا؛ علامت اور اعشاری مقامات کی تعداد خود درج کریں",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "تجارت کا ریکارڈ حذف نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "تجارت کا ریکارڈ محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage("نامعلوم حالت"),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("اپ ڈیٹ کریں"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
+      "ای میل اپ ڈیٹ کریں",
+    ),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "تصدیق کے مسائل",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "تصدیقی کوڈ",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage(
+      "کوڈ کی تصدیق کریں",
+    ),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "مارکیٹ کا ڈیٹا دیکھیں",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage(
+      "24 گھنٹے کا تجارتی حجم",
+    ),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("والیٹ AI"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "شروع کرنے کے لیے والیٹ بنائیں یا درآمد کریں",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "والیٹ لوڈ نہیں ہو سکا",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "والیٹ لوڈ ہو رہا ہے…",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("بعد میں"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "بیلنس تازہ نہیں ہو سکا",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD والیٹ · نیمونک",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "سنگل چین · درآمد شدہ",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن کو اوپر پن کریں",
+    ),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "محفوظ کردہ قیمتیں",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "ابھی اپ ڈیٹ ہوا",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "کچھ قیمتیں دستیاب ہیں",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "قیمتیں دستیاب نہیں",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "ٹوکن کی پننگ ختم کریں",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "کنکشن ٹوٹ گیا۔ براہ کرم دوبارہ رابطہ کریں۔",
@@ -2796,7 +3606,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("ای میل"),
     "login_password": MessageLookupByLibrary.simpleMessage("پاس ورڈ"),
     "next": MessageLookupByLibrary.simpleMessage("اگلا"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "پروفائل میں ترمیم کریں۔",
     ),
@@ -2805,10 +3615,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "براہ کرم پتہ درج کریں۔",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "یہ ڈیوائس پس منظر میں چلنے والی ایپس پر پابندیاں لگاتی ہے، اس لیے ایپ کے پس منظر میں ہونے یا بند ہونے پر آپ سے چیٹ کے پیغامات اور منتقلی کی اطلاعات چھوٹ سکتی ہیں۔\n\nپس منظر میں سرگرمی کی اجازت دینے کے لیے «ترتیبات پر جائیں» دبائیں، پھر اس ایپ کے لیے خودکار آغاز فعال کریں۔",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "پس منظر میں اطلاعات کی ترسیل محدود ہو سکتی ہے",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "دوبارہ یاد نہ دلائیں",

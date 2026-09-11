@@ -8,13 +8,14 @@ import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_chain_info_xrp.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_helpers.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/core/utils/toast_utils.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_aggregate_detail_page.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -29,7 +30,7 @@ class WalletCoinItem extends ConsumerWidget {
   final String itemKey;
   final String group;
 
-  static final _oCcy = NumberFormat('#,##0.0#', 'en_US');
+  static final _oCcy = NumberFormat('#,##0.00', 'en_US');
   static final _regular = Regular();
 
   String _abbreviate(double value, {String? fallback}) {
@@ -47,7 +48,12 @@ class WalletCoinItem extends ConsumerWidget {
 
   void _onTap(BuildContext context) {
     if (coinInfo.coin['isAggregated'] == true) {
-      ToastUtils.show(S.of(context).g_key_aa_coming_soon);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => WalletAggregateDetailPage(coin: coinInfo),
+        ),
+      );
       return;
     }
     final page = coinInfo.config.coinType == CoinType.XRP.name
@@ -58,11 +64,14 @@ class WalletCoinItem extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final su = ScreenUtil();
     final coin = coinInfo.coin;
     final config = coinInfo.config;
-    final balanceStr = _formatBalance(coinInfo.value);
-    final tokenBalanceStr = _formatTokenBalance(coinInfo);
+    final aggregate = coinInfo is AggregatedCoinModel
+        ? coinInfo as AggregatedCoinModel
+        : null;
+    final unknown = aggregate != null && aggregate.chainBalances.isEmpty;
+    final balanceStr = unknown ? '—' : _formatBalance(coinInfo.value);
+    final tokenBalanceStr = unknown ? '—' : _formatTokenBalance(coinInfo);
 
     const defaultImg = 'assets/img/list_default.png';
     final coinIcon = config.icon;
@@ -81,18 +90,6 @@ class WalletCoinItem extends ConsumerWidget {
     final deleteColor = canEdit
         ? AppColorTokens.of(context).danger
         : AppColorTokens.of(context).textTertiary;
-
-    final Widget refreshWidget = shouldShowBalanceLoadWarning(coinInfo)
-        ? Container(
-            height: su.setWidth(32.0),
-            width: su.setWidth(32.0),
-            margin: EdgeInsets.only(right: AppSpacing.space2),
-            child: Image.asset(
-              'assets/img/error.png',
-              color: AppColorTokens.of(context).warning,
-            ),
-          )
-        : const SizedBox();
 
     return Slidable(
       key: ValueKey(itemKey),
@@ -124,34 +121,35 @@ class WalletCoinItem extends ConsumerWidget {
         ],
       ),
       child: Container(
-        margin: EdgeInsets.symmetric(
-          horizontal: AppSpacing.space6,
-          vertical: AppSpacing.space2,
-        ),
+        key: ValueKey('wallet_coin_surface_$itemKey'),
         decoration: BoxDecoration(
-          borderRadius: AppRadius.brMd,
-          border: Border.all(
-            color: AppColorTokens.of(context).border,
-            width: 0.8,
+          border: Border(
+            bottom: BorderSide(
+              color: AppColorTokens.of(context).border.withValues(alpha: 0.55),
+              width: 0.5,
+            ),
           ),
         ),
         // Material 承接卡面色，InkWell ripple 画在卡面之上——
         // 此前 InkWell 在不透明卡片下方，按压态完全不可见（§5 红线）。
         child: Material(
-          color: AppColorTokens.of(context).bgSurface,
+          color: AppColorTokens.of(context).bgBase,
           borderRadius: AppRadius.brMd,
           child: InkWell(
+            key: ValueKey('wallet_coin_open_$itemKey'),
             onTap: () => _onTap(context),
             borderRadius: AppRadius.brMd,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-                vertical: AppSpacing.space6,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
               child: Row(
                 children: [
-                  refreshWidget,
-                  _CoinIcon(image: image, mainImage: mainImage),
+                  _CoinIcon(
+                    image: image,
+                    mainImage: mainImage,
+                    showWarning:
+                        aggregate?.loadError == true ||
+                        shouldShowBalanceLoadWarning(coinInfo),
+                  ),
                   Expanded(
                     child: _CoinInfo(
                       coinInfo: coinInfo,
@@ -164,7 +162,9 @@ class WalletCoinItem extends ConsumerWidget {
                       isPinned: coinInfo.isPinned,
                       onTap: () =>
                           ref.read(wapBridgeProvider).togglePinCoin(coinInfo),
-                    ),
+                    )
+                  else
+                    SizedBox.square(dimension: WalletPinIconButton.touchExtent),
                 ],
               ),
             ),
@@ -176,16 +176,21 @@ class WalletCoinItem extends ConsumerWidget {
 }
 
 class _CoinIcon extends StatelessWidget {
-  const _CoinIcon({required this.image, this.mainImage});
+  const _CoinIcon({
+    required this.image,
+    this.mainImage,
+    this.showWarning = false,
+  });
 
   final Widget image;
   final Widget? mainImage;
+  final bool showWarning;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: ScreenUtil().setWidth(48),
-      height: ScreenUtil().setWidth(48),
+      width: ScreenUtil().setWidth(64),
+      height: ScreenUtil().setWidth(64),
       margin: EdgeInsets.only(right: AppSpacing.space4),
       decoration: BoxDecoration(
         borderRadius: AppRadius.brLg,
@@ -198,8 +203,22 @@ class _CoinIcon extends StatelessWidget {
         ],
       ),
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
           ClipRRect(borderRadius: AppRadius.brLg, child: image),
+          if (showWarning)
+            Positioned(
+              right: -2,
+              bottom: -2,
+              child: Tooltip(
+                message: S.of(context).g_wallet_balance_warning,
+                child: Icon(
+                  Icons.error_rounded,
+                  size: ScreenUtil().setWidth(28),
+                  color: AppColorTokens.of(context).warning,
+                ),
+              ),
+            ),
           if (mainImage != null)
             Positioned(
               top: -2,
@@ -239,66 +258,96 @@ class _CoinInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final su = ScreenUtil();
-    final mainText = AppColorTokens.of(context).textPrimary;
-    final subtitleText = AppColorTokens.of(context).textSubtitle;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
+    final colors = AppColorTokens.of(context);
+    // Two aligned columns: market data on the left, holdings on the right.
+    // Wrap the quote/change at large text sizes instead of shrinking the font.
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            if (coinInfo.isPinned)
-              Padding(
-                padding: EdgeInsets.only(right: AppSpacing.space2),
-                child: Icon(
-                  Icons.push_pin,
-                  size: su.setWidth(22),
-                  color: AppColorTokens.of(context).brand,
-                ),
-              ),
-            Expanded(
-              child: Text(
-                coinInfo.config.miniName,
+        Expanded(
+          flex: 5,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _CoinValueText(
+                text: coinInfo.config.miniName,
                 style: AppTypography.bodyStrong.copyWith(
-                  color: mainText,
-                  letterSpacing: 0.3,
+                  color: colors.textPrimary,
                 ),
               ),
-            ),
-            Text(
-              tokenBalanceStr,
-              style: AppTypography.bodyStrong.copyWith(color: mainText),
-              textAlign: TextAlign.right,
-            ),
-          ],
+              SizedBox(height: AppSpacing.space2 / 2),
+              Wrap(
+                spacing: AppSpacing.space2,
+                runSpacing: AppSpacing.space2 / 2,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  _CoinValueText(
+                    text: "\$${coinInfo.coinPriceString()}",
+                    style: AppTypography.caption.copyWith(
+                      color: colors.textSubtitle,
+                    ),
+                  ),
+                  CoinPercentageBadge(percentage: coinInfo.percentage),
+                ],
+              ),
+            ],
+          ),
         ),
-        SizedBox(height: AppSpacing.space2),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                Text(
-                  "\$${coinInfo.coinPriceString()}",
-                  style: AppTypography.caption.copyWith(color: subtitleText),
+        SizedBox(width: AppSpacing.space4),
+        Expanded(
+          flex: 4,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              _CoinValueText(
+                text: balanceStr == '—' ? '—' : "\$$balanceStr",
+                style: AppTypography.bodyStrong.copyWith(
+                  color: colors.textPrimary,
                 ),
-                SizedBox(width: AppSpacing.space2),
-                CoinPercentageBadge(percentage: coinInfo.percentage),
-              ],
-            ),
-            Text(
-              "\$$balanceStr",
-              style: AppTypography.caption.copyWith(color: subtitleText),
-            ),
-          ],
+                textAlign: TextAlign.right,
+              ),
+              SizedBox(height: AppSpacing.space2 / 2),
+              _CoinValueText(
+                text: '$tokenBalanceStr ${coinInfo.config.miniName}',
+                style: AppTypography.caption.copyWith(
+                  color: colors.textSubtitle,
+                ),
+                textAlign: TextAlign.right,
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
+}
+
+/// Preserve full values for long press / accessibility when a narrow row clips.
+class _CoinValueText extends StatelessWidget {
+  const _CoinValueText({
+    required this.text,
+    required this.style,
+    this.textAlign = TextAlign.left,
+  });
+
+  final String text;
+  final TextStyle style;
+  final TextAlign textAlign;
+
+  @override
+  Widget build(BuildContext context) => Tooltip(
+    message: text,
+    excludeFromSemantics: true,
+    child: Text(
+      text,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      textAlign: textAlign,
+      style: style,
+    ),
+  );
 }
 
 class CoinPercentageBadge extends StatelessWidget {
@@ -314,21 +363,13 @@ class CoinPercentageBadge extends StatelessWidget {
         : AppThemeKeys.errorTextColor;
     final color = AppThemeUtils.getColorByKey(context, colorKey.name);
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space2,
-        vertical: AppSpacing.space2,
-      ),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: AppRadius.brSm,
-      ),
-      child: Text(
-        "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
-        style: AppTypography.caption.copyWith(
-          color: color,
-          fontWeight: FontWeight.w600,
-        ),
+    return Text(
+      "${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%",
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: AppTypography.caption.copyWith(
+        color: color,
+        fontWeight: FontWeight.w500,
       ),
     );
   }

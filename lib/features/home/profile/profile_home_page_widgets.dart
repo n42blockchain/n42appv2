@@ -76,11 +76,15 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        title,
-                        style: AppTypography.body.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: AppColorTokens.of(context).textPrimary,
+                      Flexible(
+                        child: Text(
+                          title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: AppTypography.body.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
                         ),
                       ),
                       if (isNew) ...[
@@ -155,12 +159,10 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
     );
   }
 
-  // TransactionHistoryList requires a CoinModel, so navigate to wallet list first.
-  // TODO: add a dedicated "all transactions" page that doesn't require pre-selecting a coin.
   void _navigateToTransactionHistory(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => const WalletList()),
+      MaterialPageRoute(builder: (_) => const WalletActivityPage()),
     );
   }
 
@@ -185,20 +187,17 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
     );
   }
 
-  void _navigateToLanguageSettings(BuildContext context) {
-    Navigator.push(
+  Future<void> _navigateToLanguageSettings(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final code = languageCodeFromLocale(ref.read(localeProvider));
+    final selected = await Navigator.push<String>(
       context,
-      MaterialPageRoute(builder: (_) => const SettingSysLanguage('')),
+      MaterialPageRoute(builder: (_) => SettingSysLanguage(code)),
     );
-  }
-
-  // TODO: create a dedicated currency settings page.
-  // Temporarily reuses language settings as no currency page exists yet.
-  void _navigateToCurrencySettings(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => const SettingSysLanguage('')),
-    );
+    if (!context.mounted || selected == null) return;
+    ref.read(localeProvider.notifier).setLocale(selected);
   }
 
   void _navigateToThemeSettings(BuildContext context) {
@@ -216,9 +215,10 @@ extension _ProfileHomePageWidgets on ProfileHomePage {
   }
 
   void _rateApp(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Thank you for your support!')),
-    );
+    RateUsOnStore(
+      androidPackageName: 'ai.n42.www',
+      appstoreAppId: '1622941204',
+    ).launch();
   }
 
   void _navigateToAbout(BuildContext context) {

@@ -7,6 +7,7 @@ import (
 	"math/big"
 	"net/http"
 	"net/url"
+	"strings"
 	"time"
 
 	"github.com/n42/n42appv2/backend/swap/models"
@@ -55,12 +56,22 @@ func (a *InchAdapter) Quote(
 	}
 
 	params := url.Values{}
-	params.Set("src", req.TokenIn)
-	params.Set("dst", req.TokenOut)
+	src := req.TokenIn
+	if strings.EqualFold(src, "0x0000000000000000000000000000000000000000") {
+		src = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+	}
+	params.Set("src", src)
+	dst := req.TokenOut
+	if strings.EqualFold(dst, "0x0000000000000000000000000000000000000000") {
+		dst = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+	}
+	params.Set("dst", dst)
 	params.Set("amount", req.AmountIn)
 	params.Set("from", req.UserAddr)
+	params.Set("receiver", req.UserAddr)
 	params.Set("slippage", fmt.Sprintf("%.2f", float64(req.SlippageBps)/100.0))
 	params.Set("disableEstimate", "true")
+	params.Set("includeTokensInfo", "true")
 	endpoint := fmt.Sprintf("%s/%d/swap?%s", inchBase, chainID, params.Encode())
 
 	httpReq, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
@@ -81,10 +92,18 @@ func (a *InchAdapter) Quote(
 	}
 
 	var body struct {
-		ToAmount string `json:"toAmount"`
-		Tx       struct {
-			Data string `json:"data"`
-			To   string `json:"to"`
+		DstAmount string `json:"dstAmount"`
+		SrcToken  struct {
+			Symbol string `json:"symbol"`
+		} `json:"srcToken"`
+		DstToken struct {
+			Symbol   string `json:"symbol"`
+			Decimals *int   `json:"decimals"`
+		} `json:"dstToken"`
+		Tx struct {
+			Value string `json:"value"`
+			Data  string `json:"data"`
+			To    string `json:"to"`
 		} `json:"tx"`
 	}
 	if err = json.NewDecoder(resp.Body).Decode(&body); err != nil {
@@ -94,17 +113,36 @@ func (a *InchAdapter) Quote(
 		return nil, fmt.Errorf("1inch: empty calldata")
 	}
 
-	amountOut, ok := new(big.Int).SetString(body.ToAmount, 10)
-	if !ok {
-		return nil, fmt.Errorf("1inch: invalid toAmount: %q", body.ToAmount)
+	amountOut, ok := new(big.Int).SetString(body.DstAmount, 10)
+	if !ok || amountOut.Sign() <= 0 {
+		return nil, fmt.Errorf("1inch: invalid dstAmount: %q", body.DstAmount)
 	}
 
+	if body.DstToken.Decimals == nil || *body.DstToken.Decimals < 0 || *body.DstToken.Decimals > 255 {
+		return nil, fmt.Errorf("1inch: missing or invalid output token decimals")
+	}
+	value, valid := new(big.Int).SetString(body.Tx.Value, 10)
+	if !valid || value.Sign() < 0 || value.BitLen() > 256 {
+		return nil, fmt.Errorf("1inch: invalid transaction value")
+	}
+	expected := new(big.Int)
+	if strings.EqualFold(src, "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee") {
+		if _, valid = expected.SetString(req.AmountIn, 10); !valid || expected.Sign() <= 0 {
+			return nil, fmt.Errorf("1inch: invalid native input")
+		}
+	}
+	if value.Cmp(expected) != 0 {
+		return nil, fmt.Errorf("1inch: transaction value does not match input")
+	}
 	return &models.QuoteResp{
-		Source:       "1inch",
-		AmountOutWei: amountOut,
-		AmountOut:    weiToHuman(amountOut, 18),
-		Calldata:     body.Tx.Data,
-		RouterAddr:   body.Tx.To,
-		Chain:        req.Chain,
+		TxValue:        value.String(),
+		Source:         "1inch",
+		TokenInSymbol:  body.SrcToken.Symbol,
+		TokenOutSymbol: body.DstToken.Symbol,
+		AmountOutWei:   amountOut,
+		AmountOut:      weiToHuman(amountOut, *body.DstToken.Decimals),
+		Calldata:       body.Tx.Data,
+		RouterAddr:     body.Tx.To,
+		Chain:          req.Chain,
 	}, nil
 }

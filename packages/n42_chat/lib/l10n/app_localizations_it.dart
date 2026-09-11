@@ -800,8 +800,8 @@ class SIt extends S {
   String get commonTransferTo => 'Trasferisci a';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'Da $senderName';
+  String commonFromSender(String name) {
+    return 'Da $name';
   }
 
   @override
@@ -1225,7 +1225,7 @@ class SIt extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Funzionalità in sviluppo...';
+    return 'La funzionalità $feature è in sviluppo…';
   }
 
   @override

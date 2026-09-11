@@ -25,6 +25,7 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
   final TextEditingController _codeController = TextEditingController();
   String _errorMessage = '';
   bool _showManualKey = false;
+  bool _completed = false;
 
   @override
   void initState() {
@@ -42,8 +43,10 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
   }
 
   void _verify() {
+    if (_completed) return;
     final code = _codeController.text.trim();
     if (TotpUtil.verify(_secret, code)) {
+      _completed = true;
       Navigator.pop(context, _secret);
     } else {
       setState(() => _errorMessage = S.of(context).g_google_auth_key6);
@@ -95,9 +98,11 @@ class _GoogleAuthSetupPageState extends State<GoogleAuthSetupPage> {
                 onTap: () => setState(() => _showManualKey = !_showManualKey),
                 child: Row(
                   children: [
-                    Text(
-                      S.of(context).g_google_auth_key3,
-                      style: AppTypography.bodySm.copyWith(color: mainBlue),
+                    Expanded(
+                      child: Text(
+                        S.of(context).g_google_auth_key3,
+                        style: AppTypography.bodySm.copyWith(color: mainBlue),
+                      ),
                     ),
                     Icon(
                       _showManualKey

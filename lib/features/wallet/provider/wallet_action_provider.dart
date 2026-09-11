@@ -32,13 +32,13 @@ import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dar
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:n42_wallet/core/utils/safe_change_notifier.dart';
-import 'package:n42_wallet/generated/l10n.dart';
 import 'package:web3dart/web3dart.dart';
 
 part 'wallet_action_provider_wallet.dart';
 part 'wallet_action_provider_token.dart';
 part 'wallet_action_provider_sort.dart';
 part 'wallet_action_provider_market.dart';
+part 'wallet_action_provider_aggregated.dart';
 
 String? resolveBalanceRpcOverride(CoinModel coinModel) {
   // For EVM chains with a configured RPC, bypass the N42 API to avoid
@@ -73,6 +73,27 @@ String? resolveBalanceRpcOverride(CoinModel coinModel) {
 class WalletActionProvider extends ChangeNotifier
     with SafeChangeNotifierMixin
     implements ICoinModelWalletAccess {
+  WalletActionProvider({
+    MarketApi? marketApi,
+    Future<dynamic> Function(String)? stablecoinPriceRequest,
+    DateTime Function()? now,
+  }) : _marketApi = marketApi ?? MarketApi(),
+       _stablecoinPriceRequest =
+           stablecoinPriceRequest ?? _requestStablecoinPrices,
+       _now = now ?? DateTime.now;
+
+  static Future<dynamic> _requestStablecoinPrices(String url) =>
+      ExternalHttp.get(url);
+  final MarketApi _marketApi;
+  final Future<dynamic> Function(String) _stablecoinPriceRequest;
+  final DateTime Function() _now;
+  Future<void>? _priceRefreshInFlight;
+  bool _priceRefreshFailed = false;
+  bool get priceRefreshFailed => _priceRefreshFailed;
+  bool _hasPartialPrices = false;
+  bool get hasPartialPrices => _hasPartialPrices;
+  Set<String> _marketRequestedSymbols = {};
+
   /// 公开的刷新方法，用于通知监听者数据已更新
   @override
   void refresh() {
@@ -107,6 +128,7 @@ class WalletActionProvider extends ChangeNotifier
   List<WalletInfo> get walletInfoLsit => _walletInfoLsit;
   @override
   List<WalletInfo> get walletInfoList => _walletInfoLsit;
+
   /// 现在读 [walletInfo] / [walletMap] 是否安全。
   ///
   /// [initWallet] 在第一个 await 之前就同步清空列表（让骨架屏接管），
@@ -114,9 +136,7 @@ class WalletActionProvider extends ChangeNotifier
   /// 的消费者（post-frame 回调、Timer、await 之后的续体）都必须在真正读取前用
   /// 本 getter 重新判一次，不能沿用调度时捕获的快照——调度与执行之间状态会变。
   bool get isWalletReady =>
-      !buildwallet &&
-      walletIndex >= 0 &&
-      walletIndex < _walletInfoLsit.length;
+      !buildwallet && walletIndex >= 0 && walletIndex < _walletInfoLsit.length;
 
   @override
   WalletInfo get walletInfo {
@@ -385,11 +405,11 @@ class WalletActionProvider extends ChangeNotifier
   DateTime? get priceLastUpdated => _priceLastUpdated;
 
   // ---------------------------------------------------------------------------
-  // 市场数据防重复请求：两次 getCoinInfo() 间隔 < 30s 时跳过网络请求
+  // 市场数据防重复请求：普通行情请求共享 5 分钟缓存，手动刷新可强制更新
   // ---------------------------------------------------------------------------
 
   DateTime? _coinMarketInfoFetchTime;
-  static const Duration _marketInfoMinInterval = Duration(seconds: 30);
+  static const Duration _marketInfoMinInterval = Duration(minutes: 5);
 
   /// 稳定币价格有效范围（防止异常数据）
   static const double _stablecoinMinPrice = 0.9;

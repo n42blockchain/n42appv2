@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Kırmızı paket detaylarını gör",
   "commonEnterTransferAmount": "Transfer tutarını girin",
   "commonTransferTo": "Transfer hedefi",
-  "commonFromSender": "{senderName} tarafından",
+  "commonFromSender": "{name} tarafından",
   "commonConfirmReceive": "Alımı Onayla",
   "groupProfile": "Grup Bilgisi",
   "groupRemoveMember": "Gruptan Çıkar",
@@ -397,7 +397,7 @@
   "chatCalling": "Aranıyor...",
   "chatRinging": "Çalıyor...",
   "chatInCall": "Aramada",
-  "commonFeatureInDevelopment": "Özellik geliştirme aşamasında...",
+  "commonFeatureInDevelopment": "{feature} özelliği geliştirme aşamasında…",
   "chatCollectMessages": "{count} mesaj kaydedildi",
   "commonMemberCount": "{count} üye",
   "groupDone": "Tamamlandı({count})",
@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "E-posta değiştirilemedi",
   "blocAuthVerificationCodeInvalid": "Doğrulama kodu yanlış veya süresi dolmuş",
   "blocAuthSessionExpired": "Oturumun süresi doldu, lütfen tekrar giriş yapın",
-  "blocAuthSessionIncomplete": "Oturum verileri eksik, lütfen tekrar giriş yapın"
+  "blocAuthSessionIncomplete": "Oturum verileri eksik, lütfen tekrar giriş yapın",
+  "authSsoNotConfigured": "Bu sunucuda SSO oturum açma sağlayıcıları yapılandırılmamış"
 }

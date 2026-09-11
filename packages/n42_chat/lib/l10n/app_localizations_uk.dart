@@ -805,7 +805,7 @@ class SUk extends S {
   String get commonTransferTo => 'Передача в';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return 'Від $name';
   }
 

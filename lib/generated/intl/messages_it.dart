@@ -83,111 +83,178 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Sei sicuro di voler rimuovere \"${name}\" dai dispositivi salvati?";
 
-  static String m28(value) => "Stima gas: unità ~${value}";
+  static String m28(value) => "Guadagna ${value} punti";
 
-  static String m29(reason) => "Motivo: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "Richiedi ${amount} ${symbol} sulla rete ${network}";
 
-  static String m30(value) => "${value}d sciogliere";
+  static String m30(value) =>
+      "Rimuovere la rete personalizzata ${value}? I saldi su questa rete non verranno più mostrati. I tuoi asset sulla catena non sono interessati.";
 
-  static String m31(value) => "${value} giorni rimanenti";
+  static String m31(value) => "Stima gas: unità ~${value}";
 
-  static String m32(value) =>
+  static String m32(reason) => "Motivo: ${reason}";
+
+  static String m33(value) => "${value}d sciogliere";
+
+  static String m34(value) => "${value} giorni rimanenti";
+
+  static String m35(value) =>
       "L\'unstaking richiede ${value} giorni. I tuoi token saranno bloccati durante questo periodo.";
 
-  static String m33(value) => "Non hai abbastanza \"${value}\"";
+  static String m36(value) => "Non hai abbastanza \"${value}\"";
 
-  static String m34(value) => "Impossibile recuperare l\'account \"${value}\"";
+  static String m37(value) => "Impossibile recuperare l\'account \"${value}\"";
 
-  static String m35(value) => "Minimo ${value} XRP per il primo trasferimento";
+  static String m38(value) => "Minimo ${value} XRP per il primo trasferimento";
 
-  static String m36(count) => "Aggiungi (${count})";
+  static String m39(count) => "Aggiungi (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: '1 nuovo token rilevato', other: '${count} rilevati nuovi token')} — tocca per rivedere";
 
-  static String m38(value) => "Nessuna catena ${value} aggiunta.";
+  static String m41(value) => "Nessuna catena ${value} aggiunta.";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "${value} ha transazioni non completate, riprova più tardi.";
 
-  static String m40(value) => "Nessun indirizzo trovato per ${value}.";
+  static String m43(value) => "Nessun indirizzo trovato per ${value}.";
 
-  static String m41(value) => "Saldo insufficiente di ${value}.";
+  static String m44(value) => "Saldo insufficiente di ${value}.";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "Ogni account XRP deve riservare ${value} XRP (${value1} drops) come baseline, che non può essere speso.";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "Per ogni oggetto posseduto dall\'account, ${value} XRP (${value1} drops) viene aggiunto alla riserva.";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "Questo account possiede ${value} oggetti, il che significa che ${value1} XRP aggiuntivi sono riservati.";
 
-  static String m45(message) => "Accesso alla stanza non riuscito\n${message}";
+  static String m48(message) => "Accesso alla stanza non riuscito\n${message}";
 
-  static String m46(value) => "Schema errato, ${value} tentativi rimanenti";
+  static String m49(value) => "Schema errato, ${value} tentativi rimanenti";
 
-  static String m47(value) => "Schema errato, ${value} tentativo rimanente";
+  static String m50(value) => "Schema errato, ${value} tentativo rimanente";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "Hai configurato con successo un ${value} e inizierai la verifica con N42Wallet!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "Unisciti al mio gruppo ${value} su @N42Wallet per essere uno dei primi miner di una blockchain Layer 1, e ottieni criptovalute sul tuo telefono!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "Sei sicuro di voler bloccare ${value} N fino a ${value1} per eseguire un nodo?";
 
-  static String m51(value) => "Importazione fallita:${value}";
+  static String m54(value) => "Importazione fallita:${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "È necessario un saldo di staking di almeno ${value} per ricevere ricompense.";
 
-  static String m53(value, value1) =>
+  static String m56(value, value1) =>
       "${value} N ogni ${value1} blocchi estratti";
 
-  static String m54(value) => "Deve essere di ${value} caratteri";
+  static String m57(value) => "Deve essere di ${value} caratteri";
 
-  static String m55(symbol) => "Importo (${symbol})";
+  static String m58(symbol) => "Importo (${symbol})";
 
-  static String m56(amount, symbol) => "Saldo: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "Saldo: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "Dichiarare “${label}” vincitore e liquidare? Irreversibile.";
 
-  static String m58(n) => "${n} min";
+  static String m61(n) => "${n} min";
 
-  static String m59(n) => "Esito ${n}";
+  static String m62(n) => "Esito ${n}";
 
-  static String m60(label, pct) => "${label} vince (${pct}%)";
+  static String m63(label, pct) => "${label} vince (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "Stima ${shares} quote · media ${avg}% · dopo ${after}%";
 
-  static String m62(reason) => "Riscatto non riuscito: ${reason}";
+  static String m65(reason) => "Riscatto non riuscito: ${reason}";
 
-  static String m63(label) => "Esito: ${label}";
+  static String m66(label) => "Esito: ${label}";
 
-  static String m64(n) => "Vendi ${n}";
+  static String m67(n) => "Vendi ${n}";
 
-  static String m65(value) => "Saldo insufficiente di ${value}.";
+  static String m68(value) => "Saldo insufficiente di ${value}.";
 
-  static String m66(value) => "${value} in arrivo...";
-
-  static String m67(value) =>
-      "${value} scambiati nell\'app saranno distribuiti a breve nel tuo portafoglio e non possono essere venduti tramite questo processo. Possono essere utilizzati per gestire un nodo.";
-
-  static String m68(value) => "Massimo ${value} caratteri";
-
-  static String m69(value) => "La catena ${value} è già supportata dall\'APP!";
+  static String m69(value) => "${value} in arrivo...";
 
   static String m70(value) =>
+      "${value} scambiati nell\'app saranno distribuiti a breve nel tuo portafoglio e non possono essere venduti tramite questo processo. Possono essere utilizzati per gestire un nodo.";
+
+  static String m71(value) => "Massimo ${value} caratteri";
+
+  static String m72(value) => "La catena ${value} è già supportata dall\'APP!";
+
+  static String m73(value) =>
       "La catena ${value} è già supportata dall\'APP, vuoi aggiungerla?";
 
-  static String m71(value) =>
+  static String m74(value) =>
       "Test del collegamento dell\'indirizzo ${value} fallito!";
 
-  static String m72(value) => "0~${value} caratteri";
+  static String m75(value) =>
+      "L\'RPC riporta l\'ID della catena ${value}, che non corrisponde al valore inserito.";
+
+  static String m76(asset, contract, address) =>
+      "L\'asset ${asset} (${contract}) non è stato aggiunto al conto ${address}.";
+
+  static String m77(imported, skipped) =>
+      "Portafogli importati: ${imported}. Saltati: ${skipped}.";
+
+  static String m78(value) => "Saldio: ${value}";
+
+  static String m79(value) => "Commissione base: ${value} Gwei";
+
+  static String m80(value) => "Appunti cancellati automaticamente in ${value}s";
+
+  static String m81(value) => "Riga ${value}: campi mancanti";
+
+  static String m82(value) => "${value} giorni";
+
+  static String m83(value) => "Connesso a ${value}";
+
+  static String m84(value) => "Gas: ${value}";
+
+  static String m85(value) => "${value} ore";
+
+  static String m86(value) => "Destinatari validi (${value})";
+
+  static String m87(quote, base) => "Prezzo limite (${quote} per ${base})";
+
+  static String m88(value) => "Limite ${value}";
+
+  static String m89(value) => "Mercati (${value})";
+
+  static String m90(value) => "Saldio minimo: ${value}";
+
+  static String m91(value) => "Ordini (${value})";
+
+  static String m92(value) => "Posizioni (${value})";
+
+  static String m93(value) => "Destinatari: ${value}";
+
+  static String m94(value) => "Token trovato: ${value}";
+
+  static String m95(value) => "Token: ${value}";
+
+  static String m96(value) => "Transazione: ${value}";
+
+  static String m97(valid, issues) => "Validi: ${valid}. Problemi: ${issues}.";
+
+  static String m98(value) => "… e ${value} altri problemi";
+
+  static String m99(volume, interest) => "Vol: ${volume} · OI: ${interest}";
+
+  static String m100(value) => "Portafoglio ${value}";
+
+  static String m101(value) => "Aggiornato ${value} h fa";
+
+  static String m102(value) => "Aggiornato ${value} min fa";
+
+  static String m103(value) => "0~${value} caratteri";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -208,6 +275,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nuovo accesso dispositivo",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Archivio"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "Saldio salvato · il caricamento è fallito",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "Saldio noto",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "Solo saldi della rete principale. Le richieste di rete mancanti o non riuscite non vengono conteggiate come saldi pari a zero.",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "Saldi per rete",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "Nessun account principale attivo per questa rete",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "Saldio non caricato",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage(
+      "Apri rete",
+    ),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Questo asset non è più disponibile nel portafoglio selezionato. Torna al portafoglio per scegliere un asset.",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Va sopra ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Scende sotto ↓"),
     "g_alert_current_price": m1,
@@ -232,6 +323,118 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Scansiona per ricevere",
+    ),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "Apri il block explorer per visualizzare l\'attività sulla blockchain di questo account intelligente.",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "Versione, sito web e supporto",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "Impossibile caricare la cronologia delle transazioni.",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "Cronologia delle transazioni salvata su questo dispositivo per i tuoi wallet. Apri un asset per sincronizzarne le attività più recenti.",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("Tutto"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "Permesso di spesa per",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "Contratto del token",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage(
+      "Trasferimento in blocco",
+    ),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Invia a più destinatari o importa un file CSV",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Autenticazione biométrica",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Impostazioni Face ID / impronta digitale",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "Gestisci sessioni; la disconnessione non revoca i permessi di approvazione dei token.",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage(
+      "Valuta di visualizzazione",
+    ),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "I valori del portafoglio sono attualmente mostrati in dollari statunitensi.",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "Impossibile caricare le posizioni DeFi. Tocca per riprovare.",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "Caricamento delle posizioni DeFi…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "Posizioni DeFi",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "Lingua di visualizzazione dell\'app",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "Esporta un backup cifrato del portafoglio",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage(
+      "Tasso di finanziamento corrente",
+    ),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage(
+      "Tracciamento delle commissioni di rete",
+    ),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Commissioni di rete e avvisi sui prezzi",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage(
+      "Portafoglio hardware",
+    ),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage("Carica altro"),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Rete principale"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "Gestisci il tuo portafoglio e le preferenze",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "Crea, importa e gestisci portafogli",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage(
+      "Prezzo di riferimento",
+    ),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "Massimo leverage",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "Gestisci reti e endpoint RPC",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage(
+      "Interesse aperto",
+    ),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "Prezzo dell\'oracolo",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "Autenticazione e protezione del portafoglio",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "L\'offerta di prezzo per lo scambio è cambiata o è scaduta. Verifica l\'offerta di scambio più recente prima di confermare.",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage("Valuta N42"),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "Apri l\'App Store",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "Indirizzi destinatari salvati",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage("Mostra meno"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Rete di prova"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "Aspetto e modalità di visualizzazione",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage("Volume 24h (USD)"),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "Gestione del portafoglio",
     ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("Inserisci l\'URL"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage(
@@ -298,6 +501,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "Verificato",
     ),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Seleziona un portafoglio spendibile sulla rete principale per questa rete. Gli account in sola lettura non possono firmare scambi.",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "I parametri della transazione non sono validi o l\'esecuzione ha fallito. Aggiorna l\'offerta di prezzo per lo scambio e riprova.",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "Lo scambio è stato inviato, ma la cronologia non è stata aggiornata. Non inviarlo nuovamente.",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "Le commissioni di rete sono pagate da questo account intelligente.",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "Account di spesa",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Usa account intelligente",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "Invia nuovamente il codice",
     ),
@@ -338,10 +559,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
       "Collegamento riuscito",
     ),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage(
+      "Cancella date",
+    ),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "Esporta tutti i record locali corrispondenti (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "Impossibile esportare la cronologia delle transazioni. Riprova.",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "I filtri e l\'esportazione CSV includono tutti i record corrispondenti salvati su questo dispositivo. Apri l\'asset per sincronizzare le attività più recenti sulla blockchain.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profilo"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Notizie"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Verifica"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Invita un amico"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Mercati"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Annullato"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Controlla la connessione di rete e riprova",
@@ -704,6 +938,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Impossibile caricare opzioni gas",
     ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage("Riprova"),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Il finanziamento della gas non è disponibile ancora. Per favore paga la gas con il saldo del tuo account.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("In sospeso"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage(
       "Autorizzazione",
@@ -743,6 +980,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Selezionato"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Invia token utilizzando il tuo account intelligente",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "Transazione fallita",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 giorno"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 ora"),
@@ -860,6 +1100,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Funzionalità avanzate",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Attivo"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("Scopri"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "Distribuisci",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("Terminato"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Nessuna campagna verificata disponibile",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("In Attesa"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Fonti"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Apri Fonti per consultare gli elenchi di campagne gestiti dai fornitori.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Le campagne di terze parti possono essere dannose. Verifica il dominio del progetto e i dettagli della transazione prima di firmare.",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("Airdrop"),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("In arrivo"),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("POPOLARE"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("IN DIRETTA"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Aggiungi Destinatario",
     ),
@@ -924,6 +1185,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Importo Totale",
+    ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "URL del Block Explorer (opzionale)",
     ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Catena non supportata",
@@ -1067,6 +1331,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Per masterizzare un NFT, vai alla pagina dei dettagli NFT e tocca il pulsante \"Masterizza\".",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Reti popolari (tocca per compilare)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Questa catena non supporta ancora i trasferimenti, resta sintonizzato",
     ),
@@ -1080,6 +1347,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Tocca per mostrare tutto",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Recente"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage(
+      "Account",
+    ),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "Questo sito richiede di visualizzare il tuo indirizzo del portafoglio e suggerire transazioni. Non può spostare fondi senza il tuo consenso.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Collega Portafoglio",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "Questo dispositivo sembra essere rootato o jailbroken. L\'uso di un portafoglio su un dispositivo compromesso aumenta il rischio di furto delle chiavi e di accesso non autorizzato. Procedi con cautela.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Avviso Sicurezza Dispositivo",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Approvato! Tocca Scambia per continuare.",
     ),
@@ -1128,6 +1410,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Preventivo fallito",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Il servizio di offerta prezzo scambio è temporaneamente non disponibile. Riprova più tardi.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Cerca simbolo / nome / indirizzo",
     ),
@@ -1147,6 +1432,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Swap inviato con successo",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Il servizio token non è disponibile. Mostra un elenco limitato offline.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Scambio bloccato: l\'indirizzo del router non è riconosciuto. Per la tua sicurezza, questa transazione è stata annullata.",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Paghi"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Ricevi"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
@@ -1155,13 +1446,20 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage(
       "Trasferimento multiplo",
     ),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage("Miglior APY"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Brucia"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Compra N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Compra N con il protocollo N42",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Trova campagne verificate di terze parti",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Trasferimento a catena incrociata",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Punti giornalieri sulla blockchain",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("Scambio DEX"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Gas"),
@@ -1185,6 +1483,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Guadagna premi partecipando al mining di nodi",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage(
+      "Contratti perpetui",
+    ),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Strumenti rapidi",
     ),
@@ -1193,6 +1494,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Seleziona tipo di scambio",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Deposita",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "Guadagna rendimento giornaliero su USDC / USDT / DAI",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "Al momento non ci sono mercati di stablecoin disponibili",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Guadagno su Stablecoin",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Partecipa a ETH con Lido",
@@ -1767,6 +2080,66 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Sei sicuro di voler uscire dall\'app?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Punti disponibili",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Hai effettuato il check-in oggi",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Effettua il check-in",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Fatto"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Il check-in non è riuscito",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Check-in confermato su N42",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Copia"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Check-in giornaliero",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "La classifica è vuota",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("Cronologia"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Condividi il tuo codice di rinvio",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Invita amici",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Classifica",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "Nessun cronologia punti",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "Nessun rinvio ancora. Condividi il tuo codice per iniziare.",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Nessun premio disponibile",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Nessun compito disponibile",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Nessun wallet attivo",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Rinvii"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Ricompense"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Compiti"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Punti"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Totale guadagnato",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Servizio non disponibile",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Usati"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1797,6 +2170,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Inserisci la frase di recupero",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("Firma"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Per favore inserisci prima un messaggio",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "Firma fallita",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "Inserisci il messaggio da firmare",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("Firma"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage(
+      "Firma Messaggio",
+    ),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "La firma di messaggi non è ancora supportata per questa catena",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Firma solo messaggi di cui ti fidi completamente. Un messaggio dannoso potrebbe essere utilizzato per autorizzare azioni a tuo nome.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Totale"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Nome"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Indietro"),
@@ -1823,6 +2216,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Pavimento"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("Galleria NFT"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage(
+      "Nascondi spam",
+    ),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage(
       "Iscrizione n.",
     ),
@@ -1851,13 +2247,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Identificativo del gettone",
     ),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Digitare"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("Altri"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Le password non corrispondono",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Dati di mercato in sola lettura. Il posizionamento di ordini non è supportato in questa versione.",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Seleziona dalla galleria del telefono",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Chiave Pubblica"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Richiesta di pagamento",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage(
+      "Rimuovi Rete",
+    ),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Ripristina"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Riprova"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Il token o la catena della richiesta di pagamento non sono presenti in questo portafoglio",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Usare cautela",
     ),
@@ -1886,11 +2299,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Metodo di condivisione",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "La transazione probabilmente fallirà",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Simulazione della transazione...",
     ),
@@ -1911,11 +2324,14 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("APY medio"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Transazione creata, ma la trasmissione in-wallet per questa catena non è ancora supportata.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage(
       "Commissione",
     ),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Stima Premio giornaliero",
     ),
@@ -1976,6 +2392,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Inizia a puntare",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Transazione di puntata inviata",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Puntata"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Transazione preparata con successo",
@@ -1983,7 +2402,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Sbloccaggio",
     ),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage(
       "Non partecipare",
     ),
@@ -2003,7 +2422,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Commissione massima per gas",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("In attesa"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Fallito"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Procedi"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage(
@@ -2030,7 +2449,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Impossibile recuperare i dati",
     ),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Verifica l\'account dell\'indirizzo di ricezione",
     ),
@@ -2043,7 +2462,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Verifica account riuscita",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "L\'indirizzo di ricezione non ha un account, il primo trasferimento è di almeno 10XRP",
     ),
@@ -2052,11 +2471,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage(
       "Aggiungi",
     ),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Gettone aggiunto",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Deseleziona tutto",
     ),
@@ -2237,8 +2656,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Accelera"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Nota"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Il token corrente non è stato aggiunto.",
     ),
@@ -2248,14 +2667,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "Importa portafoglio",
     ),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Il saldo del token corrente è insufficiente.",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Errore di firma"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Gestisci portafoglio",
+    ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "Una transazione di sostituzione verrà trasmessa con lo stesso nonce e un gas circa del 20% superiore. Avrà effetto solo mentre quella originale è ancora in sospeso.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Transazione di sostituzione inviata",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage(
+      "Accelerazione",
     ),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Inserisci l\'indirizzo Ethereum (0x...)",
@@ -2271,20 +2699,23 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Riservato"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Riserva base"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Riserva incrementale"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Conteggio oggetti posseduti",
     ),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Come calcolare l\'importo totale riservato",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Riserva totale = Riserva base + (Conteggio oggetti posseduti × Riserva incrementale)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "Lo streaming live è terminato",
+    ),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Segui"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "Funzione segui in arrivo",
@@ -2303,7 +2734,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Disegna il gesto attuale",
     ),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Reimposta password gestuale",
     ),
@@ -2313,12 +2744,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Aggiungere password del portafoglio?",
     ),
-    "g_lock_key25": m47,
+    "g_lock_key25": m50,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
+      "Verifica del trasferimento",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "Richiedi l\'autenticazione biometrica (Face ID / impronta digitale) per confermare ogni trasferimento del portafoglio.",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "Password gestuale non impostata",
@@ -2399,12 +2830,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Condividi con gli amici",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Continua"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Ho appena configurato un nodo su @N42Wallet e ho iniziato la verifica su dispositivi mobili! Vieni a unirti a me. Il futuro decentralizzato è mobile!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Minerale"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Nodo"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Rete"),
@@ -2441,7 +2872,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Formato dati crittografati non supportato!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Ricompense di ieri",
     ),
@@ -2459,7 +2890,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Il riscatto richiede un po\' di tempo, attendi un momento!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "La ricompensa si accumula giornalmente e viene inviata al tuo portafoglio N solo quando raggiunge ~0,5 N.",
     ),
@@ -2547,7 +2978,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 blocchi/giorno~15 min",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 secondi per verifica",
     ),
@@ -2619,7 +3050,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Inserisci la password di crittografia",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Reinserisci la password per assicurarti che sia corretta",
     ),
@@ -2694,8 +3125,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
       "Aggiungi esito",
     ),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("Compra"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "Annulla e rimborsa",
@@ -2707,7 +3138,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "Conferma esito",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Avvia previsione",
     ),
@@ -2725,6 +3156,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Esito non valido",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Il mercato è già stato risolto, l\'azione non è consentita",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Mercato chiuso, trading non disponibile",
     ),
@@ -2733,6 +3167,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Mercato non risolto, non riscattabile",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Solo l\'host che ha creato questo mercato può eseguire questa azione",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Almeno due esiti validi",
@@ -2743,10 +3180,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "Slippage superato, riprova",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("No"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Esiti"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "Scegli l’esito vincente per liquidare (fondi in base al risultato)",
@@ -2756,11 +3193,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Domanda di previsione, es.: Chi vince questo round?",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Risolto"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Illimitato (chiusura manuale)",
     ),
@@ -2793,7 +3230,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Invita tramite"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Collegamento"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("codice"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Errore nel recupero del prezzo della moneta.",
     ),
@@ -2807,7 +3244,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Il tuo scambio sarà distribuito a breve. Attendi con pazienza.",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Costi per gestire un nodo: Verifica di gruppo 1-49 N Nodo base: 50 N Nodo premium: 100 N Nodo pro: 500 N.",
     ),
@@ -2821,7 +3258,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nuovo saldo"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Paghi"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Data"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Gli scambi possono essere visualizzati sugli esploratori della blockchain pertinenti (Etherscan, BscScan, TRONSCAN e il nostro).",
     ),
@@ -2836,7 +3273,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Ripristina le impostazioni predefinite",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Aspetto"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Stile"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage(
+      "Personalizzato",
+    ),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Chiunque può creare un token, incluse versioni false di token esistenti. Fai sempre ricerche su un token prima di importarlo.",
     ),
@@ -2859,9 +3301,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage(
       "Errore di formato!",
     ),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Importa token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tutte le reti"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2877,15 +3319,375 @@ class MessageLookup extends MessageLookupByLibrary {
       "Decimali del token",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importa"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "Questo ID della catena è già in uso da un\'altra rete.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Attenzione"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Alto Rischio"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Sicuro"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
+      "Prestito Aave V3",
+    ),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
+      "Email del conto",
+    ),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "Aggiungere questo asset richiede una commissione di rete. Tocca Aggiungi per continuare.",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "Chiedi informazioni sull\'saldio, sul portafoglio, sulla commissione di rete",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("Torna al codice"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage("Torna alla email"),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "Crea e Salva Backup",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "Nessun portafoglio trovato nel file di backup",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "Il tuo backup è crittografato con AES-256 + PBKDF2. Solo la password corretta può ripristinarlo.",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "Inserisci la password del backup",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "Esporta Backup Cloud",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile creare il backup. Riprova.",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage("File di Backup"),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "Impossibile accedere al file selezionato",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "Importa Backup Cloud",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile ripristinare il backup. Verifica la password e il file di backup, quindi riprova.",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "Importa Portafogli",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "Non è un file di backup N42Wallet valido",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "Nessun file selezionato",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "Nessun portafoglio valido selezionato per il salvataggio",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "Password di Salvataggio",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Imposta una password di salvataggio sicura (minimo 8 caratteri)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "La password deve contenere almeno 8 caratteri",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "Inserisci nuovamente la password di salvataggio",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "Ripristina i tuoi portafogli da un backup crittografato memorizzato su iCloud Drive o Google Drive.",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "Nessun portafoglio può essere ripristinato da questo backup",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Inserisci la password usata durante la creazione del backup",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Seleziona prima un file di backup",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "Seleziona almeno un portafoglio da salvare",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "Seleziona i Portafogli da Salvare",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "Backup N42Wallet",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "Questo backup contiene le tue chiavi private / mnemonici, le password dei portafogli e le impostazioni dei portafogli. Conserva il file di backup e la password in sicurezza. Non condividerle mai con nessuno.",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "Acquista N tramite protocollo N42",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Calldata (esadecimale)",
+    ),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "È richiesta l\'autorizzazione alla fotocamera per scansionare un codice.",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage("Annulla ordine"),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage("Cambia Email"),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "Verifica approvazione...",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
+      "Appunti vuoti",
+    ),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile caricare le monete. Riprova.",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Conferma Password",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "Conferma aggiornamento",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "Informazioni sul contratto",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage(
+      "Crea portafoglio",
+    ),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "Nessuna riga di dati trovata (solo intestazione rilevata).",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "Nessun dato trovato dopo aver rimosso i commenti.",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage(
+      "Tag personalizzato...",
+    ),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
+      "Tag di destinazione",
+    ),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Scambia token tramite Uniswap / 1inch / Jupiter",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "Codice di verifica accettato",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Richiesta di codice di verifica inviata",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile caricare i prezzi di rinnovo ENS. Riprova.",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "Il rinnovo ENS è fallito. Riprova.",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage(
+      "Prezzo di ingresso",
+    ),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("Scade tra:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage("Paura & Gola"),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile aprire il selettore file. Riprova.",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile leggere il file selezionato. Riprova.",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("Disponibile"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "Previsione gas del prossimo blocco",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "Inserisci un indirizzo email valido",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("Problemi:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Keystone collegato correttamente",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Ordini a limite",
+    ),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("Prezzo limite"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "Prezzo di liquidazione",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("Utilizzo"),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Memo"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("Messaggio"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "Portafoglio mnemonico",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "Accedi con il tuo account sociale per creare un portafoglio MPC sicuro. La tua chiave privata viene suddivisa in parti crittografate — nessuna frase seed da perdere.",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "Nessuna frase seed necessaria",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "Funziona con MPC-TSS. La tua chiave viene suddivisa in 3 parti crittografate distribuite sul tuo dispositivo, sui nostri server e su un backup di recupero.",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage(
+      "Nuovo indirizzo email",
+    ),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "Nessuna email memorizzata su questo dispositivo",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage(
+      "Nessun gettone ancora",
+    ),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("Nessun DApp"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Nessun ordine a limite",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage(
+      "Nessun ordine aperto",
+    ),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Nessuna posizione aperta",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Nessun portafoglio ancora",
+    ),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("Opzionale"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "Annullamento fallito",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Ordine annullato",
+    ),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Creazione dell\'ordine fallita",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "Ordine a limite creato",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("Eseguito"),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "Piazza ordine a limite",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("Attivato"),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile caricare gli ordini a limite",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "Le password non corrispondono",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "Incolla il link di connessione",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "In attesa (Mempool)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage(
+      "Token popolari",
+    ),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("Dimensione"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "Portafoglio chiave privata",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("Solo lettura"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("ID Stanza"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Salvataggio fallito. Riprova.",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("Invia codice"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "Invio richiesta...",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage(
+      "Seleziona modalità scambio",
+    ),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("Tag"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "Modello copiato",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "Contratto del token (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "Ricerca informazioni sul token...",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "Token non trovato nell\'elenco — inserisci simbolo e decimali manualmente",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile eliminare lo scambio. Riprova.",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Impossibile salvare lo scambio. Riprova.",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
+      "Stato sconosciuto",
+    ),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("Aggiorna"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage("Aggiorna email"),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "Problemi di convalida",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Codice di verifica",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("Verifica codice"),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "Visualizza dati di mercato",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("Volume 24h"),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("IA del wallet"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "Crea o importa un portafoglio per iniziare",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Caricamento del portafoglio fallito",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "Caricamento del portafoglio...",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("Più tardi"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "L\'saldio non può essere aggiornato",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Wallet HD · Mnemonico",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "Singola catena · Importato",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage("Fissa token"),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "Prezzi salvati",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "Aggiornato ora",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "Prezzi parziali",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Prezzi non disponibili",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "Rimuovi token dai fissati",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Connessione persa. Si prega di riconnettersi.",
@@ -2928,7 +3730,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Parola d\'ordine"),
     "next": MessageLookupByLibrary.simpleMessage("Avanti"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Modifica profilo",
     ),
@@ -2937,10 +3739,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Inserisci l\'indirizzo",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "Questo dispositivo limita le app in background, quindi potresti perdere messaggi di chat e avvisi sui trasferimenti quando l\'app è in background o chiusa.\n\nTocca \"Vai alle impostazioni\" per consentire l\'attività in background, quindi abilita l\'avvio automatico per questa app.",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "La consegna in background potrebbe essere limitata",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Non ricordare più",

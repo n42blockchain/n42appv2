@@ -1,0 +1,66 @@
+{
+  "network": "Sui Devnet",
+  "validation": "Official SDK transaction, not N42 native signing or UI acceptance",
+  "url": "https://fullnode.devnet.sui.io:443",
+  "from": "0xe5302bcfed048b9eb7fbb526e91e2741fc87126165d49b64226f28c1fe2d167e",
+  "to": "0x39b8daed511e0a35de508ca0e3847f488094a13784e090c862c8ee53c5340af0",
+  "amountMist": "10000000",
+  "chainId": {
+    "chainIdentifier": "2unjCNzwGGzzogTCsaJCNguUQAhRuRiMXMdekixiUTGW"
+  },
+  "before": {
+    "balance": {
+      "balance": "10000000000",
+      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+      "coinBalance": "10000000000",
+      "addressBalance": "0"
+    }
+  },
+  "dryRun": "Transaction",
+  "submittedDigest": "66htE7PqUaHd2WGTCkajYNaReuRRMo4pmrYTc29EqexQ",
+  "receipt": {
+    "digest": "66htE7PqUaHd2WGTCkajYNaReuRRMo4pmrYTc29EqexQ",
+    "epoch": "70",
+    "timestampMs": 1789069491841,
+    "checkpoint": "1209842",
+    "status": {
+      "success": true,
+      "error": null
+    },
+    "balanceChanges": [
+      {
+        "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+        "address": "0x39b8daed511e0a35de508ca0e3847f488094a13784e090c862c8ee53c5340af0",
+        "amount": "10000000"
+      },
+      {
+        "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+        "address": "0xe5302bcfed048b9eb7fbb526e91e2741fc87126165d49b64226f28c1fe2d167e",
+        "amount": "-11997880"
+      }
+    ],
+    "gasUsed": {
+      "computationCost": "1000000",
+      "storageCost": "1976000",
+      "storageRebate": "978120",
+      "nonRefundableStorageFee": "9880"
+    }
+  },
+  "after": {
+    "balance": {
+      "balance": "9988002120",
+      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+      "coinBalance": "9988002120",
+      "addressBalance": "0"
+    }
+  },
+  "recipientAfter": {
+    "balance": {
+      "balance": "10000000",
+      "coinType": "0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI",
+      "coinBalance": "10000000",
+      "addressBalance": "0"
+    }
+  },
+  "passed": true
+}

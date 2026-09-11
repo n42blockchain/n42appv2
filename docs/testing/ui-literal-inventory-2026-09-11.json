@@ -1,0 +1,2157 @@
+[
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 60,
+    "text": "'Sign Typed Data'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 86,
+    "text": "'Accept Terms'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 100,
+    "text": "'Sign In to DApp'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 111,
+    "text": "'Sign Message'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 135,
+    "text": "'Send ETH'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 167,
+    "text": "'On-chain Permit'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 180,
+    "text": "'Increase Allowance'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 192,
+    "text": "'Decrease Allowance'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 205,
+    "text": "'NFT Transfer (ERC-1155)'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 218,
+    "text": "'Wrap ETH'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 229,
+    "text": "'Unwrap WETH'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 247,
+    "text": "'Token Swap'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 264,
+    "text": "'Multicall (Batch)'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 278,
+    "text": "'Permit2 Approval'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 297,
+    "text": "'NFT Order (Seaport)'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 310,
+    "text": "'Stake ETH (Lido)'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 322,
+    "text": "'Contract Interaction'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 353,
+    "text": "'Permit: Off-chain Approval'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 382,
+    "text": "'Permit2: Batch Approval'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 398,
+    "text": "'NFT Marketplace Order'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 411,
+    "text": "'Safe Multisig Transaction'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 430,
+    "text": "'Token Approve'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 474,
+    "text": "'Token Transfer'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 486,
+    "text": "'Token Transfer'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 499,
+    "text": "'Transfer From'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 515,
+    "text": "'NFT Approval For All'"
+  },
+  {
+    "file": "lib/core/security/signature_decoder.dart",
+    "line": 552,
+    "text": "'NFT Transfer'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_address.dart",
+    "line": 45,
+    "text": "'Failed to generate address for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_address.dart",
+    "line": 65,
+    "text": "'Failed to generate address for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_address.dart",
+    "line": 80,
+    "text": "'Address generation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_address.dart",
+    "line": 109,
+    "text": "'Failed to derive Solana token account'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_address.dart",
+    "line": 116,
+    "text": "'Solana token account derivation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 69,
+    "text": "'Failed to generate mnemonic'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 76,
+    "text": "'Mnemonic generation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 118,
+    "text": "'Failed to derive public key for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 125,
+    "text": "'Public key derivation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 148,
+    "text": "'Failed to derive private key for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 155,
+    "text": "'Private key derivation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 180,
+    "text": "'Failed to derive key pair for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 192,
+    "text": "'Invalid key pair format: not valid hex'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 200,
+    "text": "'Malformed key pair response for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 205,
+    "text": "'Key pair derivation failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 236,
+    "text": "'Failed to export keystore for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 243,
+    "text": "'Keystore export failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 267,
+    "text": "'Invalid keystore or wrong passphrase'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_key_manager.dart",
+    "line": 274,
+    "text": "'Keystore import failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 29,
+    "text": "'$operation returned empty result for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 66,
+    "text": "'Transaction signing failed for $coin: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 98,
+    "text": "'Transaction signing (gas) failed for $coin: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 129,
+    "text": "'BTC P2WSH signing failed: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 157,
+    "text": "'ByteArray signing returned invalid result for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 164,
+    "text": "'ByteArray signing failed for $coin: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 191,
+    "text": "'Max value calculation returned empty result for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 198,
+    "text": "'Max value calculation failed for $coin: ${e.message}'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 229,
+    "text": "'Message signing returned empty result for $coin'"
+  },
+  {
+    "file": "lib/core/wallet_sdk/wallet_signer.dart",
+    "line": 236,
+    "text": "'Message signing failed for $coin: ${e.message}'"
+  },
+  {
+    "file": "lib/features/ai_assistant/presentation/wallet_assistant_page.dart",
+    "line": 175,
+    "text": "'\\$${snapshot.totalUsd.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_history_page.dart",
+    "line": 160,
+    "text": "'Tx'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_history_page.dart",
+    "line": 170,
+    "text": "'Dest'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_history_page.dart",
+    "line": 284,
+    "text": "'$label: '"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_home_page_sections.dart",
+    "line": 189,
+    "text": "'$receiveAmt ${provider.toToken?.symbol ?? ''}'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_home_page_sections.dart",
+    "line": 196,
+    "text": "'Min: $minReceive ${provider.toToken?.symbol ?? ''}'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_home_page_sections.dart",
+    "line": 236,
+    "text": "'${step.fromToken.symbol} → ${step.toToken.symbol} via ${step.toolName}'"
+  },
+  {
+    "file": "lib/features/bridge/pages/bridge_home_page_widgets.dart",
+    "line": 323,
+    "text": "'$pct%'"
+  },
+  {
+    "file": "lib/features/browser/data/repositories/browser_repository_impl.dart",
+    "line": 108,
+    "text": "'Insert failed'"
+  },
+  {
+    "file": "lib/features/browser/pages/browser_page_widgets.dart",
+    "line": 123,
+    "text": "\"${bValue.wvcList.length}\""
+  },
+  {
+    "file": "lib/features/component/pages/setting_share.dart",
+    "line": 95,
+    "text": "\"${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5}\""
+  },
+  {
+    "file": "lib/features/component/pages/setting_share.dart",
+    "line": 116,
+    "text": "\"${S.of(context).g_share_v3_key_3} ${S.of(context).g_share_v3_key_4} 25 ${S.of(context).g_share_v3_key_5} ${S.of(context).g_share_v3_key_7}: $linkStr\""
+  },
+  {
+    "file": "lib/features/earn/pages/earn_page_logic.dart",
+    "line": 160,
+    "text": "'${S.of(context).g_key_burn_nft_tip}\\n\\n' '${S.of(context).g_key_burn_nft_steps}\\n' '${S.of(context).g_key_burn_nft_step1}\\n' '${S.of(context).g_key_burn_nft_step2}\\n' '${S.of(context).g_key_burn_nft_step3}\\n' '${S.of(context).g_key_burn_nft_step4}'"
+  },
+  {
+    "file": "lib/features/earn/pages/earn_page_products.dart",
+    "line": 240,
+    "text": "'+${formatBigIntForChain(position.pendingRewards, protocol.chainType, protocol.chainSymbol)}'"
+  },
+  {
+    "file": "lib/features/earn/pages/stablecoin_earn_page.dart",
+    "line": 169,
+    "text": "'${best.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/earn/pages/stablecoin_earn_page.dart",
+    "line": 223,
+    "text": "'${e.chainName} · TVL ${_formatUsd(e.reserve.totalLiquidityUsd)}'"
+  },
+  {
+    "file": "lib/features/earn/pages/stablecoin_earn_page.dart",
+    "line": 235,
+    "text": "'${e.reserve.supplyApy.toStringAsFixed(2)}% APY'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/device_scan_page.dart",
+    "line": 385,
+    "text": "'Bluetooth Permission Required'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/device_scan_page.dart",
+    "line": 406,
+    "text": "'Bluetooth Disabled'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/hardware_wallet_accounts_widgets.dart",
+    "line": 320,
+    "text": "'${account.index + 1}'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/keystone_pair_page.dart",
+    "line": 110,
+    "text": "'${_scanSession.receivedPartCount} / ' '${_scanSession.expectedPartCount}'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/keystone_sign_page.dart",
+    "line": 320,
+    "text": "'${_scanSession.receivedPartCount} / ' '${_scanSession.expectedPartCount}'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/pages/trezor_connect_page.dart",
+    "line": 164,
+    "text": "'Trezor'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 129,
+    "text": "'User rejected on device'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 134,
+    "text": "'App not open on device'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 140,
+    "text": "'Device is locked. Please unlock it first'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 145,
+    "text": "'Invalid APDU length'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 151,
+    "text": "'Instruction not supported. Check that the correct app is open'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_apdu_utils.dart",
+    "line": 156,
+    "text": "'Class not supported. Wrong app may be open'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_service.dart",
+    "line": 169,
+    "text": "'Failed to connect to device'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/ledger_service.dart",
+    "line": 407,
+    "text": "'No device connected'"
+  },
+  {
+    "file": "lib/features/hardware_wallet/service/trezor_service.dart",
+    "line": 39,
+    "text": "'Trezor connect returned null'"
+  },
+  {
+    "file": "lib/features/home/profile/profile_home_page.dart",
+    "line": 261,
+    "text": "'USD'"
+  },
+  {
+    "file": "lib/features/home/profile/profile_home_page_widgets.dart",
+    "line": 102,
+    "text": "'NEW'"
+  },
+  {
+    "file": "lib/features/home/setting/about_app.dart",
+    "line": 186,
+    "text": "\"v ${appVersion ?? \"\"}\""
+  },
+  {
+    "file": "lib/features/home/setting/about_app.dart",
+    "line": 231,
+    "text": "\"${S.of(context).g_key_v_k3}(v${versionInfo!.versionName})\""
+  },
+  {
+    "file": "lib/features/home/widgets/check_version_alert.dart",
+    "line": 92,
+    "text": "'V$newVersion'"
+  },
+  {
+    "file": "lib/features/live/prediction/widgets/prediction_card.dart",
+    "line": 174,
+    "text": "'成交量 ${market.totalVolume.toStringAsFixed(0)} $symbol'"
+  },
+  {
+    "file": "lib/features/live/prediction/widgets/prediction_card.dart",
+    "line": 298,
+    "text": "'持 ${heldShares.toStringAsFixed(1)}'"
+  },
+  {
+    "file": "lib/features/live/prediction/widgets/prediction_card.dart",
+    "line": 305,
+    "text": "'$pct%'"
+  },
+  {
+    "file": "lib/features/live/prediction/widgets/trade_sheet.dart",
+    "line": 192,
+    "text": "'${o.label}  ${(o.price * 100).toStringAsFixed(0)}%'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 222,
+    "text": "'请切换到支持补光灯的后置摄像头'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 383,
+    "text": "'美颜与滤镜'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 402,
+    "text": "'切换摄像头'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 456,
+    "text": "'视频暂不可用，其他直播功能可继续使用'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 497,
+    "text": "'已复制房间号'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/go_live_page.dart",
+    "line": 594,
+    "text": "'$earnings'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_app.dart",
+    "line": 24,
+    "text": "'N42 Live'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 57,
+    "text": "'关闭'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 62,
+    "text": "'N42 Live'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 65,
+    "text": "'开始直播'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 83,
+    "text": "'!xxxxx:m.si46.world'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 93,
+    "text": "'进入'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 101,
+    "text": "'直播列表'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 116,
+    "text": "'加载'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 132,
+    "text": "'加载失败：$_roomsError'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 143,
+    "text": "'查看直播间'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 144,
+    "text": "'点击右上角\"加载\"'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 149,
+    "text": "'暂无直播间'"
+  },
+  {
+    "file": "lib/features/live/presentation/pages/live_home_page.dart",
+    "line": 159,
+    "text": "'${r.memberCount} 人'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/danmu_input_bar.dart",
+    "line": 46,
+    "text": "'发送太快了，稍后再试'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/danmu_input_bar.dart",
+    "line": 62,
+    "text": "'发送失败，请重试'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/danmu_input_bar.dart",
+    "line": 97,
+    "text": "'说点什么…'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/danmu_overlay.dart",
+    "line": 98,
+    "text": "'${danmu.sender}：'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 26,
+    "text": "'玫瑰'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 27,
+    "text": "'点赞'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 28,
+    "text": "'干杯'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 29,
+    "text": "'火箭'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 30,
+    "text": "'钻石'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_catalog.dart",
+    "line": 31,
+    "text": "'皇冠'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_picker_sheet.dart",
+    "line": 52,
+    "text": "'送礼物'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_picker_sheet.dart",
+    "line": 60,
+    "text": "'$coins'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_picker_sheet.dart",
+    "line": 66,
+    "text": "'充值'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_picker_sheet.dart",
+    "line": 102,
+    "text": "'金币不足，请先充值'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/gift_picker_sheet.dart",
+    "line": 141,
+    "text": "'${gift.coinPrice}'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 41,
+    "text": "'美颜与滤镜'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 45,
+    "text": "'恢复原图'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 50,
+    "text": "'磨皮'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 55,
+    "text": "'美白'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 61,
+    "text": "'红润'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 78,
+    "text": "'${filter.label}滤镜'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 114,
+    "text": "'滤镜'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 129,
+    "text": "'按住查看原图'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_beauty_sheet.dart",
+    "line": 165,
+    "text": "'${(value * 100).round()}'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_player_view.dart",
+    "line": 25,
+    "text": "'连接中…'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_player_view.dart",
+    "line": 34,
+    "text": "'等待画面…'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_side_actions.dart",
+    "line": 22,
+    "text": "'点赞'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_side_actions.dart",
+    "line": 26,
+    "text": "'礼物'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/live_side_actions.dart",
+    "line": 32,
+    "text": "'分享'"
+  },
+  {
+    "file": "lib/features/live/presentation/widgets/online_badge.dart",
+    "line": 39,
+    "text": "'$count'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 75,
+    "text": "'${S.of(context).g_key_loyalty_checkin_success} +${result.points}' '${tx == null ? '' : '\\n$tx'}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 92,
+    "text": "'${S.of(context).g_key_loyalty_checkin_failed}: $error'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 207,
+    "text": "'${account.availablePoints}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 244,
+    "text": "'$value'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 322,
+    "text": "'+${task.points}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 359,
+    "text": "'+${referral.pointsEarned}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 393,
+    "text": "'${positive ? '+' : ''}${item.points}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 415,
+    "text": "'#${entry.rank}'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 417,
+    "text": "'${entry.points} pts'"
+  },
+  {
+    "file": "lib/features/loyalty/pages/loyalty_home_page.dart",
+    "line": 442,
+    "text": "'${reward.pointsCost} pts'"
+  },
+  {
+    "file": "lib/features/mining/data/repositories/mining_repository_impl.dart",
+    "line": 124,
+    "text": "'Mining not active. Use MiningV2Provider.createDepositUnsignedTx().'"
+  },
+  {
+    "file": "lib/features/mining/data/repositories/mining_repository_impl.dart",
+    "line": 134,
+    "text": "'Use MiningV2Provider.createExitDepositUnsignedTx() to stop mining.'"
+  },
+  {
+    "file": "lib/features/mining/data/repositories/mining_repository_impl.dart",
+    "line": 154,
+    "text": "'getMiningHistory failed: $e'"
+  },
+  {
+    "file": "lib/features/mining/data/repositories/mining_repository_impl.dart",
+    "line": 180,
+    "text": "'N chain rewards are distributed automatically; no manual claim needed.'"
+  },
+  {
+    "file": "lib/features/mining/data/repositories/mining_repository_impl.dart",
+    "line": 238,
+    "text": "'getFullNode failed: $e'"
+  },
+  {
+    "file": "lib/features/mining/domain/usecases/start_mining.dart",
+    "line": 44,
+    "text": "'Wallet not found'"
+  },
+  {
+    "file": "lib/features/mining/domain/usecases/start_mining.dart",
+    "line": 111,
+    "text": "'Amount is required'"
+  },
+  {
+    "file": "lib/features/mining_v1/pages/full_node_page_logic.dart",
+    "line": 167,
+    "text": "\"insufficient funds for transfer\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/share_mining.dart",
+    "line": 88,
+    "text": "\"Congratulations!\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/summary_page_logic.dart",
+    "line": 325,
+    "text": "\"Release the pledge and stop mining\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/task_detail_page.dart",
+    "line": 132,
+    "text": "\"${taskDetailResponse?[\"hash\"]}\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/today_mining_page_sections.dart",
+    "line": 153,
+    "text": "\"${S.of(context).g_mining_key_49}...\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/today_mining_page_sections.dart",
+    "line": 230,
+    "text": "\"Tier Value\""
+  },
+  {
+    "file": "lib/features/mining_v1/pages/today_mining_page_sections.dart",
+    "line": 297,
+    "text": "'24H Reward'"
+  },
+  {
+    "file": "lib/features/mining_v1/pages/today_mining_page_sections.dart",
+    "line": 306,
+    "text": "\"${dataUtils.doubleFixed(last24HValue, 3)}${CoinType.N.name}\""
+  },
+  {
+    "file": "lib/features/mining_v1/widgets/ast_level.dart",
+    "line": 58,
+    "text": "\"$astNum\""
+  },
+  {
+    "file": "lib/features/mining_v1/widgets/ast_mining_board.dart",
+    "line": 68,
+    "text": "\"$astNum\""
+  },
+  {
+    "file": "lib/features/mining_v2/pages/key_management/mining_key_list.dart",
+    "line": 131,
+    "text": "'PublicKey:${keyValue['keypart']['publicKey']}'"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/key_management/mining_output_pk.dart",
+    "line": 90,
+    "text": "'Encryption failed: $e'"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/mining_full_node_v2.dart",
+    "line": 71,
+    "text": "\"${S.current.g_mining_key_37}:${S.of(context).g_mining_key_62}\""
+  },
+  {
+    "file": "lib/features/mining_v2/pages/mining_node_detail_page.dart",
+    "line": 138,
+    "text": "'${S.of(context).g_mining_node_key2}: '"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/mining_node_detail_widgets.dart",
+    "line": 34,
+    "text": "'Uptime'"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/mining_node_detail_widgets.dart",
+    "line": 111,
+    "text": "'Activation Time'"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/mining_node_detail_widgets.dart",
+    "line": 117,
+    "text": "'WS Status'"
+  },
+  {
+    "file": "lib/features/mining_v2/pages/share_mining.dart",
+    "line": 164,
+    "text": "\"Congratulations!\""
+  },
+  {
+    "file": "lib/features/mining_v2/widgets/mining_board_widget.dart",
+    "line": 116,
+    "text": "\"$nNum\""
+  },
+  {
+    "file": "lib/features/mining_v2/widgets/mining_risk_card.dart",
+    "line": 231,
+    "text": "\"${mpValue.inactivityScorePercentage}%\""
+  },
+  {
+    "file": "lib/features/mining_v2/widgets/n_level_widget.dart",
+    "line": 100,
+    "text": "\"$nNum\""
+  },
+  {
+    "file": "lib/features/splash/splash_page.dart",
+    "line": 189,
+    "text": "'N42 Wallet'"
+  },
+  {
+    "file": "lib/features/splash/splash_page.dart",
+    "line": 227,
+    "text": "'\\u00a9 2021-2026 N42 Inc.'"
+  },
+  {
+    "file": "lib/features/splash/splash_page.dart",
+    "line": 255,
+    "text": "'${variant.topLabel} '"
+  },
+  {
+    "file": "lib/features/splash/splash_page.dart",
+    "line": 258,
+    "text": "' ${variant.midLabel}'"
+  },
+  {
+    "file": "lib/features/staking/pages/stake_page_forms.dart",
+    "line": 51,
+    "text": "'${S.of(context).g_key_stake_commission}: ${provider.selectedValidator!.commission.toStringAsFixed(1)}% | ${S.of(context).g_key_stake_apy}: ${provider.selectedValidator!.apy.toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/staking/pages/stake_page_sections.dart",
+    "line": 216,
+    "text": "'${S.of(context).g_key_stake_staked}: ${_formatBigInt(pos.stakedAmount)} ${widget.protocol.chainSymbol}'"
+  },
+  {
+    "file": "lib/features/staking/pages/stake_page_widgets.dart",
+    "line": 111,
+    "text": "'${provider.currentApy.toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/staking/pages/stake_page_widgets.dart",
+    "line": 118,
+    "text": "'APY'"
+  },
+  {
+    "file": "lib/features/staking/pages/staking_home_page_widgets.dart",
+    "line": 205,
+    "text": "'${(liveApys[protocol.id] ?? protocol.apy).toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/staking/pages/staking_home_page_widgets.dart",
+    "line": 314,
+    "text": "'${S.of(context).g_key_stake_validator}: ${position.validator!.name}'"
+  },
+  {
+    "file": "lib/features/staking/pages/staking_home_page_widgets.dart",
+    "line": 358,
+    "text": "'${(liveApys[position.protocol.id] ?? position.protocol.apy).toStringAsFixed(1)}% ${S.of(context).g_key_stake_apy}'"
+  },
+  {
+    "file": "lib/features/staking/pages/validator_list_page.dart",
+    "line": 300,
+    "text": "'$rank'"
+  },
+  {
+    "file": "lib/features/utils/app_push_utils.dart",
+    "line": 444,
+    "text": "'New Device Login'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_batch_paymaster_sheet.dart",
+    "line": 42,
+    "text": "'Paymaster'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_batch_templates_sheet.dart",
+    "line": 165,
+    "text": "'${template.operations.length} operations · ${template.chainSymbol}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_batch_transaction_body.dart",
+    "line": 248,
+    "text": "'${S.of(context).g_key_aa_operations} (${operations.length})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_batch_transaction_body.dart",
+    "line": 454,
+    "text": "'${S.of(context).g_key_aa_execute_batch} (${operations.length})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_send_page_widgets.dart",
+    "line": 83,
+    "text": "'AA'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/aa_send_page_widgets.dart",
+    "line": 157,
+    "text": "'${S.of(context).g_key_43}: ${formatNativeBalance()} $selectedToken'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/paymaster_select_page.dart",
+    "line": 206,
+    "text": "'${S.of(context).g_key_aa_paymaster_coverage}: ' '${supportedChains.length} ${S.of(context).g_key_aa_paymaster_chains_supported}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/session_key_card.dart",
+    "line": 292,
+    "text": "'${(pct * 100).toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/session_key_manage_page.dart",
+    "line": 323,
+    "text": "'${s.g_key_aa_active} (${activeKeys.length})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/session_key_manage_page.dart",
+    "line": 324,
+    "text": "'${s.g_key_aa_expired} (${expiredKeys.length})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/aa/session_key_manage_page.dart",
+    "line": 325,
+    "text": "'${s.g_key_aa_revoked_status} (${revokedKeys.length})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_chain_add.dart",
+    "line": 513,
+    "text": "'https://…'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 93,
+    "text": "'Missing parent chain configuration'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 338,
+    "text": "'Invalid chain configuration'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 349,
+    "text": "'Invalid chain configuration'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 363,
+    "text": "\"Already exists\""
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 367,
+    "text": "\"Successfully added\""
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 378,
+    "text": "\"Already exists\""
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_logic.dart",
+    "line": 397,
+    "text": "\"Successfully added\""
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_search_ui.dart",
+    "line": 268,
+    "text": "'$symbol  '"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_add_all_search_ui.dart",
+    "line": 277,
+    "text": "'${rowValue['chain_name']}(${rowValue['rules']})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/add_token/wallet_coin_token_add2.dart",
+    "line": 355,
+    "text": "'$coinName  '"
+  },
+  {
+    "file": "lib/features/wallet/pages/address_book/add_address_page.dart",
+    "line": 207,
+    "text": "'$coinFullName ($coinName)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart",
+    "line": 88,
+    "text": "\"$percent%\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_get_widget.dart",
+    "line": 157,
+    "text": "\"${S.of(context).g_key_29}:${getCoinModel?.balanceDoubleAll()}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_pay_widget.dart",
+    "line": 118,
+    "text": "'${payConfig?.name ?? \"\"}(${payConfig?.miniName ?? \"\"})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_pay_widget.dart",
+    "line": 252,
+    "text": "\"${S.of(context).g_key_29}:$balanceText\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_select_chain.dart",
+    "line": 61,
+    "text": "\"${sm.payChain}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_transaction_detail.dart",
+    "line": 140,
+    "text": "\"+${_orderModel.orderNum}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_transaction_detail.dart",
+    "line": 282,
+    "text": "'${_orderModel.orderPrice}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_transactions.dart",
+    "line": 131,
+    "text": "\"${order.payCoin ?? 'USDT'}/${CoinType.N.name}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/ast_swap/swap_ast_transactions.dart",
+    "line": 136,
+    "text": "\"+${order.orderNum}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_bottom_bar.dart",
+    "line": 52,
+    "text": "'${S.of(context).g_key_batch_recipients}:'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_bottom_bar.dart",
+    "line": 58,
+    "text": "'${S.of(context).g_key_batch_total_amount}:'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_bottom_bar.dart",
+    "line": 66,
+    "text": "'${S.of(context).g_key_aa_estimated_gas}:'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 43,
+    "text": "'${S.of(context).g_key_batch_recipients}: ${provider.recipientCount}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 48,
+    "text": "'${S.of(context).g_key_batch_total_amount}: ${provider.formatAmount(provider.totalAmount)} $tokenSymbol'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 184,
+    "text": "'TxHash'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 287,
+    "text": "'address,amount,memo\\n0x123...,1.5,Note 1\\n0xabc...,2.0,Note 2'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 301,
+    "text": "'• ${S.of(context).g_key_batch_swipe_remove}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 305,
+    "text": "'• ${S.of(context).g_key_batch_memo_optional}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 309,
+    "text": "'• ${S.of(context).g_key_batch_multicall_tip}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_dialogs.dart",
+    "line": 348,
+    "text": "'$label:'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_list_widgets.dart",
+    "line": 141,
+    "text": "'${index + 1}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_list_widgets.dart",
+    "line": 180,
+    "text": "'${formatAmount(item.amount)} $tokenSymbol'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_widgets.dart",
+    "line": 51,
+    "text": "'${S.of(context).g_key_batch_evm_only.split(' ').take(3).join(' ')} · $chainSymbol'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/batch_transfer_widgets.dart",
+    "line": 79,
+    "text": "'Multicall'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/csv_format_section.dart",
+    "line": 146,
+    "text": "'# Batch payment 2026-02-20\\n' 'address,amount,memo\\n' '0x1234567890123456789012345678901234567890,1.5,Alice\\n' '0xabcdefabcdefabcdefabcdefabcdefabcdefabcd,2.0,Bob\\n' '0x9876543210987654321098765432109876543210,0.5,'"
+  },
+  {
+    "file": "lib/features/wallet/pages/batch_transfer/csv_import_page.dart",
+    "line": 113,
+    "text": "'# Comments start with #\\n' 'address,amount,memo\\n' '0x1234...5678,1.0,Alice\\n' '0xabcd...efgh,2.5,Bob'"
+  },
+  {
+    "file": "lib/features/wallet/pages/create_wallet/create/create_two.dart",
+    "line": 171,
+    "text": "\"$count\""
+  },
+  {
+    "file": "lib/features/wallet/pages/create_wallet/create/create_two_widgets.dart",
+    "line": 104,
+    "text": "\"${S.of(context).g_key_wallet_c18}?\""
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_approval_confirmation.dart",
+    "line": 24,
+    "text": "'$amountLabel $tokenSymbol · $chain'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_limit_orders_page.dart",
+    "line": 180,
+    "text": "'${order.symbolIn} → ${order.symbolOut}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart",
+    "line": 104,
+    "text": "'${(bps / 100).toStringAsFixed(bps % 100 == 0 ? 0 : 1)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart",
+    "line": 315,
+    "text": "'\\$${chartPrices.reduce((a, b) => a < b ? a : b).toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_form_widgets.dart",
+    "line": 319,
+    "text": "'\\$${chartPrices.reduce((a, b) => a > b ? a : b).toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_history.dart",
+    "line": 91,
+    "text": "'${item.tokenInSymbol} → ${item.tokenOutSymbol}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_history.dart",
+    "line": 99,
+    "text": "'+${item.amountOut} ${item.tokenOutSymbol}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/dex_swap/dex_swap_home.dart",
+    "line": 997,
+    "text": "'${s.g_dex_spending_account}: $_userAddr'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_domain_card.dart",
+    "line": 70,
+    "text": "'${ownedEns.daysUntilExpiry} ${S.of(context).g_key_ens_days_left}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_home_page_widgets.dart",
+    "line": 164,
+    "text": "'ENS'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_home_page_widgets.dart",
+    "line": 309,
+    "text": "'${ownedNames.length}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_purchase_page.dart",
+    "line": 281,
+    "text": "'${widget.name}.eth'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_purchase_page.dart",
+    "line": 298,
+    "text": "'${widget.years} $yearLabel'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_renew_page.dart",
+    "line": 278,
+    "text": "'+$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_subdomain_section.dart",
+    "line": 204,
+    "text": "'${sub.owner.substring(0, 6)}...${sub.owner.substring(sub.owner.length - 4)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/ens/ens_subdomain_sheet.dart",
+    "line": 223,
+    "text": "'$label.${widget.parentName}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_settings_page.dart",
+    "line": 424,
+    "text": "'${Decimal.parse(formatted.toString())} ${_gasEstimate.unit}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_card.dart",
+    "line": 175,
+    "text": "'${history.last.toStringAsFixed(1)} Gwei'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_card.dart",
+    "line": 356,
+    "text": "'$label: ${value.toStringAsFixed(1)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_card.dart",
+    "line": 391,
+    "text": "'${_formatCount(data.pendingCount!)} pending'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_widgets.dart",
+    "line": 80,
+    "text": "'${config.alertBelow ? S.of(context).g_key_gas_alert_below : S.of(context).g_key_gas_alert_above} ${config.threshold.toStringAsFixed(0)} Gwei'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_widgets.dart",
+    "line": 262,
+    "text": "'${widget.network.name} — ${S.of(context).g_key_gas_alert}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/gas_tracker_widgets.dart",
+    "line": 412,
+    "text": "'Gwei'"
+  },
+  {
+    "file": "lib/features/wallet/pages/gas/non_evm_gas_settings_page.dart",
+    "line": 245,
+    "text": "'${S.of(context).g_key_t_37}: ' '${_feeModel.standard.feeRate ?? '-'} $feeRateUnit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/lending/aave_action_page.dart",
+    "line": 251,
+    "text": "'$actionLabel ${widget.reserve.symbol}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/lending/aave_action_page.dart",
+    "line": 283,
+    "text": "'${apy.toStringAsFixed(2)}% ${widget.isSupply ? 'Supply APY' : 'Borrow APR'}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/lending/lending_page.dart",
+    "line": 80,
+    "text": "'Supply'"
+  },
+  {
+    "file": "lib/features/wallet/pages/lending/lending_page.dart",
+    "line": 81,
+    "text": "'Borrow'"
+  },
+  {
+    "file": "lib/features/wallet/pages/lending/lending_page.dart",
+    "line": 184,
+    "text": "'${apy.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_coin_info_sections.dart",
+    "line": 72,
+    "text": "'(${coin['name'] ?? ''})'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_coin_info_sections.dart",
+    "line": 123,
+    "text": "'\\$${fmtPrice(price)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_coin_info_sections.dart",
+    "line": 142,
+    "text": "'${isUp ? '+' : ''}${regular.formartNum(priceChange24h, 2, isCrop: true)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_coin_tabs.dart",
+    "line": 39,
+    "text": "'No trending data'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_coin_tabs.dart",
+    "line": 155,
+    "text": "'Search for a coin'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_shared_widgets.dart",
+    "line": 139,
+    "text": "'#$_rank'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_shared_widgets.dart",
+    "line": 196,
+    "text": "'${isPositive ? '+' : ''}${_pct24h.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/market_shared_widgets.dart",
+    "line": 349,
+    "text": "'${data.value}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/trade_entry_sheet.dart",
+    "line": 191,
+    "text": "'${s.g_pnl_add_trade} · ${widget.symbol.toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/market/trade_entry_sheet.dart",
+    "line": 298,
+    "text": "'${t.quantity} × \\$${_fmt(t.buyPriceUsd)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/message_sign/message_sign_page.dart",
+    "line": 196,
+    "text": "'· ${widget.model.config.name}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_batch_send_page.dart",
+    "line": 168,
+    "text": "'Batch NFT Transfer'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_list_page_widgets.dart",
+    "line": 200,
+    "text": "'${S.of(context).g_key_nft_hide_spam} ($_spamCount)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_list_page_widgets.dart",
+    "line": 310,
+    "text": "'${g.items.length}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_list_page_widgets.dart",
+    "line": 465,
+    "text": "'BTC'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_list_page_widgets.dart",
+    "line": 503,
+    "text": "'${S.of(context).g_key_nft_floor_price}: '"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_send_page.dart",
+    "line": 193,
+    "text": "'1 ~ ${nft.balance}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/nft/nft_send_page.dart",
+    "line": 288,
+    "text": "'${S.of(context).g_key_nft_token_id}: #${nft.tokenId}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perp_market_details_sheet.dart",
+    "line": 31,
+    "text": "'${market.symbol}-PERP'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 220,
+    "text": "'${m.symbol}-PERP'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 242,
+    "text": "'\\$${m.markPrice.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 249,
+    "text": "'${isPositive ? '+' : ''}${m.priceChangePct.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 305,
+    "text": "'${p.sideLabel} ${p.leverage.toStringAsFixed(1)}x'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 325,
+    "text": "'${isProfitable ? '+' : ''}\\$${p.unrealizedPnl.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 332,
+    "text": "'${isProfitable ? '+' : ''}${p.pnlPercentage.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/perps/perps_page.dart",
+    "line": 410,
+    "text": "'${o.sideLabel} ${o.symbol} × ${o.size}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/defi_positions_section.dart",
+    "line": 213,
+    "text": "'${c.label}: ${fmtUsd(c.value)}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/defi_positions_section.dart",
+    "line": 322,
+    "text": "'$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/portfolio_holdings.dart",
+    "line": 69,
+    "text": "'$rank'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/portfolio_holdings.dart",
+    "line": 123,
+    "text": "'${pct.toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/portfolio_movers.dart",
+    "line": 98,
+    "text": "'${r.percentage >= 0 ? '+' : ''}${r.percentage.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/portfolio/portfolio_widgets.dart",
+    "line": 119,
+    "text": "'${pct.toStringAsFixed(1)}%'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/send_utils.dart",
+    "line": 65,
+    "text": "'≈ $usdStr'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send.dart",
+    "line": 293,
+    "text": "'${S.of(context).g_key_37} ${widget.coinModel.config.miniName}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_algo.dart",
+    "line": 152,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_algo_logic.dart",
+    "line": 198,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_algo_logic.dart",
+    "line": 254,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_apt.dart",
+    "line": 94,
+    "text": "'${S.of(context).g_key_37} ${widget.coinModel.config.miniName}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_apt_logic.dart",
+    "line": 161,
+    "text": "'loading'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_apt_widgets.dart",
+    "line": 162,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_apt_widgets.dart",
+    "line": 222,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_btc.dart",
+    "line": 99,
+    "text": "'${S.of(context).g_key_37} ${widget.coinModel.config.miniName}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_btc_widgets.dart",
+    "line": 174,
+    "text": "'${dec.Decimal.parse(widget.coinModel.balanceDoubleAll().toString())} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_btc_widgets.dart",
+    "line": 262,
+    "text": "'$gasFees ${widget.coinModel.coin['unit']}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_dot.dart",
+    "line": 147,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_dot_logic.dart",
+    "line": 177,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_dot_widgets.dart",
+    "line": 73,
+    "text": "\"${noteTextEditingController.text.length}/100\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_dot_widgets.dart",
+    "line": 215,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_dot_widgets.dart",
+    "line": 275,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_fil.dart",
+    "line": 93,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_fil_logic.dart",
+    "line": 139,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_fil_widgets.dart",
+    "line": 227,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_form.dart",
+    "line": 121,
+    "text": "'${controller.text.length}/100'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_form.dart",
+    "line": 265,
+    "text": "'${coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_gas.dart",
+    "line": 163,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_gas.dart",
+    "line": 284,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_logic.dart",
+    "line": 438,
+    "text": "'loading'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_memo.dart",
+    "line": 73,
+    "text": "'${S.of(context).g_key_37} $miniName'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_memo_logic.dart",
+    "line": 145,
+    "text": "'loading'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_memo_widgets.dart",
+    "line": 270,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ' '${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol.dart",
+    "line": 88,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol_logic.dart",
+    "line": 120,
+    "text": "\"Error\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol_logic.dart",
+    "line": 154,
+    "text": "\"Error\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol_logic.dart",
+    "line": 232,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol_widgets.dart",
+    "line": 159,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sol_widgets.dart",
+    "line": 220,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sui.dart",
+    "line": 145,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sui_logic.dart",
+    "line": 268,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sui_widgets.dart",
+    "line": 73,
+    "text": "\"${noteTextEditingController.text.length}/100\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sui_widgets.dart",
+    "line": 225,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_sui_widgets.dart",
+    "line": 286,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_ton.dart",
+    "line": 122,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_ton_logic.dart",
+    "line": 249,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_ton_widgets.dart",
+    "line": 70,
+    "text": "'${noteTextEditingController.text.length}/100'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_ton_widgets.dart",
+    "line": 221,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_ton_widgets.dart",
+    "line": 281,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_trx.dart",
+    "line": 137,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_trx_logic.dart",
+    "line": 241,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_trx_widgets.dart",
+    "line": 81,
+    "text": "\"${noteTextEditingController.text.length}/100\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_trx_widgets.dart",
+    "line": 195,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_trx_widgets.dart",
+    "line": 250,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_xrp.dart",
+    "line": 152,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_xrp_logic.dart",
+    "line": 240,
+    "text": "\"loading\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_xrp_widgets.dart",
+    "line": 207,
+    "text": "'$label:$value'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_xrp_widgets.dart",
+    "line": 218,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_xrp_widgets.dart",
+    "line": 307,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_zil.dart",
+    "line": 88,
+    "text": "\"${S.of(context).g_key_37} ${widget.coinModel.config.miniName}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_zil_logic.dart",
+    "line": 180,
+    "text": "'loading'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_zil_widgets.dart",
+    "line": 159,
+    "text": "'${widget.coinModel.balanceStringAll()} $unit'"
+  },
+  {
+    "file": "lib/features/wallet/pages/send/wallet_chain_send_zil_widgets.dart",
+    "line": 220,
+    "text": "'${chainModel?.balanceDoubleAll() ?? 0} ${(chainModel?.coin['unit'] ?? '').toString().toUpperCase()}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/transactions/transaction_history_list.dart",
+    "line": 187,
+    "text": "'$count'"
+  },
+  {
+    "file": "lib/features/wallet/pages/transactions/wallet_activity_page.dart",
+    "line": 156,
+    "text": "'${item.coin.coin['coinType'] ?? ''} · ${item.coin.isTest ? s.g_audit_testnet : s.g_audit_mainnet}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info.dart",
+    "line": 292,
+    "text": "'$_chainSymbol ($_chainName)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info.dart",
+    "line": 299,
+    "text": "'$_tokenSymbol($_tokenName)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info_actions.dart",
+    "line": 151,
+    "text": "'NEW'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info_xrp.dart",
+    "line": 257,
+    "text": "'$_chainSymbol ($_chainName)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info_xrp.dart",
+    "line": 267,
+    "text": "'$_tokenSymbol($_tokenName)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_chain_info_xrp_actions.dart",
+    "line": 261,
+    "text": "'$title:'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_coin_item.dart",
+    "line": 286,
+    "text": "\"\\$${coinInfo.coinPriceString()}\""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_coin_item.dart",
+    "line": 313,
+    "text": "'$tokenBalanceStr ${coinInfo.config.miniName}'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_coin_item.dart",
+    "line": 367,
+    "text": "\"${isPositive ? '+' : ''}${percentage.toStringAsFixed(2)}%\""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/edit_wallet.dart",
+    "line": 173,
+    "text": "'+ $tag'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/export_keystore_page.dart",
+    "line": 130,
+    "text": "'${s.g_key_ex_keystore_12} (${_countdown}s)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart",
+    "line": 98,
+    "text": "\" (${widget.model.config.miniName})\""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart",
+    "line": 112,
+    "text": "\"${S.of(context).g_key_address}: \""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart",
+    "line": 154,
+    "text": "\"${S.of(context).g_key_wallet_k53}:\""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart",
+    "line": 163,
+    "text": "\"($displayPath)\""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage_widgets.dart",
+    "line": 273,
+    "text": "\"${S.of(context).g_key_pubkey}: \""
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_page_top_bar.dart",
+    "line": 272,
+    "text": "'$sessionCount'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_receive_qr.dart",
+    "line": 283,
+    "text": "'${S.of(context).g_key_33}($symbol)'"
+  },
+  {
+    "file": "lib/features/wallet/pages/wallet_receive_qr_content.dart",
+    "line": 219,
+    "text": "'${S.of(context).g_key_44} ($symbol)'"
+  },
+  {
+    "file": "lib/features/wallet/presentation/pages/wallet_page_riverpod.dart",
+    "line": 98,
+    "text": "'\\$${balance.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/presentation/pages/wallet_page_riverpod.dart",
+    "line": 196,
+    "text": "'${coin.balance.toStringAsFixed(4)} ${coin.symbol}'"
+  },
+  {
+    "file": "lib/features/wallet/presentation/pages/wallet_page_riverpod.dart",
+    "line": 200,
+    "text": "'\\$${coin.balanceUsd.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/services/coin_price_alert_service.dart",
+    "line": 258,
+    "text": "'${config.alertAbove ? '🚀' : '📉'} Price Alert: ${config.name}'"
+  },
+  {
+    "file": "lib/features/wallet/services/ens_expiry_reminder_service.dart",
+    "line": 292,
+    "text": "'ENS Domain Expiring Soon'"
+  },
+  {
+    "file": "lib/features/wallet/services/ens_expiry_reminder_service.dart",
+    "line": 305,
+    "text": "'ENS Domain Expired'"
+  },
+  {
+    "file": "lib/features/wallet/services/gas_alert_service.dart",
+    "line": 213,
+    "text": "'Gas Alert: $networkName'"
+  },
+  {
+    "file": "lib/features/wallet/services/limit_order_alert_service.dart",
+    "line": 95,
+    "text": "'🎯 Limit Order Triggered'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/aa/aa_transaction_preview.dart",
+    "line": 336,
+    "text": "'${S.of(context).g_key_aa_batch_operations} (${ops.length})'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/aa/batch_operation_item.dart",
+    "line": 147,
+    "text": "'${index + 1}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/aa/batch_operation_item.dart",
+    "line": 188,
+    "text": "'${operation.formattedAmount} ${operation.tokenSymbol}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_price_card.dart",
+    "line": 89,
+    "text": "'≈ \\$${price.usdPrice!.toStringAsFixed(2)}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_purchase_step_content.dart",
+    "line": 185,
+    "text": "'${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_purchase_step_content.dart",
+    "line": 240,
+    "text": "'$domainName.eth ${S.of(context).g_key_ens_is_yours}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_renew_success_card.dart",
+    "line": 90,
+    "text": "'${S.of(context).g_key_ens_new_expiry}: ${_formatDate(widget.renewResult.newExpiresAt!)}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_search_bar.dart",
+    "line": 116,
+    "text": "'.eth'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_search_result_view.dart",
+    "line": 142,
+    "text": "'$name.eth'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_search_result_view.dart",
+    "line": 294,
+    "text": "'$searchQuery.eth'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/ens/ens_search_result_view.dart",
+    "line": 436,
+    "text": "'$years ${years == 1 ? S.of(context).g_key_ens_year : S.of(context).g_key_ens_years}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/feature_entry_cards_items.dart",
+    "line": 173,
+    "text": "'ENS'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/gas_selector_widget.dart",
+    "line": 426,
+    "text": "'$formatted $unit'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/nav_import_wallet.dart",
+    "line": 112,
+    "text": "\"Keystore\""
+  },
+  {
+    "file": "lib/features/wallet/widgets/nft_info_board.dart",
+    "line": 201,
+    "text": "'${S.of(context).g_key_nft_contract}: ${_shortenAddress(contractAddress!)}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/nft_info_board.dart",
+    "line": 254,
+    "text": "'$label: '"
+  },
+  {
+    "file": "lib/features/wallet/widgets/nft_info_board.dart",
+    "line": 296,
+    "text": "'${S.of(context).g_key_nft_floor_price}: $floorPriceDisplay'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/non_evm_fee_selector.dart",
+    "line": 242,
+    "text": "'$formatted $unit'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/non_evm_fee_selector.dart",
+    "line": 338,
+    "text": "'${option.feeRate} ${option.feeRateUnit ?? ''}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_board.dart",
+    "line": 153,
+    "text": "'≈ ¥${oCcyCny.format(cny)}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_chain_info_board.dart",
+    "line": 89,
+    "text": "\"${S.of(context).g_key_xml_0}: ${lockAmountStr ?? \"\"} \""
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_chain_info_transactions_item.dart",
+    "line": 104,
+    "text": "'${transactionModel.message}'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_coin_market_preview.dart",
+    "line": 185,
+    "text": "'$sign${widget.priceChange24h.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_search_coin_item.dart",
+    "line": 118,
+    "text": "'\\$$balanceStr'"
+  },
+  {
+    "file": "lib/features/wallet/widgets/wallet_search_coin_item.dart",
+    "line": 260,
+    "text": "'${percentage.toStringAsFixed(2)}%'"
+  },
+  {
+    "file": "lib/features/wallet_connect/provider/wallet_connect_provider.dart",
+    "line": 127,
+    "text": "\"Connection error: ${e.toString()}\""
+  },
+  {
+    "file": "lib/features/wallet_connect/provider/wallet_connect_provider.dart",
+    "line": 182,
+    "text": "\"User rejected.\""
+  },
+  {
+    "file": "lib/features/wallet_connect/provider/wallet_connect_session.dart",
+    "line": 723,
+    "text": "'Unrecognized chain ID. Try adding the chain using wallet_addEthereumChain.'"
+  },
+  {
+    "file": "lib/features/wallet_connect/provider/wallet_connect_session.dart",
+    "line": 764,
+    "text": "'Unsupported method: ${eventData.method}'"
+  },
+  {
+    "file": "lib/features/wallet_connect/provider/wallet_connect_signing.dart",
+    "line": 190,
+    "text": "'eth_sign is disabled for security reasons. Use personal_sign instead.'"
+  },
+  {
+    "file": "lib/features/wallet_connect/widgets/wallet_connect_alert_widget.dart",
+    "line": 494,
+    "text": "'Creator: ${creatorAddr.length > 16 ? '${creatorAddr.substring(0, 8)}...${creatorAddr.substring(creatorAddr.length - 8)}' : creatorAddr}'"
+  },
+  {
+    "file": "lib/features/wallet_connect/widgets/wallet_connect_alert_widget.dart",
+    "line": 501,
+    "text": "'Age: ${ageDays >= 365 ? '${(ageDays / 365).toStringAsFixed(1)} years' : ageDays >= 30 ? '${(ageDays / 30).toStringAsFixed(0)} months' : '$ageDays days'}'"
+  },
+  {
+    "file": "lib/features/wallet_connect/widgets/wallet_connect_alert_widget.dart",
+    "line": 514,
+    "text": "'⚠ New contract (< 7 days), proceed with caution'"
+  },
+  {
+    "file": "lib/features/widgets/reply_empty_widget.dart",
+    "line": 65,
+    "text": "\"[${S.of(context).g_chat_key_67}]\""
+  },
+  {
+    "file": "lib/main.dart",
+    "line": 459,
+    "text": "'N42Wallet'"
+  }
+]

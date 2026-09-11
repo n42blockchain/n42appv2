@@ -800,7 +800,7 @@ class SBn extends S {
   String get commonTransferTo => 'ট্রান্সফার করুন';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name থেকে';
   }
 
@@ -2879,7 +2879,7 @@ class SBn extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'এই সার্ভারে SSO লগইন প্রদানকারী কনফিগার করা নেই';
 
   @override
   String get transferAmountHintZero => '0.00';

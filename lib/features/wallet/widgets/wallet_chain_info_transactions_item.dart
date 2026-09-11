@@ -5,6 +5,9 @@ import 'package:n42_wallet/features/wallet/api/tokenview_enhanced_api.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
+import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
+    show toEther;
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_eth.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_page.dart';
 import 'package:n42_wallet/features/wallet/pages/transactions/transaction_detail_trx.dart';
@@ -18,19 +21,28 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
   final dynamic transactionModel;
   final CoinModel? coinModel;
   final dynamic onBack;
+
+  /// Local aggregate history has no signing account or derivation context.
+  final bool readOnly;
   const WalletChainInfoTransactionsItem({
     required this.type,
     required this.transactionModel,
     required this.coinModel,
     required this.onBack,
+    this.readOnly = false,
     super.key,
   });
 
   bool get _isBtcType => type == 0;
 
+  String get _amountLabel =>
+      '${toEther(transactionModel.price.toString(), transactionModel.coin['decimals'] ?? 0)} '
+      '${transactionModel.coin['unit'].toString().toUpperCase()}';
+
   bool _isOutgoing() {
     if (_isBtcType) {
-      final index = transactionModel.InputsAddress.indexWhere(
+      final tx = transactionModel as BtcTransactionRecodeModel;
+      final index = tx.inputsAddressList.indexWhere(
         (e) =>
             coinModel!.address.toString().toUpperCase() ==
             e.toString().toUpperCase(),
@@ -43,9 +55,8 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
 
   String _counterpartyAddress(bool isOut) {
     if (_isBtcType) {
-      return isOut
-          ? transactionModel.OutputAddressStr
-          : transactionModel.InputAddressStr;
+      final tx = transactionModel as BtcTransactionRecodeModel;
+      return isOut ? tx.outputAddressStrValue : tx.inputAddressStrValue;
     }
     return isOut ? transactionModel.to1 : transactionModel.from1;
   }
@@ -185,7 +196,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
       children: [
         Expanded(
           child: Text(
-            '${transactionModel.priceDouble()} ${transactionModel.coin['unit'].toUpperCase()}',
+            _amountLabel,
             style: AppTypography.bodySm.copyWith(
               color: AppColorTokens.of(context).textPrimary,
             ),
@@ -224,11 +235,12 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                   height: ScreenUtil().setWidth(32.0),
                 ),
                 SizedBox(width: AppSpacing.space2),
-                Text(
-                  transactionModel.errorMessage,
-                  maxLines: null,
-                  style: AppTypography.caption.copyWith(
-                    color: AppColorTokens.of(context).danger,
+                Expanded(
+                  child: Text(
+                    transactionModel.errorMessage,
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).danger,
+                    ),
                   ),
                 ),
               ],
@@ -249,15 +261,17 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
   }
 
   Future<void> _onItemTap(BuildContext context) async {
-    if (_isBtcType) {
+    if (_isBtcType || readOnly) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (_) => TransactionDetailPage(
-            from: transactionModel.address,
+            from: _isBtcType
+                ? transactionModel.address
+                : transactionModel.from1,
             to: transactionModel.to1,
             txHash: transactionModel.txHash,
-            value: transactionModel.priceDouble().toString(),
+            value: _amountLabel,
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
@@ -282,7 +296,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
             from: transactionModel.from1,
             to: transactionModel.to1,
             txHash: txHash,
-            value: transactionModel.priceDouble().toString(),
+            value: _amountLabel,
             coinType: transactionModel.coin['coinType'],
             time: transactionModel.getTxTimeStr(),
             isTest: coinModel?.isTest,
@@ -373,7 +387,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                     borderRadius: AppRadius.brSm,
                   ),
                   child: Text(
-                    'Mempool',
+                    S.of(context).g_ui_mempool,
                     style: AppTypography.captionSm.copyWith(
                       fontWeight: FontWeight.w600,
                       color: warn,
@@ -382,7 +396,7 @@ class WalletChainInfoTransactionsItem extends StatelessWidget {
                 ),
                 const Spacer(),
                 Text(
-                  'Pending (Mempool)',
+                  S.of(context).g_ui_pending_mempool,
                   style: AppTypography.captionSm.copyWith(color: warn),
                 ),
               ],

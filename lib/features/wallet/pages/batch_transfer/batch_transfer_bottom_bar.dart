@@ -63,7 +63,7 @@ class BatchBottomBar extends StatelessWidget {
                 SizedBox(height: AppSpacing.space2),
                 _summaryRow(
                   context,
-                  label: 'Estimated Gas:',
+                  label: '${S.of(context).g_key_aa_estimated_gas}:',
                   value: formatGasFee(provider.gasEstimate!.totalFee),
                 ),
               ],

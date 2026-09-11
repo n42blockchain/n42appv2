@@ -1,0 +1,6 @@
+{
+  "network": "testnet",
+  "address": "0xe5302bcfed048b9eb7fbb526e91e2741fc87126165d49b64226f28c1fe2d167e",
+  "faucet": "https://faucet.testnet.sui.io",
+  "error": "Too many requests from this client have been sent to the faucet. Please retry later"
+}

@@ -799,7 +799,7 @@ class SHi extends S {
   String get commonTransferTo => 'में स्थानांतरित करें';
 
   @override
-  String commonFromSender(String name, Object senderName) {
+  String commonFromSender(String name) {
     return '$name से';
   }
 
@@ -2880,7 +2880,7 @@ class SHi extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'इस सर्वर पर SSO लॉगिन प्रदाता कॉन्फ़िगर नहीं किए गए हैं';
 
   @override
   String get transferAmountHintZero => '0.00';

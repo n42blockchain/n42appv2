@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'dart:convert';
 import 'dart:io';
 
@@ -60,7 +61,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       );
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = 'Cannot open file picker: $e');
+      setState(() => _error = S.of(context).g_ui_file_picker_failed);
       return;
     }
 
@@ -69,7 +70,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
     final path = result.files.first.path;
     if (path == null) {
       if (!mounted) return;
-      setState(() => _error = 'Cannot access the selected file');
+      setState(() => _error = S.of(context).g_ui_backup_file_access);
       return;
     }
 
@@ -79,7 +80,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       // 快速格式验证（不解密）
       final decoded = jsonDecode(content);
       if (decoded is! Map || decoded['app'] != 'N42Wallet') {
-        setState(() => _error = 'Not a valid N42Wallet backup file');
+        setState(() => _error = S.of(context).g_ui_backup_invalid_file);
         return;
       }
       setState(() {
@@ -88,7 +89,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       });
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = 'Cannot read file: $e');
+      setState(() => _error = S.of(context).g_ui_file_read_failed);
     }
   }
 
@@ -115,12 +116,12 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   Future<void> _import() async {
     var completedWithExit = false;
     if (_backupContent == null) {
-      ToastUtils.show('Please select a backup file first');
+      ToastUtils.show(S.of(context).g_ui_backup_select_file_first);
       return;
     }
     final password = _passwordController.text;
     if (password.isEmpty) {
-      ToastUtils.show('Please enter the backup password');
+      ToastUtils.show(S.of(context).g_ui_backup_enter_password);
       return;
     }
 
@@ -137,7 +138,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       if (!mounted) return;
 
       if (wallets.isEmpty) {
-        setState(() => _error = 'No wallets found in the backup file');
+        setState(() => _error = S.of(context).g_ui_backup_empty);
         return;
       }
 
@@ -166,25 +167,23 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
       if (imported == 0) {
         setState(() {
           _error = skipped > 0
-              ? 'No wallets could be restored from this backup'
-              : 'No wallets found in the backup file';
+              ? S.of(context).g_ui_backup_restore_none
+              : S.of(context).g_ui_backup_empty;
         });
         return;
       }
 
       if (!mounted) return;
-      final msg =
-          'Imported $imported wallet(s)'
-          '${skipped > 0 ? ', $skipped skipped' : ''}';
+      final msg = S.of(context).g_ui_backup_import_result(imported, skipped);
       ToastUtils.show(msg);
       completedWithExit = true;
       Navigator.of(context).pop(true);
-    } on WalletBackupException catch (e) {
+    } on WalletBackupException {
       if (!mounted) return;
-      setState(() => _error = e.message);
+      setState(() => _error = S.of(context).g_ui_backup_import_failed);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.toString());
+      setState(() => _error = S.of(context).g_ui_backup_import_failed);
     } finally {
       if (mounted && !completedWithExit) {
         setState(() => _load = Load.finish);
@@ -198,7 +197,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: 'Import Cloud Backup'),
+      appBar: AppBarWidget(text: S.of(context).g_ui_backup_import),
       body: SafeArea(
         child: Stack(
           children: [
@@ -221,14 +220,14 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.',
+            S.of(context).g_ui_backup_restore_hint,
             style: AppTypography.body.copyWith(
               color: _color(AppThemeKeys.itemSubtitleTextColor),
             ),
           ),
           SizedBox(height: su.setWidth(40)),
 
-          _label('Backup File'),
+          _label(S.of(context).g_ui_backup_file),
           SizedBox(height: su.setWidth(16)),
           containerStyle1(
             context,
@@ -241,7 +240,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               children: [
                 Expanded(
                   child: Text(
-                    _selectedFileName ?? 'No file selected',
+                    _selectedFileName ?? S.of(context).g_ui_backup_no_file,
                     style: AppTypography.body.copyWith(
                       color: _color(
                         _selectedFileName != null
@@ -253,13 +252,13 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
                   ),
                 ),
                 SizedBox(width: su.setWidth(16)),
-                _chip('Select', onTap: _pickFile),
+                _chip(S.of(context).g_key_dex_select_token, onTap: _pickFile),
               ],
             ),
             onTap: _pickFile,
           ),
 
-          _label('Backup Password'),
+          _label(S.of(context).g_ui_backup_password),
           containerStyle1(
             context,
             height: su.setWidth(120),
@@ -267,7 +266,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
             margin: EdgeInsets.symmetric(vertical: su.setWidth(20)),
             child: CommInput(
               type: InputFieldType.password,
-              hintText: 'Enter the password used when creating the backup',
+              hintText: S.of(context).g_ui_backup_restore_password_hint,
               controller: _passwordController,
               maxLines: 1,
               style: AppTypography.bodySm.copyWith(
@@ -304,7 +303,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
               SizedBox(width: su.setWidth(12)),
               Expanded(
                 child: Text(
-                  'Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.',
+                  S.of(context).g_ui_backup_encryption_hint,
                   style: AppTypography.caption.copyWith(
                     color: _color(AppThemeKeys.itemSubtitleTextColor),
                   ),
@@ -361,7 +360,7 @@ class _ImportCloudBackupState extends ConsumerState<ImportCloudBackup> {
           width: double.infinity,
           color: _color(AppThemeKeys.backGroundColor),
           child: AppButton(
-            label: 'Import Wallets',
+            label: S.of(context).g_ui_backup_import_wallets,
             onPressed: () => _import(),
             loading: isLoading,
           ),

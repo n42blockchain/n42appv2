@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_limit_order_model.dart';
 import 'package:n42_wallet/features/wallet/pages/dex_swap/dex_swap_home.dart';
@@ -8,15 +10,28 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 
 /// 限价单列表页面
-class DexLimitOrdersPage extends StatefulWidget {
-  const DexLimitOrdersPage({super.key});
-
+class DexLimitOrdersPage extends ConsumerWidget {
+  final DexSwapApi? api;
+  const DexLimitOrdersPage({super.key, this.api});
   @override
-  State<DexLimitOrdersPage> createState() => _DexLimitOrdersPageState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(currentUserProvider)?.uuid ?? '';
+    return _LimitOrdersView(key: ValueKey(userId), userId: userId, api: api);
+  }
 }
 
-class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
-  final DexSwapApi _api = DexSwapApi();
+class _LimitOrdersView extends StatefulWidget {
+  final String userId;
+  final DexSwapApi? api;
+  const _LimitOrdersView({super.key, required this.userId, this.api});
+  @override
+  State<_LimitOrdersView> createState() => _DexLimitOrdersPageState();
+}
+
+class _DexLimitOrdersPageState extends State<_LimitOrdersView> {
+  late final DexSwapApi _api = widget.api ?? DexSwapApi();
+  int _generation = 0;
+  String? _error;
   List<DexLimitOrderModel> _orders = [];
   bool _loading = true;
   final Set<String> _cancelling = {};
@@ -28,68 +43,101 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
   }
 
   Future<void> _loadOrders() async {
-    setState(() => _loading = true);
-    final result = await _api.getLimitOrders(AppGlobals.userInfo?.uuid ?? '');
-    if (!mounted) return;
-
-    if (!result.error && result.data is List) {
-      _orders = (result.data as List)
+    final generation = ++_generation;
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      if (widget.userId.isEmpty) {
+        _orders = [];
+        return;
+      }
+      final result = await _api.getLimitOrders(widget.userId);
+      if (!mounted || generation != _generation) return;
+      if (result.error || result.data is! List) throw StateError('Load failed');
+      final orders = (result.data as List)
           .map((e) => DexLimitOrderModel.fromJson(e as Map<String, dynamic>))
           .toList();
+      setState(() => _orders = orders);
+    } catch (_) {
+      if (mounted && generation == _generation) {
+        setState(() => _error = S.of(context).g_ui_orders_load_failed);
+      }
+    } finally {
+      if (mounted && generation == _generation) {
+        setState(() => _loading = false);
+      }
     }
-    setState(() => _loading = false);
   }
 
   Future<void> _cancelOrder(DexLimitOrderModel order) async {
-    if (_cancelling.contains(order.orderId)) return;
+    if (_cancelling.contains(order.orderId) || widget.userId.isEmpty) return;
     setState(() => _cancelling.add(order.orderId));
-
-    final result = await _api.cancelLimitOrder(
-      order.orderId,
-      AppGlobals.userInfo?.uuid ?? '',
-    );
-    if (!mounted) return;
-
-    setState(() => _cancelling.remove(order.orderId));
-
-    if (!result.error) {
-      _loadOrders();
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Order cancelled')));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result.data?.toString() ?? 'Cancel failed')),
-      );
+    try {
+      final result = await _api.cancelLimitOrder(order.orderId, widget.userId);
+      if (!mounted) return;
+      if (result.error) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              result.data?.toString() ?? S.of(context).g_ui_order_cancel_failed,
+            ),
+          ),
+        );
+      } else {
+        await _loadOrders();
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui_order_cancelled)),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context).g_ui_order_cancel_failed)),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _cancelling.remove(order.orderId));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarWidget(text: 'Limit Orders'),
-      body: _loading
-          ? const Center(child: CircularProgressIndicator())
-          : _orders.isEmpty
-          ? Center(
-              child: Text(
-                'No limit orders',
-                style: TextStyle(
-                  color: AppColorTokens.of(context).textSubtitle,
-                ),
-              ),
-            )
-          : RefreshIndicator(
-              onRefresh: _loadOrders,
-              child: ListView.separated(
-                padding: EdgeInsets.all(AppSpacing.space6),
-                itemCount: _orders.length,
-                separatorBuilder: (_, _) =>
-                    SizedBox(height: AppSpacing.space4),
-                itemBuilder: (context, index) =>
-                    _buildOrderCard(_orders[index]),
-              ),
-            ),
+      appBar: AppBarWidget(text: S.of(context).g_ui_limit_orders),
+      body: RefreshIndicator(
+        onRefresh: _loadOrders,
+        child: ListView.separated(
+          physics: const AlwaysScrollableScrollPhysics(),
+          padding: EdgeInsets.all(AppSpacing.space6),
+          itemCount: _loading || _error != null || _orders.isEmpty
+              ? 1
+              : _orders.length,
+          separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space4),
+          itemBuilder: (context, index) {
+            if (_loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (_error != null) {
+              return Column(
+                children: [
+                  Text(_error!),
+                  TextButton(
+                    onPressed: _loadOrders,
+                    child: Text(S.of(context).g_key_retry),
+                  ),
+                ],
+              );
+            }
+            if (_orders.isEmpty) {
+              return Center(child: Text(S.of(context).g_ui_no_limit_orders));
+            }
+            return _buildOrderCard(_orders[index]);
+          },
+        ),
+      ),
     );
   }
 
@@ -127,14 +175,16 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
           // Header: pair + status
           Row(
             children: [
-              Text(
-                '${order.symbolIn} → ${order.symbolOut}',
-                style: AppTypography.headline.copyWith(
-                  fontWeight: FontWeight.w600,
-                  color: textColor,
+              Expanded(
+                child: Text(
+                  '${order.symbolIn} → ${order.symbolOut}',
+                  style: AppTypography.headline.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: textColor,
+                  ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                 decoration: BoxDecoration(
@@ -142,7 +192,14 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text(
-                  order.statusLabel,
+                  switch (order.status) {
+                    0 => S.of(context).g_key_airdrop_active,
+                    1 => S.of(context).g_ui_order_triggered,
+                    2 => S.of(context).g_ui_order_executed,
+                    3 => S.of(context).g_iap_cancelled,
+                    4 => S.of(context).g_key_ens_expired,
+                    _ => S.of(context).g_ui_unknown_status,
+                  },
                   style: AppTypography.caption.copyWith(
                     color: statusColor,
                     fontWeight: FontWeight.w600,
@@ -155,25 +212,42 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
 
           // Details
           _detailRow(
-            'Amount',
+            S.of(context).g_key_44,
             '${order.amountIn} ${order.symbolIn}',
             textColor,
             subColor,
           ),
           _detailRow(
-            'Limit Price',
+            S.of(context).g_ui_limit_price,
             '${order.limitPrice} ${order.symbolOut}/${order.symbolIn}',
             textColor,
             subColor,
           ),
-          _detailRow('Chain', order.chain, textColor, subColor),
-          _detailRow('Created', _formatDate(createdDate), textColor, subColor),
+          _detailRow(
+            S.of(context).g_key_dex_chain,
+            order.chain,
+            textColor,
+            subColor,
+          ),
+          _detailRow(
+            S.of(context).g_key_aa_created,
+            _formatDate(createdDate),
+            textColor,
+            subColor,
+          ),
           if (order.isActive)
-            _detailRow('Expires', _formatDate(expiryDate), textColor, subColor),
+            _detailRow(
+              S.of(context).g_key_ens_expires,
+              _formatDate(expiryDate),
+              textColor,
+              subColor,
+            ),
           if (order.txHash.isNotEmpty)
             _detailRow(
               'Tx',
-              '${order.txHash.substring(0, 10)}...',
+              order.txHash.length > 10
+                  ? '${order.txHash.substring(0, 10)}...'
+                  : order.txHash,
               textColor,
               subColor,
             ),
@@ -202,7 +276,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : Text(
-                        'Cancel Order',
+                        S.of(context).g_ui_cancel_order,
                         style: AppTypography.caption.copyWith(
                           fontWeight: FontWeight.w400,
                         ),
@@ -232,7 +306,7 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
                   ),
                 ),
                 child: Text(
-                  'Go to Swap',
+                  S.of(context).g_key_stake_go_to_swap,
                   style: AppTypography.caption.copyWith(
                     fontWeight: FontWeight.w400,
                   ),
@@ -262,12 +336,15 @@ class _DexLimitOrdersPageState extends State<DexLimitOrdersPage> {
               fontWeight: FontWeight.w400,
             ),
           ),
-          const Spacer(),
-          Text(
-            value,
-            style: AppTypography.caption.copyWith(
-              color: textColor,
-              fontWeight: FontWeight.w400,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTypography.caption.copyWith(
+                color: textColor,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
         ],

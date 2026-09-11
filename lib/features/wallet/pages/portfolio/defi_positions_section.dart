@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/core/api_hub/datasources/debank_datasource.dart';
 import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_models.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
+import 'package:n42_wallet/generated/l10n.dart';
 
 /// DeFi positions section for the Portfolio page.
 ///
@@ -18,8 +19,13 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 /// - Claimable rewards
 class DeFiPositionsSection extends StatefulWidget {
   final String walletAddress;
+  final Future<DeFiPortfolio> Function(String)? loadPortfolio;
 
-  const DeFiPositionsSection({super.key, required this.walletAddress});
+  const DeFiPositionsSection({
+    super.key,
+    required this.walletAddress,
+    this.loadPortfolio,
+  });
 
   @override
   State<DeFiPositionsSection> createState() => _DeFiPositionsSectionState();
@@ -29,6 +35,8 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
   DeFiPortfolio? _portfolio;
   bool _loading = true;
   String? _error;
+  int _requestId = 0;
+  bool _showAll = false;
 
   @override
   void initState() {
@@ -36,26 +44,38 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
     _loadPositions();
   }
 
+  @override
+  void didUpdateWidget(covariant DeFiPositionsSection oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.walletAddress != widget.walletAddress) {
+      _portfolio = null;
+      _showAll = false;
+      _loadPositions();
+    }
+  }
+
   Future<void> _loadPositions() async {
+    final requestId = ++_requestId;
     setState(() {
       _loading = true;
       _error = null;
     });
 
     try {
-      final portfolio = await DeBankDatasource.getPortfolio(
-        widget.walletAddress,
-      );
-      if (mounted) {
+      final portfolio =
+          await (widget.loadPortfolio ?? DeBankDatasource.getPortfolio)(
+            widget.walletAddress,
+          );
+      if (mounted && requestId == _requestId) {
         setState(() {
           _portfolio = portfolio;
           _loading = false;
         });
       }
     } catch (e) {
-      if (mounted) {
+      if (mounted && requestId == _requestId) {
         setState(() {
-          _error = 'Failed to load DeFi positions';
+          _error = S.of(context).g_audit_defi_error;
           _loading = false;
         });
       }
@@ -90,7 +110,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'DeFi Positions',
+                S.of(context).g_audit_defi_positions,
                 style: AppTypography.body.copyWith(
                   fontWeight: FontWeight.w600,
                   color: AppColorTokens.of(context).textPrimary,
@@ -113,16 +133,19 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
         SizedBox(height: AppSpacing.space2),
 
         // Protocol list
-        ...portfolio.protocols.take(10).map((p) => _buildProtocolCard(p)),
+        ...(_showAll ? portfolio.protocols : portfolio.protocols.take(10)).map(
+          (p) => _buildProtocolCard(p),
+        ),
 
         if (portfolio.protocolCount > 10)
           Center(
             child: TextButton(
-              onPressed: () {
-                // TODO: navigate to full DeFi positions page
-              },
+              key: const ValueKey('defi_view_all'),
+              onPressed: () => setState(() => _showAll = !_showAll),
               child: Text(
-                'View all ${portfolio.protocolCount} protocols',
+                _showAll
+                    ? S.of(context).g_audit_show_less
+                    : S.of(context).g_key_aa_view_all,
                 style: AppTypography.caption.copyWith(
                   color: AppColorTokens.of(context).brand,
                 ),
@@ -294,15 +317,16 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
       ),
       child: Row(
         children: [
-          Text(
-            '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
-            style: AppTypography.caption.copyWith(
-              color: prefix == '-'
-                  ? AppColorTokens.of(context).danger
-                  : AppColorTokens.of(context).textSubtitle,
+          Expanded(
+            child: Text(
+              '$prefix ${token.amount.toStringAsFixed(4)} ${token.symbol}',
+              style: AppTypography.caption.copyWith(
+                color: prefix == '-'
+                    ? AppColorTokens.of(context).danger
+                    : AppColorTokens.of(context).textSubtitle,
+              ),
             ),
           ),
-          const Spacer(),
           Text(
             fmtUsd(token.usdValue),
             style: AppTypography.caption.copyWith(
@@ -327,7 +351,7 @@ class _DeFiPositionsSectionState extends State<DeFiPositionsSection> {
             ),
             SizedBox(height: AppSpacing.space4),
             Text(
-              'Loading DeFi positions...',
+              S.of(context).g_audit_defi_loading,
               style: AppTypography.caption.copyWith(
                 color: AppColorTokens.of(context).textSubtitle,
               ),

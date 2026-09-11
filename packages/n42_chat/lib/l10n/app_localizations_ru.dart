@@ -804,8 +804,8 @@ class SRu extends S {
   String get commonTransferTo => 'Перевести';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'От $senderName';
+  String commonFromSender(String name) {
+    return 'От $name';
   }
 
   @override
@@ -1232,7 +1232,7 @@ class SRu extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Функция в разработке...';
+    return 'Функция $feature в разработке…';
   }
 
   @override
@@ -2893,7 +2893,7 @@ class SRu extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'На этом сервере не настроены провайдеры входа через SSO';
 
   @override
   String get transferAmountHintZero => '0,00';

@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 // Copyright 2021-2026 N42 Inc. All rights reserved.
 // Use of this source code is governed by a dual license:
 // Apache License 2.0 and MIT License.
@@ -23,7 +24,7 @@ class WalletPageRiverpod extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Wallet'),
+        title: Text(S.of(context).g_key_6),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh),
@@ -131,9 +132,9 @@ class _CoinListSection extends StatelessWidget {
     return coinsAsync.when(
       data: (coins) {
         if (coins.isEmpty) {
-          return const Padding(
+          return Padding(
             padding: EdgeInsets.all(32),
-            child: Center(child: Text('No coins yet')),
+            child: Center(child: Text(S.of(context).g_ui_no_coins)),
           );
         }
 
@@ -159,11 +160,11 @@ class _CoinListSection extends StatelessWidget {
                 color: AppColorTokens.of(context).danger,
               ),
               const SizedBox(height: 16),
-              Text('Failed to load coins: $error'),
+              Text(S.of(context).g_ui_coins_load_failed),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => ref.invalidate(coinListProvider),
-                child: const Text('Retry'),
+                child: Text(S.of(context).g_key_retry),
               ),
             ],
           ),
@@ -216,13 +217,13 @@ class _WalletLoadingSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CircularProgressIndicator(),
           SizedBox(height: 16),
-          Text('Loading wallet...'),
+          Text(S.of(context).g_ui_wallet_loading),
         ],
       ),
     );
@@ -280,7 +281,7 @@ class _WalletErrorWidget extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Failed to load wallet',
+              S.of(context).g_ui_wallet_load_failed,
               style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 8),
@@ -295,7 +296,7 @@ class _WalletErrorWidget extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: Text(S.of(context).g_key_retry),
             ),
           ],
         ),
@@ -320,10 +321,13 @@ class _EmptyWalletWidget extends StatelessWidget {
             color: AppColorTokens.of(context).textTertiary,
           ),
           const SizedBox(height: 16),
-          Text('No Wallet Yet', style: Theme.of(context).textTheme.titleLarge),
+          Text(
+            S.of(context).g_ui_no_wallet,
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
           const SizedBox(height: 8),
           Text(
-            'Create or import a wallet to get started',
+            S.of(context).g_ui_wallet_get_started,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               color: AppColorTokens.of(context).textTertiary,
             ),
@@ -334,7 +338,7 @@ class _EmptyWalletWidget extends StatelessWidget {
               // Navigate to create wallet
             },
             icon: const Icon(Icons.add),
-            label: const Text('Create Wallet'),
+            label: Text(S.of(context).g_ui_create_wallet),
           ),
         ],
       ),

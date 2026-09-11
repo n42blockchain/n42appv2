@@ -4,6 +4,7 @@
 # Usage: ./scripts/build_ipa.sh [OPTIONS]
 #   --no-bump       Skip build number auto-increment (rebuild same version)
 #   --set-version X Set App Store version (CFBundleShortVersionString), e.g. --set-version 1.0.17
+#   --dart-define-from-file PATH  Load private release configuration without logging it
 #
 # Version strategy:
 #   - pubspec.yaml is the single source of truth for both version fields.
@@ -14,11 +15,11 @@ set -e
 
 MIN_IOS_VERSION="16.0"
 PUBSPEC="pubspec.yaml"
-PBXPROJ="ios/Runner.xcodeproj/project.pbxproj"
 
 # === Parse arguments ===
 NO_BUMP=false
 NEW_APP_VERSION=""
+BUILD_ARGS=()
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -27,7 +28,13 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     --set-version)
+      [ $# -ge 2 ] || { echo "--set-version requires a value"; exit 1; }
       NEW_APP_VERSION="$2"
+      shift 2
+      ;;
+    --dart-define-from-file)
+      [ $# -ge 2 ] && [ -r "$2" ] || { echo "Release configuration file is missing or unreadable"; exit 1; }
+      BUILD_ARGS+=("--dart-define-from-file=$2")
       shift 2
       ;;
     *)
@@ -65,12 +72,8 @@ if [ "$RESOLVED_VERSION" != "$CURRENT_PUBSPEC" ]; then
   echo "=== Flutter version: $CURRENT_PUBSPEC -> $RESOLVED_VERSION ==="
 fi
 
-# Target-level values override Flutter's generated xcconfig. Keep every Runner
-# and NotificationExtension build configuration synchronized with pubspec.
-sed -E -i '' \
-  "s/FLUTTER_BUILD_NAME = [^;]+;/FLUTTER_BUILD_NAME = $CURRENT_BUILD_NAME;/g; \
-   s/FLUTTER_BUILD_NUMBER = [^;]+;/FLUTTER_BUILD_NUMBER = $CURRENT_BUILD_NUMBER;/g" \
-  "$PBXPROJ"
+# Runner and NotificationExtension inherit Flutter's generated version settings.
+# The build flags below update that shared source without rewriting the project.
 
 echo ""
 echo "=== Building IPA: $CURRENT_BUILD_NAME ($CURRENT_BUILD_NUMBER) ==="
@@ -79,10 +82,12 @@ echo ""
 echo "=== Building iOS archive ==="
 flutter build ipa \
   --build-name="$CURRENT_BUILD_NAME" \
-  --build-number="$CURRENT_BUILD_NUMBER"
+  --build-number="$CURRENT_BUILD_NUMBER" \
+  "${BUILD_ARGS[@]}"
 
 echo "=== Fixing objective_c.framework in archive ==="
 ARCHIVE_PATH="build/ios/archive/Runner.xcarchive"
+bash scripts/check_ios_version.sh "$ARCHIVE_PATH/Products/Applications/Runner.app"
 ARCHIVE_OBJ_C="$ARCHIVE_PATH/Products/Applications/Runner.app/Frameworks/objective_c.framework/objective_c"
 ARCHIVE_OBJ_C_PLIST="$ARCHIVE_PATH/Products/Applications/Runner.app/Frameworks/objective_c.framework/Info.plist"
 

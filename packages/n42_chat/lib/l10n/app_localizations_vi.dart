@@ -793,8 +793,8 @@ class SVi extends S {
   String get commonTransferTo => 'Chuyen den';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'Tu $senderName';
+  String commonFromSender(String name) {
+    return 'Từ $name';
   }
 
   @override
@@ -1217,7 +1217,7 @@ class SVi extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Tinh nang dang phat trien...';
+    return 'Tính năng $feature đang được phát triển…';
   }
 
   @override
@@ -5483,7 +5483,7 @@ class SVi extends S {
   }
 
   @override
-  String get redPacketStatsTotal => 'Total: null null';
+  String get redPacketStatsTotal => 'tổng cộng';
 
   @override
   String redPacketGrabbedViral(String amount, String token) {

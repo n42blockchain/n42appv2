@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Rotes-Paket-Details anzeigen",
   "commonEnterTransferAmount": "Überweisungsbetrag eingeben",
   "commonTransferTo": "Überweisen an",
-  "commonFromSender": "Von {senderName}",
+  "commonFromSender": "Von {name}",
   "commonConfirmReceive": "Empfang bestätigen",
   "groupProfile": "Gruppeninfo",
   "groupRemoveMember": "Aus Gruppe entfernen",

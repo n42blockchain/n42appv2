@@ -57,7 +57,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     final email = _emailController.text.trim();
     if (!_validateEmail(email)) return;
     await _runRequest(
-      successMessage: 'Verification code request sent',
+      successMessage: S.of(context).g_ui_email_code_sent,
       request: () => _api.sendUpdateEmailCode(email),
       onSuccess: () {
         _step = _ChangeEmailStep.code;
@@ -71,7 +71,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     final email = _emailController.text.trim();
     if (!_validateEmail(email)) return;
     await _runRequest(
-      successMessage: 'Verification code request sent',
+      successMessage: S.of(context).g_ui_email_code_sent,
       request: () => _api.sendUpdateEmailCode(email),
       onSuccess: _startCountdown,
     );
@@ -81,7 +81,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     final code = _codeController.text.trim();
     if (!_validateCode(code)) return;
     await _runRequest(
-      successMessage: 'Verification code accepted',
+      successMessage: S.of(context).g_ui_email_code_accepted,
       request: () => _api.verifyUpdateEmailCode(code),
       onSuccess: () => _step = _ChangeEmailStep.update,
     );
@@ -96,7 +96,6 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
       request: () => _api.updateEmail(newEmail: email, code: code),
       onSuccess: () async {
         await _syncLocalEmail(email);
-        _statusText = 'Email updated';
       },
     );
   }
@@ -109,7 +108,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     if (_loading) return;
     setState(() {
       _loading = true;
-      _statusText = 'Sending request...';
+      _statusText = S.of(context).g_ui_sending_request;
       _statusIsError = false;
     });
     try {
@@ -139,7 +138,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
   bool _validateEmail(String email) {
     final ok = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(email);
     setState(() {
-      _emailError = ok ? null : 'Enter a valid email address';
+      _emailError = ok ? null : S.of(context).g_ui_invalid_email;
     });
     return ok;
   }
@@ -147,7 +146,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
   bool _validateCode(String code) {
     final ok = RegExp(r'^\d{6}$').hasMatch(code);
     setState(() {
-      _codeError = ok ? null : 'Enter the 6-digit verification code';
+      _codeError = ok ? null : S.of(context).g_google_auth_key4;
     });
     return ok;
   }
@@ -199,7 +198,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
   Widget build(BuildContext context) {
     final colors = AppColorTokens.of(context);
     return Scaffold(
-      appBar: AppBarWidget(text: 'Change Email'),
+      appBar: AppBarWidget(text: S.of(context).g_ui_change_email),
       backgroundColor: colors.bgBase,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -239,13 +238,13 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Account email',
+            S.of(context).g_ui_account_email,
             style: AppTypography.headline.copyWith(color: colors.textPrimary),
           ),
           SizedBox(height: AppSpacing.space2),
           Text(
             currentEmail == null || currentEmail.isEmpty
-                ? 'No email is cached on this device'
+                ? S.of(context).g_ui_no_cached_email
                 : currentEmail,
             style: AppTypography.bodySm.copyWith(color: colors.textSubtitle),
           ),
@@ -258,19 +257,19 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
     return Row(
       children: [
         _StepPill(
-          label: 'New email',
+          label: S.of(context).g_ui_new_email,
           active: _step.index >= _ChangeEmailStep.email.index,
           colors: colors,
         ),
         SizedBox(width: AppSpacing.space2),
         _StepPill(
-          label: 'Verify code',
+          label: S.of(context).g_ui_verify_code,
           active: _step.index >= _ChangeEmailStep.code.index,
           colors: colors,
         ),
         SizedBox(width: AppSpacing.space2),
         _StepPill(
-          label: 'Update',
+          label: S.of(context).g_ui_update,
           active: _step.index >= _ChangeEmailStep.update.index,
           colors: colors,
         ),
@@ -299,7 +298,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'New email address',
+          S.of(context).g_ui_new_email,
           style: AppTypography.bodyStrong.copyWith(color: colors.textPrimary),
         ),
         SizedBox(height: AppSpacing.space4),
@@ -329,7 +328,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
         ),
         SizedBox(height: AppSpacing.space8),
         changeEmailPrimaryButton(
-          label: 'Send code',
+          label: S.of(context).g_ui_send_code,
           onPressed: _sendCode,
           loading: _loading,
           accentColor: colors.brand,
@@ -343,7 +342,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Verification code',
+          S.of(context).g_ui_verification_code,
           style: AppTypography.bodyStrong.copyWith(color: colors.textPrimary),
         ),
         SizedBox(height: AppSpacing.space4),
@@ -372,13 +371,13 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
         ),
         SizedBox(height: AppSpacing.space4),
         changeEmailPrimaryButton(
-          label: 'Verify code',
+          label: S.of(context).g_ui_verify_code,
           onPressed: _verifyCode,
           loading: _loading,
           accentColor: colors.brand,
         ),
         changeEmailBackButton(
-          label: 'Back to email',
+          label: S.of(context).g_ui_back_email,
           onPressed: _loading ? () {} : _resetToEmailStep,
           subColor: colors.textSubtitle,
         ),
@@ -391,7 +390,7 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Confirm update',
+          S.of(context).g_ui_confirm_update,
           style: AppTypography.bodyStrong.copyWith(color: colors.textPrimary),
         ),
         SizedBox(height: AppSpacing.space2),
@@ -401,13 +400,13 @@ class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
         ),
         SizedBox(height: AppSpacing.space8),
         changeEmailPrimaryButton(
-          label: 'Update email',
+          label: S.of(context).g_ui_update_email,
           onPressed: _updateEmail,
           loading: _loading,
           accentColor: colors.brand,
         ),
         changeEmailBackButton(
-          label: 'Back to code',
+          label: S.of(context).g_ui_back_code,
           onPressed: _loading
               ? () {}
               : () => setState(() => _step = _ChangeEmailStep.code),

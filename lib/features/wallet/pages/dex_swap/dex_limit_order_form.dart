@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'dex_swap_constants.dart';
+import 'dex_execution_guard.dart';
 import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/api/dex_swap_api.dart';
 import 'package:n42_wallet/features/wallet/models/dex/dex_token_model.dart';
@@ -9,16 +12,39 @@ import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 /// 限价单表单组件
-class DexLimitOrderForm extends StatefulWidget {
+class DexLimitOrderForm extends ConsumerWidget {
   final String chain;
-  const DexLimitOrderForm({super.key, required this.chain});
+  final DexSwapApi? api;
+  const DexLimitOrderForm({super.key, required this.chain, this.api});
 
   @override
-  State<DexLimitOrderForm> createState() => _DexLimitOrderFormState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(currentUserProvider)?.uuid ?? '';
+    return _LimitOrderForm(
+      key: ValueKey((chain, userId)),
+      chain: chain,
+      userId: userId,
+      api: api,
+    );
+  }
 }
 
-class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
-  final DexSwapApi _dexApi = DexSwapApi();
+class _LimitOrderForm extends StatefulWidget {
+  final String chain;
+  final String userId;
+  final DexSwapApi? api;
+  const _LimitOrderForm({
+    super.key,
+    required this.chain,
+    required this.userId,
+    this.api,
+  });
+  @override
+  State<_LimitOrderForm> createState() => _DexLimitOrderFormState();
+}
+
+class _DexLimitOrderFormState extends State<_LimitOrderForm> {
+  late final DexSwapApi _dexApi = widget.api ?? DexSwapApi();
   final _amountCtrl = TextEditingController();
   final _priceCtrl = TextEditingController();
 
@@ -35,6 +61,17 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     '30d': 2592000,
   };
   int _expiresIn = 86400;
+
+  @override
+  void initState() {
+    super.initState();
+    _amountCtrl.addListener(_inputChanged);
+    _priceCtrl.addListener(_inputChanged);
+  }
+
+  void _inputChanged() {
+    if (mounted) setState(() {});
+  }
 
   @override
   void dispose() {
@@ -63,53 +100,71 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     }
   }
 
-  bool get _canSubmit =>
-      _tokenIn != null &&
-      _tokenOut != null &&
-      _amountCtrl.text.trim().isNotEmpty &&
-      _priceCtrl.text.trim().isNotEmpty &&
-      _submitLoad != Load.loading;
+  bool _positiveDecimal(String value) =>
+      RegExp(r'^(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)$').hasMatch(value) &&
+      RegExp(r'[1-9]').hasMatch(value);
+
+  bool get _canSubmit {
+    final input = _tokenIn;
+    final output = _tokenOut;
+    if (widget.userId.isEmpty ||
+        input == null ||
+        output == null ||
+        input.chain != widget.chain ||
+        output.chain != widget.chain ||
+        input.address.toLowerCase() == output.address.toLowerCase() ||
+        (isDexNativeToken(input.address) && isDexNativeToken(output.address))) {
+      return false;
+    }
+    final amount = _amountCtrl.text.trim();
+    final fraction = amount.contains('.') ? amount.split('.').last.length : 0;
+    return _positiveDecimal(amount) &&
+        fraction <= input.decimals &&
+        dexToWei(amount, input.decimals) > BigInt.zero &&
+        _positiveDecimal(_priceCtrl.text.trim()) &&
+        _submitLoad != Load.loading;
+  }
 
   Future<void> _submit() async {
     if (!_canSubmit) return;
-
     setState(() {
       _submitLoad = Load.loading;
       _errorMsg = '';
     });
-
-    final result = await _dexApi.createLimitOrder(
-      uuid: AppGlobals.userInfo?.uuid ?? '',
-      chain: widget.chain,
-      tokenIn: _tokenIn!.address,
-      tokenOut: _tokenOut!.address,
-      symbolIn: _tokenIn!.symbol,
-      symbolOut: _tokenOut!.symbol,
-      amountIn: _amountCtrl.text.trim(),
-      limitPrice: _priceCtrl.text.trim(),
-      expiresIn: _expiresIn,
-    );
-
-    if (!mounted) return;
-
-    if (result.error) {
-      setState(() {
-        _submitLoad = Load.finish;
-        _errorMsg = result.data?.toString() ?? 'Failed';
-      });
-      return;
+    try {
+      final result = await _dexApi.createLimitOrder(
+        uuid: widget.userId,
+        chain: widget.chain,
+        tokenIn: _tokenIn!.address,
+        tokenOut: _tokenOut!.address,
+        symbolIn: _tokenIn!.symbol,
+        symbolOut: _tokenOut!.symbol,
+        amountIn: _amountCtrl.text.trim(),
+        limitPrice: _priceCtrl.text.trim(),
+        expiresIn: _expiresIn,
+      );
+      if (!mounted) return;
+      if (result.error) {
+        setState(
+          () => _errorMsg =
+              result.data?.toString() ?? S.of(context).g_ui_order_create_failed,
+        );
+        return;
+      }
+      _amountCtrl.clear();
+      _priceCtrl.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context).g_ui_order_created),
+          backgroundColor: AppColorTokens.of(context).success,
+        ),
+      );
+    } catch (_) {
+      if (mounted)
+        setState(() => _errorMsg = S.of(context).g_ui_order_create_failed);
+    } finally {
+      if (mounted) setState(() => _submitLoad = Load.finish);
     }
-
-    setState(() => _submitLoad = Load.finish);
-    _amountCtrl.clear();
-    _priceCtrl.clear();
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Limit order created'),
-        backgroundColor: AppColorTokens.of(context).success,
-      ),
-    );
   }
 
   @override
@@ -132,7 +187,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
           // Amount input
           _buildInput(
             controller: _amountCtrl,
-            label: 'Amount',
+            label: S.of(context).g_key_44,
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
@@ -149,8 +204,12 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
           // Limit price input
           _buildInput(
             controller: _priceCtrl,
-            label:
-                'Limit Price (${_tokenOut?.symbol ?? "?"} per ${_tokenIn?.symbol ?? "?"})',
+            label: S
+                .of(context)
+                .g_ui_limit_price_pair(
+                  _tokenOut?.symbol ?? '?',
+                  _tokenIn?.symbol ?? '?',
+                ),
             hint: '0.0',
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
           ),
@@ -167,8 +226,8 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
           ],
 
           // Submit button
-          SizedBox(
-            height: 48,
+          ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 48),
             child: ElevatedButton(
               onPressed: _canSubmit ? _submit : null,
               style: ElevatedButton.styleFrom(
@@ -188,7 +247,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
                       ),
                     )
                   : Text(
-                      'Place Limit Order',
+                      S.of(context).g_ui_order_place,
                       style: AppTypography.headline.copyWith(
                         fontWeight: FontWeight.w600,
                       ),
@@ -206,7 +265,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
     required VoidCallback onTap,
   }) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: _submitLoad == Load.loading ? null : onTap,
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: AppSpacing.space4,
@@ -218,24 +277,33 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
         ),
         child: Row(
           children: [
-            Text(
-              label,
-              style: AppTypography.caption.copyWith(
-                color: AppColorTokens.of(context).textSubtitle,
-                fontWeight: FontWeight.w400,
+            Expanded(
+              child: Text(
+                label,
+                style: AppTypography.caption.copyWith(
+                  color: AppColorTokens.of(context).textSubtitle,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-            const Spacer(),
-            Text(
-              token?.symbol ?? 'Select',
-              style: AppTypography.headline.copyWith(
-                fontWeight: FontWeight.w600,
-                color: AppColorTokens.of(context).textPrimary,
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                token?.symbol ?? S.of(context).g_key_bridge_select,
+                textAlign: TextAlign.end,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.headline.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: AppColorTokens.of(context).textPrimary,
+                ),
               ),
             ),
             const SizedBox(width: 4),
             Icon(
-              Icons.chevron_right,
+              Directionality.of(context) == TextDirection.rtl
+                  ? Icons.chevron_left
+                  : Icons.chevron_right,
               size: 20,
               color: AppColorTokens.of(context).textSubtitle,
             ),
@@ -253,6 +321,7 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
   }) {
     return TextField(
       controller: controller,
+      enabled: _submitLoad != Load.loading,
       keyboardType: keyboardType,
       style: AppTypography.headline.copyWith(
         fontWeight: FontWeight.w400,
@@ -271,28 +340,36 @@ class _DexLimitOrderFormState extends State<DexLimitOrderForm> {
   }
 
   Widget _buildExpiryRow() {
-    return Row(
+    return Wrap(
+      spacing: 6,
+      runSpacing: 6,
+      crossAxisAlignment: WrapCrossAlignment.center,
       children: [
         Text(
-          'Expires in: ',
+          S.of(context).g_ui_expires_in,
           style: AppTypography.caption.copyWith(
             color: AppColorTokens.of(context).textSubtitle,
             fontWeight: FontWeight.w400,
           ),
         ),
-        const Spacer(),
         ..._expiryOptions.entries.map(
           (e) => Padding(
             padding: const EdgeInsets.only(left: 6),
             child: ChoiceChip(
               label: Text(
-                e.key,
+                e.value >= 604800
+                    ? S.of(context).g_ui_days('${e.value ~/ 86400}')
+                    : S.of(context).g_ui_hours('${e.value ~/ 3600}'),
                 style: AppTypography.caption,
               ),
               selected: _expiresIn == e.value,
-              onSelected: (_) => setState(() => _expiresIn = e.value),
+              onSelected: _submitLoad == Load.loading
+                  ? null
+                  : (_) => setState(() => _expiresIn = e.value),
               selectedColor: AppColorTokens.of(context).brand,
-              labelStyle: AppTypography.caption.copyWith(color: _expiresIn == e.value ? Colors.white : null),
+              labelStyle: AppTypography.caption.copyWith(
+                color: _expiresIn == e.value ? Colors.white : null,
+              ),
               side: BorderSide.none,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               visualDensity: VisualDensity.compact,

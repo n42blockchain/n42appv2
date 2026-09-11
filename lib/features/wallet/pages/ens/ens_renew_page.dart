@@ -72,7 +72,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
         setState(() => _isLoadingPrice = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Load ENS price failed: $e'),
+            content: Text(S.of(context).g_ui_ens_price_failed),
             backgroundColor: AppColorTokens.of(context).danger,
           ),
         );
@@ -121,7 +121,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
       setState(() => _isRenewing = false);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('ENS renew failed: $e'),
+          content: Text(S.of(context).g_ui_ens_renew_failed),
           backgroundColor: AppColorTokens.of(context).danger,
         ),
       );
@@ -258,9 +258,7 @@ class _EnsRenewPageState extends State<EnsRenewPage> {
                   margin: EdgeInsets.only(
                     right: years != 5 ? ScreenUtil().setWidth(12) : 0,
                   ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   decoration: BoxDecoration(
                     color: _color(
                       isSelected

@@ -40,7 +40,7 @@ class BatchInfoCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Token: $tokenSymbol',
+                  S.of(context).g_ui_token_value(tokenSymbol),
                   style: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColorTokens.of(context).textPrimary,
@@ -137,7 +137,7 @@ class BatchAddItemForm extends StatelessWidget {
             controller: addressController,
             decoration: InputDecoration(
               hintText: '0x...',
-              labelText: 'Address',
+              labelText: S.of(context).g_key_address,
               suffixIcon: IconButton(
                 icon: const Icon(Icons.paste),
                 onPressed: onPasteAddress,
@@ -156,7 +156,7 @@ class BatchAddItemForm extends StatelessWidget {
                   ),
                   decoration: InputDecoration(
                     hintText: '0.0',
-                    labelText: 'Amount',
+                    labelText: S.of(context).g_key_44,
                     suffixText: tokenSymbol,
                   ),
                 ),
@@ -165,9 +165,9 @@ class BatchAddItemForm extends StatelessWidget {
               Expanded(
                 child: TextField(
                   controller: memoController,
-                  decoration: const InputDecoration(
-                    hintText: 'Optional',
-                    labelText: 'Memo',
+                  decoration: InputDecoration(
+                    hintText: S.of(context).g_ui_optional,
+                    labelText: S.of(context).g_ui_memo,
                   ),
                 ),
               ),

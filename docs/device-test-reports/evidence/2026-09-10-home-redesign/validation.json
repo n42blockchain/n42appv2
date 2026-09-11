@@ -1,0 +1,60 @@
+{
+  "test_suite": "07:00 +3958: All tests passed!",
+  "line_coverage": {
+    "hit": 24018,
+    "found": 121733,
+    "files": 911
+  },
+  "scopes": {
+    "wallet_home": {
+      "hit": 692,
+      "found": 945,
+      "files": 6
+    },
+    "wallet_refresh": {
+      "hit": 292,
+      "found": 552,
+      "files": 4
+    }
+  },
+  "device_navigation": {
+    "ios": {
+      "result": "01:06 +1: All tests passed!",
+      "manual_refresh": true,
+      "row_height": 59.849333333333334
+    },
+    "android": {
+      "result": "01:17 +1: All tests passed!",
+      "manual_refresh": true,
+      "row_height": 53.748
+    }
+  },
+  "automatic_refresh_minutes": 5,
+  "normal_apps_installed": {
+    "android": true,
+    "ios": true
+  },
+  "android_installed_version": {
+    "name": "2.4.8",
+    "code": "2026072637"
+  },
+  "ios_installed_build": {
+    "name": "2.4.8",
+    "code": "2026072637",
+    "bundle": "ai.n42.www"
+  },
+  "completed_at": "2026-09-11 America/Toronto",
+  "screenshots": {
+    "android": "android-after.png",
+    "ios": "ios-after.png"
+  },
+  "source_hashes_match": true,
+  "checks": {
+    "full_analyze_errors": 0,
+    "full_analyze_warnings": 0,
+    "integration_analyze_clean": true,
+    "python_tests_passed": 8,
+    "wallet_home_module_tests_passed": 35,
+    "wallet_refresh_module_tests_passed": 44
+  }
+}

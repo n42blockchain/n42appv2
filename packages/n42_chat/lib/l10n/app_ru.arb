@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Посмотреть детали красного конверта",
   "commonEnterTransferAmount": "Введите сумму перевода",
   "commonTransferTo": "Перевести",
-  "commonFromSender": "От {senderName}",
+  "commonFromSender": "От {name}",
   "commonConfirmReceive": "Подтвердить получение",
   "groupProfile": "Информация о группе",
   "groupRemoveMember": "Удалить из группы",
@@ -397,7 +397,7 @@
   "chatCalling": "Вызов...",
   "chatRinging": "Звонок...",
   "chatInCall": "В разговоре",
-  "commonFeatureInDevelopment": "Функция в разработке...",
+  "commonFeatureInDevelopment": "Функция {feature} в разработке…",
   "chatCollectMessages": "Сохранено {count} сообщений",
   "commonMemberCount": "{count} участников",
   "groupDone": "Готово({count})",
@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "Не удалось изменить адрес электронной почты",
   "blocAuthVerificationCodeInvalid": "Код подтверждения неверен или срок его действия истек.",
   "blocAuthSessionExpired": "Срок сеанса истек, пожалуйста, войдите снова",
-  "blocAuthSessionIncomplete": "Данные сеанса неполные, пожалуйста, войдите снова"
+  "blocAuthSessionIncomplete": "Данные сеанса неполные, пожалуйста, войдите снова",
+  "authSsoNotConfigured": "На этом сервере не настроены провайдеры входа через SSO"
 }

@@ -1,4 +1,6 @@
 class DexQuoteModel {
+  final String accountAddress;
+  final String txValue;
   final String orderId;
   final String tokenInSymbol;
   final String tokenOutSymbol;
@@ -17,6 +19,8 @@ class DexQuoteModel {
   final String chain;
 
   const DexQuoteModel({
+    this.txValue = '0',
+    this.accountAddress = '',
     required this.orderId,
     required this.tokenInSymbol,
     required this.tokenOutSymbol,
@@ -34,12 +38,30 @@ class DexQuoteModel {
   factory DexQuoteModel.fromJson(
     Map<String, dynamic> json, {
     int slippageBps = 50,
+    int? outputDecimals,
   }) {
-    final amountOut = json['amount_out'] as String? ?? '';
-    final minOut =
-        json['min_amount_out'] as String? ??
-        _calcMinOut(amountOut, slippageBps);
+    final raw = json['amount_out_raw']?.toString();
+    final rawAmount = raw == null ? null : BigInt.tryParse(raw);
+    if (raw != null && (rawAmount == null || rawAmount <= BigInt.zero)) {
+      throw const FormatException('Invalid raw quote output');
+    }
+    if (slippageBps < 0 || slippageBps > 10000) {
+      throw const FormatException('Invalid slippage');
+    }
+    final hasRaw = rawAmount != null && outputDecimals != null;
+    final amountOut = hasRaw
+        ? dexBaseUnitsToDecimal(rawAmount, outputDecimals)
+        : json['amount_out'] as String? ?? '';
+    final minOut = hasRaw
+        ? dexBaseUnitsToDecimal(
+            rawAmount * BigInt.from(10000 - slippageBps) ~/ BigInt.from(10000),
+            outputDecimals,
+          )
+        : json['min_amount_out'] as String? ??
+              _calcMinOut(amountOut, slippageBps);
     return DexQuoteModel(
+      accountAddress: json['user_addr']?.toString() ?? '',
+      txValue: json['tx_value']?.toString() ?? '0',
       orderId: json['order_id'] as String? ?? '',
       tokenInSymbol: json['token_in_symbol'] as String? ?? '',
       tokenOutSymbol: json['token_out_symbol'] as String? ?? '',
@@ -62,8 +84,6 @@ class DexQuoteModel {
     return double.tryParse(clean) ?? 0.0;
   }
 
-  static final RegExp _trailingZeros = RegExp(r'0+$');
-
   static String _calcMinOut(String amountOut, int slippageBps) {
     try {
       // Split into integer and fractional parts
@@ -79,16 +99,26 @@ class DexQuoteModel {
       final scale = BigInt.from(10).pow(fracLen);
       final total = intPart * scale + fracPart; // amount × 10^fracLen
 
-      final numerator = total * BigInt.from(10000 - slippageBps);
-      final result = numerator ~/ BigInt.from(10000); // floor division
-
-      final resultInt = result ~/ scale;
-      final resultFrac = (result % scale).toString().padLeft(fracLen, '0');
-
-      if (fracLen == 0) return resultInt.toString();
-      return '$resultInt.${resultFrac.replaceAll(_trailingZeros, '')}';
+      return dexBaseUnitsToDecimal(
+        total * BigInt.from(10000 - slippageBps),
+        fracLen + 4,
+      );
     } catch (_) {
       return amountOut;
     }
   }
+}
+
+/// Exact base-unit formatting for all token precisions; never passes via double.
+String dexBaseUnitsToDecimal(BigInt amount, int decimals) {
+  if (decimals < 0 || decimals > 255 || amount < BigInt.zero) {
+    throw const FormatException('Invalid token amount or decimals');
+  }
+  if (decimals == 0) return amount.toString();
+  final digits = amount.toString().padLeft(decimals + 1, '0');
+  final split = digits.length - decimals;
+  final fraction = digits.substring(split).replaceFirst(RegExp(r'0+$'), '');
+  return fraction.isEmpty
+      ? digits.substring(0, split)
+      : '${digits.substring(0, split)}.$fraction';
 }

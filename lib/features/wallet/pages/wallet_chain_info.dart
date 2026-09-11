@@ -1,3 +1,5 @@
+import 'package:n42_wallet/features/wallet/models/aggregated_coin_model.dart';
+import 'package:n42_wallet/features/wallet/pages/wallet_aggregate_detail_page.dart';
 import 'dart:async';
 
 import 'package:n42_wallet/shared/utils/in_app_browser.dart';
@@ -335,6 +337,24 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
             controller: _scrollController,
             padding: EdgeInsets.zero,
             children: [
+              if (aggregatedTokenForCoin(widget.coinModel) != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      key: const ValueKey('asset_network_balances'),
+                      icon: const Icon(Icons.account_tree_outlined),
+                      label: Text(S.of(context).g_aggregate_network_balances),
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              WalletAggregateDetailPage(coin: widget.coinModel),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               WalletChainInfoBoard(
                 address: cm.address,
                 coinType: cm.config.coinType,

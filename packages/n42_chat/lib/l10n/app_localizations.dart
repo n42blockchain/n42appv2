@@ -1623,7 +1623,7 @@ abstract class S {
   ///
   /// In en, this message translates to:
   /// **'From {name}'**
-  String commonFromSender(String name, Object senderName);
+  String commonFromSender(String name);
 
   /// No description provided for @commonConfirmReceive.
   ///

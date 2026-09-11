@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "فشل في تغيير البريد الإلكتروني",
   "blocAuthVerificationCodeInvalid": "رمز التحقق غير صحيح أو منتهي الصلاحية",
   "blocAuthSessionExpired": "انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى",
-  "blocAuthSessionIncomplete": "بيانات الجلسة غير كاملة، يرجى تسجيل الدخول مرة أخرى"
+  "blocAuthSessionIncomplete": "بيانات الجلسة غير كاملة، يرجى تسجيل الدخول مرة أخرى",
+  "authSsoNotConfigured": "لم يُعِدّ هذا الخادم أي مزوّد لتسجيل الدخول عبر SSO"
 }

@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Xem chi tiet li xi",
   "commonEnterTransferAmount": "Nhap so tien chuyen",
   "commonTransferTo": "Chuyen den",
-  "commonFromSender": "Tu {senderName}",
+  "commonFromSender": "Từ {name}",
   "commonConfirmReceive": "Xac nhan nhan",
   "groupProfile": "Thong tin nhom",
   "groupRemoveMember": "Xoa khoi nhom",
@@ -397,7 +397,7 @@
   "chatCalling": "Dang goi...",
   "chatRinging": "Dang reo...",
   "chatInCall": "Dang trong cuoc goi",
-  "commonFeatureInDevelopment": "Tinh nang dang phat trien...",
+  "commonFeatureInDevelopment": "Tính năng {feature} đang được phát triển…",
   "chatCollectMessages": "Da luu {count} tin nhan",
   "commonMemberCount": "{count} thanh vien",
   "groupDone": "Xong({count})",
@@ -2620,7 +2620,7 @@
       }
     }
   },
-  "redPacketStatsTotal": "Total: {amount} {token}",
+  "redPacketStatsTotal": "tổng cộng",
   "redPacketGrabbedViral": "I grabbed a {amount} {token} red packet! 🧧",
   "@redPacketGrabbedViral": {
     "placeholders": {
@@ -2744,15 +2744,5 @@
   "blocAuthChangeEmailFailed": "Không thể thay đổi email",
   "blocAuthVerificationCodeInvalid": "Mã xác minh không chính xác hoặc đã hết hạn",
   "blocAuthSessionExpired": "Phiên đã hết hạn, vui lòng đăng nhập lại",
-  "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại",
-  "@redPacketStatsTotal": {
-    "placeholders": {
-      "amount": {
-        "type": "String"
-      },
-      "token": {
-        "type": "String"
-      }
-    }
-  }
+  "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại"
 }

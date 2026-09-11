@@ -804,8 +804,8 @@ class SPt extends S {
   String get commonTransferTo => 'Transferir para';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'De $senderName';
+  String commonFromSender(String name) {
+    return 'De $name';
   }
 
   @override
@@ -1232,7 +1232,7 @@ class SPt extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Recurso em desenvolvimento...';
+    return 'A funcionalidade $feature está em desenvolvimento…';
   }
 
   @override
@@ -6611,8 +6611,8 @@ class SPtBr extends SPt {
   String get commonTransferTo => 'Transferir para';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'De $senderName';
+  String commonFromSender(String name) {
+    return 'De $name';
   }
 
   @override
@@ -7039,7 +7039,7 @@ class SPtBr extends SPt {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Recurso em desenvolvimento...';
+    return 'O recurso $feature está em desenvolvimento…';
   }
 
   @override

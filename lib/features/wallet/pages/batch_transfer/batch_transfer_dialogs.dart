@@ -50,7 +50,9 @@ class BatchConfirmDialog extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Gas: ${formatGasFee(provider.gasEstimate!.totalFee)}',
+              S
+                  .of(context)
+                  .g_ui_gas_value(formatGasFee(provider.gasEstimate!.totalFee)),
               style: TextStyle(color: contentColor),
             ),
             const SizedBox(height: 16),
@@ -70,7 +72,9 @@ class BatchConfirmDialog extends StatelessWidget {
                   Expanded(
                     child: Text(
                       S.of(context).importantNotice,
-                      style: AppTypography.caption.copyWith(color: contentColor),
+                      style: AppTypography.caption.copyWith(
+                        color: contentColor,
+                      ),
                     ),
                   ),
                 ],
@@ -217,9 +221,7 @@ class BatchResultSheet extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: blue,
                   foregroundColor: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   textStyle: AppTypography.body.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -233,9 +235,7 @@ class BatchResultSheet extends StatelessWidget {
               child: OutlinedButton(
                 onPressed: () => Navigator.pop(context),
                 style: OutlinedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space4,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                   shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
                 ),
                 child: Text(S.of(context).g_key_batch_done),
@@ -293,7 +293,7 @@ class BatchHelpDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             Text(
-              'Tips',
+              S.of(context).g_face_3,
               style: TextStyle(fontWeight: FontWeight.w600, color: textColor),
             ),
             const SizedBox(height: 8),

@@ -6,7 +6,17 @@ import 'package:n42_wallet/core/network/base_api.dart';
 import 'package:n42_wallet/core/network/request_url.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 
+typedef SolRpcRequest =
+    Future<dynamic> Function(
+      String url,
+      Map<String, dynamic> body, {
+      required bool enableRetry,
+    });
+
 class SolApi {
+  final SolRpcRequest? request;
+  SolApi({this.request});
+
   /// 获取账号信息
   Future<MessageModel> getAccountInfo(
     String address, {
@@ -17,7 +27,7 @@ class SolApi {
       {'encoding': 'base64'},
     ], isTest: isTest);
     final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = mm.data['value']['data'];
+    if (mm.error == false) mm.data = mm.data['value']?['data'];
     return mm;
   }
 
@@ -38,7 +48,14 @@ class SolApi {
     if (contract == '') {
       final result = await baseRPCSol('getBalance', [address], isTest: isTest);
       final mm = resultToMessageModel(result);
-      if (mm.error == false) mm.data = mm.data['value'];
+      if (mm.error == false) {
+        final value = BigInt.tryParse(mm.data['value']?.toString() ?? '');
+        if (value == null || value < BigInt.zero) {
+          return MessageModel.error()
+            ..data = 'Invalid or unavailable Solana RPC value';
+        }
+        mm.data = value;
+      }
       return mm;
     } else {
       final result = await baseRPCSol('getTokenAccountsByOwner', [
@@ -62,6 +79,43 @@ class SolApi {
     }
   }
 
+  /// Balance of the exact associated account that Wallet Core will spend.
+  Future<MessageModel> getTokenAccountBalance(
+    String address, {
+    bool isTest = false,
+  }) async {
+    final mm = resultToMessageModel(
+      await baseRPCSol('getTokenAccountBalance', [address], isTest: isTest),
+    );
+    if (!mm.error) {
+      final value = BigInt.tryParse(
+        mm.data['value']?['amount']?.toString() ?? '',
+      );
+      if (value == null || value < BigInt.zero) {
+        return MessageModel.error()..data = 'Invalid Solana token balance';
+      }
+      mm.data = value;
+    }
+    return mm;
+  }
+
+  Future<MessageModel> getTokenAccountRent({bool isTest = false}) async {
+    // Wallet Core's tokenCreate path creates a legacy SPL token account (165 bytes).
+    final mm = resultToMessageModel(
+      await baseRPCSol('getMinimumBalanceForRentExemption', [
+        165,
+      ], isTest: isTest),
+    );
+    if (!mm.error) {
+      final value = BigInt.tryParse(mm.data?.toString() ?? '');
+      if (value == null || value < BigInt.zero) {
+        return MessageModel.error()..data = 'Invalid Solana account rent';
+      }
+      mm.data = value;
+    }
+    return mm;
+  }
+
   /// 计算 gas 费
   Future<MessageModel> getFeeForMessage(
     String signMessage, {
@@ -71,7 +125,14 @@ class SolApi {
       signMessage,
     ], isTest: isTest);
     final mm = resultToMessageModel(result);
-    if (mm.error == false) mm.data = mm.data['value'];
+    if (mm.error == false) {
+      final value = BigInt.tryParse(mm.data['value']?.toString() ?? '');
+      if (value == null || value < BigInt.zero) {
+        return MessageModel.error()
+          ..data = 'Invalid or unavailable Solana RPC value';
+      }
+      mm.data = value;
+    }
     return mm;
   }
 
@@ -125,16 +186,22 @@ class SolApi {
         'rpc',
         isTest: isTest,
       );
-      final data = await BaseApi.requestEmptyH.post(
-        url,
-        params: {},
-        data: postData,
-        enableRetry: enableRetry,
-      );
+      final rpcRequest = request;
+      final data = rpcRequest != null
+          ? await rpcRequest(url, postData, enableRetry: enableRetry)
+          : await BaseApi.requestEmptyH.post(
+              url,
+              params: {},
+              data: postData,
+              enableRetry: enableRetry,
+            );
       if (data.containsKey('error')) {
         return Result.failure(
           AppError.blockchain(
-            data['message']?.toString() ?? 'RPC error',
+            (data['error'] is Map
+                    ? data['error']['message']?.toString()
+                    : null) ??
+                'RPC error',
             code: 'SOL_RPC_ERROR',
             originalError: data['error'],
           ),

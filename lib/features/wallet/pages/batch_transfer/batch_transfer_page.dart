@@ -353,7 +353,7 @@ class _BatchTransferPageState extends ConsumerState<BatchTransferPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Export failed: $e'),
+          content: Text(S.of(context).g_history_export_error),
           backgroundColor: AppColorTokens.of(context).danger,
           behavior: SnackBarBehavior.floating,
         ),

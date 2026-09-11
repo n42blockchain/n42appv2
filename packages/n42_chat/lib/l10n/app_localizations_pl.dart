@@ -801,8 +801,8 @@ class SPl extends S {
   String get commonTransferTo => 'Przelew do';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'Od $senderName';
+  String commonFromSender(String name) {
+    return 'Od $name';
   }
 
   @override
@@ -1227,7 +1227,7 @@ class SPl extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Funkcja w trakcie rozwoju...';
+    return 'Funkcja $feature jest w trakcie rozwoju…';
   }
 
   @override
@@ -2898,7 +2898,7 @@ class SPl extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'Na tym serwerze nie skonfigurowano dostawców logowania SSO';
 
   @override
   String get transferAmountHintZero => '0,00';

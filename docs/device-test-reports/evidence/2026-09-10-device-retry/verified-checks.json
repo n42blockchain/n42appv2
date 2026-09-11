@@ -1,0 +1,97 @@
+{
+  "devices": {
+    "android": {
+      "id": "38f4f08a",
+      "model": "25098RA98C",
+      "os": "Android 16"
+    },
+    "ios": {
+      "id": "00008110-001C11A12692801E",
+      "model": "iPhone 13 Pro Max",
+      "os": "iOS 26.6.2"
+    }
+  },
+  "automaticUninstall": false,
+  "checks": [
+    {
+      "device": "android",
+      "check": "startup_lifecycle",
+      "passed": true
+    },
+    {
+      "device": "ios",
+      "check": "startup_lifecycle",
+      "passed": true
+    },
+    {
+      "device": "android",
+      "check": "native_solana_signature",
+      "passed": true,
+      "network": "testnet",
+      "temporaryPublicAddress": "5WQuPtwVzRWrxTVFh4qQUJNbsu34EUbjz6e4A41pRqBA",
+      "feeLamports": 5000,
+      "broadcast": false,
+      "privateMaterialPersisted": false
+    },
+    {
+      "device": "ios",
+      "check": "native_solana_signature",
+      "passed": true,
+      "network": "testnet",
+      "temporaryPublicAddress": "9qBVG3VrVSoBjeKEx54GWFPLiQw4XWxx9CkBLQWA1c78",
+      "feeLamports": 5000,
+      "broadcast": false,
+      "privateMaterialPersisted": false
+    },
+    {
+      "device": "android",
+      "check": "wallet_market_drawer_navigation",
+      "passed": true,
+      "authenticatedChatIncluded": false,
+      "broadcast": false,
+      "includesLoadingOverlayFix": true
+    },
+    {
+      "device": "ios",
+      "check": "wallet_market_drawer_navigation",
+      "passed": true,
+      "authenticatedChatIncluded": false,
+      "broadcast": false,
+      "includesLoadingOverlayFix": true
+    },
+    {
+      "device": "android",
+      "check": "normal_app_profile_install_launch",
+      "passed": true,
+      "target": "lib/main.dart",
+      "version": "2.4.8+2026072637",
+      "uninstall": false
+    },
+    {
+      "device": "ios",
+      "check": "normal_app_profile_install_launch",
+      "passed": true,
+      "target": "lib/main.dart",
+      "version": "2.4.8+2026072637",
+      "uninstall": false,
+      "localNetworkPermissionPromptPending": false,
+      "localNetworkPermissionConfirmedByUser": true,
+      "walletHomeVisibleWithoutSystemPrompt": true,
+      "screenshot": "ios-normal-app.png"
+    }
+  ],
+  "validation": {
+    "fullSuitePassed": 3908,
+    "addedTests": 21,
+    "fullSuiteSeconds": 422,
+    "overallCoveredLines": 23134,
+    "overallExecutableLines": 121651,
+    "walletConnectCoveredLines": 628,
+    "walletConnectExecutableLines": 1991,
+    "walletConnectModuleTestsPassed": 197,
+    "analyzeErrors": 0,
+    "analyzeWarnings": 0,
+    "analyzeInfos": 139,
+    "coverageScriptTestsPassed": 4
+  }
+}

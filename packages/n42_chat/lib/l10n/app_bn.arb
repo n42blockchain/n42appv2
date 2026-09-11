@@ -2743,5 +2743,6 @@
   "blocAuthChangeEmailFailed": "ইমেল পরিবর্তন করতে ব্যর্থ হয়েছে",
   "blocAuthVerificationCodeInvalid": "যাচাইকরণ কোডটি ভুল বা মেয়াদ উত্তীর্ণ",
   "blocAuthSessionExpired": "সেশনের মেয়াদ শেষ হয়েছে, অনুগ্রহ করে আবার লগইন করুন",
-  "blocAuthSessionIncomplete": "সেশন ডেটা অসম্পূর্ণ, অনুগ্রহ করে আবার লগইন করুন"
+  "blocAuthSessionIncomplete": "সেশন ডেটা অসম্পূর্ণ, অনুগ্রহ করে আবার লগইন করুন",
+  "authSsoNotConfigured": "এই সার্ভারে SSO লগইন প্রদানকারী কনফিগার করা নেই"
 }

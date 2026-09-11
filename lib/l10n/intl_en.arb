@@ -1395,12 +1395,20 @@
   "g_pred_q_hint": "Prediction question, e.g. Who wins this round?",
   "g_pred_outcomes": "Outcomes",
   "g_pred_outcome_n": "Outcome {n}",
-  "@g_pred_outcome_n": {"placeholders":{"n":{}}},
+  "@g_pred_outcome_n": {
+    "placeholders": {
+      "n": {}
+    }
+  },
   "g_pred_add_outcome": "Add outcome",
   "g_pred_deadline": "Deadline",
   "g_pred_unlimited": "Unlimited (manual close)",
   "g_pred_minutes": "{n} min",
-  "@g_pred_minutes": {"placeholders":{"n":{}}},
+  "@g_pred_minutes": {
+    "placeholders": {
+      "n": {}
+    }
+  },
   "g_pred_creating": "Creating…",
   "g_pred_publish": "Publish",
   "g_pred_err_question": "Please enter a question",
@@ -1408,31 +1416,67 @@
   "g_pred_yes": "Yes",
   "g_pred_no": "No",
   "g_pred_balance": "Balance: {amount} {symbol}",
-  "@g_pred_balance": {"placeholders":{"amount":{},"symbol":{}}},
+  "@g_pred_balance": {
+    "placeholders": {
+      "amount": {},
+      "symbol": {}
+    }
+  },
   "g_pred_amount_input": "Amount ({symbol})",
-  "@g_pred_amount_input": {"placeholders":{"symbol":{}}},
+  "@g_pred_amount_input": {
+    "placeholders": {
+      "symbol": {}
+    }
+  },
   "g_pred_quote_info": "Est. {shares} shares · avg {avg}% · after {after}%",
-  "@g_pred_quote_info": {"placeholders":{"shares":{},"avg":{},"after":{}}},
+  "@g_pred_quote_info": {
+    "placeholders": {
+      "shares": {},
+      "avg": {},
+      "after": {}
+    }
+  },
   "g_pred_processing": "Processing…",
   "g_pred_buy": "Buy",
   "g_pred_sell_n": "Sell {n}",
-  "@g_pred_sell_n": {"placeholders":{"n":{}}},
+  "@g_pred_sell_n": {
+    "placeholders": {
+      "n": {}
+    }
+  },
   "g_pred_closed_waiting": "Closed, awaiting resolution",
   "g_pred_resolved": "Resolved",
   "g_pred_pick_winner": "Pick the winning outcome to settle (funds paid by result)",
   "g_pred_outcome_win": "{label} wins ({pct}%)",
-  "@g_pred_outcome_win": {"placeholders":{"label":{},"pct":{}}},
+  "@g_pred_outcome_win": {
+    "placeholders": {
+      "label": {},
+      "pct": {}
+    }
+  },
   "g_pred_result_label": "Result: {label}",
-  "@g_pred_result_label": {"placeholders":{"label":{}}},
+  "@g_pred_result_label": {
+    "placeholders": {
+      "label": {}
+    }
+  },
   "g_pred_close_only": "Close only",
   "g_pred_cancel_refund": "Cancel & refund",
   "g_pred_confirm_resolve": "Confirm resolution",
   "g_pred_confirm_resolve_msg": "Declare “{label}” the winner and settle? This cannot be undone.",
-  "@g_pred_confirm_resolve_msg": {"placeholders":{"label":{}}},
+  "@g_pred_confirm_resolve_msg": {
+    "placeholders": {
+      "label": {}
+    }
+  },
   "g_live_follow": "Follow",
   "g_live_follow_wip": "Follow coming soon",
   "g_live_enter_room_failed": "Failed to enter room\n{message}",
-  "@g_live_enter_room_failed": {"placeholders":{"message":{}}},
+  "@g_live_enter_room_failed": {
+    "placeholders": {
+      "message": {}
+    }
+  },
   "g_live_ended": "Live stream has ended",
   "g_wallet_group_hd": "HD Wallet · Mnemonic",
   "g_wallet_group_single": "Single-Chain · Imported",
@@ -1449,7 +1493,11 @@
   "g_pred_err_invalid_state": "Market already settled, action not allowed",
   "g_pred_err_not_resolver": "Only the host who created this market can do this",
   "g_pred_redeem_failed": "Redeem failed: {reason}",
-  "@g_pred_redeem_failed": {"placeholders":{"reason":{}}},
+  "@g_pred_redeem_failed": {
+    "placeholders": {
+      "reason": {}
+    }
+  },
   "g_key_earn_stablecoin_title": "Stablecoin Earn",
   "g_key_earn_stablecoin_desc": "Earn daily yield on USDC / USDT / DAI",
   "g_key_earn_stablecoin_deposit": "Deposit",
@@ -1493,7 +1541,11 @@
   "g_key_loyalty_daily_checkin": "Daily Check-in",
   "g_key_loyalty_checked_today": "Checked in today",
   "g_key_loyalty_earn_points": "Earn {value} points",
-  "@g_key_loyalty_earn_points": {"placeholders":{"value":{}}},
+  "@g_key_loyalty_earn_points": {
+    "placeholders": {
+      "value": {}
+    }
+  },
   "g_key_loyalty_checkin_done": "Done",
   "g_key_loyalty_checkin_btn": "Check In",
   "g_key_loyalty_checkin_success": "Check-in confirmed on N42",
@@ -1517,5 +1569,293 @@
   "g_key_loyalty_no_wallet": "No active wallet",
   "g_key_loyalty_unavailable": "Service unavailable",
   "g_key_badge_hot": "HOT",
-  "g_key_badge_live": "LIVE"
+  "g_key_badge_live": "LIVE",
+  "g_audit_defi_positions": "DeFi positions",
+  "g_audit_defi_loading": "Loading DeFi positions…",
+  "g_audit_defi_error": "Unable to load DeFi positions. Tap to retry.",
+  "g_audit_show_less": "Show less",
+  "g_audit_activity_local": "Local transaction history across your wallets. Open an asset to sync its latest activity.",
+  "g_audit_activity_error": "Unable to load transaction history.",
+  "g_audit_all": "All",
+  "g_audit_load_more": "Load more",
+  "g_audit_testnet": "Testnet",
+  "g_audit_mainnet": "Mainnet",
+  "g_audit_manage_settings": "Manage your wallet and preferences",
+  "g_audit_wallet_management": "Wallet management",
+  "g_audit_manage_wallets": "Create, import and manage wallets",
+  "g_audit_hardware": "Hardware wallet",
+  "g_audit_saved_addresses": "Saved recipient addresses",
+  "g_audit_protect_wallet": "Authentication and wallet protection",
+  "g_audit_encrypted_backup": "Export an encrypted wallet backup",
+  "g_audit_biometrics": "Biometric authentication",
+  "g_audit_biometrics_desc": "Face ID / fingerprint settings",
+  "g_audit_display_language": "App display language",
+  "g_audit_theme_desc": "Appearance and display mode",
+  "g_audit_network_desc": "Manage networks and RPC endpoints",
+  "g_audit_rate": "Rate N42",
+  "g_audit_rate_desc": "Open the app store",
+  "g_audit_about_desc": "Version, website and support",
+  "g_audit_currency": "Display currency",
+  "g_audit_currency_usd": "Portfolio values are currently shown in US dollars.",
+  "g_audit_gas": "Gas tracker",
+  "g_audit_gas_desc": "Network fees and price alerts",
+  "g_audit_batch": "Batch transfer",
+  "g_audit_batch_desc": "Send to multiple recipients or import a CSV",
+  "g_audit_connections_desc": "Manage sessions; disconnecting does not revoke token approvals.",
+  "g_audit_aa_history_external": "Open the block explorer to view this smart account’s on-chain activity.",
+  "g_audit_mark_price": "Mark price",
+  "g_audit_oracle_price": "Oracle price",
+  "g_audit_volume": "24h volume (USD)",
+  "g_audit_open_interest": "Open interest",
+  "g_audit_funding": "Current funding rate",
+  "g_audit_max_leverage": "Maximum leverage",
+  "g_audit_quote_changed": "The quote changed or expired. Review the latest quote before confirming.",
+  "g_audit_approval_token": "Token contract",
+  "g_audit_approval_spender": "Spending permission for",
+  "g_history_export_all": "Export matching local records (CSV)",
+  "g_history_local_scope": "Filters and CSV export include all matching records saved on this device. Open the asset to sync newer on-chain activity.",
+  "g_history_clear_dates": "Clear dates",
+  "g_history_export_error": "Could not export transaction history. Please try again.",
+  "g_dex_account_unavailable": "Select a spendable mainnet wallet for this network. Watch-only accounts cannot sign swaps.",
+  "g_dex_execution_invalid": "The transaction parameters are invalid or execution failed. Refresh the quote and try again.",
+  "g_dex_spending_account": "Spending account",
+  "g_dex_use_smart_account": "Use smart account",
+  "g_dex_smart_account_fees": "Network fees are paid by this smart account.",
+  "g_dex_history_record_failed": "Swap submitted, but history could not be updated. Do not submit it again.",
+  "g_wallet_prices_unavailable": "Prices unavailable",
+  "g_wallet_prices_cached": "Saved prices",
+  "g_wallet_prices_just_updated": "Updated now",
+  "g_wallet_prices_minutes": "Updated {value}m ago",
+  "@g_wallet_prices_minutes": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "g_wallet_prices_hours": "Updated {value}h ago",
+  "@g_wallet_prices_hours": {
+    "placeholders": {
+      "value": {}
+    }
+  },
+  "g_wallet_pin_token": "Pin token",
+  "g_wallet_unpin_token": "Unpin token",
+  "g_wallet_balance_warning": "Balance could not be refreshed",
+  "g_wallet_prices_partial": "Partial prices",
+  "g_aggregate_network_balances": "Balances by network",
+  "g_aggregate_known_balance": "Known balance",
+  "g_aggregate_mainnet_note": "Mainnet balances only. Missing or failed network queries are not counted as zero.",
+  "g_aggregate_unavailable": "This asset is no longer available in the selected wallet. Return to the wallet to choose an asset.",
+  "g_aggregate_no_mainnet": "No active mainnet account for this network",
+  "g_aggregate_not_loaded": "Balance not loaded",
+  "g_aggregate_cached_balance": "Saved balance · refresh failed",
+  "g_aggregate_open_network": "Open network",
+  "g_ui_order_create_failed": "Failed to create order",
+  "g_ui_order_created": "Limit order created",
+  "g_ui_order_place": "Place Limit Order",
+  "g_ui_limit_price": "Limit Price",
+  "g_ui_limit_price_pair": "Limit Price ({quote} per {base})",
+  "@g_ui_limit_price_pair": {
+    "placeholders": {
+      "quote": {
+        "type": "String"
+      },
+      "base": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_expires_in": "Expires in:",
+  "g_ui_hours": "{value}h",
+  "@g_ui_hours": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_days": "{value}d",
+  "@g_ui_days": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_order_cancelled": "Order cancelled",
+  "g_ui_order_cancel_failed": "Cancel failed",
+  "g_ui_orders_load_failed": "Unable to load limit orders",
+  "g_ui_limit_orders": "Limit Orders",
+  "g_ui_no_limit_orders": "No limit orders",
+  "g_ui_cancel_order": "Cancel Order",
+  "g_ui_order_triggered": "Triggered",
+  "g_ui_unknown_status": "Unknown status",
+  "g_ui_swap_mode": "Select Swap Mode",
+  "g_ui_buy_n_description": "Purchase N via N42 protocol",
+  "g_ui_dex_description": "Swap tokens via Uniswap / 1inch / Jupiter",
+  "g_ui_view_market": "View Market Data",
+  "g_ui_volume_24h": "24h Volume",
+  "g_ui_markets_count": "Markets ({value})",
+  "@g_ui_markets_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_positions_count": "Positions ({value})",
+  "@g_ui_positions_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_orders_count": "Orders ({value})",
+  "@g_ui_orders_count": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_no_positions": "No open positions",
+  "g_ui_no_orders": "No open orders",
+  "g_ui_free_margin": "Free",
+  "g_ui_margin_utilization": "Utilization",
+  "g_ui_position_size": "Size",
+  "g_ui_entry_price": "Entry Price",
+  "g_ui_liquidation_price": "Liquidation Price",
+  "g_ui_limit_value": "Limit {value}",
+  "@g_ui_limit_value": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_volume_interest": "Vol: {volume} · OI: {interest}",
+  "@g_ui_volume_interest": {
+    "placeholders": {
+      "volume": {
+        "type": "String"
+      },
+      "interest": {
+        "type": "String"
+      }
+    }
+  },
+  "g_ui_optional": "Optional",
+  "g_ui_memo": "Memo",
+  "g_ui_account_email": "Account email",
+  "g_ui_new_email": "New email address",
+  "g_ui_verification_code": "Verification code",
+  "g_ui_confirm_update": "Confirm update",
+  "g_ui_order_executed": "Executed",
+  "g_ui_email_code_sent": "Verification code request sent",
+  "g_ui_email_code_accepted": "Verification code accepted",
+  "g_ui_sending_request": "Sending request...",
+  "g_ui_invalid_email": "Enter a valid email address",
+  "g_ui_change_email": "Change Email",
+  "g_ui_no_cached_email": "No email is cached on this device",
+  "g_ui_verify_code": "Verify code",
+  "g_ui_update": "Update",
+  "g_ui_send_code": "Send code",
+  "g_ui_back_email": "Back to email",
+  "g_ui_update_email": "Update email",
+  "g_ui_back_code": "Back to code",
+  "g_ui_tags": "Tags",
+  "g_ui_custom_tag": "Custom tag...",
+  "g_ui_popular_tokens": "Popular Tokens",
+  "g_ui_token_lookup": "Looking up token info…",
+  "g_ui_token_manual": "Token not found in list — fill symbol & decimals manually",
+  "g_ui_token_found": "Token found: {value}",
+  "g_ui_gas_prediction": "Next Block Gas Prediction",
+  "g_ui_mempool": "Mempool",
+  "g_ui_base_fee_value": "Base Fee: {value} Gwei",
+  "g_ui_pending_mempool": "Pending (Mempool)",
+  "g_ui_checking_approval": "Checking approval…",
+  "g_ui_aave_lending": "Aave V3 Lending",
+  "g_ui_fear_greed": "Fear & Greed",
+  "g_ui_save_failed": "Save failed. Please try again.",
+  "g_ui_destination_tag": "Destination Tag",
+  "g_ui_token_contract_hint": "Token Contract (0x...)",
+  "g_ui_calldata_hex": "Calldata (hex)",
+  "g_ui_wallet_ai": "Wallet AI",
+  "g_ui_read_only": "Read-only",
+  "g_ui_assistant_hint": "Ask about balance, portfolio, gas",
+  "g_ui_no_dapps": "No DApps",
+  "g_ui_paste_connection": "Paste connection link",
+  "g_ui_contract_info": "Contract Info",
+  "g_ui_keystone_paired": "Keystone paired successfully",
+  "g_ui_device_connected": "Connected to {value}",
+  "g_ui_clipboard_clear": "Clipboard auto-clears in {value}s",
+  "g_ui_message": "Message",
+  "g_ui_room_id": "Room ID",
+  "g_ui_backup_select_wallet": "Please select at least one wallet to backup",
+  "g_ui_backup_password_min": "Password must be at least 8 characters",
+  "g_ui_password_mismatch": "Passwords do not match",
+  "g_ui_backup_no_selection": "No valid wallets selected for backup",
+  "g_ui_backup_export": "Export Cloud Backup",
+  "g_ui_backup_select_wallets": "Select Wallets to Backup",
+  "g_ui_backup_password": "Backup Password",
+  "g_ui_backup_password_hint": "Set a strong backup password (min 8 chars)",
+  "g_ui_confirm_password": "Confirm Password",
+  "g_ui_backup_password_repeat": "Re-enter the backup password",
+  "g_ui_mnemonic_wallet": "Mnemonic wallet",
+  "g_ui_private_key_wallet": "Private key wallet",
+  "g_ui_backup_create_save": "Create & Save Backup",
+  "g_ui_backup_share_subject": "N42Wallet Backup",
+  "g_ui_backup_warning": "This backup contains your private keys / mnemonics, wallet passwords and wallet settings. Keep the backup file and password safe. Never share them with anyone.",
+  "g_ui_wallet_number": "Wallet {value}",
+  "g_ui_backup_file_access": "Cannot access the selected file",
+  "g_ui_backup_invalid_file": "Not a valid N42Wallet backup file",
+  "g_ui_backup_select_file_first": "Please select a backup file first",
+  "g_ui_backup_enter_password": "Please enter the backup password",
+  "g_ui_backup_empty": "No wallets found in the backup file",
+  "g_ui_backup_restore_none": "No wallets could be restored from this backup",
+  "g_ui_backup_import": "Import Cloud Backup",
+  "g_ui_backup_restore_hint": "Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.",
+  "g_ui_backup_file": "Backup File",
+  "g_ui_backup_no_file": "No file selected",
+  "g_ui_backup_restore_password_hint": "Enter the password used when creating the backup",
+  "g_ui_backup_encryption_hint": "Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.",
+  "g_ui_backup_import_wallets": "Import Wallets",
+  "g_ui_file_picker_failed": "Cannot open the file picker. Please try again.",
+  "g_ui_file_read_failed": "Cannot read the selected file. Please try again.",
+  "g_ui_backup_import_result": "Wallets imported: {imported}. Skipped: {skipped}.",
+  "g_ui_backup_export_failed": "Could not create the backup. Please try again.",
+  "g_ui_backup_import_failed": "Could not restore the backup. Check the password and backup file, then try again.",
+  "g_ui_csv_no_data": "No data found after removing comments.",
+  "g_ui_csv_header_only": "No data rows found (only header detected).",
+  "g_ui_clipboard_empty": "Clipboard is empty",
+  "g_ui_validation_issues": "Validation Issues",
+  "g_ui_issues_label": "Issues:",
+  "g_ui_csv_missing_fields": "Row {value}: missing fields",
+  "g_ui_template_copied": "Template copied",
+  "g_ui_validation_counts": "Valid: {valid}. Issues: {issues}.",
+  "g_ui_validation_more": "… and {value} more issues",
+  "g_ui_import_valid": "Import valid recipients ({value})",
+  "g_ui_recipients_count": "Recipients: {value}",
+  "g_ui_token_value": "Token: {value}",
+  "g_ui_gas_value": "Gas: {value}",
+  "g_ui_ens_price_failed": "Unable to load ENS renewal prices. Please try again.",
+  "g_ui_ens_renew_failed": "ENS renewal failed. Please try again.",
+  "g_ui_transaction_hash_value": "Transaction: {value}",
+  "g_ui_trade_save_failed": "Could not save the trade. Please try again.",
+  "g_ui_trade_delete_failed": "Could not delete the trade. Please try again.",
+  "g_ui_algo_asset_missing": "Asset {asset} ({contract}) has not been added to account {address}.",
+  "g_ui_algo_asset_add_fee": "Adding this asset requires a network fee. Tap Add to continue.",
+  "g_ui_balance_value": "Balance: {value}",
+  "g_ui_min_balance_value": "Minimum balance: {value}",
+  "g_ui_camera_permission": "Camera permission is required to scan a code.",
+  "g_ui_no_coins": "No coins yet",
+  "g_ui_wallet_loading": "Loading wallet...",
+  "g_ui_wallet_load_failed": "Failed to load wallet",
+  "g_ui_no_wallet": "No Wallet Yet",
+  "g_ui_wallet_get_started": "Create or import a wallet to get started",
+  "g_ui_create_wallet": "Create Wallet",
+  "g_ui_coins_load_failed": "Failed to load coins. Please try again.",
+  "g_ui_mpc_no_phrase": "No Seed Phrase Needed",
+  "g_ui_mpc_intro": "Sign in with your social account to create a secure MPC wallet. Your private key is split into encrypted shares — no seed phrase to lose.",
+  "g_ui_mpc_security": "Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup."
 }

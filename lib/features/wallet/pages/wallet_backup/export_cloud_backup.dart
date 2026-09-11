@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -68,17 +69,17 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     setState(() => _error = '');
 
     if (_selectedIndexes.isEmpty) {
-      ToastUtils.show('Please select at least one wallet to backup');
+      ToastUtils.show(S.of(context).g_ui_backup_select_wallet);
       return;
     }
 
     final password = _passwordController.text;
     if (password.length < 8) {
-      setState(() => _error = 'Password must be at least 8 characters');
+      setState(() => _error = S.of(context).g_ui_backup_password_min);
       return;
     }
     if (password != _confirmController.text) {
-      setState(() => _error = 'Passwords do not match');
+      setState(() => _error = S.of(context).g_ui_password_mismatch);
       return;
     }
 
@@ -92,7 +93,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           .toList();
 
       if (selected.isEmpty) {
-        setState(() => _error = 'No valid wallets selected for backup');
+        setState(() => _error = S.of(context).g_ui_backup_no_selection);
         return;
       }
 
@@ -115,15 +116,15 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               mimeType: 'application/octet-stream',
             ),
           ],
-          subject: 'N42Wallet Backup',
+          subject: S.of(context).g_ui_backup_share_subject,
         ),
       );
-    } on WalletBackupException catch (e) {
+    } on WalletBackupException {
       if (!mounted) return;
-      setState(() => _error = e.message);
+      setState(() => _error = S.of(context).g_ui_backup_export_failed);
     } catch (e) {
       if (!mounted) return;
-      setState(() => _error = e.toString());
+      setState(() => _error = S.of(context).g_ui_backup_export_failed);
     } finally {
       if (mounted) setState(() => _load = Load.finish);
     }
@@ -136,7 +137,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
     final wallets = _wallets;
 
     return Scaffold(
-      appBar: AppBarWidget(text: 'Export Cloud Backup'),
+      appBar: AppBarWidget(text: S.of(context).g_ui_backup_export),
       body: SafeArea(
         child: Stack(
           children: [
@@ -162,23 +163,23 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
           SizedBox(height: AppSpacing.space8),
 
           // 钱包列表选择
-          _label('Select Wallets to Backup'),
+          _label(S.of(context).g_ui_backup_select_wallets),
           SizedBox(height: AppSpacing.space4),
           ...List.generate(wallets.length, (i) => _walletTile(wallets[i], i)),
           SizedBox(height: AppSpacing.space8),
 
           // 密码
-          _label('Backup Password'),
+          _label(S.of(context).g_ui_backup_password),
           _buildPasswordField(
             controller: _passwordController,
-            hintText: 'Set a strong backup password (min 8 chars)',
+            hintText: S.of(context).g_ui_backup_password_hint,
           ),
 
           // 确认密码
-          _label('Confirm Password'),
+          _label(S.of(context).g_ui_confirm_password),
           _buildPasswordField(
             controller: _confirmController,
-            hintText: 'Re-enter the backup password',
+            hintText: S.of(context).g_ui_backup_password_repeat,
           ),
 
           // 错误
@@ -223,10 +224,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
         SizedBox(width: AppSpacing.space4),
         Expanded(
           child: Text(
-            'This backup contains your private keys / mnemonics. '
-            'wallet passwords and wallet settings. '
-            'Keep the backup file and password safe. '
-            'Never share them with anyone.',
+            S.of(context).g_ui_backup_warning,
             style: AppTypography.caption.copyWith(
               color: const Color(0xFF856404),
             ),
@@ -275,14 +273,17 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  wallet.walletName ?? 'Wallet ${index + 1}',
+                  wallet.walletName ??
+                      S.of(context).g_ui_wallet_number(index + 1),
                   style: AppTypography.body.copyWith(
                     color: AppColorTokens.of(context).textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
-                  wallet.hasMnemonic ? 'Mnemonic wallet' : 'Private key wallet',
+                  wallet.hasMnemonic
+                      ? S.of(context).g_ui_mnemonic_wallet
+                      : S.of(context).g_ui_private_key_wallet,
                   style: AppTypography.caption.copyWith(
                     color: AppColorTokens.of(context).textSubtitle,
                   ),
@@ -338,7 +339,7 @@ class _ExportCloudBackupState extends ConsumerState<ExportCloudBackup> {
         width: double.infinity,
         color: AppColorTokens.of(context).bgBase,
         child: AppButton(
-          label: 'Create & Save Backup',
+          label: S.of(context).g_ui_backup_create_save,
           onPressed: () => _export(),
           loading: _load == Load.loading,
         ),

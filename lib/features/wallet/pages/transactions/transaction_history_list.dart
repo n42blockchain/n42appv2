@@ -5,79 +5,67 @@ import 'package:flutter/material.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/generated/l10n.dart';
-import 'package:n42_wallet/features/component/enums/coin_type.dart';
-import 'package:n42_wallet/features/sqlite/app_database.dart';
-import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
-import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
-import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
-import 'package:n42_wallet/features/wallet/pages/transactions/transaction_record_helpers.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_chain_info_transactions_item.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import 'package:n42_wallet/features/wallet/data/transaction_history_query.dart';
+import 'package:n42_wallet/features/wallet/data/transaction_history_repository.dart';
+
 part 'transaction_history_list_logic.dart';
 part 'transaction_history_list_widgets.dart';
 
-class _TxFilter {
-  final String? direction; // null=all, 'out'=sent, 'in'=received
-  final int? status; // null=all, 0=pending, 1=success, 2=failed
-  final DateTime? dateFrom;
-  final DateTime? dateTo;
-
-  const _TxFilter({this.direction, this.status, this.dateFrom, this.dateTo});
-
-  bool get isActive =>
-      direction != null || status != null || dateFrom != null || dateTo != null;
-
-  int get activeCount =>
-      [direction, status, dateFrom, dateTo].where((e) => e != null).length;
-
-  _TxFilter copyWith({
-    Object? direction = _sentinel,
-    Object? status = _sentinel,
-    Object? dateFrom = _sentinel,
-    Object? dateTo = _sentinel,
-  }) {
-    return _TxFilter(
-      direction: direction == _sentinel ? this.direction : direction as String?,
-      status: status == _sentinel ? this.status : status as int?,
-      dateFrom: dateFrom == _sentinel ? this.dateFrom : dateFrom as DateTime?,
-      dateTo: dateTo == _sentinel ? this.dateTo : dateTo as DateTime?,
-    );
-  }
-
-  _TxFilter clear() => const _TxFilter();
-}
-
-const Object _sentinel = Object();
-
-class TransactionHistoryList extends StatefulWidget {
+class TransactionHistoryList extends ConsumerWidget {
   final CoinModel coinModel;
-
-  const TransactionHistoryList(this.coinModel, {super.key});
+  final TransactionHistoryRepository? repository;
+  const TransactionHistoryList(this.coinModel, {super.key, this.repository});
 
   @override
-  State<TransactionHistoryList> createState() => _TransactionHistoryListState();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final userId = ref.watch(currentUserProvider)?.uuid ?? '';
+    final scope = TransactionHistoryScope.fromCoin(userId, coinModel);
+    return _TransactionHistoryView(
+      key: ValueKey(scope.key),
+      coinModel: coinModel,
+      scope: scope,
+      repository: repository,
+    );
+  }
 }
 
-class _TransactionHistoryListState extends State<TransactionHistoryList>
+class _TransactionHistoryView extends StatefulWidget {
+  final CoinModel coinModel;
+  final TransactionHistoryScope scope;
+  final TransactionHistoryRepository? repository;
+  const _TransactionHistoryView({
+    super.key,
+    required this.coinModel,
+    required this.scope,
+    this.repository,
+  });
+  @override
+  State<_TransactionHistoryView> createState() =>
+      _TransactionHistoryListState();
+}
+
+class _TransactionHistoryListState extends State<_TransactionHistoryView>
     with _TransactionHistoryLogicMixin, _TransactionHistoryWidgetsMixin {
   @override
   void initState() {
     super.initState();
-    initLogic();
     loadAll();
   }
 
   @override
   Widget build(BuildContext context) {
-    final items = filtered;
+    final items = allRecords;
     return Scaffold(
       appBar: AppBarWidget(
         text: S.of(context).g_coin_key_1,
@@ -87,7 +75,8 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
             children: [
               IconButton(
                 icon: const Icon(Icons.filter_list),
-                onPressed: showFilterSheet,
+                onPressed: isExporting ? null : showFilterSheet,
+                tooltip: S.of(context).g_key_filter,
               ),
               if (filter.isActive)
                 Positioned(
@@ -107,8 +96,8 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
                   )
                 : IconButton(
                     icon: const Icon(Icons.download_outlined),
-                    onPressed: exportCsv,
-                    tooltip: S.of(context).g_key_batch_export_csv,
+                    onPressed: () => exportCsv(context),
+                    tooltip: S.of(context).g_history_export_all,
                   ),
         ],
       ),
@@ -116,50 +105,65 @@ class _TransactionHistoryListState extends State<TransactionHistoryList>
     );
   }
 
-  Widget _buildBody(List<dynamic> items) {
-    if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-    if (items.isEmpty) {
-      return Center(
-        child: Text(
-          filter.isActive
-              ? S.of(context).g_key_tx_no_results
-              : S.of(context).g_key_132,
+  Widget _buildBody(List<Object> items) {
+    final s = S.of(context);
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(s.g_history_local_scope, style: AppTypography.caption),
         ),
-      );
-    }
-    final itemCount = items.length + (_isLoadingMore ? 1 : 0);
-    return NotificationListener<ScrollNotification>(
-      onNotification: (notification) {
-        if (notification is ScrollEndNotification &&
-            notification.metrics.pixels >=
-                notification.metrics.maxScrollExtent - 200) {
-          loadMore();
-        }
-        return false;
-      },
-      child: ListView.separated(
-        padding: EdgeInsets.all(AppSpacing.space8),
-        itemCount: itemCount,
-        separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space8),
-        itemBuilder: (ctx, i) {
-          if (i >= items.length) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
-            );
-          }
-          final tx = items[i];
-          final isBtcTx = tx is BtcTransactionRecodeModel;
-          return WalletChainInfoTransactionsItem(
-            coinModel: widget.coinModel,
-            type: isBtcTx ? 0 : 1,
-            transactionModel: tx,
-            onBack: loadAll,
-          );
-        },
-      ),
+        Expanded(
+          child: RefreshIndicator(
+            onRefresh: loadAll,
+            child: ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: EdgeInsets.all(AppSpacing.space8),
+              itemCount: items.length + 1,
+              separatorBuilder: (_, _) => SizedBox(height: AppSpacing.space8),
+              itemBuilder: (ctx, i) {
+                if (i == items.length) {
+                  if (isLoading || _isLoadingMore) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (_loadFailed) {
+                    return Column(
+                      children: [
+                        Text(s.g_audit_activity_error),
+                        TextButton(
+                          onPressed: items.isEmpty ? loadAll : loadMore,
+                          child: Text(s.g_key_retry),
+                        ),
+                      ],
+                    );
+                  }
+                  if (items.isEmpty) {
+                    return Center(
+                      child: Text(
+                        filter.isActive ? s.g_key_tx_no_results : s.g_key_132,
+                      ),
+                    );
+                  }
+                  if (_hasMore) {
+                    return TextButton(
+                      onPressed: loadMore,
+                      child: Text(s.g_audit_load_more),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }
+                final tx = items[i];
+                return WalletChainInfoTransactionsItem(
+                  coinModel: widget.coinModel,
+                  type: tx is BtcTransactionRecodeModel ? 0 : 1,
+                  transactionModel: tx,
+                  onBack: loadAll,
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

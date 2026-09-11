@@ -1,3 +1,4 @@
+import 'package:n42_wallet/generated/l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:n42_wallet/core/design_system/design_system.dart';
@@ -77,8 +78,8 @@ class _LiveHomePageState extends State<LiveHomePage> {
                 Expanded(
                   child: TextField(
                     controller: _roomController,
-                    decoration: const InputDecoration(
-                      labelText: 'Room ID',
+                    decoration: InputDecoration(
+                      labelText: S.of(context).g_ui_room_id,
                       hintText: '!xxxxx:m.si46.world',
                       border: OutlineInputBorder(),
                       isDense: true,
@@ -190,7 +191,7 @@ class _LiveBadge extends StatelessWidget {
           ),
           SizedBox(width: AppSpacing.space2),
           Text(
-            'LIVE',
+            S.of(context).g_key_badge_live,
             style: AppTypography.captionSm.copyWith(
               color: danger,
               fontWeight: FontWeight.w700,

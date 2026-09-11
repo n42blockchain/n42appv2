@@ -1,0 +1,8 @@
+{
+  "lib/core/platform/deep_link_service.dart": "e6d19addc20b0b56b9adcfa78b3a34d3e6d6a3ba9d6a711d98fdb36c15b5d83b",
+  "lib/core/routing/deep_link_handler.dart": "cfedf58e846dbbd6d00f9cc110053b60240e74a305b834ae5ecf6c1d4f935183",
+  "lib/main.dart": "d52c087a809526615fc4e2f243e049984b0f141191b149eeeb58c66cdf9d6802",
+  "test/core/routing/deep_link_lifecycle_test.dart": "7dff3c5a59debd70b3c1d4ba84962fdbade6f04eeda40b1e4428b7832b2a57ba",
+  "integration_test/device_full_flow_test.dart": "f3ecb676bd04bcd3a0b9db38e66070f847e79b6999091084365d0272316f5fa4",
+  "scripts/module_coverage.py": "d07cefaab547746fe8183d54467399ae6927cbbb3a449b166fbc9e98574949fd"
+}

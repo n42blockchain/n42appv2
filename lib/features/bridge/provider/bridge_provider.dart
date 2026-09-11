@@ -43,6 +43,14 @@ class BridgeProvider extends ChangeNotifier
   @override
   final BridgeApiClient _lifiApi;
   bool _isDisposed = false;
+  int _quoteGeneration = 0;
+
+  void _invalidateQuote() {
+    ++_quoteGeneration;
+    _quoteResponse = null;
+    __selectedRoute = null;
+    if (_state == BridgeState.loadingQuotes) _state = BridgeState.idle;
+  }
 
   /// 状态变化通知回调：仅在 completed / failed 时触发。
   /// 由 UI 层设置，dispose 时应置 null 防止野回调。
@@ -191,13 +199,17 @@ class BridgeProvider extends ChangeNotifier
           .toList();
 
       // 默认选择原生代币
-      if (__fromChain?.chainId == chainId && __fromToken == null) {
+      if (__fromChain?.chainId == chainId &&
+          __fromToken == null &&
+          _tokensByChain[chainId]!.isNotEmpty) {
         __fromToken = _tokensByChain[chainId]?.firstWhere(
           (t) => t.isNative,
           orElse: () => _tokensByChain[chainId]!.first,
         );
       }
-      if (__toChain?.chainId == chainId && __toToken == null) {
+      if (__toChain?.chainId == chainId &&
+          __toToken == null &&
+          _tokensByChain[chainId]!.isNotEmpty) {
         __toToken = _tokensByChain[chainId]?.firstWhere(
           (t) => t.isNative,
           orElse: () => _tokensByChain[chainId]!.first,
@@ -214,10 +226,10 @@ class BridgeProvider extends ChangeNotifier
 
     __fromChain = chain;
     __fromToken = null;
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
 
     await loadTokensForChain(chain.chainId);
+    if (_isDisposed || __fromChain?.chainId != chain.chainId) return;
 
     // 选择原生代币作为默认
     final tokens = getTokensForChain(chain.chainId);
@@ -237,10 +249,10 @@ class BridgeProvider extends ChangeNotifier
 
     __toChain = chain;
     __toToken = null;
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
 
     await loadTokensForChain(chain.chainId);
+    if (_isDisposed || __toChain?.chainId != chain.chainId) return;
 
     // 选择原生代币作为默认
     final tokens = getTokensForChain(chain.chainId);
@@ -264,8 +276,7 @@ class BridgeProvider extends ChangeNotifier
     __toChain = tempChain;
     __toToken = tempToken;
 
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
 
     _notifySafely();
   }
@@ -273,30 +284,28 @@ class BridgeProvider extends ChangeNotifier
   /// 设置源代币
   void setFromToken(BridgeToken token) {
     __fromToken = token;
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
     _notifySafely();
   }
 
   /// 设置目标代币
   void setToToken(BridgeToken token) {
     __toToken = token;
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
     _notifySafely();
   }
 
   /// 设置转账金额
   void setFromAmount(String amount) {
     __fromAmount = amount;
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
     _notifySafely();
   }
 
   /// 设置滑点
   void setSlippage(double slippage) {
     __slippage = slippage;
+    _invalidateQuote();
     _notifySafely();
   }
 
@@ -314,11 +323,18 @@ class BridgeProvider extends ChangeNotifier
       return;
     }
 
+    final generation = ++_quoteGeneration;
+    _quoteResponse = null;
+    __selectedRoute = null;
     _setState(BridgeState.loadingQuotes);
     _clearError();
 
     // 将金额转换为最小单位
     final amountInWei = _parseAmount(__fromAmount, __fromToken!.decimals);
+    if ((BigInt.tryParse(amountInWei) ?? BigInt.zero) <= BigInt.zero) {
+      _setError('Invalid amount');
+      return;
+    }
 
     final request = BridgeQuoteRequest(
       fromChainId: __fromChain!.chainId,
@@ -336,24 +352,25 @@ class BridgeProvider extends ChangeNotifier
     );
 
     // 使用 advanced/routes 获取多个路由选项
-    final result = await _lifiApi.getRoutes(request);
-    if (_isDisposed) return;
-
-    if (result.error) {
-      _setError(result.data?.toString() ?? 'Failed to get quote');
-      return;
-    }
-
-    _quoteResponse = result.data as BridgeQuoteResponse;
-
-    if (_quoteResponse!.hasRoutes) {
+    try {
+      final result = await _lifiApi.getRoutes(request);
+      if (_isDisposed || generation != _quoteGeneration) return;
+      if (result.error) {
+        _setError(result.data?.toString() ?? 'Failed to get quote');
+        return;
+      }
+      _quoteResponse = result.data as BridgeQuoteResponse;
+      if (!_quoteResponse!.hasRoutes) {
+        _setError('No routes available for this transfer');
+        return;
+      }
       __selectedRoute = _quoteResponse!.recommendedRoute;
-    } else {
-      _setError('No routes available for this transfer');
-      return;
+      _setState(BridgeState.idle);
+    } catch (_) {
+      if (!_isDisposed && generation == _quoteGeneration) {
+        _setError('Failed to get quote');
+      }
     }
-
-    _setState(BridgeState.idle);
   }
 
   /// 选择路由
@@ -374,8 +391,7 @@ class BridgeProvider extends ChangeNotifier
   /// 清除状态，准备新的转账
   void reset() {
     __fromAmount = '';
-    _quoteResponse = null;
-    __selectedRoute = null;
+    _invalidateQuote();
     _clearError();
     _setState(BridgeState.idle);
   }

@@ -92,36 +92,46 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
   /// Disconnect a specific session by its topic.
   Future<void> disconnectSessionByTopic(String topic) async {
-    if (signClient == null) return;
+    final client = signClient;
+    if (client == null) return;
     try {
-      await signClient!.disconnectSession(
+      await client.disconnectSession(
         topic: topic,
         reason: _userDisconnectReason,
       );
+      if (dAppTopic == topic) {
+        cleanData();
+      }
     } catch (e) {
       AppLogger.w('WalletConnect', 'disconnectSession($topic) error: $e');
+      rethrow;
+    } finally {
+      notifyListeners();
     }
-    if (dAppTopic == topic) {
-      cleanData();
-    }
-    notifyListeners();
   }
 
   /// Disconnect all active sessions.
   Future<void> disconnectAllSessions() async {
-    final sessions = getActiveSessions();
+    final client = signClient;
+    if (client == null) return;
+    final sessions = client.getActiveSessions();
+    var failures = 0;
     for (final topic in sessions.keys.toList()) {
       try {
-        await signClient!.disconnectSession(
+        await client.disconnectSession(
           topic: topic,
           reason: _userDisconnectReason,
         );
+        if (dAppTopic == topic) cleanData();
       } catch (e) {
+        failures++;
         AppLogger.w('WalletConnect', 'disconnectAll($topic) error: $e');
       }
     }
-    cleanData();
     notifyListeners();
+    if (failures > 0) {
+      throw StateError('Failed to disconnect $failures WalletConnect sessions');
+    }
   }
 
   /// Set the active session context when user taps a session from the list.
@@ -664,9 +674,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
   /// Respond with the list of EVM addresses in the current session.
   void _respondEthAccounts(wallet_connect.SessionRequestEvent eventData) {
     final addrs = coinModels
-        .where(
-          (cm) => cm.config.blockchainType == BlockchainType.Ethereum.name,
-        )
+        .where((cm) => cm.config.blockchainType == BlockchainType.Ethereum.name)
         .map((cm) => cm.address?.toString())
         .where((a) => a != null && a.isNotEmpty && a != 'null')
         .cast<String>()

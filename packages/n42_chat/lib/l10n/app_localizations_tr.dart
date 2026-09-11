@@ -797,8 +797,8 @@ class STr extends S {
   String get commonTransferTo => 'Transfer hedefi';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return '$senderName tarafından';
+  String commonFromSender(String name) {
+    return '$name tarafından';
   }
 
   @override
@@ -1221,7 +1221,7 @@ class STr extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Özellik geliştirme aşamasında...';
+    return '$feature özelliği geliştirme aşamasında…';
   }
 
   @override
@@ -2880,7 +2880,7 @@ class STr extends S {
 
   @override
   String get authSsoNotConfigured =>
-      'This server has not configured SSO login providers';
+      'Bu sunucuda SSO oturum açma sağlayıcıları yapılandırılmamış';
 
   @override
   String get transferAmountHintZero => '0,00';

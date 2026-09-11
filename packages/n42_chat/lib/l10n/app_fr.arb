@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "Voir les details de l'enveloppe rouge",
   "commonEnterTransferAmount": "Entrez le montant du transfert",
   "commonTransferTo": "Transferer a",
-  "commonFromSender": "De {senderName}",
+  "commonFromSender": "De {name}",
   "commonConfirmReceive": "Confirmer la reception",
   "groupProfile": "Infos du groupe",
   "groupRemoveMember": "Retirer du groupe",

@@ -3,8 +3,25 @@
 A comprehensive cross-platform cryptocurrency wallet built with Flutter, featuring multi-chain support, DeFi integration, secure messaging, and advanced Web3 capabilities.
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.41.9-blue.svg)](https://flutter.dev)
+[![Flutter](https://img.shields.io/badge/Flutter-%3E%3D3.44.8-blue.svg)](https://flutter.dev)
 [![Chains](https://img.shields.io/badge/Chains-238%2B-green.svg)](#multi-chain-wallet)
+
+## Functional audit (2026-09-10)
+
+The [industry research and functional audit](docs/wallet-industry-research-and-functional-audit-2026-09-10.md) records verified fixes, feature entry points, and unresolved execution gaps. See the [UI reference inventory](docs/wallet-feature-wiring-inventory-2026-09-10.md) and [validation results](docs/wallet-audit-validation-2026-09-10.md) for evidence.
+The [follow-up gap audit](docs/wallet-gap-audit-2026-09-11.md) reconciles earlier reports, fixes home refresh edge cases, and separates verified behavior from remaining feature gaps.
+
+The [aggregate balance follow-up](docs/wallet-aggregate-followup-2026-09-11.md) connects stablecoin network details, receive and network routes, distinguishes unknown balances from zero, and adds a `wallet_aggregate` coverage module.
+
+The [deep-link follow-up](docs/deep-link-followup-2026-09-11.md) fixes startup intent delivery, duplicate navigation, asynchronous errors, and target validation, with a `deep_links` coverage module and explicit limits on legacy mining routes.
+
+The legacy feature tables below describe implementation areas; a check mark does not certify every network, account type, platform, or external service. Network lists describe configuration coverage. Hardware signing in the main wallet, Solana DEX execution, and a standalone token-approval revocation center remain incomplete. The [second implementation pass](docs/wallet-followup-implementation-2026-09-10.md) adds complete local history exports and fixes native-value/AA account handling; live network acceptance is still pending. Device and chain-level acceptance is tracked in the audit.
+
+The [module coverage report](docs/testing/module-coverage-2026-09-10.md) records history, DEX, and security regression tests, fixes found by those tests, and remaining coverage gaps. Run a module with `python3 scripts/module_coverage.py test history` (also `dex` or `security`); module traces are kept separately from full-suite coverage.
+
+The [second coverage pass](docs/testing/module-coverage-batch2-2026-09-10.md) covers DEX execution and limit-order navigation, bridge transaction recovery, and WalletConnect session controls and SDK failures. The module runner also supports `bridge` and `wallet_connect`; the report includes the batch-specific baseline, UI evidence, and remaining unverified paths.
+
+The [third coverage pass](docs/testing/module-coverage-batch3-2026-09-10.md) extends core security with TOTP reference vectors, GoPlus response/cache checks, phishing-warning navigation and large-text layouts, and authenticator setup interactions. Run `security` or `security_setup` with the baseline documented in that report.
 
 ## Features Overview
 
@@ -396,7 +413,7 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 | 导入钱包 | 支持助记词、私钥、Keystore 文件 | ✅ |
 | 多账户管理 | 每个钱包支持多个账户 | ✅ |
 | 地址簿 | 保存和管理常用收款地址 | ✅ |
-| 交易历史 | 完整交易记录和状态追踪 | ✅ |
+| 交易历史 | 资产页同步与本地跨钱包汇总；汇总详情只读，完整链上记录依赖同步 | 部分完成 |
 | 二维码 | 生成和扫描支付二维码 | ✅ |
 | 代币管理 | 添加自定义 ERC-20/BEP-20/SPL 代币 | ✅ |
 | 余额查询 | 实时查询所有链上余额 | ✅ |
@@ -451,7 +468,7 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | 功能 | 说明 | 状态 |
 |------|------|------|
-| 无 Gas 交易 | 使用任意 ERC-20 代币支付 Gas 或由他人赞助 | ✅ |
+| 无 Gas 交易 | 依赖配置的 Paymaster、支持资产、账户和网络；DEX 智能账户模式当前自行支付费用 | 待端到端验收 |
 | 批量操作 | 一次调用执行多个交易 | ✅ |
 | 会话密钥 | 向 DApp 授予有限权限 | ✅ |
 | 反事实部署 | 部署前即可使用智能账户地址 | ✅ |
@@ -505,10 +522,10 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | 功能 | 说明 | 状态 |
 |------|------|------|
-| DEX 聚合 | 跨多个 DEX 获取最佳价格 | ✅ |
+| DEX 聚合 | EVM 报价、确认、原生 value 与 AA 账户流程已修复；SOL 未开放，真实网络执行待验收 | 部分完成 |
 | 跨链兑换 | 不同网络间代币兑换 | ✅ |
 | 滑点控制 | 可配置滑点容忍度 | ✅ |
-| 价格影响 | 实时价格影响警告 | ✅ |
+| 价格影响 | 有来源数据时显示警告；缺失时显示未知 | 条件支持 |
 | 路由显示 | 显示最佳兑换路径 | ✅ |
 | 限价订单 | 设置目标价格自动兑换 | ✅ |
 
@@ -540,7 +557,7 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | 功能 | 说明 | 状态 |
 |------|------|------|
-| 多链质押 | 支持 ETH, SOL, ATOM, DOT 等多链原生质押 | ✅ |
+| 多链质押 | 存在 ETH、SOL、ATOM 等实现；DOT 未实现且入口隐藏 | 待逐链验收 |
 | Lido 质押 | 流动性质押获取 stETH | ✅ |
 | 质押仪表盘 | 查看所有质押仓位 | ✅ |
 | 收益追踪 | 实时收益和 APY 显示 | ✅ |
@@ -551,10 +568,10 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | 协议 | 链 | 预估 APY |
 |------|-----|---------|
-| Lido | ETH | ~4% |
-| Native | SOL | ~7% |
-| Native | ATOM | ~15% |
-| Native | DOT | ~12% |
+| Lido | ETH | 以当前服务数据为准 |
+| Native | SOL | 以当前服务数据为准 |
+| Native | ATOM | 以当前服务数据为准 |
+| Native | DOT | 尚未实现 |
 | BTC Staking | BTC | 可变 |
 
 #### 收益聚合
@@ -595,8 +612,8 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 | 功能 | 说明 | 状态 |
 |------|------|------|
 | Ledger 支持 | 蓝牙连接 Ledger 设备 | ✅ |
-| 账户导入 | 导入硬件钱包账户 | ✅ |
-| 安全签名 | 在设备上签名交易 | ✅ |
+| 账户导入 | 可保存独立硬件账户；尚未接入主钱包 signer | 部分完成 |
+| 安全签名 | 有设备适配层；主钱包发送与 Keystone QR 回传仍未闭环 | 未完成 |
 | 多账户 | 管理多个硬件账户 | ✅ |
 | 固件检查 | 检查固件版本 | ✅ |
 | 地址验证 | 在设备上验证地址 | ✅ |
@@ -724,7 +741,7 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 
 | Category | Technology |
 |----------|------------|
-| Framework | Flutter 3.41.9+ |
+| Framework | Flutter 3.44.8+ |
 | Language | Dart 3.11.5+ |
 | State Management | Riverpod, Provider |
 | Blockchain | web3dart, bitcoin_base, solana |
@@ -741,7 +758,7 @@ Support for **238+ blockchain networks** including mainnet and testnet:
 ## Getting Started
 
 ### Prerequisites
-- Flutter SDK 3.41.9 or higher
+- Flutter SDK 3.44.8 or higher
 - Dart SDK 3.11.5 or higher
 - Android Studio / Xcode
 - iOS 17.0+ / Android 7.0+

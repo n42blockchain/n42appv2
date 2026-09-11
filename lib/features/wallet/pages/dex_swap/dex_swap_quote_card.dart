@@ -67,7 +67,7 @@ class DexQuoteCard extends StatelessWidget {
           _rowWidget(
             context,
             s.g_key_dex_price_impact,
-            quote.priceImpact,
+            quote.priceImpact.isEmpty ? '—' : quote.priceImpact,
             valueColor: impactColor,
           ),
           _rowWidget(context, s.g_key_dex_gas_estimate, quote.gasEstimate),
@@ -163,7 +163,9 @@ class DexQuoteCard extends StatelessWidget {
             ],
           ),
           SizedBox(height: AppSpacing.space2),
-          Row(
+          Wrap(
+            spacing: AppSpacing.space2,
+            runSpacing: AppSpacing.space2,
             children: [
               _approveChip(
                 context,
@@ -171,7 +173,6 @@ class DexQuoteCard extends StatelessWidget {
                 selected: !exactApprove,
                 onTap: () => onExactApproveChanged(false),
               ),
-              SizedBox(width: AppSpacing.space2),
               _approveChip(
                 context,
                 label: s.g_key_dex_approve_exact,
@@ -240,25 +241,33 @@ class DexQuoteCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            label,
-            style: AppTypography.bodySm.copyWith(
-              color: AppColorTokens.of(context).textSubtitle,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: AppTypography.bodySm.copyWith(
+                    color: AppColorTokens.of(context).textSubtitle,
+                  ),
+                ),
+                ?trailing,
+              ],
             ),
           ),
-          if (trailing != null) ...[
-            SizedBox(width: AppSpacing.space2),
-            trailing,
-          ],
-          const Spacer(),
-          Text(
-            value,
-            style: AppTypography.bodySm.copyWith(
-              color: valueColor ?? AppColorTokens.of(context).textPrimary,
-              fontWeight: valueColor != null
-                  ? FontWeight.w600
-                  : FontWeight.normal,
+          SizedBox(width: AppSpacing.space2),
+          Expanded(
+            child: Text(
+              value,
+              textAlign: TextAlign.end,
+              style: AppTypography.bodySm.copyWith(
+                color: valueColor ?? AppColorTokens.of(context).textPrimary,
+                fontWeight: valueColor != null
+                    ? FontWeight.w600
+                    : FontWeight.normal,
+              ),
             ),
           ),
         ],

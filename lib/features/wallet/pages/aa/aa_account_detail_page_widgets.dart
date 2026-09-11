@@ -293,6 +293,10 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
   // ─── Transaction History ──────────────────────────────────────────────
 
   Widget buildTransactionHistory() {
+    final explorer = aaAccountExplorer(
+      widget.account.chainId,
+      widget.account.address,
+    );
     return Container(
       padding: EdgeInsets.all(AppSpacing.space4),
       decoration: _sectionDecoration(),
@@ -312,18 +316,18 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                child: Text(S.of(context).g_key_aa_view_all),
-              ),
+              if (explorer.isNotEmpty)
+                TextButton(
+                  key: const ValueKey('aa_view_history'),
+                  onPressed: () => InAppBrowser.open(context, explorer),
+                  child: Text(S.of(context).g_key_196),
+                ),
             ],
           ),
           SizedBox(height: AppSpacing.space4),
           Center(
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space6,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
               child: Column(
                 children: [
                   Icon(
@@ -333,7 +337,7 @@ mixin _AAAccountDetailWidgetsMixin on State<AAAccountDetailPage> {
                   ),
                   SizedBox(height: AppSpacing.space4),
                   Text(
-                    S.of(context).g_key_132,
+                    S.of(context).g_audit_aa_history_external,
                     style: AppTypography.caption.copyWith(color: _subText),
                   ),
                 ],

@@ -129,8 +129,8 @@ class FeatureEntryHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setWidth(160),
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
+      height: ScreenUtil().setWidth(128),
+      padding: EdgeInsets.symmetric(vertical: AppSpacing.space2),
       child: ListView(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),

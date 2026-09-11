@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"math/big"
+	"strings"
 	"sync"
 	"time"
 
@@ -104,8 +105,23 @@ func weiToHuman(wei *big.Int, decimals int) string {
 	if wei == nil {
 		return "0"
 	}
-	divisor := new(big.Float).SetInt(
-		new(big.Int).Exp(big.NewInt(10), big.NewInt(int64(decimals)), nil))
-	result := new(big.Float).Quo(new(big.Float).SetInt(wei), divisor)
-	return result.Text('f', 8)
+	if decimals <= 0 {
+		return wei.String()
+	}
+	digits := wei.String()
+	negative := strings.HasPrefix(digits, "-")
+	digits = strings.TrimPrefix(digits, "-")
+	if len(digits) <= decimals {
+		digits = strings.Repeat("0", decimals-len(digits)+1) + digits
+	}
+	split := len(digits) - decimals
+	fraction := strings.TrimRight(digits[split:], "0")
+	result := digits[:split]
+	if fraction != "" {
+		result += "." + fraction
+	}
+	if negative {
+		result = "-" + result
+	}
+	return result
 }

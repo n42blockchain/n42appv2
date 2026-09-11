@@ -233,7 +233,7 @@ class TokenViewApi {
       case 'Ethereum':
         return await getGasPriceEth(coinType, isTest: isTest, rpc: rpc);
       case 'Solana':
-        return await SolApi().getFeeForMessage(signMessage);
+        return await SolApi().getFeeForMessage(signMessage, isTest: isTest);
       case 'Tron':
         return await getGasPriceTrx(isTest: isTest);
       case 'Algorand':

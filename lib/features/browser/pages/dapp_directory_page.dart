@@ -109,7 +109,7 @@ class _DAppDirectoryPageState extends State<DAppDirectoryPage>
     if (dapps.isEmpty) {
       return Center(
         child: Text(
-          'No DApps',
+          S.of(context).g_ui_no_dapps,
           style: TextStyle(color: AppColorTokens.of(context).textSubtitle),
         ),
       );

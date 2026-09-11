@@ -230,7 +230,7 @@ class _NftListPageState extends State<NftListPage> {
             )
           else if (_nfts.any(NftBatchTransferUtils.isBatchTransferable))
             IconButton(
-              tooltip: 'Select',
+              tooltip: S.of(context).g_key_bridge_select,
               icon: const Icon(Icons.checklist_outlined),
               onPressed: () => setState(() => _selectionMode = true),
             ),

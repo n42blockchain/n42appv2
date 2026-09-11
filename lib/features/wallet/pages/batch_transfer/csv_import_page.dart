@@ -146,15 +146,16 @@ class _CsvImportPageState extends State<CsvImportPage>
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Wrap(
+              spacing: 12,
+              runSpacing: 4,
               children: [
                 Text(
-                  'Recipients: $_validLineCount',
+                  S.of(context).g_ui_recipients_count(_validLineCount),
                   style: AppTypography.caption.copyWith(color: subText),
                 ),
                 Text(
-                  'Token: ${widget.tokenSymbol}',
+                  S.of(context).g_ui_token_value(widget.tokenSymbol),
                   style: AppTypography.caption.copyWith(color: subText),
                 ),
               ],
@@ -184,7 +185,7 @@ class _CsvImportPageState extends State<CsvImportPage>
                       ),
                     ),
                     child: Text(
-                      'Import $_validLineCount ${S.of(context).g_key_batch_recipients}',
+                      S.of(context).g_ui_import_valid(_validLineCount),
                     ),
                   ),
                 ),

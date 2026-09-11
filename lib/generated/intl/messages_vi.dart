@@ -82,109 +82,177 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Bạn có chắc chắn muốn xóa \"${name}\" khỏi các thiết bị đã lưu không?";
 
-  static String m28(value) => "Ước tính. khí: ~${value} đơn vị";
+  static String m28(value) => "Nhận ${value} điểm";
 
-  static String m29(reason) => "Lý do: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "Yêu cầu ${amount} ${symbol} trên mạng ${network}";
 
-  static String m30(value) => "${value}d hủy liên kết";
+  static String m30(value) =>
+      "Xóa mạng tùy chỉnh ${value}? Số dư trên mạng này sẽ không còn hiển thị. Tài sản của bạn trên chuỗi không bị ảnh hưởng.";
 
-  static String m31(value) => "${value} số ngày còn lại";
+  static String m31(value) => "Ước tính. khí: ~${value} đơn vị";
 
-  static String m32(value) =>
+  static String m32(reason) => "Lý do: ${reason}";
+
+  static String m33(value) => "${value}d hủy liên kết";
+
+  static String m34(value) => "${value} số ngày còn lại";
+
+  static String m35(value) =>
       "Việc hủy đặt cược mất ${value} ngày. Token của bạn sẽ bị khóa trong thời gian này.";
 
-  static String m33(value) => "Bạn không có đủ \"${value}\"";
+  static String m36(value) => "Bạn không có đủ \"${value}\"";
 
-  static String m34(value) => "Không thể lấy tài khoản \"${value}\"";
+  static String m37(value) => "Không thể lấy tài khoản \"${value}\"";
 
-  static String m35(value) => "Tối thiểu ${value} XRP cho lần chuyển đầu tiên";
+  static String m38(value) => "Tối thiểu ${value} XRP cho lần chuyển đầu tiên";
 
-  static String m36(count) => "Thêm (${count})";
+  static String m39(count) => "Thêm (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: 'Đã phát hiện 1 mã thông báo mới', other: 'Đã phát hiện mã thông báo mới ${count}')} — nhấn để xem lại";
 
-  static String m38(value) => "Chưa thêm chuỗi ${value}.";
+  static String m41(value) => "Chưa thêm chuỗi ${value}.";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "${value} có giao dịch chưa hoàn tất, vui lòng thử lại sau.";
 
-  static String m40(value) => "Không tìm thấy địa chỉ cho ${value}.";
+  static String m43(value) => "Không tìm thấy địa chỉ cho ${value}.";
 
-  static String m41(value) => "Số dư ${value} không đủ.";
+  static String m44(value) => "Số dư ${value} không đủ.";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "Mỗi tài khoản XRP phải dự trữ ${value} XRP (${value1} drops) làm mức cơ bản, không thể chi tiêu.";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "Với mỗi đối tượng tài khoản sở hữu, ${value} XRP (${value1} drops) được thêm vào dự trữ.";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "Tài khoản này sở hữu ${value} đối tượng, có nghĩa là thêm ${value1} XRP được dự trữ.";
 
-  static String m45(message) => "Không vào được phòng\n${message}";
+  static String m48(message) => "Không vào được phòng\n${message}";
 
-  static String m46(value) => "Mẫu không đúng, còn ${value} lần thử";
+  static String m49(value) => "Mẫu không đúng, còn ${value} lần thử";
 
-  static String m47(value) => "Mẫu không đúng, còn ${value} lần thử";
+  static String m50(value) => "Mẫu không đúng, còn ${value} lần thử";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "Bạn đã thiết lập thành công ${value} và sẽ bắt đầu xác minh với N42Wallet!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "Tham gia nhóm ${value} của tôi trên @N42Wallet để trở thành thợ đào sớm của chuỗi Layer 1 và nhận tiền mã hóa trên điện thoại!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "Bạn có chắc muốn khóa ${value} N cho đến ${value1} để chạy node không?";
 
-  static String m51(value) => "Nhập thất bại:${value}";
+  static String m54(value) => "Nhập thất bại:${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "Cần có số dư staking tối thiểu ${value} để nhận phần thưởng.";
 
-  static String m53(value, value1) => "${value} N mỗi ${value1} khối đã đào";
+  static String m56(value, value1) => "${value} N mỗi ${value1} khối đã đào";
 
-  static String m54(value) => "Phải có ${value} ký tự";
+  static String m57(value) => "Phải có ${value} ký tự";
 
-  static String m55(symbol) => "Số tiền (${symbol})";
+  static String m58(symbol) => "Số tiền (${symbol})";
 
-  static String m56(amount, symbol) => "Số dư: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "Số dư: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "Tuyên bố “${label}” thắng và thanh toán? Không thể hoàn tác.";
 
-  static String m58(n) => "${n} phút";
+  static String m61(n) => "${n} phút";
 
-  static String m59(n) => "Kết quả ${n}";
+  static String m62(n) => "Kết quả ${n}";
 
-  static String m60(label, pct) => "${label} thắng (${pct}%)";
+  static String m63(label, pct) => "${label} thắng (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "Ước tính ${shares} phần · TB ${avg}% · sau ${after}%";
 
-  static String m62(reason) => "Đổi thưởng thất bại: ${reason}";
+  static String m65(reason) => "Đổi thưởng thất bại: ${reason}";
 
-  static String m63(label) => "Kết quả: ${label}";
+  static String m66(label) => "Kết quả: ${label}";
 
-  static String m64(n) => "Bán ${n}";
+  static String m67(n) => "Bán ${n}";
 
-  static String m65(value) => "${value} Số dư không đủ.";
+  static String m68(value) => "${value} Số dư không đủ.";
 
-  static String m66(value) => "${value} đang đến...";
-
-  static String m67(value) =>
-      "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
-
-  static String m68(value) => "Tối đa ${value} ký tự";
-
-  static String m69(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+  static String m69(value) => "${value} đang đến...";
 
   static String m70(value) =>
+      "${value} hoán đổi trong ứng dụng sẽ được phân phối đến ví của bạn trong thời gian ngắn và không thể bán qua quy trình này. Có thể sử dụng để vận hành node.";
+
+  static String m71(value) => "Tối đa ${value} ký tự";
+
+  static String m72(value) => "Ứng dụng đã hỗ trợ chuỗi ${value}!";
+
+  static String m73(value) =>
       "Ứng dụng đã hỗ trợ chuỗi ${value}, bạn có muốn thêm không?";
 
-  static String m71(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
+  static String m74(value) => "Kết nối thử nghiệm địa chỉ ${value} thất bại!";
 
-  static String m72(value) => "0~${value} ký tự";
+  static String m75(value) =>
+      "RPC báo cáo ID Chuỗi ${value}, không khớp với giá trị bạn nhập.";
+
+  static String m76(asset, contract, address) =>
+      "Tài sản ${asset} (${contract}) chưa được thêm vào tài khoản ${address}.";
+
+  static String m77(imported, skipped) =>
+      "Ví đã nhập: ${imported}. Bỏ qua: ${skipped}.";
+
+  static String m78(value) => "Số dư: ${value}";
+
+  static String m79(value) => "Phí cơ bản: ${value} Gwei";
+
+  static String m80(value) => "Bộ nhớ tạm tự xóa sau ${value}s";
+
+  static String m81(value) => "Dòng ${value}: thiếu trường";
+
+  static String m82(value) => "${value} ngày";
+
+  static String m83(value) => "Đã kết nối với ${value}";
+
+  static String m84(value) => "Phí mạng: ${value}";
+
+  static String m85(value) => "${value} giờ";
+
+  static String m86(value) => "Nhập người nhận hợp lệ (${value})";
+
+  static String m87(quote, base) => "Giá giới hạn (${quote} mỗi ${base})";
+
+  static String m88(value) => "Giới hạn ${value}";
+
+  static String m89(value) => "Thị trường (${value})";
+
+  static String m90(value) => "Số dư tối thiểu: ${value}";
+
+  static String m91(value) => "Lệnh (${value})";
+
+  static String m92(value) => "Vị thế (${value})";
+
+  static String m93(value) => "Người nhận: ${value}";
+
+  static String m94(value) => "Đã tìm thấy token: ${value}";
+
+  static String m95(value) => "Token: ${value}";
+
+  static String m96(value) => "Giao dịch: ${value}";
+
+  static String m97(valid, issues) => "Hợp lệ: ${valid}. Vấn đề: ${issues}.";
+
+  static String m98(value) => "… và ${value} vấn đề khác";
+
+  static String m99(volume, interest) =>
+      "Thể tích: ${volume} · OI: ${interest}";
+
+  static String m100(value) => "Ví ${value}";
+
+  static String m101(value) => "Cập nhật ${value} giờ trước";
+
+  static String m102(value) => "Cập nhật ${value} phút trước";
+
+  static String m103(value) => "0~${value} ký tự";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -205,6 +273,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Đăng nhập thiết bị mới",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Tệp"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "Số dư đã lưu · tải lại thất bại",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "Số dư đã biết",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "Chỉ số dư trên mạng chính. Các truy vấn mạng bị thiếu hoặc thất bại sẽ không được tính là 0.",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "Số dư theo mạng",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "Không có tài khoản mạng chính đang hoạt động cho mạng này",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "Số dư chưa được tải",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage("Mở mạng"),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Tài sản này không còn khả dụng trong ví đã chọn. Quay lại ví để chọn tài sản khác.",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Vượt lên trên ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Giảm xuống dưới ↓"),
     "g_alert_current_price": m1,
@@ -228,6 +318,114 @@ class MessageLookup extends MessageLookupByLibrary {
       "Token chỉ có thể gửi trong cùng một mạng. Gửi từ mạng khác có thể dẫn đến mất mát.",
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage("Quét để nhận"),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "Mở trình duyệt khối để xem hoạt động trên chuỗi của tài khoản thông minh này.",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "Phiên bản, trang web và hỗ trợ",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "Không thể tải lịch sử giao dịch.",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "Lịch sử giao dịch cục bộ trên các ví của bạn. Mở một tài sản để đồng bộ hóa hoạt động mới nhất của nó.",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("Tất cả"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "Quyền chi tiêu cho",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "Hợp đồng token",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage(
+      "Chuyển tiền hàng loạt",
+    ),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Chuyển tiền cho nhiều người nhận hoặc nhập từ tệp CSV",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Xác thực sinh trắc học",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Cài đặt Face ID / vân tay",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "Quản lý phiên kết nối; ngắt kết nối không ảnh hưởng đến quyền phê duyệt token.",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage(
+      "Đơn vị tiền tệ hiển thị",
+    ),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "Giá trị danh mục đầu tư hiện đang được hiển thị bằng đô la Mỹ.",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "Không thể tải vị trí DeFi. Nhấn để thử lại.",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "Đang tải vị trí DeFi…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "Vị trí DeFi",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "Ngôn ngữ hiển thị ứng dụng",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "Xuất bản sao lưu ví được mã hóa",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage(
+      "Tỷ lệ thanh toán hiện tại",
+    ),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage(
+      "Trình theo dõi phí gas",
+    ),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Phí mạng và thông báo giá",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage("Ví phần cứng"),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage("Tải thêm"),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Mạng chính"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "Quản lý ví và cài đặt của bạn",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "Tạo, nhập và quản lý ví",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage("Giá đánh dấu"),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "Đòn bẩy tối đa",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "Quản lý mạng và điểm cuối RPC",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage("Lượng mở"),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "Giá tham chiếu",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "Xác thực và bảo vệ ví",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "Lời mời trao đổi giá đã thay đổi hoặc hết hạn. Vui lòng kiểm tra lại lời mời trao đổi giá mới nhất trước khi xác nhận.",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage("Đánh giá N42"),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "Mở cửa hàng ứng dụng",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "Địa chỉ người nhận đã lưu",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage("Hiện ít hơn"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Mạng thử nghiệm"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "Giao diện và chế độ hiển thị",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage(
+      "Khối lượng giao dịch 24h (USD)",
+    ),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "Quản lý ví",
+    ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage("Vui lòng nhập URL"),
     "g_browser_key10": MessageLookupByLibrary.simpleMessage("Nhập mô tả"),
     "g_browser_key11": MessageLookupByLibrary.simpleMessage("Trình duyệt"),
@@ -285,6 +483,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "Đã xác minh",
     ),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng chọn ví mainnet có thể chi tiêu cho mạng này. Tài khoản chỉ xem được không thể ký giao dịch trao đổi.",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "Tham số giao dịch không hợp lệ hoặc thực thi thất bại. Vui lòng làm mới lời mời trao đổi giá và thử lại.",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "Đổi đã được gửi, nhưng lịch sử không thể cập nhật. Không gửi lại.",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "Phí mạng được thanh toán bởi tài khoản thông minh này.",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "Tài khoản chi tiêu",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Sử dụng tài khoản thông minh",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage("Gửi lại mã"),
     "g_email_resend_countdown": m3,
     "g_face_1": MessageLookupByLibrary.simpleMessage(
@@ -323,10 +539,21 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
       "Liên kết thành công",
     ),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage("Xóa ngày"),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "Xuất tất cả bản ghi cục bộ khớp (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "Không thể xuất lịch sử giao dịch. Vui lòng thử lại.",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "Bộ lọc và xuất CSV bao gồm tất cả bản ghi khớp được lưu trên thiết bị này. Mở tài sản để đồng bộ hoạt động trên chuỗi mới nhất.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Hồ sơ"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Tin tức"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Xác minh"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Mời bạn bè"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Thị trường"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Đã hủy"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Kiểm tra kết nối mạng và thử lại",
@@ -667,6 +894,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Không tải được tùy chọn gas",
     ),
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Hỗ trợ phí gas chưa khả dụng. Vui lòng thanh toán phí gas bằng số dư tài khoản của bạn.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Đang chờ xử lý"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Quyền"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -704,6 +934,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Đã chọn"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Gửi mã thông báo bằng tài khoản thông minh của bạn",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch thất bại",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 ngày"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 giờ"),
@@ -813,6 +1046,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Tính năng nâng cao",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage(
+      "Đang hoạt động",
+    ),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("Khám phá"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "Phân phối",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage(
+      "Đã kết thúc",
+    ),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Không có chiến dịch xác minh nào khả dụng",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("Đang Chờ"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Nguồn"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Mở mục Nguồn để duyệt các thư mục chiến dịch do nhà cung cấp duy trì.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Các chiến dịch bên thứ ba có thể độc hại. Xác minh tên miền dự án và chi tiết giao dịch trước khi ký.",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
+      "Phát tiền airdrop",
+    ),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Sắp tới"),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("NÓNG"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("TRỰC TIẾP"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Thêm người nhận",
     ),
@@ -871,6 +1131,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Tổng số tiền",
+    ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "URL Khai thác Khối (tùy chọn)",
     ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Chuỗi không được hỗ trợ",
@@ -1006,6 +1269,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Để ghi NFT, vui lòng truy cập trang chi tiết NFT và nhấn vào nút \"Ghi\".",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Các mạng phổ biến (chạm để điền)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Chuỗi này chưa hỗ trợ chuyển khoản, hãy chú ý theo dõi",
     ),
@@ -1019,6 +1285,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhấn để hiển thị tất cả",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Gần đây"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage(
+      "Tài khoản",
+    ),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "Trang web này đang yêu cầu xem địa chỉ ví của bạn và đề xuất giao dịch. Nó không thể chuyển tiền mà không có sự chấp thuận của bạn.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Kết nối Ví",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "Thiết bị này dường như đã được root hoặc jailbreak. Sử dụng ví trên thiết bị bị can thiệp sẽ làm tăng nguy cơ bị đánh cắp khóa và truy cập trái phép. Vui lòng cẩn trọng.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Cảnh báo bảo mật thiết bị",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Đã được phê duyệt! Nhấn Hoán đổi để tiếp tục.",
     ),
@@ -1071,6 +1352,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Lấy báo giá thất bại",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Dịch vụ cung cấp giá hoán đổi tạm thời không khả dụng. Vui lòng thử lại sau.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Tìm ký hiệu / tên / địa chỉ",
     ),
@@ -1092,6 +1376,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Swap đã được gửi thành công",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Dịch vụ token không khả dụng. Đang hiển thị danh sách ngoại tuyến hạn chế.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Hoán đổi bị chặn: địa chỉ bộ định tuyến không được nhận diện. Vì an toàn, giao dịch này đã bị hủy.",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Bạn Trả"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Bạn Nhận"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
@@ -1100,13 +1390,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage(
       "Chuyển khoản hàng loạt",
     ),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage(
+      "Lợi suất cao nhất",
+    ),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Đốt"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Mua N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Mua N bằng giao thức N42",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Tìm kiếm các chiến dịch bên thứ ba được xác minh",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Chuyển giao chuỗi chéo",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Điểm hàng ngày trên chuỗi khối",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("Hoán đổi DEX"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Khí đốt"),
@@ -1128,6 +1427,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Kiếm phần thưởng bằng cách tham gia đào node",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage(
+      "Hợp đồng vĩnh cửu",
+    ),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Công cụ nhanh",
     ),
@@ -1136,6 +1438,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Chọn loại hoán đổi",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Nạp tiền",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "Nhận lợi suất hàng ngày trên USDC / USDT / DAI",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "Hiện tại chưa có thị trường ổn định nào",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Tích lũy ổn định",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Đặt cược ETH với Lido",
@@ -1694,6 +2008,70 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Bạn có chắc chắn muốn thoát ứng dụng không?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Điểm khả dụng",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Đã kiểm tra hôm nay",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Kiểm tra vào",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage("Xong"),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Kiểm tra vào thất bại",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Kiểm tra vào thành công trên N42",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Sao chép"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Kiểm tra hàng ngày",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Bảng xếp hạng trống",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("Lịch sử"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Chia sẻ mã giới thiệu của bạn",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Mời bạn bè",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Bảng xếp hạng",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "Không có lịch sử điểm",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "Chưa có người được mời. Chia sẻ mã của bạn để bắt đầu.",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Không có phần thưởng nào khả dụng",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Không có nhiệm vụ nào khả dụng",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Không có ví đang hoạt động",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage(
+      "Giới thiệu",
+    ),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage(
+      "Phần thưởng",
+    ),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Nhiệm vụ"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Điểm"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Tổng điểm đã nhận",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Dịch vụ không khả dụng",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Đã sử dụng"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Twitter"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1720,6 +2098,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập cụm từ khôi phục",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("Ký"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng nhập tin nhắn trước",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage("Ký thất bại"),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "Nhập tin nhắn cần ký",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("Chữ ký"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage("Ký tin nhắn"),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Chưa hỗ trợ ký tin nhắn cho chuỗi này",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Chỉ ký tin nhắn mà bạn hoàn toàn tin tưởng. Một tin nhắn độc hại có thể được sử dụng để ủy quyền hành động thay bạn.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Tổng"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Tên"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Quay lại"),
@@ -1742,6 +2136,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Băng hình"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Tầng"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("Thư viện NFT"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage(
+      "Ẩn nội dung rác",
+    ),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("Dòng chữ #"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
       "Không tìm thấy NFT",
@@ -1768,13 +2165,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "ID mã thông báo",
     ),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("loại"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("Khác"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Mật khẩu không khớp",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Dữ liệu thị trường chỉ đọc. Chức năng đặt lệnh không được hỗ trợ trong phiên bản này.",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Chọn từ thư viện ảnh điện thoại",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Khóa công khai"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Yêu cầu thanh toán",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage("Xóa Mạng"),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Đặt lại"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Thử lại"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Token hoặc chuỗi trong yêu cầu thanh toán không có trong ví này",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Sử dụng thận trọng",
     ),
@@ -1803,11 +2215,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Phương thức chia sẻ",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "Giao dịch có thể sẽ thất bại",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Mô phỏng giao dịch…",
     ),
@@ -1832,9 +2244,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage(
       "APY trung bình",
     ),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch đã được tạo, nhưng chức năng phát trực tiếp trong ví cho chuỗi này chưa được hỗ trợ.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Hoa hồng"),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Ước tính. Phần thưởng hàng ngày",
     ),
@@ -1895,6 +2310,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Bắt đầu đặt cược",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch đặt cược đã được gửi",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("đặt cược"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Giao dịch được chuẩn bị thành công",
@@ -1902,7 +2320,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Đang mở khóa",
     ),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Rút stake"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "Đang cập nhật...",
@@ -1918,7 +2336,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Phí Gas tối đa"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("Phí tối đa mỗi Gas"),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Đang chờ"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Thất bại"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Tiếp tục"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Mật khẩu ví"),
@@ -1935,7 +2353,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập số nguyên lớn hơn 0.",
     ),
     "g_key_t_44": MessageLookupByLibrary.simpleMessage("Không thể lấy dữ liệu"),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Kiểm tra tài khoản địa chỉ nhận",
     ),
@@ -1946,18 +2364,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Xác minh tài khoản thành công",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Địa chỉ nhận chưa có tài khoản, và lần chuyển đầu tiên tối thiểu 10XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Gas đã dùng"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("Khí đốt"),
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("Thêm"),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Đã thêm mã thông báo",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Bỏ chọn tất cả",
     ),
@@ -2114,8 +2532,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nonce"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Tăng tốc"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Ghi chú"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Token hiện tại chưa được thêm.",
     ),
@@ -2123,13 +2541,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Nhập cụm từ khôi phục với các từ cách nhau bằng dấu cách",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Nhập ví"),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Số dư token hiện tại không đủ.",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Lỗi ký"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage("Quản lý ví"),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch thay thế sẽ được phát sóng với cùng số nonce và phí gas cao hơn khoảng 20%. Hành động này chỉ có hiệu lực khi giao dịch gốc vẫn đang chờ xử lý.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Giao dịch thay thế đã được gửi",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage("Tăng tốc"),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Nhập địa chỉ Ethereum (0x...)",
     ),
@@ -2142,20 +2567,23 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Dự trữ"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Dự trữ cơ bản"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Dự trữ gia tăng"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Số lượng đối tượng sở hữu",
     ),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Cách tính tổng số tiền dự trữ",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Tổng dự trữ = Dự trữ cơ bản + (Số lượng đối tượng sở hữu × Dự trữ gia tăng)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "Lưu trực tiếp đã kết thúc",
+    ),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Theo dõi"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "Tính năng theo dõi sắp ra mắt",
@@ -2170,7 +2598,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Xác nhận mẫu cử chỉ của bạn",
     ),
     "g_lock_key20": MessageLookupByLibrary.simpleMessage("Vẽ cử chỉ hiện tại"),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Đặt lại mật khẩu cử chỉ",
     ),
@@ -2178,12 +2606,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Quá nhiều lần thử thất bại, vui lòng thử lại",
     ),
     "g_lock_key24": MessageLookupByLibrary.simpleMessage("Thêm mật khẩu ví?"),
-    "g_lock_key25": m47,
+    "g_lock_key25": m50,
     "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
+      "Xác minh chuyển khoản",
     ),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "Yêu cầu xác thực sinh trắc học (Face ID / vân tay) để xác nhận mỗi giao dịch chuyển tiền từ ví.",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "Chưa đặt mật khẩu cử chỉ",
@@ -2256,12 +2684,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Chia sẻ cho bạn bè",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Tiếp tục"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Tôi vừa thiết lập một node trên @N42Wallet và bắt đầu xác minh trên thiết bị di động! Hãy tham gia cùng tôi. Tương lai phi tập trung là di động!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Khoáng sản"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("nút"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Mạng"),
@@ -2298,7 +2726,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Định dạng dữ liệu mã hóa không được hỗ trợ!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Phần thưởng hôm qua",
     ),
@@ -2312,7 +2740,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Đổi thưởng cần một chút thời gian, vui lòng đợi một lát!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Phần thưởng tích lũy hàng ngày và chỉ được gửi đến ví N của bạn khi đạt ~0.5 N.",
     ),
@@ -2398,7 +2826,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 khối/ngày~15 phút",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 giây mỗi lần kiểm tra",
     ),
@@ -2464,7 +2892,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập mật khẩu mã hóa",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Vui lòng nhập lại mật khẩu để đảm bảo chính xác",
     ),
@@ -2541,8 +2969,8 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_portfolio_total": MessageLookupByLibrary.simpleMessage("Tổng giá trị"),
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage("Thêm kết quả"),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("Mua"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "Hủy và hoàn tiền",
@@ -2554,7 +2982,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "Xác nhận kết quả",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Bắt đầu dự đoán",
     ),
@@ -2572,6 +3000,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Kết quả không hợp lệ",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Thị trường đã được thanh toán, hành động này không được phép",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Thị trường đã đóng, không thể giao dịch",
     ),
@@ -2580,6 +3011,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Thị trường chưa giải quyết, không thể đổi",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Chỉ người tạo thị trường này mới có thể thực hiện hành động này",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Cần ít nhất hai kết quả hợp lệ",
@@ -2590,10 +3024,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "Vượt trượt giá, vui lòng thử lại",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Không"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Kết quả"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "Chọn kết quả thắng để thanh toán (tiền chi theo kết quả)",
@@ -2603,11 +3037,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Câu hỏi dự đoán, ví dụ: Ai thắng ván này?",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Đã giải quyết"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Không giới hạn (đóng thủ công)",
     ),
@@ -2642,7 +3076,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Giới thiệu qua"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Liên kết"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("mã"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage("Lỗi lấy giá coin."),
     "g_swap_key_16": MessageLookupByLibrary.simpleMessage(
       "Bằng việc tiếp tục, bạn đồng ý với ",
@@ -2654,7 +3088,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Giao dịch hoán đổi của bạn sẽ được phân phối trong thời gian ngắn. Vui lòng kiên nhẫn.",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Chi phí vận hành node: Xác minh nhóm 1-49 N Node cơ bản: 50 N Node cao cấp: 100 N Node Pro: 500 N.",
     ),
@@ -2668,7 +3102,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Số dư mới"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Bạn trả"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Ngày"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Các giao dịch hoán đổi có thể xem trên các trình duyệt chuỗi liên quan (Etherscan, BscScan, TRONSCAN và của chúng tôi).",
     ),
@@ -2681,7 +3115,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Đặt lại về mặc định",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Chế độ hiển thị"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Phong cách"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("tùy chỉnh"),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Bất kỳ ai cũng có thể tạo token, bao gồm cả việc tạo phiên bản giả của token hiện có. Luôn nghiên cứu token trước khi nhập.",
     ),
@@ -2698,9 +3135,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 đơn vị"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Thêm token"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Lỗi định dạng!"),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Nhập token"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Tất cả mạng"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Token tùy chỉnh"),
@@ -2710,15 +3147,365 @@ class MessageLookup extends MessageLookupByLibrary {
       "Số thập phân token",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Nhập"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "ID Chuỗi này đã được sử dụng bởi mạng khác.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Thận trọng"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Rủi ro cao"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("An toàn"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
+      "Cho vay Aave V3",
+    ),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
+      "Email tài khoản",
+    ),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "Việc thêm tài sản này yêu cầu phí mạng. Nhấn Thêm để tiếp tục.",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "Hỏi về số dư, danh mục đầu tư, phí gas",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("Quay lại mã"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage(
+      "Quay lại địa chỉ email",
+    ),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "Tạo & Lưu sao lưu",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy ví nào trong tệp sao lưu",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "Tệp sao lưu của bạn được mã hóa bằng AES-256 + PBKDF2. Chỉ có mật khẩu đúng mới khôi phục được.",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng nhập mật khẩu sao lưu",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "Xuất sao lưu đám mây",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể tạo bản sao lưu. Vui lòng thử lại.",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage("Tệp sao lưu"),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "Không thể truy cập tệp đã chọn",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "Nhập sao lưu đám mây",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể khôi phục bản sao lưu. Vui lòng kiểm tra mật khẩu và tập tin sao lưu, rồi thử lại.",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "Nhập Ví",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "Không phải tệp sao lưu Ví N42Wallet hợp lệ",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "Chưa chọn tệp",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "Không có ví hợp lệ nào được chọn để sao lưu",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "Mật khẩu sao lưu",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Đặt mật khẩu sao lưu mạnh (tối thiểu 8 ký tự)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "Mật khẩu phải có ít nhất 8 ký tự",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "Nhập lại mật khẩu sao lưu",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "Khôi phục ví của bạn từ tệp sao lưu được mã hóa lưu trữ trên iCloud Drive hoặc Google Drive.",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "Không thể khôi phục bất kỳ ví nào từ tệp sao lưu này",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Nhập mật khẩu đã dùng khi tạo tệp sao lưu",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng chọn tệp sao lưu trước",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng chọn ít nhất một ví để sao lưu",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "Chọn ví để sao lưu",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "Sao lưu Ví N42Wallet",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "Tệp sao lưu này chứa khóa riêng tư / cụm từ khôi phục, mật khẩu ví và cài đặt ví. Hãy giữ an toàn tệp sao lưu và mật khẩu. Không bao giờ chia sẻ chúng với ai.",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "Mua N thông qua giao thức N42",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "Cần cấp quyền máy ảnh để quét mã.",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage("Hủy lệnh"),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage("Thay đổi email"),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "Đang kiểm tra phê duyệt...",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
+      "Bàn phím tạm thời trống",
+    ),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể tải danh sách tiền tệ. Vui lòng thử lại.",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Xác nhận mật khẩu",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "Xác nhận cập nhật",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "Thông tin hợp đồng",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage("Tạo ví"),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy dòng dữ liệu (chỉ phát hiện tiêu đề).",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy dữ liệu sau khi loại bỏ phần chú thích.",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("Thẻ tùy chỉnh..."),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage("Nhãn đích"),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Hoán đổi token qua Uniswap / 1inch / Jupiter",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "Đã chấp nhận mã xác minh",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Đã gửi yêu cầu mã xác minh",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể tải giá gia hạn ENS. Vui lòng thử lại.",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "Gia hạn ENS thất bại. Vui lòng thử lại.",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage("Giá vào lệnh"),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("Hết hạn trong:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage(
+      "Sợ hãi & Tham lam",
+    ),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể mở trình chọn tập tin. Vui lòng thử lại.",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể đọc tập tin đã chọn. Vui lòng thử lại.",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("Tự do"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "Dự báo phí Gas cho khối tiếp theo",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "Vui lòng nhập địa chỉ email hợp lệ",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("Vấn đề:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Đã ghép nối Keystone thành công",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage("Lệnh giới hạn"),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("Giá giới hạn"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "Giá thanh lý",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage(
+      "Tỷ lệ sử dụng",
+    ),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Ghi chú"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("Tin nhắn"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "Ví từ cụm từ khôi phục",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "Đăng nhập bằng tài khoản mạng xã hội để tạo ví MPC an toàn. Khóa riêng tư của bạn sẽ được chia thành các phần mã hóa — không cần lưu trữ Phrases Khôi phục.",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "Không cần Phrases Khôi phục",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "Được hỗ trợ bởi MPC-TSS. Khóa của bạn được chia thành 3 phần mã hóa, phân bố trên thiết bị của bạn, máy chủ của chúng tôi và bản sao lưu khôi phục.",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage("Địa chỉ email mới"),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "Không có địa chỉ email nào được lưu tạm trên thiết bị này",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage(
+      "Chưa có tiền tệ nào",
+    ),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("Không có DApp"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Không có lệnh giới hạn",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage("Không có lệnh mở"),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Không có vị thế mở",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage("Chưa có ví nào"),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("Tùy chọn"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "Hủy lệnh thất bại",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage("Lệnh đã hủy"),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Tạo lệnh thất bại",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "Lệnh giới hạn đã được tạo",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("Đã thực hiện"),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "Đặt lệnh giới hạn",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage(
+      "Đã kích hoạt",
+    ),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể tải lệnh giới hạn",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "Mật khẩu không khớp",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "Dán liên kết kết nối",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "Đang chờ (Mempool)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage(
+      "Token phổ biến",
+    ),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("Kích thước"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "Ví từ khóa riêng",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("Chỉ đọc"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("Mã phòng"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Lưu thất bại. Vui lòng thử lại.",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("Gửi mã"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "Đang gửi yêu cầu...",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage(
+      "Chọn chế độ hoán đổi",
+    ),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("Thẻ"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "Mẫu đã sao chép",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "Hợp đồng Token (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "Đang tra cứu thông tin token...",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "Không tìm thấy token trong danh sách — điền mã và số chữ số thập phân thủ công",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể xóa giao dịch. Vui lòng thử lại.",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Không thể lưu giao dịch. Vui lòng thử lại.",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
+      "Trạng thái không xác định",
+    ),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("Cập nhật"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật địa chỉ email",
+    ),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "Vấn đề xác thực",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Mã xác minh",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("Xác minh mã"),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "Xem dữ liệu thị trường",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("Khối lượng 24h"),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("AI Ví"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "Tạo hoặc nhập ví để bắt đầu",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Tải ví thất bại",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "Đang tải ví...",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("Để sau"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "Số dư không thể làm mới",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Ví HD · Cụm từ ghi nhớ",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "Chuỗi đơn · Đã nhập",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage("Ghim token"),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "Giá đã lưu",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "Cập nhật ngay lúc này",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "Giá một phần",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Giá không khả dụng",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "Bỏ ghim token",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Mất kết nối. Vui lòng kết nối lại.",
@@ -2759,7 +3546,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Mật khẩu"),
     "next": MessageLookupByLibrary.simpleMessage("Tiếp theo"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Chỉnh sửa hồ sơ",
     ),
@@ -2768,10 +3555,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vui lòng nhập địa chỉ",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "Thiết bị này hạn chế hoạt động nền của ứng dụng, do đó bạn có thể bỏ lỡ tin nhắn trò chuyện và thông báo chuyển tiền khi ứng dụng ở chế độ nền hoặc đã đóng.\n\nNhấn vào \"Đi tới Cài đặt\" để cho phép hoạt động nền, sau đó bật Tự động khởi động cho ứng dụng này.",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "Giao hàng nền có thể bị giới hạn",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Không nhắc lại",

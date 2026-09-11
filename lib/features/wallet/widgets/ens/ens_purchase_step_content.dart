@@ -252,7 +252,11 @@ class EnsPurchaseStepContent extends StatelessWidget {
                 borderRadius: AppRadius.brSm,
               ),
               child: Text(
-                'Tx: ${_shortenHash(registerResult!.txHash!)}',
+                S
+                    .of(context)
+                    .g_ui_transaction_hash_value(
+                      _shortenHash(registerResult!.txHash!),
+                    ),
                 style: AppTypography.caption.copyWith(
                   fontFamily: 'monospace',
                   color: _subtitle(context),

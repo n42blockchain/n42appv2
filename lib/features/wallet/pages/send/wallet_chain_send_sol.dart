@@ -12,7 +12,7 @@ import 'package:n42_wallet/features/wallet/data/transaction_record_dao.dart';
 import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/features/utils/regular.dart';
 import 'package:n42_wallet/features/wallet/api/chain_api/sol_api.dart';
-import 'package:n42_wallet/features/wallet/api/sender/chain_sender.dart';
+import 'package:n42_wallet/features/wallet/pages/send/sol_send_request.dart';
 import 'package:n42_wallet/features/wallet/api/sender/sender_factory.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';

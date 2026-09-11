@@ -1,0 +1,65 @@
+{
+  "full_suite": "07:27 +4059: All tests passed!",
+  "new_tests": 46,
+  "line_coverage": {
+    "hit": 24874,
+    "found": 122234,
+    "files": 914
+  },
+  "full_suite_deep_links": {
+    "hit": 236,
+    "found": 249,
+    "files": 3
+  },
+  "module_suite": {
+    "tests": 110,
+    "hit": 236,
+    "found": 249,
+    "files": 3
+  },
+  "device_navigation": {
+    "android": "01:28 +1: All tests passed!",
+    "ios": "01:17 +1: All tests passed!"
+  },
+  "device_deep_links": {
+    "android": true,
+    "ios": true,
+    "input": "injected into real service before first app frame",
+    "cold_delivery": true,
+    "duplicate_blocked": true,
+    "untrusted_blocked": true,
+    "signed": false,
+    "os_association_verified": false
+  },
+  "ios_first_attempt": "debug connection stalled before test case; same source retried successfully",
+  "normal_apps_installed": {
+    "android": true,
+    "ios": true
+  },
+  "installed_version": {
+    "name": "2.4.8",
+    "code": "2026072637",
+    "bundle": "ai.n42.www",
+    "mode": "Profile",
+    "entrypoint": "lib/main.dart"
+  },
+  "checks": {
+    "analyze_errors": 0,
+    "analyze_warnings": 0,
+    "analyze_infos": 160,
+    "dart_format_files": 5,
+    "dart_format_changes": 0,
+    "python_tests": 8,
+    "feature_inventory_current": true,
+    "git_diff_check_passed": true
+  },
+  "mainnet_broadcast": false,
+  "authenticated_chat_tested": false,
+  "account_binding_completed": false,
+  "screenshots": {
+    "android": "android-after.png",
+    "ios": "ios-after.png"
+  },
+  "source_hashes_match": true,
+  "completed_at_utc": "2026-09-11T07:13:17.780835+00:00"
+}

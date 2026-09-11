@@ -71,7 +71,7 @@ import 'package:n42_wallet/core/network/request_url.dart';
 /// This is used during the migration phase to bridge Provider and Riverpod
 late ProviderContainer globalProviderContainer;
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // 设备方向控制：iPad 允许所有方向，iPhone 仅竖屏
@@ -243,6 +243,9 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
     // 时点,否则要等 periodic 下一跳(最长 5 分钟,复审 P2)。
     if (state == AppLifecycleState.resumed) {
       unawaited(_priceAlertTick());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _deepLinkHandler?.resumePending();
+      });
     }
   }
 
@@ -308,14 +311,18 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
   Future<void> _initDeepLinks() async {
     try {
       final service = ref.read(deepLinkServiceProvider);
-      await service.init();
+      _deepLinkService = service;
       final handler = DeepLinkHandler(deepLinkService: service);
       handler.onNavigate = _handleDeepLinkNavigation;
-      handler.startListening();
-      _deepLinkService = service;
+      handler.canNavigate = () =>
+          mounted &&
+          _splashComplete &&
+          (AppGlobals.navigatorKey.currentContext?.mounted ?? false);
       _deepLinkHandler = handler;
+      handler.startListening();
+      await service.init();
     } catch (e) {
-      AppLogger.w('main', 'deep link initialization failed: $e');
+      AppLogger.w('main', 'deep link initialization failed: ${e.runtimeType}');
     }
   }
 
@@ -394,6 +401,9 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
         if (mounted) {
           setState(() {
             _splashComplete = true;
+          });
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            if (mounted) _deepLinkHandler?.resumePending();
           });
         }
       },

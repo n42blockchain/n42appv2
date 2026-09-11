@@ -74,7 +74,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
             0,
             su.setWidth(8),
           ),
-          child: Text('Popular Tokens', style: sectionTitle),
+          child: Text(S.of(context).g_ui_popular_tokens, style: sectionTitle),
         ),
         SizedBox(
           height: su.setWidth(100),
@@ -94,7 +94,7 @@ extension _WalletCoinAddAllSearchUI on _WalletCoinAddAllState {
             left: su.setWidth(4),
             bottom: su.setWidth(8),
           ),
-          child: Text('All Tokens', style: sectionTitle),
+          child: Text(S.of(context).g_key_9, style: sectionTitle),
         ),
       ],
     );

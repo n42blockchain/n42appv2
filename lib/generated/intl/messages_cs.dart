@@ -83,110 +83,177 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Opravdu chcete odstranit „${name}“ z uložených zařízení?";
 
-  static String m28(value) => "Odhad. plyn: ~${value} jednotky";
+  static String m28(value) => "Získat ${value} bodů";
 
-  static String m29(reason) => "Důvod: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "Vyžádejte si ${amount} ${symbol} na síti ${network}";
 
-  static String m30(value) => "Rozpojení ${value}d";
+  static String m30(value) =>
+      "Odstranit vlastní síť ${value}? Zůstávající prostředky v této síti už nebudou zobrazeny. Vaše aktiva v řetězci nejsou ovlivněna.";
 
-  static String m31(value) => "${value} zbývajících dní";
+  static String m31(value) => "Odhad. plyn: ~${value} jednotky";
 
-  static String m32(value) =>
+  static String m32(reason) => "Důvod: ${reason}";
+
+  static String m33(value) => "Rozpojení ${value}d";
+
+  static String m34(value) => "${value} zbývajících dní";
+
+  static String m35(value) =>
       "Vysazení trvá ${value} dní. Vaše tokeny budou během této doby uzamčeny.";
 
-  static String m33(value) => "Nemáte dostatek \"${value}\"";
+  static String m36(value) => "Nemáte dostatek \"${value}\"";
 
-  static String m34(value) => "Nepodařilo se získat účet „${value}“.";
+  static String m37(value) => "Nepodařilo se získat účet „${value}“.";
 
-  static String m35(value) => "Minimální ${value} XRP pro první přenos";
+  static String m38(value) => "Minimální ${value} XRP pro první přenos";
 
-  static String m36(count) => "Přidat (${count})";
+  static String m39(count) => "Přidat (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: 'Byl zjištěn 1 nový token', other: 'Byly zjištěny nové tokeny ${count}')} — klepněte pro kontrolu";
 
-  static String m38(value) => "Nebyl přidán žádný řetěz ${value}.";
+  static String m41(value) => "Nebyl přidán žádný řetěz ${value}.";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "${value} má nedokončené transakce, zkuste to prosím znovu později.";
 
-  static String m40(value) => "Pro ${value} nebyla nalezena žádná adresa.";
+  static String m43(value) => "Pro ${value} nebyla nalezena žádná adresa.";
 
-  static String m41(value) => "Nedostatečný zůstatek ${value}.";
+  static String m44(value) => "Nedostatečný zůstatek ${value}.";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "Každý účet XRP si musí rezervovat ${value} XRP (${value1} poklesy) jako základ, který nelze utratit.";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "Pro každý objekt, který účet vlastní, se do rezervy přidá ${value} XRP (${value1} klesne).";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "Tento účet vlastní objekty ${value}, což znamená, že je vyhrazen další ${value1} XRP.";
 
-  static String m45(message) =>
+  static String m48(message) =>
       "Nepodařilo se vstoupit do místnosti\n${message}";
 
-  static String m46(value) => "Nesprávný vzor, zbývá ${value} pokusů";
+  static String m49(value) => "Nesprávný vzor, zbývá ${value} pokusů";
 
-  static String m47(value) => "Nesprávný vzor, zbývá ${value} pokus";
+  static String m50(value) => "Nesprávný vzor, zbývá ${value} pokus";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "Úspěšně jste nastavili ${value} a zahájíte ověřování pomocí N42Wallet!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "Připojte se k mé skupině ${value} na @N42Wallet a staňte se prvním těžařem řetězce Layer 1 a získejte kryptoměny do svého telefonu!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "Opravdu chcete zamknout ${value} N do ${value1} pro spuštění uzlu?";
 
-  static String m51(value) => "Import se nezdařil: ${value}";
+  static String m54(value) => "Import se nezdařil: ${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "K získání odměn je nutný zůstatek v sázce alespoň ${value}.";
 
-  static String m53(value, value1) => "${value} N každý blok ${value1} vytěžen";
+  static String m56(value, value1) => "${value} N každý blok ${value1} vytěžen";
 
-  static String m54(value) => "Musí být ${value} znaků";
+  static String m57(value) => "Musí být ${value} znaků";
 
-  static String m55(symbol) => "Částka (${symbol})";
+  static String m58(symbol) => "Částka (${symbol})";
 
-  static String m56(amount, symbol) => "Zůstatek: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "Zůstatek: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "Prohlásit „${label}“ vítězem a vypořádat? Nelze vrátit.";
 
-  static String m58(n) => "${n} min";
+  static String m61(n) => "${n} min";
 
-  static String m59(n) => "Výsledek ${n}";
+  static String m62(n) => "Výsledek ${n}";
 
-  static String m60(label, pct) => "${label} vyhrává (${pct}%)";
+  static String m63(label, pct) => "${label} vyhrává (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "Odh. ${shares} podílů · prům ${avg}% · poté ${after}%";
 
-  static String m62(reason) => "Výplata selhala: ${reason}";
+  static String m65(reason) => "Výplata selhala: ${reason}";
 
-  static String m63(label) => "Výsledek: ${label}";
+  static String m66(label) => "Výsledek: ${label}";
 
-  static String m64(n) => "Prodat ${n}";
+  static String m67(n) => "Prodat ${n}";
 
-  static String m65(value) => "${value} Nedostatečný zůstatek.";
+  static String m68(value) => "${value} Nedostatečný zůstatek.";
 
-  static String m66(value) => "${value} příchozí...";
-
-  static String m67(value) =>
-      "${value} vyměněné v aplikaci budou brzy distribuovány do vaší peněženky a nelze je tímto procesem prodávat. Lze jej použít ke spuštění uzlu.";
-
-  static String m68(value) => "Max. ${value} znaků";
-
-  static String m69(value) => "Řetězová aplikace ${value} je již podporována!";
+  static String m69(value) => "${value} příchozí...";
 
   static String m70(value) =>
+      "${value} vyměněné v aplikaci budou brzy distribuovány do vaší peněženky a nelze je tímto procesem prodávat. Lze jej použít ke spuštění uzlu.";
+
+  static String m71(value) => "Max. ${value} znaků";
+
+  static String m72(value) => "Řetězová aplikace ${value} je již podporována!";
+
+  static String m73(value) =>
       "Řetězová aplikace ${value} je již podporována, chcete ji přidat?";
 
-  static String m71(value) => "Odkaz na test adresy ${value} se nezdařil!";
+  static String m74(value) => "Odkaz na test adresy ${value} se nezdařil!";
 
-  static String m72(value) => "0~${value} znaků";
+  static String m75(value) =>
+      "RPC hlásí Chain ID ${value}, které se neshoduje s hodnotou, kterou jste zadali.";
+
+  static String m76(asset, contract, address) =>
+      "Aktivum ${asset} (${contract}) nebylo přidáno k účtu ${address}.";
+
+  static String m77(imported, skipped) =>
+      "Peněženky importovány: ${imported}. Přeskočeno: ${skipped}.";
+
+  static String m78(value) => "Zůstatek: ${value}";
+
+  static String m79(value) => "Základní poplatek: ${value} Gwei";
+
+  static String m80(value) => "Schránka se automaticky vymaže za ${value}s";
+
+  static String m81(value) => "Řádek ${value}: chybějící pole";
+
+  static String m82(value) => "${value} dní";
+
+  static String m83(value) => "Připojeno k ${value}";
+
+  static String m84(value) => "Poplatek za síť: ${value}";
+
+  static String m85(value) => "${value} hod.";
+
+  static String m86(value) => "Import platných příjemců (${value})";
+
+  static String m87(quote, base) => "Limitní cena (${quote} za ${base})";
+
+  static String m88(value) => "Limit ${value}";
+
+  static String m89(value) => "Trhy (${value})";
+
+  static String m90(value) => "Minimální zůstatek: ${value}";
+
+  static String m91(value) => "Objednávky (${value})";
+
+  static String m92(value) => "Pozice (${value})";
+
+  static String m93(value) => "Příjemci: ${value}";
+
+  static String m94(value) => "Token nalezen: ${value}";
+
+  static String m95(value) => "Token: ${value}";
+
+  static String m96(value) => "Transakce: ${value}";
+
+  static String m97(valid, issues) => "Platné: ${valid}. Chyby: ${issues}.";
+
+  static String m98(value) => "… a ${value} dalších chyb";
+
+  static String m99(volume, interest) => "Objem: ${volume} · OI: ${interest}";
+
+  static String m100(value) => "Peněženka ${value}";
+
+  static String m101(value) => "Aktualizováno před ${value}h";
+
+  static String m102(value) => "Aktualizováno před ${value}m";
+
+  static String m103(value) => "0~${value} znaků";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -207,6 +274,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Přihlášení nového zařízení",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Soubor"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "Uložená zůstatek · selhalo aktualizování",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "Známá zůstatek",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "Pouze zůstatky na hlavní síti. Chybějící nebo neúspěšné síťové dotazy se nezapočítávají jako nulový zůstatek.",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "Zůstatky podle sítě",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "Žádný aktivní hlavní účet pro tuto síť",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "Zůstatek nebyla načtena",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage(
+      "Otevřít síť",
+    ),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Tento aktivum již není k dispozici v vybrané peněžence. Vraťte se do peněženky a vyberte aktivum.",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Jde výše ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Pokles pod ↓"),
     "g_alert_current_price": m1,
@@ -233,6 +324,118 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Skenujte pro příjem",
+    ),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "Otevřete block explorer, abyste zobrazili činnost této chytrého účtu na blockchainu.",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "Verze, webová stránka a podpora",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se načíst historii transakcí.",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "Místní historie transakcí ve vašich peněženkách. Otevřete aktivum, abyste synchronizovali jeho nejnovější aktivitu.",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("všechny"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "Povolení výdaje pro",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "Kontrakt tokenu",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage("Hromadná převod"),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Odeslat více příjemcům nebo importovat CSV",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Biometrická autentizace",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Nastavení Face ID / otisku prstu",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "Spravujte relace; odpojení neodebírá schválení tokenů.",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage(
+      "Zobrazovaná měna",
+    ),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "Hodnoty portfolia jsou nyní zobrazeny v amerických dolarech.",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se načíst pozice v DeFi. Tapněte pro opakování.",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "Načítání pozic v DeFi…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "Pozice v DeFi",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "Jazyk rozhraní aplikace",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "Exportujte šifrovanou zálohu peněženky",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage(
+      "Aktuální sazba finančního příspěvku",
+    ),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage(
+      "Sledovač poplatků za síť",
+    ),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Poplatky za síť a upozornění na ceny",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage(
+      "Hardwarová peněženka",
+    ),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage("Načíst více"),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Mainnet"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "Spravujte svou peněženku a nastavení",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "Vytvářejte, importujte a spravujte peněženky",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage(
+      "Odhadovaná cena",
+    ),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "Maximální páka",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "Spravujte sítě a koncové body RPC",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage(
+      "Otevřené závazky",
+    ),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "Cena z oráku",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "Ověření a ochrana peněženky",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "Nabídka směnného kurzu se změnila nebo vypršela. Před potvrzením si prosím zkontrolujte nejnovější nabídku směnného kurzu.",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage("Ohodnoťte N42"),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "Otevřete obchod s aplikacemi",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "Uložené adresy příjemců",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage("Zobrazit méně"),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Testnet"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "Vzhled a režim zobrazení",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage(
+      "Objem za 24 hodin (USD)",
+    ),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "Správa peněženek",
     ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "Zadejte prosím adresu URL",
@@ -295,6 +498,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_caution": MessageLookupByLibrary.simpleMessage("Pozor"),
     "g_dapp_security_safe": MessageLookupByLibrary.simpleMessage("Bezpečný"),
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage("Ověřeno"),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Vyberte výdajovou hlavní peněženku pro tuto síť. Peněženky jen pro sledování nemohou podepisovat výměny.",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "Parametry transakce jsou neplatné nebo došlo k selhání provedení. Obnovte nabídku cen výměny a zkuste to znovu.",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "Výměna byla odeslána, ale historie nemohla být aktualizována. Neposílejte ji znovu.",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "Poplatky za síť jsou účtovány tímto chytřím účtem.",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "Účet pro výdaje",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Použít chytrý účet",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage("Znovu odeslat kód"),
     "g_email_resend_countdown": m3,
     "g_face_1": MessageLookupByLibrary.simpleMessage(
@@ -333,10 +554,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
       "Propojení úspěšné",
     ),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage(
+      "Vymazat datum",
+    ),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "Exportovat odpovídající lokální záznamy (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se exportovat historii transakcí. Zkuste to prosím znovu.",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "Filtrování a export do CSV zahrnují všechny odpovídající záznamy uložené na tomto zařízení. Otevřete aktivum, abyste synchronizovali novější činnost na blockchainu.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Profil"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Novinky"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Ověření"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Pozvěte přítele"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Trhy"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Zrušeno"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Zkontrolujte připojení k síti a zkuste to znovu",
@@ -677,6 +911,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "Zkuste to znovu",
     ),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Sponzorování poplatků za pohyb (gas) ještě není k dispozici. Prosím, platte poplatky za pohyb z vašeho zůstatku.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage(
       "Čeká na vyřízení",
     ),
@@ -716,6 +953,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Vybráno"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Odesílejte tokeny pomocí svého chytrého účtu",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "Transakce se nezdařila",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 den"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 hodina"),
@@ -821,6 +1061,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Pokročilé funkce",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Aktivní"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage("Objevit"),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "Rozdělit",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("Ukončeno"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Žádné ověřené kampaně nejsou k dispozici",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage(
+      "Čeká na vyřízení",
+    ),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Zdroje"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Otevřete Zdroje, abyste procházeli adresáře kampaní spravované poskytovateli.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Kampaně třetích stran mohou být škodlivé. Před podepsáním ověřte doménu projektu a podrobnosti transakce.",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage("Airdropy"),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage(
+      "Naplánováno",
+    ),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("OBLÍBENÉ"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("ŽIVĚ"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Přidat příjemce",
     ),
@@ -883,6 +1148,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_batch_title": MessageLookupByLibrary.simpleMessage("Dávkový přenos"),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Celková částka",
+    ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "Adresa Block Exploreru (volitelné)",
     ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Řetěz není podporován",
@@ -1026,6 +1294,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Chcete-li vypálit NFT, přejděte na stránku s podrobnostmi o NFT a klepněte na tlačítko „Vypálit“.",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Běžné sítě (kliknutím vyplnit)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Tento řetězec zatím nepodporuje převody, zůstaňte naladěni",
     ),
@@ -1039,6 +1310,19 @@ class MessageLookup extends MessageLookupByLibrary {
       "Klepnutím zobrazíte vše",
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage("Nedávné"),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage("Účet"),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "Tato stránka žádá o zobrazení vaší adresy peněženky a navrhuje transakce. Nemůže přesouvat prostředky bez vašeho schválení.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Připojit peněženku",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "Toto zařízení je pravděpodobně rootované nebo má jailbreak. Používání peněženky na zařízení s narušeným zabezpečením zvyšuje riziko krádeže klíčů a neoprávněného přístupu. Postupujte opatrně.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Upozornění na bezpečnost zařízení",
+    ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Schváleno! Pokračujte klepnutím na Vyměnit.",
     ),
@@ -1085,6 +1369,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Nabídka se nezdařila",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Služba nabídky směnného kurzu je dočasně nedostupná. Zkuste to prosím později.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Vyhledávací symbol / jméno / adresa",
     ),
@@ -1106,19 +1393,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Výměna byla úspěšně odeslána",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Služba tokenů je nedostupná. Zobrazuje se omezený offline seznam.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Výměna blokována: adresa routera není rozpoznána. Pro vaši bezpečnost byla tato transakce zrušena.",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Vy platíte"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage("Přijímáte"),
     "g_key_earn_active_products": MessageLookupByLibrary.simpleMessage(
       "Aktivní produkty",
     ),
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage("Dávka"),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage("Nejlepší APY"),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Spálit"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Koupit N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Koupit N s protokolem N42",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Najděte ověřené kampaně třetích stran",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Křížový převod",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Denní body na blockchainu",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("Výměna DEX"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("plyn"),
@@ -1140,6 +1440,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Získejte odměny účastí na těžbě uzlů",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage(
+      "Perpetuální futures",
+    ),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Rychlé nástroje",
     ),
@@ -1148,6 +1451,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Vyberte Typ výměny",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Vložit",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "Získávejte denní výnos na USDC / USDT / DAI",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "V současnosti nejsou k dispozici žádné trhy s stabilními mincemi",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Výdělek z stabilních mincí",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Vsaďte ETH s Lidem",
@@ -1723,6 +2038,68 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Opravdu chcete aplikaci ukončit?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Dostupné body",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Dnes přihlášen",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Přihlásit se",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
+      "Hotovo",
+    ),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Přihlášení selhalo",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Přihlášení potvrzeno na N42",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Kopírovat"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Denní přihlášení",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Žebříček je prázdný",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("Historie"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Sdílet váš odkazový kód",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Pozvat přátele",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Žebříček",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "Žádná historie bodů",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "Zatím žádné odkazy. Sdílejte svůj kód, abyste začali.",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Žádné odměny nejsou k dispozici",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Žádné úkoly nejsou k dispozici",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Žádná aktivní peněženka",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Odkazy"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Odměny"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Úkoly"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Body"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Celkem získáno",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Služba není k dispozici",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Použito"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Facebook"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Cvrlikání"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Reddit"),
@@ -1751,6 +2128,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage(
       "Zadejte počáteční frázi",
     ),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("Podpis"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Nejprve zadejte zprávu",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "Podpis selhal",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "Zadejte zprávu k podepsání",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("Podpis"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage(
+      "Podpis zprávy",
+    ),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Podpis zprávy je pro tuto řetězec zatím nepodporován",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Podepisujte pouze zprávy, kterým plně důvěřujete. Zákeřná zpráva může být použita k autorizaci akcí ve vašem jménu.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Celkem"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Jméno"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Zpět"),
@@ -1773,6 +2170,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Video"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Podlaha"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("Galerie NFT"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage("Skrýt spam"),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("Nápis #"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
       "Nebyly nalezeny žádné NFT",
@@ -1797,13 +2195,30 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_nft_token_id": MessageLookupByLibrary.simpleMessage("ID tokenu"),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Typ"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("Ostatní"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Hesla se neshodují",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Pouze pro čtení tržních dat. Umístění objednávek není v této verzi podporováno.",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Vyberte z galerie telefonů",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Veřejný klíč"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Požadavek na platbu",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage(
+      "Odstranit síť",
+    ),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Resetovat"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Zkusit znovu"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Token nebo řetězec požadavku na platbu není v této peněžence",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Použijte Pozor",
     ),
@@ -1830,11 +2245,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Metoda sdílení",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "Transakce se pravděpodobně nezdaří",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Simulace transakce…",
     ),
@@ -1855,9 +2270,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Prům. APY"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Transakce byla vytvořena, ale odesílání přes peněženku pro tuto síť ještě není podporováno.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Komise"),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Odhad. Denní odměna",
     ),
@@ -1918,12 +2336,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Začněte vytyčovat",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Transakce na vytyčování odeslána",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Vytyčování"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Transakce byla úspěšně připravena",
     ),
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage("Rozpojení"),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Odsadit"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "Aktualizace...",
@@ -1937,7 +2358,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Maximální poplatek za plyn",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("Čeká na vyřízení"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Selhání"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Pokračujte"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Heslo peněženky"),
@@ -1960,7 +2381,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Nepodařilo se získat data",
     ),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Zkontrolujte účet s adresou příjemce",
     ),
@@ -1971,18 +2392,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Ověření účtu proběhlo úspěšně",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "Přijímací adresa nemá účet a první převod je minimálně 10XRP",
     ),
     "g_key_t_6": MessageLookupByLibrary.simpleMessage("Použitý plyn"),
     "g_key_t_7": MessageLookupByLibrary.simpleMessage("plyn"),
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage("Přidat"),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Token přidán",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Zrušte výběr všech",
     ),
@@ -2145,8 +2566,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("Nikdy"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Zrychlit"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Poznámka"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Aktuální token nebyl přidán.",
     ),
@@ -2156,15 +2577,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage(
       "Importovat peněženku",
     ),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Aktuální zůstatek tokenů je nedostatečný.",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Chyba podpisu"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Spravovat Peněženku",
     ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "Bude odeslána náhradní transakce se stejným nonce a přibližně o 20 % vyšším poplatkem za gas. Má účinek pouze tehdy, pokud původní transakce stále čeká na potvrzení.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Odeslána transakce nahrazující původní",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage("Zrychlit"),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Zadejte adresu Ethereum (0x...)",
     ),
@@ -2177,20 +2605,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Rezervováno"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Základní rezerva"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Přírůstková rezerva"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Počet vlastněných objektů",
     ),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Jak vypočítat celkovou rezervovanou částku",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Celková rezerva = základní rezerva + (počet vlastněných objektů × přírůstková rezerva)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage("Živý přenos skončil"),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Sledovat"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "Funkce sledování již brzy",
@@ -2207,7 +2636,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Nakreslete aktuální vzor",
     ),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Resetovat vzorové heslo",
     ),
@@ -2217,12 +2646,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Přidat heslo k Peněžence?",
     ),
-    "g_lock_key25": m47,
-    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
-    ),
+    "g_lock_key25": m50,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage("Ověření převodu"),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "Vyžadovat biometrické ověření (Face ID / otisk prstu) pro potvrzení každého převodu peněz z peněženky.",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "Vzorové heslo není nastaveno",
@@ -2295,12 +2722,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Sdílejte s přáteli",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Pokračujte"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Právě jsem nastavil uzel na @N42Wallet a zahájil ověřování na mobilních zařízeních! Pojď a přidej se ke mně. Decentralizovaná budoucnost je mobilní!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Minerální"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Uzel"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Síť"),
@@ -2335,7 +2762,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Nepodporovaný formát šifrovaných dat!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage("Včerejší odměny"),
     "g_mining_key_110": MessageLookupByLibrary.simpleMessage("Šifrovaná data"),
     "g_mining_key_111": MessageLookupByLibrary.simpleMessage(
@@ -2349,7 +2776,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Vykoupení nějakou dobu trvá, chvíli prosím počkejte!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Odměna se hromadí denně a je odeslána do vaší peněženky N, až když dosáhne ~0,5 N.",
     ),
@@ -2421,7 +2848,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 bloků/den ~ 15 minut",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 sekund na kontrolu",
     ),
@@ -2487,7 +2914,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Zadejte heslo pro šifrování",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Zadejte prosím své heslo znovu, abyste se ujistili, že je správné",
     ),
@@ -2564,8 +2991,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
       "Přidat výsledek",
     ),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("Koupit"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "Zrušit a vrátit",
@@ -2577,7 +3004,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "Potvrdit vyhodnocení",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Spustit predikci",
     ),
@@ -2595,6 +3022,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Neplatný výsledek",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Trh již byl uzavřen, akce není povolena",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Trh uzavřen, obchodování nedostupné",
     ),
@@ -2603,6 +3033,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Trh nevyhodnocen, nelze vyplatit",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Tuto akci může provést pouze vlastník trhu, který ji vytvořil",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Alespoň dva platné výsledky",
@@ -2613,10 +3046,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "Překročen skluz, zkuste znovu",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Ne"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Výsledky"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "Vyberte vítězný výsledek k vypořádání (prostředky dle výsledku)",
@@ -2626,11 +3059,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Otázka predikce, např.: Kdo vyhraje toto kolo?",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Vyhodnoceno"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Bez limitu (ruční uzavření)",
     ),
@@ -2663,7 +3096,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_share_v3_key_6": MessageLookupByLibrary.simpleMessage("Odkazovat přes"),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Odkaz"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("kód"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Získejte chybu ceny mince.",
     ),
@@ -2675,7 +3108,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Váš swap bude brzy distribuován. Buďte prosím trpěliví.",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Náklady na provoz uzlu: Ověření skupiny 1-49 N Základní uzel: 50 N Prémiový uzel: 100 N Pro uzel: 500 N.",
     ),
@@ -2687,7 +3120,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Nová rovnováha"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Vy platíte"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Datum"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Swapy lze prohlížet na příslušných průzkumnících řetězců (Etherscan, BscScan, TRONSCAN a naše vlastní).",
     ),
@@ -2702,7 +3135,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Obnovit výchozí",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Vzhled"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Styl"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage("Vlastní"),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Každý může vytvořit token, včetně vytváření falešných verzí existujících tokenů. Před importem tokenu vždy prozkoumejte.",
     ),
@@ -2721,9 +3157,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 uint"),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Přidat tokeny"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Chyba formátu!"),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Import tokenů"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Všechny sítě"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage("Vlastní token"),
@@ -2733,15 +3169,371 @@ class MessageLookup extends MessageLookupByLibrary {
       "Token v desítkové soustavě",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Importovat"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "Toto Chain ID je již použito jinou sítí.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Pozor"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Vysoké riziko"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Bezpečný"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage(
+      "Půjčování Aave V3",
+    ),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage("E-mail účtu"),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "Přidání tohoto aktivum vyžaduje poplatek za síť. Tapněte na Přidat pro pokračování.",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "Zeptejte se na zůstatek, portfolia, poplatky za síť",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("Zpět na kód"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage("Zpět na e-mail"),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "Vytvořit a uložit zálohu",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "V souboru zálohy nebyly nalezeny žádné peněženky",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "Vaše záloha je šifrována pomocí AES-256 + PBKDF2. Pouze správné heslo umožní její obnovení.",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "Zadejte heslo pro zálohu",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "Export zálohy do cloudu",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se vytvořit zálohu. Zkuste to znovu.",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage("Soubor zálohy"),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "Nelze přistoupit k vybranému souboru",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "Importovat zálohu z cloudu",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se obnovit zálohu. Zkontrolujte heslo a soubor zálohy, pak zkuste znovu.",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "Importovat peněženky",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "Nejde o platný soubor zálohy peněženky N42Wallet",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "Žádný soubor nebyl vybrán",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "Nebyla vybrána žádná platná peněženka k zálohování",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "Heslo k záloze",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Nastavte silné heslo pro zálohu (minimálně 8 znaků)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "Heslo musí mít alespoň 8 znaků",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "Zopakujte heslo pro zálohu",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "Obnovte své peněženky z šifrovaného záložního souboru uloženého na iCloud Drive nebo Google Drive.",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "Z této zálohy nelze obnovit žádné peněženky",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Zadejte heslo použité při vytváření zálohy",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Nejprve vyberte soubor zálohy",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "Vyberte alespoň jednu peněženku k zálohování",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "Vyberte peněženky k zálohování",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "Záloha peněženky N42Wallet",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "Tato záloha obsahuje vaše privátní klíče / fráze, hesla peněženky a nastavení peněženky. Uchovávejte soubor zálohy a heslo v bezpečí. Nikdy je nesdílejte s nikým.",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "Koupě N prostřednictvím protokolu N42",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage("Calldata (hex)"),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "Pro skenování kódu je vyžadováno oprávnění ke kameře.",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage(
+      "Zrušit objednávku",
+    ),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage("Změnit e-mail"),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "Kontrola schválení…",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
+      "Schránka je prázdná",
+    ),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Načtení mincí selhalo. Zkuste to prosím znovu.",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Potvrďte heslo",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "Potvrdit aktualizaci",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "Informace o kontraktu",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage(
+      "Vytvořit peněženku",
+    ),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "Nebyly nalezeny žádné řádky dat (zjištěn pouze hlavička).",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "Po odstranění komentářů nebyly nalezeny žádné údaje.",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage(
+      "Vlastní štítek...",
+    ),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
+      "Značka příjemce",
+    ),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Výměna tokenů prostřednictvím Uniswap / 1inch / Jupiter",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "Ověřovací kód byl přijat",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Požadavek na ověřovací kód byl odeslán",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se načíst ceny obnovení ENS. Zkuste to znovu.",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "Obnovení ENS selhalo. Zkuste to znovu.",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage("Cena vstupu"),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("Vyprší za:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage("Strach a žádost"),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "Nelze otevřít výběr souboru. Zkuste to znovu.",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "Nelze načíst vybraný soubor. Zkuste to znovu.",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("Volný"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "Odhad ceny poplatku za blok",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "Zadejte platnou e-mailovou adresu",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("Problémy:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Keystone úspěšně přidán",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Objednávky s omezením",
+    ),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("Cena omezení"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "Cena likvidace",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage("Využití"),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Poznámka"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage("Mempool"),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("Zpráva"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "Peněženka s frází",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "Přihlaste se pomocí svého sociálního účtu, abyste vytvořili bezpečnou peněženku MPC. Vaše soukromý klíč je rozdělen na šifrované části — nemusíte se bát ztráty záložní fráze.",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "Není potřeba záložní fráze",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "Používá MPC-TSS. Váš klíč je rozdělen na 3 šifrované části umístěné na vašem zařízení, na našich servery a na záložním záložním kopii.",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage(
+      "Nová e-mailová adresa",
+    ),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "Na tomto zařízení není uložena žádná e-mailová adresa",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage("Zatím žádné mince"),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("Žádné DApp"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Žádné objednávky s omezením",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage(
+      "Žádné otevřené objednávky",
+    ),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Žádné otevřené pozice",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Zatím žádná peněženka",
+    ),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("Volitelné"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "Zrušení selhalo",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Objednávka zrušena",
+    ),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Vytvoření objednávky selhalo",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "Objednávka s omezením vytvořena",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("Provedeno"),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "Vytvořit objednávku s omezením",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("Spuštěno"),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se načíst objednávky s omezením",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "Hesla se neshodují",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "Vložte odkaz na připojení",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "Čeká (Mempool)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage(
+      "Populární mince",
+    ),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("Velikost"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "Peněženka s privátním klíčem",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("Pouze pro čtení"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("ID místnosti"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Uložení selhalo. Zkuste to prosím znovu.",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("Odeslat kód"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "Odesílání požadavku...",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage(
+      "Vybrat režim směny",
+    ),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("Štítky"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "Šablona zkopírována",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "Smlouva tokenu (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "Vyhledávání informací o tokenu…",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "Token nebyl nalezen v seznamu — vyplňte značku a počet desetinných míst ručně",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se smazat obchod. Zkuste to znovu.",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Nepodařilo se uložit obchod. Zkuste to znovu.",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage("Neznámý stav"),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("Aktualizovat"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
+      "Aktualizovat e-mail",
+    ),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "Problémy s ověřením",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Kód ověření",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("Ověřit kód"),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "Zobrazit data trhu",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("Objem 24h"),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("Peněženka AI"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "Vytvořte nebo importujte peněženku, abyste mohli začít",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Načtení peněženky selhalo",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "Načítání peněženky...",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("Později"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "Zůstatek se nepodařilo aktualizovat",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Peněženka HD · Mnemonika",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "Jeden řetězec · Importováno",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage(
+      "Připnout token",
+    ),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "Uložené ceny",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "Aktualizováno právě teď",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "Částečné ceny",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Ceny nejsou k dispozici",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "Odepnout token",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Spojení ztraceno. Připojte se znovu.",
@@ -2782,7 +3574,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("E-mail"),
     "login_password": MessageLookupByLibrary.simpleMessage("Heslo"),
     "next": MessageLookupByLibrary.simpleMessage("Další"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Upravit profil",
     ),
@@ -2791,10 +3583,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Zadejte adresu",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "Toto zařízení omezuje aplikace na pozadí. Pokud je aplikace na pozadí nebo zavřená, nemusíte obdržet zprávy z chatu a upozornění na převody.\n\nKlepněte na „Přejít do nastavení“, povolte činnost na pozadí a poté pro tuto aplikaci zapněte automatické spouštění.",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "Doručování na pozadí může být omezeno",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Nepřipomínat",

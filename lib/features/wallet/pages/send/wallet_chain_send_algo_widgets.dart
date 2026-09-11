@@ -27,7 +27,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
+          style: AppTypography.bodySm.copyWith(
+            color: _tc(AppThemeKeys.mainWhiteColor.name),
+          ),
         ),
       ),
     );
@@ -40,7 +42,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
+        style: AppTypography.caption.copyWith(
+          color: _tc(AppThemeKeys.errorTextColor.name),
+        ),
       ),
     );
   }
@@ -56,14 +60,24 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            'There is no "${widget.coinModel.config.miniName}($contract)" added under your account "${widget.coinModel.address}"',
-            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.textColorOrange.name)),
+            S
+                .of(context)
+                .g_ui_algo_asset_missing(
+                  widget.coinModel.config.miniName,
+                  contract,
+                  widget.coinModel.address,
+                ),
+            style: AppTypography.bodySm.copyWith(
+              color: _tc(AppThemeKeys.textColorOrange.name),
+            ),
             textAlign: TextAlign.center,
           ),
           SizedBox(height: AppSpacing.space8),
           Text(
-            'Adding will consume some absenteeism fees. Click the "Add" button to add.',
-            style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
+            S.of(context).g_ui_algo_asset_add_fee,
+            style: AppTypography.bodySm.copyWith(
+              color: _tc(AppThemeKeys.mainTextColor.name),
+            ),
             textAlign: TextAlign.center,
           ),
         ],
@@ -282,11 +296,19 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         _balanceText(
-          'Balance:${widget.coinModel.balanceStringAll()} $unit',
+          S
+              .of(context)
+              .g_ui_balance_value(
+                '${widget.coinModel.balanceStringAll()} $unit',
+              ),
           _tc(AppThemeKeys.mainBlueColor.name),
         ),
         _balanceText(
-          'Min balance:${regular.formartNumDouble(minBalance, 14, isCrop: true, isFill0: false)} $unit',
+          S
+              .of(context)
+              .g_ui_min_balance_value(
+                '${regular.formartNumDouble(minBalance, 14, isCrop: true, isFill0: false)} $unit',
+              ),
           _tc(AppThemeKeys.errorTextColor.name),
         ),
         _balanceText(
@@ -303,7 +325,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
+        style: AppTypography.body.copyWith(
+          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -337,7 +361,9 @@ mixin _AlgoSendWidgetsMixin on _AlgoSendLogicMixin {
     final double availableBalance =
         (chainModel?.balanceDoubleAll() ?? 0) - minBalance;
 
-    final labelStyle = AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name));
+    final labelStyle = AppTypography.body.copyWith(
+      color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
+    );
 
     Widget balanceRow(String label, String value, Color valueColor) {
       return Row(

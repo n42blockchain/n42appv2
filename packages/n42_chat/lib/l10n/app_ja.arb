@@ -274,7 +274,7 @@
   "commonViewRedPacketDetails": "レッドパケットの詳細を表示",
   "commonEnterTransferAmount": "送金額を入力",
   "commonTransferTo": "送金先",
-  "commonFromSender": "{senderName}から",
+  "commonFromSender": "{name}から",
   "commonConfirmReceive": "受け取りを確認",
   "groupProfile": "グループ情報",
   "groupRemoveMember": "グループから削除",
@@ -397,7 +397,7 @@
   "chatCalling": "発信中...",
   "chatRinging": "呼び出し中...",
   "chatInCall": "通話中",
-  "commonFeatureInDevelopment": "機能開発中...",
+  "commonFeatureInDevelopment": "{feature}機能は開発中です…",
   "chatCollectMessages": "{count}件のメッセージをコレクションに追加しました",
   "commonMemberCount": "{count}人のメンバー",
   "groupDone": "完了({count})",
@@ -2263,7 +2263,7 @@
       }
     }
   },
-  "momentCommentsCount": "コメント",
+  "momentCommentsCount": "コメント{count}件",
   "@momentCommentsCount": {
     "placeholders": {
       "count": {

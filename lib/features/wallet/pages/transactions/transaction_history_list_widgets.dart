@@ -2,7 +2,7 @@ part of 'transaction_history_list.dart';
 
 mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   void showFilterSheet() {
-    _TxFilter temp = filter;
+    TransactionHistoryFilter temp = filter;
 
     showModalBottomSheet<void>(
       context: context,
@@ -42,7 +42,8 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          setState(() => filter = temp);
+                          filter = temp;
+                          loadAll();
                           Navigator.pop(ctx);
                         },
                         child: Text(S.of(ctx).g_key_78),
@@ -62,7 +63,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
     BuildContext ctx,
     StateSetter setSS,
     VoidCallback onClear,
-    ValueChanged<_TxFilter> onUpdate,
+    ValueChanged<TransactionHistoryFilter> onUpdate,
   ) {
     return Row(
       children: [
@@ -89,8 +90,8 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   Widget _buildDirectionSection(
     BuildContext ctx,
     StateSetter setSS,
-    _TxFilter temp,
-    ValueChanged<_TxFilter> onUpdate,
+    TransactionHistoryFilter temp,
+    ValueChanged<TransactionHistoryFilter> onUpdate,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,7 +102,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
           spacing: 8.w,
           children: [
             ChoiceChip(
-              label: const Text('All'),
+              label: Text(S.of(ctx).g_audit_all),
               selected: temp.direction == null,
               onSelected: (_) =>
                   setSS(() => onUpdate(temp.copyWith(direction: null))),
@@ -127,8 +128,8 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   Widget _buildStatusSection(
     BuildContext ctx,
     StateSetter setSS,
-    _TxFilter temp,
-    ValueChanged<_TxFilter> onUpdate,
+    TransactionHistoryFilter temp,
+    ValueChanged<TransactionHistoryFilter> onUpdate,
   ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -139,7 +140,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
           spacing: 8.w,
           children: [
             ChoiceChip(
-              label: const Text('All'),
+              label: Text(S.of(ctx).g_audit_all),
               selected: temp.status == null,
               onSelected: (_) =>
                   setSS(() => onUpdate(temp.copyWith(status: null))),
@@ -171,8 +172,8 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
   Widget _buildDateRangeSection(
     BuildContext ctx,
     StateSetter setSS,
-    _TxFilter temp,
-    ValueChanged<_TxFilter> onUpdate,
+    TransactionHistoryFilter temp,
+    ValueChanged<TransactionHistoryFilter> onUpdate,
   ) {
     final hasDateFilter = temp.dateFrom != null || temp.dateTo != null;
     final dateText = hasDateFilter
@@ -207,7 +208,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
                     )
                   : null,
             );
-            if (range != null) {
+            if (range != null && ctx.mounted) {
               setSS(
                 () => onUpdate(
                   temp.copyWith(dateFrom: range.start, dateTo: range.end),
@@ -221,7 +222,7 @@ mixin _TransactionHistoryWidgetsMixin on _TransactionHistoryLogicMixin {
             onPressed: () => setSS(
               () => onUpdate(temp.copyWith(dateFrom: null, dateTo: null)),
             ),
-            child: const Text('Clear dates'),
+            child: Text(S.of(ctx).g_history_clear_dates),
           ),
       ],
     );

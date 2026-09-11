@@ -796,8 +796,8 @@ class SId extends S {
   String get commonTransferTo => 'Transfer ke';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'Dari $senderName';
+  String commonFromSender(String name) {
+    return 'Dari $name';
   }
 
   @override
@@ -1221,7 +1221,7 @@ class SId extends S {
 
   @override
   String commonFeatureInDevelopment(Object feature) {
-    return 'Fitur sedang dikembangkan...';
+    return 'Fitur $feature sedang dikembangkan…';
   }
 
   @override

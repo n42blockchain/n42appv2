@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_wallet/features/wallet/token_discovery/discovered_token.dart';
-import 'package:n42_wallet/core/enums/load.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/pages/token_discovery/token_discovery_page.dart';
@@ -122,7 +121,6 @@ class _CoinListBody extends StatelessWidget {
               onDismiss: onDiscoveryDismiss,
               onAdded: onDiscoveryAdded,
             ),
-          if (waValue.loadBalance == Load.loading) _LoadingBanner(su: su),
           if (showSkeleton) const WalletCoinListSkeleton(),
           if (!showSkeleton && displayList.isEmpty)
             Container(
@@ -167,39 +165,6 @@ class _NoSearchResults extends StatelessWidget {
           Text(
             S.of(context).g_market_no_results,
             style: AppTypography.body.copyWith(color: color),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _LoadingBanner extends StatelessWidget {
-  const _LoadingBanner({required this.su});
-
-  final ScreenUtil su;
-
-  @override
-  Widget build(BuildContext context) {
-    // warning 12% 色调底 + 同色字（AppBadge 风格）——此前 warning 实底白字
-    // 亮色下对比 ≈2.2:1 不达 4.5:1（§2.6）。
-    final warning = AppColorTokens.of(context).warning;
-    return Container(
-      width: double.infinity,
-      height: su.setWidth(64.0),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: warning.withValues(alpha: 0.12),
-        borderRadius: AppRadius.brSm,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.sync_rounded, size: su.setWidth(28), color: warning),
-          SizedBox(width: AppSpacing.space2),
-          Text(
-            S.of(context).g_key_208,
-            style: AppTypography.caption.copyWith(color: warning),
           ),
         ],
       ),

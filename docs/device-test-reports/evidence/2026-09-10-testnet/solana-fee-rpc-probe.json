@@ -1,0 +1,31 @@
+{
+  "network": "Solana Testnet",
+  "validation": "Read-only fee RPC shape; no signature or broadcast",
+  "rpc": "https://api.testnet.solana.com",
+  "latestBlockhash": {
+    "jsonrpc": "2.0",
+    "result": {
+      "context": {
+        "apiVersion": "4.3.0-rc.0",
+        "slot": 440004500
+      },
+      "value": {
+        "blockhash": "HXLMm7fqy36trz7WM48KPewps8GR6z7oGXRxVHjhjhYd",
+        "lastValidBlockHeight": 391818242
+      }
+    },
+    "id": 1
+  },
+  "messageBase64": "AQAAAWrGsOGP68U5ir+IJGb6N6G/O9Q4eMKrPiWKWItL3NPc9YBNnbtzmHI3735mL88Sxu4BBFbdGuIeki/a1D6T9xoA",
+  "fee": {
+    "jsonrpc": "2.0",
+    "result": {
+      "context": {
+        "apiVersion": "4.3.0-rc.0",
+        "slot": 440004500
+      },
+      "value": 5000
+    },
+    "id": 1
+  }
+}

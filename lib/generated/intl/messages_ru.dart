@@ -84,111 +84,180 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m27(name) =>
       "Вы уверены, что хотите удалить «${name}» из сохраненных устройств?";
 
-  static String m28(value) => "Оценка. газ: ~${value} единиц";
+  static String m28(value) => "Получите ${value} очков";
 
-  static String m29(reason) => "Причина: ${reason}";
+  static String m29(amount, symbol, network) =>
+      "Запросите ${amount} ${symbol} в сети ${network}";
 
-  static String m30(value) => "${value}d разрыв связи";
+  static String m30(value) =>
+      "Удалить пользовательскую сеть ${value}? Балансы в этой сети больше не будут отображаться. Ваши активы в цепочке не затронуты.";
 
-  static String m31(value) => "${value} осталось дней";
+  static String m31(value) => "Оценка. газ: ~${value} единиц";
 
-  static String m32(value) =>
+  static String m32(reason) => "Причина: ${reason}";
+
+  static String m33(value) => "${value}d разрыв связи";
+
+  static String m34(value) => "${value} осталось дней";
+
+  static String m35(value) =>
       "Анстейкинг занимает ${value} дней. В течение этого периода ваши токены будут заблокированы.";
 
-  static String m33(value) => "У вас недостаточно \"${value}\"";
+  static String m36(value) => "У вас недостаточно \"${value}\"";
 
-  static String m34(value) => "Не удалось получить аккаунт \"${value}\"";
+  static String m37(value) => "Не удалось получить аккаунт \"${value}\"";
 
-  static String m35(value) => "Минимум ${value} XRP для первого перевода";
+  static String m38(value) => "Минимум ${value} XRP для первого перевода";
 
-  static String m36(count) => "Добавить (${count})";
+  static String m39(count) => "Добавить (${count})";
 
-  static String m37(count) =>
+  static String m40(count) =>
       "${Intl.plural(count, one: 'Обнаружен 1 новый токен', other: '${count} обнаружены новые токены')} — нажмите, чтобы просмотреть";
 
-  static String m38(value) => "Сеть ${value} не добавлена.";
+  static String m41(value) => "Сеть ${value} не добавлена.";
 
-  static String m39(value) =>
+  static String m42(value) =>
       "У ${value} есть незавершённые транзакции, попробуйте позже.";
 
-  static String m40(value) => "Адрес для ${value} не найден.";
+  static String m43(value) => "Адрес для ${value} не найден.";
 
-  static String m41(value) => "Недостаточный баланс ${value}.";
+  static String m44(value) => "Недостаточный баланс ${value}.";
 
-  static String m42(value, value1) =>
+  static String m45(value, value1) =>
       "Каждый аккаунт XRP должен резервировать ${value} XRP (${value1} drops) в качестве базового минимума, который нельзя потратить.";
 
-  static String m43(value, value1) =>
+  static String m46(value, value1) =>
       "За каждый объект, принадлежащий аккаунту, к резерву добавляется ${value} XRP (${value1} drops).";
 
-  static String m44(value, value1) =>
+  static String m47(value, value1) =>
       "Этот аккаунт владеет ${value} объектами, что означает дополнительный резерв в ${value1} XRP.";
 
-  static String m45(message) => "Не удалось войти в комнату\n${message}";
+  static String m48(message) => "Не удалось войти в комнату\n${message}";
 
-  static String m46(value) => "Неверный ключ, осталось попыток: ${value}";
+  static String m49(value) => "Неверный ключ, осталось попыток: ${value}";
 
-  static String m47(value) => "Неверный ключ, осталась попытка: ${value}";
+  static String m50(value) => "Неверный ключ, осталась попытка: ${value}";
 
-  static String m48(value) =>
+  static String m51(value) =>
       "Вы успешно настроили ${value} и начнёте верификацию с N42Wallet!";
 
-  static String m49(value) =>
+  static String m52(value) =>
       "Присоединяйтесь к моей группе ${value} в @N42Wallet, чтобы стать ранним майнером Layer 1 сети и получать крипто на свой телефон!";
 
-  static String m50(value, value1) =>
+  static String m53(value, value1) =>
       "Вы уверены, что хотите заблокировать ${value} N до ${value1} для запуска узла?";
 
-  static String m51(value) => "Импорт не удался:${value}";
+  static String m54(value) => "Импорт не удался:${value}";
 
-  static String m52(value) =>
+  static String m55(value) =>
       "Для получения вознаграждений требуется баланс стейкинга не менее ${value}.";
 
-  static String m53(value, value1) =>
+  static String m56(value, value1) =>
       "${value} N каждые ${value1} добытых блоков";
 
-  static String m54(value) => "Должно быть ${value} символов";
+  static String m57(value) => "Должно быть ${value} символов";
 
-  static String m55(symbol) => "Сумма (${symbol})";
+  static String m58(symbol) => "Сумма (${symbol})";
 
-  static String m56(amount, symbol) => "Баланс: ${amount} ${symbol}";
+  static String m59(amount, symbol) => "Баланс: ${amount} ${symbol}";
 
-  static String m57(label) =>
+  static String m60(label) =>
       "Объявить «${label}» победителем и рассчитать? Это необратимо.";
 
-  static String m58(n) => "${n} мин";
+  static String m61(n) => "${n} мин";
 
-  static String m59(n) => "Исход ${n}";
+  static String m62(n) => "Исход ${n}";
 
-  static String m60(label, pct) => "${label} побеждает (${pct}%)";
+  static String m63(label, pct) => "${label} побеждает (${pct}%)";
 
-  static String m61(shares, avg, after) =>
+  static String m64(shares, avg, after) =>
       "Ожид. ${shares} долей · средн. ${avg}% · после ${after}%";
 
-  static String m62(reason) => "Ошибка погашения: ${reason}";
+  static String m65(reason) => "Ошибка погашения: ${reason}";
 
-  static String m63(label) => "Результат: ${label}";
+  static String m66(label) => "Результат: ${label}";
 
-  static String m64(n) => "Продать ${n}";
+  static String m67(n) => "Продать ${n}";
 
-  static String m65(value) => "Недостаточный баланс ${value}.";
+  static String m68(value) => "Недостаточный баланс ${value}.";
 
-  static String m66(value) => "${value} поступает...";
-
-  static String m67(value) =>
-      "${value} обменянные в приложении будут в ближайшее время распределены на ваш кошелёк и не могут быть проданы через этот процесс. Их можно использовать для запуска ноды.";
-
-  static String m68(value) => "Максимум ${value} символов";
-
-  static String m69(value) => "Сеть ${value} уже поддерживается приложением!";
+  static String m69(value) => "${value} поступает...";
 
   static String m70(value) =>
+      "${value} обменянные в приложении будут в ближайшее время распределены на ваш кошелёк и не могут быть проданы через этот процесс. Их можно использовать для запуска ноды.";
+
+  static String m71(value) => "Максимум ${value} символов";
+
+  static String m72(value) => "Сеть ${value} уже поддерживается приложением!";
+
+  static String m73(value) =>
       "Сеть ${value} уже поддерживается приложением, хотите её добавить?";
 
-  static String m71(value) =>
+  static String m74(value) =>
       "Тестовое подключение к адресу ${value} не удалось!";
 
-  static String m72(value) => "0~${value} символов";
+  static String m75(value) =>
+      "RPC сообщает идентификатор цепочки ${value}, который не совпадает со введённым вами значением.";
+
+  static String m76(asset, contract, address) =>
+      "Актив ${asset} (${contract}) не был добавлен в кошелёк ${address}.";
+
+  static String m77(imported, skipped) =>
+      "Кошельки импортированы: ${imported}. Пропущено: ${skipped}.";
+
+  static String m78(value) => "Баланс: ${value}";
+
+  static String m79(value) => "Базовая плата: ${value} Gwei";
+
+  static String m80(value) =>
+      "Буфер обмена автоматически очистится через ${value} сек";
+
+  static String m81(value) => "Строка ${value}: отсутствуют поля";
+
+  static String m82(value) => "${value}д";
+
+  static String m83(value) => "Подключено к ${value}";
+
+  static String m84(value) => "Газ: ${value}";
+
+  static String m85(value) => "${value}ч";
+
+  static String m86(value) => "Импорт допустимых получателей (${value})";
+
+  static String m87(quote, base) => "Лимитная цена (${quote} за ${base})";
+
+  static String m88(value) => "Лимит ${value}";
+
+  static String m89(value) => "Рынки (${value})";
+
+  static String m90(value) => "Минимальный баланс: ${value}";
+
+  static String m91(value) => "Заказы (${value})";
+
+  static String m92(value) => "Позиции (${value})";
+
+  static String m93(value) => "Получатели: ${value}";
+
+  static String m94(value) => "Токен найден: ${value}";
+
+  static String m95(value) => "Токен: ${value}";
+
+  static String m96(value) => "Транзакция: ${value}";
+
+  static String m97(valid, issues) =>
+      "Допустимо: ${valid}. Проблемы: ${issues}.";
+
+  static String m98(value) => "… и ещё ${value} проблем";
+
+  static String m99(volume, interest) => "Объём: ${volume} · OI: ${interest}";
+
+  static String m100(value) => "Кошелёк ${value}";
+
+  static String m101(value) => "Обновлено ${value} часов назад";
+
+  static String m102(value) => "Обновлено ${value} минут назад";
+
+  static String m103(value) => "0~${value} символов";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -209,6 +278,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Вход с нового устройства",
     ),
     "file": MessageLookupByLibrary.simpleMessage("Файл"),
+    "g_aggregate_cached_balance": MessageLookupByLibrary.simpleMessage(
+      "Сохранённый баланс · не удалось обновить",
+    ),
+    "g_aggregate_known_balance": MessageLookupByLibrary.simpleMessage(
+      "Известный баланс",
+    ),
+    "g_aggregate_mainnet_note": MessageLookupByLibrary.simpleMessage(
+      "Только балансы основной сети. Пропущенные или неудачные запросы к сети не учитываются как ноль.",
+    ),
+    "g_aggregate_network_balances": MessageLookupByLibrary.simpleMessage(
+      "Балансы по сети",
+    ),
+    "g_aggregate_no_mainnet": MessageLookupByLibrary.simpleMessage(
+      "Нет активного основного кошелька сети для этой сети",
+    ),
+    "g_aggregate_not_loaded": MessageLookupByLibrary.simpleMessage(
+      "Баланс не загружен",
+    ),
+    "g_aggregate_open_network": MessageLookupByLibrary.simpleMessage(
+      "Открыть сеть",
+    ),
+    "g_aggregate_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Этот актив больше недоступен в выбранном кошельке. Вернитесь в кошелёк, чтобы выбрать актив.",
+    ),
     "g_alert_above": MessageLookupByLibrary.simpleMessage("Идет выше ↑"),
     "g_alert_below": MessageLookupByLibrary.simpleMessage("Капли ниже ↓"),
     "g_alert_current_price": m1,
@@ -237,6 +330,118 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_app_share_key_2": MessageLookupByLibrary.simpleMessage(
       "Сканируйте для получения",
+    ),
+    "g_audit_aa_history_external": MessageLookupByLibrary.simpleMessage(
+      "Открыть блокчейн-эксплорер для просмотра активности этого смарт-кошелька в блокчейне.",
+    ),
+    "g_audit_about_desc": MessageLookupByLibrary.simpleMessage(
+      "Версия, веб-сайт и поддержка",
+    ),
+    "g_audit_activity_error": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить историю транзакций.",
+    ),
+    "g_audit_activity_local": MessageLookupByLibrary.simpleMessage(
+      "Локальная история транзакций во всех ваших кошельках. Откройте актив, чтобы синхронизировать его последнюю активность.",
+    ),
+    "g_audit_all": MessageLookupByLibrary.simpleMessage("Все"),
+    "g_audit_approval_spender": MessageLookupByLibrary.simpleMessage(
+      "Разрешение на расходование",
+    ),
+    "g_audit_approval_token": MessageLookupByLibrary.simpleMessage(
+      "Контракт токена",
+    ),
+    "g_audit_batch": MessageLookupByLibrary.simpleMessage("Пакетная отправка"),
+    "g_audit_batch_desc": MessageLookupByLibrary.simpleMessage(
+      "Отправка нескольким получателям или импорт CSV-файла",
+    ),
+    "g_audit_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Биометрическая аутентификация",
+    ),
+    "g_audit_biometrics_desc": MessageLookupByLibrary.simpleMessage(
+      "Настройки Face ID / отпечатка пальца",
+    ),
+    "g_audit_connections_desc": MessageLookupByLibrary.simpleMessage(
+      "Управление сеансами; отключение не отменяет разрешения на токены",
+    ),
+    "g_audit_currency": MessageLookupByLibrary.simpleMessage(
+      "Валюта отображения",
+    ),
+    "g_audit_currency_usd": MessageLookupByLibrary.simpleMessage(
+      "Стоимость портфеля отображается в долларах США.",
+    ),
+    "g_audit_defi_error": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить позиции в DeFi. Нажмите, чтобы повторить.",
+    ),
+    "g_audit_defi_loading": MessageLookupByLibrary.simpleMessage(
+      "Загрузка позиций в DeFi…",
+    ),
+    "g_audit_defi_positions": MessageLookupByLibrary.simpleMessage(
+      "Позиции в DeFi",
+    ),
+    "g_audit_display_language": MessageLookupByLibrary.simpleMessage(
+      "Язык отображения приложения",
+    ),
+    "g_audit_encrypted_backup": MessageLookupByLibrary.simpleMessage(
+      "Экспорт зашифрованной резервной копии кошелька",
+    ),
+    "g_audit_funding": MessageLookupByLibrary.simpleMessage(
+      "Текущая ставка финансирования",
+    ),
+    "g_audit_gas": MessageLookupByLibrary.simpleMessage("Трекер газа"),
+    "g_audit_gas_desc": MessageLookupByLibrary.simpleMessage(
+      "Стоимость сетевых комиссий и оповещения о ценах",
+    ),
+    "g_audit_hardware": MessageLookupByLibrary.simpleMessage(
+      "Аппаратный кошелёк",
+    ),
+    "g_audit_load_more": MessageLookupByLibrary.simpleMessage(
+      "Загрузить больше",
+    ),
+    "g_audit_mainnet": MessageLookupByLibrary.simpleMessage("Основная сеть"),
+    "g_audit_manage_settings": MessageLookupByLibrary.simpleMessage(
+      "Управление вашим кошельком и настройками",
+    ),
+    "g_audit_manage_wallets": MessageLookupByLibrary.simpleMessage(
+      "Создание, импорт и управление кошельками",
+    ),
+    "g_audit_mark_price": MessageLookupByLibrary.simpleMessage("Рыночная цена"),
+    "g_audit_max_leverage": MessageLookupByLibrary.simpleMessage(
+      "Максимальное плечо",
+    ),
+    "g_audit_network_desc": MessageLookupByLibrary.simpleMessage(
+      "Управление сетями и конечными точками RPC",
+    ),
+    "g_audit_open_interest": MessageLookupByLibrary.simpleMessage(
+      "Открытый интерес",
+    ),
+    "g_audit_oracle_price": MessageLookupByLibrary.simpleMessage(
+      "Цена оракула",
+    ),
+    "g_audit_protect_wallet": MessageLookupByLibrary.simpleMessage(
+      "Аутентификация и защита кошелька",
+    ),
+    "g_audit_quote_changed": MessageLookupByLibrary.simpleMessage(
+      "Ценовое предложение для обмена изменилось или истекло. Проверьте последнее предложение по обмену перед подтверждением.",
+    ),
+    "g_audit_rate": MessageLookupByLibrary.simpleMessage("Оцените N42"),
+    "g_audit_rate_desc": MessageLookupByLibrary.simpleMessage(
+      "Открыть магазин приложений",
+    ),
+    "g_audit_saved_addresses": MessageLookupByLibrary.simpleMessage(
+      "Сохранённые адреса получателей",
+    ),
+    "g_audit_show_less": MessageLookupByLibrary.simpleMessage(
+      "Показать меньше",
+    ),
+    "g_audit_testnet": MessageLookupByLibrary.simpleMessage("Тестовая сеть"),
+    "g_audit_theme_desc": MessageLookupByLibrary.simpleMessage(
+      "Внешний вид и режим отображения",
+    ),
+    "g_audit_volume": MessageLookupByLibrary.simpleMessage(
+      "Объём за 24 часа (USD)",
+    ),
+    "g_audit_wallet_management": MessageLookupByLibrary.simpleMessage(
+      "Управление кошельками",
     ),
     "g_browser_key1": MessageLookupByLibrary.simpleMessage(
       "Пожалуйста, введите URL",
@@ -301,6 +506,24 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_dapp_security_verified": MessageLookupByLibrary.simpleMessage(
       "Проверено",
     ),
+    "g_dex_account_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Выберите доступный основной кошелёк сети для этой сети. Кошельки только для просмотра не могут подписывать обмены.",
+    ),
+    "g_dex_execution_invalid": MessageLookupByLibrary.simpleMessage(
+      "Параметры транзакции недействительны или выполнение не удалось. Обновите предложение по цене обмена и попробуйте снова.",
+    ),
+    "g_dex_history_record_failed": MessageLookupByLibrary.simpleMessage(
+      "Обмен отправлен, но история не была обновлена. Не отправляйте его повторно.",
+    ),
+    "g_dex_smart_account_fees": MessageLookupByLibrary.simpleMessage(
+      "Стоимость сетевых комиссий оплачивается этим умным кошельком.",
+    ),
+    "g_dex_spending_account": MessageLookupByLibrary.simpleMessage(
+      "Счет для расходов",
+    ),
+    "g_dex_use_smart_account": MessageLookupByLibrary.simpleMessage(
+      "Использовать умный кошелёк",
+    ),
     "g_email_resend": MessageLookupByLibrary.simpleMessage(
       "Отправить код повторно",
     ),
@@ -341,10 +564,23 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_google_auth_key8": MessageLookupByLibrary.simpleMessage(
       "Привязка выполнена успешно",
     ),
+    "g_history_clear_dates": MessageLookupByLibrary.simpleMessage(
+      "Очистить даты",
+    ),
+    "g_history_export_all": MessageLookupByLibrary.simpleMessage(
+      "Экспорт соответствующих локальных записей (CSV)",
+    ),
+    "g_history_export_error": MessageLookupByLibrary.simpleMessage(
+      "Не удалось экспортировать историю транзакций. Пожалуйста, попробуйте снова.",
+    ),
+    "g_history_local_scope": MessageLookupByLibrary.simpleMessage(
+      "Фильтры и экспорт CSV включают все соответствующие записи, сохранённые на этом устройстве. Откройте актив, чтобы синхронизировать более новые действия в блокчейне.",
+    ),
     "g_home_key1": MessageLookupByLibrary.simpleMessage("Профиль"),
     "g_home_key2": MessageLookupByLibrary.simpleMessage("Новости"),
     "g_home_key3": MessageLookupByLibrary.simpleMessage("Верификация"),
     "g_home_key9": MessageLookupByLibrary.simpleMessage("Пригласить друга"),
+    "g_home_market": MessageLookupByLibrary.simpleMessage("Рынки"),
     "g_iap_cancelled": MessageLookupByLibrary.simpleMessage("Отменено"),
     "g_iap_check_network": MessageLookupByLibrary.simpleMessage(
       "Проверьте подключение к сети и попробуйте ещё раз",
@@ -697,6 +933,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_paymaster_retry": MessageLookupByLibrary.simpleMessage(
       "Повторить",
     ),
+    "g_key_aa_paymaster_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Спонсорство газа ещё недоступно. Пожалуйста, оплатите газ со своего баланса.",
+    ),
     "g_key_aa_pending": MessageLookupByLibrary.simpleMessage("Ожидается"),
     "g_key_aa_permission": MessageLookupByLibrary.simpleMessage("Разрешение"),
     "g_key_aa_preview_address": MessageLookupByLibrary.simpleMessage(
@@ -734,6 +973,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_aa_selected": MessageLookupByLibrary.simpleMessage("Выбрано"),
     "g_key_aa_send_desc": MessageLookupByLibrary.simpleMessage(
       "Отправляйте токены, используя свой смарт-аккаунт",
+    ),
+    "g_key_aa_send_failed": MessageLookupByLibrary.simpleMessage(
+      "Транзакция не удалась",
     ),
     "g_key_aa_session_1d": MessageLookupByLibrary.simpleMessage("1 день"),
     "g_key_aa_session_1h": MessageLookupByLibrary.simpleMessage("1 час"),
@@ -839,6 +1081,31 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_advanced_features": MessageLookupByLibrary.simpleMessage(
       "Расширенные функции",
     ),
+    "g_key_airdrop_active": MessageLookupByLibrary.simpleMessage("Активный"),
+    "g_key_airdrop_discover": MessageLookupByLibrary.simpleMessage(
+      "Обнаружить",
+    ),
+    "g_key_airdrop_distribute": MessageLookupByLibrary.simpleMessage(
+      "Распределить",
+    ),
+    "g_key_airdrop_expired": MessageLookupByLibrary.simpleMessage("Завершено"),
+    "g_key_airdrop_no_airdrops": MessageLookupByLibrary.simpleMessage(
+      "Нет доступных подтвержденных кампаний",
+    ),
+    "g_key_airdrop_pending": MessageLookupByLibrary.simpleMessage("В ожидании"),
+    "g_key_airdrop_sources": MessageLookupByLibrary.simpleMessage("Источники"),
+    "g_key_airdrop_sources_hint": MessageLookupByLibrary.simpleMessage(
+      "Откройте «Источники», чтобы просмотреть каталоги кампаний, поддерживаемые провайдерами.",
+    ),
+    "g_key_airdrop_thirdparty_warning": MessageLookupByLibrary.simpleMessage(
+      "Кампании сторонних провайдеров могут быть вредоносными. Убедитесь в подлинности домена проекта и деталей транзакции перед подписанием.",
+    ),
+    "g_key_airdrop_title": MessageLookupByLibrary.simpleMessage(
+      "Раздача токенов",
+    ),
+    "g_key_airdrop_upcoming": MessageLookupByLibrary.simpleMessage("Скоро"),
+    "g_key_badge_hot": MessageLookupByLibrary.simpleMessage("ГОРЯЧИЙ"),
+    "g_key_badge_live": MessageLookupByLibrary.simpleMessage("В ЭФИРЕ"),
     "g_key_batch_add_recipient": MessageLookupByLibrary.simpleMessage(
       "Добавить получателя",
     ),
@@ -905,6 +1172,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_batch_total_amount": MessageLookupByLibrary.simpleMessage(
       "Общая сумма",
+    ),
+    "g_key_block_explorer_optional": MessageLookupByLibrary.simpleMessage(
+      "URL проводника блоков (необязательно)",
     ),
     "g_key_bridge_chain_not_supported": MessageLookupByLibrary.simpleMessage(
       "Цепочка не поддерживается",
@@ -1050,6 +1320,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_burn_nft_tip": MessageLookupByLibrary.simpleMessage(
       "Чтобы записать NFT, перейдите на страницу сведений о NFT и нажмите кнопку «Записать».",
     ),
+    "g_key_chain_presets": MessageLookupByLibrary.simpleMessage(
+      "Популярные сети (нажмите, чтобы заполнить)",
+    ),
     "g_key_chain_transfer_not_supported": MessageLookupByLibrary.simpleMessage(
       "Эта цепочка пока не поддерживает переводы, следите за обновлениями",
     ),
@@ -1064,6 +1337,19 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_coin_search_recent": MessageLookupByLibrary.simpleMessage(
       "Недавние",
+    ),
+    "g_key_dapp_connect_account": MessageLookupByLibrary.simpleMessage("Счёт"),
+    "g_key_dapp_connect_desc": MessageLookupByLibrary.simpleMessage(
+      "Этот сайт запрашивает доступ к вашему адресу кошелька и предлагает транзакции. Он не может переместить средства без вашего согласия.",
+    ),
+    "g_key_dapp_connect_title": MessageLookupByLibrary.simpleMessage(
+      "Подключить кошелёк",
+    ),
+    "g_key_device_security_warning_message": MessageLookupByLibrary.simpleMessage(
+      "Похоже, на этом устройстве получены root-права или выполнен джейлбрейк. Использование кошелька на устройстве с нарушенной защитой повышает риск кражи ключей и несанкционированного доступа. Будьте осторожны.",
+    ),
+    "g_key_device_security_warning_title": MessageLookupByLibrary.simpleMessage(
+      "Предупреждение о безопасности устройства",
     ),
     "g_key_dex_approval_success": MessageLookupByLibrary.simpleMessage(
       "Одобрено! Нажмите «Обменять», чтобы продолжить.",
@@ -1115,6 +1401,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_quote_failed": MessageLookupByLibrary.simpleMessage(
       "Ошибка котировки",
     ),
+    "g_key_dex_quote_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Сервис предложения цены обмена временно недоступен. Пожалуйста, попробуйте позже.",
+    ),
     "g_key_dex_search_hint": MessageLookupByLibrary.simpleMessage(
       "Поиск по символу / имени / адресу",
     ),
@@ -1138,6 +1427,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_dex_swap_success": MessageLookupByLibrary.simpleMessage(
       "Своп успешно отправлен",
     ),
+    "g_key_dex_tokens_offline": MessageLookupByLibrary.simpleMessage(
+      "Сервис токенов недоступен. Отображается ограниченный список в автономном режиме.",
+    ),
+    "g_key_dex_untrusted_router": MessageLookupByLibrary.simpleMessage(
+      "Обмен заблокирован: адрес маршрутизатора не распознан. Для вашей безопасности эта транзакция отменена.",
+    ),
     "g_key_dex_you_pay": MessageLookupByLibrary.simpleMessage("Вы Платите"),
     "g_key_dex_you_receive": MessageLookupByLibrary.simpleMessage(
       "Вы Получаете",
@@ -1148,13 +1443,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_batch": MessageLookupByLibrary.simpleMessage(
       "Пакетный перевод",
     ),
+    "g_key_earn_best_apy": MessageLookupByLibrary.simpleMessage(
+      "Лучший годовой доход",
+    ),
     "g_key_earn_burn": MessageLookupByLibrary.simpleMessage("Сжечь"),
     "g_key_earn_buy_n": MessageLookupByLibrary.simpleMessage("Купить N"),
     "g_key_earn_buy_n_desc": MessageLookupByLibrary.simpleMessage(
       "Купить N с помощью протокола N42",
     ),
+    "g_key_earn_claim_free": MessageLookupByLibrary.simpleMessage(
+      "Найти проверенные кампании сторонних провайдеров",
+    ),
     "g_key_earn_cross_chain": MessageLookupByLibrary.simpleMessage(
       "Межсетевой перевод",
+    ),
+    "g_key_earn_daily_bonus": MessageLookupByLibrary.simpleMessage(
+      "Ежедневные баллы в блокчейне",
     ),
     "g_key_earn_dex_swap": MessageLookupByLibrary.simpleMessage("DEX обмен"),
     "g_key_earn_gas": MessageLookupByLibrary.simpleMessage("Газ"),
@@ -1178,6 +1482,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_earn_node_mining_desc": MessageLookupByLibrary.simpleMessage(
       "Зарабатывайте вознаграждения, участвуя в майнинге узлов",
     ),
+    "g_key_earn_perps": MessageLookupByLibrary.simpleMessage(
+      "Перпетуальные контракты",
+    ),
     "g_key_earn_quick_tools": MessageLookupByLibrary.simpleMessage(
       "Быстрые инструменты",
     ),
@@ -1186,6 +1493,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_earn_select_swap": MessageLookupByLibrary.simpleMessage(
       "Выбрать тип обмена",
+    ),
+    "g_key_earn_stablecoin_deposit": MessageLookupByLibrary.simpleMessage(
+      "Внести",
+    ),
+    "g_key_earn_stablecoin_desc": MessageLookupByLibrary.simpleMessage(
+      "Получайте ежедневный доход на USDC / USDT / DAI",
+    ),
+    "g_key_earn_stablecoin_empty": MessageLookupByLibrary.simpleMessage(
+      "В данный момент доступных рынков стейблкоинов нет",
+    ),
+    "g_key_earn_stablecoin_title": MessageLookupByLibrary.simpleMessage(
+      "Доход с стейблкоинов",
     ),
     "g_key_earn_stake_eth_lido": MessageLookupByLibrary.simpleMessage(
       "Ставьте ETH с помощью Lido",
@@ -1758,6 +2077,68 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_logout_sure": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите выйти из приложения?",
     ),
+    "g_key_loyalty_available_points": MessageLookupByLibrary.simpleMessage(
+      "Доступные очки",
+    ),
+    "g_key_loyalty_checked_today": MessageLookupByLibrary.simpleMessage(
+      "Уже зарегистрированы сегодня",
+    ),
+    "g_key_loyalty_checkin_btn": MessageLookupByLibrary.simpleMessage(
+      "Зарегистрироваться",
+    ),
+    "g_key_loyalty_checkin_done": MessageLookupByLibrary.simpleMessage(
+      "Готово",
+    ),
+    "g_key_loyalty_checkin_failed": MessageLookupByLibrary.simpleMessage(
+      "Регистрация не удалась",
+    ),
+    "g_key_loyalty_checkin_success": MessageLookupByLibrary.simpleMessage(
+      "Регистрация подтверждена на N42",
+    ),
+    "g_key_loyalty_copy": MessageLookupByLibrary.simpleMessage("Копировать"),
+    "g_key_loyalty_daily_checkin": MessageLookupByLibrary.simpleMessage(
+      "Ежедневная регистрация",
+    ),
+    "g_key_loyalty_earn_points": m28,
+    "g_key_loyalty_empty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Рейтинг пуст",
+    ),
+    "g_key_loyalty_history": MessageLookupByLibrary.simpleMessage("История"),
+    "g_key_loyalty_invite_description": MessageLookupByLibrary.simpleMessage(
+      "Поделитесь своим реферальным кодом",
+    ),
+    "g_key_loyalty_invite_friends": MessageLookupByLibrary.simpleMessage(
+      "Пригласить друзей",
+    ),
+    "g_key_loyalty_leaderboard": MessageLookupByLibrary.simpleMessage(
+      "Таблица лидеров",
+    ),
+    "g_key_loyalty_no_history": MessageLookupByLibrary.simpleMessage(
+      "Нет истории очков",
+    ),
+    "g_key_loyalty_no_referrals": MessageLookupByLibrary.simpleMessage(
+      "Пока нет рефералов. Поделитесь своим кодом, чтобы начать",
+    ),
+    "g_key_loyalty_no_rewards": MessageLookupByLibrary.simpleMessage(
+      "Нет доступных наград",
+    ),
+    "g_key_loyalty_no_tasks": MessageLookupByLibrary.simpleMessage(
+      "Нет доступных заданий",
+    ),
+    "g_key_loyalty_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Активный кошелёк отсутствует",
+    ),
+    "g_key_loyalty_referral": MessageLookupByLibrary.simpleMessage("Рефералы"),
+    "g_key_loyalty_rewards": MessageLookupByLibrary.simpleMessage("Награды"),
+    "g_key_loyalty_tasks": MessageLookupByLibrary.simpleMessage("Задания"),
+    "g_key_loyalty_title": MessageLookupByLibrary.simpleMessage("Очки"),
+    "g_key_loyalty_total_earned": MessageLookupByLibrary.simpleMessage(
+      "Всего начислено",
+    ),
+    "g_key_loyalty_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Сервис недоступен",
+    ),
+    "g_key_loyalty_used": MessageLookupByLibrary.simpleMessage("Использовано"),
     "g_key_m_10": MessageLookupByLibrary.simpleMessage("Фейсбук"),
     "g_key_m_11": MessageLookupByLibrary.simpleMessage("Твиттер"),
     "g_key_m_14": MessageLookupByLibrary.simpleMessage("Реддит"),
@@ -1782,6 +2163,26 @@ class MessageLookup extends MessageLookupByLibrary {
       "Требуется стейкинг",
     ),
     "g_key_mnemonic": MessageLookupByLibrary.simpleMessage("Введите сид-фразу"),
+    "g_key_msgsign_btn": MessageLookupByLibrary.simpleMessage("Подписать"),
+    "g_key_msgsign_empty": MessageLookupByLibrary.simpleMessage(
+      "Сначала введите сообщение",
+    ),
+    "g_key_msgsign_failed": MessageLookupByLibrary.simpleMessage(
+      "Ошибка подписи",
+    ),
+    "g_key_msgsign_input_hint": MessageLookupByLibrary.simpleMessage(
+      "Введите сообщение для подписи",
+    ),
+    "g_key_msgsign_result": MessageLookupByLibrary.simpleMessage("Подпись"),
+    "g_key_msgsign_title": MessageLookupByLibrary.simpleMessage(
+      "Подписать сообщение",
+    ),
+    "g_key_msgsign_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Подпись сообщений пока не поддерживается для этой цепочки",
+    ),
+    "g_key_msgsign_warning": MessageLookupByLibrary.simpleMessage(
+      "Подписывайте только те сообщения, которым полностью доверяете. Злонамеренное сообщение может быть использовано для авторизации действий от вашего имени.",
+    ),
     "g_key_nft_141": MessageLookupByLibrary.simpleMessage("Всего"),
     "g_key_nft_2": MessageLookupByLibrary.simpleMessage("Название"),
     "g_key_nft_220": MessageLookupByLibrary.simpleMessage("Назад"),
@@ -1806,6 +2207,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_nft_filter_video": MessageLookupByLibrary.simpleMessage("Видео"),
     "g_key_nft_floor_price": MessageLookupByLibrary.simpleMessage("Этаж"),
     "g_key_nft_gallery": MessageLookupByLibrary.simpleMessage("Галерея НФТ"),
+    "g_key_nft_hide_spam": MessageLookupByLibrary.simpleMessage("Скрыть спам"),
     "g_key_nft_inscription": MessageLookupByLibrary.simpleMessage("Надпись №"),
     "g_key_nft_no_items": MessageLookupByLibrary.simpleMessage(
       "NFT-файлы не найдены",
@@ -1834,13 +2236,30 @@ class MessageLookup extends MessageLookupByLibrary {
       "Идентификатор токена",
     ),
     "g_key_nft_type": MessageLookupByLibrary.simpleMessage("Тип"),
+    "g_key_nft_uncategorized": MessageLookupByLibrary.simpleMessage("Другие"),
     "g_key_passwords_not_match": MessageLookupByLibrary.simpleMessage(
       "Пароли не совпадают",
+    ),
+    "g_key_perps_read_only": MessageLookupByLibrary.simpleMessage(
+      "Данные рынка только для чтения. В этом выпуске размещение ордеров не поддерживается.",
     ),
     "g_key_personal_1": MessageLookupByLibrary.simpleMessage(
       "Выбрать из галереи телефона",
     ),
+    "g_key_pubkey": MessageLookupByLibrary.simpleMessage("Публичный ключ"),
+    "g_key_receive_payment_request": MessageLookupByLibrary.simpleMessage(
+      "Запрос платежа",
+    ),
+    "g_key_receive_request_line": m29,
+    "g_key_remove_network": MessageLookupByLibrary.simpleMessage(
+      "Удалить сеть",
+    ),
+    "g_key_remove_network_confirm": m30,
     "g_key_reset": MessageLookupByLibrary.simpleMessage("Сброс"),
+    "g_key_retry": MessageLookupByLibrary.simpleMessage("Повторить"),
+    "g_key_scan_pay_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Токен или цепочка запроса платежа не входят в этот кошелёк",
+    ),
     "g_key_security_goplus_caution": MessageLookupByLibrary.simpleMessage(
       "Будьте осторожны",
     ),
@@ -1871,11 +2290,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_share_method": MessageLookupByLibrary.simpleMessage(
       "Способ распространения",
     ),
-    "g_key_sim_gas_estimate": m28,
+    "g_key_sim_gas_estimate": m31,
     "g_key_sim_reverted": MessageLookupByLibrary.simpleMessage(
       "Транзакция, скорее всего, не удастся",
     ),
-    "g_key_sim_reverted_reason": m29,
+    "g_key_sim_reverted_reason": m32,
     "g_key_sim_simulating": MessageLookupByLibrary.simpleMessage(
       "Имитация транзакции…",
     ),
@@ -1896,9 +2315,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_stake_apy": MessageLookupByLibrary.simpleMessage("APY"),
     "g_key_stake_avg_apy": MessageLookupByLibrary.simpleMessage("Средняя APY"),
+    "g_key_stake_broadcast_unsupported": MessageLookupByLibrary.simpleMessage(
+      "Транзакция создана, но отправка транзакции из кошелька для этой цепочки ещё не поддерживается.",
+    ),
     "g_key_stake_commission": MessageLookupByLibrary.simpleMessage("Комиссия"),
-    "g_key_stake_d_unbond": m30,
-    "g_key_stake_days_remaining": m31,
+    "g_key_stake_d_unbond": m33,
+    "g_key_stake_days_remaining": m34,
     "g_key_stake_estimated_daily": MessageLookupByLibrary.simpleMessage(
       "Оценка. Ежедневная награда",
     ),
@@ -1957,6 +2379,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_start_staking": MessageLookupByLibrary.simpleMessage(
       "Начать ставку",
     ),
+    "g_key_stake_submitted": MessageLookupByLibrary.simpleMessage(
+      "Транзакция стейкинга отправлена",
+    ),
     "g_key_stake_title": MessageLookupByLibrary.simpleMessage("Стейкинг"),
     "g_key_stake_tx_prepared": MessageLookupByLibrary.simpleMessage(
       "Транзакция успешно подготовлена",
@@ -1964,7 +2389,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_unbonding": MessageLookupByLibrary.simpleMessage(
       "Разблокировка",
     ),
-    "g_key_stake_unbonding_warning": m32,
+    "g_key_stake_unbonding_warning": m35,
     "g_key_stake_unstake": MessageLookupByLibrary.simpleMessage("Снять стейк"),
     "g_key_stake_updating": MessageLookupByLibrary.simpleMessage(
       "Обновление...",
@@ -1980,7 +2405,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Макс. плата за единицу газа",
     ),
     "g_key_t_2": MessageLookupByLibrary.simpleMessage("В ожидании"),
-    "g_key_t_29": m33,
+    "g_key_t_29": m36,
     "g_key_t_3": MessageLookupByLibrary.simpleMessage("Неудача"),
     "g_key_t_31": MessageLookupByLibrary.simpleMessage("Продолжить"),
     "g_key_t_32": MessageLookupByLibrary.simpleMessage("Пароль кошелька"),
@@ -2003,7 +2428,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_44": MessageLookupByLibrary.simpleMessage(
       "Не удалось получить данные",
     ),
-    "g_key_t_45": m34,
+    "g_key_t_45": m37,
     "g_key_t_46": MessageLookupByLibrary.simpleMessage(
       "Проверка адреса получателя",
     ),
@@ -2016,7 +2441,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_t_51": MessageLookupByLibrary.simpleMessage(
       "Верификация аккаунта успешна",
     ),
-    "g_key_t_52": m35,
+    "g_key_t_52": m38,
     "g_key_t_54": MessageLookupByLibrary.simpleMessage(
       "У адреса получателя нет аккаунта, и первый перевод должен быть минимум 10XRP",
     ),
@@ -2025,11 +2450,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_token_discovery_add": MessageLookupByLibrary.simpleMessage(
       "Добавить",
     ),
-    "g_key_token_discovery_add_selected": m36,
+    "g_key_token_discovery_add_selected": m39,
     "g_key_token_discovery_added": MessageLookupByLibrary.simpleMessage(
       "Токен добавлен",
     ),
-    "g_key_token_discovery_banner": m37,
+    "g_key_token_discovery_banner": m40,
     "g_key_token_discovery_deselect_all": MessageLookupByLibrary.simpleMessage(
       "Отменить выбор всех",
     ),
@@ -2200,8 +2625,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_wallet_k56": MessageLookupByLibrary.simpleMessage("одноразовый"),
     "g_key_wallet_k57": MessageLookupByLibrary.simpleMessage("Ускорить"),
     "g_key_wallet_k58": MessageLookupByLibrary.simpleMessage("Заметка"),
-    "g_key_wallet_m1": m38,
-    "g_key_wallet_m19": m39,
+    "g_key_wallet_m1": m41,
+    "g_key_wallet_m19": m42,
     "g_key_wallet_m2": MessageLookupByLibrary.simpleMessage(
       "Текущий токен не был добавлен.",
     ),
@@ -2209,15 +2634,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "Введите сид-фразу, разделяя слова пробелами",
     ),
     "g_key_wallet_m22": MessageLookupByLibrary.simpleMessage("Импорт кошелька"),
-    "g_key_wallet_m3": m40,
+    "g_key_wallet_m3": m43,
     "g_key_wallet_m4": MessageLookupByLibrary.simpleMessage(
       "Недостаточный баланс текущего токена.",
     ),
-    "g_key_wallet_m5": m41,
+    "g_key_wallet_m5": m44,
     "g_key_wallet_m6": MessageLookupByLibrary.simpleMessage("Ошибка подписи"),
     "g_key_wallet_manage": MessageLookupByLibrary.simpleMessage(
       "Управление кошельком",
     ),
+    "g_key_wallet_tx_replace_hint": MessageLookupByLibrary.simpleMessage(
+      "Будет отправлена заменяющая транзакция с тем же nonce и комиссией за газ примерно на 20% выше. Она действует только пока исходная транзакция ожидает подтверждения.",
+    ),
+    "g_key_wallet_tx_replace_submitted": MessageLookupByLibrary.simpleMessage(
+      "Отправлена транзакция замены",
+    ),
+    "g_key_wallet_tx_speedup": MessageLookupByLibrary.simpleMessage("Ускорить"),
     "g_key_watch_address_hint": MessageLookupByLibrary.simpleMessage(
       "Введите адрес Эфириума (0x...)",
     ),
@@ -2232,20 +2664,23 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_key_xml_0": MessageLookupByLibrary.simpleMessage("Зарезервировано"),
     "g_key_xml_1": MessageLookupByLibrary.simpleMessage("Базовый резерв"),
-    "g_key_xml_11": m42,
+    "g_key_xml_11": m45,
     "g_key_xml_2": MessageLookupByLibrary.simpleMessage("Инкрементный резерв"),
-    "g_key_xml_22": m43,
+    "g_key_xml_22": m46,
     "g_key_xml_3": MessageLookupByLibrary.simpleMessage(
       "Количество принадлежащих объектов",
     ),
-    "g_key_xml_33": m44,
+    "g_key_xml_33": m47,
     "g_key_xml_4": MessageLookupByLibrary.simpleMessage(
       "Как рассчитать общую сумму резерва",
     ),
     "g_key_xml_44": MessageLookupByLibrary.simpleMessage(
       "Общий резерв = Базовый резерв + (Количество объектов × Инкрементный резерв)",
     ),
-    "g_live_enter_room_failed": m45,
+    "g_live_ended": MessageLookupByLibrary.simpleMessage(
+      "Прямой эфир завершён",
+    ),
+    "g_live_enter_room_failed": m48,
     "g_live_follow": MessageLookupByLibrary.simpleMessage("Подписаться"),
     "g_live_follow_wip": MessageLookupByLibrary.simpleMessage(
       "Функция подписки скоро",
@@ -2264,7 +2699,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key20": MessageLookupByLibrary.simpleMessage(
       "Нарисуйте текущий графический ключ",
     ),
-    "g_lock_key21": m46,
+    "g_lock_key21": m49,
     "g_lock_key22": MessageLookupByLibrary.simpleMessage(
       "Сбросить графический пароль",
     ),
@@ -2274,12 +2709,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_lock_key24": MessageLookupByLibrary.simpleMessage(
       "Добавить пароль кошелька?",
     ),
-    "g_lock_key25": m47,
-    "g_lock_key26": MessageLookupByLibrary.simpleMessage(
-      "Transfer Verification",
-    ),
+    "g_lock_key25": m50,
+    "g_lock_key26": MessageLookupByLibrary.simpleMessage("Проверка перевода"),
     "g_lock_key27": MessageLookupByLibrary.simpleMessage(
-      "Require biometric authentication (Face ID / fingerprint) to confirm each wallet transfer.",
+      "Требуется биометрическая аутентификация (Face ID / отпечаток пальца) для подтверждения каждой транзакции в кошельке.",
     ),
     "g_lock_key28": MessageLookupByLibrary.simpleMessage(
       "Графический пароль не установлен",
@@ -2358,12 +2791,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Поделиться с друзьями",
     ),
     "g_mining_key62": MessageLookupByLibrary.simpleMessage("Продолжить"),
-    "g_mining_key63": m48,
-    "g_mining_key73": m49,
+    "g_mining_key63": m51,
+    "g_mining_key73": m52,
     "g_mining_key74": MessageLookupByLibrary.simpleMessage(
       "Я только что настроил ноду в @N42Wallet и начал верификацию на мобильных устройствах! Присоединяйтесь. Децентрализованное будущее — это мобильность!",
     ),
-    "g_mining_key76": m50,
+    "g_mining_key76": m53,
     "g_mining_key82": MessageLookupByLibrary.simpleMessage("Минерал"),
     "g_mining_key83": MessageLookupByLibrary.simpleMessage("Узел"),
     "g_mining_key84": MessageLookupByLibrary.simpleMessage("Сеть"),
@@ -2400,7 +2833,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_108": MessageLookupByLibrary.simpleMessage(
       "Неподдерживаемый формат зашифрованных данных!",
     ),
-    "g_mining_key_109": m51,
+    "g_mining_key_109": m54,
     "g_mining_key_11": MessageLookupByLibrary.simpleMessage(
       "Вчерашние вознаграждения",
     ),
@@ -2416,7 +2849,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_115": MessageLookupByLibrary.simpleMessage(
       "Выкуп занимает некоторое время, пожалуйста, подождите!",
     ),
-    "g_mining_key_116": m52,
+    "g_mining_key_116": m55,
     "g_mining_key_12": MessageLookupByLibrary.simpleMessage(
       "Вознаграждение накапливается ежедневно и отправляется на ваш N кошелёк только при достижении ~0.5 N.",
     ),
@@ -2508,7 +2941,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_70": MessageLookupByLibrary.simpleMessage(
       "100 блоков/день~15 мин",
     ),
-    "g_mining_key_71": m53,
+    "g_mining_key_71": m56,
     "g_mining_key_72": MessageLookupByLibrary.simpleMessage(
       "128 секунд на проверку",
     ),
@@ -2578,7 +3011,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_mining_key_97": MessageLookupByLibrary.simpleMessage(
       "Введите пароль шифрования",
     ),
-    "g_mining_key_98": m54,
+    "g_mining_key_98": m57,
     "g_mining_key_99": MessageLookupByLibrary.simpleMessage(
       "Повторите пароль для подтверждения",
     ),
@@ -2657,8 +3090,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_add_outcome": MessageLookupByLibrary.simpleMessage(
       "Добавить исход",
     ),
-    "g_pred_amount_input": m55,
-    "g_pred_balance": m56,
+    "g_pred_amount_input": m58,
+    "g_pred_balance": m59,
     "g_pred_buy": MessageLookupByLibrary.simpleMessage("Купить"),
     "g_pred_cancel_refund": MessageLookupByLibrary.simpleMessage(
       "Отменить и вернуть",
@@ -2670,7 +3103,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_confirm_resolve": MessageLookupByLibrary.simpleMessage(
       "Подтвердить расчёт",
     ),
-    "g_pred_confirm_resolve_msg": m57,
+    "g_pred_confirm_resolve_msg": m60,
     "g_pred_create_title": MessageLookupByLibrary.simpleMessage(
       "Начать прогноз",
     ),
@@ -2688,6 +3121,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_invalid_outcome": MessageLookupByLibrary.simpleMessage(
       "Недопустимый исход",
     ),
+    "g_pred_err_invalid_state": MessageLookupByLibrary.simpleMessage(
+      "Рынок уже закрыт, действие недопустимо",
+    ),
     "g_pred_err_market_closed": MessageLookupByLibrary.simpleMessage(
       "Рынок закрыт, торговля недоступна",
     ),
@@ -2696,6 +3132,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_pred_err_not_resolved": MessageLookupByLibrary.simpleMessage(
       "Рынок не рассчитан, погашение невозможно",
+    ),
+    "g_pred_err_not_resolver": MessageLookupByLibrary.simpleMessage(
+      "Только создатель этого рынка может выполнить это действие",
     ),
     "g_pred_err_outcomes": MessageLookupByLibrary.simpleMessage(
       "Минимум два допустимых исхода",
@@ -2706,10 +3145,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_err_slippage": MessageLookupByLibrary.simpleMessage(
       "Превышено проскальзывание, повторите",
     ),
-    "g_pred_minutes": m58,
+    "g_pred_minutes": m61,
     "g_pred_no": MessageLookupByLibrary.simpleMessage("Нет"),
-    "g_pred_outcome_n": m59,
-    "g_pred_outcome_win": m60,
+    "g_pred_outcome_n": m62,
+    "g_pred_outcome_win": m63,
     "g_pred_outcomes": MessageLookupByLibrary.simpleMessage("Исходы"),
     "g_pred_pick_winner": MessageLookupByLibrary.simpleMessage(
       "Выберите победный исход для расчёта (выплата по результату)",
@@ -2719,11 +3158,11 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_pred_q_hint": MessageLookupByLibrary.simpleMessage(
       "Вопрос прогноза, напр.: Кто победит в этом раунде?",
     ),
-    "g_pred_quote_info": m61,
-    "g_pred_redeem_failed": m62,
+    "g_pred_quote_info": m64,
+    "g_pred_redeem_failed": m65,
     "g_pred_resolved": MessageLookupByLibrary.simpleMessage("Рассчитано"),
-    "g_pred_result_label": m63,
-    "g_pred_sell_n": m64,
+    "g_pred_result_label": m66,
+    "g_pred_sell_n": m67,
     "g_pred_unlimited": MessageLookupByLibrary.simpleMessage(
       "Без лимита (закрыть вручную)",
     ),
@@ -2760,7 +3199,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_share_v3_key_7": MessageLookupByLibrary.simpleMessage("Ссылка"),
     "g_share_v3_key_8": MessageLookupByLibrary.simpleMessage("код"),
-    "g_swap_key_14": m65,
+    "g_swap_key_14": m68,
     "g_swap_key_15": MessageLookupByLibrary.simpleMessage(
       "Ошибка получения цены монеты.",
     ),
@@ -2774,7 +3213,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_19": MessageLookupByLibrary.simpleMessage(
       "Ваш обмен будет распределён в ближайшее время. Пожалуйста, подождите.",
     ),
-    "g_swap_key_20": m66,
+    "g_swap_key_20": m69,
     "g_swap_key_21": MessageLookupByLibrary.simpleMessage(
       "Стоимость запуска ноды: Групповая верификация 1-49 N Базовая нода: 50 N Премиум нода: 100 N Про нода: 500 N.",
     ),
@@ -2788,7 +3227,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_swap_key_29": MessageLookupByLibrary.simpleMessage("Новый баланс"),
     "g_swap_key_3": MessageLookupByLibrary.simpleMessage("Вы платите"),
     "g_swap_key_30": MessageLookupByLibrary.simpleMessage("Дата"),
-    "g_swap_key_31": m67,
+    "g_swap_key_31": m70,
     "g_swap_key_32": MessageLookupByLibrary.simpleMessage(
       "Обмены можно просмотреть в соответствующих обозревателях блокчейна (Etherscan, BscScan, TRONSCAN и наш собственный).",
     ),
@@ -2803,7 +3242,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_theme_accent_reset": MessageLookupByLibrary.simpleMessage(
       "Сбросить настройки по умолчанию",
     ),
-    "g_token_m_key_1": m68,
+    "g_theme_mode": MessageLookupByLibrary.simpleMessage("Внешний вид"),
+    "g_theme_style": MessageLookupByLibrary.simpleMessage("Стиль"),
+    "g_theme_style_custom": MessageLookupByLibrary.simpleMessage(
+      "Пользовательский",
+    ),
+    "g_token_m_key_1": m71,
     "g_token_m_key_10": MessageLookupByLibrary.simpleMessage(
       "Любой может создать токен, включая поддельные версии существующих токенов. Всегда изучайте токен перед импортом.",
     ),
@@ -2822,9 +3266,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_token_m_key_2": MessageLookupByLibrary.simpleMessage("0~18 ед."),
     "g_token_m_key_20": MessageLookupByLibrary.simpleMessage("Добавить токены"),
     "g_token_m_key_21": MessageLookupByLibrary.simpleMessage("Ошибка формата!"),
-    "g_token_m_key_22": m69,
-    "g_token_m_key_23": m70,
-    "g_token_m_key_24": m71,
+    "g_token_m_key_22": m72,
+    "g_token_m_key_23": m73,
+    "g_token_m_key_24": m74,
     "g_token_m_key_3": MessageLookupByLibrary.simpleMessage("Импорт токенов"),
     "g_token_m_key_4": MessageLookupByLibrary.simpleMessage("Все сети"),
     "g_token_m_key_5": MessageLookupByLibrary.simpleMessage(
@@ -2836,15 +3280,379 @@ class MessageLookup extends MessageLookupByLibrary {
       "Десятичные знаки токена",
     ),
     "g_token_m_key_9": MessageLookupByLibrary.simpleMessage("Импортировать"),
+    "g_token_m_key_chainid_conflict": MessageLookupByLibrary.simpleMessage(
+      "Этот идентификатор цепочки уже используется другой сетью.",
+    ),
+    "g_token_m_key_chainid_mismatch": m75,
     "g_tx_risk_caution": MessageLookupByLibrary.simpleMessage("Осторожно"),
     "g_tx_risk_danger": MessageLookupByLibrary.simpleMessage("Высокий риск"),
     "g_tx_risk_safe": MessageLookupByLibrary.simpleMessage("Безопасно"),
+    "g_ui_aave_lending": MessageLookupByLibrary.simpleMessage("Займы Aave V3"),
+    "g_ui_account_email": MessageLookupByLibrary.simpleMessage(
+      "Электронная почта учётной записи",
+    ),
+    "g_ui_algo_asset_add_fee": MessageLookupByLibrary.simpleMessage(
+      "Добавление этого актива требует сетевой комиссии. Нажмите «Добавить», чтобы продолжить.",
+    ),
+    "g_ui_algo_asset_missing": m76,
+    "g_ui_assistant_hint": MessageLookupByLibrary.simpleMessage(
+      "Спросите о балансе, портфеле, газе",
+    ),
+    "g_ui_back_code": MessageLookupByLibrary.simpleMessage("Назад к коду"),
+    "g_ui_back_email": MessageLookupByLibrary.simpleMessage(
+      "Назад к электронной почте",
+    ),
+    "g_ui_backup_create_save": MessageLookupByLibrary.simpleMessage(
+      "Создать и сохранить резервную копию",
+    ),
+    "g_ui_backup_empty": MessageLookupByLibrary.simpleMessage(
+      "В файле резервной копии не найдено кошельков",
+    ),
+    "g_ui_backup_encryption_hint": MessageLookupByLibrary.simpleMessage(
+      "Ваша резервная копия зашифрована с помощью AES-256 + PBKDF2. Только правильный пароль может её восстановить.",
+    ),
+    "g_ui_backup_enter_password": MessageLookupByLibrary.simpleMessage(
+      "Пожалуйста, введите пароль резервной копии",
+    ),
+    "g_ui_backup_export": MessageLookupByLibrary.simpleMessage(
+      "Экспорт резервной копии в облако",
+    ),
+    "g_ui_backup_export_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось создать резервную копию. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_backup_file": MessageLookupByLibrary.simpleMessage(
+      "Файл резервной копии",
+    ),
+    "g_ui_backup_file_access": MessageLookupByLibrary.simpleMessage(
+      "Невозможно получить доступ к выбранному файлу",
+    ),
+    "g_ui_backup_import": MessageLookupByLibrary.simpleMessage(
+      "Импортировать облачную резервную копию",
+    ),
+    "g_ui_backup_import_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось восстановить резервную копию. Проверьте пароль и файл резервной копии, затем попробуйте снова.",
+    ),
+    "g_ui_backup_import_result": m77,
+    "g_ui_backup_import_wallets": MessageLookupByLibrary.simpleMessage(
+      "Импортировать кошельки",
+    ),
+    "g_ui_backup_invalid_file": MessageLookupByLibrary.simpleMessage(
+      "Не является допустимым файлом резервной копии N42Wallet",
+    ),
+    "g_ui_backup_no_file": MessageLookupByLibrary.simpleMessage(
+      "Файл не выбран",
+    ),
+    "g_ui_backup_no_selection": MessageLookupByLibrary.simpleMessage(
+      "Нет выбранных кошельков для резервного копирования",
+    ),
+    "g_ui_backup_password": MessageLookupByLibrary.simpleMessage(
+      "Пароль резервного копирования",
+    ),
+    "g_ui_backup_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Установите надёжный пароль резервной копии (минимум 8 символов)",
+    ),
+    "g_ui_backup_password_min": MessageLookupByLibrary.simpleMessage(
+      "Пароль должен содержать не менее 8 символов",
+    ),
+    "g_ui_backup_password_repeat": MessageLookupByLibrary.simpleMessage(
+      "Повторите пароль резервной копии",
+    ),
+    "g_ui_backup_restore_hint": MessageLookupByLibrary.simpleMessage(
+      "Восстановите свои кошельки из зашифрованного резервного копии, хранящейся в iCloud Drive или Google Drive.",
+    ),
+    "g_ui_backup_restore_none": MessageLookupByLibrary.simpleMessage(
+      "Невозможно восстановить кошельки из этой резервной копии",
+    ),
+    "g_ui_backup_restore_password_hint": MessageLookupByLibrary.simpleMessage(
+      "Введите пароль, использованный при создании резервной копии",
+    ),
+    "g_ui_backup_select_file_first": MessageLookupByLibrary.simpleMessage(
+      "Пожалуйста, сначала выберите файл резервной копии",
+    ),
+    "g_ui_backup_select_wallet": MessageLookupByLibrary.simpleMessage(
+      "Пожалуйста, выберите хотя бы один кошелёк для резервного копирования",
+    ),
+    "g_ui_backup_select_wallets": MessageLookupByLibrary.simpleMessage(
+      "Выберите кошельки для резервного копирования",
+    ),
+    "g_ui_backup_share_subject": MessageLookupByLibrary.simpleMessage(
+      "Резервная копия N42Wallet",
+    ),
+    "g_ui_backup_warning": MessageLookupByLibrary.simpleMessage(
+      "Эта резервная копия содержит ваши закрытые ключи / мнемонические фразы, пароли кошелька и настройки кошелька. Храните файл резервной копии и пароль в безопасности. Никогда не сообщайте их никому.",
+    ),
+    "g_ui_balance_value": m78,
+    "g_ui_base_fee_value": m79,
+    "g_ui_buy_n_description": MessageLookupByLibrary.simpleMessage(
+      "Покупка N через протокол N42",
+    ),
+    "g_ui_calldata_hex": MessageLookupByLibrary.simpleMessage(
+      "Данные вызова (hex)",
+    ),
+    "g_ui_camera_permission": MessageLookupByLibrary.simpleMessage(
+      "Для сканирования кода требуется разрешение на камеру.",
+    ),
+    "g_ui_cancel_order": MessageLookupByLibrary.simpleMessage("Отменить ордер"),
+    "g_ui_change_email": MessageLookupByLibrary.simpleMessage(
+      "Изменить электронную почту",
+    ),
+    "g_ui_checking_approval": MessageLookupByLibrary.simpleMessage(
+      "Проверка разрешения…",
+    ),
+    "g_ui_clipboard_clear": m80,
+    "g_ui_clipboard_empty": MessageLookupByLibrary.simpleMessage(
+      "Буфер обмена пуст",
+    ),
+    "g_ui_coins_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить монеты. Попробуйте снова.",
+    ),
+    "g_ui_confirm_password": MessageLookupByLibrary.simpleMessage(
+      "Подтвердите пароль",
+    ),
+    "g_ui_confirm_update": MessageLookupByLibrary.simpleMessage(
+      "Подтвердить обновление",
+    ),
+    "g_ui_contract_info": MessageLookupByLibrary.simpleMessage(
+      "Информация о контракте",
+    ),
+    "g_ui_create_wallet": MessageLookupByLibrary.simpleMessage(
+      "Создать кошелёк",
+    ),
+    "g_ui_csv_header_only": MessageLookupByLibrary.simpleMessage(
+      "Строки данных не найдены (обнаружен только заголовок).",
+    ),
+    "g_ui_csv_missing_fields": m81,
+    "g_ui_csv_no_data": MessageLookupByLibrary.simpleMessage(
+      "Данные не найдены после удаления комментариев.",
+    ),
+    "g_ui_custom_tag": MessageLookupByLibrary.simpleMessage("Создать метку..."),
+    "g_ui_days": m82,
+    "g_ui_destination_tag": MessageLookupByLibrary.simpleMessage(
+      "Тег назначения",
+    ),
+    "g_ui_device_connected": m83,
+    "g_ui_dex_description": MessageLookupByLibrary.simpleMessage(
+      "Обмен токенов через Uniswap / 1inch / Jupiter",
+    ),
+    "g_ui_email_code_accepted": MessageLookupByLibrary.simpleMessage(
+      "Код подтверждения принят",
+    ),
+    "g_ui_email_code_sent": MessageLookupByLibrary.simpleMessage(
+      "Запрос кода подтверждения отправлен",
+    ),
+    "g_ui_ens_price_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить цены продления ENS. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_ens_renew_failed": MessageLookupByLibrary.simpleMessage(
+      "Продление ENS не удалось. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_entry_price": MessageLookupByLibrary.simpleMessage("Цена входа"),
+    "g_ui_expires_in": MessageLookupByLibrary.simpleMessage("Истекает через:"),
+    "g_ui_fear_greed": MessageLookupByLibrary.simpleMessage("Страх и жадность"),
+    "g_ui_file_picker_failed": MessageLookupByLibrary.simpleMessage(
+      "Невозможно открыть выбор файла. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_file_read_failed": MessageLookupByLibrary.simpleMessage(
+      "Невозможно прочитать выбранный файл. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_free_margin": MessageLookupByLibrary.simpleMessage("Свободный"),
+    "g_ui_gas_prediction": MessageLookupByLibrary.simpleMessage(
+      "Прогноз стоимости газа в следующем блоке",
+    ),
+    "g_ui_gas_value": m84,
+    "g_ui_hours": m85,
+    "g_ui_import_valid": m86,
+    "g_ui_invalid_email": MessageLookupByLibrary.simpleMessage(
+      "Введите корректный адрес электронной почты",
+    ),
+    "g_ui_issues_label": MessageLookupByLibrary.simpleMessage("Проблемы:"),
+    "g_ui_keystone_paired": MessageLookupByLibrary.simpleMessage(
+      "Keystone успешно подключен",
+    ),
+    "g_ui_limit_orders": MessageLookupByLibrary.simpleMessage("Ордера лимита"),
+    "g_ui_limit_price": MessageLookupByLibrary.simpleMessage("Цена лимита"),
+    "g_ui_limit_price_pair": m87,
+    "g_ui_limit_value": m88,
+    "g_ui_liquidation_price": MessageLookupByLibrary.simpleMessage(
+      "Цена ликвидации",
+    ),
+    "g_ui_margin_utilization": MessageLookupByLibrary.simpleMessage(
+      "Использование",
+    ),
+    "g_ui_markets_count": m89,
+    "g_ui_memo": MessageLookupByLibrary.simpleMessage("Примечание"),
+    "g_ui_mempool": MessageLookupByLibrary.simpleMessage(
+      "Очередь транзакций (mempool)",
+    ),
+    "g_ui_message": MessageLookupByLibrary.simpleMessage("Сообщение"),
+    "g_ui_min_balance_value": m90,
+    "g_ui_mnemonic_wallet": MessageLookupByLibrary.simpleMessage(
+      "Мнемонический кошелёк",
+    ),
+    "g_ui_mpc_intro": MessageLookupByLibrary.simpleMessage(
+      "Войдите в свой аккаунт в социальной сети, чтобы создать безопасный MPC-кошелёк. Ваш закрытый ключ делится на зашифрованные части — не нужно беспокоиться о потере семантической фразы.",
+    ),
+    "g_ui_mpc_no_phrase": MessageLookupByLibrary.simpleMessage(
+      "Семейная фраза не требуется",
+    ),
+    "g_ui_mpc_security": MessageLookupByLibrary.simpleMessage(
+      "Работает на основе MPC-TSS. Ваш ключ делится на 3 зашифрованные части, распределённые между вашим устройством, нашими серверами и резервной копией восстановления.",
+    ),
+    "g_ui_new_email": MessageLookupByLibrary.simpleMessage(
+      "Новый адрес электронной почты",
+    ),
+    "g_ui_no_cached_email": MessageLookupByLibrary.simpleMessage(
+      "На этом устройстве нет сохранённого адреса электронной почты",
+    ),
+    "g_ui_no_coins": MessageLookupByLibrary.simpleMessage("Ещё нет монет"),
+    "g_ui_no_dapps": MessageLookupByLibrary.simpleMessage("Нет DApps"),
+    "g_ui_no_limit_orders": MessageLookupByLibrary.simpleMessage(
+      "Нет ордеров лимита",
+    ),
+    "g_ui_no_orders": MessageLookupByLibrary.simpleMessage(
+      "Нет открытых заказов",
+    ),
+    "g_ui_no_positions": MessageLookupByLibrary.simpleMessage(
+      "Нет открытых позиций",
+    ),
+    "g_ui_no_wallet": MessageLookupByLibrary.simpleMessage(
+      "Кошелёк ещё не создан",
+    ),
+    "g_ui_optional": MessageLookupByLibrary.simpleMessage("Необязательно"),
+    "g_ui_order_cancel_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось отменить ордер",
+    ),
+    "g_ui_order_cancelled": MessageLookupByLibrary.simpleMessage(
+      "Ордер отменён",
+    ),
+    "g_ui_order_create_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось создать ордер",
+    ),
+    "g_ui_order_created": MessageLookupByLibrary.simpleMessage(
+      "Ордер лимита создан",
+    ),
+    "g_ui_order_executed": MessageLookupByLibrary.simpleMessage("Выполнен"),
+    "g_ui_order_place": MessageLookupByLibrary.simpleMessage(
+      "Создать ордер лимита",
+    ),
+    "g_ui_order_triggered": MessageLookupByLibrary.simpleMessage("Сработано"),
+    "g_ui_orders_count": m91,
+    "g_ui_orders_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить ордера лимита",
+    ),
+    "g_ui_password_mismatch": MessageLookupByLibrary.simpleMessage(
+      "Пароли не совпадают",
+    ),
+    "g_ui_paste_connection": MessageLookupByLibrary.simpleMessage(
+      "Вставить ссылку на подключение",
+    ),
+    "g_ui_pending_mempool": MessageLookupByLibrary.simpleMessage(
+      "Ожидание (mempool)",
+    ),
+    "g_ui_popular_tokens": MessageLookupByLibrary.simpleMessage(
+      "Популярные токены",
+    ),
+    "g_ui_position_size": MessageLookupByLibrary.simpleMessage("Размер"),
+    "g_ui_positions_count": m92,
+    "g_ui_private_key_wallet": MessageLookupByLibrary.simpleMessage(
+      "Кошелёк с закрытым ключом",
+    ),
+    "g_ui_read_only": MessageLookupByLibrary.simpleMessage("Только для чтения"),
+    "g_ui_recipients_count": m93,
+    "g_ui_room_id": MessageLookupByLibrary.simpleMessage("ID комнаты"),
+    "g_ui_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Сохранение не удалось. Попробуйте снова.",
+    ),
+    "g_ui_send_code": MessageLookupByLibrary.simpleMessage("Отправить код"),
+    "g_ui_sending_request": MessageLookupByLibrary.simpleMessage(
+      "Отправка запроса...",
+    ),
+    "g_ui_swap_mode": MessageLookupByLibrary.simpleMessage(
+      "Выберите режим обмена",
+    ),
+    "g_ui_tags": MessageLookupByLibrary.simpleMessage("Метки"),
+    "g_ui_template_copied": MessageLookupByLibrary.simpleMessage(
+      "Шаблон скопирован",
+    ),
+    "g_ui_token_contract_hint": MessageLookupByLibrary.simpleMessage(
+      "Адрес контракта токена (0x...)",
+    ),
+    "g_ui_token_found": m94,
+    "g_ui_token_lookup": MessageLookupByLibrary.simpleMessage(
+      "Поиск информации о токене…",
+    ),
+    "g_ui_token_manual": MessageLookupByLibrary.simpleMessage(
+      "Токен не найден в списке — введите символ и количество знаков вручную",
+    ),
+    "g_ui_token_value": m95,
+    "g_ui_trade_delete_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось удалить сделку. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_trade_save_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось сохранить сделку. Пожалуйста, попробуйте снова.",
+    ),
+    "g_ui_transaction_hash_value": m96,
+    "g_ui_unknown_status": MessageLookupByLibrary.simpleMessage(
+      "Неизвестный статус",
+    ),
+    "g_ui_update": MessageLookupByLibrary.simpleMessage("Обновить"),
+    "g_ui_update_email": MessageLookupByLibrary.simpleMessage(
+      "Обновить электронную почту",
+    ),
+    "g_ui_validation_counts": m97,
+    "g_ui_validation_issues": MessageLookupByLibrary.simpleMessage(
+      "Проблемы проверки",
+    ),
+    "g_ui_validation_more": m98,
+    "g_ui_verification_code": MessageLookupByLibrary.simpleMessage(
+      "Код подтверждения",
+    ),
+    "g_ui_verify_code": MessageLookupByLibrary.simpleMessage("Подтвердить код"),
+    "g_ui_view_market": MessageLookupByLibrary.simpleMessage(
+      "Просмотр данных рынка",
+    ),
+    "g_ui_volume_24h": MessageLookupByLibrary.simpleMessage("Объём за 24 часа"),
+    "g_ui_volume_interest": m99,
+    "g_ui_wallet_ai": MessageLookupByLibrary.simpleMessage("AI кошелёк"),
+    "g_ui_wallet_get_started": MessageLookupByLibrary.simpleMessage(
+      "Создайте или импортируйте кошелёк, чтобы начать",
+    ),
+    "g_ui_wallet_load_failed": MessageLookupByLibrary.simpleMessage(
+      "Не удалось загрузить кошелёк",
+    ),
+    "g_ui_wallet_loading": MessageLookupByLibrary.simpleMessage(
+      "Загрузка кошелька...",
+    ),
+    "g_ui_wallet_number": m100,
     "g_version_later": MessageLookupByLibrary.simpleMessage("Позже"),
+    "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
+      "Баланс не удалось обновить",
+    ),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD-кошелёк · Мнемоника",
     ),
     "g_wallet_group_single": MessageLookupByLibrary.simpleMessage(
       "Одна сеть · Импорт",
+    ),
+    "g_wallet_pin_token": MessageLookupByLibrary.simpleMessage(
+      "Закрепить токен",
+    ),
+    "g_wallet_prices_cached": MessageLookupByLibrary.simpleMessage(
+      "Сохранённые цены",
+    ),
+    "g_wallet_prices_hours": m101,
+    "g_wallet_prices_just_updated": MessageLookupByLibrary.simpleMessage(
+      "Обновлено сейчас",
+    ),
+    "g_wallet_prices_minutes": m102,
+    "g_wallet_prices_partial": MessageLookupByLibrary.simpleMessage(
+      "Частичные цены",
+    ),
+    "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
+      "Цены недоступны",
+    ),
+    "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
+      "Открепить токен",
     ),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(
       "Соединение потеряно. Пожалуйста, подключитесь снова.",
@@ -2887,7 +3695,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "login_email": MessageLookupByLibrary.simpleMessage("Электронная почта"),
     "login_password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "next": MessageLookupByLibrary.simpleMessage("Далее"),
-    "nicknameMessage": m72,
+    "nicknameMessage": m103,
     "personalInformation": MessageLookupByLibrary.simpleMessage(
       "Редактировать профиль",
     ),
@@ -2896,10 +3704,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Введите адрес",
     ),
     "push_bg_delivery_dialog_content": MessageLookupByLibrary.simpleMessage(
-      "This device restricts background apps, so you may miss chat messages and transfer alerts when the app is in the background or closed.\n\nTap \"Go to Settings\" to allow background activity, then enable Autostart for this app.",
+      "На этом устройстве ограничена работа приложений в фоновом режиме, поэтому вы можете пропустить сообщения чата и уведомления о переводах, когда приложение находится в фоне или закрыто.\n\nНажмите «Перейти к настройкам», чтобы разрешить фоновую активность, а затем включить автозапуск для этого приложения.",
     ),
     "push_bg_delivery_dialog_title": MessageLookupByLibrary.simpleMessage(
-      "Background Delivery May Be Limited",
+      "Работа в фоновом режиме может быть ограничена",
     ),
     "push_permission_btn_dismiss": MessageLookupByLibrary.simpleMessage(
       "Не напоминать",

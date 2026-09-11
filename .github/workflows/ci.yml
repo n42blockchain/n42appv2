@@ -17,9 +17,9 @@ on:
   workflow_dispatch:
 
 env:
-  # Flutter 3.41.9 ships Dart 3.11.5 and includes physical-device iOS fixes.
+  # Match pubspec.yaml: Flutter 3.44.8 ships Dart 3.12.2.
   # Java 21 matches android/app/build.gradle.kts compileOptions.
-  FLUTTER_VERSION: '3.41.9'
+  FLUTTER_VERSION: '3.44.8'
   COVERAGE_THRESHOLD: 70
   JAVA_VERSION: '21'
 
@@ -47,6 +47,11 @@ jobs:
 
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Check wallet and chat localization integrity
+        run: |
+          python3 scripts/audit_localizations.py --mode all
+          python3 -m unittest discover -s test/scripts -p test_localization_audit.py
 
       - name: Run Flutter Analyze
         run: |

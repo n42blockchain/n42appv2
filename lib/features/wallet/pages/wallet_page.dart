@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +20,7 @@ import 'package:n42_wallet/features/wallet/pages/portfolio/portfolio_page.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_item.dart';
+import 'package:n42_wallet/features/wallet/provider/wallet_price_refresh_scheduler.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_header.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_coin_list_section.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_page_top_bar.dart';
@@ -70,8 +69,8 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   /// 防止每次 rebuild 重复扫描；钱包切换时重置。
   bool _discoveryScanned = false;
 
-  /// 价格自动刷新定时器（每 60 秒）
-  Timer? _priceRefreshTimer;
+  /// Only refresh quotes while the wallet home is visible in the foreground.
+  WalletPriceRefreshScheduler? _priceRefreshScheduler;
 
   // ENS 状态
   String? _ensName;
@@ -100,7 +99,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   @override
   void dispose() {
-    _priceRefreshTimer?.cancel();
+    _priceRefreshScheduler?.dispose();
     _scrollController.dispose();
     _tokenSearchController.dispose();
     _tokenSearchFocusNode.dispose();
@@ -122,11 +121,17 @@ class _WalletPageState extends ConsumerState<WalletPage> {
   // ── Price timer ───────────────────────────────────────────────────────────
 
   void _startPriceTimer() {
-    _priceRefreshTimer?.cancel();
-    _priceRefreshTimer = Timer.periodic(const Duration(seconds: 60), (_) {
-      if (!mounted) return;
-      ref.read(wapBridgeProvider).refreshWalletCoinInfo(refresh: false);
-    });
+    _priceRefreshScheduler?.dispose();
+    _priceRefreshScheduler = WalletPriceRefreshScheduler(
+      canRefresh: () =>
+          mounted &&
+          WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed &&
+          ref.read(homeTabIndexProvider) == 0 &&
+          (ModalRoute.of(context)?.isCurrent ?? false) &&
+          ref.read(wapBridgeProvider).isWalletReady,
+      onRefresh: () =>
+          ref.read(wapBridgeProvider).refreshWalletCoinInfo(refresh: false),
+    )..start();
   }
 
   // ── Token discovery ───────────────────────────────────────────────────────
@@ -287,7 +292,7 @@ class _WalletPageState extends ConsumerState<WalletPage> {
 
   Future<void> _refreshWallet(WalletActionProvider waValue) async {
     if (waValue.load == Load.refresh) return;
-    await waValue.refreshWalletCoinInfo();
+    await waValue.refreshWalletCoinInfo(forcePrices: true);
   }
 
   /// 钱包首页二维码菜单的扫码入口。EIP-681 请求直接进入对应资产的付款页；
@@ -425,7 +430,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                   waValue.load == Load.loading) {
                                 return;
                               }
-                              await waValue.refreshWalletCoinInfo();
+                              await waValue.refreshWalletCoinInfo(
+                                forcePrices: true,
+                              );
                             },
                             backgroundColor: AppThemeUtils.getColorByKey(
                               context,
@@ -447,6 +454,9 @@ class _WalletPageState extends ConsumerState<WalletPage> {
                                     accountPrice: waValue.balanceTotal,
                                     usdToCnyRate: waValue.usdToCnyRate,
                                     priceLastUpdated: waValue.priceLastUpdated,
+                                    hasPartialPrices: waValue.hasPartialPrices,
+                                    priceRefreshFailed:
+                                        waValue.priceRefreshFailed,
                                     walletName: waValue.walletName,
                                     sendTap: () => _onSendTap(waValue),
                                     receiveTap: () => _onReceiveTap(waValue),

@@ -12462,6 +12462,2095 @@ class S {
   String get g_key_badge_live {
     return Intl.message('LIVE', name: 'g_key_badge_live', desc: '', args: []);
   }
+
+  /// `DeFi positions`
+  String get g_audit_defi_positions {
+    return Intl.message(
+      'DeFi positions',
+      name: 'g_audit_defi_positions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading DeFi positions…`
+  String get g_audit_defi_loading {
+    return Intl.message(
+      'Loading DeFi positions…',
+      name: 'g_audit_defi_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load DeFi positions. Tap to retry.`
+  String get g_audit_defi_error {
+    return Intl.message(
+      'Unable to load DeFi positions. Tap to retry.',
+      name: 'g_audit_defi_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show less`
+  String get g_audit_show_less {
+    return Intl.message(
+      'Show less',
+      name: 'g_audit_show_less',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Local transaction history across your wallets. Open an asset to sync its latest activity.`
+  String get g_audit_activity_local {
+    return Intl.message(
+      'Local transaction history across your wallets. Open an asset to sync its latest activity.',
+      name: 'g_audit_activity_local',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load transaction history.`
+  String get g_audit_activity_error {
+    return Intl.message(
+      'Unable to load transaction history.',
+      name: 'g_audit_activity_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `All`
+  String get g_audit_all {
+    return Intl.message('All', name: 'g_audit_all', desc: '', args: []);
+  }
+
+  /// `Load more`
+  String get g_audit_load_more {
+    return Intl.message(
+      'Load more',
+      name: 'g_audit_load_more',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Testnet`
+  String get g_audit_testnet {
+    return Intl.message('Testnet', name: 'g_audit_testnet', desc: '', args: []);
+  }
+
+  /// `Mainnet`
+  String get g_audit_mainnet {
+    return Intl.message('Mainnet', name: 'g_audit_mainnet', desc: '', args: []);
+  }
+
+  /// `Manage your wallet and preferences`
+  String get g_audit_manage_settings {
+    return Intl.message(
+      'Manage your wallet and preferences',
+      name: 'g_audit_manage_settings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet management`
+  String get g_audit_wallet_management {
+    return Intl.message(
+      'Wallet management',
+      name: 'g_audit_wallet_management',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create, import and manage wallets`
+  String get g_audit_manage_wallets {
+    return Intl.message(
+      'Create, import and manage wallets',
+      name: 'g_audit_manage_wallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hardware wallet`
+  String get g_audit_hardware {
+    return Intl.message(
+      'Hardware wallet',
+      name: 'g_audit_hardware',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved recipient addresses`
+  String get g_audit_saved_addresses {
+    return Intl.message(
+      'Saved recipient addresses',
+      name: 'g_audit_saved_addresses',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Authentication and wallet protection`
+  String get g_audit_protect_wallet {
+    return Intl.message(
+      'Authentication and wallet protection',
+      name: 'g_audit_protect_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export an encrypted wallet backup`
+  String get g_audit_encrypted_backup {
+    return Intl.message(
+      'Export an encrypted wallet backup',
+      name: 'g_audit_encrypted_backup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Biometric authentication`
+  String get g_audit_biometrics {
+    return Intl.message(
+      'Biometric authentication',
+      name: 'g_audit_biometrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Face ID / fingerprint settings`
+  String get g_audit_biometrics_desc {
+    return Intl.message(
+      'Face ID / fingerprint settings',
+      name: 'g_audit_biometrics_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `App display language`
+  String get g_audit_display_language {
+    return Intl.message(
+      'App display language',
+      name: 'g_audit_display_language',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Appearance and display mode`
+  String get g_audit_theme_desc {
+    return Intl.message(
+      'Appearance and display mode',
+      name: 'g_audit_theme_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage networks and RPC endpoints`
+  String get g_audit_network_desc {
+    return Intl.message(
+      'Manage networks and RPC endpoints',
+      name: 'g_audit_network_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rate N42`
+  String get g_audit_rate {
+    return Intl.message('Rate N42', name: 'g_audit_rate', desc: '', args: []);
+  }
+
+  /// `Open the app store`
+  String get g_audit_rate_desc {
+    return Intl.message(
+      'Open the app store',
+      name: 'g_audit_rate_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Version, website and support`
+  String get g_audit_about_desc {
+    return Intl.message(
+      'Version, website and support',
+      name: 'g_audit_about_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Display currency`
+  String get g_audit_currency {
+    return Intl.message(
+      'Display currency',
+      name: 'g_audit_currency',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Portfolio values are currently shown in US dollars.`
+  String get g_audit_currency_usd {
+    return Intl.message(
+      'Portfolio values are currently shown in US dollars.',
+      name: 'g_audit_currency_usd',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gas tracker`
+  String get g_audit_gas {
+    return Intl.message('Gas tracker', name: 'g_audit_gas', desc: '', args: []);
+  }
+
+  /// `Network fees and price alerts`
+  String get g_audit_gas_desc {
+    return Intl.message(
+      'Network fees and price alerts',
+      name: 'g_audit_gas_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Batch transfer`
+  String get g_audit_batch {
+    return Intl.message(
+      'Batch transfer',
+      name: 'g_audit_batch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Send to multiple recipients or import a CSV`
+  String get g_audit_batch_desc {
+    return Intl.message(
+      'Send to multiple recipients or import a CSV',
+      name: 'g_audit_batch_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Manage sessions; disconnecting does not revoke token approvals.`
+  String get g_audit_connections_desc {
+    return Intl.message(
+      'Manage sessions; disconnecting does not revoke token approvals.',
+      name: 'g_audit_connections_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open the block explorer to view this smart account’s on-chain activity.`
+  String get g_audit_aa_history_external {
+    return Intl.message(
+      'Open the block explorer to view this smart account’s on-chain activity.',
+      name: 'g_audit_aa_history_external',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mark price`
+  String get g_audit_mark_price {
+    return Intl.message(
+      'Mark price',
+      name: 'g_audit_mark_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Oracle price`
+  String get g_audit_oracle_price {
+    return Intl.message(
+      'Oracle price',
+      name: 'g_audit_oracle_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `24h volume (USD)`
+  String get g_audit_volume {
+    return Intl.message(
+      '24h volume (USD)',
+      name: 'g_audit_volume',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open interest`
+  String get g_audit_open_interest {
+    return Intl.message(
+      'Open interest',
+      name: 'g_audit_open_interest',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Current funding rate`
+  String get g_audit_funding {
+    return Intl.message(
+      'Current funding rate',
+      name: 'g_audit_funding',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Maximum leverage`
+  String get g_audit_max_leverage {
+    return Intl.message(
+      'Maximum leverage',
+      name: 'g_audit_max_leverage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The quote changed or expired. Review the latest quote before confirming.`
+  String get g_audit_quote_changed {
+    return Intl.message(
+      'The quote changed or expired. Review the latest quote before confirming.',
+      name: 'g_audit_quote_changed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token contract`
+  String get g_audit_approval_token {
+    return Intl.message(
+      'Token contract',
+      name: 'g_audit_approval_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spending permission for`
+  String get g_audit_approval_spender {
+    return Intl.message(
+      'Spending permission for',
+      name: 'g_audit_approval_spender',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export matching local records (CSV)`
+  String get g_history_export_all {
+    return Intl.message(
+      'Export matching local records (CSV)',
+      name: 'g_history_export_all',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Filters and CSV export include all matching records saved on this device. Open the asset to sync newer on-chain activity.`
+  String get g_history_local_scope {
+    return Intl.message(
+      'Filters and CSV export include all matching records saved on this device. Open the asset to sync newer on-chain activity.',
+      name: 'g_history_local_scope',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clear dates`
+  String get g_history_clear_dates {
+    return Intl.message(
+      'Clear dates',
+      name: 'g_history_clear_dates',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not export transaction history. Please try again.`
+  String get g_history_export_error {
+    return Intl.message(
+      'Could not export transaction history. Please try again.',
+      name: 'g_history_export_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select a spendable mainnet wallet for this network. Watch-only accounts cannot sign swaps.`
+  String get g_dex_account_unavailable {
+    return Intl.message(
+      'Select a spendable mainnet wallet for this network. Watch-only accounts cannot sign swaps.',
+      name: 'g_dex_account_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The transaction parameters are invalid or execution failed. Refresh the quote and try again.`
+  String get g_dex_execution_invalid {
+    return Intl.message(
+      'The transaction parameters are invalid or execution failed. Refresh the quote and try again.',
+      name: 'g_dex_execution_invalid',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Spending account`
+  String get g_dex_spending_account {
+    return Intl.message(
+      'Spending account',
+      name: 'g_dex_spending_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use smart account`
+  String get g_dex_use_smart_account {
+    return Intl.message(
+      'Use smart account',
+      name: 'g_dex_use_smart_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Network fees are paid by this smart account.`
+  String get g_dex_smart_account_fees {
+    return Intl.message(
+      'Network fees are paid by this smart account.',
+      name: 'g_dex_smart_account_fees',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap submitted, but history could not be updated. Do not submit it again.`
+  String get g_dex_history_record_failed {
+    return Intl.message(
+      'Swap submitted, but history could not be updated. Do not submit it again.',
+      name: 'g_dex_history_record_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Prices unavailable`
+  String get g_wallet_prices_unavailable {
+    return Intl.message(
+      'Prices unavailable',
+      name: 'g_wallet_prices_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved prices`
+  String get g_wallet_prices_cached {
+    return Intl.message(
+      'Saved prices',
+      name: 'g_wallet_prices_cached',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updated now`
+  String get g_wallet_prices_just_updated {
+    return Intl.message(
+      'Updated now',
+      name: 'g_wallet_prices_just_updated',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Updated {value}m ago`
+  String g_wallet_prices_minutes(Object value) {
+    return Intl.message(
+      'Updated ${value}m ago',
+      name: 'g_wallet_prices_minutes',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Updated {value}h ago`
+  String g_wallet_prices_hours(Object value) {
+    return Intl.message(
+      'Updated ${value}h ago',
+      name: 'g_wallet_prices_hours',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Pin token`
+  String get g_wallet_pin_token {
+    return Intl.message(
+      'Pin token',
+      name: 'g_wallet_pin_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unpin token`
+  String get g_wallet_unpin_token {
+    return Intl.message(
+      'Unpin token',
+      name: 'g_wallet_unpin_token',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balance could not be refreshed`
+  String get g_wallet_balance_warning {
+    return Intl.message(
+      'Balance could not be refreshed',
+      name: 'g_wallet_balance_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Partial prices`
+  String get g_wallet_prices_partial {
+    return Intl.message(
+      'Partial prices',
+      name: 'g_wallet_prices_partial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balances by network`
+  String get g_aggregate_network_balances {
+    return Intl.message(
+      'Balances by network',
+      name: 'g_aggregate_network_balances',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Known balance`
+  String get g_aggregate_known_balance {
+    return Intl.message(
+      'Known balance',
+      name: 'g_aggregate_known_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mainnet balances only. Missing or failed network queries are not counted as zero.`
+  String get g_aggregate_mainnet_note {
+    return Intl.message(
+      'Mainnet balances only. Missing or failed network queries are not counted as zero.',
+      name: 'g_aggregate_mainnet_note',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This asset is no longer available in the selected wallet. Return to the wallet to choose an asset.`
+  String get g_aggregate_unavailable {
+    return Intl.message(
+      'This asset is no longer available in the selected wallet. Return to the wallet to choose an asset.',
+      name: 'g_aggregate_unavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No active mainnet account for this network`
+  String get g_aggregate_no_mainnet {
+    return Intl.message(
+      'No active mainnet account for this network',
+      name: 'g_aggregate_no_mainnet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balance not loaded`
+  String get g_aggregate_not_loaded {
+    return Intl.message(
+      'Balance not loaded',
+      name: 'g_aggregate_not_loaded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Saved balance · refresh failed`
+  String get g_aggregate_cached_balance {
+    return Intl.message(
+      'Saved balance · refresh failed',
+      name: 'g_aggregate_cached_balance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Open network`
+  String get g_aggregate_open_network {
+    return Intl.message(
+      'Open network',
+      name: 'g_aggregate_open_network',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to create order`
+  String get g_ui_order_create_failed {
+    return Intl.message(
+      'Failed to create order',
+      name: 'g_ui_order_create_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit order created`
+  String get g_ui_order_created {
+    return Intl.message(
+      'Limit order created',
+      name: 'g_ui_order_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Place Limit Order`
+  String get g_ui_order_place {
+    return Intl.message(
+      'Place Limit Order',
+      name: 'g_ui_order_place',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit Price`
+  String get g_ui_limit_price {
+    return Intl.message(
+      'Limit Price',
+      name: 'g_ui_limit_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit Price ({quote} per {base})`
+  String g_ui_limit_price_pair(String quote, String base) {
+    return Intl.message(
+      'Limit Price ($quote per $base)',
+      name: 'g_ui_limit_price_pair',
+      desc: '',
+      args: [quote, base],
+    );
+  }
+
+  /// `Expires in:`
+  String get g_ui_expires_in {
+    return Intl.message(
+      'Expires in:',
+      name: 'g_ui_expires_in',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{value}h`
+  String g_ui_hours(String value) {
+    return Intl.message(
+      '${value}h',
+      name: 'g_ui_hours',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `{value}d`
+  String g_ui_days(String value) {
+    return Intl.message(
+      '${value}d',
+      name: 'g_ui_days',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Order cancelled`
+  String get g_ui_order_cancelled {
+    return Intl.message(
+      'Order cancelled',
+      name: 'g_ui_order_cancelled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel failed`
+  String get g_ui_order_cancel_failed {
+    return Intl.message(
+      'Cancel failed',
+      name: 'g_ui_order_cancel_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unable to load limit orders`
+  String get g_ui_orders_load_failed {
+    return Intl.message(
+      'Unable to load limit orders',
+      name: 'g_ui_orders_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit Orders`
+  String get g_ui_limit_orders {
+    return Intl.message(
+      'Limit Orders',
+      name: 'g_ui_limit_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No limit orders`
+  String get g_ui_no_limit_orders {
+    return Intl.message(
+      'No limit orders',
+      name: 'g_ui_no_limit_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cancel Order`
+  String get g_ui_cancel_order {
+    return Intl.message(
+      'Cancel Order',
+      name: 'g_ui_cancel_order',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Triggered`
+  String get g_ui_order_triggered {
+    return Intl.message(
+      'Triggered',
+      name: 'g_ui_order_triggered',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Unknown status`
+  String get g_ui_unknown_status {
+    return Intl.message(
+      'Unknown status',
+      name: 'g_ui_unknown_status',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Swap Mode`
+  String get g_ui_swap_mode {
+    return Intl.message(
+      'Select Swap Mode',
+      name: 'g_ui_swap_mode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Purchase N via N42 protocol`
+  String get g_ui_buy_n_description {
+    return Intl.message(
+      'Purchase N via N42 protocol',
+      name: 'g_ui_buy_n_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Swap tokens via Uniswap / 1inch / Jupiter`
+  String get g_ui_dex_description {
+    return Intl.message(
+      'Swap tokens via Uniswap / 1inch / Jupiter',
+      name: 'g_ui_dex_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `View Market Data`
+  String get g_ui_view_market {
+    return Intl.message(
+      'View Market Data',
+      name: 'g_ui_view_market',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `24h Volume`
+  String get g_ui_volume_24h {
+    return Intl.message(
+      '24h Volume',
+      name: 'g_ui_volume_24h',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Markets ({value})`
+  String g_ui_markets_count(String value) {
+    return Intl.message(
+      'Markets ($value)',
+      name: 'g_ui_markets_count',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Positions ({value})`
+  String g_ui_positions_count(String value) {
+    return Intl.message(
+      'Positions ($value)',
+      name: 'g_ui_positions_count',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Orders ({value})`
+  String g_ui_orders_count(String value) {
+    return Intl.message(
+      'Orders ($value)',
+      name: 'g_ui_orders_count',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `No open positions`
+  String get g_ui_no_positions {
+    return Intl.message(
+      'No open positions',
+      name: 'g_ui_no_positions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No open orders`
+  String get g_ui_no_orders {
+    return Intl.message(
+      'No open orders',
+      name: 'g_ui_no_orders',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Free`
+  String get g_ui_free_margin {
+    return Intl.message('Free', name: 'g_ui_free_margin', desc: '', args: []);
+  }
+
+  /// `Utilization`
+  String get g_ui_margin_utilization {
+    return Intl.message(
+      'Utilization',
+      name: 'g_ui_margin_utilization',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Size`
+  String get g_ui_position_size {
+    return Intl.message('Size', name: 'g_ui_position_size', desc: '', args: []);
+  }
+
+  /// `Entry Price`
+  String get g_ui_entry_price {
+    return Intl.message(
+      'Entry Price',
+      name: 'g_ui_entry_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Liquidation Price`
+  String get g_ui_liquidation_price {
+    return Intl.message(
+      'Liquidation Price',
+      name: 'g_ui_liquidation_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limit {value}`
+  String g_ui_limit_value(String value) {
+    return Intl.message(
+      'Limit $value',
+      name: 'g_ui_limit_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Vol: {volume} · OI: {interest}`
+  String g_ui_volume_interest(String volume, String interest) {
+    return Intl.message(
+      'Vol: $volume · OI: $interest',
+      name: 'g_ui_volume_interest',
+      desc: '',
+      args: [volume, interest],
+    );
+  }
+
+  /// `Optional`
+  String get g_ui_optional {
+    return Intl.message('Optional', name: 'g_ui_optional', desc: '', args: []);
+  }
+
+  /// `Memo`
+  String get g_ui_memo {
+    return Intl.message('Memo', name: 'g_ui_memo', desc: '', args: []);
+  }
+
+  /// `Account email`
+  String get g_ui_account_email {
+    return Intl.message(
+      'Account email',
+      name: 'g_ui_account_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `New email address`
+  String get g_ui_new_email {
+    return Intl.message(
+      'New email address',
+      name: 'g_ui_new_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code`
+  String get g_ui_verification_code {
+    return Intl.message(
+      'Verification code',
+      name: 'g_ui_verification_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm update`
+  String get g_ui_confirm_update {
+    return Intl.message(
+      'Confirm update',
+      name: 'g_ui_confirm_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Executed`
+  String get g_ui_order_executed {
+    return Intl.message(
+      'Executed',
+      name: 'g_ui_order_executed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code request sent`
+  String get g_ui_email_code_sent {
+    return Intl.message(
+      'Verification code request sent',
+      name: 'g_ui_email_code_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verification code accepted`
+  String get g_ui_email_code_accepted {
+    return Intl.message(
+      'Verification code accepted',
+      name: 'g_ui_email_code_accepted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sending request...`
+  String get g_ui_sending_request {
+    return Intl.message(
+      'Sending request...',
+      name: 'g_ui_sending_request',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter a valid email address`
+  String get g_ui_invalid_email {
+    return Intl.message(
+      'Enter a valid email address',
+      name: 'g_ui_invalid_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Change Email`
+  String get g_ui_change_email {
+    return Intl.message(
+      'Change Email',
+      name: 'g_ui_change_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No email is cached on this device`
+  String get g_ui_no_cached_email {
+    return Intl.message(
+      'No email is cached on this device',
+      name: 'g_ui_no_cached_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Verify code`
+  String get g_ui_verify_code {
+    return Intl.message(
+      'Verify code',
+      name: 'g_ui_verify_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update`
+  String get g_ui_update {
+    return Intl.message('Update', name: 'g_ui_update', desc: '', args: []);
+  }
+
+  /// `Send code`
+  String get g_ui_send_code {
+    return Intl.message(
+      'Send code',
+      name: 'g_ui_send_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to email`
+  String get g_ui_back_email {
+    return Intl.message(
+      'Back to email',
+      name: 'g_ui_back_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Update email`
+  String get g_ui_update_email {
+    return Intl.message(
+      'Update email',
+      name: 'g_ui_update_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Back to code`
+  String get g_ui_back_code {
+    return Intl.message(
+      'Back to code',
+      name: 'g_ui_back_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tags`
+  String get g_ui_tags {
+    return Intl.message('Tags', name: 'g_ui_tags', desc: '', args: []);
+  }
+
+  /// `Custom tag...`
+  String get g_ui_custom_tag {
+    return Intl.message(
+      'Custom tag...',
+      name: 'g_ui_custom_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Popular Tokens`
+  String get g_ui_popular_tokens {
+    return Intl.message(
+      'Popular Tokens',
+      name: 'g_ui_popular_tokens',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Looking up token info…`
+  String get g_ui_token_lookup {
+    return Intl.message(
+      'Looking up token info…',
+      name: 'g_ui_token_lookup',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token not found in list — fill symbol & decimals manually`
+  String get g_ui_token_manual {
+    return Intl.message(
+      'Token not found in list — fill symbol & decimals manually',
+      name: 'g_ui_token_manual',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token found: {value}`
+  String g_ui_token_found(Object value) {
+    return Intl.message(
+      'Token found: $value',
+      name: 'g_ui_token_found',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Next Block Gas Prediction`
+  String get g_ui_gas_prediction {
+    return Intl.message(
+      'Next Block Gas Prediction',
+      name: 'g_ui_gas_prediction',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mempool`
+  String get g_ui_mempool {
+    return Intl.message('Mempool', name: 'g_ui_mempool', desc: '', args: []);
+  }
+
+  /// `Base Fee: {value} Gwei`
+  String g_ui_base_fee_value(Object value) {
+    return Intl.message(
+      'Base Fee: $value Gwei',
+      name: 'g_ui_base_fee_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Pending (Mempool)`
+  String get g_ui_pending_mempool {
+    return Intl.message(
+      'Pending (Mempool)',
+      name: 'g_ui_pending_mempool',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Checking approval…`
+  String get g_ui_checking_approval {
+    return Intl.message(
+      'Checking approval…',
+      name: 'g_ui_checking_approval',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Aave V3 Lending`
+  String get g_ui_aave_lending {
+    return Intl.message(
+      'Aave V3 Lending',
+      name: 'g_ui_aave_lending',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fear & Greed`
+  String get g_ui_fear_greed {
+    return Intl.message(
+      'Fear & Greed',
+      name: 'g_ui_fear_greed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save failed. Please try again.`
+  String get g_ui_save_failed {
+    return Intl.message(
+      'Save failed. Please try again.',
+      name: 'g_ui_save_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Destination Tag`
+  String get g_ui_destination_tag {
+    return Intl.message(
+      'Destination Tag',
+      name: 'g_ui_destination_tag',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Token Contract (0x...)`
+  String get g_ui_token_contract_hint {
+    return Intl.message(
+      'Token Contract (0x...)',
+      name: 'g_ui_token_contract_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Calldata (hex)`
+  String get g_ui_calldata_hex {
+    return Intl.message(
+      'Calldata (hex)',
+      name: 'g_ui_calldata_hex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet AI`
+  String get g_ui_wallet_ai {
+    return Intl.message(
+      'Wallet AI',
+      name: 'g_ui_wallet_ai',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Read-only`
+  String get g_ui_read_only {
+    return Intl.message(
+      'Read-only',
+      name: 'g_ui_read_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ask about balance, portfolio, gas`
+  String get g_ui_assistant_hint {
+    return Intl.message(
+      'Ask about balance, portfolio, gas',
+      name: 'g_ui_assistant_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No DApps`
+  String get g_ui_no_dapps {
+    return Intl.message('No DApps', name: 'g_ui_no_dapps', desc: '', args: []);
+  }
+
+  /// `Paste connection link`
+  String get g_ui_paste_connection {
+    return Intl.message(
+      'Paste connection link',
+      name: 'g_ui_paste_connection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Contract Info`
+  String get g_ui_contract_info {
+    return Intl.message(
+      'Contract Info',
+      name: 'g_ui_contract_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Keystone paired successfully`
+  String get g_ui_keystone_paired {
+    return Intl.message(
+      'Keystone paired successfully',
+      name: 'g_ui_keystone_paired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Connected to {value}`
+  String g_ui_device_connected(Object value) {
+    return Intl.message(
+      'Connected to $value',
+      name: 'g_ui_device_connected',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Clipboard auto-clears in {value}s`
+  String g_ui_clipboard_clear(Object value) {
+    return Intl.message(
+      'Clipboard auto-clears in ${value}s',
+      name: 'g_ui_clipboard_clear',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Message`
+  String get g_ui_message {
+    return Intl.message('Message', name: 'g_ui_message', desc: '', args: []);
+  }
+
+  /// `Room ID`
+  String get g_ui_room_id {
+    return Intl.message('Room ID', name: 'g_ui_room_id', desc: '', args: []);
+  }
+
+  /// `Please select at least one wallet to backup`
+  String get g_ui_backup_select_wallet {
+    return Intl.message(
+      'Please select at least one wallet to backup',
+      name: 'g_ui_backup_select_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password must be at least 8 characters`
+  String get g_ui_backup_password_min {
+    return Intl.message(
+      'Password must be at least 8 characters',
+      name: 'g_ui_backup_password_min',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Passwords do not match`
+  String get g_ui_password_mismatch {
+    return Intl.message(
+      'Passwords do not match',
+      name: 'g_ui_password_mismatch',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No valid wallets selected for backup`
+  String get g_ui_backup_no_selection {
+    return Intl.message(
+      'No valid wallets selected for backup',
+      name: 'g_ui_backup_no_selection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export Cloud Backup`
+  String get g_ui_backup_export {
+    return Intl.message(
+      'Export Cloud Backup',
+      name: 'g_ui_backup_export',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select Wallets to Backup`
+  String get g_ui_backup_select_wallets {
+    return Intl.message(
+      'Select Wallets to Backup',
+      name: 'g_ui_backup_select_wallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup Password`
+  String get g_ui_backup_password {
+    return Intl.message(
+      'Backup Password',
+      name: 'g_ui_backup_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Set a strong backup password (min 8 chars)`
+  String get g_ui_backup_password_hint {
+    return Intl.message(
+      'Set a strong backup password (min 8 chars)',
+      name: 'g_ui_backup_password_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get g_ui_confirm_password {
+    return Intl.message(
+      'Confirm Password',
+      name: 'g_ui_confirm_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Re-enter the backup password`
+  String get g_ui_backup_password_repeat {
+    return Intl.message(
+      'Re-enter the backup password',
+      name: 'g_ui_backup_password_repeat',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mnemonic wallet`
+  String get g_ui_mnemonic_wallet {
+    return Intl.message(
+      'Mnemonic wallet',
+      name: 'g_ui_mnemonic_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Private key wallet`
+  String get g_ui_private_key_wallet {
+    return Intl.message(
+      'Private key wallet',
+      name: 'g_ui_private_key_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create & Save Backup`
+  String get g_ui_backup_create_save {
+    return Intl.message(
+      'Create & Save Backup',
+      name: 'g_ui_backup_create_save',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `N42Wallet Backup`
+  String get g_ui_backup_share_subject {
+    return Intl.message(
+      'N42Wallet Backup',
+      name: 'g_ui_backup_share_subject',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This backup contains your private keys / mnemonics, wallet passwords and wallet settings. Keep the backup file and password safe. Never share them with anyone.`
+  String get g_ui_backup_warning {
+    return Intl.message(
+      'This backup contains your private keys / mnemonics, wallet passwords and wallet settings. Keep the backup file and password safe. Never share them with anyone.',
+      name: 'g_ui_backup_warning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallet {value}`
+  String g_ui_wallet_number(Object value) {
+    return Intl.message(
+      'Wallet $value',
+      name: 'g_ui_wallet_number',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Cannot access the selected file`
+  String get g_ui_backup_file_access {
+    return Intl.message(
+      'Cannot access the selected file',
+      name: 'g_ui_backup_file_access',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Not a valid N42Wallet backup file`
+  String get g_ui_backup_invalid_file {
+    return Intl.message(
+      'Not a valid N42Wallet backup file',
+      name: 'g_ui_backup_invalid_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please select a backup file first`
+  String get g_ui_backup_select_file_first {
+    return Intl.message(
+      'Please select a backup file first',
+      name: 'g_ui_backup_select_file_first',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please enter the backup password`
+  String get g_ui_backup_enter_password {
+    return Intl.message(
+      'Please enter the backup password',
+      name: 'g_ui_backup_enter_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No wallets found in the backup file`
+  String get g_ui_backup_empty {
+    return Intl.message(
+      'No wallets found in the backup file',
+      name: 'g_ui_backup_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No wallets could be restored from this backup`
+  String get g_ui_backup_restore_none {
+    return Intl.message(
+      'No wallets could be restored from this backup',
+      name: 'g_ui_backup_restore_none',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import Cloud Backup`
+  String get g_ui_backup_import {
+    return Intl.message(
+      'Import Cloud Backup',
+      name: 'g_ui_backup_import',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.`
+  String get g_ui_backup_restore_hint {
+    return Intl.message(
+      'Restore your wallets from an encrypted backup stored on iCloud Drive or Google Drive.',
+      name: 'g_ui_backup_restore_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Backup File`
+  String get g_ui_backup_file {
+    return Intl.message(
+      'Backup File',
+      name: 'g_ui_backup_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No file selected`
+  String get g_ui_backup_no_file {
+    return Intl.message(
+      'No file selected',
+      name: 'g_ui_backup_no_file',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the password used when creating the backup`
+  String get g_ui_backup_restore_password_hint {
+    return Intl.message(
+      'Enter the password used when creating the backup',
+      name: 'g_ui_backup_restore_password_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.`
+  String get g_ui_backup_encryption_hint {
+    return Intl.message(
+      'Your backup is encrypted with AES-256 + PBKDF2. Only the correct password can restore it.',
+      name: 'g_ui_backup_encryption_hint',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Import Wallets`
+  String get g_ui_backup_import_wallets {
+    return Intl.message(
+      'Import Wallets',
+      name: 'g_ui_backup_import_wallets',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot open the file picker. Please try again.`
+  String get g_ui_file_picker_failed {
+    return Intl.message(
+      'Cannot open the file picker. Please try again.',
+      name: 'g_ui_file_picker_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot read the selected file. Please try again.`
+  String get g_ui_file_read_failed {
+    return Intl.message(
+      'Cannot read the selected file. Please try again.',
+      name: 'g_ui_file_read_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Wallets imported: {imported}. Skipped: {skipped}.`
+  String g_ui_backup_import_result(Object imported, Object skipped) {
+    return Intl.message(
+      'Wallets imported: $imported. Skipped: $skipped.',
+      name: 'g_ui_backup_import_result',
+      desc: '',
+      args: [imported, skipped],
+    );
+  }
+
+  /// `Could not create the backup. Please try again.`
+  String get g_ui_backup_export_failed {
+    return Intl.message(
+      'Could not create the backup. Please try again.',
+      name: 'g_ui_backup_export_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not restore the backup. Check the password and backup file, then try again.`
+  String get g_ui_backup_import_failed {
+    return Intl.message(
+      'Could not restore the backup. Check the password and backup file, then try again.',
+      name: 'g_ui_backup_import_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data found after removing comments.`
+  String get g_ui_csv_no_data {
+    return Intl.message(
+      'No data found after removing comments.',
+      name: 'g_ui_csv_no_data',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No data rows found (only header detected).`
+  String get g_ui_csv_header_only {
+    return Intl.message(
+      'No data rows found (only header detected).',
+      name: 'g_ui_csv_header_only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Clipboard is empty`
+  String get g_ui_clipboard_empty {
+    return Intl.message(
+      'Clipboard is empty',
+      name: 'g_ui_clipboard_empty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Validation Issues`
+  String get g_ui_validation_issues {
+    return Intl.message(
+      'Validation Issues',
+      name: 'g_ui_validation_issues',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Issues:`
+  String get g_ui_issues_label {
+    return Intl.message(
+      'Issues:',
+      name: 'g_ui_issues_label',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Row {value}: missing fields`
+  String g_ui_csv_missing_fields(Object value) {
+    return Intl.message(
+      'Row $value: missing fields',
+      name: 'g_ui_csv_missing_fields',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Template copied`
+  String get g_ui_template_copied {
+    return Intl.message(
+      'Template copied',
+      name: 'g_ui_template_copied',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Valid: {valid}. Issues: {issues}.`
+  String g_ui_validation_counts(Object valid, Object issues) {
+    return Intl.message(
+      'Valid: $valid. Issues: $issues.',
+      name: 'g_ui_validation_counts',
+      desc: '',
+      args: [valid, issues],
+    );
+  }
+
+  /// `… and {value} more issues`
+  String g_ui_validation_more(Object value) {
+    return Intl.message(
+      '… and $value more issues',
+      name: 'g_ui_validation_more',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Import valid recipients ({value})`
+  String g_ui_import_valid(Object value) {
+    return Intl.message(
+      'Import valid recipients ($value)',
+      name: 'g_ui_import_valid',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Recipients: {value}`
+  String g_ui_recipients_count(Object value) {
+    return Intl.message(
+      'Recipients: $value',
+      name: 'g_ui_recipients_count',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Token: {value}`
+  String g_ui_token_value(Object value) {
+    return Intl.message(
+      'Token: $value',
+      name: 'g_ui_token_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Gas: {value}`
+  String g_ui_gas_value(Object value) {
+    return Intl.message(
+      'Gas: $value',
+      name: 'g_ui_gas_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Unable to load ENS renewal prices. Please try again.`
+  String get g_ui_ens_price_failed {
+    return Intl.message(
+      'Unable to load ENS renewal prices. Please try again.',
+      name: 'g_ui_ens_price_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `ENS renewal failed. Please try again.`
+  String get g_ui_ens_renew_failed {
+    return Intl.message(
+      'ENS renewal failed. Please try again.',
+      name: 'g_ui_ens_renew_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Transaction: {value}`
+  String g_ui_transaction_hash_value(Object value) {
+    return Intl.message(
+      'Transaction: $value',
+      name: 'g_ui_transaction_hash_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Could not save the trade. Please try again.`
+  String get g_ui_trade_save_failed {
+    return Intl.message(
+      'Could not save the trade. Please try again.',
+      name: 'g_ui_trade_save_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not delete the trade. Please try again.`
+  String get g_ui_trade_delete_failed {
+    return Intl.message(
+      'Could not delete the trade. Please try again.',
+      name: 'g_ui_trade_delete_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Asset {asset} ({contract}) has not been added to account {address}.`
+  String g_ui_algo_asset_missing(
+    Object asset,
+    Object contract,
+    Object address,
+  ) {
+    return Intl.message(
+      'Asset $asset ($contract) has not been added to account $address.',
+      name: 'g_ui_algo_asset_missing',
+      desc: '',
+      args: [asset, contract, address],
+    );
+  }
+
+  /// `Adding this asset requires a network fee. Tap Add to continue.`
+  String get g_ui_algo_asset_add_fee {
+    return Intl.message(
+      'Adding this asset requires a network fee. Tap Add to continue.',
+      name: 'g_ui_algo_asset_add_fee',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Balance: {value}`
+  String g_ui_balance_value(Object value) {
+    return Intl.message(
+      'Balance: $value',
+      name: 'g_ui_balance_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Minimum balance: {value}`
+  String g_ui_min_balance_value(Object value) {
+    return Intl.message(
+      'Minimum balance: $value',
+      name: 'g_ui_min_balance_value',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `Camera permission is required to scan a code.`
+  String get g_ui_camera_permission {
+    return Intl.message(
+      'Camera permission is required to scan a code.',
+      name: 'g_ui_camera_permission',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No coins yet`
+  String get g_ui_no_coins {
+    return Intl.message(
+      'No coins yet',
+      name: 'g_ui_no_coins',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading wallet...`
+  String get g_ui_wallet_loading {
+    return Intl.message(
+      'Loading wallet...',
+      name: 'g_ui_wallet_loading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load wallet`
+  String get g_ui_wallet_load_failed {
+    return Intl.message(
+      'Failed to load wallet',
+      name: 'g_ui_wallet_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Wallet Yet`
+  String get g_ui_no_wallet {
+    return Intl.message(
+      'No Wallet Yet',
+      name: 'g_ui_no_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create or import a wallet to get started`
+  String get g_ui_wallet_get_started {
+    return Intl.message(
+      'Create or import a wallet to get started',
+      name: 'g_ui_wallet_get_started',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create Wallet`
+  String get g_ui_create_wallet {
+    return Intl.message(
+      'Create Wallet',
+      name: 'g_ui_create_wallet',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to load coins. Please try again.`
+  String get g_ui_coins_load_failed {
+    return Intl.message(
+      'Failed to load coins. Please try again.',
+      name: 'g_ui_coins_load_failed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No Seed Phrase Needed`
+  String get g_ui_mpc_no_phrase {
+    return Intl.message(
+      'No Seed Phrase Needed',
+      name: 'g_ui_mpc_no_phrase',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign in with your social account to create a secure MPC wallet. Your private key is split into encrypted shares — no seed phrase to lose.`
+  String get g_ui_mpc_intro {
+    return Intl.message(
+      'Sign in with your social account to create a secure MPC wallet. Your private key is split into encrypted shares — no seed phrase to lose.',
+      name: 'g_ui_mpc_intro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.`
+  String get g_ui_mpc_security {
+    return Intl.message(
+      'Powered by MPC-TSS. Your key is split into 3 encrypted shares across your device, our servers, and a recovery backup.',
+      name: 'g_ui_mpc_security',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

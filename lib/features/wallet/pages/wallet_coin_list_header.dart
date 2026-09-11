@@ -464,28 +464,34 @@ class _BottomRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _SortButton(
-          label: S.of(context).g_browser_key6,
-          sortValue: waValue.walletInfo.coinSort['name'] ?? -1,
-          onTap: () => waValue.setCoinSortAssets("name"),
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                _SortButton(
+                  label: S.of(context).g_browser_key6,
+                  sortValue: waValue.walletInfo.coinSort['name'] ?? -1,
+                  onTap: () => waValue.setCoinSortAssets("name"),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                _SortButton(
+                  label: S.of(context).g_key_198,
+                  sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
+                  onTap: () => waValue.setCoinSortAssets("assets"),
+                ),
+                SizedBox(width: AppSpacing.space4),
+                _SortButton(
+                  label: '24h%',
+                  sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
+                  onTap: () => waValue.setCoinSortAssets("change"),
+                ),
+              ],
+            ),
+          ),
         ),
-        SizedBox(width: AppSpacing.space4),
-        _SortButton(
-          label: S.of(context).g_key_198,
-          sortValue: waValue.walletInfo.coinSort['assets'] ?? -1,
-          onTap: () => waValue.setCoinSortAssets("assets"),
-        ),
-        SizedBox(width: AppSpacing.space4),
-        _SortButton(
-          label: '24h%',
-          sortValue: waValue.walletInfo.coinSort['change'] ?? -1,
-          onTap: () => waValue.setCoinSortAssets("change"),
-        ),
-        const Spacer(),
         _RefreshButton(
-          isRefreshing:
-              waValue.load == Load.refresh ||
-              waValue.loadBalance == Load.loading,
+          isRefreshing: waValue.load == Load.refresh,
           onTap: onRefresh,
         ),
         _ThresholdButton(

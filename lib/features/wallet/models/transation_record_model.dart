@@ -52,8 +52,8 @@ class TransationRecordModel {
     trId = map['trId'];
     address = map['address'];
     coinId = map['coinId'];
-    from1 = map['from1'].toLowerCase();
-    to1 = map['to1'].toLowerCase();
+    from1 = map['from1'];
+    to1 = map['to1'];
     price = BigInt.parse(map['price']);
     txHash = map['txHash'];
     state = map['state'];
@@ -73,8 +73,8 @@ class TransationRecordModel {
   Map<String, dynamic> _baseMap() => {
     'address': address,
     'coinId': coinId,
-    'from1': from1.toLowerCase(),
-    'to1': to1.toLowerCase(),
+    'from1': from1,
+    'to1': to1,
     'state': state,
     'txHash': txHash,
     'price': price.toString(),

@@ -17,6 +17,9 @@ import 'package:n42_wallet/features/wallet/widgets/aa/deployment_status_indicato
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+import 'package:n42_wallet/features/wallet/pages/aa/aa_account_explorer.dart';
+import 'package:n42_wallet/shared/utils/in_app_browser.dart';
+
 part 'aa_account_detail_page_widgets.dart';
 
 /// AA 账户详情页面

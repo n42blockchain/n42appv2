@@ -46,7 +46,7 @@ extension _HardwareWalletPageLogic on _HardwareWalletPageState {
               // 配对成功，提示用户
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Text('Keystone paired successfully'),
+                  content: Text(S.of(context).g_ui_keystone_paired),
                   backgroundColor: AppColorTokens.of(context).success,
                 ),
               );

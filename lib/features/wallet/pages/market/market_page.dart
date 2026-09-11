@@ -485,7 +485,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Markets',
+                  S.of(context).g_home_market,
                   style: AppTypography.headline.copyWith(
                     color: textColor,
                     letterSpacing: -0.5,
@@ -514,7 +514,7 @@ class _MarketPageState extends ConsumerState<MarketPage>
                   children: [
 
                     Text(
-                      'Markets',
+                      S.of(context).g_home_market,
                       style: TextStyle(
                         fontSize: 32.sp,
                         fontWeight: FontWeight.w600,

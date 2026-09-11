@@ -1,0 +1,21 @@
+{
+  "network": "Sui Testnet",
+  "rpc": "https://fullnode.testnet.sui.io:443",
+  "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "suix_getBalance",
+    "params": [
+      "0xe5302bcfed048b9eb7fbb526e91e2741fc87126165d49b64226f28c1fe2d167e",
+      "0x2::sui::SUI"
+    ]
+  },
+  "response": {
+    "jsonrpc": "2.0",
+    "error": {
+      "code": -32601,
+      "message": "Method not found. JSON-RPC on public fullnodes has been deprecated. Please migrate to gRPC or GraphQL endpoints. See https://docs.sui.io/develop/accessing-data/json-rpc-migration for more information."
+    },
+    "id": null
+  }
+}

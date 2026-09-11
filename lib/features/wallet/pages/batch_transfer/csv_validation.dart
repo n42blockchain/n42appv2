@@ -24,7 +24,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
 
     final dataLines = _filterDataLines(rawContent);
     if (dataLines.isEmpty) {
-      _showSnack('No data found after removing comments.');
+      _showSnack(S.of(context).g_ui_csv_no_data);
       return;
     }
 
@@ -32,7 +32,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     final rows = hasHeader ? dataLines.skip(1).toList() : dataLines;
 
     if (rows.isEmpty) {
-      _showSnack('No data rows found (only header detected).');
+      _showSnack(S.of(context).g_ui_csv_header_only);
       return;
     }
     if (rows.length > 200) {
@@ -52,9 +52,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
       final parts = rows[i].split(',');
 
       if (parts.length < 2) {
-        errors.add(
-          '${S.of(context).g_key_batch_invalid_address(lineNum)}: missing fields',
-        );
+        errors.add(S.of(context).g_ui_csv_missing_fields(lineNum));
         continue;
       }
 
@@ -124,7 +122,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
         '0x9876543210987654321098765432109876543210,0.5,';
 
     Clipboard.setData(const ClipboardData(text: template));
-    _showSnack('${S.of(context).g_key_119} — Template');
+    _showSnack(S.of(context).g_ui_template_copied);
   }
 
   Future<void> _pasteFromClipboard() async {
@@ -133,7 +131,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     if (data?.text != null && data!.text!.isNotEmpty) {
       _textController.text = data.text!;
     } else {
-      _showSnack('Clipboard is empty');
+      _showSnack(S.of(context).g_ui_clipboard_empty);
     }
   }
 
@@ -156,7 +154,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
     } catch (e) {
       if (!mounted) return;
       _showSnack(
-        'Failed to read file: $e',
+        S.of(context).g_ui_file_read_failed,
         color: AppColorTokens.of(context).danger,
       );
     }
@@ -177,7 +175,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
           children: [
             Icon(Icons.warning_amber, color: c.warning),
             const SizedBox(width: 8),
-            const Text('Validation Issues'),
+            Expanded(child: Text(S.of(context).g_ui_validation_issues)),
           ],
         ),
         content: SizedBox(
@@ -187,10 +185,14 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Found $validCount valid, ${errors.length} issue(s).'),
+                Text(
+                  S
+                      .of(context)
+                      .g_ui_validation_counts(validCount, errors.length),
+                ),
                 const SizedBox(height: 12),
-                const Text(
-                  'Issues:',
+                Text(
+                  S.of(context).g_ui_issues_label,
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 6),
@@ -210,8 +212,10 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
                 ),
                 if (errors.length > 5)
                   Text(
-                    '… and ${errors.length - 5} more issues',
-                    style: AppTypography.caption.copyWith(color: c.textTertiary),
+                    S.of(context).g_ui_validation_more(errors.length - 5),
+                    style: AppTypography.caption.copyWith(
+                      color: c.textTertiary,
+                    ),
                   ),
               ],
             ),
@@ -230,7 +234,7 @@ mixin _CsvValidationMixin on State<CsvImportPage> {
               },
               style: ElevatedButton.styleFrom(backgroundColor: blue),
               child: Text(
-                'Import $validCount Valid',
+                S.of(context).g_ui_import_valid(validCount),
                 style: const TextStyle(color: Colors.white),
               ),
             ),

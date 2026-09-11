@@ -147,9 +147,9 @@ class _ScanPageState extends State<ScanPage> {
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {
     if (!p) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('no Permission')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context).g_ui_camera_permission)),
+      );
     }
   }
 }

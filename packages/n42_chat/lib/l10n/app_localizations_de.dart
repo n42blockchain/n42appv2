@@ -797,8 +797,8 @@ class SDe extends S {
   String get commonTransferTo => 'Überweisen an';
 
   @override
-  String commonFromSender(String name, Object senderName) {
-    return 'Von $senderName';
+  String commonFromSender(String name) {
+    return 'Von $name';
   }
 
   @override

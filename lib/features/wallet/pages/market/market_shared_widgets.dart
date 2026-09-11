@@ -358,7 +358,7 @@ class _FearGreedBadge extends StatelessWidget {
         ),
         SizedBox(width: 6.w),
         Text(
-          'Fear & Greed',
+          S.of(context).g_ui_fear_greed,
           style: AppTypography.captionSm.copyWith(
             fontWeight: FontWeight.w400,
             color: AppColorTokens.of(context).textPrimary.withAlpha(90),
