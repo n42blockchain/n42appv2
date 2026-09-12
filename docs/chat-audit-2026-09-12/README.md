@@ -29,7 +29,7 @@ flutter drive --driver=test_driver/chat_audit_device_test.dart --target=integrat
 | 阿拉伯语首层 / 更多操作 | [首层](android-menu-compact-ar.png) · [展开](android-menu-expanded-ar.png) |
 | 阿拉伯语 AI 缺配置 | [截图](android-ai-unavailable-ar.png) |
 
-截图中的菜单背景属于隔离测试页面，并非完整会话截图。Android 设备可能仍停留在本轮测试入口。
+截图中的菜单背景属于隔离测试页面，并非完整会话截图。测试后已成功编译正常 `lib/main.dart` 入口的 Debug APK（build 2026072642），但两次恢复覆盖安装都被小米系统拒绝：`INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`。设备仍保留本轮测试入口，需要保持解锁并允许“通过 USB 安装”提示后再次覆盖安装；没有卸载或清除应用数据。
 
 ## iPhone 验收状态
 
