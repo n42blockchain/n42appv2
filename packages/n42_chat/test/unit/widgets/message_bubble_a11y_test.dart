@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/message_bubble.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/message_status_indicator.dart';
@@ -8,8 +9,7 @@ import 'package:n42_chat/src/presentation/widgets/chat/message_status_indicator.
 /// 历史上 chat 仓 `Semantics()` 全仓 0 命中，屏幕阅读器无法播报头像发送者
 /// 与消息发送状态。这些用例锁定本次补齐的语义标签，防止回归。
 void main() {
-  Widget wrap(Widget child) =>
-      MaterialApp(home: Scaffold(body: child));
+  Widget wrap(Widget child) => MaterialApp(home: Scaffold(body: child));
 
   testWidgets('avatar exposes sender name to screen readers', (tester) async {
     await tester.pumpWidget(
@@ -56,5 +56,21 @@ void main() {
       find.bySemanticsLabel('Failed to send, tap to resend'),
       findsOneWidget,
     );
+  });
+  testWidgets('desktop right click reaches the message action callback once', (
+    tester,
+  ) async {
+    var opened = 0;
+    await tester.pumpWidget(
+      wrap(
+        MessageBubble(
+          isSelf: false,
+          onLongPress: () => opened++,
+          child: const Text('right click'),
+        ),
+      ),
+    );
+    await tester.tap(find.text('right click'), buttons: kSecondaryMouseButton);
+    expect(opened, 1);
   });
 }

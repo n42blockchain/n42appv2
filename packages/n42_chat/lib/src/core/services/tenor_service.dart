@@ -49,8 +49,8 @@ class TenorService implements GifService {
   final TenorConfig _config;
 
   TenorService({required TenorConfig config, http.Client? client})
-      : _config = config,
-        _client = client ?? http.Client();
+    : _config = config,
+      _client = client ?? http.Client();
 
   int get _pageSize => _config.pageSize;
 
@@ -72,10 +72,10 @@ class TenorService implements GifService {
     };
   }
 
-  Map<String, String> _baseParams(int offset, int limit) {
+  Map<String, String> _baseParams(String? cursor, int limit) {
     return {
       'limit': limit.toString(),
-      if (offset > 0) 'pos': offset.toString(),
+      if (cursor != null && cursor.isNotEmpty) 'pos': cursor,
       'media_filter': 'gif,tinygif,mp4',
       'contentfilter': _config.contentFilter,
       'client_key': _config.clientKey,
@@ -86,15 +86,15 @@ class TenorService implements GifService {
   @override
   Future<GiphySearchResult> getTrendingGifs({
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
   }) async {
     final effectiveLimit = limit ?? _pageSize;
     return _request(
       '$_baseUrl/featured',
-      _baseParams(offset, effectiveLimit),
+      _baseParams(cursor, effectiveLimit),
       offset,
-      effectiveLimit,
     );
   }
 
@@ -102,6 +102,7 @@ class TenorService implements GifService {
   Future<GiphySearchResult> searchGifs({
     required String query,
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
     String lang = 'en',
@@ -110,24 +111,28 @@ class TenorService implements GifService {
     if (query.trim().isEmpty) {
       return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
     }
-    final params = _baseParams(offset, effectiveLimit)
+    final params = _baseParams(cursor, effectiveLimit)
       ..['q'] = query
       ..['locale'] = lang;
-    return _request('$_baseUrl/search', params, offset, effectiveLimit);
+    return _request('$_baseUrl/search', params, offset);
   }
 
   Future<GiphySearchResult> _request(
     String url,
     Map<String, String> params,
     int offset,
-    int limit,
   ) async {
     try {
       final uri = Uri.parse(url).replace(queryParameters: params);
       final response = await _client.get(uri, headers: _headers());
       if (response.statusCode != 200) {
         debugLog('Tenor request failed: ${response.statusCode}');
-        return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+        return GiphySearchResult(
+          gifs: const [],
+          totalCount: 0,
+          offset: offset,
+          isError: true,
+        );
       }
       final json = jsonDecode(response.body) as Map<String, dynamic>;
       final results = (json['results'] as List<dynamic>? ?? [])
@@ -135,17 +140,28 @@ class TenorService implements GifService {
           .map(_mapGif)
           .whereType<GiphyGif>()
           .toList();
-      // Tenor 用字符串 cursor 分页；这里以"返回满页即可能有更多"近似 hasMore。
-      final hasMore = results.length >= limit;
-      final totalCount = offset + results.length + (hasMore ? limit : 0);
+      // `pos` is opaque: the next response token is not a numeric offset.
+      final rawCursor = json['next']?.toString();
+      final nextCursor =
+          rawCursor == null || rawCursor.isEmpty || rawCursor == '0'
+          ? null
+          : rawCursor;
+      final totalCount = offset + results.length + (nextCursor != null ? 1 : 0);
       return GiphySearchResult(
         gifs: results,
+        provider: 'Tenor',
         totalCount: totalCount,
         offset: offset,
+        nextCursor: nextCursor,
       );
     } catch (e) {
       debugLog('Tenor request error: $e');
-      return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+      return GiphySearchResult(
+        gifs: const [],
+        totalCount: 0,
+        offset: offset,
+        isError: true,
+      );
     }
   }
 

@@ -5776,4 +5776,10 @@ class SHi extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'सत्र डेटा अधूरा, कृपया पुनः लॉगिन करें';
+
+  @override
+  String get chatReadingMode => 'पठन मोड';
+
+  @override
+  String get groupPoints => 'अंक';
 }

@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/giphy_service.dart';
 import '../../../core/services/gif_service.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/a11y_l10n.dart';
-import '../../../core/utils/debug_log.dart';
 import 'scheduled_send_picker.dart';
 
 /// GIF 选择回调
@@ -71,130 +71,128 @@ class _GifPickerState extends State<GifPicker> {
   String _currentQuery = '';
   Timer? _debounceTimer;
   bool _serviceAvailable = false;
+  bool _hasError = false;
+  int _generation = 0;
+  String? _nextCursor;
+  String? _provider;
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
+    _searchController.addListener(_onSearchChanged);
     _initializeService();
   }
 
   void _initializeService() {
     try {
-      if (GetIt.instance.isRegistered<GifService>()) {
-        _gifService = GetIt.instance<GifService>();
-        _serviceAvailable = true;
-        _loadTrendingGifs();
-        _scrollController.addListener(_onScroll);
-        _searchController.addListener(_onSearchChanged);
-      }
-    } catch (e) {
-      debugLog('GifPicker: GiphyService not available: $e');
+      _gifService = GetIt.instance.isRegistered<GifService>()
+          ? GetIt.instance<GifService>()
+          : null;
+      _serviceAvailable = _gifService?.isAvailable ?? false;
+    } catch (_) {
+      _gifService = null;
+      _serviceAvailable = false;
     }
+    if (_serviceAvailable) unawaited(_loadPage(reset: true));
   }
 
   @override
   void dispose() {
+    _generation++;
     _debounceTimer?.cancel();
     _scrollController.dispose();
     _searchController.dispose();
-    // 不要 dispose _gifService，因为它是单例
     super.dispose();
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels >=
-        _scrollController.position.maxScrollExtent - 200) {
-      _loadMoreGifs();
+    if (!_hasError &&
+        _hasMore &&
+        _scrollController.hasClients &&
+        _scrollController.position.extentAfter < 200) {
+      unawaited(_loadPage());
     }
   }
 
   void _onSearchChanged() {
+    final query = _searchController.text.trim();
+    if (query == _currentQuery) {
+      setState(() {});
+      return;
+    }
     _debounceTimer?.cancel();
-    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
-      final query = _searchController.text.trim();
-      if (query != _currentQuery) {
-        _currentQuery = query;
-        _resetAndLoad();
-      }
-    });
-  }
-
-  void _resetAndLoad() {
+    _currentQuery = query;
+    // Invalidate before the debounce: an older response must not flash back.
+    _generation++;
     setState(() {
       _gifs = [];
+      _isLoading = true;
+      _hasError = false;
+    });
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () {
+      unawaited(_loadPage(reset: true));
+    });
+  }
+
+  Future<void> _loadPage({bool reset = false}) async {
+    final service = _gifService;
+    if (!_serviceAvailable || service == null || (_isLoading && !reset)) return;
+    if (reset) {
+      _generation++;
+      _gifs = [];
       _offset = 0;
+      _nextCursor = null;
+      _provider = null;
       _hasMore = true;
-    });
-
-    if (_currentQuery.isEmpty) {
-      _loadTrendingGifs();
-    } else {
-      _searchGifs();
+      if (_scrollController.hasClients) _scrollController.jumpTo(0);
     }
-  }
-
-  Future<void> _loadTrendingGifs() async {
-    if (_isLoading || _gifService == null) return;
-
+    final generation = _generation;
+    final query = _currentQuery;
+    final cursor = _nextCursor;
     setState(() {
       _isLoading = true;
+      _hasError = false;
     });
-
     try {
-      final result = await _gifService!.getTrendingGifs(offset: _offset);
-      if (mounted) {
-        setState(() {
-          _gifs.addAll(result.gifs);
-          _offset = result.offset + result.gifs.length;
-          _hasMore = result.hasMore;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
+      final result = query.isEmpty
+          ? await service.getTrendingGifs(offset: _offset, cursor: cursor)
+          : await service.searchGifs(
+              query: query,
+              offset: _offset,
+              cursor: cursor,
+              lang: Localizations.maybeLocaleOf(context)?.languageCode ?? 'en',
+            );
+      if (!mounted || generation != _generation) return;
+      setState(() {
+        _isLoading = false;
+        _hasError = result.isError;
+        if (result.isError) return;
+        _provider = result.provider;
+        final ids = _gifs.map((gif) => gif.id).toSet();
+        final fresh = result.gifs.where((gif) => ids.add(gif.id)).toList();
+        _gifs.addAll(fresh);
+        _offset = result.offset + result.gifs.length;
+        _nextCursor = result.nextCursor;
+        _hasMore =
+            result.hasMore &&
+            fresh.isNotEmpty &&
+            (cursor == null || result.nextCursor != cursor);
+      });
+    } catch (_) {
+      if (!mounted || generation != _generation) return;
+      setState(() {
+        _isLoading = false;
+        _hasError = true;
+      });
     }
   }
 
-  Future<void> _searchGifs() async {
-    if (_isLoading || _currentQuery.isEmpty || _gifService == null) return;
-
-    setState(() {
-      _isLoading = true;
-    });
-
-    try {
-      final result = await _gifService!.searchGifs(
-        query: _currentQuery,
-        offset: _offset,
-      );
-      if (mounted) {
-        setState(() {
-          _gifs.addAll(result.gifs);
-          _offset = result.offset + result.gifs.length;
-          _hasMore = result.hasMore;
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> _loadMoreGifs() async {
-    if (_isLoading || !_hasMore) return;
-
-    if (_currentQuery.isEmpty) {
-      await _loadTrendingGifs();
+  void _retry() {
+    if (!_serviceAvailable) {
+      setState(_initializeService);
     } else {
-      await _searchGifs();
+      unawaited(_loadPage(reset: _gifs.isEmpty));
     }
   }
 
@@ -208,10 +206,7 @@ class _GifPickerState extends State<GifPicker> {
       decoration: BoxDecoration(
         color: context.inputBarColor,
         border: Border(
-          top: BorderSide(
-            color: context.dividerColor,
-            width: 0.5,
-          ),
+          top: BorderSide(color: context.dividerColor, width: 0.5),
         ),
       ),
       child: SafeArea(
@@ -224,8 +219,14 @@ class _GifPickerState extends State<GifPicker> {
             // GIF 网格
             Expanded(child: _buildGifGrid(isDark)),
 
-            // Giphy 署名
-            _buildGiphyAttribution(isDark),
+            if (_provider != null)
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Text(
+                  'Powered by $_provider',
+                  style: const TextStyle(fontSize: 10),
+                ),
+              ),
           ],
         ),
       ),
@@ -243,16 +244,11 @@ class _GifPickerState extends State<GifPicker> {
         ),
         child: TextField(
           controller: _searchController,
-          style: TextStyle(
-            fontSize: 14,
-            color: context.textPrimary,
-          ),
+          enabled: _serviceAvailable,
+          style: TextStyle(fontSize: 14, color: context.textPrimary),
           decoration: InputDecoration(
-            hintText: 'Search GIFs...',
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: context.textTertiary,
-            ),
+            hintText: '${S.of(context)?.commonSearch ?? 'Search'} GIF',
+            hintStyle: TextStyle(fontSize: 14, color: context.textTertiary),
             prefixIcon: Icon(
               Icons.search,
               size: 20,
@@ -264,8 +260,6 @@ class _GifPickerState extends State<GifPicker> {
                     tooltip: A11yL10n.of(context).clearSearch,
                     onPressed: () {
                       _searchController.clear();
-                      _currentQuery = '';
-                      _resetAndLoad();
                     },
                   )
                 : null,
@@ -278,34 +272,28 @@ class _GifPickerState extends State<GifPicker> {
   }
 
   Widget _buildGifGrid(bool isDark) {
-    // 服务不可用时显示提示
-    if (!_serviceAvailable) {
-      return const Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.warning_amber_outlined,
-              size: 48,
-              color: AppColors.textTertiary,
-            ),
-            SizedBox(height: 8),
-            Text(
-              'GIF service not configured',
-              style: TextStyle(
-                color: AppColors.textTertiary,
+    if (!_serviceAvailable || (_gifs.isEmpty && _hasError)) {
+      return Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.gif_box_outlined, size: 36),
+              const SizedBox(height: 8),
+              Text(
+                _serviceAvailable
+                    ? (S.of(context)?.commonLoadFailed ?? 'Failed to load')
+                    : 'GIF · ${S.of(context)?.aiAssistantUnavailable ?? 'Unavailable'}',
+                textAlign: TextAlign.center,
               ),
-            ),
-            SizedBox(height: 4),
-            // Giphy 与 Tenor 任一 key 即可启用，文案不要只提 Giphy 误导配置。
-            Text(
-              'Set GIPHY_API_KEY or TENOR_API_KEY at build time',
-              style: TextStyle(
-                fontSize: 12,
-                color: AppColors.textTertiary,
+              TextButton.icon(
+                onPressed: _retry,
+                icon: const Icon(Icons.refresh),
+                label: Text(S.of(context)?.commonRetry ?? 'Retry'),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
@@ -326,10 +314,8 @@ class _GifPickerState extends State<GifPicker> {
             ),
             const SizedBox(height: 8),
             Text(
-              _currentQuery.isEmpty ? 'No trending GIFs' : 'No GIFs found',
-              style: const TextStyle(
-                color: AppColors.textTertiary,
-              ),
+              S.of(context)?.searchNoResults ?? 'No Results',
+              style: const TextStyle(color: AppColors.textTertiary),
             ),
           ],
         ),
@@ -344,9 +330,16 @@ class _GifPickerState extends State<GifPicker> {
         crossAxisSpacing: 4,
         mainAxisSpacing: 4,
       ),
-      itemCount: _gifs.length + (_hasMore ? 1 : 0),
+      itemCount: _gifs.length + (_hasMore || _hasError ? 1 : 0),
       itemBuilder: (context, index) {
         if (index >= _gifs.length) {
+          if (_hasError) {
+            return TextButton.icon(
+              onPressed: _retry,
+              icon: const Icon(Icons.refresh),
+              label: Text(S.of(context)?.commonRetry ?? 'Retry'),
+            );
+          }
           return const Center(
             child: Padding(
               padding: EdgeInsets.all(16),
@@ -393,36 +386,6 @@ class _GifPickerState extends State<GifPicker> {
       ),
     );
   }
-
-  Widget _buildGiphyAttribution(bool isDark) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            'Powered by ',
-            style: TextStyle(
-              fontSize: 10,
-              color: AppColors.textTertiary,
-            ),
-          ),
-          Image.network(
-            'https://giphy.com/static/img/giphy_logo_small.png',
-            height: 12,
-            errorBuilder: (_, _, _) => const Text(
-              'GIPHY',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: AppColors.textTertiary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 /// GIF 选择对话框
@@ -459,12 +422,13 @@ Future<GifPickerResult?> showGifPicker(BuildContext context) async {
             child: Row(
               children: [
                 const Text(
-                  'Choose a GIF',
+                  'GIF',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 const Spacer(),
                 IconButton(
                   icon: const Icon(Icons.close),
+                  tooltip: S.of(context)?.commonClose ?? 'Close',
                   onPressed: () => Navigator.pop(context),
                 ),
               ],

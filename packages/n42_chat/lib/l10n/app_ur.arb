@@ -2744,5 +2744,7 @@
   "blocAuthVerificationCodeInvalid": "توثیقی کوڈ غلط ہے یا ختم ہو گیا ہے۔",
   "blocAuthSessionExpired": "سیشن ختم ہو گیا، براہ کرم دوبارہ لاگ ان کریں۔",
   "blocAuthSessionIncomplete": "سیشن کا ڈیٹا نامکمل ہے، براہ کرم دوبارہ لاگ ان کریں۔",
-  "authSsoNotConfigured": "اس سرور پر SSO لاگ اِن فراہم کنندگان ترتیب نہیں دیے گئے"
+  "authSsoNotConfigured": "اس سرور پر SSO لاگ اِن فراہم کنندگان ترتیب نہیں دیے گئے",
+  "chatReadingMode": "مطالعہ موڈ",
+  "groupPoints": "پوائنٹس"
 }

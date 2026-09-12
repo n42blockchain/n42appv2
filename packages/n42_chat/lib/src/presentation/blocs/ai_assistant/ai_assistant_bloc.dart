@@ -89,7 +89,7 @@ class AiAssistantBloc extends Bloc<AiAssistantEvent, AiAssistantState> {
     SendAiMessage event,
     Emitter<AiAssistantState> emit,
   ) async {
-    debugLog('AiAssistantBloc: SendMessage "${event.text}", isGenerating=${state.isGenerating}, isAvailable=${_aiRepository.isAvailable}');
+    debugLog('AiAssistantBloc: SendMessage, isGenerating=${state.isGenerating}, isAvailable=${_aiRepository.isAvailable}');
     if (state.isGenerating || !_aiRepository.isAvailable) {
       debugLog('AiAssistantBloc: SendMessage blocked - isGenerating=${state.isGenerating}, isAvailable=${_aiRepository.isAvailable}');
       return;

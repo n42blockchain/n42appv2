@@ -5638,6 +5638,12 @@ class SZh extends S {
 
   @override
   String get blocAuthSessionIncomplete => '會話數據不完整，請重新登錄';
+
+  @override
+  String get chatReadingMode => '阅读模式';
+
+  @override
+  String get groupPoints => '积分';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11274,4 +11280,10 @@ class SZhTw extends SZh {
 
   @override
   String get blocAuthSessionIncomplete => '會話數據不完整，請重新登錄';
+
+  @override
+  String get chatReadingMode => '閱讀模式';
+
+  @override
+  String get groupPoints => '積分';
 }

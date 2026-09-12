@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "No se pudo cambiar el correo electrónico",
   "blocAuthVerificationCodeInvalid": "El código de verificación es incorrecto o ha caducado",
   "blocAuthSessionExpired": "La sesión expiró, inicie sesión nuevamente",
-  "blocAuthSessionIncomplete": "Datos de sesión incompletos, inicie sesión nuevamente"
+  "blocAuthSessionIncomplete": "Datos de sesión incompletos, inicie sesión nuevamente",
+  "chatReadingMode": "Modo de lectura",
+  "groupPoints": "Puntos"
 }

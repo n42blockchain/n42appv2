@@ -5818,4 +5818,10 @@ class SEs extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Datos de sesión incompletos, inicie sesión nuevamente';
+
+  @override
+  String get chatReadingMode => 'Modo de lectura';
+
+  @override
+  String get groupPoints => 'Puntos';
 }

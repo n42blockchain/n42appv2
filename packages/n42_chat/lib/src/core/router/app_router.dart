@@ -11,7 +11,6 @@ import '../../domain/repositories/conversation_repository.dart';
 import '../../presentation/blocs/chat/chat_bloc.dart';
 import '../../presentation/blocs/contact/contact_bloc.dart';
 import '../../presentation/pages/ai/ai_assistant_page.dart';
-import '../../presentation/pages/ai/ai_assistant_settings_page.dart';
 import '../../presentation/pages/auth/register_page.dart';
 import '../../presentation/pages/auth/welcome_page.dart';
 import '../../presentation/pages/chat/live_location_page.dart';
@@ -435,7 +434,8 @@ class N42ChatRouter {
         GoRoute(
           path: 'settings',
           name: Routes.aiAssistantSettingsName,
-          builder: (context, state) => const AiAssistantSettingsPage(),
+          builder: (context, state) =>
+              const AiAssistantPage(showSettings: true),
         ),
       ],
     ),

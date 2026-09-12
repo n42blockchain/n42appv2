@@ -255,6 +255,7 @@ class MessageBubble extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
+      onSecondaryTap: onLongPress,
       behavior: HitTestBehavior.translucent, // 允许子组件也响应点击
       child: child,
     );
@@ -285,6 +286,7 @@ class MessageBubble extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       onLongPress: onLongPress,
+      onSecondaryTap: onLongPress,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         decoration: BoxDecoration(color: bgColor, borderRadius: borderRadius),

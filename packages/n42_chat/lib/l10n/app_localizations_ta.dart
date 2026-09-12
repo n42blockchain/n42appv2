@@ -5839,4 +5839,10 @@ class STa extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'அமர்வு தரவு முழுமையடையவில்லை, மீண்டும் உள்நுழையவும்';
+
+  @override
+  String get chatReadingMode => 'வாசிப்பு முறை';
+
+  @override
+  String get groupPoints => 'புள்ளிகள்';
 }

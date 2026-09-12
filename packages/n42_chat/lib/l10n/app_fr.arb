@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "Échec du changement d'adresse e-mail",
   "blocAuthVerificationCodeInvalid": "Le code de vérification est incorrect ou expiré",
   "blocAuthSessionExpired": "Session expirée, veuillez vous reconnecter",
-  "blocAuthSessionIncomplete": "Données de session incomplètes, veuillez vous reconnecter"
+  "blocAuthSessionIncomplete": "Données de session incomplètes, veuillez vous reconnecter",
+  "chatReadingMode": "Mode lecture",
+  "groupPoints": "Points"
 }

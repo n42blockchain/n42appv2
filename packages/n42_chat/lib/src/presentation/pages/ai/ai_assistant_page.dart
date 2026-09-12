@@ -18,16 +18,40 @@ import 'ai_assistant_settings_page.dart';
 /// AI 助手聊天页面
 class AiAssistantPage extends StatelessWidget {
   final String? assistantId;
+  final bool showSettings;
 
-  const AiAssistantPage({super.key, this.assistantId});
+  const AiAssistantPage({
+    super.key,
+    this.assistantId,
+    this.showSettings = false,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (!getIt.isRegistered<IAiRepository>()) {
+      return Scaffold(
+        appBar: N42AppBar(title: S.of(context)?.aiAssistant ?? 'AI Assistant'),
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: Text(
+              S.of(context)?.aiAssistantNotConfigured ??
+                  'AI service not configured',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
     return BlocProvider(
       create: (_) =>
-          AiAssistantBloc(aiRepository: getIt<IAiRepository>())
+          (getIt.isRegistered<AiAssistantBloc>()
+                ? getIt<AiAssistantBloc>()
+                : AiAssistantBloc(aiRepository: getIt<IAiRepository>()))
             ..add(InitializeAiAssistant(assistantId: assistantId)),
-      child: const _AiAssistantView(),
+      child: showSettings
+          ? const AiAssistantSettingsPage()
+          : const _AiAssistantView(),
     );
   }
 }
@@ -237,7 +261,11 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 13, height: 1.4, color: AppColors.warning),
+                  style: const TextStyle(
+                    fontSize: 13,
+                    height: 1.4,
+                    color: AppColors.warning,
+                  ),
                 ),
               ),
             ],
@@ -291,11 +319,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
         label,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 13,
-          height: 1.3,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: 13, height: 1.3, color: context.textPrimary),
       ),
       backgroundColor: isDark
           ? AppColors.primary.withValues(alpha: 0.15)
@@ -331,9 +355,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
               decoration: BoxDecoration(
-                color: isUser
-                    ? AppColors.primary
-                    : context.surfaceColor,
+                color: isUser ? AppColors.primary : context.surfaceColor,
                 borderRadius: BorderRadius.circular(16).copyWith(
                   topLeft: isUser ? null : const Radius.circular(4),
                   topRight: isUser ? const Radius.circular(4) : null,
@@ -480,9 +502,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
       ),
       decoration: BoxDecoration(
         color: context.surfaceColor,
-        border: Border(
-          top: BorderSide(color: AppColors.dividerOf(isDark)),
-        ),
+        border: Border(top: BorderSide(color: AppColors.dividerOf(isDark))),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -502,9 +522,7 @@ class _AiAssistantViewState extends State<_AiAssistantView> {
                 enabled: state.isAvailable && !state.isGenerating,
                 decoration: InputDecoration(
                   hintText: l10n?.aiAssistantWelcome ?? 'Ask anything...',
-                  hintStyle: TextStyle(
-                    color: context.textTertiary,
-                  ),
+                  hintStyle: TextStyle(color: context.textTertiary),
                   border: InputBorder.none,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,

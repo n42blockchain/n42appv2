@@ -5660,4 +5660,10 @@ class SKo extends S {
 
   @override
   String get blocAuthSessionIncomplete => '세션 데이터가 불완전합니다. 다시 로그인하세요.';
+
+  @override
+  String get chatReadingMode => '읽기 모드';
+
+  @override
+  String get groupPoints => '포인트';
 }

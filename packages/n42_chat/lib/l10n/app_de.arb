@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "Die E-Mail-Adresse konnte nicht geändert werden",
   "blocAuthVerificationCodeInvalid": "Der Bestätigungscode ist falsch oder abgelaufen",
   "blocAuthSessionExpired": "Sitzung abgelaufen, bitte melden Sie sich erneut an",
-  "blocAuthSessionIncomplete": "Sitzungsdaten unvollständig, bitte melden Sie sich erneut an"
+  "blocAuthSessionIncomplete": "Sitzungsdaten unvollständig, bitte melden Sie sich erneut an",
+  "chatReadingMode": "Lesemodus",
+  "groupPoints": "Punkte"
 }

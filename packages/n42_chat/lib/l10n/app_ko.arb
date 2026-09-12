@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "이메일을 변경하지 못했습니다.",
   "blocAuthVerificationCodeInvalid": "인증 코드가 올바르지 않거나 만료되었습니다.",
   "blocAuthSessionExpired": "세션이 만료되었습니다. 다시 로그인하세요.",
-  "blocAuthSessionIncomplete": "세션 데이터가 불완전합니다. 다시 로그인하세요."
+  "blocAuthSessionIncomplete": "세션 데이터가 불완전합니다. 다시 로그인하세요.",
+  "chatReadingMode": "읽기 모드",
+  "groupPoints": "포인트"
 }

@@ -16,6 +16,7 @@ import 'storage_management_page.dart';
 import 'auto_download_settings_page.dart';
 import 'privacy_security_page.dart';
 import 'system_accounts_page.dart';
+import 'about_page.dart';
 
 /// 设置页面
 class SettingsPage extends StatelessWidget {
@@ -247,7 +248,11 @@ class SettingsPage extends StatelessWidget {
                 icon: Icons.info_outline,
                 iconColor: Colors.orange,
                 title: S.of(context)?.settingsAbout ?? 'About',
-                onTap: onAbout,
+                onTap: onAbout ?? () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(builder: (pageContext) => AboutPage(
+                    onOpenSource: () => showLicensePage(context: pageContext),
+                  )),
+                ),
               ),
             ],
           ),

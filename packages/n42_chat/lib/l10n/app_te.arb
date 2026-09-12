@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "ఇమెయిల్‌ని మార్చడంలో విఫలమైంది",
   "blocAuthVerificationCodeInvalid": "ధృవీకరణ కోడ్ తప్పు లేదా గడువు ముగిసింది",
   "blocAuthSessionExpired": "సెషన్ గడువు ముగిసింది, దయచేసి మళ్లీ లాగిన్ చేయండి",
-  "blocAuthSessionIncomplete": "సెషన్ డేటా అసంపూర్తిగా ఉంది, దయచేసి మళ్లీ లాగిన్ చేయండి"
+  "blocAuthSessionIncomplete": "సెషన్ డేటా అసంపూర్తిగా ఉంది, దయచేసి మళ్లీ లాగిన్ చేయండి",
+  "chatReadingMode": "పఠన మోడ్",
+  "groupPoints": "పాయింట్లు"
 }

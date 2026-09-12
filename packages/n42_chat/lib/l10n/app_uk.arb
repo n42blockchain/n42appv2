@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "Не вдалося змінити електронну адресу",
   "blocAuthVerificationCodeInvalid": "Код підтвердження неправильний або термін дії минув",
   "blocAuthSessionExpired": "Сеанс закінчився, увійдіть знову",
-  "blocAuthSessionIncomplete": "Дані сеансу неповні, увійдіть знову"
+  "blocAuthSessionIncomplete": "Дані сеансу неповні, увійдіть знову",
+  "chatReadingMode": "Режим читання",
+  "groupPoints": "Бали"
 }

@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "Không thể thay đổi email",
   "blocAuthVerificationCodeInvalid": "Mã xác minh không chính xác hoặc đã hết hạn",
   "blocAuthSessionExpired": "Phiên đã hết hạn, vui lòng đăng nhập lại",
-  "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại"
+  "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại",
+  "chatReadingMode": "Chế độ đọc",
+  "groupPoints": "Điểm"
 }

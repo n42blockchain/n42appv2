@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "Imeshindwa kubadilisha barua pepe",
   "blocAuthVerificationCodeInvalid": "Nambari ya uthibitishaji si sahihi au muda wake umeisha",
   "blocAuthSessionExpired": "Kipindi kimekwisha, tafadhali ingia tena",
-  "blocAuthSessionIncomplete": "Data ya kipindi haijakamilika, tafadhali ingia tena"
+  "blocAuthSessionIncomplete": "Data ya kipindi haijakamilika, tafadhali ingia tena",
+  "chatReadingMode": "Hali ya kusoma",
+  "groupPoints": "Pointi"
 }

@@ -2744,5 +2744,7 @@
   "blocAuthVerificationCodeInvalid": "Kod weryfikacyjny jest nieprawidłowy lub wygasł",
   "blocAuthSessionExpired": "Sesja wygasła. Zaloguj się ponownie",
   "blocAuthSessionIncomplete": "Dane sesji są niekompletne. Proszę zalogować się ponownie",
-  "authSsoNotConfigured": "Na tym serwerze nie skonfigurowano dostawców logowania SSO"
+  "authSsoNotConfigured": "Na tym serwerze nie skonfigurowano dostawców logowania SSO",
+  "chatReadingMode": "Tryb czytania",
+  "groupPoints": "Punkty"
 }

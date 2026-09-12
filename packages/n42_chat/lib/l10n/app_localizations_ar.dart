@@ -5753,4 +5753,10 @@ class SAr extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'بيانات الجلسة غير كاملة، يرجى تسجيل الدخول مرة أخرى';
+
+  @override
+  String get chatReadingMode => 'وضع القراءة';
+
+  @override
+  String get groupPoints => 'النقاط';
 }

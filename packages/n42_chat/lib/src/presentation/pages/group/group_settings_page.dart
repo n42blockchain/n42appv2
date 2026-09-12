@@ -17,6 +17,7 @@ import '../../blocs/search/search_bloc.dart';
 import '../../blocs/contact/contact_bloc.dart';
 import '../../helpers/bloc_message_helper.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../widgets/chat/group_points_entry.dart';
 import '../search/chat_search_page.dart';
 import 'bot_settings_page.dart';
 import 'content_filter_settings_page.dart';
@@ -428,6 +429,8 @@ class _GroupSettingsPageState extends State<GroupSettingsPage> {
 
   Widget _buildSettingsSection(GroupEntity group, bool isDark) {
     final widgets = <Widget>[
+      GroupPointsEntry(roomId: widget.roomId, userId: N42Chat.currentUser?.userId,
+        isAdmin: group.isAdmin),
       // 聊天文件
       ListTile(
         leading: const Icon(Icons.folder_outlined),

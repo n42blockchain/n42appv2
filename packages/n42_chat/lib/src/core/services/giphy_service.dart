@@ -58,14 +58,22 @@ class GiphySearchResult {
   final List<GiphyGif> gifs;
   final int totalCount;
   final int offset;
+  final String? nextCursor;
+  final bool isError;
+  final String? provider;
 
   const GiphySearchResult({
     required this.gifs,
     required this.totalCount,
     required this.offset,
+    this.nextCursor,
+    this.isError = false,
+    this.provider,
   });
 
-  bool get hasMore => offset + gifs.length < totalCount;
+  bool get hasMore =>
+      !isError &&
+      ((nextCursor?.isNotEmpty ?? false) || offset + gifs.length < totalCount);
 }
 
 /// Giphy API 服务配置
@@ -121,11 +129,9 @@ class GiphyService implements GifService {
   ///
   /// [config] 必须提供有效的 API Key
   /// [client] 可选的 HTTP 客户端，用于测试
-  GiphyService({
-    required GiphyConfig config,
-    http.Client? client,
-  })  : _config = config,
-        _client = client ?? http.Client() {
+  GiphyService({required GiphyConfig config, http.Client? client})
+    : _config = config,
+      _client = client ?? http.Client() {
     if (!_config.useProxyEndpoint &&
         (_config.apiKey.isEmpty || _config.apiKey == 'YOUR_GIPHY_API_KEY')) {
       debugLog('WARNING: GiphyService initialized without valid API key');
@@ -160,6 +166,7 @@ class GiphyService implements GifService {
   Future<GiphySearchResult> searchGifs({
     required String query,
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
     String lang = 'en',
@@ -181,7 +188,9 @@ class GiphyService implements GifService {
         queryParams['api_key'] = _config.apiKey;
       }
 
-      final uri = Uri.parse('$_baseUrl/search').replace(queryParameters: queryParams);
+      final uri = Uri.parse(
+        '$_baseUrl/search',
+      ).replace(queryParameters: queryParams);
       final response = await _client.get(uri, headers: _headers());
 
       if (response.statusCode == 200) {
@@ -189,11 +198,21 @@ class GiphyService implements GifService {
         return _parseResponse(json, offset);
       } else {
         debugLog('Giphy search failed: ${response.statusCode}');
-        return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+        return GiphySearchResult(
+          gifs: const [],
+          totalCount: 0,
+          offset: offset,
+          isError: true,
+        );
       }
     } catch (e) {
       debugLog('Giphy search error: $e');
-      return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+      return GiphySearchResult(
+        gifs: const [],
+        totalCount: 0,
+        offset: offset,
+        isError: true,
+      );
     }
   }
 
@@ -205,6 +224,7 @@ class GiphyService implements GifService {
   @override
   Future<GiphySearchResult> getTrendingGifs({
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
   }) async {
@@ -219,7 +239,9 @@ class GiphyService implements GifService {
         queryParams['api_key'] = _config.apiKey;
       }
 
-      final uri = Uri.parse('$_baseUrl/trending').replace(queryParameters: queryParams);
+      final uri = Uri.parse(
+        '$_baseUrl/trending',
+      ).replace(queryParameters: queryParams);
       final response = await _client.get(uri, headers: _headers());
 
       if (response.statusCode == 200) {
@@ -227,11 +249,21 @@ class GiphyService implements GifService {
         return _parseResponse(json, offset);
       } else {
         debugLog('Giphy trending failed: ${response.statusCode}');
-        return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+        return GiphySearchResult(
+          gifs: const [],
+          totalCount: 0,
+          offset: offset,
+          isError: true,
+        );
       }
     } catch (e) {
       debugLog('Giphy trending error: $e');
-      return GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
+      return GiphySearchResult(
+        gifs: const [],
+        totalCount: 0,
+        offset: offset,
+        isError: true,
+      );
     }
   }
 
@@ -243,11 +275,9 @@ class GiphyService implements GifService {
     }
 
     try {
-      final uri = Uri.parse('$_baseUrl/$id').replace(
-        queryParameters: {
-          'api_key': _config.apiKey,
-        },
-      );
+      final uri = Uri.parse(
+        '$_baseUrl/$id',
+      ).replace(queryParameters: {'api_key': _config.apiKey});
 
       final response = await _client.get(uri);
 
@@ -283,9 +313,9 @@ class GiphyService implements GifService {
         queryParams['tag'] = tag;
       }
 
-      final uri = Uri.parse('$_baseUrl/random').replace(
-        queryParameters: queryParams,
-      );
+      final uri = Uri.parse(
+        '$_baseUrl/random',
+      ).replace(queryParameters: queryParams);
 
       final response = await _client.get(uri);
 
@@ -316,6 +346,7 @@ class GiphyService implements GifService {
 
     return GiphySearchResult(
       gifs: gifs,
+      provider: 'GIPHY',
       totalCount: totalCount,
       offset: offset,
     );

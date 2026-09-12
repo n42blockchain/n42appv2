@@ -5788,4 +5788,10 @@ class SId extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Data sesi tidak lengkap, silakan login kembali';
+
+  @override
+  String get chatReadingMode => 'Mode baca';
+
+  @override
+  String get groupPoints => 'Poin';
 }

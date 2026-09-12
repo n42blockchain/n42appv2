@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "メールアドレスの変更に失敗しました",
   "blocAuthVerificationCodeInvalid": "認証コードが間違っているか、有効期限が切れています",
   "blocAuthSessionExpired": "セッションが期限切れになりました。もう一度ログインしてください",
-  "blocAuthSessionIncomplete": "セッションデータが不完全です。再度ログインしてください。"
+  "blocAuthSessionIncomplete": "セッションデータが不完全です。再度ログインしてください。",
+  "chatReadingMode": "閲覧モード",
+  "groupPoints": "ポイント"
 }

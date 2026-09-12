@@ -1,0 +1,237 @@
+[
+  {
+    "path": "lib/src/core/services/chat_export_service.dart",
+    "kind": "modified",
+    "sha256": "b26c9a0c4cedfb9f43d1894bb48618b999c59e53d8004b898d3d491b7df42ab5"
+  },
+  {
+    "path": "lib/src/core/utils/friendly_display_name.dart",
+    "kind": "added",
+    "sha256": "9f568eb40bdd4cdc77c88fb49a829e73b6f43878247fdadab47d24d375914705"
+  },
+  {
+    "path": "lib/src/core/utils/string_utils.dart",
+    "kind": "modified",
+    "sha256": "a4de3f29566bdbfc1d7151f201d4d6b5863c95c8271a1538eb482dcb424e944b"
+  },
+  {
+    "path": "lib/src/data/datasources/local/archive_database.dart",
+    "kind": "modified",
+    "sha256": "e850070e2c9debbf92bc27aad4b5c3f2e8b2173b582338b17b08efe3d290d6a8"
+  },
+  {
+    "path": "lib/src/data/datasources/local/preferences_datasource.dart",
+    "kind": "modified",
+    "sha256": "4b13afe5f3aa485e8e1eb6356cb4252b4cee6efd2d3b9da2790e286385b60eb5"
+  },
+  {
+    "path": "lib/src/data/datasources/matrix/matrix_moment_datasource.dart",
+    "kind": "modified",
+    "sha256": "ea5ea99c8487fb2fcbb78e0c4df5c6f90016910c86f52b1f8455953791ad28ad"
+  },
+  {
+    "path": "lib/src/data/datasources/matrix/matrix_space_datasource.dart",
+    "kind": "modified",
+    "sha256": "4bbb2cb0330b5d71c7ed354e815376b549493560afeec6d5fe94499fc68963b4"
+  },
+  {
+    "path": "lib/src/data/datasources/matrix/matrix_story_datasource.dart",
+    "kind": "modified",
+    "sha256": "5b64a97e382dcf7468d153f5aa770e49f3559ecfe924bb58b37a3c0f91a51f32"
+  },
+  {
+    "path": "lib/src/data/datasources/matrix/message/matrix_event_mapper.dart",
+    "kind": "modified",
+    "sha256": "4425c18a29d1ff98e6717f83d681adce4481cb39d66001ef89522365d3f44fa3"
+  },
+  {
+    "path": "lib/src/data/repositories/auth_repository_impl.dart",
+    "kind": "modified",
+    "sha256": "8359deaf4476374ecc93f008adda055fb584a53fb41164ede48d5e91ced89e29"
+  },
+  {
+    "path": "lib/src/data/repositories/conversation_repository_impl.dart",
+    "kind": "modified",
+    "sha256": "b5da93d3a67d3d3987ed86028fc8360ab5da467359a2020b3e30a49a9c0e910a"
+  },
+  {
+    "path": "lib/src/data/repositories/group_repository_impl.dart",
+    "kind": "modified",
+    "sha256": "2aa0a26d4585f05884f9f610ad85f832e227610722dc39e28e15e5ea5044f352"
+  },
+  {
+    "path": "lib/src/data/repositories/message_repository_impl.dart",
+    "kind": "modified",
+    "sha256": "8edf700041d6880ef5d28383e08d8c2326833e5ef5baadfd2f7ecf20ba440ed8"
+  },
+  {
+    "path": "lib/src/data/repositories/story_repository_impl.dart",
+    "kind": "modified",
+    "sha256": "8987b6d6bf53687b943b493746700cf2e3ed89161685cdfde656c7ca9057a896"
+  },
+  {
+    "path": "lib/src/domain/entities/contact_entity.dart",
+    "kind": "modified",
+    "sha256": "c9f553fc77b885b9d9bf41ee1b8a2017b5f82f5afb6402c5bc5b72fdbb184da5"
+  },
+  {
+    "path": "lib/src/domain/entities/stored_account_entity.dart",
+    "kind": "modified",
+    "sha256": "5db5e43d08c863819a589ad6819e0b5a5a3ba336ab6cd9aa9958450696e28bfc"
+  },
+  {
+    "path": "lib/src/domain/entities/user_entity.dart",
+    "kind": "modified",
+    "sha256": "9eee6bfd04679aa512db4e53bdafc26e71519a2315067f4d4ea363139241a505"
+  },
+  {
+    "path": "lib/src/domain/entities/user_profile_entity.dart",
+    "kind": "modified",
+    "sha256": "45ce2d80000659c63772390d9f86721c940037d11a90d770d2a86b41974ec58d"
+  },
+  {
+    "path": "lib/src/domain/repositories/message_repository.dart",
+    "kind": "modified",
+    "sha256": "f6a48f902e501e28612d3fbc9ca40ddb2ab5541cacaa2059c2bd3ac8bd24e173"
+  },
+  {
+    "path": "lib/src/domain/repositories/story_repository.dart",
+    "kind": "modified",
+    "sha256": "f192070258d6472db9f5a6167a3d676508ca9bb759234e02962b705f400d71db"
+  },
+  {
+    "path": "lib/src/n42_chat.dart",
+    "kind": "modified",
+    "sha256": "380b334e6c16e1f26779f0c66450c5c17ae3bf90f1a4e6e01a14192a75f3c798"
+  },
+  {
+    "path": "lib/src/presentation/blocs/chat/chat_bloc_feature_handlers.part.dart",
+    "kind": "modified",
+    "sha256": "65a24a5780856dc53f6559b439d8bb231733895fca9a10b7620a822da7480afb"
+  },
+  {
+    "path": "lib/src/presentation/blocs/conversation/conversation_bloc.dart",
+    "kind": "modified",
+    "sha256": "f76a739ccd4b0737a77cbf475afc786b95a9fe82538de736850de0eb52e0271e"
+  },
+  {
+    "path": "lib/src/presentation/blocs/story/story_bloc.dart",
+    "kind": "modified",
+    "sha256": "6d1a06a523ab921ef3c04a445f31776ce772b07fb60c3772512f9f01e7e122b0"
+  },
+  {
+    "path": "lib/src/presentation/blocs/story/story_event.dart",
+    "kind": "modified",
+    "sha256": "4a4dcc229769a698d0f81b0670ed4b06ba4e08bc741cb74decc6d2959ae1df70"
+  },
+  {
+    "path": "lib/src/presentation/helpers/ai_reply_suggestion_helper.dart",
+    "kind": "modified",
+    "sha256": "cf1c1400fb78fbec05c28bab7bd1e213f3324b02ed2af79869854a0bacaa8283"
+  },
+  {
+    "path": "lib/src/presentation/pages/chat/chat_detail_page.dart",
+    "kind": "modified",
+    "sha256": "cee680b9f1f06a459550aede7d0d9a2088ddba3eff743911b4e00803b5f994b1"
+  },
+  {
+    "path": "lib/src/presentation/pages/chat/chat_page_ai_features.dart",
+    "kind": "modified",
+    "sha256": "7b95901e1713665446e3a1ca0769fad92c7f9f4888c8a027955652053c1186a0"
+  },
+  {
+    "path": "lib/src/presentation/pages/chat/chat_page_message_actions.dart",
+    "kind": "modified",
+    "sha256": "c46b183ca5ce2029e069246b27b5de99cf42cf0a65eba11675e01e277648988a"
+  },
+  {
+    "path": "lib/src/presentation/pages/discover/channel_discover_page.dart",
+    "kind": "modified",
+    "sha256": "98249ef578db52f445ba00ba090eed26e3366056e9fb6a7d3815c14c9919f870"
+  },
+  {
+    "path": "lib/src/presentation/pages/discover/discover_page.dart",
+    "kind": "modified",
+    "sha256": "c37ac36f6c824d8a30717098cedfb2d0b5acbe2ed9affac1d32487709b53e1e3"
+  },
+  {
+    "path": "lib/src/presentation/pages/discover/listen_page.dart",
+    "kind": "added",
+    "sha256": "3b7aa2a5903112dcbc36bb3fe7ccbcace41d1308b0c21988b090a5165fff7cd3"
+  },
+  {
+    "path": "lib/src/presentation/pages/discover/nearby_page.dart",
+    "kind": "added",
+    "sha256": "b6ba2a231fa16c896e1e5a0492cd7e91e3b3e4865e3fb92fd26bd6c7949c4c58"
+  },
+  {
+    "path": "lib/src/presentation/pages/profile/orders_and_cards_page.dart",
+    "kind": "modified",
+    "sha256": "e428b58d95dd0fe99d09df9e07a73e832135c13690cf87ad43739eb0c5172508"
+  },
+  {
+    "path": "lib/src/presentation/pages/profile/profile_page.dart",
+    "kind": "modified",
+    "sha256": "060f107ffb22dace15d267db213a237bdf0121a823014979e37b23c2be4fe2e8"
+  },
+  {
+    "path": "lib/src/presentation/pages/profile/services_page.dart",
+    "kind": "modified",
+    "sha256": "095f62d04963b40eeff914475505814c4813a9243eddeefb610931719b26d5e6"
+  },
+  {
+    "path": "lib/src/presentation/pages/story/create_story_page.dart",
+    "kind": "modified",
+    "sha256": "cab91f35e4c5f924514cf2c697f6a105a7f1ced53d7ba82c63dcc39f36a6057c"
+  },
+  {
+    "path": "lib/src/services/voip/livekit_service.dart",
+    "kind": "modified",
+    "sha256": "fe161941902a7a2de957fbbb75fbbe08a537465f5ded39c79eb1c9d32c53e877"
+  },
+  {
+    "path": "lib/src/services/voip/matrix_rtc_token_service.dart",
+    "kind": "modified",
+    "sha256": "d5530f8156ea48e4a20af2950841d757633418600d573f5f9a92ee68ef1be417"
+  },
+  {
+    "path": "lib/src/services/voip/virtual_background_processor.dart",
+    "kind": "modified",
+    "sha256": "12cbe2b2e15be3c708e6214ef5f646227cbe2919c37e7e404938eb52e270d89b"
+  },
+  {
+    "path": "lib/src/services/voip/voip_config.dart",
+    "kind": "modified",
+    "sha256": "6d6249f2e2681c95c57308abfac03e10daf061ccd590541cf00999b4e0674106"
+  },
+  {
+    "path": "test/core/utils/friendly_display_name_test.dart",
+    "kind": "added",
+    "sha256": "1ee9e7713753f40fd4ee04b112fc0ab92b6cb18ce46febd0768d8e56ae21c2c3"
+  },
+  {
+    "path": "test/n42_chat_test.dart",
+    "kind": "modified",
+    "sha256": "fb14af047f1a05bdbcaf431cfde212e6ad710206c11be29d960d98ba252b2010"
+  },
+  {
+    "path": "test/presentation/pages/discover_feature_pages_test.dart",
+    "kind": "added",
+    "sha256": "34bbe962d010232b461d83c4e6d923594c69fd18a82bbec98e8a6a1b0d6dcbf2"
+  },
+  {
+    "path": "test/presentation/pages/discover_page_test.dart",
+    "kind": "modified",
+    "sha256": "a3fa91ef0c80d5a93efc8e03485449ab5c65958d25cd2ee062f7afde0795f86d"
+  },
+  {
+    "path": "test/presentation/pages/profile_services_page_test.dart",
+    "kind": "added",
+    "sha256": "6cd919d2c777957698c7e84fcdef222841d9043d201c3e662d34ff537dbefee3"
+  },
+  {
+    "path": "test/unit/services/matrix_rtc_token_service_test.dart",
+    "kind": "modified",
+    "sha256": "c5ac4f76ecc7422b10b1294fa21e80ddac5bcccf208aaa042ae2868cf6c0cf8c"
+  }
+]

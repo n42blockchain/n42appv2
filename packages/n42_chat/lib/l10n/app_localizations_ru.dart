@@ -5804,4 +5804,10 @@ class SRu extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Данные сеанса неполные, пожалуйста, войдите снова';
+
+  @override
+  String get chatReadingMode => 'Режим чтения';
+
+  @override
+  String get groupPoints => 'Баллы';
 }

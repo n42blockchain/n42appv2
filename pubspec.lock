@@ -1973,9 +1973,11 @@ packages:
   n42_chat:
     dependency: "direct main"
     description:
-      path: "packages/n42_chat"
-      relative: true
-    source: path
+      path: "."
+      ref: cbc7bd1a128d841ff667708e513fc1ca0b708f9e
+      resolved-ref: cbc7bd1a128d841ff667708e513fc1ca0b708f9e
+      url: "https://github.com/n42blockchain/n42_chat"
+    source: git
     version: "0.1.0"
   nested:
     dependency: transitive

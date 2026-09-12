@@ -5750,4 +5750,10 @@ class SEn extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Session data incomplete, please login again';
+
+  @override
+  String get chatReadingMode => 'Reading mode';
+
+  @override
+  String get groupPoints => 'Points';
 }

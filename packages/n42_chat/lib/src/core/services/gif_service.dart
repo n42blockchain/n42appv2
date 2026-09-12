@@ -1,84 +1,135 @@
 import 'giphy_service.dart';
 
-/// 统一 GIF 数据源接口
-///
-/// 让 GIF 选择器与具体提供方（Giphy / Tenor / 代理）解耦。
-/// 复用 [GiphySearchResult] / [GiphyGif] 作为中性返回模型，避免重写 UI。
+/// GIF data source shared by the expression panel and its providers.
 abstract class GifService {
-  /// 当前源是否可用（已配置 key 或代理端点）
   bool get isAvailable;
 
-  /// 热门 GIF
   Future<GiphySearchResult> getTrendingGifs({
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
   });
 
-  /// 搜索 GIF
   Future<GiphySearchResult> searchGifs({
     required String query,
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
     String lang = 'en',
   });
 }
 
-/// 多源聚合 GIF 服务
-///
-/// 按 [providers] 顺序尝试（如 Giphy 主、Tenor 兜底）：返回首个有结果的源；
-/// 全部为空/失败则返回最后一次结果。"任一可用即可"。
+/// First-page fallback with subsequent pages pinned to the selected provider.
+/// A failed continuation must be retried, not mixed with another source's page.
 class CompositeGifService implements GifService {
   final List<GifService> providers;
 
-  CompositeGifService(this.providers);
-
-  List<GifService> get _available =>
-      providers.where((p) => p.isAvailable).toList();
+  CompositeGifService(List<GifService> providers)
+    : providers = List.unmodifiable(providers);
 
   @override
-  bool get isAvailable => _available.isNotEmpty;
+  bool get isAvailable => providers.any((provider) => provider.isAvailable);
 
   @override
   Future<GiphySearchResult> getTrendingGifs({
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
-  }) async {
-    var last = GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
-    for (final p in _available) {
-      final r = await p.getTrendingGifs(
-        offset: offset,
-        limit: limit,
-        rating: rating,
-      );
-      if (r.gifs.isNotEmpty) return r;
-      last = r;
-    }
-    return last;
-  }
+  }) => _load(
+    offset,
+    cursor,
+    (provider, token) => provider.getTrendingGifs(
+      offset: offset,
+      cursor: token,
+      limit: limit,
+      rating: rating,
+    ),
+  );
 
   @override
   Future<GiphySearchResult> searchGifs({
     required String query,
     int offset = 0,
+    String? cursor,
     int? limit,
     String rating = 'g',
     String lang = 'en',
-  }) async {
-    var last = GiphySearchResult(gifs: const [], totalCount: 0, offset: offset);
-    for (final p in _available) {
-      final r = await p.searchGifs(
-        query: query,
-        offset: offset,
-        limit: limit,
-        rating: rating,
-        lang: lang,
-      );
-      if (r.gifs.isNotEmpty) return r;
-      last = r;
+  }) => _load(
+    offset,
+    cursor,
+    (provider, token) => provider.searchGifs(
+      query: query,
+      offset: offset,
+      cursor: token,
+      limit: limit,
+      rating: rating,
+      lang: lang,
+    ),
+  );
+
+  Future<GiphySearchResult> _load(
+    int offset,
+    String? cursor,
+    Future<GiphySearchResult> Function(GifService, String?) fetch,
+  ) async {
+    GiphySearchResult failure() => GiphySearchResult(
+      gifs: const [],
+      totalCount: 0,
+      offset: offset,
+      isError: true,
+    );
+
+    GiphySearchResult wrap(
+      GiphySearchResult result,
+      int index,
+    ) => GiphySearchResult(
+      gifs: result.gifs,
+      totalCount: result.totalCount,
+      offset: result.offset,
+      isError: result.isError,
+      provider: result.provider,
+      nextCursor: result.hasMore
+          ? '$index:${result.nextCursor ?? (result.offset + result.gifs.length).toString()}'
+          : null,
+    );
+
+    if (cursor != null) {
+      final separator = cursor.indexOf(':');
+      if (separator < 1) return failure();
+      final index = int.tryParse(cursor.substring(0, separator));
+      if (index == null ||
+          index < 0 ||
+          index >= providers.length ||
+          !providers[index].isAvailable) {
+        return failure();
+      }
+      final token = cursor.substring(separator + 1);
+      try {
+        return wrap(
+          await fetch(providers[index], token.isEmpty ? null : token),
+          index,
+        );
+      } catch (_) {
+        return failure();
+      }
     }
-    return last;
+
+    GiphySearchResult? emptySuccess;
+    for (var index = 0; index < providers.length; index++) {
+      final provider = providers[index];
+      if (!provider.isAvailable) continue;
+      try {
+        final result = await fetch(provider, null);
+        if (result.isError) continue;
+        if (result.gifs.isNotEmpty) return wrap(result, index);
+        emptySuccess = result;
+      } catch (_) {
+        // Another configured provider may still satisfy the first-page request.
+      }
+    }
+    return emptySuccess ?? failure();
   }
 }

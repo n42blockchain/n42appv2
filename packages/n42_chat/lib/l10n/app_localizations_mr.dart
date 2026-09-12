@@ -5774,4 +5774,10 @@ class SMr extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'सत्र डेटा अपूर्ण आहे, कृपया पुन्हा लॉग इन करा';
+
+  @override
+  String get chatReadingMode => 'वाचन मोड';
+
+  @override
+  String get groupPoints => 'गुण';
 }

@@ -968,7 +968,7 @@ void _registerRepositories() {
   if (getIt.isRegistered<AiService>()) {
     getIt.registerLazySingleton<IAiRepository>(
       () => AiRepositoryImpl(
-        aiService: getIt<AiService>(),
+        aiService: getIt<AiProviderRouter>(),
         storage: getIt<PreferencesDataSource>(),
       ),
     );

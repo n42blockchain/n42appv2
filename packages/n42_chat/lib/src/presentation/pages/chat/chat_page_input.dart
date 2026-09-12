@@ -490,12 +490,10 @@ extension _ChatPageInputMethods on _ChatPageState {
         _hideMorePanel();
         _openScheduledComposerPicker();
       },
-      onAiAssistantPressed: getIt.isRegistered<IAiRepository>()
-          ? () {
-              _hideMorePanel();
-              _openAiAssistant();
-            }
-          : null,
+      onAiAssistantPressed: () {
+        _hideMorePanel();
+        _openAiAssistant();
+      },
       onMiniAppsPressed: () {
         _hideMorePanel();
         _openMiniApps();
@@ -897,9 +895,7 @@ extension _ChatPageInputMethods on _ChatPageState {
         );
       },
       storageDataSource: getIt<PreferencesDataSource>(),
-      smartReplyLoader: aiServiceAvailable()
-          ? _loadAiSmartReplies
-          : null,
+      smartReplyLoader: aiServiceAvailable() ? _loadAiSmartReplies : null,
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/extensions/context_extension.dart';
@@ -55,7 +56,7 @@ class _PointsDashboardPageState extends State<PointsDashboardPage> {
     return Scaffold(
       backgroundColor: context.pageBackground,
       appBar: AppBar(
-        title: const Text('Points'),
+        title: Text(S.of(context)?.groupPoints ?? 'Points'),
         backgroundColor: context.navBarColor,
         elevation: 0.5,
         actions: [

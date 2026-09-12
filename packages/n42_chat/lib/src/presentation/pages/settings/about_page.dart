@@ -20,7 +20,7 @@ class AboutPage extends StatelessWidget {
   const AboutPage({
     super.key,
     this.appName = 'N42 Chat',
-    this.version = '1.0.0',
+    this.version = '',
     this.buildNumber,
     this.onCheckUpdate,
     this.onPrivacyPolicy,
@@ -74,7 +74,7 @@ class AboutPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
+                if (version.isNotEmpty) Text(
                   l10n?.settingsVersionInfo(version) ?? 'Version $version',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -115,7 +115,7 @@ class AboutPage extends StatelessWidget {
           ],
 
           // 链接列表
-          Container(
+          Material(
             color: context.surfaceColor,
             child: Column(
               children: [

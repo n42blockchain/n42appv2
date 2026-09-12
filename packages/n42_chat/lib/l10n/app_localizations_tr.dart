@@ -5782,4 +5782,10 @@ class STr extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Oturum verileri eksik, lütfen tekrar giriş yapın';
+
+  @override
+  String get chatReadingMode => 'Okuma modu';
+
+  @override
+  String get groupPoints => 'Puanlar';
 }

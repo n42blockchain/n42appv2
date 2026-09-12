@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../l10n/app_localizations.dart';
+
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/recent_emoji_store.dart';
@@ -60,16 +62,16 @@ class ExpressionPanel extends StatefulWidget {
 
 class _ExpressionPanelState extends State<ExpressionPanel> {
   late ExpressionTab _tab = widget.initialTab;
+  late final Set<ExpressionTab> _visited = {widget.initialTab};
   final RecentEmojiStore _recentEmoji = RecentEmojiStore();
   int _recentReloadToken = 0;
-
-  static const double _tabBarHeight = 44;
 
   @override
   void didUpdateWidget(covariant ExpressionPanel oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.initialTab != widget.initialTab) {
       _tab = widget.initialTab;
+      _visited.add(_tab);
     }
   }
 
@@ -82,6 +84,7 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
   void _switchTab(ExpressionTab tab) {
     setState(() {
       _tab = tab;
+      _visited.add(tab);
       // 进入「最近」时刷新（IndexedStack 保活，靠 token 触发重载）
       if (tab == ExpressionTab.recent) _recentReloadToken++;
     });
@@ -89,54 +92,70 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final bodyHeight = (widget.height - _tabBarHeight).clamp(0.0, widget.height);
+    final tabBarHeight = 40 + MediaQuery.textScalerOf(context).scale(12) * 1.2;
+    final bodyHeight = (widget.height - tabBarHeight).clamp(0.0, widget.height);
     return Container(
-      height: widget.height,
+      height: widget.height + MediaQuery.paddingOf(context).bottom,
       color: context.inputBarColor,
-      child: Column(
-        children: [
-          Expanded(
-            child: IndexedStack(
-              index: _tab.index,
-              sizing: StackFit.expand,
-              children: [
-                _RecentTab(
-                  reloadToken: _recentReloadToken,
-                  recentEmojiStore: _recentEmoji,
-                  onEmojiSelected: _handleEmoji,
-                  onStickerSelected: widget.onStickerSelected,
-                  onGoToStickers: () => _switchTab(ExpressionTab.sticker),
-                  onGoToEmojis: () => _switchTab(ExpressionTab.emoji),
-                ),
-                EmojiPicker(
-                  height: bodyHeight,
-                  onEmojiSelected: _handleEmoji,
-                  onBackspace: widget.onBackspace,
-                  onSend: widget.onSend,
-                ),
-                StickerPicker(
-                  height: bodyHeight,
-                  onStickerSelected: widget.onStickerSelected,
-                  onStickerLongPressed: widget.onStickerLongPressed,
-                  onOpenStore: widget.onOpenStickerStore,
-                ),
-                GifPicker(
-                  height: bodyHeight,
-                  onGifSelected: widget.onGifSelected,
-                  onGifLongPressed: widget.onGifLongPressed,
-                ),
-              ],
+      child: SafeArea(
+        top: false,
+        child: Column(
+          children: [
+            Expanded(
+              child: IndexedStack(
+                index: _tab.index,
+                sizing: StackFit.expand,
+                children: [
+                  if (_visited.contains(ExpressionTab.recent))
+                    _RecentTab(
+                      reloadToken: _recentReloadToken,
+                      recentEmojiStore: _recentEmoji,
+                      onEmojiSelected: _handleEmoji,
+                      onStickerSelected: widget.onStickerSelected,
+                      onGoToStickers: () => _switchTab(ExpressionTab.sticker),
+                      onGoToEmojis: () => _switchTab(ExpressionTab.emoji),
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (_visited.contains(ExpressionTab.emoji))
+                    EmojiPicker(
+                      height: bodyHeight,
+                      onEmojiSelected: _handleEmoji,
+                      onBackspace: widget.onBackspace,
+                      onSend: widget.onSend,
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (_visited.contains(ExpressionTab.sticker))
+                    StickerPicker(
+                      height: bodyHeight,
+                      onStickerSelected: widget.onStickerSelected,
+                      onStickerLongPressed: widget.onStickerLongPressed,
+                      onOpenStore: widget.onOpenStickerStore,
+                    )
+                  else
+                    const SizedBox.shrink(),
+                  if (_visited.contains(ExpressionTab.gif))
+                    GifPicker(
+                      height: bodyHeight,
+                      onGifSelected: widget.onGifSelected,
+                      onGifLongPressed: widget.onGifLongPressed,
+                    )
+                  else
+                    const SizedBox.shrink(),
+                ],
+              ),
             ),
-          ),
-          _buildTabBar(context),
-        ],
+            _buildTabBar(context, tabBarHeight),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildTabBar(BuildContext context) {
+  Widget _buildTabBar(BuildContext context, double height) {
     return Container(
-      height: _tabBarHeight,
+      height: height,
       decoration: BoxDecoration(
         color: context.surfaceColor,
         border: Border(
@@ -147,9 +166,15 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
         children: [
           _tabButton(context, ExpressionTab.recent, Icons.access_time_rounded),
           _tabButton(
-              context, ExpressionTab.emoji, Icons.emoji_emotions_outlined),
+            context,
+            ExpressionTab.emoji,
+            Icons.emoji_emotions_outlined,
+          ),
           _tabButton(
-              context, ExpressionTab.sticker, Icons.auto_awesome_outlined),
+            context,
+            ExpressionTab.sticker,
+            Icons.auto_awesome_outlined,
+          ),
           _tabButton(context, ExpressionTab.gif, Icons.gif_box_outlined),
         ],
       ),
@@ -165,16 +190,37 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
         label: _tabLabel(context, tab),
         excludeSemantics: true,
         child: InkWell(
+          key: ValueKey('expression-tab-${tab.name}'),
           onTap: () => _switchTab(tab),
           child: Container(
             alignment: Alignment.center,
             color: selected
                 ? AppColors.primary.withValues(alpha: 0.12)
                 : Colors.transparent,
-            child: Icon(
-              icon,
-              size: 24,
-              color: selected ? AppColors.primary : context.textSecondary,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    icon,
+                    size: 20,
+                    color: selected ? AppColors.primary : context.textSecondary,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    _tabLabel(context, tab),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: selected
+                          ? AppColors.primary
+                          : context.textSecondary,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -186,11 +232,11 @@ class _ExpressionPanelState extends State<ExpressionPanel> {
     final a11y = A11yL10n.of(context);
     switch (tab) {
       case ExpressionTab.recent:
-        return a11y.tabRecent;
+        return S.of(context)?.chatRecentPlayed ?? a11y.tabRecent;
       case ExpressionTab.emoji:
-        return a11y.emoji;
+        return S.of(context)?.chatSelectEmoji ?? a11y.emoji;
       case ExpressionTab.sticker:
-        return a11y.tabSticker;
+        return S.of(context)?.profileStickers ?? a11y.tabSticker;
       case ExpressionTab.gif:
         return a11y.tabGif;
     }
@@ -300,8 +346,7 @@ class _RecentTabState extends State<_RecentTab> {
             children: _stickers
                 .map(
                   (r) => GestureDetector(
-                    onTap: () =>
-                        widget.onStickerSelected(r.sticker, r.packId),
+                    onTap: () => widget.onStickerSelected(r.sticker, r.packId),
                     child: _StickerThumb(sticker: r.sticker),
                   ),
                 )
@@ -324,7 +369,11 @@ class _RecentTabState extends State<_RecentTab> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.access_time_rounded, size: 44, color: context.textTertiary),
+          Icon(
+            Icons.access_time_rounded,
+            size: 44,
+            color: context.textTertiary,
+          ),
           const SizedBox(height: 10),
           Wrap(
             spacing: 8,
@@ -332,12 +381,12 @@ class _RecentTabState extends State<_RecentTab> {
               TextButton.icon(
                 onPressed: widget.onGoToEmojis,
                 icon: const Icon(Icons.emoji_emotions_outlined, size: 18),
-                label: const Text('Emoji'),
+                label: Text(S.of(context)?.chatSelectEmoji ?? 'Emoji'),
               ),
               TextButton.icon(
                 onPressed: widget.onGoToStickers,
                 icon: const Icon(Icons.auto_awesome_outlined, size: 18),
-                label: const Text('Stickers'),
+                label: Text(S.of(context)?.profileStickers ?? 'Stickers'),
               ),
             ],
           ),

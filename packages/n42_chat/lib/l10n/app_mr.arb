@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "ईमेल बदलण्यात अयशस्वी",
   "blocAuthVerificationCodeInvalid": "सत्यापन कोड चुकीचा आहे किंवा कालबाह्य झाला आहे",
   "blocAuthSessionExpired": "सत्र कालबाह्य झाले, कृपया पुन्हा लॉग इन करा",
-  "blocAuthSessionIncomplete": "सत्र डेटा अपूर्ण आहे, कृपया पुन्हा लॉग इन करा"
+  "blocAuthSessionIncomplete": "सत्र डेटा अपूर्ण आहे, कृपया पुन्हा लॉग इन करा",
+  "chatReadingMode": "वाचन मोड",
+  "groupPoints": "गुण"
 }

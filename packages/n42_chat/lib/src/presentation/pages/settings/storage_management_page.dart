@@ -346,7 +346,7 @@ class _SmartCleanupSection extends StatelessWidget {
     final cardColor = context.surfaceColor;
     final textColor = context.textPrimary;
 
-    return Container(
+    return Material(
       color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -470,10 +470,18 @@ class _RecommendationTile extends StatelessWidget {
 }
 
 /// 房间存储排行
-class _RoomStorageSection extends StatelessWidget {
+class _RoomStorageSection extends StatefulWidget {
   final StorageManagementState state;
 
   const _RoomStorageSection({required this.state});
+
+  @override
+  State<_RoomStorageSection> createState() => _RoomStorageSectionState();
+}
+
+class _RoomStorageSectionState extends State<_RoomStorageSection> {
+  bool _showAll = false;
+  StorageManagementState get state => widget.state;
 
   @override
   Widget build(BuildContext context) {
@@ -483,7 +491,7 @@ class _RoomStorageSection extends StatelessWidget {
 
     if (state.roomStorageList.isEmpty) return const SizedBox.shrink();
 
-    return Container(
+    return Material(
       color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -503,7 +511,7 @@ class _RoomStorageSection extends StatelessWidget {
             ),
           ),
           ...state.roomStorageList
-              .take(5)
+              .take(_showAll ? state.roomStorageList.length : 5)
               .map(
                 (room) => ListTile(
                   title: Text(
@@ -554,15 +562,16 @@ class _RoomStorageSection extends StatelessWidget {
                   },
                 ),
               ),
-          if (state.roomStorageList.length > 5)
+          if (!_showAll && state.roomStorageList.length > 5)
             ListTile(
               title: Text(
-                'View all ${state.roomStorageList.length} rooms',
+                S.of(context)?.storageViewAllRooms(state.roomStorageList.length) ??
+                    'View all ${state.roomStorageList.length} rooms',
                 style: const TextStyle(fontSize: 14, color: AppColors.primary),
                 textAlign: TextAlign.center,
               ),
               onTap: () {
-                // TODO: Navigate to full room list
+                setState(() => _showAll = true);
               },
             ),
           const SizedBox(height: 8),
@@ -585,7 +594,7 @@ class _StorageSettingsSection extends StatelessWidget {
     final secondaryColor = context.textSecondary;
     final config = state.storageConfig ?? const StorageConfig();
 
-    return Container(
+    return Material(
       color: cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -695,7 +704,7 @@ class _ClearCacheButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardColor = context.surfaceColor;
 
-    return Container(
+    return Material(
       color: cardColor,
       child: ListTile(
         leading: const Icon(Icons.cleaning_services, color: AppColors.primary),

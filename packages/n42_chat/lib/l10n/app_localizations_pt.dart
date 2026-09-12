@@ -5809,6 +5809,12 @@ class SPt extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Dados da sessão incompletos, faça login novamente';
+
+  @override
+  String get chatReadingMode => 'Modo de leitura';
+
+  @override
+  String get groupPoints => 'Pontos';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11616,4 +11622,10 @@ class SPtBr extends SPt {
   @override
   String get blocAuthSessionIncomplete =>
       'Dados da sessão incompletos, faça login novamente';
+
+  @override
+  String get chatReadingMode => 'Modo de leitura';
+
+  @override
+  String get groupPoints => 'Pontos';
 }

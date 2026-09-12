@@ -382,12 +382,12 @@ class AuthChangePasswordRequested extends AuthEvent {
   final String newPassword;
   // 每个实例唯一 ID，防止 Equatable 去重丢弃连续的密码修改事件
   // （密码本身不入 props，避免在内存中持久化敏感数据）
-  final int _id;
+  final Object _id = Object();
 
   AuthChangePasswordRequested({
     required this.oldPassword,
     required this.newPassword,
-  }) : _id = DateTime.now().microsecondsSinceEpoch;
+  });
 
   @override
   List<Object?> get props => [_id];

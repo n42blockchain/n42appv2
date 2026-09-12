@@ -5807,4 +5807,10 @@ class SSw extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'Data ya kipindi haijakamilika, tafadhali ingia tena';
+
+  @override
+  String get chatReadingMode => 'Hali ya kusoma';
+
+  @override
+  String get groupPoints => 'Pointi';
 }

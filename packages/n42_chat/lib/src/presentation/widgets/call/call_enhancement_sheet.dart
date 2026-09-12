@@ -106,7 +106,8 @@ class LiveKitCallEnhancementController implements CallEnhancementController {
       service.backgroundProcessingConfig.mode == BackgroundMode.blur;
 
   @override
-  bool get supportsRecording => true;
+  // No egress start/stop backend is configured in this implementation.
+  bool get supportsRecording => false;
 
   @override
   String get recordingFeatureName => 'Cloud recording';

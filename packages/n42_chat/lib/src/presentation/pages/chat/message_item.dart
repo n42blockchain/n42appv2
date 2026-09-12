@@ -506,8 +506,8 @@ class MessageItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: bgColor,
           borderRadius: BorderRadius.circular(4),
-          border: const Border(
-            left: BorderSide(color: AppColors.primary, width: 2),
+          border: const BorderDirectional(
+            start: BorderSide(color: AppColors.primary, width: 2),
           ),
         ),
         child: Column(
@@ -528,7 +528,7 @@ class MessageItem extends StatelessWidget {
               ),
             Text(
               message.replyToContent ?? '',
-              maxLines: 2,
+              maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(fontSize: 13, height: 1.35, color: textColor),
             ),

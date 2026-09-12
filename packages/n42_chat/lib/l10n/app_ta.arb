@@ -2744,5 +2744,7 @@
   "blocAuthChangeEmailFailed": "மின்னஞ்சலை மாற்ற முடியவில்லை",
   "blocAuthVerificationCodeInvalid": "சரிபார்ப்புக் குறியீடு தவறானது அல்லது காலாவதியானது",
   "blocAuthSessionExpired": "அமர்வு காலாவதியானது, மீண்டும் உள்நுழையவும்",
-  "blocAuthSessionIncomplete": "அமர்வு தரவு முழுமையடையவில்லை, மீண்டும் உள்நுழையவும்"
+  "blocAuthSessionIncomplete": "அமர்வு தரவு முழுமையடையவில்லை, மீண்டும் உள்நுழையவும்",
+  "chatReadingMode": "வாசிப்பு முறை",
+  "groupPoints": "புள்ளிகள்"
 }

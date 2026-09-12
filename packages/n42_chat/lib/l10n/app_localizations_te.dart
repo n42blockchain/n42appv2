@@ -5821,4 +5821,10 @@ class STe extends S {
   @override
   String get blocAuthSessionIncomplete =>
       'సెషన్ డేటా అసంపూర్తిగా ఉంది, దయచేసి మళ్లీ లాగిన్ చేయండి';
+
+  @override
+  String get chatReadingMode => 'పఠన మోడ్';
+
+  @override
+  String get groupPoints => 'పాయింట్లు';
 }
