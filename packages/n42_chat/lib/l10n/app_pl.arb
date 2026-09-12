@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "Dane sesji są niekompletne. Proszę zalogować się ponownie",
   "authSsoNotConfigured": "Na tym serwerze nie skonfigurowano dostawców logowania SSO",
   "chatReadingMode": "Tryb czytania",
-  "groupPoints": "Punkty"
+  "groupPoints": "Punkty",
+  "settingsPrivacySecurity": "Prywatność i bezpieczeństwo",
+  "settingsSystemAccounts": "System i konta",
+  "settingsNotificationPrivacy": "Prywatność powiadomień",
+  "settingsSenderOnly": "Pokaż tylko nadawcę",
+  "settingsHiddenNotification": "Ukryj nadawcę i wiadomość",
+  "settingsSmartFilter": "Inteligentny filtr"
 }

@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Сеанс закінчився, увійдіть знову",
   "blocAuthSessionIncomplete": "Дані сеансу неповні, увійдіть знову",
   "chatReadingMode": "Режим читання",
-  "groupPoints": "Бали"
+  "groupPoints": "Бали",
+  "settingsPrivacySecurity": "Конфіденційність і безпека",
+  "settingsSystemAccounts": "Система й облікові записи",
+  "settingsNotificationPrivacy": "Конфіденційність сповіщень",
+  "settingsSenderOnly": "Показувати лише відправника",
+  "settingsHiddenNotification": "Приховувати відправника й повідомлення",
+  "settingsSmartFilter": "Розумний фільтр"
 }

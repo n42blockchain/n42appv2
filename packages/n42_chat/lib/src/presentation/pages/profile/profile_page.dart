@@ -5,12 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
-import '../../../core/encryption/e2ee_manager.dart';
-import '../../../core/encryption/key_backup_service.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
-import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../domain/entities/avatar_decoration_preset.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../domain/entities/user_entity.dart';
@@ -19,7 +16,6 @@ import '../../../domain/repositories/auth_repository.dart';
 import '../../../domain/repositories/contact_repository.dart';
 import '../../../n42_chat.dart';
 import '../../blocs/auth/auth_bloc.dart';
-import '../../blocs/auth/auth_event.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../favorite/favorite_list_page.dart';
 import '../subscription/subscription_page.dart';
@@ -27,14 +23,6 @@ import '../fiat_ramp/fiat_ramp_page.dart';
 import '../settings/local_llm_settings_page.dart';
 import '../ai/ai_assistant_page.dart';
 import '../qrcode/my_qrcode_page.dart';
-import '../settings/change_email_page.dart';
-import '../settings/account_switch_page.dart';
-import '../settings/appearance_settings_page.dart';
-import '../settings/change_password_page.dart';
-import '../settings/language_settings_page.dart';
-import '../settings/notification_settings_page.dart';
-import '../settings/privacy_settings_page.dart';
-import '../settings/security_settings_page.dart';
 import '../settings/settings_page.dart';
 import 'avatar_studio_page.dart';
 import 'orders_and_cards_page.dart';
@@ -789,58 +777,15 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _openSettings(BuildContext context) {
+    final authBloc = context.read<AuthBloc>();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => SettingsPage(
-          profile: _buildSettingsProfile(),
-          onNotification: () => _openNotificationSettings(context),
-          onPrivacy: () => _openPrivacySettings(context),
-          onAppearance: () => _openAppearanceSettings(context),
-          onSecurity: () {
-            final client = MatrixClientManager.instance.client;
-            if (client == null) return;
-
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => SecuritySettingsPage(
-                  e2eeManager: E2EEManager(client),
-                  keyBackupService: KeyBackupService(client),
-                ),
-              ),
-            );
-          },
-          onChangePassword: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => BlocProvider.value(
-                  value: N42Chat.authBloc,
-                  child: const ChangePasswordPage(),
-                ),
-              ),
-            );
-          },
-          onChangeEmail: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => BlocProvider.value(
-                  value: N42Chat.authBloc,
-                  child: const ChangeEmailPage(),
-                ),
-              ),
-            );
-          },
-          onLanguage: () {
-            Navigator.of(context).push(
-              MaterialPageRoute<void>(
-                builder: (_) => const LanguageSettingsPage(),
-              ),
-            );
-          },
-          onAccounts: () => _openAccountSwitchPage(context),
-          onLogout: () {
-            Navigator.of(context).pop();
-            context.read<AuthBloc>().add(const AuthLogoutRequested());
-          },
+        builder: (_) => BlocProvider.value(
+          value: authBloc,
+          child: SettingsPage(
+            profile: _buildSettingsProfile(),
+            onEditProfile: () => _openEditProfile(context),
+          ),
         ),
       ),
     );
@@ -861,62 +806,6 @@ class _ProfilePageState extends State<ProfilePage> {
       phoneNumber: _boundPhoneNumber,
       avatarDecorationPreset: _avatarDecorationPreset,
     );
-  }
-
-  Future<void> _openPrivacySettings(BuildContext context) async {
-    final settings = await getIt<PreferencesDataSource>()
-        .getPrivacySettingsModel();
-    if (!context.mounted) {
-      return;
-    }
-
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => PrivacySettingsPage(settings: settings),
-      ),
-    );
-  }
-
-  Future<void> _openAppearanceSettings(BuildContext context) async {
-    final settings = await N42Chat.getSavedAppearanceSettings();
-    if (!context.mounted) {
-      return;
-    }
-
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => AppearanceSettingsPage(
-          settings: settings,
-          onSave: (newSettings) {
-            unawaited(N42Chat.applyAppearanceSettings(newSettings));
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> _openNotificationSettings(BuildContext context) async {
-    final settings = await N42Chat.getSavedNotificationSettings();
-    if (!context.mounted) {
-      return;
-    }
-
-    await Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => NotificationSettingsPage(
-          settings: settings,
-          onSave: (newSettings) {
-            unawaited(N42Chat.applyNotificationSettings(newSettings));
-          },
-        ),
-      ),
-    );
-  }
-
-  Future<void> _openAccountSwitchPage(BuildContext context) async {
-    await Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const AccountSwitchPage()));
   }
 
   void _openFavorites(BuildContext context) {

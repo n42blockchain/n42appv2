@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "Данные сеанса неполные, пожалуйста, войдите снова",
   "authSsoNotConfigured": "На этом сервере не настроены провайдеры входа через SSO",
   "chatReadingMode": "Режим чтения",
-  "groupPoints": "Баллы"
+  "groupPoints": "Баллы",
+  "settingsPrivacySecurity": "Конфиденциальность и безопасность",
+  "settingsSystemAccounts": "Система и аккаунты",
+  "settingsNotificationPrivacy": "Конфиденциальность уведомлений",
+  "settingsSenderOnly": "Показывать только отправителя",
+  "settingsHiddenNotification": "Скрывать отправителя и сообщение",
+  "settingsSmartFilter": "Умный фильтр"
 }

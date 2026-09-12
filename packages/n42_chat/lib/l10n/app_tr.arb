@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "Oturum verileri eksik, lütfen tekrar giriş yapın",
   "authSsoNotConfigured": "Bu sunucuda SSO oturum açma sağlayıcıları yapılandırılmamış",
   "chatReadingMode": "Okuma modu",
-  "groupPoints": "Puanlar"
+  "groupPoints": "Puanlar",
+  "settingsPrivacySecurity": "Gizlilik ve Güvenlik",
+  "settingsSystemAccounts": "Sistem ve Hesaplar",
+  "settingsNotificationPrivacy": "Bildirim Gizliliği",
+  "settingsSenderOnly": "Yalnızca göndereni göster",
+  "settingsHiddenNotification": "Göndereni ve mesajı gizle",
+  "settingsSmartFilter": "Akıllı Filtre"
 }

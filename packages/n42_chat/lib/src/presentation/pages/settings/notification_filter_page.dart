@@ -15,37 +15,65 @@ import '../../widgets/common/common_widgets.dart';
 /// - 屏蔽：命中即抑制通知。
 /// 规则保存到 [NotificationFilterStore] 并即时应用到运行中的推送服务。
 class NotificationFilterPage extends StatefulWidget {
-  const NotificationFilterPage({super.key});
+  final NotificationFilterStore? store;
+
+  const NotificationFilterPage({super.key, this.store});
 
   @override
   State<NotificationFilterPage> createState() => _NotificationFilterPageState();
 }
 
 class _NotificationFilterPageState extends State<NotificationFilterPage> {
-  final NotificationFilterStore _store = NotificationFilterStore();
+  late final NotificationFilterStore _store;
   NotificationFilterRules _rules = NotificationFilterRules.empty;
   bool _loaded = false;
+  bool _loadFailed = false;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
+    _store = widget.store ?? NotificationFilterStore();
     _load();
   }
 
   Future<void> _load() async {
-    final rules = await _store.load();
-    if (!mounted) return;
     setState(() {
-      _rules = rules;
-      _loaded = true;
+      _loaded = false;
+      _loadFailed = false;
     });
+    try {
+      final rules = await _store.load();
+      if (mounted) setState(() => _rules = rules);
+    } catch (_) {
+      if (mounted) setState(() => _loadFailed = true);
+    } finally {
+      if (mounted) setState(() => _loaded = true);
+    }
   }
 
   Future<void> _apply(NotificationFilterRules rules) async {
-    setState(() => _rules = rules);
-    await _store.save(rules);
-    // 即时应用到运行中的推送服务
-    N42Chat.pushService?.setFilterRules(rules);
+    if (!mounted || _isSaving) return;
+    final previous = _rules;
+    setState(() {
+      _rules = rules;
+      _isSaving = true;
+    });
+    try {
+      await _store.save(rules);
+      N42Chat.pushService?.setFilterRules(rules);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _rules = previous);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonSaveFailed ?? 'Failed to save'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
   }
 
   List<String> _addEntry(List<String> list, String value) {
@@ -59,14 +87,14 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
     required String hint,
     required void Function(String) onAdd,
   }) async {
-    final controller = TextEditingController();
+    var input = '';
     final result = await showDialog<String>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: context.surfaceColor,
         title: Text(title, style: TextStyle(color: context.textPrimary)),
         content: TextField(
-          controller: controller,
+          onChanged: (value) => input = value,
           autofocus: true,
           style: TextStyle(color: context.textPrimary),
           decoration: InputDecoration(hintText: hint),
@@ -78,13 +106,13 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
             child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(ctx, controller.text),
+            onPressed: () => Navigator.pop(ctx, input),
             child: Text(S.of(context)?.commonAdd ?? 'Add'),
           ),
         ],
       ),
     );
-    if (result != null && result.trim().isNotEmpty) {
+    if (mounted && result != null && result.trim().isNotEmpty) {
       onAdd(result);
     }
   }
@@ -94,77 +122,109 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
     return Scaffold(
       backgroundColor: context.pageBackground,
       appBar: N42AppBar(
-        title: 'Smart Filter',
+        title: S.of(context)?.settingsSmartFilter ?? 'Smart Filter',
         showBackButton: true,
         onBackPressed: () => Navigator.pop(context),
       ),
       body: !_loaded
           ? const Center(child: CircularProgressIndicator())
-          : ListView(
-              children: [
-                const SizedBox(height: 12),
-                _buildHeaderNote(
-                  'Priority rules always notify (bypassing mute, '
-                  'mentions-only and Do Not Disturb). Muted keywords '
-                  'suppress notifications.',
-                ),
-                const SizedBox(height: 8),
-                _buildKeywordSection(
-                  title: 'Priority keywords',
-                  icon: Icons.priority_high,
-                  iconColor: AppColors.primary,
-                  entries: _rules.priorityKeywords,
-                  hint: 'e.g. urgent',
-                  onAdd: (v) => _apply(_rules.copyWith(
-                      priorityKeywords:
-                          _addEntry(_rules.priorityKeywords, v))),
-                  onRemove: (v) => _apply(_rules.copyWith(
-                      priorityKeywords: _rules.priorityKeywords
-                          .where((e) => e != v)
-                          .toList())),
-                ),
-                _buildKeywordSection(
-                  title: 'Muted keywords',
-                  icon: Icons.notifications_off_outlined,
-                  iconColor: AppColors.warning,
-                  entries: _rules.mutedKeywords,
-                  hint: 'e.g. spam',
-                  onAdd: (v) => _apply(_rules.copyWith(
-                      mutedKeywords: _addEntry(_rules.mutedKeywords, v))),
-                  onRemove: (v) => _apply(_rules.copyWith(
-                      mutedKeywords: _rules.mutedKeywords
-                          .where((e) => e != v)
-                          .toList())),
-                ),
-                _buildKeywordSection(
-                  title: 'Priority senders',
-                  icon: Icons.person_outline,
-                  iconColor: AppColors.info,
-                  entries: _rules.prioritySenders,
-                  hint: '@user:server.com',
-                  onAdd: (v) => _apply(_rules.copyWith(
-                      prioritySenders:
-                          _addEntry(_rules.prioritySenders, v))),
-                  onRemove: (v) => _apply(_rules.copyWith(
-                      prioritySenders: _rules.prioritySenders
-                          .where((e) => e != v)
-                          .toList())),
-                ),
-                const SizedBox(height: 16),
-                Container(
-                  color: context.surfaceColor,
-                  child: SwitchListTile(
-                    title: Text(
-                      'Case sensitive',
-                      style: TextStyle(color: context.textPrimary),
-                    ),
-                    value: _rules.caseSensitive,
-                    activeThumbColor: AppColors.primary,
-                    onChanged: (v) =>
-                        _apply(_rules.copyWith(caseSensitive: v)),
+          : _loadFailed
+          ? Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+                  TextButton(
+                    onPressed: _load,
+                    child: Text(S.of(context)?.commonRetry ?? 'Retry'),
                   ),
-                ),
-              ],
+                ],
+              ),
+            )
+          : AbsorbPointer(
+              absorbing: _isSaving,
+              child: ListView(
+                children: [
+                  const SizedBox(height: 12),
+                  _buildHeaderNote(
+                    'Priority rules always notify (bypassing mute, '
+                    'mentions-only and Do Not Disturb). Muted keywords '
+                    'suppress notifications.',
+                  ),
+                  const SizedBox(height: 8),
+                  _buildKeywordSection(
+                    title: 'Priority keywords',
+                    icon: Icons.priority_high,
+                    iconColor: AppColors.primary,
+                    entries: _rules.priorityKeywords,
+                    hint: 'e.g. urgent',
+                    onAdd: (v) => _apply(
+                      _rules.copyWith(
+                        priorityKeywords: _addEntry(_rules.priorityKeywords, v),
+                      ),
+                    ),
+                    onRemove: (v) => _apply(
+                      _rules.copyWith(
+                        priorityKeywords: _rules.priorityKeywords
+                            .where((e) => e != v)
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  _buildKeywordSection(
+                    title: 'Muted keywords',
+                    icon: Icons.notifications_off_outlined,
+                    iconColor: AppColors.warning,
+                    entries: _rules.mutedKeywords,
+                    hint: 'e.g. spam',
+                    onAdd: (v) => _apply(
+                      _rules.copyWith(
+                        mutedKeywords: _addEntry(_rules.mutedKeywords, v),
+                      ),
+                    ),
+                    onRemove: (v) => _apply(
+                      _rules.copyWith(
+                        mutedKeywords: _rules.mutedKeywords
+                            .where((e) => e != v)
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  _buildKeywordSection(
+                    title: 'Priority senders',
+                    icon: Icons.person_outline,
+                    iconColor: AppColors.info,
+                    entries: _rules.prioritySenders,
+                    hint: '@user:server.com',
+                    onAdd: (v) => _apply(
+                      _rules.copyWith(
+                        prioritySenders: _addEntry(_rules.prioritySenders, v),
+                      ),
+                    ),
+                    onRemove: (v) => _apply(
+                      _rules.copyWith(
+                        prioritySenders: _rules.prioritySenders
+                            .where((e) => e != v)
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Material(
+                    color: context.surfaceColor,
+                    child: SwitchListTile(
+                      title: Text(
+                        'Case sensitive',
+                        style: TextStyle(color: context.textPrimary),
+                      ),
+                      value: _rules.caseSensitive,
+                      activeThumbColor: AppColors.primary,
+                      onChanged: (v) =>
+                          _apply(_rules.copyWith(caseSensitive: v)),
+                    ),
+                  ),
+                ],
+              ),
             ),
     );
   }
@@ -221,11 +281,8 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
                 IconButton(
                   tooltip: S.of(context)?.commonAdd ?? 'Add',
                   icon: const Icon(Icons.add, color: AppColors.primary),
-                  onPressed: () => _promptAdd(
-                    title: title,
-                    hint: hint,
-                    onAdd: onAdd,
-                  ),
+                  onPressed: () =>
+                      _promptAdd(title: title, hint: hint, onAdd: onAdd),
                 ),
               ],
             ),
@@ -241,12 +298,14 @@ class _NotificationFilterPageState extends State<NotificationFilterPage> {
                     spacing: 8,
                     runSpacing: 8,
                     children: entries
-                        .map((e) => Chip(
-                              label: Text(e),
-                              onDeleted: () => onRemove(e),
-                              deleteIconColor: context.textSecondary,
-                              backgroundColor: context.pageBackground,
-                            ))
+                        .map(
+                          (e) => Chip(
+                            label: Text(e),
+                            onDeleted: () => onRemove(e),
+                            deleteIconColor: context.textSecondary,
+                            backgroundColor: context.pageBackground,
+                          ),
+                        )
                         .toList(),
                   ),
           ),

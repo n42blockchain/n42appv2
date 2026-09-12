@@ -9,6 +9,11 @@ import '../../../core/utils/privacy_redaction_utils.dart';
 import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../domain/entities/user_profile_entity.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../../core/services/username_service.dart';
+import '../../../domain/repositories/auth_repository.dart';
+import 'settings_navigation.dart';
+import 'chat_settings_page.dart';
+import 'language_settings_page.dart';
 import 'quick_replies_page.dart';
 import 'translation_settings_page.dart';
 import 'backup_restore_page.dart';
@@ -88,14 +93,16 @@ class SettingsPage extends StatelessWidget {
                 title:
                     S.of(context)?.settingsNotificationSettings ??
                     'Notifications',
-                onTap: onNotification,
+                onTap:
+                    onNotification ??
+                    () => SettingsNavigation.notifications(context),
               ),
               _SettingsItem(
                 icon: Icons.shield_moon_outlined,
                 iconColor: Colors.blue,
-                title: 'Privacy & Security',
-                subtitle:
-                    'E2EE, disappearing messages, screenshot protection, and proxies',
+                title:
+                    S.of(context)?.settingsPrivacySecurity ??
+                    'Privacy & Security',
                 onTap: () => _navigateToPrivacySecurity(context),
               ),
             ],
@@ -110,13 +117,20 @@ class SettingsPage extends StatelessWidget {
                 icon: Icons.palette_outlined,
                 iconColor: Colors.purple,
                 title: S.of(context)?.settingsAppearance ?? 'Appearance',
-                onTap: onAppearance,
+                onTap:
+                    onAppearance ??
+                    () => SettingsNavigation.appearance(context),
               ),
               _SettingsItem(
                 icon: Icons.chat_outlined,
                 iconColor: Colors.green,
                 title: S.of(context)?.commonChat ?? 'Chat',
-                onTap: onChat,
+                onTap:
+                    onChat ??
+                    () => SettingsNavigation.page(
+                      context,
+                      const ChatSettingsPage(),
+                    ),
               ),
               _SettingsItem(
                 icon: Icons.flash_on_outlined,
@@ -128,7 +142,13 @@ class SettingsPage extends StatelessWidget {
                 icon: Icons.language_outlined,
                 iconColor: Colors.blue,
                 title: S.of(context)?.settingsLanguage ?? 'Language',
-                onTap: onLanguage,
+                onTap:
+                    onLanguage ??
+                    () => SettingsNavigation.page(
+                      context,
+                      const LanguageSettingsPage(),
+                      needsPreferences: true,
+                    ),
               ),
               _SettingsItem(
                 icon: Icons.translate,
@@ -171,7 +191,7 @@ class SettingsPage extends StatelessWidget {
               _SettingsItem(
                 icon: Icons.backup,
                 iconColor: Colors.deepOrange,
-                title: 'Backup & Restore',
+                title: S.of(context)?.backupRestore ?? 'Backup & Restore',
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute<void>(
@@ -191,9 +211,9 @@ class SettingsPage extends StatelessWidget {
               _SettingsItem(
                 icon: Icons.settings_suggest_outlined,
                 iconColor: Colors.indigo,
-                title: 'System & Accounts',
-                subtitle:
-                    'Accounts, devices, usernames, notifications, and bridges',
+                title:
+                    S.of(context)?.settingsSystemAccounts ??
+                    'System & Accounts',
                 onTap: () => _navigateToSystemAccounts(context),
               ),
             ],
@@ -228,13 +248,15 @@ class SettingsPage extends StatelessWidget {
                 iconColor: Colors.indigo,
                 title:
                     S.of(context)?.settingsChangePassword ?? 'Change Password',
-                onTap: onChangePassword,
+                onTap:
+                    onChangePassword ??
+                    () => SettingsNavigation.password(context),
               ),
               _SettingsItem(
                 icon: Icons.email_outlined,
                 iconColor: Colors.cyan,
                 title: S.of(context)?.commonChangeEmail ?? 'Change Email',
-                onTap: onChangeEmail,
+                onTap: onChangeEmail ?? () => SettingsNavigation.email(context),
               ),
             ],
           ),
@@ -248,11 +270,16 @@ class SettingsPage extends StatelessWidget {
                 icon: Icons.info_outline,
                 iconColor: Colors.orange,
                 title: S.of(context)?.settingsAbout ?? 'About',
-                onTap: onAbout ?? () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (pageContext) => AboutPage(
-                    onOpenSource: () => showLicensePage(context: pageContext),
-                  )),
-                ),
+                onTap:
+                    onAbout ??
+                    () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (pageContext) => AboutPage(
+                          onOpenSource: () =>
+                              showLicensePage(context: pageContext),
+                        ),
+                      ),
+                    ),
               ),
             ],
           ),
@@ -260,7 +287,9 @@ class SettingsPage extends StatelessWidget {
           const SizedBox(height: 32),
 
           // 退出登录按钮
-          if (onLogout != null)
+          if (onLogout != null ||
+              SettingsNavigation.authBloc(context)?.state.isAuthenticated ==
+                  true)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: N42Button.danger(
@@ -302,11 +331,15 @@ class SettingsPage extends StatelessWidget {
                 const SizedBox(width: 16),
                 Expanded(
                   child: FutureBuilder<PrivacySettings>(
-                    future: getIt<PreferencesDataSource>()
-                        .getPrivacySettingsModel(),
+                    future: getIt.isRegistered<PreferencesDataSource>()
+                        ? getIt<PreferencesDataSource>()
+                              .getPrivacySettingsModel()
+                        : Future.value(
+                            const PrivacySettings(hidePhoneNumber: true),
+                          ),
                     builder: (context, snapshot) {
                       final hidePhoneNumber =
-                          snapshot.data?.hidePhoneNumber ?? false;
+                          snapshot.data?.hidePhoneNumber ?? true;
                       final phoneNumber = hidePhoneNumber
                           ? maskPhoneNumber(profile!.phoneNumber)
                           : profile!.phoneNumber?.trim();
@@ -383,10 +416,8 @@ class SettingsPage extends StatelessWidget {
                     },
                   ),
                 ),
-                Icon(
-                  AppIcons.chevron,
-                  color: context.textSecondary,
-                ),
+                if (onEditProfile != null)
+                  Icon(AppIcons.chevron, color: context.textSecondary),
               ],
             ),
           ),
@@ -396,39 +427,47 @@ class SettingsPage extends StatelessWidget {
   }
 
   void _navigateToSystemAccounts(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => SystemAccountsPage(
-          onOpenAccounts: onAccounts == null
-              ? null
-              : () async {
-                  onAccounts!.call();
-                },
-          onOpenSecuritySettings: onSecurity == null
-              ? null
-              : () async {
-                  onSecurity!.call();
-                },
-        ),
+    if (!getIt.isRegistered<IAuthRepository>() ||
+        !getIt.isRegistered<UsernameService>()) {
+      SettingsNavigation.unavailable(context);
+      return;
+    }
+    SettingsNavigation.page(
+      context,
+      SystemAccountsPage(
+        onOpenAccounts: onAccounts == null
+            ? null
+            : () async {
+                onAccounts!.call();
+              },
+        onOpenSecuritySettings: onSecurity == null
+            ? null
+            : () async {
+                onSecurity!.call();
+              },
       ),
     );
   }
 
   void _navigateToPrivacySecurity(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => PrivacySecurityPage(
-          onOpenPrivacySettings: onPrivacy == null
-              ? null
-              : () async {
-                  onPrivacy!.call();
-                },
-          onOpenSecuritySettings: onSecurity == null
-              ? null
-              : () async {
-                  onSecurity!.call();
-                },
-        ),
+    if (!getIt.isRegistered<PreferencesDataSource>() ||
+        !getIt.isRegistered<UsernameService>()) {
+      SettingsNavigation.unavailable(context);
+      return;
+    }
+    SettingsNavigation.page(
+      context,
+      PrivacySecurityPage(
+        onOpenPrivacySettings: onPrivacy == null
+            ? null
+            : () async {
+                onPrivacy!.call();
+              },
+        onOpenSecuritySettings: onSecurity == null
+            ? null
+            : () async {
+                onSecurity!.call();
+              },
       ),
     );
   }
@@ -451,7 +490,7 @@ class SettingsPage extends StatelessWidget {
   void _showLogoutConfirmDialog(BuildContext context) {
     showDialog<void>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: Text(S.of(context)?.commonLogout ?? 'Log Out'),
         content: Text(
           S.of(context)?.commonLogoutConfirm ??
@@ -459,13 +498,17 @@ class SettingsPage extends StatelessWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
-              onLogout?.call();
+              Navigator.pop(dialogContext);
+              if (onLogout != null) {
+                onLogout!();
+              } else {
+                SettingsNavigation.logout(context);
+              }
             },
             child: Text(
               S.of(context)?.commonLogout ?? 'Log Out',
@@ -492,11 +535,8 @@ class _SettingsGroup extends StatelessWidget {
         children: List.generate(children.length * 2 - 1, (index) {
           if (index.isOdd) {
             return Padding(
-              padding: const EdgeInsets.only(left: 56),
-              child: Divider(
-                height: 1,
-                color: context.dividerColor,
-              ),
+              padding: const EdgeInsetsDirectional.only(start: 56),
+              child: Divider(height: 1, color: context.dividerColor),
             );
           }
           return children[index ~/ 2];
@@ -572,11 +612,7 @@ class _SettingsItem extends StatelessWidget {
                   ],
                 ),
               ),
-              trailing ??
-                  Icon(
-                    AppIcons.chevron,
-                    color: context.textSecondary,
-                  ),
+              trailing ?? Icon(AppIcons.chevron, color: context.textSecondary),
             ],
           ),
         ),

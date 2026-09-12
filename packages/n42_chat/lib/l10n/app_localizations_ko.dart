@@ -5666,4 +5666,22 @@ class SKo extends S {
 
   @override
   String get groupPoints => '포인트';
+
+  @override
+  String get settingsPrivacySecurity => '개인정보 및 보안';
+
+  @override
+  String get settingsSystemAccounts => '시스템 및 계정';
+
+  @override
+  String get settingsNotificationPrivacy => '알림 개인정보 보호';
+
+  @override
+  String get settingsSenderOnly => '보낸 사람만 표시';
+
+  @override
+  String get settingsHiddenNotification => '보낸 사람과 메시지 숨기기';
+
+  @override
+  String get settingsSmartFilter => '스마트 필터';
 }

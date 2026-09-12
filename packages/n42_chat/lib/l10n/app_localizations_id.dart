@@ -5794,4 +5794,22 @@ class SId extends S {
 
   @override
   String get groupPoints => 'Poin';
+
+  @override
+  String get settingsPrivacySecurity => 'Privasi & Keamanan';
+
+  @override
+  String get settingsSystemAccounts => 'Sistem & Akun';
+
+  @override
+  String get settingsNotificationPrivacy => 'Privasi Notifikasi';
+
+  @override
+  String get settingsSenderOnly => 'Tampilkan pengirim saja';
+
+  @override
+  String get settingsHiddenNotification => 'Sembunyikan pengirim dan pesan';
+
+  @override
+  String get settingsSmartFilter => 'Filter Cerdas';
 }

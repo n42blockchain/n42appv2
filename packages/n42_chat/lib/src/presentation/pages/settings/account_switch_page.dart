@@ -26,6 +26,7 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
 
   List<StoredAccountEntity> _accounts = const [];
   bool _isLoading = true;
+  bool _loadFailed = false;
   String? _switchingUserId;
   int _loadVersion = 0;
 
@@ -37,15 +38,22 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
 
   Future<void> _loadAccounts() async {
     final loadVersion = ++_loadVersion;
-    setState(() => _isLoading = true);
-    final accounts = await _authRepository.getStoredAccounts();
-    if (!mounted || loadVersion != _loadVersion) {
-      return;
-    }
     setState(() {
-      _accounts = accounts;
-      _isLoading = false;
+      _isLoading = true;
+      _loadFailed = false;
     });
+    try {
+      final accounts = await _authRepository.getStoredAccounts();
+      if (!mounted || loadVersion != _loadVersion) return;
+      setState(() => _accounts = accounts);
+    } catch (_) {
+      if (!mounted || loadVersion != _loadVersion) return;
+      setState(() => _loadFailed = true);
+    } finally {
+      if (mounted && loadVersion == _loadVersion) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   Future<void> _openAddAccount() async {
@@ -114,6 +122,19 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
         ),
         body: _isLoading
             ? const Center(child: CircularProgressIndicator())
+            : _loadFailed
+            ? Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(l10n?.commonLoadFailed ?? 'Failed to load'),
+                    TextButton(
+                      onPressed: _loadAccounts,
+                      child: Text(l10n?.commonRetry ?? 'Retry'),
+                    ),
+                  ],
+                ),
+              )
             : ListView(
                 children: [
                   const SizedBox(height: 16),
@@ -210,11 +231,7 @@ class _AccountTile extends StatelessWidget {
         '${account.userId}\n${account.homeserver}',
         maxLines: 2,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 12,
-          height: 1.4,
-          color: secondaryColor,
-        ),
+        style: TextStyle(fontSize: 12, height: 1.4, color: secondaryColor),
       ),
       trailing: isSwitching
           ? const SizedBox(

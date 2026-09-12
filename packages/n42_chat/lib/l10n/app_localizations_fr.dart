@@ -5847,4 +5847,22 @@ class SFr extends S {
 
   @override
   String get groupPoints => 'Points';
+
+  @override
+  String get settingsPrivacySecurity => 'Confidentialité et sécurité';
+
+  @override
+  String get settingsSystemAccounts => 'Système et comptes';
+
+  @override
+  String get settingsNotificationPrivacy => 'Confidentialité des notifications';
+
+  @override
+  String get settingsSenderOnly => 'Afficher uniquement l’expéditeur';
+
+  @override
+  String get settingsHiddenNotification => 'Masquer l’expéditeur et le message';
+
+  @override
+  String get settingsSmartFilter => 'Filtre intelligent';
 }

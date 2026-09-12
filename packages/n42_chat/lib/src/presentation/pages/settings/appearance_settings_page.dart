@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -12,7 +14,7 @@ import 'chat_background_page.dart';
 /// 外观设置页面
 class AppearanceSettingsPage extends StatefulWidget {
   final AppearanceSettings settings;
-  final void Function(AppearanceSettings)? onSave;
+  final FutureOr<void> Function(AppearanceSettings)? onSave;
 
   const AppearanceSettingsPage({
     super.key,
@@ -26,16 +28,41 @@ class AppearanceSettingsPage extends StatefulWidget {
 
 class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   late AppearanceSettings _settings;
+  late AppearanceSettings _savedSettings;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
     _settings = widget.settings;
+    _savedSettings = widget.settings;
   }
 
-  void _updateSettings(AppearanceSettings newSettings) {
-    setState(() => _settings = newSettings);
-    widget.onSave?.call(newSettings);
+  Future<void> _updateSettings(AppearanceSettings newSettings) async {
+    if (!mounted || _isSaving) return;
+    setState(() {
+      _settings = newSettings;
+      _isSaving = true;
+    });
+    try {
+      if (widget.onSave != null) {
+        await widget.onSave!(newSettings);
+      } else {
+        await N42Chat.applyAppearanceSettings(newSettings);
+      }
+      _savedSettings = newSettings;
+    } catch (_) {
+      if (mounted) {
+        setState(() => _settings = _savedSettings);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonSaveFailed ?? 'Failed to save'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isSaving = false);
+    }
   }
 
   @override
@@ -49,64 +76,63 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
         showBackButton: true,
         onBackPressed: () => Navigator.pop(context),
       ),
-      body: ListView(
-        children: [
-          const SizedBox(height: 16),
+      body: AbsorbPointer(
+        absorbing: _isSaving,
+        child: ListView(
+          children: [
+            const SizedBox(height: 16),
 
-          // 深色模式设置
-          // 宿主 App 接管明暗模式时隐藏此项，避免与宿主设置页双重控制冲突，
-          // 明暗模式统一在宿主 App 的设置页中切换。
-          if (!N42Chat.hostControlsAppearance) ...[
-            _buildSectionHeader(l10n?.settingsDarkMode ?? 'Dark Mode'),
-            _buildThemeModeSection(context),
+            // 深色模式设置
+            // 宿主 App 接管明暗模式时隐藏此项，避免与宿主设置页双重控制冲突，
+            // 明暗模式统一在宿主 App 的设置页中切换。
+            if (!N42Chat.hostControlsAppearance) ...[
+              _buildSectionHeader(l10n?.settingsDarkMode ?? 'Dark Mode'),
+              _buildThemeModeSection(context),
+              const SizedBox(height: 24),
+            ],
+
+            // 字体大小设置
+            _buildSectionHeader(l10n?.settingsFontSize ?? 'Font Size'),
+            _buildFontSizeSection(context),
+
             const SizedBox(height: 24),
-          ],
 
-          // 字体大小设置
-          _buildSectionHeader(l10n?.settingsFontSize ?? 'Font Size'),
-          _buildFontSizeSection(context),
-
-          const SizedBox(height: 24),
-
-          // 聊天背景
-          _buildSectionHeader(l10n?.chatBackground ?? 'Chat Background'),
-          Container(
-            color: context.surfaceColor,
-            child: ListTile(
-              leading: const Icon(Icons.wallpaper),
-              title: Text(
-                l10n?.chatBackground ?? 'Chat Background',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: context.textPrimary,
+            // 聊天背景
+            _buildSectionHeader(l10n?.chatBackground ?? 'Chat Background'),
+            Material(
+              color: context.surfaceColor,
+              child: ListTile(
+                leading: const Icon(Icons.wallpaper),
+                title: Text(
+                  l10n?.chatBackground ?? 'Chat Background',
+                  style: TextStyle(fontSize: 16, color: context.textPrimary),
                 ),
+                trailing: Icon(AppIcons.chevron, color: context.textSecondary),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const ChatBackgroundPage(),
+                    ),
+                  );
+                },
               ),
-              trailing: Icon(
-                AppIcons.chevron,
-                color: context.textSecondary,
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (_) => const ChatBackgroundPage(),
-                  ),
-                );
-              },
             ),
-          ),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // 字体大小滑块
-          _buildSectionHeader(l10n?.settingsFontSizeSlider ?? 'Font Size Adjustment'),
-          _buildFontSizeSliderSection(context),
+            // 字体大小滑块
+            _buildSectionHeader(
+              l10n?.settingsFontSizeSlider ?? 'Font Size Adjustment',
+            ),
+            _buildFontSizeSliderSection(context),
 
-          const SizedBox(height: 24),
+            const SizedBox(height: 24),
 
-          // 气泡样式设置
-          _buildSectionHeader(l10n?.settingsBubbleStyle ?? 'Bubble Style'),
-          _buildBubbleStyleSection(context),
-        ],
+            // 气泡样式设置
+            _buildSectionHeader(l10n?.settingsBubbleStyle ?? 'Bubble Style'),
+            _buildBubbleStyleSection(context),
+          ],
+        ),
       ),
     );
   }
@@ -116,35 +142,36 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
       padding: const EdgeInsets.only(left: 16, right: 16, bottom: 8),
       child: Text(
         title,
-        style: TextStyle(
-          fontSize: 13,
-          color: context.textSecondary,
-        ),
+        style: TextStyle(fontSize: 13, color: context.textSecondary),
       ),
     );
   }
 
   Widget _buildThemeModeSection(BuildContext context) {
     final l10n = S.of(context);
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         children: [
           _buildThemeModeItem(
             title: l10n?.settingsFollowSystem ?? 'Follow System',
-            subtitle: l10n?.settingsAutoSwitchBySystem ?? 'Auto switch by system settings',
+            subtitle:
+                l10n?.settingsAutoSwitchBySystem ??
+                'Auto switch by system settings',
             value: ThemeMode.system,
           ),
           _buildDivider(),
           _buildThemeModeItem(
             title: l10n?.settingsLightMode ?? 'Light Mode',
-            subtitle: l10n?.settingsAlwaysUseLightTheme ?? 'Always use light theme',
+            subtitle:
+                l10n?.settingsAlwaysUseLightTheme ?? 'Always use light theme',
             value: ThemeMode.light,
           ),
           _buildDivider(),
           _buildThemeModeItem(
             title: l10n?.settingsDarkModeOption ?? 'Dark Mode',
-            subtitle: l10n?.settingsAlwaysUseDarkTheme ?? 'Always use dark theme',
+            subtitle:
+                l10n?.settingsAlwaysUseDarkTheme ?? 'Always use dark theme',
             value: ThemeMode.dark,
           ),
         ],
@@ -164,11 +191,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 16,
-          height: 1.3,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: 16, height: 1.3, color: context.textPrimary),
       ),
       subtitle: Text(
         subtitle,
@@ -191,7 +214,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
 
   Widget _buildFontSizeSection(BuildContext context) {
     final l10n = S.of(context);
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         children: [
@@ -226,26 +249,17 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
     FontSize.extraLarge => 20,
   };
 
-  Widget _buildFontSizeItem({
-    required String title,
-    required FontSize value,
-  }) {
+  Widget _buildFontSizeItem({required String title, required FontSize value}) {
     final isSelected = _settings.fontSize == value;
     final previewFontSize = _fontSizeToDouble(value);
 
     return ListTile(
       title: Text(
         title,
-        style: TextStyle(
-          fontSize: previewFontSize,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: previewFontSize, color: context.textPrimary),
       ),
       trailing: isSelected
-          ? const Icon(
-              Icons.check,
-              color: AppColors.primary,
-            )
+          ? const Icon(Icons.check, color: AppColors.primary)
           : null,
       onTap: () {
         _updateSettings(_settings.copyWith(fontSize: value));
@@ -253,7 +267,12 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
     );
   }
 
-  static const _fontSizeValues = [FontSize.small, FontSize.medium, FontSize.large, FontSize.extraLarge];
+  static const _fontSizeValues = [
+    FontSize.small,
+    FontSize.medium,
+    FontSize.large,
+    FontSize.extraLarge,
+  ];
 
   Widget _buildFontSizeSliderSection(BuildContext context) {
     final sliderValue = _fontSizeValues.indexOf(_settings.fontSize).toDouble();
@@ -288,27 +307,26 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
             label: labels[sliderValue.round()],
             activeColor: AppColors.primary,
             onChanged: (value) {
-              _updateSettings(_settings.copyWith(
-                fontSize: _fontSizeValues[value.round()],
-              ));
+              setState(
+                () => _settings = _settings.copyWith(
+                  fontSize: _fontSizeValues[value.round()],
+                ),
+              );
             },
+            onChangeEnd: (value) => _updateSettings(
+              _settings.copyWith(fontSize: _fontSizeValues[value.round()]),
+            ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'A',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: context.textSecondary),
               ),
               Text(
                 'A',
-                style: TextStyle(
-                  fontSize: 22,
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(fontSize: 22, color: context.textSecondary),
               ),
             ],
           ),
@@ -319,25 +337,31 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
 
   Widget _buildBubbleStyleSection(BuildContext context) {
     final l10n = S.of(context);
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         children: [
           _buildBubbleStyleItem(
             title: l10n?.settingsBubbleStyleWechat ?? 'WeChat Style',
-            subtitle: l10n?.settingsBubbleStyleWechatDesc ?? 'Classic WeChat bubble style',
+            subtitle:
+                l10n?.settingsBubbleStyleWechatDesc ??
+                'Classic WeChat bubble style',
             value: BubbleStyle.wechat,
           ),
           _buildDivider(),
           _buildBubbleStyleItem(
             title: l10n?.settingsBubbleStyleModern ?? 'Modern Style',
-            subtitle: l10n?.settingsBubbleStyleModernDesc ?? 'Clean modern bubble style',
+            subtitle:
+                l10n?.settingsBubbleStyleModernDesc ??
+                'Clean modern bubble style',
             value: BubbleStyle.modern,
           ),
           _buildDivider(),
           _buildBubbleStyleItem(
             title: l10n?.settingsBubbleStyleClassic ?? 'Classic Style',
-            subtitle: l10n?.settingsBubbleStyleClassicDesc ?? 'Traditional bubble style',
+            subtitle:
+                l10n?.settingsBubbleStyleClassicDesc ??
+                'Traditional bubble style',
             value: BubbleStyle.classic,
           ),
         ],
@@ -357,11 +381,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
         title,
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 16,
-          height: 1.3,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: 16, height: 1.3, color: context.textPrimary),
       ),
       subtitle: Text(
         subtitle,
@@ -385,11 +405,7 @@ class _AppearanceSettingsPageState extends State<AppearanceSettingsPage> {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 }
-

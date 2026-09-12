@@ -5783,4 +5783,22 @@ class SBn extends S {
 
   @override
   String get groupPoints => 'পয়েন্ট';
+
+  @override
+  String get settingsPrivacySecurity => 'গোপনীয়তা ও নিরাপত্তা';
+
+  @override
+  String get settingsSystemAccounts => 'সিস্টেম ও অ্যাকাউন্ট';
+
+  @override
+  String get settingsNotificationPrivacy => 'বিজ্ঞপ্তির গোপনীয়তা';
+
+  @override
+  String get settingsSenderOnly => 'শুধু প্রেরক দেখান';
+
+  @override
+  String get settingsHiddenNotification => 'প্রেরক ও বার্তা লুকান';
+
+  @override
+  String get settingsSmartFilter => 'স্মার্ট ফিল্টার';
 }

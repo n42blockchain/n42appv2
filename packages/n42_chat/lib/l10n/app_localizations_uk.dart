@@ -5812,4 +5812,23 @@ class SUk extends S {
 
   @override
   String get groupPoints => 'Бали';
+
+  @override
+  String get settingsPrivacySecurity => 'Конфіденційність і безпека';
+
+  @override
+  String get settingsSystemAccounts => 'Система й облікові записи';
+
+  @override
+  String get settingsNotificationPrivacy => 'Конфіденційність сповіщень';
+
+  @override
+  String get settingsSenderOnly => 'Показувати лише відправника';
+
+  @override
+  String get settingsHiddenNotification =>
+      'Приховувати відправника й повідомлення';
+
+  @override
+  String get settingsSmartFilter => 'Розумний фільтр';
 }

@@ -5756,4 +5756,22 @@ class SEn extends S {
 
   @override
   String get groupPoints => 'Points';
+
+  @override
+  String get settingsPrivacySecurity => 'Privacy & Security';
+
+  @override
+  String get settingsSystemAccounts => 'System & Accounts';
+
+  @override
+  String get settingsNotificationPrivacy => 'Notification Privacy';
+
+  @override
+  String get settingsSenderOnly => 'Show sender only';
+
+  @override
+  String get settingsHiddenNotification => 'Hide sender and message';
+
+  @override
+  String get settingsSmartFilter => 'Smart Filter';
 }

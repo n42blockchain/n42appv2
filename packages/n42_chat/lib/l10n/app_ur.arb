@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "سیشن کا ڈیٹا نامکمل ہے، براہ کرم دوبارہ لاگ ان کریں۔",
   "authSsoNotConfigured": "اس سرور پر SSO لاگ اِن فراہم کنندگان ترتیب نہیں دیے گئے",
   "chatReadingMode": "مطالعہ موڈ",
-  "groupPoints": "پوائنٹس"
+  "groupPoints": "پوائنٹس",
+  "settingsPrivacySecurity": "رازداری اور سیکیورٹی",
+  "settingsSystemAccounts": "سسٹم اور اکاؤنٹس",
+  "settingsNotificationPrivacy": "اطلاعات کی رازداری",
+  "settingsSenderOnly": "صرف بھیجنے والے کو دکھائیں",
+  "settingsHiddenNotification": "بھیجنے والے اور پیغام کو چھپائیں",
+  "settingsSmartFilter": "اسمارٹ فلٹر"
 }

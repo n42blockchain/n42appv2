@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "सत्र डेटा अधूरा, कृपया पुनः लॉगिन करें",
   "authSsoNotConfigured": "इस सर्वर पर SSO लॉगिन प्रदाता कॉन्फ़िगर नहीं किए गए हैं",
   "chatReadingMode": "पठन मोड",
-  "groupPoints": "अंक"
+  "groupPoints": "अंक",
+  "settingsPrivacySecurity": "गोपनीयता और सुरक्षा",
+  "settingsSystemAccounts": "सिस्टम और खाते",
+  "settingsNotificationPrivacy": "सूचना गोपनीयता",
+  "settingsSenderOnly": "केवल प्रेषक दिखाएँ",
+  "settingsHiddenNotification": "प्रेषक और संदेश छिपाएँ",
+  "settingsSmartFilter": "स्मार्ट फ़िल्टर"
 }

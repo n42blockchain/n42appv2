@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "بيانات الجلسة غير كاملة، يرجى تسجيل الدخول مرة أخرى",
   "authSsoNotConfigured": "لم يُعِدّ هذا الخادم أي مزوّد لتسجيل الدخول عبر SSO",
   "chatReadingMode": "وضع القراءة",
-  "groupPoints": "النقاط"
+  "groupPoints": "النقاط",
+  "settingsPrivacySecurity": "الخصوصية والأمان",
+  "settingsSystemAccounts": "النظام والحسابات",
+  "settingsNotificationPrivacy": "خصوصية الإشعارات",
+  "settingsSenderOnly": "إظهار المرسل فقط",
+  "settingsHiddenNotification": "إخفاء المرسل والرسالة",
+  "settingsSmartFilter": "التصفية الذكية"
 }

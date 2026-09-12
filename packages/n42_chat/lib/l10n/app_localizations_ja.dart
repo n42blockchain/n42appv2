@@ -5666,4 +5666,22 @@ class SJa extends S {
 
   @override
   String get groupPoints => 'ポイント';
+
+  @override
+  String get settingsPrivacySecurity => 'プライバシーとセキュリティ';
+
+  @override
+  String get settingsSystemAccounts => 'システムとアカウント';
+
+  @override
+  String get settingsNotificationPrivacy => '通知のプライバシー';
+
+  @override
+  String get settingsSenderOnly => '送信者のみ表示';
+
+  @override
+  String get settingsHiddenNotification => '送信者とメッセージを非表示';
+
+  @override
+  String get settingsSmartFilter => 'スマートフィルター';
 }

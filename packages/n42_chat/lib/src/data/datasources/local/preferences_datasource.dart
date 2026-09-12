@@ -8,6 +8,7 @@ import '../../../domain/entities/message_entity.dart';
 import '../../../domain/entities/scheduled_message_draft.dart';
 import '../../../domain/entities/user_profile_entity.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/preference_write_utils.dart';
 
 /// 偏好设置数据源
 ///
@@ -20,8 +21,7 @@ class PreferencesDataSource {
   static const String _keyNotificationSettings =
       'n42_chat_notification_settings';
   static const String _keyStrongReminders = 'n42_chat_strong_reminders';
-  static const String _keyPrivacyMuteRestore =
-      'n42_chat_privacy_mute_restore';
+  static const String _keyPrivacyMuteRestore = 'n42_chat_privacy_mute_restore';
   static const String _keyLocallyDeletedMessages =
       'n42_chat_locally_deleted_messages';
   static const String _keyMessageDestructionTimes =
@@ -91,7 +91,7 @@ class PreferencesDataSource {
     };
 
     final p = await prefs;
-    await p.setString(_keyAppearanceSettings, jsonEncode(data));
+    await saveStringPreference(p, _keyAppearanceSettings, jsonEncode(data));
 
     prefsLog('Appearance settings saved');
   }
@@ -164,7 +164,8 @@ class PreferencesDataSource {
     NotificationSettings settings,
   ) async {
     final p = await prefs;
-    await p.setString(
+    await saveStringPreference(
+      p,
       _keyNotificationSettings,
       jsonEncode({
         'enabled': settings.enabled,
@@ -1088,7 +1089,9 @@ class PreferencesDataSource {
   Future<void> rememberPrivacyMuteOrigin(String roomId, bool wasMuted) async {
     try {
       final p = await prefs;
-      final map = _decodePrivacyMuteRestore(p.getString(_keyPrivacyMuteRestore));
+      final map = _decodePrivacyMuteRestore(
+        p.getString(_keyPrivacyMuteRestore),
+      );
       if (map.containsKey(roomId)) return;
       map[roomId] = wasMuted;
       await p.setString(_keyPrivacyMuteRestore, jsonEncode(map));
@@ -1104,7 +1107,9 @@ class PreferencesDataSource {
   Future<bool?> takePrivacyMuteOrigin(String roomId) async {
     try {
       final p = await prefs;
-      final map = _decodePrivacyMuteRestore(p.getString(_keyPrivacyMuteRestore));
+      final map = _decodePrivacyMuteRestore(
+        p.getString(_keyPrivacyMuteRestore),
+      );
       if (!map.containsKey(roomId)) return null;
       final value = map.remove(roomId);
       await p.setString(_keyPrivacyMuteRestore, jsonEncode(map));

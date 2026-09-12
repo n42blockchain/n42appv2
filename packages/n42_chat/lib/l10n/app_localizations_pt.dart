@@ -5815,6 +5815,24 @@ class SPt extends S {
 
   @override
   String get groupPoints => 'Pontos';
+
+  @override
+  String get settingsPrivacySecurity => 'Privacidade e segurança';
+
+  @override
+  String get settingsSystemAccounts => 'Sistema e contas';
+
+  @override
+  String get settingsNotificationPrivacy => 'Privacidade das notificações';
+
+  @override
+  String get settingsSenderOnly => 'Mostrar apenas o remetente';
+
+  @override
+  String get settingsHiddenNotification => 'Ocultar remetente e mensagem';
+
+  @override
+  String get settingsSmartFilter => 'Filtro inteligente';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11628,4 +11646,22 @@ class SPtBr extends SPt {
 
   @override
   String get groupPoints => 'Pontos';
+
+  @override
+  String get settingsPrivacySecurity => 'Privacidade e segurança';
+
+  @override
+  String get settingsSystemAccounts => 'Sistema e contas';
+
+  @override
+  String get settingsNotificationPrivacy => 'Privacidade das notificações';
+
+  @override
+  String get settingsSenderOnly => 'Mostrar apenas o remetente';
+
+  @override
+  String get settingsHiddenNotification => 'Ocultar remetente e mensagem';
+
+  @override
+  String get settingsSmartFilter => 'Filtro inteligente';
 }

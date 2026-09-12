@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "세션이 만료되었습니다. 다시 로그인하세요.",
   "blocAuthSessionIncomplete": "세션 데이터가 불완전합니다. 다시 로그인하세요.",
   "chatReadingMode": "읽기 모드",
-  "groupPoints": "포인트"
+  "groupPoints": "포인트",
+  "settingsPrivacySecurity": "개인정보 및 보안",
+  "settingsSystemAccounts": "시스템 및 계정",
+  "settingsNotificationPrivacy": "알림 개인정보 보호",
+  "settingsSenderOnly": "보낸 사람만 표시",
+  "settingsHiddenNotification": "보낸 사람과 메시지 숨기기",
+  "settingsSmartFilter": "스마트 필터"
 }

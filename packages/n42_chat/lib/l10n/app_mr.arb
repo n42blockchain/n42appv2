@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "सत्र कालबाह्य झाले, कृपया पुन्हा लॉग इन करा",
   "blocAuthSessionIncomplete": "सत्र डेटा अपूर्ण आहे, कृपया पुन्हा लॉग इन करा",
   "chatReadingMode": "वाचन मोड",
-  "groupPoints": "गुण"
+  "groupPoints": "गुण",
+  "settingsPrivacySecurity": "गोपनीयता आणि सुरक्षा",
+  "settingsSystemAccounts": "सिस्टम आणि खाती",
+  "settingsNotificationPrivacy": "सूचना गोपनीयता",
+  "settingsSenderOnly": "फक्त पाठवणारा दाखवा",
+  "settingsHiddenNotification": "पाठवणारा आणि संदेश लपवा",
+  "settingsSmartFilter": "स्मार्ट फिल्टर"
 }

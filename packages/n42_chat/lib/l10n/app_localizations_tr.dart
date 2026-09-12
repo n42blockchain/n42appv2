@@ -5788,4 +5788,22 @@ class STr extends S {
 
   @override
   String get groupPoints => 'Puanlar';
+
+  @override
+  String get settingsPrivacySecurity => 'Gizlilik ve Güvenlik';
+
+  @override
+  String get settingsSystemAccounts => 'Sistem ve Hesaplar';
+
+  @override
+  String get settingsNotificationPrivacy => 'Bildirim Gizliliği';
+
+  @override
+  String get settingsSenderOnly => 'Yalnızca göndereni göster';
+
+  @override
+  String get settingsHiddenNotification => 'Göndereni ve mesajı gizle';
+
+  @override
+  String get settingsSmartFilter => 'Akıllı Filtre';
 }

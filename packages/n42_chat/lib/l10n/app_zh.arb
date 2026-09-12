@@ -2134,5 +2134,11 @@
   "blocAuthSessionExpired": "會話已失效，請重新登錄",
   "blocAuthSessionIncomplete": "會話數據不完整，請重新登錄",
   "chatReadingMode": "阅读模式",
-  "groupPoints": "积分"
+  "groupPoints": "积分",
+  "settingsPrivacySecurity": "隐私与安全",
+  "settingsSystemAccounts": "系统与账号",
+  "settingsNotificationPrivacy": "通知隐私",
+  "settingsSenderOnly": "仅显示发送者",
+  "settingsHiddenNotification": "隐藏发送者和消息",
+  "settingsSmartFilter": "智能过滤"
 }

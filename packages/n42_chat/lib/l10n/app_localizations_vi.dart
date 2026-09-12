@@ -5771,4 +5771,22 @@ class SVi extends S {
 
   @override
   String get groupPoints => 'Điểm';
+
+  @override
+  String get settingsPrivacySecurity => 'Quyền riêng tư và bảo mật';
+
+  @override
+  String get settingsSystemAccounts => 'Hệ thống và tài khoản';
+
+  @override
+  String get settingsNotificationPrivacy => 'Quyền riêng tư thông báo';
+
+  @override
+  String get settingsSenderOnly => 'Chỉ hiển thị người gửi';
+
+  @override
+  String get settingsHiddenNotification => 'Ẩn người gửi và tin nhắn';
+
+  @override
+  String get settingsSmartFilter => 'Bộ lọc thông minh';
 }

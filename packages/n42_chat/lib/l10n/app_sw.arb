@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Kipindi kimekwisha, tafadhali ingia tena",
   "blocAuthSessionIncomplete": "Data ya kipindi haijakamilika, tafadhali ingia tena",
   "chatReadingMode": "Hali ya kusoma",
-  "groupPoints": "Pointi"
+  "groupPoints": "Pointi",
+  "settingsPrivacySecurity": "Faragha na Usalama",
+  "settingsSystemAccounts": "Mfumo na Akaunti",
+  "settingsNotificationPrivacy": "Faragha ya Arifa",
+  "settingsSenderOnly": "Onyesha mtumaji pekee",
+  "settingsHiddenNotification": "Ficha mtumaji na ujumbe",
+  "settingsSmartFilter": "Kichujio Mahiri"
 }

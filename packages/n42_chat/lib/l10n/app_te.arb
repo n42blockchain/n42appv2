@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "సెషన్ గడువు ముగిసింది, దయచేసి మళ్లీ లాగిన్ చేయండి",
   "blocAuthSessionIncomplete": "సెషన్ డేటా అసంపూర్తిగా ఉంది, దయచేసి మళ్లీ లాగిన్ చేయండి",
   "chatReadingMode": "పఠన మోడ్",
-  "groupPoints": "పాయింట్లు"
+  "groupPoints": "పాయింట్లు",
+  "settingsPrivacySecurity": "గోప్యత మరియు భద్రత",
+  "settingsSystemAccounts": "సిస్టమ్ మరియు ఖాతాలు",
+  "settingsNotificationPrivacy": "నోటిఫికేషన్ గోప్యత",
+  "settingsSenderOnly": "పంపినవారిని మాత్రమే చూపించు",
+  "settingsHiddenNotification": "పంపినవారిని మరియు సందేశాన్ని దాచు",
+  "settingsSmartFilter": "స్మార్ట్ ఫిల్టర్"
 }

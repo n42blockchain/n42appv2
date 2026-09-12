@@ -22,6 +22,7 @@ import '../bridge/bridge_list_page.dart';
 import '../profile/set_username_page.dart';
 import 'account_switch_page.dart';
 import 'notification_settings_page.dart';
+import 'settings_navigation.dart';
 import 'security_settings_page.dart';
 
 class SystemAccountsPage extends StatefulWidget {
@@ -138,9 +139,11 @@ class _SystemAccountsPageState extends State<SystemAccountsPage> {
       return;
     }
 
-    await Navigator.of(
+    await SettingsNavigation.page(
       context,
-    ).push(MaterialPageRoute<void>(builder: (_) => const AccountSwitchPage()));
+      const AccountSwitchPage(),
+      needsAuth: true,
+    );
     if (!mounted) {
       return;
     }
@@ -152,9 +155,9 @@ class _SystemAccountsPageState extends State<SystemAccountsPage> {
       MaterialPageRoute<void>(
         builder: (_) => NotificationSettingsPage(
           settings: _notificationSettings,
-          onSave: (settings) {
+          onSave: (settings) async {
+            await N42Chat.applyNotificationSettings(settings);
             _notificationSettings = settings;
-            unawaited(N42Chat.applyNotificationSettings(settings));
           },
         ),
       ),

@@ -10702,6 +10702,42 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Points'**
   String get groupPoints;
+
+  /// No description provided for @settingsPrivacySecurity.
+  ///
+  /// In en, this message translates to:
+  /// **'Privacy & Security'**
+  String get settingsPrivacySecurity;
+
+  /// No description provided for @settingsSystemAccounts.
+  ///
+  /// In en, this message translates to:
+  /// **'System & Accounts'**
+  String get settingsSystemAccounts;
+
+  /// No description provided for @settingsNotificationPrivacy.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification Privacy'**
+  String get settingsNotificationPrivacy;
+
+  /// No description provided for @settingsSenderOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Show sender only'**
+  String get settingsSenderOnly;
+
+  /// No description provided for @settingsHiddenNotification.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide sender and message'**
+  String get settingsHiddenNotification;
+
+  /// No description provided for @settingsSmartFilter.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart Filter'**
+  String get settingsSmartFilter;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

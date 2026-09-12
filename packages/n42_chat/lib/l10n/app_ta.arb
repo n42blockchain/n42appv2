@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "அமர்வு காலாவதியானது, மீண்டும் உள்நுழையவும்",
   "blocAuthSessionIncomplete": "அமர்வு தரவு முழுமையடையவில்லை, மீண்டும் உள்நுழையவும்",
   "chatReadingMode": "வாசிப்பு முறை",
-  "groupPoints": "புள்ளிகள்"
+  "groupPoints": "புள்ளிகள்",
+  "settingsPrivacySecurity": "தனியுரிமை மற்றும் பாதுகாப்பு",
+  "settingsSystemAccounts": "அமைப்பு மற்றும் கணக்குகள்",
+  "settingsNotificationPrivacy": "அறிவிப்புத் தனியுரிமை",
+  "settingsSenderOnly": "அனுப்புநரை மட்டும் காட்டு",
+  "settingsHiddenNotification": "அனுப்புநரையும் செய்தியையும் மறை",
+  "settingsSmartFilter": "ஸ்மார்ட் வடிகட்டி"
 }

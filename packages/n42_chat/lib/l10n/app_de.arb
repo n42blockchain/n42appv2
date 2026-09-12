@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Sitzung abgelaufen, bitte melden Sie sich erneut an",
   "blocAuthSessionIncomplete": "Sitzungsdaten unvollständig, bitte melden Sie sich erneut an",
   "chatReadingMode": "Lesemodus",
-  "groupPoints": "Punkte"
+  "groupPoints": "Punkte",
+  "settingsPrivacySecurity": "Datenschutz & Sicherheit",
+  "settingsSystemAccounts": "System & Konten",
+  "settingsNotificationPrivacy": "Benachrichtigungsdatenschutz",
+  "settingsSenderOnly": "Nur Absender anzeigen",
+  "settingsHiddenNotification": "Absender und Nachricht ausblenden",
+  "settingsSmartFilter": "Intelligenter Filter"
 }

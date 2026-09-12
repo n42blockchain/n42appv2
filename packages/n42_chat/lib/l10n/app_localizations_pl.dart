@@ -5820,4 +5820,22 @@ class SPl extends S {
 
   @override
   String get groupPoints => 'Punkty';
+
+  @override
+  String get settingsPrivacySecurity => 'Prywatność i bezpieczeństwo';
+
+  @override
+  String get settingsSystemAccounts => 'System i konta';
+
+  @override
+  String get settingsNotificationPrivacy => 'Prywatność powiadomień';
+
+  @override
+  String get settingsSenderOnly => 'Pokaż tylko nadawcę';
+
+  @override
+  String get settingsHiddenNotification => 'Ukryj nadawcę i wiadomość';
+
+  @override
+  String get settingsSmartFilter => 'Inteligentny filtr';
 }

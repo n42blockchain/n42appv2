@@ -5644,6 +5644,24 @@ class SZh extends S {
 
   @override
   String get groupPoints => '积分';
+
+  @override
+  String get settingsPrivacySecurity => '隐私与安全';
+
+  @override
+  String get settingsSystemAccounts => '系统与账号';
+
+  @override
+  String get settingsNotificationPrivacy => '通知隐私';
+
+  @override
+  String get settingsSenderOnly => '仅显示发送者';
+
+  @override
+  String get settingsHiddenNotification => '隐藏发送者和消息';
+
+  @override
+  String get settingsSmartFilter => '智能过滤';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11286,4 +11304,22 @@ class SZhTw extends SZh {
 
   @override
   String get groupPoints => '積分';
+
+  @override
+  String get settingsPrivacySecurity => '隱私與安全';
+
+  @override
+  String get settingsSystemAccounts => '系統與帳號';
+
+  @override
+  String get settingsNotificationPrivacy => '通知隱私';
+
+  @override
+  String get settingsSenderOnly => '僅顯示傳送者';
+
+  @override
+  String get settingsHiddenNotification => '隱藏傳送者和訊息';
+
+  @override
+  String get settingsSmartFilter => '智慧篩選';
 }

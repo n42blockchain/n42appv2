@@ -2746,5 +2746,11 @@
   "blocAuthSessionIncomplete": "সেশন ডেটা অসম্পূর্ণ, অনুগ্রহ করে আবার লগইন করুন",
   "authSsoNotConfigured": "এই সার্ভারে SSO লগইন প্রদানকারী কনফিগার করা নেই",
   "chatReadingMode": "পড়ার মোড",
-  "groupPoints": "পয়েন্ট"
+  "groupPoints": "পয়েন্ট",
+  "settingsPrivacySecurity": "গোপনীয়তা ও নিরাপত্তা",
+  "settingsSystemAccounts": "সিস্টেম ও অ্যাকাউন্ট",
+  "settingsNotificationPrivacy": "বিজ্ঞপ্তির গোপনীয়তা",
+  "settingsSenderOnly": "শুধু প্রেরক দেখান",
+  "settingsHiddenNotification": "প্রেরক ও বার্তা লুকান",
+  "settingsSmartFilter": "স্মার্ট ফিল্টার"
 }

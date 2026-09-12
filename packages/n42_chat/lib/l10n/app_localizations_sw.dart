@@ -5813,4 +5813,22 @@ class SSw extends S {
 
   @override
   String get groupPoints => 'Pointi';
+
+  @override
+  String get settingsPrivacySecurity => 'Faragha na Usalama';
+
+  @override
+  String get settingsSystemAccounts => 'Mfumo na Akaunti';
+
+  @override
+  String get settingsNotificationPrivacy => 'Faragha ya Arifa';
+
+  @override
+  String get settingsSenderOnly => 'Onyesha mtumaji pekee';
+
+  @override
+  String get settingsHiddenNotification => 'Ficha mtumaji na ujumbe';
+
+  @override
+  String get settingsSmartFilter => 'Kichujio Mahiri';
 }

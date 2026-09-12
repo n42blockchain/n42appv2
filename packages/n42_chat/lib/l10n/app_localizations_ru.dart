@@ -5810,4 +5810,22 @@ class SRu extends S {
 
   @override
   String get groupPoints => 'Баллы';
+
+  @override
+  String get settingsPrivacySecurity => 'Конфиденциальность и безопасность';
+
+  @override
+  String get settingsSystemAccounts => 'Система и аккаунты';
+
+  @override
+  String get settingsNotificationPrivacy => 'Конфиденциальность уведомлений';
+
+  @override
+  String get settingsSenderOnly => 'Показывать только отправителя';
+
+  @override
+  String get settingsHiddenNotification => 'Скрывать отправителя и сообщение';
+
+  @override
+  String get settingsSmartFilter => 'Умный фильтр';
 }

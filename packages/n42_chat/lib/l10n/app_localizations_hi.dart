@@ -5782,4 +5782,22 @@ class SHi extends S {
 
   @override
   String get groupPoints => 'अंक';
+
+  @override
+  String get settingsPrivacySecurity => 'गोपनीयता और सुरक्षा';
+
+  @override
+  String get settingsSystemAccounts => 'सिस्टम और खाते';
+
+  @override
+  String get settingsNotificationPrivacy => 'सूचना गोपनीयता';
+
+  @override
+  String get settingsSenderOnly => 'केवल प्रेषक दिखाएँ';
+
+  @override
+  String get settingsHiddenNotification => 'प्रेषक और संदेश छिपाएँ';
+
+  @override
+  String get settingsSmartFilter => 'स्मार्ट फ़िल्टर';
 }

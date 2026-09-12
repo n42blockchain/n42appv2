@@ -5824,4 +5824,22 @@ class SEs extends S {
 
   @override
   String get groupPoints => 'Puntos';
+
+  @override
+  String get settingsPrivacySecurity => 'Privacidad y seguridad';
+
+  @override
+  String get settingsSystemAccounts => 'Sistema y cuentas';
+
+  @override
+  String get settingsNotificationPrivacy => 'Privacidad de notificaciones';
+
+  @override
+  String get settingsSenderOnly => 'Mostrar solo el remitente';
+
+  @override
+  String get settingsHiddenNotification => 'Ocultar remitente y mensaje';
+
+  @override
+  String get settingsSmartFilter => 'Filtro inteligente';
 }

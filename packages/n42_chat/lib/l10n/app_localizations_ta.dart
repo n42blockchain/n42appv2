@@ -5845,4 +5845,22 @@ class STa extends S {
 
   @override
   String get groupPoints => 'புள்ளிகள்';
+
+  @override
+  String get settingsPrivacySecurity => 'தனியுரிமை மற்றும் பாதுகாப்பு';
+
+  @override
+  String get settingsSystemAccounts => 'அமைப்பு மற்றும் கணக்குகள்';
+
+  @override
+  String get settingsNotificationPrivacy => 'அறிவிப்புத் தனியுரிமை';
+
+  @override
+  String get settingsSenderOnly => 'அனுப்புநரை மட்டும் காட்டு';
+
+  @override
+  String get settingsHiddenNotification => 'அனுப்புநரையும் செய்தியையும் மறை';
+
+  @override
+  String get settingsSmartFilter => 'ஸ்மார்ட் வடிகட்டி';
 }

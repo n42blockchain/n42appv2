@@ -5795,4 +5795,22 @@ class SUr extends S {
 
   @override
   String get groupPoints => 'پوائنٹس';
+
+  @override
+  String get settingsPrivacySecurity => 'رازداری اور سیکیورٹی';
+
+  @override
+  String get settingsSystemAccounts => 'سسٹم اور اکاؤنٹس';
+
+  @override
+  String get settingsNotificationPrivacy => 'اطلاعات کی رازداری';
+
+  @override
+  String get settingsSenderOnly => 'صرف بھیجنے والے کو دکھائیں';
+
+  @override
+  String get settingsHiddenNotification => 'بھیجنے والے اور پیغام کو چھپائیں';
+
+  @override
+  String get settingsSmartFilter => 'اسمارٹ فلٹر';
 }

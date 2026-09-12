@@ -5830,4 +5830,22 @@ class SDe extends S {
 
   @override
   String get groupPoints => 'Punkte';
+
+  @override
+  String get settingsPrivacySecurity => 'Datenschutz & Sicherheit';
+
+  @override
+  String get settingsSystemAccounts => 'System & Konten';
+
+  @override
+  String get settingsNotificationPrivacy => 'Benachrichtigungsdatenschutz';
+
+  @override
+  String get settingsSenderOnly => 'Nur Absender anzeigen';
+
+  @override
+  String get settingsHiddenNotification => 'Absender und Nachricht ausblenden';
+
+  @override
+  String get settingsSmartFilter => 'Intelligenter Filter';
 }

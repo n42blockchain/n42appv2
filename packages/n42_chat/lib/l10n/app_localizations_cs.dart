@@ -5795,4 +5795,22 @@ class SCs extends S {
 
   @override
   String get groupPoints => 'Body';
+
+  @override
+  String get settingsPrivacySecurity => 'Soukromí a zabezpečení';
+
+  @override
+  String get settingsSystemAccounts => 'Systém a účty';
+
+  @override
+  String get settingsNotificationPrivacy => 'Soukromí oznámení';
+
+  @override
+  String get settingsSenderOnly => 'Zobrazit pouze odesílatele';
+
+  @override
+  String get settingsHiddenNotification => 'Skrýt odesílatele a zprávu';
+
+  @override
+  String get settingsSmartFilter => 'Chytrý filtr';
 }

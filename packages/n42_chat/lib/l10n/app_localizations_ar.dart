@@ -5759,4 +5759,22 @@ class SAr extends S {
 
   @override
   String get groupPoints => 'النقاط';
+
+  @override
+  String get settingsPrivacySecurity => 'الخصوصية والأمان';
+
+  @override
+  String get settingsSystemAccounts => 'النظام والحسابات';
+
+  @override
+  String get settingsNotificationPrivacy => 'خصوصية الإشعارات';
+
+  @override
+  String get settingsSenderOnly => 'إظهار المرسل فقط';
+
+  @override
+  String get settingsHiddenNotification => 'إخفاء المرسل والرسالة';
+
+  @override
+  String get settingsSmartFilter => 'التصفية الذكية';
 }

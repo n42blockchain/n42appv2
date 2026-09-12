@@ -5806,4 +5806,22 @@ class SIt extends S {
 
   @override
   String get groupPoints => 'Punti';
+
+  @override
+  String get settingsPrivacySecurity => 'Privacy e sicurezza';
+
+  @override
+  String get settingsSystemAccounts => 'Sistema e account';
+
+  @override
+  String get settingsNotificationPrivacy => 'Privacy delle notifiche';
+
+  @override
+  String get settingsSenderOnly => 'Mostra solo il mittente';
+
+  @override
+  String get settingsHiddenNotification => 'Nascondi mittente e messaggio';
+
+  @override
+  String get settingsSmartFilter => 'Filtro intelligente';
 }

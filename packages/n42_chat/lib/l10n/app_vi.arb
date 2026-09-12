@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Phiên đã hết hạn, vui lòng đăng nhập lại",
   "blocAuthSessionIncomplete": "Dữ liệu phiên không đầy đủ, vui lòng đăng nhập lại",
   "chatReadingMode": "Chế độ đọc",
-  "groupPoints": "Điểm"
+  "groupPoints": "Điểm",
+  "settingsPrivacySecurity": "Quyền riêng tư và bảo mật",
+  "settingsSystemAccounts": "Hệ thống và tài khoản",
+  "settingsNotificationPrivacy": "Quyền riêng tư thông báo",
+  "settingsSenderOnly": "Chỉ hiển thị người gửi",
+  "settingsHiddenNotification": "Ẩn người gửi và tin nhắn",
+  "settingsSmartFilter": "Bộ lọc thông minh"
 }

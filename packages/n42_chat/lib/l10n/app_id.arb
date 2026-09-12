@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Sesi telah habis, silakan login kembali",
   "blocAuthSessionIncomplete": "Data sesi tidak lengkap, silakan login kembali",
   "chatReadingMode": "Mode baca",
-  "groupPoints": "Poin"
+  "groupPoints": "Poin",
+  "settingsPrivacySecurity": "Privasi & Keamanan",
+  "settingsSystemAccounts": "Sistem & Akun",
+  "settingsNotificationPrivacy": "Privasi Notifikasi",
+  "settingsSenderOnly": "Tampilkan pengirim saja",
+  "settingsHiddenNotification": "Sembunyikan pengirim dan pesan",
+  "settingsSmartFilter": "Filter Cerdas"
 }

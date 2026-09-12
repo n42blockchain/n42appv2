@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../domain/entities/notification_filter_rules.dart';
+import '../utils/preference_write_utils.dart';
 
 /// 智能通知过滤规则持久化（SharedPreferences，轻量）
 ///
@@ -17,6 +18,6 @@ class NotificationFilterStore {
   /// 保存规则
   Future<void> save(NotificationFilterRules rules) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_key, rules.encode());
+    await saveStringPreference(prefs, _key, rules.encode());
   }
 }

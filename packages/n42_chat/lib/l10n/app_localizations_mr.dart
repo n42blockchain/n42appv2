@@ -5780,4 +5780,22 @@ class SMr extends S {
 
   @override
   String get groupPoints => 'गुण';
+
+  @override
+  String get settingsPrivacySecurity => 'गोपनीयता आणि सुरक्षा';
+
+  @override
+  String get settingsSystemAccounts => 'सिस्टम आणि खाती';
+
+  @override
+  String get settingsNotificationPrivacy => 'सूचना गोपनीयता';
+
+  @override
+  String get settingsSenderOnly => 'फक्त पाठवणारा दाखवा';
+
+  @override
+  String get settingsHiddenNotification => 'पाठवणारा आणि संदेश लपवा';
+
+  @override
+  String get settingsSmartFilter => 'स्मार्ट फिल्टर';
 }

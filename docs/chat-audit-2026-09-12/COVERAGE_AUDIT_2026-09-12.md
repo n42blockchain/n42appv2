@@ -44,3 +44,34 @@ The exclusion view is informational; CI thresholds were not changed. Raw coverag
 | services/ringtone | 1 | 50 | 2.00% |
 
 The largest remaining gaps are UI pages, native/Matrix adapters, DI and encrypted multi-device flows. Prioritize real route/callback/permission/error-recovery tests. Broad widget construction counts cannot certify delivery, storage or provider behavior.
+
+
+## Settings follow-up at `16fe83a`
+
+The final committed source passed **5,867 tests; one credential-dependent live smoke skipped**. The settings batch adds 40 behavior tests; the focused run including the existing About test passed 41.
+
+Command: `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=6 --reporter expanded`. The initial 256-file shell limit was exhausted; no coverage from that interrupted run is reported here.
+
+| Scope | First audit baseline | Settings follow-up |
+|---|---:|---:|
+| Raw lcov (including generated code) | 23,507/130,813 (17.97%) | 25,212/131,079 (19.23%) |
+| Non-generated reference view | 22,975/79,128 (29.04%) | 24,584/79,238 (31.03%) |
+| Settings pages | 664/4,768 (13.93%) | 2,067/4,916 (42.05%) |
+| Preferences data source | 500/656 (76.22%) | 502/658 (76.29%) |
+| Notification filter store | 0/6 (0.00%) | 6/6 (100.00%) |
+
+The raw total remains below the 70% CI target; the target and generated-code exclusions were not changed. The reference view is not used to replace the raw figure.
+
+Changed/new settings navigation and persistence surfaces:
+
+| Source | Covered/instrumented |
+|---|---:|
+| `lib/src/core/utils/preference_write_utils.dart` | 4/4 (100.00%) |
+| `lib/src/presentation/pages/settings/account_switch_page.dart` | 47/106 (44.34%) |
+| `lib/src/presentation/pages/settings/appearance_settings_page.dart` | 171/180 (95.00%) |
+| `lib/src/presentation/pages/settings/chat_settings_page.dart` | 32/33 (96.97%) |
+| `lib/src/presentation/pages/settings/notification_filter_page.dart` | 122/147 (82.99%) |
+| `lib/src/presentation/pages/settings/notification_settings_page.dart` | 142/195 (72.82%) |
+| `lib/src/presentation/pages/settings/settings_navigation.dart` | 40/42 (95.24%) |
+| `lib/src/presentation/pages/settings/settings_page.dart` | 185/244 (75.82%) |
+| `lib/src/presentation/pages/settings/system_accounts_page.dart` | 91/149 (61.07%) |

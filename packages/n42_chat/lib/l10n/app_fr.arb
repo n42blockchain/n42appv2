@@ -2746,5 +2746,11 @@
   "blocAuthSessionExpired": "Session expirée, veuillez vous reconnecter",
   "blocAuthSessionIncomplete": "Données de session incomplètes, veuillez vous reconnecter",
   "chatReadingMode": "Mode lecture",
-  "groupPoints": "Points"
+  "groupPoints": "Points",
+  "settingsPrivacySecurity": "Confidentialité et sécurité",
+  "settingsSystemAccounts": "Système et comptes",
+  "settingsNotificationPrivacy": "Confidentialité des notifications",
+  "settingsSenderOnly": "Afficher uniquement l’expéditeur",
+  "settingsHiddenNotification": "Masquer l’expéditeur et le message",
+  "settingsSmartFilter": "Filtre intelligent"
 }

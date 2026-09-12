@@ -5827,4 +5827,22 @@ class STe extends S {
 
   @override
   String get groupPoints => 'పాయింట్లు';
+
+  @override
+  String get settingsPrivacySecurity => 'గోప్యత మరియు భద్రత';
+
+  @override
+  String get settingsSystemAccounts => 'సిస్టమ్ మరియు ఖాతాలు';
+
+  @override
+  String get settingsNotificationPrivacy => 'నోటిఫికేషన్ గోప్యత';
+
+  @override
+  String get settingsSenderOnly => 'పంపినవారిని మాత్రమే చూపించు';
+
+  @override
+  String get settingsHiddenNotification => 'పంపినవారిని మరియు సందేశాన్ని దాచు';
+
+  @override
+  String get settingsSmartFilter => 'స్మార్ట్ ఫిల్టర్';
 }
