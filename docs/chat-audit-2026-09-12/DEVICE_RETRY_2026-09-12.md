@@ -13,7 +13,7 @@ The successful invocation omitted `--keep-app-running`. Flutter 3.44.8 calls `dr
 
 The normal app was reinstalled. Local app-container data cannot be assumed to survive that removal. Inspection of the replacement preferences showed that `flutter.n42_keychain_initialized` was absent. Since `lib/main.dart` clears the `n42wallet_prefs` keychain namespace on first initialization, further launches were paused. The existing replacement preferences were retained locally, only the initialization flag was set to true, and the on-device plist was read back to confirm it. This prevents the normal first-install cleanup path when that flag is observed; it does not recover removed app-container files or prove that earlier keychain data is intact. No wallet private keys or mnemonics were read or exported.
 
-Wallet and Chat data continuity on iPhone remains unverified. The user's newly established Android Chat session remains separate and was preserved during this retry.
+The user subsequently confirmed successful Chat login on iPhone. Current Chat login is restored on both phones; this does not establish preservation of earlier chat history or wallet data. Wallet and historical Chat data continuity on iPhone remains unverified. The user's newly established Android Chat session remains separate and was preserved during this retry.
 
 ## Prevention
 
@@ -25,4 +25,4 @@ Wallet and Chat data continuity on iPhone remains unverified. The user's newly e
 
 ## Normal app restoration
 
-The normal `lib/main.dart` Profile build (build 2026072643) compiled and installed successfully; `flutter run --profile --no-resident --disable-dds` returned exit 0. After tool exit, devicectl confirmed the main Runner process was still running. The initialized preference was read back as true after launch, and the temporary preference copies were removed. This confirms normal-app restoration and the flag, not the survival of previous wallet or Chat data; user confirmation remains pending.
+The normal `lib/main.dart` Profile build (build 2026072643) compiled and installed successfully; `flutter run --profile --no-resident --disable-dds` returned exit 0. After tool exit, devicectl confirmed the main Runner process was still running. The initialized preference was read back as true after launch, and the temporary preference copies were removed. This confirms normal-app restoration and the flag, not the survival of previous wallet or Chat data; the user has confirmed current Chat login, while wallet and historical-data confirmation remains pending.
