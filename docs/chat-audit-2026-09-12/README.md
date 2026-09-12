@@ -15,7 +15,7 @@
 USB 小米设备型号 25098RA98C，Android 16 / API 36。执行：
 
 ```sh
-flutter drive --driver=test_driver/chat_audit_device_test.dart --target=integration_test/chat_audit_device_test.dart -d <android-device> --no-pub
+./scripts/run_chat_device_acceptance.sh <device-id>
 ```
 
 通过。测试使用本地仓库夹具，不登录账号、不发真实消息；验证真实 Flutter 组件的入口、选中回调、菜单展开、阿拉伯语和无配置状态。不能据此认定真实 GIF 检索/对端贴纸收取/AI 生成已通过。
@@ -29,13 +29,23 @@ flutter drive --driver=test_driver/chat_audit_device_test.dart --target=integrat
 | 阿拉伯语首层 / 更多操作 | [首层](android-menu-compact-ar.png) · [展开](android-menu-expanded-ar.png) |
 | 阿拉伯语 AI 缺配置 | [截图](android-ai-unavailable-ar.png) |
 
-截图中的菜单背景属于隔离测试页面，并非完整会话截图。测试后已成功编译正常 `lib/main.dart` 入口的 Debug APK（build 2026072642），但两次恢复覆盖安装都被小米系统拒绝：`INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`。设备仍保留本轮测试入口，需要保持解锁并允许“通过 USB 安装”提示后再次覆盖安装；没有卸载或清除应用数据。
+截图中的菜单背景属于隔离测试页面，并非完整会话截图。初次恢复 Android 正常入口时，两次覆盖安装被系统拒绝；本次用户配合后 `adb install -r -t` 成功，已启动正常应用。用户随后登录 Chat，实际“我 → AI Assistant / Stickers”入口可打开；检查后回到消息列表，保留当前登录会话。真实账号截图仅留本机，没有提交到仓库。
 
-## iPhone 验收状态
+## iPhone 重试结果
 
-USB iPhone 13 可识别；本轮未安装成功。Xcode 编译后在签名 N42Extension 时返回 `errSecInternalComponent`。对两张 Apple Development 证书分别用临时可执行文件探测签名，也都失败；`security show-keychain-info` 返回 `User interaction not allowed`。因此是本次 Mac 进程访问私钥失败，不能以此前已授权或构建编译完成代替验收。
+本次已通过 iPhone 13 真机本地 UI 验收，保存 8 张截图。签名失败已定位为 Background 执行会话：同一证书在 GUI Terminal 签名成功，不能再归因于用户未解锁钥匙串。第一次调试连接重置后，使用 GUI Terminal 与 `--disable-dds` 重跑通过。
 
-需要 Mac 端解锁“登录”钥匙串，并允许对应 Apple Development 私钥被 codesign 使用；此后重跑同一驱动目标。没有修改签名证书或导出私钥。
+**验收发生应用卸载事故：** Flutter drive 默认测试后卸载应用，本次日志确认了 iPhone 的卸载。这可能清除应用容器中的本地数据；恢复正常安装不等于恢复这些数据。已恢复并验证初始化标记，以避免下一次启动额外执行遗留钥匙串清理；没有读取/导出钱包私钥或助记词。正常 Profile 应用已覆盖安装，工具退出后主进程保持运行，初始化标记仍为 true。钱包与 Chat 数据连续性仍须用户核实。修复脚本已强制 `--keep-app-running`，另有 10 项脚本与质量门禁回归通过。
+
+详见 [重试与恢复记录](DEVICE_RETRY_2026-09-12.md)。后续使用上面的保留应用脚本，测试后覆盖安装正常入口；iOS 签名从 Mac 的 GUI Terminal 执行。
+
+| iPhone 场景 | 截图 |
+|---|---|
+| 表情分栏 / 已安装贴纸 | [表情](ios-expression-en.png) · [贴纸](ios-stickers-en.png) |
+| GIF 未配置 | [截图](ios-gif-unavailable-en.png) |
+| 英文首层 / 展开 | [首层](ios-menu-compact-en.png) · [展开](ios-menu-expanded-en.png) |
+| 阿拉伯语首层 / 展开 | [首层](ios-menu-compact-ar.png) · [展开](ios-menu-expanded-ar.png) |
+| 阿拉伯语 AI 未配置 | [截图](ios-ai-unavailable-ar.png) |
 
 ## 明确未闭环项
 

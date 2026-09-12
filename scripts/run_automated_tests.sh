@@ -135,6 +135,7 @@ run_device() {
   if [[ "${PUBLISH_PORT:-0}" == "1" ]]; then
     flutter drive \
       --no-pub \
+      --keep-app-running \
       --driver=test_driver/integration_test.dart \
       --target=integration_test/device_full_flow_test.dart \
       -d "$DEVICE_ID" \

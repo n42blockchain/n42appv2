@@ -183,3 +183,7 @@ access before that device run can complete.
 The final review found that the relocate button moved the map without resetting the selected search result. Relocate now cancels/invalidate pending searches, clears the query, selects the real GPS result and updates the map center. The route-result regression verifies GPS latitude/longitude after relocation even when an older search completes.
 
 Host full suite: 4,163 passed; raw coverage 59,112/130,694 (45.23%). Host analyze: zero errors/warnings, 286 informational diagnostics. The host handoff removes the tracked Chat path override, pins the published audit commit and verifies resolved library/assets bytes against the cache. These host integration changes must be committed separately in n42appv2.
+
+## Follow-up evidence
+
+This snapshot describes the original plugin audit. The subsequent iPhone pass, signing-context diagnosis, unintended driver uninstall, and preservation fixes are recorded in [DEVICE_RETRY_2026-09-12.md](DEVICE_RETRY_2026-09-12.md). Data continuity is still a separate open verification item.
