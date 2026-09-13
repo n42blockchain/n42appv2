@@ -1,0 +1,40 @@
+{
+  "device": "Xiaomi 25098RA98C, Android 16/API 36",
+  "tested_build": "2.4.8+2026072647",
+  "chat_git_ref": "657a66bb1a5a5963f6460e5cc60b305fcc272de3",
+  "caseResults": {
+    "production media connection persists through background reopen": "passed",
+    "duplicate imports are idempotent and preserve the original body": "passed",
+    "pagination excludes the boundary and never leaks another room": "passed",
+    "metadata upserts retain absent fields and update archive checkpoint": "passed",
+    "quarter statistics and deletion update counts and full-text index": "passed",
+    "search filters hidden rooms before applying pagination": "passed",
+    "FTS operators are treated as user text rather than query syntax": "passed",
+    "empty and whitespace-only searches return no matches": "passed",
+    "empty database statistics and empty import are safe": "passed",
+    "default cleanup protects pinned files, thumbnails and cleaned records": "passed",
+    "cleanup combines age, room, category and minimum size filters": "passed",
+    "cleaned records retain download metadata but disappear from usage": "passed",
+    "room/category summaries and ranking match stored bytes": "passed",
+    "upsert updates existing media and pin changes alter cleanup eligibility": "passed",
+    "cleanup selects oldest access first and empty summaries remain zero": "passed",
+    "device poll composer validates, schedules and keeps quizzes single choice": "passed",
+    "device protected image and payment detail callbacks obey state": "passed",
+    "device registration keeps failed drafts and switches anonymous fields": "passed",
+    "audit expressions, compact actions, RTL and unavailable AI on device": "passed"
+  },
+  "screenshots_sha256": {
+    "android-coverage-poll-en.png": "e26ed1ef216870dd68410460e3e2de899ab4b991aa55afe0fd26e83f27deadf7",
+    "android-coverage-poll-ar.png": "8af4c9fce476142957947f5b9766e658b683263d54fb109fec857593cf181d06",
+    "android-coverage-protected-media.png": "f633cab1fd137d42b4c4243af2edf99d101cfff0f28b9efb5451e17ef1ba4235",
+    "android-coverage-anonymous-registration.png": "3ff23f82b5fc88a9438f9a1611e16cef4c5730b9dd6eaf2bff4f3fda58d3ae34",
+    "android-expression-en.png": "67b6e4175c7e876a742c217a603bbea868eacaf58035afe3feffb9cd26f0d822",
+    "android-stickers-en.png": "df8f662d974a5269653c4eea302a805c127f1e219d07f875251afca885e415ef",
+    "android-gif-unavailable-en.png": "29fc4627fddb798065c7941b7f7dca0d1960438d33d3b9f3f311181f13bc1c7f",
+    "android-menu-compact-en.png": "64bc4c7566468f7f837acc89d1c1ebd4d00b92b75fc233757a7c11185cd9f88f",
+    "android-menu-expanded-en.png": "ed9fe4b8a08c57e411ec7b04e7b67a7d06f8fc36d9829c221e5ad108441a9b30",
+    "android-menu-compact-ar.png": "aede0dad86eac894d65c25fce5e31b84105a1dc87ad16cf681368fb947f91de6",
+    "android-menu-expanded-ar.png": "d8215bab3c728bc5302c0897ee881cfa1ad89c60584fcd82b76bd487eec789d3",
+    "android-ai-unavailable-ar.png": "5a67deb206c0986895f6785531c49d9190ac0ff5bdaa1fb7826b46141f408025"
+  }
+}

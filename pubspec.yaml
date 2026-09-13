@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072647
+version: 2.4.8+2026072648
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -143,7 +143,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 58ed5f9b07277a211f84da505f6718c2716a8f86
+      ref: 657a66bb1a5a5963f6460e5cc60b305fcc272de3
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
@@ -173,6 +173,9 @@ dependency_overrides:
   flutter_secure_storage: ^10.0.0
 
 dev_dependencies:
+  path_provider_platform_interface: ^2.1.2
+  sqlcipher_flutter_libs: ^0.6.4
+  sqlite3: ^2.4.0
   flutter_test:
     sdk: flutter
   integration_test:
@@ -209,6 +212,10 @@ flutter:
     - assets/mining/
     - assets/chat/
     - assets/data/
+    # n42_chat reads these root paths for sticker rendering and uploads.
+    # Keep the compatibility copies in sync with the resolved Git dependency.
+    - assets/stickers/openmoji/
+    - assets/stickers/lottie/
 
 flutter_intl:
   enabled: true

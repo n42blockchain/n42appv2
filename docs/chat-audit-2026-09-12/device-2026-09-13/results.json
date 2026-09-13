@@ -1,0 +1,40 @@
+{
+  "device": "iPhone 13 Pro Max",
+  "tested_build": "2.4.8+2026072647",
+  "chat_git_ref": "657a66bb1a5a5963f6460e5cc60b305fcc272de3",
+  "caseResults": {
+    "production media connection persists through background reopen": "passed",
+    "duplicate imports are idempotent and preserve the original body": "passed",
+    "pagination excludes the boundary and never leaks another room": "passed",
+    "metadata upserts retain absent fields and update archive checkpoint": "passed",
+    "quarter statistics and deletion update counts and full-text index": "passed",
+    "search filters hidden rooms before applying pagination": "passed",
+    "FTS operators are treated as user text rather than query syntax": "passed",
+    "empty and whitespace-only searches return no matches": "passed",
+    "empty database statistics and empty import are safe": "passed",
+    "default cleanup protects pinned files, thumbnails and cleaned records": "passed",
+    "cleanup combines age, room, category and minimum size filters": "passed",
+    "cleaned records retain download metadata but disappear from usage": "passed",
+    "room/category summaries and ranking match stored bytes": "passed",
+    "upsert updates existing media and pin changes alter cleanup eligibility": "passed",
+    "cleanup selects oldest access first and empty summaries remain zero": "passed",
+    "device poll composer validates, schedules and keeps quizzes single choice": "passed",
+    "device protected image and payment detail callbacks obey state": "passed",
+    "device registration keeps failed drafts and switches anonymous fields": "passed",
+    "audit expressions, compact actions, RTL and unavailable AI on device": "passed"
+  },
+  "screenshots_sha256": {
+    "ios-coverage-poll-en.png": "34d16c2b2b09cce68ffedfe05a0ad30965f14412ac8e71bd5ba9ebb6c2f8feba",
+    "ios-coverage-poll-ar.png": "6fa191018127bf6c345e2baa1c699a10f8a01ad9f04e88798889764b1b254ed6",
+    "ios-coverage-protected-media.png": "fcfdbda46119765f1344b99a67b0ae955f6b3b8f6cd99ab5d85dd14b629cb894",
+    "ios-coverage-anonymous-registration.png": "fb4a405196b7951647ee6f6e37a73673a1220a890acc1958c211ec0c1bf99cca",
+    "ios-expression-en.png": "0c376346f56c773885fe447f170111ad859d1a03f74d28e35a1148bed5200be6",
+    "ios-stickers-en.png": "0f257a7de97fabc911600a73db2e968ec0ef88d5cb9669d76f994cbded5ec63d",
+    "ios-gif-unavailable-en.png": "146a48aa0e73d9ade10a364052cb56aa46e53593c6326718decd01c1747f7152",
+    "ios-menu-compact-en.png": "29c19b3998c5e07026dfdec712ebe2852d81ca84b98ff34d9a6bbbb2b38b2319",
+    "ios-menu-expanded-en.png": "a60d42f1e90662c67db6c8970cf8dc8b43666eb49013004a77921f66585791ef",
+    "ios-menu-compact-ar.png": "3541cc57f32da109e4adb917aedffc0d7a02f3a394b2a678442529d9e5f6df7e",
+    "ios-menu-expanded-ar.png": "0016910b95964fb9bb31c6656de8a4297d3cd4ca9788c23e2b6af66f5ecd4230",
+    "ios-ai-unavailable-ar.png": "4e25ab9a173f5f7adbcb3f8d39e0d3248cda481737baa0d10d3b5475c2a835b6"
+  }
+}

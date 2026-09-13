@@ -1,0 +1,17 @@
+Animated sticker assets (Lottie)
+================================
+
+The .json files in this directory are Lottie animations from
+Google's "Noto Animated Emoji" project, included unmodified as
+N42 Chat's built-in animated sticker pack.
+
+Source:   https://googlefonts.github.io/noto-emoji-animation/
+Project:  https://github.com/googlefonts/noto-emoji
+License:  Apache License, Version 2.0
+          https://www.apache.org/licenses/LICENSE-2.0
+
+Attribution: "Noto Animated Emoji" by Google.
+Licensed under the Apache License, Version 2.0.
+
+Files are named by their Unicode code point(s) (e.g. 1F600.json).
+No changes were made to the animations.

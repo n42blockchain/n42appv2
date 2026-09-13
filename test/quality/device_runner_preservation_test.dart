@@ -30,12 +30,17 @@ void main() {
       final result = await Process.run('bash', [
         'scripts/run_chat_device_acceptance.sh',
         'device-fixture',
+        'http://127.0.0.1:12345/fixture=/',
         '--profile',
         '--dart-define=LABEL=two words',
       ], environment: environment);
 
       expect(result.exitCode, 0, reason: '${result.stderr}');
       final args = await capturedArguments.readAsLines();
+      expect(
+        args,
+        contains('--use-existing-app=http://127.0.0.1:12345/fixture=/'),
+      );
       expect(args.first, 'drive');
       expect(args.last, '--keep-app-running');
       expect(args[args.indexOf('-d') + 1], 'device-fixture');
@@ -48,8 +53,19 @@ void main() {
     () async {
       for (final arguments in <List<String>>[
         [],
-        ['device-fixture', '--no-keep-app-running'],
-        ['device-fixture', '--keep-app-running=false'],
+        ['device-fixture'],
+        ['device-fixture', '--profile'],
+        ['device-fixture', 'http://127.0.0.1:12345/', '--no-keep-app-running'],
+        [
+          'device-fixture',
+          'http://127.0.0.1:12345/',
+          '--keep-app-running=false',
+        ],
+        [
+          'device-fixture',
+          'http://127.0.0.1:12345/',
+          '--use-existing-app=http://other/',
+        ],
       ]) {
         final result = await Process.run('bash', [
           'scripts/run_chat_device_acceptance.sh',
@@ -71,6 +87,7 @@ void main() {
           ...environment,
           'DEVICE_ID': 'device-fixture',
           'PUBLISH_PORT': '1',
+          'DEVICE_VM_SERVICE_URL': 'http://127.0.0.1:12345/fixture=/',
           'N42_E2E_CHAT_USERNAME': 'fixture-user',
           'N42_E2E_CHAT_PASSWORD': 'fixture-only',
         },
@@ -80,7 +97,30 @@ void main() {
       final args = await capturedArguments.readAsLines();
       expect(args.first, 'drive');
       expect(args, contains('--keep-app-running'));
+      expect(
+        args,
+        contains('--use-existing-app=http://127.0.0.1:12345/fixture=/'),
+      );
       expect(args, isNot(contains('--no-keep-app-running')));
+    },
+  );
+  test(
+    'full-flow drive refuses to install when no existing connection is supplied',
+    () async {
+      final result = await Process.run(
+        'bash',
+        ['scripts/run_automated_tests.sh', 'device'],
+        environment: {
+          ...environment,
+          'DEVICE_ID': 'device-fixture',
+          'PUBLISH_PORT': '1',
+          'DEVICE_VM_SERVICE_URL': '',
+          'N42_E2E_CHAT_USERNAME': 'fixture-user',
+          'N42_E2E_CHAT_PASSWORD': 'fixture-only',
+        },
+      );
+      expect(result.exitCode, 2);
+      expect(await capturedArguments.exists(), isFalse);
     },
   );
 }

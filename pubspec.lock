@@ -1974,8 +1974,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "58ed5f9b07277a211f84da505f6718c2716a8f86"
-      resolved-ref: "58ed5f9b07277a211f84da505f6718c2716a8f86"
+      ref: "657a66bb1a5a5963f6460e5cc60b305fcc272de3"
+      resolved-ref: "657a66bb1a5a5963f6460e5cc60b305fcc272de3"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -2108,7 +2108,7 @@ packages:
     source: hosted
     version: "2.2.2"
   path_provider_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: path_provider_platform_interface
       sha256: "484838772624c3a4b94f1e44a3e19897fee738f2d5c4ce448443b0417f7c9dda"
@@ -2817,7 +2817,7 @@ packages:
     source: hosted
     version: "3.4.0"
   sqlcipher_flutter_libs:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: sqlcipher_flutter_libs
       sha256: dd1fcc74d5baf3c36ad53e2652b2d06c9f8747494a3ccde0076e88b159dfe622
@@ -2825,7 +2825,7 @@ packages:
     source: hosted
     version: "0.6.8"
   sqlite3:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: sqlite3
       sha256: "3145bd74dcdb4fd6f5c6dda4d4e4490a8087d7f286a14dee5d37087290f0f8a2"

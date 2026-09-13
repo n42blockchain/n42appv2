@@ -1,5 +1,5 @@
 {
-  "git_ref": "58ed5f9b07277a211f84da505f6718c2716a8f86",
+  "git_ref": "657a66bb1a5a5963f6460e5cc60b305fcc272de3",
   "resolved_source": "git",
   "comparison": "resolved Git package lib/assets versus packages/n42_chat lib/assets",
   "file_count": 767,
@@ -188,7 +188,7 @@
     "lib/src/data/datasources/local/archive_database.dart": "59630e0eb18c634343b953bd0513acf010c180330b78f0fff22b1a7a50afd54f",
     "lib/src/data/datasources/local/archive_database.g.dart": "8b10ea152efb0eae123ead5e344937b64e5448e965132d899d071c85b27e75f4",
     "lib/src/data/datasources/local/local_red_packet_service.dart": "da152ee56d43ffea77b806720b4d956641da3b375d435cfc997379b062d69ef5",
-    "lib/src/data/datasources/local/media_metadata_database.dart": "b5f96072a60f6d6ccd2207947b195923c495aa5ab7cf072762f4aab328ebacea",
+    "lib/src/data/datasources/local/media_metadata_database.dart": "847638a8b9b97ff2edb0adb6b355c357a639dd52e97ca3c345141509a6055c00",
     "lib/src/data/datasources/local/media_metadata_database.g.dart": "d2d037bee135a27801ee997dcea07d0db493205023a11a568879624ef6d6dbdc",
     "lib/src/data/datasources/local/preferences_datasource.dart": "d289524391c1523bcad79d9db1a09a7f578e478198a9f69524eb7a203ab8090f",
     "lib/src/data/datasources/local/secure_storage_datasource.dart": "46ef2ab92d2bc0ce2b3d537dc4187d255aa60c8ee9fa70503e4e61f2fd023410",

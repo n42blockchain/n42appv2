@@ -127,11 +127,12 @@ unset N42_E2E_CHAT_USERNAME N42_E2E_CHAT_PASSWORD
 ./scripts/run_automated_tests.sh format
 ```
 
-无线连接的 iOS 设备必须发布 VM Service 端口：
+驱动模式先显式覆盖安装并启动测试应用，再连接其 VM Service；脚本不再自动安装，以避免覆盖失败时 Flutter 卸载重装。无线 iOS 还需发布端口：
 
 ```bash
 DEVICE_ID=<wireless-ios-id> \
 PUBLISH_PORT=1 \
+DEVICE_VM_SERVICE_URL=<running-test-app-vm-service-uri> \
 ./scripts/run_automated_tests.sh device
 ```
 

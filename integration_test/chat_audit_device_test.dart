@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'chat_coverage_device_cases.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get_it/get_it.dart';
@@ -33,17 +35,27 @@ class _StickerFixture implements IStickerRepository {
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  tearDownAll(() {
+    binding.reportData ??= <String, dynamic>{};
+    binding.reportData!['caseResults'] = binding.results.map(
+      (name, result) =>
+          MapEntry(name, result == 'success' ? 'passed' : 'failed'),
+    );
+  });
   var converted = false;
   Future<void> capture(WidgetTester tester, String name) async {
     if (Platform.isAndroid && !converted) {
       await binding.convertFlutterSurfaceToImage();
       converted = true;
+      addTearDown(() => converted = false);
     }
     await tester.pumpAndSettle();
     await binding.takeScreenshot(
       '${Platform.isAndroid ? 'android' : 'ios'}-$name',
     );
   }
+
+  registerChatCoverageDeviceCases(capture);
 
   testWidgets(
     'audit expressions, compact actions, RTL and unavailable AI on device',

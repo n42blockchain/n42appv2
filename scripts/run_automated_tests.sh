@@ -133,6 +133,13 @@ run_device() {
   cd "$ROOT"
   log "Running safe Wallet and Chat click flows on device $DEVICE_ID"
   if [[ "${PUBLISH_PORT:-0}" == "1" ]]; then
+    case "${DEVICE_VM_SERVICE_URL:-}" in
+      http://?*|ws://?*) ;;
+      *)
+        printf 'DEVICE_VM_SERVICE_URL is required; explicitly overwrite-install and launch the test app first.\n' >&2
+        return 2
+        ;;
+    esac
     flutter drive \
       --no-pub \
       --keep-app-running \
@@ -140,6 +147,7 @@ run_device() {
       --target=integration_test/device_full_flow_test.dart \
       -d "$DEVICE_ID" \
       --publish-port \
+      --use-existing-app="$DEVICE_VM_SERVICE_URL" \
       "${define_args[@]}"
   else
     flutter "${flutter_args[@]}"

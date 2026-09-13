@@ -6,6 +6,8 @@ import 'package:drift/native.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
+import 'package:sqlite3/open.dart';
 import '../../../core/utils/debug_log.dart';
 
 part 'media_metadata_database.g.dart';
@@ -34,8 +36,7 @@ class MediaFiles extends Table {
   IntColumn get fileSize => integer().withDefault(const Constant(0))();
 
   /// 是否为缩略图（永不自动清理）
-  BoolColumn get isThumbnail =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get isThumbnail => boolean().withDefault(const Constant(false))();
 
   /// 下载时间
   DateTimeColumn get downloadedAt => dateTime()();
@@ -44,15 +45,13 @@ class MediaFiles extends Table {
   DateTimeColumn get lastAccessedAt => dateTime()();
 
   /// 是否已清理（保留记录支持重下载）
-  BoolColumn get isCleaned =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get isCleaned => boolean().withDefault(const Constant(false))();
 
   /// 清理时间
   DateTimeColumn get cleanedAt => dateTime().nullable()();
 
   /// 用户标记保留（永不自动清理）
-  BoolColumn get isPinned =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get isPinned => boolean().withDefault(const Constant(false))();
 
   @override
   Set<Column> get primaryKey => {filePath};
@@ -92,26 +91,26 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (Migrator m) async {
-          await m.createAll();
-        },
-        onUpgrade: (Migrator m, int from, int to) async {
-          // 版本升级迁移逻辑
-          // 示例：
-          // if (from < 2) {
-          //   await m.addColumn(mediaFiles, mediaFiles.newColumn);
-          // }
-          debugLog(
-              'MediaMetadataDatabase: Migrating from v$from to v$to');
-        },
-        beforeOpen: (details) async {
-          if (details.hadUpgrade) {
-            debugLog(
-                'MediaMetadataDatabase: Schema upgraded from '
-                'v${details.versionBefore} to v${details.versionNow}');
-          }
-        },
-      );
+    onCreate: (Migrator m) async {
+      await m.createAll();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // 版本升级迁移逻辑
+      // 示例：
+      // if (from < 2) {
+      //   await m.addColumn(mediaFiles, mediaFiles.newColumn);
+      // }
+      debugLog('MediaMetadataDatabase: Migrating from v$from to v$to');
+    },
+    beforeOpen: (details) async {
+      if (details.hadUpgrade) {
+        debugLog(
+          'MediaMetadataDatabase: Schema upgraded from '
+          'v${details.versionBefore} to v${details.versionNow}',
+        );
+      }
+    },
+  );
 
   // ============================================
   // 插入与更新
@@ -124,26 +123,24 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
 
   /// 更新访问时间
   Future<void> touchFile(String path) async {
-    await (update(mediaFiles)..where((t) => t.filePath.equals(path)))
-        .write(MediaFilesCompanion(
-      lastAccessedAt: Value(DateTime.now()),
-    ));
+    await (update(mediaFiles)..where((t) => t.filePath.equals(path))).write(
+      MediaFilesCompanion(lastAccessedAt: Value(DateTime.now())),
+    );
   }
 
   /// 标记文件已清理
   Future<void> markCleaned(List<String> paths) async {
     final now = DateTime.now();
-    await (update(mediaFiles)..where((t) => t.filePath.isIn(paths)))
-        .write(MediaFilesCompanion(
-      isCleaned: const Value(true),
-      cleanedAt: Value(now),
-    ));
+    await (update(mediaFiles)..where((t) => t.filePath.isIn(paths))).write(
+      MediaFilesCompanion(isCleaned: const Value(true), cleanedAt: Value(now)),
+    );
   }
 
   /// 切换保留标记
   Future<void> togglePinned(String path, bool pinned) async {
-    await (update(mediaFiles)..where((t) => t.filePath.equals(path)))
-        .write(MediaFilesCompanion(isPinned: Value(pinned)));
+    await (update(mediaFiles)..where((t) => t.filePath.equals(path))).write(
+      MediaFilesCompanion(isPinned: Value(pinned)),
+    );
   }
 
   // ============================================
@@ -153,22 +150,19 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
   /// 获取房间媒体统计
   Future<RoomMediaStatsResult> getRoomMediaStats(String roomId) async {
     final totalQuery = selectOnly(mediaFiles)
-      ..where(mediaFiles.roomId.equals(roomId) &
-          mediaFiles.isCleaned.equals(false))
-      ..addColumns([
-        mediaFiles.fileSize.sum(),
-        mediaFiles.filePath.count(),
-      ]);
+      ..where(
+        mediaFiles.roomId.equals(roomId) & mediaFiles.isCleaned.equals(false),
+      )
+      ..addColumns([mediaFiles.fileSize.sum(), mediaFiles.filePath.count()]);
     final totalRow = await totalQuery.getSingleOrNull();
-    final totalSize =
-        totalRow?.read(mediaFiles.fileSize.sum()) ?? 0;
-    final totalCount =
-        totalRow?.read(mediaFiles.filePath.count()) ?? 0;
+    final totalSize = totalRow?.read(mediaFiles.fileSize.sum()) ?? 0;
+    final totalCount = totalRow?.read(mediaFiles.filePath.count()) ?? 0;
 
     // 按分类统计
     final catQuery = selectOnly(mediaFiles)
-      ..where(mediaFiles.roomId.equals(roomId) &
-          mediaFiles.isCleaned.equals(false))
+      ..where(
+        mediaFiles.roomId.equals(roomId) & mediaFiles.isCleaned.equals(false),
+      )
       ..addColumns([
         mediaFiles.fileCategory,
         mediaFiles.fileSize.sum(),
@@ -204,14 +198,12 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
   }) async {
     final query = select(mediaFiles)
       ..where((t) {
-        var expr = t.isCleaned.equals(false) &
-            t.isPinned.equals(false);
+        var expr = t.isCleaned.equals(false) & t.isPinned.equals(false);
         if (preserveThumbnails) {
           expr = expr & t.isThumbnail.equals(false);
         }
         if (olderThanDays != null) {
-          final cutoff =
-              DateTime.now().subtract(Duration(days: olderThanDays));
+          final cutoff = DateTime.now().subtract(Duration(days: olderThanDays));
           expr = expr & t.lastAccessedAt.isSmallerThanValue(cutoff);
         }
         if (roomId != null) {
@@ -221,14 +213,13 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
           expr = expr & t.fileCategory.equals(fileCategory);
         }
         if (minFileSizeBytes != null) {
-          expr = expr &
-              t.fileSize.isBiggerOrEqualValue(minFileSizeBytes);
+          expr = expr & t.fileSize.isBiggerOrEqualValue(minFileSizeBytes);
         }
         return expr;
       })
       ..orderBy([
-        (t) => OrderingTerm(
-            expression: t.lastAccessedAt, mode: OrderingMode.asc),
+        (t) =>
+            OrderingTerm(expression: t.lastAccessedAt, mode: OrderingMode.asc),
       ]);
     return query.get();
   }
@@ -236,8 +227,7 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
   /// 获取已清理但可重下载的文件
   Future<MediaFile?> getCleanedFile(String path) async {
     return (select(mediaFiles)
-          ..where((t) =>
-              t.filePath.equals(path) & t.isCleaned.equals(true)))
+          ..where((t) => t.filePath.equals(path) & t.isCleaned.equals(true)))
         .getSingleOrNull();
   }
 
@@ -253,8 +243,9 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
       ..groupBy([mediaFiles.roomId])
       ..orderBy([
         OrderingTerm(
-            expression: mediaFiles.fileSize.sum(),
-            mode: OrderingMode.desc),
+          expression: mediaFiles.fileSize.sum(),
+          mode: OrderingMode.desc,
+        ),
       ]);
 
     final rows = await query.get();
@@ -286,8 +277,8 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
         return expr;
       })
       ..orderBy([
-        (t) => OrderingTerm(
-            expression: t.downloadedAt, mode: OrderingMode.desc),
+        (t) =>
+            OrderingTerm(expression: t.downloadedAt, mode: OrderingMode.desc),
       ]);
     return query.get();
   }
@@ -298,14 +289,12 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
   }) async {
     final query = selectOnly(mediaFiles)
       ..where(mediaFiles.isCleaned.equals(false))
-      ..addColumns([
-        mediaFiles.fileSize.sum(),
-        mediaFiles.filePath.count(),
-      ]);
+      ..addColumns([mediaFiles.fileSize.sum(), mediaFiles.filePath.count()]);
     final row = await query.getSingleOrNull();
     final cleanableQuery = selectOnly(mediaFiles)
       ..where(() {
-        var expr = mediaFiles.isCleaned.equals(false) &
+        var expr =
+            mediaFiles.isCleaned.equals(false) &
             mediaFiles.isPinned.equals(false);
         if (preserveThumbnails) {
           expr = expr & mediaFiles.isThumbnail.equals(false);
@@ -318,8 +307,7 @@ class MediaMetadataDatabase extends _$MediaMetadataDatabase {
     return TotalMediaStats(
       totalSize: row?.read(mediaFiles.fileSize.sum()) ?? 0,
       totalCount: row?.read(mediaFiles.filePath.count()) ?? 0,
-      cleanableSize:
-          cleanableRow?.read(mediaFiles.fileSize.sum()) ?? 0,
+      cleanableSize: cleanableRow?.read(mediaFiles.fileSize.sum()) ?? 0,
     );
   }
 
@@ -340,8 +328,22 @@ Future<LazyDatabase> _openConnection() async {
       dbDir.createSync(recursive: true);
     }
     final file = File(p.join(dbDir.path, 'media_meta.db'));
-    return NativeDatabase.createInBackground(file);
+    if (Platform.isAndroid) {
+      await applyWorkaroundToOpenSqlCipherOnOldAndroidVersions();
+    }
+    return NativeDatabase.createInBackground(
+      file,
+      isolateSetup: _configureMediaDatabaseLibrary,
+    );
   });
+}
+
+void _configureMediaDatabaseLibrary() {
+  // The APK ships SQLCipher, and a background isolate does not inherit the
+  // archive connection's SQLite loader override from the main isolate.
+  if (Platform.isAndroid) {
+    open.overrideFor(OperatingSystem.android, openCipherOnAndroid);
+  }
 }
 
 // ============================================
