@@ -349,6 +349,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     int offset = 0,
   }) async {
     final ftsQuery = _sanitizeFtsQuery(query);
+    if (ftsQuery.isEmpty) return [];
     final conditions = <String>[];
     final variables = <Variable>[];
 
@@ -420,6 +421,7 @@ class ArchiveDatabase extends _$ArchiveDatabase {
   /// FTS5 搜索结果计数
   Future<int> searchCount(String query, {String? roomId}) async {
     final ftsQuery = _sanitizeFtsQuery(query);
+    if (ftsQuery.isEmpty) return 0;
     final conditions = <String>[];
     final variables = <Variable>[];
 

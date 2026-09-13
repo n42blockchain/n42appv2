@@ -88,7 +88,12 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
     final question = _questionController.text.trim();
     if (question.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)?.chatPleaseEnterQuestion ?? 'Please enter poll question')),
+        SnackBar(
+          content: Text(
+            S.of(context)?.chatPleaseEnterQuestion ??
+                'Please enter poll question',
+          ),
+        ),
       );
       return;
     }
@@ -103,7 +108,12 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
 
     if (options.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)?.chatAtLeastTwoOptions ?? 'At least 2 options required')),
+        SnackBar(
+          content: Text(
+            S.of(context)?.chatAtLeastTwoOptions ??
+                'At least 2 options required',
+          ),
+        ),
       );
       return;
     }
@@ -111,8 +121,9 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
     int? quizCorrectIndex;
     String? quizExplanation;
     if (_isQuiz) {
-      quizCorrectIndex =
-          kept.indexWhere((e) => e.key == _correctControllerIndex);
+      quizCorrectIndex = kept.indexWhere(
+        (e) => e.key == _correctControllerIndex,
+      );
       if (quizCorrectIndex < 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mark a non-empty correct answer')),
@@ -155,55 +166,35 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: AppColors.dividerOf(isDark),
-                ),
+                bottom: BorderSide(color: AppColors.dividerOf(isDark)),
               ),
             ),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                TextButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(
-                    S.of(context)?.commonCancel ?? 'Cancel',
-                    style: TextStyle(
-                      color: AppColors.textSecondaryOf(isDark),
-                    ),
+                Text(
+                  S.of(context)?.chatCreatePollTitle ?? 'Create Poll',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                Expanded(
-                  child: Text(
-                    S.of(context)?.chatCreatePollTitle ?? 'Create Poll',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
+                Wrap(
+                  alignment: WrapAlignment.spaceBetween,
                   children: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
+                    ),
                     if (widget.allowScheduling)
                       TextButton(
                         onPressed: () => _submit(PollComposerAction.schedule),
-                        child: const Text(
-                          'Schedule',
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        child: const Text('Schedule'),
                       ),
                     TextButton(
                       onPressed: () => _submit(PollComposerAction.sendNow),
-                      child: Text(
-                        S.of(context)?.chatSubmitPoll ?? 'Submit',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      child: Text(S.of(context)?.chatSubmitPoll ?? 'Submit'),
                     ),
                   ],
                 ),
@@ -235,7 +226,9 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                   maxLines: 2,
                   maxLength: 100,
                   decoration: InputDecoration(
-                    hintText: S.of(context)?.chatEnterPollQuestionHint ?? 'Please enter poll question',
+                    hintText:
+                        S.of(context)?.chatEnterPollQuestionHint ??
+                        'Please enter poll question',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -277,9 +270,8 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                           IconButton(
                             tooltip: 'Correct answer',
                             visualDensity: VisualDensity.compact,
-                            onPressed: () => setState(
-                              () => _correctControllerIndex = index,
-                            ),
+                            onPressed: () =>
+                                setState(() => _correctControllerIndex = index),
                             icon: Icon(
                               _correctControllerIndex == index
                                   ? Icons.radio_button_checked
@@ -313,7 +305,11 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                             controller: _optionControllers[index],
                             maxLength: 50,
                             decoration: InputDecoration(
-                              hintText: S.of(context)?.chatOptionHintWithIndex(index + 1) ?? 'Option ${index + 1}',
+                              hintText:
+                                  S
+                                      .of(context)
+                                      ?.chatOptionHintWithIndex(index + 1) ??
+                                  'Option ${index + 1}',
                               counterText: '',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
@@ -343,7 +339,9 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                   TextButton.icon(
                     onPressed: _addOption,
                     icon: const Icon(Icons.add_circle_outline, size: 20),
-                    label: Text(S.of(context)?.chatAddOptionButton ?? 'Add Option'),
+                    label: Text(
+                      S.of(context)?.chatAddOptionButton ?? 'Add Option',
+                    ),
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.primary,
                     ),
@@ -372,30 +370,43 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                       const SizedBox(height: 12),
 
                       // 单选/多选
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Flexible(
-                            child: Text(
-                              S.of(context)?.chatSelectionType ?? 'Selection Type',
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                          Text(
+                            S.of(context)?.chatSelectionType ??
+                                'Selection Type',
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: SegmentedButton<int>(
-                              segments: [
-                                ButtonSegment(value: 1, label: Text(S.of(context)?.chatSingleChoiceLabel ?? 'Single', overflow: TextOverflow.ellipsis)),
-                                ButtonSegment(value: 0, label: Text(S.of(context)?.chatMultiChoiceLabel ?? 'Multi', overflow: TextOverflow.ellipsis)),
-                              ],
-                              selected: {_maxSelections},
-                              onSelectionChanged: (value) {
-                                setState(() {
-                                  _maxSelections = value.first;
-                                });
-                              },
-                              style: const ButtonStyle(
-                                visualDensity: VisualDensity.compact,
+                          const SizedBox(height: 8),
+                          SegmentedButton<int>(
+                            segments: [
+                              ButtonSegment(
+                                value: 1,
+                                label: Text(
+                                  S.of(context)?.chatSingleChoiceLabel ??
+                                      'Single',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
+                              ButtonSegment(
+                                value: 0,
+                                enabled: !_isQuiz,
+                                label: Text(
+                                  S.of(context)?.chatMultiChoiceLabel ??
+                                      'Multi',
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
+                            selected: {_maxSelections},
+                            onSelectionChanged: (value) {
+                              setState(() {
+                                _maxSelections = value.first;
+                              });
+                            },
+                            style: const ButtonStyle(
+                              visualDensity: VisualDensity.compact,
                             ),
                           ),
                         ],
@@ -408,8 +419,13 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                       // 匿名投票
                       Row(
                         children: [
-                          Text(S.of(context)?.chatAnonymousPollSwitch ?? 'Anonymous Poll'),
-                          const Spacer(),
+                          Expanded(
+                            child: Text(
+                              S.of(context)?.chatAnonymousPollSwitch ??
+                                  'Anonymous Poll',
+                            ),
+                          ),
+                          const SizedBox(width: 8),
                           Switch(
                             value: _isAnonymous,
                             onChanged: (value) {
@@ -483,7 +499,8 @@ class _PollCreateSheetState extends State<PollCreateSheet> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          S.of(context)?.chatPollHint ?? 'Poll will be displayed in chat. Group members can vote.',
+                          S.of(context)?.chatPollHint ??
+                              'Poll will be displayed in chat. Group members can vote.',
                           style: const TextStyle(
                             fontSize: 12,
                             color: AppColors.info,

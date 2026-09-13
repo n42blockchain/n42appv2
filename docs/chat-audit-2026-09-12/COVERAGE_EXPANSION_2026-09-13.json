@@ -1,0 +1,129 @@
+{
+  "baseline": "16fe83a8bcd2493c296d73ba9f909b2e5d2a5b56",
+  "passed": 6007,
+  "skipped": 1,
+  "added_tests": 140,
+  "raw_trace_sha256": "90374b682a91a6882beaa2e90563eb5d7b2ba51a81d28fc04e938d76bd63fedb",
+  "modules": {
+    "Raw lcov (including generated code)": {
+      "baseline": {
+        "covered": 25212,
+        "instrumented": 131079
+      },
+      "current": {
+        "covered": 27822,
+        "instrumented": 131172
+      }
+    },
+    "Non-generated reference view": {
+      "baseline": {
+        "covered": 24584,
+        "instrumented": 79238
+      },
+      "current": {
+        "covered": 26688,
+        "instrumented": 79257
+      }
+    },
+    "Auth repository": {
+      "baseline": {
+        "covered": 59,
+        "instrumented": 567
+      },
+      "current": {
+        "covered": 272,
+        "instrumented": 569
+      }
+    },
+    "Message actions repository": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 269
+      },
+      "current": {
+        "covered": 272,
+        "instrumented": 275
+      }
+    },
+    "Story repository": {
+      "baseline": {
+        "covered": 8,
+        "instrumented": 156
+      },
+      "current": {
+        "covered": 152,
+        "instrumented": 156
+      }
+    },
+    "Archive database": {
+      "baseline": {
+        "covered": 24,
+        "instrumented": 319
+      },
+      "current": {
+        "covered": 182,
+        "instrumented": 321
+      }
+    },
+    "Media metadata database": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 165
+      },
+      "current": {
+        "covered": 126,
+        "instrumented": 165
+      }
+    },
+    "Registration page": {
+      "baseline": {
+        "covered": 1,
+        "instrumented": 390
+      },
+      "current": {
+        "covered": 332,
+        "instrumented": 391
+      }
+    },
+    "Password reset page": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 257
+      },
+      "current": {
+        "covered": 234,
+        "instrumented": 257
+      }
+    },
+    "Poll composer": {
+      "baseline": {
+        "covered": 1,
+        "instrumented": 200
+      },
+      "current": {
+        "covered": 206,
+        "instrumented": 207
+      }
+    },
+    "Image messages": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 222
+      },
+      "current": {
+        "covered": 134,
+        "instrumented": 223
+      }
+    },
+    "Payment cards": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 232
+      },
+      "current": {
+        "covered": 225,
+        "instrumented": 232
+      }
+    }
+  }
+}

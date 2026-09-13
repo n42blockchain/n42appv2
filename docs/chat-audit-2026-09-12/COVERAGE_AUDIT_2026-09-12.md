@@ -75,3 +75,8 @@ Changed/new settings navigation and persistence surfaces:
 | `lib/src/presentation/pages/settings/settings_navigation.dart` | 40/42 (95.24%) |
 | `lib/src/presentation/pages/settings/settings_page.dart` | 185/244 (75.82%) |
 | `lib/src/presentation/pages/settings/system_accounts_page.dart` | 91/149 (61.07%) |
+
+
+## Behavior expansion — 2026-09-13
+
+See [the next coverage batch](COVERAGE_EXPANSION_2026-09-13.md) for 140 additional behavior tests, full-run module comparisons, discovered defects and remaining boundaries.

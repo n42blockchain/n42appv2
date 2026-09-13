@@ -17,6 +17,16 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   // 内存缓存
   List<MessageEntity>? _cachedSavedMessages;
   Map<String, Map<String, dynamic>>? _cachedFavoriteMeta;
+  Future<void> _pendingMutation = Future<void>.value();
+
+  Future<void> _mutateFavorites(Future<void> Function() action) {
+    final result = _pendingMutation.then((_) => action());
+    _pendingMutation = result.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return result;
+  }
 
   MessageActionRepositoryImpl(
     this._reactionDataSource,
@@ -205,8 +215,8 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
 
     for (final toRoomId in toRoomIds) {
       try {
-        await forwardMessage(fromRoomId, eventId, toRoomId);
-        results[toRoomId] = true;
+        final forwarded = await forwardMessage(fromRoomId, eventId, toRoomId);
+        results[toRoomId] = forwarded != null;
       } catch (e) {
         results[toRoomId] = false;
       }
@@ -220,28 +230,27 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   // ============================================
 
   @override
-  Future<void> saveMessage(MessageEntity message) async {
+  Future<void> saveMessage(MessageEntity message) => _mutateFavorites(() async {
     final messages = await _loadSavedMessages();
-    if (!messages.any((m) => m.id == message.id)) {
-      messages.add(message);
-      _cachedSavedMessages = messages;
-      await _persistSavedMessages(messages);
-    }
-  }
+    if (messages.any((m) => m.id == message.id)) return;
+    final updated = [...messages, message];
+    await _persistSavedMessages(updated);
+    _cachedSavedMessages = updated;
+  });
 
   @override
-  Future<void> unsaveMessage(String messageId) async {
+  Future<void> unsaveMessage(String messageId) => _mutateFavorites(() async {
     final messages = await _loadSavedMessages();
-    messages.removeWhere((m) => m.id == messageId);
-    _cachedSavedMessages = messages;
-    await _persistSavedMessages(messages);
+    final updated = messages.where((m) => m.id != messageId).toList();
+    await _persistSavedMessages(updated);
+    _cachedSavedMessages = updated;
 
-    // 同时清理该消息的元数据
-    final meta = await _loadFavoriteMeta();
-    meta.remove(messageId);
-    _cachedFavoriteMeta = meta;
+    final meta = Map<String, Map<String, dynamic>>.from(
+      await _loadFavoriteMeta(),
+    )..remove(messageId);
     await _persistFavoriteMeta(meta);
-  }
+    _cachedFavoriteMeta = meta;
+  });
 
   @override
   Future<List<MessageEntity>> getSavedMessages() async {
@@ -272,8 +281,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
       return _cachedSavedMessages!;
     } catch (e) {
       debugLog('MessageActionRepository: Failed to load saved messages - $e');
-      _cachedSavedMessages = [];
-      return _cachedSavedMessages!;
+      rethrow;
     }
   }
 
@@ -285,6 +293,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
       debugLog(
         'MessageActionRepository: Failed to persist saved messages - $e',
       );
+      rethrow;
     }
   }
 
@@ -293,24 +302,29 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   // ============================================
 
   @override
-  Future<void> editFavoriteTags(String favoriteId, List<String> tags) async {
-    final meta = await _loadFavoriteMeta();
-    final entry = meta[favoriteId] ?? {};
-    entry['tags'] = tags;
-    meta[favoriteId] = entry;
-    _cachedFavoriteMeta = meta;
-    await _persistFavoriteMeta(meta);
-  }
+  Future<void> editFavoriteTags(String favoriteId, List<String> tags) =>
+      _mutateFavorites(() async {
+        final meta = Map<String, Map<String, dynamic>>.from(
+          await _loadFavoriteMeta(),
+        );
+        meta[favoriteId] = {
+          ...?meta[favoriteId],
+          'tags': List<String>.of(tags),
+        };
+        await _persistFavoriteMeta(meta);
+        _cachedFavoriteMeta = meta;
+      });
 
   @override
-  Future<void> editFavoriteRemark(String favoriteId, String remark) async {
-    final meta = await _loadFavoriteMeta();
-    final entry = meta[favoriteId] ?? {};
-    entry['remark'] = remark;
-    meta[favoriteId] = entry;
-    _cachedFavoriteMeta = meta;
-    await _persistFavoriteMeta(meta);
-  }
+  Future<void> editFavoriteRemark(String favoriteId, String remark) =>
+      _mutateFavorites(() async {
+        final meta = Map<String, Map<String, dynamic>>.from(
+          await _loadFavoriteMeta(),
+        );
+        meta[favoriteId] = {...?meta[favoriteId], 'remark': remark};
+        await _persistFavoriteMeta(meta);
+        _cachedFavoriteMeta = meta;
+      });
 
   Future<Map<String, Map<String, dynamic>>> _loadFavoriteMeta() async {
     if (_cachedFavoriteMeta != null) return _cachedFavoriteMeta!;
@@ -329,8 +343,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
       return _cachedFavoriteMeta!;
     } catch (e) {
       debugLog('MessageActionRepository: Failed to load favorite meta - $e');
-      _cachedFavoriteMeta = {};
-      return _cachedFavoriteMeta!;
+      rethrow;
     }
   }
 
@@ -341,6 +354,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
       await _storage.saveFavoriteMeta(jsonEncode(meta));
     } catch (e) {
       debugLog('MessageActionRepository: Failed to persist favorite meta - $e');
+      rethrow;
     }
   }
 

@@ -29,6 +29,28 @@ void main() {
   tearDown(() => SharedPreferences.setMockInitialValues({}));
 
   for (final failure in ['false', 'throw']) {
+    for (final metadata in [false, true]) {
+      test(
+        'favorite metadata=$metadata rejects $failure and refreshes optimistic cache',
+        () async {
+          final prefs = PreferencesDataSource();
+          final save = metadata
+              ? prefs.saveFavoriteMeta
+              : prefs.saveFavoriteMessages;
+          final read = metadata
+              ? prefs.getFavoriteMeta
+              : prefs.getFavoriteMessages;
+          await save('original');
+          platform.failure = failure;
+          await expectLater(save('changed'), throwsStateError);
+          expect(await read(), 'original');
+          platform.failure = null;
+          await save('retry');
+          expect(await read(), 'retry');
+        },
+      );
+    }
+
     test(
       'appearance $failure result fails and restores the durable cache',
       () async {

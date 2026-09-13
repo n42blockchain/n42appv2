@@ -90,6 +90,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
   late final AutoDownloadPolicyService _autoDownloadPolicyService;
   bool _shouldLoadImage = false;
   bool _autoDownloadResolved = false;
+  int _policyRequest = 0;
 
   @override
   void initState() {
@@ -117,10 +118,11 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
   }
 
   Future<void> _resolveAutoDownloadPreference() async {
+    final request = ++_policyRequest;
     try {
       final shouldAutoDownload = await _autoDownloadPolicyService
           .shouldAutoDownload(AutoDownloadMediaType.image);
-      if (!mounted) return;
+      if (!mounted || request != _policyRequest) return;
       setState(() {
         _shouldLoadImage = shouldAutoDownload;
         _autoDownloadResolved = true;
@@ -129,9 +131,9 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
       debugLog(
         'ImageMessageWidget: Failed to resolve auto-download policy: $e',
       );
-      if (!mounted) return;
+      if (!mounted || request != _policyRequest) return;
       setState(() {
-        _shouldLoadImage = true;
+        _shouldLoadImage = false;
         _autoDownloadResolved = true;
       });
     }
@@ -358,7 +360,8 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
         borderRadius: BorderRadius.circular(widget.borderRadius),
         child: Container(
           width: size.width,
-          height: size.height * 0.6,
+          constraints: BoxConstraints(minHeight: size.height * 0.6),
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topLeft,
@@ -367,6 +370,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
             ),
           ),
           child: Center(
+            heightFactor: 1,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -543,61 +547,62 @@ class ImageGridWidget extends StatelessWidget {
             image: true,
             button: true,
             label: isLast
-                ? A11yL10n.of(context)
-                    .imageIndexMore(index + 1, images.length - maxCount)
+                ? A11yL10n.of(
+                    context,
+                  ).imageIndexMore(index + 1, images.length - maxCount)
                 : A11yL10n.of(context).imageIndex(index + 1),
             excludeSemantics: true,
             child: GestureDetector(
-            onTap: () => onTap?.call(index),
-            child: Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: CachedNetworkImage(
-                    imageUrl: imageUrl,
-                    width: itemSize,
-                    height: itemSize,
-                    fit: BoxFit.cover,
-                    httpHeaders: headers,
-                    placeholder: (context, url) => Container(
+              onTap: () => onTap?.call(index),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: CachedNetworkImage(
+                      imageUrl: imageUrl,
                       width: itemSize,
                       height: itemSize,
-                      color: AppColors.placeholder,
-                    ),
-                    errorWidget: (context, url, error) => Container(
-                      width: itemSize,
-                      height: itemSize,
-                      color: AppColors.placeholder,
-                      child: const Icon(
-                        Icons.broken_image,
-                        color: AppColors.textTertiary,
+                      fit: BoxFit.cover,
+                      httpHeaders: headers,
+                      placeholder: (context, url) => Container(
+                        width: itemSize,
+                        height: itemSize,
+                        color: AppColors.placeholder,
                       ),
-                    ),
-                  ),
-                ),
-                // 显示更多数量
-                if (isLast)
-                  Container(
-                    width: itemSize,
-                    height: itemSize,
-                    decoration: BoxDecoration(
-                      color: Colors.black45,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '+${images.length - maxCount}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      errorWidget: (context, url, error) => Container(
+                        width: itemSize,
+                        height: itemSize,
+                        color: AppColors.placeholder,
+                        child: const Icon(
+                          Icons.broken_image,
+                          color: AppColors.textTertiary,
                         ),
                       ),
                     ),
                   ),
-              ],
+                  // 显示更多数量
+                  if (isLast)
+                    Container(
+                      width: itemSize,
+                      height: itemSize,
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Center(
+                        child: Text(
+                          '+${images.length - maxCount}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
           );
         }),
       ),

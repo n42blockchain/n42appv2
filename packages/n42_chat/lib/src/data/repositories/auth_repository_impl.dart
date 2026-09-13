@@ -171,6 +171,29 @@ class AuthRepositoryImpl implements IAuthRepository {
     _authInProgress = Completer<void>();
     _isAuthenticating = true;
     try {
+      return await _loginWithTokenWithinAuthFlow(
+        homeserver: homeserver,
+        accessToken: accessToken,
+        userId: userId,
+        deviceId: deviceId,
+      );
+    } finally {
+      _isAuthenticating = false;
+      _authInProgress?.complete();
+      _authInProgress = null;
+      unawaited(_flushPendingLogoutState());
+      _startMonitoringLoginState();
+    }
+  }
+
+  // Caller owns the authentication lock, including the restore-session path.
+  Future<AuthResult> _loginWithTokenWithinAuthFlow({
+    required String homeserver,
+    required String accessToken,
+    required String userId,
+    required String deviceId,
+  }) async {
+    try {
       _clearCachedUserProfile();
       await _authDataSource.loginWithToken(
         homeserver: homeserver,
@@ -202,12 +225,6 @@ class AuthRepositoryImpl implements IAuthRepository {
     } catch (e) {
       authLog('Token login failed - $e');
       return AuthResult.failure('会话恢复失败', type: AuthErrorType.tokenExpired);
-    } finally {
-      _isAuthenticating = false;
-      _authInProgress?.complete();
-      _authInProgress = null;
-      unawaited(_flushPendingLogoutState());
-      _startMonitoringLoginState();
     }
   }
 
@@ -270,7 +287,7 @@ class AuthRepositoryImpl implements IAuthRepository {
             userId != null &&
             deviceId != null) {
           authLog('Trying to restore with token...');
-          final result = await loginWithToken(
+          final result = await _loginWithTokenWithinAuthFlow(
             homeserver: homeserver,
             accessToken: accessToken,
             userId: userId,
@@ -1389,7 +1406,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   AuthResult _handleMatrixError(MatrixException e) {
-    final errorCode = e.errorMessage;
+    final errorCode = e.errcode;
 
     if (errorCode.contains('M_FORBIDDEN') ||
         errorCode.contains('M_UNAUTHORIZED')) {

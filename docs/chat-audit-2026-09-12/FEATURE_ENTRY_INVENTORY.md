@@ -4,7 +4,7 @@
 
 本表是静态构造引用索引，不代表按钮可点击、平台可见、消息正确收发或服务端验收通过。零外部引用是复核候选；同文件调用、构造函数 tear-off 和备用实现可能导致误报。外部引用也可能来自未启用代码。运行时结论见配套审计报告。
 
-纳入 659 个 Dart 源文件、335 个测试文件、174 个公开页面或页面组件类。
+纳入 659 个 Dart 源文件、343 个测试文件、174 个公开页面或页面组件类。
 
 ## 模块覆盖清单
 
@@ -52,7 +52,7 @@
 | transfer | 3 |
 | voice_room | 2 |
 
-测试目录分布：core/utils: 1、integration/auth_flow_test.dart: 1、integration/bridge: 2、integration/wallet_bridge_test.dart: 1、live/live_media_smoke_test.dart: 1、localization/sso_localization_test.dart: 1、n42_chat_test.dart: 1、presentation/pages: 38、presentation/widgets: 7、unit/blocs: 74、unit/config: 2、unit/core: 8、unit/datasources: 21、unit/domain: 1、unit/encryption: 1、unit/entities: 54、unit/game: 6、unit/helpers: 5、unit/image_upload_test.dart: 1、unit/integration: 3、unit/repositories: 16、unit/services: 48、unit/theme: 1、unit/utils: 27、unit/widgets: 14。
+测试目录分布：core/utils: 1、integration/auth_flow_test.dart: 1、integration/bridge: 2、integration/wallet_bridge_test.dart: 1、live/live_media_smoke_test.dart: 1、localization/sso_localization_test.dart: 1、n42_chat_test.dart: 1、presentation/pages: 39、presentation/widgets: 10、unit/blocs: 74、unit/config: 2、unit/core: 8、unit/datasources: 22、unit/domain: 1、unit/encryption: 1、unit/entities: 54、unit/game: 6、unit/helpers: 5、unit/image_upload_test.dart: 1、unit/integration: 3、unit/repositories: 19、unit/services: 48、unit/theme: 1、unit/utils: 27、unit/widgets: 14。
 
 测试计数按目录归属，不把文件数当作行为覆盖率。
 

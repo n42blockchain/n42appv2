@@ -334,11 +334,13 @@ class _RegisterPageState extends State<RegisterPage> {
           onChanged: (_) => setState(() {}),
           onEditingComplete: _checkHomeserver,
           validator: (value) {
-            if (value == null || value.isEmpty) {
+            final server = value?.trim() ?? '';
+            if (server.isEmpty) {
               return S.of(context)?.authEnterServerAddress ??
                   'Please enter server address';
             }
-            if (!value.startsWith('http://') && !value.startsWith('https://')) {
+            if (!server.startsWith('http://') &&
+                !server.startsWith('https://')) {
               return S.of(context)?.authEnterValidServerAddress ??
                   'Please enter a valid server address';
             }
@@ -367,11 +369,10 @@ class _RegisterPageState extends State<RegisterPage> {
     final subtitleColor = context.textSecondary;
     final cardColor = AppColors.inputBgOf(isDark);
 
-    return Container(
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(8),
-      ),
+    return Material(
+      color: cardColor,
+      borderRadius: BorderRadius.circular(8),
+      clipBehavior: Clip.antiAlias,
       child: SwitchListTile(
         value: _anonymousMode,
         onChanged: (value) {

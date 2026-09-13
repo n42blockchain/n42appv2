@@ -1429,7 +1429,7 @@ class PreferencesDataSource {
   /// 保存收藏消息列表（JSON）
   Future<void> saveFavoriteMessages(String json) async {
     final p = await prefs;
-    await p.setString(_keyFavoriteMessages, json);
+    await saveStringPreference(p, _keyFavoriteMessages, json);
   }
 
   /// 获取收藏消息列表（JSON）
@@ -1441,7 +1441,7 @@ class PreferencesDataSource {
   /// 保存收藏元数据（标签+备注）
   Future<void> saveFavoriteMeta(String json) async {
     final p = await prefs;
-    await p.setString(_keyFavoriteMeta, json);
+    await saveStringPreference(p, _keyFavoriteMeta, json);
   }
 
   /// 获取收藏元数据
