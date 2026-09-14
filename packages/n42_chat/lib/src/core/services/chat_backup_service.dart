@@ -232,7 +232,7 @@ class ChatBackupService {
         'backup_${now.year}${now.month.toString().padLeft(2, '0')}'
         '${now.day.toString().padLeft(2, '0')}_'
         '${now.hour.toString().padLeft(2, '0')}'
-        '${now.minute.toString().padLeft(2, '0')}'
+        '${now.minute.toString().padLeft(2, '0')}_$backupId'
         '${StorageConstants.backupExtension}';
     final filePath = p.join(backupDir.path, fileName);
 
@@ -461,7 +461,7 @@ class ChatBackupService {
         'incremental_${now.year}${now.month.toString().padLeft(2, '0')}'
         '${now.day.toString().padLeft(2, '0')}_'
         '${now.hour.toString().padLeft(2, '0')}'
-        '${now.minute.toString().padLeft(2, '0')}'
+        '${now.minute.toString().padLeft(2, '0')}_$backupId'
         '${StorageConstants.backupExtension}';
     final filePath = p.join(backupDir.path, fileName);
 
@@ -1223,10 +1223,9 @@ class ChatBackupService {
         ),
       );
 
-    final input = Uint8List.fromList(plaintext);
-    final output = Uint8List(cipher.getOutputSize(input.length));
-    final len = cipher.processBytes(input, 0, input.length, output, 0);
-    cipher.doFinal(output, len);
+    // getOutputSize rounds up to a block boundary. Only process()'s returned
+    // bytes contain the ciphertext and authentication tag actually written.
+    final output = cipher.process(Uint8List.fromList(plaintext));
 
     // output contains ciphertext + tag (appended by GCM)
     // Extract tag (last 16 bytes) and ciphertext
@@ -1257,24 +1256,43 @@ class ChatBackupService {
 
     final key = _pbkdf2(password, salt, iterations: 100000, keyLength: 32);
 
-    final cipher = pc.GCMBlockCipher(pc.AESEngine())
-      ..init(
-        false,
-        pc.AEADParameters(pc.KeyParameter(key), 128, nonce, Uint8List(0)),
-      );
-
-    // GCM expects ciphertext + tag concatenated
-    final input = Uint8List.fromList([...ciphertext, ...tag]);
-    final output = Uint8List(cipher.getOutputSize(input.length));
-    try {
-      final len = cipher.processBytes(input, 0, input.length, output, 0);
-      cipher.doFinal(output, len);
-    } on ArgumentError {
-      throw const FormatException('Encrypted backup password is invalid');
+    Uint8List decrypt(Uint8List input) {
+      final cipher = pc.GCMBlockCipher(pc.AESEngine())
+        ..init(
+          false,
+          pc.AEADParameters(pc.KeyParameter(key), 128, nonce, Uint8List(0)),
+        );
+      return cipher.process(input);
     }
 
-    // GCM output is plaintext (tag is verified internally)
-    return Uint8List.fromList(output.sublist(0, ciphertext.length));
+    // GCM expects ciphertext + tag concatenated.
+    final input = Uint8List.fromList([...ciphertext, ...tag]);
+    try {
+      return decrypt(input);
+    } on pc.InvalidCipherTextException {
+      // Earlier v3 writers serialized the rounded output buffer, including
+      // up to 15 zero bytes after the real tag. Recover only that layout and
+      // still require successful GCM authentication for every candidate.
+      if (input.length % 16 == 0) {
+        for (
+          var padding = 1;
+          padding <= 15 && input.length - padding >= 16;
+          padding++
+        ) {
+          if (input[input.length - padding] != 0) break;
+          try {
+            return decrypt(
+              Uint8List.sublistView(input, 0, input.length - padding),
+            );
+          } on pc.InvalidCipherTextException {
+            // A zero byte can also be part of the tag; try the next boundary.
+          }
+        }
+      }
+      throw const FormatException('Encrypted backup authentication failed');
+    } on ArgumentError {
+      throw const FormatException('Encrypted backup authentication failed');
+    }
   }
 
   /// 读取备份 manifest（快速预览，不需要密码）

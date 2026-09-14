@@ -1,0 +1,98 @@
+{
+  "baseline_commit": "1985645b191abdcdcf67733387c5c3e882c29918",
+  "baseline_passed": 6008,
+  "passed": 6092,
+  "skipped": 1,
+  "new_tests": 84,
+  "new_test_modules": {
+    "stickers": 38,
+    "backup": 34,
+    "export": 12
+  },
+  "modules": {
+    "Raw lcov": {
+      "baseline": {
+        "covered": 27829,
+        "instrumented": 131164,
+        "percent": 21.22
+      },
+      "final": {
+        "covered": 28117,
+        "instrumented": 131169,
+        "percent": 21.44
+      }
+    },
+    "Non-generated reference": {
+      "baseline": {
+        "covered": 26696,
+        "instrumented": 79249,
+        "percent": 33.69
+      },
+      "final": {
+        "covered": 26984,
+        "instrumented": 79254,
+        "percent": 34.05
+      }
+    },
+    "Sticker repository": {
+      "baseline": {
+        "covered": 48,
+        "instrumented": 145,
+        "percent": 33.1
+      },
+      "final": {
+        "covered": 135,
+        "instrumented": 145,
+        "percent": 93.1
+      }
+    },
+    "Backup service": {
+      "baseline": {
+        "covered": 254,
+        "instrumented": 585,
+        "percent": 43.42
+      },
+      "final": {
+        "covered": 393,
+        "instrumented": 589,
+        "percent": 66.72
+      }
+    },
+    "Export service": {
+      "baseline": {
+        "covered": 71,
+        "instrumented": 166,
+        "percent": 42.77
+      },
+      "final": {
+        "covered": 140,
+        "instrumented": 167,
+        "percent": 83.83
+      }
+    }
+  },
+  "traces": {
+    "baseline": {
+      "file": "baseline.lcov.gz",
+      "raw_sha256": "257e36a8ebf789e6ac1648a32276c7195ff4f52ba306f2d5fdecc3b5495e4713"
+    },
+    "final": {
+      "file": "final.lcov.gz",
+      "raw_sha256": "7e2937c04a2a338854f69e18c9b1d3e2a2aaa8a1498ed2aac19b8f9b4dd6d7a9"
+    }
+  },
+  "current_commit": "e38d6fb43bd61227352ec9cdb54dbb18e8e7c069",
+  "host_integration_passed": 124,
+  "analysis": {
+    "canonical": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 173
+    },
+    "host": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 155
+    }
+  }
+}

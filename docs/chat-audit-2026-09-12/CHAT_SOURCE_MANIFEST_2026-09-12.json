@@ -1,5 +1,5 @@
 {
-  "git_ref": "657a66bb1a5a5963f6460e5cc60b305fcc272de3",
+  "git_ref": "e38d6fb43bd61227352ec9cdb54dbb18e8e7c069",
   "resolved_source": "git",
   "comparison": "resolved Git package lib/assets versus packages/n42_chat lib/assets",
   "file_count": 767,
@@ -80,8 +80,8 @@
     "lib/src/core/services/bot_command_processor.dart": "b28f31b4a3e2da4721c4fd07aadb3c071bebeb72009e625197f959dc3496f304",
     "lib/src/core/services/bot_command_registry.dart": "9e7d826313b0651da2abe3509f0fab2ff839e6cc58786e2b66684bf30f440c13",
     "lib/src/core/services/bot_webhook_service.dart": "01b0b1268eade7a1239a303fc8f71c9ce57cfe24b091f2d809af1e8bc366b330",
-    "lib/src/core/services/chat_backup_service.dart": "1c884f82475919aa53203c67b669ac8410d97368fa59fe6006455fb8807197b1",
-    "lib/src/core/services/chat_export_service.dart": "b26c9a0c4cedfb9f43d1894bb48618b999c59e53d8004b898d3d491b7df42ab5",
+    "lib/src/core/services/chat_backup_service.dart": "c3e3029657fc7dc198c43519f62180801a422a9ccf3ad173b3bd4c7db05db846",
+    "lib/src/core/services/chat_export_service.dart": "008dc6d09748eaab4b09aa2379d6dfc5db7a23ecef7f9903ebe00aee7fa03b54",
     "lib/src/core/services/chat_lock_service.dart": "85a0c74b4c76c16376fb102bf45cf059f50ac74936c4d57040e0f5e6845863b6",
     "lib/src/core/services/chat_media_bytes_resolver.dart": "70a505adca64bfa88435e31e857761e26bfefe46556a29ab2df63c96d3be1b7c",
     "lib/src/core/services/contact_sync_service.dart": "fa54194e2c9de9912b6d50e77269cbef3a36636b0b6cd7e6802e42f71816814f",

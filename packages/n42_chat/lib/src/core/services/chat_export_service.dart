@@ -47,6 +47,9 @@ class ChatExportService {
 
     // 写入临时文件
     final dir = await getTemporaryDirectory();
+    // Keep earlier share-sheet files intact when the same conversation is
+    // exported again before the timestamp changes.
+    final exportDir = await dir.createTemp('n42_chat_export_');
     final timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
     final extension = switch (format) {
       ExportFormat.html => 'html',
@@ -55,7 +58,7 @@ class ChatExportService {
     };
     final sanitizedName = roomName.replaceAll(_unsafeExportNameRegExp, '_');
     final file = File(
-      '${dir.path}/chat_${sanitizedName}_$timestamp.$extension',
+      '${exportDir.path}/chat_${sanitizedName}_$timestamp.$extension',
     );
     await file.writeAsString(content);
 
