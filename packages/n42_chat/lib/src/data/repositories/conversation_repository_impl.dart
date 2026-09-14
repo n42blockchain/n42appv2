@@ -186,9 +186,9 @@ class ConversationRepositoryImpl implements IConversationRepository {
 
   @override
   Future<List<ConversationEntity>> searchConversations(String query) async {
-    if (query.isEmpty) return getConversations();
+    if (query.trim().isEmpty) return getConversations();
 
-    final lowerQuery = query.toLowerCase();
+    final lowerQuery = query.trim().toLowerCase();
     final rooms = _roomDataSource.getJoinedRooms();
 
     return rooms

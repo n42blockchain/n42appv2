@@ -73,10 +73,11 @@ class ContactRepositoryImpl implements IContactRepository {
     if (query.trim().isEmpty) return getContacts();
 
     final contacts = await getContacts();
-    final lowerQuery = query.toLowerCase();
+    final lowerQuery = query.trim().toLowerCase();
 
     return contacts.where((contact) {
       return contact.displayName.toLowerCase().contains(lowerQuery) ||
+          contact.effectiveDisplayName.toLowerCase().contains(lowerQuery) ||
           contact.userId.toLowerCase().contains(lowerQuery);
     }).toList();
   }
@@ -145,6 +146,7 @@ class ContactRepositoryImpl implements IContactRepository {
 
   @override
   Future<List<ContactEntity>> getIgnoredUsers() async {
+    await _loadRemarkCache();
     final ignoredIds = _contactDataSource.ignoredUsers;
     final contacts = <ContactEntity>[];
 

@@ -953,6 +953,12 @@ class MatrixGroupDataSource {
     }
   }
 
+  /// Read for admission checks: an unavailable room or state must not be
+  /// confused with a successfully read room that has no gate configured.
+  Map<String, dynamic>? getTokenGateConfigStrict(String roomId) {
+    return _getRequiredRoom(roomId).getState(_tokenGateEventType)?.content;
+  }
+
   /// 设置代币门控配置
   Future<void> setTokenGateConfig(
     String roomId,

@@ -1,0 +1,116 @@
+{
+  "baseline_commit": "dba781335dfe4238b5de1a5efbac709d62c28751",
+  "baseline_trace_origin": "Prior completed round3 full suite at unchanged source; SHA-256 verified",
+  "baseline_passed": 6166,
+  "passed": 6271,
+  "skipped": 1,
+  "new_tests": 105,
+  "new_test_modules": {
+    "contacts": 32,
+    "conversations": 24,
+    "token_gate": 49
+  },
+  "modules": {
+    "Raw lcov": {
+      "baseline": {
+        "covered": 28418,
+        "instrumented": 131204,
+        "percent": 21.66
+      },
+      "final": {
+        "covered": 28636,
+        "instrumented": 131242,
+        "percent": 21.82
+      }
+    },
+    "Non-generated reference": {
+      "baseline": {
+        "covered": 27284,
+        "instrumented": 79289,
+        "percent": 34.41
+      },
+      "final": {
+        "covered": 27502,
+        "instrumented": 79327,
+        "percent": 34.67
+      }
+    },
+    "Contact repository": {
+      "baseline": {
+        "covered": 47,
+        "instrumented": 139,
+        "percent": 33.81
+      },
+      "final": {
+        "covered": 127,
+        "instrumented": 141,
+        "percent": 90.07
+      }
+    },
+    "Conversation repository": {
+      "baseline": {
+        "covered": 90,
+        "instrumented": 167,
+        "percent": 53.89
+      },
+      "final": {
+        "covered": 133,
+        "instrumented": 167,
+        "percent": 79.64
+      }
+    },
+    "Group repository": {
+      "baseline": {
+        "covered": 93,
+        "instrumented": 226,
+        "percent": 41.15
+      },
+      "final": {
+        "covered": 171,
+        "instrumented": 260,
+        "percent": 65.77
+      }
+    },
+    "Matrix group datasource": {
+      "baseline": {
+        "covered": 11,
+        "instrumented": 372,
+        "percent": 2.96
+      },
+      "final": {
+        "covered": 29,
+        "instrumented": 374,
+        "percent": 7.75
+      }
+    }
+  },
+  "traces": {
+    "baseline": {
+      "file": "baseline.lcov.gz",
+      "raw_sha256": "eb2a4b72bcafe23ebd5f0584191032dd7e40933397bea6ab542f05f82130e95e"
+    },
+    "final": {
+      "file": "final.lcov.gz",
+      "raw_sha256": "53de69ba04ff5f5bf7a37bae3baa51f17160c2e76eafe18090a416b118996303"
+    }
+  },
+  "current_commit": "ce0483338d859e4c483506fe3a7f1c29e1a581ec",
+  "completed_date": "2026-09-14",
+  "runtime_file_hashes_verified": 767,
+  "open_issues": [
+    "GROUP-001: Alias/direct SDK joins do not use the same token verification; authoritative admission remains unverified"
+  ],
+  "host_integration_passed": 303,
+  "analysis": {
+    "canonical": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 173
+    },
+    "host": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 155
+    }
+  }
+}

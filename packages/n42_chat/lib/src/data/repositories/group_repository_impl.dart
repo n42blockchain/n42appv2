@@ -332,18 +332,14 @@ class GroupRepositoryImpl implements IGroupRepository {
 
   @override
   Future<TokenGateConfig?> getTokenGate(String roomId) async {
-    try {
-      final data = _groupDataSource.getTokenGateConfig(roomId);
-      if (data == null) return null;
-      return TokenGateConfig.fromJson(data);
-    } catch (e) {
-      debugLog('GroupRepository: Failed to get token gate: $e');
-      return null;
-    }
+    final data = _groupDataSource.getTokenGateConfigStrict(roomId);
+    if (data == null) return null;
+    return _parseTokenGate(data);
   }
 
   @override
   Future<void> setTokenGate(String roomId, TokenGateConfig config) async {
+    _parseTokenGate(config.toJson());
     await _groupDataSource.setTokenGateConfig(roomId, config.toJson());
   }
 
@@ -353,7 +349,12 @@ class GroupRepositoryImpl implements IGroupRepository {
       return TokenGateVerificationResult.error('Wallet not connected');
     }
 
-    final config = await getTokenGate(roomId);
+    final TokenGateConfig? config;
+    try {
+      config = await getTokenGate(roomId);
+    } catch (e) {
+      return TokenGateVerificationResult.error('Unable to read token gate: $e');
+    }
     if (config == null || !config.enabled || config.rules.isEmpty) {
       return const TokenGateVerificationResult(passed: true);
     }
@@ -386,11 +387,13 @@ class GroupRepositoryImpl implements IGroupRepository {
             );
             break;
           case TokenStandard.native:
+            if (!const {1, 10, 56, 137, 42161}.contains(rule.chainId)) {
+              throw const FormatException('Unsupported native token chain');
+            }
             final balanceStr = await _walletBridge.getBalance(
               nativeTokenSymbolForChainId(rule.chainId),
             );
-            final balanceDouble = double.tryParse(balanceStr) ?? 0;
-            actualBalance = BigInt.from(balanceDouble * 1e18);
+            actualBalance = _parseNativeBalance(balanceStr);
             break;
         }
 
@@ -421,6 +424,65 @@ class GroupRepositoryImpl implements IGroupRepository {
       passed: passed,
       ruleResults: ruleResults,
     );
+  }
+
+  /// The display model has tolerant legacy defaults; admission checks cannot
+  /// reinterpret corrupt rules as a zero threshold or a disabled gate.
+  TokenGateConfig _parseTokenGate(Map<String, dynamic> data) {
+    if (data['enabled'] is! bool) {
+      throw const FormatException('Invalid token gate enabled flag');
+    }
+    if (data['enabled'] == true) {
+      final rules = data['rules'];
+      final operator = data['operator'];
+      if (rules is! List ||
+          rules.isEmpty ||
+          (operator != null &&
+              !GateOperator.values.any((v) => v.name == operator))) {
+        throw const FormatException('Invalid token gate rules or operator');
+      }
+      for (final rule in rules) {
+        if (rule is! Map<String, dynamic> ||
+            !TokenStandard.values.any(
+              (v) => v.name == rule['token_standard'],
+            )) {
+          throw const FormatException('Invalid token gate rule');
+        }
+        final minimum = rule['min_balance'];
+        final chainId = rule['chain_id'];
+        if (minimum is! String ||
+            !RegExp(r'^\d+$').hasMatch(minimum) ||
+            chainId is! int ||
+            chainId <= 0) {
+          throw const FormatException('Invalid token gate minimum or chain');
+        }
+        if (rule['token_standard'] != TokenStandard.native.name) {
+          final address = rule['contract_address'];
+          if (address is! String ||
+              !RegExp(r'^0x[0-9a-fA-F]{40}$').hasMatch(address)) {
+            throw const FormatException('Invalid token gate contract');
+          }
+        }
+        if (rule['token_standard'] == TokenStandard.erc1155.name) {
+          final tokenId = rule['token_id'];
+          if (tokenId is! String || !RegExp(r'^\d+$').hasMatch(tokenId)) {
+            throw const FormatException('Invalid ERC-1155 token ID');
+          }
+        }
+      }
+    }
+    return TokenGateConfig.fromJson(data);
+  }
+
+  BigInt _parseNativeBalance(String value) {
+    final normalized = value.trim();
+    if (!RegExp(r'^\d+(?:\.\d{1,18})?$').hasMatch(normalized)) {
+      throw const FormatException('Invalid native token balance');
+    }
+    final parts = normalized.split('.');
+    final fraction = parts.length == 1 ? '' : parts[1];
+    return BigInt.parse(parts[0]) * BigInt.from(10).pow(18) +
+        BigInt.parse(fraction.padRight(18, '0'));
   }
 
   // ============================================
