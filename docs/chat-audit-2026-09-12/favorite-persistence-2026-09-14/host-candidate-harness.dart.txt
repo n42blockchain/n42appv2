@@ -1,0 +1,8 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/repositories/favorite_record_persistence_test.dart' as record;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/repositories/message_action_persistence_test.dart' as actions;
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  group('Favorite record candidate', record.main);
+  group('Message action candidate', actions.main);
+}

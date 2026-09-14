@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-14",
+  "status": "Validated local candidate; no commit or publication; wallet pin unchanged",
+  "canonical_base": "c1d222e3ea9c49a5f8bc51444154eb4026d689ef",
+  "host_base": "e9f843d63afe1d10ab8b3d589b8896bc3afeb543",
+  "new_tests": 18,
+  "full_tests": {
+    "passed": 6339,
+    "skipped": 1,
+    "command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --reporter expanded"
+  },
+  "targeted_tests": 200,
+  "host_candidate_tests": 393,
+  "host_validation": "Temporary package config redirects n42_chat to the canonical worktree. The harness and temporary config were removed after validation; default resolved source remains the original Git pin.",
+  "canonical_analyze": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 173
+  },
+  "raw_line_coverage": {
+    "hit": 28718,
+    "found": 131301,
+    "percent": 21.8719
+  },
+  "canonical_source_sha256": {
+    "lib/src/data/datasources/local/preferences_datasource.dart": "16ad83fdc811b78c6ca31a2fd2a3d86cdc61a2f4bd7440aaf197b5feab6dbbd5",
+    "lib/src/data/repositories/message_action_repository_impl.dart": "c79e6d50bc4a515b3c22f90fa936cac2c92d1214b445bf3a052b6e9ba0474b46",
+    "test/unit/repositories/message_action_persistence_test.dart": "f0eac4805b78987363ad060136eb3f176b837ad899587bdd6a06555ac548def8",
+    "test/unit/repositories/favorite_record_persistence_test.dart": "ab73338f5ef8e0ff0de9f8f559efa50e63cbae0710adb758815a3def5536d3a4",
+    "OPEN_ISSUES.md": "26e4aa5d60066b11b76f8d2fa960d112f092e8360d61bb807dfa54b22d501de5"
+  },
+  "evidence_sha256": {
+    "analyze.log.gz": "2210859cb2d43523457d59f7f9cd78b5c8f2b1bd1ccd4af8e1984b403f6ead60",
+    "before-fix.log.gz": "59c3775577e53c064b3a67fc84cbfe328452a3033cc3c6de79a3018ae88c8c5f",
+    "file-limit-interrupted.log.gz": "2a7cc92b98bdee3c03ec05cbffa72a2e63a682b47b01e5d16eddc7c96037487f",
+    "final.lcov.gz": "867c19372ab54b3f37a7aec8eec1ab1edf20e64ed6536239c25c2bab67c39f90",
+    "full-tests.log.gz": "d6ca8363ff2c17d2c72c313ecfb4b50c07cdcd1a083d6d3ad5fd9ddc4882ff87",
+    "host-candidate-harness.dart.txt": "4d42af819d52a608a5d4abbc3eca5d1884afa4d0c18e1545c79dec0d2ce0590a",
+    "host-candidate.log.gz": "5007bb1b581adafee031e6a161c68b6d6caf7771ebd1eb05c159171a044cf25f",
+    "targeted.log.gz": "9b7c78bdd3f2476a533578c893a79fe310ce70da8a5aae5795277944e70a23c5"
+  },
+  "limitations": [
+    "Fake platform storage and reconstructed preferences cache, not physical crash or power-loss testing",
+    "No cross-isolate transaction/locking guarantee added",
+    "SharedPreferences remains the persistence backend",
+    "Canonical change is not published or integrated into the wallet Git dependency",
+    "Legacy tag/remark UI issue UI-001 remains open"
+  ]
+}

@@ -1,0 +1,16 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/repositories/favorite_record_persistence_test.dart' as favorites;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/repositories/message_action_persistence_test.dart' as actions;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/services/email_change_service_test.dart' as email;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/repositories/email_change_repository_regression_test.dart' as authRepository;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/presentation/pages/settings/change_email_verification_test.dart' as emailPage;
+import 'file:///Users/jieliu/Documents/n42/n42_chat_audit_20260912/test/unit/blocs/auth_bloc_test.dart' as authBloc;
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  group('favorites candidate', favorites.main);
+  group('actions candidate', actions.main);
+  group('email candidate', email.main);
+  group('authRepository candidate', authRepository.main);
+  group('emailPage candidate', emailPage.main);
+  group('authBloc candidate', authBloc.main);
+}
