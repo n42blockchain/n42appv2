@@ -68,6 +68,7 @@ void main() {
     when(() => client.getRoomById(roomId)).thenReturn(room);
     when(() => client.rooms).thenReturn([]);
     when(() => room.id).thenReturn(roomId);
+    when(() => room.membership).thenReturn(matrix.Membership.invite);
     when(() => room.join()).thenAnswer((_) async {});
     when(
       () => room.getState('n42.token_gate'),
@@ -96,6 +97,47 @@ void main() {
   });
   setUpAll(() => registerFallbackValue(BigInt.zero));
 
+  test(
+    'real invite Bloc checks balance once and joins after approval',
+    () async {
+      config([rule()]);
+      final bloc = GroupBloc(repository);
+      final outcome = bloc.stream.firstWhere(
+        (s) => s.status == GroupStatus.success || s.status == GroupStatus.error,
+      );
+      bloc.add(const AcceptGroupInvite(roomId));
+      final result = await outcome;
+      expect(result.status, GroupStatus.success, reason: result.errorMessage);
+      verify(
+        () => wallet.getErc20Balance(contractAddress: contract, chainId: 1),
+      ).called(1);
+      verify(() => room.join()).called(1);
+      await bloc.close();
+    },
+  );
+  test(
+    'real invite Bloc presents insufficient balance without joining',
+    () async {
+      config([rule(minimum: BigInt.from(101))]);
+      final bloc = GroupBloc(repository);
+      final outcome = bloc.stream.firstWhere(
+        (s) =>
+            s.status == GroupStatus.tokenGateVerified ||
+            s.status == GroupStatus.error,
+      );
+      bloc.add(const AcceptGroupInvite(roomId));
+      final result = await outcome;
+      expect(
+        result.status,
+        GroupStatus.tokenGateVerified,
+        reason: result.errorMessage,
+      );
+      expect(result.tokenGateResult?.passed, isFalse);
+      expect(result.tokenGateRoomId, roomId);
+      verifyNever(() => room.join());
+      await bloc.close();
+    },
+  );
   test('absent gate requires no balance calls', () async {
     expect((await repository.verifyTokenGate(roomId)).passed, isTrue);
     verifyZeroInteractions(wallet);

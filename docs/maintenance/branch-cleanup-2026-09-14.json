@@ -1,0 +1,28 @@
+{
+  "repository": "n42appv2",
+  "base_commit": "1206ac7707f6c481226ef36b0aa99e17f4535d1b",
+  "eligible": [
+    {
+      "branch": "codex/discover-full",
+      "local_tip": "4ce208c99bfc185587a050cd7e21d68c349a1525",
+      "remote_tip": "4ce208c99bfc185587a050cd7e21d68c349a1525",
+      "merged_into": "1206ac7707f6c481226ef36b0aa99e17f4535d1b"
+    },
+    {
+      "branch": "codex/t29-live-full",
+      "local_tip": "7d3ca232bc924c209b783e3564ed3027438590c5",
+      "remote_tip": "7d3ca232bc924c209b783e3564ed3027438590c5",
+      "merged_into": "1206ac7707f6c481226ef36b0aa99e17f4535d1b"
+    },
+    {
+      "branch": "fix/wallet-audit-localization-20260911",
+      "local_tip": "9d9eabb77b4a473bed4a976894358247a304016e",
+      "remote_tip": "9d9eabb77b4a473bed4a976894358247a304016e",
+      "merged_into": "1206ac7707f6c481226ef36b0aa99e17f4535d1b"
+    }
+  ],
+  "policy": "Delete only branches fully merged into origin/master and not used by a worktree; preserve unmerged and backup branches.",
+  "status": "Deleted locally and remotely with expected-tip leases",
+  "verified_date": "2026-09-14",
+  "remote_recheck": "ls-remote returned master at base_commit and no deleted branch refs"
+}

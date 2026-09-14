@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/services/bot_webhook_service.dart';
+import '../../../core/services/room_join_service.dart';
 import '../../../domain/entities/bot_config_entity.dart';
 import '../../../domain/entities/group_entity.dart';
 import '../../../domain/repositories/group_repository.dart';
@@ -539,24 +540,6 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
     Emitter<GroupState> emit,
   ) async {
     try {
-      // Check token gate before accepting invite
-      final tokenGate = await _groupRepository.getTokenGate(event.roomId);
-      if (tokenGate != null &&
-          tokenGate.enabled &&
-          tokenGate.rules.isNotEmpty) {
-        final result = await _groupRepository.verifyTokenGate(event.roomId);
-        if (!result.passed) {
-          emit(
-            state.copyWith(
-              status: GroupStatus.tokenGateVerified,
-              tokenGateRoomId: event.roomId,
-              tokenGateResult: result,
-            ),
-          );
-          return;
-        }
-      }
-
       await _groupRepository.acceptGroupInvite(event.roomId);
       emit(
         state.copyWith(
@@ -565,6 +548,14 @@ class GroupBloc extends Bloc<GroupEvent, GroupState> {
         ),
       );
       add(const RefreshGroups());
+    } on RoomAdmissionException catch (e) {
+      emit(
+        state.copyWith(
+          status: GroupStatus.tokenGateVerified,
+          tokenGateRoomId: e.roomId,
+          tokenGateResult: e.result,
+        ),
+      );
     } catch (e) {
       emit(
         state.copyWith(status: GroupStatus.error, errorMessage: e.toString()),

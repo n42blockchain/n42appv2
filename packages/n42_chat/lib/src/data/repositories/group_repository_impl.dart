@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../core/services/room_join_service.dart';
 import '../../domain/entities/bot_config_entity.dart';
 import '../../domain/entities/channel_entity.dart';
 import '../../domain/entities/content_filter_entity.dart';
@@ -27,14 +28,20 @@ class GroupRepositoryImpl implements IGroupRepository {
   final MatrixClientManager _clientManager;
   final IWalletBridge? _walletBridge;
   final MatrixMessageDataSource? _messageDataSource;
+  late final RoomJoinService _roomJoinService;
 
   GroupRepositoryImpl(
     this._groupDataSource,
     this._clientManager, {
     IWalletBridge? walletBridge,
     MatrixMessageDataSource? messageDataSource,
+    RoomJoinService? roomJoinService,
   }) : _walletBridge = walletBridge,
-       _messageDataSource = messageDataSource;
+       _messageDataSource = messageDataSource {
+    _roomJoinService =
+        roomJoinService ??
+        RoomJoinService(_clientManager, verifyGate: verifyTokenGate);
+  }
 
   @override
   Future<List<GroupEntity>> getGroups() async {
@@ -163,12 +170,12 @@ class GroupRepositoryImpl implements IGroupRepository {
 
   @override
   Future<void> joinGroup(String roomId) async {
-    await _groupDataSource.joinGroup(roomId);
+    await _roomJoinService.join(roomId);
   }
 
   @override
   Future<String> joinGroupByAlias(String alias) async {
-    return await _groupDataSource.joinGroupByAlias(alias);
+    return await _roomJoinService.join(alias);
   }
 
   @override
@@ -194,7 +201,7 @@ class GroupRepositoryImpl implements IGroupRepository {
 
   @override
   Future<void> acceptGroupInvite(String roomId) async {
-    await _groupDataSource.acceptGroupInvite(roomId);
+    await _roomJoinService.join(roomId);
   }
 
   @override

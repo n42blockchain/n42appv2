@@ -1,0 +1,26 @@
+{
+  "source_commit": "1206ac7707f6c481226ef36b0aa99e17f4535d1b",
+  "preserved_report_bodies": [
+    {
+      "file": "docs/chat-audit-2026-09-12/COVERAGE_EXPANSION_2026-09-13.md",
+      "original_sha256": "7181caf59c1cc29f838a5e4df2a14a1819200708481c204c9dadf30389d8bb77"
+    },
+    {
+      "file": "docs/chat-audit-2026-09-12/COVERAGE_ROUND2_2026-09-13.md",
+      "original_sha256": "f5d8e5995f9f0059abb236ab5530b231c9e3a60c7217d528bc195863ab699e41"
+    },
+    {
+      "file": "docs/chat-audit-2026-09-12/COVERAGE_ROUND3_2026-09-14.md",
+      "original_sha256": "8c47131dbf275944bc158ff62828568cb3a6b51eb8f333d721adec63af1337b9"
+    },
+    {
+      "file": "docs/chat-audit-2026-09-12/COVERAGE_ROUND4_2026-09-14.md",
+      "original_sha256": "177a4cb699e81731250c14ef32e02e924063366b9957bac06d32669ea9183e37"
+    }
+  ],
+  "device_and_recovery_history_preserved": true,
+  "markdown_files_checked": 10,
+  "local_links_and_anchors_checked": 118,
+  "errors": [],
+  "round4_and_round5_trace_hashes": "verified"
+}

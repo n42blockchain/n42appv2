@@ -8,6 +8,8 @@ A comprehensive cross-platform cryptocurrency wallet built with Flutter, featuri
 
 ## Functional audit (2026-09-10)
 
+Start with the [documentation index](docs/README.md) for current module reports, Chat verification, coverage history, and maintenance records.
+
 The [industry research and functional audit](docs/wallet-industry-research-and-functional-audit-2026-09-10.md) records verified fixes, feature entry points, and unresolved execution gaps. See the [UI reference inventory](docs/wallet-feature-wiring-inventory-2026-09-10.md) and [validation results](docs/wallet-audit-validation-2026-09-10.md) for evidence.
 The [follow-up gap audit](docs/wallet-gap-audit-2026-09-11.md) reconciles earlier reports, fixes home refresh edge cases, and separates verified behavior from remaining feature gaps.
 

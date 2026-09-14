@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/services/room_join_service.dart';
 import '../../../core/utils/conversation_notification_utils.dart';
 import '../../../core/utils/matrix_utils.dart';
 import '../../../domain/entities/conversation_entity.dart';
@@ -14,7 +15,10 @@ import '../../../core/utils/debug_log.dart';
 class MatrixRoomDataSource {
   final MatrixClientManager _clientManager;
 
-  MatrixRoomDataSource(this._clientManager);
+  final RoomJoinService _roomJoinService;
+
+  MatrixRoomDataSource(this._clientManager, {RoomJoinService? roomJoinService})
+    : _roomJoinService = roomJoinService ?? RoomJoinService(_clientManager);
 
   /// 获取Matrix客户端
   matrix.Client? get _client => _clientManager.client;
@@ -251,11 +255,7 @@ class MatrixRoomDataSource {
 
   /// 加入房间
   Future<void> joinRoom(String roomIdOrAlias) async {
-    if (_client == null) {
-      throw Exception('Matrix client not initialized');
-    }
-
-    await _client!.joinRoom(roomIdOrAlias);
+    await _roomJoinService.join(roomIdOrAlias);
   }
 
   /// 离开房间

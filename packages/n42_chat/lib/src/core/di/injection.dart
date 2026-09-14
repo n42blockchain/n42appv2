@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../services/room_join_service.dart';
 import '../services/giphy_service.dart';
 import '../services/tenor_service.dart';
 import '../services/gif_service.dart';
@@ -712,9 +713,19 @@ Future<void> _registerDataSources() async {
     ),
   );
 
+  getIt.registerLazySingleton<RoomJoinService>(
+    () => RoomJoinService(
+      getIt<MatrixClientManager>(),
+      verifyGate: (roomId) => getIt<IGroupRepository>().verifyTokenGate(roomId),
+    ),
+  );
+
   // Matrix房间数据源
   getIt.registerLazySingleton<MatrixRoomDataSource>(
-    () => MatrixRoomDataSource(getIt<MatrixClientManager>()),
+    () => MatrixRoomDataSource(
+      getIt<MatrixClientManager>(),
+      roomJoinService: getIt<RoomJoinService>(),
+    ),
   );
 
   // Matrix消息数据源
@@ -729,7 +740,10 @@ Future<void> _registerDataSources() async {
 
   // Matrix群聊数据源
   getIt.registerLazySingleton<MatrixGroupDataSource>(
-    () => MatrixGroupDataSource(getIt<MatrixClientManager>()),
+    () => MatrixGroupDataSource(
+      getIt<MatrixClientManager>(),
+      roomJoinService: getIt<RoomJoinService>(),
+    ),
   );
 
   // Matrix搜索数据源
@@ -887,6 +901,7 @@ void _registerRepositories() {
       getIt<MatrixClientManager>(),
       walletBridge: getIt<IWalletBridge>(),
       messageDataSource: getIt<MatrixMessageDataSource>(),
+      roomJoinService: getIt<RoomJoinService>(),
     ),
   );
 

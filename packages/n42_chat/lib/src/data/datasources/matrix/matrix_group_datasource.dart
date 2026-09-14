@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/services/room_join_service.dart';
 import '../../../domain/entities/bot_config_entity.dart';
 import '../../../domain/entities/channel_entity.dart';
 import '../../../domain/entities/content_filter_entity.dart';
@@ -23,7 +24,10 @@ class MatrixGroupDataSource {
   static const String _botConfigEventType = 'n42.room.bot_config';
   static const String _tokenGateEventType = 'n42.token_gate';
 
-  MatrixGroupDataSource(this._clientManager);
+  final RoomJoinService _roomJoinService;
+
+  MatrixGroupDataSource(this._clientManager, {RoomJoinService? roomJoinService})
+    : _roomJoinService = roomJoinService ?? RoomJoinService(_clientManager);
 
   /// 获取Matrix客户端
   matrix.Client? get _client => _clientManager.client;
@@ -411,21 +415,11 @@ class MatrixGroupDataSource {
 
   /// 加入群
   Future<void> joinGroup(String roomId) async {
-    final room = _client?.getRoomById(roomId);
-    if (room != null) {
-      await room.join();
-    } else {
-      await _client?.joinRoom(roomId);
-    }
+    await _roomJoinService.join(roomId);
   }
 
   /// 通过邀请链接加入群
-  Future<String> joinGroupByAlias(String alias) async {
-    if (_client == null) {
-      throw Exception('Matrix client not initialized');
-    }
-    return await _client!.joinRoom(alias);
-  }
+  Future<String> joinGroupByAlias(String alias) => _roomJoinService.join(alias);
 
   /// 离开群
   Future<void> leaveGroup(String roomId) async {

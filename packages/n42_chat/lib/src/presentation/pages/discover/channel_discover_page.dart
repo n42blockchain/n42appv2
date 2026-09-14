@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:matrix/matrix.dart' as matrix;
 
+import '../../../core/di/injection.dart';
+import '../../../domain/repositories/group_repository.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
@@ -148,7 +150,7 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
       if (client == null || !client.isLogged()) {
         throw Exception('Sign in first');
       }
-      await client.joinRoom(channel.roomId);
+      await getIt<IGroupRepository>().joinGroup(channel.roomId);
       if (!mounted) return;
       await N42Chat.openConversation(channel.roomId, context: context);
     } catch (error) {

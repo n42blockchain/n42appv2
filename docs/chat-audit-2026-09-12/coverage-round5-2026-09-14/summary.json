@@ -1,0 +1,127 @@
+{
+  "baseline_commit": "ce0483338d859e4c483506fe3a7f1c29e1a581ec",
+  "baseline_trace_origin": "Previous completed round4 full suite; SHA-256 verified",
+  "baseline_passed": 6271,
+  "passed": 6321,
+  "skipped": 1,
+  "new_tests": 50,
+  "new_test_modules": {
+    "room_admission": 48,
+    "real_invite_bloc": 2
+  },
+  "modules": {
+    "Raw lcov": {
+      "baseline": {
+        "covered": 28636,
+        "instrumented": 131242,
+        "percent": 21.82
+      },
+      "final": {
+        "covered": 28708,
+        "instrumented": 131292,
+        "percent": 21.87
+      }
+    },
+    "Non-generated reference": {
+      "baseline": {
+        "covered": 27502,
+        "instrumented": 79327,
+        "percent": 34.67
+      },
+      "final": {
+        "covered": 27574,
+        "instrumented": 79377,
+        "percent": 34.74
+      }
+    },
+    "Room join service": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 0,
+        "percent": null
+      },
+      "final": {
+        "covered": 47,
+        "instrumented": 47,
+        "percent": 100.0
+      }
+    },
+    "Group repository": {
+      "baseline": {
+        "covered": 171,
+        "instrumented": 260,
+        "percent": 65.77
+      },
+      "final": {
+        "covered": 182,
+        "instrumented": 262,
+        "percent": 69.47
+      }
+    },
+    "Matrix group datasource": {
+      "baseline": {
+        "covered": 29,
+        "instrumented": 374,
+        "percent": 7.75
+      },
+      "final": {
+        "covered": 43,
+        "instrumented": 370,
+        "percent": 11.62
+      }
+    },
+    "Matrix room datasource": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 162,
+        "percent": 0.0
+      },
+      "final": {
+        "covered": 3,
+        "instrumented": 161,
+        "percent": 1.86
+      }
+    },
+    "Group Bloc": {
+      "baseline": {
+        "covered": 269,
+        "instrumented": 314,
+        "percent": 85.67
+      },
+      "final": {
+        "covered": 266,
+        "instrumented": 311,
+        "percent": 85.53
+      }
+    }
+  },
+  "traces": {
+    "baseline": {
+      "file": "baseline.lcov.gz",
+      "raw_sha256": "53de69ba04ff5f5bf7a37bae3baa51f17160c2e76eafe18090a416b118996303"
+    },
+    "final": {
+      "file": "final.lcov.gz",
+      "raw_sha256": "346e9d62d8a9bc676af99a61225c330423f629f1dbf58ce00fd23ff9ecd1714b"
+    }
+  },
+  "completed_date": "2026-09-14",
+  "current_commit": "c1d222e3ea9c49a5f8bc51444154eb4026d689ef",
+  "host_integration_passed": 353,
+  "runtime_file_hashes_verified": 768,
+  "analysis": {
+    "canonical": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 173
+    },
+    "host": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 155
+    }
+  },
+  "open_issues": [
+    "GROUP-001: Known gate coverage improved; unknown/partial room state, remaining protocol helpers and authoritative homeserver admission remain unverified"
+  ]
+}
