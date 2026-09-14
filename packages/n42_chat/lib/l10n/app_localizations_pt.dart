@@ -5833,6 +5833,16 @@ class SPt extends S {
 
   @override
   String get settingsSmartFilter => 'Filtro inteligente';
+
+  @override
+  String get settingsEmailVerificationSent => 'E-mail de verificação enviado';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Abra a ligação de verificação no seu e-mail, depois volte aqui e confirme.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Enviar e-mail de verificação';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11664,4 +11674,14 @@ class SPtBr extends SPt {
 
   @override
   String get settingsSmartFilter => 'Filtro inteligente';
+
+  @override
+  String get settingsEmailVerificationSent => 'E-mail de verificação enviado';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Abra o link de verificação no seu e-mail, depois volte aqui e confirme.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Enviar e-mail de verificação';
 }

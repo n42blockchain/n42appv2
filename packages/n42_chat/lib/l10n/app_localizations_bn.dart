@@ -5801,4 +5801,14 @@ class SBn extends S {
 
   @override
   String get settingsSmartFilter => 'স্মার্ট ফিল্টার';
+
+  @override
+  String get settingsEmailVerificationSent => 'যাচাইকরণ ইমেল পাঠানো হয়েছে';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'ইমেলের যাচাইকরণ লিঙ্কটি খুলুন, তারপর এখানে ফিরে এসে নিশ্চিত করুন।';
+
+  @override
+  String get settingsSendVerificationEmail => 'যাচাইকরণ ইমেল পাঠান';
 }

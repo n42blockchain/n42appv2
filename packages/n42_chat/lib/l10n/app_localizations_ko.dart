@@ -5684,4 +5684,13 @@ class SKo extends S {
 
   @override
   String get settingsSmartFilter => '스마트 필터';
+
+  @override
+  String get settingsEmailVerificationSent => '인증 이메일을 보냈습니다';
+
+  @override
+  String get settingsEmailLinkInstructions => '이메일의 인증 링크를 연 다음 여기로 돌아와 확인하세요.';
+
+  @override
+  String get settingsSendVerificationEmail => '인증 이메일 보내기';
 }

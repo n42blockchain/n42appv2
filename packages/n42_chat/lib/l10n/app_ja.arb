@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "通知のプライバシー",
   "settingsSenderOnly": "送信者のみ表示",
   "settingsHiddenNotification": "送信者とメッセージを非表示",
-  "settingsSmartFilter": "スマートフィルター"
+  "settingsSmartFilter": "スマートフィルター",
+  "settingsEmailVerificationSent": "確認メールを送信しました",
+  "settingsEmailLinkInstructions": "メール内の確認リンクを開いてから、ここに戻って確認してください。",
+  "settingsSendVerificationEmail": "確認メールを送信"
 }

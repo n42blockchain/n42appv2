@@ -2140,5 +2140,8 @@
   "settingsNotificationPrivacy": "通知隱私",
   "settingsSenderOnly": "僅顯示傳送者",
   "settingsHiddenNotification": "隱藏傳送者和訊息",
-  "settingsSmartFilter": "智慧篩選"
+  "settingsSmartFilter": "智慧篩選",
+  "settingsEmailVerificationSent": "驗證郵件已傳送",
+  "settingsEmailLinkInstructions": "請開啟郵件中的驗證連結，然後返回此處確認。",
+  "settingsSendVerificationEmail": "傳送驗證郵件"
 }

@@ -5848,4 +5848,14 @@ class SDe extends S {
 
   @override
   String get settingsSmartFilter => 'Intelligenter Filter';
+
+  @override
+  String get settingsEmailVerificationSent => 'Bestätigungs-E-Mail gesendet';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Öffne den Bestätigungslink in deiner E-Mail, kehre dann hierher zurück und bestätige.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Bestätigungs-E-Mail senden';
 }

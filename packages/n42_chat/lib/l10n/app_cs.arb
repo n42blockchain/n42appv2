@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Soukromí oznámení",
   "settingsSenderOnly": "Zobrazit pouze odesílatele",
   "settingsHiddenNotification": "Skrýt odesílatele a zprávu",
-  "settingsSmartFilter": "Chytrý filtr"
+  "settingsSmartFilter": "Chytrý filtr",
+  "settingsEmailVerificationSent": "Ověřovací e-mail byl odeslán",
+  "settingsEmailLinkInstructions": "Otevřete ověřovací odkaz v e-mailu, poté se sem vraťte a potvrďte.",
+  "settingsSendVerificationEmail": "Odeslat ověřovací e-mail"
 }

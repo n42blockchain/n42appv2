@@ -14,6 +14,7 @@ import '../../domain/repositories/auth_repository.dart';
 import '../datasources/local/secure_storage_datasource.dart';
 import '../datasources/matrix/matrix_auth_datasource.dart';
 import '../datasources/remote/social_auth_api.dart';
+import '../services/email_change_service.dart';
 
 /// 认证仓库实现
 class AuthRepositoryImpl implements IAuthRepository {
@@ -23,6 +24,15 @@ class AuthRepositoryImpl implements IAuthRepository {
   // 新三家（discord/github/telegram）走自建 backend/social-auth；
   // 未配置 baseUrl 时回退到默认实例（对新三家会失败，但 gating 保证按钮隐藏）。
   final SocialAuthApi _socialAuthBackendApi;
+
+  late final _emailChange = EmailChangeService(
+    currentClient: () => _authDataSource.clientManager.client,
+    isLoggedIn: () => isLoggedIn && !_isDisposed,
+    storage: _secureStorage,
+  );
+
+  @override
+  bool? get emailChangeRequiresCode => _emailChange.requiresCode;
 
   final _loginStateController = StreamController<bool>.broadcast();
 
@@ -320,6 +330,7 @@ class AuthRepositoryImpl implements IAuthRepository {
 
   @override
   Future<void> logout() async {
+    _emailChange.reset();
     // 停止监听 Matrix SDK 登录状态（防止登出流程触发误报）
     await _matrixLoginStateSubscription?.cancel();
     _matrixLoginStateSubscription = null;
@@ -1053,116 +1064,15 @@ class AuthRepositoryImpl implements IAuthRepository {
   Future<bool> requestChangeEmail({
     required String password,
     required String newEmail,
-  }) async {
-    if (!isLoggedIn) {
-      throw StateError('Not logged in: cannot perform this operation');
-    }
-
-    try {
-      authLog('Requesting change email');
-
-      final client = _authDataSource.clientManager.client;
-      if (client == null) {
-        throw StateError('Matrix client not initialized');
-      }
-
-      // Matrix 使用 3PID (Third Party Identifier) 机制管理邮箱
-      // 添加新邮箱需要先验证
-      final userId = client.userID;
-      if (userId == null) {
-        throw StateError('User ID not available');
-      }
-
-      // 生成 client_secret 用于验证流程（UUID v4，不可预测）
-      final clientSecret = const Uuid().v4();
-
-      // 保存 client_secret 以便后续确认使用
-      await _secureStorage.write('email_change_secret', clientSecret);
-      await _secureStorage.write('email_change_address', newEmail);
-
-      // 请求发送验证码到新邮箱
-      final response = await client.requestTokenTo3PIDEmail(
-        clientSecret,
-        newEmail,
-        1, // sendAttempt
-      );
-
-      // 保存 session ID 和过期时间用于后续确认
-      await _secureStorage.write('email_change_sid', response.sid);
-      await _secureStorage.write(
-        'email_change_expires_at',
-        DateTime.now().add(const Duration(hours: 1)).toIso8601String(),
-      );
-
-      authLog('Email verification sent, sid: ${response.sid}');
-      return true;
-    } catch (e) {
-      authLog('Request change email failed - $e');
-      rethrow;
-    }
-  }
+  }) => _emailChange.request(newEmail: newEmail);
 
   @override
   Future<bool> confirmChangeEmail({
     required String newEmail,
     required String code,
-  }) async {
-    if (!isLoggedIn) {
-      throw StateError('Not logged in: cannot perform this operation');
-    }
-
-    try {
-      authLog('Confirming email change');
-
-      final client = _authDataSource.clientManager.client;
-      if (client == null) {
-        throw StateError('Matrix client not initialized');
-      }
-
-      // 获取之前保存的验证信息
-      final clientSecret = await _secureStorage.read('email_change_secret');
-      final sid = await _secureStorage.read('email_change_sid');
-
-      if (clientSecret == null || sid == null) {
-        throw Exception('未找到邮箱验证会话，请重新请求验证码');
-      }
-
-      // 检查验证码是否已过期（1 小时有效期）
-      final expiresAtStr = await _secureStorage.read('email_change_expires_at');
-      if (expiresAtStr != null) {
-        final expiresAt = DateTime.tryParse(expiresAtStr);
-        if (expiresAt != null && DateTime.now().isAfter(expiresAt)) {
-          await _secureStorage.delete('email_change_secret');
-          await _secureStorage.delete('email_change_address');
-          await _secureStorage.delete('email_change_sid');
-          await _secureStorage.delete('email_change_expires_at');
-          throw Exception('验证码已过期，请重新请求');
-        }
-      }
-
-      // 调用 Matrix add3PID 完成 3PID 邮箱绑定
-      try {
-        await client.add3PID(clientSecret, sid);
-      } on MatrixException catch (e) {
-        if (e.errcode == 'M_THREEPID_AUTH_FAILED') {
-          throw Exception('邮箱验证失败，请检查验证码是否正确');
-        }
-        rethrow;
-      }
-
-      // 清除临时保存的验证信息
-      await _secureStorage.delete('email_change_secret');
-      await _secureStorage.delete('email_change_address');
-      await _secureStorage.delete('email_change_sid');
-      await _secureStorage.delete('email_change_expires_at');
-
-      authLog('Email changed successfully');
-      return true;
-    } catch (e) {
-      authLog('Confirm change email failed - $e');
-      rethrow;
-    }
-  }
+    String? password,
+  }) =>
+      _emailChange.confirm(newEmail: newEmail, code: code, password: password);
 
   @override
   Future<String?> getBoundEmail() async {
@@ -1442,12 +1352,14 @@ class AuthRepositoryImpl implements IAuthRepository {
   }
 
   void dispose() {
+    _emailChange.reset();
     _isDisposed = true;
     _matrixLoginStateSubscription?.cancel();
     _loginStateController.close();
   }
 
   Future<void> _handleSdkLogout(LoginState loginState) async {
+    _emailChange.reset();
     authLog(
       'Matrix SDK reported $loginState (token expired or revoked), clearing local session',
     );

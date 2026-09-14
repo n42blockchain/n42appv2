@@ -5831,4 +5831,16 @@ class SUk extends S {
 
   @override
   String get settingsSmartFilter => 'Розумний фільтр';
+
+  @override
+  String get settingsEmailVerificationSent =>
+      'Лист для підтвердження надіслано';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Відкрийте посилання в листі, потім поверніться сюди та підтвердьте.';
+
+  @override
+  String get settingsSendVerificationEmail =>
+      'Надіслати лист для підтвердження';
 }

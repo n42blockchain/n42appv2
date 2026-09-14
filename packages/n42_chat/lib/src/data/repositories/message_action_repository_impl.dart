@@ -6,7 +6,6 @@ import '../../domain/repositories/message_action_repository.dart';
 import '../datasources/local/preferences_datasource.dart';
 import '../datasources/matrix/matrix_client_manager.dart';
 import '../datasources/matrix/matrix_reaction_datasource.dart';
-import '../../core/utils/debug_log.dart';
 
 /// 消息操作仓库实现
 class MessageActionRepositoryImpl implements IMessageActionRepository {
@@ -17,6 +16,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   // 内存缓存
   List<MessageEntity>? _cachedSavedMessages;
   Map<String, Map<String, dynamic>>? _cachedFavoriteMeta;
+  Future<void>? _pendingLoad;
   Future<void> _pendingMutation = Future<void>.value();
 
   Future<void> _mutateFavorites(Future<void> Function() action) {
@@ -234,22 +234,17 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
     final messages = await _loadSavedMessages();
     if (messages.any((m) => m.id == message.id)) return;
     final updated = [...messages, message];
-    await _persistSavedMessages(updated);
-    _cachedSavedMessages = updated;
+    await _persistFavorites(updated, await _loadFavoriteMeta());
   });
 
   @override
   Future<void> unsaveMessage(String messageId) => _mutateFavorites(() async {
     final messages = await _loadSavedMessages();
     final updated = messages.where((m) => m.id != messageId).toList();
-    await _persistSavedMessages(updated);
-    _cachedSavedMessages = updated;
-
     final meta = Map<String, Map<String, dynamic>>.from(
       await _loadFavoriteMeta(),
     )..remove(messageId);
-    await _persistFavoriteMeta(meta);
-    _cachedFavoriteMeta = meta;
+    await _persistFavorites(updated, meta);
   });
 
   @override
@@ -265,36 +260,75 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   }
 
   Future<List<MessageEntity>> _loadSavedMessages() async {
-    if (_cachedSavedMessages != null) return _cachedSavedMessages!;
+    await _loadFavorites();
+    return _cachedSavedMessages!;
+  }
 
+  // Load both halves before publishing either cache. A bad committed record
+  // must never fall back to legacy data and resurrect previously deleted items.
+  Future<void> _loadFavorites() async {
+    if (_cachedSavedMessages != null && _cachedFavoriteMeta != null) return;
+
+    final loading = _pendingLoad ??= _readFavorites();
     try {
-      final jsonStr = await _storage.getFavoriteMessages();
-      if (jsonStr == null || jsonStr.isEmpty) {
-        _cachedSavedMessages = [];
-        return _cachedSavedMessages!;
-      }
-
-      final list = jsonDecode(jsonStr) as List<dynamic>;
-      _cachedSavedMessages = list
-          .map((e) => _messageFromJson(e as Map<String, dynamic>))
-          .toList();
-      return _cachedSavedMessages!;
-    } catch (e) {
-      debugLog('MessageActionRepository: Failed to load saved messages - $e');
-      rethrow;
+      await loading;
+    } finally {
+      if (identical(_pendingLoad, loading)) _pendingLoad = null;
     }
   }
 
-  Future<void> _persistSavedMessages(List<MessageEntity> messages) async {
-    try {
-      final jsonStr = jsonEncode(messages.map(_messageToJson).toList());
-      await _storage.saveFavoriteMessages(jsonStr);
-    } catch (e) {
-      debugLog(
-        'MessageActionRepository: Failed to persist saved messages - $e',
-      );
-      rethrow;
+  Future<void> _readFavorites() async {
+    final record = await _storage.getFavoriteRecord();
+    dynamic messages;
+    dynamic metadata;
+    if (record != null) {
+      final decoded = jsonDecode(record);
+      if (decoded is! Map<String, dynamic> || decoded['version'] != 1) {
+        throw const FormatException('Unsupported favorite record');
+      }
+      messages = decoded['messages'];
+      metadata = decoded['metadata'];
+    } else {
+      final legacyMessages = await _storage.getFavoriteMessages();
+      final legacyMeta = await _storage.getFavoriteMeta();
+      messages = legacyMessages == null || legacyMessages.isEmpty
+          ? <dynamic>[]
+          : jsonDecode(legacyMessages);
+      metadata = legacyMeta == null || legacyMeta.isEmpty
+          ? <String, dynamic>{}
+          : jsonDecode(legacyMeta);
     }
+    if (messages is! List ||
+        messages.any((dynamic item) => item is! Map<String, dynamic>) ||
+        metadata is! Map<String, dynamic> ||
+        metadata.values.any((dynamic item) => item is! Map<String, dynamic>)) {
+      throw const FormatException('Invalid favorite record contents');
+    }
+    final parsedMessages = messages
+        .map((dynamic item) => _messageFromJson(item as Map<String, dynamic>))
+        .toList();
+    final parsedMeta = metadata.map(
+      (key, value) => MapEntry(key, value as Map<String, dynamic>),
+    );
+    _cachedSavedMessages = parsedMessages;
+    _cachedFavoriteMeta = parsedMeta;
+  }
+
+  Future<void> _persistFavorites(
+    List<MessageEntity> messages,
+    Map<String, Map<String, dynamic>> metadata,
+  ) async {
+    // Retain legacy keys for interrupted migration. Once this record exists it
+    // is authoritative; subsequent mutations never write either legacy key.
+    await _storage.saveFavoriteRecord(
+      jsonEncode({
+        'version': 1,
+        'messages': messages.map(_messageToJson).toList(),
+        'metadata': metadata,
+      }),
+    );
+    _cachedSavedMessages = messages;
+    _cachedFavoriteMeta = metadata;
   }
 
   // ============================================
@@ -311,8 +345,7 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
           ...?meta[favoriteId],
           'tags': List<String>.of(tags),
         };
-        await _persistFavoriteMeta(meta);
-        _cachedFavoriteMeta = meta;
+        await _persistFavorites(await _loadSavedMessages(), meta);
       });
 
   @override
@@ -322,40 +355,12 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
           await _loadFavoriteMeta(),
         );
         meta[favoriteId] = {...?meta[favoriteId], 'remark': remark};
-        await _persistFavoriteMeta(meta);
-        _cachedFavoriteMeta = meta;
+        await _persistFavorites(await _loadSavedMessages(), meta);
       });
 
   Future<Map<String, Map<String, dynamic>>> _loadFavoriteMeta() async {
-    if (_cachedFavoriteMeta != null) return _cachedFavoriteMeta!;
-
-    try {
-      final jsonStr = await _storage.getFavoriteMeta();
-      if (jsonStr == null || jsonStr.isEmpty) {
-        _cachedFavoriteMeta = {};
-        return _cachedFavoriteMeta!;
-      }
-
-      final decoded = jsonDecode(jsonStr) as Map<String, dynamic>;
-      _cachedFavoriteMeta = decoded.map(
-        (key, value) => MapEntry(key, value as Map<String, dynamic>),
-      );
-      return _cachedFavoriteMeta!;
-    } catch (e) {
-      debugLog('MessageActionRepository: Failed to load favorite meta - $e');
-      rethrow;
-    }
-  }
-
-  Future<void> _persistFavoriteMeta(
-    Map<String, Map<String, dynamic>> meta,
-  ) async {
-    try {
-      await _storage.saveFavoriteMeta(jsonEncode(meta));
-    } catch (e) {
-      debugLog('MessageActionRepository: Failed to persist favorite meta - $e');
-      rethrow;
-    }
+    await _loadFavorites();
+    return _cachedFavoriteMeta!;
   }
 
   // ============================================

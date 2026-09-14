@@ -194,9 +194,12 @@ abstract class IAuthRepository {
   // 邮箱管理
   // ============================================
 
+  /// True for a token submission URL, false for an email link, null before a request.
+  bool? get emailChangeRequiresCode;
+
   /// 修改绑定邮箱
   ///
-  /// [password] 当前密码（用于验证身份）
+  /// [password] 为兼容保留；绑定所需密码应随 confirmChangeEmail 提供
   /// [newEmail] 新邮箱地址
   ///
   /// 返回是否成功发送验证码
@@ -208,12 +211,14 @@ abstract class IAuthRepository {
   /// 确认修改邮箱
   ///
   /// [newEmail] 新邮箱地址
-  /// [code] 验证码
+  /// [code] 原始验证码；邮件链接验证时传空字符串
+  /// [password] 绑定接口要求密码认证时使用，不持久化
   ///
   /// 返回是否成功修改
   Future<bool> confirmChangeEmail({
     required String newEmail,
     required String code,
+    String? password,
   });
 
   /// 获取当前绑定的邮箱

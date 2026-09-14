@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Privacidad de notificaciones",
   "settingsSenderOnly": "Mostrar solo el remitente",
   "settingsHiddenNotification": "Ocultar remitente y mensaje",
-  "settingsSmartFilter": "Filtro inteligente"
+  "settingsSmartFilter": "Filtro inteligente",
+  "settingsEmailVerificationSent": "Correo de verificación enviado",
+  "settingsEmailLinkInstructions": "Abre el enlace de verificación del correo, vuelve aquí y confirma.",
+  "settingsSendVerificationEmail": "Enviar correo de verificación"
 }

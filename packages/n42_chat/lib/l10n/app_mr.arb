@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "सूचना गोपनीयता",
   "settingsSenderOnly": "फक्त पाठवणारा दाखवा",
   "settingsHiddenNotification": "पाठवणारा आणि संदेश लपवा",
-  "settingsSmartFilter": "स्मार्ट फिल्टर"
+  "settingsSmartFilter": "स्मार्ट फिल्टर",
+  "settingsEmailVerificationSent": "पडताळणी ईमेल पाठवला",
+  "settingsEmailLinkInstructions": "तुमच्या ईमेलमधील पडताळणी लिंक उघडा, नंतर येथे परत येऊन पुष्टी करा.",
+  "settingsSendVerificationEmail": "पडताळणी ईमेल पाठवा"
 }

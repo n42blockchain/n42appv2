@@ -5662,6 +5662,15 @@ class SZh extends S {
 
   @override
   String get settingsSmartFilter => '智能过滤';
+
+  @override
+  String get settingsEmailVerificationSent => '验证邮件已发送';
+
+  @override
+  String get settingsEmailLinkInstructions => '请打开邮件中的验证链接，然后返回此处确认。';
+
+  @override
+  String get settingsSendVerificationEmail => '发送验证邮件';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11322,4 +11331,13 @@ class SZhTw extends SZh {
 
   @override
   String get settingsSmartFilter => '智慧篩選';
+
+  @override
+  String get settingsEmailVerificationSent => '驗證郵件已傳送';
+
+  @override
+  String get settingsEmailLinkInstructions => '請開啟郵件中的驗證連結，然後返回此處確認。';
+
+  @override
+  String get settingsSendVerificationEmail => '傳送驗證郵件';
 }

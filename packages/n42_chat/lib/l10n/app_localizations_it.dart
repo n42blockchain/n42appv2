@@ -5824,4 +5824,14 @@ class SIt extends S {
 
   @override
   String get settingsSmartFilter => 'Filtro intelligente';
+
+  @override
+  String get settingsEmailVerificationSent => 'Email di verifica inviata';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Apri il link di verifica nella tua email, poi torna qui e conferma.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Invia email di verifica';
 }

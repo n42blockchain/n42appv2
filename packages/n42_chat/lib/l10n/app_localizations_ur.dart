@@ -5813,4 +5813,14 @@ class SUr extends S {
 
   @override
   String get settingsSmartFilter => 'اسمارٹ فلٹر';
+
+  @override
+  String get settingsEmailVerificationSent => 'تصدیقی ای میل بھیج دی گئی';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'اپنی ای میل میں تصدیقی لنک کھولیں، پھر یہاں واپس آ کر تصدیق کریں۔';
+
+  @override
+  String get settingsSendVerificationEmail => 'تصدیقی ای میل بھیجیں';
 }

@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "నోటిఫికేషన్ గోప్యత",
   "settingsSenderOnly": "పంపినవారిని మాత్రమే చూపించు",
   "settingsHiddenNotification": "పంపినవారిని మరియు సందేశాన్ని దాచు",
-  "settingsSmartFilter": "స్మార్ట్ ఫిల్టర్"
+  "settingsSmartFilter": "స్మార్ట్ ఫిల్టర్",
+  "settingsEmailVerificationSent": "ధృవీకరణ ఇమెయిల్ పంపబడింది",
+  "settingsEmailLinkInstructions": "మీ ఇమెయిల్‌లోని ధృవీకరణ లింక్‌ను తెరిచి, ఇక్కడికి తిరిగి వచ్చి నిర్ధారించండి.",
+  "settingsSendVerificationEmail": "ధృవీకరణ ఇమెయిల్ పంపండి"
 }

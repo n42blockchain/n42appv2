@@ -5789,4 +5789,14 @@ class SVi extends S {
 
   @override
   String get settingsSmartFilter => 'Bộ lọc thông minh';
+
+  @override
+  String get settingsEmailVerificationSent => 'Đã gửi email xác minh';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Mở liên kết xác minh trong email, sau đó quay lại đây và xác nhận.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Gửi email xác minh';
 }

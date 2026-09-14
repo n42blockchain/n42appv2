@@ -5777,4 +5777,14 @@ class SAr extends S {
 
   @override
   String get settingsSmartFilter => 'التصفية الذكية';
+
+  @override
+  String get settingsEmailVerificationSent => 'تم إرسال رسالة التحقق';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'افتح رابط التحقق في بريدك الإلكتروني، ثم عد إلى هنا وأكّد.';
+
+  @override
+  String get settingsSendVerificationEmail => 'إرسال رسالة التحقق';
 }

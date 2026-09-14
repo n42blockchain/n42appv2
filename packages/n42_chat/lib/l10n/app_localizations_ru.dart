@@ -5828,4 +5828,16 @@ class SRu extends S {
 
   @override
   String get settingsSmartFilter => 'Умный фильтр';
+
+  @override
+  String get settingsEmailVerificationSent =>
+      'Письмо для подтверждения отправлено';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Откройте ссылку в письме, затем вернитесь сюда и подтвердите.';
+
+  @override
+  String get settingsSendVerificationEmail =>
+      'Отправить письмо для подтверждения';
 }

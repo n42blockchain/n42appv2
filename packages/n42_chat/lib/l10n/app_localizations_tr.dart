@@ -5806,4 +5806,14 @@ class STr extends S {
 
   @override
   String get settingsSmartFilter => 'Akıllı Filtre';
+
+  @override
+  String get settingsEmailVerificationSent => 'Doğrulama e-postası gönderildi';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'E-postanızdaki doğrulama bağlantısını açın, ardından buraya dönüp onaylayın.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Doğrulama e-postası gönder';
 }

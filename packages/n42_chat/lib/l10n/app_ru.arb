@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Конфиденциальность уведомлений",
   "settingsSenderOnly": "Показывать только отправителя",
   "settingsHiddenNotification": "Скрывать отправителя и сообщение",
-  "settingsSmartFilter": "Умный фильтр"
+  "settingsSmartFilter": "Умный фильтр",
+  "settingsEmailVerificationSent": "Письмо для подтверждения отправлено",
+  "settingsEmailLinkInstructions": "Откройте ссылку в письме, затем вернитесь сюда и подтвердите.",
+  "settingsSendVerificationEmail": "Отправить письмо для подтверждения"
 }

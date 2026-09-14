@@ -5863,4 +5863,15 @@ class STa extends S {
 
   @override
   String get settingsSmartFilter => 'ஸ்மார்ட் வடிகட்டி';
+
+  @override
+  String get settingsEmailVerificationSent =>
+      'சரிபார்ப்பு மின்னஞ்சல் அனுப்பப்பட்டது';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'மின்னஞ்சலில் உள்ள சரிபார்ப்பு இணைப்பைத் திறந்து, இங்கே திரும்பி வந்து உறுதிப்படுத்தவும்.';
+
+  @override
+  String get settingsSendVerificationEmail => 'சரிபார்ப்பு மின்னஞ்சலை அனுப்பு';
 }

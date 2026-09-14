@@ -86,6 +86,9 @@ enum ChangeEmailStatus {
   /// 验证码已发送
   codeSent,
 
+  /// 邮件链接已发送
+  linkSent,
+
   /// 确认中
   confirming,
 
@@ -159,28 +162,28 @@ class AuthState extends Equatable {
 
   /// 初始状态
   const AuthState.initial()
-      : status = AuthStatus.initial,
-        user = null,
-        errorMessage = null,
-        errorType = null,
-        homeserverStatus = HomeserverStatus.unknown,
-        homeserverInfo = null,
-        lastCheckedHomeserver = null,
-        passwordResetStatus = PasswordResetStatus.initial,
-        changePasswordStatus = ChangePasswordStatus.initial,
-        changeEmailStatus = ChangeEmailStatus.initial,
-        boundEmail = null,
-        isBiometricAvailable = false,
-        isBiometricEnabled = false,
-        biometricTypeDescription = null;
+    : status = AuthStatus.initial,
+      user = null,
+      errorMessage = null,
+      errorType = null,
+      homeserverStatus = HomeserverStatus.unknown,
+      homeserverInfo = null,
+      lastCheckedHomeserver = null,
+      passwordResetStatus = PasswordResetStatus.initial,
+      changePasswordStatus = ChangePasswordStatus.initial,
+      changeEmailStatus = ChangeEmailStatus.initial,
+      boundEmail = null,
+      isBiometricAvailable = false,
+      isBiometricEnabled = false,
+      biometricTypeDescription = null;
 
   /// 是否正在加载
   bool get isLoading =>
       status == AuthStatus.loading || status == AuthStatus.checking;
 
   /// 是否已登录（loading 状态下如果有 user 也算已登录）
-  bool get isAuthenticated => 
-      status == AuthStatus.authenticated || 
+  bool get isAuthenticated =>
+      status == AuthStatus.authenticated ||
       (status == AuthStatus.loading && user != null) ||
       (status == AuthStatus.error && user != null);
 
@@ -191,7 +194,8 @@ class AuthState extends Equatable {
   bool get isHomeserverValid => homeserverStatus == HomeserverStatus.valid;
 
   /// 是否正在检查Homeserver
-  bool get isCheckingHomeserver => homeserverStatus == HomeserverStatus.checking;
+  bool get isCheckingHomeserver =>
+      homeserverStatus == HomeserverStatus.checking;
 
   AuthState copyWith({
     AuthStatus? status,
@@ -224,29 +228,29 @@ class AuthState extends Equatable {
       boundEmail: boundEmail ?? this.boundEmail,
       isBiometricAvailable: isBiometricAvailable ?? this.isBiometricAvailable,
       isBiometricEnabled: isBiometricEnabled ?? this.isBiometricEnabled,
-      biometricTypeDescription: biometricTypeDescription ?? this.biometricTypeDescription,
+      biometricTypeDescription:
+          biometricTypeDescription ?? this.biometricTypeDescription,
     );
   }
 
   @override
   List<Object?> get props => [
-        status,
-        user,
-        errorMessage,
-        errorType,
-        homeserverStatus,
-        homeserverInfo,
-        lastCheckedHomeserver,
-        passwordResetStatus,
-        changePasswordStatus,
-        changeEmailStatus,
-        boundEmail,
-        isBiometricAvailable,
-        isBiometricEnabled,
-        biometricTypeDescription,
-      ];
+    status,
+    user,
+    errorMessage,
+    errorType,
+    homeserverStatus,
+    homeserverInfo,
+    lastCheckedHomeserver,
+    passwordResetStatus,
+    changePasswordStatus,
+    changeEmailStatus,
+    boundEmail,
+    isBiometricAvailable,
+    isBiometricEnabled,
+    biometricTypeDescription,
+  ];
 
   @override
   String toString() => 'AuthState(status: $status, user: ${user?.userId})';
 }
-

@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Bildirim Gizliliği",
   "settingsSenderOnly": "Yalnızca göndereni göster",
   "settingsHiddenNotification": "Göndereni ve mesajı gizle",
-  "settingsSmartFilter": "Akıllı Filtre"
+  "settingsSmartFilter": "Akıllı Filtre",
+  "settingsEmailVerificationSent": "Doğrulama e-postası gönderildi",
+  "settingsEmailLinkInstructions": "E-postanızdaki doğrulama bağlantısını açın, ardından buraya dönüp onaylayın.",
+  "settingsSendVerificationEmail": "Doğrulama e-postası gönder"
 }

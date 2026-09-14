@@ -38,6 +38,7 @@ class PreferencesDataSource {
   static const String _keyTranslationSettings = 'n42_chat_translation_settings';
   static const String _keyFavoriteMessages = 'n42_chat_favorite_messages';
   static const String _keyFavoriteMeta = 'n42_chat_favorite_meta';
+  static const String _keyFavoriteRecord = 'n42_chat_favorite_record';
   static const String _keyChatFolders = 'n42_chat_folders';
   static const Map<String, bool> defaultAutoDownloadSettings = {
     'wifi_images': true,
@@ -1425,6 +1426,18 @@ class PreferencesDataSource {
   // ============================================
   // 收藏消息持久化
   // ============================================
+
+  /// Save the versioned message/metadata snapshot with one platform write.
+  Future<void> saveFavoriteRecord(String json) async {
+    final p = await prefs;
+    await saveStringPreference(p, _keyFavoriteRecord, json);
+  }
+
+  /// A missing record allows legacy migration; malformed records must surface.
+  Future<String?> getFavoriteRecord() async {
+    final p = await prefs;
+    return p.getString(_keyFavoriteRecord);
+  }
 
   /// 保存收藏消息列表（JSON）
   Future<void> saveFavoriteMessages(String json) async {

@@ -5684,4 +5684,14 @@ class SJa extends S {
 
   @override
   String get settingsSmartFilter => 'スマートフィルター';
+
+  @override
+  String get settingsEmailVerificationSent => '確認メールを送信しました';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'メール内の確認リンクを開いてから、ここに戻って確認してください。';
+
+  @override
+  String get settingsSendVerificationEmail => '確認メールを送信';
 }

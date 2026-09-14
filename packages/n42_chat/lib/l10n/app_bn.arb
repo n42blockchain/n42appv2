@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "বিজ্ঞপ্তির গোপনীয়তা",
   "settingsSenderOnly": "শুধু প্রেরক দেখান",
   "settingsHiddenNotification": "প্রেরক ও বার্তা লুকান",
-  "settingsSmartFilter": "স্মার্ট ফিল্টার"
+  "settingsSmartFilter": "স্মার্ট ফিল্টার",
+  "settingsEmailVerificationSent": "যাচাইকরণ ইমেল পাঠানো হয়েছে",
+  "settingsEmailLinkInstructions": "ইমেলের যাচাইকরণ লিঙ্কটি খুলুন, তারপর এখানে ফিরে এসে নিশ্চিত করুন।",
+  "settingsSendVerificationEmail": "যাচাইকরণ ইমেল পাঠান"
 }

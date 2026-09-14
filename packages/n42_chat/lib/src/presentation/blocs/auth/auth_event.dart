@@ -415,10 +415,12 @@ class AuthRequestChangeEmailRequested extends AuthEvent {
 class AuthConfirmChangeEmailRequested extends AuthEvent {
   final String newEmail;
   final String code;
+  final String? password;
 
   const AuthConfirmChangeEmailRequested({
     required this.newEmail,
     required this.code,
+    this.password,
   });
 
   @override

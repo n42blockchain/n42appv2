@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "알림 개인정보 보호",
   "settingsSenderOnly": "보낸 사람만 표시",
   "settingsHiddenNotification": "보낸 사람과 메시지 숨기기",
-  "settingsSmartFilter": "스마트 필터"
+  "settingsSmartFilter": "스마트 필터",
+  "settingsEmailVerificationSent": "인증 이메일을 보냈습니다",
+  "settingsEmailLinkInstructions": "이메일의 인증 링크를 연 다음 여기로 돌아와 확인하세요.",
+  "settingsSendVerificationEmail": "인증 이메일 보내기"
 }

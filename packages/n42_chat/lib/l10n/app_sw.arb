@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Faragha ya Arifa",
   "settingsSenderOnly": "Onyesha mtumaji pekee",
   "settingsHiddenNotification": "Ficha mtumaji na ujumbe",
-  "settingsSmartFilter": "Kichujio Mahiri"
+  "settingsSmartFilter": "Kichujio Mahiri",
+  "settingsEmailVerificationSent": "Barua pepe ya uthibitishaji imetumwa",
+  "settingsEmailLinkInstructions": "Fungua kiungo cha uthibitishaji katika barua pepe yako, kisha urudi hapa na uthibitishe.",
+  "settingsSendVerificationEmail": "Tuma barua pepe ya uthibitishaji"
 }

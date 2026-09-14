@@ -1,6 +1,6 @@
 # 邮箱验证修复候选 — 2026-09-14
 
-后续发布记录：本报告所述修复已于 2026-09-14 随 Chat [ebaa003](https://github.com/n42blockchain/n42_chat/commit/ebaa003b3dd882be9f951cb73c88633fa618f76c) 提交并推送；钱包依赖尚未更新。以下保留验证当时的状态与证据。
+后续发布记录：本报告所述修复已于 2026-09-14 随 Chat [ebaa003](https://github.com/n42blockchain/n42_chat/commit/ebaa003b3dd882be9f951cb73c88633fa618f76c) 提交并推送；钱包随后已完成[依赖集成](WALLET_INTEGRATION_2026-09-14.md)。以下保留验证当时的状态与证据。
 
 状态：正式 Chat 工作树已实现并验证的本地候选，尚未提交、发布或更新钱包 Git pin。包含上一轮收藏修复；当前钱包仍使用 `c1d222e3ea9c49a5f8bc51444154eb4026d689ef`，本报告不替换第五轮已交付基线。
 

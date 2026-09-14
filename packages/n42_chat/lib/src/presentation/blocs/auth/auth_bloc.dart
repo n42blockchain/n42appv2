@@ -1280,7 +1280,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
 
       if (success) {
-        emit(state.copyWith(changeEmailStatus: ChangeEmailStatus.codeSent));
+        emit(
+          state.copyWith(
+            changeEmailStatus: _authRepository.emailChangeRequiresCode == false
+                ? ChangeEmailStatus.linkSent
+                : ChangeEmailStatus.codeSent,
+          ),
+        );
       } else {
         emit(
           state.copyWith(
@@ -1322,6 +1328,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       final success = await _authRepository.confirmChangeEmail(
         newEmail: event.newEmail,
         code: event.code,
+        password: event.password,
       );
 
       if (success) {
@@ -1342,7 +1349,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       String errorMessage = BlocMessageKeys.authChangeEmailFailed;
       if (e.toString().contains('M_THREEPID_AUTH_FAILED')) {
-        errorMessage = BlocMessageKeys.authVerificationCodeInvalid;
+        errorMessage = _authRepository.emailChangeRequiresCode == false
+            ? BlocMessageKeys.authChangeEmailFailed
+            : BlocMessageKeys.authVerificationCodeInvalid;
+      } else if (e.toString().contains('M_FORBIDDEN') ||
+          e.toString().contains('M_UNAUTHORIZED')) {
+        errorMessage = BlocMessageKeys.authPasswordWrong;
       }
       emit(
         state.copyWith(

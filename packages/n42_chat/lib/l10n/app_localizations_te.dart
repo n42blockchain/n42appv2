@@ -5845,4 +5845,14 @@ class STe extends S {
 
   @override
   String get settingsSmartFilter => 'స్మార్ట్ ఫిల్టర్';
+
+  @override
+  String get settingsEmailVerificationSent => 'ధృవీకరణ ఇమెయిల్ పంపబడింది';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'మీ ఇమెయిల్‌లోని ధృవీకరణ లింక్‌ను తెరిచి, ఇక్కడికి తిరిగి వచ్చి నిర్ధారించండి.';
+
+  @override
+  String get settingsSendVerificationEmail => 'ధృవీకరణ ఇమెయిల్ పంపండి';
 }

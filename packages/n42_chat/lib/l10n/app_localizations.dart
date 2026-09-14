@@ -10738,6 +10738,24 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Smart Filter'**
   String get settingsSmartFilter;
+
+  /// No description provided for @settingsEmailVerificationSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Verification email sent'**
+  String get settingsEmailVerificationSent;
+
+  /// No description provided for @settingsEmailLinkInstructions.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the verification link in your email, then return here and confirm.'**
+  String get settingsEmailLinkInstructions;
+
+  /// No description provided for @settingsSendVerificationEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Send verification email'**
+  String get settingsSendVerificationEmail;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

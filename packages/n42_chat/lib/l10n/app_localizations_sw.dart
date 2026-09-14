@@ -5831,4 +5831,16 @@ class SSw extends S {
 
   @override
   String get settingsSmartFilter => 'Kichujio Mahiri';
+
+  @override
+  String get settingsEmailVerificationSent =>
+      'Barua pepe ya uthibitishaji imetumwa';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Fungua kiungo cha uthibitishaji katika barua pepe yako, kisha urudi hapa na uthibitishe.';
+
+  @override
+  String get settingsSendVerificationEmail =>
+      'Tuma barua pepe ya uthibitishaji';
 }

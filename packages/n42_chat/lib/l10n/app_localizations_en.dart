@@ -5774,4 +5774,14 @@ class SEn extends S {
 
   @override
   String get settingsSmartFilter => 'Smart Filter';
+
+  @override
+  String get settingsEmailVerificationSent => 'Verification email sent';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Open the verification link in your email, then return here and confirm.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Send verification email';
 }

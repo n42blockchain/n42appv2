@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Quyền riêng tư thông báo",
   "settingsSenderOnly": "Chỉ hiển thị người gửi",
   "settingsHiddenNotification": "Ẩn người gửi và tin nhắn",
-  "settingsSmartFilter": "Bộ lọc thông minh"
+  "settingsSmartFilter": "Bộ lọc thông minh",
+  "settingsEmailVerificationSent": "Đã gửi email xác minh",
+  "settingsEmailLinkInstructions": "Mở liên kết xác minh trong email, sau đó quay lại đây và xác nhận.",
+  "settingsSendVerificationEmail": "Gửi email xác minh"
 }

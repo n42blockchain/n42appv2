@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Notification Privacy",
   "settingsSenderOnly": "Show sender only",
   "settingsHiddenNotification": "Hide sender and message",
-  "settingsSmartFilter": "Smart Filter"
+  "settingsSmartFilter": "Smart Filter",
+  "settingsEmailVerificationSent": "Verification email sent",
+  "settingsEmailLinkInstructions": "Open the verification link in your email, then return here and confirm.",
+  "settingsSendVerificationEmail": "Send verification email"
 }

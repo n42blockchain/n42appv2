@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Privasi Notifikasi",
   "settingsSenderOnly": "Tampilkan pengirim saja",
   "settingsHiddenNotification": "Sembunyikan pengirim dan pesan",
-  "settingsSmartFilter": "Filter Cerdas"
+  "settingsSmartFilter": "Filter Cerdas",
+  "settingsEmailVerificationSent": "Email verifikasi terkirim",
+  "settingsEmailLinkInstructions": "Buka tautan verifikasi di email Anda, lalu kembali ke sini dan konfirmasi.",
+  "settingsSendVerificationEmail": "Kirim email verifikasi"
 }

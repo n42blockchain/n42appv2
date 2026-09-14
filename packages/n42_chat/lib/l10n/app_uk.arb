@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Конфіденційність сповіщень",
   "settingsSenderOnly": "Показувати лише відправника",
   "settingsHiddenNotification": "Приховувати відправника й повідомлення",
-  "settingsSmartFilter": "Розумний фільтр"
+  "settingsSmartFilter": "Розумний фільтр",
+  "settingsEmailVerificationSent": "Лист для підтвердження надіслано",
+  "settingsEmailLinkInstructions": "Відкрийте посилання в листі, потім поверніться сюди та підтвердьте.",
+  "settingsSendVerificationEmail": "Надіслати лист для підтвердження"
 }

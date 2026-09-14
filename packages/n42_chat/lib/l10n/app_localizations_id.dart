@@ -5812,4 +5812,14 @@ class SId extends S {
 
   @override
   String get settingsSmartFilter => 'Filter Cerdas';
+
+  @override
+  String get settingsEmailVerificationSent => 'Email verifikasi terkirim';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Buka tautan verifikasi di email Anda, lalu kembali ke sini dan konfirmasi.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Kirim email verifikasi';
 }

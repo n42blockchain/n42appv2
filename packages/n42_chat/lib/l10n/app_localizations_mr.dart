@@ -5798,4 +5798,14 @@ class SMr extends S {
 
   @override
   String get settingsSmartFilter => 'स्मार्ट फिल्टर';
+
+  @override
+  String get settingsEmailVerificationSent => 'पडताळणी ईमेल पाठवला';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'तुमच्या ईमेलमधील पडताळणी लिंक उघडा, नंतर येथे परत येऊन पुष्टी करा.';
+
+  @override
+  String get settingsSendVerificationEmail => 'पडताळणी ईमेल पाठवा';
 }

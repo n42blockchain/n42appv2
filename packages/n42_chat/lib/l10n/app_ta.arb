@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "அறிவிப்புத் தனியுரிமை",
   "settingsSenderOnly": "அனுப்புநரை மட்டும் காட்டு",
   "settingsHiddenNotification": "அனுப்புநரையும் செய்தியையும் மறை",
-  "settingsSmartFilter": "ஸ்மார்ட் வடிகட்டி"
+  "settingsSmartFilter": "ஸ்மார்ட் வடிகட்டி",
+  "settingsEmailVerificationSent": "சரிபார்ப்பு மின்னஞ்சல் அனுப்பப்பட்டது",
+  "settingsEmailLinkInstructions": "மின்னஞ்சலில் உள்ள சரிபார்ப்பு இணைப்பைத் திறந்து, இங்கே திரும்பி வந்து உறுதிப்படுத்தவும்.",
+  "settingsSendVerificationEmail": "சரிபார்ப்பு மின்னஞ்சலை அனுப்பு"
 }

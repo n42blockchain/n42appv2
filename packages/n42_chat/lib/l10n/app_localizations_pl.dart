@@ -5838,4 +5838,14 @@ class SPl extends S {
 
   @override
   String get settingsSmartFilter => 'Inteligentny filtr';
+
+  @override
+  String get settingsEmailVerificationSent => 'Wysłano e-mail weryfikacyjny';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Otwórz link weryfikacyjny w wiadomości e-mail, następnie wróć tutaj i potwierdź.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Wyślij e-mail weryfikacyjny';
 }

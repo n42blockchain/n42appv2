@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "Benachrichtigungsdatenschutz",
   "settingsSenderOnly": "Nur Absender anzeigen",
   "settingsHiddenNotification": "Absender und Nachricht ausblenden",
-  "settingsSmartFilter": "Intelligenter Filter"
+  "settingsSmartFilter": "Intelligenter Filter",
+  "settingsEmailVerificationSent": "Bestätigungs-E-Mail gesendet",
+  "settingsEmailLinkInstructions": "Öffne den Bestätigungslink in deiner E-Mail, kehre dann hierher zurück und bestätige.",
+  "settingsSendVerificationEmail": "Bestätigungs-E-Mail senden"
 }

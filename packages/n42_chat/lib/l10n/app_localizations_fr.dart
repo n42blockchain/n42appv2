@@ -5865,4 +5865,15 @@ class SFr extends S {
 
   @override
   String get settingsSmartFilter => 'Filtre intelligent';
+
+  @override
+  String get settingsEmailVerificationSent => 'E-mail de vérification envoyé';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Ouvrez le lien de vérification dans votre e-mail, puis revenez ici et confirmez.';
+
+  @override
+  String get settingsSendVerificationEmail =>
+      'Envoyer un e-mail de vérification';
 }

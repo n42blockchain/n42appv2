@@ -5813,4 +5813,14 @@ class SCs extends S {
 
   @override
   String get settingsSmartFilter => 'Chytrý filtr';
+
+  @override
+  String get settingsEmailVerificationSent => 'Ověřovací e-mail byl odeslán';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Otevřete ověřovací odkaz v e-mailu, poté se sem vraťte a potvrďte.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Odeslat ověřovací e-mail';
 }

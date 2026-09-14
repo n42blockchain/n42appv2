@@ -1,0 +1,49 @@
+{
+  "date": "2026-09-14",
+  "git_ref": "ebaa003b3dd882be9f951cb73c88633fa618f76c",
+  "previous_git_ref": "c1d222e3ea9c49a5f8bc51444154eb4026d689ef",
+  "status": "Integrated into the wallet pubspec, lockfile and normal package configuration",
+  "dependency_resolution": {
+    "command": "flutter pub get",
+    "changed_dependencies": [
+      "n42_chat"
+    ]
+  },
+  "host_tests": {
+    "passed": 457,
+    "command": "flutter test --no-pub test/features/chat/ test/quality/ --reporter expanded",
+    "newly_wired_regressions": 104,
+    "temporary_package_configuration": false
+  },
+  "host_analyze": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 155,
+    "command": "flutter analyze --no-pub --no-fatal-infos"
+  },
+  "source_verification": {
+    "lib_assets_files": 769,
+    "mirror_matches_resolved_git": true,
+    "manifest": "../CHAT_SOURCE_MANIFEST_2026-09-12.json",
+    "test_files_synced": 7,
+    "matches_prior_validated_candidate": true,
+    "exception": "OPEN_ISSUES.md changed only to track publication status"
+  },
+  "prior_canonical_validation": {
+    "passed": 6411,
+    "skipped": 1,
+    "source": "../email-retry-2026-09-14/summary.json",
+    "rerun_for_dependency_update": false
+  },
+  "test_harness_sha256": "c6590e26dfda519a6dddbe70407e305a828d622bb6ccdd621df2961e9c3dc1dd",
+  "lockfile_sha256": "ee18ff5266997e2ad4cd1b98801397c7701a13bacbe07ee3fc295779bf11f814",
+  "evidence_sha256": {
+    "analyze.log.gz": "dbcc768d58ea6a7cfb38696494b35158cd8d28a68c231596b58eab1a002fd811",
+    "pub-get.log.gz": "46f4410b65eee5da7bdbc3da42862f31a854d7b8feecc5ea48bff600b4f1487e",
+    "tests.log.gz": "d3118780302a0e4fe4588d8a75bd9e16348ac576eadf77f3e89e32853055920d"
+  },
+  "verification_limits": [
+    "No new device build or live account/email acceptance",
+    "Multi-email handling, SSO/multi-stage UIA and lost-response reconciliation remain in canonical AUTH-001"
+  ]
+}

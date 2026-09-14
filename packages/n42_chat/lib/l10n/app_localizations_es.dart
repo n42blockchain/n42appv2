@@ -5842,4 +5842,14 @@ class SEs extends S {
 
   @override
   String get settingsSmartFilter => 'Filtro inteligente';
+
+  @override
+  String get settingsEmailVerificationSent => 'Correo de verificación enviado';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'Abre el enlace de verificación del correo, vuelve aquí y confirma.';
+
+  @override
+  String get settingsSendVerificationEmail => 'Enviar correo de verificación';
 }

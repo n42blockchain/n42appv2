@@ -5800,4 +5800,14 @@ class SHi extends S {
 
   @override
   String get settingsSmartFilter => 'स्मार्ट फ़िल्टर';
+
+  @override
+  String get settingsEmailVerificationSent => 'सत्यापन ईमेल भेज दिया गया';
+
+  @override
+  String get settingsEmailLinkInstructions =>
+      'अपने ईमेल में सत्यापन लिंक खोलें, फिर यहाँ वापस आकर पुष्टि करें।';
+
+  @override
+  String get settingsSendVerificationEmail => 'सत्यापन ईमेल भेजें';
 }

@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "خصوصية الإشعارات",
   "settingsSenderOnly": "إظهار المرسل فقط",
   "settingsHiddenNotification": "إخفاء المرسل والرسالة",
-  "settingsSmartFilter": "التصفية الذكية"
+  "settingsSmartFilter": "التصفية الذكية",
+  "settingsEmailVerificationSent": "تم إرسال رسالة التحقق",
+  "settingsEmailLinkInstructions": "افتح رابط التحقق في بريدك الإلكتروني، ثم عد إلى هنا وأكّد.",
+  "settingsSendVerificationEmail": "إرسال رسالة التحقق"
 }

@@ -11,6 +11,7 @@ import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../widgets/common/common_widgets.dart';
+import '../../helpers/bloc_message_helper.dart';
 
 /// 修改邮箱页面
 class ChangeEmailPage extends StatefulWidget {
@@ -27,6 +28,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   final _codeController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _requiresCode = true;
   int _currentStep = 0; // 0: 输入密码和邮箱, 1: 输入验证码
   int _countdown = 0;
   Timer? _countdownTimer;
@@ -72,6 +74,7 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   }
 
   void _requestCode() {
+    if (_pendingAction != null) return;
     if (_formKey.currentState?.validate() ?? false) {
       setState(() {
         _pendingAction = _ChangeEmailAction.requestCode;
@@ -86,16 +89,19 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
   }
 
   void _confirmChange() {
-    if (_codeController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            S.of(context)?.commonEnterVerificationCode ??
-                'Please enter verification code',
+    if (_pendingAction != null) return;
+    if (_requiresCode && _codeController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: Text(
+              S.of(context)?.commonEnterVerificationCode ??
+                  'Please enter verification code',
+            ),
+            backgroundColor: AppColors.error,
           ),
-          backgroundColor: AppColors.error,
-        ),
-      );
+        );
       return;
     }
 
@@ -105,19 +111,20 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     context.read<AuthBloc>().add(
       AuthConfirmChangeEmailRequested(
         newEmail: _emailController.text.trim(),
-        code: _codeController.text.trim(),
+        code: _requiresCode ? _codeController.text : '',
+        password: _passwordController.text,
       ),
     );
   }
 
-  static final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  static final _emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
       return S.of(context)?.commonEnterEmailAddress ??
           'Please enter email address';
     }
-    if (!_emailRegex.hasMatch(value)) {
+    if (!_emailRegex.hasMatch(value.trim())) {
       return S.of(context)?.commonInvalidEmailFormat ?? 'Invalid email format';
     }
     return null;
@@ -141,51 +148,62 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                 previous.errorMessage != current.errorMessage),
         listener: (context, state) {
           if (_pendingAction == _ChangeEmailAction.requestCode &&
-              state.changeEmailStatus == ChangeEmailStatus.codeSent) {
+              (state.changeEmailStatus == ChangeEmailStatus.codeSent ||
+                  state.changeEmailStatus == ChangeEmailStatus.linkSent)) {
             // 验证码发送成功，进入下一步
             setState(() {
               _currentStep = 1;
+              _requiresCode =
+                  state.changeEmailStatus == ChangeEmailStatus.codeSent;
+              _codeController.clear();
               _pendingAction = null;
             });
             _startCountdown();
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  S.of(context)?.settingsVerificationCodeSent ??
-                      'Verification code sent',
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(
+                    S.of(context)?.settingsEmailVerificationSent ??
+                        'Verification email sent',
+                  ),
+                  backgroundColor: AppColors.success,
                 ),
-                backgroundColor: AppColors.success,
-              ),
-            );
+              );
           } else if (_pendingAction == _ChangeEmailAction.confirmChange &&
               state.changeEmailStatus == ChangeEmailStatus.success) {
             setState(() {
               _pendingAction = null;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  S.of(context)?.settingsEmailChangedSuccess ??
-                      'Email changed successfully',
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(
+                    S.of(context)?.settingsEmailChangedSuccess ??
+                        'Email changed successfully',
+                  ),
+                  backgroundColor: AppColors.success,
                 ),
-                backgroundColor: AppColors.success,
-              ),
-            );
+              );
             Navigator.pop(context);
           } else if (state.changeEmailStatus == ChangeEmailStatus.failed) {
             setState(() {
               _pendingAction = null;
             });
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(
-                  state.errorMessage ??
-                      (S.of(context)?.settingsChangeEmailFailed ??
-                          'Change email failed'),
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.errorMessage != null
+                        ? resolveBlocMessage(context, state.errorMessage!)
+                        : (S.of(context)?.settingsChangeEmailFailed ??
+                              'Change email failed'),
+                  ),
+                  backgroundColor: AppColors.error,
                 ),
-                backgroundColor: AppColors.error,
-              ),
-            );
+              );
           }
         },
         builder: (context, state) {
@@ -215,7 +233,16 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                     _buildSendCodeButton(isDark, isLoading),
                   ] else ...[
                     // 步骤 2: 输入验证码
-                    _buildCodeField(isDark),
+                    if (_requiresCode)
+                      _buildCodeField(isDark)
+                    else ...[
+                      Text(
+                        S.of(context)?.settingsEmailLinkInstructions ??
+                            'Open the verification link in your email, then return here and confirm.',
+                      ),
+                      const SizedBox(height: 12),
+                      SelectableText(_emailController.text.trim()),
+                    ],
                     const SizedBox(height: 16),
                     _buildResendButton(isDark, isLoading),
                     const SizedBox(height: 32),
@@ -467,7 +494,9 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
             ),
             prefixIcon: Icon(Icons.verified_outlined, color: hintColor),
           ),
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
+          autocorrect: false,
+          enableSuggestions: false,
           textInputAction: TextInputAction.done,
           onFieldSubmitted: (_) => _confirmChange(),
         ),
@@ -496,8 +525,8 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
                 ),
               )
             : Text(
-                S.of(context)?.commonSendVerificationCode ??
-                    'Send Verification Code',
+                S.of(context)?.settingsSendVerificationEmail ??
+                    'Send verification email',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
@@ -520,27 +549,30 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Flexible(
-          child: Text(
-            S.of(context)?.settingsDidNotReceiveCode ??
-                "Didn't receive the code?",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 14, height: 1.3, color: textColor),
+        if (_requiresCode)
+          Flexible(
+            child: Text(
+              S.of(context)?.settingsDidNotReceiveCode ??
+                  "Didn't receive the code?",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(fontSize: 14, height: 1.3, color: textColor),
+            ),
           ),
-        ),
-        TextButton(
-          onPressed: canResend ? _requestCode : null,
-          child: Text(
-            _countdown > 0
-                ? '${S.of(context)?.settingsResend ?? 'Resend'} (${_countdown}s)'
-                : S.of(context)?.settingsResend ?? 'Resend',
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: 14,
-              height: 1.3,
-              color: canResend ? AppColors.primary : textColor,
+        Flexible(
+          child: TextButton(
+            onPressed: canResend ? _requestCode : null,
+            child: Text(
+              _countdown > 0
+                  ? '${S.of(context)?.settingsResend ?? 'Resend'} (${_countdown}s)'
+                  : S.of(context)?.settingsResend ?? 'Resend',
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.3,
+                color: canResend ? AppColors.primary : textColor,
+              ),
             ),
           ),
         ),

@@ -2752,5 +2752,8 @@
   "settingsNotificationPrivacy": "اطلاعات کی رازداری",
   "settingsSenderOnly": "صرف بھیجنے والے کو دکھائیں",
   "settingsHiddenNotification": "بھیجنے والے اور پیغام کو چھپائیں",
-  "settingsSmartFilter": "اسمارٹ فلٹر"
+  "settingsSmartFilter": "اسمارٹ فلٹر",
+  "settingsEmailVerificationSent": "تصدیقی ای میل بھیج دی گئی",
+  "settingsEmailLinkInstructions": "اپنی ای میل میں تصدیقی لنک کھولیں، پھر یہاں واپس آ کر تصدیق کریں۔",
+  "settingsSendVerificationEmail": "تصدیقی ای میل بھیجیں"
 }

@@ -29,16 +29,10 @@ class FaultStorage extends PreferencesDataSource {
   bool rejectMeta = false;
   Completer<void>? pending;
   @override
-  Future<void> saveFavoriteMessages(String json) async {
+  Future<void> saveFavoriteRecord(String json) async {
     if (pending != null) await pending!.future;
-    if (rejectMessages) throw StateError('storage full');
-    await super.saveFavoriteMessages(json);
-  }
-
-  @override
-  Future<void> saveFavoriteMeta(String json) async {
-    if (rejectMeta) throw StateError('metadata write failed');
-    await super.saveFavoriteMeta(json);
+    if (rejectMessages || rejectMeta) throw StateError('storage full');
+    await super.saveFavoriteRecord(json);
   }
 }
 
@@ -133,7 +127,9 @@ void main() {
       await storage.saveFavoriteMeta('{}');
       await repository.editFavoriteRemark('one', 'recovered');
       expect(
-        jsonDecode((await storage.getFavoriteMeta())!)['one']['remark'],
+        jsonDecode(
+          (await storage.getFavoriteRecord())!,
+        )['metadata']['one']['remark'],
         'recovered',
       );
     },
@@ -222,7 +218,7 @@ void main() {
     await repository.unsaveMessage('one');
     expect((await fresh().getSavedMessages()).map((m) => m.id), ['two']);
     expect(
-      jsonDecode((await storage.getFavoriteMeta())!),
+      jsonDecode((await storage.getFavoriteRecord())!)['metadata'],
       isNot(contains('one')),
     );
   });
@@ -232,7 +228,7 @@ void main() {
       await repository.editFavoriteTags('one', ['work', 'todo']);
       await fresh().editFavoriteRemark('one', 'review');
       final data =
-          jsonDecode((await storage.getFavoriteMeta())!)
+          jsonDecode((await storage.getFavoriteRecord())!)['metadata']
               as Map<String, dynamic>;
       expect(data['one'], {
         'tags': ['work', 'todo'],
@@ -273,7 +269,7 @@ void main() {
       storage.rejectMeta = false;
       await repository.editFavoriteRemark('one', 'remark');
       final data =
-          jsonDecode((await storage.getFavoriteMeta())!)
+          jsonDecode((await storage.getFavoriteRecord())!)['metadata']
               as Map<String, dynamic>;
       expect(data['one'], {
         'tags': ['original'],
@@ -289,7 +285,8 @@ void main() {
       tags.add('external');
       await repository.editFavoriteRemark('one', 'remark');
       expect(
-        (jsonDecode((await storage.getFavoriteMeta())!) as Map)['one']['tags'],
+        (jsonDecode((await storage.getFavoriteRecord())!)['metadata']
+            as Map)['one']['tags'],
         ['original'],
       );
     },
