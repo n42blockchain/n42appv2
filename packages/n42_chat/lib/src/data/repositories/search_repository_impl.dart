@@ -308,6 +308,7 @@ class SearchRepositoryImpl implements ISearchRepository {
         excludeIds: liveItems.map((e) => e.id).toSet(),
         excludeRoomIds: excluded,
         limit: limit,
+        filter: filter,
       );
       if (archiveItems.isEmpty) return liveItems;
       // 合并后按时间倒序重排——否则 live 全部排在 archive 之前,时间顺序错乱
@@ -331,6 +332,7 @@ class SearchRepositoryImpl implements ISearchRepository {
     required Set<String> excludeIds,
     Set<String> excludeRoomIds = const {},
     int limit = 50,
+    MessageSearchFilter? filter,
   }) async {
     final archive = _archiveSearch;
     if (archive == null) return const [];
@@ -339,6 +341,10 @@ class SearchRepositoryImpl implements ISearchRepository {
         query,
         excludeRoomIds: excludeRoomIds,
         limit: limit,
+        filter: filter == null || filter.isEmpty ? null : filter,
+        currentUserId: filter?.onlyFromMe == true
+            ? _clientManager.client?.userID
+            : null,
       );
       final items = <SearchResultItem>[];
       for (final hit in hits) {
@@ -422,8 +428,21 @@ class SearchRepositoryImpl implements ISearchRepository {
 
     final messages = events.map(_mapEventToMessage).toList();
 
+    // A refreshed timeline may insert or remove results before the selected
+    // message. Preserve its identity, then fall back to a valid nearby index.
+    final selectedId = currentResults.currentMessage?.id;
+    var selectedIndex = messages.indexWhere(
+      (message) => message.id == selectedId,
+    );
+    if (selectedIndex < 0) {
+      selectedIndex = messages.isEmpty
+          ? -1
+          : currentResults.currentIndex.clamp(0, messages.length - 1);
+    }
+
     return currentResults.copyWith(
       messages: messages,
+      currentIndex: selectedIndex,
       hasMore: messages.length >= currentResults.messages.length + limit,
     );
   }

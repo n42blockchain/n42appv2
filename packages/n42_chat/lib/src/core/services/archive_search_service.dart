@@ -1,7 +1,7 @@
-
 import '../../data/datasources/local/archive_database.dart';
 import '../../data/mappers/archived_message_mapper.dart';
 import '../../domain/entities/message_entity.dart';
+import '../../domain/entities/search_result_entity.dart';
 import '../utils/debug_log.dart';
 
 /// 归档搜索结果
@@ -12,10 +12,7 @@ class ArchiveSearchResult {
   /// 匹配的文本片段（高亮用）
   final String? snippet;
 
-  const ArchiveSearchResult({
-    required this.message,
-    this.snippet,
-  });
+  const ArchiveSearchResult({required this.message, this.snippet});
 }
 
 /// 归档搜索服务
@@ -30,7 +27,7 @@ class ArchiveSearchService {
 
   /// 搜索归档消息
   ///
-  /// [query] 搜索关键词，支持 FTS5 语法（AND、OR、NOT、短语 "..."）
+  /// [query] Literal search terms; FTS operators are escaped by the database.
   /// [roomId] 限定房间（null 搜索所有房间）
   /// [after] 时间范围下限
   /// [before] 时间范围上限
@@ -45,6 +42,7 @@ class ArchiveSearchService {
     int limit = 20,
     int offset = 0,
     String? currentUserId,
+    MessageSearchFilter? filter,
   }) async {
     if (query.trim().isEmpty) return [];
 
@@ -57,13 +55,12 @@ class ArchiveSearchService {
         excludeRoomIds: excludeRoomIds,
         limit: limit,
         offset: offset,
+        filter: filter,
+        currentUserId: currentUserId,
       );
 
       return results.map((archived) {
-        final entity = _mapper.toEntity(
-          archived,
-          currentUserId: currentUserId,
-        );
+        final entity = _mapper.toEntity(archived, currentUserId: currentUserId);
 
         // 提取搜索匹配片段
         final snippet = _extractSnippet(
@@ -71,10 +68,7 @@ class ArchiveSearchService {
           query,
         );
 
-        return ArchiveSearchResult(
-          message: entity,
-          snippet: snippet,
-        );
+        return ArchiveSearchResult(message: entity, snippet: snippet);
       }).toList();
     } catch (e) {
       debugLog('ArchiveSearchService: Search failed: $e');
@@ -83,10 +77,7 @@ class ArchiveSearchService {
   }
 
   /// 搜索结果总数
-  Future<int> searchCount(
-    String query, {
-    String? roomId,
-  }) async {
+  Future<int> searchCount(String query, {String? roomId}) async {
     if (query.trim().isEmpty) return 0;
     try {
       return await _db.searchCount(query, roomId: roomId);
@@ -106,7 +97,9 @@ class ArchiveSearchService {
     final queryLower = query.toLowerCase().trim();
     final idx = lower.indexOf(queryLower);
 
-    if (idx == -1) return text.length > 80 ? '${text.substring(0, 80)}...' : text;
+    if (idx == -1) {
+      return text.length > 80 ? '${text.substring(0, 80)}...' : text;
+    }
 
     final start = (idx - contextLen).clamp(0, text.length);
     final end = (idx + queryLower.length + contextLen).clamp(0, text.length);

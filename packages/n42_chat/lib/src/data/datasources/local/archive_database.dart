@@ -12,6 +12,8 @@ import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
 import 'package:sqlite3/open.dart';
 import 'package:sqlite3/sqlite3.dart' as raw_sqlite;
 import '../../../core/utils/debug_log.dart';
+import '../../../domain/entities/message_entity.dart';
+import '../../../domain/entities/search_result_entity.dart';
 
 part 'archive_database.g.dart';
 
@@ -347,6 +349,8 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     Set<String> excludeRoomIds = const {},
     int limit = 20,
     int offset = 0,
+    MessageSearchFilter? filter,
+    String? currentUserId,
   }) async {
     final ftsQuery = _sanitizeFtsQuery(query);
     if (ftsQuery.isEmpty) return [];
@@ -373,6 +377,61 @@ class ArchiveDatabase extends _$ArchiveDatabase {
     if (beforeTimestamp != null) {
       conditions.add('am.origin_server_ts <= ?');
       variables.add(Variable.withInt(beforeTimestamp));
+    }
+
+    // Apply UI filters before LIMIT/OFFSET so newer non-matching rows cannot
+    // hide matching history on subsequent pages. All user values are bound.
+    if (filter != null && !filter.isEmpty) {
+      if (filter.onlyFromMe) {
+        if (currentUserId == null || currentUserId.isEmpty) return [];
+        conditions.add('am.sender_id = ?');
+        variables.add(Variable.withString(currentUserId));
+      }
+      final senderId = filter.senderId;
+      if (senderId != null && senderId.isNotEmpty) {
+        conditions.add('am.sender_id = ?');
+        variables.add(Variable.withString(senderId));
+      }
+      if (filter.sentAfter != null) {
+        conditions.add('am.origin_server_ts >= ?');
+        variables.add(
+          Variable.withInt(filter.sentAfter!.millisecondsSinceEpoch),
+        );
+      }
+      if (filter.sentBefore != null) {
+        conditions.add('am.origin_server_ts <= ?');
+        variables.add(
+          Variable.withInt(filter.sentBefore!.millisecondsSinceEpoch),
+        );
+      }
+      // Match ArchivedMessageMapper's event-type precedence and text fallback.
+      // Matrix m.audio is represented as voice in archived entities; both UI
+      // audio categories address that same persisted subtype.
+      const resolvedType = '''CASE
+        WHEN am.type = 'm.sticker' THEN 'sticker'
+        WHEN am.type = 'org.matrix.msc3381.poll.start' THEN 'poll'
+        WHEN am.type = 'm.room.encrypted' THEN 'encrypted'
+        WHEN am.msgtype = 'm.image' THEN 'image'
+        WHEN am.msgtype = 'm.audio' THEN 'voice'
+        WHEN am.msgtype = 'm.video' THEN 'video'
+        WHEN am.msgtype = 'm.file' THEN 'file'
+        WHEN am.msgtype = 'm.location' THEN 'location'
+        WHEN am.msgtype = 'm.notice' THEN 'notice'
+        ELSE 'text' END''';
+      final messageType = filter.messageType;
+      if (messageType != null) {
+        conditions.add('($resolvedType) = ?');
+        variables.add(
+          Variable.withString(
+            messageType == MessageType.audio ? 'voice' : messageType.name,
+          ),
+        );
+      }
+      if (filter.hasMediaOnly) {
+        conditions.add(
+          "($resolvedType) IN ('image', 'voice', 'video', 'file')",
+        );
+      }
     }
 
     final whereClause = conditions.isNotEmpty

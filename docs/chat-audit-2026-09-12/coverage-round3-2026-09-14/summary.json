@@ -1,0 +1,100 @@
+{
+  "baseline_commit": "e38d6fb43bd61227352ec9cdb54dbb18e8e7c069",
+  "baseline_trace_origin": "Previous completed round2 full suite at unchanged baseline source; SHA-256 verified",
+  "baseline_passed": 6092,
+  "passed": 6166,
+  "skipped": 1,
+  "new_tests": 74,
+  "new_test_modules": {
+    "search_repository": 43,
+    "archive_repository_and_service_sqlite": 31
+  },
+  "modules": {
+    "Raw lcov": {
+      "baseline": {
+        "covered": 28117,
+        "instrumented": 131169,
+        "percent": 21.44
+      },
+      "final": {
+        "covered": 28418,
+        "instrumented": 131204,
+        "percent": 21.66
+      }
+    },
+    "Non-generated reference": {
+      "baseline": {
+        "covered": 26984,
+        "instrumented": 79254,
+        "percent": 34.05
+      },
+      "final": {
+        "covered": 27284,
+        "instrumented": 79289,
+        "percent": 34.41
+      }
+    },
+    "Search repository": {
+      "baseline": {
+        "covered": 25,
+        "instrumented": 198,
+        "percent": 12.63
+      },
+      "final": {
+        "covered": 205,
+        "instrumented": 208,
+        "percent": 98.56
+      }
+    },
+    "Archive search service": {
+      "baseline": {
+        "covered": 0,
+        "instrumented": 30,
+        "percent": 0.0
+      },
+      "final": {
+        "covered": 31,
+        "instrumented": 31,
+        "percent": 100.0
+      }
+    },
+    "Archive database": {
+      "baseline": {
+        "covered": 182,
+        "instrumented": 321,
+        "percent": 56.7
+      },
+      "final": {
+        "covered": 206,
+        "instrumented": 345,
+        "percent": 59.71
+      }
+    }
+  },
+  "traces": {
+    "baseline": {
+      "file": "baseline.lcov.gz",
+      "raw_sha256": "7e2937c04a2a338854f69e18c9b1d3e2a2aaa8a1498ed2aac19b8f9b4dd6d7a9"
+    },
+    "final": {
+      "file": "final.lcov.gz",
+      "raw_sha256": "eb2a4b72bcafe23ebd5f0584191032dd7e40933397bea6ab542f05f82130e95e"
+    }
+  },
+  "current_commit": "dba781335dfe4238b5de1a5efbac709d62c28751",
+  "completed_date": "2026-09-14",
+  "host_integration_passed": 198,
+  "runtime_file_hashes_verified": 767,
+  "analysis": {
+    "canonical": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 173
+    },
+    "host": {
+      "errors": 0,
+      "warnings": 0,
+      "info": 155
+    }
+  }
+}
