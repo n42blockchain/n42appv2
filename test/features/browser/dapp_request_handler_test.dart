@@ -6,13 +6,32 @@
 // - 签名类方法的安全闸门：eth_sign 全拒、地址不匹配拒绝、未审批默认拒绝(4001)
 // - 未知方法拒绝（-32601，不盲目转发）
 //
-// 注意：所有断言都停在审批闸门之前或之时，绝不触发 _getPrivateKey /
-// _getWeb3Client（那会访问未初始化的 globalProviderContainer 并触网）。
-// 因此「抛出 4001/-32602」本身就证明了请求未进入取私钥/发交易环节。
+// Approved flows use fixture keys and a loopback RPC server; no real wallet or
+// external network is used. Other cases stop at the approval/validation gates.
 
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/browser/handler/dapp_request_handler.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:web3dart/web3dart.dart' as web3;
+import 'package:wallet/wallet.dart' as wallet;
+
+class _Secrets extends Fake implements IWalletService {
+  Future<String?> Function() readKey = () async => null;
+
+  @override
+  Future<String?> getPrivateKeyForWallet(int walletIndex) => readKey();
+}
 
 /// 钱包当前地址（混合大小写，用于验证地址比较不区分大小写）
 const kWalletAddress = '0x1234567890AbcdEF1234567890aBcdef12345678';
@@ -39,6 +58,240 @@ Matcher throwsRpcError(int code) =>
     throwsA(isA<Map>().having((m) => m['code'], 'code', code));
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  group('approved signing', () {
+    late DAppRequestHandler handler;
+    late _Secrets secrets;
+    HttpOverrides? previousHttpOverrides;
+    final key = web3.EthPrivateKey.fromHex('1'.padLeft(64, '0'));
+    final signer = key.address.eip55With0x;
+    setUp(() {
+      previousHttpOverrides = HttpOverrides.current;
+      HttpOverrides.global = null;
+      SharedPreferences.setMockInitialValues({});
+      FlutterSecureStorage.setMockInitialValues({});
+      secrets = _Secrets()..readKey = () async => base64Encode(key.privateKey);
+      app.globalProviderContainer = ProviderContainer(
+        overrides: [walletServiceProvider.overrideWithValue(secrets)],
+      );
+      handler =
+          DAppRequestHandler(
+              ethCoinModels: [
+                makeEthModel(chainId: 137, address: signer)
+                  ..coin['service'] = 'http://127.0.0.1:1',
+              ],
+            )
+            ..onSigningRequest =
+                ({required origin, required method, required details}) async =>
+                    true;
+    });
+    tearDown(() {
+      handler.dispose();
+      app.globalProviderContainer.dispose();
+      HttpOverrides.global = previousHttpOverrides;
+    });
+
+    test('personal signing succeeds for the approved account', () async {
+      final result = await handler.handleRequest('personal_sign', [
+        '0x6869',
+        signer,
+      ]);
+      expect(
+        result,
+        web3.bytesToHex(
+          key.signPersonalMessageToUint8List(web3.hexToBytes('6869')),
+          include0x: true,
+        ),
+      );
+    });
+
+    test(
+      'rejects a private key that does not match the approved address',
+      () async {
+        secrets.readKey = () async => base64Encode(
+          web3.EthPrivateKey.fromHex('2'.padLeft(64, '0')).privateKey,
+        );
+        await expectLater(
+          handler.handleRequest('personal_sign', ['0x6869', signer]),
+          throwsRpcError(4001),
+        );
+      },
+    );
+
+    test(
+      'rechecks request validity after asynchronous key retrieval',
+      () async {
+        final keyRead = Completer<String?>();
+        final reading = Completer<void>();
+        secrets.readKey = () {
+          reading.complete();
+          return keyRead.future;
+        };
+        var active = true;
+        final request = handler.handleRequest('personal_sign', [
+          '0x6869',
+          signer,
+        ], isRequestActive: () => active);
+        final rejected = expectLater(request, throwsRpcError(4001));
+        await reading.future;
+        active = false;
+        keyRead.complete(base64Encode(key.privateKey));
+        await rejected;
+      },
+    );
+
+    test('transaction signature uses the selected chain ID', () async {
+      final result = await handler.handleRequest('eth_signTransaction', [
+        <String, dynamic>{
+          'from': signer,
+          'to': kOtherAddress,
+          'value': '0x1',
+          'nonce': '0x0',
+          'gas': '0x5208',
+          'gasPrice': '0x1',
+        },
+      ]);
+      final expected = web3.signTransactionRaw(
+        web3.Transaction(
+          from: key.address,
+          to: wallet.EthereumAddress.fromHex(kOtherAddress),
+          value: wallet.EtherAmount.inWei(BigInt.one),
+          nonce: 0,
+          maxGas: 21000,
+          gasPrice: wallet.EtherAmount.inWei(BigInt.one),
+          data: Uint8List(0),
+        ),
+        key,
+        chainId: 137,
+      );
+      expect(result, web3.bytesToHex(expected, include0x: true));
+    });
+
+    for (final expires in [false, true]) {
+      test(
+        'transaction broadcast ${expires ? 'stops' : 'succeeds'} after nonce lookup',
+        () async {
+          final server = await HttpServer.bind(InternetAddress.loopbackIPv4, 0);
+          addTearDown(() => server.close(force: true));
+          handler.ethCoinModels.single.coin['service'] =
+              'http://127.0.0.1:${server.port}';
+          final nonceRequested = Completer<void>();
+          final releaseNonce = Completer<void>();
+          final methods = <String>[];
+          server.listen((request) async {
+            final body =
+                jsonDecode(await utf8.decoder.bind(request).join()) as Map;
+            methods.add(body['method'] as String);
+            if (body['method'] == 'eth_getTransactionCount') {
+              nonceRequested.complete();
+              await releaseNonce.future;
+            }
+            request.response.headers.contentType = ContentType.json;
+            request.response.write(
+              jsonEncode({
+                'jsonrpc': '2.0',
+                'id': body['id'],
+                'result': body['method'] == 'eth_getTransactionCount'
+                    ? '0x0'
+                    : '0xtesthash',
+              }),
+            );
+            await request.response.close();
+          });
+          var active = true;
+          final result = handler.handleRequest('eth_sendTransaction', [
+            <String, dynamic>{
+              'from': signer,
+              'to': kOtherAddress,
+              'value': '0x1',
+              'gas': '0x5208',
+              'gasPrice': '0x1',
+            },
+          ], isRequestActive: () => active);
+          final checked = expires
+              ? expectLater(result, throwsRpcError(4001))
+              : expectLater(result, completion('0xtesthash'));
+          await nonceRequested.future.timeout(const Duration(seconds: 5));
+          active = !expires;
+          releaseNonce.complete();
+          await checked;
+          expect(methods, [
+            'eth_getTransactionCount',
+            if (!expires) 'eth_sendRawTransaction',
+          ]);
+        },
+      );
+    }
+  });
+
+  group('pending signing requests', () {
+    final methods = <String, List<dynamic>>{
+      'personal_sign': ['0x6869', kWalletAddress],
+      'eth_signTypedData_v4': [kWalletAddress, '{}'],
+      'eth_sendTransaction': [
+        <String, dynamic>{'from': kWalletAddress},
+      ],
+      'eth_signTransaction': [
+        <String, dynamic>{'from': kWalletAddress},
+      ],
+    };
+    for (final entry in methods.entries) {
+      test(
+        '${entry.key} stops before key access when its page expires',
+        () async {
+          final handler = DAppRequestHandler(ethCoinModels: [makeEthModel()]);
+          addTearDown(handler.dispose);
+          var active = true;
+          handler.onSigningRequest =
+              ({required origin, required method, required details}) async {
+                active = false;
+                return true;
+              };
+          await expectLater(
+            handler.handleRequest(
+              entry.key,
+              entry.value,
+              isRequestActive: () => active,
+            ),
+            throwsRpcError(4001),
+          );
+        },
+      );
+      for (final change in ['chain', 'chain round trip', 'address']) {
+        test(
+          '${entry.key} rejects after $change changes during approval',
+          () async {
+            final model = makeEthModel();
+            final handler = DAppRequestHandler(
+              ethCoinModels: [model, makeEthModel(chainId: 137)],
+            );
+            addTearDown(handler.dispose);
+            final approval = Completer<bool>();
+            handler.onSigningRequest =
+                ({required origin, required method, required details}) =>
+                    approval.future;
+            final request = handler.handleRequest(entry.key, entry.value);
+            final rejected = expectLater(request, throwsRpcError(4001));
+            if (change == 'address') {
+              model.address = kOtherAddress;
+            } else {
+              await handler.handleRequest('wallet_switchEthereumChain', [
+                {'chainId': '0x89'},
+              ]);
+              if (change == 'chain round trip') {
+                await handler.handleRequest('wallet_switchEthereumChain', [
+                  {'chainId': '0x1'},
+                ]);
+              }
+            }
+            approval.complete(true);
+            await rejected;
+          },
+        );
+      }
+    }
+  });
+
   group('账户与链信息只读方法', () {
     late DAppRequestHandler handler;
 

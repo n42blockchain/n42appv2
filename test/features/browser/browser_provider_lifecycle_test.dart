@@ -2,11 +2,15 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
 import 'package:n42_wallet/features/browser/provider/browser_provider.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/provider/legacy_wallet_adapter.dart';
+import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/shared/domain/services/wallet_service_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
@@ -15,6 +19,17 @@ import '../../helpers/browser_platform_fake.dart';
 class _Wallet extends Fake implements LegacyWalletActionProviderAdapter {
   @override
   List<CoinModel> coinModels = [];
+  @override
+  int walletIndex = 0;
+}
+
+class _Secrets extends Fake implements IWalletService {
+  int reads = 0;
+  @override
+  Future<String?> getPrivateKeyForWallet(int index) async {
+    reads++;
+    throw StateError('An expired request must not read a key');
+  }
 }
 
 class _Bookmarks extends Fake implements BrowserApi {
@@ -54,6 +69,7 @@ void main() {
   setUpAll(() => globalWapAdapter = wallet);
   setUp(() async {
     SharedPreferences.setMockInitialValues({});
+    wallet.walletIndex = 0;
     wallet.coinModels = [
       CoinModel()
         ..address = address
@@ -622,6 +638,110 @@ void main() {
       expect(response(controller).$3['code'], 4001);
     },
   );
+
+  for (final change in ['models', 'index', 'address']) {
+    test('pending signature rejects a wallet $change change', () async {
+      final controller = await tab('https://one.example.test');
+      final approval = Completer<bool>();
+      provider.onSigningRequest =
+          ({required origin, required method, required details}) =>
+              approval.future;
+      await message(controller, 'personal_sign', params: ['0x6869', address]);
+      if (change == 'index') {
+        wallet.walletIndex++;
+      } else if (change == 'address') {
+        wallet.coinModels.single.address =
+            '0x2222222222222222222222222222222222222222';
+      } else {
+        wallet.coinModels = [
+          CoinModel()
+            ..address = address
+            ..coin = Map.of(wallet.coinModels.single.coin),
+        ];
+      }
+      approval.complete(true);
+      await flush();
+      expect(response(controller).$3, containsPair('code', 4001));
+    });
+  }
+
+  for (final change in ['reload', 'navigation', 'closed tab']) {
+    test('signature approval after $change never accesses a key', () async {
+      final secrets = _Secrets();
+      app.globalProviderContainer = ProviderContainer(
+        overrides: [walletServiceProvider.overrideWithValue(secrets)],
+      );
+      addTearDown(app.globalProviderContainer.dispose);
+      final controller = await tab('https://one.example.test');
+      final approval = Completer<bool>();
+      provider.onSigningRequest =
+          ({required origin, required method, required details}) =>
+              approval.future;
+      await message(controller, 'personal_sign', params: ['0x6869', address]);
+      if (change == 'closed tab') {
+        provider.wListDelete(0);
+      } else if (change == 'reload') {
+        controller.navigation!.started!('https://one.example.test');
+      } else {
+        controller.navigation!.urlChanged!(
+          const UrlChange(url: 'https://two.example.test'),
+        );
+      }
+      approval.complete(true);
+      await flush();
+      expect(secrets.reads, 0);
+      expect(
+        controller.scripts.where((script) => script.contains('._n42Cb(')),
+        isEmpty,
+      );
+    });
+  }
+
+  test(
+    'connection approval for one wallet does not expose another wallet',
+    () async {
+      final controller = await tab('https://one.example.test');
+      var approvals = 0;
+      provider.onSigningRequest =
+          ({required origin, required method, required details}) async {
+            approvals++;
+            return true;
+          };
+      await message(controller, 'eth_requestAccounts');
+      const otherAddress = '0x2222222222222222222222222222222222222222';
+      wallet.coinModels = [
+        CoinModel()
+          ..address = otherAddress
+          ..coin = Map.of(wallet.coinModels.single.coin),
+      ];
+      await message(controller, 'eth_accounts');
+      expect(response(controller).$2, isEmpty);
+      await message(controller, 'eth_coinbase');
+      expect(response(controller).$2, isNull);
+      await message(controller, 'eth_requestAccounts');
+      expect(response(controller).$2, [otherAddress]);
+      expect(approvals, 2);
+    },
+  );
+
+  test('pending connection approval is rejected when wallet changes', () async {
+    final controller = await tab('https://one.example.test');
+    final approval = Completer<bool>();
+    provider.onSigningRequest =
+        ({required origin, required method, required details}) =>
+            approval.future;
+    await message(controller, 'eth_requestAccounts');
+    wallet.coinModels = [
+      CoinModel()
+        ..address = '0x2222222222222222222222222222222222222222'
+        ..coin = Map.of(wallet.coinModels.single.coin),
+    ];
+    approval.complete(true);
+    await flush();
+    expect(response(controller).$3, containsPair('code', 4001));
+    await message(controller, 'eth_accounts');
+    expect(response(controller).$2, isEmpty);
+  });
 
   test('clipboard bridge dispatches a WalletConnect URI once', () async {
     final controller = await tab('https://one.example.test');

@@ -27,6 +27,8 @@ typedef DAppSigningCallback =
 class DAppRequestHandler {
   final List<CoinModel> ethCoinModels;
   int _selectedChainIndex;
+  int _chainRevision = 0;
+  bool _isDisposed = false;
   final Trustdart _trustdart = Trustdart();
 
   web3.Web3Client? _web3client;
@@ -81,8 +83,26 @@ class DAppRequestHandler {
     String method,
     List<dynamic> params, {
     String? origin,
+    bool Function()? isRequestActive,
   }) async {
     final requestOrigin = origin ?? dappOrigin;
+    final requestRevision = _chainRevision;
+    final requestAddress = address.toLowerCase();
+    final requestChain = chainIdInt;
+    void validateRequest() {
+      if (_isDisposed ||
+          _chainRevision != requestRevision ||
+          address.toLowerCase() != requestAddress ||
+          chainIdInt != requestChain ||
+          !(isRequestActive?.call() ?? true)) {
+        throw {
+          'code': 4001,
+          'message': 'Request context changed; retry the request',
+        };
+      }
+    }
+
+    validateRequest();
     switch (method) {
       case 'eth_requestAccounts':
       case 'eth_accounts':
@@ -105,7 +125,7 @@ class DAppRequestHandler {
         return _handleSwitchChain(params);
 
       case 'personal_sign':
-        return _handlePersonalSign(params, requestOrigin);
+        return _handlePersonalSign(params, requestOrigin, validateRequest);
 
       case 'eth_sign':
         // eth_sign is dangerous (signs arbitrary data) — reject by default
@@ -116,13 +136,18 @@ class DAppRequestHandler {
       case 'eth_signTypedData':
       case 'eth_signTypedData_v3':
       case 'eth_signTypedData_v4':
-        return _handleSignTypedData(method, params, requestOrigin);
+        return _handleSignTypedData(
+          method,
+          params,
+          requestOrigin,
+          validateRequest,
+        );
 
       case 'eth_sendTransaction':
-        return _handleSendTransaction(params, requestOrigin);
+        return _handleSendTransaction(params, requestOrigin, validateRequest);
 
       case 'eth_signTransaction':
-        return _handleSignTransaction(params, requestOrigin);
+        return _handleSignTransaction(params, requestOrigin, validateRequest);
 
       // RPC pass-through methods
       case 'eth_call':
@@ -179,6 +204,7 @@ class DAppRequestHandler {
           ? cm.coin['chainId_test']
           : cm.coin['chainId'];
       if (cmChainId == targetChainId) {
+        if (_selectedChainIndex != i) _chainRevision++;
         _selectedChainIndex = i;
         _web3client?.dispose();
         _web3client = null;
@@ -193,6 +219,7 @@ class DAppRequestHandler {
   Future<String> _handlePersonalSign(
     List<dynamic> params,
     String origin,
+    void Function() validateRequest,
   ) async {
     // 裸字符串会被上层归一化为 -32603，参数校验失败按规范应报 -32602
     if (params.length < 2) {
@@ -211,8 +238,10 @@ class DAppRequestHandler {
       details: {'message': rawData},
     );
     if (!approved) throw {'code': 4001, 'message': 'User rejected'};
+    validateRequest();
 
     final privateKey = await _getPrivateKey();
+    validateRequest();
     final stripped = web3.strip0x(rawData);
     final encodedMessage = _isValidHex(stripped)
         ? web3.hexToBytes(stripped)
@@ -230,6 +259,7 @@ class DAppRequestHandler {
     String method,
     List<dynamic> params,
     String origin,
+    void Function() validateRequest,
   ) async {
     if (params.length < 2) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -246,8 +276,10 @@ class DAppRequestHandler {
       details: {'data': jsonData},
     );
     if (!approved) throw {'code': 4001, 'message': 'User rejected'};
+    validateRequest();
 
     final privateKey = await _getPrivateKey();
+    validateRequest();
 
     final Map<String, dynamic> typedData = json.decode(jsonData);
     final typedMessage = TypedMessage.fromJson(typedData);
@@ -269,6 +301,7 @@ class DAppRequestHandler {
   Future<String> _handleSendTransaction(
     List<dynamic> params,
     String origin,
+    void Function() validateRequest,
   ) async {
     if (params.isEmpty) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -289,22 +322,29 @@ class DAppRequestHandler {
       details: txMap,
     );
     if (!approved) throw {'code': 4001, 'message': 'User rejected'};
+    validateRequest();
 
     final privateKey = await _getPrivateKey();
+    validateRequest();
     final web3client = await _getWeb3Client();
+    validateRequest();
 
     final transaction = _buildTransaction(txMap);
     final cm = ethCoinModels[_selectedChainIndex];
-    return web3client.sendTransaction(
+    final signed = await web3client.signTransaction(
       privateKey,
       transaction,
       chainId: cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'],
     );
+    // Nonce/gas lookups during signing can outlive the originating page.
+    validateRequest();
+    return web3client.sendRawTransaction(signed);
   }
 
   Future<String> _handleSignTransaction(
     List<dynamic> params,
     String origin,
+    void Function() validateRequest,
   ) async {
     if (params.isEmpty) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -325,12 +365,20 @@ class DAppRequestHandler {
       details: txMap,
     );
     if (!approved) throw {'code': 4001, 'message': 'User rejected'};
+    validateRequest();
 
     final privateKey = await _getPrivateKey();
+    validateRequest();
     final web3client = await _getWeb3Client();
+    validateRequest();
 
     final transaction = _buildTransaction(txMap);
-    final signed = await web3client.signTransaction(privateKey, transaction);
+    final signed = await web3client.signTransaction(
+      privateKey,
+      transaction,
+      chainId: chainIdInt,
+    );
+    validateRequest();
     return bytesToHex(signed, include0x: true);
   }
 
@@ -373,6 +421,7 @@ class DAppRequestHandler {
   }
 
   Future<web3.EthPrivateKey> _getPrivateKey() async {
+    final expectedAddress = address.toLowerCase();
     final walletService = globalProviderContainer.read(walletServiceProvider);
     if (walletService == null) throw 'Wallet service not available';
 
@@ -402,7 +451,14 @@ class DAppRequestHandler {
 
     final decodedKey = base64Decode(pKey);
     if (decodedKey.length != 32) throw 'Invalid private key length';
-    return web3.EthPrivateKey(decodedKey);
+    final privateKey = web3.EthPrivateKey(decodedKey);
+    if (privateKey.address.eip55With0x.toLowerCase() != expectedAddress) {
+      throw {
+        'code': 4001,
+        'message': 'Signing account changed; retry the request',
+      };
+    }
+    return privateKey;
   }
 
   Future<web3.Web3Client> _getWeb3Client() async {
@@ -479,6 +535,7 @@ class DAppRequestHandler {
   }
 
   void dispose() {
+    _isDisposed = true;
     _web3client?.dispose();
     _web3client = null;
   }

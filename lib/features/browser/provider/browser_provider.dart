@@ -113,12 +113,14 @@ class BrowserProvider extends ChangeNotifier {
         .where((cm) => cm.config.coinType == CoinType.ETH.name)
         .toList();
     if (evm.isEmpty) {
+      _dappHandler?.dispose();
       _dappHandler = null;
       return null;
     }
     // Wallet switches can replace every model while preserving the count.
     // Compare the actual models so a new request cannot use the old account.
     if (_dappHandler == null || !listEquals(_dappHandler!.ethCoinModels, evm)) {
+      _dappHandler?.dispose();
       final handler = DAppRequestHandler(ethCoinModels: evm);
       handler.onSigningRequest =
           ({
@@ -642,11 +644,11 @@ class BrowserProvider extends ChangeNotifier {
     }
   }
 
-  /// Origins the user has explicitly connected (approved `eth_requestAccounts`)
-  /// this session. Only these origins get the wallet address exposed —
-  /// every other page sees an empty account list until it asks and the user
-  /// approves, matching MetaMask semantics (no silent address leak).
-  final Set<String> _connectedOrigins = {};
+  /// Connection approval exposes only the account shown in the prompt.
+  final Map<String, Set<String>> _connectedAccounts = {};
+
+  bool _isAccountConnected(String origin, String address) =>
+      _connectedAccounts[origin]?.contains(address.toLowerCase()) ?? false;
 
   /// Inject the EIP-1193 `window.ethereum` provider into [wvc]. The address
   /// is only seeded for origins the user has connected; other pages get an
@@ -658,7 +660,7 @@ class BrowserProvider extends ChangeNotifier {
     final handler = _ensureDappHandler();
     if (handler == null) return;
     try {
-      final connected = _connectedOrigins.contains(_originOf(url));
+      final connected = _isAccountConnected(_originOf(url), handler.address);
       final script = EthereumProviderJs.buildProviderScript(
         handler.chainIdHex,
         connected ? [handler.address] : const [],
@@ -697,6 +699,14 @@ class BrowserProvider extends ChangeNotifier {
         await _rejectProvider(wvc, id, -32603, 'No EVM account available');
         return;
       }
+      final requestAddress = handler.address;
+      final requestChain = handler.chainIdHex;
+      final requestWalletIndex = globalWapAdapter.walletIndex;
+      bool isCurrentWallet() =>
+          globalWapAdapter.walletIndex == requestWalletIndex &&
+          identical(_ensureDappHandler(), handler) &&
+          handler.address == requestAddress &&
+          handler.chainIdHex == requestChain;
 
       // Origin/安全检查基于发起请求的标签，而不是当前活跃标签——后台标签的
       // JS 仍在运行，否则恶意后台页可借前台可信页的 origin 弹签名框、并绕过
@@ -724,18 +734,22 @@ class BrowserProvider extends ChangeNotifier {
           await _resolveProvider(
             wvc,
             id,
-            _connectedOrigins.contains(origin) ? [handler.address] : const [],
+            _isAccountConnected(origin, handler.address)
+                ? [handler.address]
+                : const [],
           );
           return;
         case 'eth_coinbase':
           await _resolveProvider(
             wvc,
             id,
-            _connectedOrigins.contains(origin) ? handler.address : null,
+            _isAccountConnected(origin, handler.address)
+                ? handler.address
+                : null,
           );
           return;
         case 'eth_requestAccounts':
-          if (!_connectedOrigins.contains(origin)) {
+          if (!_isAccountConnected(origin, handler.address)) {
             final cb = onSigningRequest;
             if (cb == null) {
               // 回调未接线时若静默拒绝，DApp 只会看到"连接失败"而用户什么
@@ -757,12 +771,23 @@ class BrowserProvider extends ChangeNotifier {
               },
             );
             if (!isCurrentDocument()) return;
+            if (!isCurrentWallet()) {
+              await _rejectProvider(
+                wvc,
+                id,
+                4001,
+                'Wallet changed; retry the request',
+              );
+              return;
+            }
             if (!approved) {
               AppLogger.i('Browser', 'connect rejected for $origin');
               await _rejectProvider(wvc, id, 4001, 'User rejected');
               return;
             }
-            _connectedOrigins.add(origin);
+            (_connectedAccounts[origin] ??= {}).add(
+              requestAddress.toLowerCase(),
+            );
             AppLogger.i('Browser', 'connect approved for $origin');
           }
           // Push the now-exposed account into the page's provider so
@@ -782,6 +807,7 @@ class BrowserProvider extends ChangeNotifier {
         method,
         params,
         origin: origin,
+        isRequestActive: () => isCurrentDocument() && isCurrentWallet(),
       );
       if (!isCurrentDocument()) return;
       await _resolveProvider(wvc, id, result);
