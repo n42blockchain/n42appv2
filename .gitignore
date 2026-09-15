@@ -9,6 +9,8 @@ bin-release/
 
 # Environment secrets
 .env
+.env.*
+!.env.example
 
 # Executables
 *.swf
@@ -37,6 +39,8 @@ packages/*/pubspec.lock
 .vscode/
 *.swp
 *.swo
+**/.claude/
+**/.kotlin/
 
 # macOS
 .DS_Store
