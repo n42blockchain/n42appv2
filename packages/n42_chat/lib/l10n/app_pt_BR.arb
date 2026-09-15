@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Filtro inteligente",
   "settingsEmailVerificationSent": "E-mail de verificação enviado",
   "settingsEmailLinkInstructions": "Abra o link de verificação no seu e-mail, depois volte aqui e confirme.",
-  "settingsSendVerificationEmail": "Enviar e-mail de verificação"
+  "settingsSendVerificationEmail": "Enviar e-mail de verificação",
+  "chatLogoutKeyWarning": "Faça backup das chaves de criptografia antes de sair, ou você poderá perder o acesso às mensagens criptografadas."
 }

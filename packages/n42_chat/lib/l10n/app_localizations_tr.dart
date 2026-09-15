@@ -5816,4 +5816,8 @@ class STr extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Doğrulama e-postası gönder';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz.';
 }

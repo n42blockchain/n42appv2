@@ -112,15 +112,16 @@ class ContactRepositoryImpl implements IContactRepository {
       encrypted: encrypted,
     );
 
-    // 发起聊天时，也邀请对方加入我的 Moment 房间
-    try {
-      await _momentDataSource.inviteFriendToMomentRoom(userId);
-    } catch (e) {
-      debugLog(
-        'ContactRepository: Failed to invite to moment room after startDirectChat: $e',
-      );
+    // Share Moments only after both users have joined the direct room.
+    if (_contactDataSource.getDirectChatRoomIdMap().containsKey(userId)) {
+      try {
+        await _momentDataSource.inviteFriendToMomentRoom(userId);
+      } catch (e) {
+        debugLog(
+          'ContactRepository: Failed to invite to moment room after startDirectChat: $e',
+        );
+      }
     }
-
     return roomId;
   }
 

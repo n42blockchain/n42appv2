@@ -1,3 +1,4 @@
+import 'message/direct_chat_send_guard.dart';
 import 'dart:convert';
 
 import 'package:matrix/matrix.dart' as matrix;
@@ -16,7 +17,7 @@ class MatrixReactionDataSource {
 
   /// 添加emoji反应
   Future<void> addReaction(String roomId, String eventId, String emoji) async {
-    final room = _client?.getRoomById(roomId);
+    final room = roomForSending(_client, roomId);
     if (room == null) throw Exception('Room not found');
 
     // Matrix使用 m.annotation 类型发送反应
@@ -100,7 +101,7 @@ class MatrixReactionDataSource {
     String content, {
     String? formattedContent,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = roomForSending(_client, roomId);
     if (room == null) throw Exception('Room not found');
 
     // 获取原消息
@@ -135,7 +136,7 @@ class MatrixReactionDataSource {
     String newContent, {
     String? formattedContent,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = roomForSending(_client, roomId);
     if (room == null) throw Exception('Room not found');
 
     final content = buildTextMessageContent(newContent);
@@ -182,7 +183,7 @@ class MatrixReactionDataSource {
     String toRoomId,
   ) async {
     final fromRoom = _client?.getRoomById(fromRoomId);
-    final toRoom = _client?.getRoomById(toRoomId);
+    final toRoom = roomForSending(_client, toRoomId);
     if (fromRoom == null || toRoom == null) {
       throw Exception('Room not found');
     }

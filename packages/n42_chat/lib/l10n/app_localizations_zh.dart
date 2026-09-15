@@ -5671,6 +5671,9 @@ class SZh extends S {
 
   @override
   String get settingsSendVerificationEmail => '发送验证邮件';
+
+  @override
+  String get chatLogoutKeyWarning => '登出前請備份加密金鑰，否則可能無法再讀取加密訊息。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11340,4 +11343,7 @@ class SZhTw extends SZh {
 
   @override
   String get settingsSendVerificationEmail => '傳送驗證郵件';
+
+  @override
+  String get chatLogoutKeyWarning => '登出前請備份加密金鑰，否則可能無法再讀取加密訊息。';
 }

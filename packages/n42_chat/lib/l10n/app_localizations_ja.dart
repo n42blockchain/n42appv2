@@ -5694,4 +5694,8 @@ class SJa extends S {
 
   @override
   String get settingsSendVerificationEmail => '確認メールを送信';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'ログアウトする前に暗号化キーをバックアップしてください。暗号化されたメッセージを読めなくなる可能性があります。';
 }

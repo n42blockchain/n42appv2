@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "التصفية الذكية",
   "settingsEmailVerificationSent": "تم إرسال رسالة التحقق",
   "settingsEmailLinkInstructions": "افتح رابط التحقق في بريدك الإلكتروني، ثم عد إلى هنا وأكّد.",
-  "settingsSendVerificationEmail": "إرسال رسالة التحقق"
+  "settingsSendVerificationEmail": "إرسال رسالة التحقق",
+  "chatLogoutKeyWarning": "انسخ مفاتيح التشفير احتياطيًا قبل تسجيل الخروج، وإلا فقد تفقد إمكانية الوصول إلى الرسائل المشفرة."
 }

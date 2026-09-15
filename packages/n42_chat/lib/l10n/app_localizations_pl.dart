@@ -5848,4 +5848,8 @@ class SPl extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Wyślij e-mail weryfikacyjny';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Przed wylogowaniem utwórz kopię zapasową kluczy szyfrowania, inaczej możesz utracić dostęp do zaszyfrowanych wiadomości.';
 }

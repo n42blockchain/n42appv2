@@ -28,11 +28,13 @@ import '../../../core/utils/debug_log.dart';
 class SecuritySettingsPage extends StatefulWidget {
   final E2EEManager e2eeManager;
   final KeyBackupService keyBackupService;
+  final bool restoreKeysOnOpen;
 
   const SecuritySettingsPage({
     super.key,
     required this.e2eeManager,
     required this.keyBackupService,
+    this.restoreKeysOnOpen = false,
   });
 
   @override
@@ -67,6 +69,11 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
     _loadData();
     _loadBiometricStatus();
     _loadPasskeyStatus();
+    if (widget.restoreKeysOnOpen) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _showRestoreDialog();
+      });
+    }
   }
 
   Future<void> _loadBiometricStatus() async {

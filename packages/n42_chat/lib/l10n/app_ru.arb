@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Умный фильтр",
   "settingsEmailVerificationSent": "Письмо для подтверждения отправлено",
   "settingsEmailLinkInstructions": "Откройте ссылку в письме, затем вернитесь сюда и подтвердите.",
-  "settingsSendVerificationEmail": "Отправить письмо для подтверждения"
+  "settingsSendVerificationEmail": "Отправить письмо для подтверждения",
+  "chatLogoutKeyWarning": "Перед выходом сохраните резервную копию ключей шифрования, иначе вы можете потерять доступ к зашифрованным сообщениям."
 }

@@ -5811,4 +5811,8 @@ class SBn extends S {
 
   @override
   String get settingsSendVerificationEmail => 'যাচাইকরণ ইমেল পাঠান';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'লগ আউট করার আগে এনক্রিপশন কীগুলি ব্যাক আপ করুন, নইলে এনক্রিপ্ট করা বার্তাগুলিতে প্রবেশাধিকার হারাতে পারেন।';
 }

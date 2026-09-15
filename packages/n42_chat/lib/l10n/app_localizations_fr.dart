@@ -5876,4 +5876,8 @@ class SFr extends S {
   @override
   String get settingsSendVerificationEmail =>
       'Envoyer un e-mail de vérification';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Sauvegardez vos clés de chiffrement avant de vous déconnecter, sinon vous risquez de perdre l’accès aux messages chiffrés.';
 }

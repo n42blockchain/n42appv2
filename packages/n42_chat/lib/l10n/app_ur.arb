@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "اسمارٹ فلٹر",
   "settingsEmailVerificationSent": "تصدیقی ای میل بھیج دی گئی",
   "settingsEmailLinkInstructions": "اپنی ای میل میں تصدیقی لنک کھولیں، پھر یہاں واپس آ کر تصدیق کریں۔",
-  "settingsSendVerificationEmail": "تصدیقی ای میل بھیجیں"
+  "settingsSendVerificationEmail": "تصدیقی ای میل بھیجیں",
+  "chatLogoutKeyWarning": "لاگ آؤٹ کرنے سے پہلے اپنی خفیہ کاری کی کلیدوں کا بیک اپ لیں، ورنہ آپ خفیہ کردہ پیغامات تک رسائی کھو سکتے ہیں۔"
 }

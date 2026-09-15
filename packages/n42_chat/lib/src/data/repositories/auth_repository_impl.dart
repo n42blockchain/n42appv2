@@ -419,6 +419,18 @@ class AuthRepositoryImpl implements IAuthRepository {
         type: AuthErrorType.additionalAuthRequired,
       );
     } on MatrixException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return AuthResult.failure(
+          '需要完成服务器要求的注册验证，请检查邀请码或联系服务器管理员',
+          type: AuthErrorType.additionalAuthRequired,
+        );
+      }
+      if (e.errcode == 'M_FORBIDDEN' || e.errcode == 'M_UNAUTHORIZED') {
+        return AuthResult.failure(
+          e.errorMessage,
+          type: AuthErrorType.serverError,
+        );
+      }
       return _handleMatrixError(e);
     } catch (e) {
       return AuthResult.failure(

@@ -35,7 +35,9 @@ class MatrixContactDataSource {
         final partnerId = room.directChatMatrixID;
         if (partnerId != null && partnerId != _client?.userID) {
           final user = room.unsafeGetUserFromMemoryOrFallback(partnerId);
-          contacts[partnerId] = user;
+          if (user.content['membership'] == 'join') {
+            contacts[partnerId] = user;
+          }
         }
       }
     }
@@ -53,7 +55,10 @@ class MatrixContactDataSource {
       if (isDirectChat && isJoined) {
         final partnerId = room.directChatMatrixID;
         if (partnerId != null && partnerId != _client?.userID) {
-          roomIdMap[partnerId] = room.id;
+          final user = room.unsafeGetUserFromMemoryOrFallback(partnerId);
+          if (user.content['membership'] == 'join') {
+            roomIdMap[partnerId] = room.id;
+          }
         }
       }
     }

@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "স্মার্ট ফিল্টার",
   "settingsEmailVerificationSent": "যাচাইকরণ ইমেল পাঠানো হয়েছে",
   "settingsEmailLinkInstructions": "ইমেলের যাচাইকরণ লিঙ্কটি খুলুন, তারপর এখানে ফিরে এসে নিশ্চিত করুন।",
-  "settingsSendVerificationEmail": "যাচাইকরণ ইমেল পাঠান"
+  "settingsSendVerificationEmail": "যাচাইকরণ ইমেল পাঠান",
+  "chatLogoutKeyWarning": "লগ আউট করার আগে এনক্রিপশন কীগুলি ব্যাক আপ করুন, নইলে এনক্রিপ্ট করা বার্তাগুলিতে প্রবেশাধিকার হারাতে পারেন।"
 }

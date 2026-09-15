@@ -1,3 +1,4 @@
+import 'direct_chat_send_guard.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
@@ -28,14 +29,16 @@ class MatrixMediaSender {
     int? selfDestructAfter,
   }) async {
     debugLog('=== sendImageMessage start ===');
-    debugLog('roomId: $roomId, filename: $filename, size: ${imageBytes.length}');
+    debugLog(
+      'roomId: $roomId, filename: $filename, size: ${imageBytes.length}',
+    );
 
     try {
       if (_client == null || !_client!.isLogged()) {
         throw Exception('未登录或客户端未初始化');
       }
 
-      final room = _client!.getRoomById(roomId);
+      final room = roomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -90,17 +93,12 @@ class MatrixMediaSender {
         'msgtype': 'm.image',
         'body': filename,
         'url': mxcUri.toString(),
-        'info': {
-          'mimetype': actualMimeType,
-          'size': imageBytes.length,
-        },
+        'info': {'mimetype': actualMimeType, 'size': imageBytes.length},
       };
 
       // View Once / 阅后即焚支持
       if (selfDestructAfter != null && selfDestructAfter > 0) {
-        content['n42.self_destruct'] = {
-          'after': selfDestructAfter,
-        };
+        content['n42.self_destruct'] = {'after': selfDestructAfter};
       }
 
       final result = await room.sendEvent(content);
@@ -140,7 +138,7 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = _client!.getRoomById(roomId);
+      final room = roomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -150,7 +148,8 @@ class MatrixMediaSender {
       final lowerFilename = filename.toLowerCase();
       if (lowerFilename.endsWith('.m4a')) {
         actualMimeType = 'audio/mp4';
-      } else if (lowerFilename.endsWith('.ogg') || lowerFilename.endsWith('.opus')) {
+      } else if (lowerFilename.endsWith('.ogg') ||
+          lowerFilename.endsWith('.opus')) {
         actualMimeType = 'audio/ogg';
       } else if (lowerFilename.endsWith('.mp3')) {
         actualMimeType = 'audio/mpeg';
@@ -180,16 +179,16 @@ class MatrixMediaSender {
             // MSC3245 语音消息标记
             'org.matrix.msc3245.voice': <String, dynamic>{},
             // MSC1767 音频消息扩展
-            'org.matrix.msc1767.audio': {
-              'duration': duration,
-            },
+            'org.matrix.msc1767.audio': {'duration': duration},
             if (selfDestructAfter != null)
               'n42.self_destruct': {'seconds': selfDestructAfter},
           },
         );
 
         debugLog('sendFileEvent result: $result');
-        debugLog('=== sendVoiceMessage completed successfully (SDK method) ===');
+        debugLog(
+          '=== sendVoiceMessage completed successfully (SDK method) ===',
+        );
         return result;
       } catch (sdkError, sdkStack) {
         debugLog('SDK sendFileEvent for audio failed: $sdkError');
@@ -218,15 +217,15 @@ class MatrixMediaSender {
           'duration': duration,
         },
         'org.matrix.msc3245.voice': <String, dynamic>{},
-        'org.matrix.msc1767.audio': {
-          'duration': duration,
-        },
+        'org.matrix.msc1767.audio': {'duration': duration},
         if (selfDestructAfter != null)
           'n42.self_destruct': {'seconds': selfDestructAfter},
       };
 
       final result = await room.sendEvent(content);
-      debugLog('=== sendVoiceMessage completed successfully (manual method) ===');
+      debugLog(
+        '=== sendVoiceMessage completed successfully (manual method) ===',
+      );
       return result;
     } catch (e, stackTrace) {
       debugLog('=== sendVoiceMessage ERROR ===');
@@ -260,7 +259,7 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = _client!.getRoomById(roomId);
+      final room = roomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -295,10 +294,7 @@ class MatrixMediaSender {
         'msgtype': 'm.video',
         'body': filename,
         'url': mxcUri.toString(),
-        'info': {
-          'mimetype': actualMimeType,
-          'size': videoBytes.length,
-        },
+        'info': {'mimetype': actualMimeType, 'size': videoBytes.length},
       };
 
       if (thumbnailUri != null) {
@@ -312,13 +308,13 @@ class MatrixMediaSender {
 
       // View Once / 阅后即焚支持
       if (selfDestructAfter != null && selfDestructAfter > 0) {
-        content['n42.self_destruct'] = {
-          'after': selfDestructAfter,
-        };
+        content['n42.self_destruct'] = {'after': selfDestructAfter};
       }
 
       final result = await room.sendEvent(content);
-      debugLog('=== sendVideoMessage completed successfully (manual method) ===');
+      debugLog(
+        '=== sendVideoMessage completed successfully (manual method) ===',
+      );
       return result;
     } catch (e, stackTrace) {
       debugLog('=== sendVideoMessage ERROR ===');
@@ -354,13 +350,14 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = _client!.getRoomById(roomId);
+      final room = roomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
 
       final actualMimeType = mimeType ?? 'application/octet-stream';
-      final effectiveSize = fileSize ??
+      final effectiveSize =
+          fileSize ??
           fileBytes?.length ??
           (filePath != null ? await File(filePath).length() : null);
 
@@ -399,16 +396,15 @@ class MatrixMediaSender {
           'body': filename,
           'filename': filename,
           'url': mxcUri.toString(),
-          'info': {
-            'mimetype': actualMimeType,
-            'size': ?effectiveSize,
-          },
+          'info': {'mimetype': actualMimeType, 'size': ?effectiveSize},
           if (selfDestructAfter != null)
             'n42.self_destruct': {'seconds': selfDestructAfter},
         };
 
         final result = await room.sendEvent(content);
-        debugLog('=== sendFileMessage completed successfully (streaming method) ===');
+        debugLog(
+          '=== sendFileMessage completed successfully (streaming method) ===',
+        );
         return result;
       }
 
@@ -428,7 +424,9 @@ class MatrixMediaSender {
         final result = await room.sendFileEvent(
           matrixFile,
           extraContent: selfDestructAfter != null
-              ? {'n42.self_destruct': {'seconds': selfDestructAfter}}
+              ? {
+                  'n42.self_destruct': {'seconds': selfDestructAfter},
+                }
               : null,
         );
 
@@ -466,7 +464,9 @@ class MatrixMediaSender {
       };
 
       final result = await room.sendEvent(content);
-      debugLog('=== sendFileMessage completed successfully (manual method) ===');
+      debugLog(
+        '=== sendFileMessage completed successfully (manual method) ===',
+      );
       return result;
     } catch (e, stackTrace) {
       debugLog('=== sendFileMessage ERROR ===');

@@ -5810,4 +5810,8 @@ class SHi extends S {
 
   @override
   String get settingsSendVerificationEmail => 'सत्यापन ईमेल भेजें';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'लॉग आउट करने से पहले अपनी एन्क्रिप्शन कुंजियों का बैकअप लें, वरना एन्क्रिप्ट किए गए संदेशों तक पहुँच खो सकते हैं।';
 }

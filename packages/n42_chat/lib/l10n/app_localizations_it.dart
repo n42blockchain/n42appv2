@@ -5834,4 +5834,8 @@ class SIt extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Invia email di verifica';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Esegui il backup delle chiavi di crittografia prima di uscire, altrimenti potresti perdere l’accesso ai messaggi crittografati.';
 }

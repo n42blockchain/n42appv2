@@ -140,6 +140,9 @@ void main() {
       expect(event.username, 'alice');
       expect(event.email, 'alice@example.org');
       expect(event.password, 'Password123!');
+      expect(event.registrationToken, isNull);
+      expect(find.text('Filled'), findsNothing);
+      expect(find.text('Invite Code (Built-in)'), findsNothing);
       expect(events.whereType<AuthAnonymousRegisterRequested>(), isEmpty);
     },
   );

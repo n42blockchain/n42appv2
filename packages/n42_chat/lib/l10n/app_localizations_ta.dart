@@ -5874,4 +5874,8 @@ class STa extends S {
 
   @override
   String get settingsSendVerificationEmail => 'சரிபார்ப்பு மின்னஞ்சலை அனுப்பு';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'வெளியேறும் முன் உங்கள் குறியாக்க விசிகளை காப்புப் பிரதி எடுக்கவும். இல்லையெனில் குறியாக்கப்பட்ட செய்திகளை அணுக முடியாமல் போகலாம்.';
 }

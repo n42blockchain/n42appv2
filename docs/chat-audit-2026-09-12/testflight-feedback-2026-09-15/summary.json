@@ -1,0 +1,69 @@
+{
+  "date": "2026-09-15",
+  "wallet_base_commit": "a33eb25b1faa9de82b2311e6d03807efa054c25b",
+  "chat_ref": "def750f16e553146c484d8a155e6819581f4d3c3",
+  "chat_repairs_ref": "c612f8bb787bf15a097dae9550cc3e01bc6e7889",
+  "chat_full_tests": {
+    "passed": 6445,
+    "skipped": 1,
+    "failed": 0,
+    "ref": "c612f8bb787bf15a097dae9550cc3e01bc6e7889"
+  },
+  "final_chat_delta": "def750f releases a completed timeline generation marker; 14 message repository cases pass after the one-line cleanup.",
+  "wallet_full_tests": {
+    "passed": 4870,
+    "skipped": 0,
+    "failed": 0,
+    "chat_ref": "c612f8bb787bf15a097dae9550cc3e01bc6e7889"
+  },
+  "wallet_final_pin_tests": {
+    "passed": 111,
+    "failed": 0,
+    "chat_ref": "def750f16e553146c484d8a155e6819581f4d3c3"
+  },
+  "coverage": {
+    "hit": 60085,
+    "found": 130740,
+    "percent": 45.95762582224262,
+    "threshold": 70,
+    "passed": false
+  },
+  "analysis": {
+    "chat": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 173
+    },
+    "wallet": {
+      "errors": 0,
+      "warnings": 0,
+      "infos": 155
+    }
+  },
+  "mirror_files": 771,
+  "test_files_integrated": 9,
+  "artifacts_sha256": {
+    "chat-full.jsonl.gz": "7949968b0893e304918b137d3dcd60164b31ac6ccd0aaeb9b0aacdd550f916be",
+    "chat-analyze.log.gz": "eec8b590601d0415f026c16ba8dc7909fa3cc3b64e077111c3a95f30bb34d7f3",
+    "regressions-before.log.gz": "d4e09d754bd2a2fd134123db84cd00940e2dfc140a2e7408f650cd4fed578301",
+    "session-cache-before.log.gz": "c39a04ba05bdc894e04f7612ee10b124feae26a4d4c87e99cd587e871892cfc1",
+    "session-cleanup.log.gz": "62679882f8e9781281d4ad36062c68115c465dbd58462c1e65bf4ee832672fd7",
+    "wallet-full.jsonl.gz": "e55b0f9528edbc75c6db2db1c6040cd3f49f24ed5c2ab6667c2bd27990f06558",
+    "wallet-final-pin-tests.log.gz": "27342920cdac3a45e6ca407d2e20c091ac845158de4e2cf3d3ffef11293b1c69",
+    "wallet-analyze.log.gz": "24452d5eb67f16a1bd819985ff870b1d6a6211141093b386d1b6c11496ee0778",
+    "lcov.info.gz": "782b52cfa59eac446836993fd0d67b3beb54cded4979ab3c3bd933c58b37a5b3"
+  },
+  "pre_commit_source_sha256": {
+    "pubspec.yaml": "8c311fb10c8f929441dcab5822696c744ba937782ef7c939081c572233474619",
+    "pubspec.lock": "c9c2f1814f3507f54a64f97e088e749ddfccb47b4c71b8c3da887b1592b4f8f9",
+    "lib/features/browser/provider/browser_provider.dart": "55d1908d0261bb01bf332d16e0b0e1052e99ea503a69ace9ffb472bef50af7cb",
+    "test/features/chat/chat_testflight_feedback_regression_test.dart": "b5ed659119ff8b08ab360dba04ddee4cc64a957315f5db8be723fd5122ed1cba",
+    "docs/chat-audit-2026-09-12/CHAT_SOURCE_MANIFEST_2026-09-12.json": "c2b569309cc3b59847d8bec4aa57d513dde35a9b54f7bfff3725aa7f25d129b9"
+  },
+  "limitations": [
+    "No live registration or user login was performed.",
+    "Real iOS/Android encrypted send, logout and key restoration need acceptance.",
+    "Unbacked-up lost session keys are not recoverable by the client cache repair.",
+    "TestFlight upload is tracked separately from these code-test results."
+  ]
+}

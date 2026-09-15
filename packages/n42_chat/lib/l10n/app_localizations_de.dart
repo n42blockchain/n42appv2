@@ -5858,4 +5858,8 @@ class SDe extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Bestätigungs-E-Mail senden';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Sichere deine Verschlüsselungsschlüssel vor dem Abmelden, sonst könntest du den Zugriff auf verschlüsselte Nachrichten verlieren.';
 }

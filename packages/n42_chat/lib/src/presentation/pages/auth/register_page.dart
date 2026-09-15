@@ -13,6 +13,7 @@ import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_text_styles.dart';
 import '../../../n42_chat.dart';
+import '../../../domain/repositories/auth_repository.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
@@ -41,10 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  // 内置邀请码
-  final _inviteCodeController = TextEditingController(
-    text: 'c321fb4d6ce5e93984452cbd11427f5dfc8c02a2c728234ce8d6e5ce317e9a81',
-  );
+  final _inviteCodeController = TextEditingController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -190,6 +188,9 @@ class _RegisterPageState extends State<RegisterPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.hasError) {
+            if (state.errorType == AuthErrorType.additionalAuthRequired) {
+              setState(() => _showInviteCode = true);
+            }
             final message = state.errorMessage != null
                 ? resolveBlocMessage(context, state.errorMessage!)
                 : (S.of(context)?.authRegisterFailed ?? 'Registration failed');
@@ -727,8 +728,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(width: 4),
               Flexible(
                 child: Text(
-                  S.of(context)?.authInviteCodeBuiltIn ??
-                      'Invite Code (Built-in)',
+                  S.of(context)?.authEnterInviteCode ?? 'Enter invite code',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -739,7 +739,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const Spacer(),
-              if (!_showInviteCode)
+              if (!_showInviteCode &&
+                  _inviteCodeController.text.trim().isNotEmpty)
                 Text(
                   S.of(context)?.authFilled ?? 'Filled',
                   maxLines: 1,
@@ -776,14 +777,6 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               prefixIcon: Icon(Icons.vpn_key_outlined, color: hintColor),
             ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            S.of(context)?.authInviteCodeBuiltInNote ??
-                'Invite code is built-in, usually no need to modify',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 11, height: 1.4, color: hintColor),
           ),
         ],
       ],

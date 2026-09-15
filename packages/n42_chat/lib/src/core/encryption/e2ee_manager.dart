@@ -1,6 +1,8 @@
 import 'package:matrix/encryption/utils/key_verification.dart' as kv;
+import 'package:matrix/encryption/utils/bootstrap.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import '../utils/debug_log.dart';
+import 'room_key_backup_restore.dart';
 
 /// 端到端加密管理器
 ///
@@ -79,9 +81,9 @@ class E2EEManager {
       await openSsss.maybeCacheAll();
 
       // 从服务端备份恢复所有密钥
-      await encryption.keyManager.loadAllKeys();
+      final restored = await restoreRoomKeyBackup(_client);
       debugLog('E2EEManager: Room keys imported from server backup');
-      return 1;
+      return restored;
     } catch (e) {
       throw E2EEException('Failed to import room keys: $e');
     }
@@ -109,36 +111,70 @@ class E2EEManager {
   /// 返回恢复密钥字符串，用户应安全保存此密钥。
   Future<String?> createRecoveryKey({String? passphrase}) async {
     final encryption = _client.encryption;
-    if (encryption == null) return null;
+    if (encryption == null) throw E2EEException('Encryption not initialized');
 
     try {
-      // 1. 通过 SSSS 创建新的默认密钥
-      final openSsss = await encryption.ssss.createKey(passphrase);
-      final recoveryKey = openSsss.recoveryKey;
-      if (recoveryKey == null) {
-        throw E2EEException('Failed to generate recovery key');
+      final bootstrap = encryption.bootstrap();
+      // Complete the SDK backup setup, preserving existing secret storage and
+      // backup versions. Starting auto-upload alone does not create a backup.
+      for (var step = 0; step < 16; step++) {
+        switch (bootstrap.state) {
+          case BootstrapState.askWipeSsss:
+            bootstrap.wipeSsss(false);
+          case BootstrapState.askUseExistingSsss:
+            bootstrap.useExistingSsss(true);
+          case BootstrapState.openExistingSsss:
+            final key = bootstrap.newSsssKey!;
+            if (!key.isUnlocked) {
+              if (_cachedRecoveryKey == null && passphrase == null) {
+                throw E2EEException(
+                  'Unlock the existing recovery key before backing up',
+                );
+              }
+              await key.unlock(
+                recoveryKey: _cachedRecoveryKey,
+                passphrase: passphrase,
+              );
+            }
+            await bootstrap.openExistingSsss();
+          case BootstrapState.askNewSsss:
+            // Never replace existing storage merely because its secrets could
+            // not be read. Recovery must be completed first in that case.
+            if (hasSsssDefaultKey) {
+              throw E2EEException('Restore the existing secret storage first');
+            }
+            await bootstrap.newSsss(passphrase);
+          case BootstrapState.askWipeCrossSigning:
+            await bootstrap.wipeCrossSigning(false);
+          case BootstrapState.askSetupCrossSigning:
+            // Device verification is a separate user flow, not a prerequisite
+            // for preserving encrypted room keys.
+            await bootstrap.askSetupCrossSigning();
+          case BootstrapState.askWipeOnlineKeyBackup:
+            bootstrap.wipeOnlineKeyBackup(false);
+          case BootstrapState.askSetupOnlineKeyBackup:
+            await bootstrap.askSetupOnlineKeyBackup(true);
+          case BootstrapState.done:
+            final recoveryKey = bootstrap.newSsssKey?.recoveryKey;
+            if (recoveryKey == null) {
+              throw E2EEException('Recovery key is unavailable');
+            }
+            _cachedRecoveryKey = recoveryKey;
+            await bootstrap.newSsssKey!.maybeCacheAll();
+            await encryption.keyManager.getRoomKeysBackupInfo(false);
+            if (!await encryption.keyManager.isCached()) {
+              throw E2EEException('Backup key is unavailable');
+            }
+            await encryption.keyManager.uploadInboundGroupSessions();
+            encryption.keyManager.startAutoUploadKeys();
+            return recoveryKey;
+          default:
+            throw E2EEException(
+              'Key backup requires recovery of existing secrets',
+            );
+        }
       }
-
-      // 2. 设置为默认密钥
-      await encryption.ssss.setDefaultKeyId(openSsss.keyId);
-
-      // 3. 缓存恢复密钥和解锁的 SSSS
-      _cachedRecoveryKey = recoveryKey;
-
-      // 4. 存储 cross-signing 和 megolm backup 密钥到 SSSS
-      try {
-        await encryption.crossSigning.selfSign(
-          recoveryKey: recoveryKey,
-        );
-      } catch (e) {
-        debugLog('E2EEManager: Cross-signing self-sign skipped: $e');
-      }
-
-      // 5. 启用密钥自动上传到服务端备份
-      encryption.keyManager.startAutoUploadKeys();
-
-      debugLog('E2EEManager: Recovery key created successfully');
-      return recoveryKey;
+      throw E2EEException('Key backup setup did not complete');
     } catch (e) {
       if (e is E2EEException) rethrow;
       throw E2EEException('Failed to create recovery key: $e');
@@ -169,6 +205,8 @@ class E2EEManager {
         debugLog('E2EEManager: Cross-signing recovery skipped: $e');
       }
 
+      await restoreRoomKeyBackup(_client);
+
       // 4. 缓存恢复密钥
       _cachedRecoveryKey = recoveryKey;
 
@@ -193,6 +231,8 @@ class E2EEManager {
       final openSsss = encryption.ssss.open();
       await openSsss.unlock(passphrase: passphrase);
       await openSsss.maybeCacheAll();
+
+      await restoreRoomKeyBackup(_client);
 
       // 缓存恢复密钥
       _cachedRecoveryKey = openSsss.recoveryKey;
@@ -268,12 +308,15 @@ class E2EEManager {
     final devices = getDevicesForUser(userId);
     return devices
         .where((d) => !d.verified)
-        .map((d) => DeviceInfo(
-              deviceId: d.deviceId ?? '',
-              deviceName: d.unsigned?['device_display_name'] as String? ?? 'Unknown',
-              isVerified: d.verified,
-              lastSeenTs: d.unsigned?['last_seen_ts'] as int?,
-            ))
+        .map(
+          (d) => DeviceInfo(
+            deviceId: d.deviceId ?? '',
+            deviceName:
+                d.unsigned?['device_display_name'] as String? ?? 'Unknown',
+            isVerified: d.verified,
+            lastSeenTs: d.unsigned?['last_seen_ts'] as int?,
+          ),
+        )
         .toList();
   }
 
@@ -334,7 +377,9 @@ class E2EEManager {
   /// 失败时静默处理，不阻塞登录流程。
   Future<void> autoSetupAfterLogin() async {
     if (!isEncryptionInitialized || _autoSetupInProgress) {
-      debugLog('E2EEManager: Encryption not initialized or setup already in progress, skipping');
+      debugLog(
+        'E2EEManager: Encryption not initialized or setup already in progress, skipping',
+      );
       return;
     }
 
@@ -530,8 +575,9 @@ class DeviceInfo {
     this.isCurrentDevice = false,
   });
 
-  DateTime? get lastSeen =>
-      lastSeenTs != null ? DateTime.fromMillisecondsSinceEpoch(lastSeenTs!) : null;
+  DateTime? get lastSeen => lastSeenTs != null
+      ? DateTime.fromMillisecondsSinceEpoch(lastSeenTs!)
+      : null;
 }
 
 /// E2EE异常

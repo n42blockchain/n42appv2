@@ -34,6 +34,19 @@ extension _ChatPageEventHandlersMethods on _ChatPageState {
 
     // 处理消息点击（如查看图片、播放视频、播放语音等）
     switch (message.type) {
+      case MessageType.encrypted:
+        final client = MatrixClientManager.instance.client;
+        if (client == null || !client.isLogged()) return;
+        Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (_) => SecuritySettingsPage(
+              e2eeManager: E2EEManager(client),
+              keyBackupService: KeyBackupService(client),
+              restoreKeysOnOpen: true,
+            ),
+          ),
+        );
+        break;
       case MessageType.image:
         _viewImage(message);
         break;
@@ -448,13 +461,11 @@ extension _ChatPageEventHandlersMethods on _ChatPageState {
           imageUrl: imageUrl!,
           heroTag: message.id,
           message: message,
-          onForwardText: (text) => _forwardMessage(
-            _imageTextMessage(message, text),
-          ),
+          onForwardText: (text) =>
+              _forwardMessage(_imageTextMessage(message, text)),
           onFavoriteText: (text) => _favoriteImageText(message, text),
-          onSearchText: (text) => unawaited(
-            _openChatHistorySearch(initialQuery: text),
-          ),
+          onSearchText: (text) =>
+              unawaited(_openChatHistorySearch(initialQuery: text)),
         ),
       ),
     );

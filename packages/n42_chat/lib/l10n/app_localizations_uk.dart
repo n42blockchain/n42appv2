@@ -5843,4 +5843,8 @@ class SUk extends S {
   @override
   String get settingsSendVerificationEmail =>
       'Надіслати лист для підтвердження';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Перед виходом створіть резервну копію ключів шифрування, інакше ви можете втратити доступ до зашифрованих повідомлень.';
 }

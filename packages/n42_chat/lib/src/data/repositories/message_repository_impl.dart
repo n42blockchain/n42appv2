@@ -38,6 +38,23 @@ class MessageRepositoryImpl implements IMessageRepository {
   // instance then stop seeing updates. Share the in-flight creation as well as
   // the completed cache entry.
   final Map<String, Future<matrix.Timeline?>> _timelineCreations = {};
+  final Map<String, Object> _timelineGenerations = {};
+  (matrix.Client?, String?, String?, Uri?)? _cacheIdentity;
+
+  (matrix.Client?, String?, String?, Uri?) get _currentCacheIdentity =>
+      (_client, _client?.userID, _client?.deviceID, _client?.homeserver);
+
+  void _ensureCurrentSession() {
+    final identity = _currentCacheIdentity;
+    if (_cacheIdentity == identity) return;
+    disposeAllTimelines();
+    _cacheIdentity = identity;
+  }
+
+  bool _isCurrentTimeline(String roomId, matrix.Timeline timeline) =>
+      _cacheIdentity == _currentCacheIdentity &&
+      identical(_timelines[roomId], timeline);
+
   final List<String> _timelineAccessOrder = []; // 记录访问顺序，实现 LRU
 
   // 消息实体缓存：避免重复 mapEventToMessage 转换，提升约 40% 滚动流畅度
@@ -131,6 +148,7 @@ class MessageRepositoryImpl implements IMessageRepository {
       }
     }
 
+    if (!_isCurrentTimeline(roomId, timeline)) return [];
     _requestMissingTimelineKeys(room, timeline);
 
     final events = displayableEvents.take(limit).toList();
@@ -200,6 +218,7 @@ class MessageRepositoryImpl implements IMessageRepository {
 
     try {
       await for (final sync in updates.stream) {
+        if (!_isCurrentTimeline(roomId, timeline)) break;
         // Matrix 协议中 limited=true 表示 sync 存在时间线缺口（如通话期间大量
         // 信令事件）。SDK 的 Timeline._removeEventsNotInThisSync 会在此时清空
         // 本地缓存，只保留本次 sync 的少量事件，导致消息列表骤减。
@@ -213,6 +232,7 @@ class MessageRepositoryImpl implements IMessageRepository {
             );
           }
         }
+        if (!_isCurrentTimeline(roomId, timeline)) break;
         _requestMissingTimelineKeys(room, timeline);
         yield _getMessagesFromTimeline(timeline, room);
       }
@@ -245,6 +265,7 @@ class MessageRepositoryImpl implements IMessageRepository {
 
     try {
       await for (final _ in updates.stream) {
+        if (!_isCurrentTimeline(roomId, timeline)) break;
         _requestMissingTimelineKeys(room, timeline);
         final updatedMessage = _findMessageInTimeline(
           timeline,
@@ -530,7 +551,9 @@ class MessageRepositoryImpl implements IMessageRepository {
       try {
         await _archiveService?.deleteArchivedMessage(messageId);
       } catch (e) {
-        debugLog('MessageRepositoryImpl: archive purge failed for $messageId: $e');
+        debugLog(
+          'MessageRepositoryImpl: archive purge failed for $messageId: $e',
+        );
       }
     }
     return ok;
@@ -1149,6 +1172,7 @@ class MessageRepositoryImpl implements IMessageRepository {
     String roomId, {
     bool requestHistory = true,
   }) async {
+    _ensureCurrentSession();
     // 更新访问顺序（LRU）
     _timelineAccessOrder.remove(roomId);
     _timelineAccessOrder.add(roomId);
@@ -1160,13 +1184,20 @@ class MessageRepositoryImpl implements IMessageRepository {
     final pending = _timelineCreations[roomId];
     if (pending != null) return pending;
 
-    final creation = _createTimeline(roomId, requestHistory: requestHistory);
+    final generation = Object();
+    _timelineGenerations[roomId] = generation;
+    final creation = _createTimeline(
+      roomId,
+      requestHistory: requestHistory,
+      generation: generation,
+    );
     _timelineCreations[roomId] = creation;
     try {
       return await creation;
     } finally {
       if (identical(_timelineCreations[roomId], creation)) {
         _timelineCreations.remove(roomId);
+        _timelineGenerations.remove(roomId);
       }
     }
   }
@@ -1174,7 +1205,9 @@ class MessageRepositoryImpl implements IMessageRepository {
   Future<matrix.Timeline?> _createTimeline(
     String roomId, {
     required bool requestHistory,
+    required Object generation,
   }) async {
+    final identity = _currentCacheIdentity;
     // A previous creation may have completed between the outer cache check and
     // this task starting. Reuse it rather than replacing a live timeline.
     final cached = _timelines[roomId];
@@ -1207,6 +1240,12 @@ class MessageRepositoryImpl implements IMessageRepository {
         }
       },
     );
+    if (identity != _currentCacheIdentity ||
+        !identical(_timelineGenerations[roomId], generation)) {
+      timeline.cancelSubscriptions();
+      unawaited(updateController.close());
+      return null;
+    }
     _timelines[roomId] = timeline;
     _timelineUpdateControllers[roomId] = updateController;
 
@@ -1227,6 +1266,7 @@ class MessageRepositoryImpl implements IMessageRepository {
       }
     }
 
+    if (!_isCurrentTimeline(roomId, timeline)) return null;
     _requestMissingTimelineKeys(room, timeline);
 
     return timeline;
@@ -1461,6 +1501,7 @@ class MessageRepositoryImpl implements IMessageRepository {
 
   /// 清理时间线缓存
   void disposeTimeline(String roomId) {
+    _timelineGenerations.remove(roomId);
     // A creation may still be in flight; without dropping it the completed
     // task writes the timeline back into the cache after disposal, reviving a
     // room the user already left with no one left to cancel its subscriptions.
@@ -1474,6 +1515,8 @@ class MessageRepositoryImpl implements IMessageRepository {
 
   /// 清理所有时间线缓存
   void disposeAllTimelines() {
+    _timelineGenerations.clear();
+    _archivedThisSession.clear();
     for (final timeline in _timelines.values) {
       timeline.cancelSubscriptions();
     }
@@ -1579,7 +1622,11 @@ class MessageRepositoryImpl implements IMessageRepository {
       for (final messageId in expiredMessageIds) {
         var ok = false;
         try {
-          ok = await redactMessage(roomId, messageId, reason: 'Self-destructed');
+          ok = await redactMessage(
+            roomId,
+            messageId,
+            reason: 'Self-destructed',
+          );
         } catch (e) {
           debugLog(
             'MessageRepositoryImpl: Failed to redact message $messageId: $e',

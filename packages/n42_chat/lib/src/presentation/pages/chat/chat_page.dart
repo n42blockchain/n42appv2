@@ -31,6 +31,9 @@ import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../n42_chat.dart';
 
 import '../../../core/di/injection.dart';
+import '../../../core/encryption/e2ee_manager.dart';
+import '../../../core/encryption/key_backup_service.dart';
+import '../settings/security_settings_page.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/download_service.dart';
 import '../../../core/services/red_packet_service.dart';
@@ -149,7 +152,7 @@ part 'chat_page_ai_features.dart';
 part 'chat_page_event_handlers.dart';
 
 /// 聊天页面
-class ChatPage extends StatefulWidget {
+class ChatPage extends StatelessWidget {
   /// 会话实体
   final ConversationEntity conversation;
 
@@ -171,10 +174,34 @@ class ChatPage extends StatefulWidget {
   });
 
   @override
-  State<ChatPage> createState() => _ChatPageState();
+  Widget build(BuildContext context) => ScaffoldMessenger(
+    child: _ChatPageContent(
+      conversation: conversation,
+      initialTargetMessageId: initialTargetMessageId,
+      onBack: onBack,
+      onMorePressed: onMorePressed,
+    ),
+  );
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ChatPageContent extends StatefulWidget {
+  final ConversationEntity conversation;
+  final String? initialTargetMessageId;
+  final VoidCallback? onBack;
+  final VoidCallback? onMorePressed;
+
+  const _ChatPageContent({
+    required this.conversation,
+    this.initialTargetMessageId,
+    this.onBack,
+    this.onMorePressed,
+  });
+
+  @override
+  State<_ChatPageContent> createState() => _ChatPageState();
+}
+
+class _ChatPageState extends State<_ChatPageContent> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _inputController = TextEditingController();
   final FocusNode _inputFocusNode = FocusNode();
@@ -464,8 +491,8 @@ class _ChatPageState extends State<ChatPage> {
     if (mounted && bg != null) {
       // 只在此处（背景 key 变化时）解析一次，build 直接用缓存。
       setState(
-        () => _backgroundDecoration =
-            ChatBackgroundPresets.resolveDecoration(bg),
+        () =>
+            _backgroundDecoration = ChatBackgroundPresets.resolveDecoration(bg),
       );
     }
   }

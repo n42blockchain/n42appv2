@@ -5822,4 +5822,8 @@ class SId extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Kirim email verifikasi';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Cadangkan kunci enkripsi sebelum keluar, atau Anda mungkin kehilangan akses ke pesan terenkripsi.';
 }

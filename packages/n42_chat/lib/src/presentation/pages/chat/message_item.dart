@@ -2282,15 +2282,17 @@ class MessageItem extends StatelessWidget {
       children: [
         const Icon(Icons.lock, size: 16, color: AppColors.textSecondary),
         const SizedBox(width: 4),
-        Text(
-          A11yL10n.of(context).encrypted,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(
-            fontSize: 16,
-            height: 1.3,
-            color: AppColors.textSecondary,
-            fontStyle: FontStyle.italic,
+        Flexible(
+          child: Text(
+            '${A11yL10n.of(context).encrypted} · ${S.of(context)?.settingsRestoreKeyTitle ?? 'Restore Keys'}',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(
+              fontSize: 16,
+              height: 1.3,
+              color: AppColors.textSecondary,
+              fontStyle: FontStyle.italic,
+            ),
           ),
         ),
       ],

@@ -2143,5 +2143,6 @@
   "settingsSmartFilter": "智能过滤",
   "settingsEmailVerificationSent": "验证邮件已发送",
   "settingsEmailLinkInstructions": "请打开邮件中的验证链接，然后返回此处确认。",
-  "settingsSendVerificationEmail": "发送验证邮件"
+  "settingsSendVerificationEmail": "发送验证邮件",
+  "chatLogoutKeyWarning": "登出前請備份加密金鑰，否則可能無法再讀取加密訊息。"
 }

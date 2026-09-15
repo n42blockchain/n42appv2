@@ -1,0 +1,80 @@
+{
+  "date": "2026-09-15",
+  "baseline_commit": "a33eb25b1faa9de82b2311e6d03807efa054c25b",
+  "baseline_pushed_to": "origin/master",
+  "source_status": "Browser coverage follow-up is uncommitted; baseline release/WalletConnect repairs were committed and pushed",
+  "baseline_coverage": {
+    "hit": 59793,
+    "found": 130727,
+    "percent": 45.73882977502735,
+    "threshold": 70,
+    "passed": false
+  },
+  "coverage": {
+    "hit": 60085,
+    "found": 130740,
+    "percent": 45.95762582224262,
+    "threshold": 70,
+    "passed": false
+  },
+  "tests": {
+    "tests_passed": 4759,
+    "tests_failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "passed": true
+  },
+  "new_behavior_tests": 38,
+  "covered_line_delta": 292,
+  "percentage_point_delta": 0.21879604721527102,
+  "focus_file": {
+    "path": "lib/features/browser/provider/browser_provider.dart",
+    "before": {
+      "hit": 26,
+      "found": 344
+    },
+    "after": {
+      "hit": 314,
+      "found": 357
+    }
+  },
+  "missing_lcov_files": [],
+  "added_lcov_files": [],
+  "analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 155
+  },
+  "regressions_fixed": [
+    "Web origins must include non-default ports",
+    "Pending provider replies must belong to the current document of a live tab",
+    "Replacing wallet models without changing count must refresh the provider handler"
+  ],
+  "commands": {
+    "full_tests": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine",
+    "focused_tests": "flutter test --no-pub test/features/browser/browser_provider_lifecycle_test.dart",
+    "analyze": "flutter analyze --no-pub --no-fatal-infos",
+    "gate": "python3 scripts/quality_gate.py coverage coverage/lcov.info --threshold 70"
+  },
+  "changed_source_sha256": {
+    "lib/features/browser/provider/browser_provider.dart": "55d1908d0261bb01bf332d16e0b0e1052e99ea503a69ace9ffb472bef50af7cb",
+    "test/features/browser/browser_provider_lifecycle_test.dart": "3d07d03ba1a576473eebcdd5de92e86cce16919e4498964e28443ee948089ace",
+    "test/helpers/browser_platform_fake.dart": "fa90f9376ea17a5ee8982daa8f1d337e21a574f4b6c7fbc57078d592ccfded49",
+    "pubspec.yaml": "7ce23be0e96c0f075091414a692269c694469cd485e35d69cc66109d86e37961",
+    "pubspec.lock": "f992bca5e8e0e84430b7eacf537544e5294508f31c0505451996a726bfcc4ce9"
+  },
+  "evidence_sha256": {
+    "full.lcov.gz": "78c1f1778762b9a1735e07d1b27e1db47e359c00ae6335ffec394db8e7f3ce8c",
+    "authorization-before.log.gz": "39abc511adb83f95da8e08c63709851cc3a49b7d97d6f5d45e3b64c5a480acdd",
+    "wallet-model-before.log.gz": "bc3b590d21f9ba7a479629407c59d7c29f74b9edb0030ff90b91e94725be953d",
+    "analysis.log.gz": "cc789a2ece7cd570e431ca40554da62e0da7d068d65a609cc8cb19de14b6632e",
+    "browser-tests.log.gz": "4c385a9b0f6a238ced868c484f083a918a8070de29288564f6cfd75124c5feb1",
+    "full-tests.jsonl.gz": "201a2e3a91b5c77d8481d376fee755d3fd6f2896cd007d36081914e3d3274ffc"
+  },
+  "limits": [
+    "No live DApp, relay, account or signing operation",
+    "Native WebView and JavaScript execution are replaced with a deterministic platform fake",
+    "Line coverage does not prove all branches; the unchanged 70 percent release gate remains unmet",
+    "Existing release artifacts predate this browser repair"
+  ]
+}

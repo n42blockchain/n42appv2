@@ -5843,4 +5843,8 @@ class SSw extends S {
   @override
   String get settingsSendVerificationEmail =>
       'Tuma barua pepe ya uthibitishaji';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Hifadhi nakala ya funguo zako za usimbaji fiche kabla ya kutoka, la sivyo unaweza kupoteza ufikiaji wa ujumbe uliosimbwa.';
 }

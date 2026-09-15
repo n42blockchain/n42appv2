@@ -5855,4 +5855,8 @@ class STe extends S {
 
   @override
   String get settingsSendVerificationEmail => 'ధృవీకరణ ఇమెయిల్ పంపండి';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'లాగ్ అవుట్ చేసే ముందు మీ ఎన్‌క్రిప్షన్ కీలను బ్యాకప్ చేయండి, లేకపోతే ఎన్‌క్రిప్ట్ చేసిన సందేశాలను చదవలేకపోవచ్చు.';
 }

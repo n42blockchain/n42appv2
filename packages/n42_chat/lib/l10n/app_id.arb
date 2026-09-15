@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Filter Cerdas",
   "settingsEmailVerificationSent": "Email verifikasi terkirim",
   "settingsEmailLinkInstructions": "Buka tautan verifikasi di email Anda, lalu kembali ke sini dan konfirmasi.",
-  "settingsSendVerificationEmail": "Kirim email verifikasi"
+  "settingsSendVerificationEmail": "Kirim email verifikasi",
+  "chatLogoutKeyWarning": "Cadangkan kunci enkripsi sebelum keluar, atau Anda mungkin kehilangan akses ke pesan terenkripsi."
 }

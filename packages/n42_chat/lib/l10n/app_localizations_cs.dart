@@ -5823,4 +5823,8 @@ class SCs extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Odeslat ověřovací e-mail';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Před odhlášením zálohujte šifrovací klíče, jinak můžete ztratit přístup k šifrovaným zprávám.';
 }

@@ -1,6 +1,6 @@
 # N42 Wallet 正式发布检查清单
 
-适用范围：钱包全应用（含 Chat），iOS App Store 与 Android Google Play。检查结果见[发布审查报告](release-audit-2026-09-14/README.md)及后续[覆盖率与会话修复](testing/wallet-connect-coverage-2026-09-14/README.md)；存在阻塞项时不得把本清单作为发布批准。
+适用范围：钱包全应用（含 Chat），iOS App Store 与 Android Google Play。检查结果见[发布审查报告](release-audit-2026-09-14/README.md)、[覆盖率与会话修复](testing/wallet-connect-coverage-2026-09-14/README.md)、[浏览器授权回归](testing/browser-coverage-2026-09-15/README.md)及最新[Chat TestFlight 反馈修复](chat-audit-2026-09-12/testflight-feedback-2026-09-15/README.md)；存在阻塞项时不得把本清单作为发布批准。
 
 ## 质量门禁
 

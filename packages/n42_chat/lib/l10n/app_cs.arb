@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Chytrý filtr",
   "settingsEmailVerificationSent": "Ověřovací e-mail byl odeslán",
   "settingsEmailLinkInstructions": "Otevřete ověřovací odkaz v e-mailu, poté se sem vraťte a potvrďte.",
-  "settingsSendVerificationEmail": "Odeslat ověřovací e-mail"
+  "settingsSendVerificationEmail": "Odeslat ověřovací e-mail",
+  "chatLogoutKeyWarning": "Před odhlášením zálohujte šifrovací klíče, jinak můžete ztratit přístup k šifrovaným zprávám."
 }

@@ -5784,4 +5784,8 @@ class SEn extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Send verification email';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Back up your encryption keys before logging out, or you may lose access to encrypted messages.';
 }

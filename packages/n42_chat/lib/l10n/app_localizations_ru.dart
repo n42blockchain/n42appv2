@@ -5840,4 +5840,8 @@ class SRu extends S {
   @override
   String get settingsSendVerificationEmail =>
       'Отправить письмо для подтверждения';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Перед выходом сохраните резервную копию ключей шифрования, иначе вы можете потерять доступ к зашифрованным сообщениям.';
 }

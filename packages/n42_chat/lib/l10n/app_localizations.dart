@@ -10756,6 +10756,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Send verification email'**
   String get settingsSendVerificationEmail;
+
+  /// No description provided for @chatLogoutKeyWarning.
+  ///
+  /// In en, this message translates to:
+  /// **'Back up your encryption keys before logging out, or you may lose access to encrypted messages.'**
+  String get chatLogoutKeyWarning;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

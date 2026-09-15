@@ -5787,4 +5787,8 @@ class SAr extends S {
 
   @override
   String get settingsSendVerificationEmail => 'إرسال رسالة التحقق';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'انسخ مفاتيح التشفير احتياطيًا قبل تسجيل الخروج، وإلا فقد تفقد إمكانية الوصول إلى الرسائل المشفرة.';
 }

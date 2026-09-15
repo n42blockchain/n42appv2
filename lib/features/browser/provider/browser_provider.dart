@@ -37,6 +37,10 @@ class _BrowserTab {
 
   /// 该标签当前加载的 URL，由 onPageStarted / onUrlChange 持续更新。
   String url;
+
+  /// Invalidates pending replies when the document changes, including reloads
+  /// of the same URL and navigating away and back while approval is pending.
+  int documentRevision = 0;
 }
 
 /// Callback to show a DApp signing/transaction confirmation sheet.
@@ -101,7 +105,6 @@ class BrowserProvider extends ChangeNotifier {
   /// Lazily-built EIP-1193 request handler for the injected `window.ethereum`.
   /// Rebuilt whenever the wallet's EVM coin models change (address/chain).
   DAppRequestHandler? _dappHandler;
-  int _dappHandlerCoinCount = -1;
 
   /// Build/refresh the injected-provider request handler from the wallet's
   /// current EVM coin models. Returns null if no EVM account exists.
@@ -111,11 +114,11 @@ class BrowserProvider extends ChangeNotifier {
         .toList();
     if (evm.isEmpty) {
       _dappHandler = null;
-      _dappHandlerCoinCount = -1;
       return null;
     }
-    // Rebuild when the account set changes (cheap heuristic: count).
-    if (_dappHandler == null || _dappHandlerCoinCount != evm.length) {
+    // Wallet switches can replace every model while preserving the count.
+    // Compare the actual models so a new request cannot use the old account.
+    if (_dappHandler == null || !listEquals(_dappHandler!.ethCoinModels, evm)) {
       final handler = DAppRequestHandler(ethCoinModels: evm);
       handler.onSigningRequest =
           ({
@@ -128,7 +131,6 @@ class BrowserProvider extends ChangeNotifier {
             return cb(origin: origin, method: method, details: details);
           };
       _dappHandler = handler;
-      _dappHandlerCoinCount = evm.length;
     }
     return _dappHandler;
   }
@@ -329,6 +331,7 @@ class BrowserProvider extends ChangeNotifier {
       onPageStarted: (String url) {
         AppLogger.d('Browser', 'page started loading: $url');
         // origin 归属先于一切更新，且不依赖标签是否已入列。
+        tab.documentRevision++;
         tab.url = url;
         // 注入按 controller 进行，不需要列表索引——此前 idx<0 时会整个
         // 跳过注入，页面就彻底拿不到 window.ethereum。
@@ -380,6 +383,12 @@ class BrowserProvider extends ChangeNotifier {
             : NavigationDecision.prevent;
       },
       onUrlChange: (UrlChange change) {
+        // Same-origin SPA history updates keep the same document. Full loads
+        // are invalidated by onPageStarted, including same-URL reloads.
+        if (change.url != null &&
+            _originOf(change.url!) != _originOf(tab.url)) {
+          tab.documentRevision++;
+        }
         tab.url = change.url ?? tab.url;
         final idx = _indexOfController(wvc);
         if (idx < 0) return;
@@ -669,6 +678,12 @@ class BrowserProvider extends ChangeNotifier {
     String raw,
   ) async {
     int? id;
+    final revision = tab.documentRevision;
+    bool isCurrentDocument() =>
+        !_isDisposed &&
+        _indexOfController(wvc) >= 0 &&
+        tab.documentRevision == revision;
+    if (!isCurrentDocument()) return;
     try {
       final msg = json.decode(raw) as Map<String, dynamic>;
       id = msg['id'] as int?;
@@ -741,6 +756,7 @@ class BrowserProvider extends ChangeNotifier {
                 'chainId': handler.chainIdHex,
               },
             );
+            if (!isCurrentDocument()) return;
             if (!approved) {
               AppLogger.i('Browser', 'connect rejected for $origin');
               await _rejectProvider(wvc, id, 4001, 'User rejected');
@@ -757,6 +773,7 @@ class BrowserProvider extends ChangeNotifier {
               '${json.encode([handler.address])})',
             );
           } catch (_) {}
+          if (!isCurrentDocument()) return;
           await _resolveProvider(wvc, id, [handler.address]);
           return;
       }
@@ -766,9 +783,10 @@ class BrowserProvider extends ChangeNotifier {
         params,
         origin: origin,
       );
+      if (!isCurrentDocument()) return;
       await _resolveProvider(wvc, id, result);
     } catch (e) {
-      if (id == null) return;
+      if (id == null || !isCurrentDocument()) return;
       // Normalize thrown JSON-RPC error maps and generic errors.
       int code = -32603;
       String message = e.toString();
@@ -795,6 +813,7 @@ class BrowserProvider extends ChangeNotifier {
   String _originOf(String url) {
     final uri = Uri.tryParse(url);
     if (uri == null || uri.host.isEmpty) return url.isEmpty ? 'DApp' : url;
+    if (uri.scheme == 'http' || uri.scheme == 'https') return uri.origin;
     return '${uri.scheme}://${uri.host}';
   }
 

@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "ஸ்மார்ட் வடிகட்டி",
   "settingsEmailVerificationSent": "சரிபார்ப்பு மின்னஞ்சல் அனுப்பப்பட்டது",
   "settingsEmailLinkInstructions": "மின்னஞ்சலில் உள்ள சரிபார்ப்பு இணைப்பைத் திறந்து, இங்கே திரும்பி வந்து உறுதிப்படுத்தவும்.",
-  "settingsSendVerificationEmail": "சரிபார்ப்பு மின்னஞ்சலை அனுப்பு"
+  "settingsSendVerificationEmail": "சரிபார்ப்பு மின்னஞ்சலை அனுப்பு",
+  "chatLogoutKeyWarning": "வெளியேறும் முன் உங்கள் குறியாக்க விசிகளை காப்புப் பிரதி எடுக்கவும். இல்லையெனில் குறியாக்கப்பட்ட செய்திகளை அணுக முடியாமல் போகலாம்."
 }

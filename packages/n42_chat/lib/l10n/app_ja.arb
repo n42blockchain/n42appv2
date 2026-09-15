@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "スマートフィルター",
   "settingsEmailVerificationSent": "確認メールを送信しました",
   "settingsEmailLinkInstructions": "メール内の確認リンクを開いてから、ここに戻って確認してください。",
-  "settingsSendVerificationEmail": "確認メールを送信"
+  "settingsSendVerificationEmail": "確認メールを送信",
+  "chatLogoutKeyWarning": "ログアウトする前に暗号化キーをバックアップしてください。暗号化されたメッセージを読めなくなる可能性があります。"
 }

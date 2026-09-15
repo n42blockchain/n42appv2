@@ -5799,4 +5799,8 @@ class SVi extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Gửi email xác minh';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Sao lưu khóa mã hóa trước khi đăng xuất, nếu không bạn có thể mất quyền truy cập vào các tin nhắn được mã hóa.';
 }

@@ -316,7 +316,7 @@ class SettingsPage extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: onEditProfile,
+          onTap: onEditProfile ?? () => SettingsNavigation.profile(context),
           borderRadius: BorderRadius.circular(12),
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -416,8 +416,7 @@ class SettingsPage extends StatelessWidget {
                     },
                   ),
                 ),
-                if (onEditProfile != null)
-                  Icon(AppIcons.chevron, color: context.textSecondary),
+                Icon(AppIcons.chevron, color: context.textSecondary),
               ],
             ),
           ),
@@ -493,10 +492,24 @@ class SettingsPage extends StatelessWidget {
       builder: (dialogContext) => AlertDialog(
         title: Text(S.of(context)?.commonLogout ?? 'Log Out'),
         content: Text(
-          S.of(context)?.commonLogoutConfirm ??
-              'Are you sure you want to log out?',
+          '${S.of(context)?.commonLogoutConfirm ?? 'Are you sure you want to log out?'}'
+          '\n\n${S.of(context)?.chatLogoutKeyWarning ?? 'Back up your encryption keys before logging out, or you may lose access to encrypted messages.'}',
         ),
         actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              if (onSecurity != null) {
+                onSecurity!();
+              } else {
+                SettingsNavigation.keyBackup(context);
+              }
+            },
+            child: Text(
+              S.of(context)?.settingsBackupEncryptionKeys ??
+                  'Backup Encryption Keys',
+            ),
+          ),
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: Text(S.of(context)?.commonCancel ?? 'Cancel'),

@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Intelligenter Filter",
   "settingsEmailVerificationSent": "Bestätigungs-E-Mail gesendet",
   "settingsEmailLinkInstructions": "Öffne den Bestätigungslink in deiner E-Mail, kehre dann hierher zurück und bestätige.",
-  "settingsSendVerificationEmail": "Bestätigungs-E-Mail senden"
+  "settingsSendVerificationEmail": "Bestätigungs-E-Mail senden",
+  "chatLogoutKeyWarning": "Sichere deine Verschlüsselungsschlüssel vor dem Abmelden, sonst könntest du den Zugriff auf verschlüsselte Nachrichten verlieren."
 }

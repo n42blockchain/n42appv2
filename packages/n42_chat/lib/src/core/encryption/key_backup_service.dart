@@ -1,5 +1,7 @@
 import 'package:matrix/matrix.dart' as matrix;
 import '../utils/debug_log.dart';
+import 'e2ee_manager.dart';
+import 'room_key_backup_restore.dart';
 
 /// 密钥备份服务
 ///
@@ -49,17 +51,7 @@ class KeyBackupService {
   /// 启用服务端密钥备份并开始自动上传 inbound group sessions
   Future<String?> createKeyBackup(String password) async {
     try {
-      final encryption = _client.encryption;
-      if (encryption == null) return null;
-
-      // 启用自动密钥上传（每次同步后自动上传未备份的密钥）
-      encryption.keyManager.startAutoUploadKeys();
-
-      // 立即触发一次全量上传
-      await encryption.keyManager.uploadInboundGroupSessions();
-
-      debugLog('KeyBackupService: Key backup created and auto-upload enabled');
-      return 'backup_created';
+      return await E2EEManager(_client).createRecoveryKey(passphrase: password);
     } catch (e) {
       throw KeyBackupException('Failed to create backup: $e');
     }
@@ -83,18 +75,13 @@ class KeyBackupService {
       await openSsss.maybeCacheAll();
 
       // 3. 从服务端备份主动下载所有房间密钥
-      try {
-        await encryption.keyManager.loadAllKeys();
-        debugLog('KeyBackupService: All room keys loaded from backup');
-      } catch (e) {
-        debugLog('KeyBackupService: loadAllKeys skipped: $e');
-      }
+      final restored = await restoreRoomKeyBackup(_client);
 
       // 4. 启用自动密钥上传
       encryption.keyManager.startAutoUploadKeys();
 
       debugLog('KeyBackupService: Restored from password successfully');
-      return 1;
+      return restored;
     } catch (e) {
       if (e is KeyBackupException) rethrow;
       throw KeyBackupException('Failed to restore from password: $e');
@@ -126,18 +113,13 @@ class KeyBackupService {
       }
 
       // 4. 从服务端备份主动下载所有房间密钥
-      try {
-        await encryption.keyManager.loadAllKeys();
-        debugLog('KeyBackupService: All room keys loaded from backup');
-      } catch (e) {
-        debugLog('KeyBackupService: loadAllKeys skipped: $e');
-      }
+      final restored = await restoreRoomKeyBackup(_client);
 
       // 5. 启用自动密钥上传
       encryption.keyManager.startAutoUploadKeys();
 
       debugLog('KeyBackupService: Restored from recovery key successfully');
-      return 1;
+      return restored;
     } catch (e) {
       if (e is KeyBackupException) rethrow;
       throw KeyBackupException('Failed to restore from recovery key: $e');

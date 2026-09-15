@@ -28,6 +28,7 @@ import 'package:n42_chat/src/presentation/pages/settings/settings_navigation.dar
 import 'package:n42_chat/src/presentation/pages/settings/settings_page.dart';
 import 'package:n42_chat/src/presentation/pages/settings/translation_settings_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:n42_chat/src/presentation/pages/profile/profile_edit_page.dart';
 
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
@@ -68,6 +69,41 @@ void main() {
     getIt.registerSingleton<PreferencesDataSource>(PreferencesDataSource());
   });
   tearDown(() async => getIt.reset());
+
+  testWidgets('profile card opens editing without a host callback', (
+    tester,
+  ) async {
+    final auth = MockAuthBloc();
+    when(() => auth.state).thenReturn(
+      const AuthState(
+        status: AuthStatus.authenticated,
+        user: UserEntity(userId: '@test:example.org', displayName: 'Test'),
+      ),
+    );
+    await tester.pumpWidget(
+      app(
+        BlocProvider<AuthBloc>.value(
+          value: auth,
+          child: const SettingsPage(
+            profile: UserProfileEntity(
+              userId: '@test:example.org',
+              displayName: 'Test',
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Test').last);
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfileEditPage), findsOneWidget);
+    expect(
+      tester.element(find.byType(ProfileEditPage)).read<AuthBloc>(),
+      same(auth),
+    );
+    verify(() => auth.add(const LoadUserProfileData())).called(1);
+    expect(tester.takeException(), isNull);
+  });
 
   for (final entry in <String, Type>{
     'Notifications': NotificationSettingsPage,
@@ -214,6 +250,35 @@ void main() {
     await tapLabel(tester, 'Quick Reply');
     expect(find.byType(QuickRepliesPage), findsNothing);
     expect(find.byType(SnackBar), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('logout offers key backup without ending the session', (
+    tester,
+  ) async {
+    var backupOpened = false;
+    var loggedOut = false;
+    await tester.pumpWidget(
+      app(
+        SettingsPage(
+          onSecurity: () => backupOpened = true,
+          onLogout: () => loggedOut = true,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Log Out');
+    final dialog = find.byType(AlertDialog);
+    expect(dialog, findsOneWidget);
+    expect(
+      find.textContaining('lose access to encrypted messages'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Backup Encryption Keys'));
+    await tester.pumpAndSettle();
+    expect(backupOpened, isTrue);
+    expect(loggedOut, isFalse);
+    expect(find.byType(AlertDialog), findsNothing);
     expect(tester.takeException(), isNull);
   });
 

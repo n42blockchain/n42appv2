@@ -7,6 +7,11 @@ import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../n42_chat.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
+import '../profile/profile_edit_page.dart';
+import '../../../core/encryption/e2ee_manager.dart';
+import '../../../core/encryption/key_backup_service.dart';
+import '../../../data/datasources/matrix/matrix_client_manager.dart';
+import 'security_settings_page.dart';
 import 'appearance_settings_page.dart';
 import 'change_email_page.dart';
 import 'change_password_page.dart';
@@ -77,6 +82,24 @@ class SettingsNavigation {
         if (!context.mounted) return;
         await page(context, AppearanceSettingsPage(settings: settings));
       });
+
+  static Future<void> keyBackup(BuildContext context) async {
+    final client = MatrixClientManager.instance.client;
+    if (client == null || !client.isLogged()) {
+      unavailable(context, login: true);
+      return;
+    }
+    await page(
+      context,
+      SecuritySettingsPage(
+        e2eeManager: E2EEManager(client),
+        keyBackupService: KeyBackupService(client),
+      ),
+    );
+  }
+
+  static Future<void> profile(BuildContext context) =>
+      page(context, const ProfileEditPage(), needsAuth: true);
 
   static Future<void> password(BuildContext context) =>
       page(context, const ChangePasswordPage(), needsAuth: true);

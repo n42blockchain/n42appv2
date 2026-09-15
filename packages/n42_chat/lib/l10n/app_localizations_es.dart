@@ -5852,4 +5852,8 @@ class SEs extends S {
 
   @override
   String get settingsSendVerificationEmail => 'Enviar correo de verificación';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      'Haz una copia de seguridad de tus claves de cifrado antes de cerrar sesión o podrías perder el acceso a los mensajes cifrados.';
 }

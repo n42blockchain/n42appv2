@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Kichujio Mahiri",
   "settingsEmailVerificationSent": "Barua pepe ya uthibitishaji imetumwa",
   "settingsEmailLinkInstructions": "Fungua kiungo cha uthibitishaji katika barua pepe yako, kisha urudi hapa na uthibitishe.",
-  "settingsSendVerificationEmail": "Tuma barua pepe ya uthibitishaji"
+  "settingsSendVerificationEmail": "Tuma barua pepe ya uthibitishaji",
+  "chatLogoutKeyWarning": "Hifadhi nakala ya funguo zako za usimbaji fiche kabla ya kutoka, la sivyo unaweza kupoteza ufikiaji wa ujumbe uliosimbwa."
 }

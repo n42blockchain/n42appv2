@@ -5693,4 +5693,8 @@ class SKo extends S {
 
   @override
   String get settingsSendVerificationEmail => '인증 이메일 보내기';
+
+  @override
+  String get chatLogoutKeyWarning =>
+      '로그아웃하기 전에 암호화 키를 백업하세요. 그렇지 않으면 암호화된 메시지를 읽지 못할 수 있습니다.';
 }

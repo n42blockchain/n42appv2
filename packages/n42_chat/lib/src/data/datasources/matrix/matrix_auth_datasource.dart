@@ -196,79 +196,63 @@ class MatrixAuthDataSource {
     final homeserverUri = Uri.parse(homeserver);
     await finalClient.checkHomeserver(homeserverUri);
 
-    // 构建认证数据
+    // Discover the server's UIA flow first. Only send an invitation token
+    // when the server requests that stage, and keep its session between stages.
     AuthenticationData? auth;
-    if (registrationToken != null && registrationToken.isNotEmpty) {
-      auth = RegistrationTokenAuthenticationData(token: registrationToken);
-    }
-
-    // 注册
-    // 注意：这个流程可能需要额外的认证步骤（如验证码）
-    try {
-      return await finalClient.register(
-        username: username,
-        password: password,
-        initialDeviceDisplayName: deviceName ?? 'N42Chat',
-        auth: auth,
-      );
-    } on MatrixException catch (e) {
-      // 处理 UIA 流程 - 如果服务器返回 401 且有 session
-      if (e.response?.statusCode == 401) {
+    final attemptedStages = <String>{};
+    while (true) {
+      try {
+        return await finalClient.register(
+          username: username,
+          password: password,
+          initialDeviceDisplayName: deviceName ?? 'N42Chat',
+          auth: auth,
+        );
+      } on MatrixException catch (error) {
+        if (error.response?.statusCode != 401) rethrow;
+        final Object? decoded;
         try {
-          final rawBody = e.response?.body;
-          if (rawBody == null || rawBody.isEmpty) rethrow;
-
-          late final Map<String, dynamic> body;
-          try {
-            final decoded = jsonDecode(rawBody);
-            if (decoded is! Map<String, dynamic>) rethrow;
-            body = decoded;
-          } on FormatException catch (fe) {
-            debugLog(
-              'MatrixAuthDataSource: Register UIA - server returned non-JSON body: $fe',
-            );
-            rethrow; // 继续抛出原始 MatrixException
-          }
-
-          final session = body['session']?.toString();
-          final flows = body['flows'];
-
-          // 检查是否需要 registration_token
-          bool needsToken = false;
-          if (flows is List) {
-            needsToken = flows.any((flow) {
-              if (flow is Map) {
-                final stages = flow['stages'];
-                if (stages is List) {
-                  return stages.contains('m.login.registration_token');
-                }
-              }
-              return false;
-            });
-          }
-
-          if (needsToken && registrationToken != null && session != null) {
-            // 使用 session 重新尝试注册
-            final authWithSession = RegistrationTokenAuthenticationData(
-              token: registrationToken,
-              session: session,
-            );
-
-            return await finalClient.register(
-              username: username,
-              password: password,
-              initialDeviceDisplayName: deviceName ?? 'N42Chat',
-              auth: authWithSession,
-            );
-          }
-        } catch (innerError) {
-          // 解析或处理失败，继续抛出原始异常
-          debugLog(
-            'MatrixAuthDataSource: Register UIA parse error: $innerError',
-          );
+          decoded = jsonDecode(error.response!.body);
+        } on FormatException {
+          throw error;
         }
+        if (decoded is! Map<String, dynamic>) rethrow;
+        final session = decoded['session'];
+        final flows = decoded['flows'];
+        if (session is! String || session.isEmpty || flows is! List) rethrow;
+        final completed = decoded['completed'] is List
+            ? decoded['completed'] as List
+            : const <Object?>[];
+        final token = registrationToken?.trim();
+        List<String>? selected;
+        for (final flow in flows) {
+          if (flow is! Map || flow['stages'] is! List) continue;
+          final stages = flow['stages'] as List;
+          if (stages.isEmpty ||
+              !stages.every(
+                (stage) =>
+                    stage == 'm.login.dummy' ||
+                    (stage == 'm.login.registration_token' &&
+                        token != null &&
+                        token.isNotEmpty),
+              ))
+            continue;
+          selected = stages.cast<String>();
+          break;
+        }
+        if (selected == null) rethrow;
+        final remaining = selected.where((stage) => !completed.contains(stage));
+        if (remaining.isEmpty) rethrow;
+        final stage = remaining.first;
+        // Bound retries even if a server changes session on every challenge.
+        if (!attemptedStages.add(stage)) rethrow;
+        auth = stage == 'm.login.registration_token'
+            ? RegistrationTokenAuthenticationData(
+                token: token!,
+                session: session,
+              )
+            : AuthenticationData(type: stage, session: session);
       }
-      rethrow;
     }
   }
 

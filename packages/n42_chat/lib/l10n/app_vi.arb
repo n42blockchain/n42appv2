@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "Bộ lọc thông minh",
   "settingsEmailVerificationSent": "Đã gửi email xác minh",
   "settingsEmailLinkInstructions": "Mở liên kết xác minh trong email, sau đó quay lại đây và xác nhận.",
-  "settingsSendVerificationEmail": "Gửi email xác minh"
+  "settingsSendVerificationEmail": "Gửi email xác minh",
+  "chatLogoutKeyWarning": "Sao lưu khóa mã hóa trước khi đăng xuất, nếu không bạn có thể mất quyền truy cập vào các tin nhắn được mã hóa."
 }

@@ -61,6 +61,29 @@ void main() {
     userId: session['userId']!,
     deviceId: session['deviceId']!,
   );
+  test(
+    'registration rejection is not reported as a login password error',
+    () async {
+      when(
+        () => auth.register(
+          homeserver: any(named: 'homeserver'),
+          username: any(named: 'username'),
+          password: any(named: 'password'),
+          email: any(named: 'email'),
+          registrationToken: any(named: 'registrationToken'),
+        ),
+      ).thenThrow(error('M_FORBIDDEN'));
+      final result = await repository.register(
+        homeserver: 'https://hs.test',
+        username: 'alice',
+        password: 'Password123!',
+      );
+      expect(result.success, isFalse);
+      expect(result.errorType, AuthErrorType.serverError);
+      expect(result.errorMessage, 'Request rejected');
+    },
+  );
+
   setUpAll(() => registerFallbackValue(Uint8List(0)));
   setUp(() {
     auth = MockAuth();

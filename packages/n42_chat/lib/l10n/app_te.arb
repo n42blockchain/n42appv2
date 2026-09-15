@@ -2755,5 +2755,6 @@
   "settingsSmartFilter": "స్మార్ట్ ఫిల్టర్",
   "settingsEmailVerificationSent": "ధృవీకరణ ఇమెయిల్ పంపబడింది",
   "settingsEmailLinkInstructions": "మీ ఇమెయిల్‌లోని ధృవీకరణ లింక్‌ను తెరిచి, ఇక్కడికి తిరిగి వచ్చి నిర్ధారించండి.",
-  "settingsSendVerificationEmail": "ధృవీకరణ ఇమెయిల్ పంపండి"
+  "settingsSendVerificationEmail": "ధృవీకరణ ఇమెయిల్ పంపండి",
+  "chatLogoutKeyWarning": "లాగ్ అవుట్ చేసే ముందు మీ ఎన్‌క్రిప్షన్ కీలను బ్యాకప్ చేయండి, లేకపోతే ఎన్‌క్రిప్ట్ చేసిన సందేశాలను చదవలేకపోవచ్చు."
 }
