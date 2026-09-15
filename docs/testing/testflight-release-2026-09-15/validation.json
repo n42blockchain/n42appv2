@@ -1,0 +1,57 @@
+{
+  "source_commit": "0a20560356fa74d681a95126ce3607a0d297d5d0",
+  "chat_commit": "def750f16e553146c484d8a155e6819581f4d3c3",
+  "ipa_bytes": 162624021,
+  "ipa_sha256": "4ddb65644908ef37dcdd309cca5dc1c95c0e0d40031096e0891dfa234cf81e1a",
+  "apps": [
+    {
+      "bundle": "ai.n42.www",
+      "version": "2.4.8",
+      "build": "2026072656",
+      "signature_verified": true,
+      "app_store_profile": true,
+      "entitlements": {
+        "application-identifier": "CFRXH38L48.ai.n42.www",
+        "aps-environment": "production",
+        "beta-reports-active": true,
+        "com.apple.developer.applesignin": [
+          "Default"
+        ],
+        "com.apple.developer.team-identifier": "CFRXH38L48",
+        "com.apple.security.application-groups": [
+          "group.ai.n42.wallet"
+        ],
+        "get-task-allow": false,
+        "keychain-access-groups": [
+          "CFRXH38L48.ai.n42.www",
+          "CFRXH38L48.ai.n42.www.ios"
+        ]
+      }
+    },
+    {
+      "bundle": "ai.n42.www.NotificationExtension",
+      "version": "2.4.8",
+      "build": "2026072656",
+      "signature_verified": true,
+      "app_store_profile": true,
+      "entitlements": {
+        "application-identifier": "CFRXH38L48.ai.n42.www.NotificationExtension",
+        "beta-reports-active": true,
+        "com.apple.developer.team-identifier": "CFRXH38L48",
+        "get-task-allow": false
+      }
+    }
+  ],
+  "objective_c_platform": "IOS",
+  "objective_c_min_os": "16.0",
+  "upload": {
+    "exit_code": 0,
+    "uploaded_at_utc": "2026-09-15T08:34:02Z",
+    "apple_status": "Uploaded package is processing",
+    "tester_availability_verified": false,
+    "warnings": [
+      "Missing WebRTC.framework dSYM",
+      "Missing flutter_vodozemac.framework dSYM"
+    ]
+  }
+}
