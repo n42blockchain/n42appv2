@@ -8,7 +8,7 @@ Future<int> restoreRoomKeyBackup(Client client) async {
   if (keys == null || !await keys.isCached()) {
     throw StateError('Unlock the room-key backup before restoring messages');
   }
-  final info = await keys.getRoomKeysBackupInfo();
+  final info = await keys.getRoomKeysBackupInfo(false);
   final backup = await client.getRoomKeys(info.version);
   await keys.loadFromResponse(backup);
   var restored = 0;
@@ -19,6 +19,10 @@ Future<int> restoreRoomKeyBackup(Client client) async {
         throw StateError('Some room keys could not be restored');
       }
       restored++;
+      // Importing an already-known session may not emit the SDK notification.
+      // Retry undecryptable events in open timelines even in that case.
+      final updates = client.getRoomById(room.key)?.onSessionKeyReceived;
+      if (updates != null && !updates.isClosed) updates.add(sessionId);
     }
   }
   return restored;

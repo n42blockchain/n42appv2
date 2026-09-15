@@ -2147,6 +2147,15 @@ class SUk extends S {
   String get settingsRestoreSuccess => 'Ключі успішно відновлені';
 
   @override
+  String get settingsRestoreEmpty =>
+      'У цій резервній копії немає ключів повідомлень.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Відновлено сеансів ключів: $count. Повідомлення без ключів можуть залишитися зашифрованими.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Не вдалося відновити';
 
   @override

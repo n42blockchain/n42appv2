@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Veuillez conserver cette clé de récupération dans un endroit sûr. Vous en aurez besoin pour restaurer vos messages cryptés sur un nouvel appareil.",
   "settingsRecoveryKeySaved": "je l'ai sauvegardé",
   "settingsRestoreSuccess": "Clés restaurées avec succès",
+  "settingsRestoreEmpty": "Aucune clé de message trouvée dans cette sauvegarde.",
+  "settingsRestoreSessions": "{count} sessions de clés restaurées. Les messages sans clés peuvent rester chiffrés.",
   "settingsRestoreFailed": "La restauration a échoué",
   "settingsPassword": "Mot de passe",
   "settingsEnterRecoveryKey": "Entrez la clé de récupération",

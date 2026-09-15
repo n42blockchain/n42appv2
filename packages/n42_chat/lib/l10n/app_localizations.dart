@@ -3995,6 +3995,18 @@ abstract class S {
   /// **'Keys restored successfully'**
   String get settingsRestoreSuccess;
 
+  /// No description provided for @settingsRestoreEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No message keys were found in this backup.'**
+  String get settingsRestoreEmpty;
+
+  /// No description provided for @settingsRestoreSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Restored {count} key sessions. Messages with missing keys may remain encrypted.'**
+  String settingsRestoreSessions(int count);
+
   /// No description provided for @settingsRestoreFailed.
   ///
   /// In en, this message translates to:

@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Salva questa chiave di ripristino in un luogo sicuro. Ne avrai bisogno per ripristinare i tuoi messaggi crittografati su un nuovo dispositivo.",
   "settingsRecoveryKeySaved": "L'ho salvato",
   "settingsRestoreSuccess": "Chiavi ripristinate correttamente",
+  "settingsRestoreEmpty": "Nessuna chiave dei messaggi trovata in questo backup.",
+  "settingsRestoreSessions": "Ripristinate {count} sessioni di chiavi. I messaggi senza chiavi potrebbero rimanere crittografati.",
   "settingsRestoreFailed": "Ripristino non riuscito",
   "settingsPassword": "Parola d'ordine",
   "settingsEnterRecoveryKey": "Inserisci la chiave di ripristino",

@@ -184,7 +184,7 @@ class E2EEManager {
   /// 使用恢复密钥解锁 SSSS 并恢复密钥
   ///
   /// 解锁后会缓存恢复密钥，并尝试恢复 cross-signing 和密钥备份
-  Future<void> unlockWithRecoveryKey(String recoveryKey) async {
+  Future<int> unlockWithRecoveryKey(String recoveryKey) async {
     final encryption = _client.encryption;
     if (encryption == null) {
       throw E2EEException('Encryption not initialized');
@@ -205,7 +205,7 @@ class E2EEManager {
         debugLog('E2EEManager: Cross-signing recovery skipped: $e');
       }
 
-      await restoreRoomKeyBackup(_client);
+      final restored = await restoreRoomKeyBackup(_client);
 
       // 4. 缓存恢复密钥
       _cachedRecoveryKey = recoveryKey;
@@ -214,6 +214,7 @@ class E2EEManager {
       encryption.keyManager.startAutoUploadKeys();
 
       debugLog('E2EEManager: Unlocked with recovery key successfully');
+      return restored;
     } catch (e) {
       if (e is E2EEException) rethrow;
       throw E2EEException('Failed to unlock with recovery key: $e');
@@ -221,7 +222,7 @@ class E2EEManager {
   }
 
   /// 使用密码解锁 SSSS
-  Future<void> unlockWithPassphrase(String passphrase) async {
+  Future<int> unlockWithPassphrase(String passphrase) async {
     final encryption = _client.encryption;
     if (encryption == null) {
       throw E2EEException('Encryption not initialized');
@@ -232,7 +233,7 @@ class E2EEManager {
       await openSsss.unlock(passphrase: passphrase);
       await openSsss.maybeCacheAll();
 
-      await restoreRoomKeyBackup(_client);
+      final restored = await restoreRoomKeyBackup(_client);
 
       // 缓存恢复密钥
       _cachedRecoveryKey = openSsss.recoveryKey;
@@ -246,6 +247,7 @@ class E2EEManager {
       encryption.keyManager.startAutoUploadKeys();
 
       debugLog('E2EEManager: Unlocked with passphrase successfully');
+      return restored;
     } catch (e) {
       if (e is E2EEException) rethrow;
       throw E2EEException('Failed to unlock with passphrase: $e');

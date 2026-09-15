@@ -2140,6 +2140,15 @@ class SBn extends S {
   String get settingsRestoreSuccess => 'কী সফলভাবে পুনরুদ্ধার করা হয়েছে৷';
 
   @override
+  String get settingsRestoreEmpty =>
+      'এই ব্যাকআপে কোনো বার্তার কী পাওয়া যায়নি।';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$countটি কী সেশন পুনরুদ্ধার হয়েছে। কী না থাকা বার্তাগুলি এনক্রিপ্ট করা থাকতে পারে।';
+  }
+
+  @override
   String get settingsRestoreFailed => 'পুনরুদ্ধার ব্যর্থ হয়েছে';
 
   @override

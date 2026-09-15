@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "이 복구 키를 안전한 곳에 보관하십시오. 새 장치에서 암호화된 메시지를 복원하려면 이 정보가 필요합니다.",
   "settingsRecoveryKeySaved": "나는 그것을 저장했다",
   "settingsRestoreSuccess": "키가 성공적으로 복원되었습니다.",
+  "settingsRestoreEmpty": "이 백업에 메시지 키가 없습니다.",
+  "settingsRestoreSessions": "키 세션 {count}개를 복원했습니다. 키가 없는 메시지는 암호화된 상태로 남을 수 있습니다.",
   "settingsRestoreFailed": "복원 실패",
   "settingsPassword": "비밀번호",
   "settingsEnterRecoveryKey": "복구 키 입력",

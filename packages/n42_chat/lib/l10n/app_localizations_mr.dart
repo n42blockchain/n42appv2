@@ -2142,6 +2142,15 @@ class SMr extends S {
   String get settingsRestoreSuccess => 'की यशस्वीरित्या पुनर्संचयित केल्या';
 
   @override
+  String get settingsRestoreEmpty =>
+      'या बॅकअपमध्ये संदेशांच्या कळा आढळल्या नाहीत.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count की सत्रे पुनर्संचयित केली. कळा नसलेले संदेश एन्क्रिप्ट केलेले राहू शकतात.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'पुनर्संचयित करता आले नाही';
 
   @override

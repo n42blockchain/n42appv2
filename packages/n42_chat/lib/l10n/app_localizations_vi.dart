@@ -2124,6 +2124,15 @@ class SVi extends S {
   String get settingsRestoreSuccess => 'Đã khôi phục khóa thành công';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Không tìm thấy khóa tin nhắn trong bản sao lưu này.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Đã khôi phục $count phiên khóa. Tin nhắn thiếu khóa có thể vẫn bị mã hóa.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Khôi phục không thành công';
 
   @override

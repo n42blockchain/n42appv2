@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Пожалуйста, сохраните этот ключ восстановления в надежном месте. Он понадобится вам для восстановления зашифрованных сообщений на новом устройстве.",
   "settingsRecoveryKeySaved": "Я сохранил это",
   "settingsRestoreSuccess": "Ключи успешно восстановлены",
+  "settingsRestoreEmpty": "В этой резервной копии нет ключей сообщений.",
+  "settingsRestoreSessions": "Восстановлено сеансов ключей: {count}. Сообщения без ключей могут остаться зашифрованными.",
   "settingsRestoreFailed": "Восстановление не удалось",
   "settingsPassword": "Пароль",
   "settingsEnterRecoveryKey": "Введите ключ восстановления",

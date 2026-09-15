@@ -2156,6 +2156,15 @@ class SPl extends S {
   String get settingsRestoreSuccess => 'Klucze zostały przywrócone pomyślnie';
 
   @override
+  String get settingsRestoreEmpty =>
+      'W tej kopii zapasowej nie znaleziono kluczy wiadomości.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Przywrócono $count sesji kluczy. Wiadomości bez kluczy mogą pozostać zaszyfrowane.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Przywracanie nie powiodło się';
 
   @override

@@ -2146,6 +2146,15 @@ class SIt extends S {
   String get settingsRestoreSuccess => 'Chiavi ripristinate correttamente';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Nessuna chiave dei messaggi trovata in questo backup.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Ripristinate $count sessioni di chiavi. I messaggi senza chiavi potrebbero rimanere crittografati.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Ripristino non riuscito';
 
   @override

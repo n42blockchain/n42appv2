@@ -2157,6 +2157,15 @@ class STa extends S {
   String get settingsRestoreSuccess => 'விசைகள் வெற்றிகரமாக மீட்டெடுக்கப்பட்டன';
 
   @override
+  String get settingsRestoreEmpty =>
+      'இந்தக் காப்புப்பிரதியில் செய்தி விசைகள் எதுவும் இல்லை.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count விசை அமர்வுகள் மீட்டமைக்கப்பட்டன. விசைகள் இல்லாத செய்திகள் மறைகுறியாக்கப்பட்ட நிலையிலேயே இருக்கலாம்.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'மீட்டமைக்க முடியவில்லை';
 
   @override

@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Uložte si prosím tento obnovovací klíč na bezpečném místě. Budete jej potřebovat k obnovení šifrovaných zpráv na novém zařízení.",
   "settingsRecoveryKeySaved": "Uložil jsem to",
   "settingsRestoreSuccess": "Klíče byly úspěšně obnoveny",
+  "settingsRestoreEmpty": "V této záloze nebyly nalezeny žádné klíče zpráv.",
+  "settingsRestoreSessions": "Obnoveno {count} relací klíčů. Zprávy bez klíčů mohou zůstat zašifrované.",
   "settingsRestoreFailed": "Obnovení se nezdařilo",
   "settingsPassword": "Heslo",
   "settingsEnterRecoveryKey": "Zadejte klíč pro obnovení",

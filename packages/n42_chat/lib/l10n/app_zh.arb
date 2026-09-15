@@ -710,6 +710,8 @@
   "settingsRecoveryKeySaveWarning": "請將此恢復密鑰保存在安全的地方。您需要它在新設備上恢復加密消息。",
   "settingsRecoveryKeySaved": "我已保存",
   "settingsRestoreSuccess": "密鑰恢復成功",
+  "settingsRestoreEmpty": "此备份中没有可恢复的消息密钥。",
+  "settingsRestoreSessions": "已恢复 {count} 组消息密钥；缺少密钥的消息仍可能无法解密。",
   "settingsRestoreFailed": "恢復失敗",
   "settingsPassword": "密碼",
   "settingsEnterRecoveryKey": "輸入恢復密鑰",

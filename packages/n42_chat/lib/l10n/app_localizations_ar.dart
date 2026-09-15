@@ -2129,6 +2129,15 @@ class SAr extends S {
   String get settingsRestoreSuccess => 'تمت استعادة المفاتيح بنجاح';
 
   @override
+  String get settingsRestoreEmpty =>
+      'لم يتم العثور على مفاتيح رسائل في هذه النسخة الاحتياطية.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'تمت استعادة $count جلسات مفاتيح. قد تبقى الرسائل ذات المفاتيح المفقودة مشفرة.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'فشلت عملية الاستعادة';
 
   @override

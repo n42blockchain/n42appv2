@@ -2089,6 +2089,14 @@ class SZh extends S {
   String get settingsRestoreSuccess => '密鑰恢復成功';
 
   @override
+  String get settingsRestoreEmpty => '此备份中没有可恢复的消息密钥。';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '已恢复 $count 组消息密钥；缺少密钥的消息仍可能无法解密。';
+  }
+
+  @override
   String get settingsRestoreFailed => '恢復失敗';
 
   @override
@@ -7762,6 +7770,14 @@ class SZhTw extends SZh {
 
   @override
   String get settingsRestoreSuccess => '密鑰恢復成功';
+
+  @override
+  String get settingsRestoreEmpty => '此備份中沒有可恢復的訊息金鑰。';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '已恢復 $count 組訊息金鑰；缺少金鑰的訊息仍可能無法解密。';
+  }
 
   @override
   String get settingsRestoreFailed => '恢復失敗';

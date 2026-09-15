@@ -2167,6 +2167,15 @@ class SFr extends S {
   String get settingsRestoreSuccess => 'Clés restaurées avec succès';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Aucune clé de message trouvée dans cette sauvegarde.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count sessions de clés restaurées. Les messages sans clés peuvent rester chiffrés.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'La restauration a échoué';
 
   @override

@@ -126,6 +126,8 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
 
     try {
       final backupInfo = await widget.keyBackupService.getBackupInfo();
+      if (!mounted || loadVersion != _dataLoadVersion) return;
+      setState(() => _backupInfo = backupInfo);
 
       // 获取当前用户的设备列表
       final authDataSource = MatrixAuthDataSource();
@@ -226,7 +228,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
         ? Icons.face
         : Icons.fingerprint;
 
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -254,9 +256,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
             ),
             title: Text(
               _biometricTypeDescription ?? 'Biometric',
-              style: TextStyle(
-                color: context.textPrimary,
-              ),
+              style: TextStyle(color: context.textPrimary),
             ),
             subtitle: Text(
               _isBiometricEnabled
@@ -264,9 +264,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                         'Enabled - Use biometric to login')
                   : (S.of(context)?.settingsBiometricDisabled ??
                         'Disabled - Tap to enable'),
-              style: TextStyle(
-                color: context.textSecondary,
-              ),
+              style: TextStyle(color: context.textSecondary),
             ),
             trailing: Switch(
               value: _isBiometricEnabled,
@@ -284,7 +282,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   Widget _buildPasskeySection() {
     final l10n = S.of(context);
 
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,16 +312,12 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
               ),
               title: Text(
                 l10n?.authPasskeyNoRegistered ?? 'No passkeys registered',
-                style: TextStyle(
-                  color: context.textPrimary,
-                ),
+                style: TextStyle(color: context.textPrimary),
               ),
               subtitle: Text(
                 l10n?.authPasskeyRegisterHint ??
                     'Register a passkey for this account. Standalone passkey sign-in will be enabled later.',
-                style: TextStyle(
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(color: context.textSecondary),
               ),
             )
           else
@@ -340,18 +334,13 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                 ),
                 title: Text(
                   passkey.displayName ?? 'Passkey',
-                  style: TextStyle(
-                    color: context.textPrimary,
-                  ),
+                  style: TextStyle(color: context.textPrimary),
                 ),
                 subtitle: Text(
                   passkey.credentialId.length > 20
                       ? '${passkey.credentialId.substring(0, 20)}...'
                       : passkey.credentialId,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: context.textSecondary,
-                  ),
+                  style: TextStyle(fontSize: 12, color: context.textSecondary),
                 ),
                 trailing: IconButton(
                   tooltip: S.of(context)?.commonDelete ?? 'Delete',
@@ -667,7 +656,11 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                   statusText,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 13, height: 1.3, color: statusColor),
+                  style: TextStyle(
+                    fontSize: 13,
+                    height: 1.3,
+                    color: statusColor,
+                  ),
                 ),
               ],
             ),
@@ -686,7 +679,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   }
 
   Widget _buildTotp2faSection() {
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: FutureBuilder<bool>(
         future: Totp2faStore().isEnabled(),
@@ -700,8 +693,11 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                 color: enabled ? AppColors.success : AppColors.primary,
                 borderRadius: BorderRadius.circular(6),
               ),
-              child: const Icon(Icons.shield_outlined,
-                  color: Colors.white, size: 20),
+              child: const Icon(
+                Icons.shield_outlined,
+                color: Colors.white,
+                size: 20,
+              ),
             ),
             title: Text(
               'Two-factor authentication',
@@ -730,7 +726,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   }
 
   Widget _buildKeyBackupSection() {
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -795,7 +791,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   }
 
   Widget _buildDevicesSection() {
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -816,9 +812,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 S.of(context)?.settingsNoOtherDevices ?? 'No other devices',
-                style: TextStyle(
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(color: context.textSecondary),
               ),
             )
           else
@@ -892,10 +886,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
               : AppColors.warning,
         ),
       ),
-      trailing: Icon(
-        AppIcons.chevron,
-        color: context.textSecondary,
-      ),
+      trailing: Icon(AppIcons.chevron, color: context.textSecondary),
       onTap: () => _showDeviceDetails(device),
     );
   }
@@ -911,7 +902,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   }
 
   Widget _buildAdvancedSection() {
-    return Container(
+    return Material(
       color: context.surfaceColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1169,17 +1160,9 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
       ),
       title: Text(title, style: TextStyle(color: color)),
       subtitle: subtitle != null
-          ? Text(
-              subtitle,
-              style: TextStyle(
-                color: context.textSecondary,
-              ),
-            )
+          ? Text(subtitle, style: TextStyle(color: context.textSecondary))
           : null,
-      trailing: Icon(
-        AppIcons.chevron,
-        color: context.textSecondary,
-      ),
+      trailing: Icon(AppIcons.chevron, color: context.textSecondary),
       onTap: onTap,
     );
   }
@@ -1187,10 +1170,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.only(left: 56),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 
@@ -1339,7 +1319,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
     final controller = TextEditingController();
     var isRecoveryKey = true;
 
-    showDialog<void>(
+    final route = DialogRoute<void>(
       context: context,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setDialogState) => AlertDialog(
@@ -1410,7 +1390,9 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
           ],
         ),
       ),
-    ).whenComplete(controller.dispose);
+    );
+    Navigator.of(context, rootNavigator: true).push(route);
+    unawaited(route.completed.whenComplete(controller.dispose));
   }
 
   Future<void> _performRestore(
@@ -1420,18 +1402,10 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
     _invalidatePendingDataLoads();
     setState(() => _isLoading = true);
     try {
-      if (isRecoveryKey) {
-        await widget.e2eeManager.unlockWithRecoveryKey(input);
-      } else {
-        await widget.e2eeManager.unlockWithPassphrase(input);
-      }
-
-      // 从服务端备份恢复所有密钥
-      if (isRecoveryKey) {
-        await widget.keyBackupService.restoreFromRecoveryKey(input);
-      } else {
-        await widget.keyBackupService.restoreFromPassword(input);
-      }
+      // Unlock and import once, retaining the verified session count.
+      final restored = isRecoveryKey
+          ? await widget.e2eeManager.unlockWithRecoveryKey(input)
+          : await widget.e2eeManager.unlockWithPassphrase(input);
 
       // 刷新备份信息
       final backupInfo = await widget.keyBackupService.getBackupInfo();
@@ -1444,8 +1418,11 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            S.of(context)?.settingsRestoreSuccess ??
-                'Keys restored successfully',
+            restored == 0
+                ? (S.of(context)?.settingsRestoreEmpty ??
+                      'This backup contains no message keys to restore. Messages may need keys from another device.')
+                : (S.of(context)?.settingsRestoreSessions(restored) ??
+                      'Restored $restored backed-up key sessions. Messages without backed-up keys may remain encrypted.'),
           ),
         ),
       );
@@ -1763,10 +1740,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
           Expanded(
             child: Text(
               value,
-              style: TextStyle(
-                fontSize: 13,
-                color: context.textPrimary,
-              ),
+              style: TextStyle(fontSize: 13, color: context.textPrimary),
             ),
           ),
         ],

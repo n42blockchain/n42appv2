@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Harap simpan kunci pemulihan ini di tempat yang aman. Anda akan membutuhkannya untuk memulihkan pesan terenkripsi di perangkat baru.",
   "settingsRecoveryKeySaved": "Saya telah menyimpannya",
   "settingsRestoreSuccess": "Kunci berhasil dipulihkan",
+  "settingsRestoreEmpty": "Tidak ada kunci pesan dalam cadangan ini.",
+  "settingsRestoreSessions": "{count} sesi kunci dipulihkan. Pesan tanpa kunci mungkin tetap terenkripsi.",
   "settingsRestoreFailed": "Pemulihan gagal",
   "settingsPassword": "Kata sandi",
   "settingsEnterRecoveryKey": "Masukkan kunci pemulihan",

@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Zapisz ten klucz odzyskiwania w bezpiecznym miejscu. Będziesz go potrzebować, aby przywrócić zaszyfrowane wiadomości na nowym urządzeniu.",
   "settingsRecoveryKeySaved": "Zachowałem to",
   "settingsRestoreSuccess": "Klucze zostały przywrócone pomyślnie",
+  "settingsRestoreEmpty": "W tej kopii zapasowej nie znaleziono kluczy wiadomości.",
+  "settingsRestoreSessions": "Przywrócono {count} sesji kluczy. Wiadomości bez kluczy mogą pozostać zaszyfrowane.",
   "settingsRestoreFailed": "Przywracanie nie powiodło się",
   "settingsPassword": "Hasło",
   "settingsEnterRecoveryKey": "Wprowadź klucz odzyskiwania",

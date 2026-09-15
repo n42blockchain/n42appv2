@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Vui lòng lưu khóa khôi phục này ở nơi an toàn. Bạn sẽ cần nó để khôi phục tin nhắn được mã hóa của mình trên thiết bị mới.",
   "settingsRecoveryKeySaved": "Tôi đã lưu nó",
   "settingsRestoreSuccess": "Đã khôi phục khóa thành công",
+  "settingsRestoreEmpty": "Không tìm thấy khóa tin nhắn trong bản sao lưu này.",
+  "settingsRestoreSessions": "Đã khôi phục {count} phiên khóa. Tin nhắn thiếu khóa có thể vẫn bị mã hóa.",
   "settingsRestoreFailed": "Khôi phục không thành công",
   "settingsPassword": "Mật khẩu",
   "settingsEnterRecoveryKey": "Nhập khóa khôi phục",

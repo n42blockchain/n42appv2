@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "कृपया ही पुनर्प्राप्ती की सुरक्षित ठिकाणी जतन करा. तुमचे एनक्रिप्ट केलेले संदेश नवीन डिव्हाइसवर पुनर्संचयित करण्यासाठी तुम्हाला याची आवश्यकता असेल.",
   "settingsRecoveryKeySaved": "मी ते जतन केले आहे",
   "settingsRestoreSuccess": "की यशस्वीरित्या पुनर्संचयित केल्या",
+  "settingsRestoreEmpty": "या बॅकअपमध्ये संदेशांच्या कळा आढळल्या नाहीत.",
+  "settingsRestoreSessions": "{count} की सत्रे पुनर्संचयित केली. कळा नसलेले संदेश एन्क्रिप्ट केलेले राहू शकतात.",
   "settingsRestoreFailed": "पुनर्संचयित करता आले नाही",
   "settingsPassword": "पासवर्ड",
   "settingsEnterRecoveryKey": "पुनर्प्राप्ती की प्रविष्ट करा",

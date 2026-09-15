@@ -2151,6 +2151,15 @@ class SRu extends S {
   String get settingsRestoreSuccess => 'Ключи успешно восстановлены';
 
   @override
+  String get settingsRestoreEmpty =>
+      'В этой резервной копии нет ключей сообщений.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Восстановлено сеансов ключей: $count. Сообщения без ключей могут остаться зашифрованными.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Восстановление не удалось';
 
   @override

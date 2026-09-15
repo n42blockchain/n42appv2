@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "कृपया इस पुनर्प्राप्ति कुंजी को सुरक्षित स्थान पर सहेजें। आपको किसी नए डिवाइस पर अपने एन्क्रिप्टेड संदेशों को पुनर्स्थापित करने के लिए इसकी आवश्यकता होगी।",
   "settingsRecoveryKeySaved": "मैंने इसे सेव कर लिया है",
   "settingsRestoreSuccess": "कुंजियाँ सफलतापूर्वक पुनर्स्थापित की गईं",
+  "settingsRestoreEmpty": "इस बैकअप में संदेशों की कोई कुंजी नहीं मिली।",
+  "settingsRestoreSessions": "{count} कुंजी सत्र बहाल किए गए। जिन संदेशों की कुंजियाँ नहीं हैं, वे एन्क्रिप्टेड रह सकते हैं।",
   "settingsRestoreFailed": "पुनर्स्थापना विफल",
   "settingsPassword": "पासवर्ड",
   "settingsEnterRecoveryKey": "पुनर्प्राप्ति कुंजी दर्ज करें",

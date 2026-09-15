@@ -2097,6 +2097,14 @@ class SKo extends S {
   String get settingsRestoreSuccess => '키가 성공적으로 복원되었습니다.';
 
   @override
+  String get settingsRestoreEmpty => '이 백업에 메시지 키가 없습니다.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '키 세션 $count개를 복원했습니다. 키가 없는 메시지는 암호화된 상태로 남을 수 있습니다.';
+  }
+
+  @override
   String get settingsRestoreFailed => '복원 실패';
 
   @override

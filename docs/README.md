@@ -4,6 +4,7 @@
 
 | 主题 | 建议入口 |
 |---|---|
+| 密钥恢复后仍显示已加密 | [恢复结果、时间线刷新及验收限制](testing/key-recovery-2026-09-15/README.md) |
 | 注册被服务器禁用 | [原因、客户端提示与服务端恢复步骤](operations/2026-09-15-matrix-registration-disabled.md) |
 | TestFlight Chat 1.1—1.5 修复与复测 | [源码修复、钱包集成和验证边界](chat-audit-2026-09-12/testflight-feedback-2026-09-15/README.md) |
 | Chat 当前结果、入口审计、真机证据 | [Chat 交付索引](chat-audit-2026-09-12/README.md) |

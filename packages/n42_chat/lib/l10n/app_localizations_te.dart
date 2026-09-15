@@ -2159,6 +2159,14 @@ class STe extends S {
   String get settingsRestoreSuccess => 'కీలు విజయవంతంగా పునరుద్ధరించబడ్డాయి';
 
   @override
+  String get settingsRestoreEmpty => 'ఈ బ్యాకప్‌లో సందేశ కీలేవీ కనుగొనబడలేదు.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count కీ సెషన్‌లు పునరుద్ధరించబడ్డాయి. కీలు లేని సందేశాలు గుప్తీకరించబడి ఉండవచ్చు.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'పునరుద్ధరించడం విఫలమైంది';
 
   @override

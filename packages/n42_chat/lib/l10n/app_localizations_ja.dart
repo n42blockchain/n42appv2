@@ -2096,6 +2096,14 @@ class SJa extends S {
   String get settingsRestoreSuccess => 'キーは正常に復元されました';
 
   @override
+  String get settingsRestoreEmpty => 'このバックアップにはメッセージの鍵がありません。';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count 件の鍵セッションを復元しました。鍵のないメッセージは暗号化されたままの場合があります。';
+  }
+
+  @override
   String get settingsRestoreFailed => '復元に失敗しました';
 
   @override

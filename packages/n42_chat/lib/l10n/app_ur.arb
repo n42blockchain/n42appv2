@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "براہ کرم اس ریکوری کلید کو محفوظ جگہ پر محفوظ کریں۔ آپ کو اپنے انکرپٹڈ پیغامات کو نئے آلے پر بحال کرنے کے لیے اس کی ضرورت ہوگی۔",
   "settingsRecoveryKeySaved": "میں نے اسے محفوظ کر لیا ہے۔",
   "settingsRestoreSuccess": "کلیدیں کامیابی کے ساتھ بحال ہو گئیں۔",
+  "settingsRestoreEmpty": "اس بیک اپ میں پیغامات کی کوئی کلید نہیں ملی۔",
+  "settingsRestoreSessions": "{count} کلیدی سیشن بحال ہوئے۔ کلیدوں کے بغیر پیغامات خفیہ رہ سکتے ہیں۔",
   "settingsRestoreFailed": "بحالی ناکام ہوگئی",
   "settingsPassword": "پاس ورڈ",
   "settingsEnterRecoveryKey": "ریکوری کلید درج کریں۔",

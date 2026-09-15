@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "الرجاء حفظ مفتاح الاسترداد هذا في مكان آمن. ستحتاج إليه لاستعادة رسائلك المشفرة على جهاز جديد.",
   "settingsRecoveryKeySaved": "لقد أنقذته",
   "settingsRestoreSuccess": "تمت استعادة المفاتيح بنجاح",
+  "settingsRestoreEmpty": "لم يتم العثور على مفاتيح رسائل في هذه النسخة الاحتياطية.",
+  "settingsRestoreSessions": "تمت استعادة {count} جلسات مفاتيح. قد تبقى الرسائل ذات المفاتيح المفقودة مشفرة.",
   "settingsRestoreFailed": "فشلت عملية الاستعادة",
   "settingsPassword": "كلمة المرور",
   "settingsEnterRecoveryKey": "أدخل مفتاح الاسترداد",

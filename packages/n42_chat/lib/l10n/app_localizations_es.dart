@@ -2152,6 +2152,15 @@ class SEs extends S {
   String get settingsRestoreSuccess => 'Claves restauradas exitosamente';
 
   @override
+  String get settingsRestoreEmpty =>
+      'No se encontraron claves de mensajes en esta copia de seguridad.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Se restauraron $count sesiones de claves. Los mensajes sin claves pueden seguir cifrados.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Restauración fallida';
 
   @override

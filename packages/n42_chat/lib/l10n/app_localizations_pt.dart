@@ -2160,6 +2160,15 @@ class SPt extends S {
   String get settingsRestoreSuccess => 'Chaves restauradas com sucesso';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Não foram encontradas chaves de mensagens nesta cópia de segurança.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Foram restauradas $count sessões de chaves. As mensagens sem chaves podem permanecer encriptadas.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Falha na restauração';
 
   @override
@@ -8007,6 +8016,15 @@ class SPtBr extends SPt {
 
   @override
   String get settingsRestoreSuccess => 'Chaves restauradas com sucesso';
+
+  @override
+  String get settingsRestoreEmpty =>
+      'Nenhuma chave de mensagem foi encontrada neste backup.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count sessões de chaves restauradas. Mensagens sem chaves podem continuar criptografadas.';
+  }
 
   @override
   String get settingsRestoreFailed => 'Falha na restauração';

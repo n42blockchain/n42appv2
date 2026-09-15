@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Bitte bewahren Sie diesen Wiederherstellungsschlüssel an einem sicheren Ort auf. Sie benötigen es, um Ihre verschlüsselten Nachrichten auf einem neuen Gerät wiederherzustellen.",
   "settingsRecoveryKeySaved": "Ich habe es gespeichert",
   "settingsRestoreSuccess": "Schlüssel erfolgreich wiederhergestellt",
+  "settingsRestoreEmpty": "In dieser Sicherung wurden keine Nachrichtenschlüssel gefunden.",
+  "settingsRestoreSessions": "{count} Schlüsselsitzungen wiederhergestellt. Nachrichten ohne Schlüssel können verschlüsselt bleiben.",
   "settingsRestoreFailed": "Wiederherstellung fehlgeschlagen",
   "settingsPassword": "Passwort",
   "settingsEnterRecoveryKey": "Geben Sie den Wiederherstellungsschlüssel ein",

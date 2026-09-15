@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Salve esta chave de recuperação em um local seguro. Você precisará dele para restaurar suas mensagens criptografadas em um novo dispositivo.",
   "settingsRecoveryKeySaved": "eu salvei",
   "settingsRestoreSuccess": "Chaves restauradas com sucesso",
+  "settingsRestoreEmpty": "Não foram encontradas chaves de mensagens nesta cópia de segurança.",
+  "settingsRestoreSessions": "Foram restauradas {count} sessões de chaves. As mensagens sem chaves podem permanecer encriptadas.",
   "settingsRestoreFailed": "Falha na restauração",
   "settingsPassword": "Senha",
   "settingsEnterRecoveryKey": "Insira a chave de recuperação",

@@ -13,14 +13,7 @@ class KeyBackupService {
 
   /// 是否存在密钥备份
   Future<bool> hasKeyBackup() async {
-    try {
-      final encryption = _client.encryption;
-      if (encryption == null) return false;
-
-      return encryption.keyManager.enabled;
-    } catch (e) {
-      return false;
-    }
+    return await getBackupInfo() != null;
   }
 
   /// 获取密钥备份信息
@@ -31,9 +24,8 @@ class KeyBackupService {
       final encryption = _client.encryption;
       if (encryption == null) return null;
 
-      if (!encryption.keyManager.enabled) return null;
-
-      final info = await encryption.keyManager.getRoomKeysBackupInfo();
+      // A new device can have a server backup before its local SSSS is cached.
+      final info = await encryption.keyManager.getRoomKeysBackupInfo(false);
       return KeyBackupInfo(
         version: info.version,
         algorithm: info.algorithm.name,

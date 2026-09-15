@@ -2144,6 +2144,15 @@ class SId extends S {
   String get settingsRestoreSuccess => 'Kunci berhasil dipulihkan';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Tidak ada kunci pesan dalam cadangan ini.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count sesi kunci dipulihkan. Pesan tanpa kunci mungkin tetap terenkripsi.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Pemulihan gagal';
 
   @override

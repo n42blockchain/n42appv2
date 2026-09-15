@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "この回復キーを安全な場所に保存してください。新しいデバイスで暗号化されたメッセージを復元するために必要になります。",
   "settingsRecoveryKeySaved": "保存しました",
   "settingsRestoreSuccess": "キーは正常に復元されました",
+  "settingsRestoreEmpty": "このバックアップにはメッセージの鍵がありません。",
+  "settingsRestoreSessions": "{count} 件の鍵セッションを復元しました。鍵のないメッセージは暗号化されたままの場合があります。",
   "settingsRestoreFailed": "復元に失敗しました",
   "settingsPassword": "パスワード",
   "settingsEnterRecoveryKey": "回復キーを入力してください",

@@ -2126,6 +2126,15 @@ class SEn extends S {
   String get settingsRestoreSuccess => 'Keys restored successfully';
 
   @override
+  String get settingsRestoreEmpty =>
+      'No message keys were found in this backup.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Restored $count key sessions. Messages with missing keys may remain encrypted.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Restore failed';
 
   @override

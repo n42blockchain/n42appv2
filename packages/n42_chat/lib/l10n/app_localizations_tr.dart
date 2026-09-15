@@ -2141,6 +2141,14 @@ class STr extends S {
   String get settingsRestoreSuccess => 'Anahtarlar başarıyla geri yüklendi';
 
   @override
+  String get settingsRestoreEmpty => 'Bu yedekte mesaj anahtarı bulunamadı.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count anahtar oturumu geri yüklendi. Anahtarı eksik mesajlar şifreli kalabilir.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Geri yükleme başarısız oldu';
 
   @override

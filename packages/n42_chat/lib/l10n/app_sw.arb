@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Tafadhali hifadhi ufunguo huu wa kurejesha akaunti mahali salama. Utaihitaji ili kurejesha ujumbe wako uliosimbwa kwa njia fiche kwenye kifaa kipya.",
   "settingsRecoveryKeySaved": "Nimeihifadhi",
   "settingsRestoreSuccess": "Vifunguo vimerejeshwa",
+  "settingsRestoreEmpty": "Hakuna funguo za ujumbe zilizopatikana katika nakala hii.",
+  "settingsRestoreSessions": "Vipindi {count} vya funguo vimerejeshwa. Ujumbe usio na funguo unaweza kubaki umesimbwa.",
   "settingsRestoreFailed": "Kurejesha kumeshindwa",
   "settingsPassword": "Nenosiri",
   "settingsEnterRecoveryKey": "Ingiza ufunguo wa kurejesha",

@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "Lütfen bu kurtarma anahtarını güvenli bir yere saklayın. Şifrelenmiş mesajlarınızı yeni bir cihaza geri yüklemek için buna ihtiyacınız olacak.",
   "settingsRecoveryKeySaved": "onu sakladım",
   "settingsRestoreSuccess": "Anahtarlar başarıyla geri yüklendi",
+  "settingsRestoreEmpty": "Bu yedekte mesaj anahtarı bulunamadı.",
+  "settingsRestoreSessions": "{count} anahtar oturumu geri yüklendi. Anahtarı eksik mesajlar şifreli kalabilir.",
   "settingsRestoreFailed": "Geri yükleme başarısız oldu",
   "settingsPassword": "Şifre",
   "settingsEnterRecoveryKey": "Kurtarma anahtarını girin",

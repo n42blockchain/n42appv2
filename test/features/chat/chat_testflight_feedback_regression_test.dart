@@ -6,6 +6,8 @@ import '../../../packages/n42_chat/test/presentation/pages/chat_file_lifecycle_t
     as chat_routes;
 import '../../../packages/n42_chat/test/presentation/pages/settings/settings_navigation_test.dart'
     as settings;
+import '../../../packages/n42_chat/test/presentation/pages/settings/security_restore_feedback_test.dart'
+    as recovery_feedback;
 import '../../../packages/n42_chat/test/unit/datasources/direct_friendship_test.dart'
     as friendship;
 import '../../../packages/n42_chat/test/unit/datasources/registration_uia_test.dart'
@@ -27,6 +29,7 @@ void main() {
   group('Chat accepted friendship and sending', friendship.main);
   group('Chat contact invitation policy', contacts.main);
   group('Chat key backup and verified restoration', key_backup.main);
+  group('Chat recovery result and backup status', recovery_feedback.main);
   group('Chat timeline session and decryption', messages.main);
   group('Chat file action lifetime and recovery bubbles', chat_routes.main);
   group('Chat settings navigation and logout backup', settings.main);

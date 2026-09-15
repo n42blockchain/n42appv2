@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matrix/matrix.dart';
+import 'package:matrix/src/models/timeline_chunk.dart';
 import 'package:matrix/encryption/encryption.dart';
 import 'package:matrix/encryption/key_manager.dart';
 import 'package:matrix/encryption/ssss.dart';
@@ -25,6 +28,8 @@ class _Bootstrap extends Mock implements Bootstrap {}
 class _Session extends Mock implements SessionKey {}
 
 class _Info extends Mock implements GetRoomKeysVersionCurrentResponse {}
+
+class _Database extends Mock implements DatabaseApi {}
 
 void main() {
   late _Client client;
@@ -55,6 +60,11 @@ void main() {
     when(() => keys.uploadInboundGroupSessions()).thenAnswer((_) async {});
     final info = _Info();
     when(() => info.version).thenReturn('v1');
+    when(
+      () => info.algorithm,
+    ).thenReturn(BackupAlgorithm.mMegolmBackupV1Curve25519AesSha2);
+    when(() => info.count).thenReturn(2);
+    when(() => info.etag).thenReturn('etag');
     when(() => keys.getRoomKeysBackupInfo(any())).thenAnswer((_) async => info);
     when(
       () => client.getRoomKeys('v1'),
@@ -62,6 +72,110 @@ void main() {
     when(() => keys.loadFromResponse(any())).thenAnswer((_) async {});
     when(() => keys.isCached()).thenAnswer((_) async => true);
   });
+  test(
+    'server backup is discovered even without a local backup secret',
+    () async {
+      when(() => keys.enabled).thenReturn(false);
+      final service = KeyBackupService(client);
+      expect((await service.getBackupInfo())?.count, 2);
+      expect(await service.hasKeyBackup(), isTrue);
+      verify(() => keys.getRoomKeysBackupInfo(false)).called(2);
+    },
+  );
+  for (final recovery in [false, true]) {
+    test('E2EE unlock returns an empty restore count ($recovery)', () async {
+      final manager = E2EEManager(client);
+      final count = recovery
+          ? await manager.unlockWithRecoveryKey('fixture')
+          : await manager.unlockWithPassphrase('fixture');
+      expect(count, 0);
+      verify(() => client.getRoomKeys('v1')).called(1);
+      verify(() => keys.getRoomKeysBackupInfo(false)).called(1);
+    });
+  }
+  test(
+    'restoring known sessions retries decryption in an existing SDK timeline',
+    () async {
+      final database = _Database();
+      final streams = Client('recovery-fixture', database: database);
+      when(() => client.onTimelineEvent).thenReturn(streams.onTimelineEvent);
+      when(() => client.onHistoryEvent).thenReturn(streams.onHistoryEvent);
+      when(() => client.onSync).thenReturn(streams.onSync);
+      when(
+        () => client.onCancelSendEvent,
+      ).thenReturn(streams.onCancelSendEvent);
+      when(() => client.database).thenReturn(database);
+      when(() => client.encryptionEnabled).thenReturn(true);
+      when(() => database.transaction(any())).thenAnswer(
+        (invocation) =>
+            (invocation.positionalArguments.single
+                as Future<void> Function())(),
+      );
+      final room = Room(id: '!room:test', client: client);
+      when(() => client.getRoomById(room.id)).thenReturn(room);
+      Event encrypted(String id, String session) => Event.fromJson({
+        'event_id': id,
+        'type': EventTypes.Encrypted,
+        'sender': '@alice:test',
+        'origin_server_ts': 1,
+        'content': {
+          'msgtype': MessageTypes.BadEncrypted,
+          'session_id': session,
+        },
+      }, room);
+      final pending = encrypted(r'$pending', 'session');
+      final missing = encrypted(r'$missing', 'not-backed-up');
+      final clear = Event.fromJson({
+        'event_id': r'$pending',
+        'type': EventTypes.Message,
+        'sender': '@alice:test',
+        'origin_server_ts': 1,
+        'content': {'msgtype': MessageTypes.Text, 'body': 'Recovered fixture'},
+      }, room);
+      when(
+        () => encryption.decryptRoomEvent(
+          pending,
+          store: true,
+          updateType: EventUpdateType.history,
+        ),
+      ).thenAnswer((_) async => clear);
+      final updated = Completer<void>();
+      final timeline = Timeline(
+        room: room,
+        chunk: TimelineChunk(events: [pending, missing]),
+        onUpdate: () {
+          if (!updated.isCompleted) updated.complete();
+        },
+      );
+      addTearDown(timeline.cancelSubscriptions);
+      addTearDown(room.onSessionKeyReceived.close);
+      final backup = RoomKeys.fromJson({
+        'rooms': {
+          room.id: {
+            'sessions': {
+              'session': {
+                'first_message_index': 0,
+                'forwarded_count': 0,
+                'is_verified': false,
+                'session_data': <String, Object?>{},
+              },
+            },
+          },
+        },
+      });
+      when(() => client.getRoomKeys('v1')).thenAnswer((_) async => backup);
+      final session = _Session();
+      when(() => session.isValid).thenReturn(true);
+      when(
+        () => keys.loadInboundGroupSession(room.id, 'session'),
+      ).thenAnswer((_) async => session);
+      // loadFromResponse is a no-op, matching the SDK's already-known-key path.
+      expect(await restoreRoomKeyBackup(client), 1);
+      await updated.future.timeout(const Duration(seconds: 2));
+      expect(timeline.events.first.body, 'Recovered fixture');
+      expect(timeline.events.last.messageType, MessageTypes.BadEncrypted);
+    },
+  );
   for (final recovery in [false, true]) {
     test(
       'failed ${recovery ? 'recovery-key' : 'password'} download does not report restoration success',

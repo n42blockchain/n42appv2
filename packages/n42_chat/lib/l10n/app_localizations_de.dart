@@ -2150,6 +2150,15 @@ class SDe extends S {
       'Schlüssel erfolgreich wiederhergestellt';
 
   @override
+  String get settingsRestoreEmpty =>
+      'In dieser Sicherung wurden keine Nachrichtenschlüssel gefunden.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count Schlüsselsitzungen wiederhergestellt. Nachrichten ohne Schlüssel können verschlüsselt bleiben.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Wiederherstellung fehlgeschlagen';
 
   @override

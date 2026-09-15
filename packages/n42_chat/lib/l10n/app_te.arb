@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "దయచేసి ఈ రికవరీ కీని సురక్షితమైన స్థలంలో సేవ్ చేయండి. కొత్త పరికరంలో మీ గుప్తీకరించిన సందేశాలను పునరుద్ధరించడానికి మీకు ఇది అవసరం.",
   "settingsRecoveryKeySaved": "నేను దానిని సేవ్ చేసాను",
   "settingsRestoreSuccess": "కీలు విజయవంతంగా పునరుద్ధరించబడ్డాయి",
+  "settingsRestoreEmpty": "ఈ బ్యాకప్‌లో సందేశ కీలేవీ కనుగొనబడలేదు.",
+  "settingsRestoreSessions": "{count} కీ సెషన్‌లు పునరుద్ధరించబడ్డాయి. కీలు లేని సందేశాలు గుప్తీకరించబడి ఉండవచ్చు.",
   "settingsRestoreFailed": "పునరుద్ధరించడం విఫలమైంది",
   "settingsPassword": "పాస్వర్డ్",
   "settingsEnterRecoveryKey": "రికవరీ కీని నమోదు చేయండి",

@@ -2143,6 +2143,15 @@ class SUr extends S {
   String get settingsRestoreSuccess => 'کلیدیں کامیابی کے ساتھ بحال ہو گئیں۔';
 
   @override
+  String get settingsRestoreEmpty =>
+      'اس بیک اپ میں پیغامات کی کوئی کلید نہیں ملی۔';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count کلیدی سیشن بحال ہوئے۔ کلیدوں کے بغیر پیغامات خفیہ رہ سکتے ہیں۔';
+  }
+
+  @override
   String get settingsRestoreFailed => 'بحالی ناکام ہوگئی';
 
   @override

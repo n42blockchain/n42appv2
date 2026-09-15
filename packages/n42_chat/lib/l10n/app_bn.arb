@@ -914,6 +914,8 @@
   "settingsRecoveryKeySaveWarning": "অনুগ্রহ করে এই পুনরুদ্ধার কীটি নিরাপদ স্থানে সংরক্ষণ করুন। একটি নতুন ডিভাইসে আপনার এনক্রিপ্ট করা বার্তাগুলি পুনরুদ্ধার করতে আপনার এটির প্রয়োজন হবে৷",
   "settingsRecoveryKeySaved": "আমি এটা সংরক্ষণ করেছি",
   "settingsRestoreSuccess": "কী সফলভাবে পুনরুদ্ধার করা হয়েছে৷",
+  "settingsRestoreEmpty": "এই ব্যাকআপে কোনো বার্তার কী পাওয়া যায়নি।",
+  "settingsRestoreSessions": "{count}টি কী সেশন পুনরুদ্ধার হয়েছে। কী না থাকা বার্তাগুলি এনক্রিপ্ট করা থাকতে পারে।",
   "settingsRestoreFailed": "পুনরুদ্ধার ব্যর্থ হয়েছে",
   "settingsPassword": "পাসওয়ার্ড",
   "settingsEnterRecoveryKey": "পুনরুদ্ধার কী লিখুন",

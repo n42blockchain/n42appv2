@@ -2148,6 +2148,15 @@ class SSw extends S {
   String get settingsRestoreSuccess => 'Vifunguo vimerejeshwa';
 
   @override
+  String get settingsRestoreEmpty =>
+      'Hakuna funguo za ujumbe zilizopatikana katika nakala hii.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Vipindi $count vya funguo vimerejeshwa. Ujumbe usio na funguo unaweza kubaki umesimbwa.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Kurejesha kumeshindwa';
 
   @override

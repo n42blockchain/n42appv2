@@ -2142,6 +2142,15 @@ class SHi extends S {
       'कुंजियाँ सफलतापूर्वक पुनर्स्थापित की गईं';
 
   @override
+  String get settingsRestoreEmpty =>
+      'इस बैकअप में संदेशों की कोई कुंजी नहीं मिली।';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return '$count कुंजी सत्र बहाल किए गए। जिन संदेशों की कुंजियाँ नहीं हैं, वे एन्क्रिप्टेड रह सकते हैं।';
+  }
+
+  @override
   String get settingsRestoreFailed => 'पुनर्स्थापना विफल';
 
   @override

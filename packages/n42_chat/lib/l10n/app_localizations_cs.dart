@@ -2142,6 +2142,15 @@ class SCs extends S {
   String get settingsRestoreSuccess => 'Klíče byly úspěšně obnoveny';
 
   @override
+  String get settingsRestoreEmpty =>
+      'V této záloze nebyly nalezeny žádné klíče zpráv.';
+
+  @override
+  String settingsRestoreSessions(int count) {
+    return 'Obnoveno $count relací klíčů. Zprávy bez klíčů mohou zůstat zašifrované.';
+  }
+
+  @override
   String get settingsRestoreFailed => 'Obnovení se nezdařilo';
 
   @override
