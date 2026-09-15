@@ -5860,4 +5860,8 @@ class SUk extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Перед виходом створіть резервну копію ключів шифрування, інакше ви можете втратити доступ до зашифрованих повідомлень.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Біометрична автентифікація недоступна. Перевірте реєстрацію та дозволи в налаштуваннях пристрою.';
 }

@@ -5840,4 +5840,8 @@ class SCs extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Před odhlášením zálohujte šifrovací klíče, jinak můžete ztratit přístup k šifrovaným zprávám.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Biometrické ověření není dostupné. Zkontrolujte registraci a oprávnění v nastavení zařízení.';
 }

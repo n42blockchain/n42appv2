@@ -1,0 +1,31 @@
+{
+  "chat_ref": "4b146b688a46c48653155d9e49e0778b15d77814",
+  "chat_full": {
+    "passed": 6470,
+    "skipped": 1,
+    "failed": 0
+  },
+  "chat_targeted_passed": 77,
+  "wallet_targeted_passed": 180,
+  "new_tests": 8,
+  "chat_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 173
+  },
+  "mirror_file_count": 771,
+  "testflight_uploaded": false,
+  "device_acceptance_verified": false,
+  "sha256": {
+    "chat-full.jsonl.gz": "b0c1fc7f1c2b896b441898114272568a7d4718523c9cbbfb520615dffc003970",
+    "chat-targeted.log.gz": "d14dbe7eff43d0a7d9e13cb19f00f888ff94a207fc9a63755c87ebc64d9185bf",
+    "chat-analyze.log.gz": "b9d08271a6d30772c9a5991d021fe3aec0736bfaa9d444caf0c9b38d7116745c",
+    "wallet-targeted.log.gz": "53f690c3069919914d524a7dc86bb3961d0de616434e7490a9385f370e026500",
+    "wallet-analyze.log.gz": "6b012abebc80c57c9e5c3ecf2cb9177bba48c998a360da84cef9801defcfeb65"
+  },
+  "wallet_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 155
+  }
+}

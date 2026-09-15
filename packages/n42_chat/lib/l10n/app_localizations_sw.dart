@@ -5860,4 +5860,8 @@ class SSw extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Hifadhi nakala ya funguo zako za usimbaji fiche kabla ya kutoka, la sivyo unaweza kupoteza ufikiaji wa ujumbe uliosimbwa.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Uthibitishaji wa kibayometriki haupatikani. Angalia usajili na ruhusa katika mipangilio ya kifaa.';
 }

@@ -41,7 +41,8 @@ class SecuritySettingsPage extends StatefulWidget {
   State<SecuritySettingsPage> createState() => _SecuritySettingsPageState();
 }
 
-class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
+class _SecuritySettingsPageState extends State<SecuritySettingsPage>
+    with WidgetsBindingObserver {
   bool _isLoading = false;
   KeyBackupInfo? _backupInfo;
   List<DeviceInfo> _devices = [];
@@ -50,6 +51,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   // 生物识别状态
   bool _isBiometricAvailable = false;
   bool _isBiometricEnabled = false;
+  bool _biometricBusy = false;
   String? _biometricTypeDescription;
   final BiometricService _biometricService = BiometricService();
   final SecureStorageDataSource _secureStorage = SecureStorageDataSource();
@@ -66,6 +68,7 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _loadData();
     _loadBiometricStatus();
     _loadPasskeyStatus();
@@ -76,19 +79,29 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
     }
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) _loadBiometricStatus();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   Future<void> _loadBiometricStatus() async {
+    if (_biometricBusy) return;
     final isAvailable = await _biometricService.isAvailable();
-    if (isAvailable) {
-      final typeDescription = await _biometricService
-          .getBiometricTypeDescription();
-      final isEnabled = await _secureStorage.isBiometricEnabled();
-      if (!mounted) return;
-      setState(() {
-        _isBiometricAvailable = true;
-        _biometricTypeDescription = typeDescription;
-        _isBiometricEnabled = isEnabled;
-      });
-    }
+    final typeDescription = await _biometricService
+        .getBiometricTypeDescription();
+    final isEnabled = await _secureStorage.isBiometricEnabled();
+    if (!mounted || _biometricBusy) return;
+    setState(() {
+      _isBiometricAvailable = isAvailable;
+      _biometricTypeDescription = typeDescription;
+      _isBiometricEnabled = isEnabled;
+    });
   }
 
   Future<void> _loadPasskeyStatus() async {
@@ -190,10 +203,8 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
                 const SizedBox(height: 16),
 
                 // 生物识别登录
-                if (_isBiometricAvailable) ...[
-                  _buildBiometricSection(),
-                  const SizedBox(height: 16),
-                ],
+                _buildBiometricSection(),
+                const SizedBox(height: 16),
 
                 // Passkey 管理
                 if (_isPasskeySupported) ...[
@@ -259,7 +270,10 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
               style: TextStyle(color: context.textPrimary),
             ),
             subtitle: Text(
-              _isBiometricEnabled
+              !_isBiometricAvailable
+                  ? (S.of(context)?.settingsBiometricUnavailable ??
+                        'Biometric authentication is unavailable. Check device settings.')
+                  : _isBiometricEnabled
                   ? (S.of(context)?.settingsBiometricEnabled ??
                         'Enabled - Use biometric to login')
                   : (S.of(context)?.settingsBiometricDisabled ??
@@ -268,11 +282,19 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
             ),
             trailing: Switch(
               value: _isBiometricEnabled,
-              onChanged: _onBiometricToggle,
+              onChanged:
+                  (!_biometricBusy &&
+                      (_isBiometricAvailable || _isBiometricEnabled))
+                  ? _onBiometricToggle
+                  : null,
               activeTrackColor: AppColors.primary.withValues(alpha: 0.5),
               activeThumbColor: AppColors.primary,
             ),
-            onTap: () => _onBiometricToggle(!_isBiometricEnabled),
+            onTap:
+                (!_biometricBusy &&
+                    (_isBiometricAvailable || _isBiometricEnabled))
+                ? () => _onBiometricToggle(!_isBiometricEnabled)
+                : null,
           ),
         ],
       ),
@@ -541,16 +563,34 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
   }
 
   Future<void> _onBiometricToggle(bool enable) async {
+    if (_biometricBusy) return;
+    setState(() => _biometricBusy = true);
+    try {
+      await _saveBiometricToggle(enable);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonSaveFailed ?? 'Save failed'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _biometricBusy = false);
+    }
+  }
+
+  Future<void> _saveBiometricToggle(bool enable) async {
     if (enable) {
       // 首先检查是否有保存的凭据
-      final hasCredentials = await _secureStorage.hasCredentials();
-      if (!hasCredentials) {
+      final session = await _secureStorage.getSession();
+      if (session == null) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                S.of(context)?.settingsBiometricNeedRelogin ??
-                    'Please log out and log in again to enable biometric login',
+                S.of(context)?.blocAuthSessionExpired ??
+                    'Session expired, please login again',
               ),
               duration: const Duration(seconds: 4),
             ),
@@ -569,23 +609,25 @@ class _SecuritySettingsPageState extends State<SecuritySettingsPage> {
 
       if (result.success) {
         // 获取凭据信息
-        final credentials = await _secureStorage.getCredentials();
-        if (credentials != null) {
-          await _secureStorage.enableBiometricLogin(
-            homeserver: credentials['homeserver']!,
-            username: credentials['username']!,
-          );
-          if (!mounted) return;
-          setState(() => _isBiometricEnabled = true);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                S.of(context)?.settingsBiometricLoginEnabled ??
-                    'Biometric login enabled',
-              ),
+        final saved = await _secureStorage.saveCredentials(
+          homeserver: session['homeserver']!,
+          username: session['userId']!,
+        );
+        if (!saved) throw StateError('Could not save biometric account');
+        await _secureStorage.enableBiometricLogin(
+          homeserver: session['homeserver']!,
+          username: session['userId']!,
+        );
+        if (!mounted) return;
+        setState(() => _isBiometricEnabled = true);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              S.of(context)?.settingsBiometricLoginEnabled ??
+                  'Biometric login enabled',
             ),
-          );
-        }
+          ),
+        );
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(

@@ -10780,6 +10780,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Back up your encryption keys before logging out, or you may lose access to encrypted messages.'**
   String get chatLogoutKeyWarning;
+
+  /// No description provided for @settingsBiometricUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric authentication is unavailable. Check enrollment and permissions in device settings.'**
+  String get settingsBiometricUnavailable;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

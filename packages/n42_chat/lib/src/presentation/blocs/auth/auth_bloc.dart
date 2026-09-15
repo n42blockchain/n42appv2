@@ -1454,22 +1454,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         return;
       }
 
-      // 执行生物识别认证
-      final biometricResult = await _biometricService.authenticate(
-        reason: 'Authenticate to login',
-      );
-
-      if (!biometricResult.success) {
-        emit(
-          state.copyWith(
-            status: AuthStatus.unauthenticated,
-            errorMessage: biometricResult.errorMessage,
-          ),
-        );
-        return;
-      }
-
-      // 生物识别成功，使用已保存的 session token 恢复登录（仿微信策略：密码不再存储）
+      // Explicit logout revokes the session. Do not prompt Face ID for a token that is absent.
       final session = await _secureStorage.getSession();
       if (session == null) {
         emit(
@@ -1490,6 +1475,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           state.copyWith(
             status: AuthStatus.unauthenticated,
             errorMessage: BlocMessageKeys.authSessionIncomplete,
+          ),
+        );
+        return;
+      }
+
+      // 执行生物识别认证
+      final biometricResult = await _biometricService.authenticate(
+        reason: 'Authenticate to login',
+      );
+
+      if (!biometricResult.success) {
+        emit(
+          state.copyWith(
+            status: AuthStatus.unauthenticated,
+            errorMessage: biometricResult.errorMessage,
           ),
         );
         return;

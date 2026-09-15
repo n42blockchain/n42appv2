@@ -5851,4 +5851,8 @@ class SIt extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Esegui il backup delle chiavi di crittografia prima di uscire, altrimenti potresti perdere l’accesso ai messaggi crittografati.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Autenticazione biometrica non disponibile. Controlla la configurazione e le autorizzazioni nelle impostazioni del dispositivo.';
 }

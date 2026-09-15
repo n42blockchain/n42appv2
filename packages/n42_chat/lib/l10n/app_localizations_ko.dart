@@ -5709,4 +5709,8 @@ class SKo extends S {
   @override
   String get chatLogoutKeyWarning =>
       '로그아웃하기 전에 암호화 키를 백업하세요. 그렇지 않으면 암호화된 메시지를 읽지 못할 수 있습니다.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      '생체 인증을 사용할 수 없습니다. 기기 설정에서 등록 상태와 권한을 확인하세요.';
 }

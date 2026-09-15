@@ -47,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isBiometricAvailable = false;
   bool _isBiometricEnabled = false;
   bool _hasCredentials = false;
+  bool _hasSession = false;
   String _biometricTypeDescription = '';
   // 微信策略：同一设备登录一次后自动保持登录状态，无需用户选择
   // 登出时才会清除登录凭据
@@ -61,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
     final isAvailable = await _biometricService.isAvailable();
     final isEnabled = await _secureStorage.isBiometricEnabled();
     final hasCredentials = await _secureStorage.hasCredentials();
+    final hasSession = await _secureStorage.hasSession();
     final typeDescription = isAvailable
         ? await _biometricService.getBiometricTypeDescription()
         : '';
@@ -75,11 +77,12 @@ class _LoginPageState extends State<LoginPage> {
         _isBiometricAvailable = isAvailable;
         _isBiometricEnabled = isEnabled;
         _hasCredentials = hasCredentials;
+        _hasSession = hasSession;
         _biometricTypeDescription = typeDescription;
       });
 
       // 如果生物识别已启用且有保存的凭据，自动触发生物识别
-      if (isAvailable && isEnabled && hasCredentials) {
+      if (isAvailable && isEnabled && hasCredentials && hasSession) {
         // 延迟一点再触发，让UI先渲染
         Future.delayed(const Duration(milliseconds: 500), () {
           if (mounted) {
@@ -254,10 +257,20 @@ class _LoginPageState extends State<LoginPage> {
                   // 生物识别快捷登录（如果已启用且有凭据）- 显示在登录按钮上方
                   if (_isBiometricAvailable &&
                       _isBiometricEnabled &&
-                      _hasCredentials) ...[
+                      _hasCredentials &&
+                      _hasSession) ...[
                     _buildBiometricQuickLogin(),
                     const SizedBox(height: 12),
                     _buildOrDivider(),
+                    const SizedBox(height: 12),
+                  ],
+
+                  if (_isBiometricEnabled && !_hasSession) ...[
+                    Text(
+                      S.of(context)?.blocAuthSessionExpired ??
+                          'Session expired, please login again',
+                      textAlign: TextAlign.center,
+                    ),
                     const SizedBox(height: 12),
                   ],
 
@@ -683,8 +696,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _loginWithBiometric() async {
-    // 直接触发生物识别登录
-    context.read<AuthBloc>().add(const AuthBiometricLoginRequested());
+    final bloc = context.read<AuthBloc>();
+    if (bloc.state.isLoading || bloc.state.isAuthenticated) return;
+    bloc.add(const AuthBiometricLoginRequested());
   }
 
   Widget _buildAgreement(bool isDark) {

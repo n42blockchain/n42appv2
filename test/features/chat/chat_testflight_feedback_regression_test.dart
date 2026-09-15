@@ -1,5 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../packages/n42_chat/test/presentation/pages/contact_detail_page_test.dart'
+    as contact_details;
+import '../../../packages/n42_chat/test/unit/blocs/auth_bloc_extended_test.dart'
+    as biometric_auth;
 import '../../../packages/n42_chat/test/presentation/pages/auth_forms_behavior_test.dart'
     as auth_forms;
 import '../../../packages/n42_chat/test/presentation/pages/chat_file_lifecycle_test.dart'
@@ -23,6 +27,8 @@ import '../../../packages/n42_chat/test/unit/repositories/message_repository_imp
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat account biometric authentication', biometric_auth.main);
+  group('Chat friend identity and detail actions', contact_details.main);
   group('Chat registration UIA', registration.main);
   group('Chat auth forms', auth_forms.main);
   group('Chat auth session and registration errors', auth_session.main);

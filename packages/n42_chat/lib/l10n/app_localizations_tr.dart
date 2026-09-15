@@ -5832,4 +5832,8 @@ class STr extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin.';
 }

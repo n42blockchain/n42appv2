@@ -5871,4 +5871,8 @@ class STe extends S {
   @override
   String get chatLogoutKeyWarning =>
       'లాగ్ అవుట్ చేసే ముందు మీ ఎన్‌క్రిప్షన్ కీలను బ్యాకప్ చేయండి, లేకపోతే ఎన్‌క్రిప్ట్ చేసిన సందేశాలను చదవలేకపోవచ్చు.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'బయోమెట్రిక్ ప్రామాణీకరణ అందుబాటులో లేదు. పరికర సెట్టింగ్‌లలో నమోదు మరియు అనుమతులను తనిఖీ చేయండి.';
 }

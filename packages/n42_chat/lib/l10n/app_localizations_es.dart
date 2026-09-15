@@ -5869,4 +5869,8 @@ class SEs extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Haz una copia de seguridad de tus claves de cifrado antes de cerrar sesión o podrías perder el acceso a los mensajes cifrados.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'La autenticación biométrica no está disponible. Revisa el registro y los permisos en los ajustes del dispositivo.';
 }

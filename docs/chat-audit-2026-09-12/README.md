@@ -2,7 +2,9 @@
 
 ## 当前钱包依赖（2026-09-15）
 
-钱包现已更新到 Chat `aca3fdad317a8e86a95a664d9bc66bdebae29318`，修复恢复 0 组密钥仍提示成功、备份状态误判和已有时间线的解密刷新，避免重复恢复及弹窗关闭时过早销毁输入框。插件全量 6,462 项通过、1 项跳过。详见[密钥恢复跟进与验收边界](../testing/key-recovery-2026-09-15/README.md)；已上传为 [TestFlight 2.4.8+2026072659](../testing/testflight-release-2026-09-15-r2.md)，Apple 正在处理。
+钱包现已更新到 Chat `4b146b688a46c48653155d9e49e0778b15d77814`，修复好友详情误用房间 ID、临时状态下的好友按钮判断，以及无有效会话仍尝试 Face ID 的流程；补充固定生物识别入口和设备不可用说明。插件全量 6,470 项通过、1 项跳过，钱包定向 180 项通过。详见 [Face ID 与好友详情跟进](../testing/face-id-contact-2026-09-15/README.md)。本轮尚未上传 TestFlight。
+
+此前密钥恢复修复已上传为 [TestFlight 2.4.8+2026072659](../testing/testflight-release-2026-09-15-r2.md)；历史验证见[密钥恢复跟进](../testing/key-recovery-2026-09-15/README.md)。
 
 ## 注册禁用提示跟进（2026-09-15）
 

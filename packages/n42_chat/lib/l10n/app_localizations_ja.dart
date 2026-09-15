@@ -5710,4 +5710,8 @@ class SJa extends S {
   @override
   String get chatLogoutKeyWarning =>
       'ログアウトする前に暗号化キーをバックアップしてください。暗号化されたメッセージを読めなくなる可能性があります。';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      '生体認証を利用できません。端末の設定で顔や指紋の登録とアプリの権限を確認してください。';
 }

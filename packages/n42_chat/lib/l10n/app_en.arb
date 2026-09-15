@@ -2760,5 +2760,6 @@
   "settingsEmailVerificationSent": "Verification email sent",
   "settingsEmailLinkInstructions": "Open the verification link in your email, then return here and confirm.",
   "settingsSendVerificationEmail": "Send verification email",
-  "chatLogoutKeyWarning": "Back up your encryption keys before logging out, or you may lose access to encrypted messages."
+  "chatLogoutKeyWarning": "Back up your encryption keys before logging out, or you may lose access to encrypted messages.",
+  "settingsBiometricUnavailable": "Biometric authentication is unavailable. Check enrollment and permissions in device settings."
 }

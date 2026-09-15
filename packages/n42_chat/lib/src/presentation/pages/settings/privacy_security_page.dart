@@ -318,6 +318,13 @@ class _PrivacySecurityPageState extends State<PrivacySecurityPage> {
               title: l10n?.settingsSecurityTitle ?? 'Security',
               children: [
                 SettingsHubActionTile(
+                  icon: Icons.face,
+                  iconColor: Colors.green,
+                  title: l10n?.settingsBiometricLogin ?? 'Biometric Login',
+                  subtitle: 'Face ID / Touch ID',
+                  onTap: _openSecuritySettings,
+                ),
+                SettingsHubActionTile(
                   icon: Icons.enhanced_encryption_outlined,
                   iconColor: Colors.teal,
                   title: 'Encryption & Key Backup',

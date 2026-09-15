@@ -5816,4 +5816,8 @@ class SVi extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Sao lưu khóa mã hóa trước khi đăng xuất, nếu không bạn có thể mất quyền truy cập vào các tin nhắn được mã hóa.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Xác thực sinh trắc học không khả dụng. Kiểm tra đăng ký và quyền trong cài đặt thiết bị.';
 }

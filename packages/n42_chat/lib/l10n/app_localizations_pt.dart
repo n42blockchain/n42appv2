@@ -5860,6 +5860,10 @@ class SPt extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Faça uma cópia de segurança das chaves de encriptação antes de terminar sessão, ou poderá perder o acesso às mensagens encriptadas.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'A autenticação biométrica não está disponível. Verifique o registo e as permissões nas definições do dispositivo.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11718,4 +11722,8 @@ class SPtBr extends SPt {
   @override
   String get chatLogoutKeyWarning =>
       'Faça backup das chaves de criptografia antes de sair, ou você poderá perder o acesso às mensagens criptografadas.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'A autenticação biométrica não está disponível. Verifique o cadastro e as permissões nas configurações do dispositivo.';
 }

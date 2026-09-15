@@ -5865,4 +5865,8 @@ class SPl extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Przed wylogowaniem utwórz kopię zapasową kluczy szyfrowania, inaczej możesz utracić dostęp do zaszyfrowanych wiadomości.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Uwierzytelnianie biometryczne jest niedostępne. Sprawdź konfigurację i uprawnienia w ustawieniach urządzenia.';
 }

@@ -418,7 +418,12 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   /// 获取对方用户ID
   String? _getOtherUserId() {
-    return widget.conversation.directUserId;
+    final userId =
+        widget.conversation.directUserId ??
+        MatrixClientManager.instance.client
+            ?.getRoomById(widget.conversation.id)
+            ?.directChatMatrixID;
+    return userId != null && userId.startsWith('@') ? userId : null;
   }
 
   /// 获取显示名称（私聊时优先使用备注名）
@@ -607,12 +612,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
             decoration: InputDecoration(
               hintText:
                   S.of(context)?.commonEnterGroupName ?? 'Enter group name',
-              hintStyle: TextStyle(
-                color: context.textSecondary,
-              ),
-              counterStyle: TextStyle(
-                color: context.textSecondary,
-              ),
+              hintStyle: TextStyle(color: context.textSecondary),
+              counterStyle: TextStyle(color: context.textSecondary),
             ),
           ),
           actions: [
@@ -1356,18 +1357,14 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     hintText:
                         S.of(context)?.chatGroupAnnouncementHint ??
                         'Enter group announcement',
-                    hintStyle: TextStyle(
-                      color: context.textSecondary,
-                    ),
+                    hintStyle: TextStyle(color: context.textSecondary),
                     border: const OutlineInputBorder(),
                   ),
                 )
               : Text(
                   S.of(context)?.chatGroupAnnouncementEmpty ??
                       'No announcement',
-                  style: TextStyle(
-                    color: context.textPrimary,
-                  ),
+                  style: TextStyle(color: context.textPrimary),
                 ),
           actions: [
             TextButton(
@@ -1452,12 +1449,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
               hintText:
                   S.of(context)?.chatNicknameHint ??
                   'Enter your nickname in this group',
-              hintStyle: TextStyle(
-                color: context.textSecondary,
-              ),
-              counterStyle: TextStyle(
-                color: context.textSecondary,
-              ),
+              hintStyle: TextStyle(color: context.textSecondary),
+              counterStyle: TextStyle(color: context.textSecondary),
             ),
           ),
           actions: [
@@ -1524,9 +1517,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   (reason) => RadioListTile<String>(
                     title: Text(
                       reason,
-                      style: TextStyle(
-                        color: context.textPrimary,
-                      ),
+                      style: TextStyle(color: context.textPrimary),
                     ),
                     value: reason,
                     activeColor: AppColors.primary,
@@ -1543,9 +1534,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     hintText:
                         S.of(context)?.reportDescription ??
                         'Additional description (optional)',
-                    hintStyle: TextStyle(
-                      color: context.textSecondary,
-                    ),
+                    hintStyle: TextStyle(color: context.textSecondary),
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -1593,13 +1582,15 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     // 获取对方用户ID（私聊时需要真实的用户ID，而不是房间ID）
     final otherUserId = _getOtherUserId();
     if (otherUserId == null) {
-      // 无法获取用户ID，使用房间ID作为后备
-      debugLog(
-        'ChatDetailPage: Cannot get other user ID, using room ID as fallback',
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+        ),
       );
+      return;
     }
 
-    final userId = otherUserId ?? widget.conversation.id;
+    final userId = otherUserId;
 
     // 获取当前的 ContactBloc
     ContactBloc? contactBloc;
@@ -1967,7 +1958,9 @@ class _GroupMemberListPageState extends State<_GroupMemberListPage> {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: AppColors.warning.withValues(alpha: 0.2),
+                                  color: AppColors.warning.withValues(
+                                    alpha: 0.2,
+                                  ),
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 child: Text(

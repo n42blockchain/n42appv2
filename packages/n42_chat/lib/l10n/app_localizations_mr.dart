@@ -5825,4 +5825,8 @@ class SMr extends S {
   @override
   String get chatLogoutKeyWarning =>
       'लॉग आउट करण्यापूर्वी तुमच्या एन्क्रिप्शन कींचा बॅकअप घ्या, अन्यथा एन्क्रिप्ट केलेले संदेश वाचता येणार नाहीत.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'बायोमेट्रिक प्रमाणीकरण उपलब्ध नाही. डिव्हाइस सेटिंग्जमध्ये नोंदणी आणि परवानग्या तपासा.';
 }

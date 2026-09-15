@@ -5893,4 +5893,8 @@ class SFr extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Sauvegardez vos clés de chiffrement avant de vous déconnecter, sinon vous risquez de perdre l’accès aux messages chiffrés.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'L’authentification biométrique est indisponible. Vérifiez la configuration et les autorisations dans les réglages de l’appareil.';
 }

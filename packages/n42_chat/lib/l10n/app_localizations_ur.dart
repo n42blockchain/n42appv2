@@ -5840,4 +5840,8 @@ class SUr extends S {
   @override
   String get chatLogoutKeyWarning =>
       'لاگ آؤٹ کرنے سے پہلے اپنی خفیہ کاری کی کلیدوں کا بیک اپ لیں، ورنہ آپ خفیہ کردہ پیغامات تک رسائی کھو سکتے ہیں۔';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'بایومیٹرک تصدیق دستیاب نہیں ہے۔ آلے کی ترتیبات میں اندراج اور اجازتیں چیک کریں۔';
 }

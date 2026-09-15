@@ -5801,4 +5801,8 @@ class SEn extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Back up your encryption keys before logging out, or you may lose access to encrypted messages.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Biometric authentication is unavailable. Check enrollment and permissions in device settings.';
 }

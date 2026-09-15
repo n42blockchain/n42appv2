@@ -5875,4 +5875,8 @@ class SDe extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Sichere deine Verschlüsselungsschlüssel vor dem Abmelden, sonst könntest du den Zugriff auf verschlüsselte Nachrichten verlieren.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Biometrische Authentifizierung ist nicht verfügbar. Prüfe Einrichtung und Berechtigungen in den Geräteeinstellungen.';
 }

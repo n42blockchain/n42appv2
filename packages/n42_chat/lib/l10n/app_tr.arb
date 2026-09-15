@@ -2759,5 +2759,6 @@
   "settingsEmailVerificationSent": "Doğrulama e-postası gönderildi",
   "settingsEmailLinkInstructions": "E-postanızdaki doğrulama bağlantısını açın, ardından buraya dönüp onaylayın.",
   "settingsSendVerificationEmail": "Doğrulama e-postası gönder",
-  "chatLogoutKeyWarning": "Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz."
+  "chatLogoutKeyWarning": "Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz.",
+  "settingsBiometricUnavailable": "Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin."
 }

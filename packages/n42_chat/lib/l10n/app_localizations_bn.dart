@@ -5828,4 +5828,8 @@ class SBn extends S {
   @override
   String get chatLogoutKeyWarning =>
       'লগ আউট করার আগে এনক্রিপশন কীগুলি ব্যাক আপ করুন, নইলে এনক্রিপ্ট করা বার্তাগুলিতে প্রবেশাধিকার হারাতে পারেন।';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'বায়োমেট্রিক প্রমাণীকরণ উপলব্ধ নয়। ডিভাইসের সেটিংসে নিবন্ধন ও অনুমতি দেখুন।';
 }

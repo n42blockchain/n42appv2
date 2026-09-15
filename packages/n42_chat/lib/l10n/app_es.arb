@@ -2759,5 +2759,6 @@
   "settingsEmailVerificationSent": "Correo de verificación enviado",
   "settingsEmailLinkInstructions": "Abre el enlace de verificación del correo, vuelve aquí y confirma.",
   "settingsSendVerificationEmail": "Enviar correo de verificación",
-  "chatLogoutKeyWarning": "Haz una copia de seguridad de tus claves de cifrado antes de cerrar sesión o podrías perder el acceso a los mensajes cifrados."
+  "chatLogoutKeyWarning": "Haz una copia de seguridad de tus claves de cifrado antes de cerrar sesión o podrías perder el acceso a los mensajes cifrados.",
+  "settingsBiometricUnavailable": "La autenticación biométrica no está disponible. Revisa el registro y los permisos en los ajustes del dispositivo."
 }

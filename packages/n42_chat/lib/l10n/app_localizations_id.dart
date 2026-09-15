@@ -5839,4 +5839,8 @@ class SId extends S {
   @override
   String get chatLogoutKeyWarning =>
       'Cadangkan kunci enkripsi sebelum keluar, atau Anda mungkin kehilangan akses ke pesan terenkripsi.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'Autentikasi biometrik tidak tersedia. Periksa pendaftaran dan izin di pengaturan perangkat.';
 }

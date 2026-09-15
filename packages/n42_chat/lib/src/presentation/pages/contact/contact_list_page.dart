@@ -509,11 +509,7 @@ class _ContactListPageState extends State<ContactListPage> {
                     ),
                   ),
                 ),
-              Icon(
-                AppIcons.chevron,
-                color: context.textSecondary,
-                size: 20,
-              ),
+              Icon(AppIcons.chevron, color: context.textSecondary, size: 20),
             ],
           ),
         ),
@@ -524,10 +520,7 @@ class _ContactListPageState extends State<ContactListPage> {
   Widget _buildItemDivider(bool isDark) {
     return Padding(
       padding: const EdgeInsets.only(left: 72),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 
@@ -906,6 +899,7 @@ class _ContactListPageState extends State<ContactListPage> {
         name: contact.effectiveDisplayName,
         avatarUrl: contact.avatarUrl,
         type: ConversationType.direct,
+        directUserId: contact.userId,
         lastMessage: null,
         lastMessageTime: null,
         unreadCount: 0,
@@ -1491,11 +1485,8 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
           return ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: requests.length,
-            separatorBuilder: (_, _) => Divider(
-              height: 1,
-              indent: 72,
-              color: context.dividerColor,
-            ),
+            separatorBuilder: (_, _) =>
+                Divider(height: 1, indent: 72, color: context.dividerColor),
             itemBuilder: (context, index) {
               final request = requests[index];
               return _buildRequestItem(request, isDark);
@@ -1743,11 +1734,7 @@ class _GroupListPageState extends State<_GroupListPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.group_outlined,
-            size: 64,
-            color: context.textTertiary,
-          ),
+          Icon(Icons.group_outlined, size: 64, color: context.textTertiary),
           const SizedBox(height: 16),
           Text(
             S.of(context)?.commonNoGroups ?? 'No groups',
@@ -1857,11 +1844,7 @@ class _GroupListPageState extends State<_GroupListPage> {
           ),
         ),
         trailing: group.isEncrypted
-            ? Icon(
-                Icons.lock,
-                size: 16,
-                color: context.textSecondary,
-              )
+            ? Icon(Icons.lock, size: 16, color: context.textSecondary)
             : null,
         onTap: () => _navigateToChat(group.roomId),
         onLongPress: () => _showGroupOptions(group),
@@ -1893,7 +1876,11 @@ class _GroupListPageState extends State<_GroupListPage> {
           S.of(context)?.commonInvitedToJoinGroup ?? 'Invited to join group',
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 13, height: 1.3, color: AppColors.primary),
+          style: const TextStyle(
+            fontSize: 13,
+            height: 1.3,
+            color: AppColors.primary,
+          ),
         ),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -1934,7 +1921,10 @@ class _GroupListPageState extends State<_GroupListPage> {
             ),
             if (group.isOwner)
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: AppColors.error),
+                leading: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.error,
+                ),
                 title: Text(
                   S.of(context)?.commonDissolveGroup ?? 'Dissolve Group',
                   style: const TextStyle(color: AppColors.error),
@@ -2094,9 +2084,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: AppColors.dividerOf(widget.isDark),
-                ),
+                bottom: BorderSide(color: AppColors.dividerOf(widget.isDark)),
               ),
             ),
             child: Row(
@@ -2159,9 +2147,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
                     child: Text(
                       S.of(context)?.contactNoContactsFound ??
                           'No contacts found',
-                      style: TextStyle(
-                        color: context.textSecondary,
-                      ),
+                      style: TextStyle(color: context.textSecondary),
                     ),
                   )
                 : ListView.builder(
@@ -2176,9 +2162,7 @@ class _RecommendContactSheetState extends State<_RecommendContactSheet> {
                         ),
                         title: Text(
                           contact.effectiveDisplayName,
-                          style: TextStyle(
-                            color: context.textPrimary,
-                          ),
+                          style: TextStyle(color: context.textPrimary),
                         ),
                         subtitle: Text(
                           contact.userId,

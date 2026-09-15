@@ -75,7 +75,8 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     if (contactBloc == null) return;
 
     final contactState = contactBloc.state;
-    if (contactState.isLoaded) {
+    if (contactState.status != ContactStatus.initial ||
+        contactState.contacts.isNotEmpty) {
       final contact = contactState.contacts
           .where((ContactEntity c) => c.userId == widget.userId)
           .firstOrNull;
@@ -186,11 +187,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
         backgroundColor: bgColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            AppIcons.back,
-            color: textColor,
-            size: 20,
-          ),
+          icon: Icon(AppIcons.back, color: textColor, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
@@ -348,6 +345,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     if (hasContactBloc) {
       return BlocListener<ContactBloc, ContactState>(
         listener: (context, state) {
+          _loadContact();
           if (state.status == ContactStatus.remarkUpdated &&
               state.updatedRemarkUserId == widget.userId) {
             _handleRemarkUpdate(
@@ -356,8 +354,6 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                 remark: state.updatedRemark,
               ),
             );
-          } else if (state.status == ContactStatus.loaded) {
-            _loadContact();
           }
         },
         child: scaffold,
@@ -406,7 +402,11 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                     title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 16, height: 1.3, color: textColor),
+                    style: TextStyle(
+                      fontSize: 16,
+                      height: 1.3,
+                      color: textColor,
+                    ),
                   ),
                   if (subtitle != null) ...[
                     const SizedBox(height: 4),
@@ -414,17 +414,17 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                       subtitle,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 13, height: 1.3, color: secondaryTextColor),
+                      style: TextStyle(
+                        fontSize: 13,
+                        height: 1.3,
+                        color: secondaryTextColor,
+                      ),
                     ),
                   ],
                 ],
               ),
             ),
-            Icon(
-              AppIcons.chevron,
-              color: secondaryTextColor,
-              size: 20,
-            ),
+            Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
           ],
         ),
       ),
@@ -491,11 +491,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                   ),
                 ),
                 const SizedBox(width: 8),
-                Icon(
-                  AppIcons.chevron,
-                  color: secondaryTextColor,
-                  size: 20,
-                ),
+                Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
               ],
             ),
           ),
@@ -794,11 +790,7 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: Icon(
-            AppIcons.back,
-            color: textColor,
-            size: 20,
-          ),
+          icon: Icon(AppIcons.back, color: textColor, size: 20),
           tooltip: MaterialLocalizations.of(context).backButtonTooltip,
           onPressed: () => Navigator.of(context).pop(),
         ),
@@ -1028,11 +1020,7 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
             // 右侧箭头
             if (showArrow) ...[
               const SizedBox(width: 4),
-              Icon(
-                AppIcons.chevron,
-                color: secondaryTextColor,
-                size: 20,
-              ),
+              Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
             ],
           ],
         ),
@@ -1085,23 +1073,17 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
         backgroundColor: context.surfaceColor,
         title: Text(
           S.of(context)?.contactNotes ?? 'Notes',
-          style: TextStyle(
-            color: context.textPrimary,
-          ),
+          style: TextStyle(color: context.textPrimary),
         ),
         content: TextField(
           controller: controller,
           maxLines: 4,
-          style: TextStyle(
-            color: context.textPrimary,
-          ),
+          style: TextStyle(color: context.textPrimary),
           decoration: InputDecoration(
             hintText:
                 S.of(context)?.contactNotesHint ??
                 'Add notes about this contact',
-            hintStyle: TextStyle(
-              color: context.textSecondary,
-            ),
+            hintStyle: TextStyle(color: context.textSecondary),
             border: const OutlineInputBorder(),
           ),
         ),
@@ -1237,22 +1219,16 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
         backgroundColor: context.surfaceColor,
         title: Text(
           S.of(context)?.contactPhone ?? 'Phone',
-          style: TextStyle(
-            color: context.textPrimary,
-          ),
+          style: TextStyle(color: context.textPrimary),
         ),
         content: TextField(
           controller: phoneController,
           keyboardType: TextInputType.phone,
-          style: TextStyle(
-            color: context.textPrimary,
-          ),
+          style: TextStyle(color: context.textPrimary),
           decoration: InputDecoration(
             hintText:
                 S.of(context)?.contactAddPhoneHint ?? 'Enter phone number',
-            hintStyle: TextStyle(
-              color: context.textSecondary,
-            ),
+            hintStyle: TextStyle(color: context.textSecondary),
             border: const OutlineInputBorder(),
           ),
         ),
@@ -1496,11 +1472,7 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
                         style: TextStyle(fontSize: 16, color: hintColor),
                       ),
                       const Spacer(),
-                      Icon(
-                        AppIcons.chevron,
-                        color: hintColor,
-                        size: 20,
-                      ),
+                      Icon(AppIcons.chevron, color: hintColor, size: 20),
                     ],
                   ),
                 ),

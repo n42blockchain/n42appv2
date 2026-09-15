@@ -2759,5 +2759,6 @@
   "settingsEmailVerificationSent": "E-mail de vérification envoyé",
   "settingsEmailLinkInstructions": "Ouvrez le lien de vérification dans votre e-mail, puis revenez ici et confirmez.",
   "settingsSendVerificationEmail": "Envoyer un e-mail de vérification",
-  "chatLogoutKeyWarning": "Sauvegardez vos clés de chiffrement avant de vous déconnecter, sinon vous risquez de perdre l’accès aux messages chiffrés."
+  "chatLogoutKeyWarning": "Sauvegardez vos clés de chiffrement avant de vous déconnecter, sinon vous risquez de perdre l’accès aux messages chiffrés.",
+  "settingsBiometricUnavailable": "L’authentification biométrique est indisponible. Vérifiez la configuration et les autorisations dans les réglages de l’appareil."
 }

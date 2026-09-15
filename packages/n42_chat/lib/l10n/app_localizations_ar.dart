@@ -5804,4 +5804,8 @@ class SAr extends S {
   @override
   String get chatLogoutKeyWarning =>
       'انسخ مفاتيح التشفير احتياطيًا قبل تسجيل الخروج، وإلا فقد تفقد إمكانية الوصول إلى الرسائل المشفرة.';
+
+  @override
+  String get settingsBiometricUnavailable =>
+      'المصادقة البيومترية غير متاحة. تحقّق من التسجيل والأذونات في إعدادات الجهاز.';
 }
