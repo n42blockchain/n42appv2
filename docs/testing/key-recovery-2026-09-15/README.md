@@ -29,8 +29,9 @@ The user's separate friend-permissions question has an existing entry:
 **Contacts → select friend → top-right “…” → Set Permissions**. Global Chat settings
 cover background, quick replies, translation and automatic downloads.
 
-The uploaded TestFlight build remains **2.4.8+2026072656** and does not contain this
-follow-up. No new TestFlight upload or real-account recovery was performed here.
+The follow-up was subsequently uploaded as **2.4.8+2026072659**; Apple confirmed
+processing at 2026-09-15 10:14:42 UTC. See the [release record](../testflight-release-2026-09-15-r2.md).
+Tester availability and real-account recovery have not been verified.
 Registration server access at the supplied host still rejects the offered SSH
 public key; the service's registration policy remains unchanged. Canonical unresolved
 acceptance is tracked in Chat `OPEN_ISSUES.md`, item `QA-009`.

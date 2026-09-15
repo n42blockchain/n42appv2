@@ -19,12 +19,14 @@
   },
   "new_tests": 10,
   "live_account_recovery_verified": false,
-  "testflight_uploaded": false,
+  "testflight_uploaded": true,
   "sha256": {
     "chat-full.jsonl.gz": "d1671528b163d2e92c120eee97678c3baf488eb9f439208c7d746de0fae02865",
     "chat-targeted.log.gz": "8e47fc4925c399ca89d76647a1e10c9fba14b698dda91373e0d85384d68a0e86",
     "chat-analyze.log.gz": "a2dd97ed300c8e617091a7b270d575b82aec2e1e96de9f2cd567d3a1af750100",
     "wallet-targeted.log.gz": "c6edeea051d99ec6eb0c5d43eb1681e9a91f83b16e08ec471766852d224ac2c1",
     "wallet-analyze.log.gz": "6a437b6e5d6dddb74116748f63a6af04c99e719af7de2510b71c90b6c87aba8a"
-  }
+  },
+  "testflight_build": "2.4.8+2026072659",
+  "testflight_uploaded_at_utc": "2026-09-15T10:14:42Z"
 }
