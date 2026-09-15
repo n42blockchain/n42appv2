@@ -86,7 +86,9 @@ class _ActionButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
         decoration: BoxDecoration(
-          color: isDisabled ? c.textTertiary.withAlpha(20) : color.withAlpha(20),
+          color: isDisabled
+              ? c.textTertiary.withAlpha(20)
+              : color.withAlpha(20),
           borderRadius: AppRadius.brMd,
           border: Border.all(
             color: isDisabled ? c.border : color.withAlpha(40),

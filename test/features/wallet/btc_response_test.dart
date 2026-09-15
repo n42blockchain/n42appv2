@@ -16,13 +16,13 @@ const _kTxrefJson = <String, dynamic>{
 };
 
 Map<String, dynamic> _makeBtcResponseJson({List<dynamic>? txrefs}) => {
-      'address': '1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf',
-      'total_received': 200000000,
-      'total_sent': 50000000,
-      'balance': 150000000,
-      'unconfirmed_balance': 0,
-      'txrefs': txrefs ?? [_kTxrefJson],
-    };
+  'address': '1A1zP1eP5QGefi2DMPTfTL5SLmv7Divf',
+  'total_received': 200000000,
+  'total_sent': 50000000,
+  'balance': 150000000,
+  'unconfirmed_balance': 0,
+  'txrefs': txrefs ?? [_kTxrefJson],
+};
 
 void main() {
   // ─────────────────────────────────────────────────
@@ -65,10 +65,19 @@ void main() {
   group('Txref.toJson', () {
     test('includes all expected snake_case keys', () {
       final json = Txref.fromJson(_kTxrefJson).toJson();
-      expect(json.keys, containsAll([
-        'tx_hash', 'block_height', 'value', 'ref_balance',
-        'confirmations', 'tx_input_n', 'tx_output_n', 'confirmed',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          'tx_hash',
+          'block_height',
+          'value',
+          'ref_balance',
+          'confirmations',
+          'tx_input_n',
+          'tx_output_n',
+          'confirmed',
+        ]),
+      );
     });
 
     test('values match the original fields', () {
@@ -128,7 +137,9 @@ void main() {
         'value': 10000000,
         'block_height': 700001,
       };
-      final response = BtcResponse.fromJson(_makeBtcResponseJson(txrefs: [_kTxrefJson, txref2]));
+      final response = BtcResponse.fromJson(
+        _makeBtcResponseJson(txrefs: [_kTxrefJson, txref2]),
+      );
       expect(response.txrefs.length, 2);
       expect(response.txrefs[1].txHash, '0xsecondtxhash');
     });
@@ -157,10 +168,17 @@ void main() {
   group('BtcResponse.toJson', () {
     test('includes all expected keys', () {
       final json = BtcResponse.fromJson(_makeBtcResponseJson()).toJson();
-      expect(json.keys, containsAll([
-        'address', 'total_received', 'total_sent',
-        'balance', 'unconfirmed_balance', 'txrefs',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          'address',
+          'total_received',
+          'total_sent',
+          'balance',
+          'unconfirmed_balance',
+          'txrefs',
+        ]),
+      );
     });
 
     test('txrefs is a List in toJson', () {

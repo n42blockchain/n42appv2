@@ -284,9 +284,7 @@ class _WalletSecurityVerificationState
             InkWell(
               onTap: pushSetting,
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Image.asset(
                   'assets/img/Setting.png',
                   color: AppColorTokens.of(context).textPrimary,

@@ -137,7 +137,11 @@ void main() {
 
   group('BrowserHistoryModel.getMap', () {
     test('contains id from fromJson', () {
-      final m = BrowserHistoryModel.fromJson({'id': 3, 'url': 'https://y.com', 'time': '123'});
+      final m = BrowserHistoryModel.fromJson({
+        'id': 3,
+        'url': 'https://y.com',
+        'time': '123',
+      });
       expect(m.getMap()['id'], 3);
     });
   });

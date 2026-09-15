@@ -10,8 +10,7 @@ void main() {
     test('BNB：旧钱包 false → 权威 true（七测 FAIL 场景）', () {
       final stored = {'supportTest': false, 'isTest': false};
       final canonical = chainUrlMap['BNB'] as Map;
-      expect(canonical['supportTest'], isTrue,
-          reason: '前置：权威表 BNB 已打开测试网');
+      expect(canonical['supportTest'], isTrue, reason: '前置：权威表 BNB 已打开测试网');
 
       final changed = syncChainTestnetFlags(stored, canonical);
       expect(changed, isTrue);
@@ -28,14 +27,12 @@ void main() {
     test('ATOM：旧钱包 true → 权威 false，且停在测试网时拉回主网', () {
       final stored = {'supportTest': true, 'isTest': true};
       final canonical = chainUrlMap['ATOM'] as Map;
-      expect(canonical['supportTest'], isFalse,
-          reason: '前置：权威表 ATOM 已关闭测试网');
+      expect(canonical['supportTest'], isFalse, reason: '前置：权威表 ATOM 已关闭测试网');
 
       final changed = syncChainTestnetFlags(stored, canonical);
       expect(changed, isTrue);
       expect(stored['supportTest'], isFalse);
-      expect(stored['isTest'], isFalse,
-          reason: '链关闭测试网后不能把钱包留在无法切回的测试网状态');
+      expect(stored['isTest'], isFalse, reason: '链关闭测试网后不能把钱包留在无法切回的测试网状态');
     });
 
     test('值已一致时不产生写入', () {
@@ -59,12 +56,19 @@ void main() {
     test('权威表中 supportTest 在顶层而非 baseInfo', () {
       for (final key in const ['ATOM', 'BNB', 'TRX', 'ETH']) {
         final chain = chainUrlMap[key] as Map;
-        expect(chain.containsKey('supportTest'), isTrue,
-            reason: '$key 顶层应有 supportTest');
+        expect(
+          chain.containsKey('supportTest'),
+          isTrue,
+          reason: '$key 顶层应有 supportTest',
+        );
         final base = chain['baseInfo'] as Map;
-        expect(base.containsKey('supportTest'), isFalse,
-            reason: '$key 的 baseInfo 不应有 supportTest——'
-                '若未来搬进 baseInfo，请同步更新 buildCoinModel 的复制逻辑');
+        expect(
+          base.containsKey('supportTest'),
+          isFalse,
+          reason:
+              '$key 的 baseInfo 不应有 supportTest——'
+              '若未来搬进 baseInfo，请同步更新 buildCoinModel 的复制逻辑',
+        );
       }
     });
   });

@@ -104,10 +104,7 @@ void main() {
     });
 
     test('hash should be 32 bytes', () {
-      final hash = userOp.getUserOpHash(
-        AAConfig.entryPointV08,
-        BigInt.from(1),
-      );
+      final hash = userOp.getUserOpHash(AAConfig.entryPointV08, BigInt.from(1));
 
       expect(hash.length, 32);
     });

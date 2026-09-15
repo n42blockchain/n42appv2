@@ -8,12 +8,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Loading state enum for legacy compatibility
-enum LoadState {
-  initial,
-  loading,
-  success,
-  error,
-}
+enum LoadState { initial, loading, success, error }
 
 /// Extension to convert between AsyncValue and LoadState
 extension AsyncValueToLoadState<T> on AsyncValue<T> {
@@ -24,4 +19,3 @@ extension AsyncValueToLoadState<T> on AsyncValue<T> {
     return LoadState.initial;
   }
 }
-

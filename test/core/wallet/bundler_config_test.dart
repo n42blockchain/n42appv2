@@ -16,12 +16,15 @@ void main() {
     });
 
     test('contains all expected values', () {
-      expect(BundlerStrategy.values, containsAll([
-        BundlerStrategy.primary,
-        BundlerStrategy.fallback,
-        BundlerStrategy.race,
-        BundlerStrategy.roundRobin,
-      ]));
+      expect(
+        BundlerStrategy.values,
+        containsAll([
+          BundlerStrategy.primary,
+          BundlerStrategy.fallback,
+          BundlerStrategy.race,
+          BundlerStrategy.roundRobin,
+        ]),
+      );
     });
   });
 

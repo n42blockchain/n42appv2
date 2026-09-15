@@ -28,40 +28,71 @@ void main() {
 
     test('favicon defaults to null', () {
       final e = BrowserHistoryEntity(
-        id: 'h', url: 'https://x.com', title: 'X', visitedAt: ts);
+        id: 'h',
+        url: 'https://x.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       expect(e.favicon, isNull);
     });
 
     test('stores favicon when provided', () {
       final e = BrowserHistoryEntity(
-        id: 'h', url: 'https://x.com', title: 'X',
-        favicon: 'https://x.com/favicon.ico', visitedAt: ts,
+        id: 'h',
+        url: 'https://x.com',
+        title: 'X',
+        favicon: 'https://x.com/favicon.ico',
+        visitedAt: ts,
       );
       expect(e.favicon, 'https://x.com/favicon.ico');
     });
 
     test('same fields → equal', () {
       final a = BrowserHistoryEntity(
-          id: 'h', url: 'https://x.com', title: 'X', visitedAt: ts);
+        id: 'h',
+        url: 'https://x.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       final b = BrowserHistoryEntity(
-          id: 'h', url: 'https://x.com', title: 'X', visitedAt: ts);
+        id: 'h',
+        url: 'https://x.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       expect(a, equals(b));
     });
 
     test('different url → not equal', () {
       // Only url differs — title and id are identical to isolate the url field.
       final a = BrowserHistoryEntity(
-          id: 'h', url: 'https://a.com', title: 'X', visitedAt: ts);
+        id: 'h',
+        url: 'https://a.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       final b = BrowserHistoryEntity(
-          id: 'h', url: 'https://b.com', title: 'X', visitedAt: ts);
+        id: 'h',
+        url: 'https://b.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       expect(a, isNot(equals(b)));
     });
 
     test('different id → not equal', () {
       final a = BrowserHistoryEntity(
-          id: 'h1', url: 'https://x.com', title: 'X', visitedAt: ts);
+        id: 'h1',
+        url: 'https://x.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       final b = BrowserHistoryEntity(
-          id: 'h2', url: 'https://x.com', title: 'X', visitedAt: ts);
+        id: 'h2',
+        url: 'https://x.com',
+        title: 'X',
+        visitedAt: ts,
+      );
       expect(a, isNot(equals(b)));
     });
   });
@@ -86,37 +117,66 @@ void main() {
 
     test('favicon defaults to null', () {
       final e = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(e.favicon, isNull);
     });
 
     test('folderId defaults to null', () {
       final e = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(e.folderId, isNull);
     });
 
     test('stores folderId when provided', () {
       final e = BookmarkEntity(
-        id: 'b', url: 'https://x.com', title: 'X',
-        folderId: 'folder1', createdAt: ts,
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        folderId: 'folder1',
+        createdAt: ts,
       );
       expect(e.folderId, 'folder1');
     });
 
     test('same fields → equal', () {
       final a = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       final b = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(a, equals(b));
     });
 
     test('different folderId → not equal', () {
       final a = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', folderId: 'f1', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        folderId: 'f1',
+        createdAt: ts,
+      );
       final b = BookmarkEntity(
-          id: 'b', url: 'https://x.com', title: 'X', folderId: 'f2', createdAt: ts);
+        id: 'b',
+        url: 'https://x.com',
+        title: 'X',
+        folderId: 'f2',
+        createdAt: ts,
+      );
       expect(a, isNot(equals(b)));
     });
   });
@@ -127,8 +187,7 @@ void main() {
 
   group('BookmarkFolderEntity', () {
     test('stores id, name, createdAt', () {
-      final e = BookmarkFolderEntity(
-        id: 'f1', name: 'Work', createdAt: ts);
+      final e = BookmarkFolderEntity(id: 'f1', name: 'Work', createdAt: ts);
       expect(e.id, 'f1');
       expect(e.name, 'Work');
       expect(e.createdAt, ts);
@@ -141,7 +200,11 @@ void main() {
 
     test('stores parentId when provided', () {
       final e = BookmarkFolderEntity(
-          id: 'f', name: 'N', parentId: 'parent1', createdAt: ts);
+        id: 'f',
+        name: 'N',
+        parentId: 'parent1',
+        createdAt: ts,
+      );
       expect(e.parentId, 'parent1');
     });
 
@@ -266,20 +329,32 @@ void main() {
 
     test('favicon defaults to null', () {
       final e = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(e.favicon, isNull);
     });
 
     test('isActive defaults to false', () {
       final e = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(e.isActive, isFalse);
     });
   });
 
   group('TabEntity.copyWith', () {
     final base = TabEntity(
-        id: 't1', url: 'https://x.com', title: 'X', createdAt: ts);
+      id: 't1',
+      url: 'https://x.com',
+      title: 'X',
+      createdAt: ts,
+    );
 
     test('replaces url', () {
       expect(base.copyWith(url: 'https://y.com').url, 'https://y.com');
@@ -302,27 +377,51 @@ void main() {
   group('TabEntity equality', () {
     test('same fields → equal', () {
       final a = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       final b = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(a, equals(b));
     });
 
     test('different isActive → not equal', () {
       final a = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X',
-          isActive: true, createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        isActive: true,
+        createdAt: ts,
+      );
       final b = TabEntity(
-          id: 't', url: 'https://x.com', title: 'X',
-          isActive: false, createdAt: ts);
+        id: 't',
+        url: 'https://x.com',
+        title: 'X',
+        isActive: false,
+        createdAt: ts,
+      );
       expect(a, isNot(equals(b)));
     });
 
     test('different id → not equal', () {
       final a = TabEntity(
-          id: 't1', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't1',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       final b = TabEntity(
-          id: 't2', url: 'https://x.com', title: 'X', createdAt: ts);
+        id: 't2',
+        url: 'https://x.com',
+        title: 'X',
+        createdAt: ts,
+      );
       expect(a, isNot(equals(b)));
     });
   });

@@ -18,15 +18,14 @@ void main() {
     String tokenId = '1',
     String chain = 'ethereum',
     String quantityString = '1',
-  }) =>
-      {
-        'nft_id': nftId,
-        'name': name,
-        'contract': {'address': contractAddress, 'type': contractType},
-        'token_id': tokenId,
-        'chain': chain,
-        'quantity_string': quantityString,
-      };
+  }) => {
+    'nft_id': nftId,
+    'name': name,
+    'contract': {'address': contractAddress, 'type': contractType},
+    'token_id': tokenId,
+    'chain': chain,
+    'quantity_string': quantityString,
+  };
 
   // ── NftModel.fromSimpleHash ───────────────────────────────────────────────
 
@@ -100,12 +99,15 @@ void main() {
         expect(m.name, 'Cool Collection');
       });
 
-      test('falls back to NFT #tokenId when both name and collection are absent', () {
-        final json = base(tokenId: '42');
-        json.remove('name');
-        final m = NftModel.fromSimpleHash(json);
-        expect(m.name, 'NFT #42');
-      });
+      test(
+        'falls back to NFT #tokenId when both name and collection are absent',
+        () {
+          final json = base(tokenId: '42');
+          json.remove('name');
+          final m = NftModel.fromSimpleHash(json);
+          expect(m.name, 'NFT #42');
+        },
+      );
     });
 
     group('image URL resolution', () {
@@ -141,26 +143,35 @@ void main() {
     });
 
     group('floor price', () {
-      test('parses floor price (numeric value) from collection.floor_prices', () {
-        final json = {
-          ...base(),
-          'collection': {
-            'floor_prices': [
-              {'value': 0.05, 'payment_token': {'symbol': 'ETH'}},
-            ],
-          },
-        };
-        final m = NftModel.fromSimpleHash(json);
-        expect(m.floorPrice, closeTo(0.05, 1e-9));
-        expect(m.floorPriceSymbol, 'ETH');
-      });
+      test(
+        'parses floor price (numeric value) from collection.floor_prices',
+        () {
+          final json = {
+            ...base(),
+            'collection': {
+              'floor_prices': [
+                {
+                  'value': 0.05,
+                  'payment_token': {'symbol': 'ETH'},
+                },
+              ],
+            },
+          };
+          final m = NftModel.fromSimpleHash(json);
+          expect(m.floorPrice, closeTo(0.05, 1e-9));
+          expect(m.floorPriceSymbol, 'ETH');
+        },
+      );
 
       test('parses floor price when value is a string', () {
         final json = {
           ...base(),
           'collection': {
             'floor_prices': [
-              {'value': '0.1', 'payment_token': {'symbol': 'SOL'}},
+              {
+                'value': '0.1',
+                'payment_token': {'symbol': 'SOL'},
+              },
             ],
           },
         };
@@ -170,7 +181,10 @@ void main() {
       });
 
       test('floorPrice is null when floor_prices list is empty', () {
-        final json = {...base(), 'collection': {'floor_prices': []}};
+        final json = {
+          ...base(),
+          'collection': {'floor_prices': []},
+        };
         expect(NftModel.fromSimpleHash(json).floorPrice, isNull);
       });
 
@@ -195,9 +209,14 @@ void main() {
 
     group('animationUrl', () {
       test('parses animation_url', () {
-        final json = {...base(), 'animation_url': 'https://cdn.example.com/video.mp4'};
-        expect(NftModel.fromSimpleHash(json).animationUrl,
-            'https://cdn.example.com/video.mp4');
+        final json = {
+          ...base(),
+          'animation_url': 'https://cdn.example.com/video.mp4',
+        };
+        expect(
+          NftModel.fromSimpleHash(json).animationUrl,
+          'https://cdn.example.com/video.mp4',
+        );
       });
 
       test('falls back to extra_metadata.animation_original_url', () {
@@ -207,8 +226,10 @@ void main() {
             'animation_original_url': 'https://cdn.example.com/orig.mp4',
           },
         };
-        expect(NftModel.fromSimpleHash(json).animationUrl,
-            'https://cdn.example.com/orig.mp4');
+        expect(
+          NftModel.fromSimpleHash(json).animationUrl,
+          'https://cdn.example.com/orig.mp4',
+        );
       });
 
       test('animation_url takes priority over extra_metadata fallback', () {
@@ -219,8 +240,10 @@ void main() {
             'animation_original_url': 'https://fallback.com/orig.mp4',
           },
         };
-        expect(NftModel.fromSimpleHash(json).animationUrl,
-            'https://primary.com/video.mp4');
+        expect(
+          NftModel.fromSimpleHash(json).animationUrl,
+          'https://primary.com/video.mp4',
+        );
       });
 
       test('animationUrl is null when absent', () {
@@ -257,7 +280,10 @@ void main() {
 
     group('collectionName', () {
       test('parses collection name', () {
-        final json = {...base(), 'collection': {'name': 'Bored Apes'}};
+        final json = {
+          ...base(),
+          'collection': {'name': 'Bored Apes'},
+        };
         expect(NftModel.fromSimpleHash(json).collectionName, 'Bored Apes');
       });
 
@@ -291,7 +317,10 @@ void main() {
     });
 
     test('returns false for ethereum chain', () {
-      expect(NftModel.fromSimpleHash(base(chain: 'ethereum')).isSolana, isFalse);
+      expect(
+        NftModel.fromSimpleHash(base(chain: 'ethereum')).isSolana,
+        isFalse,
+      );
     });
   });
 
@@ -311,59 +340,88 @@ void main() {
 
   group('NftModel.isErc1155', () {
     test('returns true for ERC1155', () {
-      expect(NftModel.fromSimpleHash(base(contractType: 'ERC1155')).isErc1155, isTrue);
+      expect(
+        NftModel.fromSimpleHash(base(contractType: 'ERC1155')).isErc1155,
+        isTrue,
+      );
     });
 
     test('returns false for ERC721', () {
-      expect(NftModel.fromSimpleHash(base(contractType: 'ERC721')).isErc1155, isFalse);
+      expect(
+        NftModel.fromSimpleHash(base(contractType: 'ERC721')).isErc1155,
+        isFalse,
+      );
     });
   });
 
   group('NftModel.hasVideo', () {
     NftModel withAnimation(String? url) => NftModel(
-          nftId: 'id',
-          name: 'Test',
-          contractAddress: '0x0',
-          tokenId: '1',
-          nftType: 'ERC721',
-          balance: 1,
-          chain: 'ethereum',
-          animationUrl: url,
-        );
+      nftId: 'id',
+      name: 'Test',
+      contractAddress: '0x0',
+      tokenId: '1',
+      nftType: 'ERC721',
+      balance: 1,
+      chain: 'ethereum',
+      animationUrl: url,
+    );
 
     test('returns true for .mp4', () {
-      expect(withAnimation('https://cdn.example.com/video.mp4').hasVideo, isTrue);
+      expect(
+        withAnimation('https://cdn.example.com/video.mp4').hasVideo,
+        isTrue,
+      );
     });
 
     test('returns true for .webm', () {
-      expect(withAnimation('https://cdn.example.com/clip.webm').hasVideo, isTrue);
+      expect(
+        withAnimation('https://cdn.example.com/clip.webm').hasVideo,
+        isTrue,
+      );
     });
 
     test('returns true for .mov', () {
-      expect(withAnimation('https://cdn.example.com/clip.mov').hasVideo, isTrue);
+      expect(
+        withAnimation('https://cdn.example.com/clip.mov').hasVideo,
+        isTrue,
+      );
     });
 
     test('returns true for .ogg', () {
-      expect(withAnimation('https://cdn.example.com/audio.ogg').hasVideo, isTrue);
+      expect(
+        withAnimation('https://cdn.example.com/audio.ogg').hasVideo,
+        isTrue,
+      );
     });
 
     test('returns true for uppercase extension (.MP4)', () {
-      expect(withAnimation('https://cdn.example.com/VIDEO.MP4').hasVideo, isTrue);
+      expect(
+        withAnimation('https://cdn.example.com/VIDEO.MP4').hasVideo,
+        isTrue,
+      );
     });
 
     test('returns true for URL with query params', () {
       expect(
-        withAnimation('https://cdn.example.com/video.mp4?v=1&token=abc').hasVideo,
+        withAnimation(
+          'https://cdn.example.com/video.mp4?v=1&token=abc',
+        ).hasVideo,
         isTrue,
       );
     });
 
     test('returns false for .jpg', () {
-      expect(withAnimation('https://cdn.example.com/image.jpg').hasVideo, isFalse);
+      expect(
+        withAnimation('https://cdn.example.com/image.jpg').hasVideo,
+        isFalse,
+      );
     });
 
     test('returns false for .gif', () {
-      expect(withAnimation('https://cdn.example.com/anim.gif').hasVideo, isFalse);
+      expect(
+        withAnimation('https://cdn.example.com/anim.gif').hasVideo,
+        isFalse,
+      );
     });
 
     test('returns false for null animationUrl', () {
@@ -374,26 +432,29 @@ void main() {
       expect(withAnimation('').hasVideo, isFalse);
     });
 
-    test('returns false when .mp4 appears in path component (not as extension)', () {
-      expect(
-        withAnimation('https://cdn.example.com/mp4/image.jpg').hasVideo,
-        isFalse,
-      );
-    });
+    test(
+      'returns false when .mp4 appears in path component (not as extension)',
+      () {
+        expect(
+          withAnimation('https://cdn.example.com/mp4/image.jpg').hasVideo,
+          isFalse,
+        );
+      },
+    );
   });
 
   group('NftModel.floorPriceDisplay', () {
     NftModel withFloor(double? price, [String? symbol]) => NftModel(
-          nftId: 'id',
-          name: 'Test',
-          contractAddress: '0x0',
-          tokenId: '1',
-          nftType: 'ERC721',
-          balance: 1,
-          chain: 'ethereum',
-          floorPrice: price,
-          floorPriceSymbol: symbol,
-        );
+      nftId: 'id',
+      name: 'Test',
+      contractAddress: '0x0',
+      tokenId: '1',
+      nftType: 'ERC721',
+      balance: 1,
+      chain: 'ethereum',
+      floorPrice: price,
+      floorPriceSymbol: symbol,
+    );
 
     test('returns null when floorPrice is null', () {
       expect(withFloor(null).floorPriceDisplay, isNull);

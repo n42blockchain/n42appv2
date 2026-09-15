@@ -119,10 +119,28 @@ void main() {
 
   group('InputModel.toMap', () {
     test('includes all expected keys', () {
-      final model = InputModel(value: 100, txid: 'txid', vout: 1, script: 'sc', witnessValue: 'wv', lockTime: 5);
+      final model = InputModel(
+        value: 100,
+        txid: 'txid',
+        vout: 1,
+        script: 'sc',
+        witnessValue: 'wv',
+        lockTime: 5,
+      );
       model.address.addAll(['addr1']);
       final map = model.toMap();
-      expect(map.keys, containsAll(['value', 'txid', 'vout', 'script', 'witnessValue', 'address', 'lockTime']));
+      expect(
+        map.keys,
+        containsAll([
+          'value',
+          'txid',
+          'vout',
+          'script',
+          'witnessValue',
+          'address',
+          'lockTime',
+        ]),
+      );
     });
 
     test('value is serialized as String', () {

@@ -34,23 +34,21 @@ class ToastUtils {
   static void show(String message) => _showToast(message);
 
   /// Show a success toast
-  static void showSuccess(String message) => _showToast(
-        message,
-        backgroundColor: Colors.green.withValues(alpha: 0.8),
-      );
+  static void showSuccess(String message) =>
+      _showToast(message, backgroundColor: Colors.green.withValues(alpha: 0.8));
 
   /// Show an error toast
   static void showError(String message) => _showToast(
-        message,
-        length: Toast.LENGTH_LONG,
-        backgroundColor: Colors.red.withValues(alpha: 0.8),
-      );
+    message,
+    length: Toast.LENGTH_LONG,
+    backgroundColor: Colors.red.withValues(alpha: 0.8),
+  );
 
   /// Show a warning toast
   static void showWarning(String message) => _showToast(
-        message,
-        backgroundColor: Colors.orange.withValues(alpha: 0.8),
-      );
+    message,
+    backgroundColor: Colors.orange.withValues(alpha: 0.8),
+  );
 
   // ========== Custom UI Toast ==========
 
@@ -63,11 +61,7 @@ class ToastUtils {
   }
 
   /// Show custom styled toast
-  static void showFtToast({
-    Widget? child,
-    String? title,
-    int duration = 2,
-  }) {
+  static void showFtToast({Widget? child, String? title, int duration = 2}) {
     _fToast?.showToast(
       child: child ?? _buildDefaultChild(title ?? ''),
       gravity: ToastGravity.CENTER,

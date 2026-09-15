@@ -302,10 +302,12 @@ class AATransferHandler extends BaseTransferHandler {
     // 拒、资金锁死在该智能账户(第三轮 P1)。
     String path = chainMap['path'] as String? ?? '';
     if (path.isEmpty) {
-      final ownerCm =
-          walletProvider.getCoinModelWithCoinType(params.chainSymbol);
+      final ownerCm = walletProvider.getCoinModelWithCoinType(
+        params.chainSymbol,
+      );
       if (ownerCm != null) {
-        final base = ownerCm.config.pathForAddrType(ownerCm.addrType) ??
+        final base =
+            ownerCm.config.pathForAddrType(ownerCm.addrType) ??
             "m/44'/60'/0'/0/0";
         path = getPathWithIndex(base, ownerCm.pathIndex);
       } else {

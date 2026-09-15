@@ -49,28 +49,31 @@ jobs:
           flutter test test/benchmark/startup_benchmark_test.dart \
             --reporter expanded \
             --no-pub
-        continue-on-error: true
 
       - name: Run Navigation Benchmark
         run: |
           flutter test test/benchmark/navigation_benchmark_test.dart \
             --reporter expanded \
             --no-pub
-        continue-on-error: true
 
       - name: Run Core Business Benchmark
         run: |
           flutter test test/benchmark/core_business_benchmark_test.dart \
             --reporter expanded \
             --no-pub
-        continue-on-error: true
 
       - name: Combine benchmark results
         run: |
-          echo '{"benchmarks": [' > benchmark_results/combined_results.json
-          find benchmark_results -name '*.json' ! -name 'combined_results.json' -exec cat {} \; | sed 's/}/},/g' | sed '$ s/,$//' >> benchmark_results/combined_results.json
-          echo ']}' >> benchmark_results/combined_results.json
-        continue-on-error: true
+          python3 - <<'PY_COMBINE'
+          import json
+          from pathlib import Path
+          root = Path('benchmark_results')
+          files = sorted(p for p in root.glob('*.json') if p.name != 'combined_results.json')
+          if not files:
+              raise SystemExit('No benchmark evidence produced')
+          data = {'benchmarks': [json.loads(p.read_text()) for p in files], 'device_performance_verified': False}
+          (root / 'combined_results.json').write_text(json.dumps(data, indent=2) + '\n')
+          PY_COMBINE
 
       - name: Upload benchmark results
         uses: actions/upload-artifact@v4
@@ -89,16 +92,16 @@ jobs:
           echo "### Startup Metrics" >> $GITHUB_STEP_SUMMARY
           echo "| Metric | Target | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Cold Start | < 3000ms | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| Warm Start | < 1000ms | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| First Frame | < 500ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Cold Start (synthetic/unverified on device) | < 3000ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
+          echo "| Warm Start (synthetic/unverified on device) | < 1000ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
+          echo "| First Frame (synthetic/unverified on device) | < 500ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Navigation Metrics" >> $GITHUB_STEP_SUMMARY
           echo "| Metric | Target | Status |" >> $GITHUB_STEP_SUMMARY
           echo "|--------|--------|--------|" >> $GITHUB_STEP_SUMMARY
-          echo "| Page Navigation | < 300ms | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| Tab Switch | < 50ms | ✅ |" >> $GITHUB_STEP_SUMMARY
-          echo "| Back Navigation | < 100ms | ✅ |" >> $GITHUB_STEP_SUMMARY
+          echo "| Page Navigation | < 300ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
+          echo "| Tab Switch | < 50ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
+          echo "| Back Navigation | < 100ms | Not measured on device |" >> $GITHUB_STEP_SUMMARY
 
       - name: Check performance thresholds
         run: |

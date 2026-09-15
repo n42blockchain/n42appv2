@@ -78,9 +78,7 @@ class _CreateTwoState extends State<CreateTwo> with _CreateTwoWidgetsMixin {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,

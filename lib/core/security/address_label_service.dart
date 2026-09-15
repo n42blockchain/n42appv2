@@ -12,7 +12,9 @@ class AddressLabelService {
   static Future<void> init() async {
     if (_labels != null) return;
     try {
-      final jsonStr = await rootBundle.loadString('assets/data/known_addresses.json');
+      final jsonStr = await rootBundle.loadString(
+        'assets/data/known_addresses.json',
+      );
       final List<dynamic> list = jsonDecode(jsonStr);
       _labels = {
         for (final item in list)

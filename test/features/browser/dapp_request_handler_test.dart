@@ -28,10 +28,7 @@ CoinModel makeEthModel({
   String address = kWalletAddress,
 }) {
   final cm = CoinModel();
-  cm.coin = {
-    'chainId': chainId,
-    'chainId_test': ?chainIdTest,
-  };
+  cm.coin = {'chainId': chainId, 'chainId_test': ?chainIdTest};
   cm.isTest = isTest;
   cm.address = address;
   return cm;
@@ -46,9 +43,7 @@ void main() {
     late DAppRequestHandler handler;
 
     setUp(() {
-      handler = DAppRequestHandler(
-        ethCoinModels: [makeEthModel(chainId: 1)],
-      );
+      handler = DAppRequestHandler(ethCoinModels: [makeEthModel(chainId: 1)]);
     });
 
     test('eth_accounts 返回当前钱包地址列表', () async {
@@ -119,24 +114,18 @@ void main() {
 
     test('命中已知链后 selectedChainIndex 与 chainIdHex 变化，返回 null', () async {
       expect(handler.selectedChainIndex, 0);
-      final result = await handler.handleRequest(
-        'wallet_switchEthereumChain',
-        [
-          {'chainId': '0x89'}, // 137
-        ],
-      );
+      final result = await handler.handleRequest('wallet_switchEthereumChain', [
+        {'chainId': '0x89'}, // 137
+      ]);
       expect(result, isNull); // EIP-3326：成功返回 null
       expect(handler.selectedChainIndex, 1);
       expect(handler.chainIdHex, '0x89');
     });
 
     test('isTest=true 的链按 chainId_test 匹配（Sepolia 0xaa36a7）', () async {
-      await handler.handleRequest(
-        'wallet_switchEthereumChain',
-        [
-          {'chainId': '0xaa36a7'}, // 11155111
-        ],
-      );
+      await handler.handleRequest('wallet_switchEthereumChain', [
+        {'chainId': '0xaa36a7'}, // 11155111
+      ]);
       expect(handler.selectedChainIndex, 2);
       expect(handler.chainIdHex, '0xaa36a7');
     });
@@ -150,12 +139,9 @@ void main() {
         ],
       );
       expect(
-        () => testOnly.handleRequest(
-          'wallet_switchEthereumChain',
-          [
-            {'chainId': '0x1'},
-          ],
-        ),
+        () => testOnly.handleRequest('wallet_switchEthereumChain', [
+          {'chainId': '0x1'},
+        ]),
         throwsRpcError(4902),
       );
     });
@@ -169,36 +155,27 @@ void main() {
 
     test('chainId 非 String（数字）抛 -32602', () {
       expect(
-        () => handler.handleRequest(
-          'wallet_switchEthereumChain',
-          [
-            {'chainId': 137},
-          ],
-        ),
+        () => handler.handleRequest('wallet_switchEthereumChain', [
+          {'chainId': 137},
+        ]),
         throwsRpcError(-32602),
       );
     });
 
     test('chainId 非法 hex 抛 -32602', () {
       expect(
-        () => handler.handleRequest(
-          'wallet_switchEthereumChain',
-          [
-            {'chainId': '0xzz'},
-          ],
-        ),
+        () => handler.handleRequest('wallet_switchEthereumChain', [
+          {'chainId': '0xzz'},
+        ]),
         throwsRpcError(-32602),
       );
     });
 
     test('未知链抛 4902，selectedChainIndex 不变', () async {
       expect(
-        () => handler.handleRequest(
-          'wallet_switchEthereumChain',
-          [
-            {'chainId': '0x2710'}, // 10000，不在列表
-          ],
-        ),
+        () => handler.handleRequest('wallet_switchEthereumChain', [
+          {'chainId': '0x2710'}, // 10000，不在列表
+        ]),
         throwsRpcError(4902),
       );
       expect(handler.selectedChainIndex, 0);
@@ -206,12 +183,9 @@ void main() {
 
     test('大写前缀 0X89 与 0x89 等效（EIP-1193 hex quantity 大小写不敏感）', () async {
       // 修复后：剥前缀大小写不敏感，'0X89' 与 '0x89' 都解析为 137
-      final result = await handler.handleRequest(
-        'wallet_switchEthereumChain',
-        [
-          {'chainId': '0X89'},
-        ],
-      );
+      final result = await handler.handleRequest('wallet_switchEthereumChain', [
+        {'chainId': '0X89'},
+      ]);
       expect(result, isNull); // EIP-3326：成功返回 null
       expect(handler.selectedChainIndex, 1);
       expect(handler.chainIdHex, '0x89');
@@ -225,22 +199,16 @@ void main() {
     });
 
     test('wallet_addEthereumChain 已知链等价于切换，未知链抛 4902', () async {
-      final result = await handler.handleRequest(
-        'wallet_addEthereumChain',
-        [
-          {'chainId': '0x89'},
-        ],
-      );
+      final result = await handler.handleRequest('wallet_addEthereumChain', [
+        {'chainId': '0x89'},
+      ]);
       expect(result, isNull);
       expect(handler.selectedChainIndex, 1);
 
       expect(
-        () => handler.handleRequest(
-          'wallet_addEthereumChain',
-          [
-            {'chainId': '0xdeadbeef'},
-          ],
-        ),
+        () => handler.handleRequest('wallet_addEthereumChain', [
+          {'chainId': '0xdeadbeef'},
+        ]),
         throwsRpcError(4902),
       );
     });
@@ -316,10 +284,10 @@ void main() {
 
     test('personal_sign 地址不匹配', () async {
       await expectLater(
-        () => handler.handleRequest(
-          'personal_sign',
-          ['0xdeadbeef', kOtherAddress],
-        ),
+        () => handler.handleRequest('personal_sign', [
+          '0xdeadbeef',
+          kOtherAddress,
+        ]),
         throwsRpcError(-32602),
       );
       expect(approvalCallCount, 0);
@@ -327,10 +295,10 @@ void main() {
 
     test('eth_signTypedData_v4 地址不匹配', () async {
       await expectLater(
-        () => handler.handleRequest(
-          'eth_signTypedData_v4',
-          [kOtherAddress, '{"types":{}}'],
-        ),
+        () => handler.handleRequest('eth_signTypedData_v4', [
+          kOtherAddress,
+          '{"types":{}}',
+        ]),
         throwsRpcError(-32602),
       );
       expect(approvalCallCount, 0);
@@ -338,12 +306,9 @@ void main() {
 
     test('eth_sendTransaction from 不匹配', () async {
       await expectLater(
-        () => handler.handleRequest(
-          'eth_sendTransaction',
-          [
-            <String, dynamic>{'from': kOtherAddress, 'to': kWalletAddress},
-          ],
-        ),
+        () => handler.handleRequest('eth_sendTransaction', [
+          <String, dynamic>{'from': kOtherAddress, 'to': kWalletAddress},
+        ]),
         throwsRpcError(-32602),
       );
       expect(approvalCallCount, 0);
@@ -351,12 +316,9 @@ void main() {
 
     test('eth_signTransaction from 不匹配', () async {
       await expectLater(
-        () => handler.handleRequest(
-          'eth_signTransaction',
-          [
-            <String, dynamic>{'from': kOtherAddress},
-          ],
-        ),
+        () => handler.handleRequest('eth_signTransaction', [
+          <String, dynamic>{'from': kOtherAddress},
+        ]),
         throwsRpcError(-32602),
       );
       expect(approvalCallCount, 0);
@@ -424,10 +386,10 @@ void main() {
             return false; // 用户点了拒绝
           };
       await expectLater(
-        () => handler.handleRequest(
-          'personal_sign',
-          ['0xdeadbeef', kWalletAddress],
-        ),
+        () => handler.handleRequest('personal_sign', [
+          '0xdeadbeef',
+          kWalletAddress,
+        ]),
         throwsRpcError(4001),
       );
       expect(callCount, 1);
@@ -448,10 +410,10 @@ void main() {
             return false;
           };
       await expectLater(
-        () => handler.handleRequest(
-          'personal_sign',
-          ['0xdeadbeef', kWalletAddress],
-        ),
+        () => handler.handleRequest('personal_sign', [
+          '0xdeadbeef',
+          kWalletAddress,
+        ]),
         throwsRpcError(4001),
       );
       expect(seenOrigin, 'https://app.uniswap.org');

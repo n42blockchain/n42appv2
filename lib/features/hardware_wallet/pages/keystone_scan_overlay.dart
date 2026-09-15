@@ -126,7 +126,9 @@ class _KeystoneInfoCard extends StatelessWidget {
           Expanded(
             child: Text(
               message,
-              style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.caption.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
         ],

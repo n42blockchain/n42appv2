@@ -38,31 +38,19 @@ Map<String, dynamic> parseEthTxParams(Map<String, dynamic> trMap) {
 /// Mirrors eth_signTypedData / eth_signTypedData_v3 / eth_signTypedData_v4
 /// branch (lines 117–130): params[0]=address, params[1]=typedData.
 Map<String, dynamic> parseEthSignTypedData(List<String> params) {
-  return {
-    'from': params[0],
-    'data': params[1],
-    'signType': 'message',
-  };
+  return {'from': params[0], 'data': params[1], 'signType': 'message'};
 }
 
 /// Mirrors eth_sign branch (lines 104–116):
 /// params[0]=address, params[1]=data — OPPOSITE of personal_sign.
 Map<String, dynamic> parseEthSign(List<String> params) {
-  return {
-    'from': params[0],
-    'data': params[1],
-    'signType': 'message',
-  };
+  return {'from': params[0], 'data': params[1], 'signType': 'message'};
 }
 
 /// Mirrors personal_sign branch (lines 87–103):
 /// params[0]=data, params[1]=address.
 Map<String, dynamic> parsePersonalSign(List<String> params) {
-  return {
-    'from': params[1],
-    'data': params[0],
-    'signType': 'message',
-  };
+  return {'from': params[1], 'data': params[0], 'signType': 'message'};
 }
 
 // ---------------------------------------------------------------------------
@@ -83,8 +71,12 @@ void main() {
     });
 
     test('gas decoded from hex to decimal string', () {
-      final result = parseEthTxParams(
-          {'from': '0x', 'to': '0x', 'data': '0x', 'gas': '0x5208'});
+      final result = parseEthTxParams({
+        'from': '0x',
+        'to': '0x',
+        'data': '0x',
+        'gas': '0x5208',
+      });
       // 0x5208 = 21000 (standard ETH transfer gas)
       expect(result['gas'], '21000');
     });
@@ -105,7 +97,11 @@ void main() {
     });
 
     test('missing to defaults to "0x"', () {
-      final result = parseEthTxParams({'gas': '0x0', 'from': '0x', 'data': '0x'});
+      final result = parseEthTxParams({
+        'gas': '0x0',
+        'from': '0x',
+        'data': '0x',
+      });
       expect(result['to'], '0x');
     });
 
@@ -174,24 +170,27 @@ void main() {
       expect(result['data'], '0xDataFirst');
     });
 
-    test('same raw params produce different from/data for eth_sign vs personal_sign', () {
-      final rawParams = ['0xParamA', '0xParamB'];
+    test(
+      'same raw params produce different from/data for eth_sign vs personal_sign',
+      () {
+        final rawParams = ['0xParamA', '0xParamB'];
 
-      final ethSign = parseEthSign(rawParams);
-      final personalSign = parsePersonalSign(rawParams);
+        final ethSign = parseEthSign(rawParams);
+        final personalSign = parsePersonalSign(rawParams);
 
-      // eth_sign: address at index 0
-      expect(ethSign['from'], '0xParamA');
-      expect(ethSign['data'], '0xParamB');
+        // eth_sign: address at index 0
+        expect(ethSign['from'], '0xParamA');
+        expect(ethSign['data'], '0xParamB');
 
-      // personal_sign: address at index 1
-      expect(personalSign['from'], '0xParamB');
-      expect(personalSign['data'], '0xParamA');
+        // personal_sign: address at index 1
+        expect(personalSign['from'], '0xParamB');
+        expect(personalSign['data'], '0xParamA');
 
-      // They must differ
-      expect(ethSign['from'], isNot(personalSign['from']));
-      expect(ethSign['data'], isNot(personalSign['data']));
-    });
+        // They must differ
+        expect(ethSign['from'], isNot(personalSign['from']));
+        expect(ethSign['data'], isNot(personalSign['data']));
+      },
+    );
 
     test('both eth_sign and personal_sign produce signType=message', () {
       expect(parseEthSign(['a', 'b'])['signType'], 'message');

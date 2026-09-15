@@ -20,31 +20,19 @@ void main() {
     });
 
     test('returns true for m.call.invite', () {
-      expect(
-        isChatPushPayload({'type': 'm.call.invite'}),
-        isTrue,
-      );
+      expect(isChatPushPayload({'type': 'm.call.invite'}), isTrue);
     });
 
     test('returns true for m.call.answer', () {
-      expect(
-        isChatPushPayload({'type': 'm.call.answer'}),
-        isTrue,
-      );
+      expect(isChatPushPayload({'type': 'm.call.answer'}), isTrue);
     });
 
     test('returns true for m.call.hangup', () {
-      expect(
-        isChatPushPayload({'type': 'm.call.hangup'}),
-        isTrue,
-      );
+      expect(isChatPushPayload({'type': 'm.call.hangup'}), isTrue);
     });
 
     test('returns true for m.call.candidates', () {
-      expect(
-        isChatPushPayload({'type': 'm.call.candidates'}),
-        isTrue,
-      );
+      expect(isChatPushPayload({'type': 'm.call.candidates'}), isTrue);
     });
 
     test('returns false for transaction notification', () {
@@ -59,10 +47,7 @@ void main() {
 
     test('returns false for device_login', () {
       expect(
-        isChatPushPayload({
-          'type': 'device_login',
-          'device_id': 'abc',
-        }),
+        isChatPushPayload({'type': 'device_login', 'device_id': 'abc'}),
         isFalse,
       );
     });
@@ -83,7 +68,12 @@ void main() {
       // FCM payload arrives as Map<String, dynamic>; this catches the case
       // where backend mistakenly puts an int / map in the room_id slot.
       expect(isChatPushPayload({'room_id': 123}), isFalse);
-      expect(isChatPushPayload({'room_id': {'inner': 'val'}}), isFalse);
+      expect(
+        isChatPushPayload({
+          'room_id': {'inner': 'val'},
+        }),
+        isFalse,
+      );
     });
 
     test('returns false when type is null', () {
@@ -94,9 +84,12 @@ void main() {
       expect(isChatPushPayload({'type': 42}), isFalse);
     });
 
-    test('returns false for "mcall." typo (must start with literal "m.call.")', () {
-      expect(isChatPushPayload({'type': 'mcall.invite'}), isFalse);
-    });
+    test(
+      'returns false for "mcall." typo (must start with literal "m.call.")',
+      () {
+        expect(isChatPushPayload({'type': 'mcall.invite'}), isFalse);
+      },
+    );
 
     test('returns false for case-mismatched prefix', () {
       // Matrix spec uses lowercase; we want strict matching to avoid
@@ -160,10 +153,7 @@ void main() {
       // whether to defer to CallKit (call) vs queue for conversation
       // open (regular message).
       expect(
-        isMatrixCallPayload({
-          'room_id': '!room:srv',
-          'type': 'm.room.message',
-        }),
+        isMatrixCallPayload({'room_id': '!room:srv', 'type': 'm.room.message'}),
         isFalse,
       );
     });

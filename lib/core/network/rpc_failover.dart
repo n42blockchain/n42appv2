@@ -22,26 +22,11 @@ class RpcFailover {
       'https://bsc-dataseed2.binance.org/',
       'https://bsc-rpc.publicnode.com',
     ],
-    'POLYGON': [
-      RpcConfig.polygonMainnetRpc,
-      'https://polygon.llamarpc.com',
-    ],
-    'ARB': [
-      RpcConfig.arbitrumMainnetRpc,
-      'https://arb1.arbitrum.io/rpc',
-    ],
-    'OP': [
-      RpcConfig.optimismMainnetRpc,
-      'https://optimism.llamarpc.com',
-    ],
-    'BASE': [
-      RpcConfig.baseMainnetRpc,
-      'https://base.llamarpc.com',
-    ],
-    'SOL': [
-      RpcConfig.solanaMainnetRpc,
-      'https://solana-rpc.publicnode.com',
-    ],
+    'POLYGON': [RpcConfig.polygonMainnetRpc, 'https://polygon.llamarpc.com'],
+    'ARB': [RpcConfig.arbitrumMainnetRpc, 'https://arb1.arbitrum.io/rpc'],
+    'OP': [RpcConfig.optimismMainnetRpc, 'https://optimism.llamarpc.com'],
+    'BASE': [RpcConfig.baseMainnetRpc, 'https://base.llamarpc.com'],
+    'SOL': [RpcConfig.solanaMainnetRpc, 'https://solana-rpc.publicnode.com'],
   };
 
   /// 获取当前活跃的 RPC 端点

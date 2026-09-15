@@ -21,10 +21,22 @@ class WalletAssistantEngine {
   static const List<String> _gasKw = ['gas', '手续费', '矿工费', 'gwei', '燃料'];
   static const List<String> _balanceKw = ['余额', 'balance', '有多少', '剩多少'];
   static const List<String> _portfolioKw = [
-    '持仓', '资产', 'portfolio', '总值', '总资产', '净值', 'holdings', 'assets',
+    '持仓',
+    '资产',
+    'portfolio',
+    '总值',
+    '总资产',
+    '净值',
+    'holdings',
+    'assets',
   ];
   static const List<String> _helpKw = [
-    '帮助', 'help', '能做什么', '怎么用', '功能', 'what can you'
+    '帮助',
+    'help',
+    '能做什么',
+    '怎么用',
+    '功能',
+    'what can you',
   ];
 
   /// 纯意图分类（小写匹配关键词；先 Gas 后余额，避免「余额」误吞）。
@@ -59,8 +71,13 @@ class WalletAssistantEngine {
   // ── 确定性回答（可单测）──
 
   String balanceAnswer(WalletSnapshot s) {
-    if (s.assets.isEmpty) return 'No assets found on ${s.chainName ?? 'this wallet'}.';
-    final top = s.assets.take(5).map((a) => '${a.balance} ${a.symbol}').join('\n');
+    if (s.assets.isEmpty) {
+      return 'No assets found on ${s.chainName ?? 'this wallet'}.';
+    }
+    final top = s.assets
+        .take(5)
+        .map((a) => '${a.balance} ${a.symbol}')
+        .join('\n');
     return 'Your balances:\n$top';
   }
 
@@ -69,7 +86,10 @@ class WalletAssistantEngine {
     if (s.assets.isEmpty) return 'Total value: $total (no assets).';
     final lines = s.assets
         .take(5)
-        .map((a) => '${a.symbol}: ${a.balance} (\$${a.usdValue.toStringAsFixed(2)})')
+        .map(
+          (a) =>
+              '${a.symbol}: ${a.balance} (\$${a.usdValue.toStringAsFixed(2)})',
+        )
         .join('\n');
     return 'Total value: $total\n$lines';
   }
@@ -80,8 +100,8 @@ class WalletAssistantEngine {
     final hint = g <= 15
         ? 'Low — a good time to transact.'
         : g <= 40
-            ? 'Moderate.'
-            : 'High — consider waiting.';
+        ? 'Moderate.'
+        : 'High — consider waiting.';
     return 'Current gas: ${g.toStringAsFixed(1)} gwei. $hint';
   }
 
@@ -100,7 +120,9 @@ class WalletAssistantEngine {
   String systemPrompt(WalletSnapshot s) {
     final assets = s.assets
         .take(10)
-        .map((a) => '${a.symbol}=${a.balance}(\$${a.usdValue.toStringAsFixed(2)})')
+        .map(
+          (a) => '${a.symbol}=${a.balance}(\$${a.usdValue.toStringAsFixed(2)})',
+        )
         .join(', ');
     return 'You are a read-only crypto wallet assistant. '
         'Context: chain=${s.chainName ?? 'unknown'}, totalUsd=${s.totalUsd.toStringAsFixed(2)}, '

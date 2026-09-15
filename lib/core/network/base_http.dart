@@ -93,10 +93,10 @@ class BaseHttp {
   // ---------------------------------------------------------------------------
 
   String get _contentTypeString => switch (headerType) {
-        0 => 'application/json',
-        1 => 'multipart/form-data',
-        _ => 'application/x-www-form-urlencoded',
-      };
+    0 => 'application/json',
+    1 => 'multipart/form-data',
+    _ => 'application/x-www-form-urlencoded',
+  };
 
   static const String _contentTypeKey = 'content-type';
 
@@ -124,7 +124,10 @@ class BaseHttp {
     if (params.isNotEmpty) {
       params.forEach((key, value) {
         if (path.contains(':$key')) {
-          path = path.replaceAll(':$key', Uri.encodeComponent(value.toString()));
+          path = path.replaceAll(
+            ':$key',
+            Uri.encodeComponent(value.toString()),
+          );
           consumedKeys.add(key);
         }
       });
@@ -141,9 +144,7 @@ class BaseHttp {
         connectTimeout: timeout,
         sendTimeout: timeout,
         receiveTimeout: timeout,
-        headers: ProxyConfig.mergeAuthHeaders(
-          '${_options.baseUrl}$path',
-          {
+        headers: ProxyConfig.mergeAuthHeaders('${_options.baseUrl}$path', {
           if (header != null)
             ...header.map((key, value) => MapEntry(key, value.toString())),
           ...?userInfo,
@@ -203,8 +204,7 @@ class BaseHttp {
       DioExceptionType.connectionTimeout ||
       DioExceptionType.receiveTimeout ||
       DioExceptionType.sendTimeout ||
-      DioExceptionType.connectionError =>
-        S.current.g_key_error_4,
+      DioExceptionType.connectionError => S.current.g_key_error_4,
       DioExceptionType.badCertificate => S.current.g_key_error_27,
       DioExceptionType.badResponse => _handleBadResponse(error.response),
       DioExceptionType.cancel => S.current.g_key_error_8,
@@ -230,20 +230,20 @@ class BaseHttp {
 
   /// Handle HTTP error codes
   String _handleHttpError(int? errorCode) => switch (errorCode) {
-        400 => S.current.g_key_error_11,
-        401 => S.current.g_key_error_12,
-        403 => S.current.g_key_error_13,
-        404 => S.current.g_key_error_14,
-        408 => S.current.g_key_error_15,
-        429 => S.current.g_key_error_23,
-        500 => S.current.g_key_error_16,
-        501 => S.current.g_key_error_17,
-        502 => S.current.g_key_error_18,
-        503 => S.current.g_key_error_19,
-        504 => S.current.g_key_error_20,
-        505 => S.current.g_key_error_21,
-        _ => '${S.current.g_key_error_22}$errorCode',
-      };
+    400 => S.current.g_key_error_11,
+    401 => S.current.g_key_error_12,
+    403 => S.current.g_key_error_13,
+    404 => S.current.g_key_error_14,
+    408 => S.current.g_key_error_15,
+    429 => S.current.g_key_error_23,
+    500 => S.current.g_key_error_16,
+    501 => S.current.g_key_error_17,
+    502 => S.current.g_key_error_18,
+    503 => S.current.g_key_error_19,
+    504 => S.current.g_key_error_20,
+    505 => S.current.g_key_error_21,
+    _ => '${S.current.g_key_error_22}$errorCode',
+  };
 
   // ---------------------------------------------------------------------------
   // Public HTTP methods
@@ -356,10 +356,6 @@ class BaseHttp {
     if (uuid == null || uuid.isEmpty || token == null || token.isEmpty) {
       return null;
     }
-    return {
-      'Source': 'app',
-      'Uuid': uuid,
-      'Token': token,
-    };
+    return {'Source': 'app', 'Uuid': uuid, 'Token': token};
   }
 }

@@ -25,7 +25,10 @@ class TxSimulationResult {
       const TxSimulationResult._(status: TxSimStatus.simulating);
 
   factory TxSimulationResult.success({BigInt? gasEstimate}) =>
-      TxSimulationResult._(status: TxSimStatus.success, gasEstimate: gasEstimate);
+      TxSimulationResult._(
+        status: TxSimStatus.success,
+        gasEstimate: gasEstimate,
+      );
 
   factory TxSimulationResult.reverted(String? reason) =>
       TxSimulationResult._(status: TxSimStatus.reverted, revertReason: reason);

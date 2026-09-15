@@ -59,7 +59,9 @@ class _EmptyViewState extends State<EmptyView> {
           SizedBox(height: AppSpacing.space8),
           Text(
             widget.title ?? S.of(context).g_key_132,
-            style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.titleLg.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
         ],
       ),

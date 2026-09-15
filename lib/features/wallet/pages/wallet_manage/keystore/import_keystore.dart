@@ -65,9 +65,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
           children: [
             Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -108,9 +106,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                       context,
                       height: ScreenUtil().setWidth(440),
                       padding: EdgeInsets.all(AppSpacing.space4),
-                      margin: EdgeInsets.symmetric(
-                        vertical: AppSpacing.space4,
-                      ),
+                      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                       child: CommInput(
                         type: InputFieldType.account,
                         hintText: S.of(context).g_key_ex_keystore_17,
@@ -134,9 +130,7 @@ class _ImportKeystoreState extends ConsumerState<ImportKeystore> {
                       padding: EdgeInsets.symmetric(
                         horizontal: AppSpacing.space4,
                       ),
-                      margin: EdgeInsets.symmetric(
-                        vertical: AppSpacing.space4,
-                      ),
+                      margin: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                       child: CommInput(
                         type: InputFieldType.password,
                         hintText: S.of(context).g_key_21,

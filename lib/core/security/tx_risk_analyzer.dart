@@ -21,23 +21,33 @@ class TxRiskAnalyzer {
   // ERC-20
   static const String _selTransfer = '0xa9059cbb'; // transfer(address,uint256)
   static const String _selApprove = '0x095ea7b3'; // approve(address,uint256)
-  static const String _selTransferFrom = '0x23b872dd'; // transferFrom(address,address,uint256)
-  static const String _selIncAllowance = '0xb0431182'; // increaseAllowance(address,uint256)
-  static const String _selPermit = '0xd505accf'; // permit(address,address,uint256,uint256,uint8,bytes32,bytes32)
+  static const String _selTransferFrom =
+      '0x23b872dd'; // transferFrom(address,address,uint256)
+  static const String _selIncAllowance =
+      '0xb0431182'; // increaseAllowance(address,uint256)
+  static const String _selPermit =
+      '0xd505accf'; // permit(address,address,uint256,uint256,uint8,bytes32,bytes32)
 
   // ERC-721 / ERC-1155
-  static const String _selApprovalForAll = '0xa22cb465'; // setApprovalForAll(address,bool)
-  static const String _selSafeTransferFrom3 = '0x42842e0e'; // safeTransferFrom(address,address,uint256)
-  static const String _selSafeTransferFrom4 = '0xb88d4fde'; // safeTransferFrom(address,address,uint256,bytes)
-  static const String _selSafeBatchTransfer = '0x2eb2c2d6'; // safeBatchTransferFrom
+  static const String _selApprovalForAll =
+      '0xa22cb465'; // setApprovalForAll(address,bool)
+  static const String _selSafeTransferFrom3 =
+      '0x42842e0e'; // safeTransferFrom(address,address,uint256)
+  static const String _selSafeTransferFrom4 =
+      '0xb88d4fde'; // safeTransferFrom(address,address,uint256,bytes)
+  static const String _selSafeBatchTransfer =
+      '0x2eb2c2d6'; // safeBatchTransferFrom
 
   // Ownable
-  static const String _selTransferOwnership = '0xf2fde38b'; // transferOwnership(address)
-  static const String _selRenounceOwnership = '0x715018a6'; // renounceOwnership()
+  static const String _selTransferOwnership =
+      '0xf2fde38b'; // transferOwnership(address)
+  static const String _selRenounceOwnership =
+      '0x715018a6'; // renounceOwnership()
 
   // Multicall / batch
   static const String _selMulticall1 = '0xac9650d8'; // multicall(bytes[])
-  static const String _selMulticall2 = '0x5ae401dc'; // multicall(uint256,bytes[]) — Uniswap V3
+  static const String _selMulticall2 =
+      '0x5ae401dc'; // multicall(uint256,bytes[]) — Uniswap V3
 
   // Uniswap V2 swaps
   static const String _selSwapExactETHForTokens = '0x7ff36ab5';
@@ -132,11 +142,13 @@ class TxRiskAnalyzer {
       if (spender.isNotEmpty) {
         fields.add(TxRiskField('Spender', txRiskFormatAddress(spender)));
       }
-      fields.add(TxRiskField(
-        'Amount',
-        isUnlimited ? 'Unlimited ∞' : value?.toString() ?? '?',
-        isHighlighted: isUnlimited,
-      ));
+      fields.add(
+        TxRiskField(
+          'Amount',
+          isUnlimited ? 'Unlimited ∞' : value?.toString() ?? '?',
+          isHighlighted: isUnlimited,
+        ),
+      );
       if (deadline != null) {
         fields.add(TxRiskField('Deadline', txRiskFormatDeadline(deadline)));
       }
@@ -200,7 +212,9 @@ class TxRiskAnalyzer {
         return const TxRiskAnalysis(
           level: TxRiskLevel.danger,
           functionName: 'Renounce Ownership',
-          warnings: ['Ownership will be permanently renounced. This cannot be undone.'],
+          warnings: [
+            'Ownership will be permanently renounced. This cannot be undone.',
+          ],
         );
 
       // ── Multicall / batch ─────────────────────────────────────────────────
@@ -209,7 +223,9 @@ class TxRiskAnalyzer {
         return const TxRiskAnalysis(
           level: TxRiskLevel.caution,
           functionName: 'Batch Transaction (Multicall)',
-          warnings: ['Multiple operations are bundled. Review each action carefully.'],
+          warnings: [
+            'Multiple operations are bundled. Review each action carefully.',
+          ],
         );
 
       // ── Uniswap-style DEX swaps ───────────────────────────────────────────

@@ -14,7 +14,9 @@ void main() {
         expect(isValid, true);
 
         final invalidAddress = '0x123';
-        final isInvalid = RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(invalidAddress);
+        final isInvalid = RegExp(
+          r'^0x[a-fA-F0-9]{40}$',
+        ).hasMatch(invalidAddress);
         expect(isInvalid, false);
       });
     });
@@ -37,7 +39,8 @@ void main() {
 
       test('should detect native token correctly', () {
         const nativeAddress = '0x0000000000000000000000000000000000000000';
-        final isNative = nativeAddress == '0x0000000000000000000000000000000000000000';
+        final isNative =
+            nativeAddress == '0x0000000000000000000000000000000000000000';
         expect(isNative, true);
       });
     });
@@ -90,7 +93,8 @@ void main() {
         const multicallPerCallGas = 15000;
 
         final individualTotal = singleTransferGas * numTransfers;
-        final multicallTotal = multicallBaseGas + (multicallPerCallGas * numTransfers);
+        final multicallTotal =
+            multicallBaseGas + (multicallPerCallGas * numTransfers);
 
         final savings = individualTotal - multicallTotal;
         expect(savings, 30000);
@@ -100,7 +104,10 @@ void main() {
     group('Multicall3 Tests', () {
       test('Multicall3 address should be consistent', () {
         const multicall3Address = '0xcA11bde05977b3631167028862bE2a173976CA11';
-        expect(multicall3Address.toLowerCase(), '0xca11bde05977b3631167028862be2a173976ca11');
+        expect(
+          multicall3Address.toLowerCase(),
+          '0xca11bde05977b3631167028862be2a173976ca11',
+        );
       });
     });
   });

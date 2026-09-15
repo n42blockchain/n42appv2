@@ -66,9 +66,7 @@ class _MiningPlansV2State extends State<MiningPlansV2> {
           children: [
             Positioned.fill(
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Column(
                   children: [
                     MiningBoardWidget(nNum: 32, cReward: cReward),

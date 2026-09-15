@@ -82,10 +82,7 @@ Widget wrapForTest(
 }
 
 /// 便捷方法：仅包装 Material
-Widget wrapWithMaterial(
-  Widget child, {
-  ThemeMode themeMode = ThemeMode.light,
-}) {
+Widget wrapWithMaterial(Widget child, {ThemeMode themeMode = ThemeMode.light}) {
   return MaterialApp(
     themeMode: themeMode,
     theme: ThemeData.light(),
@@ -95,15 +92,10 @@ Widget wrapWithMaterial(
 }
 
 /// 便捷方法：包装 Riverpod
-Widget wrapWithRiverpod(
-  Widget child, {
-  List<Override>? overrides,
-}) {
+Widget wrapWithRiverpod(Widget child, {List<Override>? overrides}) {
   return ProviderScope(
     overrides: overrides ?? [],
-    child: MaterialApp(
-      home: Scaffold(body: child),
-    ),
+    child: MaterialApp(home: Scaffold(body: child)),
   );
 }
 
@@ -138,10 +130,7 @@ class ThemeTestHelper {
     Widget widget,
     Future<void> Function() assertions,
   ) async {
-    await tester.pumpWidget(wrapForTest(
-      widget,
-      themeMode: ThemeMode.light,
-    ));
+    await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.light));
     await tester.pumpAndSettle();
     await assertions();
   }
@@ -152,10 +141,7 @@ class ThemeTestHelper {
     Widget widget,
     Future<void> Function() assertions,
   ) async {
-    await tester.pumpWidget(wrapForTest(
-      widget,
-      themeMode: ThemeMode.dark,
-    ));
+    await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.dark));
     await tester.pumpAndSettle();
     await assertions();
   }
@@ -199,10 +185,7 @@ class GoldenTestHelper {
 /// 交互测试辅助
 class InteractionTestHelper {
   /// 点击并等待
-  static Future<void> tapAndSettle(
-    WidgetTester tester,
-    Finder finder,
-  ) async {
+  static Future<void> tapAndSettle(WidgetTester tester, Finder finder) async {
     await tester.tap(finder);
     await tester.pumpAndSettle();
   }
@@ -224,11 +207,7 @@ class InteractionTestHelper {
     Finder? scrollable,
     double delta = 100,
   }) async {
-    await tester.scrollUntilVisible(
-      finder,
-      delta,
-      scrollable: scrollable,
-    );
+    await tester.scrollUntilVisible(finder, delta, scrollable: scrollable);
     await tester.pumpAndSettle();
   }
 
@@ -289,4 +268,3 @@ class AssertionHelper {
     }
   }
 }
-

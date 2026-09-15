@@ -80,8 +80,11 @@ class _StubDexSwapApi extends DexSwapApi {
   }
 
   @override
-  Future<MessageModel> getHistory(String uuid,
-      {int page = 1, int size = 20}) async {
+  Future<MessageModel> getHistory(
+    String uuid, {
+    int page = 1,
+    int size = 20,
+  }) async {
     historyCallCount++;
     if (throwOnCall) throw Exception('network error');
     final mm = MessageModel();
@@ -91,7 +94,10 @@ class _StubDexSwapApi extends DexSwapApi {
 
   @override
   Future<MessageModel> commit(
-      String uuid, String orderId, String txHash) async {
+    String uuid,
+    String orderId,
+    String txHash,
+  ) async {
     final mm = MessageModel();
     mm.data = true;
     return mm;
@@ -109,15 +115,14 @@ Map<String, dynamic> _fullTokenJson({
   String logoUri = 'https://example.com/usdc.png',
   int decimals = 6,
   String chain = 'ETH',
-}) =>
-    {
-      'address': address,
-      'symbol': symbol,
-      'name': name,
-      'logo_uri': logoUri,
-      'decimals': decimals,
-      'chain': chain,
-    };
+}) => {
+  'address': address,
+  'symbol': symbol,
+  'name': name,
+  'logo_uri': logoUri,
+  'decimals': decimals,
+  'chain': chain,
+};
 
 Map<String, dynamic> _fullQuoteJson({
   String orderId = 'ord_abc',
@@ -131,20 +136,19 @@ Map<String, dynamic> _fullQuoteJson({
   String calldata = '0xdeadbeef',
   String routerAddr = '0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45',
   String chain = 'ETH',
-}) =>
-    {
-      'order_id': orderId,
-      'token_in_symbol': tokenInSymbol,
-      'token_out_symbol': tokenOutSymbol,
-      'amount_in': amountIn,
-      'amount_out': amountOut,
-      'price_impact': priceImpact,
-      'gas_estimate': gasEstimate,
-      'source': source,
-      'calldata': calldata,
-      'router_addr': routerAddr,
-      'chain': chain,
-    };
+}) => {
+  'order_id': orderId,
+  'token_in_symbol': tokenInSymbol,
+  'token_out_symbol': tokenOutSymbol,
+  'amount_in': amountIn,
+  'amount_out': amountOut,
+  'price_impact': priceImpact,
+  'gas_estimate': gasEstimate,
+  'source': source,
+  'calldata': calldata,
+  'router_addr': routerAddr,
+  'chain': chain,
+};
 
 Map<String, dynamic> _fullHistoryJson({
   String orderId = 'ord_001',
@@ -157,19 +161,18 @@ Map<String, dynamic> _fullHistoryJson({
   String txHash = '0xabc',
   int status = 2,
   int createdAt = 1700000000,
-}) =>
-    {
-      'order_id': orderId,
-      'chain': chain,
-      'token_in_symbol': tokenInSymbol,
-      'token_out_symbol': tokenOutSymbol,
-      'amount_in': amountIn,
-      'amount_out': amountOut,
-      'source': source,
-      'tx_hash': txHash,
-      'status': status,
-      'created_at': createdAt,
-    };
+}) => {
+  'order_id': orderId,
+  'chain': chain,
+  'token_in_symbol': tokenInSymbol,
+  'token_out_symbol': tokenOutSymbol,
+  'amount_in': amountIn,
+  'amount_out': amountOut,
+  'source': source,
+  'tx_hash': txHash,
+  'status': status,
+  'created_at': createdAt,
+};
 
 // ---------------------------------------------------------------------------
 // Tests
@@ -223,7 +226,8 @@ void main() {
 
     test('handles Solana-style address (no 0x prefix)', () {
       final m = DexTokenModel.fromJson(
-          _fullTokenJson(address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'));
+        _fullTokenJson(address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
+      );
       expect(m.address, 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v');
     });
 
@@ -353,14 +357,22 @@ void main() {
     });
 
     test('status 0 and status 1 return different strings', () {
-      final s0 = DexHistoryModel.fromJson(_fullHistoryJson(status: 0)).statusText;
-      final s1 = DexHistoryModel.fromJson(_fullHistoryJson(status: 1)).statusText;
+      final s0 = DexHistoryModel.fromJson(
+        _fullHistoryJson(status: 0),
+      ).statusText;
+      final s1 = DexHistoryModel.fromJson(
+        _fullHistoryJson(status: 1),
+      ).statusText;
       expect(s0, isNot(equals(s1)));
     });
 
     test('status 2 and status 3 return different strings', () {
-      final s2 = DexHistoryModel.fromJson(_fullHistoryJson(status: 2)).statusText;
-      final s3 = DexHistoryModel.fromJson(_fullHistoryJson(status: 3)).statusText;
+      final s2 = DexHistoryModel.fromJson(
+        _fullHistoryJson(status: 2),
+      ).statusText;
+      final s3 = DexHistoryModel.fromJson(
+        _fullHistoryJson(status: 3),
+      ).statusText;
       expect(s2, isNot(equals(s3)));
     });
 
@@ -474,32 +486,43 @@ void main() {
       expect(msg, 'Insufficient liquidity');
     });
 
-    test('error message in err field is also accessible (compat fallback)', () async {
-      final stub = _StubDexSwapApi()
-        ..quoteData = null
-        ..quoteErrMsg = 'Old backend error'
-        ..quoteErrField = 'err';
-      final res = await stub.getQuote(
-        chain: 'ETH',
-        tokenIn: '0xA0',
-        tokenOut: '0xC0',
-        amountIn: '1000000',
-        userAddr: '0xUser',
-      );
-      expect(res.error, isTrue);
-      final errMap = res.data as Map<String, dynamic>;
-      final msg = errMap['msg'] ?? errMap['err'];
-      expect(msg, 'Old backend error');
-    });
+    test(
+      'error message in err field is also accessible (compat fallback)',
+      () async {
+        final stub = _StubDexSwapApi()
+          ..quoteData = null
+          ..quoteErrMsg = 'Old backend error'
+          ..quoteErrField = 'err';
+        final res = await stub.getQuote(
+          chain: 'ETH',
+          tokenIn: '0xA0',
+          tokenOut: '0xC0',
+          amountIn: '1000000',
+          userAddr: '0xUser',
+        );
+        expect(res.error, isTrue);
+        final errMap = res.data as Map<String, dynamic>;
+        final msg = errMap['msg'] ?? errMap['err'];
+        expect(msg, 'Old backend error');
+      },
+    );
 
     test('quote call count increments', () async {
       final stub = _StubDexSwapApi()..quoteData = _fullQuoteJson();
       await stub.getQuote(
-          chain: 'ETH', tokenIn: '0x1', tokenOut: '0x2',
-          amountIn: '100', userAddr: '0xU');
+        chain: 'ETH',
+        tokenIn: '0x1',
+        tokenOut: '0x2',
+        amountIn: '100',
+        userAddr: '0xU',
+      );
       await stub.getQuote(
-          chain: 'ETH', tokenIn: '0x1', tokenOut: '0x2',
-          amountIn: '200', userAddr: '0xU');
+        chain: 'ETH',
+        tokenIn: '0x1',
+        tokenOut: '0x2',
+        amountIn: '200',
+        userAddr: '0xU',
+      );
       expect(stub.quoteCallCount, 2);
     });
 
@@ -524,7 +547,10 @@ void main() {
   group('DexSwapApi.getHistory', () {
     test('returns history list when API provides data', () async {
       final stub = _StubDexSwapApi()
-        ..historyList = [_fullHistoryJson(), _fullHistoryJson(orderId: 'ord_002')];
+        ..historyList = [
+          _fullHistoryJson(),
+          _fullHistoryJson(orderId: 'ord_002'),
+        ];
       final res = await stub.getHistory('user-uuid');
       final list = (res.data as List?) ?? [];
       expect(list.length, 2);

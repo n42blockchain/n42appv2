@@ -19,9 +19,8 @@ import 'package:n42_wallet/features/hardware_wallet/models/hardware_wallet_model
 import 'package:n42_wallet/features/hardware_wallet/service/ledger_apdu_utils.dart';
 
 /// 匹配指定错误码的 HardwareWalletError
-Matcher throwsHwError(String code) => throwsA(
-      isA<HardwareWalletError>().having((e) => e.code, 'code', code),
-    );
+Matcher throwsHwError(String code) =>
+    throwsA(isA<HardwareWalletError>().having((e) => e.code, 'code', code));
 
 void main() {
   const path = "m/44'/60'/0'/0/0";
@@ -41,10 +40,17 @@ void main() {
     });
 
     test('无 m 前缀的路径同样可序列化', () {
-      expect(
-        LedgerApduUtils.serializeDerivationPath("44'/60'"),
-        [2, 0x80, 0x00, 0x00, 0x2C, 0x80, 0x00, 0x00, 0x3C],
-      );
+      expect(LedgerApduUtils.serializeDerivationPath("44'/60'"), [
+        2,
+        0x80,
+        0x00,
+        0x00,
+        0x2C,
+        0x80,
+        0x00,
+        0x00,
+        0x3C,
+      ]);
     });
 
     test('仅 "m" 的路径 -> 只有 0 计数字节', () {
@@ -53,19 +59,25 @@ void main() {
 
     test('非硬化大索引的大端编码', () {
       // 0x01020304 = 16909060
-      expect(
-        LedgerApduUtils.serializeDerivationPath('m/16909060'),
-        [1, 0x01, 0x02, 0x03, 0x04],
-      );
+      expect(LedgerApduUtils.serializeDerivationPath('m/16909060'), [
+        1,
+        0x01,
+        0x02,
+        0x03,
+        0x04,
+      ]);
     });
   });
 
   group('buildGetAppNameApdu', () {
     test('固定 APDU B0 01 00 00 00', () {
-      expect(
-        LedgerApduUtils.buildGetAppNameApdu(),
-        [0xB0, 0x01, 0x00, 0x00, 0x00],
-      );
+      expect(LedgerApduUtils.buildGetAppNameApdu(), [
+        0xB0,
+        0x01,
+        0x00,
+        0x00,
+        0x00,
+      ]);
     });
   });
 
@@ -159,10 +171,11 @@ void main() {
   group('handleApduStatusCode', () {
     test('0x9000 长包 -> 剥离末尾 2 字节状态码', () {
       final result = Uint8List.fromList([0xAA, 0xBB, 0xCC, 0x90, 0x00]);
-      expect(
-        LedgerApduUtils.handleApduStatusCode(0x9000, result),
-        [0xAA, 0xBB, 0xCC],
-      );
+      expect(LedgerApduUtils.handleApduStatusCode(0x9000, result), [
+        0xAA,
+        0xBB,
+        0xCC,
+      ]);
     });
 
     test('0x9000 短包（仅 2 字节状态码）-> 返回空', () {
@@ -286,10 +299,10 @@ void main() {
 
     test('整除：8 字节按 4 分块 -> [4,4]', () {
       final data = Uint8List.fromList(List.generate(8, (i) => i));
-      expect(
-        LedgerApduUtils.splitIntoChunks(data, 4).map((c) => c.length),
-        [4, 4],
-      );
+      expect(LedgerApduUtils.splitIntoChunks(data, 4).map((c) => c.length), [
+        4,
+        4,
+      ]);
     });
 
     test('块大小大于数据 -> 单块', () {

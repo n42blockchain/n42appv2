@@ -94,8 +94,8 @@ mixin _AASendLogicMixin on State<AASendPage> {
     final t = text.trim();
     if (t.isEmpty) return BigInt.zero;
     final parts = t.split('.');
-    final whole = BigInt.tryParse(parts[0].isEmpty ? '0' : parts[0]) ??
-        BigInt.zero;
+    final whole =
+        BigInt.tryParse(parts[0].isEmpty ? '0' : parts[0]) ?? BigInt.zero;
     var frac = parts.length > 1 ? parts[1] : '';
     if (frac.length > decimals) frac = frac.substring(0, decimals);
     frac = frac.padRight(decimals, '0');

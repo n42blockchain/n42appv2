@@ -29,13 +29,16 @@ void main() {
         expect(reward, greaterThan(0));
       });
 
-      test('reward decreases as totalEffectiveBalance grows (inverse sqrt)', () {
-        final rewardSmall = miningCalculateReward(1000000);
-        final rewardLarge = miningCalculateReward(4000000);
+      test(
+        'reward decreases as totalEffectiveBalance grows (inverse sqrt)',
+        () {
+          final rewardSmall = miningCalculateReward(1000000);
+          final rewardLarge = miningCalculateReward(4000000);
 
-        // sqrt(4x) = 2*sqrt(x), so reward halves
-        expect(rewardSmall, greaterThan(rewardLarge));
-      });
+          // sqrt(4x) = 2*sqrt(x), so reward halves
+          expect(rewardSmall, greaterThan(rewardLarge));
+        },
+      );
 
       test('reward = effectiveBalance/sqrt(total) for default params', () {
         const total = 1000000;
@@ -68,10 +71,14 @@ void main() {
 
       test('higher baseRewardsPerEpoch reduces reward proportionally', () {
         const total = 1000000;
-        final rewardEpoch1 =
-            miningCalculateReward(total, baseRewardsPerEpoch: 1.0);
-        final rewardEpoch2 =
-            miningCalculateReward(total, baseRewardsPerEpoch: 2.0);
+        final rewardEpoch1 = miningCalculateReward(
+          total,
+          baseRewardsPerEpoch: 1.0,
+        );
+        final rewardEpoch2 = miningCalculateReward(
+          total,
+          baseRewardsPerEpoch: 2.0,
+        );
 
         expect(rewardEpoch2, closeTo(rewardEpoch1 ~/ 2, 1));
       });
@@ -87,10 +94,7 @@ void main() {
       test('totalEffectiveBalance very large (no integer overflow)', () {
         // Use a representative large value
         const bigTotal = 1000000000000000; // 1e15
-        expect(
-          () => miningCalculateReward(bigTotal),
-          returnsNormally,
-        );
+        expect(() => miningCalculateReward(bigTotal), returnsNormally);
         final reward = miningCalculateReward(bigTotal);
         expect(reward, isNonNegative);
       });
@@ -101,8 +105,7 @@ void main() {
       });
 
       test('baseRewardFactor=0 returns 0', () {
-        final reward =
-            miningCalculateReward(1000000, baseRewardFactor: 0.0);
+        final reward = miningCalculateReward(1000000, baseRewardFactor: 0.0);
         expect(reward, 0);
       });
     });

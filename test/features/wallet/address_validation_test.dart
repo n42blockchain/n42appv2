@@ -26,7 +26,11 @@ void main() {
 
         for (final address in invalidAddresses) {
           final isValid = RegExp(r'^0x[a-fA-F0-9]{40}$').hasMatch(address);
-          expect(isValid, false, reason: 'Address "$address" should be invalid');
+          expect(
+            isValid,
+            false,
+            reason: 'Address "$address" should be invalid',
+          );
         }
       });
 
@@ -48,14 +52,18 @@ void main() {
       test('valid P2PKH address should match pattern', () {
         // Legacy addresses start with 1
         const validAddress = '1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2';
-        final isValid = RegExp(r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$').hasMatch(validAddress);
+        final isValid = RegExp(
+          r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$',
+        ).hasMatch(validAddress);
         expect(isValid, true);
       });
 
       test('valid P2SH address should match pattern', () {
         // P2SH addresses start with 3
         const validAddress = '3J98t1WpEZ73CNmQviecrnyiWrnqRhWNLy';
-        final isValid = RegExp(r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$').hasMatch(validAddress);
+        final isValid = RegExp(
+          r'^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$',
+        ).hasMatch(validAddress);
         expect(isValid, true);
       });
 
@@ -69,7 +77,8 @@ void main() {
 
     group('Stellar Address Validation', () {
       test('valid Stellar address should start with G', () {
-        const validAddress = 'GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ';
+        const validAddress =
+            'GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ';
         // Stellar public keys are 56 characters and start with G
         final isValid = RegExp(r'^G[A-Z2-7]{55}$').hasMatch(validAddress);
         expect(isValid, true);
@@ -126,21 +135,21 @@ void main() {
 
     group('NEAR Address Validation', () {
       test('valid NEAR implicit address should be 64 hex chars', () {
-        const validAddress = 'ed25519:8hSHprDq2StXwMtNd43wDTXQYsjXcD4MJTXQYsjXcD4M';
-        final isValid = validAddress.startsWith('ed25519:') ||
+        const validAddress =
+            'ed25519:8hSHprDq2StXwMtNd43wDTXQYsjXcD4MJTXQYsjXcD4M';
+        final isValid =
+            validAddress.startsWith('ed25519:') ||
             RegExp(r'^[a-f0-9]{64}$').hasMatch(validAddress);
         expect(isValid, true);
       });
 
       test('valid NEAR named account should match pattern', () {
-        const validAddresses = [
-          'alice.near',
-          'bob.testnet',
-          'my-account.near',
-        ];
+        const validAddresses = ['alice.near', 'bob.testnet', 'my-account.near'];
 
         for (final address in validAddresses) {
-          final isValid = RegExp(r'^[a-z0-9._-]+\.(near|testnet)$').hasMatch(address);
+          final isValid = RegExp(
+            r'^[a-z0-9._-]+\.(near|testnet)$',
+          ).hasMatch(address);
           expect(isValid, true, reason: '$address should be valid');
         }
       });
@@ -170,21 +179,28 @@ void main() {
 
     group('Cardano Address Validation', () {
       test('valid Cardano Shelley address should start with addr', () {
-        const validAddress = 'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp';
-        final isValid = validAddress.startsWith('addr1') || validAddress.startsWith('addr_test1');
+        const validAddress =
+            'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp';
+        final isValid =
+            validAddress.startsWith('addr1') ||
+            validAddress.startsWith('addr_test1');
         expect(isValid, true);
       });
 
       test('valid Cardano stake address should start with stake', () {
-        const validAddress = 'stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7';
-        final isValid = validAddress.startsWith('stake1') || validAddress.startsWith('stake_test1');
+        const validAddress =
+            'stake1ux3g2c9dx2nhhehyrezyxpkstartcqmu9hk63qgfkccw5rqttygt7';
+        final isValid =
+            validAddress.startsWith('stake1') ||
+            validAddress.startsWith('stake_test1');
         expect(isValid, true);
       });
     });
 
     group('MultiversX Address Validation', () {
       test('valid MultiversX address should start with erd', () {
-        const validAddress = 'erd1qqqqqqqqqqqqqpgqhe8t5jewej70zupmh44jurgn29psua5l2jps3ntjj3';
+        const validAddress =
+            'erd1qqqqqqqqqqqqqpgqhe8t5jewej70zupmh44jurgn29psua5l2jps3ntjj3';
         final isValid = RegExp(r'^erd1[a-z0-9]{58}$').hasMatch(validAddress);
         expect(isValid, true);
       });
@@ -224,7 +240,8 @@ void main() {
 
     test('Cardano transaction should have UTXOs', () {
       final txData = {
-        'toAddress': 'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp',
+        'toAddress':
+            'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp',
         'amount': '1000000',
         'ttl': '1000000',
         'utxos': [
@@ -233,7 +250,7 @@ void main() {
             'outputIndex': 0,
             'amount': '5000000',
             'address': 'addr1...',
-          }
+          },
         ],
       };
 

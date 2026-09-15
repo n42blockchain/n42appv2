@@ -12,12 +12,15 @@ void main() {
   group('AddressType enum', () {
     test('has 4 values: standard, contract, ens, multisig', () {
       expect(AddressType.values.length, 4);
-      expect(AddressType.values, containsAll([
-        AddressType.standard,
-        AddressType.contract,
-        AddressType.ens,
-        AddressType.multisig,
-      ]));
+      expect(
+        AddressType.values,
+        containsAll([
+          AddressType.standard,
+          AddressType.contract,
+          AddressType.ens,
+          AddressType.multisig,
+        ]),
+      );
     });
   });
 

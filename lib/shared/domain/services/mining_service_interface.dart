@@ -5,13 +5,7 @@
 //
 // Author: Jiang Yiwei
 
-enum MiningStatus {
-  idle,
-  mining,
-  paused,
-  stopped,
-  error,
-}
+enum MiningStatus { idle, mining, paused, stopped, error }
 
 class SharedMiningInfo {
   final MiningStatus status;
@@ -40,4 +34,3 @@ abstract class IMiningService {
   Stream<MiningStatus> get statusStream;
   void onWalletChanged(String? newAddress);
 }
-

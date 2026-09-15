@@ -33,7 +33,9 @@ void main() {
 
     test('googleAuthEnabled defaults to false', () {
       expect(
-          const UserEntity(uuid: 'u', email: 'a@b.com').googleAuthEnabled, isFalse);
+        const UserEntity(uuid: 'u', email: 'a@b.com').googleAuthEnabled,
+        isFalse,
+      );
     });
 
     test('stores all optional fields when provided', () {
@@ -161,7 +163,9 @@ void main() {
 
     test('refreshToken defaults to null', () {
       final e = AuthTokenEntity(
-          accessToken: 'tok', expiresAt: DateTime.utc(2030));
+        accessToken: 'tok',
+        expiresAt: DateTime.utc(2030),
+      );
       expect(e.refreshToken, isNull);
     });
 
@@ -245,15 +249,31 @@ void main() {
     });
 
     test('different secret → not equal', () {
-      const a = GoogleAuthEntity(secret: 'A', qrCodeUrl: 'url', backupCodes: []);
-      const b = GoogleAuthEntity(secret: 'B', qrCodeUrl: 'url', backupCodes: []);
+      const a = GoogleAuthEntity(
+        secret: 'A',
+        qrCodeUrl: 'url',
+        backupCodes: [],
+      );
+      const b = GoogleAuthEntity(
+        secret: 'B',
+        qrCodeUrl: 'url',
+        backupCodes: [],
+      );
       expect(a, isNot(equals(b)));
     });
 
     test('backupCodes order matters for equality', () {
       // List equality is order-sensitive — ['c1','c2'] ≠ ['c2','c1'].
-      const a = GoogleAuthEntity(secret: 'S', qrCodeUrl: 'url', backupCodes: ['c1', 'c2']);
-      const b = GoogleAuthEntity(secret: 'S', qrCodeUrl: 'url', backupCodes: ['c2', 'c1']);
+      const a = GoogleAuthEntity(
+        secret: 'S',
+        qrCodeUrl: 'url',
+        backupCodes: ['c1', 'c2'],
+      );
+      const b = GoogleAuthEntity(
+        secret: 'S',
+        qrCodeUrl: 'url',
+        backupCodes: ['c2', 'c1'],
+      );
       expect(a, isNot(equals(b)));
     });
   });
@@ -302,8 +322,7 @@ void main() {
     });
 
     test('replaces biometricEnabled', () {
-      expect(
-          base.copyWith(biometricEnabled: true).biometricEnabled, isTrue);
+      expect(base.copyWith(biometricEnabled: true).biometricEnabled, isTrue);
     });
 
     test('replaces lockTimeout', () {

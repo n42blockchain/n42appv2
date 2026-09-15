@@ -229,9 +229,7 @@ class _KeystoneSignPageState extends State<KeystoneSignPage> {
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColorTokens.of(context).brand,
               foregroundColor: Colors.white,
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: Text(

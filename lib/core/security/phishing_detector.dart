@@ -122,7 +122,10 @@ class PhishingDetector {
     const legacyKey = 'phishing_blocklist_v1';
     if (prefs.containsKey(legacyKey)) {
       await prefs.remove(legacyKey);
-      AppLogger.d('PhishingDetector', 'removed legacy NSUserDefaults cache key');
+      AppLogger.d(
+        'PhishingDetector',
+        'removed legacy NSUserDefaults cache key',
+      );
     }
   }
 
@@ -272,7 +275,10 @@ class PhishingDetector {
           jsonEncode({'blacklist': blacklist, 'whitelist': whitelist}),
         );
       }
-      await prefs.setInt(_spCacheTimeKey, DateTime.now().millisecondsSinceEpoch);
+      await prefs.setInt(
+        _spCacheTimeKey,
+        DateTime.now().millisecondsSinceEpoch,
+      );
 
       AppLogger.d(
         'PhishingDetector',

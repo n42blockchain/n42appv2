@@ -5,8 +5,9 @@ import 'package:n42_wallet/core/utils/responsive_utils.dart';
 void main() {
   group('ResponsiveUtils', () {
     group('isTablet', () {
-      testWidgets('should return false for narrow screen (< 600)',
-          (tester) async {
+      testWidgets('should return false for narrow screen (< 600)', (
+        tester,
+      ) async {
         tester.view.physicalSize = const Size(599 * 3, 800 * 3);
         tester.view.devicePixelRatio = 3.0;
         addTearDown(tester.view.resetPhysicalSize);
@@ -15,18 +16,21 @@ void main() {
         late bool result;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              result = ResponsiveUtils.isTablet(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                result = ResponsiveUtils.isTablet(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
         expect(result, isFalse);
       });
 
-      testWidgets('should return true for wide screen (>= 600)',
-          (tester) async {
+      testWidgets('should return true for wide screen (>= 600)', (
+        tester,
+      ) async {
         tester.view.physicalSize = const Size(600 * 3, 800 * 3);
         tester.view.devicePixelRatio = 3.0;
         addTearDown(tester.view.resetPhysicalSize);
@@ -35,10 +39,12 @@ void main() {
         late bool result;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              result = ResponsiveUtils.isTablet(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                result = ResponsiveUtils.isTablet(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -56,10 +62,12 @@ void main() {
         late bool result;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              result = ResponsiveUtils.isMobile(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                result = ResponsiveUtils.isMobile(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -77,10 +85,12 @@ void main() {
         late ScreenType type;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              type = ResponsiveUtils.getScreenType(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                type = ResponsiveUtils.getScreenType(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -96,10 +106,12 @@ void main() {
         late ScreenType type;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              type = ResponsiveUtils.getScreenType(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                type = ResponsiveUtils.getScreenType(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -115,10 +127,12 @@ void main() {
         late ScreenType type;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              type = ResponsiveUtils.getScreenType(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                type = ResponsiveUtils.getScreenType(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -136,10 +150,12 @@ void main() {
         late double padding;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              padding = ResponsiveUtils.getAdaptivePadding(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                padding = ResponsiveUtils.getAdaptivePadding(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -155,10 +171,12 @@ void main() {
         late double padding;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              padding = ResponsiveUtils.getAdaptivePadding(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                padding = ResponsiveUtils.getAdaptivePadding(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -174,10 +192,12 @@ void main() {
         late double padding;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              padding = ResponsiveUtils.getAdaptivePadding(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                padding = ResponsiveUtils.getAdaptivePadding(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -195,10 +215,12 @@ void main() {
         late double maxWidth;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              maxWidth = ResponsiveUtils.getContentMaxWidth(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                maxWidth = ResponsiveUtils.getContentMaxWidth(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -214,10 +236,12 @@ void main() {
         late double maxWidth;
         await tester.pumpWidget(
           MaterialApp(
-            home: Builder(builder: (context) {
-              maxWidth = ResponsiveUtils.getContentMaxWidth(context);
-              return const SizedBox();
-            }),
+            home: Builder(
+              builder: (context) {
+                maxWidth = ResponsiveUtils.getContentMaxWidth(context);
+                return const SizedBox();
+              },
+            ),
           ),
         );
 
@@ -227,8 +251,10 @@ void main() {
 
     group('constants', () {
       test('breakpoints should be in correct order', () {
-        expect(ResponsiveUtils.mobileBreakpoint,
-            lessThan(ResponsiveUtils.tabletBreakpoint));
+        expect(
+          ResponsiveUtils.mobileBreakpoint,
+          lessThan(ResponsiveUtils.tabletBreakpoint),
+        );
       });
 
       test('contentMaxWidth should be positive', () {
@@ -239,11 +265,10 @@ void main() {
 
   group('ScreenType', () {
     test('should have all expected values', () {
-      expect(ScreenType.values, containsAll([
-        ScreenType.mobile,
-        ScreenType.tablet,
-        ScreenType.desktop,
-      ]));
+      expect(
+        ScreenType.values,
+        containsAll([ScreenType.mobile, ScreenType.tablet, ScreenType.desktop]),
+      );
     });
   });
 
@@ -307,26 +332,24 @@ void main() {
       expect(find.text('desktop'), findsOneWidget);
     });
 
-    testWidgets('should fallback to mobile when tablet is null',
-        (tester) async {
+    testWidgets('should fallback to mobile when tablet is null', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(700 * 3, 800 * 3);
       tester.view.devicePixelRatio = 3.0;
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.view.resetDevicePixelRatio);
 
       await tester.pumpWidget(
-        const MaterialApp(
-          home: ResponsiveBuilder(
-            mobile: Text('mobile'),
-          ),
-        ),
+        const MaterialApp(home: ResponsiveBuilder(mobile: Text('mobile'))),
       );
 
       expect(find.text('mobile'), findsOneWidget);
     });
 
-    testWidgets('should fallback to tablet when desktop is null',
-        (tester) async {
+    testWidgets('should fallback to tablet when desktop is null', (
+      tester,
+    ) async {
       tester.view.physicalSize = const Size(1000 * 3, 800 * 3);
       tester.view.devicePixelRatio = 3.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -354,11 +377,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ResponsiveContainer(
-              child: Text('content'),
-            ),
-          ),
+          home: Scaffold(body: ResponsiveContainer(child: Text('content'))),
         ),
       );
 
@@ -375,11 +394,7 @@ void main() {
 
       await tester.pumpWidget(
         const MaterialApp(
-          home: Scaffold(
-            body: ResponsiveContainer(
-              child: Text('content'),
-            ),
-          ),
+          home: Scaffold(body: ResponsiveContainer(child: Text('content'))),
         ),
       );
 
@@ -396,10 +411,7 @@ void main() {
       await tester.pumpWidget(
         const MaterialApp(
           home: Scaffold(
-            body: ResponsiveContainer(
-              maxWidth: 400,
-              child: Text('content'),
-            ),
+            body: ResponsiveContainer(maxWidth: 400, child: Text('content')),
           ),
         ),
       );

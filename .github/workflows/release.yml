@@ -14,35 +14,47 @@ env:
   FLUTTER_VERSION: '3.44.8'
   JAVA_VERSION: '21'
 
+permissions:
+  contents: write
+
+defaults:
+  run:
+    shell: bash
+
 jobs:
+  quality:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
   # ==================== 创建 GitHub Release ====================
   create-release:
     name: 创建 Release
     runs-on: ubuntu-latest
+    needs: quality
     outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
       version: ${{ steps.get_version.outputs.version }}
     steps:
+      - uses: actions/checkout@v4
+      - name: Validate release tag and canonical version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: python3 scripts/quality_gate.py version pubspec.yaml --tag "$RELEASE_TAG"
       - name: 获取版本号
         id: get_version
         run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: 创建 GitHub Release
-        id: create_release
-        uses: actions/create-release@v1
+      - name: Create draft release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ steps.get_version.outputs.version }}
-          draft: true
-          prerelease: false
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release create "$RELEASE_TAG" --verify-tag --draft --title "Release $RELEASE_TAG" --generate-notes
 
   # ==================== 构建并发布 Android ====================
   release-android:
     name: 发布 Android
     runs-on: ubuntu-latest
     needs: create-release
+    environment: release
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -75,21 +87,25 @@ jobs:
           echo "keyAlias=$ANDROID_KEY_ALIAS" >> android/key.properties
           echo "storeFile=keystore.jks" >> android/key.properties
 
-      - name: 构建 Release APK
-        run: flutter build apk --release
-
-      - name: 构建 App Bundle
-        run: flutter build appbundle --release
-
-      - name: 上传 APK 到 Release
-        uses: actions/upload-release-asset@v1
+      - name: Build signed Android artifacts
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: n42wallet-${{ needs.create-release.outputs.version }}.apk
-          asset_content_type: application/vnd.android.package-archive
+          WALLET_CORE_USER: ${{ secrets.WALLET_CORE_USER }}
+          WALLET_CORE_KEY: ${{ secrets.WALLET_CORE_KEY }}
+          RELEASE_DART_DEFINES: ${{ secrets.RELEASE_DART_DEFINES }}
+        run: |
+          test -n "$RELEASE_DART_DEFINES"
+          umask 077
+          printf '%s' "$RELEASE_DART_DEFINES" > "$RUNNER_TEMP/release-defines.json"
+          bash build_release.sh android --dart-define-from-file "$RUNNER_TEMP/release-defines.json"
+
+      - name: Check 64-bit native library alignment
+        run: python3 scripts/audit_android_native.py build/app/outputs/bundle/release/app-release.aab
+
+      - name: Upload APK to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release upload "$RELEASE_TAG" build/app/outputs/flutter-apk/app-release.apk
 
       - name: 上传到 Google Play (内部测试)
         uses: r0adkll/upload-google-play@v1
@@ -100,11 +116,16 @@ jobs:
           track: internal
           status: draft
 
+      - name: Remove Android signing and runtime configuration
+        if: always()
+        run: rm -f android/key.properties android/app/keystore.jks "$RUNNER_TEMP/release-defines.json"
+
   # ==================== 构建并发布 iOS ====================
   release-ios:
     name: 发布 iOS
     runs-on: macos-latest
     needs: create-release
+    environment: release
     steps:
       - name: 检出代码
         uses: actions/checkout@v4
@@ -128,10 +149,16 @@ jobs:
           IOS_CERTIFICATE_P12: ${{ secrets.IOS_CERTIFICATE_P12 }}
           IOS_CERTIFICATE_PASSWORD: ${{ secrets.IOS_CERTIFICATE_PASSWORD }}
           IOS_PROVISIONING_PROFILE: ${{ secrets.IOS_PROVISIONING_PROFILE }}
+          IOS_EXTENSION_PROVISIONING_PROFILE: ${{ secrets.IOS_EXTENSION_PROVISIONING_PROFILE }}
         run: |
+          test -n "$IOS_CERTIFICATE_P12"
+          test -n "$IOS_PROVISIONING_PROFILE"
+          test -n "$IOS_EXTENSION_PROVISIONING_PROFILE"
           # 创建临时 keychain
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           KEYCHAIN_PASSWORD=$(openssl rand -base64 32)
+          echo "::add-mask::$KEYCHAIN_PASSWORD"
+          umask 077
           
           security create-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
@@ -140,31 +167,57 @@ jobs:
           # 导入证书
           echo "$IOS_CERTIFICATE_P12" | base64 --decode > certificate.p12
           security import certificate.p12 -P "$IOS_CERTIFICATE_PASSWORD" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security list-keychain -d user -s $KEYCHAIN_PATH
           
           # 安装配置文件
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           echo "$IOS_PROVISIONING_PROFILE" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/profile.mobileprovision
+          echo "$IOS_EXTENSION_PROVISIONING_PROFILE" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/extension.mobileprovision
 
-      - name: 构建 iOS Archive
-        run: |
-          flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
-
-      - name: 上传 IPA 到 Release
-        uses: actions/upload-release-asset@v1
+      - name: Build iOS archive and preserve the committed version
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ needs.create-release.outputs.upload_url }}
-          asset_path: build/ios/ipa/N42Wallet.ipa
-          asset_name: n42wallet-${{ needs.create-release.outputs.version }}.ipa
-          asset_content_type: application/octet-stream
+          RELEASE_DART_DEFINES: ${{ secrets.RELEASE_DART_DEFINES }}
+        run: |
+          test -n "$RELEASE_DART_DEFINES"
+          umask 077
+          printf '%s' "$RELEASE_DART_DEFINES" > "$RUNNER_TEMP/release-defines.json"
+          bash build_release.sh ipa --dart-define-from-file "$RUNNER_TEMP/release-defines.json"
 
-      - name: 上传到 App Store Connect
+      - name: Locate exported IPA
+        run: |
+          shopt -s nullglob
+          ipas=(build/ios/ipa/*.ipa)
+          test "${#ipas[@]}" -eq 1
+          echo "IPA_PATH=${ipas[0]}" >> "$GITHUB_ENV"
+
+      - name: Upload IPA to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: gh release upload "$RELEASE_TAG" "$IPA_PATH"
+
+      - name: Upload to App Store Connect
         env:
           APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+          API_ISSUER: ${{ secrets.APP_STORE_API_ISSUER_ID }}
         run: |
-          xcrun altool --upload-app -f build/ios/ipa/N42Wallet.ipa \
-            --type ios \
-            --apiKey ${{ secrets.APP_STORE_API_KEY_ID }} \
-            --apiIssuer ${{ secrets.APP_STORE_API_ISSUER_ID }}
+          test -n "$APP_STORE_CONNECT_API_KEY"
+          test -n "$API_KEY_ID"
+          test -n "$API_ISSUER"
+          umask 077
+          mkdir -p "$HOME/.appstoreconnect/private_keys"
+          printf '%s' "$APP_STORE_CONNECT_API_KEY" > "$HOME/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8"
+          xcrun altool --upload-app -f "$IPA_PATH" --type ios --apiKey "$API_KEY_ID" --apiIssuer "$API_ISSUER"
+
+      - name: Remove iOS signing and runtime configuration
+        if: always()
+        env:
+          API_KEY_ID: ${{ secrets.APP_STORE_API_KEY_ID }}
+        run: |
+          security delete-keychain "$RUNNER_TEMP/app-signing.keychain-db" || true
+          rm -f certificate.p12 "$RUNNER_TEMP/release-defines.json"
+          rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/profile.mobileprovision"
+          rm -f "$HOME/Library/MobileDevice/Provisioning Profiles/extension.mobileprovision"
+          rm -f "$HOME/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8"

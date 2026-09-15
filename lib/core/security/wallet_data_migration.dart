@@ -27,8 +27,8 @@ class WalletDataMigration {
   WalletDataMigration({
     required SecureStorage secureStorage,
     required SPUtil spUtil,
-  })  : _secureStorage = secureStorage,
-        _spUtil = spUtil;
+  }) : _secureStorage = secureStorage,
+       _spUtil = spUtil;
 
   /// 检查是否需要迁移
   Future<bool> needsMigration() async {
@@ -115,7 +115,10 @@ class WalletDataMigration {
   }
 
   /// 迁移单个钱包的敏感数据
-  Future<int> _migrateWallet(Map<String, dynamic> wallet, String walletId) async {
+  Future<int> _migrateWallet(
+    Map<String, dynamic> wallet,
+    String walletId,
+  ) async {
     int migratedFields = 0;
 
     // 迁移助记词
@@ -132,7 +135,10 @@ class WalletDataMigration {
     // 迁移私钥
     final privateKey = wallet['privateKey'] as String?;
     if (privateKey != null && privateKey.isNotEmpty) {
-      await _secureStorage.savePrivateKey(address: walletId, privateKey: privateKey);
+      await _secureStorage.savePrivateKey(
+        address: walletId,
+        privateKey: privateKey,
+      );
       migratedFields++;
       _debugLog(
         '[WalletDataMigration] Migrated privateKey for wallet: '
@@ -232,5 +238,6 @@ extension WalletCredentialsExtension on SecureStorage {
   Future<String?> getWalletMnemonic(String walletId) => getMnemonic(walletId);
 
   /// 获取迁移后的私钥
-  Future<String?> getWalletPrivateKey(String walletId) => getPrivateKey(walletId);
+  Future<String?> getWalletPrivateKey(String walletId) =>
+      getPrivateKey(walletId);
 }

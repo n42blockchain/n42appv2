@@ -66,8 +66,18 @@ void main() {
       name: 'Test Token',
       icon: 'https://example.com/test.png',
       chains: [
-        ChainTokenConfig(chainSymbol: 'ETH', contract: '0x1234', decimals: 18, chainId: 1),
-        ChainTokenConfig(chainSymbol: 'BNB', contract: '0x5678', decimals: 18, chainId: 56),
+        ChainTokenConfig(
+          chainSymbol: 'ETH',
+          contract: '0x1234',
+          decimals: 18,
+          chainId: 1,
+        ),
+        ChainTokenConfig(
+          chainSymbol: 'BNB',
+          contract: '0x5678',
+          decimals: 18,
+          chainId: 56,
+        ),
       ],
     );
 
@@ -104,25 +114,33 @@ void main() {
     });
 
     test('supports ETH chain', () {
-      final eth = AggregatedTokens.usdt.chains
-          .firstWhere((c) => c.chainSymbol == 'ETH', orElse: null as Never Function()?);
+      final eth = AggregatedTokens.usdt.chains.firstWhere(
+        (c) => c.chainSymbol == 'ETH',
+        orElse: null as Never Function()?,
+      );
       expect(eth.decimals, 6);
       expect(eth.chainId, 1);
     });
 
     test('ETH USDT has correct contract address', () {
-      final eth = AggregatedTokens.usdt.chains.firstWhere((c) => c.chainSymbol == 'ETH');
+      final eth = AggregatedTokens.usdt.chains.firstWhere(
+        (c) => c.chainSymbol == 'ETH',
+      );
       expect(eth.contract, '0xdAC17F958D2ee523a2206206994597C13D831ec7');
     });
 
     test('supports TRX chain with TRC20 rules', () {
-      final trx = AggregatedTokens.usdt.chains.firstWhere((c) => c.chainSymbol == 'TRX');
+      final trx = AggregatedTokens.usdt.chains.firstWhere(
+        (c) => c.chainSymbol == 'TRX',
+      );
       expect(trx.rules, 'TRC20');
       expect(trx.chainId, 0);
     });
 
     test('BSC USDT has BEP20 rules', () {
-      final bnb = AggregatedTokens.usdt.chains.firstWhere((c) => c.chainSymbol == 'BNB');
+      final bnb = AggregatedTokens.usdt.chains.firstWhere(
+        (c) => c.chainSymbol == 'BNB',
+      );
       expect(bnb.rules, 'BEP20');
     });
 
@@ -153,7 +171,9 @@ void main() {
     });
 
     test('supports SOL chain with SPL rules', () {
-      final sol = AggregatedTokens.usdc.chains.firstWhere((c) => c.chainSymbol == 'SOL');
+      final sol = AggregatedTokens.usdc.chains.firstWhere(
+        (c) => c.chainSymbol == 'SOL',
+      );
       expect(sol.rules, 'SPL');
     });
 

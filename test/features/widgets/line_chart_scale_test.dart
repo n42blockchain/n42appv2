@@ -78,10 +78,7 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
-            body: SizedBox(
-              width: 200,
-              child: LineChart(values, true, 100, 10),
-            ),
+            body: SizedBox(width: 200, child: LineChart(values, true, 100, 10)),
           ),
         ),
       );

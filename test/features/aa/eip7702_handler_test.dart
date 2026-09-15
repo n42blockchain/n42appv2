@@ -19,31 +19,29 @@ import 'package:n42_wallet/features/wallet/aa/builder/calldata_builder.dart';
 const _testAddr = '0x1234567890123456789012345678901234567890';
 const _testAddr2 = '0x2222222222222222222222222222222222222222';
 
-
 UserOperation _minimalUserOp({Uint8List? eip7702Auth}) => UserOperation(
-      sender: _testAddr,
-      nonce: BigInt.zero,
-      callData: Uint8List(0),
-      accountGasLimits: Uint8List(32),
-      preVerificationGas: BigInt.zero,
-      gasFees: Uint8List(32),
-      eip7702Auth: eip7702Auth,
-    );
+  sender: _testAddr,
+  nonce: BigInt.zero,
+  callData: Uint8List(0),
+  accountGasLimits: Uint8List(32),
+  preVerificationGas: BigInt.zero,
+  gasFees: Uint8List(32),
+  eip7702Auth: eip7702Auth,
+);
 
 EIP7702Authorization _authWithZeroSig({
   int chainId = 1,
   String address = _testAddr,
   BigInt? nonce,
   int v = 27,
-}) =>
-    EIP7702Authorization(
-      chainId: chainId,
-      address: address,
-      nonce: nonce ?? BigInt.zero,
-      v: v,
-      r: Uint8List(32),
-      s: Uint8List(32),
-    );
+}) => EIP7702Authorization(
+  chainId: chainId,
+  address: address,
+  nonce: nonce ?? BigInt.zero,
+  v: v,
+  r: Uint8List(32),
+  s: Uint8List(32),
+);
 
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
@@ -64,7 +62,12 @@ void main() {
     });
 
     test('returns false for UserOp with empty eip7702Auth', () {
-      expect(EIP7702Handler.isEIP7702UserOp(_minimalUserOp(eip7702Auth: Uint8List(0))), false);
+      expect(
+        EIP7702Handler.isEIP7702UserOp(
+          _minimalUserOp(eip7702Auth: Uint8List(0)),
+        ),
+        false,
+      );
     });
 
     test('returns true for UserOp with non-empty eip7702Auth', () {
@@ -93,33 +96,57 @@ void main() {
 
     test('is deterministic for the same inputs', () {
       final h1 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       final h2 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       expect(h1, equals(h2));
     });
 
     test('differs for different chainIds', () {
       final h1 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       final h137 = EIP7702Handler.createAuthorizationHash(
-        chainId: 137, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 137,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       expect(h1, isNot(equals(h137)));
     });
 
     test('differs for different implementation addresses', () {
       final h1 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       final h2 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr2, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr2,
+        nonce: BigInt.zero,
+      );
       expect(h1, isNot(equals(h2)));
     });
 
     test('differs for different nonces', () {
       final h0 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.zero);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.zero,
+      );
       final h1 = EIP7702Handler.createAuthorizationHash(
-        chainId: 1, implementationAddress: _testAddr, nonce: BigInt.one);
+        chainId: 1,
+        implementationAddress: _testAddr,
+        nonce: BigInt.one,
+      );
       expect(h0, isNot(equals(h1)));
     });
 
@@ -147,10 +174,12 @@ void main() {
       // List payload = 1 (chainId) + 21 (address) + 1 (nonce) = 23 bytes
       // List prefix = 0xc0 + 23 = 0xd7
       final rlpList = Uint8List(24)
-        ..[0] = 0xd7  // list prefix
-        ..[1] = 0x01  // chainId = 1
-        ..setAll(2, rlpAddress)  // address (21 bytes)
-        ..[23] = 0x80;  // nonce = 0
+        ..[0] =
+            0xd7 // list prefix
+        ..[1] =
+            0x01 // chainId = 1
+        ..setAll(2, rlpAddress) // address (21 bytes)
+        ..[23] = 0x80; // nonce = 0
 
       // Prepend magic byte 0x05
       final toHash = Uint8List(25)
@@ -265,7 +294,9 @@ void main() {
 
     test('returns null for UserOp with empty auth bytes', () {
       expect(
-        EIP7702Handler.parseAuthorization(_minimalUserOp(eip7702Auth: Uint8List(0))),
+        EIP7702Handler.parseAuthorization(
+          _minimalUserOp(eip7702Auth: Uint8List(0)),
+        ),
         isNull,
       );
     });
@@ -302,7 +333,8 @@ void main() {
         r: Uint8List(31), // too short
         s: Uint8List(32),
       );
-      final encoded = invalidAuth.encode(); // encodes 31 bytes, but decode expects 32
+      final encoded = invalidAuth
+          .encode(); // encodes 31 bytes, but decode expects 32
       final userOp = _minimalUserOp(eip7702Auth: encoded);
       // Decode will still produce 32-byte r (slice from bytes), but the
       // original intent is tested via isValid check path
@@ -342,7 +374,9 @@ void main() {
         final auth = _authWithZeroSig(v: v);
         expect(
           () => EIP7702Handler.verifyAuthorization(
-              auth: auth, expectedSigner: _testAddr),
+            auth: auth,
+            expectedSigner: _testAddr,
+          ),
           returnsNormally,
         );
       }
@@ -540,25 +574,28 @@ void main() {
   // ══════════════════════════════════════════════════════════════════════════
 
   group('EntryPointVersionAdapter – estimateGasSavings', () {
-    test('first EIP-7702 tx saves ~175 000 gas (200 000 deploy − 25 000 auth)', () {
-      final userOp = UserOperation(
-        sender: _testAddr,
-        nonce: BigInt.zero,
-        callData: Uint8List(0),
-        accountGasLimits: Uint8List(32),
-        preVerificationGas: BigInt.zero,
-        gasFees: Uint8List(32),
-        eip7702Auth: Uint8List.fromList([0x01]),
-      );
+    test(
+      'first EIP-7702 tx saves ~175 000 gas (200 000 deploy − 25 000 auth)',
+      () {
+        final userOp = UserOperation(
+          sender: _testAddr,
+          nonce: BigInt.zero,
+          callData: Uint8List(0),
+          accountGasLimits: Uint8List(32),
+          preVerificationGas: BigInt.zero,
+          gasFees: Uint8List(32),
+          eip7702Auth: Uint8List.fromList([0x01]),
+        );
 
-      final savings = EntryPointVersionAdapter.estimateGasSavings(
-        userOp: userOp,
-        isFirstTransaction: true,
-      );
+        final savings = EntryPointVersionAdapter.estimateGasSavings(
+          userOp: userOp,
+          isFirstTransaction: true,
+        );
 
-      // Expected: 200 000 (deployment avoided) − 25 000 (auth gas) = 175 000
-      expect(savings, BigInt.from(175000));
-    });
+        // Expected: 200 000 (deployment avoided) − 25 000 (auth gas) = 175 000
+        expect(savings, BigInt.from(175000));
+      },
+    );
 
     test('non-first EIP-7702 tx has zero deployment savings', () {
       final userOp = UserOperation(
@@ -619,10 +656,7 @@ void main() {
 
   group('V08MigrationHelper – canMigrate', () {
     test('always returns true (v0.8 is backwards compatible)', () {
-      expect(
-        V08MigrationHelper.canMigrate(_testAddr, 1),
-        true,
-      );
+      expect(V08MigrationHelper.canMigrate(_testAddr, 1), true);
     });
   });
 
@@ -649,15 +683,18 @@ void main() {
       );
     });
 
-    test('returns true for supported undeployed account when preferring efficiency', () {
-      final result = V08MigrationHelper.shouldUseEIP7702(
-        chainSymbol: 'ETH',
-        isDeployed: false,
-        preferGasEfficiency: true,
-      );
-      // ETH supports EIP-7702; prefer gas efficiency; not deployed
-      expect(result, true);
-    });
+    test(
+      'returns true for supported undeployed account when preferring efficiency',
+      () {
+        final result = V08MigrationHelper.shouldUseEIP7702(
+          chainSymbol: 'ETH',
+          isDeployed: false,
+          preferGasEfficiency: true,
+        );
+        // ETH supports EIP-7702; prefer gas efficiency; not deployed
+        expect(result, true);
+      },
+    );
 
     test('returns false when not preferring gas efficiency', () {
       expect(
@@ -687,7 +724,12 @@ void main() {
         hasDeployedAccount: false,
         chainSymbol: 'ETH',
       );
-      expect(recs.any((r) => r.toLowerCase().contains('eip-7702') || r.contains('7702')), true);
+      expect(
+        recs.any(
+          (r) => r.toLowerCase().contains('eip-7702') || r.contains('7702'),
+        ),
+        true,
+      );
     });
 
     test('notes optimal when already on v0.8', () {
@@ -830,8 +872,12 @@ void main() {
     test('round-trip preserves non-zero r bytes', () {
       final r = Uint8List.fromList(List.filled(32, 0xAB));
       final original = EIP7702Authorization(
-        chainId: 1, address: _testAddr, nonce: BigInt.zero,
-        v: 27, r: r, s: Uint8List(32),
+        chainId: 1,
+        address: _testAddr,
+        nonce: BigInt.zero,
+        v: 27,
+        r: r,
+        s: Uint8List(32),
       );
       final decoded = EIP7702Authorization.decode(original.encode());
       expect(decoded.r, equals(r));
@@ -840,8 +886,12 @@ void main() {
     test('round-trip preserves non-zero s bytes', () {
       final s = Uint8List.fromList(List.filled(32, 0xCD));
       final original = EIP7702Authorization(
-        chainId: 1, address: _testAddr, nonce: BigInt.zero,
-        v: 27, r: Uint8List(32), s: s,
+        chainId: 1,
+        address: _testAddr,
+        nonce: BigInt.zero,
+        v: 27,
+        r: Uint8List(32),
+        s: s,
       );
       final decoded = EIP7702Authorization.decode(original.encode());
       expect(decoded.s, equals(s));
@@ -853,7 +903,10 @@ void main() {
     });
 
     test('decode throws ArgumentError for empty bytes', () {
-      expect(() => EIP7702Authorization.decode(Uint8List(0)), throwsArgumentError);
+      expect(
+        () => EIP7702Authorization.decode(Uint8List(0)),
+        throwsArgumentError,
+      );
     });
   });
 
@@ -888,7 +941,10 @@ void main() {
     });
 
     test('unsupported chain throws ArgumentError', () {
-      expect(() => Simple7702AccountHelper.fromChain('UNKNOWNCHAIN'), throwsArgumentError);
+      expect(
+        () => Simple7702AccountHelper.fromChain('UNKNOWNCHAIN'),
+        throwsArgumentError,
+      );
     });
 
     test('lowercase chain symbol is normalised (eth → ETH)', () {
@@ -936,9 +992,13 @@ void main() {
         nonce: BigInt.zero,
       );
 
-      expect(helperHash, equals(handlerHash),
-          reason: 'Simple7702AccountHelper and EIP7702Handler must produce '
-              'the same hash for the same (chainId, address, nonce) triple');
+      expect(
+        helperHash,
+        equals(handlerHash),
+        reason:
+            'Simple7702AccountHelper and EIP7702Handler must produce '
+            'the same hash for the same (chainId, address, nonce) triple',
+      );
     });
 
     test('different nonces produce different hashes', () {
@@ -1027,22 +1087,31 @@ void main() {
       expect(Simple7702GasConstants.authorizationGas, greaterThan(0));
     });
 
-    test('estimateExecuteGas returns > authorizationGas for non-trivial data', () {
-      final gas = Simple7702GasConstants.estimateExecuteGas(100);
-      expect(gas, greaterThan(BigInt.from(Simple7702GasConstants.authorizationGas)));
-    });
+    test(
+      'estimateExecuteGas returns > authorizationGas for non-trivial data',
+      () {
+        final gas = Simple7702GasConstants.estimateExecuteGas(100);
+        expect(
+          gas,
+          greaterThan(BigInt.from(Simple7702GasConstants.authorizationGas)),
+        );
+      },
+    );
 
-    test('estimateBatchGas returns > estimateExecuteGas for same call count', () {
-      final execGas = Simple7702GasConstants.estimateExecuteGas(0);
-      final batchGas = Simple7702GasConstants.estimateBatchGas([
-        ExecuteCall(
-          target: _testAddr,
-          value: BigInt.zero,
-          data: Uint8List(0),
-        ),
-      ]);
-      // Batch adds per-call overhead on top of base overhead
-      expect(batchGas, greaterThan(execGas));
-    });
+    test(
+      'estimateBatchGas returns > estimateExecuteGas for same call count',
+      () {
+        final execGas = Simple7702GasConstants.estimateExecuteGas(0);
+        final batchGas = Simple7702GasConstants.estimateBatchGas([
+          ExecuteCall(
+            target: _testAddr,
+            value: BigInt.zero,
+            data: Uint8List(0),
+          ),
+        ]);
+        // Batch adds per-call overhead on top of base overhead
+        expect(batchGas, greaterThan(execGas));
+      },
+    );
   });
 }

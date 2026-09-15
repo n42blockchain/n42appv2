@@ -22,7 +22,8 @@ String buildWithdrawalsDailyUrl(String address, String dayStr) {
 
 /// Mirrors the items-parsing logic in getMiningWithdrawalsDaily.
 List<MiningWithdrawalsDaily>? parseWithdrawalsDailyItems(
-    Map<String, dynamic>? data) {
+  Map<String, dynamic>? data,
+) {
   if (data == null) return null;
   final items = data['items'] as List<dynamic>?;
   if (items == null) return null;
@@ -39,8 +40,7 @@ void main() {
         '0x8157AC6F0C0eb1F465D14f62917e151637Ee47cC',
         '2025-11-12',
       );
-      expect(url,
-          contains('0x8157AC6F0C0eb1F465D14f62917e151637Ee47cC'));
+      expect(url, contains('0x8157AC6F0C0eb1F465D14f62917e151637Ee47cC'));
     });
 
     test('URL embeds dayStr as query param', () {
@@ -63,8 +63,7 @@ void main() {
 
     test('URL starts with expected base', () {
       final url = buildWithdrawalsDailyUrl('0xAddr', '2025-01-01');
-      expect(url,
-          startsWith('https://testnet2.n42.world/api/v2/addresses/'));
+      expect(url, startsWith('https://testnet2.n42.world/api/v2/addresses/'));
     });
   });
 
@@ -88,8 +87,8 @@ void main() {
     test('items list with one entry is parsed', () {
       final result = parseWithdrawalsDailyItems({
         'items': [
-          {'count': 5, 'day': '2025-11-10', 'total_amount': '1000000000'}
-        ]
+          {'count': 5, 'day': '2025-11-10', 'total_amount': '1000000000'},
+        ],
       });
       expect(result, hasLength(1));
       expect(result![0].count, 5);
@@ -102,7 +101,7 @@ void main() {
         'items': [
           {'count': 3, 'day': '2025-11-08', 'total_amount': '300'},
           {'count': 7, 'day': '2025-11-09', 'total_amount': '700'},
-        ]
+        ],
       });
       expect(result, hasLength(2));
       expect(result![0].count, 3);
@@ -113,8 +112,8 @@ void main() {
       const bigAmount = '50001064322000000000';
       final result = parseWithdrawalsDailyItems({
         'items': [
-          {'count': 1, 'day': '2025-11-10', 'total_amount': bigAmount}
-        ]
+          {'count': 1, 'day': '2025-11-10', 'total_amount': bigAmount},
+        ],
       });
       expect(result![0].totalAmount, bigAmount);
     });

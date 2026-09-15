@@ -185,9 +185,7 @@ mixin _WidgetsMixin on _LogicMixin {
           Expanded(
             flex: 1,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               child: Text(
                 S.of(context).g_mining_key_8,
                 style: AppTypography.bodySm.copyWith(

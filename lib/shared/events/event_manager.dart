@@ -63,11 +63,13 @@ class EventManager {
     required String coinSymbol,
     required String newBalance,
   }) {
-    emit(WalletBalanceUpdatedEvent(
-      walletAddress: walletAddress,
-      coinSymbol: coinSymbol,
-      newBalance: newBalance,
-    ));
+    emit(
+      WalletBalanceUpdatedEvent(
+        walletAddress: walletAddress,
+        coinSymbol: coinSymbol,
+        newBalance: newBalance,
+      ),
+    );
   }
 
   void emitTransactionCompleted({
@@ -77,33 +79,28 @@ class EventManager {
     required String coinSymbol,
     required bool isSuccess,
   }) {
-    emit(TransactionCompletedEvent(
-      walletAddress: walletAddress,
-      txHash: txHash,
-      amount: amount,
-      coinSymbol: coinSymbol,
-      isSuccess: isSuccess,
-    ));
+    emit(
+      TransactionCompletedEvent(
+        walletAddress: walletAddress,
+        txHash: txHash,
+        amount: amount,
+        coinSymbol: coinSymbol,
+        isSuccess: isSuccess,
+      ),
+    );
   }
 
   void emitMiningStatusChanged({
     required String status,
     String? walletAddress,
   }) {
-    emit(MiningStatusChangedEvent(
-      status: status,
-      walletAddress: walletAddress,
-    ));
+    emit(
+      MiningStatusChangedEvent(status: status, walletAddress: walletAddress),
+    );
   }
 
-  void emitUserLoggedIn({
-    required String userUuid,
-    String? email,
-  }) {
-    emit(UserLoggedInEvent(
-      userUuid: userUuid,
-      email: email,
-    ));
+  void emitUserLoggedIn({required String userUuid, String? email}) {
+    emit(UserLoggedInEvent(userUuid: userUuid, email: email));
   }
 
   void emitUserLoggedOut() {

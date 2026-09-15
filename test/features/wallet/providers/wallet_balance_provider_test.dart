@@ -18,7 +18,7 @@ class FakeWapAdapter {
   final bool shouldThrow;
 
   FakeWapAdapter({double balanceTotal = 0.0, this.shouldThrow = false})
-      : _balanceTotal = balanceTotal;
+    : _balanceTotal = balanceTotal;
 
   double get balanceTotal {
     if (shouldThrow) throw StateError('adapter not initialized');
@@ -50,12 +50,18 @@ void main() {
       expect(result, 1234.56);
     });
 
-    test('returns 0.0 when globalWapAdapter is not initialized (try-catch guard)', () {
-      final adapter = FakeWapAdapter(shouldThrow: true);
-      final result = safeBalanceTotal(adapter);
-      expect(result, 0.0,
-          reason: 'try-catch must swallow StateError and return 0.0');
-    });
+    test(
+      'returns 0.0 when globalWapAdapter is not initialized (try-catch guard)',
+      () {
+        final adapter = FakeWapAdapter(shouldThrow: true);
+        final result = safeBalanceTotal(adapter);
+        expect(
+          result,
+          0.0,
+          reason: 'try-catch must swallow StateError and return 0.0',
+        );
+      },
+    );
 
     test('returns 0.0 when adapter is null', () {
       final result = safeBalanceTotal(null);
@@ -81,23 +87,26 @@ void main() {
       expect(coin.balanceUsd, 0.0);
     });
 
-    test('CoinBalanceData correctly stores balance, price, and priceChange', () {
-      const coin = CoinBalanceData(
-        symbol: 'ETH',
-        name: 'Ethereum',
-        iconUrl: 'https://example.com/eth.png',
-        balance: 2.5,
-        balanceUsd: 5000.0,
-        price: 2000.0,
-        priceChange24h: 3.5,
-        chainType: 'ETH',
-      );
+    test(
+      'CoinBalanceData correctly stores balance, price, and priceChange',
+      () {
+        const coin = CoinBalanceData(
+          symbol: 'ETH',
+          name: 'Ethereum',
+          iconUrl: 'https://example.com/eth.png',
+          balance: 2.5,
+          balanceUsd: 5000.0,
+          price: 2000.0,
+          priceChange24h: 3.5,
+          chainType: 'ETH',
+        );
 
-      expect(coin.balance, 2.5);
-      expect(coin.price, 2000.0);
-      expect(coin.priceChange24h, 3.5);
-      expect(coin.balanceUsd, 5000.0);
-    });
+        expect(coin.balance, 2.5);
+        expect(coin.price, 2000.0);
+        expect(coin.priceChange24h, 3.5);
+        expect(coin.balanceUsd, 5000.0);
+      },
+    );
   });
 
   group('WalletInfoData coinInfo mapping', () {
@@ -114,16 +123,18 @@ void main() {
       final coinInfo = wallet.coinInfo;
       if (coinInfo != null) {
         for (final entry in coinInfo.entries) {
-          coins.add(CoinBalanceData(
-            symbol: entry.key,
-            name: entry.key,
-            iconUrl: '',
-            balance: 0.0,
-            balanceUsd: 0.0,
-            price: 0.0,
-            priceChange24h: 0.0,
-            chainType: entry.key,
-          ));
+          coins.add(
+            CoinBalanceData(
+              symbol: entry.key,
+              name: entry.key,
+              iconUrl: '',
+              balance: 0.0,
+              balanceUsd: 0.0,
+              price: 0.0,
+              priceChange24h: 0.0,
+              chainType: entry.key,
+            ),
+          );
         }
       }
 
@@ -138,10 +149,16 @@ void main() {
         createdAt: DateTime.now(),
         coinInfo: {
           'ETH': {
-            'baseInfo': {'name': 'Ethereum', 'icon': 'https://example.com/eth.png'},
+            'baseInfo': {
+              'name': 'Ethereum',
+              'icon': 'https://example.com/eth.png',
+            },
           },
           'BTC': {
-            'baseInfo': {'name': 'Bitcoin', 'icon': 'https://example.com/btc.png'},
+            'baseInfo': {
+              'name': 'Bitcoin',
+              'icon': 'https://example.com/btc.png',
+            },
           },
         },
       );
@@ -151,16 +168,18 @@ void main() {
         final coinData = entry.value as Map<String, dynamic>?;
         if (coinData != null && coinData['baseInfo'] != null) {
           final baseInfo = coinData['baseInfo'] as Map<String, dynamic>;
-          coins.add(CoinBalanceData(
-            symbol: entry.key,
-            name: baseInfo['name']?.toString() ?? entry.key,
-            iconUrl: baseInfo['icon']?.toString() ?? '',
-            balance: 0.0,
-            balanceUsd: 0.0,
-            price: 0.0,
-            priceChange24h: 0.0,
-            chainType: entry.key,
-          ));
+          coins.add(
+            CoinBalanceData(
+              symbol: entry.key,
+              name: baseInfo['name']?.toString() ?? entry.key,
+              iconUrl: baseInfo['icon']?.toString() ?? '',
+              balance: 0.0,
+              balanceUsd: 0.0,
+              price: 0.0,
+              priceChange24h: 0.0,
+              chainType: entry.key,
+            ),
+          );
         }
       }
 

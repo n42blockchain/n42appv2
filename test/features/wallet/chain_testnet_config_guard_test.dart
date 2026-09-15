@@ -21,7 +21,9 @@ void main() {
     80001: 'Polygon Mumbai (2024-04 关停)',
   };
 
-  Iterable<MapEntry<String, Map>> evmEntries(Map<String, dynamic> registry) sync* {
+  Iterable<MapEntry<String, Map>> evmEntries(
+    Map<String, dynamic> registry,
+  ) sync* {
     for (final entry in registry.entries) {
       final value = entry.value;
       if (value is! Map) continue;
@@ -66,7 +68,8 @@ void main() {
         expect(
           offenders,
           isEmpty,
-          reason: '测试网 chainId 等于主网会让"测试网"交易在主网同样合法、可被重放。'
+          reason:
+              '测试网 chainId 等于主网会让"测试网"交易在主网同样合法、可被重放。'
               '无测试网时应填 0，使 resolveChainId 返回 null 并触发 fail-closed：\n'
               '${offenders.join('\n')}',
         );
@@ -85,7 +88,8 @@ void main() {
       expect(
         src.contains('supportedNetworkSwitch'),
         isFalse,
-        reason: '网络切换入口应由 coinModel.supportTest 驱动，'
+        reason:
+            '网络切换入口应由 coinModel.supportTest 驱动，'
             '不要恢复硬编码链白名单',
       );
       expect(src.contains('coinModel.supportTest'), isTrue);

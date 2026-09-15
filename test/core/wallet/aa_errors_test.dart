@@ -15,14 +15,17 @@ void main() {
     });
 
     test('contains all expected values', () {
-      expect(SmartAccountErrorType.values, containsAll([
-        SmartAccountErrorType.notDeployed,
-        SmartAccountErrorType.deploymentFailed,
-        SmartAccountErrorType.addressCalculationFailed,
-        SmartAccountErrorType.invalidOwner,
-        SmartAccountErrorType.invalidNonce,
-        SmartAccountErrorType.notFound,
-      ]));
+      expect(
+        SmartAccountErrorType.values,
+        containsAll([
+          SmartAccountErrorType.notDeployed,
+          SmartAccountErrorType.deploymentFailed,
+          SmartAccountErrorType.addressCalculationFailed,
+          SmartAccountErrorType.invalidOwner,
+          SmartAccountErrorType.invalidNonce,
+          SmartAccountErrorType.notFound,
+        ]),
+      );
     });
   });
 
@@ -36,14 +39,17 @@ void main() {
     });
 
     test('contains all expected values', () {
-      expect(PaymasterErrorType.values, containsAll([
-        PaymasterErrorType.validationFailed,
-        PaymasterErrorType.insufficientBalance,
-        PaymasterErrorType.unsupportedToken,
-        PaymasterErrorType.signatureInvalid,
-        PaymasterErrorType.expired,
-        PaymasterErrorType.notAvailable,
-      ]));
+      expect(
+        PaymasterErrorType.values,
+        containsAll([
+          PaymasterErrorType.validationFailed,
+          PaymasterErrorType.insufficientBalance,
+          PaymasterErrorType.unsupportedToken,
+          PaymasterErrorType.signatureInvalid,
+          PaymasterErrorType.expired,
+          PaymasterErrorType.notAvailable,
+        ]),
+      );
     });
   });
 
@@ -81,7 +87,10 @@ void main() {
     });
 
     test('with details → includes parenthesised details', () {
-      const err = UserOperationBuildError('build failed', details: 'bad calldata');
+      const err = UserOperationBuildError(
+        'build failed',
+        details: 'bad calldata',
+      );
       expect(err.toString(), 'AAError: build failed (bad calldata)');
     });
 
@@ -93,7 +102,10 @@ void main() {
     });
 
     test('AAConfigurationError stores message', () {
-      const err = AAConfigurationError('bad config', details: 'entryPoint missing');
+      const err = AAConfigurationError(
+        'bad config',
+        details: 'entryPoint missing',
+      );
       expect(err.message, 'bad config');
       expect(err.details, 'entryPoint missing');
     });
@@ -116,8 +128,14 @@ void main() {
     });
 
     test('with field → includes "(field: <field>)"', () {
-      const err = UserOperationValidationError('invalid value', field: 'callData');
-      expect(err.toString(), 'UserOperationValidationError: invalid value (field: callData)');
+      const err = UserOperationValidationError(
+        'invalid value',
+        field: 'callData',
+      );
+      expect(
+        err.toString(),
+        'UserOperationValidationError: invalid value (field: callData)',
+      );
     });
 
     test('stores field', () {
@@ -142,8 +160,14 @@ void main() {
     });
 
     test('with method → "BundlerRpcError (<method>): <message>"', () {
-      const err = BundlerRpcError('call failed', method: 'eth_sendUserOperation');
-      expect(err.toString(), 'BundlerRpcError (eth_sendUserOperation): call failed');
+      const err = BundlerRpcError(
+        'call failed',
+        method: 'eth_sendUserOperation',
+      );
+      expect(
+        err.toString(),
+        'BundlerRpcError (eth_sendUserOperation): call failed',
+      );
     });
 
     test('with code → appends "[code: N]"', () {
@@ -153,7 +177,10 @@ void main() {
 
     test('with method and code', () {
       const err = BundlerRpcError('error', method: 'eth_call', code: -32000);
-      expect(err.toString(), 'BundlerRpcError (eth_call): error [code: -32000]');
+      expect(
+        err.toString(),
+        'BundlerRpcError (eth_call): error [code: -32000]',
+      );
     });
   });
 
@@ -204,17 +231,26 @@ void main() {
 
   group('SmartAccountError', () {
     test('stores type', () {
-      const err = SmartAccountError('not deployed', type: SmartAccountErrorType.notDeployed);
+      const err = SmartAccountError(
+        'not deployed',
+        type: SmartAccountErrorType.notDeployed,
+      );
       expect(err.type, SmartAccountErrorType.notDeployed);
     });
 
     test('toString → "SmartAccountError (<typeName>): <message>"', () {
-      const err = SmartAccountError('failed', type: SmartAccountErrorType.deploymentFailed);
+      const err = SmartAccountError(
+        'failed',
+        type: SmartAccountErrorType.deploymentFailed,
+      );
       expect(err.toString(), 'SmartAccountError (deploymentFailed): failed');
     });
 
     test('toString with invalidOwner type', () {
-      const err = SmartAccountError('bad owner', type: SmartAccountErrorType.invalidOwner);
+      const err = SmartAccountError(
+        'bad owner',
+        type: SmartAccountErrorType.invalidOwner,
+      );
       expect(err.toString(), 'SmartAccountError (invalidOwner): bad owner');
     });
   });
@@ -225,17 +261,30 @@ void main() {
 
   group('PaymasterError', () {
     test('stores type', () {
-      const err = PaymasterError('no funds', type: PaymasterErrorType.insufficientBalance);
+      const err = PaymasterError(
+        'no funds',
+        type: PaymasterErrorType.insufficientBalance,
+      );
       expect(err.type, PaymasterErrorType.insufficientBalance);
     });
 
     test('toString → "PaymasterError (<typeName>): <message>"', () {
-      const err = PaymasterError('token not supported', type: PaymasterErrorType.unsupportedToken);
-      expect(err.toString(), 'PaymasterError (unsupportedToken): token not supported');
+      const err = PaymasterError(
+        'token not supported',
+        type: PaymasterErrorType.unsupportedToken,
+      );
+      expect(
+        err.toString(),
+        'PaymasterError (unsupportedToken): token not supported',
+      );
     });
 
     test('stores code when provided', () {
-      const err = PaymasterError('expired', type: PaymasterErrorType.expired, code: -32502);
+      const err = PaymasterError(
+        'expired',
+        type: PaymasterErrorType.expired,
+        code: -32502,
+      );
       expect(err.code, -32502);
     });
   });
@@ -245,13 +294,19 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('ExecutionError', () {
-    test('toString without txHash or revertReason → "ExecutionError: <message>"', () {
-      const err = ExecutionError('tx failed');
-      expect(err.toString(), 'ExecutionError: tx failed');
-    });
+    test(
+      'toString without txHash or revertReason → "ExecutionError: <message>"',
+      () {
+        const err = ExecutionError('tx failed');
+        expect(err.toString(), 'ExecutionError: tx failed');
+      },
+    );
 
     test('toString with revertReason → includes "(revert: ...)"', () {
-      const err = ExecutionError('tx failed', revertReason: 'ERC20: insufficient allowance');
+      const err = ExecutionError(
+        'tx failed',
+        revertReason: 'ERC20: insufficient allowance',
+      );
       expect(err.toString(), contains('revert: ERC20: insufficient allowance'));
     });
 
@@ -272,7 +327,11 @@ void main() {
     });
 
     test('stores txHash and revertReason', () {
-      const err = ExecutionError('err', txHash: '0x1', revertReason: 'out of gas');
+      const err = ExecutionError(
+        'err',
+        txHash: '0x1',
+        revertReason: 'out of gas',
+      );
       expect(err.txHash, '0x1');
       expect(err.revertReason, 'out of gas');
     });
@@ -335,7 +394,10 @@ void main() {
         'error': {'code': -32502, 'message': 'paymaster failed'},
       }.toAAError();
       expect(result, isA<PaymasterError>());
-      expect((result as PaymasterError).type, PaymasterErrorType.validationFailed);
+      expect(
+        (result as PaymasterError).type,
+        PaymasterErrorType.validationFailed,
+      );
     });
 
     test('code -32503 → GasEstimationError', () {

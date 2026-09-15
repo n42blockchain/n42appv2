@@ -416,10 +416,9 @@ class EthSignRequest {
       if (masterFingerprint != null)
         const CborIntValue(2): CborIntValue(masterFingerprint!),
     };
-    return CborTagValue(
-      CborMapValue.definite(keypathMap),
-      const [cryptoKeypathTag],
-    );
+    return CborTagValue(CborMapValue.definite(keypathMap), const [
+      cryptoKeypathTag,
+    ]);
   }
 
   Uint8List toCbor() {

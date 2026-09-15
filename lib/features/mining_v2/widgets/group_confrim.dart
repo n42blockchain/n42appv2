@@ -73,7 +73,9 @@ class GroupConfirm extends StatelessWidget {
                 Text(
                   text,
                   textAlign: TextAlign.center,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: AppSpacing.space2),
               ],

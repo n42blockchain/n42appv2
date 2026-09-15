@@ -10,17 +10,17 @@
 	<key>teamID</key>
 	<string>CFRXH38L48</string>
 
-	<!-- Upload to App Store Connect -->
+	<!-- Export locally; upload is a separate release operation. -->
 	<key>destination</key>
-	<string>upload</string>
+	<string>export</string>
 
 	<!-- Signing style -->
 	<key>signingStyle</key>
 	<string>automatic</string>
 
-	<!-- Manage version and build number automatically -->
+	<!-- Preserve the version tested and committed in pubspec.yaml. -->
 	<key>manageAppVersionAndBuildNumber</key>
-	<true/>
+	<false/>
 
 	<!-- Upload symbols for crash reporting -->
 	<key>uploadSymbols</key>
@@ -34,11 +34,6 @@
 	<key>stripSwiftSymbols</key>
 	<true/>
 
-	<!-- Provisioning profiles (automatic signing will handle this) -->
-	<key>provisioningProfiles</key>
-	<dict>
-		<key>ai.n42.www</key>
-		<string>match AppStore ai.n42.www</string>
-	</dict>
+
 </dict>
 </plist>

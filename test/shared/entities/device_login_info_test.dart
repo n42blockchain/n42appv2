@@ -35,11 +35,23 @@ void main() {
 
     test('displayName：品牌+系统组合与回退', () {
       const full = DeviceLoginInfo(
-          deviceId: '1', deviceBrand: 'Apple', deviceModel: 'x', deviceOs: 'iOS');
+        deviceId: '1',
+        deviceBrand: 'Apple',
+        deviceModel: 'x',
+        deviceOs: 'iOS',
+      );
       const brandOnly = DeviceLoginInfo(
-          deviceId: '1', deviceBrand: 'samsung', deviceModel: 'x', deviceOs: '');
+        deviceId: '1',
+        deviceBrand: 'samsung',
+        deviceModel: 'x',
+        deviceOs: '',
+      );
       const empty = DeviceLoginInfo(
-          deviceId: '1', deviceBrand: '', deviceModel: 'x', deviceOs: '');
+        deviceId: '1',
+        deviceBrand: '',
+        deviceModel: 'x',
+        deviceOs: '',
+      );
       expect(full.displayName, 'Apple iOS');
       expect(brandOnly.displayName, 'samsung');
       expect(empty.displayName, 'Unknown');

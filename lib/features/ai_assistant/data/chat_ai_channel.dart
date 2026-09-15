@@ -21,10 +21,9 @@ class ChatAiChannel implements WalletAiChannel {
     if (!getIt.isRegistered<AiService>()) return null;
     try {
       final ai = getIt<AiService>();
-      final res = await ai.completion(
-        [AiMessage(role: AiRole.user, content: userPrompt)],
-        systemPrompt: systemPrompt,
-      );
+      final res = await ai.completion([
+        AiMessage(role: AiRole.user, content: userPrompt),
+      ], systemPrompt: systemPrompt);
       final text = res.text.trim();
       return text.isEmpty ? null : text;
     } catch (_) {

@@ -38,16 +38,19 @@ void main() {
       expect(AAConfig.getEntryPoint(), AAConfig.entryPointV08);
     });
 
-    test('getEntryPoint should return correct address for specified version', () {
-      expect(
-        AAConfig.getEntryPoint(version: EntryPointVersion.v07),
-        AAConfig.entryPointV07,
-      );
-      expect(
-        AAConfig.getEntryPoint(version: EntryPointVersion.v08),
-        AAConfig.entryPointV08,
-      );
-    });
+    test(
+      'getEntryPoint should return correct address for specified version',
+      () {
+        expect(
+          AAConfig.getEntryPoint(version: EntryPointVersion.v07),
+          AAConfig.entryPointV07,
+        );
+        expect(
+          AAConfig.getEntryPoint(version: EntryPointVersion.v08),
+          AAConfig.entryPointV08,
+        );
+      },
+    );
   });
 
   group('AAConfig Factory Address Tests', () {
@@ -58,10 +61,7 @@ void main() {
 
     test('Simple7702Account factory should be defined', () {
       expect(AAConfig.simple7702AccountFactory.isNotEmpty, true);
-      expect(
-        AAConfig.simple7702AccountFactory.startsWith('0x'),
-        true,
-      );
+      expect(AAConfig.simple7702AccountFactory.startsWith('0x'), true);
     });
 
     test('getSimpleAccountFactory should return correct address', () {
@@ -142,8 +142,14 @@ void main() {
     });
 
     test('should return correct version-specific config', () {
-      final v07Config = AAConfig.getChainConfig('ETH', version: EntryPointVersion.v07);
-      final v08Config = AAConfig.getChainConfig('ETH', version: EntryPointVersion.v08);
+      final v07Config = AAConfig.getChainConfig(
+        'ETH',
+        version: EntryPointVersion.v07,
+      );
+      final v08Config = AAConfig.getChainConfig(
+        'ETH',
+        version: EntryPointVersion.v08,
+      );
 
       expect(v07Config!.entryPoint, AAConfig.entryPointV07);
       expect(v08Config!.entryPoint, AAConfig.entryPointV08);
@@ -177,8 +183,14 @@ void main() {
     });
 
     test('getTestnetConfig should respect version parameter', () {
-      final v07Config = AAConfig.getTestnetConfig('SEPOLIA', version: EntryPointVersion.v07);
-      final v08Config = AAConfig.getTestnetConfig('SEPOLIA', version: EntryPointVersion.v08);
+      final v07Config = AAConfig.getTestnetConfig(
+        'SEPOLIA',
+        version: EntryPointVersion.v07,
+      );
+      final v08Config = AAConfig.getTestnetConfig(
+        'SEPOLIA',
+        version: EntryPointVersion.v08,
+      );
 
       expect(v07Config!.entryPoint, AAConfig.entryPointV07);
       expect(v08Config!.entryPoint, AAConfig.entryPointV08);
@@ -241,26 +253,26 @@ void main() {
       expect(v07Config.simple7702AccountFactory, isNull);
     });
 
-    test('getBundlerUrlWithKey returns bundlerUrl regardless of key (deprecated: key via Authorization header)', () {
-      final config = AAChainConfig(
-        chainId: 1,
-        bundlerUrl: 'https://example.com/bundler',
-        entryPoint: AAConfig.entryPointV08,
-        simpleAccountFactory: AAConfig.simpleAccountFactoryV08,
-      );
+    test(
+      'getBundlerUrlWithKey returns bundlerUrl regardless of key (deprecated: key via Authorization header)',
+      () {
+        final config = AAChainConfig(
+          chainId: 1,
+          bundlerUrl: 'https://example.com/bundler',
+          entryPoint: AAConfig.entryPointV08,
+          simpleAccountFactory: AAConfig.simpleAccountFactoryV08,
+        );
 
-      expect(
-        config.getBundlerUrlWithKey(null),
-        'https://example.com/bundler',
-      );
-      expect(
-        config.getBundlerUrlWithKey(''),
-        'https://example.com/bundler',
-      );
-      expect(
-        config.getBundlerUrlWithKey('myapikey'),
-        'https://example.com/bundler',
-      );
-    });
+        expect(
+          config.getBundlerUrlWithKey(null),
+          'https://example.com/bundler',
+        );
+        expect(config.getBundlerUrlWithKey(''), 'https://example.com/bundler');
+        expect(
+          config.getBundlerUrlWithKey('myapikey'),
+          'https://example.com/bundler',
+        );
+      },
+    );
   });
 }

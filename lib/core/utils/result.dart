@@ -110,8 +110,7 @@ final class Success<T, E> extends Result<T, E> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Success<T, E> && value == other.value;
+      identical(this, other) || other is Success<T, E> && value == other.value;
 
   @override
   int get hashCode => value.hashCode;
@@ -128,8 +127,7 @@ final class Failure<T, E> extends Result<T, E> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is Failure<T, E> && error == other.error;
+      identical(this, other) || other is Failure<T, E> && error == other.error;
 
   @override
   int get hashCode => error.hashCode;
@@ -223,7 +221,8 @@ sealed class AppError {
   }
 
   @override
-  String toString() => '$runtimeType: $message${code != null ? ' ($code)' : ''}';
+  String toString() =>
+      '$runtimeType: $message${code != null ? ' ($code)' : ''}';
 }
 
 final class NetworkError extends AppError {

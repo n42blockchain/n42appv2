@@ -35,21 +35,21 @@ void main() {
       SharedPreferences.setMockInitialValues({});
       prefs = await SharedPreferences.getInstance();
       secureStore = FakeSecureStore();
-      return SecurePreferences.test(
-        prefs: prefs,
-        secureStorage: secureStore,
-      );
+      return SecurePreferences.test(prefs: prefs, secureStorage: secureStore);
     }
 
-    test('migrates plaintext sensitive key into secure storage on init', () async {
-      final subject = await createSubject();
-      await prefs.setString('walletInfo', '{"user":1}');
+    test(
+      'migrates plaintext sensitive key into secure storage on init',
+      () async {
+        final subject = await createSubject();
+        await prefs.setString('walletInfo', '{"user":1}');
 
-      await subject.init();
+        await subject.init();
 
-      expect(prefs.getString('walletInfo'), isNull);
-      expect(secureStore.values['walletInfo'], '{"user":1}');
-    });
+        expect(prefs.getString('walletInfo'), isNull);
+        expect(secureStore.values['walletInfo'], '{"user":1}');
+      },
+    );
 
     test('migrates legacy mining data from shared preferences', () async {
       final subject = await createSubject();
@@ -64,16 +64,19 @@ void main() {
       );
     });
 
-    test('removes plaintext sensitive key even when secure storage already has value', () async {
-      final subject = await createSubject();
-      secureStore.values['walletInfo'] = '{"secure":true}';
-      await prefs.setString('walletInfo', '{"legacy":true}');
+    test(
+      'removes plaintext sensitive key even when secure storage already has value',
+      () async {
+        final subject = await createSubject();
+        secureStore.values['walletInfo'] = '{"secure":true}';
+        await prefs.setString('walletInfo', '{"legacy":true}');
 
-      await subject.init();
+        await subject.init();
 
-      expect(prefs.getString('walletInfo'), isNull);
-      expect(secureStore.values['walletInfo'], '{"secure":true}');
-    });
+        expect(prefs.getString('walletInfo'), isNull);
+        expect(secureStore.values['walletInfo'], '{"secure":true}');
+      },
+    );
 
     test('clearSensitiveData removes all secure sensitive keys', () async {
       final subject = await createSubject();

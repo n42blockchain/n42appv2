@@ -34,14 +34,14 @@ const _kDetailJson = <String, dynamic>{
       'script': '47304402...',
       'output_value': 100000,
       'addresses': ['1SenderAddress'],
-    }
+    },
   ],
   'outputs': [
     {
       'value': 90000,
       'script': '76a914...',
       'addresses': ['1ReceiverAddress'],
-    }
+    },
   ],
 };
 
@@ -92,7 +92,16 @@ void main() {
     test('includes all expected keys', () {
       final input = Input.fromJson(_kInputJson);
       final json = input.toJson();
-      expect(json.keys, containsAll(['prev_hash', 'output_index', 'script', 'output_value', 'addresses']));
+      expect(
+        json.keys,
+        containsAll([
+          'prev_hash',
+          'output_index',
+          'script',
+          'output_value',
+          'addresses',
+        ]),
+      );
     });
 
     test('values match fields', () {
@@ -118,12 +127,20 @@ void main() {
     });
 
     test('script is nullable', () {
-      final output = Output.fromJson({'value': 100, 'script': null, 'addresses': null});
+      final output = Output.fromJson({
+        'value': 100,
+        'script': null,
+        'addresses': null,
+      });
       expect(output.script, isNull);
     });
 
     test('addresses is nullable', () {
-      final output = Output.fromJson({'value': 100, 'script': null, 'addresses': null});
+      final output = Output.fromJson({
+        'value': 100,
+        'script': null,
+        'addresses': null,
+      });
       expect(output.addresses, isNull);
     });
 

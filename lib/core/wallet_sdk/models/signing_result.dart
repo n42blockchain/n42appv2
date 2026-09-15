@@ -19,14 +19,9 @@ class ByteArraySigningResult {
   final bool success;
   final String signHash;
 
-  const ByteArraySigningResult({
-    required this.success,
-    required this.signHash,
-  });
+  const ByteArraySigningResult({required this.success, required this.signHash});
 
-  const ByteArraySigningResult.empty()
-      : success = false,
-        signHash = '';
+  const ByteArraySigningResult.empty() : success = false, signHash = '';
 
   factory ByteArraySigningResult.fromMap(Map<dynamic, dynamic> map) {
     return ByteArraySigningResult(

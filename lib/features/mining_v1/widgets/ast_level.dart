@@ -48,7 +48,9 @@ class AstLevel extends StatelessWidget {
                 children: [
                   Text(
                     levelText,
-                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.space12),
                   Row(
@@ -89,7 +91,9 @@ class AstLevel extends StatelessWidget {
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
-                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
                         ),
                       ),
                     ],
@@ -141,10 +145,7 @@ class AstLevel extends StatelessWidget {
             color: textColor,
           ),
           SizedBox(width: AppSpacing.space4),
-          Text(
-            label,
-            style: AppTypography.caption.copyWith(color: textColor),
-          ),
+          Text(label, style: AppTypography.caption.copyWith(color: textColor)),
         ],
       ),
     );

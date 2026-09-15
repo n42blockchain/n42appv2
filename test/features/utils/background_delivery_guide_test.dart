@@ -9,10 +9,16 @@ void main() {
   group('isAggressiveBackgroundRom', () {
     test('matches major Chinese OEM brands (case-insensitive)', () {
       for (final b in [
-        'Xiaomi', 'redmi', 'POCO',
-        'OPPO', 'OnePlus', 'realme',
-        'vivo', 'iQOO',
-        'HUAWEI', 'honor',
+        'Xiaomi',
+        'redmi',
+        'POCO',
+        'OPPO',
+        'OnePlus',
+        'realme',
+        'vivo',
+        'iQOO',
+        'HUAWEI',
+        'honor',
         'Meizu',
       ]) {
         expect(isAggressiveBackgroundRom(b), isTrue, reason: b);

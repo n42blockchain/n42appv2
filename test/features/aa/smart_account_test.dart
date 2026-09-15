@@ -10,8 +10,14 @@ void main() {
   group('SmartAccountType Tests', () {
     test('should have all expected account types', () {
       expect(SmartAccountType.values.length, 6);
-      expect(SmartAccountType.values.contains(SmartAccountType.simpleAccount), true);
-      expect(SmartAccountType.values.contains(SmartAccountType.simple7702Account), true);
+      expect(
+        SmartAccountType.values.contains(SmartAccountType.simpleAccount),
+        true,
+      );
+      expect(
+        SmartAccountType.values.contains(SmartAccountType.simple7702Account),
+        true,
+      );
       expect(SmartAccountType.values.contains(SmartAccountType.safe), true);
       expect(SmartAccountType.values.contains(SmartAccountType.kernel), true);
       expect(SmartAccountType.values.contains(SmartAccountType.biconomy), true);
@@ -27,10 +33,7 @@ void main() {
         SmartAccountType.fromString('simple7702Account'),
         SmartAccountType.simple7702Account,
       );
-      expect(
-        SmartAccountType.fromString('safe'),
-        SmartAccountType.safe,
-      );
+      expect(SmartAccountType.fromString('safe'), SmartAccountType.safe);
     });
 
     test('fromString should be case insensitive', () {
@@ -51,7 +54,10 @@ void main() {
 
     test('displayName should return human-readable names', () {
       expect(SmartAccountType.simpleAccount.displayName, 'Simple Account');
-      expect(SmartAccountType.simple7702Account.displayName, 'EIP-7702 Account');
+      expect(
+        SmartAccountType.simple7702Account.displayName,
+        'EIP-7702 Account',
+      );
       expect(SmartAccountType.safe.displayName, 'Safe');
       expect(SmartAccountType.kernel.displayName, 'Kernel');
       expect(SmartAccountType.biconomy.displayName, 'Biconomy');
@@ -77,9 +83,18 @@ void main() {
   group('SmartAccountState Tests', () {
     test('should have all expected states', () {
       expect(SmartAccountState.values.length, 4);
-      expect(SmartAccountState.values.contains(SmartAccountState.notDeployed), true);
-      expect(SmartAccountState.values.contains(SmartAccountState.deploying), true);
-      expect(SmartAccountState.values.contains(SmartAccountState.deployed), true);
+      expect(
+        SmartAccountState.values.contains(SmartAccountState.notDeployed),
+        true,
+      );
+      expect(
+        SmartAccountState.values.contains(SmartAccountState.deploying),
+        true,
+      );
+      expect(
+        SmartAccountState.values.contains(SmartAccountState.deployed),
+        true,
+      );
       expect(SmartAccountState.values.contains(SmartAccountState.error), true);
     });
 
@@ -148,14 +163,18 @@ void main() {
     test('isDeployed should reflect state correctly', () {
       expect(account.isDeployed, false);
 
-      final deployedAccount = account.copyWith(state: SmartAccountState.deployed);
+      final deployedAccount = account.copyWith(
+        state: SmartAccountState.deployed,
+      );
       expect(deployedAccount.isDeployed, true);
     });
 
     test('needsDeployment should reflect state correctly', () {
       expect(account.needsDeployment, true);
 
-      final deployedAccount = account.copyWith(state: SmartAccountState.deployed);
+      final deployedAccount = account.copyWith(
+        state: SmartAccountState.deployed,
+      );
       expect(deployedAccount.needsDeployment, false);
     });
 
@@ -206,7 +225,10 @@ void main() {
       expect(modified.address, account.address);
       expect(modified.state, SmartAccountState.deployed);
       expect(modified.label, 'Updated Account');
-      expect(account.state, SmartAccountState.notDeployed); // Original unchanged
+      expect(
+        account.state,
+        SmartAccountState.notDeployed,
+      ); // Original unchanged
     });
 
     test('equality should compare address and chainId', () {
@@ -371,10 +393,7 @@ void main() {
     test('should handle defaultPaymasters', () {
       final infoWithPaymaster = AAAccountInfo(
         smartAccounts: {},
-        defaultPaymasters: {
-          1: '0xPaymaster1',
-          137: '0xPaymaster2',
-        },
+        defaultPaymasters: {1: '0xPaymaster1', 137: '0xPaymaster2'},
       );
 
       final json = infoWithPaymaster.toJson();

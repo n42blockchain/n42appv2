@@ -12,17 +12,17 @@ import 'package:n42_wallet/features/wallet/aa/models/user_operation_receipt.dart
 
 /// Minimal TransactionReceiptInfo used inside UserOperationReceipt
 TransactionReceiptInfo _receipt({int status = 1}) => TransactionReceiptInfo(
-      blockHash: '0xblock',
-      blockNumber: BigInt.from(100),
-      transactionHash: '0xtxhash',
-      transactionIndex: 0,
-      from: '0xfrom',
-      to: '0xto',
-      cumulativeGasUsed: BigInt.zero,
-      gasUsed: BigInt.from(21000),
-      status: status,
-      effectiveGasPrice: BigInt.from(1000000000),
-    );
+  blockHash: '0xblock',
+  blockNumber: BigInt.from(100),
+  transactionHash: '0xtxhash',
+  transactionIndex: 0,
+  from: '0xfrom',
+  to: '0xto',
+  cumulativeGasUsed: BigInt.zero,
+  gasUsed: BigInt.from(21000),
+  status: status,
+  effectiveGasPrice: BigInt.from(1000000000),
+);
 
 void main() {
   // ─────────────────────────────────────────────────
@@ -35,14 +35,17 @@ void main() {
     });
 
     test('contains all expected values', () {
-      expect(UserOperationStatus.values, containsAll([
-        UserOperationStatus.pending,
-        UserOperationStatus.included,
-        UserOperationStatus.success,
-        UserOperationStatus.failed,
-        UserOperationStatus.replaced,
-        UserOperationStatus.unknown,
-      ]));
+      expect(
+        UserOperationStatus.values,
+        containsAll([
+          UserOperationStatus.pending,
+          UserOperationStatus.included,
+          UserOperationStatus.success,
+          UserOperationStatus.failed,
+          UserOperationStatus.replaced,
+          UserOperationStatus.unknown,
+        ]),
+      );
     });
   });
 
@@ -90,17 +93,17 @@ void main() {
 
   group('TransactionReceiptInfo.fromJson _parseBigInt', () {
     Map<String, dynamic> base({dynamic blockNumber = '0x64'}) => {
-          'blockHash': '0xabc',
-          'blockNumber': blockNumber,
-          'transactionHash': '0xtx',
-          'transactionIndex': 0,
-          'from': '0xfrom',
-          'to': '0xto',
-          'cumulativeGasUsed': '0x0',
-          'gasUsed': '0x5208',
-          'status': '0x1',
-          'effectiveGasPrice': '0x3b9aca00',
-        };
+      'blockHash': '0xabc',
+      'blockNumber': blockNumber,
+      'transactionHash': '0xtx',
+      'transactionIndex': 0,
+      'from': '0xfrom',
+      'to': '0xto',
+      'cumulativeGasUsed': '0x0',
+      'gasUsed': '0x5208',
+      'status': '0x1',
+      'effectiveGasPrice': '0x3b9aca00',
+    };
 
     test('hex string "0x64" → BigInt 100', () {
       final r = TransactionReceiptInfo.fromJson(base(blockNumber: '0x64'));
@@ -129,17 +132,17 @@ void main() {
 
   group('TransactionReceiptInfo.fromJson _parseInt', () {
     Map<String, dynamic> base({dynamic transactionIndex = '0x1'}) => {
-          'blockHash': '0xabc',
-          'blockNumber': '0x1',
-          'transactionHash': '0xtx',
-          'transactionIndex': transactionIndex,
-          'from': '0xfrom',
-          'to': '0xto',
-          'cumulativeGasUsed': '0x0',
-          'gasUsed': '0x0',
-          'status': '0x1',
-          'effectiveGasPrice': '0x0',
-        };
+      'blockHash': '0xabc',
+      'blockNumber': '0x1',
+      'transactionHash': '0xtx',
+      'transactionIndex': transactionIndex,
+      'from': '0xfrom',
+      'to': '0xto',
+      'cumulativeGasUsed': '0x0',
+      'gasUsed': '0x0',
+      'status': '0x1',
+      'effectiveGasPrice': '0x0',
+    };
 
     test('hex string "0x1" → 1', () {
       final r = TransactionReceiptInfo.fromJson(base(transactionIndex: '0x1'));
@@ -280,29 +283,29 @@ void main() {
 
   group('UserOperationReceipt.fromJson', () {
     Map<String, dynamic> receiptJson() => {
-          'blockHash': '0xblock',
-          'blockNumber': '0x1',
-          'transactionHash': '0xtx',
-          'transactionIndex': '0x0',
-          'from': '0xfrom',
-          'to': '0xto',
-          'cumulativeGasUsed': '0x0',
-          'gasUsed': '0x5208',
-          'status': '0x1',
-          'effectiveGasPrice': '0x3b9aca00',
-        };
+      'blockHash': '0xblock',
+      'blockNumber': '0x1',
+      'transactionHash': '0xtx',
+      'transactionIndex': '0x0',
+      'from': '0xfrom',
+      'to': '0xto',
+      'cumulativeGasUsed': '0x0',
+      'gasUsed': '0x5208',
+      'status': '0x1',
+      'effectiveGasPrice': '0x3b9aca00',
+    };
 
     Map<String, dynamic> json0({bool? success}) => {
-          'userOpHash': '0xopHash',
-          'sender': '0xsender',
-          'nonce': '0x5',
-          'success': success,
-          'paymaster': '0xpaymaster',
-          'actualGasUsed': '0xc350',  // 50000
-          'actualGasCost': '0xf4240', // 1000000
-          'receipt': receiptJson(),
-          'logs': [],
-        };
+      'userOpHash': '0xopHash',
+      'sender': '0xsender',
+      'nonce': '0x5',
+      'success': success,
+      'paymaster': '0xpaymaster',
+      'actualGasUsed': '0xc350', // 50000
+      'actualGasCost': '0xf4240', // 1000000
+      'receipt': receiptJson(),
+      'logs': [],
+    };
 
     test('parses all fields correctly', () {
       final op = UserOperationReceipt.fromJson(json0(success: true));

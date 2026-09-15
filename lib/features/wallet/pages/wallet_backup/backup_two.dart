@@ -96,9 +96,7 @@ class _BackupTwoState extends State<BackupTwo> {
                     Container(
                       alignment: Alignment.center,
                       width: double.infinity,
-                      margin: EdgeInsets.symmetric(
-                        vertical: AppSpacing.space8,
-                      ),
+                      margin: EdgeInsets.symmetric(vertical: AppSpacing.space8),
                       child: Text(
                         S.of(context).g_key_wallet_c12,
                         style: AppTypography.displayLg.copyWith(

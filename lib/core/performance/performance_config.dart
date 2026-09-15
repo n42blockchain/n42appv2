@@ -94,16 +94,16 @@ class PerformanceConfig {
   /// 平均帧时间（毫秒），无帧数据时返回 0
   static double get averageFrameTime {
     if (_frameRecords.isEmpty) return 0;
-    final total =
-        _frameRecords.fold<int>(0, (sum, r) => sum + r.totalDuration);
+    final total = _frameRecords.fold<int>(0, (sum, r) => sum + r.totalDuration);
     return total / _frameRecords.length / 1000; // 微秒 → 毫秒
   }
 
   /// Jank 帧占比（0-1），无帧数据时返回 0
   static double get jankRate {
     if (_frameRecords.isEmpty) return 0;
-    final jankCount =
-        _frameRecords.where((r) => r.totalDuration > _jankThresholdUs).length;
+    final jankCount = _frameRecords
+        .where((r) => r.totalDuration > _jankThresholdUs)
+        .length;
     return jankCount / _frameRecords.length;
   }
 

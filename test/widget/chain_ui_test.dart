@@ -35,10 +35,16 @@ void main() {
         final name = baseInfo['name'] as String?;
         final miniName = baseInfo['miniName'] as String?;
 
-        expect(name != null && name.isNotEmpty, true,
-            reason: '${entry.key} should have a display name');
-        expect(miniName != null && miniName.isNotEmpty, true,
-            reason: '${entry.key} should have a mini name/symbol');
+        expect(
+          name != null && name.isNotEmpty,
+          true,
+          reason: '${entry.key} should have a display name',
+        );
+        expect(
+          miniName != null && miniName.isNotEmpty,
+          true,
+          reason: '${entry.key} should have a mini name/symbol',
+        );
       }
     });
 
@@ -165,19 +171,22 @@ void main() {
     });
 
     test('should shorten Stellar address correctly', () {
-      const address = 'GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ';
+      const address =
+          'GCEZWKCA5VLDNRLN3RPRJMRZOX3Z6G5CHCGSNFHEYVXM3XOJMDS674JZ';
       final shortened = _shortenAddress(address);
       expect(shortened, 'GCEZWK...74JZ');
     });
 
     test('should shorten Cardano address correctly', () {
-      const address = 'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp';
+      const address =
+          'addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3jcu5d8ps7zex2k2xt3uqxgjqnnj83ws8lhrn648jjxtwq2ytjqp';
       final shortened = _shortenAddress(address);
       expect(shortened, 'addr1q...tjqp');
     });
 
     test('should shorten MultiversX address correctly', () {
-      const address = 'erd1qqqqqqqqqqqqqpgqhe8t5jewej70zupmh44jurgn29psua5l2jps3ntjj3';
+      const address =
+          'erd1qqqqqqqqqqqqqpgqhe8t5jewej70zupmh44jurgn29psua5l2jps3ntjj3';
       final shortened = _shortenAddress(address);
       expect(shortened, 'erd1qq...tjj3');
     });
@@ -191,17 +200,35 @@ void main() {
 
   group('Chain Icon URL Tests', () {
     test('all new chains should have valid icon URLs', () {
-      final newChains = ['XLM', 'VET', 'ONE', 'IOTX', 'NEAR', 'ZIL', 'THETA', 'ADA', 'EGLD'];
+      final newChains = [
+        'XLM',
+        'VET',
+        'ONE',
+        'IOTX',
+        'NEAR',
+        'ZIL',
+        'THETA',
+        'ADA',
+        'EGLD',
+      ];
 
       for (final chain in newChains) {
         final config = all_chain[chain] as Map<String, dynamic>;
         final baseInfo = config['baseInfo'] as Map<String, dynamic>;
         final icon = baseInfo['icon'] as String;
 
-        expect(icon.startsWith('http'), true,
-            reason: '$chain icon URL should start with http');
-        expect(icon.contains('.png') || icon.contains('.svg') || icon.contains('.jpg'), true,
-            reason: '$chain icon should be an image file');
+        expect(
+          icon.startsWith('http'),
+          true,
+          reason: '$chain icon URL should start with http',
+        );
+        expect(
+          icon.contains('.png') ||
+              icon.contains('.svg') ||
+              icon.contains('.jpg'),
+          true,
+          reason: '$chain icon should be an image file',
+        );
       }
     });
   });
@@ -252,11 +279,13 @@ void main() {
           home: Scaffold(
             body: ListView(
               children: batch1
-                  .map((name) => _TestChainListItem(
-                        name: name,
-                        symbol: name.substring(0, 3).toUpperCase(),
-                        icon: '',
-                      ))
+                  .map(
+                    (name) => _TestChainListItem(
+                      name: name,
+                      symbol: name.substring(0, 3).toUpperCase(),
+                      icon: '',
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -276,11 +305,13 @@ void main() {
           home: Scaffold(
             body: ListView(
               children: batch2
-                  .map((name) => _TestChainListItem(
-                        name: name,
-                        symbol: name.split(' ')[0].toUpperCase(),
-                        icon: '',
-                      ))
+                  .map(
+                    (name) => _TestChainListItem(
+                      name: name,
+                      symbol: name.split(' ')[0].toUpperCase(),
+                      icon: '',
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -300,11 +331,13 @@ void main() {
           home: Scaffold(
             body: ListView(
               children: batch3
-                  .map((name) => _TestChainListItem(
-                        name: name,
-                        symbol: name == 'Cardano' ? 'ADA' : 'EGLD',
-                        icon: '',
-                      ))
+                  .map(
+                    (name) => _TestChainListItem(
+                      name: name,
+                      symbol: name == 'Cardano' ? 'ADA' : 'EGLD',
+                      icon: '',
+                    ),
+                  )
                   .toList(),
             ),
           ),
@@ -450,8 +483,10 @@ class _TestBalanceCard extends StatelessWidget {
           children: [
             Text(chainName, style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: 8),
-            Text('$balance $symbol',
-                style: Theme.of(context).textTheme.headlineSmall),
+            Text(
+              '$balance $symbol',
+              style: Theme.of(context).textTheme.headlineSmall,
+            ),
             Text(usdValue, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ),

@@ -158,7 +158,10 @@ class SwapAstCheckWidget extends StatelessWidget {
                     baseline: TextBaseline.alphabetic,
                     child: InkWell(
                       onTap: () {
-                        InAppBrowser.open(context, "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use.html");
+                        InAppBrowser.open(
+                          context,
+                          "${AppConfig.apiUrl['n42Browser']!}/static/terms_of_use.html",
+                        );
                       },
                       // 行内链接：补按压反馈 + 垂直外扩命中区（§5 红线）
                       child: Padding(

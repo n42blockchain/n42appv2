@@ -78,9 +78,7 @@ class _BridgeSelectChainPageState extends State<BridgeSelectChainPage> {
             // 搜索框
             Container(
               margin: EdgeInsets.all(AppSpacing.space8),
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               decoration: BoxDecoration(
                 color: AppColorTokens.of(context).bgSurface,
                 borderRadius: AppRadius.brMd,

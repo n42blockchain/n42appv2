@@ -30,9 +30,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           Expanded(
             flex: 1,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               child: Text(
                 S.of(context).g_mining_key_9,
                 style: AppTypography.bodySm.copyWith(
@@ -290,9 +288,7 @@ mixin _SectionsMixin on _WidgetsMixin {
           Expanded(
             flex: 1,
             child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space4),
               child: Text(
                 '24H Reward',
                 style: AppTypography.body.copyWith(

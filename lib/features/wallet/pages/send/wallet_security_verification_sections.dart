@@ -1,10 +1,12 @@
 part of 'wallet_security_verification.dart';
 
 /// Common input text style used across all verification sections.
-TextStyle _inputTextStyle(BuildContext context) => AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
+TextStyle _inputTextStyle(BuildContext context) =>
+    AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary);
 
 /// Common hint text style used across all verification sections.
-TextStyle _hintTextStyle(BuildContext context) => AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
+TextStyle _hintTextStyle(BuildContext context) =>
+    AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
 
 /// Common InputDecoration with no borders.
 InputDecoration _noBorderDecoration(
@@ -262,7 +264,9 @@ class _GoogleAuthSectionState extends State<_GoogleAuthSection> {
                       border: InputBorder.none,
                       counterText: '',
                       hintText: S.of(context).g_google_auth_key4,
-                      hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
+                      hintStyle: AppTypography.bodySm.copyWith(
+                        color: subtitleColor,
+                      ),
                     ),
                     inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     onSubmitted: widget.onVerify,

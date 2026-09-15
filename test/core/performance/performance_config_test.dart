@@ -65,10 +65,7 @@ void main() {
 
     group('measureSync', () {
       test('should measure sync operation duration', () {
-        final result = PerformanceConfig.measureSync(
-          'sync_test',
-          () => 42,
-        );
+        final result = PerformanceConfig.measureSync('sync_test', () => 42);
 
         expect(result, equals(42));
       });
@@ -144,7 +141,8 @@ void main() {
 
     test('should configure cache', () {
       expect(
-        () => ImageCacheConfig.configure(maxCacheSize: 100, maxCacheWidth: 1000),
+        () =>
+            ImageCacheConfig.configure(maxCacheSize: 100, maxCacheWidth: 1000),
         returnsNormally,
       );
     });
@@ -162,4 +160,3 @@ void main() {
     });
   });
 }
-

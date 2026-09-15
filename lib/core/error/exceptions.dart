@@ -9,11 +9,7 @@ abstract class AppException implements Exception {
   /// 原始错误（可选）
   final dynamic originalError;
 
-  const AppException({
-    required this.message,
-    this.code,
-    this.originalError,
-  });
+  const AppException({required this.message, this.code, this.originalError});
 
   @override
   String toString() => 'AppException: $message (code: $code)';
@@ -34,7 +30,8 @@ class ServerException extends AppException {
   });
 
   @override
-  String toString() => 'ServerException: $message (status: $statusCode, code: $code)';
+  String toString() =>
+      'ServerException: $message (status: $statusCode, code: $code)';
 }
 
 /// 网络异常

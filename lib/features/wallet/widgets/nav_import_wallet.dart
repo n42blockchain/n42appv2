@@ -58,12 +58,16 @@ class NavImportWallet extends StatelessWidget {
                     children: [
                       Text(
                         S.of(context).g_key_12,
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                       SizedBox(height: AppSpacing.space4),
                       Text(
                         S.of(context).w_key_8,
-                        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.bodySm.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ],
                   ),
@@ -110,12 +114,16 @@ class NavImportWallet extends StatelessWidget {
                     children: [
                       Text(
                         "Keystore",
-                        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                        style: AppTypography.body.copyWith(
+                          color: AppColorTokens.of(context).textPrimary,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         S.of(context).g_key_ex_keystore_15,
-                        style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                        style: AppTypography.bodySm.copyWith(
+                          color: AppColorTokens.of(context).textSubtitle,
+                        ),
                       ),
                     ],
                   ),

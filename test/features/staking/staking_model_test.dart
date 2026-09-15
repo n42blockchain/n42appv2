@@ -10,10 +10,16 @@ void main() {
   group('StakingModels Tests', () {
     group('StakingChainType enum', () {
       test('should have correct chain types', () {
-        expect(StakingChainType.values.contains(StakingChainType.ethereum), true);
+        expect(
+          StakingChainType.values.contains(StakingChainType.ethereum),
+          true,
+        );
         expect(StakingChainType.values.contains(StakingChainType.solana), true);
         expect(StakingChainType.values.contains(StakingChainType.cosmos), true);
-        expect(StakingChainType.values.contains(StakingChainType.polkadot), true);
+        expect(
+          StakingChainType.values.contains(StakingChainType.polkadot),
+          true,
+        );
         expect(StakingChainType.values.length, 4);
       });
     });
@@ -106,20 +112,53 @@ void main() {
 
     group('StakingPositionStatus enum', () {
       test('should have correct values', () {
-        expect(StakingPositionStatus.values.contains(StakingPositionStatus.active), true);
-        expect(StakingPositionStatus.values.contains(StakingPositionStatus.unbonding), true);
-        expect(StakingPositionStatus.values.contains(StakingPositionStatus.completed), true);
-        expect(StakingPositionStatus.values.contains(StakingPositionStatus.withdrawn), true);
+        expect(
+          StakingPositionStatus.values.contains(StakingPositionStatus.active),
+          true,
+        );
+        expect(
+          StakingPositionStatus.values.contains(
+            StakingPositionStatus.unbonding,
+          ),
+          true,
+        );
+        expect(
+          StakingPositionStatus.values.contains(
+            StakingPositionStatus.completed,
+          ),
+          true,
+        );
+        expect(
+          StakingPositionStatus.values.contains(
+            StakingPositionStatus.withdrawn,
+          ),
+          true,
+        );
       });
     });
 
     group('StakingActionType enum', () {
       test('should have correct action types', () {
-        expect(StakingActionType.values.contains(StakingActionType.stake), true);
-        expect(StakingActionType.values.contains(StakingActionType.unstake), true);
-        expect(StakingActionType.values.contains(StakingActionType.claim), true);
-        expect(StakingActionType.values.contains(StakingActionType.restake), true);
-        expect(StakingActionType.values.contains(StakingActionType.redelegate), true);
+        expect(
+          StakingActionType.values.contains(StakingActionType.stake),
+          true,
+        );
+        expect(
+          StakingActionType.values.contains(StakingActionType.unstake),
+          true,
+        );
+        expect(
+          StakingActionType.values.contains(StakingActionType.claim),
+          true,
+        );
+        expect(
+          StakingActionType.values.contains(StakingActionType.restake),
+          true,
+        );
+        expect(
+          StakingActionType.values.contains(StakingActionType.redelegate),
+          true,
+        );
       });
     });
 
@@ -144,7 +183,9 @@ void main() {
       });
 
       test('should filter by chain type', () {
-        final ethProtocols = StakingProtocols.getByChainType(StakingChainType.ethereum);
+        final ethProtocols = StakingProtocols.getByChainType(
+          StakingChainType.ethereum,
+        );
         expect(ethProtocols.length, 1);
         expect(ethProtocols.first.id, 'eth_lido');
       });
@@ -174,7 +215,9 @@ void main() {
       });
 
       test('should create error response', () {
-        final response = StakingTransactionResponse.error('Insufficient balance');
+        final response = StakingTransactionResponse.error(
+          'Insufficient balance',
+        );
 
         expect(response.success, false);
         expect(response.error, 'Insufficient balance');
@@ -190,7 +233,10 @@ void main() {
 
       // Daily rate = APY / 365
       final dailyRate = apy / 365;
-      final dailyRewards = stakedAmount * BigInt.from((dailyRate * 1e18).toInt()) ~/ BigInt.from(1e18.toInt());
+      final dailyRewards =
+          stakedAmount *
+          BigInt.from((dailyRate * 1e18).toInt()) ~/
+          BigInt.from(1e18.toInt());
 
       expect(dailyRewards > BigInt.zero, true);
     });
@@ -219,7 +265,9 @@ void main() {
       final unbondingStartDate = DateTime.now().subtract(Duration(days: 22));
       const unbondingDays = 21;
 
-      final unbondingEndDate = unbondingStartDate.add(Duration(days: unbondingDays));
+      final unbondingEndDate = unbondingStartDate.add(
+        Duration(days: unbondingDays),
+      );
       final isComplete = DateTime.now().isAfter(unbondingEndDate);
 
       expect(isComplete, true);

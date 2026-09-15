@@ -12,7 +12,11 @@ void main() {
   group('MiningWithdrawalsDaily', () {
     group('constructor', () {
       test('stores the three slots positionally', () {
-        final m = MiningWithdrawalsDaily(10, '2025-11-10', '50001064322000000000');
+        final m = MiningWithdrawalsDaily(
+          10,
+          '2025-11-10',
+          '50001064322000000000',
+        );
         expect(m.count, 10);
         expect(m.day, '2025-11-10');
         expect(m.totalAmount, '50001064322000000000');
@@ -46,28 +50,31 @@ void main() {
       });
 
       test('handles partial payload', () {
-        final m = MiningWithdrawalsDaily.fromJson({
-          'day': '2025-11-10',
-        });
+        final m = MiningWithdrawalsDaily.fromJson({'day': '2025-11-10'});
         expect(m.count, isNull);
         expect(m.day, '2025-11-10');
         expect(m.totalAmount, isNull);
       });
 
-      test('preserves wei-precision string for total_amount (no truncation)', () {
-        // The amount is wei (1e18 units of N); MUST NOT be coerced to int
-        // or double, which would lose precision on amounts above ~9e15.
-        final huge = '999999999999999999999999';
-        final m = MiningWithdrawalsDaily.fromJson({
-          'total_amount': huge,
-        });
-        expect(m.totalAmount, huge);
-      });
+      test(
+        'preserves wei-precision string for total_amount (no truncation)',
+        () {
+          // The amount is wei (1e18 units of N); MUST NOT be coerced to int
+          // or double, which would lose precision on amounts above ~9e15.
+          final huge = '999999999999999999999999';
+          final m = MiningWithdrawalsDaily.fromJson({'total_amount': huge});
+          expect(m.totalAmount, huge);
+        },
+      );
     });
 
     group('toJson', () {
       test('emits the canonical beacon-API shape (snake_case)', () {
-        final m = MiningWithdrawalsDaily(10, '2025-11-10', '50001064322000000000');
+        final m = MiningWithdrawalsDaily(
+          10,
+          '2025-11-10',
+          '50001064322000000000',
+        );
         expect(m.toJson(), {
           'count': 10,
           'day': '2025-11-10',
@@ -77,11 +84,7 @@ void main() {
 
       test('emits null for missing slots', () {
         final m = MiningWithdrawalsDaily(null, null, null);
-        expect(m.toJson(), {
-          'count': null,
-          'day': null,
-          'total_amount': null,
-        });
+        expect(m.toJson(), {'count': null, 'day': null, 'total_amount': null});
       });
     });
 

@@ -14,12 +14,15 @@ void main() {
 
   group('LoadState enum', () {
     test('contains all four expected values', () {
-      expect(LoadState.values, containsAll([
-        LoadState.initial,
-        LoadState.loading,
-        LoadState.success,
-        LoadState.error,
-      ]));
+      expect(
+        LoadState.values,
+        containsAll([
+          LoadState.initial,
+          LoadState.loading,
+          LoadState.success,
+          LoadState.error,
+        ]),
+      );
     });
 
     test('four values total', () {

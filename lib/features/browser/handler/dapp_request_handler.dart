@@ -190,7 +190,10 @@ class DAppRequestHandler {
 
   // ── Signing methods ────────────────────────────────────────────────────────
 
-  Future<String> _handlePersonalSign(List<dynamic> params, String origin) async {
+  Future<String> _handlePersonalSign(
+    List<dynamic> params,
+    String origin,
+  ) async {
     // 裸字符串会被上层归一化为 -32603，参数校验失败按规范应报 -32602
     if (params.length < 2) {
       throw {'code': -32602, 'message': 'Invalid params'};
@@ -377,8 +380,9 @@ class DAppRequestHandler {
     // 活跃钱包 selectedWalletIndex);此前却用 miningWalletIndex 取私钥——用户
     // 切换过挖矿钱包(miningIndex≠selectedIndex)时会用 A 账户私钥签、却以 B
     // 账户地址报给 DApp(接线复审第二轮 P1 安全)。
-    final selectedIndex =
-        globalProviderContainer.read(selectedWalletIndexProvider);
+    final selectedIndex = globalProviderContainer.read(
+      selectedWalletIndexProvider,
+    );
     final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
     String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
 

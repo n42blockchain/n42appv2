@@ -10,10 +10,22 @@ void main() {
   group('SessionKeyPermission Tests', () {
     test('should have all expected permission types', () {
       expect(SessionKeyPermission.values.length, 4);
-      expect(SessionKeyPermission.values.contains(SessionKeyPermission.transfer), true);
-      expect(SessionKeyPermission.values.contains(SessionKeyPermission.approve), true);
-      expect(SessionKeyPermission.values.contains(SessionKeyPermission.contractCall), true);
-      expect(SessionKeyPermission.values.contains(SessionKeyPermission.full), true);
+      expect(
+        SessionKeyPermission.values.contains(SessionKeyPermission.transfer),
+        true,
+      );
+      expect(
+        SessionKeyPermission.values.contains(SessionKeyPermission.approve),
+        true,
+      );
+      expect(
+        SessionKeyPermission.values.contains(SessionKeyPermission.contractCall),
+        true,
+      );
+      expect(
+        SessionKeyPermission.values.contains(SessionKeyPermission.full),
+        true,
+      );
     });
   });
 

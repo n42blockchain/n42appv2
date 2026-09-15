@@ -23,25 +23,28 @@ class ApiClient {
 
   /// 日志中需要过滤的敏感请求头
   static const _sensitiveHeaders = [
-    'Authorization', 'authorization',
-    'Cookie', 'cookie',
-    'Token', 'token',
+    'Authorization',
+    'authorization',
+    'Cookie',
+    'cookie',
+    'Token',
+    'token',
     'Uuid',
   ];
   static const _retryableMethods = {'GET', 'HEAD', 'OPTIONS'};
 
   ApiClient(this._secureStorage)
-      : _dio = Dio(
-          BaseOptions(
-            connectTimeout: const Duration(seconds: 30),
-            receiveTimeout: const Duration(seconds: 30),
-            sendTimeout: const Duration(seconds: 30),
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-          ),
-        ) {
+    : _dio = Dio(
+        BaseOptions(
+          connectTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+          sendTimeout: const Duration(seconds: 30),
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+        ),
+      ) {
     _setupInterceptors();
   }
 
@@ -76,11 +79,13 @@ class ApiClient {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onError: (error, handler) async {
-          final isTimeout = error.type == DioExceptionType.connectionTimeout ||
+          final isTimeout =
+              error.type == DioExceptionType.connectionTimeout ||
               error.type == DioExceptionType.receiveTimeout ||
               error.type == DioExceptionType.sendTimeout;
 
-          if (isTimeout && shouldRetryRequest(error.requestOptions) &&
+          if (isTimeout &&
+              shouldRetryRequest(error.requestOptions) &&
               error.requestOptions.extra['_retried'] != true) {
             try {
               error.requestOptions.extra['_retried'] = true;
@@ -95,7 +100,7 @@ class ApiClient {
           AppLogger.w(
             'ApiClient',
             '${error.requestOptions.method} ${error.requestOptions.path} → '
-            '${error.response?.statusCode} ${error.message}',
+                '${error.response?.statusCode} ${error.message}',
           );
           handler.next(error);
         },
@@ -108,7 +113,11 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.get<T>(path, queryParameters: queryParameters, options: options);
+    return _dio.get<T>(
+      path,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
   Future<Response<T>> post<T>(
@@ -117,7 +126,12 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.post<T>(path, data: data, queryParameters: queryParameters, options: options);
+    return _dio.post<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
   Future<Response<T>> put<T>(
@@ -126,7 +140,12 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.put<T>(path, data: data, queryParameters: queryParameters, options: options);
+    return _dio.put<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
   Future<Response<T>> delete<T>(
@@ -135,7 +154,12 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.delete<T>(path, data: data, queryParameters: queryParameters, options: options);
+    return _dio.delete<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
   Future<Response<T>> patch<T>(
@@ -144,7 +168,12 @@ class ApiClient {
     Map<String, dynamic>? queryParameters,
     Options? options,
   }) {
-    return _dio.patch<T>(path, data: data, queryParameters: queryParameters, options: options);
+    return _dio.patch<T>(
+      path,
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+    );
   }
 
   static bool shouldRetryRequest(RequestOptions options) {

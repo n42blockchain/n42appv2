@@ -64,7 +64,9 @@ class ReplyEmptyWidget extends StatelessWidget {
         Text(
           "[${S.of(context).g_chat_key_67}]",
           maxLines: 2,
-          style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+          style: AppTypography.body.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
+          ),
           overflow: TextOverflow.ellipsis,
         ),
       ],

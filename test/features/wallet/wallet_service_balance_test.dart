@@ -16,7 +16,8 @@ void main() {
     // Mirrors the logic in wallet_service_impl.dart:getBalance
     String resolveBlockchainType(String coinType) {
       final chainConfig = chainUrlMap[coinType];
-      return chainConfig?['baseInfo']?['blockchainType'] as String? ?? 'Ethereum';
+      return chainConfig?['baseInfo']?['blockchainType'] as String? ??
+          'Ethereum';
     }
 
     test('N coin resolves to Ethereum blockchain', () {
@@ -60,8 +61,11 @@ void main() {
       for (final entry in chainUrlMap.entries) {
         final bt = entry.value?['baseInfo']?['blockchainType'];
         if (bt != null) {
-          expect(bt, isNot('multi'),
-              reason: '${entry.key} blockchainType should not be "multi"');
+          expect(
+            bt,
+            isNot('multi'),
+            reason: '${entry.key} blockchainType should not be "multi"',
+          );
         }
       }
     });
@@ -71,32 +75,53 @@ void main() {
     test('all entries have baseInfo.blockchainType', () {
       for (final entry in chainUrlMap.entries) {
         final baseInfo = entry.value['baseInfo'];
-        expect(baseInfo, isNotNull,
-            reason: '${entry.key} should have baseInfo');
-        expect(baseInfo['blockchainType'], isNotNull,
-            reason: '${entry.key} should have blockchainType');
-        expect(baseInfo['blockchainType'], isA<String>(),
-            reason: '${entry.key} blockchainType should be a String');
+        expect(
+          baseInfo,
+          isNotNull,
+          reason: '${entry.key} should have baseInfo',
+        );
+        expect(
+          baseInfo['blockchainType'],
+          isNotNull,
+          reason: '${entry.key} should have blockchainType',
+        );
+        expect(
+          baseInfo['blockchainType'],
+          isA<String>(),
+          reason: '${entry.key} blockchainType should be a String',
+        );
       }
     });
 
     test('all entries have baseInfo.coinType', () {
       for (final entry in chainUrlMap.entries) {
         final coinType = entry.value['baseInfo']?['coinType'];
-        expect(coinType, isNotNull,
-            reason: '${entry.key} should have coinType');
+        expect(
+          coinType,
+          isNotNull,
+          reason: '${entry.key} should have coinType',
+        );
       }
     });
 
     test('all entries have baseInfo.decimals', () {
       for (final entry in chainUrlMap.entries) {
         final decimals = entry.value['baseInfo']?['decimals'];
-        expect(decimals, isNotNull,
-            reason: '${entry.key} should have decimals');
-        expect(decimals, isA<int>(),
-            reason: '${entry.key} decimals should be int');
-        expect(decimals > 0, true,
-            reason: '${entry.key} decimals should be positive');
+        expect(
+          decimals,
+          isNotNull,
+          reason: '${entry.key} should have decimals',
+        );
+        expect(
+          decimals,
+          isA<int>(),
+          reason: '${entry.key} decimals should be int',
+        );
+        expect(
+          decimals > 0,
+          true,
+          reason: '${entry.key} decimals should be positive',
+        );
       }
     });
   });

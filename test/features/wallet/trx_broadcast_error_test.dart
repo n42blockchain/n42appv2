@@ -10,17 +10,19 @@ void main() {
       );
     });
 
-    test('rejection with error code but echoed txid → error (no false success)',
-        () {
-      // The historical false-success case: SIGERROR / TAPOS with a txid and
-      // no `result` key.
-      final err = TrxApi.trxBroadcastError({
-        'code': 'SIGERROR',
-        'txid': 'abc123',
-        'message': 'validate signature error',
-      });
-      expect(err, isNotNull);
-    });
+    test(
+      'rejection with error code but echoed txid → error (no false success)',
+      () {
+        // The historical false-success case: SIGERROR / TAPOS with a txid and
+        // no `result` key.
+        final err = TrxApi.trxBroadcastError({
+          'code': 'SIGERROR',
+          'txid': 'abc123',
+          'message': 'validate signature error',
+        });
+        expect(err, isNotNull);
+      },
+    );
 
     test('result:false → error', () {
       expect(

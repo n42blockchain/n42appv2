@@ -117,8 +117,9 @@ void main() {
         amount: huge,
       );
 
-      final msg = (mm.data as StakingTransactionResponse).txData!['messages'][0]
-          as Map<String, dynamic>;
+      final msg =
+          (mm.data as StakingTransactionResponse).txData!['messages'][0]
+              as Map<String, dynamic>;
       expect((msg['amount'] as Map)['amount'], '1208925819614629174706177');
     });
 
@@ -129,8 +130,9 @@ void main() {
         amount: BigInt.zero,
       );
 
-      final msg = (mm.data as StakingTransactionResponse).txData!['messages'][0]
-          as Map<String, dynamic>;
+      final msg =
+          (mm.data as StakingTransactionResponse).txData!['messages'][0]
+              as Map<String, dynamic>;
       expect((msg['amount'] as Map)['amount'], '0');
     });
   });
@@ -142,7 +144,8 @@ void main() {
     const stakeAccount = 'StakeAcct111111111111111111111111111111111';
     const to = 'ToAddr111111111111111111111111111111111111';
     // Solana 官方 Stake Program 常量（源码中的 _stakeProgramId 私有常量）
-    const expectedStakeProgramId = 'Stake11111111111111111111111111111111111111';
+    const expectedStakeProgramId =
+        'Stake11111111111111111111111111111111111111';
 
     test('buildStakeTransaction：type=stake、携带 stakeProgramId 常量', () async {
       final mm = await api.buildStakeTransaction(

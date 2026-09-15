@@ -56,7 +56,9 @@ class ShowImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final watermarkStyle = AppTypography.titleLg.copyWith(color: Colors.white.withAlpha(153));
+    final watermarkStyle = AppTypography.titleLg.copyWith(
+      color: Colors.white.withAlpha(153),
+    );
     final watermarkHeight = ScreenUtil().setWidth(240);
 
     return Scaffold(
@@ -65,7 +67,9 @@ class ShowImage extends StatelessWidget {
         centerTitle: false,
         title: Text(
           title,
-          style: AppTypography.titleLg.copyWith(color: AppColorTokens.of(context).textPrimary),
+          style: AppTypography.titleLg.copyWith(
+            color: AppColorTokens.of(context).textPrimary,
+          ),
         ),
       ),
       body: Stack(

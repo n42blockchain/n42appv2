@@ -110,8 +110,9 @@ class FearGreedService {
 
   static Future<FearGreedData?> _doFetch() async {
     try {
-      final raw = await ExternalHttp.get(_url)
-          .timeout(const Duration(seconds: 8));
+      final raw = await ExternalHttp.get(
+        _url,
+      ).timeout(const Duration(seconds: 8));
       final result = parseResponse(raw, fallback: _cached);
       if (result != null) {
         _cached = result;

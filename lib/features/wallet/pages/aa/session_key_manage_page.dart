@@ -315,9 +315,7 @@ class _SessionKeyManagePageState extends State<SessionKeyManagePage>
         indicatorSize: TabBarIndicatorSize.tab,
         labelColor: Colors.white,
         unselectedLabelColor: _themeColor(AppThemeKeys.itemSubtitleTextColor),
-        labelStyle: AppTypography.caption.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        labelStyle: AppTypography.caption.copyWith(fontWeight: FontWeight.w600),
         dividerColor: Colors.transparent,
         tabs: [
           Tab(text: '${s.g_key_aa_active} (${activeKeys.length})'),

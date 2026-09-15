@@ -30,9 +30,10 @@ late final LegacyWalletActionProviderAdapter globalWapAdapter;
 /// - Pass a ProviderContainer to the adapter
 class LegacyWalletActionProviderAdapter extends WalletActionProvider {
   final ProviderContainer _container;
-  
+
   // Subscriptions to Riverpod providers
-  late final ProviderSubscription<AsyncValue<List<WalletInfoData>>> _walletListSubscription;
+  late final ProviderSubscription<AsyncValue<List<WalletInfoData>>>
+  _walletListSubscription;
   late final ProviderSubscription<int> _selectedIndexSubscription;
   late final ProviderSubscription<int> _miningIndexSubscription;
 
@@ -43,14 +44,15 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
 
   void _initSubscriptions() {
     // Subscribe to wallet list changes
-    _walletListSubscription = _container.listen<AsyncValue<List<WalletInfoData>>>(
-      walletListProvider,
-      (_, next) {
-        next.whenData((wallets) {
-          _syncWalletList(wallets);
+    _walletListSubscription = _container
+        .listen<AsyncValue<List<WalletInfoData>>>(walletListProvider, (
+          _,
+          next,
+        ) {
+          next.whenData((wallets) {
+            _syncWalletList(wallets);
+          });
         });
-      },
-    );
 
     // Subscribe to selected index changes
     _selectedIndexSubscription = _container.listen<int>(
@@ -81,7 +83,7 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
     wallets.whenData((list) {
       _syncWalletList(list);
     });
-    
+
     walletIndex = _container.read(selectedWalletIndexProvider);
     walletMiningIndex = _container.read(miningWalletIndexProvider);
     notifyListeners();
@@ -91,7 +93,7 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
     // Convert WalletInfoData to WalletInfo
     // Note: This is a shallow sync - full wallet data is in WalletActionProvider.walletInfoLsit
     // The riverpod data is used for indexing and basic info
-    
+
     // Notify listeners if wallet count changed
     if (walletInfoLsit.length != riverpodWallets.length) {
       notifyListeners();
@@ -115,7 +117,9 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
     // Sync to Riverpod
     _container.read(miningWalletIndexProvider.notifier).select(index);
     // Fire event for other listeners
-    eventBus.fire(EventPublic(EventPublicType.selectMiningWallet, intValue: index));
+    eventBus.fire(
+      EventPublic(EventPublicType.selectMiningWallet, intValue: index),
+    );
   }
 
   /// Refresh wallet list from Riverpod
@@ -140,9 +144,10 @@ class LegacyWalletActionProviderAdapter extends WalletActionProvider {
 }
 
 /// Extension to make it easier to use the adapter
-extension WalletActionProviderAdapterExtension on LegacyWalletActionProviderAdapter {
+extension WalletActionProviderAdapterExtension
+    on LegacyWalletActionProviderAdapter {
   /// Get Riverpod wallet list
-  AsyncValue<List<WalletInfoData>> get riverpodWalletList => 
+  AsyncValue<List<WalletInfoData>> get riverpodWalletList =>
       _container.read(walletListProvider);
 
   /// Get current wallet from Riverpod
@@ -153,4 +158,3 @@ extension WalletActionProviderAdapterExtension on LegacyWalletActionProviderAdap
   WalletInfoData? get miningRiverpodWallet =>
       _container.read(miningWalletProvider);
 }
-

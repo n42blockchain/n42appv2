@@ -210,8 +210,11 @@ void main() {
         'faceBinding': null,
         'mainWallet': false,
       });
-      expect(wi.pinnedCoins.length, 200,
-          reason: 'must be capped to 200 regardless of input size');
+      expect(
+        wi.pinnedCoins.length,
+        200,
+        reason: 'must be capped to 200 regardless of input size',
+      );
     });
 
     test('null pinnedCoins field treated as empty', () {
@@ -248,10 +251,7 @@ void main() {
     late _FakePinProvider provider;
 
     setUp(() {
-      provider = _FakePinProvider(
-        walletInfo: _makeWalletInfo(),
-        coinList: [],
-      );
+      provider = _FakePinProvider(walletInfo: _makeWalletInfo(), coinList: []);
     });
 
     test('main coin uses coinType only', () {
@@ -272,9 +272,7 @@ void main() {
     });
 
     test('missing coinType field returns __invalid__', () {
-      final coin = _FakeCoin(
-        coin: {'miniName': 'BNB', 'isContract': false},
-      );
+      final coin = _FakeCoin(coin: {'miniName': 'BNB', 'isContract': false});
       expect(provider.coinPinKey(coin), '__invalid__');
     });
 
@@ -445,8 +443,11 @@ void main() {
       expect(bnb.isPinned, isFalse);
       provider.togglePinCoin(bnb); // pin again
       expect(bnb.isPinned, isTrue);
-      expect(provider.walletInfo.pinnedCoins.where((k) => k == 'BNB').length, 1,
-          reason: 'no duplicate keys should be added');
+      expect(
+        provider.walletInfo.pinnedCoins.where((k) => k == 'BNB').length,
+        1,
+        reason: 'no duplicate keys should be added',
+      );
     });
 
     test('ignores aggregated coins', () {
@@ -461,7 +462,9 @@ void main() {
     });
 
     test('ignores coins with invalid (empty) coinType', () {
-      final bad = _FakeCoin(coin: {'coinType': '', 'miniName': 'X', 'isContract': false});
+      final bad = _FakeCoin(
+        coin: {'coinType': '', 'miniName': 'X', 'isContract': false},
+      );
       final provider = _FakePinProvider(
         walletInfo: _makeWalletInfo(),
         coinList: [bad],
@@ -481,8 +484,7 @@ void main() {
       final extra = _makeCoin('EXTRA');
       provider.coinList = [extra];
       provider.togglePinCoin(extra); // should be rejected
-      expect(extra.isPinned, isFalse,
-          reason: '201st coin must not be pinned');
+      expect(extra.isPinned, isFalse, reason: '201st coin must not be pinned');
       expect(provider.walletInfo.pinnedCoins.length, 200);
     });
 
@@ -495,8 +497,11 @@ void main() {
         coinList: [eth, bnb, sol],
       );
       provider.togglePinCoin(sol); // pin SOL (was last)
-      expect((provider.coinList[0] as _FakeCoin).coin['coinType'], 'SOL',
-          reason: 'pinned coin should move to front');
+      expect(
+        (provider.coinList[0] as _FakeCoin).coin['coinType'],
+        'SOL',
+        reason: 'pinned coin should move to front',
+      );
     });
   });
 
@@ -668,8 +673,11 @@ void main() {
         _makeCoin('ETH')..isPinned = false,
         _makeCoin('BNB')..isPinned = true,
       ];
-      expect(computePinnedCount(coins), 0,
-          reason: 'pinned coins are guaranteed to be at front after elevate');
+      expect(
+        computePinnedCount(coins),
+        0,
+        reason: 'pinned coins are guaranteed to be at front after elevate',
+      );
     });
 
     test('needsDivider is false when no coins are pinned', () {
@@ -680,35 +688,31 @@ void main() {
     });
 
     test('needsDivider is true when some (not all) coins are pinned', () {
-      final coins = [
-        _makeCoin('ETH')..isPinned = true,
-        _makeCoin('BNB'),
-      ];
+      final coins = [_makeCoin('ETH')..isPinned = true, _makeCoin('BNB')];
       final pinCount = computePinnedCount(coins);
       final needsDivider = pinCount > 0 && pinCount < coins.length;
       expect(needsDivider, isTrue);
     });
 
-    test('needsDivider is false when all coins are pinned (no separator needed)', () {
-      final coins = [
-        _makeCoin('ETH')..isPinned = true,
-        _makeCoin('BNB')..isPinned = true,
-      ];
-      final pinCount = computePinnedCount(coins);
-      final needsDivider = pinCount > 0 && pinCount < coins.length;
-      expect(needsDivider, isFalse);
-    });
+    test(
+      'needsDivider is false when all coins are pinned (no separator needed)',
+      () {
+        final coins = [
+          _makeCoin('ETH')..isPinned = true,
+          _makeCoin('BNB')..isPinned = true,
+        ];
+        final pinCount = computePinnedCount(coins);
+        final needsDivider = pinCount > 0 && pinCount < coins.length;
+        expect(needsDivider, isFalse);
+      },
+    );
 
     test('itemCount = list.length + 1 when divider is needed', () {
-      final coins = [
-        _makeCoin('ETH')..isPinned = true,
-        _makeCoin('BNB'),
-      ];
+      final coins = [_makeCoin('ETH')..isPinned = true, _makeCoin('BNB')];
       final pinCount = computePinnedCount(coins);
       final needsDivider = pinCount > 0 && pinCount < coins.length;
       final itemCount = coins.length + (needsDivider ? 1 : 0);
-      expect(itemCount, 3,
-          reason: '2 coins + 1 divider row');
+      expect(itemCount, 3, reason: '2 coins + 1 divider row');
     });
   });
 
@@ -759,7 +763,11 @@ void main() {
     }
 
     /// Mirrors removeWalletChainToken cleanup logic
-    void simulateRemoveToken(WalletInfo wi, String symbolStr, String tokenMiniName) {
+    void simulateRemoveToken(
+      WalletInfo wi,
+      String symbolStr,
+      String tokenMiniName,
+    ) {
       if (tokenMiniName.isNotEmpty) {
         wi.pinnedCoins.remove('${symbolStr}_$tokenMiniName');
       }
@@ -769,16 +777,24 @@ void main() {
       final wi = _makeWalletInfo(pinnedCoins: ['ETH', 'BNB']);
       simulateRemoveChain(wi, 'ETH');
       expect(wi.pinnedCoins, isNot(contains('ETH')));
-      expect(wi.pinnedCoins, contains('BNB'),
-          reason: 'other chains must not be affected');
+      expect(
+        wi.pinnedCoins,
+        contains('BNB'),
+        reason: 'other chains must not be affected',
+      );
     });
 
     test('removeChain removes all contract token keys for that chain', () {
-      final wi = _makeWalletInfo(pinnedCoins: ['ETH', 'ETH_USDT', 'ETH_USDC', 'BNB']);
+      final wi = _makeWalletInfo(
+        pinnedCoins: ['ETH', 'ETH_USDT', 'ETH_USDC', 'BNB'],
+      );
       simulateRemoveChain(wi, 'ETH');
       expect(wi.pinnedCoins, isNotEmpty);
-      expect(wi.pinnedCoins.any((k) => k == 'ETH' || k.startsWith('ETH_')), isFalse,
-          reason: 'ETH main + all ETH_* tokens must be removed');
+      expect(
+        wi.pinnedCoins.any((k) => k == 'ETH' || k.startsWith('ETH_')),
+        isFalse,
+        reason: 'ETH main + all ETH_* tokens must be removed',
+      );
       expect(wi.pinnedCoins, contains('BNB'));
     });
 
@@ -792,8 +808,11 @@ void main() {
       final wi = _makeWalletInfo(pinnedCoins: ['ETH_USDT', 'ETH_USDC', 'ETH']);
       simulateRemoveToken(wi, 'ETH', 'USDT');
       expect(wi.pinnedCoins, isNot(contains('ETH_USDT')));
-      expect(wi.pinnedCoins, contains('ETH_USDC'),
-          reason: 'other contract tokens must not be affected');
+      expect(
+        wi.pinnedCoins,
+        contains('ETH_USDC'),
+        reason: 'other contract tokens must not be affected',
+      );
       expect(wi.pinnedCoins, contains('ETH'));
     });
 
@@ -838,18 +857,25 @@ void main() {
       const maxHistory = 10;
       final history = ['USDT', 'ETH', 'BNB'];
       // Simulate inserting 'USDT' again
-      final updated =
-          ['USDT', ...history.where((e) => e != 'USDT')].take(maxHistory).toList();
-      expect(updated.where((e) => e == 'USDT').length, 1,
-          reason: 'no duplicates after re-insert');
+      final updated = [
+        'USDT',
+        ...history.where((e) => e != 'USDT'),
+      ].take(maxHistory).toList();
+      expect(
+        updated.where((e) => e == 'USDT').length,
+        1,
+        reason: 'no duplicates after re-insert',
+      );
       expect(updated[0], 'USDT', reason: 'most recent at front');
     });
 
     test('history is capped at maxHistory items', () {
       const maxHistory = 10;
       final history = List.generate(maxHistory, (i) => 'COIN_$i');
-      final updated =
-          ['NEW', ...history.where((e) => e != 'NEW')].take(maxHistory).toList();
+      final updated = [
+        'NEW',
+        ...history.where((e) => e != 'NEW'),
+      ].take(maxHistory).toList();
       expect(updated.length, maxHistory);
       expect(updated[0], 'NEW');
     });

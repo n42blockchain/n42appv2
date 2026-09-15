@@ -67,9 +67,7 @@ class _ShareMiningState extends State<ShareMining> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
             child: Column(
               children: [
                 SizedBox(
@@ -86,13 +84,13 @@ class _ShareMiningState extends State<ShareMining> {
                 SizedBox(height: ScreenUtil().setWidth(100)),
                 Text(
                   "Congratulations!",
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: AppSpacing.space12),
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: AppSpacing.space12,
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacing.space12),
                   child: Text(
                     _generateTipsContent(),
                     textAlign: TextAlign.center,
@@ -124,7 +122,9 @@ class _ShareMiningState extends State<ShareMining> {
                           SizedBox(height: AppSpacing.space6),
                           Text(
                             S.of(context).g_mining_key61,
-                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).brand),
+                            style: AppTypography.body.copyWith(
+                              color: AppColorTokens.of(context).brand,
+                            ),
                           ),
                         ],
                       ),
@@ -140,9 +140,7 @@ class _ShareMiningState extends State<ShareMining> {
                   child: Container(
                     height: ScreenUtil().setWidth(88),
                     width: double.infinity,
-                    margin: EdgeInsets.symmetric(
-                      vertical: AppSpacing.space8,
-                    ),
+                    margin: EdgeInsets.symmetric(vertical: AppSpacing.space8),
                     child: AppButton(
                       label: S.of(context).g_mining_key62,
                       onPressed: () {

@@ -111,9 +111,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         actions: [
           GestureDetector(
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               color: Colors.transparent,
               child: Center(
                 child: Text(
@@ -270,9 +268,7 @@ class _EditAddressPageState extends State<EditAddressPage> {
         FocusScope.of(context).requestFocus(nameFocusNode);
       },
       boxShadow: _noShadow,
-      messageMargin: EdgeInsets.symmetric(
-        horizontal: AppSpacing.space8,
-      ),
+      messageMargin: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
       rightWidget1: Image.asset(
         "assets/wallet/scan.png",
         color: AppColorTokens.of(context).textPrimary,

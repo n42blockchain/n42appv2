@@ -213,10 +213,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     if (browserStr.isNotEmpty &&
         (!isURL(browserStr) ||
             !browserStr.toLowerCase().startsWith('https://'))) {
-      return _setFieldError(
-        (v) => browserErrorMessage = v,
-        s.g_token_m_key_21,
-      );
+      return _setFieldError((v) => browserErrorMessage = v, s.g_token_m_key_21);
     }
     return true;
   }
@@ -291,11 +288,11 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     // chainId 交叉校验：向 RPC 查 eth_chainId，必须与用户填写的 chainId 一致。
     // 否则攻击者可诱导用户把恶意 RPC 绑到主网 chainId——余额走恶意 RPC 显示
     // 假数据，签名却用主网 chainId、签出的交易可被重放到真主网。
-    final cidRes = await EthAPI.init(null, rpcStr, null).baseRPCEth(
-      'eth_chainId',
-      [],
-      enableRetry: false,
-    );
+    final cidRes = await EthAPI.init(
+      null,
+      rpcStr,
+      null,
+    ).baseRPCEth('eth_chainId', [], enableRetry: false);
     if (!mounted) return;
     final reportedHex = cidRes.valueOrNull?.toString() ?? '';
     final reportedChainId = reportedHex.startsWith('0x')
@@ -313,8 +310,9 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
     }
     if (reportedChainId != chainId) {
       setState(() {
-        chainIdErrorMessage =
-            S.of(context).g_token_m_key_chainid_mismatch(reportedChainId);
+        chainIdErrorMessage = S
+            .of(context)
+            .g_token_m_key_chainid_mismatch(reportedChainId);
         load = Load.finish;
       });
       return;
@@ -440,9 +438,7 @@ class _WalletChainAddState extends ConsumerState<WalletChainAdd> {
                               label: Text(
                                 p.name,
                                 style: AppTypography.caption.copyWith(
-                                  color: AppColorTokens.of(
-                                    context,
-                                  ).textPrimary,
+                                  color: AppColorTokens.of(context).textPrimary,
                                 ),
                               ),
                               onPressed: () => _applyPreset(p),

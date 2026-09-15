@@ -53,7 +53,10 @@ String? _normalizeWalletConnectCandidate(String value, int depthLevel) {
   for (final key in _walletConnectParamKeys) {
     final nested = uri.queryParameters[key];
     if (nested != null && nested.trim().isNotEmpty) {
-      return normalizeWalletConnectUriString(nested, depthLevel: depthLevel + 1);
+      return normalizeWalletConnectUriString(
+        nested,
+        depthLevel: depthLevel + 1,
+      );
     }
   }
 
@@ -72,7 +75,10 @@ String? _normalizeWalletConnectCandidate(String value, int depthLevel) {
       for (final key in _walletConnectParamKeys) {
         final nested = params[key];
         if (nested != null && nested.trim().isNotEmpty) {
-          return normalizeWalletConnectUriString(nested, depthLevel: depthLevel + 1);
+          return normalizeWalletConnectUriString(
+            nested,
+            depthLevel: depthLevel + 1,
+          );
         }
       }
     } catch (_) {

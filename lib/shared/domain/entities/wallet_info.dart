@@ -48,40 +48,48 @@ class SharedUserInfo extends Equatable {
   });
 
   factory SharedUserInfo.fromJson(Map<String, dynamic> json) => SharedUserInfo(
-        uuid: json['uuid'] as String? ?? '',
-        email: json['email'] as String? ?? '',
-        name: json['name'] as String?,
-        avatarUrl: json['image'] as String? ?? json['avatarUrl'] as String?,
-        token: json['token'] as String?,
-        image: json['image'] as String?,
-        desc: json['desc'] as String?,
-        isLoggedIn: json['isLoggedIn'] as bool? ?? true,
-      );
+    uuid: json['uuid'] as String? ?? '',
+    email: json['email'] as String? ?? '',
+    name: json['name'] as String?,
+    avatarUrl: json['image'] as String? ?? json['avatarUrl'] as String?,
+    token: json['token'] as String?,
+    image: json['image'] as String?,
+    desc: json['desc'] as String?,
+    isLoggedIn: json['isLoggedIn'] as bool? ?? true,
+  );
 
-  factory SharedUserInfo.fromLegacyUserInfo(dynamic userInfo) =>
-      SharedUserInfo(
-        uuid: userInfo.uuid ?? '',
-        email: userInfo.email ?? '',
-        name: userInfo.name,
-        avatarUrl: userInfo.image,
-        token: userInfo.token,
-        image: userInfo.image,
-        desc: userInfo.desc,
-      );
+  factory SharedUserInfo.fromLegacyUserInfo(dynamic userInfo) => SharedUserInfo(
+    uuid: userInfo.uuid ?? '',
+    email: userInfo.email ?? '',
+    name: userInfo.name,
+    avatarUrl: userInfo.image,
+    token: userInfo.token,
+    image: userInfo.image,
+    desc: userInfo.desc,
+  );
 
   Map<String, dynamic> toJson() => {
-        'uuid': uuid,
-        'email': email,
-        'name': name,
-        'avatarUrl': avatarUrl,
-        'token': token,
-        'image': image,
-        'desc': desc,
-        'isLoggedIn': isLoggedIn,
-      };
+    'uuid': uuid,
+    'email': email,
+    'name': name,
+    'avatarUrl': avatarUrl,
+    'token': token,
+    'image': image,
+    'desc': desc,
+    'isLoggedIn': isLoggedIn,
+  };
 
   @override
-  List<Object?> get props => [uuid, email, name, avatarUrl, token, image, desc, isLoggedIn];
+  List<Object?> get props => [
+    uuid,
+    email,
+    name,
+    avatarUrl,
+    token,
+    image,
+    desc,
+    isLoggedIn,
+  ];
 }
 
 /// Wallet balance for a specific coin type.
@@ -101,5 +109,11 @@ class WalletBalanceInfo extends Equatable {
   });
 
   @override
-  List<Object?> get props => [address, coinType, balance, usdValue, lastUpdated];
+  List<Object?> get props => [
+    address,
+    coinType,
+    balance,
+    usdValue,
+    lastUpdated,
+  ];
 }

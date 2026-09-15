@@ -74,17 +74,11 @@ void main() {
       });
 
       test('returns safe for empty URL', () {
-        expect(
-          detector.checkUrl(''),
-          PhishingCheckResult.safe,
-        );
+        expect(detector.checkUrl(''), PhishingCheckResult.safe);
       });
 
       test('returns safe for invalid URL', () {
-        expect(
-          detector.checkUrl('not a url at all'),
-          PhishingCheckResult.safe,
-        );
+        expect(detector.checkUrl('not a url at all'), PhishingCheckResult.safe);
       });
 
       test('returns safe for URL with no host', () {
@@ -153,8 +147,7 @@ void main() {
         SharedPreferences.setMockInitialValues({
           'phishing_blocklist_v1':
               '{"blacklist":["custom-phishing-domain.xyz"],"whitelist":[]}',
-          'phishing_blocklist_time_v1':
-              DateTime.now().millisecondsSinceEpoch,
+          'phishing_blocklist_time_v1': DateTime.now().millisecondsSinceEpoch,
         });
         // Note: since PhishingDetector is a singleton and already initialized,
         // we can't truly test re-initialization. This verifies the contract.

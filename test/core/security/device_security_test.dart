@@ -42,7 +42,7 @@ void main() {
     group('getSecurityStatus', () {
       test('should return complete security status', () async {
         final status = await service.getSecurityStatus();
-        
+
         expect(status, isA<DeviceSecurityStatus>());
         expect(status.isRootedOrJailbroken, isFalse);
         expect(status.isEmulator, isFalse);
@@ -51,7 +51,7 @@ void main() {
       test('should have toString implementation', () async {
         final status = await service.getSecurityStatus();
         final string = status.toString();
-        
+
         expect(string, contains('DeviceSecurityStatus'));
         expect(string, contains('isRootedOrJailbroken'));
         expect(string, contains('isEmulator'));
@@ -98,6 +98,4 @@ void main() {
       expect(status.isSecure, isFalse);
     });
   });
-
 }
-

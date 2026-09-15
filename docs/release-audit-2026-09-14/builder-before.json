@@ -1,0 +1,6 @@
+{
+  "exit": 0,
+  "before_version": "2.4.8+123",
+  "after_pubspec": "name: fixture\nversion: 2.4.9",
+  "built_debug": true
+}

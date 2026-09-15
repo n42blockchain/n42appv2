@@ -136,9 +136,10 @@ final appInitProvider = FutureProvider<void>((ref) async {
   try {
     // SharedPreferences read should be fast; 5 s timeout guards against edge
     // cases where the platform channel is slow to respond.
-    final userInfoJson = await spUtil
-        .getUserInfo()
-        .timeout(const Duration(seconds: 5), onTimeout: () => null);
+    final userInfoJson = await spUtil.getUserInfo().timeout(
+      const Duration(seconds: 5),
+      onTimeout: () => null,
+    );
     if (userInfoJson != null) {
       final userInfo = UserInfo.fromJson(userInfoJson);
       // flutter_secure_storage on Android (custom AES cipher) can block
@@ -149,17 +150,18 @@ final appInitProvider = FutureProvider<void>((ref) async {
         userInfo,
         secureStorage: secureStorage,
         currentUserNotifier: currentUserNotifier,
-      ).timeout(const Duration(seconds: 6), onTimeout: () {
-        AppLogger.w('appInit', '_syncActiveUser timed out – continuing anyway');
-      });
+      ).timeout(
+        const Duration(seconds: 6),
+        onTimeout: () {
+          AppLogger.w(
+            'appInit',
+            '_syncActiveUser timed out – continuing anyway',
+          );
+        },
+      );
     }
   } catch (e, s) {
-    AppLogger.e(
-      'appInit',
-      '_getUserInfo error',
-      error: e,
-      stackTrace: s,
-    );
+    AppLogger.e('appInit', '_getUserInfo error', error: e, stackTrace: s);
   }
 
   ref.read(appLoadStateProvider.notifier).state = Load.finish;

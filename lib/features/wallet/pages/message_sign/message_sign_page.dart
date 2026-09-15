@@ -57,8 +57,7 @@ class _MessageSignPageState extends State<MessageSignPage> {
   String? _signature;
   bool _signing = false;
 
-  Color _c(AppThemeKeys key) =>
-      AppThemeUtils.getColorByKey(context, key.name);
+  Color _c(AppThemeKeys key) => AppThemeUtils.getColorByKey(context, key.name);
 
   @override
   void dispose() {

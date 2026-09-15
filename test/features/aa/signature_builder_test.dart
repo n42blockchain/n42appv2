@@ -87,11 +87,7 @@ void main() {
 
     group('combineSignature', () {
       test('should reconstruct 65-byte signature from components', () {
-        final comp = SignatureComponents(
-          r: 'aa' * 32,
-          s: 'bb' * 32,
-          v: 28,
-        );
+        final comp = SignatureComponents(r: 'aa' * 32, s: 'bb' * 32, v: 28);
         final result = SignatureBuilder.combineSignature(comp);
         expect(result.length, 65);
         expect(result[64], 28);
@@ -126,30 +122,35 @@ void main() {
         );
       });
 
-      test('should recover a valid Ethereum address (0x-prefixed, 42 chars)', () {
-        // signToUint8List internally does keccak256(payload) before signing.
-        // So ecRecover needs keccak256(payload) as the hash input.
-        final privKey = EthPrivateKey.fromHex(
-          'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
-        );
-        final expectedAddress = privKey.address.with0x;
+      test(
+        'should recover a valid Ethereum address (0x-prefixed, 42 chars)',
+        () {
+          // signToUint8List internally does keccak256(payload) before signing.
+          // So ecRecover needs keccak256(payload) as the hash input.
+          final privKey = EthPrivateKey.fromHex(
+            'ac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80',
+          );
+          final expectedAddress = privKey.address.with0x;
 
-        // Raw payload (simulates a UserOp hash before wallet signing)
-        final payload = Uint8List.fromList(utf8.encode('test message for signing'));
+          // Raw payload (simulates a UserOp hash before wallet signing)
+          final payload = Uint8List.fromList(
+            utf8.encode('test message for signing'),
+          );
 
-        // signToUint8List signs keccak256(payload) internally
-        final rawSig = privKey.signToUint8List(payload);
+          // signToUint8List signs keccak256(payload) internally
+          final rawSig = privKey.signToUint8List(payload);
 
-        // Recover using keccak256(payload) — the hash actually signed
-        final recovered = SignatureBuilder.recoverSignerAddress(
-          hash: keccak256(payload),
-          signature: rawSig,
-        );
+          // Recover using keccak256(payload) — the hash actually signed
+          final recovered = SignatureBuilder.recoverSignerAddress(
+            hash: keccak256(payload),
+            signature: rawSig,
+          );
 
-        expect(recovered, startsWith('0x'));
-        expect(recovered.length, 42);
-        expect(recovered.toLowerCase(), expectedAddress.toLowerCase());
-      });
+          expect(recovered, startsWith('0x'));
+          expect(recovered.length, 42);
+          expect(recovered.toLowerCase(), expectedAddress.toLowerCase());
+        },
+      );
 
       test('should handle different key pairs consistently', () {
         final privKey = EthPrivateKey.fromHex(
@@ -225,11 +226,7 @@ void main() {
 
   group('SignatureComponents', () {
     test('toCompact produces 0x + 130 hex chars', () {
-      final comp = SignatureComponents(
-        r: 'aa' * 32,
-        s: 'bb' * 32,
-        v: 27,
-      );
+      final comp = SignatureComponents(r: 'aa' * 32, s: 'bb' * 32, v: 27);
       final compact = comp.toCompact();
       expect(compact, startsWith('0x'));
       expect(compact.length, 132); // 0x + 130

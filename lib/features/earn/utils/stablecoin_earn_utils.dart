@@ -14,10 +14,33 @@ class StablecoinEarnUtils {
 
   /// 识别为稳定币的符号集合（大写归一后比较）。覆盖主流法币锚定稳定币。
   static const Set<String> stablecoinSymbols = {
-    'USDT', 'USDC', 'USDC.E', 'DAI', 'USDA', 'USDE', 'SUSDE',
-    'FRAX', 'TUSD', 'BUSD', 'GUSD', 'USDP', 'PYUSD', 'SUSD',
-    'USDD', 'LUSD', 'CRVUSD', 'GHO', 'USDS', 'FDUSD', 'USDB',
-    'MIM', 'DOLA', 'USD+', 'EURC', 'EURS', 'EURT',
+    'USDT',
+    'USDC',
+    'USDC.E',
+    'DAI',
+    'USDA',
+    'USDE',
+    'SUSDE',
+    'FRAX',
+    'TUSD',
+    'BUSD',
+    'GUSD',
+    'USDP',
+    'PYUSD',
+    'SUSD',
+    'USDD',
+    'LUSD',
+    'CRVUSD',
+    'GHO',
+    'USDS',
+    'FDUSD',
+    'USDB',
+    'MIM',
+    'DOLA',
+    'USD+',
+    'EURC',
+    'EURS',
+    'EURT',
   };
 
   /// 是否稳定币（忽略大小写与首尾空白）。
@@ -29,11 +52,12 @@ class StablecoinEarnUtils {
 
   /// 从一组 Aave reserve 中筛出稳定币，并按供给 APY 降序排序（只保留有流动性的）。
   static List<AaveReserve> filterSortStablecoins(List<AaveReserve> reserves) {
-    final list = reserves
-        .where((r) => isStablecoin(r.symbol))
-        .where((r) => r.totalLiquidityUsd > 0)
-        .toList()
-      ..sort((a, b) => b.supplyApy.compareTo(a.supplyApy));
+    final list =
+        reserves
+            .where((r) => isStablecoin(r.symbol))
+            .where((r) => r.totalLiquidityUsd > 0)
+            .toList()
+          ..sort((a, b) => b.supplyApy.compareTo(a.supplyApy));
     return list;
   }
 

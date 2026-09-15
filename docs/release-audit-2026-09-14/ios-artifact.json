@@ -1,0 +1,11 @@
+{
+  "CFBundleIdentifier": "ai.n42.www",
+  "CFBundleShortVersionString": "2.4.8",
+  "CFBundleVersion": "2026072654",
+  "DTSDKName": "iphoneos26.5",
+  "MinimumOSVersion": "16.0",
+  "executable_sha256": "f2954a6c26ed66199dd5611f48f60c45d2b2717d5c938a8bb4bf0eb39356df4a",
+  "privacy_manifest_present": true,
+  "codesigning_verified": false,
+  "build_kind": "release --no-codesign"
+}

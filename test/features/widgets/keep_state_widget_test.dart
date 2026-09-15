@@ -14,20 +14,14 @@ void main() {
   group('KeepStateWidget', () {
     testWidgets('renders the child it is given', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: KeepStateWidget(
-            child: Text('hello kid'),
-          ),
-        ),
+        const MaterialApp(home: KeepStateWidget(child: Text('hello kid'))),
       );
       expect(find.text('hello kid'), findsOneWidget);
     });
 
     testWidgets('wantKeepAlive defaults to true', (tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          home: KeepStateWidget(child: Text('x')),
-        ),
+        const MaterialApp(home: KeepStateWidget(child: Text('x'))),
       );
 
       // Find the State<KeepStateWidget> and read wantKeepAlive.
@@ -41,10 +35,7 @@ void main() {
     testWidgets('wantKeepAlive=false is honored', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
-          home: KeepStateWidget(
-            wantKeepAlive: false,
-            child: Text('x'),
-          ),
+          home: KeepStateWidget(wantKeepAlive: false, child: Text('x')),
         ),
       );
 
@@ -63,11 +54,7 @@ void main() {
       // the visible subtree and back in, its State should NOT be
       // recreated.
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: _TwoTabHarness(),
-          ),
-        ),
+        MaterialApp(home: Scaffold(body: _TwoTabHarness())),
       );
 
       // Initial: tab 0 visible, counter at 0.

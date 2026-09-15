@@ -30,8 +30,7 @@ void main() {
         isTrue,
       );
       expect(
-        NftGalleryUtils.isLikelySpam(
-            _nft(id: '2', name: 'Visit free-gift.io')),
+        NftGalleryUtils.isLikelySpam(_nft(id: '2', name: 'Visit free-gift.io')),
         isTrue,
       );
     });
@@ -39,7 +38,8 @@ void main() {
     test('keeps legit NFTs', () {
       expect(
         NftGalleryUtils.isLikelySpam(
-            _nft(id: '3', name: 'Azuki #123', collection: 'Azuki')),
+          _nft(id: '3', name: 'Azuki #123', collection: 'Azuki'),
+        ),
         isFalse,
       );
     });
@@ -47,7 +47,8 @@ void main() {
     test('flags empty name+image+collection', () {
       expect(
         NftGalleryUtils.isLikelySpam(
-            _nft(id: '4', name: '', collection: null, image: '')),
+          _nft(id: '4', name: '', collection: null, image: ''),
+        ),
         isTrue,
       );
     });
@@ -69,8 +70,11 @@ void main() {
         _nft(id: '3', collection: null),
         _nft(id: '4', collection: 'Azuki'),
       ]);
-      expect(groups.map((g) => g.name).toList(),
-          ['Azuki', 'Zed', NftGalleryUtils.uncategorized]);
+      expect(groups.map((g) => g.name).toList(), [
+        'Azuki',
+        'Zed',
+        NftGalleryUtils.uncategorized,
+      ]);
       expect(groups.first.items.length, 2); // two Azuki
     });
   });

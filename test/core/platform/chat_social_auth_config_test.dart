@@ -268,7 +268,9 @@ void main() {
     test('false when not configured, regardless of platform', () {
       expect(
         unconfigured.supportsGoogleForCurrentPlatform(
-          isAndroid: true, isIOS: true, isMacOS: true,
+          isAndroid: true,
+          isIOS: true,
+          isMacOS: true,
         ),
         isFalse,
       );
@@ -277,7 +279,9 @@ void main() {
     test('true on Android', () {
       expect(
         configured.supportsGoogleForCurrentPlatform(
-          isAndroid: true, isIOS: false, isMacOS: false,
+          isAndroid: true,
+          isIOS: false,
+          isMacOS: false,
         ),
         isTrue,
       );
@@ -286,7 +290,9 @@ void main() {
     test('true on macOS', () {
       expect(
         configured.supportsGoogleForCurrentPlatform(
-          isAndroid: false, isIOS: false, isMacOS: true,
+          isAndroid: false,
+          isIOS: false,
+          isMacOS: true,
         ),
         isTrue,
       );
@@ -296,7 +302,9 @@ void main() {
       // All three platform flags false → not on Android/iOS/macOS.
       expect(
         configured.supportsGoogleForCurrentPlatform(
-          isAndroid: false, isIOS: false, isMacOS: false,
+          isAndroid: false,
+          isIOS: false,
+          isMacOS: false,
         ),
         isFalse,
       );
@@ -351,7 +359,9 @@ void main() {
 
     test('includes the social-auth backend diagnostic', () {
       final lines = emptyCfg.diagnostics(
-        isAndroid: false, isIOS: false, isMacOS: false,
+        isAndroid: false,
+        isIOS: false,
+        isMacOS: false,
       );
       expect(lines, hasLength(6));
       expect(lines.last, contains('Discord/GitHub/Telegram: disabled'));
@@ -359,7 +369,9 @@ void main() {
 
     test('every line carries the [ChatSocialAuth] prefix', () {
       final lines = emptyCfg.diagnostics(
-        isAndroid: false, isIOS: false, isMacOS: false,
+        isAndroid: false,
+        isIOS: false,
+        isMacOS: false,
       );
       for (final line in lines) {
         expect(line, startsWith('[ChatSocialAuth] '));

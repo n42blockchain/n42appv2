@@ -200,15 +200,18 @@ void main() {
       );
       final tableNames = tables.map((r) => r['name'] as String).toSet();
 
-      expect(tableNames, containsAll([
-        'TransationRecord',
-        'BtcTransactionRecord',
-        'AddressBook',
-        'browserCollection',
-        'browserHistory',
-        'browserSearchHistory',
-        'Messages',
-      ]));
+      expect(
+        tableNames,
+        containsAll([
+          'TransationRecord',
+          'BtcTransactionRecord',
+          'AddressBook',
+          'browserCollection',
+          'browserHistory',
+          'browserSearchHistory',
+          'Messages',
+        ]),
+      );
     });
   });
 
@@ -226,10 +229,12 @@ void main() {
     });
 
     test('insertTransationRecord returns a positive row id', () async {
-      final rowId = await db.database.then((conn) => conn.insert(
-            'TransationRecord',
-            _buildTransactionRecord(txHash: '0xInsert001'),
-          ));
+      final rowId = await db.database.then(
+        (conn) => conn.insert(
+          'TransationRecord',
+          _buildTransactionRecord(txHash: '0xInsert001'),
+        ),
+      );
       expect(rowId, greaterThan(0));
     });
 
@@ -263,12 +268,18 @@ void main() {
       await conn.insert(
         'TransationRecord',
         _buildTransactionRecord(
-            state: 0, userUuid: 'uuid-filter', txHash: '0xPending'),
+          state: 0,
+          userUuid: 'uuid-filter',
+          txHash: '0xPending',
+        ),
       );
       await conn.insert(
         'TransationRecord',
         _buildTransactionRecord(
-            state: 1, userUuid: 'uuid-filter', txHash: '0xDone'),
+          state: 1,
+          userUuid: 'uuid-filter',
+          txHash: '0xDone',
+        ),
       );
 
       final rows = await conn.query(
@@ -282,29 +293,32 @@ void main() {
       expect(rows.first['state'], 0);
     });
 
-    test('updateTransationRecord — state change is reflected in query', () async {
-      final conn = await db.database;
+    test(
+      'updateTransationRecord — state change is reflected in query',
+      () async {
+        final conn = await db.database;
 
-      final rowId = await conn.insert(
-        'TransationRecord',
-        _buildTransactionRecord(state: 0, txHash: '0xUpdateMe'),
-      );
+        final rowId = await conn.insert(
+          'TransationRecord',
+          _buildTransactionRecord(state: 0, txHash: '0xUpdateMe'),
+        );
 
-      await conn.update(
-        'TransationRecord',
-        {'state': 1},
-        where: 'trId=?',
-        whereArgs: [rowId],
-      );
+        await conn.update(
+          'TransationRecord',
+          {'state': 1},
+          where: 'trId=?',
+          whereArgs: [rowId],
+        );
 
-      final rows = await conn.query(
-        'TransationRecord',
-        where: 'trId=?',
-        whereArgs: [rowId],
-      );
+        final rows = await conn.query(
+          'TransationRecord',
+          where: 'trId=?',
+          whereArgs: [rowId],
+        );
 
-      expect(rows.first['state'], 1);
-    });
+        expect(rows.first['state'], 1);
+      },
+    );
   });
 
   // -------------------------------------------------------------------------
@@ -323,9 +337,14 @@ void main() {
     test('selectBrowserHistoryLike returns matching URLs', () async {
       final conn = await db.database;
 
-      await conn.insert('browserHistory', {'url': 'https://n42.ai', 'time': '1'});
-      await conn.insert(
-          'browserHistory', {'url': 'https://google.com', 'time': '2'});
+      await conn.insert('browserHistory', {
+        'url': 'https://n42.ai',
+        'time': '1',
+      });
+      await conn.insert('browserHistory', {
+        'url': 'https://google.com',
+        'time': '2',
+      });
 
       final rows = await conn.query(
         'browserHistory',
@@ -341,8 +360,10 @@ void main() {
 
     test('LIKE query does not return non-matching URLs', () async {
       final conn = await db.database;
-      await conn.insert(
-          'browserHistory', {'url': 'https://example.com', 'time': '1'});
+      await conn.insert('browserHistory', {
+        'url': 'https://example.com',
+        'time': '1',
+      });
 
       final rows = await conn.query(
         'browserHistory',
@@ -377,10 +398,10 @@ void main() {
         whereArgs: ['flutter'],
       );
       if (existing.isEmpty) {
-        await conn.insert(
-          'browserSearchHistory',
-          {'search': 'flutter', 'searchCount': 1},
-        );
+        await conn.insert('browserSearchHistory', {
+          'search': 'flutter',
+          'searchCount': 1,
+        });
       }
 
       final rows = await conn.query(
@@ -398,8 +419,10 @@ void main() {
       const term = 'bitcoin';
 
       // First insert
-      await conn.insert(
-          'browserSearchHistory', {'search': term, 'searchCount': 1});
+      await conn.insert('browserSearchHistory', {
+        'search': term,
+        'searchCount': 1,
+      });
 
       // Simulate duplicate: read and increment
       final existing = await conn.query(

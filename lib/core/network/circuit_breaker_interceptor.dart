@@ -78,9 +78,7 @@ class CircuitBreakerInterceptor extends Interceptor {
   /// Visible for testing.
   int get failureCount => _failureCount;
 
-  CircuitBreakerInterceptor({
-    this.config = const CircuitBreakerConfig(),
-  });
+  CircuitBreakerInterceptor({this.config = const CircuitBreakerConfig()});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
@@ -99,7 +97,8 @@ class CircuitBreakerInterceptor extends Interceptor {
             DioException(
               requestOptions: options,
               type: DioExceptionType.unknown,
-              error: 'Circuit breaker is open — '
+              error:
+                  'Circuit breaker is open — '
                   'service unavailable, retry after '
                   '${config.recoveryTimeout.inSeconds}s',
             ),

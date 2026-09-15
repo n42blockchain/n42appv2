@@ -72,9 +72,7 @@ class _TodayMiningPageState extends State<TodayMiningPage>
             initData();
           },
           childWidget: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
             child: ListenableBuilder(
               listenable: globalMiningV1,
               builder: (context, _) {

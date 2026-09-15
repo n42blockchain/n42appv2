@@ -10,22 +10,26 @@ void main() {
     test('native with chainId + value', () {
       expect(
         Eip681.buildNative(
-            recipient: recipient, chainId: 1, amountWei: '1000000000000000000'),
+          recipient: recipient,
+          chainId: 1,
+          amountWei: '1000000000000000000',
+        ),
         'ethereum:$recipient@1?value=1000000000000000000',
       );
     });
 
     test('native without amount', () {
-      expect(
-        Eip681.buildNative(recipient: recipient),
-        'ethereum:$recipient',
-      );
+      expect(Eip681.buildNative(recipient: recipient), 'ethereum:$recipient');
     });
 
     test('erc20 transfer', () {
       expect(
         Eip681.buildErc20Transfer(
-            token: token, recipient: recipient, amount: '1000000', chainId: 137),
+          token: token,
+          recipient: recipient,
+          amount: '1000000',
+          chainId: 137,
+        ),
         'ethereum:$token@137/transfer?address=$recipient&uint256=1000000',
       );
     });
@@ -34,7 +38,11 @@ void main() {
   group('parse', () {
     test('round-trips erc20 transfer', () {
       final uri = Eip681.buildErc20Transfer(
-          token: token, recipient: recipient, amount: '2500000', chainId: 42161);
+        token: token,
+        recipient: recipient,
+        amount: '2500000',
+        chainId: 42161,
+      );
       final r = Eip681.parse(uri)!;
       expect(r.isErc20Transfer, isTrue);
       expect(r.tokenAddress, token);
@@ -45,7 +53,8 @@ void main() {
 
     test('round-trips native', () {
       final r = Eip681.parse(
-          Eip681.buildNative(recipient: recipient, chainId: 1, amountWei: '5'))!;
+        Eip681.buildNative(recipient: recipient, chainId: 1, amountWei: '5'),
+      )!;
       expect(r.isErc20Transfer, isFalse);
       expect(r.recipient, recipient);
       expect(r.amount, '5');
@@ -65,20 +74,34 @@ void main() {
       expect(Eip681.parse('random'), isNull);
     });
 
-    test('malformed percent-encoding does not throw (untrusted scan input)', () {
-      // 畸形 %zz 序列：必须安全降级，绝不抛（否则扫码崩溃）。
-      expect(() => Eip681.parse('ethereum:$recipient?memo=%zz&x=%'),
-          returnsNormally);
-      expect(() => Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'),
-          returnsNormally);
-      expect(Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'), recipient);
-    });
+    test(
+      'malformed percent-encoding does not throw (untrusted scan input)',
+      () {
+        // 畸形 %zz 序列：必须安全降级，绝不抛（否则扫码崩溃）。
+        expect(
+          () => Eip681.parse('ethereum:$recipient?memo=%zz&x=%'),
+          returnsNormally,
+        );
+        expect(
+          () => Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'),
+          returnsNormally,
+        );
+        expect(
+          Eip681.resolveRecipient('ethereum:$recipient?memo=%zz'),
+          recipient,
+        );
+      },
+    );
   });
 
   group('resolveRecipient', () {
     test('extracts recipient from erc20 payment request', () {
       final uri = Eip681.buildErc20Transfer(
-          token: token, recipient: recipient, amount: '1', chainId: 1);
+        token: token,
+        recipient: recipient,
+        amount: '1',
+        chainId: 1,
+      );
       expect(Eip681.resolveRecipient(uri), recipient);
     });
 

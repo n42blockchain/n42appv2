@@ -47,10 +47,7 @@ void main() {
       });
 
       test('native transfer with 0x0 value does not show Value field', () {
-        final result = TxRiskAnalyzer.analyze(
-          calldata: null,
-          ethValue: '0x0',
-        );
+        final result = TxRiskAnalyzer.analyze(calldata: null, ethValue: '0x0');
         expect(result.fields.any((f) => f.label == 'Value'), isFalse);
       });
     });
@@ -69,8 +66,10 @@ void main() {
         // selector: 0xa9059cbb
         // to: 0x000...abc (padded to 32 bytes)
         // amount: 1000 (0x3e8 padded to 32 bytes)
-        final to = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final amount = '00000000000000000000000000000000000000000000000000000000000003e8';
+        final to =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final amount =
+            '00000000000000000000000000000000000000000000000000000000000003e8';
         final result = TxRiskAnalyzer.analyze(calldata: '0xa9059cbb$to$amount');
         expect(result.level, TxRiskLevel.safe);
         expect(result.functionName, 'ERC-20 Transfer');
@@ -84,18 +83,26 @@ void main() {
     group('analyze - ERC-20 approve', () {
       test('limited approve is caution level', () {
         // selector: 0x095ea7b3
-        final spender = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final amount = '00000000000000000000000000000000000000000000000000000000000003e8';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x095ea7b3$spender$amount');
+        final spender =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final amount =
+            '00000000000000000000000000000000000000000000000000000000000003e8';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x095ea7b3$spender$amount',
+        );
         expect(result.level, TxRiskLevel.caution);
         expect(result.functionName, 'ERC-20 Approve');
         expect(result.warnings, isEmpty);
       });
 
       test('unlimited approve (MaxUint256) is danger level', () {
-        final spender = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final maxUint = 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x095ea7b3$spender$maxUint');
+        final spender =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final maxUint =
+            'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x095ea7b3$spender$maxUint',
+        );
         expect(result.level, TxRiskLevel.danger);
         expect(result.functionName, 'ERC-20 Approve');
         expect(result.warnings, isNotEmpty);
@@ -104,19 +111,28 @@ void main() {
       });
 
       test('increaseAllowance uses correct function name', () {
-        final spender = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final amount = '00000000000000000000000000000000000000000000000000000000000003e8';
-        final result = TxRiskAnalyzer.analyze(calldata: '0xb0431182$spender$amount');
+        final spender =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final amount =
+            '00000000000000000000000000000000000000000000000000000000000003e8';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0xb0431182$spender$amount',
+        );
         expect(result.functionName, 'Increase Allowance');
       });
     });
 
     group('analyze - ERC-20 transferFrom', () {
       test('decodes transferFrom with caution level', () {
-        final from = '0000000000000000000000001111111111111111111111111111111111111111';
-        final to = '0000000000000000000000002222222222222222222222222222222222222222';
-        final amount = '00000000000000000000000000000000000000000000000000000000000003e8';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x23b872dd$from$to$amount');
+        final from =
+            '0000000000000000000000001111111111111111111111111111111111111111';
+        final to =
+            '0000000000000000000000002222222222222222222222222222222222222222';
+        final amount =
+            '00000000000000000000000000000000000000000000000000000000000003e8';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x23b872dd$from$to$amount',
+        );
         expect(result.level, TxRiskLevel.caution);
         expect(result.functionName, 'ERC-20 TransferFrom');
         expect(result.fields.length, 3);
@@ -126,9 +142,13 @@ void main() {
 
     group('analyze - setApprovalForAll', () {
       test('setApprovalForAll is danger', () {
-        final operator = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final approved = '0000000000000000000000000000000000000000000000000000000000000001';
-        final result = TxRiskAnalyzer.analyze(calldata: '0xa22cb465$operator$approved');
+        final operator =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final approved =
+            '0000000000000000000000000000000000000000000000000000000000000001';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0xa22cb465$operator$approved',
+        );
         expect(result.level, TxRiskLevel.danger);
         expect(result.functionName, contains('setApprovalForAll'));
         expect(result.fields.any((f) => f.label == 'Operator'), isTrue);
@@ -136,16 +156,21 @@ void main() {
       });
 
       test('setApprovalForAll revoke shows Revoke Access', () {
-        final operator = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final revoked = '0000000000000000000000000000000000000000000000000000000000000000';
-        final result = TxRiskAnalyzer.analyze(calldata: '0xa22cb465$operator$revoked');
+        final operator =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final revoked =
+            '0000000000000000000000000000000000000000000000000000000000000000';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0xa22cb465$operator$revoked',
+        );
         expect(result.fields.any((f) => f.value == 'Revoke Access'), isTrue);
       });
     });
 
     group('analyze - ownership', () {
       test('transferOwnership is danger', () {
-        final newOwner = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final newOwner =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
         final result = TxRiskAnalyzer.analyze(calldata: '0xf2fde38b$newOwner');
         expect(result.level, TxRiskLevel.danger);
         expect(result.functionName, 'Transfer Ownership');
@@ -186,8 +211,12 @@ void main() {
 
       test('all Uniswap V2 swap selectors are safe', () {
         final selectors = [
-          '0x7ff36ab5', '0x38ed1739', '0x18cbafe5',
-          '0xfb3bdb41', '0x4a25d94a', '0x8803dbee',
+          '0x7ff36ab5',
+          '0x38ed1739',
+          '0x18cbafe5',
+          '0xfb3bdb41',
+          '0x4a25d94a',
+          '0x8803dbee',
         ];
         for (final sel in selectors) {
           final result = TxRiskAnalyzer.analyze(calldata: sel);
@@ -229,10 +258,15 @@ void main() {
 
     group('analyze - NFT transfers', () {
       test('safeTransferFrom (3 args) is safe', () {
-        final from = '0000000000000000000000001111111111111111111111111111111111111111';
-        final to = '0000000000000000000000002222222222222222222222222222222222222222';
-        final tokenId = '0000000000000000000000000000000000000000000000000000000000000001';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x42842e0e$from$to$tokenId');
+        final from =
+            '0000000000000000000000001111111111111111111111111111111111111111';
+        final to =
+            '0000000000000000000000002222222222222222222222222222222222222222';
+        final tokenId =
+            '0000000000000000000000000000000000000000000000000000000000000001';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x42842e0e$from$to$tokenId',
+        );
         expect(result.level, TxRiskLevel.safe);
         expect(result.functionName, 'NFT Transfer');
         expect(result.fields.length, 2);
@@ -248,13 +282,20 @@ void main() {
     group('analyze - permit (on-chain)', () {
       test('permit function is danger', () {
         // permit(address,address,uint256,uint256,uint8,bytes32,bytes32) = 0xd505accf
-        final owner = '0000000000000000000000001111111111111111111111111111111111111111';
-        final spender = '0000000000000000000000002222222222222222222222222222222222222222';
-        final maxUint = 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
-        final deadline = '0000000000000000000000000000000000000000000000000000000067890abc';
-        final v = '000000000000000000000000000000000000000000000000000000000000001b';
-        final r = 'abcdef0000000000000000000000000000000000000000000000000000000000';
-        final s = '1234560000000000000000000000000000000000000000000000000000000000';
+        final owner =
+            '0000000000000000000000001111111111111111111111111111111111111111';
+        final spender =
+            '0000000000000000000000002222222222222222222222222222222222222222';
+        final maxUint =
+            'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff';
+        final deadline =
+            '0000000000000000000000000000000000000000000000000000000067890abc';
+        final v =
+            '000000000000000000000000000000000000000000000000000000000000001b';
+        final r =
+            'abcdef0000000000000000000000000000000000000000000000000000000000';
+        final s =
+            '1234560000000000000000000000000000000000000000000000000000000000';
         final result = TxRiskAnalyzer.analyze(
           calldata: '0xd505accf$owner$spender$maxUint$deadline$v$r$s',
         );
@@ -289,7 +330,8 @@ void main() {
           'primaryType': 'Permit',
           'message': {
             'spender': '0x1234567890abcdef1234567890abcdef12345678',
-            'value': '115792089237316195423570985008687907853269984665640564039457584007913129639935',
+            'value':
+                '115792089237316195423570985008687907853269984665640564039457584007913129639935',
             'deadline': '1700000000',
           },
         });
@@ -313,7 +355,10 @@ void main() {
         final result = TxRiskAnalyzer.analyzeTypedData(data);
         expect(result, isNotNull);
         expect(result!.level, TxRiskLevel.danger);
-        expect(result.warnings.length, 1); // only gasless warning, not unlimited
+        expect(
+          result.warnings.length,
+          1,
+        ); // only gasless warning, not unlimited
       });
 
       test('non-Permit typed data is safe', () {
@@ -361,17 +406,28 @@ void main() {
 
     group('edge cases - amount formatting', () {
       test('zero amount', () {
-        final spender = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
-        final zero = '0000000000000000000000000000000000000000000000000000000000000000';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x095ea7b3$spender$zero');
-        expect(result.fields.any((f) => f.label == 'Amount' && f.value == '0'), isTrue);
+        final spender =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final zero =
+            '0000000000000000000000000000000000000000000000000000000000000000';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x095ea7b3$spender$zero',
+        );
+        expect(
+          result.fields.any((f) => f.label == 'Amount' && f.value == '0'),
+          isTrue,
+        );
       });
 
       test('very large but not unlimited amount', () {
-        final spender = '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
+        final spender =
+            '0000000000000000000000001234567890abcdef1234567890abcdef12345678';
         // Large number but not MaxUint256
-        final large = '00000000000000000000000000000000ffffffffffffffffffffffffffffffff';
-        final result = TxRiskAnalyzer.analyze(calldata: '0x095ea7b3$spender$large');
+        final large =
+            '00000000000000000000000000000000ffffffffffffffffffffffffffffffff';
+        final result = TxRiskAnalyzer.analyze(
+          calldata: '0x095ea7b3$spender$large',
+        );
         expect(result.level, TxRiskLevel.caution); // not danger
       });
     });

@@ -148,7 +148,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
               if (!_showEncryptResult) ...[
                 Text(
                   S.of(context).g_mining_key_97,
-                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.headline.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: AppSpacing.space2),
                 textFieldStyle3(
@@ -168,7 +170,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                 SizedBox(height: AppSpacing.space12),
                 Text(
                   S.of(context).g_mining_key_99,
-                  style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.headline.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: AppSpacing.space2),
                 textFieldStyle3(
@@ -190,7 +194,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
               if (_showEncryptResult) ...[
                 Text(
                   S.of(context).g_mining_key_100,
-                  style: AppTypography.title.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.title.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
                 SizedBox(height: AppSpacing.space12),
                 Container(
@@ -202,7 +208,9 @@ class _MiningOutputPkState extends State<MiningOutputPk> {
                   width: double.infinity,
                   child: Text(
                     _encryptedData,
-                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textItem),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textItem,
+                    ),
                   ),
                 ),
               ],

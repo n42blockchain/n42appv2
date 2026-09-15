@@ -70,12 +70,14 @@ void main() {
       expect(view.chainIdTest, 1142);
     });
 
-    test('coinPrice falls back to market "price" key when coinPrice absent',
-        () {
-      expect(const CoinConfigView({'coinPrice': 1.5}).coinPrice, 1.5);
-      expect(const CoinConfigView({'price': 2.5}).coinPrice, 2.5);
-      expect(const CoinConfigView({}).coinPrice, 0);
-    });
+    test(
+      'coinPrice falls back to market "price" key when coinPrice absent',
+      () {
+        expect(const CoinConfigView({'coinPrice': 1.5}).coinPrice, 1.5);
+        expect(const CoinConfigView({'price': 2.5}).coinPrice, 2.5);
+        expect(const CoinConfigView({}).coinPrice, 0);
+      },
+    );
 
     test('coinPrice handles String numerics from market APIs', () {
       expect(const CoinConfigView({'price': '1.23'}).coinPrice, 1.23);
@@ -128,10 +130,7 @@ void main() {
   group('CoinConfigView HD derivation paths', () {
     test('pathMap reads typed map', () {
       const view = CoinConfigView({
-        'path': {
-          'legacy': "m/44'/60'/0'/0/0",
-          'segwit': "m/49'/0'/0'/0/0",
-        },
+        'path': {'legacy': "m/44'/60'/0'/0/0", 'segwit': "m/49'/0'/0'/0/0"},
       });
       expect(view.pathMap, {
         'legacy': "m/44'/60'/0'/0/0",
@@ -182,8 +181,7 @@ void main() {
       expect(identical(view.raw, map), isTrue);
     });
 
-    test('mutating raw map after construction is visible through view',
-        () {
+    test('mutating raw map after construction is visible through view', () {
       final map = <String, dynamic>{'coinType': 'N'};
       final view = CoinConfigView(map);
       expect(view.coinType, 'N');

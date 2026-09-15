@@ -247,8 +247,9 @@ mixin WalletConnectConnection on ChangeNotifier {
       // (=活跃钱包 selectedWalletIndex);此前却用 miningWalletIndex 取私钥——
       // 用户切换过挖矿钱包(miningIndex≠selectedIndex)时会用挖矿账户私钥签、
       // 资产从非预期账户流出(第三轮 P0-1,与已修的 DApp handler 同病)。
-      final selectedIndex =
-          globalProviderContainer.read(selectedWalletIndexProvider);
+      final selectedIndex = globalProviderContainer.read(
+        selectedWalletIndexProvider,
+      );
       final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
       String? pKey = await walletService.getPrivateKeyForWallet(currentIndex);
 
@@ -258,7 +259,10 @@ mixin WalletConnectConnection on ChangeNotifier {
           pKey = await trustdart.getPrivateKey(
             mnemonic,
             cm.config.coinType,
-            getPathWithIndex(cm.config.pathForAddrType('legacy')!, cm.pathIndex),
+            getPathWithIndex(
+              cm.config.pathForAddrType('legacy')!,
+              cm.pathIndex,
+            ),
           );
         }
       }
@@ -425,9 +429,7 @@ mixin WalletConnectConnection on ChangeNotifier {
       }
       // 按指定 chainId 查找匹配项
       final matchIndex = coinModels.indexWhere((cm) {
-        final cmChainId = cm.isTest
-            ? cm.config.chainIdTest
-            : cm.config.chainId;
+        final cmChainId = cm.isTest ? cm.config.chainIdTest : cm.config.chainId;
         return cmChainId == chainId;
       });
       if (matchIndex != -1) setCoinModelsIndex(matchIndex);
@@ -497,8 +499,9 @@ mixin WalletConnectConnection on ChangeNotifier {
     // 非 EVM 链凭据同样须用活跃钱包(selectedWalletIndex)——各链地址/pathIndex
     // 都取自选中 coinModel,此前用 miningWalletIndex 取助记词会三者错配、签名
     // 对不上广播地址(第三轮 P0-2)。
-    final selectedIndex =
-        globalProviderContainer.read(selectedWalletIndexProvider);
+    final selectedIndex = globalProviderContainer.read(
+      selectedWalletIndexProvider,
+    );
     final currentIndex = selectedIndex >= 0 ? selectedIndex : 0;
     return walletService.getCredentials(currentIndex);
   }

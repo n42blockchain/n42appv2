@@ -8,5 +8,6 @@ class KeyPair {
   bool get isEmpty => privateKey.isEmpty && publicKey.isEmpty;
 
   @override
-  String toString() => 'KeyPair(pub: ${publicKey.length > 8 ? '${publicKey.substring(0, 8)}...' : publicKey})';
+  String toString() =>
+      'KeyPair(pub: ${publicKey.length > 8 ? '${publicKey.substring(0, 8)}...' : publicKey})';
 }

@@ -245,8 +245,7 @@ mixin _BtcSendTxMixin on _BtcSendLogicMixin {
     List<Map<String, dynamic>> utxos, {
     bool max = false,
   }) async {
-    final coinType = widget.coinModel.config.coinType
-        .toUpperCase();
+    final coinType = widget.coinModel.config.coinType.toUpperCase();
     final path = getPathWithIndex(
       widget.coinModel.config.pathForAddrType(widget.coinModel.addrType)!,
       widget.coinModel.pathIndex,

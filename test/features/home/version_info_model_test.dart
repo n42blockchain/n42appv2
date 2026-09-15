@@ -99,13 +99,16 @@ void main() {
         isForce: false,
       );
       final json = model.toJson();
-      expect(json.keys, containsAll([
-        'versionName',
-        'versionCode',
-        'updateTitle',
-        'updateContent',
-        'isForce',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          'versionName',
+          'versionCode',
+          'updateTitle',
+          'updateContent',
+          'isForce',
+        ]),
+      );
     });
 
     test('values match the model fields', () {

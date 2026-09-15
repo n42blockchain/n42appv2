@@ -1,7 +1,1 @@
-enum Load {
-  loading,
-  finish,
-  error,
-  refresh,
-  nextPage,
-}
+enum Load { loading, finish, error, refresh, nextPage }

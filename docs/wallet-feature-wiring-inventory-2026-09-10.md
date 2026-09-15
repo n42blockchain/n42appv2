@@ -4,7 +4,7 @@
 
 本表是静态构造引用索引，不代表按钮可点击、平台可见、签名正确或链上流程通过。零外部引用是复核候选；同文件调用、构造函数 tear-off 和备用实现可能导致误报。外部引用也可能来自未启用代码。运行时结论见配套审计报告。
 
-纳入 989 个 Dart 源文件、311 个测试文件、233 个公开页面或页面组件类。
+纳入 989 个 Dart 源文件、325 个测试文件、233 个公开页面或页面组件类。
 
 ## 模块覆盖清单
 
@@ -37,7 +37,7 @@
 | staking | 15 | 5 |
 | utils | 10 | 4 |
 | wallet | 535 | 115 |
-| wallet_connect | 15 | 13 |
+| wallet_connect | 15 | 19 |
 | widgets | 35 | 5 |
 
 测试计数按目录归属，不把文件数当作行为覆盖率。
@@ -181,7 +181,7 @@
 | wallet | `EnsSearchPage` | [ens_search_page.dart:21](../lib/features/wallet/pages/ens/ens_search_page.dart) | [ens_home_page_logic.dart](../lib/features/wallet/pages/ens/ens_home_page_logic.dart) |
 | wallet | `EnsStatusBanner` | [wallet_chain_send_ens.dart:83](../lib/features/wallet/pages/send/wallet_chain_send_ens.dart) | [wallet_chain_send_form.dart](../lib/features/wallet/pages/send/wallet_chain_send_form.dart) |
 | wallet | `EnsSubdomainSection` | [ens_subdomain_section.dart:14](../lib/features/wallet/pages/ens/ens_subdomain_section.dart) | [ens_management_page.dart](../lib/features/wallet/pages/ens/ens_management_page.dart) |
-| wallet | `EnsTextRecordsSection` | [ens_record_sections.dart:70](../lib/features/wallet/pages/ens/ens_record_sections.dart) | [ens_management_page.dart](../lib/features/wallet/pages/ens/ens_management_page.dart) |
+| wallet | `EnsTextRecordsSection` | [ens_record_sections.dart:68](../lib/features/wallet/pages/ens/ens_record_sections.dart) | [ens_management_page.dart](../lib/features/wallet/pages/ens/ens_management_page.dart) |
 | wallet | `ExportCloudBackup` | [export_cloud_backup.dart:34](../lib/features/wallet/pages/wallet_backup/export_cloud_backup.dart) | [profile_home_page_widgets.dart](../lib/features/home/profile/profile_home_page_widgets.dart) |
 | wallet | `ExportKeystoreDesc` | [export_keystore_desc.dart:11](../lib/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart) | [one_coin_wallet_manage.dart](../lib/features/wallet/pages/wallet_manage/keystore/one_coin_wallet_manage.dart) |
 | wallet | `ExportKeystorePage` | [export_keystore_page.dart:19](../lib/features/wallet/pages/wallet_manage/keystore/export_keystore_page.dart) | [export_keystore_desc.dart](../lib/features/wallet/pages/wallet_manage/keystore/export_keystore_desc.dart) |
@@ -213,7 +213,7 @@
 | wallet | `PortfolioPage` | [portfolio_page.dart:24](../lib/features/wallet/pages/portfolio/portfolio_page.dart) | [profile_home_page.dart](../lib/features/home/profile/profile_home_page.dart)<br>[wallet_page.dart](../lib/features/wallet/pages/wallet_page.dart) |
 | wallet | `RecentAddressBar` | [send_utils.dart:229](../lib/features/wallet/pages/send/send_utils.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart)<br>[wallet_chain_send_algo.dart](../lib/features/wallet/pages/send/wallet_chain_send_algo.dart)<br>[wallet_chain_send_apt.dart](../lib/features/wallet/pages/send/wallet_chain_send_apt.dart)<br>[wallet_chain_send_btc.dart](../lib/features/wallet/pages/send/wallet_chain_send_btc.dart)<br>[wallet_chain_send_dot.dart](../lib/features/wallet/pages/send/wallet_chain_send_dot.dart)<br>[wallet_chain_send_fil.dart](../lib/features/wallet/pages/send/wallet_chain_send_fil.dart)<br>[wallet_chain_send_memo_widgets.dart](../lib/features/wallet/pages/send/wallet_chain_send_memo_widgets.dart)<br>[wallet_chain_send_sol.dart](../lib/features/wallet/pages/send/wallet_chain_send_sol.dart)<br>[wallet_chain_send_sui.dart](../lib/features/wallet/pages/send/wallet_chain_send_sui.dart)<br>[wallet_chain_send_ton.dart](../lib/features/wallet/pages/send/wallet_chain_send_ton.dart)<br>[wallet_chain_send_trx.dart](../lib/features/wallet/pages/send/wallet_chain_send_trx.dart)<br>[wallet_chain_send_xrp.dart](../lib/features/wallet/pages/send/wallet_chain_send_xrp.dart)<br>[wallet_chain_send_zil.dart](../lib/features/wallet/pages/send/wallet_chain_send_zil.dart) |
 | wallet | `SendAmountWidget` | [wallet_chain_send_form.dart:140](../lib/features/wallet/pages/send/wallet_chain_send_form.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart) |
-| wallet | `SendErrorWidget` | [wallet_chain_send_gas.dart:221](../lib/features/wallet/pages/send/wallet_chain_send_gas.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart) |
+| wallet | `SendErrorWidget` | [wallet_chain_send_gas.dart:219](../lib/features/wallet/pages/send/wallet_chain_send_gas.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart) |
 | wallet | `SendNoteWidget` | [wallet_chain_send_form.dart:89](../lib/features/wallet/pages/send/wallet_chain_send_form.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart) |
 | wallet | `SendToWidget` | [wallet_chain_send_form.dart:25](../lib/features/wallet/pages/send/wallet_chain_send_form.dart) | [wallet_chain_send.dart](../lib/features/wallet/pages/send/wallet_chain_send.dart) |
 | wallet | `SessionKeyAmountLimit` | [session_key_form_widgets.dart:14](../lib/features/wallet/pages/aa/session_key_form_widgets.dart) | [create_session_key_sheet.dart](../lib/features/wallet/pages/aa/create_session_key_sheet.dart) |
@@ -230,7 +230,7 @@
 | wallet | `SwapAstMinerFeeWidget` | [swap_ast_miner_fee_widget.dart:24](../lib/features/wallet/pages/ast_swap/swap_ast_miner_fee_widget.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
 | wallet | `SwapAstPayWidget` | [swap_ast_pay_widget.dart:19](../lib/features/wallet/pages/ast_swap/swap_ast_pay_widget.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
 | wallet | `SwapAstPercentWidget` | [swap_ast_form_widgets.dart:57](../lib/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
-| wallet | `SwapAstPreviewButton` | [swap_ast_form_widgets.dart:189](../lib/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
+| wallet | `SwapAstPreviewButton` | [swap_ast_form_widgets.dart:192](../lib/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
 | wallet | `SwapAstPriceWidget` | [swap_ast_form_widgets.dart:16](../lib/features/wallet/pages/ast_swap/swap_ast_form_widgets.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |
 | wallet | `SwapAstSelectChain` | [swap_ast_select_chain.dart:9](../lib/features/wallet/pages/ast_swap/swap_ast_select_chain.dart) | [swap_ast_pay_widget.dart](../lib/features/wallet/pages/ast_swap/swap_ast_pay_widget.dart) |
 | wallet | `SwapAstSummary` | [swap_ast_summary.dart:10](../lib/features/wallet/pages/ast_swap/swap_ast_summary.dart) | [swap_ast_home_build.dart](../lib/features/wallet/pages/ast_swap/swap_ast_home_build.dart) |

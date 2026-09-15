@@ -247,31 +247,6 @@ void main() {
   });
 
   // ---------------------------------------------------------------------------
-  group('WalletConnectProvider — reconnect backoff', () {
-    // The backoff formula is: seconds = (attempts < 4) ? (2 << attempts) : 30
-    // attempts: 0→2s, 1→4s, 2→8s, 3→16s, 4→30s
-    test('backoff calculation matches expected values', () {
-      // Replicate the formula from _scheduleReconnect
-      List<int> expected = [2, 4, 8, 16, 30];
-      for (int attempt = 0; attempt < 5; attempt++) {
-        final seconds = (attempt < 4) ? (2 << attempt) : 30;
-        expect(
-          seconds,
-          expected[attempt],
-          reason: 'attempt $attempt should be ${expected[attempt]}s',
-        );
-      }
-    });
-
-    test('backoff caps at 30 for attempt >= 4', () {
-      for (int attempt = 4; attempt < 10; attempt++) {
-        final seconds = (attempt < 4) ? (2 << attempt) : 30;
-        expect(seconds, 30, reason: 'attempt $attempt should cap at 30s');
-      }
-    });
-  });
-
-  // ---------------------------------------------------------------------------
   group('WalletConnectProvider — cleanDataLogout', () {
     late WalletConnectProvider provider;
 

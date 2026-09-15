@@ -71,13 +71,13 @@ final Map<String, Map<String, dynamic>> _requestUrlTest1 = {
   'EVMOS': {'api': '', 'browser': '', 'rpc': ''},
   'MOVR': {'api': '', 'browser': '', 'rpc': ''},
   'GLMR': {'api': '', 'browser': '', 'rpc': ''},
-  'KLAY': {'api': '', 'browser': '', 'rpc': 'https://rpc.ankr.com/klaytn_testnet'},
-  'MTR': {'api': '', 'browser': '', 'rpc': ''},
-  'OKT': {
+  'KLAY': {
     'api': '',
     'browser': '',
-    'rpc': 'https://exchaintestrpc.okex.org/',
+    'rpc': 'https://rpc.ankr.com/klaytn_testnet',
   },
+  'MTR': {'api': '', 'browser': '', 'rpc': ''},
+  'OKT': {'api': '', 'browser': '', 'rpc': 'https://exchaintestrpc.okex.org/'},
   'OP': {'api': '', 'browser': '', 'rpc': ''},
   'ARB': {
     'api': '',

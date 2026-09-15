@@ -83,12 +83,12 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'rpc': 'https://rpc.gochain.io',
   },
   'WAN': {'api': '', 'browser': 'https://wanscan.org', 'rpc': ''},
-  'CRO': {'api': '', 'browser': 'https://cronoscan.com/', 'rpc': 'https://evm.cronos.org'},
-  'KAVA': {
+  'CRO': {
     'api': '',
-    'browser': 'https://www.mintscan.io/kava/',
-    'rpc': '',
+    'browser': 'https://cronoscan.com/',
+    'rpc': 'https://evm.cronos.org',
   },
+  'KAVA': {'api': '', 'browser': 'https://www.mintscan.io/kava/', 'rpc': ''},
   'KCS': {
     'api': 'https://explorer.kcc.io/api?',
     'browser': 'https://explorer.kcc.io/',
@@ -99,22 +99,14 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'browser': 'https://bobascan.com/',
     'rpc': 'https://mainnet.boba.network',
   },
-  'EVMOS': {
+  'EVMOS': {'api': '', 'browser': 'https://www.mintscan.io/evmos/', 'rpc': ''},
+  'MOVR': {'api': '', 'browser': 'https://moonriver.subscan.io/', 'rpc': ''},
+  'GLMR': {'api': '', 'browser': 'https://moonbase.subscan.io/', 'rpc': ''},
+  'KLAY': {
     'api': '',
-    'browser': 'https://www.mintscan.io/evmos/',
-    'rpc': '',
+    'browser': 'https://scope.klaytn.com/',
+    'rpc': 'https://rpc.ankr.com/klaytn',
   },
-  'MOVR': {
-    'api': '',
-    'browser': 'https://moonriver.subscan.io/',
-    'rpc': '',
-  },
-  'GLMR': {
-    'api': '',
-    'browser': 'https://moonbase.subscan.io/',
-    'rpc': '',
-  },
-  'KLAY': {'api': '', 'browser': 'https://scope.klaytn.com/', 'rpc': 'https://rpc.ankr.com/klaytn'},
   'MTR': {
     'api': '',
     'browser': 'https://scan.meter.io/',
@@ -195,11 +187,7 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
     'rpc': '',
   },
   'FIRO': {'api': '', 'browser': 'https://explorer.firo.org/', 'rpc': ''},
-  'BCH': {
-    'api': '',
-    'browser': 'https://www.blockchain.com/bch/',
-    'rpc': '',
-  },
+  'BCH': {'api': '', 'browser': 'https://www.blockchain.com/bch/', 'rpc': ''},
   'BTG': {
     'api': '',
     'browser': 'https://explorer.bitcoingold.org/insight/',
@@ -207,11 +195,7 @@ final Map<String, Map<String, dynamic>> _requestUrlMain1 = {
   },
   'RVN': {'api': '', 'browser': 'https://ravencoin.network/', 'rpc': ''},
   'QTUM': {'api': '', 'browser': 'https://qtum.info/', 'rpc': ''},
-  'XEC': {
-    'api': '',
-    'browser': 'https://explorer.bitcoinabc.org/',
-    'rpc': '',
-  },
+  'XEC': {'api': '', 'browser': 'https://explorer.bitcoinabc.org/', 'rpc': ''},
   'ALGO': {
     'api': 'https://node.algoexplorerapi.io/',
     'browser': 'https://algoexplorer.io/',

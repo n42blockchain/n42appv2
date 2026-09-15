@@ -22,9 +22,7 @@ void main() {
       )
       .toList();
 
-  final importPattern = RegExp(
-    "import\\s+'package:n42_wallet/([^']+)'",
-  );
+  final importPattern = RegExp("import\\s+'package:n42_wallet/([^']+)'");
 
   /// 文件相对路径（正斜杠）→ 它 import 的 n42_wallet 内部路径列表
   final imports = <String, List<String>>{};
@@ -87,7 +85,8 @@ void main() {
     test('sqlite 不 import 任何 feature（DAO 以 extension 下放各 feature）', () {
       final v = violations(
         (f) => f.startsWith('lib/features/sqlite/'),
-        (f, imp) => imp.startsWith('features/') && !imp.startsWith('features/sqlite/'),
+        (f, imp) =>
+            imp.startsWith('features/') && !imp.startsWith('features/sqlite/'),
       );
       expect(v, isEmpty, reason: v.join('\n'));
     });
@@ -117,8 +116,7 @@ void main() {
         'lib/features/wallet/pages/wallet_page_top_bar.dart',
       };
       final v = violations(
-        (f) =>
-            f.startsWith('lib/features/wallet/') && !allowlist.contains(f),
+        (f) => f.startsWith('lib/features/wallet/') && !allowlist.contains(f),
         (f, imp) => imp.startsWith('features/wallet_connect/'),
       );
       expect(v, isEmpty, reason: v.join('\n'));

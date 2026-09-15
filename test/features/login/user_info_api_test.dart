@@ -24,8 +24,11 @@ bool isEmailValid(String? email) {
 }
 
 /// Mirrors the login-params construction for the email-login endpoint.
-Map<String, dynamic> buildLoginParams(String email, String password,
-    {Map<String, dynamic>? deviceInfo}) {
+Map<String, dynamic> buildLoginParams(
+  String email,
+  String password, {
+  Map<String, dynamic>? deviceInfo,
+}) {
   final params = <String, dynamic>{
     'email': email,
     'pwd': password,

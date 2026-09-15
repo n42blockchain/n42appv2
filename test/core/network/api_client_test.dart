@@ -15,11 +15,11 @@ void main() {
 
   setUp(() {
     mockSecureStorage = MockSecureStorage();
-    
+
     // 设置默认返回值
     when(mockSecureStorage.getToken()).thenAnswer((_) async => 'test_token');
     when(mockSecureStorage.getUuid()).thenAnswer((_) async => 'test_uuid');
-    
+
     apiClient = ApiClient(mockSecureStorage);
   });
 
@@ -44,7 +44,7 @@ void main() {
   group('HTTP Methods', () {
     // 这些测试需要 mock Dio 实例
     // 在实际项目中，应该使用 nock 或 MockWebServer 进行集成测试
-    
+
     test('get method should exist', () {
       expect(apiClient.get, isNotNull);
     });

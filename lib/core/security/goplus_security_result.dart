@@ -29,8 +29,7 @@ class GoplusSecurityResult {
     return GoplusRiskLevel.safe;
   }
 
-  static bool _isFlagged(dynamic val) =>
-      val == '1' || val == 1 || val == true;
+  static bool _isFlagged(dynamic val) => val == '1' || val == 1 || val == true;
 
   static double _parseTax(dynamic val) {
     if (val == null) return 0.0;
@@ -43,7 +42,9 @@ class GoplusSecurityResult {
 
     // ── Critical: 直接资金损失或 rug pull ─────────────────────────────────
     if (_isFlagged(data['is_honeypot'])) {
-      risks.add(const GoplusRisk('Honeypot (cannot sell)', GoplusRiskLevel.danger));
+      risks.add(
+        const GoplusRisk('Honeypot (cannot sell)', GoplusRiskLevel.danger),
+      );
     }
     if (_isFlagged(data['hidden_owner'])) {
       risks.add(const GoplusRisk('Hidden Owner', GoplusRiskLevel.danger));
@@ -52,48 +53,75 @@ class GoplusSecurityResult {
       risks.add(const GoplusRisk('Owner Can Reclaim', GoplusRiskLevel.danger));
     }
     if (_isFlagged(data['owner_change_balance'])) {
-      risks.add(const GoplusRisk('Owner Can Change Balances', GoplusRiskLevel.danger));
+      risks.add(
+        const GoplusRisk('Owner Can Change Balances', GoplusRiskLevel.danger),
+      );
     }
     if (_isFlagged(data['transfer_pausable'])) {
-      risks.add(const GoplusRisk('Transfers Can Be Paused', GoplusRiskLevel.danger));
+      risks.add(
+        const GoplusRisk('Transfers Can Be Paused', GoplusRiskLevel.danger),
+      );
     }
     if (_isFlagged(data['cannot_buy'])) {
       risks.add(const GoplusRisk('Cannot Buy', GoplusRiskLevel.danger));
     }
     if (_isFlagged(data['is_airdrop_scam'])) {
-      risks.add(const GoplusRisk('Suspected Airdrop Scam', GoplusRiskLevel.danger));
+      risks.add(
+        const GoplusRisk('Suspected Airdrop Scam', GoplusRiskLevel.danger),
+      );
     }
 
     // ── Warning: 可疑但非确定性风险 ───────────────────────────────────────
     if (_isFlagged(data['is_blacklisted'])) {
-      risks.add(const GoplusRisk('Blacklist Function Exists', GoplusRiskLevel.caution));
+      risks.add(
+        const GoplusRisk('Blacklist Function Exists', GoplusRiskLevel.caution),
+      );
     }
     if (_isFlagged(data['selfdestruct'])) {
       risks.add(const GoplusRisk('Can Self-Destruct', GoplusRiskLevel.caution));
     }
     if (_isFlagged(data['is_mintable'])) {
-      risks.add(const GoplusRisk('Mintable (supply can increase)', GoplusRiskLevel.caution));
+      risks.add(
+        const GoplusRisk(
+          'Mintable (supply can increase)',
+          GoplusRiskLevel.caution,
+        ),
+      );
     }
     if (_isFlagged(data['anti_whale_modifiable'])) {
-      risks.add(const GoplusRisk('Anti-Whale Limits Modifiable', GoplusRiskLevel.caution));
+      risks.add(
+        const GoplusRisk(
+          'Anti-Whale Limits Modifiable',
+          GoplusRiskLevel.caution,
+        ),
+      );
     }
     if (_isFlagged(data['personal_slippage_modifiable'])) {
-      risks.add(const GoplusRisk('Slippage Modifiable by Owner', GoplusRiskLevel.caution));
+      risks.add(
+        const GoplusRisk(
+          'Slippage Modifiable by Owner',
+          GoplusRiskLevel.caution,
+        ),
+      );
     }
 
     final buyTax = _parseTax(data['buy_tax']);
     if (buyTax > 0.1) {
-      risks.add(GoplusRisk(
-        'High Buy Tax (${(buyTax * 100).toStringAsFixed(0)}%)',
-        GoplusRiskLevel.caution,
-      ));
+      risks.add(
+        GoplusRisk(
+          'High Buy Tax (${(buyTax * 100).toStringAsFixed(0)}%)',
+          GoplusRiskLevel.caution,
+        ),
+      );
     }
     final sellTax = _parseTax(data['sell_tax']);
     if (sellTax > 0.1) {
-      risks.add(GoplusRisk(
-        'High Sell Tax (${(sellTax * 100).toStringAsFixed(0)}%)',
-        GoplusRiskLevel.caution,
-      ));
+      risks.add(
+        GoplusRisk(
+          'High Sell Tax (${(sellTax * 100).toStringAsFixed(0)}%)',
+          GoplusRiskLevel.caution,
+        ),
+      );
     }
 
     if (data['is_open_source'] == '0') {

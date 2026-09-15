@@ -4,7 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:provider/provider.dart';
 
 /// 创建可测试的 Widget 包装器
-/// 
+///
 /// 用于 Widget 测试，提供必要的上下文
 Widget createTestableWidget({
   required Widget child,
@@ -12,10 +12,7 @@ Widget createTestableWidget({
 }) {
   return MaterialApp(
     home: providers != null && providers.isNotEmpty
-        ? MultiProvider(
-            providers: providers,
-            child: child,
-          )
+        ? MultiProvider(providers: providers, child: child)
         : child,
   );
 }
@@ -37,10 +34,7 @@ Future<void> pumpAndSettle(WidgetTester tester) async {
 }
 
 /// 等待指定时间后继续
-Future<void> pumpWithDuration(
-  WidgetTester tester,
-  Duration duration,
-) async {
+Future<void> pumpWithDuration(WidgetTester tester, Duration duration) async {
   await tester.pump(duration);
 }
 
@@ -77,26 +71,17 @@ void expectMultipleWidgets(Finder finder, int count) {
 /// Mock 类的辅助扩展
 extension MockExtensions<T extends Mock> on T {
   /// 设置方法返回 Future 值
-  void whenAsync<R>(
-    Function(T) methodCall,
-    R value,
-  ) {
+  void whenAsync<R>(Function(T) methodCall, R value) {
     when(methodCall(this)).thenAnswer((_) async => value);
   }
 
   /// 设置方法抛出异常
-  void whenThrows(
-    Function(T) methodCall,
-    Exception exception,
-  ) {
+  void whenThrows(Function(T) methodCall, Exception exception) {
     when(methodCall(this)).thenThrow(exception);
   }
 
   /// 设置方法返回 Stream
-  void whenStream<R>(
-    Function(T) methodCall,
-    Stream<R> stream,
-  ) {
+  void whenStream<R>(Function(T) methodCall, Stream<R> stream) {
     when(methodCall(this)).thenAnswer((_) => stream);
   }
 }
@@ -149,4 +134,3 @@ class TestDataGenerator {
     };
   }
 }
-

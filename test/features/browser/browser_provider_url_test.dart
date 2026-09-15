@@ -29,10 +29,7 @@ void main() {
 
   group('checkHttp：地址栏输入归一化', () {
     test('非 URL 输入 "btc" → Google 搜索 URL', () {
-      expect(
-        provider.checkHttp('btc'),
-        'https://www.google.com/search?q=btc',
-      );
+      expect(provider.checkHttp('btc'), 'https://www.google.com/search?q=btc');
     });
 
     test('裸域名 "example.com" → 补 https:// 前缀', () {
@@ -90,10 +87,7 @@ void main() {
     });
 
     test('blob: 协议被拦截', () {
-      expect(
-        provider.checkUrl('blob:https://evil.com/6a5f0a-uuid'),
-        isFalse,
-      );
+      expect(provider.checkUrl('blob:https://evil.com/6a5f0a-uuid'), isFalse);
     });
 
     test('file: 协议被拦截', () {

@@ -315,7 +315,9 @@ class AABatchTransactionBody extends StatelessWidget {
             : _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
         border: isSponsored
-            ? Border.all(color: AppColorTokens.of(context).success.withAlpha(30))
+            ? Border.all(
+                color: AppColorTokens.of(context).success.withAlpha(30),
+              )
             : null,
       ),
       child: Column(

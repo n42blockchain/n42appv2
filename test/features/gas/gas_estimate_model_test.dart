@@ -68,10 +68,7 @@ void main() {
 
     group('LegacyGasFee', () {
       test('should create from JSON correctly', () {
-        final json = {
-          'gasPrice': '20000000000',
-          'estimatedSeconds': 60,
-        };
+        final json = {'gasPrice': '20000000000', 'estimatedSeconds': 60};
 
         final fee = LegacyGasFee.fromJson(json);
 

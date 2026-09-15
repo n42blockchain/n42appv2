@@ -53,10 +53,10 @@ void main() {
       expect(resolveChainConfigIdOrNull(config), 56);
       expect(resolveChainConfigIdOrNull(null), isNull);
       expect(
-        resolveChainConfigIdOrNull(
-          <String, dynamic>{'chainId': 56, 'chainId_test': 97},
-          isTest: true,
-        ),
+        resolveChainConfigIdOrNull(<String, dynamic>{
+          'chainId': 56,
+          'chainId_test': 97,
+        }, isTest: true),
         97,
       );
     });

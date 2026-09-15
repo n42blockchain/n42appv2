@@ -64,7 +64,8 @@ class RpcConfig {
   static const String optimismMainnetRpc = 'https://mainnet.optimism.io';
 
   /// Avalanche C-Chain RPC
-  static const String avalancheMainnetRpc = 'https://api.avax.network/ext/bc/C/rpc';
+  static const String avalancheMainnetRpc =
+      'https://api.avax.network/ext/bc/C/rpc';
 
   /// Base Mainnet RPC
   static const String baseMainnetRpc = 'https://mainnet.base.org';
@@ -98,7 +99,7 @@ class RpcConfig {
       AppLogger.w(
         'RpcConfig',
         'insecure HTTP connections detected: ${insecureEntries.join(", ")} '
-        '— consider upgrading to HTTPS or using VPN/proxy',
+            '— consider upgrading to HTTPS or using VPN/proxy',
       );
     }
   }

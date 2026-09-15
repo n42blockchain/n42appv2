@@ -26,9 +26,12 @@ void main() {
     ]);
 
     expect(log, [
-      't1-start', 't1-end',
-      't2-start', 't2-end',
-      't3-start', 't3-end',
+      't1-start',
+      't1-end',
+      't2-start',
+      't2-end',
+      't3-start',
+      't3-end',
     ]);
     expect(TransferSerializer.isIdle, isTrue);
   });
@@ -38,12 +41,13 @@ void main() {
     var maxConcurrent = 0;
 
     Future<void> task(String key) => TransferSerializer.run(key, () async {
-          running.add(key);
-          maxConcurrent =
-              maxConcurrent > running.length ? maxConcurrent : running.length;
-          await Future<void>.delayed(const Duration(milliseconds: 20));
-          running.remove(key);
-        });
+      running.add(key);
+      maxConcurrent = maxConcurrent > running.length
+          ? maxConcurrent
+          : running.length;
+      await Future<void>.delayed(const Duration(milliseconds: 20));
+      running.remove(key);
+    });
 
     await Future.wait([task('ETH:0xaaa'), task('ETH:0xbbb'), task('BTC:bc1q')]);
 

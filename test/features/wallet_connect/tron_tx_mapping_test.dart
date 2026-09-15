@@ -20,13 +20,8 @@ class _TronTxResult {
   final Map<String, dynamic>? data;
   final String? errorMsg;
 
-  _TronTxResult.ok(this.data)
-      : success = true,
-        errorMsg = null;
-  _TronTxResult.err(String msg)
-      : success = false,
-        data = null,
-        errorMsg = msg;
+  _TronTxResult.ok(this.data) : success = true, errorMsg = null;
+  _TronTxResult.err(String msg) : success = false, data = null, errorMsg = msg;
 }
 
 /// Mirrors lines 143–179 of wallet_connect_provider.dart.
@@ -36,8 +31,9 @@ _TronTxResult processTronSignTransaction(dynamic rawParams) {
       !rawParams.containsKey('transaction')) {
     return _TronTxResult.err('Invalid TRON transaction: missing params');
   }
-  final Map<String, dynamic> trMap =
-      Map<String, dynamic>.from(rawParams['transaction'] as Map);
+  final Map<String, dynamic> trMap = Map<String, dynamic>.from(
+    rawParams['transaction'] as Map,
+  );
   final tronInnerTx = trMap['transaction'] as Map<String, dynamic>? ?? {};
   final tronRawData = tronInnerTx['raw_data'] as Map<String, dynamic>? ?? {};
 
@@ -147,23 +143,24 @@ void main() {
     group('native TRX transfer (TransferContract)', () {
       test('from = owner_address', () {
         final result = processTronSignTransaction(
-            _nativeTrxParams(ownerAddress: 'TOwner'));
+          _nativeTrxParams(ownerAddress: 'TOwner'),
+        );
         expect(result.success, isTrue);
         expect(result.data!['from'], 'TOwner');
       });
 
       test('to = to_address', () {
-        final result =
-            processTronSignTransaction(_nativeTrxParams(toAddress: 'TDest'));
+        final result = processTronSignTransaction(
+          _nativeTrxParams(toAddress: 'TDest'),
+        );
         expect(result.success, isTrue);
         expect(result.data!['to'], 'TDest');
       });
 
       test('to is NOT contract_address for native transfer', () {
-        final result = processTronSignTransaction(_nativeTrxParams(
-          toAddress: 'TDestAddr',
-          ownerAddress: 'TOwner',
-        ));
+        final result = processTronSignTransaction(
+          _nativeTrxParams(toAddress: 'TDestAddr', ownerAddress: 'TOwner'),
+        );
         expect(result.data!['to'], 'TDestAddr');
         expect(result.data!['to'], isNot(''));
       });
@@ -172,42 +169,48 @@ void main() {
     group('TRC-20 token transfer (TriggerSmartContract)', () {
       test('to = contract_address, not to_address', () {
         final result = processTronSignTransaction(
-            _trc20Params(contractAddress: 'TContract'));
+          _trc20Params(contractAddress: 'TContract'),
+        );
         expect(result.success, isTrue);
         expect(result.data!['to'], 'TContract');
       });
 
       test('from = owner_address even for TRC-20', () {
         final result = processTronSignTransaction(
-            _trc20Params(ownerAddress: 'TOwner20'));
+          _trc20Params(ownerAddress: 'TOwner20'),
+        );
         expect(result.data!['from'], 'TOwner20');
       });
     });
 
     group('gas / fee_limit field', () {
       test('gas field is fee_limit as decimal string', () {
-        final result =
-            processTronSignTransaction(_nativeTrxParams(feeLimit: 2000000));
+        final result = processTronSignTransaction(
+          _nativeTrxParams(feeLimit: 2000000),
+        );
         expect(result.data!['gas'], '2000000');
       });
 
       test('fee_limit=0 is valid and serialised as "0"', () {
-        final result =
-            processTronSignTransaction(_nativeTrxParams(feeLimit: 0));
+        final result = processTronSignTransaction(
+          _nativeTrxParams(feeLimit: 0),
+        );
         expect(result.data!['gas'], '0');
       });
 
       test('large fee_limit does not overflow', () {
         final result = processTronSignTransaction(
-            _nativeTrxParams(feeLimit: 1000000000));
+          _nativeTrxParams(feeLimit: 1000000000),
+        );
         expect(result.data!['gas'], '1000000000');
       });
     });
 
     group('data / raw_data_hex field', () {
       test('raw_data_hex is passed through verbatim', () {
-        final result =
-            processTronSignTransaction(_nativeTrxParams(rawDataHex: 'aabb1234'));
+        final result = processTronSignTransaction(
+          _nativeTrxParams(rawDataHex: 'aabb1234'),
+        );
         expect(result.data!['data'], 'aabb1234');
       });
 
@@ -220,7 +223,7 @@ void main() {
                   {
                     'type': 'TransferContract',
                     'parameter': {'value': <String, dynamic>{}},
-                  }
+                  },
                 ],
                 'fee_limit': 0,
               },
@@ -245,7 +248,7 @@ void main() {
                     'parameter': {
                       'value': {'to_address': 'TDest'},
                     },
-                  }
+                  },
                 ],
                 'fee_limit': 0,
               },
@@ -266,7 +269,7 @@ void main() {
                   {
                     'type': 'TransferContract',
                     'parameter': {'value': <String, dynamic>{}},
-                  }
+                  },
                 ],
                 'fee_limit': 0,
               },

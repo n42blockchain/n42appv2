@@ -80,9 +80,7 @@ class _FullNodePageState extends State<FullNodePage>
           children: [
             Positioned.fill(
               child: Container(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space8,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
                 child: Column(
                   children: [
                     Expanded(
@@ -92,7 +90,9 @@ class _FullNodePageState extends State<FullNodePage>
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_38,
-                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                            style: AppTypography.body.copyWith(
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
                           ),
                           SizedBox(height: AppSpacing.space8),
                           _buildPayMethod(
@@ -111,12 +111,16 @@ class _FullNodePageState extends State<FullNodePage>
                           Text(
                             S.of(context).g_mining_key46,
                             textAlign: TextAlign.center,
-                            style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary),
+                            style: AppTypography.bodySm.copyWith(
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
                           ),
                           SizedBox(height: ScreenUtil().setWidth(90)),
                           Text(
                             S.current.g_mining_key_39,
-                            style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                            style: AppTypography.body.copyWith(
+                              color: AppColorTokens.of(context).textPrimary,
+                            ),
                           ),
                           SizedBox(height: AppSpacing.space6),
                           _buildPayMethods(),

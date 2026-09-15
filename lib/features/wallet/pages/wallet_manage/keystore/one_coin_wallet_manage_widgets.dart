@@ -491,10 +491,7 @@ mixin _OneCoinWalletManageWidgetsMixin on ConsumerState<OneCoinWalletManage> {
     final su = ScreenUtil();
     final itemBg = _color(AppThemeKeys.itemBgColor);
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: AppRadius.brMd,
-        color: itemBg,
-      ),
+      decoration: BoxDecoration(borderRadius: AppRadius.brMd, color: itemBg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,

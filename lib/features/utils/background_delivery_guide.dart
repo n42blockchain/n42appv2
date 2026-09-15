@@ -14,10 +14,16 @@
 library;
 
 const Set<String> _aggressiveBackgroundVendors = {
-  'xiaomi', 'redmi', 'poco',
-  'oppo', 'oneplus', 'realme',
-  'vivo', 'iqoo',
-  'huawei', 'honor',
+  'xiaomi',
+  'redmi',
+  'poco',
+  'oppo',
+  'oneplus',
+  'realme',
+  'vivo',
+  'iqoo',
+  'huawei',
+  'honor',
   'meizu',
 };
 

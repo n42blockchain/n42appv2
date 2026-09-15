@@ -11,14 +11,22 @@ void main() {
 
   group('BrowserCollectionModel constructor', () {
     test('stores url, name, desc', () {
-      final m = BrowserCollectionModel('https://example.com', 'Example', 'A site');
+      final m = BrowserCollectionModel(
+        'https://example.com',
+        'Example',
+        'A site',
+      );
       expect(m.url, 'https://example.com');
       expect(m.name, 'Example');
       expect(m.desc, 'A site');
     });
 
     test('id defaults to null', () {
-      final m = BrowserCollectionModel('https://example.com', 'Example', 'desc');
+      final m = BrowserCollectionModel(
+        'https://example.com',
+        'Example',
+        'desc',
+      );
       expect(m.id, isNull);
     });
 
@@ -58,17 +66,29 @@ void main() {
     });
 
     test('missing url is null', () {
-      final m = BrowserCollectionModel.fromJson({'id': 1, 'name': 'N', 'desc': 'D'});
+      final m = BrowserCollectionModel.fromJson({
+        'id': 1,
+        'name': 'N',
+        'desc': 'D',
+      });
       expect(m.url, isNull);
     });
 
     test('missing name is null', () {
-      final m = BrowserCollectionModel.fromJson({'id': 1, 'url': 'u', 'desc': 'd'});
+      final m = BrowserCollectionModel.fromJson({
+        'id': 1,
+        'url': 'u',
+        'desc': 'd',
+      });
       expect(m.name, isNull);
     });
 
     test('missing desc is null', () {
-      final m = BrowserCollectionModel.fromJson({'id': 1, 'url': 'u', 'name': 'n'});
+      final m = BrowserCollectionModel.fromJson({
+        'id': 1,
+        'url': 'u',
+        'name': 'n',
+      });
       expect(m.desc, isNull);
     });
 
@@ -92,7 +112,11 @@ void main() {
 
   group('BrowserCollectionModel.getMapDb', () {
     test('returns map with url, name, desc only (no id)', () {
-      final m = BrowserCollectionModel('https://example.com', 'Example', 'desc');
+      final m = BrowserCollectionModel(
+        'https://example.com',
+        'Example',
+        'desc',
+      );
       m.id = 5;
       final map = m.getMapDb();
       expect(map.containsKey('id'), isFalse);

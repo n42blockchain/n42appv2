@@ -53,7 +53,9 @@ class Eip681 {
   }) {
     final buf = StringBuffer(scheme)..write(recipient);
     if (chainId != null) buf.write('@$chainId');
-    if (amountWei != null && amountWei.isNotEmpty) buf.write('?value=$amountWei');
+    if (amountWei != null && amountWei.isNotEmpty) {
+      buf.write('?value=$amountWei');
+    }
     return buf.toString();
   }
 
@@ -130,8 +132,9 @@ class Eip681 {
       if (eq < 0) {
         map[_safeDecode(pair)] = '';
       } else {
-        map[_safeDecode(pair.substring(0, eq))] =
-            _safeDecode(pair.substring(eq + 1));
+        map[_safeDecode(pair.substring(0, eq))] = _safeDecode(
+          pair.substring(eq + 1),
+        );
       }
     }
     return map;

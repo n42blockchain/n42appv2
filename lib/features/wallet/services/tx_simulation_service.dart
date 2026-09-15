@@ -164,7 +164,9 @@ class TxSimulationService {
     const prefix = 'execution reverted:';
     final lower = msg.toLowerCase();
     if (lower.contains(prefix)) {
-      final reason = msg.substring(lower.indexOf(prefix) + prefix.length).trim();
+      final reason = msg
+          .substring(lower.indexOf(prefix) + prefix.length)
+          .trim();
       return reason.isNotEmpty ? reason : null;
     }
     if (lower.contains('revert')) return msg;
@@ -176,8 +178,7 @@ class TxSimulationService {
   ///   Error(string)  — selector 0x08c379a0
   ///   Panic(uint256) — selector 0x4e487b71
   static String? _decodeRevertData(String hexData) {
-    final clean =
-        hexData.startsWith('0x') ? hexData.substring(2) : hexData;
+    final clean = hexData.startsWith('0x') ? hexData.substring(2) : hexData;
     if (clean.length < 8) return null;
 
     final selector = clean.substring(0, 8).toLowerCase();

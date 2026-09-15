@@ -33,9 +33,21 @@ void main() {
   group('SwapAstModel positional constructor', () {
     test('sets all db fields correctly', () {
       final model = SwapAstModel(
-        7, 'AST Token', 'desc', 'https://icon.url/ast.png',
-        100, 'ETH', 'USDT', '0xcontract', 6,
-        'uuid-abc', '0xaddr', 1, 0, 1700000000, 1700001000,
+        7,
+        'AST Token',
+        'desc',
+        'https://icon.url/ast.png',
+        100,
+        'ETH',
+        'USDT',
+        '0xcontract',
+        6,
+        'uuid-abc',
+        '0xaddr',
+        1,
+        0,
+        1700000000,
+        1700001000,
       );
       expect(model.id, 7);
       expect(model.name, 'AST Token');
@@ -55,14 +67,46 @@ void main() {
     });
 
     test('runtime fields initialise to defaults', () {
-      final model = SwapAstModel(1, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      final model = SwapAstModel(
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
       expect(model.balance, 0.0);
       expect(model.price, 0.0);
       expect(model.load, Load.finish);
     });
 
     test('runtime fields are mutable', () {
-      final model = SwapAstModel(1, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+      final model = SwapAstModel(
+        1,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+      );
       model.balance = 3.14;
       model.price = 2.71;
       model.load = Load.loading;
@@ -86,7 +130,10 @@ void main() {
       expect(model.amtNum, 100);
       expect(model.payChain, 'ETH');
       expect(model.payCoin, 'USDT');
-      expect(model.payCoinContract, '0xdAC17F958D2ee523a2206206994597C13D831ec7');
+      expect(
+        model.payCoinContract,
+        '0xdAC17F958D2ee523a2206206994597C13D831ec7',
+      );
       expect(model.payCoinDecimal, 6);
       expect(model.payUuid, 'uuid-abc-123');
       expect(model.payAddr, '0xSenderAddress');
@@ -114,7 +161,10 @@ void main() {
     });
 
     test('partial map with only pay_chain and pay_coin', () {
-      final model = SwapAstModel.fromJson({'pay_chain': 'BTC', 'pay_coin': 'BTC'});
+      final model = SwapAstModel.fromJson({
+        'pay_chain': 'BTC',
+        'pay_coin': 'BTC',
+      });
       expect(model.payChain, 'BTC');
       expect(model.payCoin, 'BTC');
       expect(model.id, isNull);
@@ -129,12 +179,26 @@ void main() {
   group('SwapAstModel.toJson', () {
     test('includes all expected snake_case keys', () {
       final json = SwapAstModel.fromJson(_kFullJson).toJson();
-      expect(json.keys, containsAll([
-        'id', 'name', 'desc', 'uri',
-        'amt_num', 'pay_chain', 'pay_coin', 'pay_coin_contract',
-        'pay_coin_decimal', 'pay_uuid', 'pay_addr',
-        'type', 'del', 'created', 'updated',
-      ]));
+      expect(
+        json.keys,
+        containsAll([
+          'id',
+          'name',
+          'desc',
+          'uri',
+          'amt_num',
+          'pay_chain',
+          'pay_coin',
+          'pay_coin_contract',
+          'pay_coin_decimal',
+          'pay_uuid',
+          'pay_addr',
+          'type',
+          'del',
+          'created',
+          'updated',
+        ]),
+      );
     });
 
     test('values match model fields', () {

@@ -45,7 +45,7 @@ mixin _AptSendLogicMixin on ConsumerState<WalletChainSendApt> {
       });
       if (cIndex != -1) {
         // indexWhere 找不到返回 -1，直接下标会 RangeError。
-      chainModel = cIndex >= 0 ? wap.coinModels[cIndex] : null;
+        chainModel = cIndex >= 0 ? wap.coinModels[cIndex] : null;
         if (chainModel != null) {
           await fetchCoinBalance(chainModel!, ref.read(wapBridgeProvider));
         }

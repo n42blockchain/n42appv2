@@ -52,8 +52,11 @@ void main() {
   group('fallbackInflationApyResult 诚实性', () {
     test('error 必须为 true，data 保留估算值供日志/调试参考', () {
       final mm = AtomStakingApi.fallbackInflationApyResult();
-      expect(mm.error, isTrue,
-          reason: '历史缺陷：catch 兜底曾置 error=false，调用方把估算值当真实数据');
+      expect(
+        mm.error,
+        isTrue,
+        reason: '历史缺陷：catch 兜底曾置 error=false，调用方把估算值当真实数据',
+      );
       final data = mm.data as Map;
       expect(data['inflation'], 15.0);
       expect(data['stakingRatio'], 60.0);

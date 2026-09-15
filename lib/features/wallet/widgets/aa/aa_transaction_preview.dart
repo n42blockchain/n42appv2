@@ -159,9 +159,7 @@ class AATransactionPreview extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 6.w),
                 child: Text(
                   data.tokenSymbol,
-                  style: AppTypography.bodyStrong.copyWith(
-                    color: blueColor,
-                  ),
+                  style: AppTypography.bodyStrong.copyWith(color: blueColor),
                 ),
               ),
             ],

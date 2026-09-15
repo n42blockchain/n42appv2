@@ -31,17 +31,11 @@ void main() {
 
       test('miningRpcUrl default starts with http', () {
         // Default value is http://5.161.252.59:8545
-        expect(
-          AppConfig.miningRpcUrl.startsWith('http'),
-          true,
-        );
+        expect(AppConfig.miningRpcUrl.startsWith('http'), true);
       });
 
       test('miningWebSocketUrl default starts with ws', () {
-        expect(
-          AppConfig.miningWebSocketUrl.startsWith('ws'),
-          true,
-        );
+        expect(AppConfig.miningWebSocketUrl.startsWith('ws'), true);
       });
     });
 

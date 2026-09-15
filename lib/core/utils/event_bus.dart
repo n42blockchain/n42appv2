@@ -30,12 +30,7 @@ class EventPublic {
   /// Optional additional parameter
   final Object? param;
 
-  const EventPublic(
-    this.type, {
-    this.intValue,
-    this.stringValue,
-    this.param,
-  });
+  const EventPublic(this.type, {this.intValue, this.stringValue, this.param});
 
   @override
   String toString() {
@@ -50,46 +45,59 @@ enum EventPublicType {
   // === General Events ===
   /// Close pages listening to this event
   finishPage,
+
   /// Refresh page data
   refreshData,
 
   // === Authentication Events ===
   /// Token expired, user needs to re-login
   tokenExpired,
+
   /// Another device logged in with the same account
   deviceLoginDetected,
 
   // === Chat Feature Events ===
   /// New chat message received
   chatMessage,
+
   /// Chat message content updated
   chatMessageRefresh,
+
   /// Single message deleted
   deleteChatItem,
+
   /// Message reply action
   chatItemReply,
+
   /// Conversation list updated
   updateChatConversationList,
+
   /// Group info updated
   updateGroupInfo,
 
   // === Mining Feature Events ===
   /// Mining data needs refresh
   refreshMiningData,
+
   /// Mining plan page pop
   selectMiningplansPop,
+
   /// Full node mining fee paid
   miningFullNode,
 
   // === Wallet Feature Events ===
   /// Wallet selection changed
   selectWallet,
+
   /// Mining wallet selection changed
   selectMiningWallet,
+
   /// Transfer completed successfully
   transferOk,
+
   /// WalletConnect event
   walletConnect,
+
   /// Backup reminder
   backup,
 

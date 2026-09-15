@@ -101,7 +101,9 @@ void main() {
   // -------------------------------------------------------------------------
   group('UserInfo.isArtist', () {
     test('true when artJson contains _id field', () {
-      final user = UserInfo(artJson: jsonEncode({'_id': 'art-001', 'style': 'oil'}));
+      final user = UserInfo(
+        artJson: jsonEncode({'_id': 'art-001', 'style': 'oil'}),
+      );
       expect(user.isArtist, isTrue);
     });
 
@@ -132,8 +134,7 @@ void main() {
 
     test('isArtist result is cached after first call', () {
       // Call twice to exercise the cache path
-      final user =
-          UserInfo(artJson: jsonEncode({'_id': 'art-x'}));
+      final user = UserInfo(artJson: jsonEncode({'_id': 'art-x'}));
       expect(user.isArtist, isTrue);
       expect(user.isArtist, isTrue); // second call hits cache
     });

@@ -20,7 +20,14 @@ void main() {
     };
 
     const Set<String> stablecoins = {
-      'usdt', 'usdc', 'dai', 'busd', 'tusd', 'usdp', 'gusd', 'frax'
+      'usdt',
+      'usdc',
+      'dai',
+      'busd',
+      'tusd',
+      'usdp',
+      'gusd',
+      'frax',
     };
 
     test('stablecoin list should contain all major stablecoins', () {
@@ -38,8 +45,11 @@ void main() {
 
     test('all stablecoins should have gecko id mapping', () {
       for (final coin in stablecoins) {
-        expect(stablecoinGeckoIds.containsKey(coin), true,
-            reason: 'Missing gecko id for $coin');
+        expect(
+          stablecoinGeckoIds.containsKey(coin),
+          true,
+          reason: 'Missing gecko id for $coin',
+        );
       }
     });
 
@@ -47,16 +57,22 @@ void main() {
       final testCases = ['USDT', 'usdt', 'Usdt', 'USDC', 'usdc'];
       for (final coin in testCases) {
         final lowerCoin = coin.toLowerCase();
-        expect(stablecoins.contains(lowerCoin), true,
-            reason: '$coin should be detected as stablecoin');
+        expect(
+          stablecoins.contains(lowerCoin),
+          true,
+          reason: '$coin should be detected as stablecoin',
+        );
       }
     });
 
     test('non-stablecoin should not be detected as stablecoin', () {
       final nonStablecoins = ['btc', 'eth', 'bnb', 'sol', 'n'];
       for (final coin in nonStablecoins) {
-        expect(stablecoins.contains(coin.toLowerCase()), false,
-            reason: '$coin should not be detected as stablecoin');
+        expect(
+          stablecoins.contains(coin.toLowerCase()),
+          false,
+          reason: '$coin should not be detected as stablecoin',
+        );
       }
     });
 
@@ -71,8 +87,11 @@ void main() {
       for (final entry in mockPrices.entries) {
         final price = entry.value['price']!;
         // 稳定币价格应该在 0.95 - 1.05 之间
-        expect(price >= 0.95 && price <= 1.05, true,
-            reason: '${entry.key} price $price should be close to 1.0');
+        expect(
+          price >= 0.95 && price <= 1.05,
+          true,
+          reason: '${entry.key} price $price should be close to 1.0',
+        );
       }
     });
 
@@ -91,7 +110,8 @@ void main() {
       const geckoIds = ['tether', 'usd-coin', 'dai'];
       final idsString = geckoIds.join(',');
       const baseUrl = 'https://api.coingecko.com/api/v3';
-      final url = '$baseUrl/simple/price?ids=$idsString&vs_currencies=usd&include_24hr_change=true';
+      final url =
+          '$baseUrl/simple/price?ids=$idsString&vs_currencies=usd&include_24hr_change=true';
 
       expect(url.contains('api.coingecko.com'), true);
       expect(url.contains('simple/price'), true);
@@ -160,7 +180,9 @@ void main() {
     test('should identify aggregated coin by type', () {
       // 模拟检查是否为聚合代币
       final coinTypes = ['CoinModel', 'AggregatedCoinModel', 'CoinModel'];
-      final filteredList = coinTypes.where((t) => t != 'AggregatedCoinModel').toList();
+      final filteredList = coinTypes
+          .where((t) => t != 'AggregatedCoinModel')
+          .toList();
 
       expect(filteredList.length, 2);
       expect(filteredList.contains('AggregatedCoinModel'), false);

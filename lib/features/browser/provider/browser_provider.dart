@@ -320,79 +320,79 @@ class BrowserProvider extends ChangeNotifier {
     _BrowserTab tab,
   ) {
     return NavigationDelegate(
-          onProgress: (int progress) {
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
-            wInfoList[idx]['progress'] = progress * 0.01;
-            _safeNotify();
-          },
-          onPageStarted: (String url) {
-            AppLogger.d('Browser', 'page started loading: $url');
-            // origin 归属先于一切更新，且不依赖标签是否已入列。
-            tab.url = url;
-            // 注入按 controller 进行，不需要列表索引——此前 idx<0 时会整个
-            // 跳过注入，页面就彻底拿不到 window.ethereum。
-            _injectWcClipboardScript(wvc);
-            // Inject the EIP-1193 provider as early as possible so DApps that
-            // probe window.ethereum at document-start find it.
-            _injectEthereumProvider(wvc, url);
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
-            wInfoList[idx]['load'] = true;
-            _safeNotify();
-          },
-          onPageFinished: (String url) async {
-            tab.url = url;
-            // Inject again after full load in case onPageStarted fired too early.
-            await _injectWcClipboardScript(wvc);
-            await _injectEthereumProvider(wvc, url);
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
-            wInfoList[idx]['load'] = false;
-            wInfoList[idx]['progress'] = 0;
-            // Fetch title for this tab
-            final t = await wvc.getTitle();
-            if (t != null) {
-              final idx2 = _indexOfController(wvc);
-              if (idx2 >= 0) wInfoList[idx2]['title'] = t;
-            }
-            final idx3 = _indexOfController(wvc);
-            if (idx3 < 0) return;
-            final pageTitle = wInfoList[idx3]['title'] as String?;
-            browserApi.insertBrowserHistory(url, title: pageTitle);
-            // Only update navigation state if this is the active tab
-            if (idx3 == wListIndex) {
-              checkCanGo();
-              getCollectionUrl(url);
-            }
-            _safeNotify();
-          },
-          onWebResourceError: (WebResourceError error) {
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
-            wInfoList[idx]['load'] = false;
-            wInfoList[idx]['progress'] = 0;
-            _safeNotify();
-          },
-          onNavigationRequest: (NavigationRequest request) {
-            return checkUrl(request.url)
-                ? NavigationDecision.navigate
-                : NavigationDecision.prevent;
-          },
-          onUrlChange: (UrlChange change) {
-            tab.url = change.url ?? tab.url;
-            final idx = _indexOfController(wvc);
-            if (idx < 0) return;
-            wInfoList[idx]['openUrl'] = change.url ?? "";
-            // Only update URL bar if this is the active tab
-            if (idx == wListIndex) {
-              titleEditingController?.text = wInfoList[idx]['openUrl'];
-            }
-            _safeNotify();
-          },
-          onHttpError: (HttpResponseError error) {
-            AppLogger.w('Browser', 'HTTP error: ${error.response?.statusCode}');
-          },
+      onProgress: (int progress) {
+        final idx = _indexOfController(wvc);
+        if (idx < 0) return;
+        wInfoList[idx]['progress'] = progress * 0.01;
+        _safeNotify();
+      },
+      onPageStarted: (String url) {
+        AppLogger.d('Browser', 'page started loading: $url');
+        // origin 归属先于一切更新，且不依赖标签是否已入列。
+        tab.url = url;
+        // 注入按 controller 进行，不需要列表索引——此前 idx<0 时会整个
+        // 跳过注入，页面就彻底拿不到 window.ethereum。
+        _injectWcClipboardScript(wvc);
+        // Inject the EIP-1193 provider as early as possible so DApps that
+        // probe window.ethereum at document-start find it.
+        _injectEthereumProvider(wvc, url);
+        final idx = _indexOfController(wvc);
+        if (idx < 0) return;
+        wInfoList[idx]['load'] = true;
+        _safeNotify();
+      },
+      onPageFinished: (String url) async {
+        tab.url = url;
+        // Inject again after full load in case onPageStarted fired too early.
+        await _injectWcClipboardScript(wvc);
+        await _injectEthereumProvider(wvc, url);
+        final idx = _indexOfController(wvc);
+        if (idx < 0) return;
+        wInfoList[idx]['load'] = false;
+        wInfoList[idx]['progress'] = 0;
+        // Fetch title for this tab
+        final t = await wvc.getTitle();
+        if (t != null) {
+          final idx2 = _indexOfController(wvc);
+          if (idx2 >= 0) wInfoList[idx2]['title'] = t;
+        }
+        final idx3 = _indexOfController(wvc);
+        if (idx3 < 0) return;
+        final pageTitle = wInfoList[idx3]['title'] as String?;
+        browserApi.insertBrowserHistory(url, title: pageTitle);
+        // Only update navigation state if this is the active tab
+        if (idx3 == wListIndex) {
+          checkCanGo();
+          getCollectionUrl(url);
+        }
+        _safeNotify();
+      },
+      onWebResourceError: (WebResourceError error) {
+        final idx = _indexOfController(wvc);
+        if (idx < 0) return;
+        wInfoList[idx]['load'] = false;
+        wInfoList[idx]['progress'] = 0;
+        _safeNotify();
+      },
+      onNavigationRequest: (NavigationRequest request) {
+        return checkUrl(request.url)
+            ? NavigationDecision.navigate
+            : NavigationDecision.prevent;
+      },
+      onUrlChange: (UrlChange change) {
+        tab.url = change.url ?? tab.url;
+        final idx = _indexOfController(wvc);
+        if (idx < 0) return;
+        wInfoList[idx]['openUrl'] = change.url ?? "";
+        // Only update URL bar if this is the active tab
+        if (idx == wListIndex) {
+          titleEditingController?.text = wInfoList[idx]['openUrl'];
+        }
+        _safeNotify();
+      },
+      onHttpError: (HttpResponseError error) {
+        AppLogger.w('Browser', 'HTTP error: ${error.response?.statusCode}');
+      },
     );
   }
 
@@ -642,7 +642,10 @@ class BrowserProvider extends ChangeNotifier {
   /// Inject the EIP-1193 `window.ethereum` provider into [wvc]. The address
   /// is only seeded for origins the user has connected; other pages get an
   /// empty account list. No-op when there is no EVM account.
-  Future<void> _injectEthereumProvider(WebViewController wvc, String url) async {
+  Future<void> _injectEthereumProvider(
+    WebViewController wvc,
+    String url,
+  ) async {
     final handler = _ensureDappHandler();
     if (handler == null) return;
     try {
@@ -758,7 +761,11 @@ class BrowserProvider extends ChangeNotifier {
           return;
       }
 
-      final result = await handler.handleRequest(method, params, origin: origin);
+      final result = await handler.handleRequest(
+        method,
+        params,
+        origin: origin,
+      );
       await _resolveProvider(wvc, id, result);
     } catch (e) {
       if (id == null) return;

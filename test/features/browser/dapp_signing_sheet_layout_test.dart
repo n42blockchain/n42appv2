@@ -24,9 +24,12 @@ void main() {
       expect(rect.top >= 0, isTrue, reason: '按钮 "$label" 顶部超出屏幕上沿');
     }
     // 至少要能找到一个可点击的确认控件，否则说明按钮压根没被布局出来。
-    expect(find.byType(ElevatedButton).evaluate().isNotEmpty ||
-        find.byType(TextButton).evaluate().isNotEmpty ||
-        find.byType(InkWell).evaluate().isNotEmpty, isTrue);
+    expect(
+      find.byType(ElevatedButton).evaluate().isNotEmpty ||
+          find.byType(TextButton).evaluate().isNotEmpty ||
+          find.byType(InkWell).evaluate().isNotEmpty,
+      isTrue,
+    );
   }
 
   Future<void> pumpSheet(

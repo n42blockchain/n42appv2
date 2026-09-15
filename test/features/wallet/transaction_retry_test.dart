@@ -50,7 +50,7 @@ class FakeMessageModel {
 
 /// Mirrors the transfer retry logic where errorMessage must come from mm.data.
 String simulateTransferRetry({
-  required FakeMessageModel gasEstimate,   // ethMessage (gas estimation)
+  required FakeMessageModel gasEstimate, // ethMessage (gas estimation)
   required FakeMessageModel transferResult, // mm (actual transfer)
 }) {
   String errorMessage = '';
@@ -80,8 +80,11 @@ void main() {
 
       state.initState();
 
-      expect(state.txHash, txHash,
-          reason: '_txHash must be initialized from widget.txHash in initState');
+      expect(
+        state.txHash,
+        txHash,
+        reason: '_txHash must be initialized from widget.txHash in initState',
+      );
     });
 
     test('when txHash is non-empty, owner remains true', () {
@@ -98,8 +101,11 @@ void main() {
       state.init();
 
       expect(state.txHash, isEmpty);
-      expect(state.owner, isFalse,
-          reason: 'empty txHash must set owner=false without crashing');
+      expect(
+        state.owner,
+        isFalse,
+        reason: 'empty txHash must set owner=false without crashing',
+      );
     });
   });
 
@@ -107,34 +113,49 @@ void main() {
     test('transfer failure shows mm.data as error message', () {
       final gasOk = FakeMessageModel(error: false, data: BigInt.from(21000));
       final transferFail = FakeMessageModel(
-          error: true, data: 'insufficient funds for gas * price + value');
+        error: true,
+        data: 'insufficient funds for gas * price + value',
+      );
 
       final errorMsg = simulateTransferRetry(
-          gasEstimate: gasOk, transferResult: transferFail);
+        gasEstimate: gasOk,
+        transferResult: transferFail,
+      );
 
-      expect(errorMsg, 'insufficient funds for gas * price + value',
-          reason: 'error must come from mm.data (transfer result), not gas estimate');
+      expect(
+        errorMsg,
+        'insufficient funds for gas * price + value',
+        reason:
+            'error must come from mm.data (transfer result), not gas estimate',
+      );
     });
 
     test('successful transfer yields empty error message', () {
       final gasOk = FakeMessageModel(error: false, data: BigInt.from(21000));
-      final transferOk = FakeMessageModel(
-          error: false, data: '0xtxhash123456');
+      final transferOk = FakeMessageModel(error: false, data: '0xtxhash123456');
 
       final errorMsg = simulateTransferRetry(
-          gasEstimate: gasOk, transferResult: transferOk);
+        gasEstimate: gasOk,
+        transferResult: transferOk,
+      );
 
       expect(errorMsg, isEmpty);
     });
 
     test('gas estimation failure uses gas error, not transfer error', () {
       final gasFail = FakeMessageModel(
-          error: true, data: 'gas estimation failed');
+        error: true,
+        data: 'gas estimation failed',
+      );
       final transferMsg = FakeMessageModel(
-          error: true, data: 'transfer error should not appear');
+        error: true,
+        data: 'transfer error should not appear',
+      );
 
       final errorMsg = simulateTransferRetry(
-          gasEstimate: gasFail, transferResult: transferMsg);
+        gasEstimate: gasFail,
+        transferResult: transferMsg,
+      );
 
       expect(errorMsg, 'gas estimation failed');
       expect(errorMsg, isNot(contains('transfer error should not appear')));

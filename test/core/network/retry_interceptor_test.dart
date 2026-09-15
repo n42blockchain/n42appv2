@@ -13,8 +13,14 @@ import 'package:n42_wallet/core/network/retry_interceptor.dart';
 class _MockHttpAdapter implements HttpClientAdapter {
   final List<_MockResponse> responses = [];
 
-  void enqueue(int statusCode, {Map<String, List<String>>? headers, dynamic data}) {
-    responses.add(_MockResponse(statusCode, headers: headers ?? {}, data: data));
+  void enqueue(
+    int statusCode, {
+    Map<String, List<String>>? headers,
+    dynamic data,
+  }) {
+    responses.add(
+      _MockResponse(statusCode, headers: headers ?? {}, data: data),
+    );
   }
 
   @override
@@ -63,17 +69,22 @@ class _MockResponse {
   final adapter = _MockHttpAdapter();
   final dio = Dio(BaseOptions(baseUrl: 'https://test.example.com'));
   dio.httpClientAdapter = adapter;
-  dio.interceptors.add(RetryInterceptor(
-    dio: dio,
-    policy: policy ?? const RetryPolicy(
-      // Use very short delays for tests.
-      baseDelay: Duration(milliseconds: 1),
-      maxDelay: Duration(milliseconds: 10),
-      maxJitter: Duration.zero,
+  dio.interceptors.add(
+    RetryInterceptor(
+      dio: dio,
+      policy:
+          policy ??
+          const RetryPolicy(
+            // Use very short delays for tests.
+            baseDelay: Duration(milliseconds: 1),
+            maxDelay: Duration(milliseconds: 10),
+            maxJitter: Duration.zero,
+          ),
+      random: random ?? _ZeroRandom(),
+      connectivity:
+          connectivity ?? _MockConnectivity([ConnectivityResult.wifi]),
     ),
-    random: random ?? _ZeroRandom(),
-    connectivity: connectivity ?? _MockConnectivity([ConnectivityResult.wifi]),
-  ));
+  );
   return (dio: dio, adapter: adapter);
 }
 
@@ -136,11 +147,13 @@ void main() {
 
       expect(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          400,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            400,
+          ),
+        ),
       );
     });
 
@@ -151,11 +164,13 @@ void main() {
 
       expect(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          401,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            401,
+          ),
+        ),
       );
     });
 
@@ -166,11 +181,13 @@ void main() {
 
       expect(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          403,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            403,
+          ),
+        ),
       );
     });
 
@@ -181,11 +198,13 @@ void main() {
 
       expect(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          404,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            404,
+          ),
+        ),
       );
     });
   });
@@ -209,10 +228,7 @@ void main() {
       adapter.enqueue(502);
       adapter.enqueue(200);
 
-      expect(
-        () => dio.post('/test'),
-        throwsA(isA<DioException>()),
-      );
+      expect(() => dio.post('/test'), throwsA(isA<DioException>()));
     });
 
     test('PUT is NOT retried by default', () async {
@@ -220,10 +236,7 @@ void main() {
       adapter.enqueue(502);
       adapter.enqueue(200);
 
-      expect(
-        () => dio.put('/test'),
-        throwsA(isA<DioException>()),
-      );
+      expect(() => dio.put('/test'), throwsA(isA<DioException>()));
     });
 
     test('DELETE is NOT retried by default', () async {
@@ -231,10 +244,7 @@ void main() {
       adapter.enqueue(502);
       adapter.enqueue(200);
 
-      expect(
-        () => dio.delete('/test'),
-        throwsA(isA<DioException>()),
-      );
+      expect(() => dio.delete('/test'), throwsA(isA<DioException>()));
     });
 
     test('POST with kRetryEnabled=true IS retried', () async {
@@ -286,11 +296,13 @@ void main() {
 
       expect(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          502,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            502,
+          ),
+        ),
       );
     });
 
@@ -394,7 +406,12 @@ void main() {
       // Note: We can't easily verify the exact delay used in this test,
       // but we verify that the retry succeeds after 429 with Retry-After.
       // The actual delay verification is done via unit math tests below.
-      adapter.enqueue(429, headers: {'retry-after': ['1']});
+      adapter.enqueue(
+        429,
+        headers: {
+          'retry-after': ['1'],
+        },
+      );
       adapter.enqueue(200);
 
       final response = await dio.get('/test');
@@ -507,39 +524,47 @@ void main() {
 
       await expectLater(
         () => dio.get('/test'),
-        throwsA(isA<DioException>().having(
-          (e) => e.response?.statusCode,
-          'statusCode',
-          502,
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.response?.statusCode,
+            'statusCode',
+            502,
+          ),
+        ),
       );
       // Second response was never consumed — retry was skipped.
       expect(adapter.responses.length, 1);
     });
 
-    test('retries normally when device reports ConnectivityResult.wifi', () async {
-      final (:dio, :adapter) = _createTestDio(
-        connectivity: _MockConnectivity([ConnectivityResult.wifi]),
-      );
-      adapter.enqueue(502);
-      adapter.enqueue(200);
+    test(
+      'retries normally when device reports ConnectivityResult.wifi',
+      () async {
+        final (:dio, :adapter) = _createTestDio(
+          connectivity: _MockConnectivity([ConnectivityResult.wifi]),
+        );
+        adapter.enqueue(502);
+        adapter.enqueue(200);
 
-      final response = await dio.get('/test');
-      expect(response.statusCode, 200);
-      expect(adapter.responses, isEmpty);
-    });
+        final response = await dio.get('/test');
+        expect(response.statusCode, 200);
+        expect(adapter.responses, isEmpty);
+      },
+    );
 
-    test('retries normally when device reports ConnectivityResult.mobile', () async {
-      final (:dio, :adapter) = _createTestDio(
-        connectivity: _MockConnectivity([ConnectivityResult.mobile]),
-      );
-      adapter.enqueue(502);
-      adapter.enqueue(200);
+    test(
+      'retries normally when device reports ConnectivityResult.mobile',
+      () async {
+        final (:dio, :adapter) = _createTestDio(
+          connectivity: _MockConnectivity([ConnectivityResult.mobile]),
+        );
+        adapter.enqueue(502);
+        adapter.enqueue(200);
 
-      final response = await dio.get('/test');
-      expect(response.statusCode, 200);
-      expect(adapter.responses, isEmpty);
-    });
+        final response = await dio.get('/test');
+        expect(response.statusCode, 200);
+        expect(adapter.responses, isEmpty);
+      },
+    );
 
     test('retries when list has none AND wifi (any() check)', () async {
       final (:dio, :adapter) = _createTestDio(
@@ -556,24 +581,24 @@ void main() {
       expect(adapter.responses, isEmpty);
     });
 
-    test('skips ALL retries when offline — exhausts no extra requests', () async {
-      final (:dio, :adapter) = _createTestDio(
-        policy: const RetryPolicy(
-          maxRetries: 3,
-          baseDelay: Duration(milliseconds: 1),
-          maxDelay: Duration(milliseconds: 10),
-          maxJitter: Duration.zero,
-        ),
-        connectivity: _MockConnectivity([ConnectivityResult.none]),
-      );
-      adapter.enqueue(502); // only initial attempt
-      // No more queued — proves retries were skipped
-      await expectLater(
-        () => dio.get('/test'),
-        throwsA(isA<DioException>()),
-      );
-      expect(adapter.responses, isEmpty);
-    });
+    test(
+      'skips ALL retries when offline — exhausts no extra requests',
+      () async {
+        final (:dio, :adapter) = _createTestDio(
+          policy: const RetryPolicy(
+            maxRetries: 3,
+            baseDelay: Duration(milliseconds: 1),
+            maxDelay: Duration(milliseconds: 10),
+            maxJitter: Duration.zero,
+          ),
+          connectivity: _MockConnectivity([ConnectivityResult.none]),
+        );
+        adapter.enqueue(502); // only initial attempt
+        // No more queued — proves retries were skipped
+        await expectLater(() => dio.get('/test'), throwsA(isA<DioException>()));
+        expect(adapter.responses, isEmpty);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------

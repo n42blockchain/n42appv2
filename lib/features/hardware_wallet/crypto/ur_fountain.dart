@@ -63,7 +63,7 @@ class Xoshiro256 {
   BigInt next() {
     final result =
         (_rotl((_s[1] * BigInt.from(5)) & _mask64, 7) * BigInt.from(9)) &
-            _mask64;
+        _mask64;
     final t = (_s[1] << 17) & _mask64;
     _s[2] ^= _s[0];
     _s[3] ^= _s[1];
@@ -312,8 +312,8 @@ class FountainEncoder {
     required this.fragmentLen,
     required List<Uint8List> fragments,
     required int firstSeqNum,
-  })  : _fragments = fragments,
-        _seqNum = firstSeqNum;
+  }) : _fragments = fragments,
+       _seqNum = firstSeqNum;
 
   factory FountainEncoder(
     Uint8List message, {
@@ -343,12 +343,16 @@ class FountainEncoder {
   ) {
     assert(messageLen > 0 && minFragmentLen > 0);
     assert(maxFragmentLen >= minFragmentLen);
-    final maxFragmentCount =
-        (messageLen ~/ minFragmentLen).clamp(1, messageLen);
+    final maxFragmentCount = (messageLen ~/ minFragmentLen).clamp(
+      1,
+      messageLen,
+    );
     var fragmentLen = messageLen;
-    for (var fragmentCount = 1;
-        fragmentCount <= maxFragmentCount;
-        fragmentCount++) {
+    for (
+      var fragmentCount = 1;
+      fragmentCount <= maxFragmentCount;
+      fragmentCount++
+    ) {
       fragmentLen = (messageLen / fragmentCount).ceil();
       if (fragmentLen <= maxFragmentLen) break;
     }
@@ -426,9 +430,7 @@ class FountainDecoder {
   }
 
   static Uint8List joinFragments(List<Uint8List> fragments, int messageLen) {
-    final joined = Uint8List.fromList(
-      [for (final f in fragments) ...f],
-    );
+    final joined = Uint8List.fromList([for (final f in fragments) ...f]);
     return Uint8List.sublistView(joined, 0, messageLen);
   }
 
@@ -492,10 +494,9 @@ class FountainDecoder {
     if (_receivedPartIndexes.length == _expectedPartIndexes!.length) {
       final sorted = _simpleParts.values.toList()
         ..sort((a, b) => a.indexes.first.compareTo(b.indexes.first));
-      final message = joinFragments(
-        [for (final part in sorted) part.data],
-        _expectedMessageLen!,
-      );
+      final message = joinFragments([
+        for (final part in sorted) part.data,
+      ], _expectedMessageLen!);
       if (UrCodec.crc32Int(message) == _expectedChecksum) {
         _resultMessage = message;
       } else {
@@ -541,8 +542,8 @@ class FountainDecoder {
 
   /// 若 b 的片段集是 a 的真子集：a 消去 b（索引差集，数据 XOR）
   _DecoderPart _reducePartByPart(_DecoderPart a, _DecoderPart b) {
-    final isStrictSubset = b.indexes.length < a.indexes.length &&
-        a.indexes.containsAll(b.indexes);
+    final isStrictSubset =
+        b.indexes.length < a.indexes.length && a.indexes.containsAll(b.indexes);
     if (!isStrictSubset) return a;
     final newIndexes = a.indexes.difference(b.indexes);
     final newData = Uint8List.fromList(a.data);
@@ -579,13 +580,13 @@ class UrEncoder {
     int maxFragmentLen = 120,
     int firstSeqNum = 0,
     int minFragmentLen = 10,
-  })  : _messageCbor = cborPayload,
-        _fountain = FountainEncoder(
-          cborPayload,
-          maxFragmentLen: maxFragmentLen,
-          firstSeqNum: firstSeqNum,
-          minFragmentLen: minFragmentLen,
-        );
+  }) : _messageCbor = cborPayload,
+       _fountain = FountainEncoder(
+         cborPayload,
+         maxFragmentLen: maxFragmentLen,
+         firstSeqNum: firstSeqNum,
+         minFragmentLen: minFragmentLen,
+       );
 
   bool get isSinglePart => _fountain.isSinglePart;
   int get seqLen => _fountain.seqLen;
@@ -641,7 +642,10 @@ class UrDecoder {
 
       // 单帧 UR：直接完成
       if (components.length == 2) {
-        _result = (type: type, data: UrCodec.decodeBytewordsBody(components[1]));
+        _result = (
+          type: type,
+          data: UrCodec.decodeBytewordsBody(components[1]),
+        );
         return true;
       }
 

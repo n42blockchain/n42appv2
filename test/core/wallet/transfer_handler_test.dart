@@ -162,8 +162,11 @@ void main() {
       expect(
         () => throw const UnsupportedChainException('UNKNOWN'),
         throwsA(
-          isA<UnsupportedChainException>()
-              .having((e) => e.chainSymbol, 'chainSymbol', 'UNKNOWN'),
+          isA<UnsupportedChainException>().having(
+            (e) => e.chainSymbol,
+            'chainSymbol',
+            'UNKNOWN',
+          ),
         ),
       );
     });
@@ -206,7 +209,10 @@ void main() {
 
     test('can be thrown and caught', () {
       expect(
-        () => throw const TransferException('tx rejected', details: 'gas limit exceeded'),
+        () => throw const TransferException(
+          'tx rejected',
+          details: 'gas limit exceeded',
+        ),
         throwsA(
           isA<TransferException>()
               .having((e) => e.message, 'message', 'tx rejected')

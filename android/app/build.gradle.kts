@@ -39,7 +39,7 @@ fun escapeResValue(value: String): String {
 
 android {
     namespace = "ai.n42.www"
-    // Google Play 2026 要求: compileSdk 36, targetSdk 35 (Android 15)
+    // Google Play requires API 36 for new mobile submissions from 2026-08-31.
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
@@ -62,7 +62,7 @@ android {
         applicationId = "ai.n42.www"
         // web3auth_flutter 要求 minSdk 26 (Android 8.0)
         minSdk = 26
-        targetSdk = 35
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         // 多 DEX 支持

@@ -12,7 +12,18 @@ void main() {
   // ─────────────────────────────────────────────────
 
   group('getCoinGas — EVM chains, contract=false → 50000', () {
-    for (final coin in ['ETH', 'BNB', 'MATIC', 'ETC', 'AVAX', 'OP', 'ARB', 'BASE', 'S', 'N']) {
+    for (final coin in [
+      'ETH',
+      'BNB',
+      'MATIC',
+      'ETC',
+      'AVAX',
+      'OP',
+      'ARB',
+      'BASE',
+      'S',
+      'N',
+    ]) {
       test('$coin → 50000', () {
         expect(getCoinGas(coin), 50000);
       });

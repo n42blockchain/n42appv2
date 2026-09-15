@@ -176,7 +176,9 @@ class _MiningSettingsState extends State<MiningSettings> {
                     Flexible(
                       child: Text(
                         value,
-                        style: AppTypography.headline.copyWith(color: textColor),
+                        style: AppTypography.headline.copyWith(
+                          color: textColor,
+                        ),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -271,7 +273,8 @@ class _MiningSettingsState extends State<MiningSettings> {
     final textColor = _mainTextColor();
     final labelText = Text(
       label,
-      style: AppTypography.body.copyWith(color: textColor));
+      style: AppTypography.body.copyWith(color: textColor),
+    );
 
     return InkWell(
       onTap: onTap,
@@ -301,7 +304,9 @@ class _MiningSettingsState extends State<MiningSettings> {
                         SizedBox(height: AppSpacing.space2),
                         Text(
                           subtitle,
-                          style: AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textSubtitle),
+                          style: AppTypography.bodySm.copyWith(
+                            color: AppColorTokens.of(context).textSubtitle,
+                          ),
                         ),
                       ],
                     )

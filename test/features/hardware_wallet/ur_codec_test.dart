@@ -40,10 +40,12 @@ void main() {
     });
 
     test('单字节数据的 CRC 与已知实现一致（0x00 -> 0xD202EF8D）', () {
-      expect(
-        UrCodec.crc32Bytes(Uint8List.fromList([0x00])),
-        [0xD2, 0x02, 0xEF, 0x8D],
-      );
+      expect(UrCodec.crc32Bytes(Uint8List.fromList([0x00])), [
+        0xD2,
+        0x02,
+        0xEF,
+        0x8D,
+      ]);
     });
   });
 

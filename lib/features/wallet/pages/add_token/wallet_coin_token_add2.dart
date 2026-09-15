@@ -187,7 +187,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
         appBar: AppBar(
           title: Text(
             S.of(context).g_key_9,
-            style: AppTypography.headline.copyWith(color: _themeColor(AppThemeKeys.mainTextColor)),
+            style: AppTypography.headline.copyWith(
+              color: _themeColor(AppThemeKeys.mainTextColor),
+            ),
           ),
           actions: [
             if (load == Load.loading)
@@ -272,7 +274,9 @@ class _WalletCoinTokenAdd2State extends ConsumerState<WalletCoinTokenAdd2> {
               alignment: Alignment.center,
               child: Text(
                 S.of(context).search,
-                style: AppTypography.bodySm.copyWith(color: _themeColor(AppThemeKeys.mainButtonTextColor)),
+                style: AppTypography.bodySm.copyWith(
+                  color: _themeColor(AppThemeKeys.mainButtonTextColor),
+                ),
               ),
             ),
           ),

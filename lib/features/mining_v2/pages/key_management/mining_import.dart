@@ -232,7 +232,9 @@ class _MiningImportState extends ConsumerState<MiningImport> {
           Expanded(
             child: Text(
               title,
-              style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+              style: AppTypography.headline.copyWith(
+                color: AppColorTokens.of(context).textPrimary,
+              ),
             ),
           ),
           ?rightWidget,
@@ -269,7 +271,9 @@ class _MiningImportState extends ConsumerState<MiningImport> {
         padding: EdgeInsets.symmetric(horizontal: AppSpacing.space2),
         child: Text(
           text,
-          style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).brand),
+          style: AppTypography.headline.copyWith(
+            color: AppColorTokens.of(context).brand,
+          ),
         ),
       ),
     );
@@ -339,7 +343,9 @@ class _MiningImportState extends ConsumerState<MiningImport> {
       ),
       child: Text(
         _errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }

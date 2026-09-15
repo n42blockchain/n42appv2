@@ -55,9 +55,7 @@ class EnsAddressSection extends StatelessWidget {
                     )
                   : null,
             ),
-            style: AppTypography.caption.copyWith(
-              fontFamily: 'monospace',
-            ),
+            style: AppTypography.caption.copyWith(fontFamily: 'monospace'),
             onChanged: (_) => onChanged(),
           ),
         ],

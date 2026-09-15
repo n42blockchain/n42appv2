@@ -58,7 +58,9 @@ class ASTMiningBoard extends StatelessWidget {
                 children: [
                   Text(
                     levelText,
-                    style: AppTypography.headline.copyWith(color: AppColorTokens.of(context).textPrimary),
+                    style: AppTypography.headline.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                   ),
                   SizedBox(height: AppSpacing.space12),
                   Row(
@@ -98,7 +100,9 @@ class ASTMiningBoard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           S.current.g_mining_key_32,
-                          style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                          style: AppTypography.caption.copyWith(
+                            color: AppColorTokens.of(context).textPrimary,
+                          ),
                         ),
                       ),
                     ],
@@ -194,7 +198,9 @@ class ASTMiningBoard extends StatelessWidget {
     String action,
     String desc,
   ) {
-    final textStyle = AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary);
+    final textStyle = AppTypography.caption.copyWith(
+      color: AppColorTokens.of(context).textPrimary,
+    );
 
     return Padding(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
@@ -252,7 +258,9 @@ class ASTMiningBoard extends StatelessWidget {
           SizedBox(width: AppSpacing.space4),
           Text(
             text,
-            style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textPrimary,
+            ),
           ),
         ],
       ),

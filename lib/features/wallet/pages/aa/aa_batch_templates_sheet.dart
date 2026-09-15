@@ -72,9 +72,7 @@ class _BatchTemplatesSheetState extends State<BatchTemplatesSheet> {
               SizedBox(height: AppSpacing.space4),
               if (templates.isEmpty)
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                    vertical: AppSpacing.space8,
-                  ),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
                   child: Column(
                     children: [
                       Icon(

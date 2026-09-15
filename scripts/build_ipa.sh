@@ -11,7 +11,10 @@
 #   - App Store Version (CFBundleShortVersionString): manual, change with --set-version.
 #   - App Store Build   (CFBundleVersion): auto-increment each build unless --no-bump.
 
-set -e
+set -euo pipefail
+
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$PROJECT_ROOT"
 
 MIN_IOS_VERSION="16.0"
 PUBSPEC="pubspec.yaml"
@@ -28,7 +31,7 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     --set-version)
-      [ $# -ge 2 ] || { echo "--set-version requires a value"; exit 1; }
+      [ $# -ge 2 ] && [[ "$2" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "--set-version requires X.Y.Z"; exit 1; }
       NEW_APP_VERSION="$2"
       shift 2
       ;;
@@ -43,6 +46,13 @@ while [ $# -gt 0 ]; do
       ;;
   esac
 done
+
+python3 scripts/quality_gate.py version "$PUBSPEC"
+IOS_SDK_VERSION="$(xcrun --sdk iphoneos --show-sdk-version)"
+if [ "${IOS_SDK_VERSION%%.*}" -lt 26 ]; then
+  echo "App Store release requires iOS SDK 26 or later" >&2
+  exit 1
+fi
 
 # === Read the canonical version from pubspec.yaml ===
 CURRENT_PUBSPEC=$(grep '^version:' "$PUBSPEC" | sed 's/version: //')
@@ -81,9 +91,11 @@ echo ""
 
 echo "=== Building iOS archive ==="
 flutter build ipa \
+  --release \
+  --export-options-plist=ios/ExportOptions-AppStore.plist \
   --build-name="$CURRENT_BUILD_NAME" \
   --build-number="$CURRENT_BUILD_NUMBER" \
-  "${BUILD_ARGS[@]}"
+  ${BUILD_ARGS[@]+"${BUILD_ARGS[@]}"}
 
 echo "=== Fixing objective_c.framework in archive ==="
 ARCHIVE_PATH="build/ios/archive/Runner.xcarchive"
@@ -98,7 +110,7 @@ if [ -f "$ARCHIVE_OBJ_C" ]; then
   PLATFORM=$(vtool -show "$ARCHIVE_OBJ_C" 2>/dev/null | grep "platform " | head -1 | xargs)
   if echo "$PLATFORM" | grep -qi "simulator"; then
     echo "  Fixing platform: IOSSIMULATOR -> IOS"
-    vtool -set-build-version ios "$MIN_IOS_VERSION" 26.2 -replace \
+    vtool -set-build-version ios "$MIN_IOS_VERSION" "$IOS_SDK_VERSION" -replace \
       -output "$ARCHIVE_OBJ_C" "$ARCHIVE_OBJ_C"
     NEEDS_FIX=true
   fi
@@ -107,7 +119,7 @@ if [ -f "$ARCHIVE_OBJ_C" ]; then
   MINOS=$(vtool -show "$ARCHIVE_OBJ_C" 2>/dev/null | grep "minos " | head -1 | awk '{print $2}')
   if [ -n "$MINOS" ] && [ "$(printf '%s\n' "$MIN_IOS_VERSION" "$MINOS" | sort -V | head -1)" != "$MIN_IOS_VERSION" ]; then
     echo "  Fixing minos: $MINOS -> $MIN_IOS_VERSION"
-    vtool -set-build-version ios "$MIN_IOS_VERSION" 26.2 -replace \
+    vtool -set-build-version ios "$MIN_IOS_VERSION" "$IOS_SDK_VERSION" -replace \
       -output "$ARCHIVE_OBJ_C" "$ARCHIVE_OBJ_C"
     NEEDS_FIX=true
   fi

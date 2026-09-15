@@ -1,0 +1,8 @@
+{
+  "path": "build/app/outputs/bundle/release/app-release.aab",
+  "bytes": 537337041,
+  "sha256": "addec0ef2c18662f66d89c247705a54f1296042e496f454da52dfa0d71433c4b",
+  "version": "2.4.8+2026072654",
+  "kind": "release AAB",
+  "source": "current uncommitted release repair worktree; not uploaded"
+}

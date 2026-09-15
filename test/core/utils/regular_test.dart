@@ -28,11 +28,14 @@ void main() {
       expect(reg.regularHex('0xABCDEF'), isTrue);
     });
 
-    test('hex with 0X prefix is valid (regex is case-insensitive on prefix)', () {
-      // The regex is ^(0x)?[0-9a-fA-F]+$ — literal "0x" lowercase only
-      // '0X' would not match (0x) group → '0' is valid hex, 'X' is not → false
-      expect(reg.regularHex('0XABCDEF'), isFalse);
-    });
+    test(
+      'hex with 0X prefix is valid (regex is case-insensitive on prefix)',
+      () {
+        // The regex is ^(0x)?[0-9a-fA-F]+$ — literal "0x" lowercase only
+        // '0X' would not match (0x) group → '0' is valid hex, 'X' is not → false
+        expect(reg.regularHex('0XABCDEF'), isFalse);
+      },
+    );
 
     test('digits only are valid hex', () {
       expect(reg.regularHex('1234567890'), isTrue);

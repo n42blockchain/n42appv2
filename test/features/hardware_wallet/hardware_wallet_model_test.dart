@@ -10,24 +10,66 @@ void main() {
   group('HardwareWalletModels Tests', () {
     group('HardwareWalletType enum', () {
       test('should have Ledger device types', () {
-        expect(HardwareWalletType.values.contains(HardwareWalletType.ledgerNanoX), true);
-        expect(HardwareWalletType.values.contains(HardwareWalletType.ledgerNanoSPlus), true);
-        expect(HardwareWalletType.values.contains(HardwareWalletType.ledgerStax), true);
+        expect(
+          HardwareWalletType.values.contains(HardwareWalletType.ledgerNanoX),
+          true,
+        );
+        expect(
+          HardwareWalletType.values.contains(
+            HardwareWalletType.ledgerNanoSPlus,
+          ),
+          true,
+        );
+        expect(
+          HardwareWalletType.values.contains(HardwareWalletType.ledgerStax),
+          true,
+        );
       });
 
       test('should have Trezor device types', () {
-        expect(HardwareWalletType.values.contains(HardwareWalletType.trezorModelT), true);
-        expect(HardwareWalletType.values.contains(HardwareWalletType.trezorOne), true);
+        expect(
+          HardwareWalletType.values.contains(HardwareWalletType.trezorModelT),
+          true,
+        );
+        expect(
+          HardwareWalletType.values.contains(HardwareWalletType.trezorOne),
+          true,
+        );
       });
     });
 
     group('HardwareWalletConnectionState enum', () {
       test('should have correct values', () {
-        expect(HardwareWalletConnectionState.values.contains(HardwareWalletConnectionState.disconnected), true);
-        expect(HardwareWalletConnectionState.values.contains(HardwareWalletConnectionState.scanning), true);
-        expect(HardwareWalletConnectionState.values.contains(HardwareWalletConnectionState.connecting), true);
-        expect(HardwareWalletConnectionState.values.contains(HardwareWalletConnectionState.connected), true);
-        expect(HardwareWalletConnectionState.values.contains(HardwareWalletConnectionState.error), true);
+        expect(
+          HardwareWalletConnectionState.values.contains(
+            HardwareWalletConnectionState.disconnected,
+          ),
+          true,
+        );
+        expect(
+          HardwareWalletConnectionState.values.contains(
+            HardwareWalletConnectionState.scanning,
+          ),
+          true,
+        );
+        expect(
+          HardwareWalletConnectionState.values.contains(
+            HardwareWalletConnectionState.connecting,
+          ),
+          true,
+        );
+        expect(
+          HardwareWalletConnectionState.values.contains(
+            HardwareWalletConnectionState.connected,
+          ),
+          true,
+        );
+        expect(
+          HardwareWalletConnectionState.values.contains(
+            HardwareWalletConnectionState.error,
+          ),
+          true,
+        );
       });
     });
 
@@ -76,23 +118,43 @@ void main() {
 
       test('should calculate signal strength correctly', () {
         // Strong signal (rssi >= -50)
-        final strongDevice = BluetoothDeviceInfo(id: '1', name: 'Test', rssi: -40);
+        final strongDevice = BluetoothDeviceInfo(
+          id: '1',
+          name: 'Test',
+          rssi: -40,
+        );
         expect(strongDevice.signalStrength, 4);
 
         // Good signal (rssi >= -60)
-        final goodDevice = BluetoothDeviceInfo(id: '2', name: 'Test', rssi: -55);
+        final goodDevice = BluetoothDeviceInfo(
+          id: '2',
+          name: 'Test',
+          rssi: -55,
+        );
         expect(goodDevice.signalStrength, 3);
 
         // Medium signal (rssi >= -70)
-        final mediumDevice = BluetoothDeviceInfo(id: '3', name: 'Test', rssi: -65);
+        final mediumDevice = BluetoothDeviceInfo(
+          id: '3',
+          name: 'Test',
+          rssi: -65,
+        );
         expect(mediumDevice.signalStrength, 2);
 
         // Weak signal (rssi >= -80)
-        final weakDevice = BluetoothDeviceInfo(id: '4', name: 'Test', rssi: -75);
+        final weakDevice = BluetoothDeviceInfo(
+          id: '4',
+          name: 'Test',
+          rssi: -75,
+        );
         expect(weakDevice.signalStrength, 1);
 
         // Very weak signal (rssi < -80)
-        final veryWeakDevice = BluetoothDeviceInfo(id: '5', name: 'Test', rssi: -90);
+        final veryWeakDevice = BluetoothDeviceInfo(
+          id: '5',
+          name: 'Test',
+          rssi: -90,
+        );
         expect(veryWeakDevice.signalStrength, 0);
       });
     });

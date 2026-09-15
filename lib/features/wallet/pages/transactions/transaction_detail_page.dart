@@ -42,7 +42,9 @@ class TransactionDetailPage extends StatefulWidget {
 }
 
 class _TransactionDetailPageState extends State<TransactionDetailPage> {
-  TextStyle _labelStyle() => AppTypography.body.copyWith(color: AppColorTokens.of(context).textSubtitle);
+  TextStyle _labelStyle() => AppTypography.body.copyWith(
+    color: AppColorTokens.of(context).textSubtitle,
+  );
 
   EdgeInsets get _itemPadding => EdgeInsets.symmetric(
     vertical: AppSpacing.space4,
@@ -135,7 +137,9 @@ class _TransactionDetailPageState extends State<TransactionDetailPage> {
                   content,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: AppTypography.body.copyWith(color: AppColorTokens.of(context).textPrimary),
+                  style: AppTypography.body.copyWith(
+                    color: AppColorTokens.of(context).textPrimary,
+                  ),
                 ),
               ),
               if (copy)

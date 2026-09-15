@@ -232,7 +232,10 @@ void main() {
 
   group('Error Handling', () {
     test('network error should be properly formatted', () {
-      final error = _formatSocialAuthError('network_error', 'Connection failed');
+      final error = _formatSocialAuthError(
+        'network_error',
+        'Connection failed',
+      );
       expect(error, contains('network_error'));
       expect(error, contains('Connection failed'));
     });
@@ -245,18 +248,12 @@ void main() {
     });
 
     test('provider errors should map to user-friendly messages', () {
-      expect(
-        _getErrorMessage('sign_in_canceled'),
-        'Sign-in was cancelled',
-      );
+      expect(_getErrorMessage('sign_in_canceled'), 'Sign-in was cancelled');
       expect(
         _getErrorMessage('network_error'),
         'Network error. Please check your connection.',
       );
-      expect(
-        _getErrorMessage('unknown_error'),
-        'An unexpected error occurred',
-      );
+      expect(_getErrorMessage('unknown_error'), 'An unexpected error occurred');
     });
   });
 }
@@ -373,9 +370,7 @@ class _OIDCConfig {
   });
 
   bool validate() {
-    return issuer.isNotEmpty &&
-           clientId.isNotEmpty &&
-           redirectUri.isNotEmpty;
+    return issuer.isNotEmpty && clientId.isNotEmpty && redirectUri.isNotEmpty;
   }
 
   String get discoveryUrl => '$issuer/.well-known/openid-configuration';
@@ -398,10 +393,10 @@ class _SAMLConfig {
 
   bool validate() {
     return idpEntityId.isNotEmpty &&
-           idpSsoUrl.isNotEmpty &&
-           idpCertificate.isNotEmpty &&
-           spEntityId.isNotEmpty &&
-           acsUrl.isNotEmpty;
+        idpSsoUrl.isNotEmpty &&
+        idpCertificate.isNotEmpty &&
+        spEntityId.isNotEmpty &&
+        acsUrl.isNotEmpty;
   }
 }
 
@@ -439,12 +434,7 @@ Map<String, dynamic> _buildUnlinkAccountParams({
   required String token,
   required String provider,
 }) {
-  return {
-    'uuid': uuid,
-    'token': token,
-    'source': 'app',
-    'provider': provider,
-  };
+  return {'uuid': uuid, 'token': token, 'source': 'app', 'provider': provider};
 }
 
 String _formatSocialAuthError(String code, String message) {
@@ -452,11 +442,7 @@ String _formatSocialAuthError(String code, String message) {
 }
 
 bool _isUserCancelledError(String error) {
-  final cancelPatterns = [
-    'cancel',
-    'cancelled',
-    'canceled',
-  ];
+  final cancelPatterns = ['cancel', 'cancelled', 'canceled'];
   return cancelPatterns.any((p) => error.toLowerCase().contains(p));
 }
 

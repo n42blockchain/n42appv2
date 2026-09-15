@@ -22,16 +22,23 @@ BigInt? reconcile({
 void main() {
   final balance = BigInt.from(1000);
 
-  test('max send computed with a smaller fee is settled against the real fee', () {
-    // UI offered balance - fee(1.0x); sender signs with fee(1.2x).
-    final result = reconcile(
-      value: balance - BigInt.from(100),
-      balance: balance,
-      fee: BigInt.from(120),
-    );
-    expect(result, BigInt.from(880), reason: 'must send balance - actual fee');
-    expect(result! + BigInt.from(120) <= balance, isTrue);
-  });
+  test(
+    'max send computed with a smaller fee is settled against the real fee',
+    () {
+      // UI offered balance - fee(1.0x); sender signs with fee(1.2x).
+      final result = reconcile(
+        value: balance - BigInt.from(100),
+        balance: balance,
+        fee: BigInt.from(120),
+      );
+      expect(
+        result,
+        BigInt.from(880),
+        reason: 'must send balance - actual fee',
+      );
+      expect(result! + BigInt.from(120) <= balance, isTrue);
+    },
+  );
 
   test('exact full balance is settled the same way', () {
     expect(
@@ -42,14 +49,22 @@ void main() {
 
   test('ordinary small transfer is untouched', () {
     expect(
-      reconcile(value: BigInt.from(10), balance: balance, fee: BigInt.from(120)),
+      reconcile(
+        value: BigInt.from(10),
+        balance: balance,
+        fee: BigInt.from(120),
+      ),
       BigInt.from(10),
     );
   });
 
   test('value above balance is still a shortfall', () {
     expect(
-      reconcile(value: BigInt.from(2000), balance: balance, fee: BigInt.from(120)),
+      reconcile(
+        value: BigInt.from(2000),
+        balance: balance,
+        fee: BigInt.from(120),
+      ),
       isNull,
     );
   });

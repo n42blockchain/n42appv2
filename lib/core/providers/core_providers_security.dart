@@ -13,9 +13,10 @@ part of 'core_providers.dart';
 
 /// Controls whether to use V2 (beacon-chain staking, default) or V1 (APOS mining) UI.
 /// true = V2, false = V1
-final miningUseV2Provider = StateNotifierProvider<MiningUiVersionNotifier, bool>((ref) {
-  return MiningUiVersionNotifier(ref.read(spUtilProvider));
-});
+final miningUseV2Provider =
+    StateNotifierProvider<MiningUiVersionNotifier, bool>((ref) {
+      return MiningUiVersionNotifier(ref.read(spUtilProvider));
+    });
 
 class MiningUiVersionNotifier extends StateNotifier<bool> {
   final SPUtil _sp;

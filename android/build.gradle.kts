@@ -15,8 +15,8 @@ allprojects {
                 localPropertiesFile.inputStream().use { props.load(it) }
             }
             credentials {
-                username = props.getProperty("wallet_core.user")
-                password = props.getProperty("wallet_core.key")
+                username = System.getenv("WALLET_CORE_USER") ?: props.getProperty("wallet_core.user")
+                password = System.getenv("WALLET_CORE_KEY") ?: props.getProperty("wallet_core.key")
             }
         }
     }

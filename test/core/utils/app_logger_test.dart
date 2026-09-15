@@ -103,8 +103,13 @@ void main() {
         } catch (e, s) {
           stack = s;
         }
-        AppLogger.e('Boom', 'msg',
-            error: 'err', stackTrace: stack, report: false);
+        AppLogger.e(
+          'Boom',
+          'msg',
+          error: 'err',
+          stackTrace: stack,
+          report: false,
+        );
         expect(captured.length, 2);
         expect(captured[0], contains('[Boom] ERROR: msg'));
         expect(captured[1], contains('app_logger_test.dart'));
@@ -126,10 +131,7 @@ void main() {
         // raw would normally throw. AppLogger must defensively swallow
         // so a missing Crashlytics doesn't turn a recoverable error
         // into an actual crash.
-        expect(
-          () => AppLogger.e('Boom', 'msg', report: true),
-          returnsNormally,
-        );
+        expect(() => AppLogger.e('Boom', 'msg', report: true), returnsNormally);
       });
     });
 

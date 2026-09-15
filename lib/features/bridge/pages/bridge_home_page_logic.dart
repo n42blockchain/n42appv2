@@ -38,7 +38,9 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 6),
-        backgroundColor: isSuccess ? AppColorTokens.of(context).success : AppColorTokens.of(context).danger,
+        backgroundColor: isSuccess
+            ? AppColorTokens.of(context).success
+            : AppColorTokens.of(context).danger,
         content: Row(
           children: [
             Icon(
@@ -173,7 +175,9 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
               fromAddress: cm.address,
               toAddress: toAddress,
               // 名义金额供 gas 估算;精确 value 由 valueWeiOverride 透传给签名。
-              amount: valueWei == BigInt.zero ? 0.0 : valueWei.toDouble() / 1e18,
+              amount: valueWei == BigInt.zero
+                  ? 0.0
+                  : valueWei.toDouble() / 1e18,
               decimals: 18,
               path: path,
               isTest: cm.isTest,
@@ -312,7 +316,10 @@ mixin BridgeHomeLogicMixin on ConsumerState<BridgeHomePage> {
                         title: Text(token.symbol),
                         subtitle: Text(token.name),
                         trailing: isSelected
-                            ?  Icon(Icons.check, color: AppColorTokens.of(context).success)
+                            ? Icon(
+                                Icons.check,
+                                color: AppColorTokens.of(context).success,
+                              )
                             : null,
                         onTap: () => Navigator.pop(context, token),
                       );

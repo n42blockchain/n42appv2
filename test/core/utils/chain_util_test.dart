@@ -71,16 +71,22 @@ void main() {
 
     test('contains entries for keys 0 through 24', () {
       for (int i = 0; i <= 24; i++) {
-        expect(decimalMap.containsKey(i.toString()), isTrue,
-            reason: 'decimalMap should have key "$i"');
+        expect(
+          decimalMap.containsKey(i.toString()),
+          isTrue,
+          reason: 'decimalMap should have key "$i"',
+        );
       }
     });
 
     test('each entry equals 10^n.0 for n in 0..18', () {
       for (int i = 0; i <= 18; i++) {
         final expected = '${BigInt.from(10).pow(i)}.0';
-        expect(decimalMap[i.toString()], expected,
-            reason: 'decimalMap["$i"] should be $expected');
+        expect(
+          decimalMap[i.toString()],
+          expected,
+          reason: 'decimalMap["$i"] should be $expected',
+        );
       }
     });
   });

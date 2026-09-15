@@ -42,7 +42,7 @@ void main() {
     test('should set light theme', () async {
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.light);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       final themeMode = container.read(themeModeProvider);
       expect(themeMode, ThemeMode.light);
     });
@@ -50,7 +50,7 @@ void main() {
     test('should set dark theme', () async {
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       final themeMode = container.read(themeModeProvider);
       expect(themeMode, ThemeMode.dark);
     });
@@ -59,11 +59,11 @@ void main() {
       // First set to dark
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       // Then set to system
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.system);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       final themeMode = container.read(themeModeProvider);
       expect(themeMode, ThemeMode.system);
     });
@@ -72,42 +72,38 @@ void main() {
       // Set to dark
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       // Verify it's dark
       expect(container.read(themeModeProvider), ThemeMode.dark);
-      
+
       // Change to light
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.light);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       // Verify it's light
       expect(container.read(themeModeProvider), ThemeMode.light);
     });
 
     test('should notify listeners on theme change', () async {
       int notifyCount = 0;
-      
-      container.listen<ThemeMode>(
-        themeModeProvider,
-        (previous, next) {
-          notifyCount++;
-        },
-        fireImmediately: false,
-      );
-      
+
+      container.listen<ThemeMode>(themeModeProvider, (previous, next) {
+        notifyCount++;
+      }, fireImmediately: false);
+
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
       await Future.delayed(const Duration(milliseconds: 50));
-      
+
       expect(notifyCount, greaterThanOrEqualTo(1));
     });
 
     test('should cycle through all theme modes', () async {
       final modes = [ThemeMode.light, ThemeMode.dark, ThemeMode.system];
-      
+
       for (final mode in modes) {
         container.read(themeModeProvider.notifier).setTheme(mode);
         await Future.delayed(const Duration(milliseconds: 50));
-        
+
         final currentMode = container.read(themeModeProvider);
         expect(currentMode, mode);
       }
@@ -117,7 +113,7 @@ void main() {
   group('Theme Mode Integration', () {
     testWidgets('MaterialApp should respond to theme changes', (tester) async {
       final container = ProviderContainer();
-      
+
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
@@ -140,26 +136,25 @@ void main() {
           ),
         ),
       );
-      
+
       await tester.pumpAndSettle();
-      
+
       // Initial state (system - defaults to light in tests)
       expect(find.textContaining('Brightness:'), findsOneWidget);
-      
+
       // Change to dark
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.dark);
       await tester.pumpAndSettle();
-      
+
       expect(find.text('Brightness: Brightness.dark'), findsOneWidget);
-      
+
       // Change to light
       container.read(themeModeProvider.notifier).setTheme(ThemeMode.light);
       await tester.pumpAndSettle();
-      
+
       expect(find.text('Brightness: Brightness.light'), findsOneWidget);
-      
+
       container.dispose();
     });
   });
 }
-

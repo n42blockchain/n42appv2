@@ -81,8 +81,9 @@ class ChangeEmailApi {
       if (response is Map && response['code'] != null) {
         final bizCode = response['code'];
         if (bizCode != 200 && bizCode != '200') {
-          final msg = (response['msg'] ?? response['message'] ?? 'code $bizCode')
-              .toString();
+          final msg =
+              (response['msg'] ?? response['message'] ?? 'code $bizCode')
+                  .toString();
           AppLogger.w('ChangeEmailApi', '$action business error: $msg');
           throw Exception(msg);
         }

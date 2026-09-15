@@ -49,8 +49,11 @@ void main() {
       // any future variant accidentally bypassing that.
       for (var i = 0; i < 50; i++) {
         final v = pickRandomVariant();
-        expect(v.mainText, isNotEmpty,
-            reason: 'iter $i returned empty mainText');
+        expect(
+          v.mainText,
+          isNotEmpty,
+          reason: 'iter $i returned empty mainText',
+        );
       }
     });
 
@@ -83,10 +86,16 @@ void main() {
       // With 50/50 split we expect ~150 each in 300 draws. A lower
       // bound of 75 catches a wholly-skewed implementation while
       // accepting normal RNG variance.
-      expect(cnEnHits, greaterThan(75),
-          reason: 'cn/en pool seems under-weighted: $cnEnHits / $draws');
-      expect(otherHits, greaterThan(75),
-          reason: 'other-language pool seems under-weighted: $otherHits / $draws');
+      expect(
+        cnEnHits,
+        greaterThan(75),
+        reason: 'cn/en pool seems under-weighted: $cnEnHits / $draws',
+      );
+      expect(
+        otherHits,
+        greaterThan(75),
+        reason: 'other-language pool seems under-weighted: $otherHits / $draws',
+      );
     });
 
     test('returned variants have plausible string shapes (no junk)', () {
@@ -111,17 +120,23 @@ void main() {
       }
     });
 
-    test('returns a fresh-enough sample of distinct variants over 200 draws', () {
-      // 39 unique variants × 200 draws → birthday paradox says we should
-      // observe a substantial fraction of the pool. A lower bound of 15
-      // distinct mainTexts catches a stuck-on-one-variant bug while
-      // tolerating RNG variance.
-      final seen = <String>{};
-      for (var i = 0; i < 200; i++) {
-        seen.add(pickRandomVariant().mainText);
-      }
-      expect(seen.length, greaterThan(15),
-          reason: 'only saw ${seen.length} distinct mainTexts in 200 draws');
-    });
+    test(
+      'returns a fresh-enough sample of distinct variants over 200 draws',
+      () {
+        // 39 unique variants × 200 draws → birthday paradox says we should
+        // observe a substantial fraction of the pool. A lower bound of 15
+        // distinct mainTexts catches a stuck-on-one-variant bug while
+        // tolerating RNG variance.
+        final seen = <String>{};
+        for (var i = 0; i < 200; i++) {
+          seen.add(pickRandomVariant().mainText);
+        }
+        expect(
+          seen.length,
+          greaterThan(15),
+          reason: 'only saw ${seen.length} distinct mainTexts in 200 draws',
+        );
+      },
+    );
   });
 }

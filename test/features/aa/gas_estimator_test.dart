@@ -27,12 +27,12 @@ GasEstimateResult _makeEstimate({
     verificationGasLimit: BigInt.from(verification),
     callGasLimit: BigInt.from(call),
     preVerificationGas: BigInt.from(preVerification),
-    paymasterVerificationGasLimit:
-        pmVerify != null ? BigInt.from(pmVerify) : null,
+    paymasterVerificationGasLimit: pmVerify != null
+        ? BigInt.from(pmVerify)
+        : null,
     paymasterPostOpGasLimit: pmPost != null ? BigInt.from(pmPost) : null,
   );
 }
-
 
 /// Build a minimal UserOpBuilder with the required fields set.
 UserOpBuilder _minimalBuilder({bool withGasFees = false}) {
@@ -62,7 +62,9 @@ void _testCalculatePreVerificationGas() {
         ..setNonce(BigInt.zero)
         ..setCallData(data)
         ..setGasFees(
-            maxFeePerGas: BigInt.one, maxPriorityFeePerGas: BigInt.zero);
+          maxFeePerGas: BigInt.one,
+          maxPriorityFeePerGas: BigInt.zero,
+        );
     }
 
     test('all-zero calldata: charges 4 gas per byte', () {
@@ -76,7 +78,9 @@ void _testCalculatePreVerificationGas() {
     });
 
     test('all-nonzero calldata: charges 16 gas per byte', () {
-      final data = Uint8List.fromList(List.filled(10, 0xFF)); // 10 non-zero bytes
+      final data = Uint8List.fromList(
+        List.filled(10, 0xFF),
+      ); // 10 non-zero bytes
       final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
@@ -87,7 +91,18 @@ void _testCalculatePreVerificationGas() {
 
     test('mixed calldata: zero bytes cost 4, nonzero cost 16', () {
       // 5 zero bytes + 5 non-zero bytes
-      final data = Uint8List.fromList([0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]);
+      final data = Uint8List.fromList([
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0x00,
+        0xFF,
+        0xFF,
+        0xFF,
+        0xFF,
+        0xFF,
+      ]);
       final builder = builderWithCalldata(data);
       final userOp = builder.build();
 
@@ -105,23 +120,35 @@ void _testCalculatePreVerificationGas() {
 
       final gas = AAGasEstimator.calculatePreVerificationGas(userOp);
       // 21000 + 1*4 = 21004 — still above minimum
-      expect(gas, greaterThanOrEqualTo(BigInt.from(AAConstants.minPreVerificationGas)));
+      expect(
+        gas,
+        greaterThanOrEqualTo(BigInt.from(AAConstants.minPreVerificationGas)),
+      );
     });
 
     test('nonzero bytes are significantly more expensive than zero bytes', () {
       final zeroData = Uint8List(50); // 50 zeros
-      final nonZeroData = Uint8List.fromList(List.filled(50, 0xAB)); // 50 non-zeros
+      final nonZeroData = Uint8List.fromList(
+        List.filled(50, 0xAB),
+      ); // 50 non-zeros
 
       UserOpBuilder zeroBuilder() => builderWithCalldata(zeroData);
       UserOpBuilder nonZeroBuilder() => builderWithCalldata(nonZeroData);
 
-      final zeroGas = AAGasEstimator.calculatePreVerificationGas(zeroBuilder().build());
-      final nonZeroGas = AAGasEstimator.calculatePreVerificationGas(nonZeroBuilder().build());
+      final zeroGas = AAGasEstimator.calculatePreVerificationGas(
+        zeroBuilder().build(),
+      );
+      final nonZeroGas = AAGasEstimator.calculatePreVerificationGas(
+        nonZeroBuilder().build(),
+      );
 
       // Non-zero should cost 4x more for the calldata portion
       // zeroGas calldata portion = 50*4 = 200
       // nonZeroGas calldata portion = 50*16 = 800
-      expect(nonZeroGas - zeroGas, BigInt.from(600)); // 800 - 200 = 600 extra gas
+      expect(
+        nonZeroGas - zeroGas,
+        BigInt.from(600),
+      ); // 800 - 200 = 600 extra gas
     });
 
     test('EIP-2028 is superior to flat-16 for ABI-encoded parameters', () {
@@ -233,9 +260,9 @@ void _testGasDeviationDetector() {
     group('callGasHigh', () {
       test('fires when callGasLimit >= 500000', () {
         final estimate = _makeEstimate(call: 500000);
-        final warnings = GasDeviationDetector.analyze(estimate)
-            .where((w) => w.type == GasDeviationWarningType.callGasHigh)
-            .toList();
+        final warnings = GasDeviationDetector.analyze(
+          estimate,
+        ).where((w) => w.type == GasDeviationWarningType.callGasHigh).toList();
 
         expect(warnings, hasLength(1));
         expect(warnings.first.severity, GasDeviationSeverity.warning);
@@ -244,9 +271,9 @@ void _testGasDeviationDetector() {
 
       test('does not fire below threshold', () {
         final estimate = _makeEstimate(call: 499999);
-        final warnings = GasDeviationDetector.analyze(estimate)
-            .where((w) => w.type == GasDeviationWarningType.callGasHigh)
-            .toList();
+        final warnings = GasDeviationDetector.analyze(
+          estimate,
+        ).where((w) => w.type == GasDeviationWarningType.callGasHigh).toList();
         expect(warnings, isEmpty);
       });
     });
@@ -311,10 +338,12 @@ void _testGasDeviationDetector() {
     group('deploymentOverhead', () {
       test('fires as info when isFirstTransaction=true', () {
         final estimate = _makeEstimate();
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-          isFirstTransaction: true,
-        ).where((w) => w.type == GasDeviationWarningType.deploymentOverhead).toList();
+        final warnings =
+            GasDeviationDetector.analyze(estimate, isFirstTransaction: true)
+                .where(
+                  (w) => w.type == GasDeviationWarningType.deploymentOverhead,
+                )
+                .toList();
 
         expect(warnings, hasLength(1));
         expect(warnings.first.severity, GasDeviationSeverity.info);
@@ -341,10 +370,16 @@ void _testGasDeviationDetector() {
           call: 100000,
           preVerification: 50000,
         );
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-          clientEstimate: BigInt.from(375000),
-        ).where((w) => w.type == GasDeviationWarningType.possibleUnderEstimate).toList();
+        final warnings =
+            GasDeviationDetector.analyze(
+                  estimate,
+                  clientEstimate: BigInt.from(375000),
+                )
+                .where(
+                  (w) =>
+                      w.type == GasDeviationWarningType.possibleUnderEstimate,
+                )
+                .toList();
 
         expect(warnings, hasLength(1));
         expect(warnings.first.severity, GasDeviationSeverity.warning);
@@ -360,10 +395,16 @@ void _testGasDeviationDetector() {
           call: 100000,
           preVerification: 50000,
         );
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-          clientEstimate: BigInt.from(500000),
-        ).where((w) => w.type == GasDeviationWarningType.possibleUnderEstimate).toList();
+        final warnings =
+            GasDeviationDetector.analyze(
+                  estimate,
+                  clientEstimate: BigInt.from(500000),
+                )
+                .where(
+                  (w) =>
+                      w.type == GasDeviationWarningType.possibleUnderEstimate,
+                )
+                .toList();
 
         expect(warnings, hasLength(1));
         expect(warnings.first.severity, GasDeviationSeverity.critical);
@@ -378,10 +419,16 @@ void _testGasDeviationDetector() {
           preVerification: 100000,
         ); // total = 500000
 
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-          clientEstimate: BigInt.from(250000), // bundler higher → safe
-        ).where((w) => w.type == GasDeviationWarningType.possibleUnderEstimate).toList();
+        final warnings =
+            GasDeviationDetector.analyze(
+                  estimate,
+                  clientEstimate: BigInt.from(250000), // bundler higher → safe
+                )
+                .where(
+                  (w) =>
+                      w.type == GasDeviationWarningType.possibleUnderEstimate,
+                )
+                .toList();
 
         expect(warnings, isEmpty);
       });
@@ -389,17 +436,22 @@ void _testGasDeviationDetector() {
       test('no check performed when clientEstimate is null', () {
         final estimate = _makeEstimate();
         final warnings = GasDeviationDetector.analyze(estimate)
-            .where((w) => w.type == GasDeviationWarningType.possibleUnderEstimate)
+            .where(
+              (w) => w.type == GasDeviationWarningType.possibleUnderEstimate,
+            )
             .toList();
         expect(warnings, isEmpty);
       });
 
       test('no check performed when clientEstimate is zero', () {
         final estimate = _makeEstimate();
-        final warnings = GasDeviationDetector.analyze(
-          estimate,
-          clientEstimate: BigInt.zero,
-        ).where((w) => w.type == GasDeviationWarningType.possibleUnderEstimate).toList();
+        final warnings =
+            GasDeviationDetector.analyze(estimate, clientEstimate: BigInt.zero)
+                .where(
+                  (w) =>
+                      w.type == GasDeviationWarningType.possibleUnderEstimate,
+                )
+                .toList();
         expect(warnings, isEmpty);
       });
     });
@@ -520,20 +572,23 @@ void _testBuildForEstimation() {
       expect(realOp.signature, isNull);
     });
 
-    test('estimation and real build can be called multiple times independently', () {
-      final sig = Uint8List.fromList(List.filled(65, 0xAA));
-      final builder = _minimalBuilder(withGasFees: true)..setSignature(sig);
+    test(
+      'estimation and real build can be called multiple times independently',
+      () {
+        final sig = Uint8List.fromList(List.filled(65, 0xAA));
+        final builder = _minimalBuilder(withGasFees: true)..setSignature(sig);
 
-      // Alternate calls: estimation must not interfere with real builds
-      builder.buildForEstimation();
-      builder.buildForEstimation();
-      final real1 = builder.build();
-      builder.buildForEstimation();
-      final real2 = builder.build();
+        // Alternate calls: estimation must not interfere with real builds
+        builder.buildForEstimation();
+        builder.buildForEstimation();
+        final real1 = builder.build();
+        builder.buildForEstimation();
+        final real2 = builder.build();
 
-      expect(real1.signature, equals(sig));
-      expect(real2.signature, equals(sig));
-    });
+        expect(real1.signature, equals(sig));
+        expect(real2.signature, equals(sig));
+      },
+    );
 
     test('throws when sender is missing', () {
       final builder = UserOpBuilder()
@@ -771,9 +826,18 @@ void _testGasSpeed() {
     });
 
     test('faster speeds have shorter estimated times', () {
-      expect(GasSpeed.instant.estimatedTime, lessThan(GasSpeed.fast.estimatedTime));
-      expect(GasSpeed.fast.estimatedTime, lessThan(GasSpeed.standard.estimatedTime));
-      expect(GasSpeed.standard.estimatedTime, lessThan(GasSpeed.slow.estimatedTime));
+      expect(
+        GasSpeed.instant.estimatedTime,
+        lessThan(GasSpeed.fast.estimatedTime),
+      );
+      expect(
+        GasSpeed.fast.estimatedTime,
+        lessThan(GasSpeed.standard.estimatedTime),
+      );
+      expect(
+        GasSpeed.standard.estimatedTime,
+        lessThan(GasSpeed.slow.estimatedTime),
+      );
     });
   });
 }

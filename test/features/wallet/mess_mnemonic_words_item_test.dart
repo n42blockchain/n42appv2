@@ -43,9 +43,12 @@ void main() {
       expect(item.index, 0);
     });
 
-    test('index 23 is a valid BIP-39 last word position (24-word mnemonic)', () {
-      final item = MessMnemonicWordsItem('zoo', false, 23);
-      expect(item.index, 23);
-    });
+    test(
+      'index 23 is a valid BIP-39 last word position (24-word mnemonic)',
+      () {
+        final item = MessMnemonicWordsItem('zoo', false, 23);
+        expect(item.index, 23);
+      },
+    );
   });
 }

@@ -190,125 +190,125 @@ mixin EarnPageWidgetsMixin on ConsumerState<EarnPage> {
         onTap: onTap,
         borderRadius: AppRadius.brMd,
         child: Container(
-        width: ScreenUtil().setWidth(230),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: gradientColors,
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: AppRadius.brMd,
-          boxShadow: [
-            BoxShadow(
-              color: gradientColors[0].withAlpha(80),
-              blurRadius: 12,
-              offset: const Offset(0, 6),
+          width: ScreenUtil().setWidth(230),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-          ],
-        ),
-        child: ClipRRect(
-          borderRadius: AppRadius.brMd,
-          child: Stack(
-            children: [
-              // 右上装饰圆
-              Positioned(
-                right: -ScreenUtil().setWidth(20),
-                top: -ScreenUtil().setWidth(20),
-                child: Container(
-                  width: ScreenUtil().setWidth(100),
-                  height: ScreenUtil().setWidth(100),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withAlpha(18),
+            borderRadius: AppRadius.brMd,
+            boxShadow: [
+              BoxShadow(
+                color: gradientColors[0].withAlpha(80),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: AppRadius.brMd,
+            child: Stack(
+              children: [
+                // 右上装饰圆
+                Positioned(
+                  right: -ScreenUtil().setWidth(20),
+                  top: -ScreenUtil().setWidth(20),
+                  child: Container(
+                    width: ScreenUtil().setWidth(100),
+                    height: ScreenUtil().setWidth(100),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withAlpha(18),
+                    ),
                   ),
                 ),
-              ),
-              // 左下装饰圆
-              Positioned(
-                left: -ScreenUtil().setWidth(12),
-                bottom: -ScreenUtil().setWidth(12),
-                child: Container(
-                  width: ScreenUtil().setWidth(64),
-                  height: ScreenUtil().setWidth(64),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white.withAlpha(10),
+                // 左下装饰圆
+                Positioned(
+                  left: -ScreenUtil().setWidth(12),
+                  bottom: -ScreenUtil().setWidth(12),
+                  child: Container(
+                    width: ScreenUtil().setWidth(64),
+                    height: ScreenUtil().setWidth(64),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white.withAlpha(10),
+                    ),
                   ),
                 ),
-              ),
-              // 主内容
-              Padding(
-                padding: EdgeInsets.all(AppSpacing.space4),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: ScreenUtil().setWidth(48),
-                          height: ScreenUtil().setWidth(48),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withAlpha(50),
-                            borderRadius: AppRadius.brMd,
-                          ),
-                          child: Icon(
-                            icon,
-                            color: Colors.white,
-                            size: ScreenUtil().setWidth(28),
-                          ),
-                        ),
-                        if (badge != null)
+                // 主内容
+                Padding(
+                  padding: EdgeInsets.all(AppSpacing.space4),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSpacing.space2,
-                              vertical: AppSpacing.space2,
-                            ),
+                            width: ScreenUtil().setWidth(48),
+                            height: ScreenUtil().setWidth(48),
                             decoration: BoxDecoration(
                               color: Colors.white.withAlpha(50),
                               borderRadius: AppRadius.brMd,
                             ),
-                            child: Text(
-                              badge,
-                              style: AppTypography.captionSm.copyWith(
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
-                                letterSpacing: 0.5,
-                              ),
+                            child: Icon(
+                              icon,
+                              color: Colors.white,
+                              size: ScreenUtil().setWidth(28),
                             ),
                           ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: AppTypography.body.copyWith(
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
+                          if (badge != null)
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: AppSpacing.space2,
+                                vertical: AppSpacing.space2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.white.withAlpha(50),
+                                borderRadius: AppRadius.brMd,
+                              ),
+                              child: Text(
+                                badge,
+                                style: AppTypography.captionSm.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: AppTypography.body.copyWith(
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        SizedBox(height: AppSpacing.space2),
-                        Text(
-                          subtitle,
-                          style: AppTypography.captionSm.copyWith(
-                            color: Colors.white.withAlpha(200),
+                          SizedBox(height: AppSpacing.space2),
+                          Text(
+                            subtitle,
+                            style: AppTypography.captionSm.copyWith(
+                              color: Colors.white.withAlpha(200),
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
         ),
       ),
     );

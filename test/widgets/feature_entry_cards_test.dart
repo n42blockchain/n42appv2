@@ -11,18 +11,21 @@ import '../helpers/widget_test_helpers.dart';
 
 void main() {
   group('EnsEntryCard Widget Tests', () {
-    testWidgets('should display register message when no ENS name',
-        (WidgetTester tester) async {
+    testWidgets('should display register message when no ENS name', (
+      WidgetTester tester,
+    ) async {
       bool onTapCalled = false;
       bool onRegisterCalled = false;
 
-      await tester.pumpWidget(wrapForTest(
-        EnsEntryCard(
-          ensName: null,
-          onTap: () => onTapCalled = true,
-          onRegisterTap: () => onRegisterCalled = true,
+      await tester.pumpWidget(
+        wrapForTest(
+          EnsEntryCard(
+            ensName: null,
+            onTap: () => onTapCalled = true,
+            onRegisterTap: () => onRegisterCalled = true,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show ENS text/icon
@@ -36,18 +39,21 @@ void main() {
       expect(onTapCalled, false);
     });
 
-    testWidgets('should display ENS name when provided',
-        (WidgetTester tester) async {
+    testWidgets('should display ENS name when provided', (
+      WidgetTester tester,
+    ) async {
       bool onTapCalled = false;
       bool onRegisterCalled = false;
 
-      await tester.pumpWidget(wrapForTest(
-        EnsEntryCard(
-          ensName: 'alice.eth',
-          onTap: () => onTapCalled = true,
-          onRegisterTap: () => onRegisterCalled = true,
+      await tester.pumpWidget(
+        wrapForTest(
+          EnsEntryCard(
+            ensName: 'alice.eth',
+            onTap: () => onTapCalled = true,
+            onRegisterTap: () => onRegisterCalled = true,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show the ENS name
@@ -64,15 +70,14 @@ void main() {
       expect(onRegisterCalled, false);
     });
 
-    testWidgets('should show add icon when no ENS name',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        EnsEntryCard(
-          ensName: null,
-          onTap: () {},
-          onRegisterTap: () {},
+    testWidgets('should show add icon when no ENS name', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          EnsEntryCard(ensName: null, onTap: () {}, onRegisterTap: () {}),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.byIcon(Icons.add_rounded), findsOneWidget);
@@ -80,18 +85,21 @@ void main() {
   });
 
   group('SmartAccountEntryCard Widget Tests', () {
-    testWidgets('should display create message when no smart account',
-        (WidgetTester tester) async {
+    testWidgets('should display create message when no smart account', (
+      WidgetTester tester,
+    ) async {
       bool onTapCalled = false;
       bool onCreateCalled = false;
 
-      await tester.pumpWidget(wrapForTest(
-        SmartAccountEntryCard(
-          hasSmartAccount: false,
-          onTap: () => onTapCalled = true,
-          onCreateTap: () => onCreateCalled = true,
+      await tester.pumpWidget(
+        wrapForTest(
+          SmartAccountEntryCard(
+            hasSmartAccount: false,
+            onTap: () => onTapCalled = true,
+            onCreateTap: () => onCreateCalled = true,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show wallet icon
@@ -108,19 +116,22 @@ void main() {
       expect(onTapCalled, false);
     });
 
-    testWidgets('should display account info when smart account exists',
-        (WidgetTester tester) async {
+    testWidgets('should display account info when smart account exists', (
+      WidgetTester tester,
+    ) async {
       bool onTapCalled = false;
 
-      await tester.pumpWidget(wrapForTest(
-        SmartAccountEntryCard(
-          hasSmartAccount: true,
-          accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
-          isDeployed: true,
-          onTap: () => onTapCalled = true,
-          onCreateTap: () {},
+      await tester.pumpWidget(
+        wrapForTest(
+          SmartAccountEntryCard(
+            hasSmartAccount: true,
+            accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
+            isDeployed: true,
+            onTap: () => onTapCalled = true,
+            onCreateTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show forward arrow for existing account
@@ -136,34 +147,38 @@ void main() {
       expect(onTapCalled, true);
     });
 
-    testWidgets('should show pending icon when not deployed',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        SmartAccountEntryCard(
-          hasSmartAccount: true,
-          accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
-          isDeployed: false,
-          onTap: () {},
-          onCreateTap: () {},
+    testWidgets('should show pending icon when not deployed', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          SmartAccountEntryCard(
+            hasSmartAccount: true,
+            accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
+            isDeployed: false,
+            onTap: () {},
+            onCreateTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show hourglass icon for pending deployment
       expect(find.byIcon(Icons.hourglass_empty), findsOneWidget);
     });
 
-    testWidgets('should format address correctly',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        SmartAccountEntryCard(
-          hasSmartAccount: true,
-          accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
-          isDeployed: true,
-          onTap: () {},
-          onCreateTap: () {},
+    testWidgets('should format address correctly', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          SmartAccountEntryCard(
+            hasSmartAccount: true,
+            accountAddress: '0x1234567890abcdef1234567890abcdef12345678',
+            isDeployed: true,
+            onTap: () {},
+            onCreateTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show truncated address
@@ -172,17 +187,20 @@ void main() {
   });
 
   group('FeatureEntryHorizontal Widget Tests', () {
-    testWidgets('should display both ENS and AA cards',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntryHorizontal(
-          ensName: null,
-          hasSmartAccount: false,
-          isSmartAccountDeployed: false,
-          onEnsTap: () {},
-          onSmartAccountTap: () {},
+    testWidgets('should display both ENS and AA cards', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntryHorizontal(
+            ensName: null,
+            hasSmartAccount: false,
+            isSmartAccountDeployed: false,
+            onEnsTap: () {},
+            onSmartAccountTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should have horizontal scroll
@@ -195,36 +213,42 @@ void main() {
       expect(find.byIcon(Icons.account_balance_wallet_rounded), findsOneWidget);
     });
 
-    testWidgets('should display ENS name when provided',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntryHorizontal(
-          ensName: 'bob.eth',
-          hasSmartAccount: false,
-          isSmartAccountDeployed: false,
-          onEnsTap: () {},
-          onSmartAccountTap: () {},
+    testWidgets('should display ENS name when provided', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntryHorizontal(
+            ensName: 'bob.eth',
+            hasSmartAccount: false,
+            isSmartAccountDeployed: false,
+            onEnsTap: () {},
+            onSmartAccountTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('bob.eth'), findsOneWidget);
     });
 
-    testWidgets('should trigger correct callbacks',
-        (WidgetTester tester) async {
+    testWidgets('should trigger correct callbacks', (
+      WidgetTester tester,
+    ) async {
       bool ensClicked = false;
       bool aaClicked = false;
 
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntryHorizontal(
-          ensName: null,
-          hasSmartAccount: false,
-          isSmartAccountDeployed: false,
-          onEnsTap: () => ensClicked = true,
-          onSmartAccountTap: () => aaClicked = true,
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntryHorizontal(
+            ensName: null,
+            hasSmartAccount: false,
+            isSmartAccountDeployed: false,
+            onEnsTap: () => ensClicked = true,
+            onSmartAccountTap: () => aaClicked = true,
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Tap ENS card (first GestureDetector in list)
@@ -236,17 +260,20 @@ void main() {
       expect(aaClicked, false);
     });
 
-    testWidgets('should handle long ENS names without overflow',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntryHorizontal(
-          ensName: 'verylongensname.eth',
-          hasSmartAccount: false,
-          isSmartAccountDeployed: false,
-          onEnsTap: () {},
-          onSmartAccountTap: () {},
+    testWidgets('should handle long ENS names without overflow', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntryHorizontal(
+            ensName: 'verylongensname.eth',
+            hasSmartAccount: false,
+            isSmartAccountDeployed: false,
+            onEnsTap: () {},
+            onSmartAccountTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // FittedBox should handle long text without errors
@@ -256,18 +283,21 @@ void main() {
   });
 
   group('FeatureEntrySection Widget Tests', () {
-    testWidgets('should display section title and both cards',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntrySection(
-          ensName: null,
-          hasSmartAccount: false,
-          onEnsTap: () {},
-          onEnsRegisterTap: () {},
-          onSmartAccountTap: () {},
-          onSmartAccountCreateTap: () {},
+    testWidgets('should display section title and both cards', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntrySection(
+            ensName: null,
+            hasSmartAccount: false,
+            onEnsTap: () {},
+            onEnsRegisterTap: () {},
+            onSmartAccountTap: () {},
+            onSmartAccountCreateTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Should show both entry cards
@@ -275,20 +305,23 @@ void main() {
       expect(find.byType(SmartAccountEntryCard), findsOneWidget);
     });
 
-    testWidgets('should pass correct props to child cards',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        FeatureEntrySection(
-          ensName: 'test.eth',
-          hasSmartAccount: true,
-          smartAccountAddress: '0xabc123',
-          isSmartAccountDeployed: true,
-          onEnsTap: () {},
-          onEnsRegisterTap: () {},
-          onSmartAccountTap: () {},
-          onSmartAccountCreateTap: () {},
+    testWidgets('should pass correct props to child cards', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          FeatureEntrySection(
+            ensName: 'test.eth',
+            hasSmartAccount: true,
+            smartAccountAddress: '0xabc123',
+            isSmartAccountDeployed: true,
+            onEnsTap: () {},
+            onEnsRegisterTap: () {},
+            onSmartAccountTap: () {},
+            onSmartAccountCreateTap: () {},
+          ),
         ),
-      ));
+      );
       await tester.pumpAndSettle();
 
       // Verify ENS name is displayed
@@ -300,31 +333,37 @@ void main() {
   });
 
   group('Theme Support Tests', () {
-    testWidgets('should render correctly in light theme',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        EnsEntryCard(
-          ensName: 'theme.eth',
-          onTap: () {},
-          onRegisterTap: () {},
+    testWidgets('should render correctly in light theme', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          EnsEntryCard(
+            ensName: 'theme.eth',
+            onTap: () {},
+            onRegisterTap: () {},
+          ),
+          themeMode: ThemeMode.light,
         ),
-        themeMode: ThemeMode.light,
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(EnsEntryCard), findsOneWidget);
     });
 
-    testWidgets('should render correctly in dark theme',
-        (WidgetTester tester) async {
-      await tester.pumpWidget(wrapForTest(
-        EnsEntryCard(
-          ensName: 'theme.eth',
-          onTap: () {},
-          onRegisterTap: () {},
+    testWidgets('should render correctly in dark theme', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrapForTest(
+          EnsEntryCard(
+            ensName: 'theme.eth',
+            onTap: () {},
+            onRegisterTap: () {},
+          ),
+          themeMode: ThemeMode.dark,
         ),
-        themeMode: ThemeMode.dark,
-      ));
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(EnsEntryCard), findsOneWidget);

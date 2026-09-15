@@ -298,9 +298,7 @@ mixin BridgeHomeWidgetsMixin
                 child: GestureDetector(
                   onTap: () => provider.setSlippage(pct),
                   child: Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppSpacing.space4,
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
                     decoration: BoxDecoration(
                       color: selected
                           ? AppThemeUtils.getColorByKey(

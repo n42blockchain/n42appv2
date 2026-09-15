@@ -53,10 +53,12 @@ class MevProtectionService {
   /// Whether MEV protection is enabled globally.
   bool isEnabled = true;
 
-  static final Dio _dio = Dio(BaseOptions(
-    connectTimeout: const Duration(seconds: 10),
-    receiveTimeout: const Duration(seconds: 30),
-  ));
+  static final Dio _dio = Dio(
+    BaseOptions(
+      connectTimeout: const Duration(seconds: 10),
+      receiveTimeout: const Duration(seconds: 30),
+    ),
+  );
 
   /// Check if MEV protection is available for a specific chain.
   static bool isAvailable(int chainId) => supportedChains.containsKey(chainId);
@@ -169,7 +171,9 @@ class MevProtectionService {
   }) async {
     final rpcUrl = getProtectedRpc(chainId, fast: fast);
     if (rpcUrl == null) {
-      throw MevProtectionException('MEV protection not available for chain $chainId');
+      throw MevProtectionException(
+        'MEV protection not available for chain $chainId',
+      );
     }
 
     try {
@@ -181,9 +185,7 @@ class MevProtectionService {
           'method': 'eth_sendRawTransaction',
           'params': [signedTx],
         }),
-        options: Options(
-          headers: {'Content-Type': 'application/json'},
-        ),
+        options: Options(headers: {'Content-Type': 'application/json'}),
       );
 
       final result = response.data;

@@ -199,7 +199,10 @@ void main() {
     });
 
     test('非 UR 内容 -> "Not a valid UR QR code"', () {
-      expect(service.validateScannedUr('https://n42.ai'), contains('Not a valid UR'));
+      expect(
+        service.validateScannedUr('https://n42.ai'),
+        contains('Not a valid UR'),
+      );
     });
 
     test('类型不符 -> 报出实际类型', () {
@@ -257,7 +260,8 @@ void main() {
     });
 
     test('明文 xpub 回退路径', () {
-      const xpub = 'xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz';
+      const xpub =
+          'xpub6CUGRUonZSQ4TWtTMmzXdrXDtypWKiKrhko4egpiMZbpiaQL2jkwSB1icqYh2cfDfVxdx4df189oLKnC5fSwqPfgyP3hooxujYzAu3fDVmz';
       final info = service.parseSyncQr('  $xpub  ');
       expect(info.xpub, xpub);
       expect(info.masterFingerprint, isNull);

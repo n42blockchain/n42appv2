@@ -14,12 +14,15 @@ void main() {
 
   group('MiningSessionStatus enum', () {
     test('contains all four expected values', () {
-      expect(MiningSessionStatus.values, containsAll([
-        MiningSessionStatus.active,
-        MiningSessionStatus.paused,
-        MiningSessionStatus.completed,
-        MiningSessionStatus.error,
-      ]));
+      expect(
+        MiningSessionStatus.values,
+        containsAll([
+          MiningSessionStatus.active,
+          MiningSessionStatus.paused,
+          MiningSessionStatus.completed,
+          MiningSessionStatus.error,
+        ]),
+      );
     });
 
     test('four values total', () {
@@ -37,12 +40,15 @@ void main() {
     });
 
     test('values: online, offline, syncing, error', () {
-      expect(NodeStatus.values, containsAll([
-        NodeStatus.online,
-        NodeStatus.offline,
-        NodeStatus.syncing,
-        NodeStatus.error,
-      ]));
+      expect(
+        NodeStatus.values,
+        containsAll([
+          NodeStatus.online,
+          NodeStatus.offline,
+          NodeStatus.syncing,
+          NodeStatus.error,
+        ]),
+      );
     });
   });
 
@@ -110,36 +116,56 @@ void main() {
 
     test('true when status is active', () {
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningSessionStatus.active,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        status: MiningSessionStatus.active,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.isActive, isTrue);
     });
 
     test('false when status is completed', () {
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningSessionStatus.completed,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        status: MiningSessionStatus.completed,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
     });
 
     test('false when status is paused', () {
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningSessionStatus.paused,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        status: MiningSessionStatus.paused,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
     });
 
     test('false when status is error', () {
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, status: MiningSessionStatus.error,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        status: MiningSessionStatus.error,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.isActive, isFalse);
     });
@@ -150,10 +176,15 @@ void main() {
       final start = DateTime.utc(2024, 1, 1, 8, 0);
       final end = DateTime.utc(2024, 1, 1, 10, 30);
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, endTime: end,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        endTime: end,
         status: MiningSessionStatus.completed,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.duration, equals(const Duration(hours: 2, minutes: 30)));
     });
@@ -162,10 +193,15 @@ void main() {
       final start = DateTime.utc(2024, 1, 1, 8, 0);
       final end = DateTime.utc(2024, 1, 1, 11, 45);
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, endTime: end,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        endTime: end,
         status: MiningSessionStatus.completed,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.formattedDuration, '3h 45m');
     });
@@ -174,10 +210,15 @@ void main() {
       final start = DateTime.utc(2024, 1, 1);
       final end = DateTime.utc(2024, 1, 3, 5, 0); // 2d 5h
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, endTime: end,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        endTime: end,
         status: MiningSessionStatus.completed,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.formattedDuration, '2d 5h');
     });
@@ -186,10 +227,15 @@ void main() {
       final start = DateTime.utc(2024, 1, 1, 12, 0);
       final end = DateTime.utc(2024, 1, 1, 12, 45);
       final e = MiningSessionEntity(
-        id: 's', walletAddress: '0x', planId: 'p',
-        startTime: start, endTime: end,
+        id: 's',
+        walletAddress: '0x',
+        planId: 'p',
+        startTime: start,
+        endTime: end,
         status: MiningSessionStatus.completed,
-        earnedRewards: 0, rewardTokenSymbol: 'T', miningPower: 1.0,
+        earnedRewards: 0,
+        rewardTokenSymbol: 'T',
+        miningPower: 1.0,
       );
       expect(e.formattedDuration, '45m');
     });
@@ -199,15 +245,15 @@ void main() {
     final start = DateTime.utc(2024, 1, 1);
 
     MiningSessionEntity make(String id) => MiningSessionEntity(
-          id: id,
-          walletAddress: '0x',
-          planId: 'p',
-          startTime: start,
-          status: MiningSessionStatus.active,
-          earnedRewards: 1.0,
-          rewardTokenSymbol: 'T',
-          miningPower: 50.0,
-        );
+      id: id,
+      walletAddress: '0x',
+      planId: 'p',
+      startTime: start,
+      status: MiningSessionStatus.active,
+      earnedRewards: 1.0,
+      rewardTokenSymbol: 'T',
+      miningPower: 50.0,
+    );
 
     test('same id → equal', () {
       expect(make('s1'), equals(make('s1')));
@@ -270,26 +316,48 @@ void main() {
     test('same fields → equal', () {
       expect(
         const MiningPlanEntity(
-          id: 'p', name: 'N', stakeAmount: 100.0,
-          stakeTokenSymbol: 'T', dailyRewardRate: 0.5, minDurationDays: 7,
+          id: 'p',
+          name: 'N',
+          stakeAmount: 100.0,
+          stakeTokenSymbol: 'T',
+          dailyRewardRate: 0.5,
+          minDurationDays: 7,
         ),
-        equals(const MiningPlanEntity(
-          id: 'p', name: 'N', stakeAmount: 100.0,
-          stakeTokenSymbol: 'T', dailyRewardRate: 0.5, minDurationDays: 7,
-        )),
+        equals(
+          const MiningPlanEntity(
+            id: 'p',
+            name: 'N',
+            stakeAmount: 100.0,
+            stakeTokenSymbol: 'T',
+            dailyRewardRate: 0.5,
+            minDurationDays: 7,
+          ),
+        ),
       );
     });
 
     test('different id → not equal', () {
       expect(
         const MiningPlanEntity(
-          id: 'p1', name: 'N', stakeAmount: 100.0,
-          stakeTokenSymbol: 'T', dailyRewardRate: 0.5, minDurationDays: 7,
+          id: 'p1',
+          name: 'N',
+          stakeAmount: 100.0,
+          stakeTokenSymbol: 'T',
+          dailyRewardRate: 0.5,
+          minDurationDays: 7,
         ),
-        isNot(equals(const MiningPlanEntity(
-          id: 'p2', name: 'N', stakeAmount: 100.0,
-          stakeTokenSymbol: 'T', dailyRewardRate: 0.5, minDurationDays: 7,
-        ))),
+        isNot(
+          equals(
+            const MiningPlanEntity(
+              id: 'p2',
+              name: 'N',
+              stakeAmount: 100.0,
+              stakeTokenSymbol: 'T',
+              dailyRewardRate: 0.5,
+              minDurationDays: 7,
+            ),
+          ),
+        ),
       );
     });
   });
@@ -318,24 +386,35 @@ void main() {
 
     test('isClaimed defaults to false', () {
       final e = MiningRewardEntity(
-        id: 'r', sessionId: 's', amount: 1.0,
-        tokenSymbol: 'T', timestamp: ts,
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
       );
       expect(e.isClaimed, isFalse);
     });
 
     test('claimTxHash defaults to null', () {
       final e = MiningRewardEntity(
-        id: 'r', sessionId: 's', amount: 1.0,
-        tokenSymbol: 'T', timestamp: ts,
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
       );
       expect(e.claimTxHash, isNull);
     });
 
     test('stores isClaimed and claimTxHash when provided', () {
       final e = MiningRewardEntity(
-        id: 'r', sessionId: 's', amount: 1.0, tokenSymbol: 'T',
-        timestamp: ts, isClaimed: true, claimTxHash: '0xtx',
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
+        isClaimed: true,
+        claimTxHash: '0xtx',
       );
       expect(e.isClaimed, isTrue);
       expect(e.claimTxHash, '0xtx');
@@ -343,17 +422,37 @@ void main() {
 
     test('same fields → equal', () {
       final a = MiningRewardEntity(
-          id: 'r', sessionId: 's', amount: 1.0, tokenSymbol: 'T', timestamp: ts);
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
+      );
       final b = MiningRewardEntity(
-          id: 'r', sessionId: 's', amount: 1.0, tokenSymbol: 'T', timestamp: ts);
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
+      );
       expect(a, equals(b));
     });
 
     test('different amount → not equal', () {
       final a = MiningRewardEntity(
-          id: 'r', sessionId: 's', amount: 1.0, tokenSymbol: 'T', timestamp: ts);
+        id: 'r',
+        sessionId: 's',
+        amount: 1.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
+      );
       final b = MiningRewardEntity(
-          id: 'r', sessionId: 's', amount: 2.0, tokenSymbol: 'T', timestamp: ts);
+        id: 'r',
+        sessionId: 's',
+        amount: 2.0,
+        tokenSymbol: 'T',
+        timestamp: ts,
+      );
       expect(a, isNot(equals(b)));
     });
   });
@@ -384,32 +483,48 @@ void main() {
 
     test('expiresAt defaults to null', () {
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.offline,
-        uptimePercentage: 0, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.offline,
+        uptimePercentage: 0,
+        totalRewards: 0,
+        activatedAt: activated,
       );
       expect(e.expiresAt, isNull);
     });
 
     test('isOnline is true when status is online', () {
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 100,
+        totalRewards: 0,
+        activatedAt: activated,
       );
       expect(e.isOnline, isTrue);
     });
 
     test('isOnline is false when status is offline', () {
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.offline,
-        uptimePercentage: 0, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.offline,
+        uptimePercentage: 0,
+        totalRewards: 0,
+        activatedAt: activated,
       );
       expect(e.isOnline, isFalse);
     });
 
     test('daysUntilExpiration is null when expiresAt is null', () {
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 100,
+        totalRewards: 0,
+        activatedAt: activated,
       );
       expect(e.daysUntilExpiration, isNull);
     });
@@ -420,8 +535,12 @@ void main() {
       // test execution time.
       final farFuture = DateTime.utc(2100, 1, 1);
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 100,
+        totalRewards: 0,
+        activatedAt: activated,
         expiresAt: farFuture,
       );
       expect(e.daysUntilExpiration, isNotNull);
@@ -431,8 +550,12 @@ void main() {
     test('daysUntilExpiration returns 0 or negative for past expiresAt', () {
       final yesterday = DateTime.utc(2000, 1, 1); // far in the past
       final e = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 100, totalRewards: 0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 100,
+        totalRewards: 0,
+        activatedAt: activated,
         expiresAt: yesterday,
       );
       expect(e.daysUntilExpiration!, lessThanOrEqualTo(0));
@@ -440,24 +563,40 @@ void main() {
 
     test('same fields → equal', () {
       final a = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 99.0, totalRewards: 10.0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 99.0,
+        totalRewards: 10.0,
+        activatedAt: activated,
       );
       final b = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 99.0, totalRewards: 10.0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 99.0,
+        totalRewards: 10.0,
+        activatedAt: activated,
       );
       expect(a, equals(b));
     });
 
     test('different status → not equal', () {
       final a = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.online,
-        uptimePercentage: 99.0, totalRewards: 10.0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.online,
+        uptimePercentage: 99.0,
+        totalRewards: 10.0,
+        activatedAt: activated,
       );
       final b = FullNodeEntity(
-        id: 'n', name: 'N', status: NodeStatus.offline,
-        uptimePercentage: 99.0, totalRewards: 10.0, activatedAt: activated,
+        id: 'n',
+        name: 'N',
+        status: NodeStatus.offline,
+        uptimePercentage: 99.0,
+        totalRewards: 10.0,
+        activatedAt: activated,
       );
       expect(a, isNot(equals(b)));
     });
@@ -483,13 +622,24 @@ void main() {
 
     test('currentSession defaults to null', () {
       final e = MiningStatusEntity(
-        isActive: false, totalPower: 0, lastUpdated: updated);
+        isActive: false,
+        totalPower: 0,
+        lastUpdated: updated,
+      );
       expect(e.currentSession, isNull);
     });
 
     test('same fields → equal', () {
-      final a = MiningStatusEntity(isActive: false, totalPower: 0, lastUpdated: updated);
-      final b = MiningStatusEntity(isActive: false, totalPower: 0, lastUpdated: updated);
+      final a = MiningStatusEntity(
+        isActive: false,
+        totalPower: 0,
+        lastUpdated: updated,
+      );
+      final b = MiningStatusEntity(
+        isActive: false,
+        totalPower: 0,
+        lastUpdated: updated,
+      );
       expect(a, equals(b));
     });
   });
@@ -519,21 +669,33 @@ void main() {
 
     test('same fields → equal', () {
       const a = MiningRewardsEntity(
-        totalEarned: 50.0, claimableAmount: 10.0,
-        claimedAmount: 40.0, tokenSymbol: 'T',
+        totalEarned: 50.0,
+        claimableAmount: 10.0,
+        claimedAmount: 40.0,
+        tokenSymbol: 'T',
       );
       const b = MiningRewardsEntity(
-        totalEarned: 50.0, claimableAmount: 10.0,
-        claimedAmount: 40.0, tokenSymbol: 'T',
+        totalEarned: 50.0,
+        claimableAmount: 10.0,
+        claimedAmount: 40.0,
+        tokenSymbol: 'T',
       );
       expect(a, equals(b));
     });
 
     test('different totalEarned → not equal', () {
       const a = MiningRewardsEntity(
-        totalEarned: 50.0, claimableAmount: 0, claimedAmount: 0, tokenSymbol: 'T');
+        totalEarned: 50.0,
+        claimableAmount: 0,
+        claimedAmount: 0,
+        tokenSymbol: 'T',
+      );
       const b = MiningRewardsEntity(
-        totalEarned: 60.0, claimableAmount: 0, claimedAmount: 0, tokenSymbol: 'T');
+        totalEarned: 60.0,
+        claimableAmount: 0,
+        claimedAmount: 0,
+        tokenSymbol: 'T',
+      );
       expect(a, isNot(equals(b)));
     });
   });
@@ -568,21 +730,33 @@ void main() {
     test('stores miningStartDate when provided', () {
       final date = DateTime.utc(2024, 1, 1);
       final e2 = MiningStatisticsEntity(
-        totalSessions: 1, totalActiveDays: 1,
-        averageDailyRewards: 1.0, bestDailyRewards: 1.0,
-        totalRewards: 1.0, tokenSymbol: 'T', miningStartDate: date,
+        totalSessions: 1,
+        totalActiveDays: 1,
+        averageDailyRewards: 1.0,
+        bestDailyRewards: 1.0,
+        totalRewards: 1.0,
+        tokenSymbol: 'T',
+        miningStartDate: date,
       );
       expect(e2.miningStartDate, date);
     });
 
     test('same fields → equal', () {
       const a = MiningStatisticsEntity(
-        totalSessions: 5, totalActiveDays: 10, averageDailyRewards: 2.0,
-        bestDailyRewards: 5.0, totalRewards: 20.0, tokenSymbol: 'T',
+        totalSessions: 5,
+        totalActiveDays: 10,
+        averageDailyRewards: 2.0,
+        bestDailyRewards: 5.0,
+        totalRewards: 20.0,
+        tokenSymbol: 'T',
       );
       const b = MiningStatisticsEntity(
-        totalSessions: 5, totalActiveDays: 10, averageDailyRewards: 2.0,
-        bestDailyRewards: 5.0, totalRewards: 20.0, tokenSymbol: 'T',
+        totalSessions: 5,
+        totalActiveDays: 10,
+        averageDailyRewards: 2.0,
+        bestDailyRewards: 5.0,
+        totalRewards: 20.0,
+        tokenSymbol: 'T',
       );
       expect(a, equals(b));
     });

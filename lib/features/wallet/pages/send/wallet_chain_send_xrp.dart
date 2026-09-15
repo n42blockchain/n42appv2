@@ -94,7 +94,9 @@ class _WalletChainSendXrpState extends ConsumerState<WalletChainSendXrp>
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }

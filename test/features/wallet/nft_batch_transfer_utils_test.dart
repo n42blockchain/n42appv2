@@ -49,21 +49,24 @@ void main() {
     );
   });
 
-  test('quantityForBatch is always 1 (never transfers full ERC-1155 balance)', () {
-    // 资金安全关键不变量：批量路径每个 token 只转 1，避免误转整个多余额 ERC-1155。
-    expect(NftBatchTransferUtils.quantityForBatch(nft(type: 'ERC721')), 1);
-    expect(NftBatchTransferUtils.quantityForBatch(nft(type: 'ERC1155')), 1);
-    final multiBalance = NftModel(
-      nftId: 'nft-multi',
-      name: 'Multi',
-      contractAddress: '0xContract',
-      tokenId: '1',
-      nftType: 'ERC1155',
-      balance: 999,
-      chain: 'ethereum',
-    );
-    expect(NftBatchTransferUtils.quantityForBatch(multiBalance), 1);
-  });
+  test(
+    'quantityForBatch is always 1 (never transfers full ERC-1155 balance)',
+    () {
+      // 资金安全关键不变量：批量路径每个 token 只转 1，避免误转整个多余额 ERC-1155。
+      expect(NftBatchTransferUtils.quantityForBatch(nft(type: 'ERC721')), 1);
+      expect(NftBatchTransferUtils.quantityForBatch(nft(type: 'ERC1155')), 1);
+      final multiBalance = NftModel(
+        nftId: 'nft-multi',
+        name: 'Multi',
+        contractAddress: '0xContract',
+        tokenId: '1',
+        nftType: 'ERC1155',
+        balance: 999,
+        chain: 'ethereum',
+      );
+      expect(NftBatchTransferUtils.quantityForBatch(multiBalance), 1);
+    },
+  );
 
   test('selectionKey uses nftId when present', () {
     expect(

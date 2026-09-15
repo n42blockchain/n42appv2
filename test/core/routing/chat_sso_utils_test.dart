@@ -24,14 +24,17 @@ void main() {
       expect(value, isNull);
     });
 
-    test('does not silently replace invalid explicit homeserver with fallback', () {
-      final value = normalizeChatSsoHomeserver(
-        'not-a-url',
-        fallbackHomeserver: 'https://matrix.example.com',
-      );
+    test(
+      'does not silently replace invalid explicit homeserver with fallback',
+      () {
+        final value = normalizeChatSsoHomeserver(
+          'not-a-url',
+          fallbackHomeserver: 'https://matrix.example.com',
+        );
 
-      expect(value, isNull);
-    });
+        expect(value, isNull);
+      },
+    );
 
     // Extended boundary tests for the chat integration contract.
     // These guard against regressions when bumping the chat ref.
@@ -68,12 +71,15 @@ void main() {
       );
     });
 
-    test('strips userinfo (credentials must not leak to homeserver string)', () {
-      expect(
-        normalizeChatSsoHomeserver('https://user:pass@m.example.com'),
-        'https://m.example.com',
-      );
-    });
+    test(
+      'strips userinfo (credentials must not leak to homeserver string)',
+      () {
+        expect(
+          normalizeChatSsoHomeserver('https://user:pass@m.example.com'),
+          'https://m.example.com',
+        );
+      },
+    );
 
     test('lowercases scheme', () {
       expect(
@@ -90,31 +96,19 @@ void main() {
     });
 
     test('rejects file:// scheme (no local-fs surface)', () {
-      expect(
-        normalizeChatSsoHomeserver('file:///etc/passwd'),
-        isNull,
-      );
+      expect(normalizeChatSsoHomeserver('file:///etc/passwd'), isNull);
     });
 
     test('rejects ftp:// scheme', () {
-      expect(
-        normalizeChatSsoHomeserver('ftp://m.example.com'),
-        isNull,
-      );
+      expect(normalizeChatSsoHomeserver('ftp://m.example.com'), isNull);
     });
 
     test('rejects URI without scheme', () {
-      expect(
-        normalizeChatSsoHomeserver('m.example.com'),
-        isNull,
-      );
+      expect(normalizeChatSsoHomeserver('m.example.com'), isNull);
     });
 
     test('rejects URI with scheme but empty host', () {
-      expect(
-        normalizeChatSsoHomeserver('https://'),
-        isNull,
-      );
+      expect(normalizeChatSsoHomeserver('https://'), isNull);
     });
 
     test('preserves non-default port', () {

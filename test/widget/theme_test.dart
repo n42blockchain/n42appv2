@@ -21,10 +21,9 @@ void main() {
         );
 
         // Act
-        await tester.pumpWidget(wrapForTest(
-          widget,
-          themeMode: ThemeMode.light,
-        ));
+        await tester.pumpWidget(
+          wrapForTest(widget, themeMode: ThemeMode.light),
+        );
         await tester.pumpAndSettle();
 
         // Assert
@@ -44,10 +43,9 @@ void main() {
         );
 
         // Act
-        await tester.pumpWidget(wrapForTest(
-          widget,
-          themeMode: ThemeMode.light,
-        ));
+        await tester.pumpWidget(
+          wrapForTest(widget, themeMode: ThemeMode.light),
+        );
         await tester.pumpAndSettle();
 
         // Assert
@@ -64,10 +62,7 @@ void main() {
         );
 
         // Act
-        await tester.pumpWidget(wrapForTest(
-          widget,
-          themeMode: ThemeMode.dark,
-        ));
+        await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.dark));
         await tester.pumpAndSettle();
 
         // Assert
@@ -87,10 +82,7 @@ void main() {
         );
 
         // Act
-        await tester.pumpWidget(wrapForTest(
-          widget,
-          themeMode: ThemeMode.dark,
-        ));
+        await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.dark));
         await tester.pumpAndSettle();
 
         // Assert
@@ -99,23 +91,22 @@ void main() {
     });
 
     group('Theme Consistency', () {
-      testWidgets('should apply same widget structure in both themes', (tester) async {
+      testWidgets('should apply same widget structure in both themes', (
+        tester,
+      ) async {
         // Arrange
         final widget = Column(
           children: [
             const Text('Header'),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Button'),
-            ),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Input'),
-            ),
+            ElevatedButton(onPressed: () {}, child: const Text('Button')),
+            const TextField(decoration: InputDecoration(labelText: 'Input')),
           ],
         );
 
         // Test Light Theme
-        await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.light));
+        await tester.pumpWidget(
+          wrapForTest(widget, themeMode: ThemeMode.light),
+        );
         await tester.pumpAndSettle();
 
         expect(find.text('Header'), findsOneWidget);
@@ -131,7 +122,9 @@ void main() {
         expect(find.byType(TextField), findsOneWidget);
       });
 
-      testWidgets('should maintain functionality in both themes', (tester) async {
+      testWidgets('should maintain functionality in both themes', (
+        tester,
+      ) async {
         // Arrange
         bool buttonPressed = false;
         final widget = ElevatedButton(
@@ -140,7 +133,9 @@ void main() {
         );
 
         // Test Light Theme
-        await tester.pumpWidget(wrapForTest(widget, themeMode: ThemeMode.light));
+        await tester.pumpWidget(
+          wrapForTest(widget, themeMode: ThemeMode.light),
+        );
         await tester.tap(find.text('Press Me'));
         expect(buttonPressed, true);
 
@@ -208,4 +203,3 @@ void main() {
     });
   });
 }
-

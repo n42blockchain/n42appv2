@@ -10,10 +10,30 @@ void main() {
   group('BridgeModels Tests', () {
     group('BridgeTransactionStatus enum', () {
       test('should have correct values', () {
-        expect(BridgeTransactionStatus.values.contains(BridgeTransactionStatus.pending), true);
-        expect(BridgeTransactionStatus.values.contains(BridgeTransactionStatus.inProgress), true);
-        expect(BridgeTransactionStatus.values.contains(BridgeTransactionStatus.completed), true);
-        expect(BridgeTransactionStatus.values.contains(BridgeTransactionStatus.failed), true);
+        expect(
+          BridgeTransactionStatus.values.contains(
+            BridgeTransactionStatus.pending,
+          ),
+          true,
+        );
+        expect(
+          BridgeTransactionStatus.values.contains(
+            BridgeTransactionStatus.inProgress,
+          ),
+          true,
+        );
+        expect(
+          BridgeTransactionStatus.values.contains(
+            BridgeTransactionStatus.completed,
+          ),
+          true,
+        );
+        expect(
+          BridgeTransactionStatus.values.contains(
+            BridgeTransactionStatus.failed,
+          ),
+          true,
+        );
       });
     });
 
@@ -24,10 +44,7 @@ void main() {
           'key': 'eth',
           'name': 'Ethereum',
           'logoURI': 'https://example.com/eth.png',
-          'nativeToken': {
-            'symbol': 'ETH',
-            'decimals': 18,
-          },
+          'nativeToken': {'symbol': 'ETH', 'decimals': 18},
         };
 
         final chain = BridgeChain.fromJson(json);
@@ -167,9 +184,7 @@ void main() {
 
     group('BridgeQuoteResponse', () {
       test('should handle empty routes', () {
-        final json = {
-          'message': 'No routes available',
-        };
+        final json = {'message': 'No routes available'};
 
         final response = BridgeQuoteResponse.fromJson(json);
 
@@ -234,10 +249,7 @@ void main() {
       });
 
       test('should parse FAILED status correctly', () {
-        final json = {
-          'status': 'FAILED',
-          'error': 'Bridge failed',
-        };
+        final json = {'status': 'FAILED', 'error': 'Bridge failed'};
 
         final response = BridgeStatusResponse.fromJson(json);
 
@@ -246,9 +258,7 @@ void main() {
       });
 
       test('should parse PENDING status correctly', () {
-        final json = {
-          'status': 'PENDING',
-        };
+        final json = {'status': 'PENDING'};
 
         final response = BridgeStatusResponse.fromJson(json);
 
@@ -256,9 +266,7 @@ void main() {
       });
 
       test('should default to inProgress for unknown status', () {
-        final json = {
-          'status': 'PROCESSING',
-        };
+        final json = {'status': 'PROCESSING'};
 
         final response = BridgeStatusResponse.fromJson(json);
 

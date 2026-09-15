@@ -83,8 +83,7 @@ void main() {
     test('XSS injection attempt is safely escaped', () {
       final input = '<script>alert("xss")</script>';
       // angle brackets pass through; quotes are escaped
-      expect(JsEscapeUtils.escapeJs(input),
-          r'<script>alert(\"xss\")</script>');
+      expect(JsEscapeUtils.escapeJs(input), r'<script>alert(\"xss\")</script>');
     });
 
     test('SQL injection pattern with quotes is escaped', () {

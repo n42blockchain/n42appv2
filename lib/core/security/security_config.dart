@@ -8,9 +8,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:crypto/crypto.dart';
 import 'package:flutter/foundation.dart';
-import 'package:n42_wallet/core/utils/app_logger.dart';
 
 /// 安全配置
 ///
@@ -18,34 +16,12 @@ import 'package:n42_wallet/core/utils/app_logger.dart';
 class SecurityConfig {
   SecurityConfig._();
 
-  /// SSL 证书配置
+  /// Legacy fingerprint metadata, retained for compatibility.
   ///
-  /// IMPORTANT: 在生产环境部署前，必须执行以下步骤：
-  ///
-  /// 1. 获取服务器证书指纹：
-  ///    ```bash
-  ///    openssl s_client -connect api.n42.ai:443 2>/dev/null | \
-  ///      openssl x509 -pubkey -noout | \
-  ///      openssl rsa -pubin -outform der 2>/dev/null | \
-  ///      openssl dgst -sha256 -binary | base64
-  ///    ```
-  ///
-  /// 2. 或使用在线工具: https://www.ssllabs.com/ssltest/
-  ///
-  /// 3. 将获取的指纹替换下面的占位符值
-  ///
-  /// 4. 设置证书轮换提醒（证书到期前30天添加新证书）
-  ///
-  /// 证书轮换流程：
-  /// 1. 在证书到期前30天，将新证书指纹添加到 backupCertFingerprints
-  /// 2. 发布包含新证书的应用更新
-  /// 3. 等待大部分用户更新后，切换服务器证书
-  /// 4. 在下一个版本中，将新证书移到 allowedCertFingerprints，删除旧证书
-
-  /// 允许的 SSL 证书指纹列表
-  ///
-  /// IMPORTANT: 必须在生产部署前替换为真实的服务器证书指纹
-  /// 当前值为占位符，release 模式下 SSL pinning 会拒绝所有连接
+  /// HttpClient validates certificate chains and hostnames using the platform
+  /// trust store. Its bad-certificate callback cannot enforce pinning on valid
+  /// connections, and must never accept an invalid certificate in production.
+  /// These legacy fingerprints are not an active certificate-pinning policy.
   static const List<String> allowedCertFingerprints = [
     // N42 API 服务器证书指纹 (主证书)
     // PLACEHOLDER - Replace with actual certificate fingerprint before production
@@ -99,66 +75,23 @@ class SecurityConfig {
     );
   }
 
-  /// 验证 SSL 证书
-  ///
-  /// 在 Release 模式下进行严格验证
-  static bool verifySslCertificate(X509Certificate cert, String host, int port) {
+  /// The callback is invoked only after normal TLS validation has failed.
+  static bool verifySslCertificate(
+    X509Certificate cert,
+    String host,
+    int port,
+  ) {
     if (kDebugMode) return true;
-
-    final isPinnedHost = pinnedHosts.any((pinnedHost) => host.endsWith(pinnedHost));
-    if (!isPinnedHost) return true;
-
-    if (!isCertPinningConfigured) {
-      // Cert pinning uses placeholder fingerprints.
-      // badCertificateCallback only fires for certs that ALREADY failed system
-      // TLS validation, so returning true would accept MITM certs.
-      // Debug mode: allow (local dev servers). Release: reject.
-      //
-      // This branch is only reached in release mode because the caller
-      // (line 110) returns true early in debug mode.
-      AppLogger.w(
-        'SSLPinning',
-        'not configured for $host — rejecting untrusted cert in release',
-        report: true,
-      );
-      return false;
-    }
-
-    if (allowedCertFingerprints.isEmpty && backupCertFingerprints.isEmpty) {
-      AppLogger.w(
-        'SSLPinning',
-        'no certificate fingerprints configured for $host',
-        report: true,
-      );
-      return false;
-    }
-
-    try {
-      final fingerprint = _getCertFingerprint(cert);
-
-      if (allowedCertFingerprints.contains(fingerprint)) return true;
-
-      if (backupCertFingerprints.contains(fingerprint)) {
-        AppLogger.i('SSLPinning', 'using backup certificate for $host');
-        return true;
-      }
-
-      AppLogger.e(
-        'SSLPinning',
-        'certificate fingerprint mismatch for $host: '
-        'expected one of ${allowedCertFingerprints.join(", ")}, got $fingerprint',
-      );
-      return false;
-    } catch (e, s) {
-      AppLogger.e(
-        'SSLPinning',
-        'verification failed',
-        error: e,
-        stackTrace: s,
-      );
-      return false;
-    }
+    return rejectUntrustedCertificate(cert, host, port);
   }
+
+  /// Production callback: a fingerprint must not override an expired chain,
+  /// a hostname mismatch or an unknown certificate authority.
+  static bool rejectUntrustedCertificate(
+    X509Certificate cert,
+    String host,
+    int port,
+  ) => false;
 
   /// Check certificate expiry
   ///
@@ -193,12 +126,12 @@ class SecurityConfig {
   /// 深度脱敏 Map 数据
   static Map<String, dynamic> maskSensitiveMap(Map<String, dynamic> data) {
     return data.map((key, value) {
-      if (value is Map<String, dynamic>) {
+      if (isSensitiveKey(key)) {
+        return MapEntry(key, '******');
+      } else if (value is Map<String, dynamic>) {
         return MapEntry(key, maskSensitiveMap(value));
       } else if (value is List) {
         return MapEntry(key, _maskSensitiveList(value));
-      } else if (isSensitiveKey(key)) {
-        return MapEntry(key, '******');
       }
       return MapEntry(key, value);
     });
@@ -223,12 +156,6 @@ class SecurityConfig {
     } else {
       debugPrint(message);
     }
-  }
-
-  /// 获取证书 SHA-256 指纹
-  static String _getCertFingerprint(X509Certificate cert) {
-    final digest = sha256.convert(cert.der);
-    return 'sha256/${base64Encode(digest.bytes)}';
   }
 }
 

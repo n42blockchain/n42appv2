@@ -17,7 +17,6 @@
 ///   - Direction: LTR, RTL
 library;
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -217,11 +216,7 @@ String _fmt(Map<String, List<String>> r) {
 
 Widget _appBarTitle(_L10n l) {
   return AppBar(
-    title: Text(
-      l.settings,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-    ),
+    title: Text(l.settings, maxLines: 1, overflow: TextOverflow.ellipsis),
   );
 }
 
@@ -230,21 +225,25 @@ Widget _appBarTitle(_L10n l) {
 Widget _labelValueRow(_L10n l) {
   return Padding(
     padding: const EdgeInsets.all(16),
-    child: Row(children: [
-      Flexible(
-        child: Text(l.amount,
-          style: const TextStyle(fontSize: 14),
-          overflow: TextOverflow.ellipsis,
+    child: Row(
+      children: [
+        Flexible(
+          child: Text(
+            l.amount,
+            style: const TextStyle(fontSize: 14),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      const SizedBox(width: 8),
-      const Expanded(
-        child: Text('0.00000000 ETH',
-          textAlign: TextAlign.end,
-          overflow: TextOverflow.ellipsis,
+        const SizedBox(width: 8),
+        const Expanded(
+          child: Text(
+            '0.00000000 ETH',
+            textAlign: TextAlign.end,
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-    ]),
+      ],
+    ),
   );
 }
 
@@ -253,21 +252,27 @@ Widget _labelValueRow(_L10n l) {
 Widget _buttonRow(_L10n l) {
   return Padding(
     padding: const EdgeInsets.all(16),
-    child: Row(children: [
-      Expanded(
-        child: OutlinedButton(
-          onPressed: () {},
-          child: Text(l.cancel, maxLines: 2, overflow: TextOverflow.ellipsis),
+    child: Row(
+      children: [
+        Expanded(
+          child: OutlinedButton(
+            onPressed: () {},
+            child: Text(l.cancel, maxLines: 2, overflow: TextOverflow.ellipsis),
+          ),
         ),
-      ),
-      const SizedBox(width: 12),
-      Expanded(
-        child: ElevatedButton(
-          onPressed: () {},
-          child: Text(l.confirm, maxLines: 2, overflow: TextOverflow.ellipsis),
+        const SizedBox(width: 12),
+        Expanded(
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text(
+              l.confirm,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
         ),
-      ),
-    ]),
+      ],
+    ),
   );
 }
 
@@ -276,16 +281,19 @@ Widget _buttonRow(_L10n l) {
 Widget _iconTextRow(_L10n l) {
   return Padding(
     padding: const EdgeInsets.all(16),
-    child: Row(children: [
-      const Icon(Icons.layers, size: 24),
-      const SizedBox(width: 8),
-      Flexible(
-        child: Text(l.batchTransaction,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+    child: Row(
+      children: [
+        const Icon(Icons.layers, size: 24),
+        const SizedBox(width: 8),
+        Flexible(
+          child: Text(
+            l.batchTransaction,
+            overflow: TextOverflow.ellipsis,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          ),
         ),
-      ),
-    ]),
+      ],
+    ),
   );
 }
 
@@ -294,12 +302,14 @@ Widget _iconTextRow(_L10n l) {
 Widget _checkboxRow(_L10n l) {
   return Padding(
     padding: const EdgeInsets.all(16),
-    child: Row(children: [
-      Checkbox(value: false, onChanged: (_) {}),
-      Expanded(
-        child: Text(l.gasPaymentOptions, overflow: TextOverflow.ellipsis),
-      ),
-    ]),
+    child: Row(
+      children: [
+        Checkbox(value: false, onChanged: (_) {}),
+        Expanded(
+          child: Text(l.gasPaymentOptions, overflow: TextOverflow.ellipsis),
+        ),
+      ],
+    ),
   );
 }
 
@@ -331,7 +341,8 @@ Widget _fullWidthButton(_L10n l) {
       height: 48,
       child: ElevatedButton(
         onPressed: () {},
-        child: Text(l.startStaking,
+        child: Text(
+          l.startStaking,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
@@ -345,24 +356,28 @@ Widget _fullWidthButton(_L10n l) {
 Widget _drawerItem(_L10n l) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-    child: Row(children: [
-      Container(
-        width: 44, height: 44,
-        decoration: BoxDecoration(
-          color: Colors.blue.withAlpha(25),
-          borderRadius: BorderRadius.circular(12),
+    child: Row(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: Colors.blue.withAlpha(25),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: const Icon(Icons.security, color: Colors.blue, size: 24),
         ),
-        child: const Icon(Icons.security, color: Colors.blue, size: 24),
-      ),
-      const SizedBox(width: 16),
-      Expanded(
-        child: Text(l.security,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          overflow: TextOverflow.ellipsis,
+        const SizedBox(width: 16),
+        Expanded(
+          child: Text(
+            l.security,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+            overflow: TextOverflow.ellipsis,
+          ),
         ),
-      ),
-      const Icon(Icons.chevron_right, size: 24, color: Colors.grey),
-    ]),
+        const Icon(Icons.chevron_right, size: 24, color: Colors.grey),
+      ],
+    ),
   );
 }
 
@@ -371,26 +386,29 @@ Widget _drawerItem(_L10n l) {
 Widget _tabBar(_L10n l) {
   return DefaultTabController(
     length: 3,
-    child: Column(children: [
-      TabBar(
-        isScrollable: true,
-        tabs: [
-          Tab(text: l.settings),
-          Tab(text: l.security),
-          Tab(text: l.addressBook),
-        ],
-      ),
-      const Expanded(child: TabBarView(
-        children: [SizedBox(), SizedBox(), SizedBox()],
-      )),
-    ]),
+    child: Column(
+      children: [
+        TabBar(
+          isScrollable: true,
+          tabs: [
+            Tab(text: l.settings),
+            Tab(text: l.security),
+            Tab(text: l.addressBook),
+          ],
+        ),
+        const Expanded(
+          child: TabBarView(children: [SizedBox(), SizedBox(), SizedBox()]),
+        ),
+      ],
+    ),
   );
 }
 
 // ── Pattern: Dialog body with long text ─────────────────────────────────
 
 Widget _dialogBody(_L10n l) {
-  final longText = '${l.advancedFeatures}\n\n'
+  final longText =
+      '${l.advancedFeatures}\n\n'
       '${l.gasPaymentOptions}: ${l.batchTransaction}\n\n'
       '${l.startStaking}\n${l.sortBy} ${l.apy}, ${l.commission}, ${l.staked}';
   return SingleChildScrollView(
@@ -398,7 +416,10 @@ Widget _dialogBody(_L10n l) {
     child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(l.settings, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        Text(
+          l.settings,
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 16),
         Text(longText, style: const TextStyle(fontSize: 14)),
         const SizedBox(height: 16),
@@ -411,15 +432,17 @@ Widget _dialogBody(_L10n l) {
 // ── Pattern: Composite page (simulates a real page) ─────────────────────
 
 Widget _compositePage(_L10n l) {
-  return ListView(children: [
-    _labelValueRow(l),
-    _iconTextRow(l),
-    _checkboxRow(l),
-    _sortBar(l),
-    _buttonRow(l),
-    _fullWidthButton(l),
-    _drawerItem(l),
-  ]);
+  return ListView(
+    children: [
+      _labelValueRow(l),
+      _iconTextRow(l),
+      _checkboxRow(l),
+      _sortBar(l),
+      _buttonRow(l),
+      _fullWidthButton(l),
+      _drawerItem(l),
+    ],
+  );
 }
 
 // ── Tests ───────────────────────────────────────────────────────────────
@@ -485,7 +508,9 @@ void main() {
 
     testWidgets('Full page composite (RTL)', (t) async {
       final r = await _stressAll(
-        t, 'Composite-RTL', _compositePage,
+        t,
+        'Composite-RTL',
+        _compositePage,
         dir: TextDirection.rtl,
       );
       expect(r, isEmpty, reason: _fmt(r));
@@ -493,26 +518,29 @@ void main() {
   });
 
   group('Overflow Detector — Regression: broken patterns', () {
-    testWidgets('UNPROTECTED Row label should overflow on small screen', (t) async {
+    testWidgets('UNPROTECTED Row label should overflow on small screen', (
+      t,
+    ) async {
       // This intentionally tests a BROKEN pattern to verify the detector works
       final r = await _stressAll(t, 'BrokenRow', (l) {
         return Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(children: [
-            // Intentionally NO Flexible wrapping — should overflow
-            Text(l.gasPaymentOptions,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 8),
-            Text(l.batchTransaction,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ]),
+          child: Row(
+            children: [
+              // Intentionally NO Flexible wrapping — should overflow
+              Text(l.gasPaymentOptions, style: const TextStyle(fontSize: 16)),
+              const SizedBox(width: 8),
+              Text(l.batchTransaction, style: const TextStyle(fontSize: 16)),
+            ],
+          ),
         );
       });
       // We EXPECT this to overflow on small screens with long locales
-      expect(r.isNotEmpty, isTrue,
-        reason: 'Detector should catch unprotected Row overflow');
+      expect(
+        r.isNotEmpty,
+        isTrue,
+        reason: 'Detector should catch unprotected Row overflow',
+      );
     });
   });
 }

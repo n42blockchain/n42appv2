@@ -5,11 +5,57 @@
 //
 // Author: Jiang Yiwei
 
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mocktail/mocktail.dart';
 import 'package:n42_wallet/core/security/security_config.dart';
+
+class _UntrustedCertificate extends Mock implements X509Certificate {}
 
 void main() {
   group('SecurityConfig', () {
+    for (final host in [
+      'third-party.test',
+      'api.n42.ai',
+      'evilapi.n42.ai',
+      'localhost',
+    ]) {
+      test('production rejects a failed TLS validation for $host', () {
+        final certificate = _UntrustedCertificate();
+        expect(
+          SecurityConfig.rejectUntrustedCertificate(certificate, host, 443),
+          isFalse,
+        );
+        verifyZeroInteractions(certificate);
+      });
+    }
+
+    test('sensitive containers are fully redacted without modifying input', () {
+      final source = {
+        'tokens': ['private-token'],
+        'seed': {
+          'words': ['private-seed'],
+        },
+        'authorization': {'value': 'private-auth'},
+        'users': [
+          {
+            'name': 'Alice',
+            'password': {'value': 'private-password'},
+          },
+        ],
+      };
+      final masked = SecurityConfig.maskSensitiveMap(source);
+      expect(masked['tokens'], '******');
+      expect(masked['seed'], '******');
+      expect(masked['authorization'], '******');
+      expect((masked['users'] as List).single, {
+        'name': 'Alice',
+        'password': '******',
+      });
+      expect(source['tokens'], ['private-token']);
+      expect(masked.toString(), isNot(contains('private-')));
+    });
     group('sensitiveKeys', () {
       test('should contain authentication related keys', () {
         expect(SecurityConfig.sensitiveKeys, contains('token'));
@@ -84,14 +130,29 @@ void main() {
 
     group('maskSensitiveData', () {
       test('should mask sensitive values', () {
-        expect(SecurityConfig.maskSensitiveData('token', 'abc123'), equals('******'));
-        expect(SecurityConfig.maskSensitiveData('password', 'secret123'), equals('******'));
-        expect(SecurityConfig.maskSensitiveData('mnemonic', 'word1 word2'), equals('******'));
+        expect(
+          SecurityConfig.maskSensitiveData('token', 'abc123'),
+          equals('******'),
+        );
+        expect(
+          SecurityConfig.maskSensitiveData('password', 'secret123'),
+          equals('******'),
+        );
+        expect(
+          SecurityConfig.maskSensitiveData('mnemonic', 'word1 word2'),
+          equals('******'),
+        );
       });
 
       test('should not mask non-sensitive values', () {
-        expect(SecurityConfig.maskSensitiveData('name', 'John'), equals('John'));
-        expect(SecurityConfig.maskSensitiveData('balance', '100.5'), equals('100.5'));
+        expect(
+          SecurityConfig.maskSensitiveData('name', 'John'),
+          equals('John'),
+        );
+        expect(
+          SecurityConfig.maskSensitiveData('balance', '100.5'),
+          equals('100.5'),
+        );
       });
 
       test('should handle null values', () {
@@ -101,11 +162,7 @@ void main() {
 
     group('maskSensitiveMap', () {
       test('should mask sensitive values in map', () {
-        final data = {
-          'name': 'John',
-          'token': 'abc123',
-          'password': 'secret',
-        };
+        final data = {'name': 'John', 'token': 'abc123', 'password': 'secret'};
 
         final masked = SecurityConfig.maskSensitiveMap(data);
 
@@ -118,16 +175,17 @@ void main() {
         final data = {
           'user': {
             'name': 'John',
-            'credentials': {
-              'password': 'secret',
-            },
+            'credentials': {'password': 'secret'},
           },
         };
 
         final masked = SecurityConfig.maskSensitiveMap(data);
 
         expect((masked['user'] as Map)['name'], equals('John'));
-        expect(((masked['user'] as Map)['credentials'] as Map)['password'], equals('******'));
+        expect(
+          ((masked['user'] as Map)['credentials'] as Map)['password'],
+          equals('******'),
+        );
       });
 
       test('should handle lists in maps', () {
@@ -149,19 +207,18 @@ void main() {
 
     group('secureLog', () {
       test('should not throw in debug mode', () {
-        expect(
-          () => SecurityConfig.secureLog('Test message'),
-          returnsNormally,
-        );
+        expect(() => SecurityConfig.secureLog('Test message'), returnsNormally);
       });
 
       test('should handle data parameter', () {
         expect(
-          () => SecurityConfig.secureLog('Test', data: {'key': 'value', 'token': 'secret'}),
+          () => SecurityConfig.secureLog(
+            'Test',
+            data: {'key': 'value', 'token': 'secret'},
+          ),
           returnsNormally,
         );
       });
     });
   });
 }
-

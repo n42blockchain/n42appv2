@@ -55,9 +55,9 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
       _chains.entries.map((e) async {
         try {
           final reserves = await AaveService.getReserves(e.key);
-          return StablecoinEarnUtils.filterSortStablecoins(reserves)
-              .map((r) => _StablecoinEarnEntry(e.key, e.value, r))
-              .toList();
+          return StablecoinEarnUtils.filterSortStablecoins(
+            reserves,
+          ).map((r) => _StablecoinEarnEntry(e.key, e.value, r)).toList();
         } catch (_) {
           return <_StablecoinEarnEntry>[];
         }
@@ -152,7 +152,9 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
               Expanded(
                 child: Text(
                   S.of(context).g_key_earn_stablecoin_desc,
-                  style: AppTypography.bodySm.copyWith(color: tokens.textSubtitle),
+                  style: AppTypography.bodySm.copyWith(
+                    color: tokens.textSubtitle,
+                  ),
                 ),
               ),
               SizedBox(width: su.setWidth(8)),
@@ -275,10 +277,8 @@ class _StablecoinEarnPageState extends State<StablecoinEarnPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => LendingPage(
-          chainId: chainId,
-          walletAddress: widget.walletAddress,
-        ),
+        builder: (_) =>
+            LendingPage(chainId: chainId, walletAddress: widget.walletAddress),
       ),
     );
   }

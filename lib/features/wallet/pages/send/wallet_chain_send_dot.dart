@@ -110,7 +110,9 @@ class _WalletChainSendDotState extends ConsumerState<WalletChainSendDot>
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: AppColorTokens.of(context).danger),
+        style: AppTypography.body.copyWith(
+          color: AppColorTokens.of(context).danger,
+        ),
       ),
     );
   }

@@ -26,7 +26,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         alignment: Alignment.center,
         child: Text(
           label,
-          style: AppTypography.bodySm.copyWith(color: _tc(AppThemeKeys.mainWhiteColor.name)),
+          style: AppTypography.bodySm.copyWith(
+            color: _tc(AppThemeKeys.mainWhiteColor.name),
+          ),
         ),
       ),
     );
@@ -39,7 +41,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       alignment: Alignment.centerLeft,
       child: Text(
         message,
-        style: AppTypography.caption.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
+        style: AppTypography.caption.copyWith(
+          color: _tc(AppThemeKeys.errorTextColor.name),
+        ),
       ),
     );
   }
@@ -225,7 +229,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
     final String unit = widget.coinModel.coin['unit'];
     return Text(
       '${widget.coinModel.balanceStringAll()} $unit',
-      style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.mainTextColor.name)),
+      style: AppTypography.body.copyWith(
+        color: _tc(AppThemeKeys.mainTextColor.name),
+      ),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.right,
@@ -238,7 +244,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       padding: EdgeInsets.only(top: vPad, bottom: vPad, right: vPad),
       child: Text(
         widget.coinModel.address.toString(),
-        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.itemSubtitleTextColor.name)),
+        style: AppTypography.body.copyWith(
+          color: _tc(AppThemeKeys.itemSubtitleTextColor.name),
+        ),
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
@@ -270,7 +278,9 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
       ),
       child: Text(
         errorMessage,
-        style: AppTypography.body.copyWith(color: _tc(AppThemeKeys.errorTextColor.name)),
+        style: AppTypography.body.copyWith(
+          color: _tc(AppThemeKeys.errorTextColor.name),
+        ),
       ),
     );
   }

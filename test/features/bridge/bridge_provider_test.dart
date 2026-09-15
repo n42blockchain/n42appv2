@@ -35,8 +35,10 @@ String weiToDisplay(BigInt weiAmount, {int decimals = 18}) {
   final whole = weiAmount ~/ divisor;
   final remainder = weiAmount - whole * divisor;
   if (remainder == BigInt.zero) return whole.toString();
-  final fracStr =
-      remainder.toString().padLeft(decimals, '0').replaceAll(RegExp(r'0+$'), '');
+  final fracStr = remainder
+      .toString()
+      .padLeft(decimals, '0')
+      .replaceAll(RegExp(r'0+$'), '');
   return '$whole.$fracStr';
 }
 
@@ -68,10 +70,7 @@ void main() {
           'key': 'eth',
           'name': 'Ethereum',
           'logoURI': 'https://example.com/eth.png',
-          'nativeToken': {
-            'symbol': 'ETH',
-            'decimals': 18,
-          },
+          'nativeToken': {'symbol': 'ETH', 'decimals': 18},
         });
 
         expect(chain.chainId, 1);
@@ -135,8 +134,7 @@ void main() {
           'priceUSD': 1.0,
         });
 
-        expect(token.address,
-            '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');
+        expect(token.address, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');
         expect(token.symbol, 'USDC');
         expect(token.name, 'USD Coin');
         expect(token.decimals, 6);
@@ -289,8 +287,7 @@ void main() {
     });
 
     test('1.5 ETH → "1.5"', () {
-      final oneAndHalf =
-          BigInt.from(15) * BigInt.from(10).pow(17);
+      final oneAndHalf = BigInt.from(15) * BigInt.from(10).pow(17);
       expect(weiToDisplay(oneAndHalf), '1.5');
     });
 
@@ -301,11 +298,13 @@ void main() {
 
     test('trailing zeros are stripped from fractional part', () {
       // 1.50 ETH should display as "1.5"
-      final onePointFive =
-          BigInt.from(15) * BigInt.from(10).pow(17);
+      final onePointFive = BigInt.from(15) * BigInt.from(10).pow(17);
       final display = weiToDisplay(onePointFive);
-      expect(display.endsWith('0'), isFalse,
-          reason: 'trailing zeros should be stripped');
+      expect(
+        display.endsWith('0'),
+        isFalse,
+        reason: 'trailing zeros should be stripped',
+      );
     });
   });
 }

@@ -15,7 +15,9 @@ class LoginTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final titleStyle = AppTypography.headline.copyWith(color: color ?? AppColorTokens.of(context).brand);
+    final titleStyle = AppTypography.headline.copyWith(
+      color: color ?? AppColorTokens.of(context).brand,
+    );
 
     if (!must) return Text(title, style: titleStyle);
 
@@ -25,7 +27,9 @@ class LoginTitle extends StatelessWidget {
         Text(title, style: titleStyle),
         Text(
           "*",
-          style: AppTypography.captionSm.copyWith(color: AppColorTokens.of(context).danger),
+          style: AppTypography.captionSm.copyWith(
+            color: AppColorTokens.of(context).danger,
+          ),
         ),
       ],
     );

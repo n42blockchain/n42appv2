@@ -65,8 +65,10 @@ class SenderFactory {
   ///
   /// Pass [chainConfig] for user-added networks; without it a chain missing
   /// from the registry always reports unsupported.
-  bool supportsTransfers(String coinType, {Map<String, dynamic>? chainConfig}) =>
-      getSender(coinType, chainConfig: chainConfig) is! _UnsupportedSender;
+  bool supportsTransfers(
+    String coinType, {
+    Map<String, dynamic>? chainConfig,
+  }) => getSender(coinType, chainConfig: chainConfig) is! _UnsupportedSender;
 
   ChainSender _createSender(
     String coinType, {

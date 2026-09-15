@@ -19,20 +19,22 @@ void main() {
     expect(EvmSender.resolveChainId(baseInfo, isTest: true), 1142);
   });
 
-  test('missing testnet chain ID resolves to null (fail-closed), never mainnet',
-      () {
-    // 回退主网 chainId 会让"测试网"交易在主网合法、可被重放——必须失败关闭。
-    expect(
-      EvmSender.resolveChainId(const {
-        'baseInfo': {'chainId': 94},
-      }, isTest: true),
-      isNull,
-    );
-    expect(
-      EvmSender.resolveChainId(const {'mainnetChainID': 94}, isTest: true),
-      isNull,
-    );
-  });
+  test(
+    'missing testnet chain ID resolves to null (fail-closed), never mainnet',
+    () {
+      // 回退主网 chainId 会让"测试网"交易在主网合法、可被重放——必须失败关闭。
+      expect(
+        EvmSender.resolveChainId(const {
+          'baseInfo': {'chainId': 94},
+        }, isTest: true),
+        isNull,
+      );
+      expect(
+        EvmSender.resolveChainId(const {'mainnetChainID': 94}, isTest: true),
+        isNull,
+      );
+    },
+  );
 
   test('EVM sender accepts numeric chain IDs serialized as strings', () {
     expect(

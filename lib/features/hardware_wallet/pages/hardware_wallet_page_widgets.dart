@@ -191,10 +191,7 @@ extension _HardwareWalletPageWidgets on _HardwareWalletPageState {
         color: _themeColor(context, AppThemeKeys.itemBgColor),
         borderRadius: AppRadius.brMd,
         border: isConnected
-            ? Border.all(
-                color: AppColorTokens.of(context).success,
-                width: 2,
-              )
+            ? Border.all(color: AppColorTokens.of(context).success, width: 2)
             : null,
       ),
       child: Row(

@@ -41,13 +41,12 @@ void main() {
   group('iOS webkit masking 不变量', () {
     test('不得直接给别名对象的 postMessage 赋值（会自递归爆栈）', () {
       // 形如 `window.N42Wallet.postMessage =` / `window['X'].postMessage =`
-      final selfAssign = RegExp(
-        r"window(\.\w+|\[[^\]]+\])\.postMessage\s*=",
-      );
+      final selfAssign = RegExp(r"window(\.\w+|\[[^\]]+\])\.postMessage\s*=");
       expect(
         selfAssign.hasMatch(code),
         isFalse,
-        reason: '禁止对 window.X.postMessage 直接赋值：iOS 上 window.X 就是 '
+        reason:
+            '禁止对 window.X.postMessage 直接赋值：iOS 上 window.X 就是 '
             'messageHandlers.X 本身，会形成自递归。应新建包装对象并以原生 '
             'postMessage 函数引用 + 正确 receiver 调用。',
       );
@@ -57,7 +56,8 @@ void main() {
       expect(
         code.contains('rawPost.call(handler'),
         isTrue,
-        reason: '应保存原生 postMessage 函数并用 .call(handler, ...) 调用，'
+        reason:
+            '应保存原生 postMessage 函数并用 .call(handler, ...) 调用，'
             '而不是通过可能已被覆写的属性间接调用。',
       );
     });

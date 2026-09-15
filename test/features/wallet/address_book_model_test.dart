@@ -73,7 +73,10 @@ void main() {
       model.coinName = 'USDT';
       model.address = '0x1234';
       final json = model.toJson();
-      expect(json.keys, containsAll(['id', 'coinName', 'coinIcon', 'address', 'name', 'desc']));
+      expect(
+        json.keys,
+        containsAll(['id', 'coinName', 'coinIcon', 'address', 'name', 'desc']),
+      );
     });
 
     test('values match model fields', () {

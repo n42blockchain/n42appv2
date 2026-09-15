@@ -12,22 +12,40 @@ void main() {
   group('CoinType Enum', () {
     test('should have N token (not AST)', () {
       // Verify N exists
-      expect(CoinType.values.any((c) => c.name == 'N'), true,
-          reason: 'CoinType should have N token');
+      expect(
+        CoinType.values.any((c) => c.name == 'N'),
+        true,
+        reason: 'CoinType should have N token',
+      );
 
       // Verify AST does NOT exist
-      expect(CoinType.values.any((c) => c.name == 'AST'), false,
-          reason: 'CoinType should NOT have AST token (renamed to N)');
+      expect(
+        CoinType.values.any((c) => c.name == 'AST'),
+        false,
+        reason: 'CoinType should NOT have AST token (renamed to N)',
+      );
 
       // Verify AMT does NOT exist
-      expect(CoinType.values.any((c) => c.name == 'AMT'), false,
-          reason: 'CoinType should NOT have AMT token');
+      expect(
+        CoinType.values.any((c) => c.name == 'AMT'),
+        false,
+        reason: 'CoinType should NOT have AMT token',
+      );
     });
 
     test('should have all major cryptocurrencies', () {
       final expectedCoins = [
-        'BTC', 'ETH', 'BNB', 'SOL', 'TRX', 'MATIC',
-        'AVAX', 'DOT', 'ATOM', 'XRP', 'N'
+        'BTC',
+        'ETH',
+        'BNB',
+        'SOL',
+        'TRX',
+        'MATIC',
+        'AVAX',
+        'DOT',
+        'ATOM',
+        'XRP',
+        'N',
       ];
 
       for (final coin in expectedCoins) {
@@ -64,7 +82,7 @@ void main() {
 
     test('should have Layer 2 solutions', () {
       expect(CoinType.ARB.name, 'ARB'); // Arbitrum
-      expect(CoinType.OP.name, 'OP');   // Optimism
+      expect(CoinType.OP.name, 'OP'); // Optimism
       expect(CoinType.BASE.name, 'BASE'); // Base
     });
 
@@ -77,12 +95,15 @@ void main() {
       expect(CoinType.TON.name, 'TON'); // The Open Network
     });
 
-    test('should have new batch 1 chains (Stellar, VeChain, Harmony, IoTeX)', () {
-      expect(CoinType.XLM.name, 'XLM'); // Stellar
-      expect(CoinType.VET.name, 'VET'); // VeChain
-      expect(CoinType.ONE.name, 'ONE'); // Harmony
-      expect(CoinType.IOTX.name, 'IOTX'); // IoTeX
-    });
+    test(
+      'should have new batch 1 chains (Stellar, VeChain, Harmony, IoTeX)',
+      () {
+        expect(CoinType.XLM.name, 'XLM'); // Stellar
+        expect(CoinType.VET.name, 'VET'); // VeChain
+        expect(CoinType.ONE.name, 'ONE'); // Harmony
+        expect(CoinType.IOTX.name, 'IOTX'); // IoTeX
+      },
+    );
 
     test('should have new batch 2 chains (NEAR, Zilliqa, Theta)', () {
       expect(CoinType.NEAR.name, 'NEAR'); // NEAR Protocol
@@ -97,8 +118,19 @@ void main() {
 
     test('should have all supported EVM-compatible coins', () {
       final evmCoins = [
-        'ETH', 'BNB', 'MATIC', 'AVAX', 'FTM', 'CELO',
-        'XDAI', 'OP', 'ARB', 'BASE', 'ONE', 'IOTX', 'THETA'
+        'ETH',
+        'BNB',
+        'MATIC',
+        'AVAX',
+        'FTM',
+        'CELO',
+        'XDAI',
+        'OP',
+        'ARB',
+        'BASE',
+        'ONE',
+        'IOTX',
+        'THETA',
       ];
 
       for (final coin in evmCoins) {
@@ -112,8 +144,16 @@ void main() {
 
     test('should have all Bitcoin-like coins', () {
       final btcCoins = [
-        'BTC', 'LTC', 'DOGE', 'DASH', 'BCH', 'BTG', 'RVN',
-        'VIA', 'DGB', 'MONA'
+        'BTC',
+        'LTC',
+        'DOGE',
+        'DASH',
+        'BCH',
+        'BTG',
+        'RVN',
+        'VIA',
+        'DGB',
+        'MONA',
       ];
 
       for (final coin in btcCoins) {
@@ -140,8 +180,14 @@ void main() {
   group('BlockchainType Enum', () {
     test('should have all major blockchain types', () {
       final expectedTypes = [
-        'Bitcoin', 'Ethereum', 'Solana', 'Tron',
-        'Algorand', 'Tezos', 'Cosmos', 'Polkadot'
+        'Bitcoin',
+        'Ethereum',
+        'Solana',
+        'Tron',
+        'Algorand',
+        'Tezos',
+        'Cosmos',
+        'Polkadot',
       ];
 
       for (final type in expectedTypes) {
@@ -190,14 +236,23 @@ void main() {
       final allCoinNames = CoinType.values.map((c) => c.name).toList();
 
       // Should contain N
-      expect(allCoinNames.contains('N'), true,
-          reason: 'Native token should be named N');
+      expect(
+        allCoinNames.contains('N'),
+        true,
+        reason: 'Native token should be named N',
+      );
 
       // Should NOT contain old names
-      expect(allCoinNames.contains('AST'), false,
-          reason: 'Old token name AST should not exist');
-      expect(allCoinNames.contains('AMT'), false,
-          reason: 'Old token name AMT should not exist');
+      expect(
+        allCoinNames.contains('AST'),
+        false,
+        reason: 'Old token name AST should not exist',
+      );
+      expect(
+        allCoinNames.contains('AMT'),
+        false,
+        reason: 'Old token name AMT should not exist',
+      );
     });
   });
 

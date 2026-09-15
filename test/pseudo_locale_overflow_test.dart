@@ -17,7 +17,6 @@
 /// Prerequisites: python scripts/generate_pseudo_locale.py (generates intl_qps.arb)
 library;
 
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -34,8 +33,7 @@ void _startCapture() {
   FlutterError.onError = (details) {
     final msg = details.exceptionAsString();
     if (msg.contains('overflowed')) {
-      _overflows.add(
-          msg.split('\n').first);
+      _overflows.add(msg.split('\n').first);
     } else {
       original?.call(details);
     }
@@ -57,10 +55,13 @@ void _loadArb() {
   final enFile = File('lib/l10n/intl_en.arb');
 
   if (!pseudoFile.existsSync()) {
-    fail('intl_qps.arb not found. Run: python scripts/generate_pseudo_locale.py');
+    fail(
+      'intl_qps.arb not found. Run: python scripts/generate_pseudo_locale.py',
+    );
   }
 
-  final pseudoRaw = json.decode(pseudoFile.readAsStringSync()) as Map<String, dynamic>;
+  final pseudoRaw =
+      json.decode(pseudoFile.readAsStringSync()) as Map<String, dynamic>;
   final enRaw = json.decode(enFile.readAsStringSync()) as Map<String, dynamic>;
 
   _pseudo = {};
@@ -93,9 +94,7 @@ const _normalPhone = Size(375, 812); // iPhone X
 // ── Test harness ────────────────────────────────────────────────────────
 
 Widget _wrap(Widget child) {
-  return MaterialApp(
-    home: Scaffold(body: child),
-  );
+  return MaterialApp(home: Scaffold(body: child));
 }
 
 Future<List<String>> _pumpAndDetect(
@@ -142,67 +141,81 @@ String _fmt(Map<String, List<String>> r) {
 // ── Layout patterns matching real app code ──────────────────────────────
 
 /// Pattern: AppBar title (tests AppBarWidget fix)
-Widget _appBar(String key) => AppBar(
-  title: Text(_ps(key), maxLines: 1, overflow: TextOverflow.ellipsis),
-);
+Widget _appBar(String key) =>
+    AppBar(title: Text(_ps(key), maxLines: 1, overflow: TextOverflow.ellipsis));
 
 /// Pattern: Row with label + value (tests send pages fix)
 Widget _labelValueRow(String labelKey) => Padding(
   padding: const EdgeInsets.all(16),
-  child: Row(children: [
-    Flexible(
-      child: Text(_ps(labelKey),
-        style: const TextStyle(fontSize: 14),
-        overflow: TextOverflow.ellipsis,
+  child: Row(
+    children: [
+      Flexible(
+        child: Text(
+          _ps(labelKey),
+          style: const TextStyle(fontSize: 14),
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
-    ),
-    const SizedBox(width: 8),
-    const Expanded(
-      child: Text('0.00000000 ETH',
-        textAlign: TextAlign.end,
-        overflow: TextOverflow.ellipsis,
+      const SizedBox(width: 8),
+      const Expanded(
+        child: Text(
+          '0.00000000 ETH',
+          textAlign: TextAlign.end,
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
-    ),
-  ]),
+    ],
+  ),
 );
 
 /// Pattern: Icon + text row (tests section headers)
 Widget _iconTextRow(String key) => Padding(
   padding: const EdgeInsets.all(16),
-  child: Row(children: [
-    const Icon(Icons.info_outline, size: 24),
-    const SizedBox(width: 8),
-    Flexible(
-      child: Text(_ps(key),
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+  child: Row(
+    children: [
+      const Icon(Icons.info_outline, size: 24),
+      const SizedBox(width: 8),
+      Flexible(
+        child: Text(
+          _ps(key),
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
       ),
-    ),
-  ]),
+    ],
+  ),
 );
 
 /// Pattern: Button pair (tests buttonStyle1/2 fix)
 Widget _buttonPair(String cancelKey, String confirmKey) => Padding(
   padding: const EdgeInsets.all(16),
-  child: Row(children: [
-    Expanded(
-      child: OutlinedButton(
-        onPressed: () {},
-        child: Text(_ps(cancelKey),
-          maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
+  child: Row(
+    children: [
+      Expanded(
+        child: OutlinedButton(
+          onPressed: () {},
+          child: Text(
+            _ps(cancelKey),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
-    ),
-    const SizedBox(width: 12),
-    Expanded(
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(_ps(confirmKey),
-          maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
+      const SizedBox(width: 12),
+      Expanded(
+        child: ElevatedButton(
+          onPressed: () {},
+          child: Text(
+            _ps(confirmKey),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
         ),
       ),
-    ),
-  ]),
+    ],
+  ),
 );
 
 /// Pattern: Full-width button
@@ -221,45 +234,53 @@ Widget _fullButton(String key) => Padding(
 /// Pattern: Checkbox + label
 Widget _checkboxRow(String key) => Padding(
   padding: const EdgeInsets.all(16),
-  child: Row(children: [
-    Checkbox(value: false, onChanged: (_) {}),
-    Expanded(
-      child: Text(_ps(key), overflow: TextOverflow.ellipsis),
-    ),
-  ]),
+  child: Row(
+    children: [
+      Checkbox(value: false, onChanged: (_) {}),
+      Expanded(child: Text(_ps(key), overflow: TextOverflow.ellipsis)),
+    ],
+  ),
 );
 
 /// Pattern: Drawer menu item
 Widget _drawerItem(String key) => Padding(
   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-  child: Row(children: [
-    Container(
-      width: 44, height: 44,
-      decoration: BoxDecoration(
-        color: Colors.blue.withAlpha(25),
-        borderRadius: BorderRadius.circular(12),
+  child: Row(
+    children: [
+      Container(
+        width: 44,
+        height: 44,
+        decoration: BoxDecoration(
+          color: Colors.blue.withAlpha(25),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.settings, size: 24),
       ),
-      child: const Icon(Icons.settings, size: 24),
-    ),
-    const SizedBox(width: 16),
-    Expanded(
-      child: Text(_ps(key),
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        overflow: TextOverflow.ellipsis,
+      const SizedBox(width: 16),
+      Expanded(
+        child: Text(
+          _ps(key),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
-    ),
-    const Icon(Icons.chevron_right, size: 24),
-  ]),
+      const Icon(Icons.chevron_right, size: 24),
+    ],
+  ),
 );
 
 /// Pattern: Sort bar with chips (Wrap)
 Widget _sortBar(List<String> chipKeys) => Padding(
   padding: const EdgeInsets.all(16),
   child: Wrap(
-    spacing: 8, runSpacing: 4,
-    children: chipKeys.map((k) =>
-      Chip(label: Text(_ps(k), style: const TextStyle(fontSize: 12)))
-    ).toList(),
+    spacing: 8,
+    runSpacing: 4,
+    children: chipKeys
+        .map(
+          (k) =>
+              Chip(label: Text(_ps(k), style: const TextStyle(fontSize: 12))),
+        )
+        .toList(),
   ),
 );
 
@@ -269,27 +290,33 @@ Widget _dialogBody(List<String> textKeys) => SingleChildScrollView(
   child: Column(
     mainAxisSize: MainAxisSize.min,
     crossAxisAlignment: CrossAxisAlignment.start,
-    children: textKeys.map((k) => Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Text(_ps(k), style: const TextStyle(fontSize: 14)),
-    )).toList(),
+    children: textKeys
+        .map(
+          (k) => Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(_ps(k), style: const TextStyle(fontSize: 14)),
+          ),
+        )
+        .toList(),
   ),
 );
 
 /// Pattern: TabBar
 Widget _tabBar(List<String> tabKeys) => DefaultTabController(
   length: tabKeys.length,
-  child: Column(children: [
-    TabBar(
-      isScrollable: true,
-      tabs: tabKeys.map((k) => Tab(text: _ps(k))).toList(),
-    ),
-    Expanded(
-      child: TabBarView(
-        children: tabKeys.map((_) => const SizedBox()).toList(),
+  child: Column(
+    children: [
+      TabBar(
+        isScrollable: true,
+        tabs: tabKeys.map((k) => Tab(text: _ps(k))).toList(),
       ),
-    ),
-  ]),
+      Expanded(
+        child: TabBarView(
+          children: tabKeys.map((_) => const SizedBox()).toList(),
+        ),
+      ),
+    ],
+  ),
 );
 
 // ── Tests ───────────────────────────────────────────────────────────────
@@ -299,9 +326,15 @@ void main() {
 
   group('Pseudo-Locale — AppBar titles', () {
     for (final key in [
-      'g_key_94', 'g_key_108', 'g_key_6', 's_key_11',
-      'g_key_ex_keystore_1', 'g_key_batch_title', 'g_key_manage_chains',
-      'g_portfolio_title', 'g_browser_key5',
+      'g_key_94',
+      'g_key_108',
+      'g_key_6',
+      's_key_11',
+      'g_key_ex_keystore_1',
+      'g_key_batch_title',
+      'g_key_manage_chains',
+      'g_portfolio_title',
+      'g_browser_key5',
     ]) {
       testWidgets('AppBar: $key', (t) async {
         final r = await _stress(t, key, _appBar(key));
@@ -312,8 +345,13 @@ void main() {
 
   group('Pseudo-Locale — Label-Value Rows', () {
     for (final key in [
-      'g_key_44', 'g_key_29', 'g_key_43', 'g_key_101',
-      'g_key_75', 'g_key_38', 'g_key_xml_0',
+      'g_key_44',
+      'g_key_29',
+      'g_key_43',
+      'g_key_101',
+      'g_key_75',
+      'g_key_38',
+      'g_key_xml_0',
     ]) {
       testWidgets('LabelValue: $key', (t) async {
         final r = await _stress(t, key, _labelValueRow(key));
@@ -324,8 +362,10 @@ void main() {
 
   group('Pseudo-Locale — Icon+Text Rows', () {
     for (final key in [
-      'g_key_aa_batch_transaction', 'g_key_aa_gas_payment_options',
-      'g_key_advanced_features', 'g_key_ens_resolving',
+      'g_key_aa_batch_transaction',
+      'g_key_aa_gas_payment_options',
+      'g_key_advanced_features',
+      'g_key_ens_resolving',
       'g_key_aa_address_calculating',
     ]) {
       testWidgets('IconText: $key', (t) async {
@@ -337,15 +377,21 @@ void main() {
 
   group('Pseudo-Locale — Button Pairs', () {
     testWidgets('Cancel/Confirm', (t) async {
-      final r = await _stress(t, 'buttons', _buttonPair('g_key_78', 'g_key_79'));
+      final r = await _stress(
+        t,
+        'buttons',
+        _buttonPair('g_key_78', 'g_key_79'),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
   });
 
   group('Pseudo-Locale — Full-width Buttons', () {
     for (final key in [
-      'g_key_stake_start_staking', 'g_key_stake_go_to_swap',
-      'g_mining_key62', 'g_mining_key_79',
+      'g_key_stake_start_staking',
+      'g_key_stake_go_to_swap',
+      'g_mining_key62',
+      'g_mining_key_79',
     ]) {
       testWidgets('FullBtn: $key', (t) async {
         final r = await _stress(t, key, _fullButton(key));
@@ -355,7 +401,10 @@ void main() {
   });
 
   group('Pseudo-Locale — Checkbox Rows', () {
-    for (final key in ['g_key_aa_session_amount_limit', 'g_key_aa_permission']) {
+    for (final key in [
+      'g_key_aa_session_amount_limit',
+      'g_key_aa_permission',
+    ]) {
       testWidgets('Checkbox: $key', (t) async {
         final r = await _stress(t, key, _checkboxRow(key));
         expect(r, isEmpty, reason: _fmt(r));
@@ -364,7 +413,13 @@ void main() {
   });
 
   group('Pseudo-Locale — Drawer Items', () {
-    for (final key in ['g_key_94', 's_key_11', 'g_key_108', 's_key_1', 's_key_10']) {
+    for (final key in [
+      'g_key_94',
+      's_key_11',
+      'g_key_108',
+      's_key_1',
+      's_key_10',
+    ]) {
       testWidgets('Drawer: $key', (t) async {
         final r = await _stress(t, key, _drawerItem(key));
         expect(r, isEmpty, reason: _fmt(r));
@@ -374,86 +429,146 @@ void main() {
 
   group('Pseudo-Locale — Sort/Filter Bars', () {
     testWidgets('Staking sort bar', (t) async {
-      final r = await _stress(t, 'sort',
-        _sortBar(['g_key_stake_sort_by', 'g_key_stake_apy',
-                   'g_key_stake_commission', 'g_key_stake_staked']));
+      final r = await _stress(
+        t,
+        'sort',
+        _sortBar([
+          'g_key_stake_sort_by',
+          'g_key_stake_apy',
+          'g_key_stake_commission',
+          'g_key_stake_staked',
+        ]),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
   });
 
   group('Pseudo-Locale — TabBars', () {
     testWidgets('Loyalty tabs', (t) async {
-      final r = await _stress(t, 'loyaltyTabs',
-        _tabBar(['g_key_loyalty_tasks', 'g_key_loyalty_rewards', 'g_key_loyalty_history']));
+      final r = await _stress(
+        t,
+        'loyaltyTabs',
+        _tabBar([
+          'g_key_loyalty_tasks',
+          'g_key_loyalty_rewards',
+          'g_key_loyalty_history',
+        ]),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
     testWidgets('Session key tabs', (t) async {
-      final r = await _stress(t, 'sessionTabs',
-        _tabBar(['g_key_aa_active', 'g_key_aa_expired', 'g_key_aa_revoked_status']));
+      final r = await _stress(
+        t,
+        'sessionTabs',
+        _tabBar([
+          'g_key_aa_active',
+          'g_key_aa_expired',
+          'g_key_aa_revoked_status',
+        ]),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
   });
 
   group('Pseudo-Locale — Dialog Bodies', () {
     testWidgets('Mining confirm dialog', (t) async {
-      final r = await _stress(t, 'miningDialog',
-        _dialogBody(['g_mining_key_114', 'g_mining_key_45', 'g_mining_key_46']));
+      final r = await _stress(
+        t,
+        'miningDialog',
+        _dialogBody(['g_mining_key_114', 'g_mining_key_45', 'g_mining_key_46']),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
     testWidgets('Burn NFT dialog', (t) async {
-      final r = await _stress(t, 'burnNft',
-        _dialogBody(['g_key_burn_nft_title', 'g_key_burn_nft_tip',
-                     'g_key_burn_nft_step1', 'g_key_burn_nft_step2',
-                     'g_key_burn_nft_step3', 'g_key_burn_nft_step4']));
+      final r = await _stress(
+        t,
+        'burnNft',
+        _dialogBody([
+          'g_key_burn_nft_title',
+          'g_key_burn_nft_tip',
+          'g_key_burn_nft_step1',
+          'g_key_burn_nft_step2',
+          'g_key_burn_nft_step3',
+          'g_key_burn_nft_step4',
+        ]),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
   });
 
   group('Pseudo-Locale — Composite Pages', () {
     testWidgets('Send page layout', (t) async {
-      final r = await _stress(t, 'sendPage', ListView(children: [
-        _appBar('g_key_48'),
-        _labelValueRow('g_key_44'),
-        _labelValueRow('g_key_43'),
-        _labelValueRow('g_key_101'),
-        _buttonPair('g_key_79', 'g_key_78'),
-      ]));
+      final r = await _stress(
+        t,
+        'sendPage',
+        ListView(
+          children: [
+            _appBar('g_key_48'),
+            _labelValueRow('g_key_44'),
+            _labelValueRow('g_key_43'),
+            _labelValueRow('g_key_101'),
+            _buttonPair('g_key_79', 'g_key_78'),
+          ],
+        ),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
 
     testWidgets('Earn page layout', (t) async {
-      final r = await _stress(t, 'earnPage', ListView(children: [
-        _iconTextRow('g_key_stake_start_staking'),
-        _iconTextRow('g_key_earn_batch'),
-        _iconTextRow('g_key_earn_mining'),
-        _fullButton('g_key_stake_go_to_swap'),
-        _sortBar(['g_key_stake_apy', 'g_key_stake_commission', 'g_key_stake_staked']),
-      ]));
+      final r = await _stress(
+        t,
+        'earnPage',
+        ListView(
+          children: [
+            _iconTextRow('g_key_stake_start_staking'),
+            _iconTextRow('g_key_earn_batch'),
+            _iconTextRow('g_key_earn_mining'),
+            _fullButton('g_key_stake_go_to_swap'),
+            _sortBar([
+              'g_key_stake_apy',
+              'g_key_stake_commission',
+              'g_key_stake_staked',
+            ]),
+          ],
+        ),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
 
     testWidgets('Drawer layout', (t) async {
-      final r = await _stress(t, 'drawer', ListView(children: [
-        _drawerItem('g_key_94'),
-        _drawerItem('s_key_11'),
-        _drawerItem('g_key_108'),
-        _drawerItem('s_key_1'),
-        _drawerItem('s_key_10'),
-        _drawerItem('g_browser_key11'),
-        _buttonPair('g_key_79', 'g_key_78'),
-      ]));
+      final r = await _stress(
+        t,
+        'drawer',
+        ListView(
+          children: [
+            _drawerItem('g_key_94'),
+            _drawerItem('s_key_11'),
+            _drawerItem('g_key_108'),
+            _drawerItem('s_key_1'),
+            _drawerItem('s_key_10'),
+            _drawerItem('g_browser_key11'),
+            _buttonPair('g_key_79', 'g_key_78'),
+          ],
+        ),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
 
     testWidgets('High-risk keys composite', (t) async {
       // Top expansion keys from stress report
-      final r = await _stress(t, 'highRisk', ListView(children: [
-        _labelValueRow('g_key_stake_avg_apy'),  // 5.7x
-        _iconTextRow('g_key_ex_keystore_1'),    // 3.8x
-        _fullButton('g_key_aa_retry'),           // 5.6x
-        _checkboxRow('g_key_feedback_8'),        // 3.7x
-        _drawerItem('g_key_105'),                // 3.7x
-      ]));
+      final r = await _stress(
+        t,
+        'highRisk',
+        ListView(
+          children: [
+            _labelValueRow('g_key_stake_avg_apy'), // 5.7x
+            _iconTextRow('g_key_ex_keystore_1'), // 3.8x
+            _fullButton('g_key_aa_retry'), // 5.6x
+            _checkboxRow('g_key_feedback_8'), // 3.7x
+            _drawerItem('g_key_105'), // 3.7x
+          ],
+        ),
+      );
       expect(r, isEmpty, reason: _fmt(r));
     });
   });

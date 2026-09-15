@@ -200,21 +200,14 @@ Map<String, dynamic> _buildResetPasswordParams({
   required String password,
   required String code,
 }) {
-  return {
-    "email": email,
-    "pwd": _hashPassword(password),
-    "code": code,
-  };
+  return {"email": email, "pwd": _hashPassword(password), "code": code};
 }
 
 Map<String, dynamic> _buildSendEmailCodeParams({
   required String email,
   required String type,
 }) {
-  return {
-    "email": email,
-    "type": type,
-  };
+  return {"email": email, "type": type};
 }
 
 bool _canProceedFromStep0(String email) {
@@ -227,5 +220,5 @@ bool _canProceedFromStep1(String code) {
 
 bool _canProceedFromStep2(String password, String confirmPassword) {
   return _isValidPasswordLength(password) &&
-         _doPasswordsMatch(password, confirmPassword);
+      _doPasswordsMatch(password, confirmPassword);
 }

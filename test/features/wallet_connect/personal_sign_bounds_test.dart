@@ -83,8 +83,11 @@ void main() {
     test('params length == 1 calls error state', () {
       final result = processPersonalSign(['onlyone']);
 
-      expect(result.state, FakeWalletConnectState.error,
-          reason: 'params with only 1 element must trigger error state');
+      expect(
+        result.state,
+        FakeWalletConnectState.error,
+        reason: 'params with only 1 element must trigger error state',
+      );
       expect(result.errorParams, isNotNull);
       expect(result.errorParams!, contains('1'));
     });
@@ -92,11 +95,17 @@ void main() {
     test('params length == 0 calls error state', () {
       final result = processPersonalSign([]);
 
-      expect(result.state, FakeWalletConnectState.error,
-          reason: 'empty params list must trigger error state');
+      expect(
+        result.state,
+        FakeWalletConnectState.error,
+        reason: 'empty params list must trigger error state',
+      );
       expect(result.errorParams, isNotNull);
-      expect(result.errorParams!, contains('0'),
-          reason: 'error message must include actual length (0)');
+      expect(
+        result.errorParams!,
+        contains('0'),
+        reason: 'error message must include actual length (0)',
+      );
     });
 
     test('error message includes the actual length for debugging', () {

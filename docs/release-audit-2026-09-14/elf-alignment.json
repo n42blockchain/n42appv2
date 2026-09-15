@@ -1,0 +1,7 @@
+{
+  "artifact": "build/app/outputs/bundle/release/app-release.aab",
+  "libraries_checked": 55,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF load segments only; ZIP alignment and 16 KB device execution require separate verification"
+}

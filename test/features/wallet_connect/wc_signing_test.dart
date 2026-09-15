@@ -53,7 +53,8 @@ void main() {
     });
 
     test('SIWE message returns false', () {
-      const siwe = 'example.com wants you to sign in with your Ethereum account';
+      const siwe =
+          'example.com wants you to sign in with your Ethereum account';
       expect(isValidHex(siwe), isFalse);
     });
 
@@ -113,7 +114,8 @@ void main() {
     });
 
     test('multiline SIWE message', () {
-      const msg = 'example.com wants you to sign in\n\nNonce: abc123\nChain ID: 1';
+      const msg =
+          'example.com wants you to sign in\n\nNonce: abc123\nChain ID: 1';
       final result = decodePersonalSignData(msg);
       expect(utf8.decode(result), msg);
     });
@@ -173,8 +175,7 @@ void main() {
     });
 
     test('eth_signTypedData_v3 with 1 param fails', () {
-      final error =
-          validateTypedDataParams('eth_signTypedData_v3', ['0xAddr']);
+      final error = validateTypedDataParams('eth_signTypedData_v3', ['0xAddr']);
       expect(error, isNotNull);
       expect(error, contains('eth_signTypedData_v3'));
     });
@@ -277,9 +278,7 @@ void main() {
 
     setUp(() {
       // Deterministic test key (32 bytes of 0x01)
-      testKey = web3.EthPrivateKey(
-        Uint8List.fromList(List.filled(32, 1)),
-      );
+      testKey = web3.EthPrivateKey(Uint8List.fromList(List.filled(32, 1)));
     });
 
     test('hashTypedData returns 32 bytes', () {
@@ -371,7 +370,9 @@ void main() {
       final recoveredPub = web3.ecRecover(hash, sig);
       final recoveredAddrBytes = web3.publicKeyToAddress(recoveredPub);
       final expectedAddrHex = testKey.address.without0x.toLowerCase();
-      final recoveredAddrHex = web3.bytesToHex(recoveredAddrBytes).toLowerCase();
+      final recoveredAddrHex = web3
+          .bytesToHex(recoveredAddrBytes)
+          .toLowerCase();
 
       expect(
         recoveredAddrHex,
@@ -465,10 +466,7 @@ void main() {
         },
         'primaryType': 'Mail',
         'domain': {'name': 'TestDApp'},
-        'message': {
-          'from': 'Alice',
-          'contents': 'Hello',
-        },
+        'message': {'from': 'Alice', 'contents': 'Hello'},
       });
 
       final hashV3 = hashTypedData(

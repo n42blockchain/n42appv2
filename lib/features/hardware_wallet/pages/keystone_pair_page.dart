@@ -125,14 +125,16 @@ class _KeystonePairPageState extends State<KeystonePairPage> {
                       child: Container(
                         padding: EdgeInsets.all(AppSpacing.space4),
                         decoration: BoxDecoration(
-                          color: AppColorTokens.of(context).danger.withAlpha(
-                            220,
-                          ),
+                          color: AppColorTokens.of(
+                            context,
+                          ).danger.withAlpha(220),
                           borderRadius: AppRadius.brMd,
                         ),
                         child: Text(
                           _error!,
-                          style: AppTypography.caption.copyWith(color: Colors.white),
+                          style: AppTypography.caption.copyWith(
+                            color: Colors.white,
+                          ),
                           textAlign: TextAlign.center,
                         ),
                       ),

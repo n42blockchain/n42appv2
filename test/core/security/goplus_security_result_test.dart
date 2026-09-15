@@ -70,17 +70,23 @@ void main() {
       });
 
       test('can_take_back_ownership "1" → danger', () {
-        final r = GoplusSecurityResult.fromTokenJson({'can_take_back_ownership': '1'});
+        final r = GoplusSecurityResult.fromTokenJson({
+          'can_take_back_ownership': '1',
+        });
         expect(r.overallLevel, GoplusRiskLevel.danger);
       });
 
       test('owner_change_balance "1" → danger', () {
-        final r = GoplusSecurityResult.fromTokenJson({'owner_change_balance': '1'});
+        final r = GoplusSecurityResult.fromTokenJson({
+          'owner_change_balance': '1',
+        });
         expect(r.overallLevel, GoplusRiskLevel.danger);
       });
 
       test('transfer_pausable "1" → danger', () {
-        final r = GoplusSecurityResult.fromTokenJson({'transfer_pausable': '1'});
+        final r = GoplusSecurityResult.fromTokenJson({
+          'transfer_pausable': '1',
+        });
         expect(r.overallLevel, GoplusRiskLevel.danger);
       });
 
@@ -113,12 +119,16 @@ void main() {
       });
 
       test('anti_whale_modifiable "1" → caution', () {
-        final r = GoplusSecurityResult.fromTokenJson({'anti_whale_modifiable': '1'});
+        final r = GoplusSecurityResult.fromTokenJson({
+          'anti_whale_modifiable': '1',
+        });
         expect(r.overallLevel, GoplusRiskLevel.caution);
       });
 
       test('personal_slippage_modifiable "1" → caution', () {
-        final r = GoplusSecurityResult.fromTokenJson({'personal_slippage_modifiable': '1'});
+        final r = GoplusSecurityResult.fromTokenJson({
+          'personal_slippage_modifiable': '1',
+        });
         expect(r.overallLevel, GoplusRiskLevel.caution);
       });
 
@@ -143,8 +153,10 @@ void main() {
       test('buy_tax "0.15" (15%) → caution with Buy Tax label', () {
         final r = GoplusSecurityResult.fromTokenJson({'buy_tax': '0.15'});
         expect(r.overallLevel, GoplusRiskLevel.caution);
-        final taxRisk = r.risks.firstWhere((x) => x.label.contains('Buy Tax'),
-            orElse: () => throw StateError('missing'));
+        final taxRisk = r.risks.firstWhere(
+          (x) => x.label.contains('Buy Tax'),
+          orElse: () => throw StateError('missing'),
+        );
         expect(taxRisk.label, contains('15%'));
       });
 
@@ -183,8 +195,8 @@ void main() {
     group('overallLevel priority', () {
       test('danger overrides caution when both present', () {
         final r = GoplusSecurityResult.fromTokenJson({
-          'is_mintable': '1',    // caution
-          'is_honeypot': '1',    // danger
+          'is_mintable': '1', // caution
+          'is_honeypot': '1', // danger
         });
         expect(r.overallLevel, GoplusRiskLevel.danger);
       });

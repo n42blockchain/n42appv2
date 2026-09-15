@@ -32,50 +32,50 @@ void main() {
     group('Wallet Operations', () {
       test('measure_wallet_balance_fetch', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟钱包余额获取
         await Future.delayed(const Duration(milliseconds: 200));
-        
+
         stopwatch.stop();
         results.add('wallet_balance_fetch', stopwatch.elapsedMilliseconds);
-        
+
         // 余额获取应在 2 秒内完成
         expect(stopwatch.elapsedMilliseconds, lessThan(2000));
       });
 
       test('measure_transaction_list_load', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟交易列表加载
         await Future.delayed(const Duration(milliseconds: 300));
-        
+
         stopwatch.stop();
         results.add('transaction_list_load', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(3000));
       });
 
       test('measure_wallet_address_generation', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟地址生成
         await Future.delayed(const Duration(milliseconds: 100));
-        
+
         stopwatch.stop();
         results.add('address_generation', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(500));
       });
 
       test('measure_transaction_signing', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟交易签名
         await Future.delayed(const Duration(milliseconds: 150));
-        
+
         stopwatch.stop();
         results.add('transaction_signing', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(1000));
       });
     });
@@ -83,37 +83,37 @@ void main() {
     group('Chat Operations', () {
       test('measure_chat_list_load', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟聊天列表加载
         await Future.delayed(const Duration(milliseconds: 150));
-        
+
         stopwatch.stop();
         results.add('chat_list_load', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(1000));
       });
 
       test('measure_message_send', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟消息发送
         await Future.delayed(const Duration(milliseconds: 100));
-        
+
         stopwatch.stop();
         results.add('message_send', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(500));
       });
 
       test('measure_message_decrypt', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟消息解密
         await Future.delayed(const Duration(milliseconds: 50));
-        
+
         stopwatch.stop();
         results.add('message_decrypt', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(200));
       });
     });
@@ -121,25 +121,25 @@ void main() {
     group('Mining Operations', () {
       test('measure_mining_status_check', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟挖矿状态检查
         await Future.delayed(const Duration(milliseconds: 200));
-        
+
         stopwatch.stop();
         results.add('mining_status_check', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(2000));
       });
 
       test('measure_mining_data_load', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟挖矿数据加载
         await Future.delayed(const Duration(milliseconds: 300));
-        
+
         stopwatch.stop();
         results.add('mining_data_load', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(3000));
       });
     });
@@ -147,37 +147,37 @@ void main() {
     group('Data Operations', () {
       test('measure_local_storage_read', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟本地存储读取
         await Future.delayed(const Duration(milliseconds: 20));
-        
+
         stopwatch.stop();
         results.add('local_storage_read', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(100));
       });
 
       test('measure_local_storage_write', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟本地存储写入
         await Future.delayed(const Duration(milliseconds: 30));
-        
+
         stopwatch.stop();
         results.add('local_storage_write', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(200));
       });
 
       test('measure_json_parse_large', () async {
         final stopwatch = Stopwatch()..start();
-        
+
         // 模拟大型 JSON 解析
         await Future.delayed(const Duration(milliseconds: 50));
-        
+
         stopwatch.stop();
         results.add('json_parse_large', stopwatch.elapsedMilliseconds);
-        
+
         expect(stopwatch.elapsedMilliseconds, lessThan(500));
       });
     });
@@ -198,11 +198,11 @@ class BenchmarkResults {
 
   Map<String, dynamic> toJson() {
     final stats = <String, dynamic>{};
-    
+
     for (final entry in _measurements.entries) {
       final values = entry.value;
       values.sort();
-      
+
       stats[entry.key] = {
         'min': values.first,
         'max': values.last,
@@ -230,19 +230,18 @@ class BenchmarkResults {
     print('BENCHMARK RESULTS: $name');
     print('Timestamp: $_timestamp');
     print('=' * 60);
-    
+
     for (final entry in _measurements.entries) {
       final values = entry.value;
       values.sort();
       final avg = values.reduce((a, b) => a + b) / values.length;
-      
+
       print('${entry.key}:');
       print('  Min: ${values.first}ms');
       print('  Max: ${values.last}ms');
       print('  Avg: ${avg.toStringAsFixed(2)}ms');
     }
-    
+
     print('=' * 60);
   }
 }
-

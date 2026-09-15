@@ -18,7 +18,8 @@ class ThemeAdapter {
 
   /// Build light ThemeData with the given [accent] color.
   static ThemeData buildLight(Color accent) => ThemeData.light().copyWith(
-    scaffoldBackgroundColor: AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
+    scaffoldBackgroundColor:
+        AppThemeUtils.lightMap[AppThemeKeys.backGroundColor.name],
     primaryColor: accent,
     colorScheme: ColorScheme.light(primary: accent, secondary: accent),
 
@@ -49,10 +50,16 @@ class ThemeAdapter {
         borderSide: BorderSide(color: accent, style: BorderStyle.solid),
       ),
       border: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffc6c6c6), style: BorderStyle.solid),
+        borderSide: BorderSide(
+          color: Color(0xffc6c6c6),
+          style: BorderStyle.solid,
+        ),
       ),
       errorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffd9445a), style: BorderStyle.solid),
+        borderSide: BorderSide(
+          color: Color(0xffd9445a),
+          style: BorderStyle.solid,
+        ),
       ),
     ),
 
@@ -77,7 +84,8 @@ class ThemeAdapter {
 
   /// Build dark ThemeData with the given [accent] color.
   static ThemeData buildDark(Color accent) => ThemeData.dark().copyWith(
-    scaffoldBackgroundColor: AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
+    scaffoldBackgroundColor:
+        AppThemeUtils.darkMap[AppThemeKeys.backGroundColor.name],
     primaryColor: accent,
     colorScheme: ColorScheme.dark(primary: accent, secondary: accent),
 
@@ -113,10 +121,16 @@ class ThemeAdapter {
         borderSide: BorderSide(color: accent, style: BorderStyle.solid),
       ),
       border: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xff545454), style: BorderStyle.solid),
+        borderSide: BorderSide(
+          color: Color(0xff545454),
+          style: BorderStyle.solid,
+        ),
       ),
       errorBorder: const UnderlineInputBorder(
-        borderSide: BorderSide(color: Color(0xffd9445a), style: BorderStyle.solid),
+        borderSide: BorderSide(
+          color: Color(0xffd9445a),
+          style: BorderStyle.solid,
+        ),
       ),
     ),
 
@@ -156,7 +170,7 @@ class ThemeAdapter {
 
   // ── Backward-compat statics (used in tests / legacy call sites) ──────────
   static ThemeData get themeDataLight => buildLight(defaultAccent);
-  static ThemeData get themeDataDark  => buildDark(defaultAccent);
+  static ThemeData get themeDataDark => buildDark(defaultAccent);
 }
 
 /// Theme Utility Functions

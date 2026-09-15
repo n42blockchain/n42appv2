@@ -18,13 +18,8 @@ void main() {
         final widget = Column(
           children: [
             const Text('Test Header'),
-            ElevatedButton(
-              onPressed: () {},
-              child: const Text('Button'),
-            ),
-            const TextField(
-              decoration: InputDecoration(labelText: 'Input'),
-            ),
+            ElevatedButton(onPressed: () {}, child: const Text('Button')),
+            const TextField(decoration: InputDecoration(labelText: 'Input')),
           ],
         );
 
@@ -94,22 +89,20 @@ void main() {
         // Arrange
         final widget = ListView.builder(
           itemCount: 100,
-          itemBuilder: (context, index) => ListTile(
-            title: Text('Item $index'),
-          ),
+          itemBuilder: (context, index) => ListTile(title: Text('Item $index')),
         );
 
         // Act
         await tester.pumpWidget(wrapWithMaterial(widget));
         await tester.pumpAndSettle();
-        
+
         // Initially item 0 should be visible
         expect(find.text('Item 0'), findsOneWidget);
-        
+
         // Scroll down
         await tester.drag(find.byType(ListView), const Offset(0, -500));
         await tester.pumpAndSettle();
-        
+
         // Item 0 should no longer be visible
         expect(find.text('Item 0'), findsNothing);
       });
@@ -177,9 +170,7 @@ void main() {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const Scaffold(
-                        body: Text('Second Page'),
-                      ),
+                      builder: (_) => const Scaffold(body: Text('Second Page')),
                     ),
                   );
                 },

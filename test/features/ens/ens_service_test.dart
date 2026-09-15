@@ -30,7 +30,8 @@ class _RejectingHttpClient implements HttpClient {
 
 class _FailFastHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context) => _RejectingHttpClient();
+  HttpClient createHttpClient(SecurityContext? context) =>
+      _RejectingHttpClient();
 }
 
 // ---------------------------------------------------------------------------

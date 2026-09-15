@@ -104,7 +104,8 @@ void main() {
       );
 
       final savedWallet =
-          (spUtil.lastSavedWalletInfo!['user-1'] as Map<String, dynamic>)['wallet']
+          (spUtil.lastSavedWalletInfo!['user-1']
+                  as Map<String, dynamic>)['wallet']
               as List<dynamic>;
       final wallet = savedWallet.single as Map<String, dynamic>;
       expect(wallet['mnemonic'], isNull);
@@ -117,10 +118,7 @@ void main() {
       spUtil.walletInfo = {
         'user-1': {
           'wallet': [
-            {
-              'timestamp': 1700000000001,
-              'mnemonic': 'seed words',
-            },
+            {'timestamp': 1700000000001, 'mnemonic': 'seed words'},
           ],
         },
       };
@@ -137,10 +135,7 @@ void main() {
           'wallet': [
             null,
             'legacy-entry',
-            {
-              'timestamp': '1700000000002',
-              'mnemonic': 'seed words',
-            },
+            {'timestamp': '1700000000002', 'mnemonic': 'seed words'},
           ],
         },
       };
@@ -149,14 +144,12 @@ void main() {
 
       expect(count, 1);
       final savedWallets =
-          (spUtil.lastSavedWalletInfo!['user-1'] as Map<String, dynamic>)['wallet']
+          (spUtil.lastSavedWalletInfo!['user-1']
+                  as Map<String, dynamic>)['wallet']
               as List<dynamic>;
       expect(savedWallets[0], isNull);
       expect(savedWallets[1], 'legacy-entry');
-      expect(
-        (savedWallets[2] as Map<String, dynamic>)['mnemonic'],
-        isNull,
-      );
+      expect((savedWallets[2] as Map<String, dynamic>)['mnemonic'], isNull);
     });
 
     test('does not mark migration complete when secure save fails', () async {
@@ -164,10 +157,7 @@ void main() {
       spUtil.walletInfo = {
         'user-1': {
           'wallet': [
-            {
-              'timestamp': '1700000000003',
-              'mnemonic': 'seed words',
-            },
+            {'timestamp': '1700000000003', 'mnemonic': 'seed words'},
           ],
         },
       };

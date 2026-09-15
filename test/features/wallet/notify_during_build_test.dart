@@ -89,10 +89,12 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(home: Directionality(
-          textDirection: TextDirection.ltr,
-          child: _EagerPage(),
-        )),
+        child: MaterialApp(
+          home: Directionality(
+            textDirection: TextDirection.ltr,
+            child: _EagerPage(),
+          ),
+        ),
       ),
     );
 
@@ -100,14 +102,12 @@ void main() {
     expect(
       error,
       isNotNull,
-      reason: 'notifying a ChangeNotifierProvider during mount must assert; '
+      reason:
+          'notifying a ChangeNotifierProvider during mount must assert; '
           'if this stops throwing, Riverpod relaxed the rule and the '
           'post-frame deferral in WalletPage.initState can be revisited',
     );
-    expect(
-      error.toString(),
-      contains('while the widget tree was building'),
-    );
+    expect(error.toString(), contains('while the widget tree was building'));
   });
 
   testWidgets('deferring to addPostFrameCallback is clean and still applies', (
@@ -115,10 +115,12 @@ void main() {
   ) async {
     await tester.pumpWidget(
       const ProviderScope(
-        child: MaterialApp(home: Directionality(
-          textDirection: TextDirection.ltr,
-          child: _DeferredPage(),
-        )),
+        child: MaterialApp(
+          home: Directionality(
+            textDirection: TextDirection.ltr,
+            child: _DeferredPage(),
+          ),
+        ),
       ),
     );
 

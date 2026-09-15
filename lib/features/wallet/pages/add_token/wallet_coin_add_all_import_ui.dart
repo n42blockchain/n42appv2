@@ -101,7 +101,9 @@ extension _WalletCoinAddAllImportUI on _WalletCoinAddAllState {
                   ),
                   child: Text(
                     S.of(context).g_token_m_key_10,
-                    style: AppTypography.caption.copyWith(color: AppColorTokens.of(context).textPrimary),
+                    style: AppTypography.caption.copyWith(
+                      color: AppColorTokens.of(context).textPrimary,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                 ),

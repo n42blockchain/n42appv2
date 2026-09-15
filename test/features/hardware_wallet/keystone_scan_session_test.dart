@@ -19,8 +19,9 @@ Uint8List buildSignatureCbor() {
     0x1B,
   ]);
   final map = <CborObject, CborObject>{
-    const CborIntValue(1):
-        CborBytesValue(Uint8List.fromList(List.generate(16, (i) => i))),
+    const CborIntValue(1): CborBytesValue(
+      Uint8List.fromList(List.generate(16, (i) => i)),
+    ),
     const CborIntValue(2): CborBytesValue(sig65),
     const CborIntValue(3): CborStringValue('Keystone'),
   };
@@ -34,8 +35,7 @@ void main() {
     test('多帧 eth-signature：逐帧累积 → 完成 → parseEthSignature 成功', () {
       final cbor = buildSignatureCbor();
       // maxFragmentLen 压小强制多帧
-      final encoder =
-          UrEncoder('eth-signature', cbor, maxFragmentLen: 20);
+      final encoder = UrEncoder('eth-signature', cbor, maxFragmentLen: 20);
       expect(encoder.isSinglePart, isFalse);
 
       final session = KeystoneScanSession();

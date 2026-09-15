@@ -26,31 +26,42 @@ void main() {
     test('with 1 validator (total == self), reward == sqrt(EB)', () {
       // total = 32e9, sqrt ≈ 178885.4, reward ≈ 32e9/178885.4 ≈ 178885
       final r = miningCalculateReward(defaultEffectiveBalance);
-      final expected = (defaultEffectiveBalance / sqrt(defaultEffectiveBalance)).toInt();
+      final expected = (defaultEffectiveBalance / sqrt(defaultEffectiveBalance))
+          .toInt();
       expect(r, expected);
     });
 
-    test('reward decreases as total_effective_balance grows (inverse sqrt)', () {
-      // Doubling the network's total stake should drop the per-validator
-      // reward by a factor of sqrt(2).
-      final base = miningCalculateReward(defaultEffectiveBalance);
-      final doubled = miningCalculateReward(defaultEffectiveBalance * 2);
-      expect(doubled, lessThan(base),
-          reason: 'larger total should reduce per-validator reward');
+    test(
+      'reward decreases as total_effective_balance grows (inverse sqrt)',
+      () {
+        // Doubling the network's total stake should drop the per-validator
+        // reward by a factor of sqrt(2).
+        final base = miningCalculateReward(defaultEffectiveBalance);
+        final doubled = miningCalculateReward(defaultEffectiveBalance * 2);
+        expect(
+          doubled,
+          lessThan(base),
+          reason: 'larger total should reduce per-validator reward',
+        );
 
-      // sqrt(2) ≈ 1.414, so ratio base/doubled should be ~1.414.
-      // Use a loose band to tolerate the int truncation.
-      final ratio = base / doubled;
-      expect(ratio, greaterThan(1.30));
-      expect(ratio, lessThan(1.55));
-    });
+        // sqrt(2) ≈ 1.414, so ratio base/doubled should be ~1.414.
+        // Use a loose band to tolerate the int truncation.
+        final ratio = base / doubled;
+        expect(ratio, greaterThan(1.30));
+        expect(ratio, lessThan(1.55));
+      },
+    );
 
     test('larger effective_balance produces proportionally larger reward', () {
       const big = 64000000000; // 64 N
-      final defaultReward =
-          miningCalculateReward(big, effectiveBalance: defaultEffectiveBalance);
-      final doubledReward =
-          miningCalculateReward(big, effectiveBalance: defaultEffectiveBalance * 2);
+      final defaultReward = miningCalculateReward(
+        big,
+        effectiveBalance: defaultEffectiveBalance,
+      );
+      final doubledReward = miningCalculateReward(
+        big,
+        effectiveBalance: defaultEffectiveBalance * 2,
+      );
       // reward is linear in effectiveBalance with all else equal.
       expect(doubledReward, defaultReward * 2);
     });
@@ -79,8 +90,11 @@ void main() {
       const totalEffective = oneValidator * 1024;
       final r = miningCalculateReward(totalEffective);
       expect(r, greaterThan(0));
-      expect(r, lessThan(oneValidator),
-          reason: 'reward should never exceed the validators own EB');
+      expect(
+        r,
+        lessThan(oneValidator),
+        reason: 'reward should never exceed the validators own EB',
+      );
     });
 
     test('matches reference formula across a sweep of total balances', () {
@@ -94,8 +108,7 @@ void main() {
       ];
       for (final total in sweepPoints) {
         final got = miningCalculateReward(total);
-        final reference =
-            (defaultEffectiveBalance / sqrt(total)).toInt();
+        final reference = (defaultEffectiveBalance / sqrt(total)).toInt();
         expect(got, reference, reason: 'total=$total');
       }
     });

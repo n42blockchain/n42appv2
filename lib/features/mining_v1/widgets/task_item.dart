@@ -16,7 +16,9 @@ class TaskItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = AppTypography.bodySm.copyWith(color: AppColorTokens.of(context).textPrimary);
+    final textStyle = AppTypography.bodySm.copyWith(
+      color: AppColorTokens.of(context).textPrimary,
+    );
     return Container(
       padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
       margin: EdgeInsets.symmetric(vertical: AppSpacing.space2),

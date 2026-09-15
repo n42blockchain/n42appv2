@@ -41,8 +41,19 @@ class RequestUrl {
 
   /// BTC-like 币种列表，testnet 和 mainnet 共用
   static const List<String> _btcLikeCoins = [
-    'BTC', 'LTC', 'DOGE', 'DASH', 'VIA', 'DGB',
-    'MONA', 'FIRO', 'BCH', 'BTG', 'RVN', 'QTUM', 'XEC',
+    'BTC',
+    'LTC',
+    'DOGE',
+    'DASH',
+    'VIA',
+    'DGB',
+    'MONA',
+    'FIRO',
+    'BCH',
+    'BTG',
+    'RVN',
+    'QTUM',
+    'XEC',
   ];
 
   String getUrl2(String coinKey, String uriKey, {bool? isTest}) {

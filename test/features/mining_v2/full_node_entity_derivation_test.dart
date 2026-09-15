@@ -82,17 +82,20 @@ void main() {
       expect(p.fullNodeEntity!.status, NodeStatus.syncing);
     });
 
-    test('exitTimestamp!=0 且 showRedemption2=false → offline 优先于 online 判定', () {
-      final p = buildProvider();
-      // 即使 showRedemption + miningStatus 都为 true（本应 online），
-      // 已退出（exitTimestamp!=0 && !showRedemption2）仍强制 offline
-      p.showRedemption = true;
-      p.showRedemption2 = false;
-      p.miningStatus = true;
-      p.exitTimestamp = 1700000000;
+    test(
+      'exitTimestamp!=0 且 showRedemption2=false → offline 优先于 online 判定',
+      () {
+        final p = buildProvider();
+        // 即使 showRedemption + miningStatus 都为 true（本应 online），
+        // 已退出（exitTimestamp!=0 && !showRedemption2）仍强制 offline
+        p.showRedemption = true;
+        p.showRedemption2 = false;
+        p.miningStatus = true;
+        p.exitTimestamp = 1700000000;
 
-      expect(p.fullNodeEntity!.status, NodeStatus.offline);
-    });
+        expect(p.fullNodeEntity!.status, NodeStatus.offline);
+      },
+    );
   });
 
   group('fullNodeEntity uptime 计算（100 - inactivityPct，clamp 0..100）', () {

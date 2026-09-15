@@ -35,7 +35,8 @@ class _FakeWalletService implements IWalletService {
   @override
   bool walletExists(String address) => false;
   @override
-  Future<String?> getChainAddress(String walletId, String chainType) async => null;
+  Future<String?> getChainAddress(String walletId, String chainType) async =>
+      null;
   @override
   Map<String, dynamic>? getCoinInfoForWallet(int walletIndex) => null;
   @override
@@ -43,12 +44,14 @@ class _FakeWalletService implements IWalletService {
   @override
   Future<String?> getMnemonicForWallet(int walletIndex) async => null;
   @override
-  Future<WalletBalanceInfo?> getBalance(String address, String coinType) async => null;
+  Future<WalletBalanceInfo?> getBalance(
+    String address,
+    String coinType,
+  ) async => null;
   @override
   Future<({String mnemonic, String privateKey})> getCredentials(
     int walletIndex,
-  ) async =>
-      (mnemonic: '', privateKey: '');
+  ) async => (mnemonic: '', privateKey: '');
   @override
   Future<void> refreshWallets() async {}
 }
@@ -94,9 +97,9 @@ void main() {
       registerWalletService(realLikeFake);
 
       final overrideFake = _FakeWalletService();
-      final container = ProviderContainer(overrides: [
-        walletServiceProvider.overrideWithValue(overrideFake),
-      ]);
+      final container = ProviderContainer(
+        overrides: [walletServiceProvider.overrideWithValue(overrideFake)],
+      );
       addTearDown(container.dispose);
 
       expect(container.read(walletServiceProvider), same(overrideFake));
@@ -125,9 +128,9 @@ void main() {
 
     test('honors overrideWithValue', () {
       final overrideFake = _FakeMiningService();
-      final container = ProviderContainer(overrides: [
-        miningServiceProvider.overrideWithValue(overrideFake),
-      ]);
+      final container = ProviderContainer(
+        overrides: [miningServiceProvider.overrideWithValue(overrideFake)],
+      );
       addTearDown(container.dispose);
 
       expect(container.read(miningServiceProvider), same(overrideFake));

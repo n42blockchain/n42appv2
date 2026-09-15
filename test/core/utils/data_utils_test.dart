@@ -105,7 +105,11 @@ void main() {
       // BigInt.from(15) → radixString '0f' ? No: 15 → 'f' (length 1, odd)
       // With padToEvenLength=true: '0f'
       expect(
-        utils.bigIntToHex(BigInt.from(15), need0x: false, padToEvenLength: true),
+        utils.bigIntToHex(
+          BigInt.from(15),
+          need0x: false,
+          padToEvenLength: true,
+        ),
         '0f',
       );
     });
@@ -113,7 +117,11 @@ void main() {
     test('padToEvenLength: even-length hex unchanged', () {
       // BigInt.from(255) → 'ff' (length 2, even)
       expect(
-        utils.bigIntToHex(BigInt.from(255), need0x: false, padToEvenLength: true),
+        utils.bigIntToHex(
+          BigInt.from(255),
+          need0x: false,
+          padToEvenLength: true,
+        ),
         'ff',
       );
     });

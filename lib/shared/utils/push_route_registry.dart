@@ -2,10 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 /// 推送路由处理器：拿到导航 context 与推送 data 负责完成跳转。
-typedef PushRouteHandler = void Function(
-  BuildContext ctx,
-  Map<String, dynamic> data,
-);
+typedef PushRouteHandler =
+    void Function(BuildContext ctx, Map<String, dynamic> data);
 
 /// 宿主推送通知的路由注册表。
 ///

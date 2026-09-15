@@ -187,7 +187,8 @@ class WalletKeyManager {
       if (parts.length >= 2) {
         final privatePart = parts[0].trim();
         final publicPart = parts[1].trim();
-        if (!_hexPattern.hasMatch(privatePart) || !_hexPattern.hasMatch(publicPart)) {
+        if (!_hexPattern.hasMatch(privatePart) ||
+            !_hexPattern.hasMatch(publicPart)) {
           throw WalletException(
             message: 'Invalid key pair format: not valid hex',
             code: 'KEY_PAIR_DERIVATION_FAILED',

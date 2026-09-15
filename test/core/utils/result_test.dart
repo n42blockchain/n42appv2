@@ -72,19 +72,13 @@ void main() {
   group('when', () {
     test('calls success branch for Success', () {
       const r = Result<String, int>.success('hello');
-      final result = r.when(
-        success: (v) => 'ok:$v',
-        failure: (e) => 'fail:$e',
-      );
+      final result = r.when(success: (v) => 'ok:$v', failure: (e) => 'fail:$e');
       expect(result, 'ok:hello');
     });
 
     test('calls failure branch for Failure', () {
       const r = Result<String, int>.failure(404);
-      final result = r.when(
-        success: (v) => 'ok:$v',
-        failure: (e) => 'fail:$e',
-      );
+      final result = r.when(success: (v) => 'ok:$v', failure: (e) => 'fail:$e');
       expect(result, 'fail:404');
     });
   });

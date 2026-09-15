@@ -51,9 +51,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
         children: [
           Positioned.fill(
             child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: AppSpacing.space8,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
               child: Column(
                 children: [
                   Expanded(
@@ -70,9 +68,7 @@ class _SelectMiningPlansState extends State<SelectMiningPlans> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: AppSpacing.space8,
-                    ),
+                    padding: EdgeInsets.symmetric(vertical: AppSpacing.space8),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [

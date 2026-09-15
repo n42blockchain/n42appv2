@@ -27,19 +27,14 @@ class MarketDataAggregator {
 
   /// Datasource fetch functions in fallback order.
   static final List<Future<Map<String, CoinPrice>> Function(List<String>)>
-      _sources = [
-    CoinPaprikaDatasource.getPrices,
-    CoinLoreDatasource.getPrices,
-  ];
+  _sources = [CoinPaprikaDatasource.getPrices, CoinLoreDatasource.getPrices];
 
   /// Fetch prices for the given uppercase [symbols] using fallback chain.
   ///
   /// Returns a map of symbol → [CoinPrice] for all symbols that could
   /// be resolved from any source. Symbols not found in any source are
   /// omitted from the result.
-  static Future<Map<String, CoinPrice>> getPrices(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, CoinPrice>> getPrices(List<String> symbols) async {
     if (symbols.isEmpty) return {};
 
     final upperSymbols = symbols.map((s) => s.toUpperCase()).toList();
@@ -101,9 +96,7 @@ class MarketDataAggregator {
   }
 
   /// Get prices as a simple symbol→USD map (convenience for bridge).
-  static Future<Map<String, double>> getPriceMap(
-    List<String> symbols,
-  ) async {
+  static Future<Map<String, double>> getPriceMap(List<String> symbols) async {
     final result = await getPrices(symbols);
     return {
       for (final entry in result.entries) entry.key: entry.value.priceUsd,

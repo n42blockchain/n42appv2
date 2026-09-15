@@ -14,16 +14,14 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('Basic Widget Tests', () {
-    testWidgets('MaterialApp should render correctly', (WidgetTester tester) async {
+    testWidgets('MaterialApp should render correctly', (
+      WidgetTester tester,
+    ) async {
       // Build a simple MaterialApp
       await tester.pumpWidget(
         const ProviderScope(
           child: MaterialApp(
-            home: Scaffold(
-              body: Center(
-                child: Text('N42 Wallet'),
-              ),
-            ),
+            home: Scaffold(body: Center(child: Text('N42 Wallet'))),
           ),
         ),
       );
@@ -43,9 +41,7 @@ void main() {
             builder: (context) {
               return Scaffold(
                 body: Center(
-                  child: Text(
-                    'Theme: ${Theme.of(context).brightness}',
-                  ),
+                  child: Text('Theme: ${Theme.of(context).brightness}'),
                 ),
               );
             },
@@ -65,9 +61,7 @@ void main() {
             builder: (context) {
               return Scaffold(
                 body: Center(
-                  child: Text(
-                    'Theme: ${Theme.of(context).brightness}',
-                  ),
+                  child: Text('Theme: ${Theme.of(context).brightness}'),
                 ),
               );
             },
@@ -80,7 +74,9 @@ void main() {
   });
 
   group('Riverpod Integration', () {
-    testWidgets('ProviderScope should work correctly', (WidgetTester tester) async {
+    testWidgets('ProviderScope should work correctly', (
+      WidgetTester tester,
+    ) async {
       final testProvider = StateProvider<int>((ref) => 0);
 
       await tester.pumpWidget(
@@ -95,7 +91,8 @@ void main() {
                     children: [
                       Text('Value: $value'),
                       ElevatedButton(
-                        onPressed: () => ref.read(testProvider.notifier).state++,
+                        onPressed: () =>
+                            ref.read(testProvider.notifier).state++,
                         child: const Text('Increment'),
                       ),
                     ],

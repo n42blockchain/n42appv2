@@ -11,10 +11,7 @@ abstract class Failure extends Equatable {
   /// 失败代码
   final String? code;
 
-  const Failure({
-    required this.message,
-    this.code,
-  });
+  const Failure({required this.message, this.code});
 
   @override
   List<Object?> get props => [message, code];
@@ -25,11 +22,7 @@ class ServerFailure extends Failure {
   /// HTTP 状态码
   final int? statusCode;
 
-  const ServerFailure({
-    super.message = '服务器错误',
-    super.code,
-    this.statusCode,
-  });
+  const ServerFailure({super.message = '服务器错误', super.code, this.statusCode});
 
   @override
   List<Object?> get props => [message, code, statusCode];
@@ -45,26 +38,17 @@ class NetworkFailure extends Failure {
 
 /// 超时失败
 class TimeoutFailure extends Failure {
-  const TimeoutFailure({
-    super.message = '请求超时',
-    super.code = 'TIMEOUT',
-  });
+  const TimeoutFailure({super.message = '请求超时', super.code = 'TIMEOUT'});
 }
 
 /// 缓存失败
 class CacheFailure extends Failure {
-  const CacheFailure({
-    super.message = '缓存操作失败',
-    super.code = 'CACHE_ERROR',
-  });
+  const CacheFailure({super.message = '缓存操作失败', super.code = 'CACHE_ERROR'});
 }
 
 /// 认证失败
 class AuthFailure extends Failure {
-  const AuthFailure({
-    super.message = '认证失败',
-    super.code = 'AUTH_ERROR',
-  });
+  const AuthFailure({super.message = '认证失败', super.code = 'AUTH_ERROR'});
 }
 
 /// Token 过期失败
@@ -108,10 +92,7 @@ class BusinessFailure extends Failure {
 
 /// 钱包操作失败
 class WalletFailure extends Failure {
-  const WalletFailure({
-    required super.message,
-    super.code = 'WALLET_ERROR',
-  });
+  const WalletFailure({required super.message, super.code = 'WALLET_ERROR'});
 }
 
 /// 交易失败
@@ -132,10 +113,7 @@ class BiometricFailure extends Failure {
 
 /// 未知失败
 class UnknownFailure extends Failure {
-  const UnknownFailure({
-    super.message = '未知错误',
-    super.code = 'UNKNOWN_ERROR',
-  });
+  const UnknownFailure({super.message = '未知错误', super.code = 'UNKNOWN_ERROR'});
 }
 
 /// 意外失败（用于捕获未预期的异常）

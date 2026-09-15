@@ -146,10 +146,9 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
 
   @override
   void setChainInfo() {
-    if (eventsRegistered) return;
+    if (eventsRegistered || signClient == null) return;
     eventsRegistered = true;
     try {
-      if (signClient == null) return;
       _subscribeRelayEvents();
       _subscribeSessionEvents();
     } catch (e) {
@@ -340,7 +339,7 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     });
 
     signClient!.onSessionExpire.subscribe((args) async {
-      if (dAppTopic != null) {
+      if (dAppTopic != null && dAppTopic == args.topic) {
         final s = wcL10n();
         ToastUtils.show(s?.g_wc_session_expired ?? 'Session has expired');
         viewStateDeal(WalletConnectState.disconnect);
@@ -781,12 +780,16 @@ mixin WalletConnectSession on ChangeNotifier, WalletConnectConnection {
     Map<String, wallet_connect.RequiredNamespace> required,
   ) {
     final result = <CoinModel>[];
-    // Track added models by address to prevent duplicates when a DApp sends
-    // multiple chain IDs that map to the same coin model (e.g. ton:mainnet + ton:-239)
+    // Deduplicate aliases of the same account, while retaining separate EVM
+    // networks that share a derived address.
     final seen = <String>{};
 
     void addIfNew(CoinModel cm, {bool prepend = false}) {
-      final key = '${cm.config.blockchainType}:${cm.address}';
+      final blockchain = cm.config.blockchainType;
+      final network = blockchain == BlockchainType.Ethereum.name
+          ? (cm.isTest ? cm.coin['chainId_test'] : cm.coin['chainId'])
+          : '';
+      final key = '$blockchain:$network:${cm.address}';
       if (seen.add(key)) {
         if (prepend) {
           result.insert(0, cm);

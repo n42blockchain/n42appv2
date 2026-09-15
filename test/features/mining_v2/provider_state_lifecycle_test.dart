@@ -59,8 +59,11 @@ void main() {
 
       expect(oldAddress, isNotNull);
       expect(newAddress, isNotNull);
-      expect(newAddress, isNot(equals(oldAddress)),
-          reason: '新 web3 客户端必须由新私钥派生地址');
+      expect(
+        newAddress,
+        isNot(equals(oldAddress)),
+        reason: '新 web3 客户端必须由新私钥派生地址',
+      );
     });
 
     test('resetData 重置基础字段并通知监听者', () {
@@ -91,8 +94,11 @@ void main() {
 
       p.resetData();
 
-      expect(p.privateKey, isNull,
-          reason: '不清空则外部忘记重设时 web3 getter 会用旧私钥重建客户端');
+      expect(
+        p.privateKey,
+        isNull,
+        reason: '不清空则外部忘记重设时 web3 getter 会用旧私钥重建客户端',
+      );
       expect(p.miningKeypart, isNull);
       expect(p.miningData, isNull);
     });

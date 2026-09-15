@@ -41,39 +41,54 @@ void main() {
 
       await provider.initWallet();
 
-      expect(provider.buildwallet, isFalse,
-          reason: 'lock must be released after normal completion');
+      expect(
+        provider.buildwallet,
+        isFalse,
+        reason: 'lock must be released after normal completion',
+      );
       expect(provider.initCallCount, 1);
     });
 
-    test('buildwallet is false even when initWallet throws internally', () async {
-      final provider = FakeWalletActionProvider()..shouldThrow = true;
+    test(
+      'buildwallet is false even when initWallet throws internally',
+      () async {
+        final provider = FakeWalletActionProvider()..shouldThrow = true;
 
-      // The exception propagates but lock must still be released.
-      expect(() => provider.initWallet(), throwsException);
-      // Give the future a chance to settle
-      await Future.delayed(Duration.zero);
+        // The exception propagates but lock must still be released.
+        expect(() => provider.initWallet(), throwsException);
+        // Give the future a chance to settle
+        await Future.delayed(Duration.zero);
 
-      expect(provider.buildwallet, isFalse,
-          reason: 'try-finally must release lock on exception');
-    });
+        expect(
+          provider.buildwallet,
+          isFalse,
+          reason: 'try-finally must release lock on exception',
+        );
+      },
+    );
 
-    test('second call while buildwallet==true is a no-op (idempotent)', () async {
-      final provider = FakeWalletActionProvider();
+    test(
+      'second call while buildwallet==true is a no-op (idempotent)',
+      () async {
+        final provider = FakeWalletActionProvider();
 
-      // Manually set lock to simulate in-flight state
-      provider.buildwallet = true;
+        // Manually set lock to simulate in-flight state
+        provider.buildwallet = true;
 
-      // This call should return immediately without incrementing initCallCount
-      await provider.initWallet();
+        // This call should return immediately without incrementing initCallCount
+        await provider.initWallet();
 
-      expect(provider.initCallCount, 0,
-          reason: 'concurrent second call must be idempotent');
-      // Restore and verify normal call works afterwards
-      provider.buildwallet = false;
-      await provider.initWallet();
-      expect(provider.initCallCount, 1);
-    });
+        expect(
+          provider.initCallCount,
+          0,
+          reason: 'concurrent second call must be idempotent',
+        );
+        // Restore and verify normal call works afterwards
+        provider.buildwallet = false;
+        await provider.initWallet();
+        expect(provider.initCallCount, 1);
+      },
+    );
 
     test('sequential calls each complete and release lock', () async {
       final provider = FakeWalletActionProvider();

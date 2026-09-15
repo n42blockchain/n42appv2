@@ -24,14 +24,18 @@ const _snap = WalletSnapshot(
 void main() {
   group('classify', () {
     test('recognizes intents in en + zh', () {
-      expect(WalletAssistantEngine.classify('what is my balance'),
-          WalletIntent.balance);
+      expect(
+        WalletAssistantEngine.classify('what is my balance'),
+        WalletIntent.balance,
+      );
       expect(WalletAssistantEngine.classify('我的余额'), WalletIntent.balance);
       expect(WalletAssistantEngine.classify('gas 现在多少'), WalletIntent.gas);
       expect(WalletAssistantEngine.classify('持仓总值'), WalletIntent.portfolio);
       expect(WalletAssistantEngine.classify('help'), WalletIntent.help);
-      expect(WalletAssistantEngine.classify('tell me a joke'),
-          WalletIntent.unknown);
+      expect(
+        WalletAssistantEngine.classify('tell me a joke'),
+        WalletIntent.unknown,
+      );
     });
   });
 

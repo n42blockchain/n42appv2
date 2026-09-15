@@ -96,9 +96,7 @@ mixin _MiningTodayV2LogicMixin on ConsumerState<MiningTodayV2> {
             constraints: BoxConstraints(
               maxHeight: ScreenUtil().setWidth(500.0),
             ),
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-            ),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacing.space8),
             child: ListView.builder(
               itemCount: walletList.length,
               itemBuilder: (context, int listIndex) {

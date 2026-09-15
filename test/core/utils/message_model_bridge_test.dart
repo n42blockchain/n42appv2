@@ -81,7 +81,10 @@ void main() {
       final result = Result<dynamic, AppError>.failure(
         AppError.blockchain('gas required exceeds allowance'),
       );
-      expect(resultToMessageModel(result).data, 'gas required exceeds allowance');
+      expect(
+        resultToMessageModel(result).data,
+        'gas required exceeds allowance',
+      );
     });
 
     test('AuthError message is propagated', () {

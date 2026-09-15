@@ -30,8 +30,8 @@ class UrlThreat {
 
   /// Safe result — no threat detected.
   const UrlThreat.safe(this.url)
-      : isMalicious = false,
-        threatType = null,
-        source = 'none',
-        tags = const [];
+    : isMalicious = false,
+      threatType = null,
+      source = 'none',
+      tags = const [];
 }

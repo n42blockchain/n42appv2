@@ -1,0 +1,109 @@
+{
+  "date": "2026-09-14",
+  "scope": "WalletConnect behavior coverage and three regression fixes",
+  "baseline_report": "../../release-audit-2026-09-14/summary.json",
+  "baseline_coverage": {
+    "hit": 59123,
+    "found": 130725,
+    "percent": 45.22700325109964,
+    "threshold": 70,
+    "passed": false
+  },
+  "current_coverage": {
+    "hit": 59793,
+    "found": 130727,
+    "percent": 45.73882977502735,
+    "threshold": 70,
+    "passed": false
+  },
+  "tests": {
+    "tests_passed": 4721,
+    "tests_failed": 0,
+    "skipped": 0,
+    "errors": 0,
+    "passed": true
+  },
+  "new_behavior_tests": 112,
+  "removed_formula_only_tests": 2,
+  "covered_line_delta": 670,
+  "percentage_point_delta": 0.5118265239277093,
+  "analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 155
+  },
+  "source_comparison": {
+    "added_files": [],
+    "missing_files": []
+  },
+  "focus_files": {
+    "lib/features/wallet_connect/provider/wallet_connect_session.dart": {
+      "before": {
+        "hit": 63,
+        "found": 419
+      },
+      "after": {
+        "hit": 373,
+        "found": 421
+      }
+    },
+    "lib/features/wallet_connect/provider/wallet_connect_connection.dart": {
+      "before": {
+        "hit": 7,
+        "found": 202
+      },
+      "after": {
+        "hit": 129,
+        "found": 202
+      }
+    },
+    "lib/features/wallet_connect/widgets/wallet_connect_alert_widget.dart": {
+      "before": {
+        "hit": 0,
+        "found": 245
+      },
+      "after": {
+        "hit": 175,
+        "found": 245
+      }
+    }
+  },
+  "current_source_sha256": {
+    "lib/features/wallet_connect/provider/wallet_connect_session.dart": "f00ae54df603d803f3501be27700f00e966ee304798cae197d6357ff42f6f3e0",
+    "test/features/wallet_connect/wc_chain_resolution_test.dart": "bb946de4c3cbea919d52aa2c57e73fa3c689b5ec57f3b04957dc0e26cb3b7ed4",
+    "test/features/wallet_connect/wc_models_test.dart": "0e85e6bd0f61d2b3bbb5050e3a63c48f65508cf22bbf90f9dda398c8a5a9bb49",
+    "test/features/wallet_connect/wc_pairing_retry_test.dart": "676a7dda82758241cc4de76397bdc2f4f537da79ebabf14ff7fee0beb1886178",
+    "test/features/wallet_connect/wc_provider_test.dart": "38b07a2868580c699cc017e3ea1d0ee5bfdade259a1c8044e8032550a60556a9",
+    "test/features/wallet_connect/wc_reconnect_test.dart": "d6257ff2f56f69a9a253d580fbda510e616dde91ac14cfc40c81a1aa83e2ab36",
+    "test/features/wallet_connect/wc_request_dispatch_test.dart": "2a2c9d94121b5ae311e3f7aae1319a4227120ce561723499a6d0aea4273fcb98",
+    "test/features/wallet_connect/wc_session_disconnect_test.dart": "c311fdcbc22d70bb91dacc2a2d82582173014b435f731297cf3cbd8b1ea47310",
+    "test/features/wallet_connect/wc_session_list_page_test.dart": "54a33861e509ce20c9370bd3b6e414c3b413888fafb61780105a756daebfcb78",
+    "test/features/wallet_connect/wc_session_proposal_test.dart": "7225593842672c283d0cf1eb61e1addd24893ca1efd562958185c49af594ea71",
+    "test/features/wallet_connect/wc_signing_handler_test.dart": "819490fec7656864ee30013b187dad606fae9efee7034fe037808cef258abb2e",
+    "test/features/wallet_connect/wc_signing_test.dart": "149f14cf0ed3b70d31a68207fa6cb0d157125725c129c9c3998d568445e71ca5",
+    "test/features/wallet_connect/wc_transaction_gas_test.dart": "91769346866b4146f50a7280b364bcebd38dcb018f42584fb6b368dcbc6f2d65",
+    "test/features/wallet_connect/widgets/wallet_connect_alert_widget_test.dart": "1a026cff0df976d82a023e15622bf69ce5b1345f6d2a77f3dad9638d169fd79a",
+    "test/helpers/wallet_connect_client_fake.dart": "8ee3126640927b3c6056825a012c87a0c4a96c0c71e251763a9742d07cb25875"
+  },
+  "evidence_sha256": {
+    "analysis.log.gz": "505f1f5f7b498c07bceeed2d2515de4fd9cdb07be90a63e84022694e81c3be0d",
+    "chain-resolution.log.gz": "6f49f67d54719391fbbcbc8b67231bb4430061b696cc1ab5934e74d20a317e2d",
+    "format.log.gz": "c1788085479ba1d6016f3ab1a96ea8bf392c0f9984c9ce9c0f11447a2ba9fa81",
+    "full-tests.jsonl.gz": "96f49baeb4f037e3be5b6a6f7f5a2980ad415a49edab90d4f0bdc61b269e9b06",
+    "full.lcov.gz": "b7b2f2ee6c0e05a897db27eebab20aa50167498519c40264fe87e66147eddf5f",
+    "pairing-retry.log.gz": "5d026353f8f06150100a45af124fab6191ffa35a6f9b7cc13dec4da2987a3991",
+    "regression-before.log.gz": "3ca50fa29400d570d2fadcaae5b497ff324966bb2989ae6dc5c4e9f606289735",
+    "wallet-connect-module.log.gz": "1a80686d6895a7f74d9f12c21334af2e12195b2d8ef1d777f780ef7c8fb5df61"
+  },
+  "commands": {
+    "full_tests": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine",
+    "analyze": "flutter analyze --no-pub --no-fatal-infos",
+    "format": "dart format --output=none --set-exit-if-changed lib test",
+    "coverage_gate": "python3 scripts/quality_gate.py coverage coverage/lcov.info --threshold 70"
+  },
+  "limits": [
+    "No live relay, real signing key, mainnet transaction or device acceptance used",
+    "70 percent CI gate unchanged; release remains blocked",
+    "Earlier native release artifacts predate these WalletConnect fixes and require rebuilding"
+  ]
+}

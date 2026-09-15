@@ -13,7 +13,7 @@ import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 /// without direct dependencies.
 abstract class CrossFeatureEvent {
   final DateTime timestamp;
-  
+
   CrossFeatureEvent() : timestamp = DateTime.now();
 }
 
@@ -21,19 +21,19 @@ abstract class CrossFeatureEvent {
 
 class WalletSelectedEvent extends CrossFeatureEvent {
   final SharedWalletInfo wallet;
-  
+
   WalletSelectedEvent(this.wallet);
 }
 
 class WalletCreatedEvent extends CrossFeatureEvent {
   final SharedWalletInfo wallet;
-  
+
   WalletCreatedEvent(this.wallet);
 }
 
 class WalletDeletedEvent extends CrossFeatureEvent {
   final String walletAddress;
-  
+
   WalletDeletedEvent(this.walletAddress);
 }
 
@@ -41,7 +41,7 @@ class WalletBalanceUpdatedEvent extends CrossFeatureEvent {
   final String walletAddress;
   final String coinSymbol;
   final String newBalance;
-  
+
   WalletBalanceUpdatedEvent({
     required this.walletAddress,
     required this.coinSymbol,
@@ -55,7 +55,7 @@ class TransactionCompletedEvent extends CrossFeatureEvent {
   final String amount;
   final String coinSymbol;
   final bool isSuccess;
-  
+
   TransactionCompletedEvent({
     required this.walletAddress,
     required this.txHash,
@@ -71,17 +71,14 @@ class TransactionCompletedEvent extends CrossFeatureEvent {
 class MiningStatusChangedEvent extends CrossFeatureEvent {
   final String status;
   final String? walletAddress;
-  
-  MiningStatusChangedEvent({
-    required this.status,
-    this.walletAddress,
-  });
+
+  MiningStatusChangedEvent({required this.status, this.walletAddress});
 }
 
 class MiningRewardReceivedEvent extends CrossFeatureEvent {
   final String reward;
   final String walletAddress;
-  
+
   MiningRewardReceivedEvent({
     required this.reward,
     required this.walletAddress,
@@ -91,18 +88,15 @@ class MiningRewardReceivedEvent extends CrossFeatureEvent {
 class MiningPlanChangedEvent extends CrossFeatureEvent {
   final String planId;
   final String planName;
-  
-  MiningPlanChangedEvent({
-    required this.planId,
-    required this.planName,
-  });
+
+  MiningPlanChangedEvent({required this.planId, required this.planName});
 }
 
 // — Chat Events —
 
 class UnreadMessageCountChangedEvent extends CrossFeatureEvent {
   final int count;
-  
+
   UnreadMessageCountChangedEvent(this.count);
 }
 
@@ -110,7 +104,7 @@ class NewMessageReceivedEvent extends CrossFeatureEvent {
   final String conversationId;
   final String messageId;
   final String senderUid;
-  
+
   NewMessageReceivedEvent({
     required this.conversationId,
     required this.messageId,
@@ -123,11 +117,8 @@ class NewMessageReceivedEvent extends CrossFeatureEvent {
 class UserLoggedInEvent extends CrossFeatureEvent {
   final String userUuid;
   final String? email;
-  
-  UserLoggedInEvent({
-    required this.userUuid,
-    this.email,
-  });
+
+  UserLoggedInEvent({required this.userUuid, this.email});
 }
 
 class UserLoggedOutEvent extends CrossFeatureEvent {}
@@ -137,4 +128,3 @@ class UserLoggedOutEvent extends CrossFeatureEvent {}
 class AppBackgroundedEvent extends CrossFeatureEvent {}
 
 class AppForegroundedEvent extends CrossFeatureEvent {}
-

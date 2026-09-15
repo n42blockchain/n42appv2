@@ -274,9 +274,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
             decoration: InputDecoration(
               labelText: widget.labelText,
               hintText: widget.hintText ?? 'Address or ENS name',
-              hintStyle: AppTypography.bodySm.copyWith(
-                color: subtitleColor,
-              ),
+              hintStyle: AppTypography.bodySm.copyWith(color: subtitleColor),
               contentPadding: EdgeInsets.symmetric(
                 horizontal: su.setWidth(16),
                 vertical: su.setWidth(14),
@@ -328,10 +326,7 @@ class _EnsAddressFieldState extends State<EnsAddressField> {
     final su = ScreenUtil();
     return Padding(
       padding: EdgeInsets.only(top: su.setWidth(8), left: su.setWidth(4)),
-      child: Text(
-        text,
-        style: AppTypography.caption.copyWith(color: color),
-      ),
+      child: Text(text, style: AppTypography.caption.copyWith(color: color)),
     );
   }
 

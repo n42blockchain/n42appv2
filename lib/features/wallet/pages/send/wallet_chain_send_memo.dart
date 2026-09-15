@@ -67,8 +67,7 @@ class _WalletChainSendMemoState extends ConsumerState<WalletChainSendMemo>
 
   @override
   Widget build(BuildContext context) {
-    final miniName = (widget.coinModel.config.miniName)
-        .toUpperCase();
+    final miniName = (widget.coinModel.config.miniName).toUpperCase();
     return Scaffold(
       appBar: AppBarWidget(text: '${S.of(context).g_key_37} $miniName'),
       body: SafeArea(

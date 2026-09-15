@@ -37,17 +37,20 @@ TxRiskAnalysis decodeApprove(String params, String selector) {
     }
 
     fields.add(TxRiskField('Spender', txRiskFormatAddress(spender)));
-    fields.add(TxRiskField(
-      'Amount',
-      isUnlimited ? 'Unlimited ∞' : txRiskFormatAmount(amountHex),
-      isHighlighted: isUnlimited,
-    ));
+    fields.add(
+      TxRiskField(
+        'Amount',
+        isUnlimited ? 'Unlimited ∞' : txRiskFormatAmount(amountHex),
+        isHighlighted: isUnlimited,
+      ),
+    );
   }
 
   return TxRiskAnalysis(
     level: level,
-    functionName:
-        selector == '0xb0431182' ? 'Increase Allowance' : 'ERC-20 Approve',
+    functionName: selector == '0xb0431182'
+        ? 'Increase Allowance'
+        : 'ERC-20 Approve',
     fields: fields,
     warnings: warnings,
   );
@@ -67,7 +70,9 @@ TxRiskAnalysis decodeTransferFrom(String params) {
     level: TxRiskLevel.caution,
     functionName: 'ERC-20 TransferFrom',
     fields: fields,
-    warnings: ['Tokens will be transferred FROM another address on their behalf.'],
+    warnings: [
+      'Tokens will be transferred FROM another address on their behalf.',
+    ],
   );
 }
 
@@ -82,11 +87,13 @@ TxRiskAnalysis decodePermit(String params) {
     final isUnlimited = txRiskIsMaxUint256(amountHex);
 
     fields.add(TxRiskField('Spender', txRiskFormatAddress(spender)));
-    fields.add(TxRiskField(
-      'Amount',
-      isUnlimited ? 'Unlimited ∞' : txRiskFormatAmount(amountHex),
-      isHighlighted: isUnlimited,
-    ));
+    fields.add(
+      TxRiskField(
+        'Amount',
+        isUnlimited ? 'Unlimited ∞' : txRiskFormatAmount(amountHex),
+        isHighlighted: isUnlimited,
+      ),
+    );
 
     warnings.add(
       'Gasless approval (EIP-2612): spender gains transfer rights '
@@ -112,10 +119,9 @@ TxRiskAnalysis decodeSetApprovalForAll(String params) {
     fields.add(TxRiskField('Operator', txRiskFormatAddress(operator)));
     if (params.length >= 128) {
       final approved = params.substring(64, 128).endsWith('1');
-      fields.add(TxRiskField(
-        'Action',
-        approved ? 'Grant Access' : 'Revoke Access',
-      ));
+      fields.add(
+        TxRiskField('Action', approved ? 'Grant Access' : 'Revoke Access'),
+      );
     }
   }
   return TxRiskAnalysis(
@@ -124,7 +130,7 @@ TxRiskAnalysis decodeSetApprovalForAll(String params) {
     fields: fields,
     warnings: [
       'Grants the operator full access to your entire NFT collection in '
-      'this contract. Revoke after use.',
+          'this contract. Revoke after use.',
     ],
   );
 }

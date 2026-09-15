@@ -141,25 +141,24 @@ void main() {
     group('.success() factory', () {
       test('success field is true', () {
         final resp = HardwareWalletSignResponse.success(
-            signature: '0xSig', txHash: '0xHash');
+          signature: '0xSig',
+          txHash: '0xHash',
+        );
         expect(resp.success, isTrue);
       });
 
       test('signature is set', () {
-        final resp =
-            HardwareWalletSignResponse.success(signature: '0xMySig');
+        final resp = HardwareWalletSignResponse.success(signature: '0xMySig');
         expect(resp.signature, '0xMySig');
       });
 
       test('txHash is optional', () {
-        final resp =
-            HardwareWalletSignResponse.success(signature: '0xSig');
+        final resp = HardwareWalletSignResponse.success(signature: '0xSig');
         expect(resp.txHash, isNull);
       });
 
       test('error field is null on success', () {
-        final resp =
-            HardwareWalletSignResponse.success(signature: '0xSig');
+        final resp = HardwareWalletSignResponse.success(signature: '0xSig');
         expect(resp.error, isNull);
       });
     });

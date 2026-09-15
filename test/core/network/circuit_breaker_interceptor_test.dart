@@ -53,7 +53,7 @@ class _MockResponse {
 // ---------------------------------------------------------------------------
 
 ({Dio dio, _MockHttpAdapter adapter, CircuitBreakerInterceptor cb})
-    _createTestDio({CircuitBreakerConfig? config}) {
+_createTestDio({CircuitBreakerConfig? config}) {
   final adapter = _MockHttpAdapter();
   final cb = CircuitBreakerInterceptor(
     config: config ?? const CircuitBreakerConfig(failureThreshold: 3),
@@ -84,8 +84,12 @@ void main() {
       adapter.enqueue(502);
 
       // Two failures — below threshold of 3.
-      try { await dio.get('/a'); } catch (_) {}
-      try { await dio.get('/b'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
+      try {
+        await dio.get('/b');
+      } catch (_) {}
 
       expect(cb.state, CircuitState.closed);
       expect(cb.failureCount, 2);
@@ -98,7 +102,9 @@ void main() {
       adapter.enqueueMany(3, 502);
 
       for (var i = 0; i < 3; i++) {
-        try { await dio.get('/test'); } catch (_) {}
+        try {
+          await dio.get('/test');
+        } catch (_) {}
       }
 
       expect(cb.state, CircuitState.open);
@@ -115,19 +121,25 @@ void main() {
 
       // Trip the circuit.
       adapter.enqueueMany(2, 500);
-      try { await dio.get('/a'); } catch (_) {}
-      try { await dio.get('/b'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
+      try {
+        await dio.get('/b');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
 
       // Next request should be rejected without consuming adapter response.
       adapter.enqueue(200);
       expect(
         () => dio.get('/c'),
-        throwsA(isA<DioException>().having(
-          (e) => e.error.toString(),
-          'error message',
-          contains('Circuit breaker is open'),
-        )),
+        throwsA(
+          isA<DioException>().having(
+            (e) => e.error.toString(),
+            'error message',
+            contains('Circuit breaker is open'),
+          ),
+        ),
       );
 
       // The 200 response was NOT consumed — circuit rejected before reaching adapter.
@@ -144,8 +156,12 @@ void main() {
 
       // Trip the circuit.
       adapter.enqueueMany(2, 502);
-      try { await dio.get('/a'); } catch (_) {}
-      try { await dio.get('/b'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
+      try {
+        await dio.get('/b');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
 
       // With recoveryTimeout=0, next request should transition to halfOpen and go through.
@@ -166,13 +182,19 @@ void main() {
 
       // Trip the circuit.
       adapter.enqueueMany(2, 503);
-      try { await dio.get('/a'); } catch (_) {}
-      try { await dio.get('/b'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
+      try {
+        await dio.get('/b');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
 
       // Probe request also fails → re-open.
       adapter.enqueue(503);
-      try { await dio.get('/c'); } catch (_) {}
+      try {
+        await dio.get('/c');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
     });
 
@@ -184,7 +206,9 @@ void main() {
       // Accumulate some failures.
       adapter.enqueueMany(3, 502);
       for (var i = 0; i < 3; i++) {
-        try { await dio.get('/test'); } catch (_) {}
+        try {
+          await dio.get('/test');
+        } catch (_) {}
       }
       expect(cb.failureCount, 3);
 
@@ -206,7 +230,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(500);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
     });
 
@@ -215,7 +241,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(502);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
     });
 
@@ -224,7 +252,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(503);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
     });
 
@@ -233,7 +263,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(504);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
     });
 
@@ -242,7 +274,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(400);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.closed);
       expect(cb.failureCount, 0);
     });
@@ -252,7 +286,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(401);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.closed);
     });
 
@@ -261,18 +297,25 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(404);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.closed);
     });
 
-    test('429 does NOT trip the circuit (rate limit, not server failure)', () async {
-      final (:dio, :adapter, :cb) = _createTestDio(
-        config: const CircuitBreakerConfig(failureThreshold: 1),
-      );
-      adapter.enqueue(429);
-      try { await dio.get('/test'); } catch (_) {}
-      expect(cb.state, CircuitState.closed);
-    });
+    test(
+      '429 does NOT trip the circuit (rate limit, not server failure)',
+      () async {
+        final (:dio, :adapter, :cb) = _createTestDio(
+          config: const CircuitBreakerConfig(failureThreshold: 1),
+        );
+        adapter.enqueue(429);
+        try {
+          await dio.get('/test');
+        } catch (_) {}
+        expect(cb.state, CircuitState.closed);
+      },
+    );
   });
 
   // ---------------------------------------------------------------------------
@@ -285,7 +328,9 @@ void main() {
         config: const CircuitBreakerConfig(failureThreshold: 1),
       );
       adapter.enqueue(502);
-      try { await dio.get('/test'); } catch (_) {}
+      try {
+        await dio.get('/test');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
 
       cb.reset();
@@ -303,7 +348,9 @@ void main() {
 
       // Trip the circuit with long recovery timeout.
       adapter.enqueue(502);
-      try { await dio.get('/a'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
       expect(cb.state, CircuitState.open);
 
       // Without reset, request would be rejected.
@@ -375,15 +422,23 @@ void main() {
       adapter.enqueue(502);
       adapter.enqueue(502);
 
-      try { await dio.get('/a'); } catch (_) {}
-      try { await dio.get('/b'); } catch (_) {}
+      try {
+        await dio.get('/a');
+      } catch (_) {}
+      try {
+        await dio.get('/b');
+      } catch (_) {}
       expect(cb.failureCount, 2);
 
       await dio.get('/c'); // success resets
       expect(cb.failureCount, 0);
 
-      try { await dio.get('/d'); } catch (_) {}
-      try { await dio.get('/e'); } catch (_) {}
+      try {
+        await dio.get('/d');
+      } catch (_) {}
+      try {
+        await dio.get('/e');
+      } catch (_) {}
       expect(cb.failureCount, 2);
       expect(cb.state, CircuitState.closed);
     });

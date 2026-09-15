@@ -220,12 +220,16 @@ class _SplashPageState extends State<SplashPage>
       children: [
         Text(
           _loadingText,
-          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.6)),
+          style: AppTypography.caption.copyWith(
+            color: Colors.white.withValues(alpha: 0.6),
+          ),
         ),
         SizedBox(height: AppSpacing.space16),
         Text(
           '\u00a9 2021-2026 N42 Inc.',
-          style: AppTypography.caption.copyWith(color: Colors.white.withValues(alpha: 0.4)),
+          style: AppTypography.caption.copyWith(
+            color: Colors.white.withValues(alpha: 0.4),
+          ),
         ),
         SizedBox(height: AppSpacing.space12),
       ],

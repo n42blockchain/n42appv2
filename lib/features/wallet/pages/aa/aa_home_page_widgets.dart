@@ -371,9 +371,7 @@ extension _AAHomePageWidgets on _AAHomePageState {
         children: [
           Text(
             S.of(context).g_key_aa_no_accounts,
-            style: AppTypography.bodyStrong.copyWith(
-              color: _mainTextColor(),
-            ),
+            style: AppTypography.bodyStrong.copyWith(color: _mainTextColor()),
           ),
           SizedBox(height: AppSpacing.space4),
           for (var i = 0; i < steps.length; i++)

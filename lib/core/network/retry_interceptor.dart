@@ -81,8 +81,8 @@ class RetryInterceptor extends Interceptor {
     this.policy = const RetryPolicy(),
     Random? random,
     Connectivity? connectivity,
-  })  : random = random ?? Random(),
-        _connectivity = connectivity ?? Connectivity();
+  }) : random = random ?? Random(),
+       _connectivity = connectivity ?? Connectivity();
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
@@ -107,8 +107,9 @@ class RetryInterceptor extends Interceptor {
 
     // Skip retry when device has no network connection.
     final connectivityResults = await _connectivity.checkConnectivity();
-    final hasNetwork =
-        connectivityResults.any((r) => r != ConnectivityResult.none);
+    final hasNetwork = connectivityResults.any(
+      (r) => r != ConnectivityResult.none,
+    );
     if (!hasNetwork) return handler.next(err);
 
     await Future<void>.delayed(_calculateDelay(attempt, err));

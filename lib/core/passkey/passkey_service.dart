@@ -63,8 +63,10 @@ class PasskeyService {
     // Check support
     final supported = await isAvailable();
     if (!supported) {
-      throw PasskeyException('Passkey not supported on this device',
-          code: 'NOT_SUPPORTED');
+      throw PasskeyException(
+        'Passkey not supported on this device',
+        code: 'NOT_SUPPORTED',
+      );
     }
 
     // Get existing credential IDs to exclude (prevent duplicate registration)
@@ -174,8 +176,7 @@ class PasskeyService {
       if (data == null || data.isEmpty) return [];
       final list = jsonDecode(data) as List<dynamic>;
       return list
-          .map((e) =>
-              PasskeyCredential.fromJson(e as Map<String, dynamic>))
+          .map((e) => PasskeyCredential.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e) {
       AppLogger.w('Passkey', 'failed to load credentials: $e');
@@ -187,8 +188,10 @@ class PasskeyService {
   Future<PasskeyCredential?> getPrimaryCredential() async {
     final credentials = await getCredentials();
     if (credentials.isEmpty) return null;
-    credentials.sort((a, b) =>
-        (b.lastUsedAt ?? b.createdAt).compareTo(a.lastUsedAt ?? a.createdAt));
+    credentials.sort(
+      (a, b) =>
+          (b.lastUsedAt ?? b.createdAt).compareTo(a.lastUsedAt ?? a.createdAt),
+    );
     return credentials.first;
   }
 

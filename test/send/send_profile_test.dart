@@ -249,12 +249,15 @@ void main() {
     });
 
     test('contains evm, utxo, xrp, memo', () {
-      expect(SendProfile.values, containsAll([
-        SendProfile.evm,
-        SendProfile.utxo,
-        SendProfile.xrp,
-        SendProfile.memo,
-      ]));
+      expect(
+        SendProfile.values,
+        containsAll([
+          SendProfile.evm,
+          SendProfile.utxo,
+          SendProfile.xrp,
+          SendProfile.memo,
+        ]),
+      );
     });
   });
 }

@@ -99,8 +99,8 @@ void main() {
 
     test('orderNum and orderPrice are parsed as double from num', () {
       final model = SwapAstOrderModel.fromJson({
-        'order_num': 5,      // int → double
-        'order_price': 1.5,  // double
+        'order_num': 5, // int → double
+        'order_price': 1.5, // double
         'pay_num': 7.5,
       });
       expect(model.orderNum, isA<double>());

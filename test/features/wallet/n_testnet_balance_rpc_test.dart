@@ -21,8 +21,8 @@ void main() {
           'service_test': 'https://stale-stored-value.example',
         };
 
-      final canonical =
-          (chainUrlMap['N']?['baseInfo'] as Map?)?['service_test']?.toString();
+      final canonical = (chainUrlMap['N']?['baseInfo'] as Map?)?['service_test']
+          ?.toString();
       expect(canonical, isNotNull);
       expect(resolveBalanceRpcOverride(coinModel), canonical);
     });
@@ -48,7 +48,10 @@ void main() {
           'service_test': 'https://custom-rpc.example',
         };
 
-      expect(resolveBalanceRpcOverride(coinModel), 'https://custom-rpc.example');
+      expect(
+        resolveBalanceRpcOverride(coinModel),
+        'https://custom-rpc.example',
+      );
     });
 
     test('custom EVM chain without configured url returns null', () {

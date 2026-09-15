@@ -66,8 +66,7 @@ int resolveChainConfigId(
   Map<String, dynamic>? chainConfig, {
   bool isTest = false,
   int fallback = 1,
-}) =>
-    resolveChainConfigIdOrNull(chainConfig, isTest: isTest) ?? fallback;
+}) => resolveChainConfigIdOrNull(chainConfig, isTest: isTest) ?? fallback;
 
 class CoinConfigView {
   /// The underlying map. Kept public for cases that genuinely need to

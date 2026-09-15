@@ -4,8 +4,8 @@ final RegExp _trailingZeros = RegExp(r'0+$');
 
 /// A token found on-chain but not yet in the user's wallet.
 class DiscoveredToken {
-  final String coinType;        // internal chain key: ETH, BSC, SOL …
-  final String blockchainType;  // Ethereum, Solana, …
+  final String coinType; // internal chain key: ETH, BSC, SOL …
+  final String blockchainType; // Ethereum, Solana, …
   final String contractAddress; // EVM contract or Solana mint
   final String symbol;
   final String name;
@@ -48,8 +48,7 @@ class DiscoveredToken {
       symbol.isNotEmpty ? symbol : _truncateAddr(contractAddress);
 
   /// Display token name, fallback to contract address.
-  String get displayName =>
-      name.isNotEmpty ? name : contractAddress;
+  String get displayName => name.isNotEmpty ? name : contractAddress;
 
   /// Build the token map expected by [WalletActionProvider.addWalletChainToken].
   ///

@@ -130,9 +130,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
             Expanded(
               child: ListView(
                 controller: scrollController,
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppSpacing.space6,
-                ),
+                padding: EdgeInsets.symmetric(horizontal: AppSpacing.space6),
                 children: _buildFormBody(context),
               ),
             ),
@@ -329,9 +327,7 @@ class CreateSessionKeySheetState extends State<CreateSessionKeySheet> {
               disabledBackgroundColor: AppColorTokens.of(
                 context,
               ).textTertiary.withAlpha(50),
-              padding: EdgeInsets.symmetric(
-                vertical: AppSpacing.space4,
-              ),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.space4),
               shape: RoundedRectangleBorder(borderRadius: AppRadius.brMd),
             ),
             child: _isSaving
