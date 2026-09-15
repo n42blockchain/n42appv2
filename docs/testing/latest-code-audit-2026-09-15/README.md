@@ -25,6 +25,8 @@ GitHub Chat `main` 当前为 `491e595cc686d2a9095a70363b4c068ed1f88a36`，钱包
 
 已连接 Android 真机 `25098RA98C`（Android 16 / API 36）。执行 `flutter test integration_test/app_test.dart -d 38f4f08a --no-pub`：APK 构建、安装、启动、生命周期暂停/恢复全部通过，`1` 项通过。尚未执行需要专用账号、Face ID/指纹交互或真实 Matrix/链服务的真机场景。
 
+用户补充确认：服务器已部署 `source/deployment/11x/matrix/` Docker Compose 目录，Matrix 登录已恢复。该目录不在本地工作区，因此本轮未能审阅服务器上的 Compose、密钥注入、暴露端口和 TLS 配置。
+
 ## 验证边界
 
-未运行全钱包测试套件、覆盖率统计、iOS/Android 真机测试或发布构建。未向真实链广播交易，未声称完成全部代码或外部服务审计。最新 Chat 回归使用钱包实际 Git 依赖运行；Face ID 系统交互、Matrix 服务端策略和双端恢复仍沿用[原验收边界](../face-id-contact-2026-09-15/README.md)。
+未运行全钱包测试套件、覆盖率统计、iOS/Android 真机测试或发布构建。未向真实链广播交易，未声称完成全部代码或外部服务审计。Matrix 登录恢复由用户确认，但本地未包含该服务器目录，尚未完成线上 Matrix 流程和服务端策略审阅；最新 Chat 回归使用钱包实际 Git 依赖运行，Face ID 系统交互和双端恢复仍沿用[原验收边界](../face-id-contact-2026-09-15/README.md)。
