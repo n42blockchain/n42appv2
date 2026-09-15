@@ -1375,6 +1375,10 @@ class SIt extends S {
   String get authRegisterFailed => 'Registrazione fallita';
 
   @override
+  String get authRegistrationDisabled =>
+      'La registrazione su questo server è disabilitata. Contatta il suo amministratore per abilitarla.';
+
+  @override
   String get commonReenterPassword => 'Reinserisci password';
 
   @override

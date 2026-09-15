@@ -488,6 +488,7 @@
   "authLoginAgreement": "En vous connectant, vous acceptez ",
   "authPleaseAgreeToTerms": "Veuillez lire et accepter les conditions d'utilisation et la politique de confidentialite",
   "authRegisterFailed": "Echec de l'inscription",
+  "authRegistrationDisabled": "Les inscriptions sont désactivées sur ce serveur. Contactez son administrateur pour les activer.",
   "commonReenterPassword": "Ressaisir le mot de passe",
   "commonPasswordsDoNotMatch": "Les mots de passe ne correspondent pas",
   "authInviteCodeBuiltIn": "Code d'invitation (integre)",

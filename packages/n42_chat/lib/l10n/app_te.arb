@@ -488,6 +488,7 @@
   "authLoginAgreement": "లాగిన్ చేయడం ద్వారా, మీరు అంగీకరిస్తున్నారు ",
   "authPleaseAgreeToTerms": "దయచేసి సేవా నిబంధనలు మరియు గోప్యతా విధానాన్ని చదివి, అంగీకరించండి",
   "authRegisterFailed": "నమోదు విఫలమైంది",
+  "authRegistrationDisabled": "ఈ సర్వర్‌లో నమోదు నిలిపివేయబడింది. దాన్ని ప్రారంభించడానికి సర్వర్ నిర్వాహకుడిని సంప్రదించండి.",
   "commonReenterPassword": "పాస్వర్డ్ను మళ్లీ నమోదు చేయండి",
   "commonPasswordsDoNotMatch": "పాస్‌వర్డ్‌లు సరిపోలడం లేదు",
   "authInviteCodeBuiltIn": "ఆహ్వాన కోడ్ (అంతర్నిర్మిత)",

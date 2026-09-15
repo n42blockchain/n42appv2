@@ -488,6 +488,7 @@
   "authLoginAgreement": "Mit der Anmeldung stimmen Sie zu ",
   "authPleaseAgreeToTerms": "Bitte lesen und akzeptieren Sie die Nutzungsbedingungen und Datenschutzrichtlinie",
   "authRegisterFailed": "Registrierung fehlgeschlagen",
+  "authRegistrationDisabled": "Die Registrierung auf diesem Server ist deaktiviert. Bitte den Administrator um Aktivierung bitten.",
   "commonReenterPassword": "Passwort erneut eingeben",
   "commonPasswordsDoNotMatch": "Passwörter stimmen nicht überein",
   "authInviteCodeBuiltIn": "Einladungscode (Integriert)",

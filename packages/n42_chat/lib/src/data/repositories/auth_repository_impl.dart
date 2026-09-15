@@ -426,6 +426,15 @@ class AuthRepositoryImpl implements IAuthRepository {
         );
       }
       if (e.errcode == 'M_FORBIDDEN' || e.errcode == 'M_UNAUTHORIZED') {
+        final message = e.errorMessage.toLowerCase();
+        if (e.errcode == 'M_FORBIDDEN' &&
+            (message.contains('registration has been disabled') ||
+                message.contains('registration is disabled'))) {
+          return AuthResult.failure(
+            e.errorMessage,
+            type: AuthErrorType.registrationDisabled,
+          );
+        }
         return AuthResult.failure(
           e.errorMessage,
           type: AuthErrorType.serverError,

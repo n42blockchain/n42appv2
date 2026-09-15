@@ -488,6 +488,7 @@
   "authLoginAgreement": "लॉग इन करके, आप सहमत हैं ",
   "authPleaseAgreeToTerms": "कृपया सेवा की शर्तें और गोपनीयता नीति पढ़ें और उनसे सहमत हों",
   "authRegisterFailed": "पंजीकरण विफल रहा",
+  "authRegistrationDisabled": "इस सर्वर पर पंजीकरण बंद है। इसे चालू करने के लिए सर्वर के व्यवस्थापक से संपर्क करें।",
   "commonReenterPassword": "पासवर्ड पुनः दर्ज करें",
   "commonPasswordsDoNotMatch": "पासवर्ड मेल नहीं खाते",
   "authInviteCodeBuiltIn": "आमंत्रण कोड (अंतर्निहित)",

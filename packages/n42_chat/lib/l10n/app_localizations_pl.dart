@@ -1376,6 +1376,10 @@ class SPl extends S {
   String get authRegisterFailed => 'Rejestracja nie powiodla sie';
 
   @override
+  String get authRegistrationDisabled =>
+      'Rejestracja na tym serwerze jest wyłączona. Skontaktuj się z administratorem, aby ją włączyć.';
+
+  @override
   String get commonReenterPassword => 'Wprowadz haslo ponownie';
 
   @override

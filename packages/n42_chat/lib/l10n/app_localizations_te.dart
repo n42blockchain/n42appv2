@@ -1383,6 +1383,10 @@ class STe extends S {
   String get authRegisterFailed => 'నమోదు విఫలమైంది';
 
   @override
+  String get authRegistrationDisabled =>
+      'ఈ సర్వర్‌లో నమోదు నిలిపివేయబడింది. దాన్ని ప్రారంభించడానికి సర్వర్ నిర్వాహకుడిని సంప్రదించండి.';
+
+  @override
   String get commonReenterPassword => 'పాస్వర్డ్ను మళ్లీ నమోదు చేయండి';
 
   @override

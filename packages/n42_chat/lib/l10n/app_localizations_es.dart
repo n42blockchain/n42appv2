@@ -1378,6 +1378,10 @@ class SEs extends S {
   String get authRegisterFailed => 'Error de registro';
 
   @override
+  String get authRegistrationDisabled =>
+      'El registro está desactivado en este servidor. Contacta con su administrador para activarlo.';
+
+  @override
   String get commonReenterPassword => 'Reingresa la contrasena';
 
   @override

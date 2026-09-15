@@ -488,6 +488,7 @@
   "authLoginAgreement": "लॉग इन करून, तुम्ही सहमत आहात ",
   "authPleaseAgreeToTerms": "कृपया सेवा अटी आणि गोपनीयता धोरण वाचा आणि त्यांना सहमती द्या",
   "authRegisterFailed": "नोंदणी अयशस्वी",
+  "authRegistrationDisabled": "या सर्व्हरवर नोंदणी बंद आहे. ती सुरू करण्यासाठी सर्व्हरच्या प्रशासकाशी संपर्क साधा.",
   "commonReenterPassword": "पासवर्ड पुन्हा एंटर करा",
   "commonPasswordsDoNotMatch": "पासवर्ड जुळत नाहीत",
   "authInviteCodeBuiltIn": "आमंत्रण कोड (अंगभूत)",

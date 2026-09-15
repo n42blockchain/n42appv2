@@ -1379,6 +1379,10 @@ class SUk extends S {
   String get authRegisterFailed => 'Помилка реєстрації';
 
   @override
+  String get authRegistrationDisabled =>
+      'Реєстрацію на цьому сервері вимкнено. Зверніться до адміністратора сервера, щоб її ввімкнути.';
+
+  @override
   String get commonReenterPassword => 'Повторно введіть пароль';
 
   @override

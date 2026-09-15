@@ -488,6 +488,7 @@
   "authLoginAgreement": "লগ ইন করে, আপনি সম্মত হন ",
   "authPleaseAgreeToTerms": "অনুগ্রহ করে পড়ুন এবং পরিষেবার শর্তাবলী এবং গোপনীয়তা নীতিতে সম্মত হন৷",
   "authRegisterFailed": "নিবন্ধন ব্যর্থ হয়েছে",
+  "authRegistrationDisabled": "এই সার্ভারে নিবন্ধন বন্ধ আছে। চালু করতে সার্ভারের প্রশাসকের সঙ্গে যোগাযোগ করুন।",
   "commonReenterPassword": "পাসওয়ার্ড পুনরায় লিখুন",
   "commonPasswordsDoNotMatch": "পাসওয়ার্ড মেলে না",
   "authInviteCodeBuiltIn": "আমন্ত্রণ কোড (বিল্ট-ইন)",

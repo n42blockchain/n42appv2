@@ -488,6 +488,7 @@
   "authLoginAgreement": "Accedendo, accetti ",
   "authPleaseAgreeToTerms": "Leggi e accetta i Termini di servizio e l'Informativa sulla privacy",
   "authRegisterFailed": "Registrazione fallita",
+  "authRegistrationDisabled": "La registrazione su questo server è disabilitata. Contatta il suo amministratore per abilitarla.",
   "commonReenterPassword": "Reinserisci password",
   "commonPasswordsDoNotMatch": "Le password non coincidono",
   "authInviteCodeBuiltIn": "Codice invito (integrato)",

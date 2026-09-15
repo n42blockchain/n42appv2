@@ -1382,6 +1382,10 @@ class SPt extends S {
   String get authRegisterFailed => 'Falha no cadastro';
 
   @override
+  String get authRegistrationDisabled =>
+      'O registo neste servidor está desativado. Contacte o administrador para o ativar.';
+
+  @override
   String get commonReenterPassword => 'Digite a senha novamente';
 
   @override
@@ -7225,6 +7229,10 @@ class SPtBr extends SPt {
 
   @override
   String get authRegisterFailed => 'Falha no cadastro';
+
+  @override
+  String get authRegistrationDisabled =>
+      'O cadastro neste servidor está desativado. Entre em contato com o administrador para ativá-lo.';
 
   @override
   String get commonReenterPassword => 'Digite a senha novamente';

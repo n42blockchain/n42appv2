@@ -1348,6 +1348,9 @@ class SZh extends S {
   String get authRegisterFailed => '註冊失敗';
 
   @override
+  String get authRegistrationDisabled => '此服务器已关闭注册，请联系服务器管理员开放注册。';
+
+  @override
   String get commonReenterPassword => '請再次輸入密碼';
 
   @override
@@ -7018,6 +7021,9 @@ class SZhTw extends SZh {
 
   @override
   String get authRegisterFailed => '註冊失敗';
+
+  @override
+  String get authRegistrationDisabled => '此伺服器已關閉註冊，請聯絡伺服器管理員開放註冊。';
 
   @override
   String get commonReenterPassword => '請再次輸入密碼';

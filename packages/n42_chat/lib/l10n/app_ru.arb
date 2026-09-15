@@ -488,6 +488,7 @@
   "authLoginAgreement": "Входя в систему, вы соглашаетесь с ",
   "authPleaseAgreeToTerms": "Пожалуйста, прочитайте и согласитесь с Условиями использования и Политикой конфиденциальности",
   "authRegisterFailed": "Ошибка регистрации",
+  "authRegistrationDisabled": "Регистрация на этом сервере отключена. Обратитесь к администратору сервера, чтобы её включить.",
   "commonReenterPassword": "Введите пароль повторно",
   "commonPasswordsDoNotMatch": "Пароли не совпадают",
   "authInviteCodeBuiltIn": "Код приглашения (встроенный)",

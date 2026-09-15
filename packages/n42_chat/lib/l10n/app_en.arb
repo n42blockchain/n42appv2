@@ -488,6 +488,7 @@
   "authLoginAgreement": "By logging in, you agree to ",
   "authPleaseAgreeToTerms": "Please read and agree to the Terms of Service and Privacy Policy",
   "authRegisterFailed": "Registration failed",
+  "authRegistrationDisabled": "This server has disabled registration. Contact its administrator to enable it.",
   "commonReenterPassword": "Re-enter password",
   "commonPasswordsDoNotMatch": "Passwords do not match",
   "authInviteCodeBuiltIn": "Invite Code (Built-in)",

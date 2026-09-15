@@ -4,6 +4,7 @@
 
 | 主题 | 建议入口 |
 |---|---|
+| 注册被服务器禁用 | [原因、客户端提示与服务端恢复步骤](operations/2026-09-15-matrix-registration-disabled.md) |
 | TestFlight Chat 1.1—1.5 修复与复测 | [源码修复、钱包集成和验证边界](chat-audit-2026-09-12/testflight-feedback-2026-09-15/README.md) |
 | Chat 当前结果、入口审计、真机证据 | [Chat 交付索引](chat-audit-2026-09-12/README.md) |
 | Chat 各轮覆盖率与修复 | [合并历史记录](chat-audit-2026-09-12/COVERAGE_HISTORY_2026-09.md) |
@@ -13,7 +14,7 @@
 | 测试运行与质量策略 | [自动化测试](AUTOMATED_TESTING.md) · [QA 计划](QA_TEST_PLAN.md) |
 | 宿主覆盖率阶段证据 | [浏览器覆盖率与授权回归](testing/browser-coverage-2026-09-15/README.md) · [WalletConnect 覆盖率提升](testing/wallet-connect-coverage-2026-09-14/README.md) · [完整缺口审计](testing/coverage-gap-audit-full-2026-09-11.md) |
 | 双端正式发布标准与当前阻塞 | [发布清单](RELEASE_CHECKLIST.md) · [2026-09-14 发布审查](release-audit-2026-09-14/README.md) |
-| TestFlight 历史发布 | [2026-09-11 发布记录](testing/testflight-release-2026-09-11.md) |
+| TestFlight 历史发布 | [2026-09-15 发布记录](testing/testflight-release-2026-09-15.md) · [2026-09-11 发布记录](testing/testflight-release-2026-09-11.md) |
 | 设计系统与模块边界 | [设计系统](DESIGN_SYSTEM.md) · [模块化计划](MODULARITY_PLAN.md) |
 | 外部服务配置 | [依赖清单](EXTERNAL_DEPENDENCIES.md) · [配置指引](api-keys-setup-guide.md) |
 | 分支和文档维护 | [2026-09-14 整理记录](maintenance/cleanup-2026-09-14.md) |

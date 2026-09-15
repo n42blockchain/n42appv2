@@ -306,6 +306,9 @@ enum AuthErrorType {
   /// 需要额外验证
   additionalAuthRequired,
 
+  /// 服务器已关闭注册；邀请码或更改登录方式不能解除该限制
+  registrationDisabled,
+
   /// 速率限制
   rateLimited,
 }

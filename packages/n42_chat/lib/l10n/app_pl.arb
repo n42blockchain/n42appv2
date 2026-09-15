@@ -488,6 +488,7 @@
   "authLoginAgreement": "Logujac sie, akceptujesz ",
   "authPleaseAgreeToTerms": "Przeczytaj i zaakceptuj Regulamin i Polityke prywatnosci",
   "authRegisterFailed": "Rejestracja nie powiodla sie",
+  "authRegistrationDisabled": "Rejestracja na tym serwerze jest wyłączona. Skontaktuj się z administratorem, aby ją włączyć.",
   "commonReenterPassword": "Wprowadz haslo ponownie",
   "commonPasswordsDoNotMatch": "Hasla nie pasuja do siebie",
   "authInviteCodeBuiltIn": "Kod zaproszenia (wbudowany)",

@@ -1385,6 +1385,10 @@ class SFr extends S {
   String get authRegisterFailed => 'Echec de l\'inscription';
 
   @override
+  String get authRegistrationDisabled =>
+      'Les inscriptions sont désactivées sur ce serveur. Contactez son administrateur pour les activer.';
+
+  @override
   String get commonReenterPassword => 'Ressaisir le mot de passe';
 
   @override

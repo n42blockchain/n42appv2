@@ -488,6 +488,7 @@
   "authLoginAgreement": "لاگ ان کرکے، آپ اتفاق کرتے ہیں۔ ",
   "authPleaseAgreeToTerms": "براہ کرم سروس کی شرائط اور رازداری کی پالیسی کو پڑھیں اور ان سے اتفاق کریں۔",
   "authRegisterFailed": "رجسٹریشن ناکام ہو گئی۔",
+  "authRegistrationDisabled": "اس سرور پر رجسٹریشن بند ہے۔ اسے فعال کرنے کے لیے سرور کے منتظم سے رابطہ کریں۔",
   "commonReenterPassword": "پاس ورڈ دوبارہ درج کریں۔",
   "commonPasswordsDoNotMatch": "پاس ورڈز مماثل نہیں ہیں۔",
   "authInviteCodeBuiltIn": "انوائٹ کوڈ (بلٹ ان)",

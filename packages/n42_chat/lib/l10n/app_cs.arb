@@ -488,6 +488,7 @@
   "authLoginAgreement": "Přihlášením souhlasíte ",
   "authPleaseAgreeToTerms": "Přečtěte si prosím Podmínky služby a Zásady ochrany osobních údajů a odsouhlaste je",
   "authRegisterFailed": "Registrace se nezdařila",
+  "authRegistrationDisabled": "Registrace na tomto serveru je zakázána. Požádejte správce serveru o její povolení.",
   "commonReenterPassword": "Znovu zadejte heslo",
   "commonPasswordsDoNotMatch": "Hesla se neshodují",
   "authInviteCodeBuiltIn": "Zvací kód (vestavěný)",

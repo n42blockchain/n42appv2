@@ -1350,6 +1350,10 @@ class SKo extends S {
   String get authRegisterFailed => '회원가입 실패';
 
   @override
+  String get authRegistrationDisabled =>
+      '이 서버에서 가입이 비활성화되어 있습니다. 활성화하려면 서버 관리자에게 문의하세요.';
+
+  @override
   String get commonReenterPassword => '비밀번호 재입력';
 
   @override

@@ -1349,6 +1349,10 @@ class SJa extends S {
   String get authRegisterFailed => '登録に失敗しました';
 
   @override
+  String get authRegistrationDisabled =>
+      'このサーバーでは登録が無効になっています。有効にするにはサーバー管理者にお問い合わせください。';
+
+  @override
   String get commonReenterPassword => 'パスワードを再入力';
 
   @override

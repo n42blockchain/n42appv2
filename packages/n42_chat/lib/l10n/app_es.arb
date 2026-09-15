@@ -488,6 +488,7 @@
   "authLoginAgreement": "Al iniciar sesion, aceptas ",
   "authPleaseAgreeToTerms": "Por favor lee y acepta los Terminos de servicio y Politica de privacidad",
   "authRegisterFailed": "Error de registro",
+  "authRegistrationDisabled": "El registro está desactivado en este servidor. Contacta con su administrador para activarlo.",
   "commonReenterPassword": "Reingresa la contrasena",
   "commonPasswordsDoNotMatch": "Las contrasenas no coinciden",
   "authInviteCodeBuiltIn": "Codigo de invitacion (integrado)",

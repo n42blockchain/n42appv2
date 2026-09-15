@@ -1365,6 +1365,10 @@ class SAr extends S {
   String get authRegisterFailed => 'فشل التسجيل';
 
   @override
+  String get authRegistrationDisabled =>
+      'عطّل هذا الخادم التسجيل. تواصل مع مسؤول الخادم لتفعيله.';
+
+  @override
   String get commonReenterPassword => 'أعد إدخال كلمة المرور';
 
   @override

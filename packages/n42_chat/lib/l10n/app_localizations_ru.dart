@@ -1381,6 +1381,10 @@ class SRu extends S {
   String get authRegisterFailed => 'Ошибка регистрации';
 
   @override
+  String get authRegistrationDisabled =>
+      'Регистрация на этом сервере отключена. Обратитесь к администратору сервера, чтобы её включить.';
+
+  @override
   String get commonReenterPassword => 'Введите пароль повторно';
 
   @override

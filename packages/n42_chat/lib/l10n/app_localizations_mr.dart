@@ -1374,6 +1374,10 @@ class SMr extends S {
   String get authRegisterFailed => 'नोंदणी अयशस्वी';
 
   @override
+  String get authRegistrationDisabled =>
+      'या सर्व्हरवर नोंदणी बंद आहे. ती सुरू करण्यासाठी सर्व्हरच्या प्रशासकाशी संपर्क साधा.';
+
+  @override
   String get commonReenterPassword => 'पासवर्ड पुन्हा एंटर करा';
 
   @override

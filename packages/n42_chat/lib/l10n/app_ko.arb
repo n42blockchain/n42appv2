@@ -488,6 +488,7 @@
   "authLoginAgreement": "로그인하면 다음에 동의하는 것으로 간주됩니다 ",
   "authPleaseAgreeToTerms": "서비스 약관과 개인정보 처리방침을 읽고 동의해주세요",
   "authRegisterFailed": "회원가입 실패",
+  "authRegistrationDisabled": "이 서버에서 가입이 비활성화되어 있습니다. 활성화하려면 서버 관리자에게 문의하세요.",
   "commonReenterPassword": "비밀번호 재입력",
   "commonPasswordsDoNotMatch": "비밀번호가 일치하지 않습니다",
   "authInviteCodeBuiltIn": "초대 코드 (내장)",

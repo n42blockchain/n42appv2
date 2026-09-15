@@ -425,6 +425,7 @@
   "authLoginAgreement": "登錄即表示同意",
   "authPleaseAgreeToTerms": "請先閱讀並同意服務協議和隱私政策",
   "authRegisterFailed": "註冊失敗",
+  "authRegistrationDisabled": "此伺服器已關閉註冊，請聯絡伺服器管理員開放註冊。",
   "commonReenterPassword": "請再次輸入密碼",
   "commonPasswordsDoNotMatch": "兩次輸入的密碼不一致",
   "authInviteCodeBuiltIn": "邀請碼（已內置）",

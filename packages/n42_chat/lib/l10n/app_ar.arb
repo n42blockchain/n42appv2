@@ -488,6 +488,7 @@
   "authLoginAgreement": "بتسجيل الدخول فإنك توافق على",
   "authPleaseAgreeToTerms": "يرجى قراءة شروط الخدمة وسياسة الخصوصية والموافقة عليها",
   "authRegisterFailed": "فشل التسجيل",
+  "authRegistrationDisabled": "عطّل هذا الخادم التسجيل. تواصل مع مسؤول الخادم لتفعيله.",
   "commonReenterPassword": "أعد إدخال كلمة المرور",
   "commonPasswordsDoNotMatch": "كلمات المرور غير متطابقة",
   "authInviteCodeBuiltIn": "رمز الدعوة (مدمج)",

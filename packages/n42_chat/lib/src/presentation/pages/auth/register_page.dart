@@ -191,7 +191,11 @@ class _RegisterPageState extends State<RegisterPage> {
             if (state.errorType == AuthErrorType.additionalAuthRequired) {
               setState(() => _showInviteCode = true);
             }
-            final message = state.errorMessage != null
+            final message =
+                state.errorType == AuthErrorType.registrationDisabled
+                ? (S.of(context)?.authRegistrationDisabled ??
+                      'This server has disabled registration. Contact its administrator to enable it.')
+                : state.errorMessage != null
                 ? resolveBlocMessage(context, state.errorMessage!)
                 : (S.of(context)?.authRegisterFailed ?? 'Registration failed');
             ScaffoldMessenger.of(context).showSnackBar(

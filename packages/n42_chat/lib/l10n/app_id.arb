@@ -488,6 +488,7 @@
   "authLoginAgreement": "Dengan masuk, Anda menyetujui ",
   "authPleaseAgreeToTerms": "Silakan baca dan setujui Ketentuan Layanan dan Kebijakan Privasi",
   "authRegisterFailed": "Pendaftaran gagal",
+  "authRegistrationDisabled": "Pendaftaran di server ini dinonaktifkan. Hubungi administrator server untuk mengaktifkannya.",
   "commonReenterPassword": "Masukkan ulang kata sandi",
   "commonPasswordsDoNotMatch": "Kata sandi tidak cocok",
   "authInviteCodeBuiltIn": "Kode Undangan (Bawaan)",

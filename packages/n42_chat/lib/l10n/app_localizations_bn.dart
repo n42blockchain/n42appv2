@@ -1372,6 +1372,10 @@ class SBn extends S {
   String get authRegisterFailed => 'নিবন্ধন ব্যর্থ হয়েছে';
 
   @override
+  String get authRegistrationDisabled =>
+      'এই সার্ভারে নিবন্ধন বন্ধ আছে। চালু করতে সার্ভারের প্রশাসকের সঙ্গে যোগাযোগ করুন।';
+
+  @override
   String get commonReenterPassword => 'পাসওয়ার্ড পুনরায় লিখুন';
 
   @override

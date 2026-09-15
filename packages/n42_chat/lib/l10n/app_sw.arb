@@ -488,6 +488,7 @@
   "authLoginAgreement": "Kwa kuingia, unakubali ",
   "authPleaseAgreeToTerms": "Tafadhali soma na ukubali Sheria na Masharti na Sera ya Faragha",
   "authRegisterFailed": "Usajili umeshindwa",
+  "authRegistrationDisabled": "Usajili umezimwa kwenye seva hii. Wasiliana na msimamizi wa seva ili kuuwezesha.",
   "commonReenterPassword": "Ingiza tena nenosiri",
   "commonPasswordsDoNotMatch": "Manenosiri hayalingani",
   "authInviteCodeBuiltIn": "Nambari ya Mwaliko (Imejengwa ndani)",

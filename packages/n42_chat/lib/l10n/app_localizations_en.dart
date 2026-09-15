@@ -1364,6 +1364,10 @@ class SEn extends S {
   String get authRegisterFailed => 'Registration failed';
 
   @override
+  String get authRegistrationDisabled =>
+      'This server has disabled registration. Contact its administrator to enable it.';
+
+  @override
   String get commonReenterPassword => 'Re-enter password';
 
   @override

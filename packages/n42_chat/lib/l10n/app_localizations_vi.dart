@@ -1366,6 +1366,10 @@ class SVi extends S {
   String get authRegisterFailed => 'Dang ky that bai';
 
   @override
+  String get authRegistrationDisabled =>
+      'Máy chủ này đã tắt đăng ký. Hãy liên hệ quản trị viên máy chủ để bật lại.';
+
+  @override
   String get commonReenterPassword => 'Nhap lai mat khau';
 
   @override

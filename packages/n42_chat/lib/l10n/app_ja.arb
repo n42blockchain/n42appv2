@@ -488,6 +488,7 @@
   "authLoginAgreement": "ログインすることで、以下に同意したものとみなします ",
   "authPleaseAgreeToTerms": "利用規約とプライバシーポリシーを読んで同意してください",
   "authRegisterFailed": "登録に失敗しました",
+  "authRegistrationDisabled": "このサーバーでは登録が無効になっています。有効にするにはサーバー管理者にお問い合わせください。",
   "commonReenterPassword": "パスワードを再入力",
   "commonPasswordsDoNotMatch": "パスワードが一致しません",
   "authInviteCodeBuiltIn": "招待コード（内蔵）",

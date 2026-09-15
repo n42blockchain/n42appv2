@@ -1372,6 +1372,10 @@ class SId extends S {
   String get authRegisterFailed => 'Pendaftaran gagal';
 
   @override
+  String get authRegistrationDisabled =>
+      'Pendaftaran di server ini dinonaktifkan. Hubungi administrator server untuk mengaktifkannya.';
+
+  @override
   String get commonReenterPassword => 'Masukkan ulang kata sandi';
 
   @override

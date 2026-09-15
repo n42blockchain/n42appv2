@@ -1375,6 +1375,10 @@ class SSw extends S {
   String get authRegisterFailed => 'Usajili umeshindwa';
 
   @override
+  String get authRegistrationDisabled =>
+      'Usajili umezimwa kwenye seva hii. Wasiliana na msimamizi wa seva ili kuuwezesha.';
+
+  @override
   String get commonReenterPassword => 'Ingiza tena nenosiri';
 
   @override

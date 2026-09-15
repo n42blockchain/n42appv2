@@ -1,0 +1,26 @@
+{
+  "chat_ref": "916f4c3ef0422da648c51bf5f8f0cf3ea9364b6c",
+  "chat_targeted_passed": 56,
+  "chat_contract_passed": 30,
+  "wallet_targeted_passed": 118,
+  "chat_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 173
+  },
+  "wallet_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 155
+  },
+  "new_tests": 7,
+  "registration_restored": false,
+  "live_registration_attempted": false,
+  "sha256": {
+    "tests.log.gz": "f50efd714fb8f72e66caa26882c6f07e8868432441c7aaddd0262a8d9488a676",
+    "contract-tests.log.gz": "296c93213748e75ddbc380bf1a59cbc10e7e7615652452336690514001c42ee1",
+    "analyze.log.gz": "39f40bd42cfcc64d6d058bdc4911dea492c23086def333a88c3b3ef705ef1917",
+    "wallet-tests.log.gz": "680eaba2848f25ef8770d8cfe6793c86bad3def8c8fc3306943ea4f08c0e723c",
+    "wallet-analyze.log.gz": "85413db42a8b8ad570fec209325fda0a4ad8aabbf9f89fd7b360ee9d7c1fa6b8"
+  }
+}

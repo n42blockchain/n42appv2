@@ -488,6 +488,7 @@
   "authLoginAgreement": "Bang viec dang nhap, ban dong y voi ",
   "authPleaseAgreeToTerms": "Vui long doc va dong y voi Dieu khoan Dich vu va Chinh sach Bao mat",
   "authRegisterFailed": "Dang ky that bai",
+  "authRegistrationDisabled": "Máy chủ này đã tắt đăng ký. Hãy liên hệ quản trị viên máy chủ để bật lại.",
   "commonReenterPassword": "Nhap lai mat khau",
   "commonPasswordsDoNotMatch": "Mat khau khong khop",
   "authInviteCodeBuiltIn": "Ma moi (tich hop san)",

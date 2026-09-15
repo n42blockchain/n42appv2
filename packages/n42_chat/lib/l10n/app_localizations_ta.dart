@@ -1377,6 +1377,10 @@ class STa extends S {
   String get authRegisterFailed => 'பதிவு தோல்வியடைந்தது';
 
   @override
+  String get authRegistrationDisabled =>
+      'இந்தச் சேவையகத்தில் பதிவு முடக்கப்பட்டுள்ளது. அதை இயக்க சேவையக நிர்வாகியைத் தொடர்புகொள்ளவும்.';
+
+  @override
   String get commonReenterPassword => 'கடவுச்சொல்லை மீண்டும் உள்ளிடவும்';
 
   @override

@@ -488,6 +488,7 @@
   "authLoginAgreement": "Giriş yaparak kabul etmiş olursunuz ",
   "authPleaseAgreeToTerms": "Lütfen Hizmet Şartları ve Gizlilik Politikasını okuyun ve kabul edin",
   "authRegisterFailed": "Kayıt başarısız",
+  "authRegistrationDisabled": "Bu sunucuda kayıt devre dışı. Etkinleştirmek için sunucu yöneticisiyle iletişime geçin.",
   "commonReenterPassword": "Şifreyi tekrar girin",
   "commonPasswordsDoNotMatch": "Şifreler eşleşmiyor",
   "authInviteCodeBuiltIn": "Davet Kodu (Yerleşik)",

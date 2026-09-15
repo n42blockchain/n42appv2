@@ -1370,6 +1370,10 @@ class STr extends S {
   String get authRegisterFailed => 'Kayıt başarısız';
 
   @override
+  String get authRegistrationDisabled =>
+      'Bu sunucuda kayıt devre dışı. Etkinleştirmek için sunucu yöneticisiyle iletişime geçin.';
+
+  @override
   String get commonReenterPassword => 'Şifreyi tekrar girin';
 
   @override

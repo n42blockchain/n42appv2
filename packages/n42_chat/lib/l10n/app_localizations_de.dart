@@ -1373,6 +1373,10 @@ class SDe extends S {
   String get authRegisterFailed => 'Registrierung fehlgeschlagen';
 
   @override
+  String get authRegistrationDisabled =>
+      'Die Registrierung auf diesem Server ist deaktiviert. Bitte den Administrator um Aktivierung bitten.';
+
+  @override
   String get commonReenterPassword => 'Passwort erneut eingeben';
 
   @override

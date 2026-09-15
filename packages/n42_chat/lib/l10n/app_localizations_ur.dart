@@ -1376,6 +1376,10 @@ class SUr extends S {
   String get authRegisterFailed => 'رجسٹریشن ناکام ہو گئی۔';
 
   @override
+  String get authRegistrationDisabled =>
+      'اس سرور پر رجسٹریشن بند ہے۔ اسے فعال کرنے کے لیے سرور کے منتظم سے رابطہ کریں۔';
+
+  @override
   String get commonReenterPassword => 'پاس ورڈ دوبارہ درج کریں۔';
 
   @override

@@ -61,6 +61,50 @@ void main() {
     userId: session['userId']!,
     deviceId: session['deviceId']!,
   );
+  for (final anonymous in [false, true]) {
+    for (final message in [
+      'M_FORBIDDEN: Registration has been disabled',
+      'Registration is disabled',
+    ]) {
+      test(
+        'disabled registration is explicit (anonymous: $anonymous, $message)',
+        () async {
+          when(
+            () => auth.isUsernameAvailable(any(), any()),
+          ).thenAnswer((_) async => true);
+          when(
+            () => auth.register(
+              homeserver: any(named: 'homeserver'),
+              username: any(named: 'username'),
+              password: any(named: 'password'),
+              email: any(named: 'email'),
+              registrationToken: any(named: 'registrationToken'),
+            ),
+          ).thenThrow(
+            MatrixException(
+              http.Response(
+                jsonEncode({'errcode': 'M_FORBIDDEN', 'error': message}),
+                403,
+              ),
+            ),
+          );
+          final result = anonymous
+              ? await repository.registerAnonymously(
+                  homeserver: 'https://hs.test',
+                  password: 'fixture-password',
+                )
+              : await repository.register(
+                  homeserver: 'https://hs.test',
+                  username: 'alice',
+                  password: 'fixture-password',
+                );
+          expect(result.success, isFalse);
+          expect(result.errorType, AuthErrorType.registrationDisabled);
+          expect(result.errorMessage, message);
+        },
+      );
+    }
+  }
   test(
     'registration rejection is not reported as a login password error',
     () async {

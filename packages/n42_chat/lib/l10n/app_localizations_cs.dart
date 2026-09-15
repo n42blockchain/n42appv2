@@ -1373,6 +1373,10 @@ class SCs extends S {
   String get authRegisterFailed => 'Registrace se nezdařila';
 
   @override
+  String get authRegistrationDisabled =>
+      'Registrace na tomto serveru je zakázána. Požádejte správce serveru o její povolení.';
+
+  @override
   String get commonReenterPassword => 'Znovu zadejte heslo';
 
   @override

@@ -2609,6 +2609,12 @@ abstract class S {
   /// **'Registration failed'**
   String get authRegisterFailed;
 
+  /// No description provided for @authRegistrationDisabled.
+  ///
+  /// In en, this message translates to:
+  /// **'This server has disabled registration. Contact its administrator to enable it.'**
+  String get authRegistrationDisabled;
+
   /// No description provided for @commonReenterPassword.
   ///
   /// In en, this message translates to:

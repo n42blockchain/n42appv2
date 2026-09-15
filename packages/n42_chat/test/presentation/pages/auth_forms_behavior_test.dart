@@ -21,10 +21,14 @@ void main() {
   late StreamController<AuthState> states;
   late List<AuthEvent> events;
   bool? navigationResult;
-  Future<void> open(WidgetTester tester, Widget page) async {
+  Future<void> open(
+    WidgetTester tester,
+    Widget page, {
+    Locale locale = const Locale('en'),
+  }) async {
     await tester.pumpWidget(
       MaterialApp(
-        locale: const Locale('en'),
+        locale: locale,
         localizationsDelegates: S.localizationsDelegates,
         supportedLocales: S.supportedLocales,
         home: Builder(
@@ -101,6 +105,37 @@ void main() {
     );
   });
   tearDown(() async => states.close());
+
+  for (final entry in {
+    const Locale(
+      'en',
+    ): 'This server has disabled registration. Contact its administrator to enable it.',
+    const Locale('zh'): '此服务器已关闭注册，请联系服务器管理员开放注册。',
+    const Locale('zh', 'TW'): '此伺服器已關閉註冊，請聯絡伺服器管理員開放註冊。',
+  }.entries) {
+    testWidgets(
+      'disabled registration explains server action in ${entry.key}',
+      (tester) async {
+        await open(tester, const RegisterPage(), locale: entry.key);
+        states.add(
+          const AuthState(
+            status: AuthStatus.error,
+            errorType: AuthErrorType.registrationDisabled,
+            errorMessage: 'M_FORBIDDEN: Registration has been disabled',
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text(entry.value), findsOneWidget);
+        expect(
+          find.text('M_FORBIDDEN: Registration has been disabled'),
+          findsNothing,
+        );
+        expect(events.whereType<AuthRegisterRequested>(), isEmpty);
+        expect(events.whereType<AuthAnonymousRegisterRequested>(), isEmpty);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('registration requires agreeing to terms before dispatch', (
     tester,

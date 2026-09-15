@@ -1371,6 +1371,10 @@ class SHi extends S {
   String get authRegisterFailed => 'पंजीकरण विफल रहा';
 
   @override
+  String get authRegistrationDisabled =>
+      'इस सर्वर पर पंजीकरण बंद है। इसे चालू करने के लिए सर्वर के व्यवस्थापक से संपर्क करें।';
+
+  @override
   String get commonReenterPassword => 'पासवर्ड पुनः दर्ज करें';
 
   @override

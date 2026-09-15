@@ -488,6 +488,7 @@
   "authLoginAgreement": "Ao entrar, você concorda com ",
   "authPleaseAgreeToTerms": "Por favor, leia e aceite os Termos de Serviço e Política de Privacidade",
   "authRegisterFailed": "Falha no cadastro",
+  "authRegistrationDisabled": "O registo neste servidor está desativado. Contacte o administrador para o ativar.",
   "commonReenterPassword": "Digite a senha novamente",
   "commonPasswordsDoNotMatch": "As senhas não coincidem",
   "authInviteCodeBuiltIn": "Código de Convite (Integrado)",
