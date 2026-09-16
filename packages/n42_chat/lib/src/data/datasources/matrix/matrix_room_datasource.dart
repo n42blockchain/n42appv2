@@ -7,6 +7,7 @@ import '../../../core/utils/conversation_notification_utils.dart';
 import '../../../core/utils/matrix_utils.dart';
 import '../../../domain/entities/conversation_entity.dart';
 import 'matrix_client_manager.dart';
+import 'contact_privacy_service.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// Matrix房间数据源
@@ -33,7 +34,9 @@ class MatrixRoomDataSource {
 
   /// 获取所有房间
   List<matrix.Room> getRooms() {
-    return _client?.rooms ?? [];
+    return (_client?.rooms ?? <matrix.Room>[])
+        .where((room) => !ContactPrivacyService.isSocialRoom(room))
+        .toList();
   }
 
   /// 获取已加入的房间（过滤邀请等）

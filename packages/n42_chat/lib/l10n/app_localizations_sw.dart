@@ -5864,4 +5864,8 @@ class SSw extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Uthibitishaji wa kibayometriki haupatikani. Angalia usajili na ruhusa katika mipangilio ya kifaa.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

@@ -33,6 +33,7 @@ void main() {
     when(() => client.rooms).thenReturn([room]);
     when(() => client.getRoomById('!dm:test')).thenReturn(room);
     when(() => room.id).thenReturn('!dm:test');
+    when(() => room.encrypted).thenReturn(false);
     when(() => room.isDirectChat).thenReturn(true);
     when(() => room.membership).thenReturn(Membership.join);
     when(() => room.directChatMatrixID).thenReturn('@bob:test');

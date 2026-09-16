@@ -30,6 +30,7 @@ import '../contact/tags_management_page.dart';
 import '../group/create_group_page.dart';
 import '../../../n42_chat.dart';
 import 'contact_tile.dart';
+import 'contact_detail_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 通讯录页面（仿微信）
@@ -589,7 +590,20 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   void _onContactTap(ContactEntity contact) {
-    _startChatWithContact(contact);
+    final bloc = context.read<ContactBloc>();
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider.value(
+          value: bloc,
+          child: ContactDetailPage(
+            userId: contact.userId,
+            displayName: contact.effectiveDisplayName,
+            avatarUrl: contact.avatarUrl,
+            onSendMessage: () => _startChatWithContact(contact),
+          ),
+        ),
+      ),
+    );
   }
 
   void _openChatOnlyFriendsPage() {

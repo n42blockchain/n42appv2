@@ -5714,4 +5714,8 @@ class SJa extends S {
   @override
   String get settingsBiometricUnavailable =>
       '生体認証を利用できません。端末の設定で顔や指紋の登録とアプリの権限を確認してください。';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

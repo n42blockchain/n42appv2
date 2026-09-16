@@ -5688,6 +5688,9 @@ class SZh extends S {
 
   @override
   String get settingsBiometricUnavailable => '生物识别暂不可用，请检查系统设置中的人脸或指纹录入及应用权限。';
+
+  @override
+  String get chatEncryptionNotReady => '安全连接尚未就绪，消息未发送。请双方检查网络和设备验证后重试。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11375,4 +11378,7 @@ class SZhTw extends SZh {
   @override
   String get settingsBiometricUnavailable =>
       '生物識別暫不可用，請檢查系統設定中的臉部或指紋登錄及應用程式權限。';
+
+  @override
+  String get chatEncryptionNotReady => '安全連線尚未就緒，訊息未傳送。請雙方檢查網路和裝置驗證後重試。';
 }

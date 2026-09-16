@@ -5873,4 +5873,8 @@ class SEs extends S {
   @override
   String get settingsBiometricUnavailable =>
       'La autenticación biométrica no está disponible. Revisa el registro y los permisos en los ajustes del dispositivo.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

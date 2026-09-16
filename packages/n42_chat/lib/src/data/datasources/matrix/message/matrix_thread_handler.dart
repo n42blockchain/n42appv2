@@ -1,3 +1,4 @@
+import 'direct_chat_send_guard.dart';
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
 
@@ -26,7 +27,7 @@ class MatrixThreadHandler {
     String threadRootEventId,
     String text,
   ) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     return room.sendEvent(
@@ -44,7 +45,7 @@ class MatrixThreadHandler {
     required String filename,
     String? mimeType,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     final actualMimeType = mimeType ?? 'image/jpeg';
@@ -78,7 +79,7 @@ class MatrixThreadHandler {
     required String filename,
     String? mimeType,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     final actualMimeType = mimeType ?? 'application/octet-stream';

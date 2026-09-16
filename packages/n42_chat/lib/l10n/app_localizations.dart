@@ -10786,6 +10786,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Biometric authentication is unavailable. Check enrollment and permissions in device settings.'**
   String get settingsBiometricUnavailable;
+
+  /// No description provided for @chatEncryptionNotReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.'**
+  String get chatEncryptionNotReady;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -448,9 +448,9 @@ class N42ChatConfig {
 
   /// 是否与所有设备（含未验证）共享 E2EE 密钥
   ///
-  /// - `false` (default): share Megolm session keys only with cross-verified
-  ///   devices. New sessions must complete SAS verification before receiving
-  ///   keys, preventing a password-only login from silently gaining access.
+  /// - `false` (default): use the SDK's crossVerifiedIfEnabled policy. Accounts
+  ///   without cross-signing can exchange encrypted messages; once enabled,
+  ///   newly logged-in devices must be verified before receiving keys.
   /// - `true`: share with every unblocked device. This improves compatibility
   ///   but explicitly trusts unverified devices and must be opt-in.
   final bool shareE2eeKeysWithAllDevices;

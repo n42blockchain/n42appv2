@@ -79,7 +79,13 @@ class PostImageMoment extends MomentEvent {
   });
 
   @override
-  List<Object?> get props => [content, images, location, visibility, visibilityUserIds];
+  List<Object?> get props => [
+    content,
+    images,
+    location,
+    visibility,
+    visibilityUserIds,
+  ];
 }
 
 /// 发布视频动态
@@ -112,18 +118,18 @@ class PostVideoMoment extends MomentEvent {
 
   @override
   List<Object?> get props => [
-        content,
-        videoBytes,
-        filename,
-        mimeType,
-        width,
-        height,
-        duration,
-        thumbnailBytes,
-        location,
-        visibility,
-        visibilityUserIds,
-      ];
+    content,
+    videoBytes,
+    filename,
+    mimeType,
+    width,
+    height,
+    duration,
+    thumbnailBytes,
+    location,
+    visibility,
+    visibilityUserIds,
+  ];
 }
 
 /// 删除动态
@@ -171,7 +177,12 @@ class CommentMoment extends MomentEvent {
   });
 
   @override
-  List<Object?> get props => [momentId, content, replyToCommentId, replyToUserId];
+  List<Object?> get props => [
+    momentId,
+    content,
+    replyToCommentId,
+    replyToUserId,
+  ];
 }
 
 /// 删除评论
@@ -192,7 +203,10 @@ class RefreshMoments extends MomentEvent {
 
 /// 订阅动态更新
 class SubscribeMoments extends MomentEvent {
-  const SubscribeMoments();
+  final String? userId;
+  const SubscribeMoments({this.userId});
+  @override
+  List<Object?> get props => [userId];
 }
 
 /// 取消订阅动态更新

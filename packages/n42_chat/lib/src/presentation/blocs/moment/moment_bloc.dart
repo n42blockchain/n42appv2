@@ -455,9 +455,22 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
   ) async {
     await _momentsSubscription?.cancel();
 
-    _momentsSubscription = _momentRepository.watchMoments().listen((moments) {
-      add(MomentsUpdated(moments));
-    });
+    _momentsSubscription = _momentRepository
+        .watchMoments()
+        .asyncMap((moments) async {
+          if (event.userId != null)
+            return _momentRepository.getUserMoments(event.userId!);
+          return moments;
+        })
+        .listen(
+          (moments) {
+            if (!isClosed) add(MomentsUpdated(moments));
+          },
+          onError: (Object _) {
+            // A failed privacy refresh must not keep displaying stale content.
+            if (!isClosed) add(const MomentsUpdated([]));
+          },
+        );
   }
 
   /// 取消订阅动态更新

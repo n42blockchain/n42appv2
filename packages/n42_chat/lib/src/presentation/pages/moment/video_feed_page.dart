@@ -26,33 +26,45 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
   final PageController _pageController = PageController();
   List<MomentEntity> _videos = const [];
   bool _loading = true;
+  StreamSubscription<List<MomentEntity>>? _subscription;
   int _current = 0;
 
   @override
   void initState() {
     super.initState();
     _load();
+    _subscription = getIt<IMomentRepository>().watchMoments().listen(
+      (_) => _load(),
+      onError: (Object _) {
+        if (mounted) setState(() => _videos = []);
+      },
+    );
   }
 
   @override
   void dispose() {
+    _subscription?.cancel();
     _pageController.dispose();
     super.dispose();
   }
 
   Future<void> _load() async {
     try {
-      final moments =
-          await getIt<IMomentRepository>().getMoments(limit: 50);
+      final moments = await getIt<IMomentRepository>().getMoments(limit: 50);
       final vids = moments.where((m) => m.hasVideo && !m.isDeleted).toList();
       if (mounted) {
         setState(() {
           _videos = vids;
+          _current = _current.clamp(0, vids.isEmpty ? 0 : vids.length - 1);
           _loading = false;
         });
       }
     } catch (_) {
-      if (mounted) setState(() => _loading = false);
+      if (mounted)
+        setState(() {
+          _loading = false;
+          _videos = [];
+        });
     }
   }
 
@@ -65,11 +77,9 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
       if (liked) {
         if (likes.isNotEmpty) likes.removeLast();
       } else {
-        likes.add(MomentLike(
-          userId: 'me',
-          userName: 'Me',
-          timestamp: DateTime.now(),
-        ));
+        likes.add(
+          MomentLike(userId: 'me', userName: 'Me', timestamp: DateTime.now()),
+        );
       }
       _videos[index] = m.copyWith(likes: likes, isLikedByMe: !liked);
     });
@@ -82,7 +92,9 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
       }
     } catch (_) {
       // 失败回滚
-      if (mounted) setState(() => _videos[index] = m);
+      if (mounted && index < _videos.length && _videos[index].id == m.id) {
+        setState(() => _videos[index] = m);
+      }
     }
   }
 
@@ -91,38 +103,36 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: _loading
-          ? const Center(
-              child: CircularProgressIndicator(color: Colors.white))
+          ? const Center(child: CircularProgressIndicator(color: Colors.white))
           : _videos.isEmpty
-              ? _buildEmpty()
-              : Stack(
-                  children: [
-                    PageView.builder(
-                      controller: _pageController,
-                      scrollDirection: Axis.vertical,
-                      itemCount: _videos.length,
-                      onPageChanged: (i) => setState(() => _current = i),
-                      itemBuilder: (ctx, i) => _VideoFeedItem(
-                        moment: _videos[i],
-                        isActive: i == _current,
-                        onLike: () => _toggleLike(i),
-                      ),
-                    ),
-                    SafeArea(
-                      child: Padding(
-                        padding: const EdgeInsets.all(4),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                            icon: const Icon(Icons.arrow_back,
-                                color: Colors.white),
-                            onPressed: () => Navigator.of(context).pop(),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+          ? _buildEmpty()
+          : Stack(
+              children: [
+                PageView.builder(
+                  controller: _pageController,
+                  scrollDirection: Axis.vertical,
+                  itemCount: _videos.length,
+                  onPageChanged: (i) => setState(() => _current = i),
+                  itemBuilder: (ctx, i) => _VideoFeedItem(
+                    moment: _videos[i],
+                    isActive: i == _current,
+                    onLike: () => _toggleLike(i),
+                  ),
                 ),
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back, color: Colors.white),
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
     );
   }
 
@@ -133,11 +143,16 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.video_collection_outlined,
-                  size: 56, color: Colors.white38),
+              Icon(
+                Icons.video_collection_outlined,
+                size: 56,
+                color: Colors.white38,
+              ),
               SizedBox(height: 12),
-              Text('No videos yet',
-                  style: TextStyle(color: Colors.white54, fontSize: 15)),
+              Text(
+                'No videos yet',
+                style: TextStyle(color: Colors.white54, fontSize: 15),
+              ),
             ],
           ),
         ),
@@ -200,11 +215,14 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
       orElse: () => widget.moment.media.first,
     );
     final client = MatrixClientManager.instance.client;
-    final url = video.httpUrl ??
+    final url =
+        video.httpUrl ??
         mx_utils.MatrixUtils.getMediaDownloadUrl(video.url, client: client);
     if (url == null || url.isEmpty) return;
-    final headers =
-        mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(url, client: client);
+    final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+      url,
+      client: client,
+    );
     final vc = VideoPlayerController.networkUrl(
       Uri.parse(url),
       httpHeaders: headers,
@@ -270,8 +288,11 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
           // 暂停图标
           if (_userPaused)
             const Center(
-              child: Icon(Icons.play_arrow_rounded,
-                  size: 72, color: Colors.white70),
+              child: Icon(
+                Icons.play_arrow_rounded,
+                size: 72,
+                color: Colors.white70,
+              ),
             ),
 
           // 底部渐变
@@ -297,19 +318,10 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
           ),
 
           // 右侧操作栏
-          Positioned(
-            right: 10,
-            bottom: 90,
-            child: _buildSidebar(m),
-          ),
+          Positioned(right: 10, bottom: 90, child: _buildSidebar(m)),
 
           // 底部作者 + 文案
-          Positioned(
-            left: 14,
-            right: 80,
-            bottom: 28,
-            child: _buildCaption(m),
-          ),
+          Positioned(left: 14, right: 80, bottom: 28, child: _buildCaption(m)),
         ],
       ),
     );
@@ -348,8 +360,10 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
         children: [
           Icon(icon, color: color, size: 34),
           const SizedBox(height: 4),
-          Text(label,
-              style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Text(
+            label,
+            style: const TextStyle(color: Colors.white, fontSize: 12),
+          ),
         ],
       ),
     );
@@ -367,12 +381,13 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
               backgroundColor: Colors.white24,
               backgroundImage:
                   (m.userAvatarUrl != null && m.userAvatarUrl!.isNotEmpty)
-                      ? CachedNetworkImageProvider(m.userAvatarUrl!)
-                      : null,
+                  ? CachedNetworkImageProvider(m.userAvatarUrl!)
+                  : null,
               child: (m.userAvatarUrl == null || m.userAvatarUrl!.isEmpty)
-                  ? Text(m.userInitials,
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 13))
+                  ? Text(
+                      m.userInitials,
+                      style: const TextStyle(color: Colors.white, fontSize: 13),
+                    )
                   : null,
             ),
             const SizedBox(width: 8),

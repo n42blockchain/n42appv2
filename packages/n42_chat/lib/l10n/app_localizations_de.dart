@@ -5879,4 +5879,8 @@ class SDe extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Biometrische Authentifizierung ist nicht verfügbar. Prüfe Einrichtung und Berechtigungen in den Geräteeinstellungen.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

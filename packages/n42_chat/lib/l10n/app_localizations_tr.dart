@@ -5836,4 +5836,8 @@ class STr extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

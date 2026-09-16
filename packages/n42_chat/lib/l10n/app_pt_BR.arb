@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "Abra o link de verificação no seu e-mail, depois volte aqui e confirme.",
   "settingsSendVerificationEmail": "Enviar e-mail de verificação",
   "chatLogoutKeyWarning": "Faça backup das chaves de criptografia antes de sair, ou você poderá perder o acesso às mensagens criptografadas.",
-  "settingsBiometricUnavailable": "A autenticação biométrica não está disponível. Verifique o cadastro e as permissões nas configurações do dispositivo."
+  "settingsBiometricUnavailable": "A autenticação biométrica não está disponível. Verifique o cadastro e as permissões nas configurações do dispositivo.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

@@ -5843,4 +5843,8 @@ class SId extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Autentikasi biometrik tidak tersedia. Periksa pendaftaran dan izin di pengaturan perangkat.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

@@ -5855,4 +5855,8 @@ class SIt extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Autenticazione biometrica non disponibile. Controlla la configurazione e le autorizzazioni nelle impostazioni del dispositivo.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

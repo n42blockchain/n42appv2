@@ -6,6 +6,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import '../../../core/utils/friendly_display_name.dart';
 import '../../../core/utils/matrix_utils.dart';
 import 'matrix_client_manager.dart';
+import 'contact_privacy_service.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// Matrix Story 数据源
@@ -28,7 +29,6 @@ class MatrixStoryDataSource {
   static const Duration storyExpiry = Duration(hours: 24);
 
   /// 缓存的 Story 房间
-  matrix.Room? _storyRoom;
 
   /// storyId → roomId 索引
   final Map<String, String> _storyRoomIndex = {};
@@ -51,7 +51,7 @@ class MatrixStoryDataSource {
 
   /// 初始化，查找或创建 Story 房间
   Future<void> initialize() async {
-    _storyRoom = await _getOrCreateStoryRoom();
+    await _getOrCreateStoryRoom();
 
     // 订阅同步事件以实时更新 Story
     await _syncSubscription?.cancel();
@@ -61,37 +61,9 @@ class MatrixStoryDataSource {
     });
   }
 
-  /// 获取或创建用户的 Story 房间（复用 moments 房间）
-  Future<matrix.Room?> _getOrCreateStoryRoom() async {
-    if (_client == null) return null;
-
-    // 查找现有的 moments 房间
-    for (final room in _client!.rooms) {
-      final tags = room.tags;
-      if (tags.containsKey(momentRoomTag)) {
-        return room;
-      }
-    }
-
-    // 创建新的 moments 房间
-    try {
-      final roomId = await _client!.createRoom(
-        name: 'My Moments',
-        visibility: matrix.Visibility.private,
-        preset: matrix.CreateRoomPreset.privateChat,
-      );
-
-      // 添加标签
-      final room = _client!.getRoomById(roomId);
-      if (room != null) {
-        await room.addTag(momentRoomTag);
-      }
-
-      return room;
-    } catch (e) {
-      return null;
-    }
-  }
+  ContactPrivacyService get _privacy => ContactPrivacyService(_clientManager);
+  StreamSubscription<void>? _privacySubscription;
+  Future<matrix.Room?> _getOrCreateStoryRoom() => _privacy.ownRoom(story: true);
 
   /// 获取好友的 Story 房间列表
   Future<List<matrix.Room>> _getFriendStoryRooms() async {
@@ -104,7 +76,8 @@ class MatrixStoryDataSource {
       if (room.membership != matrix.Membership.join) continue;
 
       final tags = room.tags;
-      if (tags.containsKey(momentRoomTag)) {
+      if (tags.containsKey(momentRoomTag) ||
+          tags.containsKey(ContactPrivacyService.storyTag)) {
         rooms.add(room);
       }
     }
@@ -114,6 +87,14 @@ class MatrixStoryDataSource {
 
   /// 监听 Story 更新
   Stream<List<Map<String, dynamic>>> watchStories() {
+    _syncSubscription ??= _client?.onSync.stream.listen((_) async {
+      final stories = await getStories();
+      if (!_storyStreamController.isClosed) _storyStreamController.add(stories);
+    });
+    _privacySubscription ??= _privacy.changes.listen((_) async {
+      final stories = await getStories();
+      if (!_storyStreamController.isClosed) _storyStreamController.add(stories);
+    });
     // 初始获取一次
     getStories().then((stories) {
       if (!_storyStreamController.isClosed) {
@@ -140,7 +121,9 @@ class MatrixStoryDataSource {
 
         for (final event in timeline.events) {
           if (event.type != storyEventType) continue;
-          if (event.redacted) continue;
+          if (event.redacted ||
+              !_privacy.canView(room, event.senderId, story: true))
+            continue;
 
           final content = event.content;
           final storyId = content['story_id'] as String?;
@@ -196,6 +179,8 @@ class MatrixStoryDataSource {
     final room = await _getOrCreateStoryRoom();
     if (room == null) return null;
 
+    await _privacy.load(_currentUserId!);
+    await _privacy.apply(room, story: true);
     final storyId = 'story_${DateTime.now().millisecondsSinceEpoch}';
     final createdAt = DateTime.now();
     final expiresAt = createdAt.add(storyExpiry);
@@ -271,7 +256,7 @@ class MatrixStoryDataSource {
 
   /// 删除 Story
   Future<void> deleteStory(String eventId) async {
-    final room = _storyRoom ?? await _getOrCreateStoryRoom();
+    final room = await _getOrCreateStoryRoom();
     if (room == null) return;
 
     try {
@@ -287,7 +272,9 @@ class MatrixStoryDataSource {
     final roomId = _storyRoomIndex[storyId];
     if (roomId != null) {
       final room = _client?.getRoomById(roomId);
-      if (room != null) return room;
+      if (room != null &&
+          _privacy.canView(room, _privacy.owner(room) ?? '', story: true))
+        return room;
     }
     // Fallback: rebuild index
     await getStories();
@@ -448,6 +435,7 @@ class MatrixStoryDataSource {
 
   /// 释放资源
   void dispose() {
+    _privacySubscription?.cancel();
     _syncSubscription?.cancel();
     _storyStreamController.close();
   }

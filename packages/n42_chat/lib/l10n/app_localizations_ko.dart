@@ -5713,4 +5713,8 @@ class SKo extends S {
   @override
   String get settingsBiometricUnavailable =>
       '생체 인증을 사용할 수 없습니다. 기기 설정에서 등록 상태와 권한을 확인하세요.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

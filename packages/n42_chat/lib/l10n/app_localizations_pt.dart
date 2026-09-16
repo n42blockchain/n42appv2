@@ -5864,6 +5864,10 @@ class SPt extends S {
   @override
   String get settingsBiometricUnavailable =>
       'A autenticação biométrica não está disponível. Verifique o registo e as permissões nas definições do dispositivo.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11726,4 +11730,8 @@ class SPtBr extends SPt {
   @override
   String get settingsBiometricUnavailable =>
       'A autenticação biométrica não está disponível. Verifique o cadastro e as permissões nas configurações do dispositivo.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

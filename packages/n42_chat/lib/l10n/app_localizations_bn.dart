@@ -5832,4 +5832,8 @@ class SBn extends S {
   @override
   String get settingsBiometricUnavailable =>
       'বায়োমেট্রিক প্রমাণীকরণ উপলব্ধ নয়। ডিভাইসের সেটিংসে নিবন্ধন ও অনুমতি দেখুন।';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

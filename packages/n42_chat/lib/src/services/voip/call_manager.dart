@@ -57,6 +57,61 @@ class CallManager {
 
   // 是否已显示通话界面
   bool _isCallScreenShowing = false;
+  OverlayEntry? _returnToCallEntry;
+  bool _startingOutgoing = false;
+  int _outgoingGeneration = 0;
+
+  /// Reopen a minimized call without starting a second call.
+  bool returnToActiveCall() {
+    if (!isInCall) return false;
+    _removeReturnToCall();
+    _navigateToCallScreen(
+      session: _webRTCService?.currentSession,
+      isIncoming: _webRTCService?.state == CallState.incoming,
+    );
+    return true;
+  }
+
+  void _removeReturnToCall() {
+    _returnToCallEntry?.remove();
+    _returnToCallEntry = null;
+  }
+
+  void _showReturnToCall() {
+    if (!isInCall || _returnToCallEntry != null) return;
+    final overlay = _navigatorKey?.currentState?.overlay;
+    if (overlay == null) return;
+    _returnToCallEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.paddingOf(context).top + 8,
+        right: 12,
+        child: Material(
+          color: Colors.green.shade700,
+          borderRadius: BorderRadius.circular(24),
+          elevation: 6,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(24),
+            onTap: returnToActiveCall,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.call, color: Colors.white, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    S.of(context)?.chatInCall ?? 'In call',
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    overlay.insert(_returnToCallEntry!);
+  }
 
   // 锁屏接听标志：用户在锁屏/通知栏点击接听但 Matrix 邀请尚未到达时设为 true。
   // 当 _handleIncomingCall() 被调用时，若此标志为 true，则自动接听而非显示来电界面。
@@ -244,50 +299,68 @@ class CallManager {
     String? peerAvatarUrl,
     required CallType type,
   }) async {
+    if (_startingOutgoing || (_isCallScreenShowing && !isInCall)) return false;
     if (_webRTCService == null) {
       onError?.call('call_not_initialized');
       return false;
     }
 
+    if (isInCall && _webRTCService?.currentSession?.roomId == roomId) {
+      return returnToActiveCall();
+    }
     if (isInCall || isInMeeting) {
       onError?.call('already_in_call');
       return false;
     }
 
-    // 设置活跃房间，禁用该房间的消息通知
-    N42Chat.pushService?.setActiveRoom(roomId);
-    // 设置通话状态，禁用所有消息通知
-    N42Chat.pushService?.setInCall(true);
+    _startingOutgoing = true;
+    final generation = ++_outgoingGeneration;
+    try {
+      // 设置活跃房间，禁用该房间的消息通知
+      N42Chat.pushService?.setActiveRoom(roomId);
+      // 设置通话状态，禁用所有消息通知
+      N42Chat.pushService?.setInCall(true);
 
-    // 显示去电通知
-    await _notificationService.showOutgoingCall(
-      calleeId: peerId,
-      calleeName: peerName,
-      calleeAvatarUrl: peerAvatarUrl,
-      isVideo: type == CallType.video,
-      roomId: roomId,
-    );
+      // 显示去电通知
+      await _notificationService.showOutgoingCall(
+        calleeId: peerId,
+        calleeName: peerName,
+        calleeAvatarUrl: peerAvatarUrl,
+        isVideo: type == CallType.video,
+        roomId: roomId,
+      );
 
-    // 发起通话
-    final success = await _webRTCService!.startCall(
-      roomId: roomId,
-      type: type,
-      peerId: peerId,
-      peerName: peerName,
-      peerAvatarUrl: peerAvatarUrl,
-    );
+      if (generation != _outgoingGeneration) return false;
+      // 发起通话
+      final success = await _webRTCService!.startCall(
+        roomId: roomId,
+        type: type,
+        peerId: peerId,
+        peerName: peerName,
+        peerAvatarUrl: peerAvatarUrl,
+      );
 
-    if (success) {
-      // 导航到通话页面
-      _navigateToCallScreen();
-    } else {
+      if (success) {
+        // 导航到通话页面
+        _navigateToCallScreen();
+      } else {
+        await _notificationService.endAllCalls();
+        // 通话失败，恢复推送通知状态
+        N42Chat.pushService?.setActiveRoom(null);
+        N42Chat.pushService?.setInCall(false);
+      }
+
+      return success;
+    } catch (_) {
+      await _webRTCService?.hangup();
       await _notificationService.endAllCalls();
-      // 通话失败，恢复推送通知状态
       N42Chat.pushService?.setActiveRoom(null);
       N42Chat.pushService?.setInCall(false);
+      onError?.call('call_failed');
+      return false;
+    } finally {
+      _startingOutgoing = false;
     }
-
-    return success;
   }
 
   /// 接听来电
@@ -319,8 +392,9 @@ class CallManager {
     // 清除锁屏接听标志（用户已主动接听）
     _setPendingAnswer(false);
 
-    // 立即停止来电铃声和通知
-    await _notificationService.endAllCalls();
+    // Keep the system call alive so its mute/end controls stay authoritative.
+    final nativeId = _notificationService.currentCallId;
+    if (nativeId != null) await _notificationService.setCallConnected(nativeId);
 
     final success = await _webRTCService!.answerCall();
     debugLog('CallManager: answerCall result=$success');
@@ -348,6 +422,7 @@ class CallManager {
 
   /// 挂断通话
   Future<void> hangupCall() async {
+    ++_outgoingGeneration;
     await _webRTCService?.hangup();
     await _notificationService.endAllCalls();
     // 清除活跃房间
@@ -570,8 +645,9 @@ class CallManager {
         debugLog(
           'CallManager: Auto-answering call (user tapped Accept before Matrix invite arrived)',
         );
-        // 清除 CallKit 通知
-        await _notificationService.endAllCalls();
+        final nativeId = _notificationService.currentCallId;
+        if (nativeId != null)
+          await _notificationService.setCallConnected(nativeId);
         // 直接接听
         final success = await _webRTCService!.answerCall();
         if (success) {
@@ -654,9 +730,9 @@ class CallManager {
         _navigateToCallScreen();
       }
     } else if (state == CallState.ended || state == CallState.failed) {
+      _removeReturnToCall();
       _notificationService.endAllCalls();
       _systemIntegration.endLiveActivity('call');
-      _isCallScreenShowing = false;
       // 清除活跃房间，恢复该房间的消息通知
       N42Chat.pushService?.setActiveRoom(null);
       // 清除通话状态，恢复消息通知
@@ -672,6 +748,10 @@ class CallManager {
     final l10n = (context != null && context.mounted) ? S.of(context) : null;
 
     switch (action) {
+      case CallAction.ended:
+        _setPendingAnswer(false);
+        hangupCall();
+        break;
       case CallAction.accept:
         _notificationService.consumePendingAcceptAction();
         answerCall();
@@ -682,6 +762,7 @@ class CallManager {
         break;
       case CallAction.timeout:
         _setPendingAnswer(false);
+        hangupCall();
         // 显示未接来电
         _notificationService.showMissedCall(
           callerId: callInfo.callerId,
@@ -717,6 +798,7 @@ class CallManager {
       'CallManager: _navigateToCallScreen called, isIncoming=$isIncoming, _isCallScreenShowing=$_isCallScreenShowing, retry=$retryCount',
     );
 
+    if (!isInCall) return;
     if (_isCallScreenShowing) {
       debugLog('CallManager: Call screen already showing, skipping navigation');
       return;
@@ -761,6 +843,7 @@ class CallManager {
       return;
     }
 
+    _removeReturnToCall();
     debugLog('CallManager: Navigating to CallScreen');
     _isCallScreenShowing = true;
 
@@ -777,6 +860,7 @@ class CallManager {
         .then((_) {
           debugLog('CallManager: CallScreen closed');
           _isCallScreenShowing = false;
+          _showReturnToCall();
         });
   }
 
@@ -800,6 +884,7 @@ class CallManager {
 
   /// 释放资源
   Future<void> dispose() async {
+    _removeReturnToCall();
     await _callActionSubscription?.cancel();
     _callActionSubscription = null;
     await _webRTCService?.dispose();

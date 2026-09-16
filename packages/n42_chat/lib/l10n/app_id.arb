@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "Buka tautan verifikasi di email Anda, lalu kembali ke sini dan konfirmasi.",
   "settingsSendVerificationEmail": "Kirim email verifikasi",
   "chatLogoutKeyWarning": "Cadangkan kunci enkripsi sebelum keluar, atau Anda mungkin kehilangan akses ke pesan terenkripsi.",
-  "settingsBiometricUnavailable": "Autentikasi biometrik tidak tersedia. Periksa pendaftaran dan izin di pengaturan perangkat."
+  "settingsBiometricUnavailable": "Autentikasi biometrik tidak tersedia. Periksa pendaftaran dan izin di pengaturan perangkat.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

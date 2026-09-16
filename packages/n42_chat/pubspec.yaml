@@ -12,6 +12,7 @@ environment:
   flutter: ">=3.44.8"
 
 dependencies:
+  async: ^2.13.0
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -240,6 +241,7 @@ dependency_overrides:
   flutter_secure_storage: ^10.0.0
 
 dev_dependencies:
+  vodozemac: ^0.5.0
   image_picker_platform_interface: ^2.11.1
   shared_preferences_platform_interface: ^2.4.1
   flutter_test:

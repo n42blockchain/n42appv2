@@ -2148,5 +2148,6 @@
   "settingsEmailLinkInstructions": "请打开邮件中的验证链接，然后返回此处确认。",
   "settingsSendVerificationEmail": "发送验证邮件",
   "chatLogoutKeyWarning": "登出前請備份加密金鑰，否則可能無法再讀取加密訊息。",
-  "settingsBiometricUnavailable": "生物识别暂不可用，请检查系统设置中的人脸或指纹录入及应用权限。"
+  "settingsBiometricUnavailable": "生物识别暂不可用，请检查系统设置中的人脸或指纹录入及应用权限。",
+  "chatEncryptionNotReady": "安全连接尚未就绪，消息未发送。请双方检查网络和设备验证后重试。"
 }

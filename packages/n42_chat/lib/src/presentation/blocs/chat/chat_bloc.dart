@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'dart:io';
 import 'dart:math' show min;
 

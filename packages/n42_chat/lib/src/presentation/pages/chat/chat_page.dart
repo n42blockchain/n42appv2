@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -651,6 +652,9 @@ class _ChatPageState extends State<_ChatPageContent> {
     );
   }
 
+  String? _pendingEncryptedDraft;
+  bool _pendingEncryptedDraftStarted = false;
+
   void _sendMessage(String text) {
     if (text.trim().isEmpty) return;
 
@@ -666,6 +670,7 @@ class _ChatPageState extends State<_ChatPageContent> {
 
     // 斜杠命令拦截（编辑模式下不拦截）
     final chatBloc = context.read<ChatBloc>();
+    if (chatBloc.state.isSending || _pendingEncryptedDraft != null) return;
     final editingMsg = chatBloc.state.editingMessage;
 
     if (editingMsg == null &&
@@ -685,6 +690,7 @@ class _ChatPageState extends State<_ChatPageContent> {
       );
       chatBloc.add(const SetEditTarget(null));
     } else {
+      _pendingEncryptedDraft = text;
       chatBloc.add(
         SendTextMessage(
           text,

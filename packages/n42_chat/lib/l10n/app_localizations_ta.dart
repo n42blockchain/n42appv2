@@ -5895,4 +5895,8 @@ class STa extends S {
   @override
   String get settingsBiometricUnavailable =>
       'பயோமெட்ரிக் அங்கீகாரம் கிடைக்கவில்லை. சாதன அமைப்புகளில் பதிவு மற்றும் அனுமதிகளைச் சரிபார்க்கவும்.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

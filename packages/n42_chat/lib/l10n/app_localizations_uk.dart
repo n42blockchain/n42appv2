@@ -5864,4 +5864,8 @@ class SUk extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Біометрична автентифікація недоступна. Перевірте реєстрацію та дозволи в налаштуваннях пристрою.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

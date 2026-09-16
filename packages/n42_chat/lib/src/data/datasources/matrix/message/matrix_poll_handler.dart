@@ -1,3 +1,4 @@
+import 'direct_chat_send_guard.dart';
 import 'package:matrix/matrix.dart' as matrix;
 
 import '../matrix_client_manager.dart';
@@ -25,7 +26,7 @@ class MatrixPollHandler {
     int? quizCorrectIndex,
     String? quizExplanation,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       debugLog('MatrixMessageDataSource: Room not found: $roomId');
       return null;
@@ -38,25 +39,21 @@ class MatrixPollHandler {
         final text = entry.value;
         // 使用时间戳+索引生成唯一ID
         final optionId = '${DateTime.now().millisecondsSinceEpoch}_$index';
-        return {
-          'id': optionId,
-          'org.matrix.msc1767.text': text,
-        };
+        return {'id': optionId, 'org.matrix.msc1767.text': text};
       }).toList();
 
       // MSC3381 投票开始事件
       final content = {
         'org.matrix.msc3381.poll.start': {
-          'question': {
-            'org.matrix.msc1767.text': question,
-          },
+          'question': {'org.matrix.msc1767.text': question},
           'kind': isAnonymous
               ? 'org.matrix.msc3381.poll.undisclosed'
               : 'org.matrix.msc3381.poll.disclosed',
           'max_selections': maxSelections == 0 ? options.length : maxSelections,
           'answers': pollOptions,
         },
-        'org.matrix.msc1767.text': '$question\n${options.asMap().entries.map((e) => '${e.key + 1}. ${e.value}').join('\n')}',
+        'org.matrix.msc1767.text':
+            '$question\n${options.asMap().entries.map((e) => '${e.key + 1}. ${e.value}').join('\n')}',
         // Quiz 扩展（非标准，N42 私有）：携带正确选项序号与解析
         if (quizCorrectIndex != null)
           'n42.quiz': {
@@ -91,7 +88,7 @@ class MatrixPollHandler {
     required int totalVoters,
     int maxSelections = 1,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       debugLog('MatrixMessageDataSource: Room not found: $roomId');
       return null;
@@ -101,7 +98,9 @@ class MatrixPollHandler {
       // 使用原有的选项ID或生成新的
       final pollOptions = <Map<String, dynamic>>[];
       for (var i = 0; i < options.length; i++) {
-        final optionId = i < optionIds.length ? optionIds[i] : '${DateTime.now().millisecondsSinceEpoch}_$i';
+        final optionId = i < optionIds.length
+            ? optionIds[i]
+            : '${DateTime.now().millisecondsSinceEpoch}_$i';
         pollOptions.add({
           'id': optionId,
           'org.matrix.msc1767.text': options[i],
@@ -115,7 +114,9 @@ class MatrixPollHandler {
       for (var i = 0; i < options.length; i++) {
         final optionId = i < optionIds.length ? optionIds[i] : '';
         final count = voteCounts[optionId] ?? 0;
-        final percentage = totalVoters > 0 ? (count * 100 / totalVoters).round() : 0;
+        final percentage = totalVoters > 0
+            ? (count * 100 / totalVoters).round()
+            : 0;
         resultLines.add('${options[i]}: $count votes ($percentage%)');
       }
       resultLines.add('');
@@ -126,9 +127,7 @@ class MatrixPollHandler {
       // 包含 n42.forwarded_poll 标记，表示这是转发的投票快照
       final content = {
         'org.matrix.msc3381.poll.start': {
-          'question': {
-            'org.matrix.msc1767.text': question,
-          },
+          'question': {'org.matrix.msc1767.text': question},
           'kind': 'org.matrix.msc3381.poll.disclosed',
           'max_selections': maxSelections == 0 ? options.length : maxSelections,
           'answers': pollOptions,
@@ -147,7 +146,9 @@ class MatrixPollHandler {
         type: 'org.matrix.msc3381.poll.start',
       );
 
-      debugLog('MatrixMessageDataSource: Forwarded poll snapshot sent: $eventId');
+      debugLog(
+        'MatrixMessageDataSource: Forwarded poll snapshot sent: $eventId',
+      );
       return eventId;
     } catch (e) {
       debugLog('MatrixMessageDataSource: Failed to send forwarded poll: $e');
@@ -163,7 +164,7 @@ class MatrixPollHandler {
     required String pollEventId,
     required List<String> selectedOptionIds,
   }) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       debugLog('MatrixMessageDataSource: Room not found: $roomId');
       return false;
@@ -172,19 +173,11 @@ class MatrixPollHandler {
     try {
       // MSC3381 投票响应事件
       final content = {
-        'm.relates_to': {
-          'rel_type': 'm.reference',
-          'event_id': pollEventId,
-        },
-        'org.matrix.msc3381.poll.response': {
-          'answers': selectedOptionIds,
-        },
+        'm.relates_to': {'rel_type': 'm.reference', 'event_id': pollEventId},
+        'org.matrix.msc3381.poll.response': {'answers': selectedOptionIds},
       };
 
-      await room.sendEvent(
-        content,
-        type: 'org.matrix.msc3381.poll.response',
-      );
+      await room.sendEvent(content, type: 'org.matrix.msc3381.poll.response');
 
       debugLog('MatrixMessageDataSource: Vote submitted successfully');
       return true;
@@ -196,23 +189,17 @@ class MatrixPollHandler {
 
   /// 结束投票
   Future<bool> endPoll(String roomId, String pollEventId) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return false;
 
     try {
       final content = {
-        'm.relates_to': {
-          'rel_type': 'm.reference',
-          'event_id': pollEventId,
-        },
+        'm.relates_to': {'rel_type': 'm.reference', 'event_id': pollEventId},
         'org.matrix.msc3381.poll.end': <String, dynamic>{},
         'org.matrix.msc1767.text': 'Poll ended',
       };
 
-      await room.sendEvent(
-        content,
-        type: 'org.matrix.msc3381.poll.end',
-      );
+      await room.sendEvent(content, type: 'org.matrix.msc3381.poll.end');
 
       return true;
     } catch (e) {
@@ -224,7 +211,10 @@ class MatrixPollHandler {
   /// 获取消息的反应聚合结果
   ///
   /// 从服务器获取消息的所有 emoji 反应
-  Future<Map<String, dynamic>?> getReactionAggregations(String roomId, String eventId) async {
+  Future<Map<String, dynamic>?> getReactionAggregations(
+    String roomId,
+    String eventId,
+  ) async {
     try {
       final room = _client?.getRoomById(roomId);
       if (room == null) return null;
@@ -245,7 +235,8 @@ class MatrixPollHandler {
             final itemType = item['type'] as String?;
             if (itemType == 'm.reaction') {
               final content = item['content'] as Map<String, dynamic>?;
-              final relatesTo = content?['m.relates_to'] as Map<String, dynamic>?;
+              final relatesTo =
+                  content?['m.relates_to'] as Map<String, dynamic>?;
               final emoji = relatesTo?['key'] as String?;
               final senderId = item['sender'] as String?;
 
@@ -257,7 +248,8 @@ class MatrixPollHandler {
                     'isMe': false,
                   };
                 }
-                reactions[emoji]!['count'] = (reactions[emoji]!['count'] as int) + 1;
+                reactions[emoji]!['count'] =
+                    (reactions[emoji]!['count'] as int) + 1;
                 (reactions[emoji]!['userIds'] as List<String>).add(senderId);
                 if (senderId == currentUserId) {
                   reactions[emoji]!['isMe'] = true;
@@ -268,12 +260,11 @@ class MatrixPollHandler {
         }
       }
 
-      return {
-        'eventId': eventId,
-        'reactions': reactions,
-      };
+      return {'eventId': eventId, 'reactions': reactions};
     } catch (e) {
-      debugLog('MatrixMessageDataSource: Failed to get reaction aggregations: $e');
+      debugLog(
+        'MatrixMessageDataSource: Failed to get reaction aggregations: $e',
+      );
       return null;
     }
   }
@@ -281,7 +272,10 @@ class MatrixPollHandler {
   /// 获取投票的聚合结果
   ///
   /// 根据 MSC3381 规范，每个用户只能有一票（使用最新的投票响应）
-  Future<Map<String, dynamic>?> getPollAggregations(String roomId, String pollEventId) async {
+  Future<Map<String, dynamic>?> getPollAggregations(
+    String roomId,
+    String pollEventId,
+  ) async {
     try {
       final room = _client?.getRoomById(roomId);
       if (room == null) return null;
@@ -308,7 +302,8 @@ class MatrixPollHandler {
               if (senderId != null) {
                 // 只保留每个用户的最新投票
                 final existingVote = userVotes[senderId];
-                final existingTs = existingVote?['origin_server_ts'] as int? ?? 0;
+                final existingTs =
+                    existingVote?['origin_server_ts'] as int? ?? 0;
 
                 if (existingVote == null || originServerTs > existingTs) {
                   userVotes[senderId] = item;
@@ -329,7 +324,9 @@ class MatrixPollHandler {
         final senderId = entry.key;
         final item = entry.value;
         final content = item['content'] as Map<String, dynamic>?;
-        final pollResponse = content?['org.matrix.msc3381.poll.response'] as Map<String, dynamic>?;
+        final pollResponse =
+            content?['org.matrix.msc3381.poll.response']
+                as Map<String, dynamic>?;
 
         if (pollResponse != null) {
           final selectedAnswers = pollResponse['answers'] as List<dynamic>?;
@@ -356,12 +353,16 @@ class MatrixPollHandler {
       // 计算实际投票人数（只计算有有效投票的用户）
       final totalVoters = userVotes.entries.where((entry) {
         final content = entry.value['content'] as Map<String, dynamic>?;
-        final pollResponse = content?['org.matrix.msc3381.poll.response'] as Map<String, dynamic>?;
+        final pollResponse =
+            content?['org.matrix.msc3381.poll.response']
+                as Map<String, dynamic>?;
         final answers = pollResponse?['answers'] as List<dynamic>?;
         return answers != null && answers.isNotEmpty;
       }).length;
 
-      debugLog('MatrixMessageDataSource: Poll $pollEventId - voteCounts: $voteCounts, totalVoters: $totalVoters, myVotes: $myVotes');
+      debugLog(
+        'MatrixMessageDataSource: Poll $pollEventId - voteCounts: $voteCounts, totalVoters: $totalVoters, myVotes: $myVotes',
+      );
 
       return {
         'voteCounts': voteCounts,

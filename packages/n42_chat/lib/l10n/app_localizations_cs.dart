@@ -5844,4 +5844,8 @@ class SCs extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Biometrické ověření není dostupné. Zkontrolujte registraci a oprávnění v nastavení zařízení.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

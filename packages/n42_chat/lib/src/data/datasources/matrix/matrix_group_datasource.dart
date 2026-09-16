@@ -6,6 +6,7 @@ import '../../../domain/entities/bot_config_entity.dart';
 import '../../../domain/entities/channel_entity.dart';
 import '../../../domain/entities/content_filter_entity.dart';
 import 'matrix_client_manager.dart';
+import 'contact_privacy_service.dart';
 import '../../../core/utils/debug_log.dart';
 import '../../../core/utils/matrix_utils.dart';
 import '../../../core/utils/room_metadata_utils.dart';
@@ -168,6 +169,7 @@ class MatrixGroupDataSource {
             .where(
               (room) =>
                   !room.isDirectChat &&
+                  !ContactPrivacyService.isSocialRoom(room) &&
                   room.membership == matrix.Membership.join,
             )
             .toList() ??
@@ -475,6 +477,7 @@ class MatrixGroupDataSource {
             .where(
               (room) =>
                   !room.isDirectChat &&
+                  !ContactPrivacyService.isSocialRoom(room) &&
                   room.membership == matrix.Membership.invite,
             )
             .toList() ??

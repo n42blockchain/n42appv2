@@ -113,7 +113,7 @@ class MatrixMessageSender {
     List<String>? mentionedUserIds,
     bool mentionsRoom = false,
   }) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     final content = buildTextMessageContent(
@@ -162,7 +162,7 @@ class MatrixMessageSender {
       }
 
       // 获取房间
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         debugLog('ERROR: Room not found: $roomId');
         throw Exception('房间不存在: $roomId');
@@ -238,7 +238,7 @@ class MatrixMessageSender {
         throw Exception('未登录');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         debugLog('ERROR: Room not found: $roomId');
         throw Exception('房间不存在: $roomId');
@@ -308,7 +308,7 @@ class MatrixMessageSender {
         throw Exception('未登录');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         debugLog('ERROR: Room not found: $roomId');
         throw Exception('房间不存在: $roomId');
@@ -364,7 +364,7 @@ class MatrixMessageSender {
     required String msgType,
     required Map<String, dynamic> content,
   }) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       throw Exception('房间不存在');
     }
@@ -379,7 +379,7 @@ class MatrixMessageSender {
     required String type,
     required Map<String, dynamic> content,
   }) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       throw Exception('房间不存在');
     }
@@ -390,7 +390,7 @@ class MatrixMessageSender {
 
   /// 重发消息
   Future<bool> resendMessage(String roomId, String eventId) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return false;
 
     final event = await room.getEventById(eventId);
@@ -410,7 +410,7 @@ class MatrixMessageSender {
     required String roomId,
     required String notice,
   }) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) {
       debugLog('MatrixMessageDataSource: Room not found: $roomId');
       return null;
@@ -453,7 +453,7 @@ class MatrixMessageSender {
     String? avatarUrl,
     String? matrixId,
   }) async {
-    final room = roomForSending(_client, roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     try {

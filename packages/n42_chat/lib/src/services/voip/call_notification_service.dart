@@ -17,7 +17,7 @@ import '../../core/utils/debug_log.dart';
 import 'incoming_call_ringtone_preference.dart';
 
 /// 来电动作类型
-enum CallAction { accept, decline, timeout, callback }
+enum CallAction { accept, decline, timeout, callback, ended }
 
 /// 来电信息
 class IncomingCallInfo {
@@ -47,7 +47,9 @@ class IncomingCallInfo {
       callerAvatarUrl: map['avatar'] as String?,
       isVideo: map['type'] == 1,
       roomId: map['extra']?['roomId'] as String?,
-      extra: map['extra'] as Map<String, dynamic>?,
+      extra: map['extra'] is Map
+          ? Map<String, dynamic>.from(map['extra'] as Map)
+          : null,
     );
   }
 }
@@ -78,6 +80,7 @@ class CallNotificationService {
 
   // 当前 CallKit 通话 ID
   String? _currentCallId;
+  final Set<String> _dismissedCallIds = {};
 
   /// 获取当前 CallKit 通话 ID
   String? get currentCallId => _currentCallId;
@@ -106,6 +109,9 @@ class CallNotificationService {
 
   /// 初始化（事件监听已在构造函数中设置，此处仅作日志标记）
   Future<void> initialize() async {
+    _callKitSubscription ??= FlutterCallkitIncoming.onEvent.listen(
+      _handleCallKitEvent,
+    );
     debugLog(
       'CallNotificationService: Initialized (listener was attached in constructor)',
     );
@@ -124,6 +130,7 @@ class CallNotificationService {
     final callInfo = IncomingCallInfo.fromMap(Map<String, dynamic>.from(body));
 
     if (eventType == callkit.Event.actionCallIncoming) {
+      _currentCallId ??= callInfo.callId;
       debugLog(
         'CallNotificationService: Incoming call from ${callInfo.callerName}',
       );
@@ -145,8 +152,13 @@ class CallNotificationService {
       debugLog('CallNotificationService: Callback');
       _callActionController.add((CallAction.callback, callInfo));
     } else if (eventType == callkit.Event.actionCallEnded) {
-      debugLog('CallNotificationService: Call ended');
+      if (_dismissedCallIds.contains(callInfo.callId)) return;
+      if (_currentCallId != null && _currentCallId != callInfo.callId) return;
+      debugLog('CallNotificationService: Call ended by system');
+      _pendingAcceptAction = null;
+      _pendingAcceptTime = null;
       _currentCallId = null;
+      _callActionController.add((CallAction.ended, callInfo));
     } else if (eventType == callkit.Event.actionCallStart) {
       debugLog('CallNotificationService: Call started');
     }
@@ -303,16 +315,25 @@ class CallNotificationService {
 
   /// 结束通话
   Future<void> endCall(String callId) async {
+    _rememberDismissed(callId);
+    if (_currentCallId == callId) _currentCallId = null;
     await FlutterCallkitIncoming.endCall(callId);
-    _currentCallId = null;
     debugLog('CallNotificationService: Call $callId ended');
   }
 
   /// 结束所有通话
   Future<void> endAllCalls() async {
-    await FlutterCallkitIncoming.endAllCalls();
+    _rememberDismissed(_currentCallId);
     _currentCallId = null;
+    await FlutterCallkitIncoming.endAllCalls();
     debugLog('CallNotificationService: All calls ended');
+  }
+
+  void _rememberDismissed(String? id) {
+    if (id == null) return;
+    _dismissedCallIds.add(id);
+    if (_dismissedCallIds.length > 64)
+      _dismissedCallIds.remove(_dismissedCallIds.first);
   }
 
   /// 获取当前活动通话

@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "Otevřete ověřovací odkaz v e-mailu, poté se sem vraťte a potvrďte.",
   "settingsSendVerificationEmail": "Odeslat ověřovací e-mail",
   "chatLogoutKeyWarning": "Před odhlášením zálohujte šifrovací klíče, jinak můžete ztratit přístup k šifrovaným zprávám.",
-  "settingsBiometricUnavailable": "Biometrické ověření není dostupné. Zkontrolujte registraci a oprávnění v nastavení zařízení."
+  "settingsBiometricUnavailable": "Biometrické ověření není dostupné. Zkontrolujte registraci a oprávnění v nastavení zařízení.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

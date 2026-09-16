@@ -5829,4 +5829,8 @@ class SMr extends S {
   @override
   String get settingsBiometricUnavailable =>
       'बायोमेट्रिक प्रमाणीकरण उपलब्ध नाही. डिव्हाइस सेटिंग्जमध्ये नोंदणी आणि परवानग्या तपासा.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

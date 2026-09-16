@@ -44,6 +44,7 @@ class MomentListPage extends StatelessWidget {
         } else {
           bloc.add(const LoadMoments());
         }
+        bloc.add(SubscribeMoments(userId: userId));
         return bloc;
       },
       child: _MomentListView(

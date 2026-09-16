@@ -5,6 +5,9 @@ part of 'chat_bloc.dart';
 /// 包含：文本、图片、语音、文件、视频、位置、GIF、贴纸、
 /// 联系人名片、自定义消息（红包/转账/音乐）、系统通知、拍一拍等。
 extension ChatBlocSendHandlers on ChatBloc {
+  String _sendFailure(Object error, String fallback) =>
+      error is EncryptedSendNotReady ? EncryptedSendNotReady.code : fallback;
+
   static final _whitespaceRe = RegExp(r'\s+');
 
   bool _canSendUserMessage(Emitter<ChatState> emit, String actionLabel) {
@@ -164,7 +167,12 @@ extension ChatBlocSendHandlers on ChatBloc {
         emit(newState);
       }
     } catch (e) {
-      emit(state.copyWith(isSending: false, error: 'Failed to send'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send'),
+        ),
+      );
     }
   }
 
@@ -198,7 +206,12 @@ extension ChatBlocSendHandlers on ChatBloc {
     } catch (e, stackTrace) {
       debugLog('ChatBloc: Send image error - $e');
       debugLog('ChatBloc: Stack trace - $stackTrace');
-      emit(state.copyWith(isSending: false, error: 'Failed to send image: $e'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send image: $e'),
+        ),
+      );
     }
   }
 
@@ -233,7 +246,12 @@ extension ChatBlocSendHandlers on ChatBloc {
     } catch (e, stackTrace) {
       debugLog('ChatBloc: Send voice error - $e');
       debugLog('ChatBloc: Stack trace - $stackTrace');
-      emit(state.copyWith(isSending: false, error: 'Failed to send voice: $e'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send voice: $e'),
+        ),
+      );
     }
   }
 
@@ -274,7 +292,12 @@ extension ChatBlocSendHandlers on ChatBloc {
       }
       emit(_buildPostSendState());
     } catch (e) {
-      emit(state.copyWith(isSending: false, error: 'Failed to send file'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send file'),
+        ),
+      );
     }
   }
 
@@ -307,7 +330,12 @@ extension ChatBlocSendHandlers on ChatBloc {
     } catch (e, stackTrace) {
       debugLog('ChatBloc: Send video error - $e');
       debugLog('ChatBloc: Stack trace - $stackTrace');
-      emit(state.copyWith(isSending: false, error: 'Failed to send video: $e'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send video: $e'),
+        ),
+      );
     }
   }
 
@@ -329,7 +357,12 @@ extension ChatBlocSendHandlers on ChatBloc {
       );
       emit(_buildPostSendState());
     } catch (e) {
-      emit(state.copyWith(isSending: false, error: 'Failed to send location'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send location'),
+        ),
+      );
     }
   }
 
@@ -359,7 +392,12 @@ extension ChatBlocSendHandlers on ChatBloc {
     } catch (e, stackTrace) {
       debugLog('ChatBloc: Send GIF error - $e');
       debugLog('ChatBloc: Stack trace - $stackTrace');
-      emit(state.copyWith(isSending: false, error: 'Failed to send GIF: $e'));
+      emit(
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send GIF: $e'),
+        ),
+      );
     }
   }
 
@@ -397,7 +435,10 @@ extension ChatBlocSendHandlers on ChatBloc {
       debugLog('ChatBloc: Send sticker error - $e');
       debugLog('ChatBloc: Stack trace - $stackTrace');
       emit(
-        state.copyWith(isSending: false, error: 'Failed to send sticker: $e'),
+        state.copyWith(
+          isSending: false,
+          error: _sendFailure(e, 'Failed to send sticker: $e'),
+        ),
       );
     }
   }

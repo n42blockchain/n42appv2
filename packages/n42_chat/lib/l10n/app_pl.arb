@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "Otwórz link weryfikacyjny w wiadomości e-mail, następnie wróć tutaj i potwierdź.",
   "settingsSendVerificationEmail": "Wyślij e-mail weryfikacyjny",
   "chatLogoutKeyWarning": "Przed wylogowaniem utwórz kopię zapasową kluczy szyfrowania, inaczej możesz utracić dostęp do zaszyfrowanych wiadomości.",
-  "settingsBiometricUnavailable": "Uwierzytelnianie biometryczne jest niedostępne. Sprawdź konfigurację i uprawnienia w ustawieniach urządzenia."
+  "settingsBiometricUnavailable": "Uwierzytelnianie biometryczne jest niedostępne. Sprawdź konfigurację i uprawnienia w ustawieniach urządzenia.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

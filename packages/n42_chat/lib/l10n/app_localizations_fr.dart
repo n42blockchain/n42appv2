@@ -5897,4 +5897,8 @@ class SFr extends S {
   @override
   String get settingsBiometricUnavailable =>
       'L’authentification biométrique est indisponible. Vérifiez la configuration et les autorisations dans les réglages de l’appareil.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

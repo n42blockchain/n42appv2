@@ -1990,8 +1990,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "10a1f7db4e1ec712ccad19c05e179a223ced865c"
-      resolved-ref: "10a1f7db4e1ec712ccad19c05e179a223ced865c"
+      ref: "860aee1b9ad63be4bf7cd546dda574cc5273c4c4"
+      resolved-ref: "860aee1b9ad63be4bf7cd546dda574cc5273c4c4"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"
@@ -3169,7 +3169,7 @@ packages:
     source: hosted
     version: "15.2.0"
   vodozemac:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: vodozemac
       sha256: bbe7dd31d7f623e2aeedb92e4b71a8b519e6109ce1e2911b5a220f6752b65cda

@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "तुमच्या ईमेलमधील पडताळणी लिंक उघडा, नंतर येथे परत येऊन पुष्टी करा.",
   "settingsSendVerificationEmail": "पडताळणी ईमेल पाठवा",
   "chatLogoutKeyWarning": "लॉग आउट करण्यापूर्वी तुमच्या एन्क्रिप्शन कींचा बॅकअप घ्या, अन्यथा एन्क्रिप्ट केलेले संदेश वाचता येणार नाहीत.",
-  "settingsBiometricUnavailable": "बायोमेट्रिक प्रमाणीकरण उपलब्ध नाही. डिव्हाइस सेटिंग्जमध्ये नोंदणी आणि परवानग्या तपासा."
+  "settingsBiometricUnavailable": "बायोमेट्रिक प्रमाणीकरण उपलब्ध नाही. डिव्हाइस सेटिंग्जमध्ये नोंदणी आणि परवानग्या तपासा.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

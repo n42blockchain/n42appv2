@@ -1,4 +1,5 @@
 import 'direct_chat_send_guard.dart';
+import 'encrypted_send_guard.dart';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
@@ -38,7 +39,7 @@ class MatrixMediaSender {
         throw Exception('未登录或客户端未初始化');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -138,7 +139,7 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -191,6 +192,7 @@ class MatrixMediaSender {
         );
         return result;
       } catch (sdkError, sdkStack) {
+        if (room.encrypted) rethrow;
         debugLog('SDK sendFileEvent for audio failed: $sdkError');
         debugLog('Stack: $sdkStack');
         debugLog('Falling back to manual upload...');
@@ -259,7 +261,7 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await prepareRoomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }
@@ -369,6 +371,7 @@ class MatrixMediaSender {
         );
       }
 
+      await EncryptedSendGuard.prepare(room);
       if (filePath != null || fileStream != null) {
         Uri? mxcUri;
         if (filePath != null) {
@@ -434,6 +437,7 @@ class MatrixMediaSender {
         debugLog('=== sendFileMessage completed successfully (SDK method) ===');
         return result;
       } catch (sdkError, sdkStack) {
+        if (room.encrypted) rethrow;
         debugLog('SDK sendFileEvent for file failed: $sdkError');
         debugLog('Stack: $sdkStack');
         debugLog('Falling back to manual upload...');

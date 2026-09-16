@@ -5820,4 +5820,8 @@ class SVi extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Xác thực sinh trắc học không khả dụng. Kiểm tra đăng ký và quyền trong cài đặt thiết bị.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

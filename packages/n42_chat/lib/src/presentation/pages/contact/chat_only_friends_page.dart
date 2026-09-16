@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../../data/datasources/matrix/matrix_client_manager.dart';
+import '../../../data/datasources/matrix/contact_privacy_service.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
@@ -32,25 +31,13 @@ class _ChatOnlyFriendsPageState extends State<ChatOnlyFriendsPage> {
 
   Future<void> _loadChatOnlyFriends() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final contactRepository = getIt<IContactRepository>();
-      final allContacts = await contactRepository.getContacts();
-
-      final chatOnlyIds = <String>[];
-      for (final contact in allContacts) {
-        final key = 'permissions_${contact.userId}';
-        final json = prefs.getString(key);
-        if (json != null) {
-          try {
-            final data = jsonDecode(json) as Map<String, dynamic>;
-            if (data['chatOnly'] == true) {
-              chatOnlyIds.add(contact.userId);
-            }
-          } catch (e) {
-            debugLog('Error: $e');
-          }
-        }
-      }
+      final privacy = ContactPrivacyService(getIt<MatrixClientManager>());
+      final allContacts = await getIt<IContactRepository>().getContacts();
+      if (allContacts.isNotEmpty) await privacy.load(allContacts.first.userId);
+      final chatOnlyIds = allContacts
+          .where((c) => privacy.forUser(c.userId)['chatOnly'] == true)
+          .map((c) => c.userId)
+          .toSet();
 
       if (mounted) {
         setState(() {
@@ -78,41 +65,37 @@ class _ChatOnlyFriendsPageState extends State<ChatOnlyFriendsPage> {
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _chatOnlyFriends.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.person_outline,
-                        size: 64,
-                        color: context.textTertiary,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        S.of(context)?.contactNoChatOnlyFriends ?? 'No chat-only friends',
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: context.textSecondary,
-                        ),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.person_outline,
+                    size: 64,
+                    color: context.textTertiary,
                   ),
-                )
-              : ListView.separated(
-                  itemCount: _chatOnlyFriends.length,
-                  separatorBuilder: (_, _) => Padding(
-                    padding: const EdgeInsets.only(left: 72),
-                    child: Divider(
-                      height: 1,
-                      color: context.dividerColor,
+                  const SizedBox(height: 16),
+                  Text(
+                    S.of(context)?.contactNoChatOnlyFriends ??
+                        'No chat-only friends',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: context.textSecondary,
                     ),
                   ),
-                  itemBuilder: (context, index) {
-                    return ContactTile(
-                      contact: _chatOnlyFriends[index],
-                    );
-                  },
-                ),
+                ],
+              ),
+            )
+          : ListView.separated(
+              itemCount: _chatOnlyFriends.length,
+              separatorBuilder: (_, _) => Padding(
+                padding: const EdgeInsets.only(left: 72),
+                child: Divider(height: 1, color: context.dividerColor),
+              ),
+              itemBuilder: (context, index) {
+                return ContactTile(contact: _chatOnlyFriends[index]);
+              },
+            ),
     );
   }
 }

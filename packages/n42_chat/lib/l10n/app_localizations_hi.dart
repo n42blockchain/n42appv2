@@ -5831,4 +5831,8 @@ class SHi extends S {
   @override
   String get settingsBiometricUnavailable =>
       'बायोमेट्रिक प्रमाणीकरण उपलब्ध नहीं है। डिवाइस सेटिंग में पंजीकरण और अनुमतियाँ जाँचें।';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

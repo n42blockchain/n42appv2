@@ -28,8 +28,30 @@ import '../../../packages/n42_chat/test/unit/repositories/message_repository_imp
 import '../../../packages/n42_chat/test/presentation/pages/friend_info_edit_test.dart'
     as friend_info;
 
+import '../../../packages/n42_chat/test/unit/datasources/contact_privacy_test.dart'
+    as privacy;
+import '../../../packages/n42_chat/test/presentation/pages/contact_navigation_call_test.dart'
+    as navigation_calls;
+import '../../../packages/n42_chat/test/unit/encryption/encrypted_send_guard_test.dart'
+    as encrypted_sends;
+import '../../../packages/n42_chat/test/unit/services/call_notification_service_test.dart'
+    as call_notifications;
+import '../../../packages/n42_chat/test/unit/services/webrtc_lifecycle_test.dart'
+    as call_lifecycle;
+import '../../../packages/n42_chat/test/presentation/pages/moment/moment_detail_page_test.dart'
+    as moment_access;
+import '../../../packages/n42_chat/test/presentation/pages/story/story_viewer_page_test.dart'
+    as story_access;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat privacy', privacy.main);
+  group('Chat navigation calls', navigation_calls.main);
+  group('Chat encrypted sends', encrypted_sends.main);
+  group('Chat call notifications', call_notifications.main);
+  group('Chat call lifecycle', call_lifecycle.main);
+  group('Chat moment access', moment_access.main);
+  group('Chat story access', story_access.main);
   group('Chat friend profile annotations', friend_info.main);
   group('Chat account biometric authentication', biometric_auth.main);
   group('Chat friend identity and detail actions', contact_details.main);

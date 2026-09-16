@@ -5875,4 +5875,8 @@ class STe extends S {
   @override
   String get settingsBiometricUnavailable =>
       'బయోమెట్రిక్ ప్రామాణీకరణ అందుబాటులో లేదు. పరికర సెట్టింగ్‌లలో నమోదు మరియు అనుమతులను తనిఖీ చేయండి.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

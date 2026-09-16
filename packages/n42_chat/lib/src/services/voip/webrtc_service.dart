@@ -12,6 +12,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import 'package:permission_handler/permission_handler.dart';
 
 import 'voip_config.dart';
+import '../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import '../../core/utils/debug_log.dart';
 
 /// 内部通话事件数据（用于统一处理不同来源的事件）
@@ -136,6 +137,8 @@ class WebRTCService {
   // ICE 候选缓存（限制大小防止内存泄漏）
   static const int _maxPendingCandidates = 100;
   final List<RTCIceCandidate> _pendingCandidates = [];
+  final List<RTCIceCandidate> _outgoingCandidates = [];
+  bool _descriptionPublished = false;
 
   // 已处理的 callId 集合（防止 to-device 和 timeline 双通道重复处理）
   // 使用 LinkedHashSet 保证插入顺序，evict 时移除最老的条目
@@ -152,6 +155,9 @@ class WebRTCService {
   StreamSubscription<List<matrix.BasicEventWithSender>>?
   _callEventsSubscription;
   StreamSubscription<matrix.Event>? _timelineEventsSubscription;
+
+  int _callGeneration = 0;
+  bool _startingCall = false;
 
   WebRTCService(this._client) : _config = VoIPConfig();
 
@@ -210,9 +216,7 @@ class WebRTCService {
         final type = event.type;
         final senderId = event.senderId;
 
-        debugLog(
-          'WebRTCService: Received $type from $senderId, content=${event.content}',
-        );
+        debugLog('WebRTCService: Received $type from $senderId');
 
         switch (type) {
           case matrix.EventTypes.CallInvite:
@@ -295,6 +299,7 @@ class WebRTCService {
     required String peerName,
     String? peerAvatarUrl,
   }) async {
+    if (_startingCall) return false;
     // 允许在 idle、ended、failed 状态时发起新通话
     if (_state != CallState.idle &&
         _state != CallState.ended &&
@@ -313,11 +318,22 @@ class WebRTCService {
       await _cleanup();
     }
 
+    _startingCall = true;
+    final generation = ++_callGeneration;
+    void ensureActive() {
+      if (generation != _callGeneration) throw StateError('Call cancelled');
+    }
+
     try {
       _setState(CallState.ringing);
+      final encryptedRoom = _client.getRoomById(roomId);
+      if (encryptedRoom == null) throw StateError('Room unavailable');
+      await EncryptedSendGuard.prepare(encryptedRoom);
+      ensureActive();
 
       // 获取 TURN 配置
       await _loadTurnServers();
+      ensureActive();
 
       // 生成通话 ID
       final callId = 'call_${DateTime.now().millisecondsSinceEpoch}';
@@ -336,9 +352,11 @@ class WebRTCService {
 
       // 获取本地媒体流
       await _getUserMedia(type);
+      ensureActive();
 
       // 创建 PeerConnection
       await _createPeerConnection();
+      ensureActive();
 
       // 添加本地轨道
       _addLocalTracks();
@@ -349,6 +367,7 @@ class WebRTCService {
         'offerToReceiveVideo': type == CallType.video,
       });
       await _peerConnection!.setLocalDescription(offer);
+      ensureActive();
 
       // 发送 m.call.invite
       final room = _client.getRoomById(roomId);
@@ -368,6 +387,9 @@ class WebRTCService {
         },
       );
 
+      ensureActive();
+      _descriptionPublished = true;
+      await _flushOutgoingCandidates();
       debugLog('WebRTCService: Call invite sent');
 
       // 启动超时计时器
@@ -381,6 +403,8 @@ class WebRTCService {
       onError?.call('call_failed');
       await _cleanup();
       return false;
+    } finally {
+      _startingCall = false;
     }
   }
 
@@ -445,6 +469,8 @@ class WebRTCService {
         },
       );
 
+      _descriptionPublished = true;
+      await _flushOutgoingCandidates();
       // 处理缓存的 ICE 候选
       debugLog('WebRTCService: Processing pending candidates');
       await _processPendingCandidates();
@@ -484,7 +510,7 @@ class WebRTCService {
     }
 
     // 先通知 UI 通话结束
-    onStateChanged?.call(CallState.ended);
+    _setState(CallState.ended);
     // 然后清理资源（会将状态重置为 idle）
     await _cleanup();
   }
@@ -495,47 +521,43 @@ class WebRTCService {
 
   /// 挂断通话
   Future<void> hangup({String reason = 'user_hangup'}) async {
-    if (_currentSession == null) return;
-
-    // 计算通话时长（秒）
-    final durationSeconds = _currentSession!.duration.inSeconds;
-    final isVideo = _currentSession!.type == CallType.video;
-    final roomId = _currentSession!.roomId;
-
-    try {
-      final room = _client.getRoomById(roomId);
-      if (room != null) {
-        // 发送 m.call.hangup 控制事件（双通道）
-        await _sendCallEvent(
-          room: room,
-          type: 'm.call.hangup',
-          content: {
-            'call_id': _currentSession!.callId,
-            'party_id': _client.deviceID,
-            'version': '1',
-            'reason': reason,
-            'duration': durationSeconds,
-            'call_type': isVideo ? 'video' : 'voice',
-          },
-        );
-
-        // 发送通话记录消息（作为普通消息显示在聊天中）
-        final isMissed = reason == 'invite_timeout' || reason == 'no_answer';
-        await _sendCallRecordMessage(
-          room: room,
-          isVideo: isVideo,
-          durationSeconds: durationSeconds,
-          isMissed: isMissed,
-        );
-      }
-    } catch (e) {
-      debugLog('WebRTCService: Hangup failed: $e');
-    }
-
-    // 先通知 UI 通话结束
-    onStateChanged?.call(CallState.ended);
-    // 然后清理资源（会将状态重置为 idle）
+    ++_callGeneration;
+    final session = _currentSession;
+    _setState(CallState.ended);
     await _cleanup();
+    if (session == null) return;
+    final room = _client.getRoomById(session.roomId);
+    if (room == null) return;
+    unawaited(_sendHangup(room, session, reason));
+  }
+
+  Future<void> _sendHangup(
+    matrix.Room room,
+    CallSession session,
+    String reason,
+  ) async {
+    try {
+      await _sendCallEvent(
+        room: room,
+        type: 'm.call.hangup',
+        content: {
+          'call_id': session.callId,
+          'party_id': _client.deviceID,
+          'version': '1',
+          'reason': reason,
+          'duration': session.duration.inSeconds,
+          'call_type': session.type == CallType.video ? 'video' : 'voice',
+        },
+      ).timeout(const Duration(seconds: 10));
+      await _sendCallRecordMessage(
+        room: room,
+        isVideo: session.type == CallType.video,
+        durationSeconds: session.duration.inSeconds,
+        isMissed: reason == 'invite_timeout' || reason == 'no_answer',
+      );
+    } catch (_) {
+      debugLog('WebRTCService: Could not deliver hangup; local call is closed');
+    }
   }
 
   /// 发送通话记录消息
@@ -560,6 +582,7 @@ class WebRTCService {
         body = isVideo ? 'Video call cancelled' : 'Voice call cancelled';
       }
 
+      await EncryptedSendGuard.prepare(room);
       await room.sendEvent({
         'msgtype': 'n42.call.record',
         'body': body,
@@ -589,6 +612,7 @@ class WebRTCService {
     required String type,
     required Map<String, dynamic> content,
   }) async {
+    if (type == 'm.call.answer') await EncryptedSendGuard.prepare(room);
     await room.sendEvent(content, type: type);
   }
 
@@ -909,6 +933,11 @@ class WebRTCService {
   /// 发送 ICE 候选（双通道）
   Future<void> _sendIceCandidate(RTCIceCandidate candidate) async {
     if (_currentSession == null) return;
+    if (!_descriptionPublished) {
+      if (_outgoingCandidates.length < _maxPendingCandidates)
+        _outgoingCandidates.add(candidate);
+      return;
+    }
 
     try {
       final room = _client.getRoomById(_currentSession!.roomId);
@@ -932,6 +961,15 @@ class WebRTCService {
       }
     } catch (e) {
       debugLog('WebRTCService: Failed to send ICE candidate: $e');
+    }
+  }
+
+  Future<void> _flushOutgoingCandidates() async {
+    final queued = List<RTCIceCandidate>.of(_outgoingCandidates);
+    _outgoingCandidates.clear();
+    for (final candidate in queued) {
+      if (!_descriptionPublished || _currentSession == null) return;
+      await _sendIceCandidate(candidate);
     }
   }
 
@@ -1061,13 +1099,8 @@ class WebRTCService {
       await _cleanup();
     }
 
+    final generation = ++_callGeneration;
     try {
-      // 获取 TURN 配置
-      await _loadTurnServers();
-
-      // 创建 PeerConnection
-      await _createPeerConnection();
-
       // 设置远程 SDP
       final sdp = offer['sdp'] as String?;
       final sdpType = offer['type'] as String?;
@@ -1076,10 +1109,6 @@ class WebRTCService {
         debugLog('WebRTCService: Invalid SDP in offer');
         return;
       }
-
-      await _peerConnection!.setRemoteDescription(
-        RTCSessionDescription(sdp, sdpType),
-      );
 
       // 获取对方信息
       final room = _client.getRoomById(roomId);
@@ -1102,6 +1131,20 @@ class WebRTCService {
         startTime: DateTime.now(),
       );
 
+      // Reserve the session before TURN/SDP awaits so early ICE is retained.
+      _setState(CallState.connecting);
+      await _loadTurnServers();
+      if (generation != _callGeneration) return;
+      await _createPeerConnection();
+      if (generation != _callGeneration) {
+        await _cleanup();
+        return;
+      }
+      await _peerConnection!.setRemoteDescription(
+        RTCSessionDescription(sdp, sdpType),
+      );
+      if (generation != _callGeneration) return;
+      await _processPendingCandidates();
       _setState(CallState.incoming);
       debugLog(
         'WebRTCService: About to call onIncomingCall callback, callback is ${onIncomingCall != null ? "SET" : "NULL"}',
@@ -1112,6 +1155,8 @@ class WebRTCService {
         'WebRTCService: Incoming ${isVideo ? "video" : "voice"} call from ${_currentSession!.peerName}',
       );
     } catch (e, stackTrace) {
+      _setState(CallState.failed);
+      await _cleanup();
       debugLog('WebRTCService: Failed to handle call invite: $e');
       debugLog('Stack: $stackTrace');
     }
@@ -1269,7 +1314,7 @@ class WebRTCService {
         debugLog(
           'WebRTCService: No current session but state is $_state, cleaning up',
         );
-        onStateChanged?.call(CallState.ended);
+        _setState(CallState.ended);
         await _cleanup();
       } else if (callId != null) {
         // invite 还未到达，提前记录此 callId 已被取消
@@ -1379,7 +1424,7 @@ class WebRTCService {
     }
 
     // 先通知 UI 通话结束
-    onStateChanged?.call(CallState.ended);
+    _setState(CallState.ended);
     onError?.call('call_rejected');
     // 然后清理资源
     await _cleanup();
@@ -1428,6 +1473,8 @@ class WebRTCService {
     _peerConnection = null;
 
     _pendingCandidates.clear();
+    _outgoingCandidates.clear();
+    _descriptionPublished = false;
 
     _currentSession?.endTime = DateTime.now();
     _currentSession = null;

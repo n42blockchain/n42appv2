@@ -5808,4 +5808,8 @@ class SAr extends S {
   @override
   String get settingsBiometricUnavailable =>
       'المصادقة البيومترية غير متاحة. تحقّق من التسجيل والأذونات في إعدادات الجهاز.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

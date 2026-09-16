@@ -1,4 +1,6 @@
 import 'dart:async';
+import '../../../core/di/injection.dart';
+import '../../../domain/repositories/story_repository.dart';
 import 'dart:io';
 
 import 'package:audioplayers/audioplayers.dart';
@@ -65,6 +67,9 @@ class StoryViewerPage extends StatefulWidget {
 }
 
 class _StoryViewerPageState extends State<StoryViewerPage> {
+  StreamSubscription<List<UserStories>>? _privacySubscription;
+  bool _accessRevoked = false;
+
   /// 用户切换 PageView 控制器
   late PageController _pageController;
 
@@ -106,10 +111,28 @@ class _StoryViewerPageState extends State<StoryViewerPage> {
 
     // 触发初始 Story 的查看回调
     _notifyStoryViewed();
+    if (getIt.isRegistered<IStoryRepository>()) {
+      _privacySubscription = getIt<IStoryRepository>().watchStories().listen(
+        (groups) {
+          if (!mounted) return;
+          final allowed = groups
+              .expand((g) => g.stories)
+              .map((s) => s.id)
+              .toSet();
+          final visible = _currentUserStories.stories[_currentStoryIndex];
+          if (!allowed.contains(visible.id))
+            setState(() => _accessRevoked = true);
+        },
+        onError: (Object _) {
+          if (mounted) setState(() => _accessRevoked = true);
+        },
+      );
+    }
   }
 
   @override
   void dispose() {
+    _privacySubscription?.cancel();
     _pageController.dispose();
     // 恢复状态栏样式
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
@@ -277,6 +300,13 @@ class _StoryViewerPageState extends State<StoryViewerPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_accessRevoked)
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+        ),
+      );
     return Scaffold(
       backgroundColor: Colors.black,
       body: PageView.builder(

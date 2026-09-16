@@ -6,11 +6,29 @@ extension _ChatPageMessageListMethods on _ChatPageState {
   Widget _buildMessageList() {
     return BlocConsumer<ChatBloc, ChatState>(
       listener: (context, state) {
+        if (state.isSending && _pendingEncryptedDraft != null)
+          _pendingEncryptedDraftStarted = true;
+        final encryptionFailure =
+            state.error?.contains(EncryptedSendNotReady.code) == true;
+        if (_pendingEncryptedDraftStarted && !state.isSending) {
+          if (encryptionFailure &&
+              _inputController.text.isEmpty &&
+              _pendingEncryptedDraft != null) {
+            _inputController.text = _pendingEncryptedDraft!;
+          }
+          _pendingEncryptedDraft = null;
+          _pendingEncryptedDraftStarted = false;
+        }
         // 显示错误
         if (state.error != null) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(state.error!),
+              content: Text(
+                encryptionFailure
+                    ? (S.of(context)?.chatEncryptionNotReady ??
+                          'Secure connection is not ready. Message not sent. Check connection and device verification, then retry.')
+                    : state.error!,
+              ),
               backgroundColor: AppColors.error,
             ),
           );
@@ -298,11 +316,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
                   ),
                 ),
                 child: isRedacted
-                    ? Icon(
-                        Icons.block,
-                        size: 14,
-                        color: context.textTertiary,
-                      )
+                    ? Icon(Icons.block, size: 14, color: context.textTertiary)
                     : (isSelected
                           ? const Icon(
                               Icons.check,
@@ -397,10 +411,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
             decoration: BoxDecoration(
               color: bgColor,
               border: Border(
-                bottom: BorderSide(
-                  color: context.dividerColor,
-                  width: 0.5,
-                ),
+                bottom: BorderSide(color: context.dividerColor, width: 0.5),
               ),
             ),
             child: Row(
@@ -527,10 +538,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
           decoration: BoxDecoration(
             color: context.surfaceColor,
             border: Border(
-              top: BorderSide(
-                color: context.dividerColor,
-                width: 0.5,
-              ),
+              top: BorderSide(color: context.dividerColor, width: 0.5),
             ),
           ),
           child: Row(
@@ -598,10 +606,7 @@ extension _ChatPageMessageListMethods on _ChatPageState {
           decoration: BoxDecoration(
             color: context.surfaceColor,
             border: Border(
-              top: BorderSide(
-                color: context.dividerColor,
-                width: 0.5,
-              ),
+              top: BorderSide(color: context.dividerColor, width: 0.5),
             ),
           ),
           child: Row(

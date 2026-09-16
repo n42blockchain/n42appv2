@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "E-postanızdaki doğrulama bağlantısını açın, ardından buraya dönüp onaylayın.",
   "settingsSendVerificationEmail": "Doğrulama e-postası gönder",
   "chatLogoutKeyWarning": "Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz.",
-  "settingsBiometricUnavailable": "Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin."
+  "settingsBiometricUnavailable": "Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

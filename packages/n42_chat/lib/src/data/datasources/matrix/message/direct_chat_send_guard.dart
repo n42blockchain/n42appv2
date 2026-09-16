@@ -1,4 +1,5 @@
 import 'package:matrix/matrix.dart' as matrix;
+import 'encrypted_send_guard.dart';
 
 /// An outgoing direct-room invitation is not yet an accepted friendship.
 /// Group rooms and the user's own saved-messages room keep their SDK policy.
@@ -13,4 +14,13 @@ matrix.Room? roomForSending(matrix.Client? client, String roomId) {
     }
   }
   return room;
+}
+
+Future<matrix.Room?> prepareRoomForSending(
+  matrix.Client? client,
+  String roomId,
+) async {
+  final room = roomForSending(client, roomId);
+  if (room != null) await EncryptedSendGuard.prepare(room);
+  return roomForSending(client, roomId);
 }

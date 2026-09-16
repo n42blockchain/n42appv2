@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 import 'dart:async';
+import 'package:async/async.dart';
+import 'contact_privacy_service.dart';
 
 import 'package:matrix/matrix.dart' as matrix;
 
@@ -46,138 +48,10 @@ class MatrixMomentDataSource {
   /// 公开当前用户ID（供 Repository 使用）
   String? get currentUserId => _currentUserId;
 
-  /// 缓存的动态房间引用
-  matrix.Room? _cachedMomentRoom;
+  ContactPrivacyService get _privacy => ContactPrivacyService(_clientManager);
+  static const String momentInviteReason = ContactPrivacyService.momentReason;
 
-  /// Moment 房间邀请原因标识
-  static const String momentInviteReason = 'n42_moments';
-
-  /// 获取或创建用户的动态房间
-  Future<matrix.Room?> _getOrCreateMomentRoom() async {
-    if (_client == null) {
-      debugLog('MatrixMomentDataSource: Client is null');
-      return null;
-    }
-
-    // 先检查缓存
-    if (_cachedMomentRoom != null) {
-      return _cachedMomentRoom;
-    }
-
-    debugLog(
-      'MatrixMomentDataSource: Looking for moment room, '
-      'total rooms: ${_client!.rooms.length}',
-    );
-
-    // 查找现有的动态房间
-    for (final room in _client!.rooms) {
-      final tags = room.tags;
-      if (tags.containsKey(momentRoomTag)) {
-        debugLog(
-          'MatrixMomentDataSource: Found existing moment room: ${room.id}',
-        );
-        _cachedMomentRoom = room;
-        return room;
-      }
-    }
-
-    // 如果房间列表为空，可能同步尚未完成，等待同步
-    if (_client!.rooms.isEmpty) {
-      debugLog('MatrixMomentDataSource: No rooms found, waiting for sync...');
-      try {
-        await _client!.onSync.stream.first.timeout(const Duration(seconds: 15));
-        debugLog(
-          'MatrixMomentDataSource: Sync completed, '
-          'rooms: ${_client!.rooms.length}',
-        );
-
-        // 同步后再次查找
-        for (final room in _client!.rooms) {
-          final tags = room.tags;
-          if (tags.containsKey(momentRoomTag)) {
-            debugLog(
-              'MatrixMomentDataSource: Found moment room after sync: ${room.id}',
-            );
-            _cachedMomentRoom = room;
-            return room;
-          }
-        }
-      } on TimeoutException {
-        debugLog(
-          'MatrixMomentDataSource: Sync timeout, proceeding to create room',
-        );
-      }
-    }
-
-    // 创建新的动态房间
-    debugLog('MatrixMomentDataSource: Creating new moment room...');
-    try {
-      final roomId = await _client!.createRoom(
-        name: 'My Moments',
-        visibility: matrix.Visibility.private,
-        preset: matrix.CreateRoomPreset.privateChat,
-        powerLevelContentOverride: {
-          'events': {
-            // 只有房主（power level 50+）才能发布动态
-            momentEventType: 50,
-            // 所有成员（power level 0+）可以点赞和评论
-            momentLikeEventType: 0,
-            momentCommentEventType: 0,
-          },
-          'events_default': 0,
-          'state_default': 50,
-          'invite': 50,
-          'redact': 50,
-        },
-      );
-
-      debugLog('MatrixMomentDataSource: Room created with id: $roomId');
-
-      // 等待房间出现在本地存储中
-      matrix.Room? room = _client!.getRoomById(roomId);
-
-      if (room == null) {
-        debugLog(
-          'MatrixMomentDataSource: Room not in local store yet, waiting...',
-        );
-        // 等待同步将房间带入本地
-        for (var i = 0; i < 10; i++) {
-          await Future<void>.delayed(const Duration(milliseconds: 500));
-          room = _client!.getRoomById(roomId);
-          if (room != null) break;
-        }
-      }
-
-      if (room == null) {
-        debugLog(
-          'MatrixMomentDataSource: Room still null after waiting, '
-          'trying sync...',
-        );
-        try {
-          await _client!.onSync.stream.first.timeout(
-            const Duration(seconds: 10),
-          );
-          room = _client!.getRoomById(roomId);
-        } on TimeoutException {
-          debugLog('MatrixMomentDataSource: Sync timeout after room creation');
-        }
-      }
-
-      // 添加标签
-      if (room != null) {
-        await room.addTag(momentRoomTag);
-        _cachedMomentRoom = room;
-        debugLog('MatrixMomentDataSource: Moment room ready: ${room.id}');
-      } else {
-        debugLog('MatrixMomentDataSource: Failed to get room after creation');
-      }
-
-      return room;
-    } catch (e) {
-      debugLog('MatrixMomentDataSource: Error creating moment room: $e');
-      return null;
-    }
-  }
+  Future<matrix.Room?> _getOrCreateMomentRoom() => _privacy.ownRoom();
 
   /// 获取好友的动态房间列表
   Future<List<matrix.Room>> _getFriendMomentRooms() async {
@@ -215,6 +89,9 @@ class MatrixMomentDataSource {
         '(logged_in=$isLoggedIn, rooms=$roomCount)',
       );
     }
+
+    await _privacy.load(_currentUserId!);
+    await _privacy.apply(room);
 
     final momentId = 'moment_${DateTime.now().millisecondsSinceEpoch}';
 
@@ -422,9 +299,7 @@ class MatrixMomentDataSource {
       return _getMomentsFromRoom(room, limit: limit, beforeId: beforeId);
     }
     // For other users, filter from cached moments or reload
-    if (_cachedMoments.isEmpty) {
-      await getMoments(limit: 100);
-    }
+    await getMoments(limit: 100);
     final userMoments = _cachedMoments
         .where((m) => m.userId == userId)
         .toList();
@@ -479,7 +354,11 @@ class MatrixMomentDataSource {
   Future<MomentEntity?> getMomentById(String momentId) async {
     // 先从缓存查找
     final cached = _cachedMoments.where((m) => m.id == momentId).firstOrNull;
-    if (cached != null) return cached;
+    if (cached != null) {
+      final room = _client?.getRoomById(_momentRoomIndex[momentId] ?? '');
+      if (room != null && _privacy.canView(room, cached.userId)) return cached;
+      return null;
+    }
 
     // 通过索引定位房间
     final room = await _findRoomForMoment(momentId);
@@ -682,7 +561,10 @@ class MatrixMomentDataSource {
   Stream<List<MomentEntity>>? watchMoments() {
     if (_client == null) return null;
 
-    return _client!.onSync.stream.asyncMap((_) async {
+    return StreamGroup.merge<Object?>([
+      _client!.onSync.stream,
+      _privacy.changes,
+    ]).asyncMap((_) async {
       return await getMoments();
     });
   }
@@ -690,6 +572,7 @@ class MatrixMomentDataSource {
   /// 解析事件为动态实体
   MomentEntity? _parseEventToMoment(matrix.Event event, matrix.Room room) {
     try {
+      if (!_privacy.canView(room, event.senderId)) return null;
       final content = event.content;
       final user = room.unsafeGetUserFromMemoryOrFallback(event.senderId);
 
@@ -800,42 +683,22 @@ class MatrixMomentDataSource {
   /// 在好友关系建立时调用，使好友可以看到我的朋友圈
   Future<void> inviteFriendToMomentRoom(String userId) async {
     if (_client == null) return;
-
-    final room = await _getOrCreateMomentRoom();
-    if (room == null) {
-      debugLog(
-        'MatrixMomentDataSource: Cannot invite $userId - moment room is null',
+    await _privacy.load(userId);
+    for (final story in [false, true]) {
+      if (_privacy.hides(userId, story: story)) continue;
+      final room = await _privacy.ownRoom(story: story);
+      if (room == null) continue;
+      await _privacy.apply(room, story: story);
+      final membership = room
+          .getState(matrix.EventTypes.RoomMember, userId)
+          ?.content['membership'];
+      if (membership == 'join' || membership == 'invite' || membership == 'ban')
+        continue;
+      await _client!.inviteUser(
+        room.id,
+        userId,
+        reason: story ? ContactPrivacyService.storyReason : momentInviteReason,
       );
-      return;
-    }
-
-    // 检查用户是否已经在房间中
-    try {
-      final members = room.getParticipants();
-      final alreadyMember = members.any(
-        (m) => m.id == userId && m.membership == matrix.Membership.join,
-      );
-      final alreadyInvited = members.any(
-        (m) => m.id == userId && m.membership == matrix.Membership.invite,
-      );
-
-      if (alreadyMember || alreadyInvited) {
-        debugLog('MatrixMomentDataSource: $userId already in moment room');
-        return;
-      }
-    } catch (e) {
-      // getParticipants 可能失败，继续尝试邀请
-      debugLog('Error: $e');
-    }
-
-    try {
-      debugLog(
-        'MatrixMomentDataSource: Inviting $userId to moment room ${room.id}',
-      );
-      await _client!.inviteUser(room.id, userId, reason: momentInviteReason);
-      debugLog('MatrixMomentDataSource: Successfully invited $userId');
-    } catch (e) {
-      debugLog('MatrixMomentDataSource: Failed to invite $userId: $e');
     }
   }
 
@@ -857,12 +720,20 @@ class MatrixMomentDataSource {
       );
 
       try {
+        final reason = room
+            .getState(matrix.EventTypes.RoomMember, _client!.userID!)
+            ?.content['reason'];
+
         // 自动加入
         await room.join();
         debugLog('MatrixMomentDataSource: Joined moment room: ${room.id}');
 
         // 添加本地标签以标识这是好友的 Moment 房间
-        await room.addTag(momentRoomTag);
+        await room.addTag(
+          reason == ContactPrivacyService.storyReason
+              ? ContactPrivacyService.storyTag
+              : momentRoomTag,
+        );
 
         // 获取房间创建者（即该 Moment 房间的拥有者）
         final creatorId = _getRoomCreatorId(room);
@@ -889,7 +760,8 @@ class MatrixMomentDataSource {
         );
         if (memberEvent != null) {
           final reason = memberEvent.content['reason'] as String?;
-          if (reason == momentInviteReason) {
+          if (reason == momentInviteReason ||
+              reason == ContactPrivacyService.storyReason) {
             return true;
           }
         }

@@ -19,10 +19,7 @@ import '../../../core/utils/debug_log.dart';
 class MomentDetailPage extends StatefulWidget {
   final MomentEntity moment;
 
-  const MomentDetailPage({
-    super.key,
-    required this.moment,
-  });
+  const MomentDetailPage({super.key, required this.moment});
 
   @override
   State<MomentDetailPage> createState() => _MomentDetailPageState();
@@ -39,15 +36,17 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
       MatrixClientManager.instance.client?.userID ?? '';
 
   /// 从 Bloc 状态中获取最新的 moment（实时响应点赞/评论）
-  MomentEntity _getLatestMoment(BuildContext context) {
+  MomentEntity? _getLatestMoment(BuildContext context) {
     try {
       final state = context.read<MomentBloc>().state;
-      final found = state.moments.where((m) => m.id == widget.moment.id).firstOrNull;
+      final found = state.moments
+          .where((m) => m.id == widget.moment.id)
+          .firstOrNull;
       if (found != null) return found;
     } catch (e) {
       debugLog('Error: $e');
     }
-    return widget.moment;
+    return null;
   }
 
   Set<String> _getFriendIds() {
@@ -119,6 +118,12 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
       builder: (context, state) {
         // 始终从 Bloc 获取最新 moment 数据（响应点赞/评论变化）
         final moment = _getLatestMoment(context);
+        if (moment == null) {
+          return Scaffold(
+            appBar: AppBar(title: Text(s?.momentMoment ?? 'Moment')),
+            body: Center(child: Text(s?.commonLoadFailed ?? 'Failed to load')),
+          );
+        }
 
         return Scaffold(
           backgroundColor: context.pageBackground,
@@ -157,7 +162,8 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         moment.userName,
@@ -227,110 +233,126 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                       const SizedBox(height: 8),
 
                       // 点赞区域（可见性过滤）
-                      Builder(builder: (context) {
-                        final visibleLikes = moment.getVisibleLikes(
-                          currentUserId: _currentUserId,
-                          friendIds: _getFriendIds(),
-                        );
-                        if (visibleLikes.isEmpty) return const SizedBox.shrink();
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          color: context.surfaceColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.favorite,
-                                    size: 18,
-                                    color: AppColors.error,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    s?.momentLikesCount(visibleLikes.length) ?? '${visibleLikes.length} likes',
-                                    style: TextStyle(
-                                      color: context.textSecondary,
-                                      fontWeight: FontWeight.w500,
+                      Builder(
+                        builder: (context) {
+                          final visibleLikes = moment.getVisibleLikes(
+                            currentUserId: _currentUserId,
+                            friendIds: _getFriendIds(),
+                          );
+                          if (visibleLikes.isEmpty)
+                            return const SizedBox.shrink();
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            color: context.surfaceColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    const Icon(
+                                      Icons.favorite,
+                                      size: 18,
+                                      color: AppColors.error,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 8,
-                                children: visibleLikes.map((like) {
-                                  return Chip(
-                                    avatar: N42Avatar(
-                                      name: like.userName,
-                                      imageUrl: like.userAvatarUrl,
-                                      size: 24,
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      s?.momentLikesCount(
+                                            visibleLikes.length,
+                                          ) ??
+                                          '${visibleLikes.length} likes',
+                                      style: TextStyle(
+                                        color: context.textSecondary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                    label: Text(
-                                      like.userName,
-                                      style: const TextStyle(fontSize: 12),
-                                    ),
-                                    padding: EdgeInsets.zero,
-                                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
-                        );
-                      }),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 8,
+                                  runSpacing: 8,
+                                  children: visibleLikes.map((like) {
+                                    return Chip(
+                                      avatar: N42Avatar(
+                                        name: like.userName,
+                                        imageUrl: like.userAvatarUrl,
+                                        size: 24,
+                                      ),
+                                      label: Text(
+                                        like.userName,
+                                        style: const TextStyle(fontSize: 12),
+                                      ),
+                                      padding: EdgeInsets.zero,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                    );
+                                  }).toList(),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
 
                       const SizedBox(height: 8),
 
                       // 评论区域（可见性过滤）
-                      Builder(builder: (context) {
-                        final visibleComments = moment.getVisibleComments(
-                          currentUserId: _currentUserId,
-                          friendIds: _getFriendIds(),
-                        );
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          color: context.surfaceColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.comment,
-                                    size: 18,
-                                    color: context.textSecondary,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    s?.momentCommentsCount(visibleComments.length) ?? '${visibleComments.length} comments',
-                                    style: TextStyle(
+                      Builder(
+                        builder: (context) {
+                          final visibleComments = moment.getVisibleComments(
+                            currentUserId: _currentUserId,
+                            friendIds: _getFriendIds(),
+                          );
+                          return Container(
+                            padding: const EdgeInsets.all(16),
+                            color: context.surfaceColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.comment,
+                                      size: 18,
                                       color: context.textSecondary,
-                                      fontWeight: FontWeight.w500,
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              if (visibleComments.isEmpty)
-                                Center(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(24),
-                                    child: Text(
-                                      s?.momentNoComments ?? 'No comments yet',
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      s?.momentCommentsCount(
+                                            visibleComments.length,
+                                          ) ??
+                                          '${visibleComments.length} comments',
                                       style: TextStyle(
                                         color: context.textSecondary,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                if (visibleComments.isEmpty)
+                                  Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(24),
+                                      child: Text(
+                                        s?.momentNoComments ??
+                                            'No comments yet',
+                                        style: TextStyle(
+                                          color: context.textSecondary,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                else
+                                  ...visibleComments.map(
+                                    (comment) =>
+                                        _buildCommentItem(comment, isDark),
                                   ),
-                                )
-                              else
-                                ...visibleComments.map((comment) => _buildCommentItem(comment, isDark)),
-                            ],
-                          ),
-                        );
-                      }),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -366,17 +388,13 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                         imageUrl: media.thumbnailUrl!,
                         fit: BoxFit.cover,
                         httpHeaders: _getAuthHeaders(),
-                        placeholder: (_, _) => Container(
-                          color: AppColors.placeholderOf(isDark),
-                        ),
-                        errorWidget: (_, _, _) => Container(
-                          color: AppColors.placeholderOf(isDark),
-                        ),
+                        placeholder: (_, _) =>
+                            Container(color: AppColors.placeholderOf(isDark)),
+                        errorWidget: (_, _, _) =>
+                            Container(color: AppColors.placeholderOf(isDark)),
                       )
                     else
-                      Container(
-                        color: AppColors.placeholderOf(isDark),
-                      ),
+                      Container(color: AppColors.placeholderOf(isDark)),
                     const Center(
                       child: Icon(
                         Icons.play_circle_filled,
@@ -432,17 +450,13 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                         imageUrl: media.thumbnailUrl!,
                         fit: BoxFit.cover,
                         httpHeaders: _getAuthHeaders(),
-                        placeholder: (_, _) => Container(
-                          color: AppColors.placeholderOf(isDark),
-                        ),
-                        errorWidget: (_, _, _) => Container(
-                          color: AppColors.placeholderOf(isDark),
-                        ),
+                        placeholder: (_, _) =>
+                            Container(color: AppColors.placeholderOf(isDark)),
+                        errorWidget: (_, _, _) =>
+                            Container(color: AppColors.placeholderOf(isDark)),
                       )
                     else
-                      Container(
-                        color: AppColors.placeholderOf(isDark),
-                      ),
+                      Container(color: AppColors.placeholderOf(isDark)),
                     const Center(
                       child: Icon(
                         Icons.play_circle_filled,
@@ -518,10 +532,7 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                   const SizedBox(height: 2),
                   Text(
                     comment.content,
-                    style: TextStyle(
-                      color: context.textPrimary,
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: context.textPrimary, fontSize: 14),
                   ),
                   const SizedBox(height: 4),
                   Text(
@@ -550,11 +561,7 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
       ),
       decoration: BoxDecoration(
         color: context.surfaceColor,
-        border: Border(
-          top: BorderSide(
-            color: context.dividerColor,
-          ),
-        ),
+        border: Border(top: BorderSide(color: context.dividerColor)),
       ),
       child: Row(
         children: [
@@ -588,7 +595,8 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                       controller: _commentController,
                       decoration: InputDecoration(
                         hintText: _replyToUserName != null
-                            ? (s?.momentReplyTo(_replyToUserName!) ?? 'Reply to $_replyToUserName...')
+                            ? (s?.momentReplyTo(_replyToUserName!) ??
+                                  'Reply to $_replyToUserName...')
                             : (s?.momentWriteComment ?? 'Write a comment...'),
                         border: InputBorder.none,
                         contentPadding: const EdgeInsets.symmetric(
@@ -612,10 +620,7 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
           // 发送按钮
           IconButton(
             onPressed: _isSubmittingComment ? null : _sendComment,
-            icon: Icon(
-              Icons.send,
-              color: Theme.of(context).primaryColor,
-            ),
+            icon: Icon(Icons.send, color: Theme.of(context).primaryColor),
           ),
         ],
       ),
@@ -646,12 +651,14 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
       _isSubmittingComment = true;
     });
 
-    context.read<MomentBloc>().add(CommentMoment(
-          momentId: widget.moment.id,
-          content: text,
-          replyToCommentId: _replyToCommentId,
-          replyToUserId: _replyToUserId,
-        ));
+    context.read<MomentBloc>().add(
+      CommentMoment(
+        momentId: widget.moment.id,
+        content: text,
+        replyToCommentId: _replyToCommentId,
+        replyToUserId: _replyToUserId,
+      ),
+    );
   }
 
   String _formatCommentTime(DateTime timestamp) {
@@ -660,9 +667,12 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
     final s = S.of(context);
 
     if (diff.inMinutes < 1) return s?.momentJustNow ?? 'just now';
-    if (diff.inMinutes < 60) return s?.momentMinutesAgo(diff.inMinutes) ?? '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return s?.momentHoursAgo(diff.inHours) ?? '${diff.inHours}h ago';
-    if (diff.inDays < 7) return s?.momentDaysAgo(diff.inDays) ?? '${diff.inDays}d ago';
+    if (diff.inMinutes < 60)
+      return s?.momentMinutesAgo(diff.inMinutes) ?? '${diff.inMinutes}m ago';
+    if (diff.inHours < 24)
+      return s?.momentHoursAgo(diff.inHours) ?? '${diff.inHours}h ago';
+    if (diff.inDays < 7)
+      return s?.momentDaysAgo(diff.inDays) ?? '${diff.inDays}d ago';
 
     return '${timestamp.month}/${timestamp.day}';
   }

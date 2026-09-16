@@ -5861,4 +5861,8 @@ class SRu extends S {
   @override
   String get settingsBiometricUnavailable =>
       'Биометрическая аутентификация недоступна. Проверьте регистрацию и разрешения в настройках устройства.';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

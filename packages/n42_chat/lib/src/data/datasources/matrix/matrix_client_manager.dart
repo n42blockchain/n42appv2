@@ -184,11 +184,11 @@ class MatrixClientManager {
         );
       }
 
-      // Default to cross-verified devices. Opting into all devices improves
-      // compatibility but explicitly trusts unverified sessions.
+      // Follow the SDK default: require signed devices once cross-signing is
+      // enabled, but do not exclude every device of accounts without it.
       final shareKeysWith = (config?.shareE2eeKeysWithAllDevices ?? false)
           ? ShareKeysWith.all
-          : ShareKeysWith.crossVerified;
+          : ShareKeysWith.crossVerifiedIfEnabled;
       final syncFilterConfig = config?.syncFilter ?? const SyncFilterConfig();
       final syncFilter = Filter(
         room: RoomFilter(

@@ -5,6 +5,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import '../../../core/utils/timed_status_utils.dart';
 import '../../../core/utils/matrix_utils.dart';
 import 'matrix_client_manager.dart';
+import 'contact_privacy_service.dart';
 
 /// Matrix联系人数据源
 ///
@@ -206,13 +207,25 @@ class MatrixContactDataSource {
 
   /// 获取用户状态消息
   Future<String?> getUserStatusMessage(String userId) async {
+    final privacy = ContactPrivacyService(_clientManager);
+    if (privacy.hides(userId, story: true, incoming: true)) return null;
+    for (final room in _client?.rooms ?? <matrix.Room>[]) {
+      if (privacy.owner(room) != userId) continue;
+      if (room.tags.containsKey(ContactPrivacyService.storyTag)) {
+        if (!privacy.canView(room, userId, story: true)) return null;
+        final status = TimedStatusMetadata.fromJson(
+          room.getState('n42.user.status')?.content,
+        );
+        return status.isExpired ? null : status.message;
+      }
+    }
     final presence = await getUserPresence(userId);
     return presence?.statusMsg;
   }
 
   /// 设置当前用户的状态消息
   Future<void> setUserStatus(String? statusMessage) async {
-    await _setStatusMessage(statusMessage);
+    await setCurrentUserStatus(statusMessage);
   }
 
   Future<void> setCurrentUserStatus(
@@ -221,16 +234,21 @@ class MatrixContactDataSource {
     bool preserveCurrentPresence = false,
   }) async {
     if (_client == null) return;
-    await _setStatusMessage(
-      statusMessage,
-      preserveCurrentPresence: preserveCurrentPresence,
+    final metadata = TimedStatusMetadata(
+      message: statusMessage,
+      expiresAt: expiresAt,
+    ).toJson();
+    final privacy = ContactPrivacyService(_clientManager);
+    await privacy.load(_client!.userID!);
+    await privacy.publishStatus(
+      metadata,
+      presenceType: preserveCurrentPresence ? null : matrix.PresenceType.online,
     );
-    await _client!.setAccountData(_client!.userID!, 'n42.user.status', {
-      ...TimedStatusMetadata(
-        message: statusMessage,
-        expiresAt: expiresAt,
-      ).toJson(),
-    });
+    await _client!.setAccountData(
+      _client!.userID!,
+      'n42.user.status',
+      metadata,
+    );
   }
 
   Future<String?> getCurrentUserStatusMessage() async {
@@ -265,31 +283,8 @@ class MatrixContactDataSource {
     String? statusMessage,
   }) async {
     if (_client == null) return;
-    await _client!.setPresence(
-      _client!.userID!,
-      presenceType,
-      statusMsg: statusMessage,
-    );
-  }
-
-  Future<void> _setStatusMessage(
-    String? statusMessage, {
-    bool preserveCurrentPresence = false,
-  }) async {
-    final client = _client;
-    final userId = client?.userID;
-    if (client == null || userId == null) return;
-
-    var presenceType = matrix.PresenceType.online;
-    if (preserveCurrentPresence) {
-      try {
-        presenceType = (await client.fetchCurrentPresence(userId)).presence;
-      } catch (_) {
-        // Fall back to online when the current presence cannot be resolved.
-      }
-    }
-
-    await client.setPresence(userId, presenceType, statusMsg: statusMessage);
+    if (statusMessage != null) await setCurrentUserStatus(statusMessage);
+    await _client!.setPresence(_client!.userID!, presenceType, statusMsg: '');
   }
 
   // ============================================

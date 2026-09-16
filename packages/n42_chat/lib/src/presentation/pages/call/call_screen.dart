@@ -154,9 +154,15 @@ class _CallScreenState extends State<CallScreen> with TickerProviderStateMixin {
         debugLog('CallScreen: Failed to set initial audio route: $e');
       }
     } else if (state == CallState.ended || state == CallState.failed) {
-      // 延迟关闭页面
+      final route = ModalRoute.of(context);
       Future.delayed(const Duration(seconds: 1), () {
-        if (mounted) Navigator.of(context).pop();
+        if (!mounted || route == null || !route.isActive) return;
+        final navigator = Navigator.of(context);
+        if (route.isCurrent) {
+          navigator.pop();
+        } else {
+          navigator.removeRoute(route);
+        }
       });
     }
   }
@@ -854,10 +860,7 @@ class _CallScreenState extends State<CallScreen> with TickerProviderStateMixin {
   }
 
   Future<void> _answerCall() async {
-    // 先停止铃声
-    await CallManager().stopRingtone();
-    // 接听
-    await widget.webRTCService.answerCall();
+    await CallManager().answerCall();
   }
 
   Future<void> _rejectCall() async {

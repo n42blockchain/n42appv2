@@ -5844,4 +5844,8 @@ class SUr extends S {
   @override
   String get settingsBiometricUnavailable =>
       'بایومیٹرک تصدیق دستیاب نہیں ہے۔ آلے کی ترتیبات میں اندراج اور اجازتیں چیک کریں۔';
+
+  @override
+  String get chatEncryptionNotReady =>
+      'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
 }

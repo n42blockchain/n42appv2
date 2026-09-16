@@ -2760,5 +2760,6 @@
   "settingsEmailLinkInstructions": "Откройте ссылку в письме, затем вернитесь сюда и подтвердите.",
   "settingsSendVerificationEmail": "Отправить письмо для подтверждения",
   "chatLogoutKeyWarning": "Перед выходом сохраните резервную копию ключей шифрования, иначе вы можете потерять доступ к зашифрованным сообщениям.",
-  "settingsBiometricUnavailable": "Биометрическая аутентификация недоступна. Проверьте регистрацию и разрешения в настройках устройства."
+  "settingsBiometricUnavailable": "Биометрическая аутентификация недоступна. Проверьте регистрацию и разрешения в настройках устройства.",
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
 }

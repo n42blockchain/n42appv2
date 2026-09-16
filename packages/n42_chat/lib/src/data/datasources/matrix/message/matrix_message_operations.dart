@@ -1,3 +1,4 @@
+import 'direct_chat_send_guard.dart';
 import 'package:matrix/matrix.dart' as matrix;
 
 import '../matrix_client_manager.dart';
@@ -144,7 +145,7 @@ class MatrixMessageOperations {
     String originalEventId,
     String newText,
   ) async {
-    final room = _client?.getRoomById(roomId);
+    final room = await prepareRoomForSending(_client, roomId);
     if (room == null) return null;
 
     final originalEvent = await room.getEventById(originalEventId);

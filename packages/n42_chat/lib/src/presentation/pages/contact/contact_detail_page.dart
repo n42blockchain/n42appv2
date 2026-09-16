@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+import '../../../core/di/injection.dart';
+import '../../../core/services/contact_call_service.dart';
+import '../../../domain/repositories/contact_repository.dart';
+import '../../../n42_chat.dart';
 
 import 'package:image_picker/image_picker.dart';
 import '../../../core/services/friend_details_store.dart';
@@ -41,6 +45,7 @@ class ContactDetailPage extends StatefulWidget {
 
   /// 音视频通话回调
   final VoidCallback? onVideoCall;
+  final ContactCallService? callService;
 
   const ContactDetailPage({
     super.key,
@@ -49,6 +54,7 @@ class ContactDetailPage extends StatefulWidget {
     this.avatarUrl,
     this.onSendMessage,
     this.onVideoCall,
+    this.callService,
   });
 
   @override
@@ -72,6 +78,61 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     _remarkSubscription = RemarkService.instance.onRemarkUpdated.listen(
       _handleRemarkUpdate,
     );
+  }
+
+  bool _startingCall = false;
+
+  Future<void> _showCallOptions() async {
+    if (_startingCall) return;
+    _startingCall = true;
+    try {
+      final video = await showModalBottomSheet<bool>(
+        context: context,
+        builder: (ctx) => SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                leading: const Icon(Icons.call),
+                title: Text(S.of(ctx)?.commonVoiceCall ?? 'Voice Call'),
+                onTap: () => Navigator.pop(ctx, false),
+              ),
+              ListTile(
+                leading: const Icon(Icons.videocam),
+                title: Text(S.of(ctx)?.chatVideoCall ?? 'Video Call'),
+                onTap: () => Navigator.pop(ctx, true),
+              ),
+              ListTile(
+                title: Text(S.of(ctx)?.commonCancel ?? 'Cancel'),
+                onTap: () => Navigator.pop(ctx),
+              ),
+            ],
+          ),
+        ),
+      );
+      if (video == null || !mounted) return;
+      final service =
+          widget.callService ??
+          ContactCallService(getIt<IContactRepository>(), () async {
+            if (N42Chat.callManager?.isInitialized != true)
+              await N42Chat.initializeCallManager();
+            return N42Chat.callManager;
+          });
+      final started = await service.start(
+        userId: widget.userId,
+        name: _contact?.effectiveDisplayName ?? widget.displayName,
+        avatarUrl: widget.avatarUrl,
+        video: video,
+      );
+      if (!started) throw StateError('Call was not started');
+    } catch (_) {
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context)?.callFailed ?? 'Call failed')),
+        );
+    } finally {
+      _startingCall = false;
+    }
   }
 
   void _loadContact() {
@@ -333,7 +394,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                 icon: Icons.phone_outlined,
                 label:
                     S.of(context)?.contactAudioVideoCall ?? 'Audio/Video Call',
-                onTap: widget.onVideoCall ?? () {},
+                onTap: widget.onVideoCall ?? _showCallOptions,
               ),
             ] else ...[
               // 非好友：显示添加好友按钮
