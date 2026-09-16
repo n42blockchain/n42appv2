@@ -2763,5 +2763,10 @@
   "settingsBiometricUnavailable": "생체 인증을 사용할 수 없습니다. 기기 설정에서 등록 상태와 권한을 확인하세요.",
   "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
   "contactRequestPending": "Awaiting acceptance",
-  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending.",
+  "contactPhotoCount": "{count} photos",
+  "videoPublish": "Publish video",
+  "videoGoLive": "Go live",
+  "videoSelect": "Select video",
+  "videoLiveUnavailable": "Live broadcasting is unavailable"
 }

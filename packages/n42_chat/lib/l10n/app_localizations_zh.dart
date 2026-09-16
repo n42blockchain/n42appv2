@@ -5697,6 +5697,23 @@ class SZh extends S {
 
   @override
   String get chatFriendRequestPending => '好友关系尚未确认，请到“联系人 → 新的朋友”查看并处理申请后再发送。';
+
+  @override
+  String contactPhotoCount(int count) {
+    return '$count张照片';
+  }
+
+  @override
+  String get videoPublish => '发布视频';
+
+  @override
+  String get videoGoLive => '发起直播';
+
+  @override
+  String get videoSelect => '选择视频';
+
+  @override
+  String get videoLiveUnavailable => '当前无法发起直播';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11393,4 +11410,21 @@ class SZhTw extends SZh {
 
   @override
   String get chatFriendRequestPending => '好友關係尚未確認，請到「聯絡人 → 新的朋友」查看並處理申請後再傳送。';
+
+  @override
+  String contactPhotoCount(int count) {
+    return '$count張照片';
+  }
+
+  @override
+  String get videoPublish => '發布影片';
+
+  @override
+  String get videoGoLive => '發起直播';
+
+  @override
+  String get videoSelect => '選擇影片';
+
+  @override
+  String get videoLiveUnavailable => '目前無法發起直播';
 }

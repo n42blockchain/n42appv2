@@ -11,12 +11,17 @@ import '../pages/live_room_page.dart';
 final GoRouter liveRouter = GoRouter(
   initialLocation: '/live',
   routes: [
-    GoRoute(path: '/live', builder: (context, state) => const LiveHomePage()),
     GoRoute(
-      path: '/live/room/:roomId',
-      builder: (context, state) =>
-          LiveRoomPage(roomId: state.pathParameters['roomId']!),
+      path: '/live',
+      builder: (context, state) => const LiveHomePage(),
+      routes: [
+        GoRoute(
+          path: 'room/:roomId',
+          builder: (context, state) =>
+              LiveRoomPage(roomId: state.pathParameters['roomId']!),
+        ),
+        GoRoute(path: 'go', builder: (context, state) => const GoLivePage()),
+      ],
     ),
-    GoRoute(path: '/live/go', builder: (context, state) => const GoLivePage()),
   ],
 );

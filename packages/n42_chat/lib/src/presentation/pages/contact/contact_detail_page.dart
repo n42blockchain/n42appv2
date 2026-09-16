@@ -5,7 +5,6 @@ import '../../../core/services/contact_call_service.dart';
 import '../../../domain/repositories/contact_repository.dart';
 import '../../../n42_chat.dart';
 
-import 'package:image_picker/image_picker.dart';
 import '../../../core/services/friend_details_store.dart';
 import '../../../data/datasources/local/secure_storage_datasource.dart';
 
@@ -27,6 +26,8 @@ import 'common_groups_page.dart';
 import 'contact_permissions_page.dart';
 import 'contact_settings_page.dart';
 import 'tags_management_page.dart';
+import 'friend_details_summary.dart';
+import 'friend_photos_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 联系人详情页面（仿微信）
@@ -66,6 +67,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   bool _isStarred = false;
   bool _isFriend = false;
   bool _isAddingFriend = false;
+  int _detailsRevision = 0;
   StreamSubscription<RemarkUpdateEvent>? _remarkSubscription;
 
   @override
@@ -337,6 +339,11 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
                   onTap: () => _openFriendInfo(),
+                ),
+                FriendDetailsSummary(
+                  userId: widget.userId,
+                  revision: _detailsRevision,
+                  onEdit: _openFriendInfo,
                 ),
               ],
             ),
@@ -753,6 +760,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
         .then((_) {
           if (!mounted) return;
           _loadContact();
+          setState(() => _detailsRevision++);
         });
   }
 }
@@ -1065,6 +1073,9 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                 _buildDivider(dividerColor),
                 _buildMenuItem(
                   title: S.of(context)?.contactPhotos ?? 'Photos',
+                  value:
+                      S.of(context)?.contactPhotoCount(_photos.length) ??
+                      '${_photos.length} photos',
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
                   onTap: () => _showPhotosDialog(),
@@ -1078,33 +1089,7 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                 child: Wrap(
                   spacing: 8,
                   runSpacing: 8,
-                  children: [
-                    for (final name in _photos)
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _photoThumbnail(name),
-                          IconButton(
-                            tooltip: S.of(context)?.commonDelete ?? 'Delete',
-                            icon: const Icon(Icons.delete_outline),
-                            onPressed: _detailsBusy
-                                ? null
-                                : () async {
-                                    if (await _saveDetails(
-                                      'photos',
-                                      _photos.where((p) => p != name).toList(),
-                                    )) {
-                                      try {
-                                        await _detailsStore!.deletePhoto(name);
-                                      } catch (_) {
-                                        /* Orphan cleanup can be retried. */
-                                      }
-                                    }
-                                  },
-                          ),
-                        ],
-                      ),
-                  ],
+                  children: [for (final name in _photos) _photoThumbnail(name)],
                 ),
               ),
             // 权限分组
@@ -1324,21 +1309,17 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
   Future<void> _showPhotosDialog() async {
     if (_detailsBusy || _pickingPhoto || _detailsStore == null) return;
     _pickingPhoto = true;
-    final store = _detailsStore!;
     try {
-      final image = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-        maxWidth: 2048,
-        maxHeight: 2048,
-        imageQuality: 85,
+      await Navigator.of(context).push<void>(
+        MaterialPageRoute(
+          builder: (_) => FriendPhotosPage(
+            store: _detailsStore!,
+            photos: _photos,
+            onSave: (photos) async =>
+                mounted && await _saveDetails('photos', photos),
+          ),
+        ),
       );
-      if (image == null || !mounted) return;
-      final name = await store.importPhoto(image);
-      if (!mounted || !await _saveDetails('photos', [..._photos, name])) {
-        await store.deletePhoto(name);
-      }
-    } catch (_) {
-      if (mounted) _showDetailsError();
     } finally {
       _pickingPhoto = false;
     }

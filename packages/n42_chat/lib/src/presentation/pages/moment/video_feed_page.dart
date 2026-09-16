@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../n42_chat.dart';
+import '../../blocs/moment/moment_bloc.dart';
+import 'create_moment_page.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +21,8 @@ import '../../../domain/repositories/moment_repository.dart';
 /// 取动态中含视频的条目，逐页全屏播放：当前页自动播放并循环，
 /// 滑走自动暂停；点屏暂停/播放；右侧点赞/评论计数，底部作者+文案。
 class VideoFeedPage extends StatefulWidget {
-  const VideoFeedPage({super.key});
+  final bool creatorActions;
+  const VideoFeedPage({super.key, this.creatorActions = false});
 
   @override
   State<VideoFeedPage> createState() => _VideoFeedPageState();
@@ -28,6 +34,7 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
   bool _loading = true;
   StreamSubscription<List<MomentEntity>>? _subscription;
   int _current = 0;
+  bool _creatorRouteOpen = false;
 
   @override
   void initState() {
@@ -98,10 +105,81 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
     }
   }
 
+  Future<void> _create({required bool live}) async {
+    if (_creatorRouteOpen) return;
+    setState(() => _creatorRouteOpen = true);
+    try {
+      if (live) {
+        final opened = await N42Chat.invokeGoLive(context);
+        if (!opened && mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                S.of(context)?.videoLiveUnavailable ??
+                    'Live broadcasting is unavailable',
+              ),
+            ),
+          );
+        }
+      } else {
+        await Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (_) => BlocProvider(
+              create: (_) => MomentBloc(getIt<IMomentRepository>()),
+              child: const CreateMomentPage(videoOnly: true),
+            ),
+          ),
+        );
+        if (mounted) await _load();
+      }
+    } finally {
+      if (mounted) setState(() => _creatorRouteOpen = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      appBar: widget.creatorActions
+          ? AppBar(
+              title: Text(
+                S.of(context)?.discoverVideoChannels ?? 'Video Channels',
+              ),
+            )
+          : null,
+      bottomNavigationBar: widget.creatorActions
+          ? SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: _creatorRouteOpen
+                            ? null
+                            : () => _create(live: false),
+                        icon: const Icon(Icons.video_call),
+                        label: Text(
+                          S.of(context)?.videoPublish ?? 'Publish video',
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: FilledButton.icon(
+                        onPressed: _creatorRouteOpen
+                            ? null
+                            : () => _create(live: true),
+                        icon: const Icon(Icons.live_tv),
+                        label: Text(S.of(context)?.videoGoLive ?? 'Go live'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : null,
       body: _loading
           ? const Center(child: CircularProgressIndicator(color: Colors.white))
           : _videos.isEmpty
@@ -115,22 +193,26 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
                   onPageChanged: (i) => setState(() => _current = i),
                   itemBuilder: (ctx, i) => _VideoFeedItem(
                     moment: _videos[i],
-                    isActive: i == _current,
+                    isActive: i == _current && !_creatorRouteOpen,
                     onLike: () => _toggleLike(i),
                   ),
                 ),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Align(
-                      alignment: Alignment.topLeft,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () => Navigator.of(context).pop(),
+                if (!widget.creatorActions)
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Align(
+                        alignment: Alignment.topLeft,
+                        child: IconButton(
+                          icon: const Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
     );
@@ -156,15 +238,16 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
             ],
           ),
         ),
-        SafeArea(
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: IconButton(
-              icon: const Icon(Icons.arrow_back, color: Colors.white),
-              onPressed: () => Navigator.of(context).pop(),
+        if (!widget.creatorActions)
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
             ),
           ),
-        ),
       ],
     );
   }

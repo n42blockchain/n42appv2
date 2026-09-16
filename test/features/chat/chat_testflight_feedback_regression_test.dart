@@ -43,8 +43,12 @@ import '../../../packages/n42_chat/test/presentation/pages/moment/moment_detail_
 import '../../../packages/n42_chat/test/presentation/pages/story/story_viewer_page_test.dart'
     as story_access;
 
+import '../../../packages/n42_chat/test/presentation/pages/discover_page_test.dart'
+    as discovery;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat video creator navigation', discovery.main);
   group('Chat privacy', privacy.main);
   group('Chat navigation calls', navigation_calls.main);
   group('Chat encrypted sends', encrypted_sends.main);

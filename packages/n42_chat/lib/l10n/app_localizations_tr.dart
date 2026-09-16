@@ -5847,4 +5847,21 @@ class STr extends S {
   @override
   String get chatFriendRequestPending =>
       'Friendship is not confirmed. Check Contacts > New Friends before sending.';
+
+  @override
+  String contactPhotoCount(int count) {
+    return '$count photos';
+  }
+
+  @override
+  String get videoPublish => 'Publish video';
+
+  @override
+  String get videoGoLive => 'Go live';
+
+  @override
+  String get videoSelect => 'Select video';
+
+  @override
+  String get videoLiveUnavailable => 'Live broadcasting is unavailable';
 }

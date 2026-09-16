@@ -91,7 +91,11 @@ class _ChannelDiscoverPageState extends State<ChannelDiscoverPage> {
       );
       final channels =
           response.chunk
-              .where((room) => room.roomType != 'm.space')
+              .where(
+                (room) =>
+                    room.roomType != 'm.space' &&
+                    !(room.topic ?? '').startsWith('n42.live.directory:'),
+              )
               .map(_mapChannel)
               .toList()
             ..sort((a, b) => b.subscriberCount.compareTo(a.subscriberCount));

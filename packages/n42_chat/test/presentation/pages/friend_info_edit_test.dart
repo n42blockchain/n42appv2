@@ -12,6 +12,15 @@ import 'package:n42_chat/src/presentation/pages/contact/contact_detail_page.dart
 
 class _GalleryPicker extends ImagePickerPlatform {
   XFile? image;
+  List<XFile> images = [];
+  @override
+  Future<List<XFile>> getMultiImageWithOptions({
+    MultiImagePickerOptions options = const MultiImagePickerOptions(),
+  }) async {
+    source = ImageSource.gallery;
+    return images;
+  }
+
   ImageSource? source;
   @override
   Future<XFile?> getImageFromSource({
@@ -184,6 +193,42 @@ void main() {
     },
   );
 
+  testWidgets(
+    'friend profile previews saved fields and refreshes when the editor returns',
+    (tester) async {
+      await store.save({
+        'phone': '15011128888',
+        'tags': ['Family', 'Friends'],
+        'notes': 'Hello',
+      });
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: S.localizationsDelegates,
+          supportedLocales: S.supportedLocales,
+          home: ContactDetailPage(
+            userId: '@friend:hs.test',
+            displayName: 'Friend',
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('15011128888'), findsOneWidget);
+      expect(find.text('Family, Friends'), findsOneWidget);
+      expect(find.text('Hello'), findsOneWidget);
+      await tester.tap(find.text('Friend Info'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Phone'));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), '15122224444');
+      await tester.tap(find.text('Save'));
+      await tester.pumpAndSettle();
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('15122224444'), findsOneWidget);
+      expect(find.text('15011128888'), findsNothing);
+    },
+  );
+
   testWidgets('an account change prevents saving stale friend details', (
     tester,
   ) async {
@@ -212,7 +257,7 @@ void main() {
     }
   });
   testWidgets(
-    'gallery photos persist, reopen, preview and delete; cancellation is harmless',
+    'multiple gallery photos persist, preview and delete in the photo manager',
     (tester) async {
       final directory = Directory.systemTemp.createTempSync(
         'friend-photo-test',
@@ -239,18 +284,20 @@ void main() {
             'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aD1sAAAAASUVORK5CYII=',
           ),
         );
-      picker.image = XFile(source.path);
+      picker.images = [XFile(source.path), XFile(source.path)];
       await open(tester);
+      await tester.tap(find.text('Photos'));
+      await tester.pumpAndSettle();
       await tester.runAsync(() async {
-        await tester.tap(find.text('Photos'));
+        await tester.tap(find.text('Add'));
         await Future<void>.delayed(const Duration(milliseconds: 200));
       });
       await tester.pumpAndSettle();
       expect(picker.source, ImageSource.gallery);
       final names = (await store.load())['photos'] as List;
-      expect(names, hasLength(1));
+      expect(names, hasLength(2));
       final saved = await tester.runAsync(
-        () => store.photo(names.single as String),
+        () => store.photo(names.first as String),
       );
       expect(saved!.existsSync(), isTrue);
       await tester.pumpWidget(const SizedBox());
@@ -260,23 +307,58 @@ void main() {
         await Future<void>.delayed(const Duration(milliseconds: 100));
       });
       await tester.pumpAndSettle();
-      expect(find.byType(Image), findsOneWidget);
-      await tester.tap(find.byType(Image));
+      expect(find.byType(Image), findsNWidgets(2));
+      await tester.tap(find.byType(Image).first);
       await tester.pumpAndSettle();
       expect(find.byType(InteractiveViewer), findsOneWidget);
       await tester.tap(find.text('Close'));
       await tester.pumpAndSettle();
+      await tester.tap(find.text('Photos'));
+      await tester.pumpAndSettle();
       await tester.runAsync(() async {
-        await tester.tap(find.byIcon(Icons.delete_outline));
+        await tester.tap(find.byIcon(Icons.delete_outline).first);
         await Future<void>.delayed(const Duration(milliseconds: 100));
       });
       await tester.pumpAndSettle();
-      expect((await store.load())['photos'], isEmpty);
+      expect((await store.load())['photos'], hasLength(1));
       expect(saved.existsSync(), isFalse);
-      picker.image = null;
-      await tester.tap(find.text('Photos'));
+      picker.images = [];
+      await tester.tap(find.text('Add'));
       await tester.pumpAndSettle();
-      expect((await store.load())['photos'], isEmpty);
+      expect((await store.load())['photos'], hasLength(1));
+      picker.images = [
+        XFile(source.path),
+        XFile('${directory.path}/missing.jpg'),
+      ];
+      await tester.runAsync(() async {
+        await tester.tap(find.text('Add'));
+        await Future<void>.delayed(const Duration(milliseconds: 200));
+      });
+      await tester.pumpAndSettle();
+      expect((await store.load())['photos'], hasLength(1));
+      expect(find.text('Save failed'), findsOneWidget);
+      expect(saved.parent.listSync().whereType<File>(), hasLength(1));
+      await tester.pumpWidget(const SizedBox());
+      await tester.pumpAndSettle();
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: S.localizationsDelegates,
+          supportedLocales: S.supportedLocales,
+          home: ContactDetailPage(
+            userId: '@friend:hs.test',
+            displayName: 'Friend',
+          ),
+        ),
+      );
+      await tester.runAsync(() async {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      });
+      await tester.pumpAndSettle();
+      expect(find.text('1 photos'), findsOneWidget);
+      await tester.ensureVisible(find.byType(Image).first);
+      await tester.tap(find.byType(Image).first);
+      await tester.pumpAndSettle();
+      expect(find.byType(InteractiveViewer), findsOneWidget);
     },
   );
   test(

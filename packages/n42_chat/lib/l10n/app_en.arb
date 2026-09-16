@@ -916,7 +916,13 @@
   "settingsRestoreSuccess": "Keys restored successfully",
   "settingsRestoreEmpty": "No message keys were found in this backup.",
   "settingsRestoreSessions": "Restored {count} key sessions. Messages with missing keys may remain encrypted.",
-  "@settingsRestoreSessions": {"placeholders": {"count": {"type": "int"}}},
+  "@settingsRestoreSessions": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
   "settingsRestoreFailed": "Restore failed",
   "settingsPassword": "Password",
   "settingsEnterRecoveryKey": "Enter recovery key",
@@ -2764,5 +2770,18 @@
   "settingsBiometricUnavailable": "Biometric authentication is unavailable. Check enrollment and permissions in device settings.",
   "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
   "contactRequestPending": "Awaiting acceptance",
-  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending.",
+  "contactPhotoCount": "{count} photos",
+  "@contactPhotoCount": {
+    "description": "Number of private photos saved for this friend",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "videoPublish": "Publish video",
+  "videoGoLive": "Go live",
+  "videoSelect": "Select video",
+  "videoLiveUnavailable": "Live broadcasting is unavailable"
 }

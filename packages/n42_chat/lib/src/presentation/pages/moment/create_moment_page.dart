@@ -26,8 +26,13 @@ const _kLastVisibilityKey = 'moment_last_visibility';
 /// 发布动态页面
 class CreateMomentPage extends StatefulWidget {
   final bool autoPickImages;
+  final bool videoOnly;
 
-  const CreateMomentPage({super.key, this.autoPickImages = false});
+  const CreateMomentPage({
+    super.key,
+    this.autoPickImages = false,
+    this.videoOnly = false,
+  });
 
   @override
   State<CreateMomentPage> createState() => _CreateMomentPageState();
@@ -107,7 +112,11 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
       child: Scaffold(
         backgroundColor: context.pageBackground,
         appBar: AppBar(
-          title: const Text('Create Moment'),
+          title: Text(
+            widget.videoOnly
+                ? s?.videoPublish ?? 'Publish video'
+                : 'Create Moment',
+          ),
           backgroundColor: context.surfaceColor,
           actions: [
             BlocBuilder<MomentBloc, MomentState>(
@@ -127,9 +136,10 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
                 return ValueListenableBuilder<TextEditingValue>(
                   valueListenable: _contentController,
                   builder: (context, textValue, _) {
-                    final canPost =
-                        textValue.text.trim().isNotEmpty ||
-                        _selectedMedia.isNotEmpty;
+                    final canPost = widget.videoOnly
+                        ? _selectedMedia.any((item) => item.isVideo)
+                        : textValue.text.trim().isNotEmpty ||
+                              _selectedMedia.isNotEmpty;
                     return TextButton(
                       style: TextButton.styleFrom(
                         foregroundColor: AppColors.primary,
@@ -166,9 +176,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
                   decoration: InputDecoration(
                     hintText: "What's on your mind?",
                     border: InputBorder.none,
-                    counterStyle: TextStyle(
-                      color: context.textSecondary,
-                    ),
+                    counterStyle: TextStyle(color: context.textSecondary),
                   ),
                   // Text changes are handled by ValueListenableBuilder on the controller
                 ),
@@ -183,33 +191,26 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
               ],
 
               // 操作按钮
-              Container(
-                decoration: BoxDecoration(
-                  color: context.surfaceColor,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              Material(
+                color: context.surfaceColor,
+                borderRadius: BorderRadius.circular(8),
                 child: Column(
                   children: [
-                    _buildOptionTile(
-                      icon: Icons.photo_library,
-                      title: 'Add Photos',
-                      onTap: _pickImages,
-                      isDark: isDark,
-                    ),
-                    Divider(
-                      height: 1,
-                      color: context.dividerColor,
-                    ),
+                    if (!widget.videoOnly)
+                      _buildOptionTile(
+                        icon: Icons.photo_library,
+                        title: 'Add Photos',
+                        onTap: _pickImages,
+                        isDark: isDark,
+                      ),
+                    Divider(height: 1, color: context.dividerColor),
                     _buildOptionTile(
                       icon: Icons.videocam,
-                      title: 'Add Video',
+                      title: s?.videoSelect ?? 'Select video',
                       onTap: _pickVideo,
                       isDark: isDark,
                     ),
-                    Divider(
-                      height: 1,
-                      color: context.dividerColor,
-                    ),
+                    Divider(height: 1, color: context.dividerColor),
                     _buildOptionTile(
                       icon: Icons.location_on,
                       title: _location?.displayText ?? 'Add Location',
@@ -222,10 +223,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
                             )
                           : null,
                     ),
-                    Divider(
-                      height: 1,
-                      color: context.dividerColor,
-                    ),
+                    Divider(height: 1, color: context.dividerColor),
                     _buildOptionTile(
                       icon: Icons.visibility,
                       title: _getVisibilityText(s),
@@ -342,16 +340,8 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   }) {
     return ListTile(
       leading: Icon(icon, color: context.textSecondary),
-      title: Text(
-        title,
-        style: TextStyle(color: context.textPrimary),
-      ),
-      trailing:
-          trailing ??
-          Icon(
-            AppIcons.chevron,
-            color: context.textTertiary,
-          ),
+      title: Text(title, style: TextStyle(color: context.textPrimary)),
+      trailing: trailing ?? Icon(AppIcons.chevron, color: context.textTertiary),
       onTap: onTap,
     );
   }
@@ -598,6 +588,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   }
 
   void _postMoment() {
+    if (widget.videoOnly && !_selectedMedia.any((item) => item.isVideo)) return;
     final bloc = context.read<MomentBloc>();
 
     if (_selectedMedia.isEmpty) {

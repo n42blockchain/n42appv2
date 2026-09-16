@@ -106,6 +106,7 @@ class N42Chat {
   /// 视频直播由宿主实现（复用 chat 的 Matrix 房间 + 自部署 LiveKit）；
   /// 宿主未注册时发现页「直播」回退到语音房列表。
   static void Function(BuildContext context)? _onOpenLive;
+  static Future<void> Function(BuildContext context)? _onGoLive;
 
   /// Moment 邀请节流时间戳（10 秒内不重复处理）
   static DateTime? _lastMomentInviteCheck;
@@ -345,6 +346,20 @@ class N42Chat {
     void Function(BuildContext context)? handler,
   ) {
     _onOpenLive = handler;
+  }
+
+  /// Host-provided video broadcast composer, separate from live discovery.
+  static void setGoLiveHandler(
+    Future<void> Function(BuildContext context)? handler,
+  ) {
+    _onGoLive = handler;
+  }
+
+  static Future<bool> invokeGoLive(BuildContext context) async {
+    final handler = _onGoLive;
+    if (handler == null) return false;
+    await handler(context);
+    return true;
   }
 
   /// 内部使用：ServicesPage 触发 Wallet，若未注册返回 false。

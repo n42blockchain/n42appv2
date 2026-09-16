@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:n42_chat/src/core/di/injection.dart';
+import 'package:n42_chat/src/n42_chat.dart';
+import 'package:n42_chat/src/domain/repositories/moment_repository.dart';
+import 'package:n42_chat/src/presentation/pages/moment/create_moment_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -10,6 +15,8 @@ import 'package:n42_chat/src/presentation/pages/discover/discover_page.dart';
 import 'package:n42_chat/src/presentation/pages/discover/listen_page.dart';
 import 'package:n42_chat/src/presentation/pages/discover/nearby_page.dart';
 import 'package:n42_chat/src/presentation/pages/moment/video_feed_page.dart';
+
+class _Moments extends Mock implements IMomentRepository {}
 
 class MockMomentBloc extends Mock implements MomentBloc {
   @override
@@ -44,6 +51,66 @@ void useTallViewport(WidgetTester tester) {
 }
 
 void main() {
+  setUp(() async {
+    await getIt.reset();
+    SharedPreferences.setMockInitialValues({});
+    final repository = _Moments();
+    when(() => repository.getMoments(limit: 50)).thenAnswer((_) async => []);
+    when(
+      () => repository.watchMoments(),
+    ).thenAnswer((_) => const Stream.empty());
+    getIt.registerSingleton<IMomentRepository>(repository);
+  });
+  tearDown(() async {
+    N42Chat.setGoLiveHandler(null);
+    await getIt.reset();
+  });
+
+  testWidgets(
+    'Video Channels opens video creation and host broadcast actions',
+    (tester) async {
+      useTallViewport(tester);
+      var broadcasts = 0;
+      N42Chat.setGoLiveHandler((_) async {
+        broadcasts++;
+      });
+      await tester.pumpWidget(buildTestWidget(const DiscoverPage()));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.textContaining('Channel'));
+      await tester.tap(find.textContaining('Channel'));
+      await tester.pumpAndSettle();
+      expect(
+        tester.widget<VideoFeedPage>(find.byType(VideoFeedPage)).creatorActions,
+        isTrue,
+      );
+      expect(find.text('Publish video'), findsOneWidget);
+      await tester.tap(find.text('Go live'));
+      await tester.pumpAndSettle();
+      expect(broadcasts, 1);
+      await tester.tap(find.text('Publish video'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<CreateMomentPage>(find.byType(CreateMomentPage))
+            .videoOnly,
+        isTrue,
+      );
+      expect(find.text('Add Photos'), findsNothing);
+      expect(find.text('Select video'), findsOneWidget);
+      await tester.enterText(
+        find.byType(TextField),
+        'A caption without a video',
+      );
+      await tester.pump();
+      expect(
+        tester
+            .widget<TextButton>(find.widgetWithText(TextButton, 'Send'))
+            .onPressed,
+        isNull,
+      );
+    },
+  );
+
   group('DiscoverPage', () {
     testWidgets('renders stories hub plus core discover menu items', (
       tester,

@@ -23,7 +23,6 @@ import '../search/global_search_page.dart';
 import 'social_hub_page.dart';
 import '../space/space_list_page.dart';
 import '../voice_room/voice_room_list_page.dart';
-import 'channel_discover_page.dart';
 import 'listen_page.dart';
 import 'nearby_page.dart';
 
@@ -447,7 +446,9 @@ class DiscoverPage extends StatelessWidget {
 
   void _openChannelDiscover(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const ChannelDiscoverPage()),
+      MaterialPageRoute<void>(
+        builder: (_) => const VideoFeedPage(creatorActions: true),
+      ),
     );
   }
 

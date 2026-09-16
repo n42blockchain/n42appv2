@@ -2763,5 +2763,10 @@
   "settingsBiometricUnavailable": "Біометрична автентифікація недоступна. Перевірте реєстрацію та дозволи в налаштуваннях пристрою.",
   "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
   "contactRequestPending": "Awaiting acceptance",
-  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending.",
+  "contactPhotoCount": "{count} photos",
+  "videoPublish": "Publish video",
+  "videoGoLive": "Go live",
+  "videoSelect": "Select video",
+  "videoLiveUnavailable": "Live broadcasting is unavailable"
 }

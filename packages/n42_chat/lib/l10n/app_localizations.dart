@@ -10804,6 +10804,36 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Friendship is not confirmed. Check Contacts > New Friends before sending.'**
   String get chatFriendRequestPending;
+
+  /// Number of private photos saved for this friend
+  ///
+  /// In en, this message translates to:
+  /// **'{count} photos'**
+  String contactPhotoCount(int count);
+
+  /// No description provided for @videoPublish.
+  ///
+  /// In en, this message translates to:
+  /// **'Publish video'**
+  String get videoPublish;
+
+  /// No description provided for @videoGoLive.
+  ///
+  /// In en, this message translates to:
+  /// **'Go live'**
+  String get videoGoLive;
+
+  /// No description provided for @videoSelect.
+  ///
+  /// In en, this message translates to:
+  /// **'Select video'**
+  String get videoSelect;
+
+  /// No description provided for @videoLiveUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Live broadcasting is unavailable'**
+  String get videoLiveUnavailable;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {
