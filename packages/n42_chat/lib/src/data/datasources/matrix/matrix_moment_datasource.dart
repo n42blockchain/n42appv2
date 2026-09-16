@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:async';
 import 'package:async/async.dart';
 import 'contact_privacy_service.dart';
+import 'message/direct_chat_send_guard.dart';
 
 import 'package:matrix/matrix.dart' as matrix;
 
@@ -53,6 +54,115 @@ class MatrixMomentDataSource {
 
   Future<matrix.Room?> _getOrCreateMomentRoom() => _privacy.ownRoom();
 
+  /// Restricted posts get an invite-only room with a fixed audience. A client
+  /// visibility flag alone does not stop other room members fetching the event.
+  Future<matrix.Room> _restrictedMomentRoom(
+    MomentVisibility visibility,
+    List<String> selected,
+  ) async {
+    final client = _client;
+    final account = client?.userID;
+    if (client == null || account == null) {
+      throw StateError('No active account');
+    }
+    void checkSession() {
+      if (!identical(client, _client) || client.userID != account) {
+        throw StateError('Account changed');
+      }
+    }
+
+    final allowed = <String>{};
+    if (visibility != MomentVisibility.private) {
+      final friends = <String>{};
+      for (final direct in List<matrix.Room>.of(client.rooms)) {
+        final peer = direct.directChatMatrixID;
+        if (!direct.isDirectChat ||
+            direct.membership != matrix.Membership.join ||
+            peer == null ||
+            peer == account ||
+            _privacy.hides(peer)) {
+          continue;
+        }
+        if (visibility == MomentVisibility.partial &&
+            !selected.contains(peer)) {
+          continue;
+        }
+        final member = await resolveDirectPeer(direct, peer);
+        checkSession();
+        if (member.content['membership'] == 'join') friends.add(peer);
+      }
+      if (visibility == MomentVisibility.partial) {
+        if (selected.isEmpty || selected.any((id) => !friends.contains(id))) {
+          throw StateError('Selected audience is not available');
+        }
+        allowed.addAll(selected);
+      } else {
+        allowed.addAll(friends.difference(selected.toSet()));
+      }
+    }
+    final audience = allowed.toList()..sort();
+    final id = await client.createRoom(
+      name: 'Private Moments',
+      visibility: matrix.Visibility.private,
+      preset: matrix.CreateRoomPreset.privateChat,
+      initialState: [
+        matrix.StateEvent(
+          type: 'n42.social.type',
+          stateKey: '',
+          content: {'kind': 'moments'},
+        ),
+        matrix.StateEvent(
+          type: ContactPrivacyService.audienceType,
+          stateKey: '',
+          content: {'users': audience},
+        ),
+        matrix.StateEvent(
+          type: 'm.room.history_visibility',
+          stateKey: '',
+          content: {'history_visibility': 'invited'},
+        ),
+      ],
+      powerLevelContentOverride: {
+        'events': {
+          momentEventType: 100,
+          ContactPrivacyService.audienceType: 100,
+          ContactPrivacyService.policyType: 100,
+        },
+        'events_default': 0,
+        'state_default': 100,
+        'invite': 100,
+        'ban': 100,
+        'kick': 100,
+        'redact': 100,
+      },
+    );
+    checkSession();
+    if (client.getRoomById(id) == null) {
+      await client
+          .waitForRoomInSync(id, join: true)
+          .timeout(const Duration(seconds: 20));
+    }
+    final room = client.getRoomById(id);
+    if (room == null) throw StateError('Restricted room sync incomplete');
+    final persistedAudience = room
+        .getState(ContactPrivacyService.audienceType)
+        ?.content['users'];
+    if (persistedAudience is! List ||
+        persistedAudience.length != audience.length ||
+        !persistedAudience.toSet().containsAll(audience)) {
+      throw StateError('Restricted room audience was not confirmed');
+    }
+    checkSession();
+    await room.addTag(momentRoomTag);
+    await _privacy.apply(room);
+    for (final user in audience) {
+      checkSession();
+      await client.inviteUser(id, user, reason: momentInviteReason);
+    }
+    checkSession();
+    return room;
+  }
+
   /// 获取好友的动态房间列表
   Future<List<matrix.Room>> _getFriendMomentRooms() async {
     if (_client == null) return [];
@@ -80,7 +190,20 @@ class MatrixMomentDataSource {
     MomentVisibility visibility = MomentVisibility.public,
     List<String> visibilityUserIds = const [],
   }) async {
-    final room = await _getOrCreateMomentRoom();
+    final client = _client;
+    final account = client?.userID;
+    void checkSession() {
+      if (client == null ||
+          account == null ||
+          !identical(client, _client) ||
+          client.userID != account) {
+        throw StateError('Account changed');
+      }
+    }
+
+    checkSession();
+    var room = await _getOrCreateMomentRoom();
+    checkSession();
     if (room == null) {
       final isLoggedIn = _client?.isLogged() ?? false;
       final roomCount = _client?.rooms.length ?? 0;
@@ -92,6 +215,11 @@ class MatrixMomentDataSource {
 
     await _privacy.load(_currentUserId!);
     await _privacy.apply(room);
+    checkSession();
+    if (visibility != MomentVisibility.public) {
+      room = await _restrictedMomentRoom(visibility, visibilityUserIds);
+      checkSession();
+    }
 
     final momentId = 'moment_${DateTime.now().millisecondsSinceEpoch}';
 
@@ -118,7 +246,8 @@ class MatrixMomentDataSource {
           'size: ${m.bytes.length}, isVideo: ${m.isVideo}',
         );
 
-        final uri = await _client!.uploadContent(
+        checkSession();
+        final uri = await client!.uploadContent(
           m.bytes,
           filename: m.filename,
           contentType: contentType,
@@ -128,7 +257,7 @@ class MatrixMomentDataSource {
         String? thumbnailMxcUrl;
         if (m.isVideo && m.thumbnailBytes != null) {
           try {
-            final thumbUri = await _client!.uploadContent(
+            final thumbUri = await client.uploadContent(
               m.thumbnailBytes!,
               filename: '${m.filename}_thumb.jpg',
               contentType: 'image/jpeg',
@@ -176,6 +305,7 @@ class MatrixMomentDataSource {
     };
 
     final now = DateTime.now();
+    checkSession();
     final sentEventId = await room.sendEvent(
       eventContent,
       type: momentEventType,
@@ -189,7 +319,8 @@ class MatrixMomentDataSource {
 
     // Build entity directly from known data — local cache needs /sync to
     // reflect the new event, so getMomentById would return null immediately.
-    final userId = _currentUserId!;
+    checkSession();
+    final userId = account!;
     final user = room.unsafeGetUserFromMemoryOrFallback(userId);
     final mediaEntities = uploadedMedia.map((m) {
       final mxcUrl = m['url'] as String;
@@ -292,13 +423,7 @@ class MatrixMomentDataSource {
     int limit = 20,
     String? beforeId,
   }) async {
-    // Optimize: if requesting own moments, use own room directly
-    if (userId == _currentUserId) {
-      final room = await _getOrCreateMomentRoom();
-      if (room == null) return [];
-      return _getMomentsFromRoom(room, limit: limit, beforeId: beforeId);
-    }
-    // For other users, filter from cached moments or reload
+    // Own posts can span the default room and fixed-audience rooms.
     await getMoments(limit: 100);
     final userMoments = _cachedMoments
         .where((m) => m.userId == userId)
@@ -308,31 +433,6 @@ class MatrixMomentDataSource {
       startIndex = userMoments.indexWhere((m) => m.id == beforeId) + 1;
     }
     return userMoments.skip(startIndex).take(limit).toList();
-  }
-
-  /// 从单个房间获取 moments
-  Future<List<MomentEntity>> _getMomentsFromRoom(
-    matrix.Room room, {
-    int limit = 20,
-    String? beforeId,
-  }) async {
-    final moments = <MomentEntity>[];
-    try {
-      final timeline = await room.getTimeline();
-      for (final event in timeline.events) {
-        if (event.type != momentEventType) continue;
-        final moment = _parseEventToMoment(event, room);
-        if (moment != null && !moment.isDeleted) {
-          moments.add(moment);
-        }
-      }
-    } catch (_) {}
-    moments.sort((a, b) => b.timestamp.compareTo(a.timestamp));
-    int startIndex = 0;
-    if (beforeId != null) {
-      startIndex = moments.indexWhere((m) => m.id == beforeId) + 1;
-    }
-    return moments.skip(startIndex).take(limit).toList();
   }
 
   /// 通过索引查找 moment 所在房间，失败时回退全量查找
@@ -378,8 +478,10 @@ class MatrixMomentDataSource {
 
   /// 删除动态（使用索引定位 eventId）
   Future<void> deleteMoment(String momentId) async {
-    final room = await _getOrCreateMomentRoom();
-    if (room == null) return;
+    final room = await _findRoomForMoment(momentId);
+    if (room == null || !_privacy.isOwn(room)) {
+      throw StateError('Owned moment not found');
+    }
 
     try {
       // Use cached eventId if available
@@ -402,6 +504,7 @@ class MatrixMomentDataSource {
       _momentEventIndex.remove(momentId);
     } catch (e) {
       debugLog('Error: $e');
+      rethrow;
     }
   }
 
@@ -707,9 +810,11 @@ class MatrixMomentDataSource {
   /// 在同步时调用，自动加入被标记为 Moment 的房间邀请
   /// 并进行回邀（确保双向可见）
   Future<void> processMomentInvites() async {
-    if (_client == null) return;
+    final client = _client;
+    final account = client?.userID;
+    if (client == null || account == null) return;
 
-    for (final room in _client!.rooms) {
+    for (final room in List<matrix.Room>.of(client.rooms)) {
       if (room.membership != matrix.Membership.invite) continue;
 
       // 检查是否是 Moment 房间邀请
@@ -720,12 +825,32 @@ class MatrixMomentDataSource {
       );
 
       try {
+        // Invitation reasons/names are supplied by the inviter. They are not
+        // proof of friendship and must not trigger reciprocal data sharing.
+        final creatorId = room.getState(matrix.EventTypes.RoomCreate)?.senderId;
+        if (creatorId == null || creatorId == account) continue;
+        var accepted = false;
+        for (final direct in List<matrix.Room>.of(client.rooms)) {
+          if (!direct.isDirectChat ||
+              direct.membership != matrix.Membership.join ||
+              direct.directChatMatrixID != creatorId) {
+            continue;
+          }
+          final member = await resolveDirectPeer(direct, creatorId);
+          if (member.content['membership'] == 'join') {
+            accepted = true;
+            break;
+          }
+        }
+        if (!identical(client, _client) || client.userID != account) return;
+        if (!accepted) continue;
         final reason = room
             .getState(matrix.EventTypes.RoomMember, _client!.userID!)
             ?.content['reason'];
 
         // 自动加入
         await room.join();
+        if (!identical(client, _client) || client.userID != account) return;
         debugLog('MatrixMomentDataSource: Joined moment room: ${room.id}');
 
         // 添加本地标签以标识这是好友的 Moment 房间
@@ -735,9 +860,8 @@ class MatrixMomentDataSource {
               : momentRoomTag,
         );
 
-        // 获取房间创建者（即该 Moment 房间的拥有者）
-        final creatorId = _getRoomCreatorId(room);
-        if (creatorId != null && creatorId != _client!.userID) {
+        if (!identical(client, _client) || client.userID != account) return;
+        if (creatorId != account) {
           debugLog('MatrixMomentDataSource: Reciprocal invite for $creatorId');
           // 回邀：邀请对方加入我的 Moment 房间
           await inviteFriendToMomentRoom(creatorId);
@@ -783,34 +907,6 @@ class MatrixMomentDataSource {
     }
 
     return false;
-  }
-
-  /// 获取房间创建者 ID
-  String? _getRoomCreatorId(matrix.Room room) {
-    try {
-      final createEvent = room.getState(matrix.EventTypes.RoomCreate);
-      if (createEvent != null) {
-        return createEvent.senderId;
-      }
-    } catch (e) {
-      // 忽略错误
-      debugLog('Error: $e');
-    }
-
-    // 降级：尝试从成员中找到不是自己的用户
-    try {
-      final members = room.getParticipants();
-      for (final member in members) {
-        if (member.id != _client?.userID && member.powerLevel >= 50) {
-          return member.id;
-        }
-      }
-    } catch (e) {
-      // 忽略错误
-      debugLog('Error: $e');
-    }
-
-    return null;
   }
 
   /// 为所有现有好友发送 Moment 房间邀请

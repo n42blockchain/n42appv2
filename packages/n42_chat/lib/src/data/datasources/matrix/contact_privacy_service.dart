@@ -11,6 +11,7 @@ import '../../../core/utils/timed_status_utils.dart';
 class ContactPrivacyService {
   static const accountType = 'n42.contact.permissions';
   static const policyType = 'n42.social.permissions';
+  static const audienceType = 'n42.social.audience';
   static const momentTag = 'n42.moments';
   static const storyTag = 'n42.stories';
   static const momentReason = 'n42_moments';
@@ -52,6 +53,8 @@ class ContactPrivacyService {
     final me = _client?.userID;
     if (me == null || room.membership != matrix.Membership.join) return false;
     if (author == me) return true;
+    final audience = room.getState(audienceType)?.content['users'];
+    if (audience is List && !audience.contains(me)) return false;
     if (hides(author, incoming: true, story: story)) return false;
     final policy = room.getState(policyType)?.content;
     final blocked = policy?[story ? 'status' : 'moments'];
@@ -253,15 +256,17 @@ class ContactPrivacyService {
         {'join_rule': 'invite'},
       );
     }
+    final audience = room.getState(audienceType)?.content['users'];
+    final historyVisibility = audience is List ? 'invited' : 'joined';
     if (room
             .getState('m.room.history_visibility')
             ?.content['history_visibility'] !=
-        'joined') {
+        historyVisibility) {
       await client.setRoomStateWithKey(
         room.id,
         'm.room.history_visibility',
         '',
-        {'history_visibility': 'joined'},
+        {'history_visibility': historyVisibility},
       );
     }
     for (final id in all.keys) {
@@ -272,7 +277,9 @@ class ContactPrivacyService {
       if (hides(id, story: story)) {
         if (membership != 'ban')
           await client.ban(room.id, id, reason: 'Contact privacy');
-      } else if (id == restoreUser && membership == 'ban') {
+      } else if (id == restoreUser &&
+          membership == 'ban' &&
+          (audience is! List || audience.contains(id))) {
         await client.unban(room.id, id);
         await client.inviteUser(
           room.id,
@@ -288,7 +295,10 @@ class ContactPrivacyService {
     if (client == null || client.userID == null) return null;
     final tag = story ? storyTag : momentTag;
     for (final room in client.rooms) {
-      if (room.tags.containsKey(tag) && isOwn(room)) return room;
+      if (room.tags.containsKey(tag) &&
+          isOwn(room) &&
+          room.getState(audienceType) == null)
+        return room;
     }
     if (!identical(_creationClient, client)) {
       _creationClient = client;

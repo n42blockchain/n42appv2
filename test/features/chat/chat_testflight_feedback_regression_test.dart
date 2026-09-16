@@ -46,8 +46,15 @@ import '../../../packages/n42_chat/test/presentation/pages/story/story_viewer_pa
 import '../../../packages/n42_chat/test/presentation/pages/discover_page_test.dart'
     as discovery;
 
+import '../../../packages/n42_chat/test/presentation/pages/moment/moment_composer_audit_test.dart'
+    as composer_audit;
+import '../../../packages/n42_chat/test/presentation/pages/moment/video_feed_refresh_test.dart'
+    as video_refresh;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat composer audience and lifecycle', composer_audit.main);
+  group('Chat video refresh permissions', video_refresh.main);
   group('Chat video creator navigation', discovery.main);
   group('Chat privacy', privacy.main);
   group('Chat navigation calls', navigation_calls.main);

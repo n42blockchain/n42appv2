@@ -45,6 +45,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   MomentVisibility _visibility = MomentVisibility.public;
   List<String> _visibilityUserIds = [];
   final ImagePicker _picker = ImagePicker();
+  bool _pickingMedia = false;
 
   @override
   void initState() {
@@ -366,57 +367,71 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   }
 
   Future<void> _pickImages() async {
-    final images = await _picker.pickMultiImage(
-      maxWidth: 1920,
-      maxHeight: 1920,
-      imageQuality: 85,
-    );
+    if (_pickingMedia) return;
+    _pickingMedia = true;
+    try {
+      final images = await _picker.pickMultiImage(
+        maxWidth: 1920,
+        maxHeight: 1920,
+        imageQuality: 85,
+      );
 
-    if (images.isNotEmpty) {
-      if (!mounted) return;
-      if (_selectedMedia.any((m) => m.isVideo)) {
-        setState(() => _selectedMedia.clear());
-      }
-      final shouldOpenEditor = images.length == 1;
-      for (final image in images) {
-        if (_selectedMedia.length >= 9) break;
+      if (images.isNotEmpty) {
+        if (!mounted) return;
+        final shouldOpenEditor = images.length == 1;
+        for (final image in images) {
+          if (_selectedMedia.length >= 9) break;
 
-        final prepared = await prepareSocialImage(
-          context,
-          image: image,
-          openEditor: shouldOpenEditor,
-        );
-        if (prepared == null || !mounted) {
-          if (shouldOpenEditor) {
-            return;
-          }
-          continue;
-        }
-
-        setState(() {
-          _selectedMedia.add(
-            _MediaItem(
-              bytes: prepared.bytes,
-              filename: prepared.filename,
-              mimeType: prepared.mimeType,
-              isVideo: false,
-            ),
+          final prepared = await prepareSocialImage(
+            context,
+            image: image,
+            openEditor: shouldOpenEditor,
           );
-        });
+          if (!mounted) return;
+          if (prepared == null) {
+            if (shouldOpenEditor) {
+              return;
+            }
+            continue;
+          }
+
+          setState(() {
+            if (_selectedMedia.any((m) => m.isVideo)) _selectedMedia.clear();
+            _selectedMedia.add(
+              _MediaItem(
+                bytes: prepared.bytes,
+                filename: prepared.filename,
+                mimeType: prepared.mimeType,
+                isVideo: false,
+              ),
+            );
+          });
+        }
       }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+          ),
+        );
+      }
+    } finally {
+      _pickingMedia = false;
     }
   }
 
   Future<void> _pickVideo() async {
-    final video = await _picker.pickVideo(
-      source: ImageSource.gallery,
-      maxDuration: const Duration(minutes: 5),
-    );
-
-    if (video != null) {
+    if (_pickingMedia) return;
+    _pickingMedia = true;
+    try {
+      final video = await _picker.pickVideo(
+        source: ImageSource.gallery,
+        maxDuration: const Duration(minutes: 5),
+      );
+      if (video == null || !mounted) return;
       final bytes = await video.readAsBytes();
-
-      // 提取视频首帧作为缩略图（Matrix thumbnail API 不支持视频）
+      if (!mounted) return;
       Uint8List? thumbnailBytes;
       try {
         thumbnailBytes = await VideoThumbnail.thumbnailData(
@@ -426,10 +441,10 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
           quality: 80,
           timeMs: 0,
         );
-      } catch (e) {
-        debugLog('Failed to extract video thumbnail: $e');
+      } catch (_) {
+        // A missing preview must not prevent publishing a valid video.
       }
-
+      if (!mounted) return;
       setState(() {
         _selectedMedia.clear();
         _selectedMedia.add(
@@ -442,6 +457,16 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
           ),
         );
       });
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+          ),
+        );
+      }
+    } finally {
+      _pickingMedia = false;
     }
   }
 
@@ -578,7 +603,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
       ),
     );
 
-    if (result != null && result.isNotEmpty) {
+    if (mounted && result != null && result.isNotEmpty) {
       setState(() {
         _visibility = visibility;
         _visibilityUserIds = result;
@@ -598,6 +623,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
           content: _contentController.text.trim(),
           location: _location,
           visibility: _visibility,
+          visibilityUserIds: List.of(_visibilityUserIds),
         ),
       );
     } else if (_selectedMedia.first.isVideo) {
@@ -614,6 +640,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
           mimeType: video.mimeType,
           location: _location,
           visibility: _visibility,
+          visibilityUserIds: List.of(_visibilityUserIds),
         ),
       );
     } else {
@@ -636,6 +663,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
           images: images,
           location: _location,
           visibility: _visibility,
+          visibilityUserIds: List.of(_visibilityUserIds),
         ),
       );
     }

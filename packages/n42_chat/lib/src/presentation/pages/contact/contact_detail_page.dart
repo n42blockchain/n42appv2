@@ -803,7 +803,12 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
         widget.userId,
       );
       final details = await store.load();
+      final current = await SecureStorageDataSource().getSession();
       if (!mounted) return;
+      if (current?['userId'] != session['userId'] ||
+          current?['homeserver'] != session['homeserver']) {
+        throw StateError('Account changed');
+      }
       setState(() {
         _accountId = session['userId'];
         _homeserver = session['homeserver'];
@@ -849,33 +854,14 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
     bool phone = false,
   }) async {
     if (_detailsBusy) return;
-    final controller = TextEditingController(
-      text: _details[field] as String? ?? '',
-    );
     final value = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(title),
-        content: TextField(
-          controller: controller,
-          keyboardType: phone ? TextInputType.phone : TextInputType.multiline,
-          maxLines: phone ? 1 : 4,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
-            child: Text(S.of(context)?.commonSave ?? 'Save'),
-          ),
-        ],
+      builder: (_) => _FriendTextDialog(
+        title: title,
+        initialValue: _details[field] as String? ?? '',
+        phone: phone,
       ),
     );
-    // Let the closing route finish before disposing its text controller.
-    await Future<void>.delayed(const Duration(milliseconds: 300));
-    controller.dispose();
     if (mounted && value != null) await _saveDetails(field, value);
   }
 
@@ -1580,4 +1566,48 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
       child: scaffold,
     );
   }
+}
+
+class _FriendTextDialog extends StatefulWidget {
+  final String title;
+  final String initialValue;
+  final bool phone;
+  const _FriendTextDialog({
+    required this.title,
+    required this.initialValue,
+    required this.phone,
+  });
+  @override
+  State<_FriendTextDialog> createState() => _FriendTextDialogState();
+}
+
+class _FriendTextDialogState extends State<_FriendTextDialog> {
+  late final _controller = TextEditingController(text: widget.initialValue);
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: Text(widget.title),
+    content: TextField(
+      controller: _controller,
+      keyboardType: widget.phone
+          ? TextInputType.phone
+          : TextInputType.multiline,
+      maxLines: widget.phone ? 1 : 4,
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
+      ),
+      TextButton(
+        onPressed: () => Navigator.pop(context, _controller.text.trim()),
+        child: Text(S.of(context)?.commonSave ?? 'Save'),
+      ),
+    ],
+  );
 }

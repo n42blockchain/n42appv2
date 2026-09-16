@@ -8,8 +8,8 @@ import '../pages/live_room_page.dart';
 /// - `/live`              直播广场（列表）
 /// - `/live/room/:roomId` 观看端直播间（roomId = Matrix room id）
 /// - `/live/go`           开播端
-final GoRouter liveRouter = GoRouter(
-  initialLocation: '/live',
+GoRouter createLiveRouter({String initialLocation = '/live'}) => GoRouter(
+  initialLocation: initialLocation,
   routes: [
     GoRoute(
       path: '/live',

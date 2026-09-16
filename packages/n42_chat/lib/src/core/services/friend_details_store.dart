@@ -42,8 +42,14 @@ class FriendDetailsStore {
     final directory = await _directory();
     await directory.create(recursive: true);
     final name = '${DateTime.now().microsecondsSinceEpoch}.jpg';
-    await image.saveTo('${directory.path}/$name');
-    return name;
+    final destination = File('${directory.path}/$name');
+    try {
+      await image.saveTo(destination.path);
+      return name;
+    } catch (_) {
+      if (await destination.exists()) await destination.delete();
+      rethrow;
+    }
   }
 
   Future<void> deletePhoto(String name) async {

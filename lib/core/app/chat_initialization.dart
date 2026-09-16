@@ -19,7 +19,6 @@ import 'package:n42_wallet/core/platform/deep_link_service.dart';
 import 'package:n42_wallet/core/routing/chat_sso_utils.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/live/presentation/pages/live_app.dart';
-import 'package:n42_wallet/features/live/presentation/router/live_router.dart';
 import 'package:n42_wallet/features/utils/app_push_utils.dart';
 import 'package:n42_wallet/features/utils/chat_logout_compat.dart';
 import 'package:n42_wallet/features/wallet/n42_api_hub_bridge.dart';
@@ -363,10 +362,11 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       });
 
       N42Chat.setGoLiveHandler((ctx) async {
-        liveRouter.go('/live/go');
-        await Navigator.of(
-          ctx,
-        ).push<void>(MaterialPageRoute(builder: (_) => const LiveApp()));
+        await Navigator.of(ctx).push<void>(
+          MaterialPageRoute(
+            builder: (_) => const LiveApp(initialLocation: '/live/go'),
+          ),
+        );
       });
 
       AppLogger.i(

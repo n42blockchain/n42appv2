@@ -32,6 +32,15 @@ class _GalleryPicker extends ImagePickerPlatform {
   }
 }
 
+class _PartialWriteImage extends XFile {
+  _PartialWriteImage() : super('unused.jpg');
+  @override
+  Future<void> saveTo(String path) async {
+    await File(path).writeAsBytes([1, 2, 3]);
+    throw const FileSystemException('Simulated partial copy');
+  }
+}
+
 void main() {
   final store = FriendDetailsStore(
     'https://hs.test',
@@ -361,6 +370,33 @@ void main() {
       expect(find.byType(InteractiveViewer), findsOneWidget);
     },
   );
+  testWidgets('failed partial photo copy leaves no orphan file', (
+    tester,
+  ) async {
+    final directory = Directory.systemTemp.createTempSync(
+      'friend-photo-partial',
+    );
+    const channel = MethodChannel('plugins.flutter.io/path_provider');
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      channel,
+      (_) async => directory.path,
+    );
+    addTearDown(() {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        channel,
+        null,
+      );
+      directory.deleteSync(recursive: true);
+    });
+    await tester.runAsync(() async {
+      await expectLater(
+        store.importPhoto(_PartialWriteImage()),
+        throwsA(isA<FileSystemException>()),
+      );
+      expect(directory.listSync(recursive: true).whereType<File>(), isEmpty);
+    });
+  });
+
   test(
     'details persist independently per server, account and friend',
     () async {

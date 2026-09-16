@@ -35,15 +35,27 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
   StreamSubscription<List<MomentEntity>>? _subscription;
   int _current = 0;
   bool _creatorRouteOpen = false;
+  int _loadGeneration = 0;
 
   @override
   void initState() {
     super.initState();
     _load();
     _subscription = getIt<IMomentRepository>().watchMoments().listen(
-      (_) => _load(),
-      onError: (Object _) {
+      (_) {
+        // Remove revoked content while fresh permissions are being resolved.
+        _loadGeneration++;
         if (mounted) setState(() => _videos = []);
+        _load();
+      },
+      onError: (Object _) {
+        _loadGeneration++;
+        if (mounted) {
+          setState(() {
+            _videos = [];
+            _loading = false;
+          });
+        }
       },
     );
   }
@@ -56,10 +68,11 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
   }
 
   Future<void> _load() async {
+    final generation = ++_loadGeneration;
     try {
       final moments = await getIt<IMomentRepository>().getMoments(limit: 50);
       final vids = moments.where((m) => m.hasVideo && !m.isDeleted).toList();
-      if (mounted) {
+      if (mounted && generation == _loadGeneration) {
         setState(() {
           _videos = vids;
           _current = _current.clamp(0, vids.isEmpty ? 0 : vids.length - 1);
@@ -67,11 +80,12 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
         });
       }
     } catch (_) {
-      if (mounted)
+      if (mounted && generation == _loadGeneration) {
         setState(() {
           _loading = false;
           _videos = [];
         });
+      }
     }
   }
 
@@ -131,6 +145,14 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
           ),
         );
         if (mounted) await _load();
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+          ),
+        );
       }
     } finally {
       if (mounted) setState(() => _creatorRouteOpen = false);
@@ -192,6 +214,7 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
                   itemCount: _videos.length,
                   onPageChanged: (i) => setState(() => _current = i),
                   itemBuilder: (ctx, i) => _VideoFeedItem(
+                    key: ValueKey(_videos[i].id),
                     moment: _videos[i],
                     isActive: i == _current && !_creatorRouteOpen,
                     onLike: () => _toggleLike(i),
@@ -260,6 +283,7 @@ class _VideoFeedItem extends StatefulWidget {
   final VoidCallback onLike;
 
   const _VideoFeedItem({
+    super.key,
     required this.moment,
     required this.isActive,
     required this.onLike,

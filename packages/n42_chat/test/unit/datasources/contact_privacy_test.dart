@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:n42_chat/src/domain/entities/moment_entity.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/core/di/injection.dart';
 import 'package:n42_chat/src/presentation/pages/contact/contact_permissions_page.dart';
@@ -66,6 +67,7 @@ void main() {
     };
     timelines[id] = timeline;
     when(() => r.id).thenReturn(id);
+    when(() => r.isDirectChat).thenReturn(false);
     when(() => r.membership).thenReturn(matrix.Membership.join);
     when(() => r.tags).thenReturn({
       story ? ContactPrivacyService.storyTag : ContactPrivacyService.momentTag:
@@ -89,6 +91,18 @@ void main() {
     when(() => r.unsafeGetUserFromMemoryOrFallback(any())).thenReturn(user);
     rooms.add(r);
     return r;
+  }
+
+  void acceptedFriend(String id) {
+    final direct = room('direct_$id', me);
+    when(() => direct.tags).thenReturn({});
+    when(() => direct.isDirectChat).thenReturn(true);
+    when(() => direct.directChatMatrixID).thenReturn(id);
+    final member = _User();
+    when(() => member.content).thenReturn({'membership': 'join'});
+    when(
+      () => direct.requestUser(id, requestProfile: false),
+    ).thenAnswer((_) async => member);
   }
 
   setUpAll(() => registerFallbackValue(matrix.PresenceType.online));
@@ -162,6 +176,281 @@ void main() {
     getIt.registerSingleton<MatrixClientManager>(manager);
   });
   tearDown(() async => getIt.reset());
+
+  for (final visibility in [
+    MomentVisibility.private,
+    MomentVisibility.partial,
+    MomentVisibility.excluded,
+  ]) {
+    test(
+      '$visibility publishes in an invite-only room with the correct audience',
+      () async {
+        final base = room('base', me);
+        acceptedFriend(friend);
+        acceptedFriend('@other:hs');
+        final other = _User();
+        final selected = _User();
+        when(() => selected.id).thenReturn(friend);
+        when(() => other.id).thenReturn('@other:hs');
+        for (final user in [selected, other]) {
+          when(() => user.membership).thenReturn(matrix.Membership.join);
+        }
+        when(
+          () => base.requestParticipants(),
+        ).thenAnswer((_) async => [selected, other]);
+        Map<String, dynamic>? powers;
+        when(
+          () => client.createRoom(
+            name: 'Private Moments',
+            visibility: matrix.Visibility.private,
+            preset: matrix.CreateRoomPreset.privateChat,
+            initialState: any(named: 'initialState'),
+            powerLevelContentOverride: any(named: 'powerLevelContentOverride'),
+          ),
+        ).thenAnswer((invocation) async {
+          final created = room('restricted', me);
+          when(() => created.addTag(any())).thenAnswer((_) async {});
+          powers =
+              invocation.namedArguments[#powerLevelContentOverride]
+                  as Map<String, dynamic>;
+          for (final state
+              in invocation.namedArguments[#initialState]
+                  as List<matrix.StateEvent>) {
+            states['restricted']!['${state.type}/${state.stateKey}'] = event(
+              state.type,
+              me,
+              state.content,
+            );
+          }
+          return 'restricted';
+        });
+        await MatrixMomentDataSource(manager).postMoment(
+          content: 'Restricted',
+          visibility: visibility,
+          visibilityUserIds: [friend],
+        );
+        final expected = visibility == MomentVisibility.private
+            ? <String>[]
+            : visibility == MomentVisibility.partial
+            ? [friend]
+            : ['@other:hs'];
+        expect(
+          states['restricted']!['${ContactPrivacyService.audienceType}/']!
+              .content['users'],
+          expected,
+        );
+        expect(
+          states['restricted']!['m.room.history_visibility/']!
+              .content['history_visibility'],
+          'invited',
+        );
+        expect(powers!['invite'], 100);
+        expect(powers!['state_default'], 100);
+        verifyNever(() => base.sendEvent(any(), type: any(named: 'type')));
+        verify(
+          () => rooms.last.sendEvent(
+            any(),
+            type: MatrixMomentDataSource.momentEventType,
+          ),
+        ).called(1);
+        if (expected.isEmpty) {
+          verifyNever(
+            () => client.inviteUser(
+              'restricted',
+              any(),
+              reason: any(named: 'reason'),
+            ),
+          );
+        } else {
+          final invitations = verify(
+            () => client.inviteUser(
+              'restricted',
+              captureAny(),
+              reason: ContactPrivacyService.momentReason,
+            ),
+          ).captured;
+          expect(invitations, expected);
+        }
+        expect(await privacy.ownRoom(), base);
+      },
+    );
+  }
+
+  for (final membership in [null, 'invite', 'join']) {
+    test(
+      'social invitation requires an accepted direct friendship: $membership',
+      () async {
+        room('base', me);
+        room('status', me, story: true);
+        final incoming = room('incoming', friend);
+        when(() => incoming.membership).thenReturn(matrix.Membership.invite);
+        states['incoming']!['m.room.member/$me'] = event(
+          'm.room.member',
+          friend,
+          {
+            'membership': 'invite',
+            'reason': ContactPrivacyService.momentReason,
+          },
+        );
+        when(() => incoming.join()).thenAnswer((_) async => incoming.id);
+        when(() => incoming.addTag(any())).thenAnswer((_) async {});
+        if (membership != null) {
+          final direct = room('direct', me);
+          when(() => direct.isDirectChat).thenReturn(true);
+          when(() => direct.directChatMatrixID).thenReturn(friend);
+          final member = _User();
+          when(() => member.content).thenReturn({'membership': membership});
+          when(
+            () => direct.requestUser(friend, requestProfile: false),
+          ).thenAnswer((_) async => member);
+        }
+        await MatrixMomentDataSource(manager).processMomentInvites();
+        if (membership == 'join') {
+          verify(() => incoming.join()).called(1);
+          verify(
+            () => incoming.addTag(ContactPrivacyService.momentTag),
+          ).called(1);
+        } else {
+          verifyNever(() => incoming.join());
+          verifyNever(
+            () => client.inviteUser(any(), any(), reason: any(named: 'reason')),
+          );
+        }
+      },
+    );
+  }
+
+  test(
+    'own profile reads all audience rooms and deletion targets the post room',
+    () async {
+      final base = room('base', me);
+      final restricted = room('restricted', me);
+      states['restricted']!['${ContactPrivacyService.audienceType}/'] = event(
+        ContactPrivacyService.audienceType,
+        me,
+        {'users': <String>[]},
+      );
+      final privateEvent = event(MatrixMomentDataSource.momentEventType, me, {
+        'moment_id': 'private-post',
+        'content': 'Only me',
+        'visibility': 'private',
+      }, id: 'private-event');
+      when(() => timelines['restricted']!.events).thenReturn([privateEvent]);
+      final source = MatrixMomentDataSource(manager);
+      expect((await source.getUserMoments(me)).map((m) => m.id), [
+        'private-post',
+      ]);
+      await source.deleteMoment('private-post');
+      verify(() => restricted.redactEvent('private-event')).called(1);
+      verifyNever(() => base.redactEvent(any()));
+    },
+  );
+
+  for (final accountChanged in [false, true]) {
+    test(
+      accountChanged
+          ? 'account change aborts restricted publication'
+          : 'failed invitation prevents restricted publication',
+      () async {
+        final base = room('base', me);
+        acceptedFriend(friend);
+        final selected = _User();
+        when(() => selected.id).thenReturn(friend);
+        when(() => selected.membership).thenReturn(matrix.Membership.join);
+        when(
+          () => base.requestParticipants(),
+        ).thenAnswer((_) async => [selected]);
+        when(
+          () => client.createRoom(
+            name: 'Private Moments',
+            visibility: matrix.Visibility.private,
+            preset: matrix.CreateRoomPreset.privateChat,
+            initialState: any(named: 'initialState'),
+            powerLevelContentOverride: any(named: 'powerLevelContentOverride'),
+          ),
+        ).thenAnswer((invocation) async {
+          final created = room('restricted', me);
+          when(() => created.addTag(any())).thenAnswer((_) async {});
+          for (final state
+              in invocation.namedArguments[#initialState]
+                  as List<matrix.StateEvent>) {
+            states['restricted']!['${state.type}/${state.stateKey}'] = event(
+              state.type,
+              me,
+              state.content,
+            );
+          }
+          return 'restricted';
+        });
+        when(
+          () => client.inviteUser(
+            'restricted',
+            friend,
+            reason: ContactPrivacyService.momentReason,
+          ),
+        ).thenAnswer((_) async {
+          if (accountChanged) {
+            when(() => client.userID).thenReturn('@other:hs');
+          } else {
+            throw StateError('Invitation failed');
+          }
+        });
+        await expectLater(
+          MatrixMomentDataSource(manager).postMoment(
+            content: 'Secret',
+            visibility: MomentVisibility.partial,
+            visibilityUserIds: [friend],
+          ),
+          throwsStateError,
+        );
+        for (final target in rooms) {
+          verifyNever(() => target.sendEvent(any(), type: any(named: 'type')));
+        }
+      },
+    );
+  }
+
+  test('invalid selected audience fails before publishing', () async {
+    final base = room('base', me);
+    await expectLater(
+      MatrixMomentDataSource(manager).postMoment(
+        content: 'Secret',
+        visibility: MomentVisibility.partial,
+        visibilityUserIds: [friend],
+      ),
+      throwsStateError,
+    );
+    verifyNever(() => base.sendEvent(any(), type: any(named: 'type')));
+  });
+
+  test(
+    'restoring global friend access never expands a restricted audience',
+    () async {
+      final restricted = room('restricted', me);
+      states['restricted']!['${ContactPrivacyService.audienceType}/'] = event(
+        ContactPrivacyService.audienceType,
+        me,
+        {'users': <String>[]},
+      );
+      states['restricted']!['m.room.member/$friend'] = event(
+        'm.room.member',
+        me,
+        {'membership': 'ban'},
+      );
+      await privacy.apply(restricted, restoreUser: friend);
+      verifyNever(() => client.unban(any(), any()));
+      verifyNever(
+        () => client.inviteUser(any(), any(), reason: any(named: 'reason')),
+      );
+      final foreign = room('foreign', friend);
+      states['foreign']!['${ContactPrivacyService.audienceType}/'] = event(
+        ContactPrivacyService.audienceType,
+        friend,
+        {'users': <String>[]},
+      );
+      expect(privacy.canView(foreign, friend), isFalse);
+    },
+  );
 
   Future<void> openPermissions(WidgetTester tester) async {
     await tester.pumpWidget(

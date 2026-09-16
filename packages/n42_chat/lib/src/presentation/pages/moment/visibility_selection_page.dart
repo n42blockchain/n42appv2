@@ -30,7 +30,8 @@ class VisibilitySelectionPage extends StatefulWidget {
   });
 
   @override
-  State<VisibilitySelectionPage> createState() => _VisibilitySelectionPageState();
+  State<VisibilitySelectionPage> createState() =>
+      _VisibilitySelectionPageState();
 }
 
 class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
@@ -54,7 +55,9 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
         final list = jsonDecode(tagsJson) as List;
         if (mounted) {
           setState(() {
-            _tags = list.map((e) => TagData.fromJson(e as Map<String, dynamic>)).toList();
+            _tags = list
+                .map((e) => TagData.fromJson(e as Map<String, dynamic>))
+                .toList();
           });
         }
       }
@@ -87,7 +90,9 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
 
   void _toggleTag(TagData tag) {
     setState(() {
-      final allSelected = tag.contactIds.every((id) => _selectedIds.contains(id));
+      final allSelected = tag.contactIds.every(
+        (id) => _selectedIds.contains(id),
+      );
       if (allSelected) {
         _selectedIds.removeAll(tag.contactIds);
       } else {
@@ -164,8 +169,11 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                     spacing: 8,
                     runSpacing: 8,
                     children: _tags.map((tag) {
-                      final allSelected = tag.contactIds.isNotEmpty &&
-                          tag.contactIds.every((id) => _selectedIds.contains(id));
+                      final allSelected =
+                          tag.contactIds.isNotEmpty &&
+                          tag.contactIds.every(
+                            (id) => _selectedIds.contains(id),
+                          );
                       return FilterChip(
                         label: Text(
                           '${tag.name} (${tag.contactIds.length})',
@@ -196,7 +204,7 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                 final contact = contacts[index];
                 final isSelected = _selectedIds.contains(contact.userId);
 
-                return Container(
+                return Material(
                   color: cardColor,
                   child: ListTile(
                     leading: N42Avatar(
@@ -246,21 +254,14 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
             ),
             decoration: BoxDecoration(
               color: cardColor,
-              border: Border(
-                top: BorderSide(
-                  color: context.dividerColor,
-                ),
-              ),
+              border: Border(top: BorderSide(color: context.dividerColor)),
             ),
             child: Row(
               children: [
                 Text(
                   s?.momentSelectedCount(_selectedIds.length) ??
                       'Selected (${_selectedIds.length})',
-                  style: TextStyle(
-                    color: secondaryColor,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(color: secondaryColor, fontSize: 14),
                 ),
                 const Spacer(),
                 ElevatedButton(
@@ -274,7 +275,10 @@ class _VisibilitySelectionPageState extends State<VisibilitySelectionPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 32,
+                      vertical: 12,
+                    ),
                   ),
                   child: Text(s?.contactDoneButton ?? 'Done'),
                 ),

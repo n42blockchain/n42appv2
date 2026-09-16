@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:n42_chat/l10n/app_localizations.dart' as chat_l10n;
 import 'package:n42_wallet/generated/l10n.dart';
@@ -10,11 +10,27 @@ import '../router/live_router.dart';
 
 /// 直播客户端根 Widget。复用主 App 的 [ThemeAdapter] 与本地化代理；
 /// 直播间默认深色风格（贴近抖音）。
-class LiveApp extends ConsumerWidget {
-  const LiveApp({super.key});
+class LiveApp extends StatefulWidget {
+  final String initialLocation;
+  const LiveApp({super.key, this.initialLocation = '/live'});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  State<LiveApp> createState() => _LiveAppState();
+}
+
+class _LiveAppState extends State<LiveApp> {
+  late final GoRouter _router = createLiveRouter(
+    initialLocation: widget.initialLocation,
+  );
+
+  @override
+  void dispose() {
+    _router.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(750, 1334),
       minTextAdapt: true,
@@ -33,7 +49,7 @@ class LiveApp extends ConsumerWidget {
           chat_l10n.S.delegate,
         ],
         supportedLocales: S.delegate.supportedLocales,
-        routerConfig: liveRouter,
+        routerConfig: _router,
       ),
     );
   }
