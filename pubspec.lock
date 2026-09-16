@@ -1622,7 +1622,7 @@ packages:
     source: hosted
     version: "0.2.2+1"
   image_picker_platform_interface:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: image_picker_platform_interface
       sha256: "567e056716333a1647c64bb6bd873cff7622233a5c3f694be28a583d4715690c"
@@ -1990,8 +1990,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "4b146b688a46c48653155d9e49e0778b15d77814"
-      resolved-ref: "4b146b688a46c48653155d9e49e0778b15d77814"
+      ref: "10a1f7db4e1ec712ccad19c05e179a223ced865c"
+      resolved-ref: "10a1f7db4e1ec712ccad19c05e179a223ced865c"
       url: "https://github.com/n42blockchain/n42_chat"
     source: git
     version: "0.1.0"

@@ -25,8 +25,12 @@ import '../../../packages/n42_chat/test/unit/repositories/contact_repository_imp
 import '../../../packages/n42_chat/test/unit/repositories/message_repository_impl_test.dart'
     as messages;
 
+import '../../../packages/n42_chat/test/presentation/pages/friend_info_edit_test.dart'
+    as friend_info;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat friend profile annotations', friend_info.main);
   group('Chat account biometric authentication', biometric_auth.main);
   group('Chat friend identity and detail actions', contact_details.main);
   group('Chat registration UIA', registration.main);

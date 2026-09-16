@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072665
+version: 2.4.8+2026072667
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -143,7 +143,7 @@ dependencies:
   n42_chat:
     git:
       url: https://github.com/n42blockchain/n42_chat
-      ref: 4b146b688a46c48653155d9e49e0778b15d77814
+      ref: 10a1f7db4e1ec712ccad19c05e179a223ced865c
     #path: /Users/jiangyiwei/Desktop/n42_chat
 
   # === Live Streaming (features/live, 复用 n42_chat 自部署 LiveKit) ===
@@ -173,6 +173,7 @@ dependency_overrides:
   flutter_secure_storage: ^10.0.0
 
 dev_dependencies:
+  image_picker_platform_interface: ^2.11.1
   path_provider_platform_interface: ^2.1.2
   sqlcipher_flutter_libs: ^0.6.4
   sqlite3: ^2.4.0

@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+import '../../../core/services/friend_details_store.dart';
+import '../../../data/datasources/local/secure_storage_datasource.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -715,6 +720,144 @@ class FriendInfoPage extends StatefulWidget {
 
 class _FriendInfoPageState extends State<FriendInfoPage> {
   String? _currentRemark;
+  FriendDetailsStore? _detailsStore;
+  Map<String, dynamic> _details = {};
+  bool _detailsBusy = true;
+  bool _pickingPhoto = false;
+  String? _accountId;
+  String? _homeserver;
+
+  Future<void> _loadDetails() async {
+    try {
+      final session = await SecureStorageDataSource().getSession();
+      if (session == null) throw StateError('No active account');
+      final store = FriendDetailsStore(
+        session['homeserver']!,
+        session['userId']!,
+        widget.userId,
+      );
+      final details = await store.load();
+      if (!mounted) return;
+      setState(() {
+        _accountId = session['userId'];
+        _homeserver = session['homeserver'];
+        _detailsStore = store;
+        _details = details;
+        _detailsBusy = false;
+      });
+    } catch (_) {
+      if (mounted) _showDetailsError();
+    }
+  }
+
+  void _showDetailsError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(S.of(context)?.commonSaveFailed ?? 'Save failed')),
+    );
+  }
+
+  Future<bool> _saveDetails(String field, Object value) async {
+    if (_detailsBusy || _detailsStore == null) return false;
+    setState(() => _detailsBusy = true);
+    try {
+      final session = await SecureStorageDataSource().getSession();
+      if (session?['userId'] != _accountId ||
+          session?['homeserver'] != _homeserver) {
+        throw StateError('Account changed');
+      }
+      final next = {..._details, field: value};
+      await _detailsStore!.save(next);
+      if (mounted) setState(() => _details = next);
+      return true;
+    } catch (_) {
+      if (mounted) _showDetailsError();
+      return false;
+    } finally {
+      if (mounted) setState(() => _detailsBusy = false);
+    }
+  }
+
+  Future<void> _editText(
+    String field,
+    String title, {
+    bool phone = false,
+  }) async {
+    if (_detailsBusy) return;
+    final controller = TextEditingController(
+      text: _details[field] as String? ?? '',
+    );
+    final value = await showDialog<String>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(title),
+        content: TextField(
+          controller: controller,
+          keyboardType: phone ? TextInputType.phone : TextInputType.multiline,
+          maxLines: phone ? 1 : 4,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, controller.text.trim()),
+            child: Text(S.of(context)?.commonSave ?? 'Save'),
+          ),
+        ],
+      ),
+    );
+    // Let the closing route finish before disposing its text controller.
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    controller.dispose();
+    if (mounted && value != null) await _saveDetails(field, value);
+  }
+
+  List<String> get _photos =>
+      List<String>.from(_details['photos'] as List? ?? const []);
+
+  Widget _photoThumbnail(String name) => FutureBuilder<File>(
+    future: _detailsStore!.photo(name),
+    builder: (context, snapshot) => SizedBox(
+      width: 80,
+      height: 80,
+      child: snapshot.hasData
+          ? InkWell(
+              onTap: () => showDialog<void>(
+                context: context,
+                builder: (ctx) => Dialog(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: InteractiveViewer(
+                          child: Image.file(
+                            snapshot.data!,
+                            errorBuilder: (_, _, _) =>
+                                const Icon(Icons.broken_image),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx),
+                        child: Text(
+                          MaterialLocalizations.of(ctx).closeButtonLabel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              child: Image.file(
+                snapshot.data!,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => const Icon(Icons.broken_image),
+              ),
+            )
+          : const Center(child: CircularProgressIndicator()),
+    ),
+  );
+
   StreamSubscription<RemarkUpdateEvent>? _remarkSubscription;
 
   @override
@@ -722,6 +865,7 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
     super.initState();
     _currentRemark = widget.remark;
     _loadRemark();
+    _loadDetails();
     _remarkSubscription = RemarkService.instance.onRemarkUpdated.listen(
       _handleRemarkUpdate,
     );
@@ -830,13 +974,21 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                 _buildDivider(dividerColor),
                 _buildMenuItem(
                   title: S.of(context)?.contactPhone ?? 'Phone',
+                  value: _details['phone'] as String?,
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
-                  onTap: () {},
+                  onTap: () => _editText(
+                    'phone',
+                    S.of(context)?.contactPhone ?? 'Phone',
+                    phone: true,
+                  ),
                 ),
                 _buildDivider(dividerColor),
                 _buildMenuItem(
                   title: S.of(context)?.contactTags ?? 'Tags',
+                  value: List<String>.from(
+                    _details['tags'] as List? ?? const [],
+                  ).join(', '),
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
                   onTap: () => _openTagsManagement(),
@@ -844,9 +996,13 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
                 _buildDivider(dividerColor),
                 _buildMenuItem(
                   title: S.of(context)?.contactNotes ?? 'Notes',
+                  value: _details['notes'] as String?,
                   textColor: textColor,
                   secondaryTextColor: secondaryTextColor,
-                  onTap: () => _showNotesDialog(),
+                  onTap: () => _editText(
+                    'notes',
+                    S.of(context)?.contactNotes ?? 'Notes',
+                  ),
                 ),
                 _buildDivider(dividerColor),
                 _buildMenuItem(
@@ -858,6 +1014,41 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
               ],
             ),
 
+            if (_detailsStore != null && _photos.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    for (final name in _photos)
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _photoThumbnail(name),
+                          IconButton(
+                            tooltip: S.of(context)?.commonDelete ?? 'Delete',
+                            icon: const Icon(Icons.delete_outline),
+                            onPressed: _detailsBusy
+                                ? null
+                                : () async {
+                                    if (await _saveDetails(
+                                      'photos',
+                                      _photos.where((p) => p != name).toList(),
+                                    )) {
+                                      try {
+                                        await _detailsStore!.deletePhoto(name);
+                                      } catch (_) {
+                                        /* Orphan cleanup can be retried. */
+                                      }
+                                    }
+                                  },
+                          ),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
             // 权限分组
             _buildSectionLabel(
               S.of(context)?.contactPermissions ?? 'Permissions',
@@ -1035,12 +1226,19 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
     );
   }
 
-  void _openTagsManagement() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => const TagsManagementPage(selectMode: true),
+  Future<void> _openTagsManagement() async {
+    if (_detailsBusy) return;
+    final tags = await Navigator.of(context).push<List<String>>(
+      MaterialPageRoute(
+        builder: (_) => TagsManagementPage(
+          selectMode: true,
+          selectedTags: List<String>.from(
+            _details['tags'] as List? ?? const [],
+          ),
+        ),
       ),
     );
+    if (mounted && tags != null) await _saveDetails('tags', tags);
   }
 
   void _openPermissions() {
@@ -1065,67 +1263,27 @@ class _FriendInfoPageState extends State<FriendInfoPage> {
     );
   }
 
-  void _showNotesDialog() {
-    final controller = TextEditingController();
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: context.surfaceColor,
-        title: Text(
-          S.of(context)?.contactNotes ?? 'Notes',
-          style: TextStyle(color: context.textPrimary),
-        ),
-        content: TextField(
-          controller: controller,
-          maxLines: 4,
-          style: TextStyle(color: context.textPrimary),
-          decoration: InputDecoration(
-            hintText:
-                S.of(context)?.contactNotesHint ??
-                'Add notes about this contact',
-            hintStyle: TextStyle(color: context.textSecondary),
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(S.of(context)?.commonSave ?? 'Saved'),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            },
-            child: Text(S.of(context)?.commonSave ?? 'Save'),
-          ),
-        ],
-      ),
-    ).whenComplete(controller.dispose);
-  }
-
-  void _showPhotosDialog() {
-    _openContactMoments();
-  }
-
-  void _openContactMoments() {
-    final displayName = (_currentRemark?.isNotEmpty ?? false)
-        ? _currentRemark!
-        : widget.displayName;
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => MomentListPage(
-          userId: widget.userId,
-          userName: displayName,
-          userAvatarUrl: widget.avatarUrl,
-        ),
-      ),
-    );
+  Future<void> _showPhotosDialog() async {
+    if (_detailsBusy || _pickingPhoto || _detailsStore == null) return;
+    _pickingPhoto = true;
+    final store = _detailsStore!;
+    try {
+      final image = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 2048,
+        maxHeight: 2048,
+        imageQuality: 85,
+      );
+      if (image == null || !mounted) return;
+      final name = await store.importPhoto(image);
+      if (!mounted || !await _saveDetails('photos', [..._photos, name])) {
+        await store.deletePhoto(name);
+      }
+    } catch (_) {
+      if (mounted) _showDetailsError();
+    } finally {
+      _pickingPhoto = false;
+    }
   }
 
   void _openEditRemark() {
@@ -1188,8 +1346,6 @@ class EditRemarkPage extends StatefulWidget {
 
 class _EditRemarkPageState extends State<EditRemarkPage> {
   late TextEditingController _remarkController;
-  late TextEditingController _phoneController;
-  late TextEditingController _memoController;
   bool _isSaving = false;
   String? _pendingRemarkToSave;
 
@@ -1199,63 +1355,12 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
     _remarkController = TextEditingController(
       text: widget.currentRemark ?? widget.displayName,
     );
-    _phoneController = TextEditingController();
-    _memoController = TextEditingController();
   }
 
   @override
   void dispose() {
     _remarkController.dispose();
-    _phoneController.dispose();
-    _memoController.dispose();
     super.dispose();
-  }
-
-  void _showAddPhoneDialog() {
-    final phoneController = TextEditingController();
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: context.surfaceColor,
-        title: Text(
-          S.of(context)?.contactPhone ?? 'Phone',
-          style: TextStyle(color: context.textPrimary),
-        ),
-        content: TextField(
-          controller: phoneController,
-          keyboardType: TextInputType.phone,
-          style: TextStyle(color: context.textPrimary),
-          decoration: InputDecoration(
-            hintText:
-                S.of(context)?.contactAddPhoneHint ?? 'Enter phone number',
-            hintStyle: TextStyle(color: context.textSecondary),
-            border: const OutlineInputBorder(),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              final phone = phoneController.text.trim();
-              Navigator.pop(ctx);
-              if (phone.isNotEmpty) {
-                _phoneController.text = phone;
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(S.of(context)?.commonSave ?? 'Saved'),
-                    duration: const Duration(seconds: 1),
-                  ),
-                );
-              }
-            },
-            child: Text(S.of(context)?.commonSave ?? 'Save'),
-          ),
-        ],
-      ),
-    ).whenComplete(phoneController.dispose);
   }
 
   void _save() async {
@@ -1263,10 +1368,6 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
 
     final remark = _remarkController.text.trim();
     final remarkToSave = remark.isEmpty ? null : remark;
-
-    debugLog(
-      'EditRemarkPage: Saving remark for userId=${widget.userId}, remark=$remark',
-    );
 
     if (!mounted) return;
     try {
@@ -1399,155 +1500,6 @@ class _EditRemarkPageState extends State<EditRemarkPage> {
             ),
 
             const SizedBox(height: 24),
-
-            // 电话
-            Text(
-              S.of(context)?.contactPhone ?? 'Phone',
-              style: TextStyle(fontSize: 13, color: labelColor),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: InkWell(
-                onTap: () => _showAddPhoneDialog(),
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.add_circle_outline,
-                        color: hintColor,
-                        size: 20,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        S.of(context)?.contactAddPhone ?? 'Add phone',
-                        style: TextStyle(fontSize: 16, color: hintColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 标签
-            Text(
-              S.of(context)?.contactTags ?? 'Tags',
-              style: TextStyle(fontSize: 13, color: labelColor),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) =>
-                          const TagsManagementPage(selectMode: true),
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        S.of(context)?.contactAddTag ?? 'Add tags',
-                        style: TextStyle(fontSize: 16, color: hintColor),
-                      ),
-                      const Spacer(),
-                      Icon(AppIcons.chevron, color: hintColor, size: 20),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 备忘
-            Text(
-              S.of(context)?.contactNotes ?? 'Notes',
-              style: TextStyle(fontSize: 13, color: labelColor),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: TextField(
-                controller: _memoController,
-                style: TextStyle(fontSize: 16, color: textColor),
-                decoration: InputDecoration(
-                  hintText: S.of(context)?.contactAddText ?? 'Add text',
-                  hintStyle: TextStyle(color: hintColor),
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 14,
-                  ),
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // 照片
-            Text(
-              S.of(context)?.contactPhotos ?? 'Photos',
-              style: TextStyle(fontSize: 13, color: labelColor),
-            ),
-            const SizedBox(height: 8),
-            Container(
-              width: 100,
-              height: 100,
-              decoration: BoxDecoration(
-                color: cardColor,
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (_) => MomentListPage(
-                        userId: widget.userId,
-                        userName: widget.displayName,
-                        userAvatarUrl: null,
-                      ),
-                    ),
-                  );
-                },
-                borderRadius: BorderRadius.circular(8),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.add_circle_outline, color: hintColor, size: 24),
-                    const SizedBox(height: 4),
-                    Text(
-                      S.of(context)?.contactAddPhoto ?? 'Add photo',
-                      style: TextStyle(fontSize: 12, color: hintColor),
-                    ),
-                  ],
-                ),
-              ),
-            ),
           ],
         ),
       ),

@@ -1,8 +1,8 @@
 {
-  "git_ref": "4b146b688a46c48653155d9e49e0778b15d77814",
+  "git_ref": "10a1f7db4e1ec712ccad19c05e179a223ced865c",
   "resolved_source": "git",
   "comparison": "resolved Git package lib/assets versus packages/n42_chat lib/assets",
-  "file_count": 771,
+  "file_count": 772,
   "files": {
     "assets/animations/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "assets/icons/.gitkeep": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -145,6 +145,7 @@
     "lib/src/core/services/download_service.dart": "bfadf662dafd48b7e692a1f0336f2cceac2c1627d2322d98b807f80bee9d3650",
     "lib/src/core/services/ens_cache_service.dart": "b843604840bc95ef581b69ac22544e9a43d47bf33bbb38d8e425b34802815c55",
     "lib/src/core/services/fiat_ramp_service.dart": "88425abf0e30b00e11ea027a9788f6a8b6b75b687271ed9d3e7b60ee366009ab",
+    "lib/src/core/services/friend_details_store.dart": "a94ba03dbdb609a65d5b0b68b2fed2bb3861edebf18ad51e81609939d2137cda",
     "lib/src/core/services/gif_service.dart": "1c02c8fcca740404eb0025f6aa9db53106b5486c37f8a221808ffdc69d7f124e",
     "lib/src/core/services/giphy_service.dart": "7ea8d6dbd85d10c51bb63b3eb68992b2dad7c1ed2eb04cd5922166992b6b5e72",
     "lib/src/core/services/image_text_recognition_service.dart": "3e696e2e318a6aef434c936f691093246cea1605a54ca6aac57202d2e7dfd584",
@@ -525,7 +526,7 @@
     "lib/src/presentation/pages/contact/add_friend_page.dart": "ccc5d3476473e73c6475a67c57c0b793db4d1fcc9050a2a280c5287f1c67f8b9",
     "lib/src/presentation/pages/contact/chat_only_friends_page.dart": "a3ade435013f5086069d2308d2354eef34cc913f4a29f7b5a937c6cfd3787662",
     "lib/src/presentation/pages/contact/common_groups_page.dart": "cea4faaaf1c611dfe1706237789529c2ac5a473ea4f9658ead8503814bab29b5",
-    "lib/src/presentation/pages/contact/contact_detail_page.dart": "7453698c09dfd3cebf2951e83ccc074b3f84c00725356a3f7de69e9a0abbe4d5",
+    "lib/src/presentation/pages/contact/contact_detail_page.dart": "78a7b5f73a3c90b7fcf0cceb695d88a9c9e6f8616baa0a7b89379360c7e42415",
     "lib/src/presentation/pages/contact/contact_index_bar.dart": "95bf940560385ff1b9c5e14cf41115299bb54b27d0fa01203f8de153b873b667",
     "lib/src/presentation/pages/contact/contact_list_page.dart": "ed64f64f32d693c397c6b0f0baec7021864b2b152eb6bf869751829401d95509",
     "lib/src/presentation/pages/contact/contact_permissions_page.dart": "7fe1695216c63b93bcc14952dceb9ba573c2782d1b984952489501d7b1eb7801",
