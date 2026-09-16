@@ -5847,4 +5847,11 @@ class SId extends S {
   @override
   String get chatEncryptionNotReady =>
       'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
+
+  @override
+  String get contactRequestPending => 'Awaiting acceptance';
+
+  @override
+  String get chatFriendRequestPending =>
+      'Friendship is not confirmed. Check Contacts > New Friends before sending.';
 }

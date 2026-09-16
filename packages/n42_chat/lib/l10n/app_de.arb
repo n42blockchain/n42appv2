@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Bestätigungs-E-Mail senden",
   "chatLogoutKeyWarning": "Sichere deine Verschlüsselungsschlüssel vor dem Abmelden, sonst könntest du den Zugriff auf verschlüsselte Nachrichten verlieren.",
   "settingsBiometricUnavailable": "Biometrische Authentifizierung ist nicht verfügbar. Prüfe Einrichtung und Berechtigungen in den Geräteeinstellungen.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

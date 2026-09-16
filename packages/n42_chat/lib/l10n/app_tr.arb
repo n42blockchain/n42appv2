@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Doğrulama e-postası gönder",
   "chatLogoutKeyWarning": "Çıkış yapmadan önce şifreleme anahtarlarınızı yedekleyin, aksi takdirde şifreli mesajlara erişiminizi kaybedebilirsiniz.",
   "settingsBiometricUnavailable": "Biyometrik kimlik doğrulama kullanılamıyor. Cihaz ayarlarından kayıt ve izinleri kontrol edin.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

@@ -352,7 +352,7 @@ class MatrixMediaSender {
         throw Exception('未登录');
       }
 
-      final room = roomForSending(_client, roomId);
+      final room = await resolveRoomForSending(_client, roomId);
       if (room == null) {
         throw Exception('房间不存在: $roomId');
       }

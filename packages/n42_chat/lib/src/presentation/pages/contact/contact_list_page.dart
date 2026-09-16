@@ -373,7 +373,7 @@ class _ContactListPageState extends State<ContactListPage> {
             isDark: isDark,
             icon: _NewFriendIcon(),
             title: S.of(context)?.contactNewFriends ?? 'New Friends',
-            badgeCount: state.friendRequests.length,
+            badgeCount: state.friendRequests.where((r) => !r.isOutgoing).length,
             onTap: _showFriendRequestsPage,
           ),
           _buildItemDivider(isDark),
@@ -1450,6 +1450,14 @@ class _FriendRequestsPage extends StatefulWidget {
 }
 
 class _FriendRequestsPageState extends State<_FriendRequestsPage> {
+  final Set<String> _pendingActions = {};
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ContactBloc>().add(const LoadFriendRequests());
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
@@ -1463,6 +1471,15 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
       ),
       body: BlocBuilder<ContactBloc, ContactState>(
         builder: (context, state) {
+          if (state.hasError) {
+            return Center(
+              child: TextButton(
+                onPressed: () =>
+                    context.read<ContactBloc>().add(const LoadFriendRequests()),
+                child: Text(S.of(context)?.commonRetry ?? 'Retry'),
+              ),
+            );
+          }
           if (!state.isLoaded) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -1560,62 +1577,92 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
           color: context.textSecondary,
         ),
       ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextButton(
-            onPressed: () => _acceptRequest(request),
-            style: TextButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
+      trailing: request.isOutgoing
+          ? Text(S.of(context)?.contactRequestPending ?? 'Awaiting acceptance')
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextButton(
+                  onPressed: _pendingActions.contains(request.id)
+                      ? null
+                      : () => _respondToRequest(request, accept: true),
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Text(S.of(context)?.commonAccept ?? 'Accept'),
+                ),
+                const SizedBox(width: 8),
+                TextButton(
+                  onPressed: _pendingActions.contains(request.id)
+                      ? null
+                      : () => _respondToRequest(request, accept: false),
+                  style: TextButton.styleFrom(
+                    backgroundColor: AppColors.inputBgOf(isDark),
+                    foregroundColor: context.textPrimary,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                  ),
+                  child: Text(S.of(context)?.commonReject ?? 'Reject'),
+                ),
+              ],
             ),
-            child: Text(S.of(context)?.commonAccept ?? 'Accept'),
-          ),
-          const SizedBox(width: 8),
-          TextButton(
-            onPressed: () => _rejectRequest(request),
-            style: TextButton.styleFrom(
-              backgroundColor: AppColors.inputBgOf(isDark),
-              foregroundColor: context.textPrimary,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-            ),
-            child: Text(S.of(context)?.commonReject ?? 'Reject'),
-          ),
-        ],
-      ),
     );
   }
 
-  void _acceptRequest(FriendRequest request) {
-    context.read<ContactBloc>().add(AcceptFriendRequest(request.id));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S.of(context)?.contactAcceptedFriendRequest(request.userName) ??
-              'Accepted ${request.userName}\'s friend request',
+  Future<void> _respondToRequest(
+    FriendRequest request, {
+    required bool accept,
+  }) async {
+    if (!_pendingActions.add(request.id)) return;
+    setState(() {});
+    try {
+      final repository = getIt<IContactRepository>();
+      if (accept) {
+        await repository.acceptFriendRequest(request.id);
+      } else {
+        await repository.rejectFriendRequest(request.id);
+      }
+      if (!mounted) return;
+      context.read<ContactBloc>().add(const RefreshContacts());
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            accept
+                ? S
+                          .of(context)
+                          ?.contactAcceptedFriendRequest(request.userName) ??
+                      'Friend request accepted'
+                : S
+                          .of(context)
+                          ?.contactRejectedFriendRequest(request.userName) ??
+                      'Friend request rejected',
+          ),
         ),
-        backgroundColor: AppColors.success,
-      ),
-    );
-  }
-
-  void _rejectRequest(FriendRequest request) {
-    context.read<ContactBloc>().add(RejectFriendRequest(request.id));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          S.of(context)?.contactRejectedFriendRequest(request.userName) ??
-              'Rejected ${request.userName}\'s friend request',
+      );
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(S.of(context)?.commonSaveFailed ?? 'Operation failed'),
+          backgroundColor: AppColors.error,
         ),
-      ),
-    );
+      );
+    } finally {
+      if (mounted) setState(() => _pendingActions.remove(request.id));
+    }
   }
 
   Color _getColorFromName(String name) {

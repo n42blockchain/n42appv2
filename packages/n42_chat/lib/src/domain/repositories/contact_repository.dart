@@ -77,6 +77,9 @@ abstract class IContactRepository {
 
 /// 好友请求
 class FriendRequest {
+  /// Outgoing requests are shown as waiting, never as actionable invitations.
+  final bool isOutgoing;
+
   /// 请求ID（房间ID）
   final String id;
 
@@ -96,6 +99,7 @@ class FriendRequest {
   final String? message;
 
   const FriendRequest({
+    this.isOutgoing = false,
     required this.id,
     required this.userId,
     required this.userName,

@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "إرسال رسالة التحقق",
   "chatLogoutKeyWarning": "انسخ مفاتيح التشفير احتياطيًا قبل تسجيل الخروج، وإلا فقد تفقد إمكانية الوصول إلى الرسائل المشفرة.",
   "settingsBiometricUnavailable": "المصادقة البيومترية غير متاحة. تحقّق من التسجيل والأذونات في إعدادات الجهاز.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

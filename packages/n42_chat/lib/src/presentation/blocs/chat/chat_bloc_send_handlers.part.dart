@@ -6,7 +6,11 @@ part of 'chat_bloc.dart';
 /// 联系人名片、自定义消息（红包/转账/音乐）、系统通知、拍一拍等。
 extension ChatBlocSendHandlers on ChatBloc {
   String _sendFailure(Object error, String fallback) =>
-      error is EncryptedSendNotReady ? EncryptedSendNotReady.code : fallback;
+      error is EncryptedSendNotReady
+      ? EncryptedSendNotReady.code
+      : error is DirectFriendshipNotReady
+      ? DirectFriendshipNotReady.code
+      : fallback;
 
   static final _whitespaceRe = RegExp(r'\s+');
 

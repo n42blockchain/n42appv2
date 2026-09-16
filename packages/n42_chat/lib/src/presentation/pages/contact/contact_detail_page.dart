@@ -657,25 +657,22 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     });
 
     try {
-      // 通过 StartChat 事件创建私聊（这会自动将对方添加到联系人）
-      final contactBloc = context.read<ContactBloc>();
-      contactBloc.add(StartChat(widget.userId));
-
-      // 等待一小段时间让操作完成
-      await Future<void>.delayed(const Duration(milliseconds: 500));
-
-      // 重新加载联系人信息
+      final repository = getIt<IContactRepository>();
+      await repository.startDirectChat(widget.userId);
+      final contact = await repository.getContactById(widget.userId);
+      if (!mounted) return;
+      context.read<ContactBloc>().add(const RefreshContacts());
       _loadContact();
-
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              S.of(context)?.contactAddedToContacts ?? 'Added to contacts',
-            ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            contact?.isFriend == true
+                ? (S.of(context)?.contactAddedToContacts ?? 'Added to contacts')
+                : (S.of(context)?.contactRequestPending ??
+                      'Awaiting acceptance'),
           ),
-        );
-      }
+        ),
+      );
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

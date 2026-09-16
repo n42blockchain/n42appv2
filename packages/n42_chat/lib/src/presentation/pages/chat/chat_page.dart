@@ -1,5 +1,6 @@
 import 'dart:async';
 import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
+import '../../../data/datasources/matrix/message/direct_chat_send_guard.dart';
 import 'dart:io';
 import 'dart:typed_data';
 

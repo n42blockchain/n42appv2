@@ -11,7 +11,9 @@ extension _ChatPageMessageListMethods on _ChatPageState {
         final encryptionFailure =
             state.error?.contains(EncryptedSendNotReady.code) == true;
         if (_pendingEncryptedDraftStarted && !state.isSending) {
-          if (encryptionFailure &&
+          if ((encryptionFailure ||
+                  state.error?.contains(DirectFriendshipNotReady.code) ==
+                      true) &&
               _inputController.text.isEmpty &&
               _pendingEncryptedDraft != null) {
             _inputController.text = _pendingEncryptedDraft!;
@@ -27,6 +29,10 @@ extension _ChatPageMessageListMethods on _ChatPageState {
                 encryptionFailure
                     ? (S.of(context)?.chatEncryptionNotReady ??
                           'Secure connection is not ready. Message not sent. Check connection and device verification, then retry.')
+                    : state.error?.contains(DirectFriendshipNotReady.code) ==
+                          true
+                    ? (S.of(context)?.chatFriendRequestPending ??
+                          'Friendship is not confirmed. Check Contacts > New Friends before sending.')
                     : state.error!,
               ),
               backgroundColor: AppColors.error,

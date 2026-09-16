@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "تصدیقی ای میل بھیجیں",
   "chatLogoutKeyWarning": "لاگ آؤٹ کرنے سے پہلے اپنی خفیہ کاری کی کلیدوں کا بیک اپ لیں، ورنہ آپ خفیہ کردہ پیغامات تک رسائی کھو سکتے ہیں۔",
   "settingsBiometricUnavailable": "بایومیٹرک تصدیق دستیاب نہیں ہے۔ آلے کی ترتیبات میں اندراج اور اجازتیں چیک کریں۔",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

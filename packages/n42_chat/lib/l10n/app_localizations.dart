@@ -10792,6 +10792,18 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.'**
   String get chatEncryptionNotReady;
+
+  /// No description provided for @contactRequestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Awaiting acceptance'**
+  String get contactRequestPending;
+
+  /// No description provided for @chatFriendRequestPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Friendship is not confirmed. Check Contacts > New Friends before sending.'**
+  String get chatFriendRequestPending;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

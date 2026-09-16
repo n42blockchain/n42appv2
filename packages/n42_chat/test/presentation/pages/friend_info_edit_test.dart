@@ -108,6 +108,82 @@ void main() {
     await tester.pumpAndSettle();
     expect((await store.load())['tags'], isEmpty);
   });
+  testWidgets(
+    'create a tag from a populated picker and persist it on the friend',
+    (tester) async {
+      await open(tester);
+      await tester.tap(find.text('Tags'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), ' Work ');
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text('Confirm'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final row = find.ancestor(
+        of: find.text('Work'),
+        matching: find.byType(ListTile),
+      );
+      expect(
+        tester
+            .widget<Checkbox>(
+              find.descendant(of: row, matching: find.byType(Checkbox)),
+            )
+            .value,
+        isTrue,
+      );
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+      expect((await store.load())['tags'], ['Work']);
+      await tester.tap(find.text('Tags'));
+      await tester.pumpAndSettle();
+      expect(find.text('Work'), findsOneWidget);
+      expect(
+        tester
+            .widget<Checkbox>(
+              find.descendant(
+                of: find.ancestor(
+                  of: find.text('Work'),
+                  matching: find.byType(ListTile),
+                ),
+                matching: find.byType(Checkbox),
+              ),
+            )
+            .value,
+        isTrue,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets(
+    'creating an existing tag selects it without duplicating the catalog',
+    (tester) async {
+      await open(tester);
+      await tester.tap(find.text('Tags'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.add));
+      await tester.pumpAndSettle();
+      await tester.enterText(find.byType(TextField), ' family ');
+      await tester.tap(
+        find.descendant(
+          of: find.byType(AlertDialog),
+          matching: find.text('Confirm'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Confirm'));
+      await tester.pumpAndSettle();
+      expect((await store.load())['tags'], ['Family']);
+      final prefs = await SharedPreferences.getInstance();
+      expect(jsonDecode(prefs.getString('tags_data')!) as List, hasLength(1));
+    },
+  );
+
   testWidgets('an account change prevents saving stale friend details', (
     tester,
   ) async {

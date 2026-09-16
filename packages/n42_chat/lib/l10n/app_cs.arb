@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Odeslat ověřovací e-mail",
   "chatLogoutKeyWarning": "Před odhlášením zálohujte šifrovací klíče, jinak můžete ztratit přístup k šifrovaným zprávám.",
   "settingsBiometricUnavailable": "Biometrické ověření není dostupné. Zkontrolujte registraci a oprávnění v nastavení zařízení.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

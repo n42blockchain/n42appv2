@@ -18,12 +18,13 @@ class _User extends Mock implements User {}
 class _Uploader extends Mock implements MatrixMediaUploader {}
 
 void main() {
+  late _Client client;
   late _Room room;
   late _User partner;
   late MatrixContactDataSource contacts;
   late MatrixMessageSender sender;
   setUp(() {
-    final client = _Client();
+    client = _Client();
     final manager = _Manager();
     room = _Room();
     partner = _User();
@@ -42,6 +43,9 @@ void main() {
     ).thenReturn(partner);
     when(() => partner.content).thenReturn({'membership': 'invite'});
     when(() => room.sendTextEvent(any())).thenAnswer((_) async => 'event');
+    when(
+      () => room.requestUser('@bob:test', requestProfile: false),
+    ).thenAnswer((_) async => partner);
     contacts = MatrixContactDataSource(manager);
     sender = MatrixMessageSender(manager, _Uploader());
   });
@@ -86,6 +90,82 @@ void main() {
       );
     },
   );
+  test(
+    'lazy-loaded accepted member is fetched before listing and sending',
+    () async {
+      when(() => partner.content).thenReturn({});
+      when(
+        () => room.requestUser('@bob:test', requestProfile: false),
+      ).thenAnswer((_) async {
+        when(() => partner.content).thenReturn({'membership': 'join'});
+        return partner;
+      });
+      await contacts.refreshDirectChatMembers();
+      expect(contacts.getDirectChatContacts(), [partner]);
+      expect(await sender.sendTextMessage('!dm:test', 'hello'), 'event');
+    },
+  );
+  test(
+    'sending also resolves membership without first opening Contacts',
+    () async {
+      when(() => partner.content).thenReturn({});
+      when(
+        () => room.requestUser('@bob:test', requestProfile: false),
+      ).thenAnswer((_) async {
+        when(() => partner.content).thenReturn({'membership': 'join'});
+        return partner;
+      });
+      expect(await sender.sendTextMessage('!dm:test', 'hello'), 'event');
+      verify(
+        () => room.requestUser('@bob:test', requestProfile: false),
+      ).called(1);
+    },
+  );
+  test('fetched pending membership remains blocked', () async {
+    when(() => partner.content).thenReturn({});
+    when(() => room.requestUser('@bob:test', requestProfile: false)).thenAnswer(
+      (_) async {
+        when(() => partner.content).thenReturn({'membership': 'invite'});
+        return partner;
+      },
+    );
+    await expectLater(
+      sender.sendTextMessage('!dm:test', 'hello'),
+      throwsStateError,
+    );
+    expect(contacts.getOutgoingInvites(), [room]);
+    expect(contacts.getDirectChatContacts(), isEmpty);
+    verifyNever(() => room.sendTextEvent(any()));
+  });
+  test('scan creates a fresh invitation when the old peer has left', () async {
+    when(() => partner.content).thenReturn({'membership': 'leave'});
+    when(
+      () => client.startDirectChat(
+        '@bob:test',
+        enableEncryption: true,
+        skipExistingChat: true,
+      ),
+    ).thenAnswer((_) async => '!new:test');
+    expect(await contacts.startDirectChat('@bob:test'), '!new:test');
+    verify(
+      () => client.startDirectChat(
+        '@bob:test',
+        enableEncryption: true,
+        skipExistingChat: true,
+      ),
+    ).called(1);
+  });
+  test(
+    'scanning a pending request reuses it without making duplicates',
+    () async {
+      expect(await contacts.startDirectChat('@bob:test'), '!dm:test');
+    },
+  );
+  test('blocked room is not bypassed by creating another invitation', () async {
+    when(() => partner.content).thenReturn({'membership': 'ban'});
+    await expectLater(contacts.startDirectChat('@bob:test'), throwsStateError);
+  });
+
   test('accepted friendship appears and permits sending', () async {
     when(() => partner.content).thenReturn({'membership': 'join'});
     expect(contacts.getDirectChatContacts(), [partner]);

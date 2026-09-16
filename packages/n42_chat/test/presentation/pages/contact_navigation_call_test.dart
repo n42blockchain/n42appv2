@@ -110,6 +110,62 @@ void main() {
     verifyNever(() => repository.startDirectChat(any()));
   });
 
+  testWidgets('outgoing requests show pending without acceptance controls', (
+    tester,
+  ) async {
+    when(() => contacts.state).thenReturn(
+      ContactState(
+        status: ContactStatus.loaded,
+        friendRequests: [
+          FriendRequest(
+            id: '!pending:hs',
+            userId: '@alice:hs',
+            userName: 'Alice',
+            requestTime: DateTime(2026),
+            isOutgoing: true,
+          ),
+        ],
+      ),
+    );
+    await tester.pumpWidget(app(const ContactListPage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New Friends'));
+    await tester.pumpAndSettle();
+    expect(find.text('Awaiting acceptance'), findsOneWidget);
+    expect(find.text('Accept'), findsNothing);
+    expect(find.text('Reject'), findsNothing);
+  });
+
+  testWidgets('acceptance does not report success when the server fails', (
+    tester,
+  ) async {
+    when(() => contacts.state).thenReturn(
+      const ContactState(
+        status: ContactStatus.loaded,
+        friendRequests: [
+          FriendRequest(
+            id: '!pending:hs',
+            userId: '@alice:hs',
+            userName: 'Alice',
+          ),
+        ],
+      ),
+    );
+    when(
+      () => repository.acceptFriendRequest('!pending:hs'),
+    ).thenThrow(StateError('offline'));
+    await tester.pumpWidget(app(const ContactListPage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('New Friends'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Accept'));
+    await tester.pumpAndSettle();
+    expect(find.text('Save failed'), findsOneWidget);
+    expect(find.textContaining('Accepted Alice'), findsNothing);
+    expect(find.text('Accept'), findsOneWidget);
+    verify(() => repository.acceptFriendRequest('!pending:hs')).called(1);
+  });
+
   for (final video in [false, true]) {
     test(
       'call launcher resolves direct room and starts ${video ? 'video' : 'voice'} call',

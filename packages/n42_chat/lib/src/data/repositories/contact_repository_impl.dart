@@ -37,6 +37,8 @@ class ContactRepositoryImpl implements IContactRepository {
     // 先加载备注缓存
     await _loadRemarkCache();
 
+    await _contactDataSource.refreshDirectChatMembers();
+
     // 获取用户ID到房间ID的映射
     _directRoomIdMap = _contactDataSource.getDirectChatRoomIdMap();
 
@@ -62,6 +64,7 @@ class ContactRepositoryImpl implements IContactRepository {
   @override
   Future<ContactEntity?> getContactById(String userId) async {
     await _loadRemarkCache();
+    await _contactDataSource.refreshDirectChatMembers();
     final profile = await _contactDataSource.getUserProfile(userId);
     if (profile == null) return null;
 
@@ -163,7 +166,10 @@ class ContactRepositoryImpl implements IContactRepository {
 
   @override
   Future<List<FriendRequest>> getPendingFriendRequests() async {
-    final invites = _contactDataSource.getPendingInvites();
+    await _contactDataSource.refreshDirectChatMembers();
+    final incoming = _contactDataSource.getPendingInvites();
+    final outgoing = _contactDataSource.getOutgoingInvites();
+    final invites = [...incoming, ...outgoing];
     final requests = <FriendRequest>[];
 
     for (final room in invites) {
@@ -211,6 +217,7 @@ class ContactRepositoryImpl implements IContactRepository {
       requests.add(
         FriendRequest(
           id: room.id,
+          isOutgoing: outgoing.contains(room),
           userId: inviter ?? '',
           userName: displayName,
           userAvatarUrl: avatarUrl,
@@ -335,7 +342,9 @@ class ContactRepositoryImpl implements IContactRepository {
     final avatarUrl = _contactDataSource.getProfileAvatarUrl(profile);
     final remark = _remarkCache[userId];
     // 获取私聊房间ID
-    final directRoomId = _contactDataSource.getDirectChatRoomId(userId);
+    final acceptedRoom = _contactDataSource.getDirectChatRoomIdMap()[userId];
+    final directRoomId =
+        acceptedRoom ?? _contactDataSource.getDirectChatRoomId(userId);
 
     return ContactEntity(
       userId: userId,
@@ -346,7 +355,7 @@ class ContactRepositoryImpl implements IContactRepository {
       remark: remark,
       isBlocked: _contactDataSource.isUserIgnored(userId),
       directRoomId: directRoomId,
-      isFriend: directRoomId != null,
+      isFriend: acceptedRoom != null,
     );
   }
 

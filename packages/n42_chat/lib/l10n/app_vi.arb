@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Gửi email xác minh",
   "chatLogoutKeyWarning": "Sao lưu khóa mã hóa trước khi đăng xuất, nếu không bạn có thể mất quyền truy cập vào các tin nhắn được mã hóa.",
   "settingsBiometricUnavailable": "Xác thực sinh trắc học không khả dụng. Kiểm tra đăng ký và quyền trong cài đặt thiết bị.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

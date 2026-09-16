@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "যাচাইকরণ ইমেল পাঠান",
   "chatLogoutKeyWarning": "লগ আউট করার আগে এনক্রিপশন কীগুলি ব্যাক আপ করুন, নইলে এনক্রিপ্ট করা বার্তাগুলিতে প্রবেশাধিকার হারাতে পারেন।",
   "settingsBiometricUnavailable": "বায়োমেট্রিক প্রমাণীকরণ উপলব্ধ নয়। ডিভাইসের সেটিংসে নিবন্ধন ও অনুমতি দেখুন।",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Kirim email verifikasi",
   "chatLogoutKeyWarning": "Cadangkan kunci enkripsi sebelum keluar, atau Anda mungkin kehilangan akses ke pesan terenkripsi.",
   "settingsBiometricUnavailable": "Autentikasi biometrik tidak tersedia. Periksa pendaftaran dan izin di pengaturan perangkat.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

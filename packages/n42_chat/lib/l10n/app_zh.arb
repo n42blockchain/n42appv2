@@ -2149,5 +2149,7 @@
   "settingsSendVerificationEmail": "发送验证邮件",
   "chatLogoutKeyWarning": "登出前請備份加密金鑰，否則可能無法再讀取加密訊息。",
   "settingsBiometricUnavailable": "生物识别暂不可用，请检查系统设置中的人脸或指纹录入及应用权限。",
-  "chatEncryptionNotReady": "安全连接尚未就绪，消息未发送。请双方检查网络和设备验证后重试。"
+  "chatEncryptionNotReady": "安全连接尚未就绪，消息未发送。请双方检查网络和设备验证后重试。",
+  "contactRequestPending": "等待对方接受",
+  "chatFriendRequestPending": "好友关系尚未确认，请到“联系人 → 新的朋友”查看并处理申请后再发送。"
 }

@@ -77,11 +77,11 @@ TestFlight build 2026072667 predates these fixes.
 
 ## Application integration validation
 
-- Chat source pin: `860aee1b9ad63be4bf7cd546dda574cc5273c4c4`.
+- Chat source pin: `38bd185598f4429e71f265929d89c9e52c0b1516`.
 - All 775 resolved Git package lib/assets files match the committed source mirror.
 - Chat behavior suite: 154 passed; focused encryption/privacy/call/Bloc suite:
   76 passed; final call regression after route-lifecycle changes: 13 passed.
-- Wallet feedback wrapper against the actual Git dependency: 228 passed.
+- Wallet feedback wrapper against the actual Git dependency: 238 passed.
 - Chat and wallet `flutter analyze --no-fatal-infos`: zero errors/warnings;
   respectively 208 and 190 informational diagnostics, including style suggestions.
 - Native smoke target: `integration_test/chat_feedback_native_test.dart`. It
@@ -98,8 +98,23 @@ driver: fresh-session Megolm decryption and WebRTC cancellation during pending
 TURN discovery, including renderer disposal. This is a native smoke test with
 fixture signaling, not a successful live call to Android.
 
-The Android smoke APK compiled successfully. The device rejected overwrite
-installation with `INSTALL_FAILED_USER_RESTRICTED: Install canceled by user`;
-no Android execution or cross-device success is claimed. Phone-side USB-install
-permission is required before repeating the native test. The iOS normal app is
-restored after testing. No new TestFlight build has been uploaded by this change.
+After USB installation was allowed, Android installation succeeded and both
+native smoke scenarios passed. The user confirmed these attached phones are
+not the phones from the feedback. Native tests do not verify live user-account
+calls. No new TestFlight build has been uploaded by this change.
+
+## Contacts and tags follow-up
+
+Video 9 exposed missing lazy-loaded peer membership after login. Contacts and
+sends now await actual room membership, without global-profile fallback; an
+unknown membership fails explicitly rather than replacing contacts with an
+empty snapshot. QR addition creates a fresh invitation when the old direct room
+was abandoned. Existing rooms and history are preserved. Outgoing requests show
+awaiting acceptance, and invitation actions report success only after completion.
+
+The populated friend-tag picker now includes Create alongside Confirm. New tags
+are selected automatically, confirmation saves the friend annotation, and an
+existing normalized name is reused. Tag catalog contact counts are unchanged.
+Focused contact/tag regression: 137 passed; request UI follow-up: 9 passed.
+Chat analyzer: no errors/warnings, 211 informational diagnostics.
+Live dxx/dxx01 acceptance and fresh message delivery remain unverified.

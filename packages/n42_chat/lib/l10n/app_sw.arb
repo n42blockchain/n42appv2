@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Tuma barua pepe ya uthibitishaji",
   "chatLogoutKeyWarning": "Hifadhi nakala ya funguo zako za usimbaji fiche kabla ya kutoka, la sivyo unaweza kupoteza ufikiaji wa ujumbe uliosimbwa.",
   "settingsBiometricUnavailable": "Uthibitishaji wa kibayometriki haupatikani. Angalia usajili na ruhusa katika mipangilio ya kifaa.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

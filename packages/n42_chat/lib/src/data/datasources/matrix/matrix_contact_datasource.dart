@@ -6,6 +6,7 @@ import '../../../core/utils/timed_status_utils.dart';
 import '../../../core/utils/matrix_utils.dart';
 import 'matrix_client_manager.dart';
 import 'contact_privacy_service.dart';
+import 'message/direct_chat_send_guard.dart';
 
 /// Matrix联系人数据源
 ///
@@ -24,6 +25,32 @@ class MatrixContactDataSource {
   // ============================================
   // 联系人获取
   // ============================================
+
+  /// Member state may be absent from memory after login with lazy loading.
+  /// Never classify an unloaded member as a removed or unaccepted friend.
+  Future<void> refreshDirectChatMembers() async {
+    final client = _client;
+    if (client == null) return;
+    final accountId = client.userID;
+    final rooms = client.rooms
+        .where(
+          (room) =>
+              room.isDirectChat &&
+              room.membership == matrix.Membership.join &&
+              room.directChatMatrixID != accountId,
+        )
+        .toList();
+    for (var offset = 0; offset < rooms.length; offset += 8) {
+      await Future.wait(
+        rooms.skip(offset).take(8).map((room) async {
+          final peer = room.directChatMatrixID;
+          if (peer != null) await resolveDirectPeer(room, peer);
+        }),
+      );
+      if (!identical(client, _client) || accountId != client.userID)
+        throw StateError('Account changed');
+    }
+  }
 
   /// 获取所有私聊联系人（有直接聊天的用户）
   List<matrix.User> getDirectChatContacts() {
@@ -157,7 +184,38 @@ class MatrixContactDataSource {
       throw Exception('Matrix client not initialized');
     }
 
-    return await _client!.startDirectChat(userId, enableEncryption: encrypted);
+    final client = _client!;
+    if (!userId.startsWith('@') || !userId.contains(':'))
+      throw ArgumentError('Invalid user ID');
+    // Prefer an accepted room over a more recently active abandoned invitation.
+    final candidates = client.rooms
+        .where((room) => room.directChatMatrixID == userId)
+        .toList();
+    matrix.Room? pending;
+    for (final room in candidates) {
+      if (room.membership == matrix.Membership.invite) {
+        pending ??= room;
+        continue;
+      }
+      if (room.membership != matrix.Membership.join) continue;
+      final peer = await resolveDirectPeer(room, userId);
+      if (peer.content['membership'] == 'join') return room.id;
+      if (peer.content['membership'] == 'invite') pending ??= room;
+      if (peer.content['membership'] == 'ban')
+        throw StateError('Contact is blocked in this room');
+    }
+    if (pending != null) {
+      if (pending.membership == matrix.Membership.invite) {
+        // Explicitly adding someone who has already invited us is acceptance.
+        await acceptInvite(pending.id);
+      }
+      return pending.id;
+    }
+    return await client.startDirectChat(
+      userId,
+      enableEncryption: encrypted,
+      skipExistingChat: candidates.isNotEmpty,
+    );
   }
 
   /// 忽略用户
@@ -303,11 +361,31 @@ class MatrixContactDataSource {
         [];
   }
 
+  List<matrix.Room> getOutgoingInvites() =>
+      (_client?.rooms ?? <matrix.Room>[]).where((room) {
+        final peer = room.directChatMatrixID;
+        return room.membership == matrix.Membership.join &&
+            peer != null &&
+            peer != _client?.userID &&
+            room
+                    .unsafeGetUserFromMemoryOrFallback(peer)
+                    .content['membership'] ==
+                'invite';
+      }).toList();
+
   /// 接受邀请
   Future<void> acceptInvite(String roomId) async {
     final room = _client?.getRoomById(roomId);
     if (room == null) return;
+    final peer = room.directChatMatrixID;
     await room.join();
+    if (peer != null) await room.addToDirectChat(peer);
+    if (room.membership != matrix.Membership.join) {
+      await _client!
+          .waitForRoomInSync(roomId, join: true)
+          .timeout(const Duration(seconds: 20));
+    }
+    await refreshDirectChatMembers();
   }
 
   /// 拒绝邀请

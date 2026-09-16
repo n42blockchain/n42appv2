@@ -61,6 +61,8 @@ void main() {
 
   setUp(() {
     contacts = _Contacts();
+    when(() => contacts.refreshDirectChatMembers()).thenAnswer((_) async {});
+    when(() => contacts.getOutgoingInvites()).thenReturn([]);
     preferences = _Preferences();
     moments = _Moments();
     repository = ContactRepositoryImpl(contacts, preferences, moments);
@@ -136,6 +138,7 @@ void main() {
           () => contacts.getUserProfile(alice),
         ).thenAnswer((_) async => profile(alice));
         when(() => contacts.isUserIgnored(alice)).thenAnswer((_) => true);
+        when(() => contacts.getDirectChatRoomIdMap()).thenReturn({});
         final result = (await repository.getContactById(alice))!;
         expect(result.displayName, alice);
         expect(result.isBlocked, isTrue);

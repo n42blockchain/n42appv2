@@ -30,6 +30,11 @@ void main() {
 
   setUp(() {
     mockContactDS = MockMatrixContactDataSource();
+    when(
+      () => mockContactDS.refreshDirectChatMembers(),
+    ).thenAnswer((_) async {});
+    when(() => mockContactDS.getOutgoingInvites()).thenReturn([]);
+    when(() => mockContactDS.getDirectChatRoomIdMap()).thenReturn({});
     mockStorageDS = MockPreferencesDataSource();
     mockMomentDS = MockMatrixMomentDataSource();
     repository = ContactRepositoryImpl(
@@ -180,6 +185,9 @@ void main() {
         () => mockContactDS.getDirectChatRoomId(userId),
       ).thenReturn('!dm-alice:matrix.org');
       when(() => mockContactDS.isUserIgnored(userId)).thenReturn(true);
+      when(
+        () => mockContactDS.getDirectChatRoomIdMap(),
+      ).thenReturn({userId: '!dm-alice:matrix.org'});
 
       final contact = await repository.getContactById(userId);
 

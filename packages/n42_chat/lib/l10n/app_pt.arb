@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "Enviar e-mail de verificação",
   "chatLogoutKeyWarning": "Faça uma cópia de segurança das chaves de encriptação antes de terminar sessão, ou poderá perder o acesso às mensagens encriptadas.",
   "settingsBiometricUnavailable": "A autenticação biométrica não está disponível. Verifique o registo e as permissões nas definições do dispositivo.",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

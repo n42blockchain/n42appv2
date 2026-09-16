@@ -5868,6 +5868,13 @@ class SPt extends S {
   @override
   String get chatEncryptionNotReady =>
       'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
+
+  @override
+  String get contactRequestPending => 'Awaiting acceptance';
+
+  @override
+  String get chatFriendRequestPending =>
+      'Friendship is not confirmed. Check Contacts > New Friends before sending.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11734,4 +11741,11 @@ class SPtBr extends SPt {
   @override
   String get chatEncryptionNotReady =>
       'Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.';
+
+  @override
+  String get contactRequestPending => 'Awaiting acceptance';
+
+  @override
+  String get chatFriendRequestPending =>
+      'Friendship is not confirmed. Check Contacts > New Friends before sending.';
 }

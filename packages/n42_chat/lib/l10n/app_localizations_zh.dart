@@ -5691,6 +5691,12 @@ class SZh extends S {
 
   @override
   String get chatEncryptionNotReady => '安全连接尚未就绪，消息未发送。请双方检查网络和设备验证后重试。';
+
+  @override
+  String get contactRequestPending => '等待对方接受';
+
+  @override
+  String get chatFriendRequestPending => '好友关系尚未确认，请到“联系人 → 新的朋友”查看并处理申请后再发送。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11381,4 +11387,10 @@ class SZhTw extends SZh {
 
   @override
   String get chatEncryptionNotReady => '安全連線尚未就緒，訊息未傳送。請雙方檢查網路和裝置驗證後重試。';
+
+  @override
+  String get contactRequestPending => '等待對方接受';
+
+  @override
+  String get chatFriendRequestPending => '好友關係尚未確認，請到「聯絡人 → 新的朋友」查看並處理申請後再傳送。';
 }

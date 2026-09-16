@@ -2761,5 +2761,7 @@
   "settingsSendVerificationEmail": "確認メールを送信",
   "chatLogoutKeyWarning": "ログアウトする前に暗号化キーをバックアップしてください。暗号化されたメッセージを読めなくなる可能性があります。",
   "settingsBiometricUnavailable": "生体認証を利用できません。端末の設定で顔や指紋の登録とアプリの権限を確認してください。",
-  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry."
+  "chatEncryptionNotReady": "Secure connection is not ready. Message not sent. Check connection and device verification on both accounts, then retry.",
+  "contactRequestPending": "Awaiting acceptance",
+  "chatFriendRequestPending": "Friendship is not confirmed. Check Contacts > New Friends before sending."
 }

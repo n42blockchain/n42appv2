@@ -57,8 +57,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
 
       // 订阅在线状态变化
       unawaited(_onlineStatusSubscription?.cancel());
-      _onlineStatusSubscription =
-          _contactRepository.watchOnlineStatus().listen(
+      _onlineStatusSubscription = _contactRepository.watchOnlineStatus().listen(
         (statusMap) {
           // 防止在 BLoC 关闭后添加事件
           if (!isClosed) {
@@ -71,27 +70,33 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       );
 
       final contacts = await _contactRepository.getContacts();
-      debugLog('ContactBloc: LoadContacts - Loaded ${contacts.length} contacts');
+      debugLog(
+        'ContactBloc: LoadContacts - Loaded ${contacts.length} contacts',
+      );
       for (final contact in contacts) {
-        debugLog('ContactBloc: Contact userId=${contact.userId}, directRoomId=${contact.directRoomId}, remark=${contact.remark}');
+        debugLog(
+          'ContactBloc: Contact userId=${contact.userId}, directRoomId=${contact.directRoomId}, remark=${contact.remark}',
+        );
       }
 
-      final friendRequests = await _contactRepository.getPendingFriendRequests();
+      final friendRequests = await _contactRepository
+          .getPendingFriendRequests();
       final grouped = _groupContactsByLetter(contacts);
 
-      emit(state.copyWith(
-        status: ContactStatus.loaded,
-        contacts: contacts,
-        filteredContacts: contacts,
-        friendRequests: friendRequests,
-        groupedContacts: grouped,
-        indexLetters: grouped.keys.toList()..sort(),
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.loaded,
+          contacts: contacts,
+          filteredContacts: contacts,
+          friendRequests: friendRequests,
+          groupedContacts: grouped,
+          indexLetters: grouped.keys.toList()..sort(),
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -116,23 +121,26 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         }
       }
 
-      final friendRequests = await _contactRepository.getPendingFriendRequests();
+      final friendRequests = await _contactRepository
+          .getPendingFriendRequests();
       final grouped = _groupContactsByLetter(contacts);
 
-      emit(state.copyWith(
-        status: ContactStatus.loaded,
-        contacts: contacts,
-        filteredContacts:
-            state.searchQuery.isEmpty ? contacts : state.filteredContacts,
-        friendRequests: friendRequests,
-        groupedContacts: grouped,
-        indexLetters: grouped.keys.toList()..sort(),
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.loaded,
+          contacts: contacts,
+          filteredContacts: state.searchQuery.isEmpty
+              ? contacts
+              : state.filteredContacts,
+          friendRequests: friendRequests,
+          groupedContacts: grouped,
+          indexLetters: grouped.keys.toList()..sort(),
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -141,26 +149,27 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     Emitter<ContactState> emit,
   ) async {
     if (event.query.trim().isEmpty) {
-      emit(state.copyWith(
-        filteredContacts: state.contacts,
-        searchQuery: '',
-        isSearching: false,
-      ));
+      emit(
+        state.copyWith(
+          filteredContacts: state.contacts,
+          searchQuery: '',
+          isSearching: false,
+        ),
+      );
       return;
     }
 
-    emit(state.copyWith(
-      isSearching: true,
-      searchQuery: event.query,
-    ));
+    emit(state.copyWith(isSearching: true, searchQuery: event.query));
 
     try {
       final results = await _contactRepository.searchContacts(event.query);
-      emit(state.copyWith(
-        filteredContacts: results,
-        searchQuery: event.query,
-        isSearching: false,
-      ));
+      emit(
+        state.copyWith(
+          filteredContacts: results,
+          searchQuery: event.query,
+          isSearching: false,
+        ),
+      );
     } catch (e) {
       emit(state.copyWith(isSearching: false));
     }
@@ -171,10 +180,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     Emitter<ContactState> emit,
   ) async {
     if (event.query.trim().isEmpty) {
-      emit(state.copyWith(
-        searchResults: [],
-        isGlobalSearching: false,
-      ));
+      emit(state.copyWith(searchResults: [], isGlobalSearching: false));
       return;
     }
 
@@ -185,44 +191,38 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         event.query,
         limit: event.limit,
       );
-      emit(state.copyWith(
-        searchResults: results,
-        isGlobalSearching: false,
-      ));
+      emit(state.copyWith(searchResults: results, isGlobalSearching: false));
     } catch (e) {
       emit(state.copyWith(isGlobalSearching: false));
     }
   }
 
-  void _onClearSearch(
-    ClearSearch event,
-    Emitter<ContactState> emit,
-  ) {
-    emit(state.copyWith(
-      filteredContacts: state.contacts,
-      searchResults: [],
-      searchQuery: '',
-      isSearching: false,
-      isGlobalSearching: false,
-    ));
+  void _onClearSearch(ClearSearch event, Emitter<ContactState> emit) {
+    emit(
+      state.copyWith(
+        filteredContacts: state.contacts,
+        searchResults: [],
+        searchQuery: '',
+        isSearching: false,
+        isGlobalSearching: false,
+      ),
+    );
   }
 
-  Future<void> _onStartChat(
-    StartChat event,
-    Emitter<ContactState> emit,
-  ) async {
+  Future<void> _onStartChat(StartChat event, Emitter<ContactState> emit) async {
     try {
       final roomId = await _contactRepository.startDirectChat(event.userId);
-      emit(state.copyWith(
-        status: ContactStatus.chatStarted,
-        startedChatRoomId: roomId,
-        startedChatUserId: event.userId,
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.chatStarted,
+          startedChatRoomId: roomId,
+          startedChatUserId: event.userId,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -234,10 +234,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await _contactRepository.ignoreUser(event.userId);
       add(const RefreshContacts());
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -249,10 +248,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await _contactRepository.unignoreUser(event.userId);
       add(const RefreshContacts());
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -261,13 +259,21 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     Emitter<ContactState> emit,
   ) async {
     try {
-      final friendRequests = await _contactRepository.getPendingFriendRequests();
-      emit(state.copyWith(friendRequests: friendRequests));
+      final friendRequests = await _contactRepository
+          .getPendingFriendRequests();
+      emit(
+        state.copyWith(
+          status: ContactStatus.loaded,
+          friendRequests: friendRequests,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: 'Failed to load friend requests: $e',
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.error,
+          errorMessage: 'Failed to load friend requests: $e',
+        ),
+      );
     }
   }
 
@@ -279,10 +285,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await _contactRepository.acceptFriendRequest(event.requestId);
       add(const RefreshContacts());
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -294,10 +299,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await _contactRepository.rejectFriendRequest(event.requestId);
       add(const RefreshContacts());
     } catch (e) {
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -322,11 +326,14 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       return contact;
     }).toList();
 
-    emit(state.copyWith(
-      contacts: updatedContacts,
-      filteredContacts:
-          state.searchQuery.isEmpty ? updatedContacts : state.filteredContacts,
-    ));
+    emit(
+      state.copyWith(
+        contacts: updatedContacts,
+        filteredContacts: state.searchQuery.isEmpty
+            ? updatedContacts
+            : state.filteredContacts,
+      ),
+    );
   }
 
   Future<void> _onSetContactRemark(
@@ -334,7 +341,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     Emitter<ContactState> emit,
   ) async {
     try {
-      debugLog('ContactBloc: Setting remark for ${event.userId} to "${event.remark}"');
+      debugLog(
+        'ContactBloc: Setting remark for ${event.userId} to "${event.remark}"',
+      );
 
       // 同时保存到 RemarkService（全局本地缓存）
       await RemarkService.instance.setRemark(event.userId, event.remark);
@@ -345,11 +354,13 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       debugLog('ContactBloc: Remark saved to ContactRepository');
 
       // 发送成功状态
-      emit(state.copyWith(
-        status: ContactStatus.remarkUpdated,
-        updatedRemarkUserId: event.userId,
-        updatedRemark: event.remark,
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.remarkUpdated,
+          updatedRemarkUserId: event.userId,
+          updatedRemark: event.remark,
+        ),
+      );
       debugLog('ContactBloc: Emitted remarkUpdated');
 
       // 刷新联系人列表以更新备注
@@ -357,10 +368,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       debugLog('ContactBloc: Added RefreshContacts event');
     } catch (e) {
       debugLog('ContactBloc: Error setting remark - $e');
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
@@ -379,10 +389,12 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await RemarkService.instance.setRemark(event.userId, null);
 
       // 发送删除成功状态
-      emit(state.copyWith(
-        status: ContactStatus.deleted,
-        deletedUserId: event.userId,
-      ));
+      emit(
+        state.copyWith(
+          status: ContactStatus.deleted,
+          deletedUserId: event.userId,
+        ),
+      );
       debugLog('ContactBloc: Emitted deleted');
 
       // 刷新联系人列表
@@ -390,10 +402,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       debugLog('ContactBloc: Added RefreshContacts event');
     } catch (e) {
       debugLog('ContactBloc: Error deleting contact - $e');
-      emit(state.copyWith(
-        status: ContactStatus.error,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
+      );
     }
   }
 
