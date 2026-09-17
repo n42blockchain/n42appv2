@@ -282,36 +282,34 @@ class _SecuritySettingState extends ConsumerState<SecuritySetting> {
                           right: ScreenUtil().setWidth(10.0),
                           bottom: ScreenUtil().setWidth(16.0),
                         ),
-                        child: Row(
-                          children: [
-                            Expanded(child: const SizedBox.shrink()),
-                            TextButton(
-                              onPressed: () async {
-                                final result = await Navigator.push<String?>(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => GesturePasswordPage(
-                                      oldPassword:
-                                          securityMap['gesturePwd'] as String,
-                                    ),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () async {
+                              final result = await Navigator.push<String?>(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => GesturePasswordPage(
+                                    oldPassword:
+                                        securityMap['gesturePwd'] as String,
                                   ),
-                                );
-                                if (result != null && result.isNotEmpty) {
-                                  securityMap['gesturePwd'] = result;
-                                  saveSecurity();
-                                  setState(() {});
-                                }
-                              },
-                              child: Text(
-                                S.of(context).g_lock_key22,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTypography.body.copyWith(
-                                  color: AppColorTokens.of(context).brand,
                                 ),
+                              );
+                              if (result != null && result.isNotEmpty) {
+                                securityMap['gesturePwd'] = result;
+                                saveSecurity();
+                                setState(() {});
+                              }
+                            },
+                            child: Text(
+                              S.of(context).g_lock_key22,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: AppTypography.body.copyWith(
+                                color: AppColorTokens.of(context).brand,
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ),
                     Divider(
