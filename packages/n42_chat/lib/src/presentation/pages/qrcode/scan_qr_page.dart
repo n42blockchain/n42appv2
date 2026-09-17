@@ -32,6 +32,9 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   bool _isCheckingPermission = true;
   bool _torchEnabled = false;
   String? _permissionError;
+  bool _permissionCheckInFlight = false;
+  Timer? _resumeTimer;
+  Future<void> _cameraLifecycle = Future<void>.value();
 
   static final RegExp _positiveAmountRegExp = RegExp(r'^\d+(?:\.\d+)?$');
 
@@ -44,115 +47,111 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    _resumeTimer?.cancel();
     if (state == AppLifecycleState.resumed) {
-      // Add a small delay to ensure system permission status is updated
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) {
-          _checkCameraPermission();
-        }
+      // A permission dialog also resumes the app. Never request permission
+      // again in response to that event, or replace the screen with a spinner.
+      _resumeTimer = Timer(const Duration(milliseconds: 300), () {
+        if (mounted) _checkCameraPermission(requestIfDenied: false);
       });
+    } else {
+      unawaited(_setCameraRunning(false));
     }
+  }
+
+  Future<void> _setCameraRunning(bool running) {
+    _cameraLifecycle = _cameraLifecycle.then((_) async {
+      final controller = _scannerController;
+      if (!mounted || controller == null || !controller.value.isInitialized) {
+        return;
+      }
+      try {
+        if (running) {
+          if (!_hasPermission ||
+              _isProcessing ||
+              WidgetsBinding.instance.lifecycleState !=
+                  AppLifecycleState.resumed ||
+              ModalRoute.of(context)?.isCurrent == false) {
+            return;
+          }
+          await controller.start();
+        } else {
+          await controller.stop();
+        }
+      } catch (e) {
+        debugLog('Camera lifecycle update failed: $e');
+      }
+    });
+    return _cameraLifecycle;
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _resumeTimer?.cancel();
     _scannerController?.dispose();
     _inputController.dispose();
     super.dispose();
   }
 
-  Future<void> _checkCameraPermission() async {
-    if (!mounted) return;
-    setState(() {
-      _isCheckingPermission = true;
-      _permissionError = null;
-    });
+  Future<void> _checkCameraPermission({bool requestIfDenied = true}) async {
+    if (!mounted || _permissionCheckInFlight) return;
+    _permissionCheckInFlight = true;
+    if (requestIfDenied) {
+      setState(() {
+        _isCheckingPermission = true;
+        _permissionError = null;
+      });
+    }
 
     try {
       var status = await Permission.camera.status;
       if (!mounted) return;
-      debugLog('Camera permission initial status: $status');
-
-      // Handle granted or limited (iOS 14+ limited access is still usable for camera)
-      if (status.isGranted || status.isLimited) {
-        _initScanner();
-        setState(() {
-          _hasPermission = true;
-          _isCheckingPermission = false;
-        });
-        return;
-      }
-
-      // If denied, try to request permission
-      if (status.isDenied) {
+      if (status.isDenied && requestIfDenied) {
         status = await Permission.camera.request();
         if (!mounted) return;
-        debugLog('Camera permission after request: $status');
-
-        if (status.isGranted || status.isLimited) {
-          _initScanner();
-          setState(() {
-            _hasPermission = true;
-            _isCheckingPermission = false;
-          });
-          return;
-        }
       }
 
-      // Handle permanently denied
-      if (status.isPermanentlyDenied) {
-        setState(() {
-          _hasPermission = false;
-          _isCheckingPermission = false;
-          _permissionError =
-              S.of(context)?.qrcodeCameraPermissionDenied ??
-              'Camera permission was permanently denied. Please enable it in system settings.';
-        });
-        return;
+      final granted = status.isGranted || status.isLimited;
+      if (granted) {
+        // MobileScanner retains its original controller for its entire life.
+        // Replacing it on resume leaves the preview attached to a disposed one.
+        _scannerController ??= MobileScannerController(
+          detectionSpeed: DetectionSpeed.normal,
+          facing: CameraFacing.back,
+          torchEnabled: false,
+        );
+      } else {
+        await _setCameraRunning(false);
+        if (!mounted) return;
       }
-
-      // Handle restricted (iOS parental controls, etc.)
-      if (status.isRestricted) {
-        setState(() {
-          _hasPermission = false;
-          _isCheckingPermission = false;
-          _permissionError =
-              S.of(context)?.qrcodeCameraPermissionRestricted ??
-              'Camera access is restricted on this device.';
-        });
-        return;
-      }
-
-      // Fallback for any other status
       setState(() {
-        _hasPermission = false;
+        _hasPermission = granted;
         _isCheckingPermission = false;
-        _permissionError =
-            S.of(context)?.qrcodeCameraPermissionRequired ??
-            'Camera permission is required to scan QR code';
+        _permissionError = granted
+            ? null
+            : status.isPermanentlyDenied
+            ? (S.of(context)?.qrcodeCameraPermissionDenied ??
+                  'Camera permission was permanently denied. Please enable it in system settings.')
+            : status.isRestricted
+            ? (S.of(context)?.qrcodeCameraPermissionRestricted ??
+                  'Camera access is restricted on this device.')
+            : (S.of(context)?.qrcodeCameraPermissionRequired ??
+                  'Camera permission is required to scan QR code');
       });
+      if (granted) await _setCameraRunning(true);
     } catch (e) {
       if (!mounted) return;
       debugLog('Camera permission check error: $e');
       setState(() {
-        _hasPermission = false;
         _isCheckingPermission = false;
         _permissionError =
             S.of(context)?.qrcodePermissionCheckError(e.toString()) ??
             'Error checking permission: $e';
       });
+    } finally {
+      _permissionCheckInFlight = false;
     }
-  }
-
-  void _initScanner() {
-    _scannerController?.dispose();
-    _scannerController = MobileScannerController(
-      detectionSpeed: DetectionSpeed.normal,
-      facing: CameraFacing.back,
-      torchEnabled: false,
-    );
-    _torchEnabled = false;
   }
 
   void _onDetect(BarcodeCapture capture) {
@@ -476,7 +475,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
 
     if (!_hasPermission) {
       return Center(
-        child: Padding(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.all(32),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -513,8 +512,10 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 32),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 16,
+                runSpacing: 12,
                 children: [
                   ElevatedButton(
                     onPressed: _checkCameraPermission,
@@ -533,7 +534,6 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
                       S.of(context)?.qrcodeRetryPermission ?? 'Retry',
                     ),
                   ),
-                  const SizedBox(width: 16),
                   OutlinedButton(
                     onPressed: _openSettings,
                     style: OutlinedButton.styleFrom(

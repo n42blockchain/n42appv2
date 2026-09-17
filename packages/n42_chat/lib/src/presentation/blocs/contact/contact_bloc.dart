@@ -52,6 +52,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         },
         onError: (Object error) {
           debugLog('ContactBloc: Contacts stream error: $error');
+          if (!isClosed) add(const LoadFriendRequests());
         },
       );
 
@@ -69,30 +70,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         },
       );
 
-      final contacts = await _contactRepository.getContacts();
-      debugLog(
-        'ContactBloc: LoadContacts - Loaded ${contacts.length} contacts',
-      );
-      for (final contact in contacts) {
-        debugLog(
-          'ContactBloc: Contact userId=${contact.userId}, directRoomId=${contact.directRoomId}, remark=${contact.remark}',
-        );
-      }
-
-      final friendRequests = await _contactRepository
-          .getPendingFriendRequests();
-      final grouped = _groupContactsByLetter(contacts);
-
-      emit(
-        state.copyWith(
-          status: ContactStatus.loaded,
-          contacts: contacts,
-          filteredContacts: contacts,
-          friendRequests: friendRequests,
-          groupedContacts: grouped,
-          indexLetters: grouped.keys.toList()..sort(),
-        ),
-      );
+      await _refreshContactSnapshot(emit);
     } catch (e) {
       emit(
         state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
@@ -111,37 +89,45 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     }
 
     try {
-      final contacts = await _contactRepository.getContacts();
-      debugLog('ContactBloc: Loaded ${contacts.length} contacts');
-
-      // 打印备注信息
-      for (final c in contacts) {
-        if (c.remark != null && c.remark!.isNotEmpty) {
-          debugLog('ContactBloc: Contact ${c.userId} has remark: ${c.remark}');
-        }
-      }
-
-      final friendRequests = await _contactRepository
-          .getPendingFriendRequests();
-      final grouped = _groupContactsByLetter(contacts);
-
-      emit(
-        state.copyWith(
-          status: ContactStatus.loaded,
-          contacts: contacts,
-          filteredContacts: state.searchQuery.isEmpty
-              ? contacts
-              : state.filteredContacts,
-          friendRequests: friendRequests,
-          groupedContacts: grouped,
-          indexLetters: grouped.keys.toList()..sort(),
-        ),
-      );
+      await _refreshContactSnapshot(emit);
     } catch (e) {
       emit(
         state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
       );
     }
+  }
+
+  /// Invitations must remain available when an unrelated contact lookup fails.
+  /// Preserve whichever list could not be refreshed instead of clearing it.
+  Future<void> _refreshContactSnapshot(Emitter<ContactState> emit) async {
+    List<ContactEntity>? contacts;
+    List<FriendRequest>? requests;
+    Object? failure;
+    try {
+      contacts = await _contactRepository.getContacts();
+    } catch (e) {
+      failure = e;
+    }
+    try {
+      requests = await _contactRepository.getPendingFriendRequests();
+    } catch (e) {
+      failure ??= e;
+    }
+    final currentContacts = contacts ?? state.contacts;
+    final grouped = _groupContactsByLetter(currentContacts);
+    emit(
+      state.copyWith(
+        status: failure == null ? ContactStatus.loaded : ContactStatus.error,
+        errorMessage: failure?.toString(),
+        contacts: currentContacts,
+        filteredContacts: state.searchQuery.isEmpty
+            ? currentContacts
+            : state.filteredContacts,
+        friendRequests: requests ?? state.friendRequests,
+        groupedContacts: grouped,
+        indexLetters: grouped.keys.toList()..sort(),
+      ),
+    );
   }
 
   Future<void> _onSearchContacts(

@@ -133,11 +133,15 @@ class _ContactListPageState extends State<ContactListPage> {
                 }
               },
               builder: (context, state) {
-                if (state.isLoading) {
+                if (state.isLoading &&
+                    state.contacts.isEmpty &&
+                    state.friendRequests.isEmpty) {
                   return const N42Loading();
                 }
 
-                if (state.status == ContactStatus.error) {
+                if (state.status == ContactStatus.error &&
+                    state.contacts.isEmpty &&
+                    state.friendRequests.isEmpty) {
                   return N42EmptyState(
                     icon: Icons.error_outline,
                     title: S.of(context)?.commonLoadFailed ?? 'Load failed',
@@ -149,7 +153,9 @@ class _ContactListPageState extends State<ContactListPage> {
                   );
                 }
 
-                if (state.isLoaded) {
+                if (state.isLoaded ||
+                    state.contacts.isNotEmpty ||
+                    state.friendRequests.isNotEmpty) {
                   return _buildContactList(state, isDark);
                 }
 
@@ -1471,7 +1477,7 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
       ),
       body: BlocBuilder<ContactBloc, ContactState>(
         builder: (context, state) {
-          if (state.hasError) {
+          if (state.hasError && state.friendRequests.isEmpty) {
             return Center(
               child: TextButton(
                 onPressed: () =>
@@ -1480,7 +1486,7 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
               ),
             );
           }
-          if (!state.isLoaded) {
+          if (!state.isLoaded && state.friendRequests.isEmpty) {
             return const Center(child: CircularProgressIndicator());
           }
 

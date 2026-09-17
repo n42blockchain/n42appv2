@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../n42_chat.dart';
 import '../../blocs/moment/moment_bloc.dart';
+import '../../blocs/contact/contact_bloc.dart';
 import 'create_moment_page.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -22,7 +23,8 @@ import '../../../domain/repositories/moment_repository.dart';
 /// 滑走自动暂停；点屏暂停/播放；右侧点赞/评论计数，底部作者+文案。
 class VideoFeedPage extends StatefulWidget {
   final bool creatorActions;
-  const VideoFeedPage({super.key, this.creatorActions = false});
+  final String? userId;
+  const VideoFeedPage({super.key, this.creatorActions = false, this.userId});
 
   @override
   State<VideoFeedPage> createState() => _VideoFeedPageState();
@@ -70,7 +72,10 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
   Future<void> _load() async {
     final generation = ++_loadGeneration;
     try {
-      final moments = await getIt<IMomentRepository>().getMoments(limit: 50);
+      final repository = getIt<IMomentRepository>();
+      final moments = widget.userId == null
+          ? await repository.getMoments(limit: 50)
+          : await repository.getUserMoments(widget.userId!, limit: 50);
       final vids = moments.where((m) => m.hasVideo && !m.isDeleted).toList();
       if (mounted && generation == _loadGeneration) {
         setState(() {
@@ -136,10 +141,17 @@ class _VideoFeedPageState extends State<VideoFeedPage> {
           );
         }
       } else {
+        final contacts = context.read<ContactBloc?>();
         await Navigator.of(context).push<void>(
           MaterialPageRoute(
-            builder: (_) => BlocProvider(
-              create: (_) => MomentBloc(getIt<IMomentRepository>()),
+            builder: (_) => MultiBlocProvider(
+              providers: [
+                BlocProvider<MomentBloc>(
+                  create: (_) => MomentBloc(getIt<IMomentRepository>()),
+                ),
+                if (contacts != null)
+                  BlocProvider<ContactBloc>.value(value: contacts),
+              ],
               child: const CreateMomentPage(videoOnly: true),
             ),
           ),

@@ -1,3 +1,5 @@
+import 'package:n42_chat/src/presentation/pages/contact/contact_detail_page.dart';
+import 'package:n42_chat/src/presentation/widgets/common/n42_avatar.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -75,6 +77,24 @@ void main() {
 
   tearDown(() async {
     await momentStateController.close();
+  });
+
+  testWidgets('author avatar opens the correct contact profile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      _buildTestWidget(momentBloc: mockMomentBloc, moment: moment),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byWidgetPredicate((w) => w is N42Avatar && w.size == 48).first,
+    );
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<ContactDetailPage>(find.byType(ContactDetailPage)).userId,
+      '@author:server.com',
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets(

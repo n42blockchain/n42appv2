@@ -1,3 +1,4 @@
+import 'moment_author_navigation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -158,6 +159,12 @@ class _MomentDetailPageState extends State<MomentDetailPage> {
                                   name: moment.userName,
                                   imageUrl: moment.userAvatarUrl,
                                   size: 48,
+                                  onTap: () => openMomentAuthor(
+                                    context,
+                                    userId: moment.userId,
+                                    displayName: moment.userName,
+                                    avatarUrl: moment.userAvatarUrl,
+                                  ),
                                 ),
                                 const SizedBox(width: 12),
                                 Expanded(

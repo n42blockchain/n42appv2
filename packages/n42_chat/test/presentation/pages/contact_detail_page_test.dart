@@ -47,7 +47,7 @@ void main() {
     isFriend: true,
   );
 
-  setUp(() {
+  setUp(() async {
     SharedPreferences.setMockInitialValues({});
     mockContactBloc = MockContactBloc();
     contactStateController = StreamController<ContactState>.broadcast();
@@ -70,6 +70,7 @@ void main() {
       getIt.unregister<PreferencesDataSource>();
     }
     getIt.registerSingleton<PreferencesDataSource>(mockPreferencesDataSource);
+    await RemarkService.instance.refresh();
   });
 
   tearDown(() async {

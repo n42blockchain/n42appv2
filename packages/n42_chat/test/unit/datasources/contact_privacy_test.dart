@@ -343,8 +343,26 @@ void main() {
       await source.deleteMoment('private-post');
       verify(() => restricted.redactEvent('private-event')).called(1);
       verifyNever(() => base.redactEvent(any()));
+      expect(await source.getMoments(), isEmpty);
+      expect(await source.getUserMoments(me), isEmpty);
+      expect(await source.getMomentById('private-post'), isNull);
     },
   );
+
+  test('failed deletion does not suppress a still-existing post', () async {
+    final owned = room('own', me);
+    final post = event(MatrixMomentDataSource.momentEventType, me, {
+      'moment_id': 'post',
+      'content': 'Keep me',
+    }, id: 'post-event');
+    when(() => timelines['own']!.events).thenReturn([post]);
+    when(
+      () => owned.redactEvent('post-event'),
+    ).thenThrow(StateError('Offline'));
+    final source = MatrixMomentDataSource(manager);
+    await expectLater(source.deleteMoment('post'), throwsStateError);
+    expect((await source.getMoments()).single.id, 'post');
+  });
 
   for (final accountChanged in [false, true]) {
     test(

@@ -1,3 +1,4 @@
+import 'dart:async';
 // Tests for ContactRepositoryImpl — contacts retrieval and friend requests.
 
 import 'package:flutter_test/flutter_test.dart';
@@ -43,6 +44,58 @@ void main() {
       mockMomentDS,
     );
   });
+
+  test(
+    'watchContacts recovers on the next sync after a failed refresh',
+    () async {
+      final sync = StreamController<void>();
+      when(
+        () => mockContactDS.onContactsChanged,
+      ).thenAnswer((_) => sync.stream);
+      when(() => mockStorageDS.getContactRemarks()).thenAnswer((_) async => {});
+      when(() => mockContactDS.getDirectChatContacts()).thenReturn([]);
+      var attempts = 0;
+      when(() => mockContactDS.refreshDirectChatMembers()).thenAnswer((
+        _,
+      ) async {
+        if (attempts++ == 0) throw ContactMembershipUnavailable();
+      });
+      final error = Completer<void>();
+      final recovered = Completer<void>();
+      final subscription = repository.watchContacts().listen(
+        (_) => recovered.complete(),
+        onError: (Object _) => error.complete(),
+      );
+      await error.future;
+      sync.add(null);
+      await recovered.future;
+      expect(attempts, 2);
+      await subscription.cancel();
+      await sync.close();
+    },
+  );
+
+  test(
+    'member refresh failure does not hide an independently received invitation',
+    () async {
+      when(
+        () => mockContactDS.refreshDirectChatMembers(),
+      ).thenThrow(ContactMembershipUnavailable());
+      final incoming = MockRoom();
+      final user = MockUser();
+      when(() => incoming.id).thenReturn('!request:hs');
+      when(() => incoming.directChatMatrixID).thenReturn('@friend:hs');
+      when(
+        () => incoming.unsafeGetUserFromMemoryOrFallback('@friend:hs'),
+      ).thenReturn(user);
+      when(() => user.avatarUrl).thenReturn(null);
+      when(() => user.calcDisplayname()).thenReturn('Friend');
+      when(() => mockContactDS.getPendingInvites()).thenReturn([incoming]);
+      final requests = await repository.getPendingFriendRequests();
+      expect(requests.single.userId, '@friend:hs');
+      expect(requests.single.isOutgoing, isFalse);
+    },
+  );
 
   group('getContacts', () {
     test('returns empty list when no contacts', () async {

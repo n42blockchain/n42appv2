@@ -193,6 +193,56 @@ void main() {
 
   group('LoadContacts', () {
     blocTest<ContactBloc, ContactState>(
+      'incoming invitations load even when existing contact membership fails',
+      build: () {
+        when(
+          () => mockRepository.getContacts(),
+        ).thenThrow(StateError('Unavailable'));
+        when(
+          () => mockRepository.getPendingFriendRequests(),
+        ).thenAnswer((_) async => [_friendRequest1]);
+        return ContactBloc(mockRepository);
+      },
+      act: (bloc) => bloc.add(const LoadContacts()),
+      expect: () => [
+        isA<ContactState>().having(
+          (s) => s.status,
+          'status',
+          ContactStatus.loading,
+        ),
+        isA<ContactState>()
+            .having((s) => s.friendRequests, 'requests', [_friendRequest1])
+            .having((s) => s.status, 'status', ContactStatus.error),
+      ],
+    );
+
+    blocTest<ContactBloc, ContactState>(
+      'contact refresh succeeds independently of invitation lookup',
+      build: () {
+        when(
+          () => mockRepository.getContacts(),
+        ).thenAnswer((_) async => [_contact1]);
+        when(
+          () => mockRepository.getPendingFriendRequests(),
+        ).thenThrow(StateError('Unavailable'));
+        return ContactBloc(mockRepository);
+      },
+      seed: () => ContactState(
+        status: ContactStatus.loaded,
+        friendRequests: [_friendRequest1],
+      ),
+      act: (bloc) => bloc.add(const RefreshContacts()),
+      expect: () => [
+        isA<ContactState>()
+            .having((s) => s.contacts, 'contacts', [_contact1])
+            .having((s) => s.friendRequests, 'cached requests', [
+              _friendRequest1,
+            ]),
+      ],
+    );
+
+
+    blocTest<ContactBloc, ContactState>(
       'emits [loading, loaded] with contacts and friend requests on success',
       build: () {
         when(() => mockRepository.getContacts())

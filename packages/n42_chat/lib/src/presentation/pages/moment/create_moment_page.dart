@@ -12,6 +12,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../core/services/moment_location_resolver.dart';
 import '../../../domain/entities/moment_entity.dart';
 import '../../blocs/contact/contact_bloc.dart';
 import '../../blocs/moment/moment_bloc.dart';
@@ -46,6 +47,7 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   List<String> _visibilityUserIds = [];
   final ImagePicker _picker = ImagePicker();
   bool _pickingMedia = false;
+  bool _locating = false;
 
   @override
   void initState() {
@@ -471,6 +473,8 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
   }
 
   Future<void> _selectLocation() async {
+    if (_locating) return;
+    _locating = true;
     try {
       final permission = await Geolocator.checkPermission();
       final resolved = (permission == LocationPermission.denied)
@@ -489,16 +493,15 @@ class _CreateMomentPageState extends State<CreateMomentPage> {
         ),
       );
       if (!mounted) return;
-      setState(() {
-        _location = MomentLocation(
-          latitude: pos.latitude,
-          longitude: pos.longitude,
-        );
-      });
+      final location = await resolveMomentLocation(pos.latitude, pos.longitude);
+      if (!mounted) return;
+      setState(() => _location = location);
     } catch (e) {
       debugLog('_selectLocation error: $e');
       if (!mounted) return;
       setState(() => _location = null);
+    } finally {
+      _locating = false;
     }
   }
 

@@ -7,6 +7,12 @@ import '../../../core/utils/matrix_utils.dart';
 import 'matrix_client_manager.dart';
 import 'contact_privacy_service.dart';
 import 'message/direct_chat_send_guard.dart';
+import '../../../core/utils/debug_log.dart';
+
+class ContactMembershipUnavailable extends StateError {
+  ContactMembershipUnavailable()
+    : super('Contact membership could not be refreshed');
+}
 
 /// Matrix联系人数据源
 ///
@@ -40,15 +46,27 @@ class MatrixContactDataSource {
               room.directChatMatrixID != accountId,
         )
         .toList();
+    var failures = 0;
     for (var offset = 0; offset < rooms.length; offset += 8) {
       await Future.wait(
         rooms.skip(offset).take(8).map((room) async {
           final peer = room.directChatMatrixID;
-          if (peer != null) await resolveDirectPeer(room, peer);
+          if (peer == null) return;
+          try {
+            await resolveDirectPeer(room, peer);
+          } catch (_) {
+            failures++;
+            debugLog(
+              'Contact member refresh failed; keeping other rooms available',
+            );
+          }
         }),
       );
       if (!identical(client, _client) || accountId != client.userID)
         throw StateError('Account changed');
+    }
+    if (failures > 0 && getDirectChatContacts().isEmpty) {
+      throw ContactMembershipUnavailable();
     }
   }
 
@@ -178,15 +196,59 @@ class MatrixContactDataSource {
     return _client?.getDirectChatFromUserId(userId);
   }
 
-  /// 创建或获取与用户的私聊
-  Future<String> startDirectChat(String userId, {bool encrypted = true}) async {
-    if (_client == null) {
-      throw Exception('Matrix client not initialized');
+  matrix.Client? _chatOperationClient;
+  String? _chatOperationAccount;
+  final Map<String, Future<String>> _startingChats = {};
+  Future<void> _chatQueue = Future<void>.value();
+
+  /// Coalesce repeated scans and serialize m.direct writes across different peers.
+  Future<String> startDirectChat(String userId, {bool encrypted = true}) {
+    final client = _client;
+    final account = client?.userID;
+    if (client == null || account == null) {
+      return Future.error(StateError('Matrix client not initialized'));
+    }
+    if (!identical(client, _chatOperationClient) ||
+        account != _chatOperationAccount) {
+      _chatOperationClient = client;
+      _chatOperationAccount = account;
+      _startingChats.clear();
+      _chatQueue = Future<void>.value();
+    }
+    final pending = _startingChats[userId];
+    if (pending != null) return pending;
+    late final Future<String> operation;
+    operation = _chatQueue
+        .then((_) => _startDirectChat(client, account, userId, encrypted))
+        .whenComplete(() {
+          if (identical(_startingChats[userId], operation)) {
+            _startingChats.remove(userId);
+          }
+        });
+    _startingChats[userId] = operation;
+    _chatQueue = operation.then<void>(
+      (_) {},
+      onError: (Object _, StackTrace _) {},
+    );
+    return operation;
+  }
+
+  Future<String> _startDirectChat(
+    matrix.Client client,
+    String account,
+    String userId,
+    bool encrypted,
+  ) async {
+    void checkSession() {
+      if (!identical(client, _client) || account != client.userID) {
+        throw StateError('Account changed');
+      }
     }
 
-    final client = _client!;
-    if (!userId.startsWith('@') || !userId.contains(':'))
+    checkSession();
+    if (!userId.startsWith('@') || !userId.contains(':')) {
       throw ArgumentError('Invalid user ID');
+    }
     // Prefer an accepted room over a more recently active abandoned invitation.
     final candidates = client.rooms
         .where((room) => room.directChatMatrixID == userId)
@@ -199,6 +261,7 @@ class MatrixContactDataSource {
       }
       if (room.membership != matrix.Membership.join) continue;
       final peer = await resolveDirectPeer(room, userId);
+      checkSession();
       if (peer.content['membership'] == 'join') return room.id;
       if (peer.content['membership'] == 'invite') pending ??= room;
       if (peer.content['membership'] == 'ban')
@@ -208,14 +271,25 @@ class MatrixContactDataSource {
       if (pending.membership == matrix.Membership.invite) {
         // Explicitly adding someone who has already invited us is acceptance.
         await acceptInvite(pending.id);
+        checkSession();
       }
       return pending.id;
     }
-    return await client.startDirectChat(
+    checkSession();
+    final roomId = await client.startDirectChat(
       userId,
       enableEncryption: encrypted,
       skipExistingChat: candidates.isNotEmpty,
     );
+    checkSession();
+    // The SDK acknowledges m.direct remotely before /sync updates this cache.
+    // Reflect that acknowledged write so a second scan cannot create another room.
+    final ids = {...?client.directChats[userId], roomId}.toList();
+    client.accountData['m.direct'] = matrix.BasicEvent(
+      type: 'm.direct',
+      content: {...client.directChats, userId: ids},
+    );
+    return roomId;
   }
 
   /// 忽略用户
@@ -375,15 +449,39 @@ class MatrixContactDataSource {
 
   /// 接受邀请
   Future<void> acceptInvite(String roomId) async {
-    final room = _client?.getRoomById(roomId);
-    if (room == null) return;
+    final client = _client;
+    final account = client?.userID;
+    final room = client?.getRoomById(roomId);
+    if (client == null || account == null || room == null) {
+      throw StateError('Friend request is no longer available');
+    }
+    void checkSession() {
+      if (!identical(client, _client) || account != client.userID) {
+        throw StateError('Account changed');
+      }
+    }
+
     final peer = room.directChatMatrixID;
     await room.join();
-    if (peer != null) await room.addToDirectChat(peer);
+    checkSession();
+    if (peer != null) {
+      await room.addToDirectChat(peer);
+      checkSession();
+      // Once joined, the SDK can no longer infer the peer from the invitation.
+      // Preserve the acknowledged mapping until account data arrives in /sync.
+      client.accountData['m.direct'] = matrix.BasicEvent(
+        type: 'm.direct',
+        content: {
+          ...client.directChats,
+          peer: {...?client.directChats[peer], roomId}.toList(),
+        },
+      );
+    }
     if (room.membership != matrix.Membership.join) {
-      await _client!
+      await client
           .waitForRoomInSync(roomId, join: true)
           .timeout(const Duration(seconds: 20));
+      checkSession();
     }
     await refreshDirectChatMembers();
   }

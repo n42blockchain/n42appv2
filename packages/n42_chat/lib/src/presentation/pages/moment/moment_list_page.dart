@@ -1,3 +1,4 @@
+import 'moment_author_navigation.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -329,6 +330,14 @@ class _MomentListViewState extends State<_MomentListView> {
                   imageUrl: _isUserMode ? widget.userAvatarUrl : _myAvatarUrl,
                   size: 64,
                   borderRadius: 6,
+                  onTap: !_isUserMode
+                      ? null
+                      : () => openMomentAuthor(
+                          context,
+                          userId: widget.userId!,
+                          displayName: widget.userName ?? widget.userId!,
+                          avatarUrl: widget.userAvatarUrl,
+                        ),
                 ),
               ),
             ],
@@ -339,10 +348,16 @@ class _MomentListViewState extends State<_MomentListView> {
   }
 
   void _openCreateMoment(BuildContext context) {
+    final contacts = context.read<ContactBloc?>();
+    final moments = context.read<MomentBloc>();
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => BlocProvider.value(
-          value: context.read<MomentBloc>(),
+        builder: (_) => MultiBlocProvider(
+          providers: [
+            BlocProvider<MomentBloc>.value(value: moments),
+            if (contacts != null)
+              BlocProvider<ContactBloc>.value(value: contacts),
+          ],
           child: const CreateMomentPage(),
         ),
       ),
@@ -395,6 +410,12 @@ class _MomentTile extends StatelessWidget {
             name: moment.userName,
             imageUrl: moment.userAvatarUrl,
             size: 44,
+            onTap: () => openMomentAuthor(
+              context,
+              userId: moment.userId,
+              displayName: moment.userName,
+              avatarUrl: moment.userAvatarUrl,
+            ),
           ),
 
           const SizedBox(width: 12),

@@ -84,6 +84,62 @@ void main() {
     home: BlocProvider<ContactBloc>.value(value: contacts, child: page),
   );
 
+  testWidgets('incoming request stays accessible when contacts fail to load', (
+    tester,
+  ) async {
+    when(() => contacts.state).thenReturn(
+      ContactState(
+        status: ContactStatus.error,
+        errorMessage: 'Membership unavailable',
+        friendRequests: [
+          FriendRequest(id: '!request:hs', userId: '@bob:hs', userName: 'Bob'),
+        ],
+      ),
+    );
+    await tester.pumpWidget(app(const ContactListPage()));
+    await tester.pumpAndSettle();
+    expect(find.text('New Friends'), findsOneWidget);
+    await tester.tap(find.text('New Friends'));
+    await tester.pumpAndSettle();
+    expect(find.text('Bob'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final status in [
+    ContactStatus.loading,
+    ContactStatus.error,
+    ContactStatus.chatStarted,
+  ]) {
+    testWidgets('cached contacts remain visible during $status', (
+      tester,
+    ) async {
+      when(() => contacts.state).thenReturn(
+        ContactState(
+          status: status,
+          contacts: const [friend],
+          groupedContacts: const {
+            'A': [friend],
+          },
+          indexLetters: const ['A'],
+        ),
+      );
+      await tester.pumpWidget(app(const ContactListPage()));
+      await tester.pumpAndSettle();
+      await tester.scrollUntilVisible(
+        find.text('Alice'),
+        250,
+        scrollable: find
+            .descendant(
+              of: find.byType(CustomScrollView),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      expect(find.text('Alice'), findsOneWidget);
+      expect(find.text('No contacts'), findsNothing);
+    });
+  }
+
   testWidgets('tapping a contact opens their profile without creating a chat', (
     tester,
   ) async {

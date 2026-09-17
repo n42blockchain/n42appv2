@@ -51,8 +51,28 @@ import '../../../packages/n42_chat/test/presentation/pages/moment/moment_compose
 import '../../../packages/n42_chat/test/presentation/pages/moment/video_feed_refresh_test.dart'
     as video_refresh;
 
+import '../../../packages/n42_chat/test/presentation/pages/moment/moment_list_page_test.dart'
+    as moment_list;
+import '../../../packages/n42_chat/test/presentation/pages/moment/screenshot_feedback_test.dart'
+    as screenshot_feedback;
+import '../../../packages/n42_chat/test/unit/blocs/moment_bloc_test.dart'
+    as moment_bloc;
+import '../../../packages/n42_chat/test/unit/blocs/moment_bloc_extended_test.dart'
+    as moment_bloc_extended;
+
+import '../../../packages/n42_chat/test/presentation/pages/scan_qr_permission_test.dart'
+    as scanner_permissions;
+import '../../../packages/n42_chat/test/unit/blocs/contact_bloc_test.dart'
+    as contact_bloc;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat camera permissions', scanner_permissions.main);
+  group('Chat contact loading', contact_bloc.main);
+  group('Chat moment list actions', moment_list.main);
+  group('Chat screenshot feedback', screenshot_feedback.main);
+  group('Chat moment operations', moment_bloc.main);
+  group('Chat moment refresh operations', moment_bloc_extended.main);
   group('Chat composer audience and lifecycle', composer_audit.main);
   group('Chat video refresh permissions', video_refresh.main);
   group('Chat video creator navigation', discovery.main);

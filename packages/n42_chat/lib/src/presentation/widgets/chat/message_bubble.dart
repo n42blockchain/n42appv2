@@ -142,6 +142,12 @@ class MessageBubble extends StatelessWidget {
                           const SizedBox(width: 4),
                         ],
 
+                        // 发送中指示器（自己的消息，在气泡左侧）
+                        if (isSelf && status == MessageStatus.sending) ...[
+                          _buildSendingIndicator(context),
+                          const SizedBox(width: 4),
+                        ],
+
                         // 气泡或无气泡内容 - 使用 Flexible 防止溢出
                         Flexible(
                           child: ConstrainedBox(
@@ -151,12 +157,6 @@ class MessageBubble extends StatelessWidget {
                                 : _buildBubble(isDark),
                           ),
                         ),
-
-                        // 发送中指示器（自己的消息，在气泡右侧）
-                        if (isSelf && status == MessageStatus.sending) ...[
-                          const SizedBox(width: 4),
-                          _buildSendingIndicator(context),
-                        ],
                       ],
                     ),
                   ],
@@ -187,40 +187,40 @@ class MessageBubble extends StatelessWidget {
       button: onAvatarTap != null,
       excludeSemantics: true,
       child: GestureDetector(
-      onTap: onAvatarTap,
-      onDoubleTap: onAvatarDoubleTap,
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: AppColors.placeholder,
-          borderRadius: BorderRadius.circular(4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 4,
-              offset: const Offset(0, 1),
-            ),
-          ],
+        onTap: onAvatarTap,
+        onDoubleTap: onAvatarDoubleTap,
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: AppColors.placeholder,
+            borderRadius: BorderRadius.circular(4),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.08),
+                blurRadius: 4,
+                offset: const Offset(0, 1),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: avatarUrl != null && avatarUrl!.isNotEmpty
+              ? CachedNetworkImage(
+                  imageUrl: avatarUrl!,
+                  fit: BoxFit.cover,
+                  memCacheWidth: 80,
+                  memCacheHeight: 80,
+                  httpHeaders: headers,
+                  placeholder: (context, url) => _buildDefaultAvatar(),
+                  errorWidget: (context, url, error) {
+                    debugLog(
+                      'MessageBubble: Failed to load avatar: $url, error: $error',
+                    );
+                    return _buildDefaultAvatar();
+                  },
+                )
+              : _buildDefaultAvatar(),
         ),
-        clipBehavior: Clip.antiAlias,
-        child: avatarUrl != null && avatarUrl!.isNotEmpty
-            ? CachedNetworkImage(
-                imageUrl: avatarUrl!,
-                fit: BoxFit.cover,
-                memCacheWidth: 80,
-                memCacheHeight: 80,
-                httpHeaders: headers,
-                placeholder: (context, url) => _buildDefaultAvatar(),
-                errorWidget: (context, url, error) {
-                  debugLog(
-                    'MessageBubble: Failed to load avatar: $url, error: $error',
-                  );
-                  return _buildDefaultAvatar();
-                },
-              )
-            : _buildDefaultAvatar(),
-      ),
       ),
     );
   }

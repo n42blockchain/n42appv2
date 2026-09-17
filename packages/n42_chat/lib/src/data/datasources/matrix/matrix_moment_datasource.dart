@@ -42,6 +42,20 @@ class MatrixMomentDataSource {
 
   MatrixMomentDataSource(this._clientManager);
 
+  final Set<String> _deletedMomentIds = {};
+  matrix.Client? _cacheClient;
+  String? _cacheAccount;
+  void _checkCacheScope() {
+    if (!identical(_cacheClient, _client) || _cacheAccount != _currentUserId) {
+      _cacheClient = _client;
+      _cacheAccount = _currentUserId;
+      _cachedMoments.clear();
+      _momentRoomIndex.clear();
+      _momentEventIndex.clear();
+      _deletedMomentIds.clear();
+    }
+  }
+
   matrix.Client? get _client => _clientManager.client;
 
   String? get _currentUserId => _client?.userID;
@@ -190,6 +204,7 @@ class MatrixMomentDataSource {
     MomentVisibility visibility = MomentVisibility.public,
     List<String> visibilityUserIds = const [],
   }) async {
+    _checkCacheScope();
     final client = _client;
     final account = client?.userID;
     void checkSession() {
@@ -369,6 +384,7 @@ class MatrixMomentDataSource {
     int limit = 20,
     String? beforeId,
   }) async {
+    _checkCacheScope();
     final rooms = await _getFriendMomentRooms();
     final moments = <MomentEntity>[];
 
@@ -387,6 +403,7 @@ class MatrixMomentDataSource {
           if (event.type != momentEventType) continue;
 
           final momentId = event.content['moment_id'] as String?;
+          if (_deletedMomentIds.contains(momentId)) continue;
           if (momentId != null) {
             _momentRoomIndex[momentId] = room.id;
             _momentEventIndex[momentId] = event.eventId;
@@ -412,9 +429,15 @@ class MatrixMomentDataSource {
     }
 
     _cachedMoments.clear();
-    _cachedMoments.addAll(moments);
+    _cachedMoments.addAll(
+      moments.where((m) => !_deletedMomentIds.contains(m.id)),
+    );
 
-    return moments.skip(startIndex).take(limit).toList();
+    return moments
+        .where((m) => !_deletedMomentIds.contains(m.id))
+        .skip(startIndex)
+        .take(limit)
+        .toList();
   }
 
   /// 获取用户的动态（直接查询该用户的 moment 房间）
@@ -452,6 +475,8 @@ class MatrixMomentDataSource {
 
   /// 获取单条动态
   Future<MomentEntity?> getMomentById(String momentId) async {
+    _checkCacheScope();
+    if (_deletedMomentIds.contains(momentId)) return null;
     // 先从缓存查找
     final cached = _cachedMoments.where((m) => m.id == momentId).firstOrNull;
     if (cached != null) {
@@ -478,27 +503,27 @@ class MatrixMomentDataSource {
 
   /// 删除动态（使用索引定位 eventId）
   Future<void> deleteMoment(String momentId) async {
+    _checkCacheScope();
     final room = await _findRoomForMoment(momentId);
     if (room == null || !_privacy.isOwn(room)) {
       throw StateError('Owned moment not found');
     }
 
     try {
-      // Use cached eventId if available
-      final eventId = _momentEventIndex[momentId];
-      if (eventId != null) {
-        await room.redactEvent(eventId);
-      } else {
-        // Fallback: search in timeline
+      var eventId = _momentEventIndex[momentId];
+      if (eventId == null) {
         final timeline = await room.getTimeline();
         for (final event in timeline.events) {
-          if (event.type != momentEventType) continue;
-          if (event.content['moment_id'] == momentId) {
-            await room.redactEvent(event.eventId);
+          if (event.type == momentEventType &&
+              event.content['moment_id'] == momentId) {
+            eventId = event.eventId;
             break;
           }
         }
       }
+      if (eventId == null) throw StateError('Moment event not found');
+      await room.redactEvent(eventId);
+      _deletedMomentIds.add(momentId);
       _cachedMoments.removeWhere((m) => m.id == momentId);
       _momentRoomIndex.remove(momentId);
       _momentEventIndex.remove(momentId);

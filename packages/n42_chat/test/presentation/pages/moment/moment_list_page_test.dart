@@ -1,3 +1,6 @@
+import 'package:n42_chat/src/domain/entities/contact_entity.dart';
+import 'package:n42_chat/src/presentation/pages/contact/contact_detail_page.dart';
+import 'package:n42_chat/src/presentation/widgets/common/n42_avatar.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -82,6 +85,50 @@ void main() {
   tearDown(() async {
     await momentStateController.close();
     await getIt.reset();
+  });
+
+  testWidgets(
+    'publishing from Moments retains friends for audience selection',
+    (tester) async {
+      when(() => mockContactBloc.state).thenReturn(
+        const ContactState(
+          status: ContactStatus.loaded,
+          contacts: [
+            ContactEntity(
+              userId: '@alice:hs',
+              displayName: 'Alice',
+              isFriend: true,
+            ),
+          ],
+        ),
+      );
+      await tester.pumpWidget(_buildTestWidget(contactBloc: mockContactBloc));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.camera_alt_outlined));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Public'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Selected Friends'));
+      await tester.pumpAndSettle();
+      expect(find.text('Alice'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('author avatar opens the correct contact profile', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_buildTestWidget(contactBloc: mockContactBloc));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byWidgetPredicate((w) => w is N42Avatar && w.size == 44),
+    );
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<ContactDetailPage>(find.byType(ContactDetailPage)).userId,
+      '@me:server.com',
+    );
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets(

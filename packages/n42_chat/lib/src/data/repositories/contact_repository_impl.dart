@@ -48,17 +48,20 @@ class ContactRepositoryImpl implements IContactRepository {
   }
 
   @override
-  Stream<List<ContactEntity>> watchContacts() async* {
-    // 初始数据
-    yield await getContacts();
-
-    // 监听变化
-    final stream = _contactDataSource.onContactsChanged;
-    if (stream != null) {
-      await for (final _ in stream) {
-        yield await getContacts();
-      }
-    }
+  Stream<List<ContactEntity>> watchContacts() {
+    // asyncMap emits a failed refresh as an error without ending the sync stream.
+    return Stream<void>.multi((controller) {
+      controller.add(null);
+      final subscription = _contactDataSource.onContactsChanged?.listen(
+        (_) => controller.add(null),
+        onError: controller.addError,
+        onDone: controller.close,
+      );
+      if (subscription == null) controller.close();
+      controller.onCancel = () async {
+        await subscription?.cancel();
+      };
+    }).asyncMap((_) => getContacts());
   }
 
   @override
@@ -166,7 +169,11 @@ class ContactRepositoryImpl implements IContactRepository {
 
   @override
   Future<List<FriendRequest>> getPendingFriendRequests() async {
-    await _contactDataSource.refreshDirectChatMembers();
+    try {
+      await _contactDataSource.refreshDirectChatMembers();
+    } on ContactMembershipUnavailable {
+      // Incoming stripped invitations are independently available from /sync.
+    }
     final incoming = _contactDataSource.getPendingInvites();
     final outgoing = _contactDataSource.getOutgoingInvites();
     final invites = [...incoming, ...outgoing];

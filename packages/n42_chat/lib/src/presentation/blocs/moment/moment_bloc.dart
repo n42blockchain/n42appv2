@@ -60,7 +60,9 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
 
       emit(
         state.copyWith(
-          moments: moments,
+          moments: moments
+              .where((m) => !_deletedMomentIds.contains(m.id))
+              .toList(),
           isLoading: false,
           hasMore: moments.length >= event.limit,
           lastMomentId: moments.isNotEmpty ? moments.last.id : null,
@@ -98,7 +100,10 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
 
       emit(
         state.copyWith(
-          moments: [...state.moments, ...moreMoments],
+          moments: [
+            ...state.moments,
+            ...moreMoments,
+          ].where((m) => !_deletedMomentIds.contains(m.id)).toList(),
           isLoadingMore: false,
           hasMore: moreMoments.length >= 20,
           lastMomentId: moreMoments.isNotEmpty
@@ -126,7 +131,9 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
 
       emit(
         state.copyWith(
-          moments: moments,
+          moments: moments
+              .where((m) => !_deletedMomentIds.contains(m.id))
+              .toList(),
           isLoading: false,
           hasMore: moments.length >= event.limit,
         ),
@@ -247,6 +254,8 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
     }
   }
 
+  final Set<String> _deletedMomentIds = {};
+
   /// 删除动态
   Future<void> _onDeleteMoment(
     DeleteMoment event,
@@ -254,6 +263,7 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
   ) async {
     try {
       await _momentRepository.deleteMoment(event.momentId);
+      _deletedMomentIds.add(event.momentId);
 
       emit(
         state.copyWith(
@@ -329,7 +339,12 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
       }).toList();
 
       emit(
-        state.copyWith(moments: revertedMoments, errorMessage: e.toString()),
+        state.copyWith(
+          moments: revertedMoments
+              .where((m) => !_deletedMomentIds.contains(m.id))
+              .toList(),
+          errorMessage: e.toString(),
+        ),
       );
     } finally {
       _pendingLikeOps.remove(event.momentId);
@@ -368,7 +383,12 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
     } catch (e) {
       // 回滚到原始状态（恢复完整的 likes 列表）
       emit(
-        state.copyWith(moments: originalMoments, errorMessage: e.toString()),
+        state.copyWith(
+          moments: originalMoments
+              .where((m) => !_deletedMomentIds.contains(m.id))
+              .toList(),
+          errorMessage: e.toString(),
+        ),
       );
     } finally {
       _pendingLikeOps.remove(event.momentId);
@@ -484,7 +504,13 @@ class MomentBloc extends Bloc<MomentEvent, MomentState> {
 
   /// 动态列表更新
   void _onMomentsUpdated(MomentsUpdated event, Emitter<MomentState> emit) {
-    emit(state.copyWith(moments: event.moments));
+    emit(
+      state.copyWith(
+        moments: event.moments
+            .where((m) => !_deletedMomentIds.contains(m.id))
+            .toList(),
+      ),
+    );
   }
 
   /// 标记已读

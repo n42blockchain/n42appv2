@@ -22,6 +22,7 @@ import '../../blocs/contact/contact_event.dart';
 import '../../blocs/contact/contact_state.dart';
 import '../../widgets/common/n42_avatar.dart';
 import '../moment/moment_list_page.dart';
+import '../moment/video_feed_page.dart';
 import 'common_groups_page.dart';
 import 'contact_permissions_page.dart';
 import 'contact_settings_page.dart';
@@ -80,6 +81,29 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
     _remarkSubscription = RemarkService.instance.onRemarkUpdated.listen(
       _handleRemarkUpdate,
     );
+  }
+
+  bool _openingConversation = false;
+  Future<void> _openConversation() async {
+    if (_openingConversation) return;
+    _openingConversation = true;
+    try {
+      final roomId =
+          _contact?.directRoomId ??
+          await getIt<IContactRepository>().startDirectChat(widget.userId);
+      if (!mounted) return;
+      await N42Chat.openConversation(roomId, context: context);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+          ),
+        );
+      }
+    } finally {
+      _openingConversation = false;
+    }
   }
 
   bool _startingCall = false;
@@ -391,8 +415,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
               _buildActionButton(
                 icon: Icons.chat_bubble_outline,
                 label: S.of(context)?.commonSendMessage ?? 'Message',
-                onTap:
-                    widget.onSendMessage ?? () => Navigator.of(context).pop(),
+                onTap: widget.onSendMessage ?? _openConversation,
               ),
 
               const SizedBox(height: 12),
@@ -505,70 +528,23 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   }
 
   Widget _buildVideoSection(Color textColor, Color secondaryTextColor) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                S.of(context)?.contactVideoChannel ?? 'Video Channel',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyle(fontSize: 16, height: 1.3, color: textColor),
-              ),
-              const SizedBox(width: 24),
-              Expanded(
-                child: Text(
-                  _effectiveDisplayName,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(fontSize: 16, height: 1.3, color: textColor),
-                ),
-              ),
-            ],
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        title: Text(
+          S.of(context)?.contactVideoChannel ?? 'Video Channel',
+          style: TextStyle(color: textColor),
+        ),
+        subtitle: Text(
+          _effectiveDisplayName,
+          style: TextStyle(color: secondaryTextColor),
+        ),
+        trailing: Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
+        onTap: () => Navigator.of(context).push<void>(
+          MaterialPageRoute(
+            builder: (_) => VideoFeedPage(userId: widget.userId),
           ),
-          const SizedBox(height: 12),
-          // 视频缩略图列表
-          SizedBox(
-            height: 80,
-            child: Row(
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 5,
-                    separatorBuilder: (_, _) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      return Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade800,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Stack(
-                          children: [
-                            Center(
-                              child: Icon(
-                                Icons.play_arrow,
-                                color: Colors.white54,
-                                size: 24,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
-              ],
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

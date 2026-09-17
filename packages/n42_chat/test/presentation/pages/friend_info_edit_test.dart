@@ -105,6 +105,25 @@ void main() {
       expect((await store.load())['notes'], 'Meet on Friday');
     },
   );
+  testWidgets('multiple friend tags can be selected and saved together', (
+    tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'tags_data': jsonEncode([
+        {'name': 'Family', 'contactIds': <String>[]},
+        {'name': 'Work', 'contactIds': <String>[]},
+      ]),
+    });
+    await open(tester);
+    await tester.tap(find.text('Tags'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Family'));
+    await tester.tap(find.text('Work'));
+    await tester.tap(find.text('Confirm'));
+    await tester.pumpAndSettle();
+    expect((await store.load())['tags'], unorderedEquals(['Family', 'Work']));
+  });
+
   testWidgets('tag confirmation persists selection', (tester) async {
     await open(tester);
     await tester.tap(find.text('Tags'));
