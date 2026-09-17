@@ -11,6 +11,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+
+CoinModel _coin(
+  String symbol, {
+  String? coinType,
+  double value = 0,
+  double change = 0,
+  bool contract = false,
+  bool aggregated = false,
+}) {
+  final chain = coinType ?? symbol;
+  return CoinModel()
+    ..coin = {
+      'coinType': chain,
+      'miniName': symbol,
+      'symbol': symbol,
+      'name': symbol,
+      'isContract': contract,
+      'isAggregated': aggregated,
+    }
+    ..value = value
+    ..percentage = change;
+}
 
 class _Market extends MarketApi {
   @override
@@ -173,4 +196,107 @@ void main() {
       expect(calls, 0);
     },
   );
+
+  group('real wallet sorting and pinning', () {
+    test('asset, name and change controls cycle independently', () {
+      final eth = _coin('ETH', value: 20, change: -5);
+      final btc = _coin('BTC', value: 30, change: 2);
+      final sol = _coin('SOL', value: 10, change: 8);
+      wallet.coinList = [eth, btc, sol];
+
+      wallet.walletInfo.coinSort = {'assets': -1, 'name': -1, 'change': -1};
+      wallet.setCoinSortAssets('assets');
+      expect(wallet.walletInfo.coinSort, {
+        'assets': 1,
+        'name': -1,
+        'change': -1,
+      });
+      expect(wallet.coinList, [sol, eth, btc]);
+      wallet.setCoinSortAssets('assets');
+      expect(wallet.coinList, [btc, eth, sol]);
+      wallet.setCoinSortAssets('assets');
+      expect(wallet.walletInfo.coinSort['assets'], -1);
+
+      wallet.setCoinSortAssets('name');
+      expect(wallet.coinList.map((c) => c.coin['miniName']), [
+        'SOL',
+        'ETH',
+        'BTC',
+      ]);
+      expect(wallet.walletInfo.coinSort['assets'], -1);
+      wallet.setCoinSortAssets('name');
+      expect(wallet.coinList.map((c) => c.coin['miniName']), [
+        'BTC',
+        'ETH',
+        'SOL',
+      ]);
+
+      wallet.setCoinSortAssets('change');
+      expect(wallet.coinList, [sol, btc, eth]);
+      expect(wallet.walletInfo.coinSort['name'], -1);
+      wallet.setCoinSortAssets('change');
+      expect(wallet.coinList, [eth, btc, sol]);
+      wallet.setCoinSortAssets('change');
+      expect(wallet.walletInfo.coinSort['change'], -1);
+      expect(wallet.sortString('BTC', 'ETH'), lessThan(0));
+    });
+
+    test(
+      'pinning uses chain-aware keys and remains above active sort',
+      () async {
+        final eth = _coin('ETH', value: 30);
+        final usdt = _coin('USDT', coinType: 'ETH', value: 1, contract: true);
+        final sol = _coin('SOL', value: 20);
+        wallet.coinList = [eth, usdt, sol];
+        wallet.walletInfo.coinSort = {'assets': 0, 'name': -1, 'change': -1};
+        var notifications = 0;
+        wallet.addListener(() => notifications++);
+
+        wallet.togglePinCoin(usdt);
+        await Future<void>.delayed(Duration.zero);
+        expect(usdt.isPinned, isTrue);
+        expect(wallet.walletInfo.pinnedCoins, ['ETH_USDT']);
+        expect(wallet.coinList.first, same(usdt));
+        expect(wallet.coinList.skip(1), [eth, sol]);
+        expect(notifications, 1);
+
+        wallet.togglePinCoin(usdt);
+        await Future<void>.delayed(Duration.zero);
+        expect(usdt.isPinned, isFalse);
+        expect(wallet.walletInfo.pinnedCoins, isEmpty);
+        expect(wallet.coinList, [eth, sol, usdt]);
+        expect(notifications, 2);
+      },
+    );
+
+    test('pin guards reject aggregate, invalid and over-cap entries', () {
+      final aggregate = _coin('USDT', aggregated: true);
+      final invalid = _coin('', coinType: '');
+      wallet.togglePinCoin(aggregate);
+      wallet.togglePinCoin(invalid);
+      expect(wallet.walletInfo.pinnedCoins, isEmpty);
+      expect(aggregate.isPinned, isFalse);
+      expect(invalid.isPinned, isFalse);
+
+      wallet.walletInfo.pinnedCoins = List.generate(200, (i) => 'PIN_$i');
+      final extra = _coin('EXTRA');
+      wallet.togglePinCoin(extra);
+      expect(wallet.walletInfo.pinnedCoins, hasLength(200));
+      expect(extra.isPinned, isFalse);
+    });
+
+    test('pinned coins keep stable relative order', () async {
+      final first = _coin('DOGE');
+      final second = _coin('ETH');
+      final third = _coin('BTC');
+      wallet.coinList = [first, second, third];
+      wallet.walletInfo.coinSort = {'assets': -1, 'name': -1, 'change': -1};
+
+      wallet.togglePinCoin(third);
+      wallet.togglePinCoin(second);
+      await Future<void>.delayed(Duration.zero);
+      expect(wallet.coinList, [third, second, first]);
+      expect(wallet.walletInfo.pinnedCoins, ['BTC', 'ETH']);
+    });
+  });
 }

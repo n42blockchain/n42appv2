@@ -421,4 +421,124 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  Future<void> mountCoinList(
+    WidgetTester tester, {
+    required WalletActionProvider wallet,
+    required ValueNotifier<String> query,
+    double threshold = 0,
+    VoidCallback? onShowAll,
+    bool settle = true,
+  }) async {
+    tester.view.physicalSize = const Size(390, 844);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(
+      wrapForTest(
+        CustomScrollView(
+          slivers: [
+            WalletCoinListSliver(
+              waValue: wallet,
+              smallAssetsThreshold: threshold,
+              searchQuery: query,
+              discoveredTokens: const [],
+              onDiscoveryDismiss: () {},
+              onDiscoveryAdded: () {},
+              onShowAllTap: onShowAll ?? () {},
+              coinItemBuilder: (coin, key, group) => Text(
+                '$key:${coin.coin['miniName']}:$group',
+                key: ValueKey(key),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (settle) {
+      await tester.pumpAndSettle();
+    } else {
+      await tester.pump();
+    }
+  }
+
+  testWidgets('coin list search normalizes input and updates in place', (
+    tester,
+  ) async {
+    final wallet = WalletActionProvider()
+      ..coinList = [
+        sampleCoin(symbol: 'ETH')..coin['name'] = 'Ethereum',
+        sampleCoin(symbol: 'USDC')
+          ..coin['coinType'] = 'POLYGON'
+          ..coin['name'] = 'USD Coin',
+      ];
+    final query = ValueNotifier('  usd COIN ');
+    addTearDown(wallet.dispose);
+    addTearDown(query.dispose);
+    await mountCoinList(tester, wallet: wallet, query: query, settle: false);
+
+    expect(find.text('c0:USDC:coin_list'), findsOneWidget);
+    expect(find.textContaining(':ETH:'), findsNothing);
+    query.value = 'polygon';
+    await tester.pumpAndSettle();
+    expect(find.text('c0:USDC:coin_list'), findsOneWidget);
+    query.value = 'missing';
+    await tester.pumpAndSettle();
+    expect(find.text(S.current.g_market_no_results), findsOneWidget);
+  });
+
+  testWidgets('small-asset filter explains hidden holdings and restores all', (
+    tester,
+  ) async {
+    final wallet = WalletActionProvider()
+      ..coinList = [sampleCoin()..value = 0.5];
+    final query = ValueNotifier('');
+    var showAllCalls = 0;
+    addTearDown(wallet.dispose);
+    addTearDown(query.dispose);
+    await mountCoinList(
+      tester,
+      wallet: wallet,
+      query: query,
+      threshold: 1,
+      onShowAll: () => showAllCalls++,
+    );
+
+    expect(find.text(S.current.g_key_coin_list_all_hidden), findsOneWidget);
+    final showAll = find.text(S.current.g_key_coin_list_show_all);
+    expect(tester.getSize(showAll.hitTestable()).height, greaterThan(0));
+    await tester.tap(showAll);
+    expect(showAllCalls, 1);
+  });
+
+  testWidgets('pinned list inserts one divider without changing item keys', (
+    tester,
+  ) async {
+    final eth = sampleCoin(symbol: 'ETH')..isPinned = true;
+    final btc = sampleCoin(symbol: 'BTC')..isPinned = true;
+    final sol = sampleCoin(symbol: 'SOL');
+    final wallet = WalletActionProvider()..coinList = [eth, btc, sol];
+    final query = ValueNotifier('');
+    addTearDown(wallet.dispose);
+    addTearDown(query.dispose);
+    await mountCoinList(tester, wallet: wallet, query: query);
+
+    expect(find.text(S.current.g_key_coin_list_separator), findsOneWidget);
+    expect(find.byKey(const ValueKey('c0')), findsOneWidget);
+    expect(find.byKey(const ValueKey('c1')), findsOneWidget);
+    expect(find.byKey(const ValueKey('c2')), findsOneWidget);
+  });
+
+  testWidgets(
+    'wallet initialization displays skeleton instead of empty state',
+    (tester) async {
+      final wallet = WalletActionProvider()..buildwallet = true;
+      final query = ValueNotifier('');
+      addTearDown(wallet.dispose);
+      addTearDown(query.dispose);
+      await mountCoinList(tester, wallet: wallet, query: query, settle: false);
+
+      expect(find.byType(WalletCoinListSkeleton), findsOneWidget);
+      expect(find.text(S.current.g_market_no_results), findsNothing);
+    },
+  );
 }
