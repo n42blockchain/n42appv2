@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:async';
 
@@ -27,6 +28,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   MobileScannerController? _scannerController;
   final TextEditingController _inputController = TextEditingController();
   bool _isProcessing = false;
+  bool _isPickingImage = false;
   bool _showManualInput = false;
   bool _hasPermission = false;
   bool _isCheckingPermission = true;
@@ -69,6 +71,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         if (running) {
           if (!_hasPermission ||
               _isProcessing ||
+              _isPickingImage ||
               WidgetsBinding.instance.lifecycleState !=
                   AppLifecycleState.resumed ||
               ModalRoute.of(context)?.isCurrent == false) {
@@ -155,7 +158,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   }
 
   void _onDetect(BarcodeCapture capture) {
-    if (_isProcessing) return;
+    if (_isProcessing || _isPickingImage) return;
 
     final List<Barcode> barcodes = capture.barcodes;
     for (final barcode in barcodes) {
@@ -167,28 +170,62 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _processQRCode(String data) async {
-    if (_isProcessing) return;
+  Future<void> _pickQrImage() async {
+    if (_isProcessing || _isPickingImage) return;
+    setState(() => _isPickingImage = true);
+    await _setCameraRunning(false);
+    try {
+      if (!mounted) return;
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (!mounted || image == null) return;
+      // Image analysis does not require camera permission or a running preview.
+      final capture = await MobileScannerPlatform.instance.analyzeImage(
+        image.path,
+        formats: const [BarcodeFormat.qrCode],
+      );
+      if (!mounted) return;
+      final values = capture?.barcodes
+          .map((barcode) => barcode.rawValue)
+          .whereType<String>()
+          .where((value) => value.trim().isNotEmpty);
+      if (values == null || values.isEmpty) {
+        _showError(S.of(context)?.qrcodeInvalidQrCode ?? 'Invalid QR code');
+        return;
+      }
+      await _processQRCode(values.first, fromGallery: true);
+    } catch (e) {
+      if (!mounted) return;
+      _showError(
+        S.of(context)?.commonSelectImageFailed(e.toString()) ??
+            'Failed to select image: $e',
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isPickingImage = false);
+        await _setCameraRunning(true);
+      }
+    }
+  }
+
+  Future<void> _processQRCode(String data, {bool fromGallery = false}) async {
+    if (_isProcessing || (_isPickingImage && !fromGallery)) return;
     var completedWithExit = false;
     setState(() => _isProcessing = true);
 
-    unawaited(_scannerController?.stop());
+    await _setCameraRunning(false);
 
     try {
+      if (!mounted) return;
       // 收款二维码（商户收款码）：识别后展示金额确认并发起付款
       final payment = PaymentRequestUri.tryParse(data);
       if (payment != null) {
         completedWithExit = await _handlePaymentUri(payment);
-        if (!completedWithExit && mounted) {
-          unawaited(_scannerController?.start());
-        }
         return;
       }
 
       final payload = parseSocialScanPayload(data);
       if (payload == null) {
         _showError(S.of(context)?.qrcodeInvalidQrCode ?? 'Invalid QR code');
-        unawaited(_scannerController?.start());
         return;
       }
 
@@ -203,9 +240,6 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
             roomId: '',
             initialUrl: payload.miniAppLaunchUrl,
           );
-          if (mounted) {
-            unawaited(_scannerController?.start());
-          }
           break;
       }
     } catch (e) {
@@ -214,10 +248,10 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         S.of(context)?.qrcodeProcessFailed(e.toString()) ??
             'Failed to process QR code: $e',
       );
-      unawaited(_scannerController?.start());
     } finally {
       if (mounted && !completedWithExit) {
         setState(() => _isProcessing = false);
+        await _setCameraRunning(true);
       }
     }
   }
@@ -376,7 +410,6 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         S.of(context)?.qrcodeCannotAddFriend(e.toString()) ??
             'Cannot add friend: $e',
       );
-      unawaited(_scannerController?.start());
     }
     return false;
   }
@@ -439,13 +472,24 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         ),
         centerTitle: true,
         actions: [
+          TextButton(
+            key: const ValueKey('scan_gallery_button'),
+            onPressed: _isCheckingPermission || _isProcessing || _isPickingImage
+                ? null
+                : _pickQrImage,
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              disabledForegroundColor: Colors.white38,
+            ),
+            child: Text(S.of(context)?.qrcodeAlbum ?? 'Album'),
+          ),
           if (_hasPermission)
             IconButton(
               icon: Icon(
                 _torchEnabled ? Icons.flash_on : Icons.flash_off,
                 color: _torchEnabled ? Colors.yellow : Colors.white,
               ),
-              onPressed: _toggleTorch,
+              onPressed: _isProcessing || _isPickingImage ? null : _toggleTorch,
             ),
         ],
       ),
@@ -658,7 +702,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
             ),
           ),
         ),
-        if (_isProcessing)
+        if (_isProcessing || _isPickingImage)
           Container(
             color: Colors.black54,
             child: const Center(
@@ -759,7 +803,9 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
           ),
           const SizedBox(width: 12),
           ElevatedButton(
-            onPressed: _isProcessing ? null : _submitManualInput,
+            onPressed: _isProcessing || _isPickingImage
+                ? null
+                : _submitManualInput,
             style: ElevatedButton.styleFrom(
               backgroundColor: AppColors.primary,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),

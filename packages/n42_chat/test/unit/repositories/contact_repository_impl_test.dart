@@ -97,6 +97,37 @@ void main() {
     },
   );
 
+  test(
+    'incoming request does not wait for membership or global profile lookup',
+    () async {
+      final blockedMembers = Completer<void>();
+      final blockedProfile = Completer<matrix.Profile?>();
+      when(
+        () => mockContactDS.refreshDirectChatMembers(),
+      ).thenAnswer((_) => blockedMembers.future);
+      when(
+        () => mockContactDS.getUserProfile('@friend:hs'),
+      ).thenAnswer((_) => blockedProfile.future);
+      final room = MockRoom();
+      final user = MockUser();
+      when(() => room.id).thenReturn('!request:hs');
+      when(() => room.directChatMatrixID).thenReturn('@friend:hs');
+      when(
+        () => room.unsafeGetUserFromMemoryOrFallback('@friend:hs'),
+      ).thenReturn(user);
+      when(() => user.avatarUrl).thenReturn(null);
+      when(() => user.calcDisplayname()).thenReturn('@friend:hs');
+      when(() => mockContactDS.getPendingInvites()).thenReturn([room]);
+      final requests = await repository.getPendingFriendRequests().timeout(
+        const Duration(seconds: 1),
+      );
+      expect(requests.single.userId, '@friend:hs');
+      expect(requests.single.userName, 'friend');
+      verifyNever(() => mockContactDS.refreshDirectChatMembers());
+      verifyNever(() => mockContactDS.getUserProfile(any()));
+    },
+  );
+
   group('getContacts', () {
     test('returns empty list when no contacts', () async {
       when(() => mockContactDS.getDirectChatContacts()).thenReturn([]);

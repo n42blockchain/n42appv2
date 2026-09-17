@@ -2768,5 +2768,6 @@
   "videoPublish": "Publish video",
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
-  "videoLiveUnavailable": "Live broadcasting is unavailable"
+  "videoLiveUnavailable": "Live broadcasting is unavailable",
+  "qrcodeAlbum": "ఆల్బమ్"
 }

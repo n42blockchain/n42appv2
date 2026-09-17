@@ -5741,4 +5741,7 @@ class SKo extends S {
 
   @override
   String get videoLiveUnavailable => 'Live broadcasting is unavailable';
+
+  @override
+  String get qrcodeAlbum => '앨범';
 }

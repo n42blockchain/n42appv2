@@ -5714,6 +5714,9 @@ class SZh extends S {
 
   @override
   String get videoLiveUnavailable => '当前无法发起直播';
+
+  @override
+  String get qrcodeAlbum => '相册';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11427,4 +11430,7 @@ class SZhTw extends SZh {
 
   @override
   String get videoLiveUnavailable => '目前無法發起直播';
+
+  @override
+  String get qrcodeAlbum => '相簿';
 }

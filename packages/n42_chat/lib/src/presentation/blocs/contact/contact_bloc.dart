@@ -103,6 +103,16 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     List<ContactEntity>? contacts;
     List<FriendRequest>? requests;
     Object? failure;
+    // Publish received invitations before potentially slow contact hydration.
+    try {
+      requests = await _contactRepository.getPendingFriendRequests();
+      if (requests.isNotEmpty) {
+        emit(state.copyWith(friendRequests: requests));
+      }
+    } catch (_) {
+      // Retry below after contact hydration; preserve the current snapshot.
+    }
+
     try {
       contacts = await _contactRepository.getContacts();
     } catch (e) {

@@ -5860,4 +5860,7 @@ class SBn extends S {
 
   @override
   String get videoLiveUnavailable => 'Live broadcasting is unavailable';
+
+  @override
+  String get qrcodeAlbum => 'অ্যালবাম';
 }

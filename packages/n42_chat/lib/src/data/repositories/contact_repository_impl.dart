@@ -169,11 +169,9 @@ class ContactRepositoryImpl implements IContactRepository {
 
   @override
   Future<List<FriendRequest>> getPendingFriendRequests() async {
-    try {
-      await _contactDataSource.refreshDirectChatMembers();
-    } on ContactMembershipUnavailable {
-      // Incoming stripped invitations are independently available from /sync.
-    }
+    // Invitations already contain their stripped member state from /sync.
+    // Do not block this list on unrelated joined-room or profile requests.
+    // Contact refresh hydrates outgoing membership separately.
     final incoming = _contactDataSource.getPendingInvites();
     final outgoing = _contactDataSource.getOutgoingInvites();
     final invites = [...incoming, ...outgoing];
@@ -195,26 +193,8 @@ class ContactRepositoryImpl implements IContactRepository {
       // Use display name if available, otherwise extract username from userId
       String displayName = user?.calcDisplayname() ?? '';
 
-      // If display name is empty or just the user ID, try to fetch from server
-      if ((displayName.isEmpty || displayName == inviter) && inviter != null) {
-        try {
-          final profile = await _contactDataSource.getUserProfile(inviter);
-          if (profile != null) {
-            if (profile.displayName != null &&
-                profile.displayName!.isNotEmpty) {
-              displayName = profile.displayName!;
-            }
-            // Also get avatar from profile if not already set
-            avatarUrl ??= _contactDataSource.getProfileAvatarUrl(profile);
-          }
-        } catch (e) {
-          // Ignore errors, will use fallback
-          debugLog('Error: $e');
-        }
-      }
-
       // Fallback: extract username from Matrix ID format (@username:server)
-      if (displayName.isEmpty && inviter != null) {
+      if ((displayName.isEmpty || displayName == inviter) && inviter != null) {
         displayName = inviter.split(':').first.replaceFirst('@', '');
       }
       if (displayName.isEmpty) {

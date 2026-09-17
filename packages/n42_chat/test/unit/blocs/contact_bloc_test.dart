@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -84,6 +85,32 @@ void main() {
     when(() => mockPreferences.getContactRemark(any()))
         .thenAnswer((_) async => null);
   });
+
+  test(
+    'incoming request is visible while contact hydration is still pending',
+    () async {
+      final pendingContacts = Completer<List<ContactEntity>>();
+      when(
+        () => mockRepository.getContacts(),
+      ).thenAnswer((_) => pendingContacts.future);
+      when(
+        () => mockRepository.getPendingFriendRequests(),
+      ).thenAnswer((_) async => [_friendRequest1]);
+      final bloc = ContactBloc(mockRepository);
+      final visible = bloc.stream.firstWhere(
+        (state) => state.friendRequests.contains(_friendRequest1),
+      );
+      bloc.add(const LoadContacts());
+      try {
+        final state = await visible.timeout(const Duration(seconds: 1));
+        expect(state.friendRequests, [_friendRequest1]);
+        expect(pendingContacts.isCompleted, isFalse);
+      } finally {
+        pendingContacts.complete([_contact1]);
+        await bloc.close();
+      }
+    },
+  );
 
   // =========================================================================
   // Initial state
@@ -211,6 +238,9 @@ void main() {
           ContactStatus.loading,
         ),
         isA<ContactState>()
+            .having((s) => s.friendRequests, 'early requests', [_friendRequest1])
+            .having((s) => s.status, 'status', ContactStatus.loading),
+        isA<ContactState>()
             .having((s) => s.friendRequests, 'requests', [_friendRequest1])
             .having((s) => s.status, 'status', ContactStatus.error),
       ],
@@ -256,6 +286,9 @@ void main() {
         isA<ContactState>()
             .having((s) => s.status, 'status', ContactStatus.loading),
         isA<ContactState>()
+            .having((s) => s.friendRequests, 'early requests', [_friendRequest1])
+            .having((s) => s.status, 'status', ContactStatus.loading),
+        isA<ContactState>()
             .having((s) => s.status, 'status', ContactStatus.loaded)
             .having((s) => s.contacts.length, 'contacts.length', 2)
             .having((s) => s.filteredContacts.length, 'filteredContacts.length', 2)
@@ -265,7 +298,7 @@ void main() {
         verify(() => mockRepository.watchContacts()).called(1);
         verify(() => mockRepository.watchOnlineStatus()).called(1);
         verify(() => mockRepository.getContacts()).called(1);
-        verify(() => mockRepository.getPendingFriendRequests()).called(1);
+        verify(() => mockRepository.getPendingFriendRequests()).called(2);
       },
     );
 

@@ -2156,5 +2156,6 @@
   "videoPublish": "发布视频",
   "videoGoLive": "发起直播",
   "videoSelect": "选择视频",
-  "videoLiveUnavailable": "当前无法发起直播"
+  "videoLiveUnavailable": "当前无法发起直播",
+  "qrcodeAlbum": "相册"
 }

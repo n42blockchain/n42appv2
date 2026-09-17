@@ -5892,6 +5892,9 @@ class SPt extends S {
 
   @override
   String get videoLiveUnavailable => 'Live broadcasting is unavailable';
+
+  @override
+  String get qrcodeAlbum => 'Álbum';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11782,4 +11785,7 @@ class SPtBr extends SPt {
 
   @override
   String get videoLiveUnavailable => 'Live broadcasting is unavailable';
+
+  @override
+  String get qrcodeAlbum => 'Álbum';
 }

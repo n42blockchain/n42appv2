@@ -10834,6 +10834,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Live broadcasting is unavailable'**
   String get videoLiveUnavailable;
+
+  /// No description provided for @qrcodeAlbum.
+  ///
+  /// In en, this message translates to:
+  /// **'Album'**
+  String get qrcodeAlbum;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

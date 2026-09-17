@@ -5897,4 +5897,7 @@ class SPl extends S {
 
   @override
   String get videoLiveUnavailable => 'Live broadcasting is unavailable';
+
+  @override
+  String get qrcodeAlbum => 'Album';
 }
