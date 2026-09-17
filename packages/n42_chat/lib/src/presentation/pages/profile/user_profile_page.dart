@@ -481,9 +481,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           // 加入黑名单
           ListTile(
             title: Text(
-              context.read<ContactBloc>().state.contacts.any(
-                    (c) => c.userId == widget.userId && c.isBlocked,
-                  )
+              getIt<IContactRepository>().isUserIgnored(widget.userId)
                   ? (S.of(context)?.profileRemoveFromBlacklist ??
                         'Remove from Blacklist')
                   : (S.of(context)?.profileAddToBlacklist ??
@@ -564,9 +562,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _toggleBlock() {
-    final isBlocked = context.read<ContactBloc>().state.contacts.any(
-      (c) => c.userId == widget.userId && c.isBlocked,
-    );
+    final isBlocked = getIt<IContactRepository>().isUserIgnored(widget.userId);
 
     showDialog<void>(
       context: context,

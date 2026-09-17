@@ -34,6 +34,15 @@ void main() {
     when(() => manager.client).thenReturn(client);
     when(() => client.isLogged()).thenReturn(true);
     when(() => client.userID).thenReturn('@alice:test');
+    when(() => client.ignoredUsers).thenReturn([]);
+    when(() => room.client).thenReturn(client);
+    when(
+      () => client.getRoomStateWithKey(any(), EventTypes.RoomMember, any()),
+    ).thenAnswer(
+      (call) async => call.positionalArguments[0] == '!dm:test'
+          ? Map<String, dynamic>.from(partner.content)
+          : {'membership': 'invite'},
+    );
     final accountData = <String, BasicEvent>{};
     when(() => client.accountData).thenReturn(accountData);
     when(() => client.directChats).thenAnswer(
@@ -320,6 +329,33 @@ void main() {
     await expectLater(contacts.acceptInvite('!gone:test'), throwsStateError);
   });
 
+  test(
+    'an empty historical room does not prevent a fresh invitation',
+    () async {
+      when(() => partner.content).thenReturn({});
+      when(
+        () => client.getRoomStateWithKey(
+          '!dm:test',
+          EventTypes.RoomMember,
+          '@bob:test',
+        ),
+      ).thenThrow(
+        MatrixException.fromJson({
+          'errcode': 'M_NOT_FOUND',
+          'error': 'Missing member',
+        }),
+      );
+      when(
+        () => client.startDirectChat(
+          '@bob:test',
+          enableEncryption: true,
+          skipExistingChat: true,
+        ),
+      ).thenAnswer((_) async => '!fresh:test');
+      expect(await contacts.startDirectChat('@bob:test'), '!fresh:test');
+    },
+  );
+
   test('scan creates a fresh invitation when the old peer has left', () async {
     when(() => partner.content).thenReturn({'membership': 'leave'});
     when(
@@ -348,6 +384,91 @@ void main() {
     when(() => partner.content).thenReturn({'membership': 'ban'});
     await expectLater(contacts.startDirectChat('@bob:test'), throwsStateError);
   });
+
+  test(
+    'stale invitation is replaced by server join before listing contacts',
+    () async {
+      final updates = Client(
+        'stale-member-test',
+        database: _Database(),
+      ).onRoomState;
+      when(() => client.onRoomState).thenReturn(updates);
+      addTearDown(updates.close);
+      final actual = Room(id: '!dm:test', client: client);
+      actual.setState(User('@bob:test', membership: 'invite', room: actual));
+      client.accountData['m.direct'] = BasicEvent(
+        type: 'm.direct',
+        content: {
+          '@bob:test': ['!dm:test'],
+        },
+      );
+      when(() => client.rooms).thenReturn([actual]);
+      when(() => client.getRoomById('!dm:test')).thenReturn(actual);
+      when(
+        () => client.getRoomStateWithKey(
+          '!dm:test',
+          EventTypes.RoomMember,
+          '@bob:test',
+        ),
+      ).thenAnswer((_) async => {'membership': 'join'});
+      await contacts.refreshDirectChatMembers();
+      expect(contacts.getDirectChatContacts().map((u) => u.id), ['@bob:test']);
+      expect(
+        actual
+            .getState(EventTypes.RoomMember, '@bob:test')
+            ?.content['membership'],
+        'join',
+      );
+    },
+  );
+
+  test(
+    'a locally blocked peer is rejected before any room is created',
+    () async {
+      when(() => client.ignoredUsers).thenReturn(['@bob:test']);
+      await expectLater(
+        contacts.startDirectChat('@bob:test'),
+        throwsStateError,
+      );
+      verifyNever(
+        () => client.startDirectChat(
+          any(),
+          enableEncryption: any(named: 'enableEncryption'),
+          skipExistingChat: any(named: 'skipExistingChat'),
+        ),
+      );
+    },
+  );
+
+  test(
+    'successful creation without a delivered invitation is a failure',
+    () async {
+      when(() => client.rooms).thenReturn([]);
+      when(
+        () => client.startDirectChat(
+          '@bob:test',
+          enableEncryption: true,
+          skipExistingChat: false,
+        ),
+      ).thenAnswer((_) async => '!empty:test');
+      when(
+        () => client.getRoomStateWithKey(
+          '!empty:test',
+          EventTypes.RoomMember,
+          '@bob:test',
+        ),
+      ).thenThrow(
+        MatrixException.fromJson({
+          'errcode': 'M_NOT_FOUND',
+          'error': 'No member event',
+        }),
+      );
+      await expectLater(
+        contacts.startDirectChat('@bob:test'),
+        throwsA(isA<MatrixException>()),
+      );
+    },
+  );
 
   test('accepted friendship appears and permits sending', () async {
     when(() => partner.content).thenReturn({'membership': 'join'});

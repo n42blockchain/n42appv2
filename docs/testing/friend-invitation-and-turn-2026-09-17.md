@@ -1,0 +1,11 @@
+# Friend invitations and TURN follow-up
+
+Both reported clients run 2026072674. The sender's server-side ignore list still contained the recipient while the contact settings switch showed off. Block status was derived from a list that excludes non-contacts, and successful room creation was incorrectly treated as invitation delivery. The newly created room had no recipient member event. Tuwunel 1.8.2 filters ignored users out of creation-time invitations without failing room creation.
+
+The explicitly authorized ignore entry was removed through the normal account-data API and read back. Other entries and all rooms/messages were preserved. The temporary maintenance session was logged out, temporary authentication configuration restored, and the original healthy homeserver PID stayed unchanged.
+
+Client changes reject blocked additions before room creation, verify invite/join state after creation, show true block status even when the contact list is empty, and retain the previous switch state when persistence fails. Pending cached membership is refreshed from authoritative room state. Missing membership in an old empty room no longer blocks a fresh invitation.
+
+A live test using the production Matrix SDK 6.2.0 and temporary accounts reproduced the stale invitation after acceptance. After the fix it passed received/outgoing invitation detection, explicit acceptance, bilateral contacts and message admission. It did not send actual encrypted messages. All temporary accounts and rooms were cleaned up. Focused tests passed 55 cases, including denied creation-time invitations, true blacklist state with no contacts and save-failure rollback. The integrated application regression suite passed 409 tests. Application analysis completed with zero errors or warnings and 196 informational findings. Native feedback-device acceptance remains open in QA-009.
+
+TURN now completes TLS and authenticated Allocate over port 443. The allocated public UDP relay remains unreachable from an external permitted peer. Gateway access is needed to verify DNAT, firewall and symmetric routing; frontend HTTP 400 is resolved but media calls remain unverified. Alternatively, an explicitly configured relay on the TURN backend's own public IP could avoid gateway relay NAT, subject to verifying UDP exposure and host/provider firewall rules first.

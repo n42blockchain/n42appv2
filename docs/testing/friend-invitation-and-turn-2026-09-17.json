@@ -1,0 +1,34 @@
+{
+  "reported_build": 2026072674,
+  "friendship_root_cause": "sender ignored recipient; settings derived block status from contact list",
+  "authorized_unblock": {
+    "unblocked": true,
+    "temporary_session_revoked": true,
+    "server_readback_verified": true,
+    "other_entries_preserved": true,
+    "original_configuration_restored": true
+  },
+  "live_sdk": "6.2.0",
+  "live_membership_regression": "passed after reproducing stale invite cache",
+  "actual_encrypted_message_exchange": "not tested by this probe",
+  "temporary_accounts_cleaned": true,
+  "turn": {
+    "tls_verified": true,
+    "authenticated_allocation": true,
+    "udp_inbound_to_relay": false,
+    "udp_return_from_relay": false,
+    "relay_address": [
+      "5.78.138.27",
+      53927
+    ],
+    "failure": "TimeoutError: The read operation timed out"
+  },
+  "gateway_ssh": "current ubuntu/22 public key rejected; awaiting access",
+  "test_packages": "pending new build",
+  "application_regression_tests_passed": 409,
+  "application_analysis": {
+    "errors": 0,
+    "warnings": 0,
+    "infos": 196
+  }
+}

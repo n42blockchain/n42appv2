@@ -39,21 +39,44 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
   late bool _isStarred;
   bool _isBlocked = false;
   bool _isDeleting = false;
+  bool _isUpdatingBlock = false;
 
   @override
   void initState() {
     super.initState();
     _isStarred = widget.isStarred;
     try {
-      final contact = context
-          .read<ContactBloc>()
-          .state
-          .contacts
-          .where((c) => c.userId == widget.userId)
-          .firstOrNull;
-      _isBlocked = contact?.isBlocked ?? false;
+      // Blocking leaves direct rooms, so blocked users may not be in contacts.
+      _isBlocked = getIt<IContactRepository>().isUserIgnored(widget.userId);
     } catch (_) {
       _isBlocked = false;
+    }
+  }
+
+  Future<void> _updateBlock(bool blocked) async {
+    if (_isUpdatingBlock) return;
+    setState(() => _isUpdatingBlock = true);
+    try {
+      final repository = getIt<IContactRepository>();
+      if (blocked) {
+        await repository.ignoreUser(widget.userId);
+      } else {
+        await repository.unignoreUser(widget.userId);
+      }
+      if (!mounted) return;
+      setState(() => _isBlocked = blocked);
+      context.read<ContactBloc>().add(const RefreshContacts());
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            S.of(context)?.commonSaveFailed ?? 'Failed to save',
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _isUpdatingBlock = false);
     }
   }
 
@@ -104,11 +127,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
           backgroundColor: bgColor,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(
-              AppIcons.back,
-              color: textColor,
-              size: 20,
-            ),
+            icon: Icon(AppIcons.back, color: textColor, size: 20),
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: Text(
@@ -206,26 +225,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
                             'Add to Blocklist',
                         value: _isBlocked,
                         textColor: textColor,
-                        onChanged: (value) {
-                          setState(() {
-                            _isBlocked = value;
-                          });
-                          try {
-                            if (value) {
-                              context.read<ContactBloc>().add(
-                                IgnoreUser(widget.userId),
-                              );
-                            } else {
-                              context.read<ContactBloc>().add(
-                                UnignoreUser(widget.userId),
-                              );
-                            }
-                          } catch (_) {
-                            debugLog(
-                              'ContactBloc not available for blocklist toggle',
-                            );
-                          }
-                        },
+                        onChanged: _isUpdatingBlock ? null : _updateBlock,
                       ),
                     ],
                   ),
@@ -318,11 +318,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
           children: [
             Text(title, style: TextStyle(fontSize: 16, color: textColor)),
             const Spacer(),
-            Icon(
-              AppIcons.chevron,
-              color: secondaryTextColor,
-              size: 20,
-            ),
+            Icon(AppIcons.chevron, color: secondaryTextColor, size: 20),
           ],
         ),
       ),
@@ -333,7 +329,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
     required String title,
     required bool value,
     required Color textColor,
-    required ValueChanged<bool> onChanged,
+    required ValueChanged<bool>? onChanged,
   }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -477,9 +473,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
           backgroundColor: context.surfaceColor,
           title: Text(
             S.of(context)?.reportTitle ?? 'Report',
-            style: TextStyle(
-              color: context.textPrimary,
-            ),
+            style: TextStyle(color: context.textPrimary),
           ),
           content: RadioGroup<String>(
             groupValue: selectedReason,
@@ -496,9 +490,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
                   (reason) => RadioListTile<String>(
                     title: Text(
                       reason,
-                      style: TextStyle(
-                        color: context.textPrimary,
-                      ),
+                      style: TextStyle(color: context.textPrimary),
                     ),
                     value: reason,
                     activeColor: AppColors.primary,
@@ -510,16 +502,12 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
                 TextField(
                   controller: descController,
                   maxLines: 2,
-                  style: TextStyle(
-                    color: context.textPrimary,
-                  ),
+                  style: TextStyle(color: context.textPrimary),
                   decoration: InputDecoration(
                     hintText:
                         S.of(context)?.reportDescription ??
                         'Additional description (optional)',
-                    hintStyle: TextStyle(
-                      color: context.textSecondary,
-                    ),
+                    hintStyle: TextStyle(color: context.textSecondary),
                     border: const OutlineInputBorder(),
                   ),
                 ),

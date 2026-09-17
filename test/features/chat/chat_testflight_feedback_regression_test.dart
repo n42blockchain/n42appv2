@@ -65,7 +65,11 @@ import '../../../packages/n42_chat/test/presentation/pages/scan_qr_permission_te
 import '../../../packages/n42_chat/test/unit/blocs/contact_bloc_test.dart'
     as contact_bloc;
 
+import '../../../packages/n42_chat/test/presentation/pages/contact_settings_page_test.dart'
+    as contact_settings;
+
 void main() {
+  group('Chat authoritative blocklist settings', contact_settings.main);
   TestWidgetsFlutterBinding.ensureInitialized();
   group('Chat camera permissions', scanner_permissions.main);
   group('Chat contact loading', contact_bloc.main);

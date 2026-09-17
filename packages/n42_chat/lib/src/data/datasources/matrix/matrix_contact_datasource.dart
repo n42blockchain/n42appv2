@@ -249,6 +249,11 @@ class MatrixContactDataSource {
     if (!userId.startsWith('@') || !userId.contains(':')) {
       throw ArgumentError('Invalid user ID');
     }
+    if (client.ignoredUsers.contains(userId)) {
+      throw StateError(
+        'Remove this user from your blacklist before adding them',
+      );
+    }
     // Prefer an accepted room over a more recently active abandoned invitation.
     final candidates = client.rooms
         .where((room) => room.directChatMatrixID == userId)
@@ -260,7 +265,13 @@ class MatrixContactDataSource {
         continue;
       }
       if (room.membership != matrix.Membership.join) continue;
-      final peer = await resolveDirectPeer(room, userId);
+      matrix.User peer;
+      try {
+        peer = await resolveDirectPeer(room, userId);
+      } on matrix.MatrixException catch (e) {
+        if (e.errcode == 'M_NOT_FOUND') continue;
+        rethrow;
+      }
       checkSession();
       if (peer.content['membership'] == 'join') return room.id;
       if (peer.content['membership'] == 'invite') pending ??= room;
@@ -288,6 +299,25 @@ class MatrixContactDataSource {
     client.accountData['m.direct'] = matrix.BasicEvent(
       type: 'm.direct',
       content: {...client.directChats, userId: ids},
+    );
+    // Room creation can succeed while the server silently skips invitations.
+    // Never report "awaiting acceptance" until a real membership event exists.
+    final content = await client
+        .getRoomStateWithKey(roomId, matrix.EventTypes.RoomMember, userId)
+        .timeout(const Duration(seconds: 15));
+    checkSession();
+    if (content['membership'] != 'invite' && content['membership'] != 'join') {
+      throw StateError('Friend invitation was not delivered');
+    }
+    final room = client.getRoomById(roomId);
+    room?.setState(
+      matrix.User.fromState(
+        stateKey: userId,
+        senderId: account,
+        typeKey: matrix.EventTypes.RoomMember,
+        content: content,
+        room: room,
+      ),
     );
     return roomId;
   }
