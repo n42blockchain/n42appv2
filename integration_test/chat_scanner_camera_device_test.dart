@@ -1,3 +1,4 @@
+// Run only on a dedicated test installation; pass --no-uninstall to flutter test.
 // Exercises the native camera; no account login or scanned payload is submitted.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
