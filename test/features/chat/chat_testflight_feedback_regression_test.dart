@@ -1,3 +1,7 @@
+import '../../../packages/n42_chat/test/unit/datasources/matrix_media_sender_test.dart'
+    as file_sends;
+import '../../../packages/n42_chat/test/presentation/pages/location_picker_entry_test.dart'
+    as locations;
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../packages/n42_chat/test/presentation/pages/contact_detail_page_test.dart'
@@ -69,6 +73,8 @@ import '../../../packages/n42_chat/test/presentation/pages/contact_settings_page
     as contact_settings;
 
 void main() {
+  group('Chat encrypted files', file_sends.main);
+  group('Chat location addresses', locations.main);
   group('Chat authoritative blocklist settings', contact_settings.main);
   TestWidgetsFlutterBinding.ensureInitialized();
   group('Chat camera permissions', scanner_permissions.main);

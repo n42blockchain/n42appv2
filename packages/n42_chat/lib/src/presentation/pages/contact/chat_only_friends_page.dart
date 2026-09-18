@@ -9,6 +9,9 @@ import '../../../domain/entities/contact_entity.dart';
 import '../../../domain/repositories/contact_repository.dart';
 import '../../widgets/common/common_widgets.dart';
 import 'contact_tile.dart';
+import 'contact_detail_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../blocs/contact/contact_bloc.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 仅聊天的朋友列表页面
@@ -93,7 +96,26 @@ class _ChatOnlyFriendsPageState extends State<ChatOnlyFriendsPage> {
                 child: Divider(height: 1, color: context.dividerColor),
               ),
               itemBuilder: (context, index) {
-                return ContactTile(contact: _chatOnlyFriends[index]);
+                final contact = _chatOnlyFriends[index];
+                return ContactTile(
+                  contact: contact,
+                  onTap: () async {
+                    final bloc = context.read<ContactBloc>();
+                    await Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => BlocProvider.value(
+                          value: bloc,
+                          child: ContactDetailPage(
+                            userId: contact.userId,
+                            displayName: contact.effectiveDisplayName,
+                            avatarUrl: contact.avatarUrl,
+                          ),
+                        ),
+                      ),
+                    );
+                    if (mounted) await _loadChatOnlyFriends();
+                  },
+                );
               },
             ),
     );

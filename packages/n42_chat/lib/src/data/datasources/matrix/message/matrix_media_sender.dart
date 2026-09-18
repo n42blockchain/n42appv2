@@ -7,6 +7,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import '../matrix_client_manager.dart';
 import 'matrix_media_uploader.dart';
 import '../../../../core/utils/debug_log.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// Matrix 媒体消息发送器
 ///
@@ -363,12 +364,34 @@ class MatrixMediaSender {
           fileBytes?.length ??
           (filePath != null ? await File(filePath).length() : null);
 
-      if (room.encrypted &&
-          _client!.fileEncryptionEnabled &&
-          (filePath != null || fileStream != null)) {
-        throw UnsupportedError(
-          'Encrypted rooms require bytes-based file uploads to preserve attachment encryption',
-        );
+      if (room.encrypted) {
+        if (!_client!.fileEncryptionEnabled) {
+          throw StateError('Attachment encryption is unavailable');
+        }
+        // The SDK encrypts byte-backed attachments. Never upload a plaintext
+        // path/stream merely because the file picker did not return bytes.
+        if (fileBytes == null && (filePath != null || fileStream != null)) {
+          if (effectiveSize != null &&
+              effectiveSize > AppConstants.maxFileSize) {
+            throw StateError('File exceeds the 50 MB attachment limit');
+          }
+          final bytes = BytesBuilder(copy: false);
+          final source = filePath != null
+              ? File(filePath).openRead()
+              : fileStream!;
+          await for (final chunk in source) {
+            if (bytes.length + chunk.length > AppConstants.maxFileSize) {
+              throw StateError('File exceeds the 50 MB attachment limit');
+            }
+            bytes.add(chunk);
+          }
+          fileBytes = bytes.takeBytes();
+        }
+        if (fileBytes != null && fileBytes.length > AppConstants.maxFileSize) {
+          throw StateError('File exceeds the 50 MB attachment limit');
+        }
+        filePath = null;
+        fileStream = null;
       }
 
       await EncryptedSendGuard.prepare(room);

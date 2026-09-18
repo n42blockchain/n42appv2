@@ -1,3 +1,7 @@
+import 'package:matrix/matrix.dart' as matrix;
+import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
+import 'package:n42_chat/src/data/datasources/matrix/contact_privacy_service.dart';
+import 'package:n42_chat/src/presentation/pages/contact/chat_only_friends_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -16,6 +20,10 @@ import 'package:n42_chat/src/presentation/pages/contact/contact_list_page.dart';
 import 'package:n42_chat/src/services/voip/call_manager.dart';
 
 class _Contacts extends Mock implements ContactBloc {}
+
+class _Manager extends Mock implements MatrixClientManager {}
+
+class _MatrixClient extends Mock implements matrix.Client {}
 
 class _Groups extends Mock implements GroupBloc {}
 
@@ -83,6 +91,41 @@ void main() {
     supportedLocales: S.supportedLocales,
     home: BlocProvider<ContactBloc>.value(value: contacts, child: page),
   );
+
+  testWidgets('chat-only row opens friend details and refreshes on return', (
+    tester,
+  ) async {
+    final manager = _Manager();
+    final client = _MatrixClient();
+    when(() => manager.client).thenReturn(client);
+    when(() => client.userID).thenReturn('@me:hs');
+    when(() => client.accountData).thenReturn(<String, matrix.BasicEvent>{});
+    var privacy = <String, dynamic>{
+      friend.userId: {'chatOnly': true},
+    };
+    when(
+      () => client.getAccountData('@me:hs', ContactPrivacyService.accountType),
+    ).thenAnswer((_) async => privacy);
+    when(() => repository.getContacts()).thenAnswer((_) async => [friend]);
+    getIt.registerSingleton<MatrixClientManager>(manager);
+    await tester.pumpWidget(app(const ContactListPage()));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Chat-only Friends'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ChatOnlyFriendsPage), findsOneWidget);
+    await tester.tap(find.text('Alice'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ContactDetailPage), findsOneWidget);
+    expect(
+      tester.widget<ContactDetailPage>(find.byType(ContactDetailPage)).userId,
+      friend.userId,
+    );
+    privacy = {};
+    Navigator.of(tester.element(find.byType(ContactDetailPage))).pop();
+    await tester.pumpAndSettle();
+    expect(find.byType(ChatOnlyFriendsPage), findsOneWidget);
+    expect(find.text('Alice'), findsNothing);
+  });
 
   testWidgets('incoming request stays accessible when contacts fail to load', (
     tester,

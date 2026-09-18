@@ -168,7 +168,9 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
         SendLocationMessage(
           latitude: latitude,
           longitude: longitude,
-          description: name ?? address,
+          description: name != null && name.isNotEmpty && name != address
+              ? '$name · $address'
+              : address,
         ),
       );
 

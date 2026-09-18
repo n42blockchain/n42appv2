@@ -40,3 +40,9 @@ a reproduced code defect; it does not establish that the user's device emitted
 `M_NOT_FOUND`. Keep QA-009 open until the affected version/account and error are
 correlated, and tab switching is verified on the replacement installation. Do
 not suppress every refresh error or clear user data as a workaround.
+
+## User follow-up
+
+The user identified account **okle**, said the failure was on build
+2026072679, and confirmed contacts now display normally. This closes the
+reported contact-tab symptom; other QA-009 acceptance items remain open.

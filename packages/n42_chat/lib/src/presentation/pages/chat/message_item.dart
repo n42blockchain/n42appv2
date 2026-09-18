@@ -1521,7 +1521,7 @@ class MessageItem extends StatelessWidget {
                     children: [
                       Text(
                         locationName,
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 14,

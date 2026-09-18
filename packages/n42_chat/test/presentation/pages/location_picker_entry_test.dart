@@ -31,6 +31,7 @@ class _PositionSource extends GeolocatorPlatform {
 }
 
 class _Places extends GeocodingPlatform {
+  bool unavailable = false;
   final queries = <String, Completer<List<Location>>>{};
   @override
   Future<List<Location>> locationFromAddress(String address) =>
@@ -39,7 +40,10 @@ class _Places extends GeocodingPlatform {
   Future<List<Placemark>> placemarkFromCoordinates(
     double latitude,
     double longitude,
-  ) async => [Placemark(name: 'Place $latitude', street: 'Street $latitude')];
+  ) async {
+    if (unavailable) throw StateError('Geocoder unavailable');
+    return [Placemark(name: 'Place $latitude', street: 'Street $latitude')];
+  }
 }
 
 void main() {
@@ -55,6 +59,28 @@ void main() {
     GeocodingPlatform.instance = places = _Places();
   });
 
+  testWidgets('unavailable geocoder preserves usable coordinates', (
+    tester,
+  ) async {
+    places.unavailable = true;
+    await tester.pumpWidget(
+      const MaterialApp(
+        localizationsDelegates: S.localizationsDelegates,
+        supportedLocales: S.supportedLocales,
+        home: ChatLocationPickerPage(),
+      ),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    expect(find.text('10.000000, 20.000000'), findsOneWidget);
+    expect(
+      tester
+          .widget<TextButton>(find.widgetWithText(TextButton, 'Send'))
+          .onPressed,
+      isNotNull,
+    );
+    await tester.pumpWidget(const SizedBox());
+  });
   testWidgets(
     'current position has no invented nearby POIs and stale searches are ignored',
     (tester) async {
@@ -146,6 +172,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
     expect(selected?['latitude'], 10);
     expect(selected?['longitude'], 20);
-    expect(selected?['address'], '10.000000, 20.000000');
+    expect(selected?['address'], 'Street 10.0');
   });
 }

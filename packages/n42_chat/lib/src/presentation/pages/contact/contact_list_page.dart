@@ -613,8 +613,12 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   void _openChatOnlyFriendsPage() {
+    final bloc = context.read<ContactBloc>();
     Navigator.of(context).push(
-      MaterialPageRoute<void>(builder: (_) => const ChatOnlyFriendsPage()),
+      MaterialPageRoute<void>(
+        builder: (_) =>
+            BlocProvider.value(value: bloc, child: const ChatOnlyFriendsPage()),
+      ),
     );
   }
 

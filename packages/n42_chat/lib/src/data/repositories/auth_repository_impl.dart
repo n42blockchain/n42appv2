@@ -1,3 +1,4 @@
+import '../../core/encryption/local_room_key_store.dart';
 import 'dart:typed_data';
 import 'dart:async';
 
@@ -363,6 +364,11 @@ class AuthRepositoryImpl implements IAuthRepository {
       if (!_isDisposed) _loginStateController.add(false);
       authLog('Logout successful');
     } catch (e) {
+      if (e is LocalRoomKeyPreservationException) {
+        _kickOffBackgroundSync();
+        _startMonitoringLoginState();
+        rethrow;
+      }
       authLog('Logout error - $e');
       // 即使出错也清除本地会话
       await _secureStorage.clearSession();

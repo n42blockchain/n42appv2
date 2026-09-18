@@ -1,4 +1,8 @@
 import 'dart:async';
+import 'dart:typed_data';
+import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
+import 'package:n42_chat/src/data/datasources/matrix/message/matrix_media_sender.dart';
+import 'package:n42_chat/src/data/datasources/matrix/message/matrix_media_uploader.dart';
 import 'dart:io';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,6 +16,10 @@ import 'package:vodozemac/vodozemac.dart' as vod;
 import 'package:mocktail/mocktail.dart';
 import 'package:n42_chat/src/data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'package:n42_chat/src/data/datasources/matrix/message/direct_chat_send_guard.dart';
+
+class _Manager extends Mock implements MatrixClientManager {}
+
+class _Uploader extends Mock implements MatrixMediaUploader {}
 
 class _Client extends Mock implements Client {}
 
@@ -160,6 +168,66 @@ void main() {
     });
     when(() => outbound.outboundGroupSession).thenReturn(group);
   });
+  for (final source in ['path', 'stream']) {
+    test(
+      'encrypted picker $source reaches SDK without plaintext upload',
+      () async {
+        final manager = _Manager();
+        final uploader = _Uploader();
+        when(() => manager.client).thenReturn(client);
+        when(() => client.fileEncryptionEnabled).thenReturn(true);
+        final payload = Uint8List.fromList([1, 2, 3, 4]);
+        registerFallbackValue(
+          MatrixFile(bytes: Uint8List(0), name: 'fallback'),
+        );
+        when(
+          () => room.sendFileEvent(
+            any(),
+            extraContent: any(named: 'extraContent'),
+          ),
+        ).thenAnswer((call) async {
+          final file = call.positionalArguments.first as MatrixFile;
+          expect(file.bytes, payload);
+          expect(file.name, 'video.bin');
+          return 'event';
+        });
+        final directory = await Directory.systemTemp.createTemp(
+          'n42-attachment-',
+        );
+        addTearDown(() => directory.delete(recursive: true));
+        final file = File('${directory.path}/video.bin');
+        await file.writeAsBytes(payload);
+        final sender = MatrixMediaSender(manager, uploader);
+        expect(
+          await sender.sendFileMessage(
+            '!room:hs',
+            filename: 'video.bin',
+            filePath: source == 'path' ? file.path : null,
+            fileStream: source == 'stream' ? Stream.value(payload) : null,
+            fileSize: payload.length,
+          ),
+          'event',
+        );
+        verifyZeroInteractions(uploader);
+        // A failed encrypted upload must never retry via plaintext media upload.
+        when(
+          () => room.sendFileEvent(
+            any(),
+            extraContent: any(named: 'extraContent'),
+          ),
+        ).thenThrow(StateError('upload failed'));
+        await expectLater(
+          sender.sendFileMessage(
+            '!room:hs',
+            filename: 'video.bin',
+            filePath: file.path,
+          ),
+          throwsStateError,
+        );
+        verifyZeroInteractions(uploader);
+      },
+    );
+  }
   test(
     'delivered Megolm key decrypts the next message on a fresh receiver',
     () async {

@@ -1,3 +1,4 @@
+import 'package:n42_chat/src/core/encryption/local_room_key_store.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -388,6 +389,19 @@ void main() {
       },
     );
   }
+  test(
+    'key preservation failure keeps login credentials and resumes sync',
+    () async {
+      when(auth.logout).thenThrow(LocalRoomKeyPreservationException());
+      await expectLater(
+        repository.logout(),
+        throwsA(isA<LocalRoomKeyPreservationException>()),
+      );
+      verifyNever(storage.clearSession);
+      verifyNever(storage.clearCredentials);
+      verify(() => manager.startSync()).called(1);
+    },
+  );
   test('server logout failure still clears the local session', () async {
     when(auth.logout).thenThrow(StateError('offline'));
     final event = repository.loginStateStream.first;

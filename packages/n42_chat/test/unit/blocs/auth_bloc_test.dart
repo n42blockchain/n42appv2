@@ -1,3 +1,4 @@
+import 'package:n42_chat/src/core/encryption/local_room_key_store.dart';
 import 'dart:async';
 
 import 'package:bloc_test/bloc_test.dart';
@@ -164,6 +165,24 @@ void main() {
       ],
     );
 
+    blocTest<AuthBloc, AuthState>(
+      'failed key preservation keeps the authenticated user and reports error',
+      build: () {
+        when(
+          () => mockAuthRepository.logout(),
+        ).thenThrow(LocalRoomKeyPreservationException());
+        return AuthBloc(authRepository: mockAuthRepository);
+      },
+      seed: () => AuthState(status: AuthStatus.authenticated, user: testUser),
+      act: (bloc) => bloc.add(const AuthLogoutRequested()),
+      expect: () => [
+        isA<AuthState>().having((s) => s.status, 'status', AuthStatus.loading),
+        isA<AuthState>()
+            .having((s) => s.status, 'status', AuthStatus.error)
+            .having((s) => s.user, 'user', testUser)
+            .having((s) => s.isAuthenticated, 'session retained', true),
+      ],
+    );
     blocTest<AuthBloc, AuthState>(
       'emits [loading, unauthenticated] when logout succeeds',
       build: () {

@@ -12,6 +12,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/services/moment_location_resolver.dart';
 
 /// 位置选择页面（微信风格）
 class ChatLocationPickerPage extends StatefulWidget {
@@ -67,7 +68,9 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
       if (!serviceEnabled) {
         setState(() {
           _isLoading = false;
-          _errorMessage = S.of(context)?.chatLocationServiceNotEnabled ?? 'Location service not enabled';
+          _errorMessage =
+              S.of(context)?.chatLocationServiceNotEnabled ??
+              'Location service not enabled';
         });
         return;
       }
@@ -81,7 +84,9 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
         if (permission == LocationPermission.denied) {
           setState(() {
             _isLoading = false;
-            _errorMessage = S.of(context)?.chatLocationPermissionDenied ?? 'Location permission denied';
+            _errorMessage =
+                S.of(context)?.chatLocationPermissionDenied ??
+                'Location permission denied';
           });
           return;
         }
@@ -90,7 +95,9 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
       if (permission == LocationPermission.deniedForever) {
         setState(() {
           _isLoading = false;
-          _errorMessage = S.of(context)?.chatLocationPermissionDeniedPermanent ?? 'Location permission permanently denied';
+          _errorMessage =
+              S.of(context)?.chatLocationPermissionDeniedPermanent ??
+              'Location permission permanently denied';
         });
         return;
       }
@@ -112,6 +119,7 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
       // 获取地址
       await _getAddressFromPosition(position);
 
+      if (!mounted) return;
       // 生成附近地点
       _generateNearbyPlaces(position);
 
@@ -123,19 +131,24 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
       if (!mounted) return;
       setState(() {
         _isLoading = false;
-        _errorMessage = S.of(context)?.chatGetLocationFailed(e.toString()) ?? 'Failed to get location: $e';
+        _errorMessage =
+            S.of(context)?.chatGetLocationFailed(e.toString()) ??
+            'Failed to get location: $e';
       });
     }
   }
 
   Future<void> _getAddressFromPosition(Position position) async {
-    try {
-      setState(() {
-        _currentAddress = '${position.latitude.toStringAsFixed(6)}, ${position.longitude.toStringAsFixed(6)}';
-      });
-    } catch (e) {
-      debugLog('Get address error: $e');
-    }
+    final location = await resolveMomentLocation(
+      position.latitude,
+      position.longitude,
+    );
+    if (!mounted) return;
+    setState(() {
+      _currentAddress =
+          location.address ??
+          '${position.latitude.toStringAsFixed(6)}, ${position.longitude.toStringAsFixed(6)}';
+    });
   }
 
   /// 搜索地点（使用 geocoding）
@@ -164,16 +177,20 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
             loc.longitude,
           );
           final pm = placemarks.isNotEmpty ? placemarks.first : null;
-          results.add(NearbyPlace(
-            name: pm?.name ?? query,
-            address: [pm?.street, pm?.locality, pm?.country]
-                .where((s) => s != null && s.isNotEmpty)
-                .join(', '),
-            latitude: loc.latitude,
-            longitude: loc.longitude,
-            icon: Icons.location_on,
-            iconColor: AppColors.primary,
-          ));
+          results.add(
+            NearbyPlace(
+              name: pm?.name ?? query,
+              address: [
+                pm?.street,
+                pm?.locality,
+                pm?.country,
+              ].where((s) => s != null && s.isNotEmpty).join(', '),
+              latitude: loc.latitude,
+              longitude: loc.longitude,
+              icon: Icons.location_on,
+              iconColor: AppColors.primary,
+            ),
+          );
         }
 
         if (mounted && generation == _searchGeneration) {
@@ -209,22 +226,42 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
         icon: Icons.my_location,
         iconColor: AppColors.primary,
       ),
-
     ];
   }
 
-  void _confirmLocation() {
-    if (_currentPosition == null) return;
+  Future<void> _confirmLocation() async {
+    if (_currentPosition == null || _isLoading) return;
 
-    final selectedPlace = _selectedPlaceIndex >= 0 && _selectedPlaceIndex < _nearbyPlaces.length
+    final selectedPlace =
+        _selectedPlaceIndex >= 0 && _selectedPlaceIndex < _nearbyPlaces.length
         ? _nearbyPlaces[_selectedPlaceIndex]
         : null;
 
+    final latitude =
+        selectedPlace?.latitude ??
+        _mapCenter?.latitude ??
+        _currentPosition!.latitude;
+    final longitude =
+        selectedPlace?.longitude ??
+        _mapCenter?.longitude ??
+        _currentPosition!.longitude;
+    var address = selectedPlace?.address;
+    if (address == null || address.isEmpty) {
+      setState(() => _isLoading = true);
+      final location = await resolveMomentLocation(latitude, longitude);
+      if (!mounted) return;
+      address =
+          location.address ??
+          '${latitude.toStringAsFixed(6)}, ${longitude.toStringAsFixed(6)}';
+    }
+    if (!mounted) return;
     Navigator.pop(context, {
-      'latitude': selectedPlace?.latitude ?? _mapCenter?.latitude ?? _currentPosition!.latitude,
-      'longitude': selectedPlace?.longitude ?? _mapCenter?.longitude ?? _currentPosition!.longitude,
-      'address': selectedPlace?.address ?? '${_mapCenter?.latitude ?? _currentPosition!.latitude}, ${_mapCenter?.longitude ?? _currentPosition!.longitude}',
-      'name': selectedPlace?.name ?? (S.of(context)?.chatMyLocation ?? 'My Location'),
+      'latitude': latitude,
+      'longitude': longitude,
+      'address': address,
+      'name':
+          selectedPlace?.name ??
+          (S.of(context)?.chatMyLocation ?? 'My Location'),
     });
   }
 
@@ -251,10 +288,7 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
         backgroundColor: context.surfaceColor,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(
-            Icons.close,
-            color: context.textPrimary,
-          ),
+          icon: Icon(Icons.close, color: context.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
@@ -268,7 +302,9 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
         centerTitle: true,
         actions: [
           TextButton(
-            onPressed: _currentPosition != null ? _confirmLocation : null,
+            onPressed: _currentPosition != null && !_isLoading
+                ? _confirmLocation
+                : null,
             child: Text(
               S.of(context)?.chatSendButton ?? 'Send',
               style: TextStyle(
@@ -289,174 +325,179 @@ class _ChatLocationPickerPageState extends State<ChatLocationPickerPage> {
                 children: [
                   const CircularProgressIndicator(),
                   const SizedBox(height: 16),
-                  Text(S.of(context)?.chatGettingLocation ?? 'Getting location...'),
+                  Text(
+                    S.of(context)?.chatGettingLocation ?? 'Getting location...',
+                  ),
                 ],
               ),
             )
           : _errorMessage != null
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.location_off,
-                        size: 64,
-                        color: context.textTertiary,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        _errorMessage!,
-                        style: TextStyle(color: context.textTertiary),
-                      ),
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: _getCurrentLocation,
-                        child: Text(S.of(context)?.commonRetry ?? 'Retry'),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.location_off,
+                    size: 64,
+                    color: context.textTertiary,
                   ),
-                )
-              : Column(
-                  children: [
-                    // 地图预览区域 - 交互式 FlutterMap
-                    SizedBox(
-                      height: 200,
-                      child: Stack(
+                  const SizedBox(height: 16),
+                  Text(
+                    _errorMessage!,
+                    style: TextStyle(color: context.textTertiary),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: _getCurrentLocation,
+                    child: Text(S.of(context)?.commonRetry ?? 'Retry'),
+                  ),
+                ],
+              ),
+            )
+          : Column(
+              children: [
+                // 地图预览区域 - 交互式 FlutterMap
+                SizedBox(
+                  height: 200,
+                  child: Stack(
+                    children: [
+                      FlutterMap(
+                        mapController: _mapController,
+                        options: MapOptions(
+                          initialCenter: _mapCenter ?? const LatLng(0, 0),
+                          initialZoom: 15.0,
+                          onPositionChanged: (pos, hasGesture) {
+                            if (hasGesture) {
+                              setState(() {
+                                _mapCenter = pos.center;
+                                _selectedPlaceIndex = -1;
+                              });
+                            }
+                          },
+                        ),
                         children: [
-                          FlutterMap(
-                            mapController: _mapController,
-                            options: MapOptions(
-                              initialCenter: _mapCenter ?? const LatLng(0, 0),
-                              initialZoom: 15.0,
-                              onPositionChanged: (pos, hasGesture) {
-                                if (hasGesture) {
-                                  setState(() {
-                                    _mapCenter = pos.center;
-                                    _selectedPlaceIndex = -1;
-                                  });
-                                }
-                              },
-                            ),
-                            children: [
-                              TileLayer(
-                                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                                userAgentPackageName: 'com.n42.wallet',
-                              ),
-                            ],
-                          ),
-                          // 中心固定 pin（地图拖动时 pin 不动）
-                          const Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 20),
-                              child: Icon(
-                                Icons.location_on,
-                                color: AppColors.error,
-                                size: 40,
-                              ),
-                            ),
-                          ),
-                          // 重新定位按钮
-                          Positioned(
-                            right: 16,
-                            bottom: 16,
-                            child: FloatingActionButton.small(
-                              heroTag: 'relocate',
-                              onPressed: _moveToCurrentLocation,
-                              backgroundColor: Colors.white,
-                              child: const Icon(
-                                Icons.my_location,
-                                color: AppColors.primary,
-                              ),
-                            ),
+                          TileLayer(
+                            urlTemplate:
+                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.n42.wallet',
                           ),
                         ],
                       ),
-                    ),
-                    // 搜索框
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      color: context.surfaceColor,
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: InputDecoration(
-                          hintText: S.of(context)?.chatSearchLocation ?? 'Search location',
-                          prefixIcon: const Icon(Icons.search),
-                          filled: true,
-                          fillColor: AppColors.inputBgOf(isDark),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 12,
+                      // 中心固定 pin（地图拖动时 pin 不动）
+                      const Center(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: Icon(
+                            Icons.location_on,
+                            color: AppColors.error,
+                            size: 40,
                           ),
                         ),
-                        onChanged: (value) {
-                          _searchPlaces(value);
-                        },
+                      ),
+                      // 重新定位按钮
+                      Positioned(
+                        right: 16,
+                        bottom: 16,
+                        child: FloatingActionButton.small(
+                          heroTag: 'relocate',
+                          onPressed: _moveToCurrentLocation,
+                          backgroundColor: Colors.white,
+                          child: const Icon(
+                            Icons.my_location,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                // 搜索框
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  color: context.surfaceColor,
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText:
+                          S.of(context)?.chatSearchLocation ??
+                          'Search location',
+                      prefixIcon: const Icon(Icons.search),
+                      filled: true,
+                      fillColor: AppColors.inputBgOf(isDark),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
                       ),
                     ),
-                    // 附近地点列表
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: _nearbyPlaces.length,
-                        itemBuilder: (context, index) {
-                          final place = _nearbyPlaces[index];
-                          final isSelected = index == _selectedPlaceIndex;
+                    onChanged: (value) {
+                      _searchPlaces(value);
+                    },
+                  ),
+                ),
+                // 附近地点列表
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _nearbyPlaces.length,
+                    itemBuilder: (context, index) {
+                      final place = _nearbyPlaces[index];
+                      final isSelected = index == _selectedPlaceIndex;
 
-                          return ListTile(
-                            leading: Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                color: place.iconColor.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                place.icon,
-                                color: place.iconColor,
-                                size: 22,
-                              ),
-                            ),
-                            title: Text(
-                              place.name,
-                              style: TextStyle(
-                                color: context.textPrimary,
-                                fontWeight: isSelected
-                                    ? FontWeight.w600
-                                    : FontWeight.normal,
-                              ),
-                            ),
-                            subtitle: Text(
-                              place.address,
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: context.textSecondary,
-                              ),
-                            ),
-                            trailing: isSelected
-                                ? const Icon(
-                                    Icons.check_circle,
-                                    color: AppColors.primary,
-                                  )
-                                : null,
-                            onTap: () {
-                              setState(() {
-                                _selectedPlaceIndex = index;
-                              });
-                              // 移动地图到选中的地点
-                              _mapController.move(
-                                LatLng(place.latitude, place.longitude),
-                                15.0,
-                              );
-                            },
+                      return ListTile(
+                        leading: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: place.iconColor.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            place.icon,
+                            color: place.iconColor,
+                            size: 22,
+                          ),
+                        ),
+                        title: Text(
+                          place.name,
+                          style: TextStyle(
+                            color: context.textPrimary,
+                            fontWeight: isSelected
+                                ? FontWeight.w600
+                                : FontWeight.normal,
+                          ),
+                        ),
+                        subtitle: Text(
+                          place.address,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: context.textSecondary,
+                          ),
+                        ),
+                        trailing: isSelected
+                            ? const Icon(
+                                Icons.check_circle,
+                                color: AppColors.primary,
+                              )
+                            : null,
+                        onTap: () {
+                          setState(() {
+                            _selectedPlaceIndex = index;
+                          });
+                          // 移动地图到选中的地点
+                          _mapController.move(
+                            LatLng(place.latitude, place.longitude),
+                            15.0,
                           );
                         },
-                      ),
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
+              ],
+            ),
     );
   }
 }
@@ -525,10 +566,7 @@ class _ChatLocationDetailPageState extends State<ChatLocationDetailPage> {
           Positioned.fill(
             child: FlutterMap(
               mapController: _mapController,
-              options: MapOptions(
-                initialCenter: center,
-                initialZoom: 15.0,
-              ),
+              options: MapOptions(initialCenter: center, initialZoom: 15.0),
               children: [
                 TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -616,7 +654,9 @@ class _ChatLocationDetailPageState extends State<ChatLocationDetailPage> {
             child: Container(
               decoration: BoxDecoration(
                 color: context.surfaceColor,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.1),
@@ -695,10 +735,18 @@ class _ChatLocationDetailPageState extends State<ChatLocationDetailPage> {
                               label: S.of(context)?.chatCopy ?? 'Copy',
                               isDark: isDark,
                               onTap: () {
-                                Clipboard.setData(ClipboardData(text: '${widget.latitude}, ${widget.longitude}'));
+                                Clipboard.setData(
+                                  ClipboardData(
+                                    text:
+                                        '${widget.latitude}, ${widget.longitude}',
+                                  ),
+                                );
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(S.of(context)?.commonAddressCopied ?? 'Coordinates copied'),
+                                    content: Text(
+                                      S.of(context)?.commonAddressCopied ??
+                                          'Coordinates copied',
+                                    ),
                                     duration: const Duration(seconds: 1),
                                     behavior: SnackBarBehavior.floating,
                                   ),
@@ -712,18 +760,29 @@ class _ChatLocationDetailPageState extends State<ChatLocationDetailPage> {
                             flex: 2,
                             child: ElevatedButton.icon(
                               onPressed: () async {
-                                final url = 'https://maps.google.com/?q=${widget.latitude},${widget.longitude}';
+                                final url =
+                                    'https://maps.google.com/?q=${widget.latitude},${widget.longitude}';
                                 final uri = Uri.parse(url);
                                 if (await canLaunchUrl(uri)) {
-                                  await launchUrl(uri, mode: LaunchMode.externalApplication);
+                                  await launchUrl(
+                                    uri,
+                                    mode: LaunchMode.externalApplication,
+                                  );
                                 }
                               },
-                              icon: const Icon(Icons.navigation_rounded, size: 20),
-                              label: Text(S.of(context)?.chatMapPreview ?? 'Open in Maps'),
+                              icon: const Icon(
+                                Icons.navigation_rounded,
+                                size: 20,
+                              ),
+                              label: Text(
+                                S.of(context)?.chatMapPreview ?? 'Open in Maps',
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 14),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 14,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -772,18 +831,11 @@ class _LocationActionButton extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                icon,
-                size: 22,
-                color: context.textPrimary,
-              ),
+              Icon(icon, size: 22, color: context.textPrimary),
               const SizedBox(height: 4),
               Text(
                 label,
-                style: TextStyle(
-                  fontSize: 12,
-                  color: context.textSecondary,
-                ),
+                style: TextStyle(fontSize: 12, color: context.textSecondary),
               ),
             ],
           ),

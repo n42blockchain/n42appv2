@@ -3,6 +3,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../core/di/injection.dart';
 import '../../../core/encryption/e2ee_manager.dart';
+import '../../../core/encryption/local_room_key_store.dart';
 import '../local/secure_storage_datasource.dart';
 import 'matrix_client_manager.dart';
 import '../../../core/utils/debug_log.dart';
@@ -13,12 +14,15 @@ import '../../../core/utils/debug_log.dart';
 class MatrixAuthDataSource {
   final MatrixClientManager _clientManager;
   final SecureStorageDataSource? _secureStorage;
+  final LocalRoomKeyStore _localRoomKeys;
 
   MatrixAuthDataSource({
     MatrixClientManager? clientManager,
     SecureStorageDataSource? secureStorage,
+    LocalRoomKeyStore? localRoomKeys,
   }) : _clientManager = clientManager ?? MatrixClientManager.instance,
-       _secureStorage = secureStorage;
+       _secureStorage = secureStorage,
+       _localRoomKeys = localRoomKeys ?? LocalRoomKeyStore();
 
   /// 获取客户端管理器
   MatrixClientManager get clientManager => _clientManager;
@@ -55,6 +59,7 @@ class MatrixAuthDataSource {
     );
 
     // 登录成功后自动初始化 cross-signing
+    await _restoreLocalRoomKeys();
     _autoSetupCrossSigning();
 
     return response;
@@ -79,6 +84,7 @@ class MatrixAuthDataSource {
     );
 
     // Token 登录后自动初始化 cross-signing
+    await _restoreLocalRoomKeys();
     _autoSetupCrossSigning();
   }
 
@@ -98,8 +104,21 @@ class MatrixAuthDataSource {
       deviceName: deviceName,
     );
 
+    await _restoreLocalRoomKeys();
     _autoSetupCrossSigning();
     return response;
+  }
+
+  Future<void> _restoreLocalRoomKeys() async {
+    final client = _clientManager.client;
+    if (client == null) return;
+    try {
+      await _localRoomKeys.restore(client);
+    } catch (_) {
+      debugLog(
+        'MatrixAuthDataSource: Device-local history key restore unavailable',
+      );
+    }
   }
 
   Future<void>? _autoSetupFuture;
@@ -284,6 +303,8 @@ class MatrixAuthDataSource {
 
   /// 登出
   Future<void> logout() async {
+    final client = _clientManager.client;
+    if (client != null) await _localRoomKeys.preserve(client);
     await _clientManager.logout();
   }
 
@@ -292,6 +313,7 @@ class MatrixAuthDataSource {
     final client = _clientManager.client;
     if (client == null || !_clientManager.isLoggedIn) return;
 
+    await _localRoomKeys.preserve(client);
     // 获取所有设备并登出
     try {
       await client.logoutAll();
@@ -325,7 +347,12 @@ class MatrixAuthDataSource {
       );
     }
 
+    final homeserver = client.homeserver;
+    final accountId = client.userID;
     await client.deactivateAccount(auth: requestAuth, erase: erase);
+    if (homeserver != null && accountId != null) {
+      await _localRoomKeys.deleteForIdentity(homeserver, accountId);
+    }
   }
 
   // ============================================

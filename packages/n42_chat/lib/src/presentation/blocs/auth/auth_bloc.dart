@@ -184,6 +184,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(
         const AuthState.initial().copyWith(status: AuthStatus.unauthenticated),
       );
+    } catch (e) {
+      unawaited(_registerPushNotifications());
+      emit(
+        state.copyWith(status: AuthStatus.error, errorMessage: e.toString()),
+      );
     } finally {
       _logoutInProgress = false;
     }

@@ -103,6 +103,8 @@ class CallSession {
 /// WebRTC 服务
 class WebRTCService {
   final matrix.Client _client;
+  final Set<String> _sentCallRecordIds = {};
+  final Set<String> _sentHangupIds = {};
   final VoIPConfig _config;
 
   RTCPeerConnection? _peerConnection;
@@ -397,6 +399,7 @@ class WebRTCService {
 
       return true;
     } catch (e, stackTrace) {
+      if (generation != _callGeneration) return false;
       debugLog('WebRTCService: Start call failed: $e');
       debugLog('Stack: $stackTrace');
       _setState(CallState.failed);
@@ -490,6 +493,7 @@ class WebRTCService {
   /// 拒绝来电
   Future<void> rejectCall() async {
     if (_currentSession == null) return;
+    ++_callGeneration;
 
     try {
       final room = _client.getRoomById(_currentSession!.roomId);
@@ -523,6 +527,7 @@ class WebRTCService {
   Future<void> hangup({String reason = 'user_hangup'}) async {
     ++_callGeneration;
     final session = _currentSession;
+    session?.endTime ??= DateTime.now();
     _setState(CallState.ended);
     await _cleanup();
     if (session == null) return;
@@ -536,6 +541,7 @@ class WebRTCService {
     CallSession session,
     String reason,
   ) async {
+    if (!_sentHangupIds.add(session.callId)) return;
     try {
       await _sendCallEvent(
         room: room,
@@ -549,24 +555,29 @@ class WebRTCService {
           'call_type': session.type == CallType.video ? 'video' : 'voice',
         },
       ).timeout(const Duration(seconds: 10));
-      await _sendCallRecordMessage(
-        room: room,
-        isVideo: session.type == CallType.video,
-        durationSeconds: session.duration.inSeconds,
-        isMissed: reason == 'invite_timeout' || reason == 'no_answer',
-      );
     } catch (_) {
       debugLog('WebRTCService: Could not deliver hangup; local call is closed');
     }
+    await _sendCallRecordMessage(
+      room: room,
+      session: session,
+      isMissed: reason == 'invite_timeout' || reason == 'no_answer',
+    );
   }
 
   /// 发送通话记录消息
   Future<void> _sendCallRecordMessage({
     required matrix.Room room,
-    required bool isVideo,
-    required int durationSeconds,
+    required CallSession session,
     required bool isMissed,
   }) async {
+    // Only the originating device owns the shared room record. Claim it before
+    // any await so local, remote and native callbacks cannot duplicate it.
+    if (session.direction != CallDirection.outgoing ||
+        !_sentCallRecordIds.add(session.callId))
+      return;
+    final isVideo = session.type == CallType.video;
+    final durationSeconds = session.duration.inSeconds;
     try {
       // 构建 fallback 消息文本（英文，实际客户端应按结构化字段渲染）
       String body;
@@ -583,13 +594,18 @@ class WebRTCService {
       }
 
       await EncryptedSendGuard.prepare(room);
-      await room.sendEvent({
-        'msgtype': 'n42.call.record',
-        'body': body,
-        'call_type': isVideo ? 'video' : 'voice',
-        'duration': durationSeconds,
-        'missed': isMissed,
-      }, type: matrix.EventTypes.Message);
+      await room.sendEvent(
+        {
+          'msgtype': 'n42.call.record',
+          'call_id': session.callId,
+          'body': body,
+          'call_type': isVideo ? 'video' : 'voice',
+          'duration': durationSeconds,
+          'missed': isMissed,
+        },
+        type: matrix.EventTypes.Message,
+        txid: 'n42_call_record_${session.callId}',
+      );
 
       debugLog('WebRTCService: Sent call record message: $body');
     } catch (e) {
@@ -613,7 +629,7 @@ class WebRTCService {
     required Map<String, dynamic> content,
   }) async {
     if (type == 'm.call.answer') await EncryptedSendGuard.prepare(room);
-    await room.sendEvent(content, type: type);
+    await room.sendEvent(content, type: type, displayPendingEvent: false);
   }
 
   // ============================================
@@ -1336,12 +1352,12 @@ class WebRTCService {
     }
 
     debugLog('WebRTCService: Remote party hung up');
+    ++_callGeneration;
 
-    // 缓存通话信息用于发送记录（cleanup 会清空 session）
-    final durationSeconds = _currentSession!.duration.inSeconds;
-    final isVideo = _currentSession!.type == CallType.video;
-    final isMissed = _state == CallState.incoming;
-    final roomId = _currentSession!.roomId;
+    final session = _currentSession!;
+    session.endTime ??= DateTime.now();
+    final isMissed = session.connectedTime == null;
+    final roomId = session.roomId;
 
     // 先通知 UI 通话结束，确保 CallScreen 能及时关闭
     _setState(CallState.ended);
@@ -1354,8 +1370,7 @@ class WebRTCService {
       if (room != null) {
         await _sendCallRecordMessage(
           room: room,
-          isVideo: isVideo,
-          durationSeconds: durationSeconds,
+          session: session,
           isMissed: isMissed,
         );
       }
@@ -1408,17 +1423,15 @@ class WebRTCService {
     }
 
     debugLog('WebRTCService: Call rejected by remote party');
+    ++_callGeneration;
 
-    // 发送通话记录消息（对方拒绝 = 未接通）
-    if (_currentSession != null) {
-      final isVideo = _currentSession!.type == CallType.video;
-      final room = _client.getRoomById(_currentSession!.roomId);
+    final session = _currentSession;
+    session?.endTime ??= DateTime.now();
+    if (session != null) {
+      final room = _client.getRoomById(session.roomId);
       if (room != null) {
-        await _sendCallRecordMessage(
-          room: room,
-          isVideo: isVideo,
-          durationSeconds: 0,
-          isMissed: true, // 对方拒绝视为未接
+        unawaited(
+          _sendCallRecordMessage(room: room, session: session, isMissed: true),
         );
       }
     }
@@ -1476,7 +1489,7 @@ class WebRTCService {
     _outgoingCandidates.clear();
     _descriptionPublished = false;
 
-    _currentSession?.endTime = DateTime.now();
+    _currentSession?.endTime ??= DateTime.now();
     _currentSession = null;
 
     _isMuted = false;
