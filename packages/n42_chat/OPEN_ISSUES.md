@@ -225,6 +225,10 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-009 TestFlight registration, friendship and historical-key acceptance
 
+- September 18 / build 2026072687 feedback: both feedback phones run this version; encrypted placeholders affect new and old messages. Current repairs guard overlapping registration submissions; filter live directories from ordinary groups; invoke the localized group-count function; preserve the selected group name/avatar/count when navigating; include avatar state and both invitees in room creation; count known joined/invited members; read persisted star/tag annotations in contacts; derive tag counts from actual assignments; and isolate tag catalogs by server/account. Video feed items now resolve authenticated media to disposable local files, show retry on failure, and open profiles from authenticated avatars/names. These are code repairs, not confirmation on the feedback phones.
+- Validation: 153 focused tests plus a tag-count widget regression pass. The live SDK run also delivered an encrypted production contact card and verified a three-member group's avatar/join/invite state. All three temporary accounts were deactivated. These tests do not constitute native feedback-phone acceptance.
+- Encryption follow-up: local session restoration now emits session-key notifications so already-loaded timelines retry decryption. Encrypted send preparation coalesces concurrent work and retries a transient incomplete device/Olm refresh once, preserving device trust checks and never sending plaintext. Contact recommendation renders the localized readiness error. A synthetic live SDK test already passed bidirectional encrypted delivery and logout/login without a recovery key; it uses real server/crypto/SQLite but mocked secure storage, so native Keychain/Android persistence and dxx/dxx01 acceptance remain open. Keys previously lost without any copy cannot be reconstructed.
+
 - September 18 contact appearance: Downloads/9.jpeg is explicitly a reference image, not a current-build screenshot. The index now keeps search/star/A–Z/# visible at the right regardless of populated groups, with bounded centered height; the chat-only/group entry gap becomes the standard divider. Existing 14 contact navigation cases pass; device visual acceptance of this small layout change is pending.
 
 - Severity: H
@@ -356,6 +360,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 - Next step: verify wallet and historical Chat data in the normal iPhone app with the user; any recovery must use user-controlled backups. Do not mark this resolved based only on renewed login, install success or fixture test results.
 
 ### STORAGE-001 Favorite deletion spans two preference keys — Resolved
+
+- September 18 account-isolation repair: build 2026072687 feedback exposed a separate ownership defect in the global record/cache. Favorites, metadata, in-flight reads and serialized writes now use a normalized homeserver/user scope. Old global records remain untouched and are deliberately not assigned to any current user because their owner cannot be established. Regression cases cover account/server changes, restart, failed writes and switching accounts during pending reads. This supersedes the previous automatic legacy migration described below; the historical atomic-deletion fix remains valid within each scope. Native account-switch acceptance remains to be performed.
 
 - Severity: M
 - Added: 2026-09-13; local fix: 2026-09-14

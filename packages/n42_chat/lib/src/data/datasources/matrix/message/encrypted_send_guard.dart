@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'package:collection/collection.dart';
 
 import 'package:matrix/matrix.dart' as matrix;
 
 class EncryptedSendNotReady implements Exception {
   static const code = 'n42.encryption_not_ready';
-  const EncryptedSendNotReady();
+  final bool retryable;
+  const EncryptedSendNotReady({this.retryable = false});
   @override
   String toString() => code;
 }
@@ -16,10 +18,42 @@ class EncryptedSendGuard {
   static Future<void> prepare(matrix.Room room) async {
     if (!room.encrypted) return;
     final guard = _instances[room.client] ??= EncryptedSendGuard();
+    final pending = guard._preparing[room.id];
+    if (pending != null) return pending;
+    final operation = guard
+        ._prepareWithRetry(room)
+        .timeout(const Duration(seconds: 30))
+        .onError(
+          (Object error, StackTrace stack) =>
+              throw const EncryptedSendNotReady(),
+        );
+    guard._preparing[room.id] = operation;
     try {
-      await guard._prepare(room).timeout(const Duration(seconds: 30));
+      await operation;
     } catch (_) {
       throw const EncryptedSendNotReady();
+    } finally {
+      if (identical(guard._preparing[room.id], operation))
+        guard._preparing.remove(room.id);
+    }
+  }
+
+  final Map<String, Future<void>> _preparing = {};
+
+  Future<void> _prepareWithRetry(matrix.Room room) async {
+    final userId = room.client.userID;
+    final deviceId = room.client.deviceID;
+    for (var attempt = 0; ; attempt++) {
+      try {
+        await _prepare(room);
+        return;
+      } on EncryptedSendNotReady catch (error) {
+        if (!error.retryable || attempt >= 1) rethrow;
+        await Future<void>.delayed(const Duration(milliseconds: 500));
+        if (room.client.userID != userId || room.client.deviceID != deviceId) {
+          throw const EncryptedSendNotReady();
+        }
+      }
     }
   }
 
@@ -51,17 +85,17 @@ class EncryptedSendGuard {
     }
     await client.updateUserDeviceKeys(additionalUsers: users);
     if (users.any((id) => client.userDeviceKeys[id]?.outdated != false)) {
-      throw const EncryptedSendNotReady();
+      throw const EncryptedSendNotReady(retryable: true);
     }
     final devices = await room.getUserDeviceKeys();
     for (final id in users) {
       final active = devices
           .where((d) => d.userId == id && !d.blocked)
           .toList();
-      if (active.isEmpty ||
-          active.any(
-            (d) => !d.isValid || !d.encryptToDevice || d.curve25519Key == null,
-          )) {
+      if (active.isEmpty) throw const EncryptedSendNotReady(retryable: true);
+      if (active.any(
+        (d) => !d.isValid || !d.encryptToDevice || d.curve25519Key == null,
+      )) {
         throw const EncryptedSendNotReady();
       }
     }
@@ -84,7 +118,7 @@ class EncryptedSendGuard {
     if (recipients.any(
       (d) => olm.olmSessions[d.curve25519Key]?.isNotEmpty != true,
     )) {
-      throw const EncryptedSendNotReady();
+      throw const EncryptedSendNotReady(retryable: true);
     }
     final keys = encryption.keyManager;
     await keys.loadOutboundGroupSession(room.id);

@@ -83,7 +83,8 @@ class ContactTile extends StatelessWidget {
 
                     // 状态消息或最后活跃时间
                     if (contact.statusMessage?.isNotEmpty == true ||
-                        (!contact.isOnline && contact.formattedLastActive.isNotEmpty))
+                        (!contact.isOnline &&
+                            contact.formattedLastActive.isNotEmpty))
                       const SizedBox(height: 4),
 
                     if (contact.statusMessage?.isNotEmpty == true)
@@ -111,6 +112,11 @@ class ContactTile extends StatelessWidget {
                 ),
               ),
 
+              if (contact.isStarred)
+                const Padding(
+                  padding: EdgeInsets.only(right: 8),
+                  child: Icon(Icons.star, size: 18, color: Colors.orange),
+                ),
               // 右侧附加内容
               ?trailing,
             ],
@@ -140,7 +146,9 @@ class SimpleContactTile extends StatelessWidget {
 
     return Material(
       color: selected
-          ? (isDark ? AppColors.primaryDark.withValues(alpha: 0.2) : AppColors.primary.withValues(alpha: 0.1))
+          ? (isDark
+                ? AppColors.primaryDark.withValues(alpha: 0.2)
+                : AppColors.primary.withValues(alpha: 0.1))
           : context.surfaceColor,
       child: InkWell(
         onTap: onTap,
@@ -157,10 +165,7 @@ class SimpleContactTile extends StatelessWidget {
               Expanded(
                 child: Text(
                   contact.effectiveDisplayName,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: context.textPrimary,
-                  ),
+                  style: TextStyle(fontSize: 15, color: context.textPrimary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -178,4 +183,3 @@ class SimpleContactTile extends StatelessWidget {
     );
   }
 }
-

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 import '../../domain/entities/message_entity.dart';
 import '../../domain/entities/message_reaction_entity.dart';
@@ -13,19 +14,51 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   final MatrixClientManager _clientManager;
   final PreferencesDataSource _storage;
 
-  // 内存缓存
-  List<MessageEntity>? _cachedSavedMessages;
-  Map<String, Map<String, dynamic>>? _cachedFavoriteMeta;
-  Future<void>? _pendingLoad;
+  final Map<String, _FavoriteSnapshot> _favoriteCaches = {};
+  final Map<String, Future<_FavoriteSnapshot>> _favoriteLoads = {};
   Future<void> _pendingMutation = Future<void>.value();
 
-  Future<void> _mutateFavorites(Future<void> Function() action) {
-    final result = _pendingMutation.then((_) => action());
+  String _favoriteScope() {
+    final client = _clientManager.client;
+    final user = client?.userID;
+    final server = client?.homeserver;
+    if (user == null || server == null) {
+      throw StateError('Sign in to access favorites');
+    }
+    return sha256
+        .convert(
+          utf8.encode(
+            jsonEncode([
+              server.removeFragment().toString().replaceFirst(
+                RegExp(r'/+$'),
+                '',
+              ),
+              user,
+            ]),
+          ),
+        )
+        .toString();
+  }
+
+  void _checkFavoriteScope(String scope) {
+    if (_favoriteScope() != scope) throw StateError('Account changed');
+  }
+
+  Future<void> _mutateFavorites(
+    Future<void> Function(String scope, _FavoriteSnapshot snapshot) action,
+  ) async {
+    final scope = _favoriteScope();
+    final result = _pendingMutation.then((_) async {
+      _checkFavoriteScope(scope);
+      final snapshot = await _loadFavorites(scope);
+      _checkFavoriteScope(scope);
+      await action(scope, snapshot);
+    });
     _pendingMutation = result.then<void>(
       (_) {},
       onError: (Object _, StackTrace _) {},
     );
-    return result;
+    await result;
   }
 
   MessageActionRepositoryImpl(
@@ -230,138 +263,127 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
   // ============================================
 
   @override
-  Future<void> saveMessage(MessageEntity message) => _mutateFavorites(() async {
-    final messages = await _loadSavedMessages();
-    if (messages.any((m) => m.id == message.id)) return;
-    final updated = [...messages, message];
-    await _persistFavorites(updated, await _loadFavoriteMeta());
-  });
+  Future<void> saveMessage(MessageEntity message) =>
+      _mutateFavorites((scope, snapshot) async {
+        if (snapshot.messages.any((m) => m.id == message.id)) return;
+        await _persistFavorites(scope, [
+          ...snapshot.messages,
+          message,
+        ], snapshot.metadata);
+      });
 
   @override
-  Future<void> unsaveMessage(String messageId) => _mutateFavorites(() async {
-    final messages = await _loadSavedMessages();
-    final updated = messages.where((m) => m.id != messageId).toList();
-    final meta = Map<String, Map<String, dynamic>>.from(
-      await _loadFavoriteMeta(),
-    )..remove(messageId);
-    await _persistFavorites(updated, meta);
+  Future<void> unsaveMessage(String messageId) => _mutateFavorites((
+    scope,
+    snapshot,
+  ) async {
+    final metadata = Map<String, Map<String, dynamic>>.from(snapshot.metadata)
+      ..remove(messageId);
+    await _persistFavorites(
+      scope,
+      snapshot.messages.where((m) => m.id != messageId).toList(),
+      metadata,
+    );
   });
 
   @override
   Future<List<MessageEntity>> getSavedMessages() async {
-    final messages = await _loadSavedMessages();
-    return List.unmodifiable(messages);
+    final scope = _favoriteScope();
+    final snapshot = await _loadFavorites(scope);
+    _checkFavoriteScope(scope);
+    return List.unmodifiable(snapshot.messages);
   }
 
   @override
-  Future<bool> isMessageSaved(String messageId) async {
-    final messages = await _loadSavedMessages();
-    return messages.any((m) => m.id == messageId);
-  }
+  Future<bool> isMessageSaved(String messageId) async =>
+      (await getSavedMessages()).any((m) => m.id == messageId);
 
-  Future<List<MessageEntity>> _loadSavedMessages() async {
-    await _loadFavorites();
-    return _cachedSavedMessages!;
-  }
-
-  // Load both halves before publishing either cache. A bad committed record
-  // must never fall back to legacy data and resurrect previously deleted items.
-  Future<void> _loadFavorites() async {
-    if (_cachedSavedMessages != null && _cachedFavoriteMeta != null) return;
-
-    final loading = _pendingLoad ??= _readFavorites();
+  Future<_FavoriteSnapshot> _loadFavorites(String scope) async {
+    final cached = _favoriteCaches[scope];
+    if (cached != null) return cached;
+    final loading = _favoriteLoads[scope] ??= _readFavorites(scope);
     try {
-      await loading;
+      return await loading;
     } finally {
-      if (identical(_pendingLoad, loading)) _pendingLoad = null;
+      if (identical(_favoriteLoads[scope], loading))
+        _favoriteLoads.remove(scope);
     }
   }
 
-  Future<void> _readFavorites() async {
-    final record = await _storage.getFavoriteRecord();
-    dynamic messages;
-    dynamic metadata;
-    if (record != null) {
-      final decoded = jsonDecode(record);
-      if (decoded is! Map<String, dynamic> || decoded['version'] != 1) {
-        throw const FormatException('Unsupported favorite record');
-      }
-      messages = decoded['messages'];
-      metadata = decoded['metadata'];
-    } else {
-      final legacyMessages = await _storage.getFavoriteMessages();
-      final legacyMeta = await _storage.getFavoriteMeta();
-      messages = legacyMessages == null || legacyMessages.isEmpty
-          ? <dynamic>[]
-          : jsonDecode(legacyMessages);
-      metadata = legacyMeta == null || legacyMeta.isEmpty
-          ? <String, dynamic>{}
-          : jsonDecode(legacyMeta);
+  Future<_FavoriteSnapshot> _readFavorites(String scope) async {
+    final record = await _storage.getFavoriteRecord(scope: scope);
+    // Legacy global records have no trustworthy owner. Leave them untouched,
+    // but never assign them to whichever account happens to sign in first.
+    final decoded = record == null
+        ? <String, dynamic>{
+            'version': 1,
+            'messages': <dynamic>[],
+            'metadata': <String, dynamic>{},
+          }
+        : jsonDecode(record);
+    if (decoded is! Map<String, dynamic> || decoded['version'] != 1) {
+      throw const FormatException('Unsupported favorite record');
     }
+    final messages = decoded['messages'];
+    final metadata = decoded['metadata'];
     if (messages is! List ||
         messages.any((dynamic item) => item is! Map<String, dynamic>) ||
         metadata is! Map<String, dynamic> ||
         metadata.values.any((dynamic item) => item is! Map<String, dynamic>)) {
       throw const FormatException('Invalid favorite record contents');
     }
-    final parsedMessages = messages
-        .map((dynamic item) => _messageFromJson(item as Map<String, dynamic>))
-        .toList();
-    final parsedMeta = metadata.map(
-      (key, value) => MapEntry(key, value as Map<String, dynamic>),
+    final snapshot = _FavoriteSnapshot(
+      messages
+          .map((dynamic item) => _messageFromJson(item as Map<String, dynamic>))
+          .toList(),
+      metadata.map(
+        (key, value) => MapEntry(key, value as Map<String, dynamic>),
+      ),
     );
-    _cachedSavedMessages = parsedMessages;
-    _cachedFavoriteMeta = parsedMeta;
+    _favoriteCaches[scope] = snapshot;
+    return snapshot;
   }
 
   Future<void> _persistFavorites(
+    String scope,
     List<MessageEntity> messages,
     Map<String, Map<String, dynamic>> metadata,
   ) async {
-    // Retain legacy keys for interrupted migration. Once this record exists it
-    // is authoritative; subsequent mutations never write either legacy key.
+    _checkFavoriteScope(scope);
     await _storage.saveFavoriteRecord(
       jsonEncode({
         'version': 1,
         'messages': messages.map(_messageToJson).toList(),
         'metadata': metadata,
       }),
+      scope: scope,
     );
-    _cachedSavedMessages = messages;
-    _cachedFavoriteMeta = metadata;
+    _favoriteCaches[scope] = _FavoriteSnapshot(messages, metadata);
+    _checkFavoriteScope(scope);
   }
-
-  // ============================================
-  // 收藏标签 / 备注（持久化）
-  // ============================================
 
   @override
   Future<void> editFavoriteTags(String favoriteId, List<String> tags) =>
-      _mutateFavorites(() async {
-        final meta = Map<String, Map<String, dynamic>>.from(
-          await _loadFavoriteMeta(),
+      _mutateFavorites((scope, snapshot) async {
+        final metadata = Map<String, Map<String, dynamic>>.from(
+          snapshot.metadata,
         );
-        meta[favoriteId] = {
-          ...?meta[favoriteId],
+        metadata[favoriteId] = {
+          ...?metadata[favoriteId],
           'tags': List<String>.of(tags),
         };
-        await _persistFavorites(await _loadSavedMessages(), meta);
+        await _persistFavorites(scope, snapshot.messages, metadata);
       });
 
   @override
   Future<void> editFavoriteRemark(String favoriteId, String remark) =>
-      _mutateFavorites(() async {
-        final meta = Map<String, Map<String, dynamic>>.from(
-          await _loadFavoriteMeta(),
+      _mutateFavorites((scope, snapshot) async {
+        final metadata = Map<String, Map<String, dynamic>>.from(
+          snapshot.metadata,
         );
-        meta[favoriteId] = {...?meta[favoriteId], 'remark': remark};
-        await _persistFavorites(await _loadSavedMessages(), meta);
+        metadata[favoriteId] = {...?metadata[favoriteId], 'remark': remark};
+        await _persistFavorites(scope, snapshot.messages, metadata);
       });
-
-  Future<Map<String, Map<String, dynamic>>> _loadFavoriteMeta() async {
-    await _loadFavorites();
-    return _cachedFavoriteMeta!;
-  }
 
   // ============================================
   // MessageEntity JSON 序列化助手
@@ -537,4 +559,10 @@ class MessageActionRepositoryImpl implements IMessageActionRepository {
       callPeerId: json['callPeerId'] as String?,
     );
   }
+}
+
+class _FavoriteSnapshot {
+  final List<MessageEntity> messages;
+  final Map<String, Map<String, dynamic>> metadata;
+  const _FavoriteSnapshot(this.messages, this.metadata);
 }

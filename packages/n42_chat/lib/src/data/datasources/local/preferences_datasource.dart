@@ -1428,15 +1428,21 @@ class PreferencesDataSource {
   // ============================================
 
   /// Save the versioned message/metadata snapshot with one platform write.
-  Future<void> saveFavoriteRecord(String json) async {
+  Future<void> saveFavoriteRecord(String json, {String? scope}) async {
     final p = await prefs;
-    await saveStringPreference(p, _keyFavoriteRecord, json);
+    await saveStringPreference(
+      p,
+      scope == null ? _keyFavoriteRecord : '${_keyFavoriteRecord}_$scope',
+      json,
+    );
   }
 
   /// A missing record allows legacy migration; malformed records must surface.
-  Future<String?> getFavoriteRecord() async {
+  Future<String?> getFavoriteRecord({String? scope}) async {
     final p = await prefs;
-    return p.getString(_keyFavoriteRecord);
+    return p.getString(
+      scope == null ? _keyFavoriteRecord : '${_keyFavoriteRecord}_$scope',
+    );
   }
 
   /// 保存收藏消息列表（JSON）

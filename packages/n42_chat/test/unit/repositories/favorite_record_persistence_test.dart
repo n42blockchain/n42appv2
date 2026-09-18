@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
+import 'package:matrix/matrix.dart' as matrix;
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,6 +14,8 @@ import 'package:n42_chat/src/presentation/blocs/favorite/favorite_bloc.dart';
 import 'package:n42_chat/src/presentation/blocs/favorite/favorite_event.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shared_preferences_platform_interface/shared_preferences_platform_interface.dart';
+
+class _Client extends Mock implements matrix.Client {}
 
 class _Reaction extends Mock implements MatrixReactionDataSource {}
 
@@ -40,9 +44,9 @@ class _DelayedStorage extends PreferencesDataSource {
   int reads = 0;
 
   @override
-  Future<String?> getFavoriteRecord() async {
+  Future<String?> getFavoriteRecord({String? scope}) async {
     reads++;
-    final snapshot = await super.getFavoriteRecord();
+    final snapshot = await super.getFavoriteRecord(scope: scope);
     if (reads == 1) {
       started.complete();
       await release.future;
@@ -54,14 +58,20 @@ class _DelayedStorage extends PreferencesDataSource {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   late _Store platform;
+  late _Manager manager;
+  late _Client client;
+  var account = '@alice:test';
+  var server = 'https://test';
+  String scope() =>
+      sha256.convert(utf8.encode(jsonEncode([server, account]))).toString();
   late PreferencesDataSource storage;
   late MessageActionRepositoryImpl repository;
   MessageActionRepositoryImpl fresh() => MessageActionRepositoryImpl(
     _Reaction(),
-    _Manager(),
+    manager,
     PreferencesDataSource(),
   );
-  const recordKey = 'n42_chat_favorite_record';
+  String recordKey() => 'n42_chat_favorite_record_${scope()}';
   MessageEntity message(String id) => MessageEntity(
     id: id,
     roomId: 'room',
@@ -76,6 +86,10 @@ void main() {
   }) async {
     await storage.saveFavoriteMessages('[{"id":"one"},{"id":"two"}]');
     await storage.saveFavoriteMeta(meta);
+    await storage.saveFavoriteRecord(
+      '{"version":1,"messages":[{"id":"one"},{"id":"two"}],"metadata":$meta}',
+      scope: scope(),
+    );
     platform.writes = 0;
   }
 
@@ -87,7 +101,7 @@ void main() {
 
   Future<Map<String, dynamic>> record() async {
     final prefs = await SharedPreferences.getInstance();
-    return jsonDecode(prefs.getString(recordKey)!) as Map<String, dynamic>;
+    return jsonDecode(prefs.getString(recordKey())!) as Map<String, dynamic>;
   }
 
   setUp(() {
@@ -95,6 +109,13 @@ void main() {
     platform = _Store();
     SharedPreferencesStorePlatform.instance = platform;
     storage = PreferencesDataSource();
+    account = '@alice:test';
+    server = 'https://test';
+    manager = _Manager();
+    client = _Client();
+    when(() => manager.client).thenReturn(client);
+    when(() => client.userID).thenAnswer((_) => account);
+    when(() => client.homeserver).thenAnswer((_) => Uri.parse(server));
     repository = fresh();
   });
   tearDown(() => SharedPreferences.setMockInitialValues({}));
@@ -112,7 +133,7 @@ void main() {
   );
 
   test(
-    'corrupt legacy metadata blocks deletion before any durable change',
+    'corrupt scoped metadata blocks deletion before any durable change',
     () async {
       await seedLegacy(meta: 'broken-json');
       await expectLater(repository.unsaveMessage('one'), throwsFormatException);
@@ -144,8 +165,8 @@ void main() {
             expect((await record())['metadata']['one']['remark'], 'keep');
           } else {
             expect(
-              (await SharedPreferences.getInstance()).getString(recordKey),
-              isNull,
+              (await SharedPreferences.getInstance()).getString(recordKey()),
+              isNotNull,
             );
             expect(
               jsonDecode((await storage.getFavoriteMeta())!)['one']['remark'],
@@ -162,7 +183,7 @@ void main() {
   }
 
   test(
-    'read-only legacy access does not migrate or require writable storage',
+    'read-only scoped access does not mutate or require writable storage',
     () async {
       await seedLegacy();
       platform.rejectWrite = 1;
@@ -175,7 +196,7 @@ void main() {
   );
 
   test(
-    'first edit migrates both halves and preserves untouched legacy data',
+    'first scoped edit preserves both halves and leaves unowned legacy untouched',
     () async {
       await seedLegacy();
       await repository.editFavoriteTags('one', ['updated']);
@@ -247,11 +268,7 @@ void main() {
     'concurrent initial read and edit share a snapshot without overwriting a committed cache',
     () async {
       final delayed = _DelayedStorage();
-      final repo = MessageActionRepositoryImpl(
-        _Reaction(),
-        _Manager(),
-        delayed,
-      );
+      final repo = MessageActionRepositoryImpl(_Reaction(), manager, delayed);
       final reading = repo.getSavedMessages();
       await delayed.started.future;
       final saving = repo.saveMessage(message('new'));
@@ -267,6 +284,48 @@ void main() {
     },
   );
 
+  test(
+    'accounts and homeservers isolate cached and persisted favorites',
+    () async {
+      await repository.saveMessage(message('alice'));
+      account = '@bob:test';
+      expect(await repository.getSavedMessages(), isEmpty);
+      await repository.saveMessage(message('bob'));
+      server = 'https://other';
+      expect(await repository.getSavedMessages(), isEmpty);
+      server = 'https://test';
+      account = '@alice:test';
+      expect((await repository.getSavedMessages()).single.id, 'alice');
+      expect((await fresh().getSavedMessages()).single.id, 'alice');
+    },
+  );
+  test(
+    'unowned legacy favorites are retained but never exposed or claimed',
+    () async {
+      await storage.saveFavoriteRecord(
+        '{"version":1,"messages":[{"id":"private"}],"metadata":{}}',
+      );
+      await storage.saveFavoriteMessages('[{"id":"private"}]');
+      expect(await repository.getSavedMessages(), isEmpty);
+      account = '@bob:test';
+      expect(await repository.getSavedMessages(), isEmpty);
+      expect(await storage.getFavoriteRecord(), contains('private'));
+    },
+  );
+  test(
+    'account switch during a delayed read does not publish another account',
+    () async {
+      final delayed = _DelayedStorage();
+      final repo = MessageActionRepositoryImpl(_Reaction(), manager, delayed);
+      final reading = repo.getSavedMessages();
+      final assertion = expectLater(reading, throwsStateError);
+      await delayed.started.future;
+      account = '@bob:test';
+      delayed.release.complete();
+      await assertion;
+      expect(await repo.getSavedMessages(), isEmpty);
+    },
+  );
   for (final invalid in [
     'broken-json',
     '{"version":2,"messages":[],"metadata":{}}',
@@ -281,16 +340,16 @@ void main() {
       () async {
         await seedLegacy();
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setString(recordKey, invalid);
+        await prefs.setString(recordKey(), invalid);
         platform.writes = 0;
         await expectLater(
           repository.saveMessage(message('new')),
           throwsFormatException,
         );
         expect(platform.writes, 0);
-        expect(prefs.getString(recordKey), invalid);
+        expect(prefs.getString(recordKey()), invalid);
         await prefs.setString(
-          recordKey,
+          recordKey(),
           '{"version":1,"messages":[],"metadata":{}}',
         );
         await repository.saveMessage(message('new'));

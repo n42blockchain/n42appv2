@@ -120,8 +120,19 @@ class LocalRoomKeyStore {
         session.senderClaimedKeys,
       );
     }
-    if (sessions.isNotEmpty)
+    if (sessions.isNotEmpty) {
       client.encryption?.keyManager.clearInboundGroupSessions();
+      // Login can load encrypted timeline events before local keys are restored.
+      // Notify even for an already stored session so cached failures retry.
+      for (final session in sessions) {
+        if (_scope(client) != scope) throw StateError('Account changed');
+        final updates = client
+            .getRoomById(session.roomId)
+            ?.onSessionKeyReceived;
+        if (updates != null && !updates.isClosed)
+          updates.add(session.sessionId);
+      }
+    }
   }
 
   Future<void> deleteForIdentity(Uri homeserver, String userId) async {

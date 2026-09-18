@@ -47,6 +47,7 @@ class ContactEntity extends Equatable {
 
   /// 是否是好友（有私聊房间）
   final bool isFriend;
+  final bool isStarred;
 
   /// 私聊房间ID
   final String? directRoomId;
@@ -73,6 +74,7 @@ class ContactEntity extends Equatable {
     this.remark,
     this.isBlocked = false,
     this.isFriend = false,
+    this.isStarred = false,
     this.directRoomId,
     this.tags = const [],
     this.n42Username,
@@ -187,6 +189,7 @@ class ContactEntity extends Equatable {
     remark,
     isBlocked,
     isFriend,
+    isStarred,
     directRoomId,
     tags,
     n42Username,
@@ -204,6 +207,7 @@ class ContactEntity extends Equatable {
     String? remark,
     bool? isBlocked,
     bool? isFriend,
+    bool? isStarred,
     String? directRoomId,
     List<String>? tags,
     String? n42Username,
@@ -220,6 +224,7 @@ class ContactEntity extends Equatable {
       remark: remark ?? this.remark,
       isBlocked: isBlocked ?? this.isBlocked,
       isFriend: isFriend ?? this.isFriend,
+      isStarred: isStarred ?? this.isStarred,
       directRoomId: directRoomId ?? this.directRoomId,
       tags: tags ?? this.tags,
       n42Username: n42Username ?? this.n42Username,

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:crypto/crypto.dart';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matrix/matrix.dart' as matrix;
@@ -17,22 +18,26 @@ class MockManager extends Mock implements MatrixClientManager {}
 
 class MockClient extends Mock implements matrix.Client {}
 
+final fixtureScope = sha256
+    .convert(utf8.encode(jsonEncode(['https://test', '@alice:test'])))
+    .toString();
+
 class FaultStorage extends PreferencesDataSource {
   bool rejectReads = false;
   @override
-  Future<String?> getFavoriteMessages() async {
+  Future<String?> getFavoriteRecord({String? scope}) async {
     if (rejectReads) throw StateError('read unavailable');
-    return super.getFavoriteMessages();
+    return super.getFavoriteRecord(scope: scope ?? fixtureScope);
   }
 
   bool rejectMessages = false;
   bool rejectMeta = false;
   Completer<void>? pending;
   @override
-  Future<void> saveFavoriteRecord(String json) async {
+  Future<void> saveFavoriteRecord(String json, {String? scope}) async {
     if (pending != null) await pending!.future;
     if (rejectMessages || rejectMeta) throw StateError('storage full');
-    await super.saveFavoriteRecord(json);
+    await super.saveFavoriteRecord(json, scope: scope ?? fixtureScope);
   }
 }
 
@@ -68,19 +73,36 @@ void main() {
         threadLatestReplyTimestamp: DateTime.utc(2026, 9, 13, 2),
         metadata: metadata,
       );
+  Future<void> seedMessages(String raw) async {
+    await storage.saveFavoriteMessages(raw);
+    await storage.saveFavoriteRecord(
+      '{"version":1,"messages":${raw.isEmpty ? '[]' : raw},"metadata":{}}',
+    );
+  }
+
+  Future<void> seedMeta(String raw) async {
+    await storage.saveFavoriteMeta(raw);
+    await storage.saveFavoriteRecord(
+      '{"version":1,"messages":[],"metadata":$raw}',
+    );
+  }
+
   setUp(() {
     SharedPreferences.setMockInitialValues({});
     reaction = MockReaction();
     manager = MockManager();
     storage = FaultStorage();
-    when(() => manager.client).thenReturn(null);
+    final client = MockClient();
+    when(() => client.userID).thenReturn('@alice:test');
+    when(() => client.homeserver).thenReturn(Uri.parse('https://test'));
+    when(() => manager.client).thenReturn(client);
     repository = fresh();
   });
 
   test(
     'failed read cannot be cached as empty or overwrite existing favorites',
     () async {
-      await storage.saveFavoriteMessages(
+      await seedMessages(
         jsonEncode([
           {'id': 'existing'},
         ]),
@@ -104,13 +126,13 @@ void main() {
   test(
     'corrupt favorite payload remains intact and can recover after storage repair',
     () async {
-      await storage.saveFavoriteMessages('broken-json');
+      await seedMessages('broken-json');
       await expectLater(
         repository.saveMessage(message('new')),
         throwsFormatException,
       );
       expect(await storage.getFavoriteMessages(), 'broken-json');
-      await storage.saveFavoriteMessages('[]');
+      await seedMessages('[]');
       await repository.saveMessage(message('new'));
       expect((await fresh().getSavedMessages()).single.id, 'new');
     },
@@ -118,13 +140,13 @@ void main() {
   test(
     'corrupt metadata is not silently discarded by a subsequent edit',
     () async {
-      await storage.saveFavoriteMeta('broken-json');
+      await seedMeta('broken-json');
       await expectLater(
         repository.editFavoriteTags('one', ['tag']),
         throwsFormatException,
       );
       expect(await storage.getFavoriteMeta(), 'broken-json');
-      await storage.saveFavoriteMeta('{}');
+      await seedMeta('{}');
       await repository.editFavoriteRemark('one', 'recovered');
       expect(
         jsonDecode(
@@ -306,7 +328,7 @@ void main() {
   test(
     'unknown persisted enum values fall back without dropping the message',
     () async {
-      await storage.saveFavoriteMessages(
+      await seedMessages(
         jsonEncode([
           {'id': 'legacy', 'type': 999, 'status': 999, 'timestamp': 'invalid'},
         ]),
@@ -318,7 +340,7 @@ void main() {
     },
   );
   test('empty persisted favorites return an empty list', () async {
-    await storage.saveFavoriteMessages('');
+    await seedMessages('');
     expect(await repository.getSavedMessages(), isEmpty);
   });
   test(
@@ -435,6 +457,7 @@ void main() {
   test(
     'reaction lookup preserves user ids without a room or active account',
     () async {
+      when(() => manager.client).thenReturn(null);
       when(() => reaction.getReactions('room', 'one')).thenAnswer(
         (_) async => {
           '👍': ['@alice:test'],

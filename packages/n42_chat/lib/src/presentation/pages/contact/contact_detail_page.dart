@@ -178,6 +178,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
         if (_contact != nextContact || _isFriend != nextIsFriend) {
           setState(() {
             _contact = nextContact;
+            _isStarred = nextContact?.isStarred ?? false;
             _isFriend = nextIsFriend;
           });
         }
@@ -211,6 +212,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
       isFriend: contact.isFriend,
       directRoomId: contact.directRoomId,
       tags: contact.tags,
+      isStarred: contact.isStarred,
       n42Username: contact.n42Username,
       walletAddress: contact.walletAddress,
       ensName: contact.ensName,

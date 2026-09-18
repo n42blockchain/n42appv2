@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 // Tests for ContactRepositoryImpl — contacts retrieval and friend requests.
 
 import 'package:flutter_test/flutter_test.dart';
@@ -30,6 +31,7 @@ void main() {
   late MockMatrixMomentDataSource mockMomentDS;
 
   setUp(() {
+    FlutterSecureStorage.setMockInitialValues({});
     mockContactDS = MockMatrixContactDataSource();
     when(
       () => mockContactDS.refreshDirectChatMembers(),

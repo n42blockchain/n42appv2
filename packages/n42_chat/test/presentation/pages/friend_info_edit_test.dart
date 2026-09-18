@@ -49,7 +49,11 @@ void main() {
   );
   setUp(() {
     SharedPreferences.setMockInitialValues({
-      'tags_data': jsonEncode([
+      FriendDetailsStore(
+        'https://hs.test',
+        '@me:hs.test',
+        '__tag_catalog__',
+      ).key: jsonEncode([
         {'name': 'Family', 'contactIds': <String>[]},
       ]),
     });
@@ -109,7 +113,11 @@ void main() {
     tester,
   ) async {
     SharedPreferences.setMockInitialValues({
-      'tags_data': jsonEncode([
+      FriendDetailsStore(
+        'https://hs.test',
+        '@me:hs.test',
+        '__tag_catalog__',
+      ).key: jsonEncode([
         {'name': 'Family', 'contactIds': <String>[]},
         {'name': 'Work', 'contactIds': <String>[]},
       ]),
@@ -217,7 +225,19 @@ void main() {
       await tester.pumpAndSettle();
       expect((await store.load())['tags'], ['Family']);
       final prefs = await SharedPreferences.getInstance();
-      expect(jsonDecode(prefs.getString('tags_data')!) as List, hasLength(1));
+      expect(
+        jsonDecode(
+              prefs.getString(
+                FriendDetailsStore(
+                  'https://hs.test',
+                  '@me:hs.test',
+                  '__tag_catalog__',
+                ).key,
+              )!,
+            )
+            as List,
+        hasLength(1),
+      );
     },
   );
 
@@ -318,7 +338,13 @@ void main() {
       await tester.pumpAndSettle();
       await tester.runAsync(() async {
         await tester.tap(find.text('Add'));
-        await Future<void>.delayed(const Duration(milliseconds: 200));
+        final deadline = DateTime.now().add(const Duration(seconds: 5));
+        while (((await store.load())['photos'] as List?)?.length != 2) {
+          if (DateTime.now().isAfter(deadline)) {
+            fail('Photo imports did not finish before the deadline');
+          }
+          await Future<void>.delayed(const Duration(milliseconds: 20));
+        }
       });
       await tester.pumpAndSettle();
       expect(picker.source, ImageSource.gallery);

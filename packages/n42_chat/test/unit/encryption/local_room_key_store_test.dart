@@ -158,6 +158,25 @@ void main() {
       });
     },
   );
+  test(
+    'restored sessions notify timelines even when already in the database',
+    () async {
+      final room = Room(id: '!room:hs', client: client);
+      when(() => client.getRoomById('!room:hs')).thenReturn(room);
+      final saved = fixture('timeline-session');
+      sessions[id(saved)] = saved;
+      await store.preserve(client);
+      final received = <String>[];
+      final subscription = room.onSessionKeyReceived.stream.listen(
+        received.add,
+      );
+      await store.restore(client);
+      await Future<void>.delayed(Duration.zero);
+      expect(received, ['timeline-session']);
+      await subscription.cancel();
+      await room.onSessionKeyReceived.close();
+    },
+  );
   test('secure write failure prevents destructive SDK logout', () async {
     final storage = _Storage();
     final manager = _Manager();

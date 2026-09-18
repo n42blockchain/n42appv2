@@ -195,30 +195,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   /// 注册
+  bool _registrationInProgress = false;
+
   Future<void> _onRegisterRequested(
     AuthRegisterRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    if (_registrationInProgress) return;
+    _registrationInProgress = true;
+    try {
+      emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
-    final result = await _authRepository.register(
-      homeserver: event.homeserver,
-      username: event.username,
-      password: event.password,
-      email: event.email,
-      registrationToken: event.registrationToken,
-    );
-
-    if (result.success && result.user != null) {
-      await _completeAuthenticatedFlow(result.user!, emit);
-    } else {
-      emit(
-        state.copyWith(
-          status: AuthStatus.error,
-          errorMessage: result.errorMessage ?? 'Registration failed',
-          errorType: result.errorType,
-        ),
+      final result = await _authRepository.register(
+        homeserver: event.homeserver,
+        username: event.username,
+        password: event.password,
+        email: event.email,
+        registrationToken: event.registrationToken,
       );
+
+      if (result.success && result.user != null) {
+        await _completeAuthenticatedFlow(result.user!, emit);
+      } else {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage: result.errorMessage ?? 'Registration failed',
+            errorType: result.errorType,
+          ),
+        );
+      }
+    } finally {
+      _registrationInProgress = false;
     }
   }
 
@@ -413,24 +421,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     AuthAnonymousRegisterRequested event,
     Emitter<AuthState> emit,
   ) async {
-    emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
+    if (_registrationInProgress) return;
+    _registrationInProgress = true;
+    try {
+      emit(state.copyWith(status: AuthStatus.loading, errorMessage: null));
 
-    final result = await _authRepository.registerAnonymously(
-      homeserver: event.homeserver,
-      password: event.password,
-      registrationToken: event.registrationToken,
-    );
-
-    if (result.success && result.user != null) {
-      await _completeAuthenticatedFlow(result.user!, emit);
-    } else {
-      emit(
-        state.copyWith(
-          status: AuthStatus.error,
-          errorMessage: result.errorMessage ?? 'Anonymous registration failed',
-          errorType: result.errorType,
-        ),
+      final result = await _authRepository.registerAnonymously(
+        homeserver: event.homeserver,
+        password: event.password,
+        registrationToken: event.registrationToken,
       );
+
+      if (result.success && result.user != null) {
+        await _completeAuthenticatedFlow(result.user!, emit);
+      } else {
+        emit(
+          state.copyWith(
+            status: AuthStatus.error,
+            errorMessage:
+                result.errorMessage ?? 'Anonymous registration failed',
+            errorType: result.errorType,
+          ),
+        );
+      }
+    } finally {
+      _registrationInProgress = false;
     }
   }
 

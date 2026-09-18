@@ -1,3 +1,4 @@
+import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -873,8 +874,11 @@ class _ContactListPageState extends State<ContactListPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              S.of(context)?.contactRecommendFailed(e.toString()) ??
-                  'Recommend failed: $e',
+              e is EncryptedSendNotReady
+                  ? (S.of(context)?.chatEncryptionNotReady ??
+                        'Secure connection is not ready. Please retry.')
+                  : (S.of(context)?.contactRecommendFailed(e.toString()) ??
+                        'Recommend failed: $e'),
             ),
             backgroundColor: AppColors.error,
           ),
@@ -1774,10 +1778,14 @@ class _GroupListPageState extends State<_GroupListPage> {
       chatBloc = getIt<ChatBloc>();
     }
 
-    // 构建会话实体
+    final group = _groupBloc.state.groups
+        .where((g) => g.roomId == roomId)
+        .firstOrNull;
     final conversation = ConversationEntity(
       id: roomId,
-      name: '',
+      name: group?.name ?? '',
+      avatarUrl: group?.avatarUrl,
+      memberCount: group?.memberCount ?? 0,
       type: ConversationType.group,
     );
 
@@ -1894,7 +1902,8 @@ class _GroupListPageState extends State<_GroupListPage> {
           // 我的群聊
           if (state.groups.isNotEmpty) ...[
             _buildSectionHeader(
-              '${S.of(context)?.commonMyGroups ?? "My Groups"} (${state.groups.length})',
+              S.of(context)?.commonMyGroups(state.groups.length) ??
+                  'My Groups (${state.groups.length})',
               isDark,
             ),
             ...state.groups.map((group) => _buildGroupTile(group, isDark)),

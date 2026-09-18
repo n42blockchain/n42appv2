@@ -6,7 +6,8 @@ import '../../blocs/moment/moment_bloc.dart';
 import '../../blocs/contact/contact_bloc.dart';
 import 'create_moment_page.dart';
 
-import 'package:cached_network_image/cached_network_image.dart';
+import '../../../core/services/authenticated_video_source.dart';
+import '../../widgets/common/n42_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
@@ -308,6 +309,9 @@ class _VideoFeedItem extends StatefulWidget {
 class _VideoFeedItemState extends State<_VideoFeedItem> {
   VideoPlayerController? _vc;
   bool _initialized = false;
+  bool _failed = false;
+  int _generation = 0;
+  AuthenticatedVideoSource? _mediaSource;
   bool _userPaused = false;
 
   @override
@@ -324,40 +328,64 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
 
   @override
   void dispose() {
+    _generation++;
     _vc?.dispose();
+    unawaited(_mediaSource?.dispose());
     super.dispose();
   }
 
   Future<void> _init() async {
-    final video = widget.moment.media.firstWhere(
-      (m) => m.isVideo,
-      orElse: () => widget.moment.media.first,
-    );
-    final client = MatrixClientManager.instance.client;
-    final url =
-        video.httpUrl ??
-        mx_utils.MatrixUtils.getMediaDownloadUrl(video.url, client: client);
-    if (url == null || url.isEmpty) return;
-    final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
-      url,
-      client: client,
-    );
-    final vc = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: headers,
-    );
-    _vc = vc;
-    unawaited(vc.setLooping(true));
+    final generation = ++_generation;
+    final previous = _vc;
+    _vc = null;
+    await previous?.dispose();
+    await _mediaSource?.dispose();
+    if (!mounted || generation != _generation) return;
+    setState(() {
+      _initialized = false;
+      _failed = false;
+    });
+    VideoPlayerController? vc;
     try {
-      await vc.initialize();
-      if (!mounted) {
-        unawaited(vc.dispose());
+      final video = widget.moment.media.firstWhere((m) => m.isVideo);
+      final client = MatrixClientManager.instance.client;
+      final url = video.url.startsWith('mxc://')
+          ? mx_utils.MatrixUtils.getMediaDownloadUrl(video.url, client: client)
+          : video.httpUrl ?? video.url;
+      if (url == null || url.isEmpty) throw StateError('Video URL unavailable');
+      final headers = mx_utils.MatrixUtils.buildAuthenticatedMediaHeaders(
+        url,
+        client: client,
+      );
+      if (headers.isNotEmpty) {
+        final source = AuthenticatedVideoSource();
+        _mediaSource = source;
+        final file = await source
+            .load(Uri.parse(url), headers)
+            .timeout(const Duration(minutes: 2));
+        if (!mounted || generation != _generation) {
+          await source.dispose();
+          return;
+        }
+        vc = VideoPlayerController.file(file);
+      } else {
+        vc = VideoPlayerController.networkUrl(Uri.parse(url));
+      }
+      _vc = vc;
+      await vc.initialize().timeout(const Duration(seconds: 30));
+      if (!mounted || generation != _generation) {
+        await vc.dispose();
         return;
       }
+      await vc.setLooping(true);
       setState(() => _initialized = true);
-      if (widget.isActive) unawaited(vc.play());
+      if (widget.isActive && !_userPaused) await vc.play();
     } catch (_) {
-      // 初始化失败：保留占位
+      await vc?.dispose();
+      if (!mounted || generation != _generation) return;
+      _vc = null;
+      await _mediaSource?.dispose();
+      if (mounted) setState(() => _failed = true);
     }
   }
 
@@ -394,6 +422,17 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
                 width: _vc!.value.size.width,
                 height: _vc!.value.size.height,
                 child: VideoPlayer(_vc!),
+              ),
+            )
+          else if (_failed)
+            Center(
+              child: TextButton.icon(
+                onPressed: _init,
+                icon: const Icon(Icons.refresh, color: Colors.white),
+                label: Text(
+                  '${S.of(context)?.commonLoadFailed ?? 'Failed to load'} · ${S.of(context)?.commonRetry ?? 'Retry'}',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             )
           else
@@ -493,36 +532,26 @@ class _VideoFeedItemState extends State<_VideoFeedItem> {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
-        Row(
-          children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.white24,
-              backgroundImage:
-                  (m.userAvatarUrl != null && m.userAvatarUrl!.isNotEmpty)
-                  ? CachedNetworkImageProvider(m.userAvatarUrl!)
-                  : null,
-              child: (m.userAvatarUrl == null || m.userAvatarUrl!.isEmpty)
-                  ? Text(
-                      m.userInitials,
-                      style: const TextStyle(color: Colors.white, fontSize: 13),
-                    )
-                  : null,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                m.userName,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 15,
+        InkWell(
+          onTap: () => N42Chat.openUserProfile(m.userId, context: context),
+          child: Row(
+            children: [
+              N42Avatar(imageUrl: m.userAvatarUrl, name: m.userName, size: 32),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  m.userName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 15,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         if (m.hasContent) ...[
           const SizedBox(height: 8),

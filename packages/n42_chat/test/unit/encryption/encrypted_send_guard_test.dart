@@ -229,6 +229,42 @@ void main() {
     );
   }
   test(
+    'simultaneous sends share one readiness and distribution operation',
+    () async {
+      final release = Completer<void>();
+      when(
+        () => client.sendToDeviceEncrypted(any(), any(), any()),
+      ).thenAnswer((_) => release.future);
+      final first = EncryptedSendGuard.prepare(room);
+      final second = EncryptedSendGuard.prepare(room);
+      await Future<void>.delayed(Duration.zero);
+      release.complete();
+      await Future.wait([first, second]);
+      verify(
+        () => client.sendToDeviceEncrypted(any(), EventTypes.RoomKey, any()),
+      ).called(1);
+    },
+  );
+  test(
+    'an initial incomplete device query retries without weakening trust',
+    () async {
+      var queries = 0;
+      when(
+        () => client.updateUserDeviceKeys(
+          additionalUsers: any(named: 'additionalUsers'),
+        ),
+      ).thenAnswer((_) async {
+        queries++;
+        if (queries > 1)
+          for (final list in lists.values) {
+            list.outdated = false;
+          }
+      });
+      await EncryptedSendGuard.prepare(room);
+      expect(queries, 2);
+    },
+  );
+  test(
     'delivered Megolm key decrypts the next message on a fresh receiver',
     () async {
       Map<String, dynamic>? delivered;
@@ -293,7 +329,7 @@ void main() {
         EncryptedSendGuard.prepare(room),
         throwsA(isA<EncryptedSendNotReady>()),
       );
-      verify(() => olm.startOutgoingOlmSessions(any())).called(1);
+      verify(() => olm.startOutgoingOlmSessions(any())).called(2);
       verifyNever(() => keys.prepareOutboundGroupSession(any()));
     },
   );

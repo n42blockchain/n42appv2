@@ -118,6 +118,13 @@ class MatrixGroupDataSource {
       throw Exception('Matrix client not initialized');
     }
 
+    final avatarUri = avatar == null
+        ? null
+        : await _client!.uploadContent(
+            avatar,
+            filename: 'avatar.png',
+            contentType: 'image/png',
+          );
     final roomId = await _client!.createRoom(
       name: name,
       topic: topic,
@@ -128,28 +135,24 @@ class MatrixGroupDataSource {
       visibility: isPublic
           ? matrix.Visibility.public
           : matrix.Visibility.private,
-      initialState: enableEncryption
-          ? [
-              matrix.StateEvent(
-                type: matrix.EventTypes.Encryption,
-                stateKey: '',
-                content: {
-                  'algorithm':
-                      matrix.Client.supportedGroupEncryptionAlgorithms.first,
-                },
-              ),
-            ]
-          : null,
+      initialState: [
+        if (enableEncryption)
+          matrix.StateEvent(
+            type: matrix.EventTypes.Encryption,
+            stateKey: '',
+            content: {
+              'algorithm':
+                  matrix.Client.supportedGroupEncryptionAlgorithms.first,
+            },
+          ),
+        if (avatarUri != null)
+          matrix.StateEvent(
+            type: 'm.room.avatar',
+            stateKey: '',
+            content: {'url': avatarUri.toString()},
+          ),
+      ],
     );
-
-    // 设置群头像
-    if (avatar != null) {
-      final room = _client!.getRoomById(roomId);
-      if (room != null) {
-        final matrixFile = matrix.MatrixFile(bytes: avatar, name: 'avatar.png');
-        await room.setAvatar(matrixFile);
-      }
-    }
 
     return roomId;
   }
@@ -170,6 +173,7 @@ class MatrixGroupDataSource {
               (room) =>
                   !room.isDirectChat &&
                   !ContactPrivacyService.isSocialRoom(room) &&
+                  !room.topic.startsWith('n42.live.directory:') &&
                   room.membership == matrix.Membership.join,
             )
             .toList() ??
@@ -478,6 +482,7 @@ class MatrixGroupDataSource {
               (room) =>
                   !room.isDirectChat &&
                   !ContactPrivacyService.isSocialRoom(room) &&
+                  !room.topic.startsWith('n42.live.directory:') &&
                   room.membership == matrix.Membership.invite,
             )
             .toList() ??

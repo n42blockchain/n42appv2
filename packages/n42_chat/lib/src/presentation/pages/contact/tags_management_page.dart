@@ -1,4 +1,8 @@
 import 'dart:convert';
+import '../../../core/di/injection.dart';
+import '../../../core/services/friend_details_store.dart';
+import '../../../data/datasources/local/secure_storage_datasource.dart';
+import '../../../domain/repositories/contact_repository.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +37,9 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
   Set<String> _selectedTags = {};
   bool _isLoading = true;
   bool _isSaving = false;
+  String? _catalogKey;
+  String? _accountId;
+  String? _homeserver;
 
   @override
   void initState() {
@@ -42,29 +49,69 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
   }
 
   Future<void> _loadTags() async {
-    final prefs = await SharedPreferences.getInstance();
-    final tagsJson = prefs.getString('tags_data');
-    if (tagsJson != null) {
-      try {
-        final List<dynamic> list = jsonDecode(tagsJson) as List<dynamic>;
-        _tags = list
-            .map((e) => TagData.fromJson(e as Map<String, dynamic>))
-            .toList();
-      } catch (e) {
-        debugLog('Failed to load tags: $e');
+    try {
+      final session = await SecureStorageDataSource().getSession();
+      if (session == null) throw StateError('No active account');
+      _accountId = session['userId'];
+      _homeserver = session['homeserver'];
+      _catalogKey = FriendDetailsStore(
+        _homeserver!,
+        _accountId!,
+        '__tag_catalog__',
+      ).key;
+      final prefs = await SharedPreferences.getInstance();
+      final raw = prefs.getString(_catalogKey!);
+      final names = <String>{...widget.selectedTags ?? []};
+      if (raw != null)
+        names.addAll(
+          (jsonDecode(raw) as List).map((e) => (e as Map)['name'] as String),
+        );
+      final assignments = <String, Set<String>>{};
+      if (getIt.isRegistered<IContactRepository>()) {
+        final contacts = await getIt<IContactRepository>().getContacts();
+        for (final contact in contacts) {
+          for (final tag in contact.tags) {
+            names.add(tag);
+            (assignments[tag] ??= {}).add(contact.userId);
+          }
+        }
       }
-    }
-    if (mounted) {
-      setState(() => _isLoading = false);
+      await _checkAccount();
+      if (!mounted) return;
+      _tags = names
+          .map(
+            (name) => TagData(
+              name: name,
+              contactIds: assignments[name]?.toList() ?? [],
+            ),
+          )
+          .toList();
+    } catch (_) {
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonLoadFailed ?? 'Failed to load'),
+          ),
+        );
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 
+  Future<void> _checkAccount() async {
+    final session = await SecureStorageDataSource().getSession();
+    if (_accountId == null ||
+        session?['userId'] != _accountId ||
+        session?['homeserver'] != _homeserver)
+      throw StateError('Account changed');
+  }
+
   Future<void> _saveTags() async {
+    await _checkAccount();
     final prefs = await SharedPreferences.getInstance();
     final json = jsonEncode(_tags.map((t) => t.toJson()).toList());
-    if (!await prefs.setString('tags_data', json)) {
+    if (!await prefs.setString(_catalogKey!, json))
       throw StateError('Unable to save tags');
-    }
   }
 
   List<TagData> _cloneTags(List<TagData> tags) {
@@ -75,7 +122,11 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
         .toList();
   }
 
-  Future<void> _applyTagMutation(VoidCallback update) async {
+  Future<void> _applyTagMutation(
+    VoidCallback update, {
+    String? previousName,
+    String? replacementName,
+  }) async {
     if (_isSaving) {
       return;
     }
@@ -90,9 +141,39 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
       update();
     });
 
+    final previousDetails = <FriendDetailsStore, Map<String, dynamic>>{};
     try {
+      await _checkAccount();
+      if (previousName != null && getIt.isRegistered<IContactRepository>()) {
+        final contacts = await getIt<IContactRepository>().getContacts();
+        for (final contact in contacts.where(
+          (c) => c.tags.contains(previousName),
+        )) {
+          await _checkAccount();
+          final store = FriendDetailsStore(
+            _homeserver!,
+            _accountId!,
+            contact.userId,
+          );
+          final details = await store.load();
+          final tags =
+              (details['tags'] as List?)?.whereType<String>().toSet() ??
+              <String>{};
+          if (!tags.remove(previousName)) continue;
+          if (replacementName != null) tags.add(replacementName);
+          previousDetails[store] = details;
+          await store.save({...details, 'tags': tags.toList()});
+        }
+      }
       await _saveTags();
     } catch (e) {
+      for (final entry in previousDetails.entries) {
+        try {
+          await entry.key.save(entry.value);
+        } catch (_) {
+          // A storage failure must remain visible; reload before another edit.
+        }
+      }
       debugLog('TagsManagementPage: Failed to save tags: $e');
       if (!mounted) {
         return;
@@ -140,10 +221,14 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
       builder: (_) => _TagNameDialog(initialName: oldName),
     );
     if (!mounted || name == null) return;
-    await _applyTagMutation(() {
-      _tags[index] = _tags[index].copyWith(name: name);
-      if (_selectedTags.remove(oldName)) _selectedTags.add(name);
-    });
+    await _applyTagMutation(
+      () {
+        _tags[index] = _tags[index].copyWith(name: name);
+        if (_selectedTags.remove(oldName)) _selectedTags.add(name);
+      },
+      previousName: oldName,
+      replacementName: name,
+    );
   }
 
   void _deleteTag(int index) {
@@ -167,7 +252,7 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
               await _applyTagMutation(() {
                 _selectedTags.remove(tag.name);
                 _tags.removeAt(index);
-              });
+              }, previousName: tag.name);
             },
             child: Text(
               S.of(context)?.commonDelete ?? 'Delete',

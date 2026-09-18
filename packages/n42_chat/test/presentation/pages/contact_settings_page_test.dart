@@ -1,3 +1,7 @@
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:n42_chat/src/core/services/friend_details_store.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,8 +46,43 @@ void main() {
 
   setUp(() {
     mockContactBloc = MockContactBloc();
+    FlutterSecureStorage.setMockInitialValues({});
+    SharedPreferences.setMockInitialValues({});
   });
 
+  testWidgets('star persists when settings reopen and remains account scoped', (
+    tester,
+  ) async {
+    final store = FriendDetailsStore('https://hs.test', '@me:hs', '@friend:hs');
+    FlutterSecureStorage.setMockInitialValues({
+      'n42_chat_session': jsonEncode({
+        'homeserver': 'https://hs.test',
+        'userId': '@me:hs',
+        'accessToken': 'fixture',
+        'deviceId': 'fixture',
+      }),
+    });
+    await store.save({'starred': true});
+    await tester.pumpWidget(
+      buildTestWidget(
+        const ContactSettingsPage(userId: '@friend:hs', displayName: 'Friend'),
+        contactBloc: mockContactBloc,
+      ),
+    );
+    await tester.pumpAndSettle();
+    final toggle = find.byType(Switch).first;
+    expect(tester.widget<Switch>(toggle).value, isTrue);
+    await tester.ensureVisible(toggle);
+    await tester.tap(toggle);
+    await tester.pumpAndSettle();
+    expect((await store.load())['starred'], isFalse);
+    final other = FriendDetailsStore(
+      'https://hs.test',
+      '@other:hs',
+      '@friend:hs',
+    );
+    expect(await other.load(), isEmpty);
+  });
   for (final fail in [false, true]) {
     testWidgets(
       'blocked user absent from contacts has truthful switch; save failure=$fail',

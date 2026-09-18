@@ -46,7 +46,19 @@ class GroupRepositoryImpl implements IGroupRepository {
   @override
   Future<List<GroupEntity>> getGroups() async {
     final rooms = _groupDataSource.getAllGroups();
-    return rooms.map(_mapRoomToGroupEntity).toList();
+    return Future.wait(
+      rooms.map((room) async {
+        List<matrix.User>? members;
+        try {
+          members = await room.requestParticipants().timeout(
+            const Duration(seconds: 10),
+          );
+        } catch (_) {
+          // Keep usable cached group metadata during a transient refresh failure.
+        }
+        return _mapRoomToGroupEntity(room, members: members);
+      }),
+    );
   }
 
   @override
@@ -613,7 +625,23 @@ class GroupRepositoryImpl implements IGroupRepository {
     }
 
     final maxMembers = _groupDataSource.getMaxMembers(room.id);
-    final memberCount = joinedCount + invitedCount;
+    final knownMembers =
+        members ??
+        room.getParticipants([
+          matrix.Membership.join,
+          matrix.Membership.invite,
+        ]);
+    final knownCount = knownMembers
+        .where(
+          (u) =>
+              u.membership == matrix.Membership.join ||
+              u.membership == matrix.Membership.invite,
+        )
+        .map((u) => u.id)
+        .toSet()
+        .length;
+    final summaryCount = joinedCount + invitedCount;
+    final memberCount = knownCount > summaryCount ? knownCount : summaryCount;
     final canonicalAliasLocalpart = extractAliasLocalpart(room.canonicalAlias);
     final groupType = isChannel
         ? GroupType.channel

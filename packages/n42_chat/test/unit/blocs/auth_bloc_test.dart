@@ -41,6 +41,43 @@ void main() {
   });
 
   group('AuthBloc', () {
+    test(
+      'duplicate registration cannot overwrite success with username taken',
+      () async {
+        final pending = Completer<AuthResult>();
+        var calls = 0;
+        when(
+          () => mockAuthRepository.register(
+            homeserver: any(named: 'homeserver'),
+            username: any(named: 'username'),
+            password: any(named: 'password'),
+            email: any(named: 'email'),
+            registrationToken: any(named: 'registrationToken'),
+          ),
+        ).thenAnswer((_) {
+          calls++;
+          return pending.future;
+        });
+        final bloc = AuthBloc(authRepository: mockAuthRepository);
+        addTearDown(bloc.close);
+        const request = AuthRegisterRequested(
+          homeserver: 'https://server.com',
+          username: 'user',
+          password: 'synthetic',
+        );
+        bloc.add(request);
+        bloc.add(request);
+        await Future<void>.delayed(Duration.zero);
+        expect(calls, 1);
+        final authenticated = bloc.stream.firstWhere(
+          (s) => s.status == AuthStatus.authenticated,
+        );
+        pending.complete(AuthResult.success(testUser));
+        await authenticated;
+        expect(bloc.state.errorMessage, isNull);
+      },
+    );
+
     test('initial state should be AuthState.initial', () async {
       final authBloc = AuthBloc(authRepository: mockAuthRepository);
       expect(authBloc.state.status, AuthStatus.initial);

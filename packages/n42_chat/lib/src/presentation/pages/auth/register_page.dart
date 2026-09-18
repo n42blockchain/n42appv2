@@ -105,6 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void _onRegister() {
+    if (context.read<AuthBloc>().state.isLoading) return;
     if (!_agreeToTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

@@ -1,4 +1,7 @@
+import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'package:flutter/material.dart';
+import '../../../core/services/friend_details_store.dart';
+import '../../../data/datasources/local/secure_storage_datasource.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -40,16 +43,87 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
   bool _isBlocked = false;
   bool _isDeleting = false;
   bool _isUpdatingBlock = false;
+  bool _isUpdatingStar = false;
+  bool _starLoaded = false;
+  String? _starAccountId;
+  String? _starHomeserver;
 
   @override
   void initState() {
     super.initState();
     _isStarred = widget.isStarred;
+    _loadStar();
     try {
       // Blocking leaves direct rooms, so blocked users may not be in contacts.
       _isBlocked = getIt<IContactRepository>().isUserIgnored(widget.userId);
     } catch (_) {
       _isBlocked = false;
+    }
+  }
+
+  Future<void> _loadStar() async {
+    try {
+      final session = await SecureStorageDataSource().getSession();
+      if (session == null) return;
+      final details = await FriendDetailsStore(
+        session['homeserver']!,
+        session['userId']!,
+        widget.userId,
+      ).load();
+      final current = await SecureStorageDataSource().getSession();
+      if (current?['userId'] != session['userId'] ||
+          current?['homeserver'] != session['homeserver'])
+        return;
+      _starAccountId = session['userId'];
+      _starHomeserver = session['homeserver'];
+      if (mounted)
+        setState(() {
+          _isStarred = details['starred'] == true;
+          _starLoaded = true;
+        });
+    } catch (_) {
+      // Leave saving disabled until the owning account is available.
+    }
+  }
+
+  Future<void> _updateStar(bool starred) async {
+    if (_isUpdatingStar || !_starLoaded) return;
+    setState(() => _isUpdatingStar = true);
+    try {
+      final storage = SecureStorageDataSource();
+      final session = await storage.getSession();
+      if (session == null ||
+          session['userId'] != _starAccountId ||
+          session['homeserver'] != _starHomeserver)
+        throw StateError('Account changed');
+      final store = FriendDetailsStore(
+        session['homeserver']!,
+        session['userId']!,
+        widget.userId,
+      );
+      final details = await store.load();
+      final current = await storage.getSession();
+      if (current?['userId'] != session['userId'] ||
+          current?['homeserver'] != session['homeserver'])
+        throw StateError('Account changed');
+      await store.save({...details, 'starred': starred});
+      final savedSession = await storage.getSession();
+      if (!mounted ||
+          savedSession?['userId'] != _starAccountId ||
+          savedSession?['homeserver'] != _starHomeserver)
+        return;
+      setState(() => _isStarred = starred);
+      widget.onStarChanged?.call(starred);
+      context.read<ContactBloc>().add(const RefreshContacts());
+    } catch (_) {
+      if (mounted)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(S.of(context)?.commonSaveFailed ?? 'Failed to save'),
+          ),
+        );
+    } finally {
+      if (mounted) setState(() => _isUpdatingStar = false);
     }
   }
 
@@ -70,9 +144,7 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            S.of(context)?.commonSaveFailed ?? 'Failed to save',
-          ),
+          content: Text(S.of(context)?.commonSaveFailed ?? 'Failed to save'),
         ),
       );
     } finally {
@@ -211,12 +283,9 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
                             'Set as Starred',
                         value: _isStarred,
                         textColor: textColor,
-                        onChanged: (value) {
-                          setState(() {
-                            _isStarred = value;
-                          });
-                          widget.onStarChanged?.call(value);
-                        },
+                        onChanged: _isUpdatingStar || !_starLoaded
+                            ? null
+                            : _updateStar,
                       ),
                       _buildDivider(dividerColor),
                       _buildSwitchItem(
@@ -453,8 +522,11 @@ class _ContactSettingsPageState extends State<ContactSettingsPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            l10n?.contactRecommendFailed(e.toString()) ??
-                'Recommend failed: $e',
+            e is EncryptedSendNotReady
+                ? (l10n?.chatEncryptionNotReady ??
+                      'Secure connection is not ready. Please retry.')
+                : (l10n?.contactRecommendFailed(e.toString()) ??
+                      'Recommend failed: $e'),
           ),
           backgroundColor: AppColors.error,
         ),

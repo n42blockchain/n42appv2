@@ -1,4 +1,6 @@
 import 'dart:async';
+import '../../core/services/friend_details_store.dart';
+import '../datasources/local/secure_storage_datasource.dart';
 
 import 'package:matrix/matrix.dart' as matrix;
 
@@ -29,6 +31,39 @@ class ContactRepositoryImpl implements IContactRepository {
     _remarkCache = await _storageDataSource.getContactRemarks();
   }
 
+  Future<List<ContactEntity>> _applyAnnotations(
+    List<ContactEntity> contacts,
+  ) async {
+    final storage = SecureStorageDataSource();
+    final session = await storage.getSession();
+    if (session == null) return contacts;
+    if (_contactDataSource.currentUserId != session['userId']) {
+      throw StateError('Account changed');
+    }
+    final result = await Future.wait(
+      contacts.map((contact) async {
+        final details = await FriendDetailsStore(
+          session['homeserver']!,
+          session['userId']!,
+          contact.userId,
+        ).load();
+        return contact.copyWith(
+          isStarred: details['starred'] == true,
+          tags:
+              (details['tags'] as List?)?.whereType<String>().toList() ??
+              const [],
+        );
+      }),
+    );
+    final current = await storage.getSession();
+    if (_contactDataSource.currentUserId != session['userId'] ||
+        current?['homeserver'] != session['homeserver'] ||
+        current?['userId'] != session['userId']) {
+      throw StateError('Account changed');
+    }
+    return result;
+  }
+
   /// 用户ID到房间ID的映射缓存
   Map<String, String> _directRoomIdMap = {};
 
@@ -43,8 +78,10 @@ class ContactRepositoryImpl implements IContactRepository {
     _directRoomIdMap = _contactDataSource.getDirectChatRoomIdMap();
 
     final users = _contactDataSource.getDirectChatContacts();
-    return users.map(_mapUserToEntity).toList()
-      ..sort((a, b) => a.sortKey.compareTo(b.sortKey));
+    final contacts = await _applyAnnotations(
+      users.map(_mapUserToEntity).toList(),
+    );
+    return contacts..sort((a, b) => a.sortKey.compareTo(b.sortKey));
   }
 
   @override
@@ -71,7 +108,9 @@ class ContactRepositoryImpl implements IContactRepository {
     final profile = await _contactDataSource.getUserProfile(userId);
     if (profile == null) return null;
 
-    return _mapProfileToEntity(userId, profile);
+    return (await _applyAnnotations([
+      _mapProfileToEntity(userId, profile),
+    ])).single;
   }
 
   @override
