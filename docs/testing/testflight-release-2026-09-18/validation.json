@@ -1,0 +1,91 @@
+{
+  "version": "2.4.8",
+  "build": "2026072679",
+  "versions": {
+    "ai.n42.www.NotificationExtension": "2026072679",
+    "ai.n42.www": "2026072679"
+  },
+  "commit": "3fb0309bb8e143e6534d41be7c7e021aaa7ee51a",
+  "ipa_path": "build/ios/ipa/N42Wallet.ipa",
+  "ipa_sha256": "4e24aca85b01b60f6b8073e65afd4edfb265ceebbc3deaa40d3215ef977ab7e1",
+  "size_bytes": 162536015,
+  "ipa_signature_verified": true,
+  "upload_status": "accepted_processing",
+  "upload_exit_code": 0,
+  "processing_complete_verified": false,
+  "tester_availability_verified": false,
+  "chat_ref": "f03cb063bb1d558aa03a74bec69a6f71f0b2ca2d",
+  "xcode": "27.0 (27A266a)",
+  "android": {
+    "apk": "N42Wallet-2.4.8-2026072679-release.apk",
+    "version": "2.4.8",
+    "build": 2026072679,
+    "commit": "3fb0309bb8e143e6534d41be7c7e021aaa7ee51a",
+    "size_bytes": 846670902,
+    "sha256": "683aa7c7b433ccda1991f276415cf480063aa8972057b41bc4e512f5f2fc793b",
+    "signature_verified": true,
+    "same_certificate_as_2671": true,
+    "debuggable": false
+  },
+  "signing": {
+    "Payload/Runner.app": {
+      "entitlements": {
+        "application-identifier": "CFRXH38L48.ai.n42.www",
+        "aps-environment": "production",
+        "beta-reports-active": true,
+        "com.apple.developer.applesignin": [
+          "Default"
+        ],
+        "com.apple.developer.team-identifier": "CFRXH38L48",
+        "com.apple.security.application-groups": [
+          "group.ai.n42.wallet"
+        ],
+        "get-task-allow": false,
+        "keychain-access-groups": [
+          "CFRXH38L48.ai.n42.www",
+          "CFRXH38L48.ai.n42.www.ios"
+        ]
+      },
+      "profile_entitlements": {
+        "beta-reports-active": true,
+        "aps-environment": "production",
+        "com.apple.security.application-groups": [
+          "group.ai.n42.wallet"
+        ],
+        "com.apple.developer.associated-domains": "*",
+        "application-identifier": "CFRXH38L48.ai.n42.www",
+        "keychain-access-groups": [
+          "CFRXH38L48.*",
+          "com.apple.token"
+        ],
+        "get-task-allow": false,
+        "com.apple.developer.team-identifier": "CFRXH38L48",
+        "com.apple.developer.applesignin": [
+          "Default"
+        ]
+      },
+      "profile_name": "iOS Team Store Provisioning Profile: ai.n42.www",
+      "profile_expires": "2027-02-10 06:33:22"
+    },
+    "Payload/Runner.app/PlugIns/N42Extension.appex": {
+      "entitlements": {
+        "application-identifier": "CFRXH38L48.ai.n42.www.NotificationExtension",
+        "beta-reports-active": true,
+        "com.apple.developer.team-identifier": "CFRXH38L48",
+        "get-task-allow": false
+      },
+      "profile_entitlements": {
+        "beta-reports-active": true,
+        "application-identifier": "CFRXH38L48.ai.n42.www.NotificationExtension",
+        "keychain-access-groups": [
+          "CFRXH38L48.*",
+          "com.apple.token"
+        ],
+        "get-task-allow": false,
+        "com.apple.developer.team-identifier": "CFRXH38L48"
+      },
+      "profile_name": "iOS Team Store Provisioning Profile: ai.n42.www.NotificationExtension",
+      "profile_expires": "2027-02-10 06:33:22"
+    }
+  }
+}
