@@ -1,0 +1,55 @@
+{
+  "version": "2.4.8",
+  "build": "2026072681",
+  "versions": {
+    "ai.n42.www.NotificationExtension": "2026072681",
+    "ai.n42.www": "2026072681"
+  },
+  "commit": "e10c8c832d8967fbad97c0ad46efae8909d7224f",
+  "ipa_path": "build/ios/ipa/N42Wallet.ipa",
+  "ipa_sha256": "f1986486d0cd9696daf257a6fc948ba0fe3ba2e7760c44e3a5b396d9a775960c",
+  "size_bytes": 162535223,
+  "ipa_signature_verified": true,
+  "upload_status": "accepted_processing",
+  "upload_exit_code": 0,
+  "processing_complete_verified": false,
+  "tester_availability_verified": false,
+  "chat_ref": "b6d29770445c1e95e4d7c3f224a0223e2e504376",
+  "xcode": "27.0 (27A266a)",
+  "android": {
+    "apk": "N42Wallet-2.4.8-2026072681-release.apk",
+    "version": "2.4.8",
+    "build": 2026072681,
+    "commit": "e10c8c832d8967fbad97c0ad46efae8909d7224f",
+    "size_bytes": 846654518,
+    "sha256": "6a76cf7e092dc5c44af96b4cf37d67fec38ee0027a644b4bf79b2fc72ffe17a0",
+    "signature_verified": true,
+    "same_certificate_as_2671": true,
+    "debuggable": false
+  },
+  "signing": {
+    "Payload/Runner.app": {
+      "application-identifier": "CFRXH38L48.ai.n42.www",
+      "aps-environment": "production",
+      "beta-reports-active": true,
+      "com.apple.developer.applesignin": [
+        "Default"
+      ],
+      "com.apple.developer.team-identifier": "CFRXH38L48",
+      "com.apple.security.application-groups": [
+        "group.ai.n42.wallet"
+      ],
+      "get-task-allow": false,
+      "keychain-access-groups": [
+        "CFRXH38L48.ai.n42.www",
+        "CFRXH38L48.ai.n42.www.ios"
+      ]
+    },
+    "Payload/Runner.app/PlugIns/N42Extension.appex": {
+      "application-identifier": "CFRXH38L48.ai.n42.www.NotificationExtension",
+      "beta-reports-active": true,
+      "com.apple.developer.team-identifier": "CFRXH38L48",
+      "get-task-allow": false
+    }
+  }
+}
