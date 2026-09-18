@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072688
+version: 2.4.8+2026072689
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -200,6 +200,11 @@ dev_dependencies:
   webview_flutter_platform_interface: ^2.15.1
 
 flutter:
+  # Keep native plugin resolution consistent with the validated iOS release.
+  # WebRTC and ML Kit are locked in ios/Podfile.lock; do not depend on a
+  # contributor's global Flutter Swift Package Manager setting.
+  config:
+    enable-swift-package-manager: false
   uses-material-design: true
   assets:
     - assets/

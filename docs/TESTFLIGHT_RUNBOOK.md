@@ -4,6 +4,9 @@ This is an executable handoff for the next operator or coding model, including
 Sol. Use the existing macOS desktop session, Xcode account and signing keys.
 Never print passwords, private keys, `.env` contents or encoded Dart defines.
 
+For WebRTC / ML Kit dependency failures on another Mac, first follow
+[iOS dependency troubleshooting](IOS_DEPENDENCY_TROUBLESHOOTING.md).
+
 ## Preconditions and release identity
 
 Run from the repository root on the release Mac:
