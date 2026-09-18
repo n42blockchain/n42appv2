@@ -27,21 +27,36 @@ matrix.Room? roomForSending(matrix.Client? client, String roomId) {
 Future<matrix.User> resolveDirectPeer(matrix.Room room, String peerId) async {
   // requestUser can return an old invitation indefinitely with lazy sync.
   // Recheck non-joined members against current server state before classifying.
-  var member = await room
-      .requestUser(peerId, requestProfile: false)
-      .timeout(const Duration(seconds: 15));
-  if (member == null || member.content['membership'] != 'join') {
-    final content = await room.client
-        .getRoomStateWithKey(room.id, matrix.EventTypes.RoomMember, peerId)
+  matrix.User? member;
+  try {
+    member = await room
+        .requestUser(peerId, requestProfile: false)
         .timeout(const Duration(seconds: 15));
-    if (content['membership'] is! String) {
-      throw StateError('Contact membership is not available yet');
+    if (member == null || member.content['membership'] != 'join') {
+      final content = await room.client
+          .getRoomStateWithKey(room.id, matrix.EventTypes.RoomMember, peerId)
+          .timeout(const Duration(seconds: 15));
+      if (content['membership'] is! String) {
+        throw StateError('Contact membership is not available yet');
+      }
+      member = matrix.User.fromState(
+        stateKey: peerId,
+        senderId: peerId,
+        typeKey: matrix.EventTypes.RoomMember,
+        content: content,
+        room: room,
+      );
     }
+  } on matrix.MatrixException catch (error) {
+    if (error.errcode != 'M_NOT_FOUND') rethrow;
+    // A stale m.direct mapping can point at a room with no peer member event.
+    // This is an absent friendship, not a failed contact-list refresh. Never
+    // turn SDK fallback membership into an accepted friend or bypass sending.
     member = matrix.User.fromState(
       stateKey: peerId,
       senderId: peerId,
       typeKey: matrix.EventTypes.RoomMember,
-      content: content,
+      content: const {'membership': 'leave'},
       room: room,
     );
   }

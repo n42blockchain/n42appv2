@@ -156,6 +156,107 @@ void main() {
     expect(contacts.getDirectChatContacts(), isEmpty);
     verifyNever(() => room.sendTextEvent(any()));
   });
+  test(
+    'real SDK room with stale direct mapping stays empty after missing member',
+    () async {
+      final updates = Client(
+        'missing-peer-test',
+        database: _Database(),
+      ).onRoomState;
+      when(() => client.onRoomState).thenReturn(updates);
+      addTearDown(updates.close);
+      client.accountData['m.direct'] = BasicEvent(
+        type: 'm.direct',
+        content: {
+          '@bob:test': ['!dm:test'],
+        },
+      );
+      final historical = Room(
+        id: '!dm:test',
+        client: client,
+        membership: Membership.join,
+      )..partial = false;
+      historical.setState(
+        User('@alice:test', membership: 'join', room: historical),
+      );
+      when(() => client.rooms).thenReturn([historical]);
+      when(() => client.getRoomById('!dm:test')).thenReturn(historical);
+      when(
+        () => client.getRoomStateWithKey(
+          '!dm:test',
+          EventTypes.RoomMember,
+          '@bob:test',
+        ),
+      ).thenThrow(
+        MatrixException.fromJson({
+          'errcode': 'M_NOT_FOUND',
+          'error': 'Missing member',
+        }),
+      );
+      await contacts.refreshDirectChatMembers();
+      expect(contacts.getDirectChatContacts(), isEmpty);
+      expect(contacts.getDirectChatRoomIdMap(), isEmpty);
+      expect(contacts.getOutgoingInvites(), isEmpty);
+      expect(
+        historical
+            .unsafeGetUserFromMemoryOrFallback('@bob:test')
+            .content['membership'],
+        'leave',
+      );
+      await expectLater(
+        sender.sendTextMessage('!dm:test', 'hello'),
+        throwsStateError,
+      );
+      // Keep the historical room and mapping; no server writes or history deletion.
+      expect(client.directChats['@bob:test'], ['!dm:test']);
+    },
+  );
+  for (final fromInitialLookup in [true, false]) {
+    test(
+      'absent historical peer does not fail contact refresh ($fromInitialLookup)',
+      () async {
+        when(() => partner.content).thenReturn({});
+        final missing = MatrixException.fromJson({
+          'errcode': 'M_NOT_FOUND',
+          'error': 'State event not found',
+        });
+        if (fromInitialLookup) {
+          when(
+            () => room.requestUser('@bob:test', requestProfile: false),
+          ).thenThrow(missing);
+        } else {
+          when(
+            () => client.getRoomStateWithKey(
+              '!dm:test',
+              EventTypes.RoomMember,
+              '@bob:test',
+            ),
+          ).thenThrow(missing);
+        }
+        await contacts.refreshDirectChatMembers();
+        expect(contacts.getDirectChatContacts(), isEmpty);
+        await expectLater(
+          sender.sendTextMessage('!dm:test', 'hello'),
+          throwsStateError,
+        );
+        verifyNever(() => room.sendTextEvent(any()));
+      },
+    );
+  }
+  for (final code in ['M_FORBIDDEN', 'M_UNKNOWN_TOKEN', 'M_LIMIT_EXCEEDED']) {
+    test('real membership failure $code still fails refresh', () async {
+      when(() => partner.content).thenReturn({});
+      when(
+        () => room.requestUser('@bob:test', requestProfile: false),
+      ).thenThrow(
+        MatrixException.fromJson({'errcode': code, 'error': 'Unavailable'}),
+      );
+      await expectLater(
+        contacts.refreshDirectChatMembers(),
+        throwsA(isA<ContactMembershipUnavailable>()),
+      );
+    });
+  }
   test('one failing room does not hide another accepted friend', () async {
     when(() => partner.content).thenReturn({'membership': 'join'});
     final broken = _Room();
