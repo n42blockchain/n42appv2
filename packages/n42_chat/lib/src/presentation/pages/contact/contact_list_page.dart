@@ -226,7 +226,37 @@ class _ContactListPageState extends State<ContactListPage> {
     }
 
     // 完整的索引字母列表
-    final fullIndexLetters = ['🔍', '☆', ...state.indexLetters, '#'];
+    const fullIndexLetters = [
+      '🔍',
+      '☆',
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+      'P',
+      'Q',
+      'R',
+      'S',
+      'T',
+      'U',
+      'V',
+      'W',
+      'X',
+      'Y',
+      'Z',
+      '#',
+    ];
 
     return Stack(
       children: [
@@ -284,25 +314,32 @@ class _ContactListPageState extends State<ContactListPage> {
         // 右侧字母索引条
         Positioned(
           right: 2,
+          width: 20,
           top: 0,
           bottom: 50,
-          child: _WeChatIndexBar(
-            letters: fullIndexLetters,
-            onLetterTap: (letter) {
-              if (letter == '🔍') {
-                _searchController.clear();
-                FocusScope.of(context).unfocus();
-              } else if (letter == '☆') {
-                // 滚动到顶部
-                _scrollController.animateTo(
-                  0,
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeOut,
-                );
-              } else {
-                _onLetterTap(letter);
-              }
-            },
+          child: Center(
+            child: SizedBox(
+              width: 20,
+              height: fullIndexLetters.length * 16.0 + 8,
+              child: _WeChatIndexBar(
+                letters: fullIndexLetters,
+                onLetterTap: (letter) {
+                  if (letter == '🔍') {
+                    _searchController.clear();
+                    FocusScope.of(context).unfocus();
+                  } else if (letter == '☆') {
+                    // 滚动到顶部
+                    _scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.easeOut,
+                    );
+                  } else {
+                    _onLetterTap(letter);
+                  }
+                },
+              ),
+            ),
           ),
         ),
       ],
@@ -392,7 +429,7 @@ class _ContactListPageState extends State<ContactListPage> {
             onTap: _openChatOnlyFriendsPage,
           ),
 
-          const SizedBox(height: 8),
+          _buildItemDivider(isDark),
           Container(
             color: surfaceColor,
             child: Column(
@@ -1344,8 +1381,9 @@ class _WeChatIndexBarState extends State<_WeChatIndexBar> {
     if (widget.letters.isEmpty) return;
 
     final box = context.findRenderObject() as RenderBox;
-    final itemHeight = box.size.height / widget.letters.length;
-    final index = (position.dy / itemHeight).floor();
+    final itemHeight = (box.size.height - 8) / widget.letters.length;
+    if (itemHeight <= 0) return;
+    final index = ((position.dy - 4) / itemHeight).floor();
 
     if (index >= 0 && index < widget.letters.length) {
       final letter = widget.letters[index];
@@ -1427,6 +1465,7 @@ class _WeChatIndexBarState extends State<_WeChatIndexBar> {
                       ),
                       child: Text(
                         letter,
+                        textScaler: TextScaler.noScaling,
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: isActive

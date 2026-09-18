@@ -225,6 +225,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-009 TestFlight registration, friendship and historical-key acceptance
 
+- September 18 contact appearance: Downloads/9.jpeg is explicitly a reference image, not a current-build screenshot. The index now keeps search/star/A–Z/# visible at the right regardless of populated groups, with bounded centered height; the chat-only/group entry gap becomes the standard divider. Existing 14 contact navigation cases pass; device visual acceptance of this small layout change is pending.
+
 - Severity: H
 - Evidence: user confirmed build 2026072683 loses readable messages after logout/login without a recovery key; Downloads/1.mov shows this on both accounts. Caller posted duplicate call summaries, receiver posted another. Picker file paths were explicitly rejected in encrypted rooms. Current-location lookup only formatted coordinates, and send composition discarded the address.
 - Client repair: preserve account/homeserver-scoped inbound history sessions in device secure storage before normal logout/logoutAll; restore missing sessions after authenticated login. Retain replay indexes and stop logout if snapshot verification fails. No passwords, access tokens, outbound ratchets or Olm identity are retained. Account deactivation deletes its snapshot. Earlier lost keys and device replacement still require a user-held backup; forced session invalidation is outside this explicit-logout hook.
