@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:matrix/matrix.dart';
 import 'package:uuid/uuid.dart';
 
@@ -209,14 +208,11 @@ class MatrixAuthDataSource {
           auth: auth,
         );
       } on MatrixException catch (error) {
-        if (error.response?.statusCode != 401) rethrow;
-        final Object? decoded;
-        try {
-          decoded = jsonDecode(error.response!.body);
-        } on FormatException {
-          throw error;
-        }
-        if (decoded is! Map<String, dynamic>) rethrow;
+        // SDK 6.x generated endpoints construct MatrixException.fromJson,
+        // so a UIA challenge can have no HTTP response attached. Use the
+        // SDK's decoded challenge instead of requiring response.statusCode.
+        if (!error.requireAdditionalAuthentication) rethrow;
+        final decoded = error.raw;
         final session = decoded['session'];
         final flows = decoded['flows'];
         if (session is! String || session.isEmpty || flows is! List) rethrow;

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart';
@@ -9,8 +10,6 @@ import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart'
 class _Client extends Mock implements Client {}
 
 class _Manager extends Mock implements MatrixClientManager {}
-
-class _Error extends Mock implements MatrixException {}
 
 void main() {
   late _Client client;
@@ -78,6 +77,39 @@ void main() {
       expect(requests, [null]);
     },
   );
+  test(
+    'SDK transport challenge without HTTP response completes registration',
+    () async {
+      final api = MatrixApi();
+      late MatrixException challenge;
+      try {
+        api.unexpectedResponse(
+          http.Response('', 401),
+          Uint8List.fromList(
+            utf8.encode(
+              jsonEncode({
+                'session': 'sdk-session',
+                'flows': [
+                  {
+                    'stages': ['m.login.dummy'],
+                  },
+                ],
+              }),
+            ),
+          ),
+        );
+      } on MatrixException catch (error) {
+        challenge = error;
+      }
+      expect(challenge.response, isNull);
+      responses = [challenge, success];
+      expect(await register(), same(success));
+      expect(requests.last!.toJson(), {
+        'type': 'm.login.dummy',
+        'session': 'sdk-session',
+      });
+    },
+  );
   test('dummy registration completes with the server session', () async {
     responses = [
       challenge([
@@ -128,6 +160,28 @@ void main() {
       expect(requests, [null]);
     },
   );
+  test('decoded forbidden error is not retried as authentication', () async {
+    final error = MatrixException.fromJson({
+      'errcode': 'M_FORBIDDEN',
+      'error': 'Registration has been disabled',
+    });
+    responses = [error];
+    await expectLater(register(), throwsA(same(error)));
+    expect(requests, [null]);
+  });
+  test('decoded unsupported authentication is not bypassed', () async {
+    final error = MatrixException.fromJson({
+      'session': 'sdk-session',
+      'flows': [
+        {
+          'stages': ['m.login.recaptcha'],
+        },
+      ],
+    });
+    responses = [error];
+    await expectLater(register(), throwsA(same(error)));
+    expect(requests, [null]);
+  });
   test('rejected token preserves actual server error', () async {
     final error = MatrixException(
       http.Response(
@@ -153,8 +207,13 @@ void main() {
     expect(requests, hasLength(2));
   });
   test('malformed challenge preserves Matrix error', () async {
-    final error = _Error();
-    when(() => error.response).thenReturn(http.Response('not-json', 401));
+    final error = MatrixException.fromJson({
+      'flows': [
+        {
+          'stages': ['m.login.dummy'],
+        },
+      ],
+    });
     responses = [error];
     await expectLater(register(), throwsA(same(error)));
   });
