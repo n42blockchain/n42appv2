@@ -32,22 +32,18 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   static final _usernameRegex = RegExp(r'^[a-zA-Z0-9_]+$');
-  static final _emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   final _formKey = GlobalKey<FormState>();
   final _homeserverController = TextEditingController(
     text: N42Chat.config?.defaultHomeserver ?? AppConstants.defaultHomeserver,
   );
   final _usernameController = TextEditingController();
-  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-  final _inviteCodeController = TextEditingController();
 
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   bool _agreeToTerms = false;
-  bool _showInviteCode = false; // 控制是否显示邀请码输入框
   bool _anonymousMode = false;
 
   late final TapGestureRecognizer _termsRecognizer;
@@ -76,10 +72,8 @@ class _RegisterPageState extends State<RegisterPage> {
   void dispose() {
     _homeserverController.dispose();
     _usernameController.dispose();
-    _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
-    _inviteCodeController.dispose();
     _termsRecognizer.dispose();
     _privacyRecognizer.dispose();
     super.dispose();
@@ -125,24 +119,19 @@ class _RegisterPageState extends State<RegisterPage> {
     }
 
     if (_formKey.currentState?.validate() ?? false) {
-      final inviteCode = _inviteCodeController.text.trim();
       if (_anonymousMode) {
         context.read<AuthBloc>().add(
           AuthAnonymousRegisterRequested(
             homeserver: _homeserverController.text.trim(),
             password: _passwordController.text,
-            registrationToken: inviteCode.isNotEmpty ? inviteCode : null,
           ),
         );
       } else {
-        final email = _emailController.text.trim();
         context.read<AuthBloc>().add(
           AuthRegisterRequested(
             homeserver: _homeserverController.text.trim(),
             username: _usernameController.text.trim(),
             password: _passwordController.text,
-            email: email.isNotEmpty ? email : null,
-            registrationToken: inviteCode.isNotEmpty ? inviteCode : null,
           ),
         );
       }
@@ -188,9 +177,6 @@ class _RegisterPageState extends State<RegisterPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state.hasError) {
-            if (state.errorType == AuthErrorType.additionalAuthRequired) {
-              setState(() => _showInviteCode = true);
-            }
             final message =
                 state.errorType == AuthErrorType.registrationDisabled
                 ? (S.of(context)?.authRegistrationDisabled ??
@@ -237,9 +223,6 @@ class _RegisterPageState extends State<RegisterPage> {
                     // 用户名输入
                     _buildUsernameInput(context, isDarkMode),
                     const SizedBox(height: 10),
-                    // 邮箱输入
-                    _buildEmailInput(context, isDarkMode),
-                    const SizedBox(height: 10),
                   ],
 
                   // 密码输入
@@ -251,11 +234,6 @@ class _RegisterPageState extends State<RegisterPage> {
                   _buildConfirmPasswordInput(context, isDarkMode),
 
                   const SizedBox(height: 10),
-
-                  // 邀请码输入（可折叠）
-                  _buildInviteCodeInput(context, isDarkMode),
-
-                  const SizedBox(height: 12),
 
                   // 同意协议
                   _buildAgreementCheckbox(context),
@@ -511,75 +489,6 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  Widget _buildEmailInput(BuildContext context, bool isDark) {
-    final labelColor = context.textSecondary;
-    final inputBgColor = AppColors.inputBgOf(isDark);
-    final textColor = context.textPrimary;
-    final hintColor = context.textSecondary;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Text(
-              S.of(context)?.authEmailAddress ?? 'Email Address',
-              style: TextStyle(fontSize: 14, height: 1.3, color: labelColor),
-            ),
-            const SizedBox(width: 4),
-            Text(
-              '(${S.of(context)?.authOptional ?? 'Optional'})',
-              style: TextStyle(fontSize: 12, color: hintColor),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: _emailController,
-          style: TextStyle(color: textColor, fontSize: 16, height: 1.3),
-          decoration: InputDecoration(
-            hintText:
-                S.of(context)?.commonEnterEmailAddress ?? 'Enter email address',
-            hintStyle: TextStyle(color: hintColor, fontSize: 14, height: 1.3),
-            filled: true,
-            fillColor: inputBgColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 14,
-            ),
-            prefixIcon: Icon(Icons.email_outlined, color: hintColor),
-          ),
-          keyboardType: TextInputType.emailAddress,
-          textInputAction: TextInputAction.next,
-          validator: (value) {
-            if (_anonymousMode) {
-              return null;
-            }
-            // 邮箱是可选的，但如果填写了需要验证格式
-            if (value != null && value.isNotEmpty) {
-              if (!_emailRegex.hasMatch(value)) {
-                return S.of(context)?.commonInvalidEmailFormat ??
-                    'Please enter a valid email address';
-              }
-            }
-            return null;
-          },
-        ),
-        const SizedBox(height: 4),
-        Text(
-          S.of(context)?.authEmailRecoveryHint ?? 'Used for password recovery',
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 11, height: 1.3, color: hintColor),
-        ),
-      ],
-    );
-  }
-
   Widget _buildPasswordInput(BuildContext context, bool isDark) {
     final labelColor = context.textSecondary;
     final inputBgColor = AppColors.inputBgOf(isDark);
@@ -702,87 +611,6 @@ class _RegisterPageState extends State<RegisterPage> {
             return null;
           },
         ),
-      ],
-    );
-  }
-
-  Widget _buildInviteCodeInput(BuildContext context, bool isDark) {
-    final labelColor = context.textSecondary;
-    final inputBgColor = AppColors.inputBgOf(isDark);
-    final textColor = context.textPrimary;
-    final hintColor = context.textSecondary;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // 展开/折叠按钮
-        GestureDetector(
-          onTap: () {
-            setState(() {
-              _showInviteCode = !_showInviteCode;
-            });
-          },
-          child: Row(
-            children: [
-              Icon(
-                _showInviteCode ? Icons.expand_less : Icons.expand_more,
-                color: labelColor,
-                size: 20,
-              ),
-              const SizedBox(width: 4),
-              Flexible(
-                child: Text(
-                  S.of(context)?.authEnterInviteCode ?? 'Enter invite code',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.3,
-                    color: labelColor,
-                  ),
-                ),
-              ),
-              const Spacer(),
-              if (!_showInviteCode &&
-                  _inviteCodeController.text.trim().isNotEmpty)
-                Text(
-                  S.of(context)?.authFilled ?? 'Filled',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    height: 1.3,
-                    color: AppColors.success,
-                  ),
-                ),
-            ],
-          ),
-        ),
-        // 邀请码输入框（可折叠）
-        if (_showInviteCode) ...[
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: _inviteCodeController,
-            style: TextStyle(color: textColor, fontSize: 14),
-            maxLines: 2,
-            decoration: InputDecoration(
-              hintText:
-                  S.of(context)?.authEnterInviteCode ?? 'Enter invite code',
-              hintStyle: TextStyle(color: hintColor),
-              filled: true,
-              fillColor: inputBgColor,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 12,
-              ),
-              prefixIcon: Icon(Icons.vpn_key_outlined, color: hintColor),
-            ),
-          ),
-        ],
       ],
     );
   }

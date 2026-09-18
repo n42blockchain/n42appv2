@@ -421,7 +421,7 @@ class AuthRepositoryImpl implements IAuthRepository {
     } on MatrixException catch (e) {
       if (e.response?.statusCode == 401) {
         return AuthResult.failure(
-          '需要完成服务器要求的注册验证，请检查邀请码或联系服务器管理员',
+          '服务器要求当前客户端不支持的注册验证方式，请联系服务器管理员',
           type: AuthErrorType.additionalAuthRequired,
         );
       }

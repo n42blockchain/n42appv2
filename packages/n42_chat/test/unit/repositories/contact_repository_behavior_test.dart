@@ -247,23 +247,23 @@ void main() {
         verifyNever(() => contacts.getUserProfile(alice));
       },
     );
-    test('missing cached name resolves profile name and avatar', () async {
-      when(() => contacts.getPendingInvites()).thenAnswer(
-        (_) => [
-          invite('!invite:test', inviter: alice, sender: user(alice, '')),
-        ],
-      );
-      final remote = profile(alice, name: 'Remote Alice');
-      when(
-        () => contacts.getUserProfile(alice),
-      ).thenAnswer((_) async => remote);
-      when(
-        () => contacts.getProfileAvatarUrl(remote),
-      ).thenAnswer((_) => 'https://fixture.test/a');
-      final result = (await repository.getPendingFriendRequests()).single;
-      expect(result.userName, 'Remote Alice');
-      expect(result.userAvatarUrl, 'https://fixture.test/a');
-    });
+    test(
+      'missing cached name uses localpart without blocking on profile',
+      () async {
+        when(() => contacts.getPendingInvites()).thenAnswer(
+          (_) => [
+            invite('!invite:test', inviter: alice, sender: user(alice, '')),
+          ],
+        );
+        when(
+          () => contacts.getUserProfile(alice),
+        ).thenAnswer((_) => Completer<matrix.Profile?>().future);
+        final result = (await repository.getPendingFriendRequests()).single;
+        expect(result.userName, 'alice');
+        expect(result.userAvatarUrl, isNull);
+        verifyNever(() => contacts.getUserProfile(any()));
+      },
+    );
     test('profile request failure uses the Matrix localpart', () async {
       when(() => contacts.getPendingInvites()).thenAnswer(
         (_) => [

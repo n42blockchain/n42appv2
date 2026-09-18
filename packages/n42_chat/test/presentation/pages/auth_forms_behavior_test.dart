@@ -73,10 +73,9 @@ void main() {
     await enter(tester, 0, 'https://hs.test');
     if (!anonymous) {
       await enter(tester, 1, 'alice');
-      await enter(tester, 2, 'alice@example.org');
     }
-    await enter(tester, anonymous ? 1 : 3, 'Password123!');
-    await enter(tester, anonymous ? 2 : 4, 'Password123!');
+    await enter(tester, anonymous ? 1 : 2, 'Password123!');
+    await enter(tester, anonymous ? 2 : 3, 'Password123!');
     await tap(
       tester,
       find
@@ -155,9 +154,8 @@ void main() {
     await open(tester, const RegisterPage());
     await registrationFields(tester);
     await enter(tester, 1, 'invalid name');
-    await enter(tester, 2, 'bad-email');
-    await enter(tester, 3, 'short');
-    await enter(tester, 4, 'different');
+    await enter(tester, 2, 'short');
+    await enter(tester, 3, 'different');
     await tap(tester, find.byType(ElevatedButton));
     expect(events.whereType<AuthRegisterRequested>(), isEmpty);
     expect(find.byType(RegisterPage), findsOneWidget);
@@ -173,14 +171,36 @@ void main() {
       final event = events.whereType<AuthRegisterRequested>().single;
       expect(event.homeserver, 'https://hs.test');
       expect(event.username, 'alice');
-      expect(event.email, 'alice@example.org');
+      expect(event.email, isNull);
       expect(event.password, 'Password123!');
       expect(event.registrationToken, isNull);
       expect(find.text('Filled'), findsNothing);
       expect(find.text('Invite Code (Built-in)'), findsNothing);
+      expect(find.text('Enter invite code'), findsNothing);
+      expect(find.text('Email Address'), findsNothing);
       expect(events.whereType<AuthAnonymousRegisterRequested>(), isEmpty);
     },
   );
+  testWidgets('additional authentication does not reveal an invite field', (
+    tester,
+  ) async {
+    await open(tester, const RegisterPage());
+    states.add(
+      const AuthState(
+        status: AuthStatus.error,
+        errorType: AuthErrorType.additionalAuthRequired,
+        errorMessage: 'Unsupported registration authentication',
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Enter invite code'), findsNothing);
+    expect(find.byIcon(Icons.vpn_key_outlined), findsNothing);
+    expect(
+      find.text('Unsupported registration authentication'),
+      findsOneWidget,
+    );
+  });
   testWidgets(
     'anonymous registration omits identity fields and dispatches anonymous flow',
     (tester) async {
