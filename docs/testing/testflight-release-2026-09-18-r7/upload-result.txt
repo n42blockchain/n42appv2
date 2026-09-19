@@ -1,0 +1,6 @@
+Upload exit: 0
+2026-09-18 21:04:03.954 xcodebuild[58484:17797395] Progress 100%: Upload succeeded.
+warning: exportArchive Upload Symbols Failed. The archive did not include a dSYM for the WebRTC.framework with the UUIDs [4C4C44FF-5555-3144-A1FC-27E280B02B7B]. Ensure that the archive's dSYM folder includes a DWARF file for WebRTC.framework with the expected UUIDs.
+warning: exportArchive Upload Symbols Failed. The archive did not include a dSYM for the flutter_vodozemac.framework with the UUIDs [9A2D3B5D-89F3-35A1-BACA-F771EBA41C66]. Ensure that the archive's dSYM folder includes a DWARF file for flutter_vodozemac.framework with the expected UUIDs.
+Uploaded Runner
+** EXPORT SUCCEEDED **
