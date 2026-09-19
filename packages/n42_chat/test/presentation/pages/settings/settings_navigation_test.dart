@@ -384,6 +384,30 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('direct account switch entry does not dispatch logout', (
+    tester,
+  ) async {
+    final repository = MockAuthRepository();
+    when(() => repository.getStoredAccounts()).thenAnswer((_) async => []);
+    getIt.registerSingleton<IAuthRepository>(repository);
+    final auth = MockAuthBloc();
+    when(() => auth.state).thenReturn(
+      const AuthState(
+        status: AuthStatus.authenticated,
+        user: UserEntity(userId: '@me:hs', displayName: 'Me'),
+      ),
+    );
+    await tester.pumpWidget(
+      app(
+        BlocProvider<AuthBloc>.value(value: auth, child: const SettingsPage()),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tapLabel(tester, 'Switch Account');
+    expect(find.byType(AccountSwitchPage), findsOneWidget);
+    verifyNever(() => auth.add(const AuthLogoutRequested()));
+  });
+
   testWidgets('standalone privacy hub opens without a Profile callback', (
     tester,
   ) async {

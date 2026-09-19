@@ -5892,4 +5892,7 @@ class SRu extends S {
 
   @override
   String get qrcodeAlbum => 'Альбом';
+
+  @override
+  String get settingsSwitchAccount => 'Сменить аккаунт';
 }

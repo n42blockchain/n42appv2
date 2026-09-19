@@ -2784,5 +2784,6 @@
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
   "videoLiveUnavailable": "Live broadcasting is unavailable",
-  "qrcodeAlbum": "Album"
+  "qrcodeAlbum": "Album",
+  "settingsSwitchAccount": "Switch Account"
 }

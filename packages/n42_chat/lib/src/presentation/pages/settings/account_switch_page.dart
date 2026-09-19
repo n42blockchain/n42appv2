@@ -116,7 +116,7 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
       child: Scaffold(
         backgroundColor: context.pageBackground,
         appBar: N42AppBar(
-          title: 'Accounts',
+          title: l10n?.settingsSwitchAccount ?? 'Switch Account',
           showBackButton: true,
           onBackPressed: () => Navigator.of(context).pop(),
         ),

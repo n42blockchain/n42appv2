@@ -5895,4 +5895,7 @@ class SSw extends S {
 
   @override
   String get qrcodeAlbum => 'Albamu';
+
+  @override
+  String get settingsSwitchAccount => 'Badili akaunti';
 }

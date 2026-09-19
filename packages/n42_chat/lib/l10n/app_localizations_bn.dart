@@ -5863,4 +5863,7 @@ class SBn extends S {
 
   @override
   String get qrcodeAlbum => 'অ্যালবাম';
+
+  @override
+  String get settingsSwitchAccount => 'অ্যাকাউন্ট বদলান';
 }

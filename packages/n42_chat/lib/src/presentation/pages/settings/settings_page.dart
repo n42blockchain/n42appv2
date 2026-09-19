@@ -1,3 +1,4 @@
+import 'account_switch_page.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -286,6 +287,21 @@ class SettingsPage extends StatelessWidget {
 
           const SizedBox(height: 32),
 
+          if (onAccounts != null || getIt.isRegistered<IAuthRepository>()) ...[
+            _SettingsGroup(
+              children: [
+                _SettingsItem(
+                  icon: Icons.switch_account_outlined,
+                  iconColor: AppColors.primary,
+                  title:
+                      S.of(context)?.settingsSwitchAccount ?? 'Switch Account',
+                  onTap: () => _navigateToAccounts(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+          ],
+
           // 退出登录按钮
           if (onLogout != null ||
               SettingsNavigation.authBloc(context)?.state.isAuthenticated ==
@@ -486,6 +502,16 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
+  void _navigateToAccounts(BuildContext context) {
+    if (onAccounts != null) {
+      onAccounts!();
+    } else if (getIt.isRegistered<IAuthRepository>()) {
+      SettingsNavigation.page(context, const AccountSwitchPage());
+    } else {
+      SettingsNavigation.unavailable(context);
+    }
+  }
+
   void _showLogoutConfirmDialog(BuildContext context) {
     showDialog<void>(
       context: context,
@@ -496,6 +522,16 @@ class SettingsPage extends StatelessWidget {
           '\n\n${S.of(context)?.chatLogoutKeyWarning ?? 'Back up your encryption keys before logging out, or you may lose access to encrypted messages.'}',
         ),
         actions: [
+          if (onAccounts != null || getIt.isRegistered<IAuthRepository>())
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+                _navigateToAccounts(context);
+              },
+              child: Text(
+                S.of(context)?.settingsSwitchAccount ?? 'Switch Account',
+              ),
+            ),
           TextButton(
             onPressed: () {
               Navigator.pop(dialogContext);

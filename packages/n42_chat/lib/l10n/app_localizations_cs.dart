@@ -5875,4 +5875,7 @@ class SCs extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Přepnout účet';
 }

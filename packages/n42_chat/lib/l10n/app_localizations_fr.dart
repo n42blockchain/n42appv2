@@ -5928,4 +5928,7 @@ class SFr extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Changer de compte';
 }

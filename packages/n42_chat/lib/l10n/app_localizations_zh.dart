@@ -5717,6 +5717,9 @@ class SZh extends S {
 
   @override
   String get qrcodeAlbum => '相册';
+
+  @override
+  String get settingsSwitchAccount => '切换账号';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11433,4 +11436,7 @@ class SZhTw extends SZh {
 
   @override
   String get qrcodeAlbum => '相簿';
+
+  @override
+  String get settingsSwitchAccount => '切換帳號';
 }

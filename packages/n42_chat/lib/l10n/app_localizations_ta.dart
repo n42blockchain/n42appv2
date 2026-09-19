@@ -5926,4 +5926,7 @@ class STa extends S {
 
   @override
   String get qrcodeAlbum => 'ஆல்பம்';
+
+  @override
+  String get settingsSwitchAccount => 'கணக்கை மாற்று';
 }

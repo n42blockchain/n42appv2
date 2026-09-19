@@ -5860,4 +5860,7 @@ class SMr extends S {
 
   @override
   String get qrcodeAlbum => 'अल्बम';
+
+  @override
+  String get settingsSwitchAccount => 'खाते बदला';
 }

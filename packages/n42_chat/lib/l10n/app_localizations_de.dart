@@ -5910,4 +5910,7 @@ class SDe extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Konto wechseln';
 }

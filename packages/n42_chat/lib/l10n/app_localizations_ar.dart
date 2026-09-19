@@ -5839,4 +5839,7 @@ class SAr extends S {
 
   @override
   String get qrcodeAlbum => 'الألبوم';
+
+  @override
+  String get settingsSwitchAccount => 'تبديل الحساب';
 }

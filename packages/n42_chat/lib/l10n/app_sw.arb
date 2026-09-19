@@ -2769,5 +2769,6 @@
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
   "videoLiveUnavailable": "Live broadcasting is unavailable",
-  "qrcodeAlbum": "Albamu"
+  "qrcodeAlbum": "Albamu",
+  "settingsSwitchAccount": "Badili akaunti"
 }

@@ -1,10 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import '../../../core/encryption/account_session_index.dart';
+import '../../../core/encryption/token_device_session.dart';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter_vodozemac/flutter_vodozemac.dart' as vodozemac;
 import 'package:http/http.dart' as http;
 import 'package:matrix/matrix.dart';
+import 'package:vodozemac/vodozemac.dart' as vod;
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart' as sqflite;
@@ -29,6 +32,12 @@ class MatrixClientManager {
   static MatrixClientManager get instance => _instance;
 
   Client? _client;
+  final AccountSessionIndex _accountSessions = AccountSessionIndex();
+  String _activeClientName = 'N42Chat';
+  String? _configuredDatabasePath;
+  N42ChatConfig? _configuredChatConfig;
+  PreferencesDataSource? _configuredPreferences;
+
   http.Client? _managedHttpClient;
   bool _isInitialized = false;
   bool _vodozemacInitialized = false;
@@ -92,7 +101,7 @@ class MatrixClientManager {
   /// [forceReinit] 强制重新初始化
   /// [config] N42ChatConfig，用于读取安全配置（如 shareE2eeKeysWithAllDevices）
   Future<void> initialize({
-    String clientName = 'N42Chat',
+    String? clientName,
     String? databasePath,
     bool forceReinit = false,
     N42ChatConfig? config,
@@ -102,6 +111,14 @@ class MatrixClientManager {
       debugLog('MatrixClientManager: Already initialized');
       return;
     }
+
+    clientName ??= await _accountSessions.activeDatabaseName();
+    _configuredDatabasePath = databasePath ?? _configuredDatabasePath;
+    _configuredChatConfig = config ?? _configuredChatConfig;
+    _configuredPreferences = preferencesDataSource ?? _configuredPreferences;
+    databasePath = _configuredDatabasePath;
+    config = _configuredChatConfig;
+    preferencesDataSource = _configuredPreferences;
 
     // 如果强制重新初始化，先清理旧的客户端
     if (forceReinit && _client != null) {
@@ -143,6 +160,7 @@ class MatrixClientManager {
       // （path_provider channel）、隐私配置读取（SharedPreferences）。
       // vodozemac 必须在 Client.init() 之前完成，但与 path 解析、prefs 读取
       // 完全无依赖。`null` 表示该步骤无 I/O，跳过 await 也省一次 microtask。
+      _vodozemacInitialized = _vodozemacInitialized || vod.isInitialized();
       final vodozemacFuture = _vodozemacInitialized ? null : vodozemac.init();
       final dbPathFuture = databasePath == null
           ? _getDefaultDatabasePath()
@@ -233,6 +251,8 @@ class MatrixClientManager {
         waitUntilLoadCompletedLoaded: true,
       );
 
+      _activeClientName = clientName;
+      await rememberCurrentAccount();
       _isInitialized = true;
       debugLog('MatrixClientManager: Initialized successfully');
       debugLog(
@@ -309,6 +329,59 @@ class MatrixClientManager {
   /// [password] 密码
   /// [deviceName] 设备名称
   Future<LoginResponse> login({
+    required String homeserver,
+    required String username,
+    required String password,
+    String? deviceName,
+  }) => withFreshDevice(
+    () => _loginWithPassword(
+      homeserver: homeserver,
+      username: username,
+      password: password,
+      deviceName: deviceName,
+    ),
+  );
+
+  Future<void> rememberCurrentAccount() async {
+    final current = _client;
+    if (current == null ||
+        !current.isLogged() ||
+        current.homeserver == null ||
+        current.userID == null ||
+        current.deviceID == null)
+      return;
+    await _accountSessions.remember(
+      current.homeserver!,
+      current.userID!,
+      current.deviceID!,
+      _activeClientName,
+    );
+  }
+
+  Future<T> withFreshDevice<T>(Future<T> Function() authenticate) async {
+    _ensureInitialized();
+    await rememberCurrentAccount();
+    final previousName = _activeClientName;
+    final hadPreviousSession = isLoggedIn;
+    // Password/SSO login creates a device. Never reuse another device's Olm
+    // account, ratchets, sync cursor, room cache, or SDK database.
+    await initialize(
+      clientName: _accountSessions.newDatabaseName(),
+      forceReinit: true,
+    );
+    try {
+      final result = await authenticate();
+      await rememberCurrentAccount();
+      return result;
+    } catch (_) {
+      if (hadPreviousSession) {
+        await initialize(clientName: previousName, forceReinit: true);
+      }
+      rethrow;
+    }
+  }
+
+  Future<LoginResponse> _loginWithPassword({
     required String homeserver,
     required String username,
     required String password,
@@ -433,38 +506,74 @@ class MatrixClientManager {
   }) async {
     _ensureInitialized();
 
-    // 如果 SDK 已使用相同用户登录（从自身 SQLite DB 恢复），跳过二次 init
-    // 二次 init 会短暂重置状态，造成不必要的开销和潜在竞态
-    if (isLoggedIn && this.userId == userId) {
-      debugLog(
-        'MatrixClientManager: Already logged in as $userId, skipping re-init',
+    final server = Uri.parse(homeserver);
+    bool matches(Client client) =>
+        client.isLogged() &&
+        client.userID == userId &&
+        client.deviceID == deviceId &&
+        client.homeserver != null &&
+        AccountSessionIndex.identity(client.homeserver!, userId, deviceId) ==
+            AccountSessionIndex.identity(server, userId, deviceId);
+    if (_client != null && matches(_client!)) return;
+
+    await rememberCurrentAccount();
+    final targetName = await _accountSessions.lookup(server, userId, deviceId);
+    if (targetName == null) {
+      await validateFreshTokenDevice(
+        MatrixApi(
+          homeserver: server,
+          accessToken: accessToken,
+          httpClient: _managedHttpClient,
+        ),
+        userId,
+        deviceId,
+      );
+      await withFreshDevice(
+        () => _client!.init(
+          newToken: accessToken,
+          newUserID: userId,
+          newDeviceID: deviceId,
+          newDeviceName: 'N42Chat',
+          newHomeserver: server,
+          waitForFirstSync: false,
+        ),
       );
       return;
     }
-
+    final previousName = _activeClientName;
+    final hadPreviousSession = isLoggedIn;
     try {
-      final homeserverUri = Uri.parse(homeserver);
-      // 不调用 checkHomeserver — 恢复已知会话时跳过此额外网络往返
-      // 使用token恢复登录
-      // 显式设置 waitForFirstSync: false，由后续 startSync() 统一处理同步
-      await _client!.init(
-        newToken: accessToken,
-        newUserID: userId,
-        newDeviceID: deviceId,
-        newDeviceName: 'N42Chat',
-        newHomeserver: homeserverUri,
-        waitForFirstSync: false,
-      );
-
-      debugLog('MatrixClientManager: Token login successful - $userId');
-    } catch (e) {
-      debugLog('MatrixClientManager: Token login failed: $e');
+      await initialize(clientName: targetName, forceReinit: true);
+      if (_client == null || !matches(_client!)) {
+        throw StateError(
+          'Stored encryption session does not match the account',
+        );
+      }
+      // SDK init restores its own token, Olm account and sync cursor together.
+      // Supplying newToken here would discard the stored Olm identity.
+      await rememberCurrentAccount();
+    } catch (_) {
+      if (hadPreviousSession) {
+        await initialize(clientName: previousName, forceReinit: true);
+      }
       rethrow;
     }
   }
 
   /// 使用 Matrix login token 登录（SSO/OIDC 回调）
   Future<LoginResponse> loginWithLoginToken({
+    required String homeserver,
+    required String loginToken,
+    String? deviceName,
+  }) => withFreshDevice(
+    () => _loginWithLoginToken(
+      homeserver: homeserver,
+      loginToken: loginToken,
+      deviceName: deviceName,
+    ),
+  );
+
+  Future<LoginResponse> _loginWithLoginToken({
     required String homeserver,
     required String loginToken,
     String? deviceName,
@@ -496,7 +605,13 @@ class MatrixClientManager {
     if (_client == null) return;
 
     try {
+      final server = _client!.homeserver;
+      final user = _client!.userID;
+      final device = _client!.deviceID;
       await _client!.logout();
+      if (server != null && user != null && device != null) {
+        await _accountSessions.forget(server, user, device);
+      }
       debugLog('MatrixClientManager: Logout successful');
     } catch (e) {
       debugLog('MatrixClientManager: Logout failed: $e');

@@ -5745,4 +5745,7 @@ class SJa extends S {
 
   @override
   String get qrcodeAlbum => 'アルバム';
+
+  @override
+  String get settingsSwitchAccount => 'アカウントを切り替え';
 }

@@ -10840,6 +10840,12 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Album'**
   String get qrcodeAlbum;
+
+  /// No description provided for @settingsSwitchAccount.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch Account'**
+  String get settingsSwitchAccount;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

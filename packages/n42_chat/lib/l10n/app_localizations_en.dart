@@ -5836,4 +5836,7 @@ class SEn extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Switch Account';
 }

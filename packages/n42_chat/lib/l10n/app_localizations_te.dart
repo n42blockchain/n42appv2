@@ -5906,4 +5906,7 @@ class STe extends S {
 
   @override
   String get qrcodeAlbum => 'ఆల్బమ్';
+
+  @override
+  String get settingsSwitchAccount => 'ఖాతాను మార్చండి';
 }

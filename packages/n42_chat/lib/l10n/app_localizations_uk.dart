@@ -5895,4 +5895,7 @@ class SUk extends S {
 
   @override
   String get qrcodeAlbum => 'Альбом';
+
+  @override
+  String get settingsSwitchAccount => 'Змінити обліковий запис';
 }

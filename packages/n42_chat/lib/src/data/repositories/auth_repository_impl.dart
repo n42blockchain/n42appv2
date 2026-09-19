@@ -213,12 +213,14 @@ class AuthRepositoryImpl implements IAuthRepository {
         deviceId: deviceId,
       );
 
-      // 保存会话（更新 SecureStorage 中的 token）
+      // The SDK database owns the resumed device identity and may contain a
+      // refreshed token newer than the account-picker's stored credentials.
+      final activeClient = _authDataSource.clientManager.client;
       await _saveSession(
-        homeserver: homeserver,
-        accessToken: accessToken,
-        userId: userId,
-        deviceId: deviceId,
+        homeserver: activeClient?.homeserver?.toString() ?? homeserver,
+        accessToken: activeClient?.accessToken ?? accessToken,
+        userId: activeClient?.userID ?? userId,
+        deviceId: activeClient?.deviceID ?? deviceId,
       );
 
       _startMonitoringLoginState();

@@ -5862,4 +5862,7 @@ class SHi extends S {
 
   @override
   String get qrcodeAlbum => 'एल्बम';
+
+  @override
+  String get settingsSwitchAccount => 'खाता बदलें';
 }

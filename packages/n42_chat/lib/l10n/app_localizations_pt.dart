@@ -5895,6 +5895,9 @@ class SPt extends S {
 
   @override
   String get qrcodeAlbum => 'Álbum';
+
+  @override
+  String get settingsSwitchAccount => 'Mudar de conta';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11788,4 +11791,7 @@ class SPtBr extends SPt {
 
   @override
   String get qrcodeAlbum => 'Álbum';
+
+  @override
+  String get settingsSwitchAccount => 'Trocar de conta';
 }

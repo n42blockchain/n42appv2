@@ -5904,4 +5904,7 @@ class SEs extends S {
 
   @override
   String get qrcodeAlbum => 'Álbum';
+
+  @override
+  String get settingsSwitchAccount => 'Cambiar de cuenta';
 }

@@ -5867,4 +5867,7 @@ class STr extends S {
 
   @override
   String get qrcodeAlbum => 'Albüm';
+
+  @override
+  String get settingsSwitchAccount => 'Hesap değiştir';
 }

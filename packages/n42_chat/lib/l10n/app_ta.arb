@@ -2769,5 +2769,6 @@
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
   "videoLiveUnavailable": "Live broadcasting is unavailable",
-  "qrcodeAlbum": "ஆல்பம்"
+  "qrcodeAlbum": "ஆல்பம்",
+  "settingsSwitchAccount": "கணக்கை மாற்று"
 }

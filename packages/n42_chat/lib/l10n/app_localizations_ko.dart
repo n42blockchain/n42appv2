@@ -5744,4 +5744,7 @@ class SKo extends S {
 
   @override
   String get qrcodeAlbum => '앨범';
+
+  @override
+  String get settingsSwitchAccount => '계정 전환';
 }

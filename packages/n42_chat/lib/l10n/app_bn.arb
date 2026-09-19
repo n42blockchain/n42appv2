@@ -2769,5 +2769,6 @@
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
   "videoLiveUnavailable": "Live broadcasting is unavailable",
-  "qrcodeAlbum": "অ্যালবাম"
+  "qrcodeAlbum": "অ্যালবাম",
+  "settingsSwitchAccount": "অ্যাকাউন্ট বদলান"
 }

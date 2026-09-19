@@ -5874,4 +5874,7 @@ class SId extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Ganti Akun';
 }

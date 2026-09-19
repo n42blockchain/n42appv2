@@ -5851,4 +5851,7 @@ class SVi extends S {
 
   @override
   String get qrcodeAlbum => 'Album';
+
+  @override
+  String get settingsSwitchAccount => 'Chuyển tài khoản';
 }

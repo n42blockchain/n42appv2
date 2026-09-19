@@ -154,11 +154,12 @@ class MatrixAuthDataSource {
       throw StateError('Matrix client not initialized');
     }
 
-    final homeserverUri = Uri.parse(homeserver);
-    final (discovery, versions, loginFlows, _) = await client.checkHomeserver(
-      homeserverUri,
-    );
-    return (discovery, versions, loginFlows);
+    return _withHomeserverProbe(client, (probe) async {
+      final (discovery, versions, loginFlows, _) = await probe.checkHomeserver(
+        Uri.parse(homeserver),
+      );
+      return (discovery, versions, loginFlows);
+    });
   }
 
   /// 获取支持的登录方式
@@ -172,12 +173,8 @@ class MatrixAuthDataSource {
       throw StateError('Matrix client not initialized');
     }
 
-    // 先检查homeserver
-    final homeserverUri = Uri.parse(homeserver);
-    await client.checkHomeserver(homeserverUri);
-
-    // 获取登录方式
-    return await client.getLoginFlows() ?? [];
+    final (_, _, flows) = await checkHomeserver(homeserver);
+    return flows;
   }
 
   // ============================================
@@ -210,6 +207,19 @@ class MatrixAuthDataSource {
       throw StateError('Matrix client is not initialized');
     }
 
+    if (finalClient.userID != null) {
+      return _clientManager.withFreshDevice(
+        () => register(
+          homeserver: homeserver,
+          username: username,
+          password: password,
+          email: email,
+          deviceName: deviceName,
+          registrationToken: registrationToken,
+        ),
+      );
+    }
+
     // 设置homeserver
     final homeserverUri = Uri.parse(homeserver);
     await finalClient.checkHomeserver(homeserverUri);
@@ -220,12 +230,14 @@ class MatrixAuthDataSource {
     final attemptedStages = <String>{};
     while (true) {
       try {
-        return await finalClient.register(
+        final response = await finalClient.register(
           username: username,
           password: password,
           initialDeviceDisplayName: deviceName ?? 'N42Chat',
           auth: auth,
         );
+        await _clientManager.rememberCurrentAccount();
+        return response;
       } on MatrixException catch (error) {
         // SDK 6.x generated endpoints construct MatrixException.fromJson,
         // so a UIA challenge can have no HTTP response attached. Use the
@@ -282,18 +294,36 @@ class MatrixAuthDataSource {
       throw StateError('Matrix client not initialized');
     }
 
-    // 设置homeserver
-    final homeserverUri = Uri.parse(homeserver);
-    await client.checkHomeserver(homeserverUri);
-
-    try {
-      final available = await client.checkUsernameAvailability(username);
-      return available ?? true;
-    } on MatrixException catch (e) {
-      if (e.errcode == 'M_USER_IN_USE' || e.errcode == 'M_FORBIDDEN') {
-        return false;
+    return _withHomeserverProbe(client, (probe) async {
+      await probe.checkHomeserver(Uri.parse(homeserver));
+      try {
+        return await probe.checkUsernameAvailability(username) ?? true;
+      } on MatrixException catch (e) {
+        if (e.errcode == 'M_USER_IN_USE' || e.errcode == 'M_FORBIDDEN')
+          return false;
+        rethrow;
       }
-      rethrow;
+    });
+  }
+
+  Future<T> _withHomeserverProbe<T>(
+    Client client,
+    Future<T> Function(Client) action,
+  ) async {
+    if (client.userID == null) return action(client);
+    // Never replace the active account's homeserver while browsing the login
+    // form. The probe has no token and never initializes or closes this DB.
+    final probe = Client(
+      'N42HomeserverProbe',
+      database: client.database,
+      httpClient: client.httpClient,
+      supportedLoginTypes: client.supportedLoginTypes,
+      logLevel: Level.error,
+    );
+    try {
+      return await action(probe);
+    } finally {
+      await probe.dispose(closeDatabase: false);
     }
   }
 

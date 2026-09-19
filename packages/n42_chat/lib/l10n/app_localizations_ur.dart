@@ -5875,4 +5875,7 @@ class SUr extends S {
 
   @override
   String get qrcodeAlbum => 'البم';
+
+  @override
+  String get settingsSwitchAccount => 'اکاؤنٹ تبدیل کریں';
 }

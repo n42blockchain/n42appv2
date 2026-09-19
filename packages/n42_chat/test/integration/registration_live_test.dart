@@ -36,6 +36,7 @@ void main() {
       registerFallbackValue(AuthenticationData());
       when(() => manager.isInitialized).thenReturn(true);
       when(() => manager.client).thenReturn(client);
+      when(() => manager.rememberCurrentAccount()).thenAnswer((_) async {});
       when(() => client.checkHomeserver(any())).thenAnswer(
         (_) async => (null, await api.getVersions(), <LoginFlow>[], null),
       );

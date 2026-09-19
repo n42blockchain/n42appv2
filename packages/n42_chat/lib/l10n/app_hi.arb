@@ -2769,5 +2769,6 @@
   "videoGoLive": "Go live",
   "videoSelect": "Select video",
   "videoLiveUnavailable": "Live broadcasting is unavailable",
-  "qrcodeAlbum": "एल्बम"
+  "qrcodeAlbum": "एल्बम",
+  "settingsSwitchAccount": "खाता बदलें"
 }

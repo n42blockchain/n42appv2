@@ -49,6 +49,7 @@ void main() {
     final manager = _Manager();
     when(() => manager.isInitialized).thenReturn(true);
     when(() => manager.client).thenReturn(client);
+    when(() => manager.rememberCurrentAccount()).thenAnswer((_) async {});
     when(() => client.checkHomeserver(any())).thenAnswer(
       (_) async =>
           (null, GetVersionsResponse(versions: ['v1.1']), <LoginFlow>[], null),

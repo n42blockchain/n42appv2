@@ -2157,5 +2157,6 @@
   "videoGoLive": "發起直播",
   "videoSelect": "選擇影片",
   "videoLiveUnavailable": "目前無法發起直播",
-  "qrcodeAlbum": "相簿"
+  "qrcodeAlbum": "相簿",
+  "settingsSwitchAccount": "切換帳號"
 }
