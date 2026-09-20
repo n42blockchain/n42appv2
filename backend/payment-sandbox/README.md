@@ -45,3 +45,60 @@ Each stage can be separately committed and tested. `Account` wrappers import act
 5. **P08** `packet_refunds.py`, `test_packet_refunds.py`: expiry boundary, unclaimed refund and replay.
 
 For P05–P08, run unittest discovery with that stage's test filename; later stages depend on previous stages. Append the consolidated evidence document after all stages. No app integration or real-provider capability is implied by these modules.
+
+## P09a: opt-in loopback HTTP fixture
+
+`server.py` adds an explicit local-only adapter. It binds **only the literal `127.0.0.1`**, rejects other hosts and production mode, does not perform reverse DNS, and accepts only configured synthetic test tokens. There is no public deployment configuration, CORS, external provider call, credential discovery or automatic production fallback.
+
+Start it from a trusted local test harness after setting up the SQLite fixture:
+
+```python
+from server import LocalPaymentServer
+from common import MODE
+
+# Existing `sandbox` was explicitly created and seeded by the fixture owner.
+server = LocalPaymentServer(
+    sandbox, mode=MODE, port=8765,
+    tokens={'synthetic-test-alice000': 'test-alice'},
+)
+try:
+    server.serve_forever()
+finally:
+    server.server_close()
+```
+
+The token mapping is required at startup; tokens must match `synthetic-test-[A-Za-z0-9_-]{8,128}`. These are disposable local fixture identifiers, not production secrets. Do not provide real provider credentials. Seed and member configuration remain trusted Python fixture actions; no HTTP seed/member/admin endpoint exists. Requests must use `Host: 127.0.0.1:<port>` and must not carry an `Origin` header.
+
+### Protocol
+
+Every request requires `Authorization: Bearer <configured synthetic token>`. Every POST additionally requires `Content-Type: application/json` and `Idempotency-Key` (1–128 non-space printable ASCII characters). Maximum JSON body: **64 KiB**. Duplicate JSON keys, unknown fields, transfer encoding, multiple identity/length headers, and malformed bodies are rejected. HTTP responses are non-cacheable.
+
+| Method/path | Request | Success object fields, in addition to `mode` |
+| --- | --- | --- |
+| GET `/balances?asset=<percent-encoded assetId>` | No body | `asset`, `available` |
+| POST `/transfers` | `recipient`, `asset`, `amount` | `id`, `recipient`, `asset`, `amount` |
+| POST `/packets` | `room`, `asset`, `total`, `slots`, `expiresAt` | `id`, `asset`, `total`, `slots`, `expiresAt` |
+| POST `/packets/{packet_id}/claims` | `{}` | `packet`, `asset`, `amount` |
+| POST `/packets/{packet_id}/refunds` | `{}` | `id`, `asset`, `amount` |
+
+Successful responses are direct JSON objects, not wrapped in `data`, always with `mode: "localSimulation"`. **All integer fields are canonical decimal strings**, including balances, amount, total, slots, and absolute Unix-seconds expiresAt. JSON numbers, floating-point/exponent notation, booleans and leading zeroes are rejected. Example transfer body: `{"recipient":"test-bob","asset":"test-fiat:USD:minor-2","amount":"100"}`. Amounts remain integer minor units; there is no decimal or symbol conversion. Values above the core's 9e15 ceiling are rejected.
+
+The server derives the actor from its token mapping. Body fields such as `sender`, `account` or `now` are rejected; time comes from the server clock (injectable only by the local harness). Idempotency keys are **globally scoped per actor across these HTTP actions** and persist in the same SQLite file. A key bound to a different route or body rejects with 409. Validation failures before binding do not consume the key; a core/business failure after binding retains it, allowing a same-request retry when conditions change.
+
+HTTP binding and the core financial operation use separate committed transactions. If interrupted between them, the key remains bound and the same request retries the core operation. The core's own durable transfer/create idempotency and unique claim/refund semantics prevent a second financial effect, including after adapter restart. The adapter does not cache receipts only in memory. Do not share one SQLite test ledger across independently configured incompatible fixtures.
+
+Errors are generic JSON without account state, tokens, tracebacks, SQL or internal exception details:
+
+```json
+{"mode":"localSimulation","error":{"code":"conflict","message":"conflict"}}
+```
+
+Codes/statuses: `unauthorized` 401, `invalid_request` 400, `not_found` 404, `conflict` 409, `payload_too_large` 413, `internal_error` 500. Core business errors intentionally share `conflict`; this small test protocol is not a production customer-error taxonomy.
+
+### HTTP verification
+
+```sh
+python3 -m unittest discover -s backend/payment-sandbox -p test_server.py -v
+```
+
+Tests use a real ephemeral loopback socket, synthetic tokens and temporary SQLite files, with an injected server clock. This is not app integration or external-provider validation. There is no TLS because the listener is local-only; do not port-forward or proxy it publicly.

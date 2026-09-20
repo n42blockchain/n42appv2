@@ -1,0 +1,135 @@
+from concurrent.futures import ThreadPoolExecutor
+import http.client
+import json
+import threading
+from urllib.parse import urlencode
+
+from test_support import Fixture, ASSET, MODE
+from server import LocalPaymentServer, MAX_BODY
+
+TOKENS = {'synthetic-test-alice000': 'a', 'synthetic-test-bob00000': 'b', 'synthetic-test-outsider': 'outsider'}
+
+
+class HttpTests(Fixture):
+    def setUp(self):
+        super().setUp()
+        self.now = 1
+        self.start_server()
+        self.addCleanup(self.stop_server)
+
+    def start_server(self):
+        self.server = LocalPaymentServer(self.s, mode=MODE, tokens=TOKENS, clock=lambda: self.now)
+        self.thread = threading.Thread(target=self.server.serve_forever, kwargs={'poll_interval': 0.01}, daemon=True)
+        self.thread.start()
+
+    def stop_server(self):
+        self.server.shutdown()
+        self.server.server_close()
+        self.thread.join(timeout=2)
+
+    def request(self, method, path, body=None, *, token='synthetic-test-alice000', key='key', extra=None, raw=None):
+        headers = {}
+        if token is not None:
+            headers['Authorization'] = 'Bearer ' + token
+        if method == 'POST':
+            headers['Content-Type'] = 'application/json'
+            if key is not None:
+                headers['Idempotency-Key'] = key
+            raw = json.dumps(body).encode() if raw is None else raw
+        headers.update(extra or {})
+        conn = http.client.HTTPConnection('127.0.0.1', self.server.server_port, timeout=5)
+        try:
+            conn.request(method, path, body=raw, headers=headers)
+            response = conn.getresponse()
+            data = json.loads(response.read())
+            self.assertEqual(data['mode'], MODE)
+            self.assertEqual(response.getheader('Cache-Control'), 'no-store')
+            return response.status, data
+        finally:
+            conn.close()
+
+    def transfer(self, amount='10', **kwargs):
+        return self.request('POST', '/transfers', {'recipient': 'b', 'asset': ASSET, 'amount': amount}, **kwargs)
+
+    def create(self):
+        status, result = self.request('POST', '/packets', {'room': 'room', 'asset': ASSET, 'total': '60', 'slots': '3', 'expiresAt': '100'}, key='create')
+        self.assertEqual(status, 200)
+        return result['id']
+
+    def test_config_fail_closed(self):
+        for kwargs in [{'mode': 'production'}, {'host': '0.0.0.0'}, {'host': 'localhost'}, {'tokens': {'live-token': 'a'}}]:
+            config = {'mode': MODE, 'tokens': TOKENS}
+            config.update(kwargs)
+            with self.assertRaises(ValueError):
+                LocalPaymentServer(self.s, **config)
+
+    def test_auth_isolation_and_no_admin_route(self):
+        path = '/balances?' + urlencode({'asset': ASSET})
+        self.assertEqual(self.request('GET', path)[1]['available'], '100')
+        self.assertEqual(self.request('GET', path, token='synthetic-test-bob00000')[1]['available'], '0')
+        for token in [None, 'incorrect']:
+            self.assertEqual(self.request('GET', path, token=token)[0], 401)
+        self.assertEqual(self.request('GET', path + '&account=a', token='synthetic-test-bob00000')[0], 400)
+        self.assertEqual(self.request('POST', '/seed', {})[0], 404)
+        self.assertEqual(self.request('POST', '/members', {})[0], 404)
+        self.assertEqual(self.transfer(extra={'Origin': 'https://example.com'})[0], 400)
+        self.assertEqual(self.transfer(extra={'Host': 'example.com'})[0], 400)
+
+    def test_integer_protocol_and_unknown_fields(self):
+        for amount in [10, True, 10.0, '01', '-1', '1e1', '9000000000000001', '']:
+            with self.subTest(amount=amount):
+                self.assertEqual(self.transfer(amount)[0], 400)
+        for forbidden in ['sender', 'now', 'account']:
+            body = {'recipient': 'b', 'asset': ASSET, 'amount': '10', forbidden: 'a'}
+            self.assertEqual(self.request('POST', '/transfers', body)[0], 400)
+        self.assertEqual(self.transfer(key=None)[0], 400)
+        self.assertEqual(self.transfer()[1]['amount'], '10')
+
+    def test_replay_conflict_and_restart(self):
+        initial = self.transfer()
+        self.assertEqual(initial[0], 200)
+        self.assertEqual(self.transfer(), initial)
+        self.assertEqual(self.transfer('11')[0], 409)
+        self.stop_server()
+        self.start_server()
+        self.assertEqual(self.transfer(), initial)
+        self.assertEqual(self.transfer('11')[0], 409)
+        self.assertEqual(self.a.balance(ASSET)['available'], 90)
+        self.conserved()
+
+    def test_packet_clock_membership_and_refund(self):
+        packet = self.create()
+        claim_path = '/packets/' + packet + '/claims'
+        refund_path = '/packets/' + packet + '/refunds'
+        denied = self.request('POST', claim_path, {}, key='claim', token='synthetic-test-outsider')
+        self.assertEqual(denied[0], 409)
+        status, claim = self.request('POST', claim_path, {}, key='claim', token='synthetic-test-bob00000')
+        self.assertEqual((status, claim['amount']), (200, '20'))
+        self.assertEqual(self.request('POST', refund_path, {}, key='refund')[0], 409)
+        self.now = 100
+        refunded = self.request('POST', refund_path, {}, key='refund')
+        self.assertEqual((refunded[0], refunded[1]['amount']), (200, '40'))
+        self.assertEqual(self.request('POST', refund_path, {}, key='refund'), refunded)
+        self.assertEqual(self.request('POST', claim_path, {}, key='claim', token='synthetic-test-bob00000')[1], claim)
+        self.assertEqual(self.request('POST', claim_path, {}, key='refund')[0], 409)
+        self.assertEqual(self.a.balance(ASSET)['available'], 80)
+        self.conserved()
+
+    def test_size_json_and_sanitized_errors(self):
+        self.assertEqual(self.request('POST', '/transfers', raw=b'x' * (MAX_BODY + 1))[0], 413)
+        for raw in [b'{', b'[]', b'{"amount":"1","amount":"2"}', b'{"x":NaN}', b'\xff']:
+            self.assertEqual(self.request('POST', '/transfers', raw=raw)[0], 400)
+        status, error = self.transfer('101')
+        self.assertEqual(status, 409)
+        self.assertEqual(error['error'], {'code': 'conflict', 'message': 'conflict'})
+        self.server.clock = lambda: (_ for _ in ()).throw(RuntimeError('SENSITIVE fixture detail'))
+        status, error = self.transfer(key='internal')
+        self.assertEqual(status, 500)
+        self.assertNotIn('SENSITIVE', json.dumps(error))
+
+    def test_concurrent_http_replay(self):
+        with ThreadPoolExecutor(max_workers=4) as pool:
+            results = list(pool.map(lambda _: self.transfer('30'), range(12)))
+        self.assertTrue(all(result == results[0] and result[0] == 200 for result in results))
+        self.assertEqual(self.a.balance(ASSET)['available'], 70)
+        self.conserved()
