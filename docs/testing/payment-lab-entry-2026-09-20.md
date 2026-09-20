@@ -25,4 +25,8 @@ The host owns and disposes both transport and client. Invalid endpoint configura
 
 Logs: `/tmp/n42-payment-lab-host-disabled.log`, `/tmp/n42-payment-lab-host-enabled.log`.
 
-This is the balance/transfer lab slice. Red-packet form, persistent pending-order recovery, mainnet execution, public testnet execution, provider contracts and real-device acceptance remain separate tasks. The latest full-app coverage report predates this UI entry; do not count these tests as a new full-suite measurement.
+This entry initially covered balance/transfer; the red-packet entry is documented below. Persistent pending-order recovery, mainnet execution, public testnet execution, provider contracts and real-device acceptance remain separate tasks. The latest full-app coverage report predates this UI entry; do not count these tests as a new full-suite measurement.
+
+## Red packet entry
+
+The same explicit flag now exposes a separate About → Local red packet lab entry. Each pushed host owns a separate client/transport, so the transfer and packet pages do not share an active test session. Both flag configurations passed two host widget tests. The packet page supports create/claim/expiry refund in the local ledger only; no contract deployment or public testnet is involved. Logs: `/tmp/n42-packet-host-off.log`, `/tmp/n42-packet-host-on.log`.

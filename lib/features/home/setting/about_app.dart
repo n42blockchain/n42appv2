@@ -93,6 +93,18 @@ class _AboutAppState extends State<AboutApp> {
                     ),
                   ),
                 ),
+              if (LocalPaymentLabHost.isEnabled)
+                ListTile(
+                  leading: const Icon(Icons.redeem_outlined),
+                  title: const Text('Local red packet lab'),
+                  subtitle: const Text('Synthetic test funds only'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) =>
+                          const LocalPaymentLabHost(redPackets: true),
+                    ),
+                  ),
+                ),
               SizedBox(height: AppSpacing.space6),
               _buildWebsiteSection(),
               SizedBox(height: AppSpacing.space8),

@@ -4,10 +4,13 @@ import 'package:http/http.dart' as http;
 
 import '../data/local_payment_client.dart';
 import 'local_payment_lab_page.dart';
+import 'local_packet_lab_page.dart';
 
 /// Explicit developer opt-in. Never exposed by a release build.
 class LocalPaymentLabHost extends StatefulWidget {
-  const LocalPaymentLabHost({super.key});
+  const LocalPaymentLabHost({super.key, this.redPackets = false});
+
+  final bool redPackets;
 
   static const isEnabled =
       !kReleaseMode &&
@@ -68,6 +71,8 @@ class _LocalPaymentLabHostState extends State<LocalPaymentLabHost> {
         ),
       );
     }
-    return LocalPaymentLabPage(client: client);
+    return widget.redPackets
+        ? LocalPacketLabPage(client: client)
+        : LocalPaymentLabPage(client: client);
   }
 }
