@@ -1,0 +1,7 @@
+{
+  "artifact": "build/app/outputs/flutter-apk/app-release.apk",
+  "libraries_checked": 55,
+  "unaligned_libraries": [],
+  "passed": true,
+  "scope": "ELF load segments only; ZIP alignment and 16 KB device execution require separate verification"
+}

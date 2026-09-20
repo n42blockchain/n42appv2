@@ -1,0 +1,35 @@
+{
+  "ios": {
+    "version": "2.4.8",
+    "build": "2026072696",
+    "versions": {
+      "ai.n42.www": "2026072696",
+      "ai.n42.www.NotificationExtension": "2026072696"
+    },
+    "commit": "b7cb3187498db1627fa5ce58adb888ebe002d1f7",
+    "ipa_sha256": "6ab76b5fbac13237b767987c18779867721387ccd27f9f795ca96b593b6e8d55",
+    "size_bytes": 162605679,
+    "ipa_signature_verified": true,
+    "distribution_entitlements_verified": true,
+    "provider_key_absent": true,
+    "upload_status": "accepted",
+    "apple_processing_verified": false,
+    "apple_processing_started": true,
+    "upload_accepted_at": "2026-09-20T01:15:10.351662-04:00"
+  },
+  "android": {
+    "apk": "/Users/jieliu/Downloads/N42Wallet-2.4.8-2026072696-release.apk",
+    "version": "2.4.8",
+    "build": 2026072696,
+    "commit": "b7cb3187498db1627fa5ce58adb888ebe002d1f7",
+    "size_bytes": 846884158,
+    "sha256": "af32b8d38419fe85c0411745ae210b62df823c49d0781ea43208a587bb8aa073",
+    "signature_verified": true,
+    "same_certificate_as_2692": true,
+    "debuggable": false,
+    "zip_alignment_16kb": true,
+    "provider_key_absent": true,
+    "elf_alignment_16kb": true,
+    "native_libraries_checked": 55
+  }
+}

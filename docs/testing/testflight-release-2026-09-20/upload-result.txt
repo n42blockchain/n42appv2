@@ -1,0 +1,7 @@
+Build: 2.4.8 (2026072696)
+Upload exit: 0
+Upload succeeded
+Uploaded Runner
+EXPORT SUCCEEDED
+Apple processing started; completion and tester availability not verified.
+Accepted at: 2026-09-20T01:15:10.351662-04:00
