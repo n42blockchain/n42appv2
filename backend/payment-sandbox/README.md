@@ -131,3 +131,11 @@ python3 -m unittest discover -s backend/payment-sandbox -p test_run_local.py -v
 ```
 
 Four tests cover seeded account balances, normal and exceptional temporary-file cleanup, unsupported CLI arguments, and a real subprocess with ephemeral loopback HTTP balance lookup followed by SIGINT and directory removal.
+
+## P13a: query an existing local operation receipt
+
+`GET /operations/{id}` uses the same synthetic Bearer authentication. Supported IDs are `transfer_`, `packet_`, or `refund_` followed by 64 lowercase hexadecimal characters. No query parameters or request body are accepted.
+
+Only the operation's original actor can read its stored receipt. Even a transfer recipient receives the same generic 404 as an unknown ID. Seed and claim operations are not supported by this endpoint. Successful responses return the **original local receipt**, with `mode: "localSimulation"` and all integers encoded as decimal strings. No blockchain confirmation, external provider settlement, or new payment-status field is implied. A packet creation receipt remains the original reservation receipt, not a current packet balance or claim summary.
+
+The query does not move funds or rerun an operation. The stored receipt survives HTTP server restart when the same SQLite fixture is reused. It can confirm an operation for which the caller already has an ID; if a timeout occurred before receiving the ID, retry the original request with the same idempotency key and parameters. Querying directly by idempotency key is a separate later feature. The disposable launcher still deletes its entire fixture on exit, so restarting that launcher starts a new ledger rather than restoring past receipts.

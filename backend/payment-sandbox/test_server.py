@@ -133,3 +133,43 @@ class HttpTests(Fixture):
         self.assertTrue(all(result == results[0] and result[0] == 200 for result in results))
         self.assertEqual(self.a.balance(ASSET)['available'], 70)
         self.conserved()
+
+    def test_operation_query_returns_original_receipts_without_mutation(self):
+        transfer = self.transfer()[1]
+        status, packet = self.request('POST', '/packets', {
+            'room': 'room', 'asset': ASSET, 'total': '60', 'slots': '3', 'expiresAt': '100'}, key='create')
+        self.assertEqual(status, 200)
+        packet_id = packet['id']
+        self.assertEqual(packet['total'], '60')
+        self.assertEqual(packet['slots'], '3')
+        self.now = 100
+        refund = self.request('POST', '/packets/' + packet_id + '/refunds', {}, key='refund')[1]
+        before = self.s.audit_test_asset(ASSET)
+        for receipt in [transfer, packet, refund]:
+            with self.subTest(operation=receipt['id']):
+                self.assertEqual(self.request('GET', '/operations/' + receipt['id']), (200, receipt))
+                self.assertNotIn('status', receipt)
+        self.assertEqual(before, self.s.audit_test_asset(ASSET))
+        self.conserved()
+
+    def test_operation_query_hides_other_accounts_and_unsupported_operations(self):
+        from common import stable_id
+        receipt = self.transfer()[1]
+        missing = self.request('GET', '/operations/transfer_' + '0' * 64)
+        self.assertEqual(missing[0], 404)
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id'], token='synthetic-test-bob00000'), missing)
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id'], token='synthetic-test-outsider'), missing)
+        for operation in [stable_id('seed', 'a', 'seed'), 'claim_' + '0' * 64, 'transfer_short', 'packet_' + 'A' * 64]:
+            self.assertEqual(self.request('GET', '/operations/' + operation), missing)
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id'], token=None)[0], 401)
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id'] + '?sender=a')[0], 400)
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id'], raw=b'{}')[0], 400)
+
+    def test_operation_query_survives_restart(self):
+        receipt = self.transfer()[1]
+        self.stop_server()
+        self.start_server()
+        self.assertEqual(self.request('GET', '/operations/' + receipt['id']), (200, receipt))
+        self.assertEqual(self.transfer(), (200, receipt))
+        self.assertEqual(self.a.balance(ASSET)['available'], 90)
+        self.conserved()

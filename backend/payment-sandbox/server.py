@@ -143,6 +143,20 @@ class Handler(BaseHTTPRequestHandler):
         if route.scheme or route.netloc or route.fragment:
             raise RequestError(400, 'invalid_request')
         if self.command == 'GET':
+            operation = re.fullmatch(r'/operations/((?:transfer|packet|refund)_[a-f0-9]{64})', route.path)
+            if operation is not None:
+                lengths = self.headers.get_all('Content-Length', [])
+                if (route.query or self.headers.get('Transfer-Encoding') is not None
+                        or (lengths and lengths != ['0'])):
+                    raise RequestError(400, 'invalid_request')
+                with self.server.sandbox._transaction() as db:
+                    row = db.execute(
+                        "SELECT result FROM operations WHERE id=? AND actor=? AND kind IN ('transfer','packet','refund')",
+                        (operation[1], actor)).fetchone()
+                if row is None:
+                    # Missing and another account's receipts are indistinguishable.
+                    raise RequestError(404, 'not_found')
+                return json.loads(row['result'])
             if route.path != '/balances':
                 raise RequestError(404, 'not_found')
             query = parse_qs(route.query, keep_blank_values=True)
