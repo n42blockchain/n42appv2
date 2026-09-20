@@ -139,3 +139,17 @@ Four tests cover seeded account balances, normal and exceptional temporary-file 
 Only the operation's original actor can read its stored receipt. Even a transfer recipient receives the same generic 404 as an unknown ID. Seed and claim operations are not supported by this endpoint. Successful responses return the **original local receipt**, with `mode: "localSimulation"` and all integers encoded as decimal strings. No blockchain confirmation, external provider settlement, or new payment-status field is implied. A packet creation receipt remains the original reservation receipt, not a current packet balance or claim summary.
 
 The query does not move funds or rerun an operation. The stored receipt survives HTTP server restart when the same SQLite fixture is reused. It can confirm an operation for which the caller already has an ID; if a timeout occurred before receiving the ID, retry the original request with the same idempotency key and parameters. Querying directly by idempotency key is a separate later feature. The disposable launcher still deletes its entire fixture on exit, so restarting that launcher starts a new ledger rather than restoring past receipts.
+
+## P13b: recover a request by its original idempotency key
+
+`GET /requests/{percent-encoded-key}` uses the current synthetic Bearer account. Encode the whole key as one URI path segment (including `/`, `?`, `#`, `%` and `+`); decoding is strict and happens **once**. The decoded key must be 1–128 non-space printable ASCII characters. No query parameters or body are accepted. A key such as literal `%2F` is encoded as `%252F`, not `%2F`.
+
+Responses:
+
+- No binding for this actor/key: generic 404 `not_found`. Another actor's binding is equally invisible.
+- A binding exists but no matching committed core result exists: `{"mode":"localSimulation","status":"unresolved"}`.
+- Matching core result exists: `{"mode":"localSimulation","status":"completed","receipt":{...original receipt...}}`. Nested receipt retains its mode and decimal-string integer fields.
+
+The server reads its **stored route and body**, never a client-supplied sender or proposed payment payload. Transfers, packet creation and refunds recover stored operations; claims recover the authenticated actor's unique claim. Existing operation parameters must match the stored binding, so a direct-core fixture action using a colliding key cannot masquerade as a different HTTP request. Reads do not issue payments or claims.
+
+`unresolved` is deliberately not `failed`, `paid` or `confirmed`: it covers a request bound before interruption, a core rejection without a result, or an action not yet committed. Retry only the exact original request/key when appropriate. A 404 likewise does not prove that an in-flight original request cannot later arrive. This endpoint lets clients recover after losing the initial response without knowing its operation ID; it does not provide an external settlement status. Bindings and receipts survive adapter restart with the same database, while the disposable launcher still starts a fresh database after exit.

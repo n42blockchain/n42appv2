@@ -173,3 +173,65 @@ class HttpTests(Fixture):
         self.assertEqual(self.transfer(), (200, receipt))
         self.assertEqual(self.a.balance(ASSET)['available'], 90)
         self.conserved()
+
+    def test_request_lookup_completed_receipts_and_isolation(self):
+        from urllib.parse import quote
+        key = '/a?b%+#'
+        transfer = self.transfer(key=key)[1]
+        path = '/requests/' + quote(key, safe='')
+        result = self.request('GET', path)
+        self.assertEqual(result, (200, {'mode': MODE, 'status': 'completed', 'receipt': transfer}))
+        missing = self.request('GET', '/requests/missing')
+        self.assertEqual(missing[0], 404)
+        self.assertEqual(self.request('GET', path, token='synthetic-test-bob00000'), missing)
+        self.assertEqual(self.request('GET', path, token=None)[0], 401)
+        packet_id = self.create()
+        packet = self.request('GET', '/operations/' + packet_id)[1]
+        self.assertEqual(self.request('GET', '/requests/create')[1]['receipt'], packet)
+        self.server.bind_key('b', 'claim', '/packets/' + packet_id + '/claims', {})
+        self.assertEqual(self.request('GET', '/requests/claim', token='synthetic-test-bob00000')[1]['status'], 'unresolved')
+        self.assertEqual(self.request('POST', '/packets/' + packet_id + '/refunds', {}, key='refund')[0], 409)
+        self.assertEqual(self.request('GET', '/requests/refund')[1]['status'], 'unresolved')
+        claim = self.request('POST', '/packets/' + packet_id + '/claims', {},
+                             key='claim', token='synthetic-test-bob00000')[1]
+        self.assertEqual(self.request('GET', '/requests/claim', token='synthetic-test-bob00000')[1]['receipt'], claim)
+        self.now = 100
+        refund = self.request('POST', '/packets/' + packet_id + '/refunds', {}, key='refund')[1]
+        self.assertEqual(self.request('GET', '/requests/refund')[1]['receipt'], refund)
+        self.conserved()
+
+    def test_request_lookup_unresolved_then_completed_and_restart(self):
+        self.assertEqual(self.transfer('101', key='insufficient')[0], 409)
+        self.assertEqual(self.request('GET', '/requests/insufficient'),
+                         (200, {'mode': MODE, 'status': 'unresolved'}))
+        body = {'recipient': 'b', 'asset': ASSET, 'amount': '10'}
+        self.server.bind_key('a', 'interrupted', '/transfers', body)
+        before = self.s.audit_test_asset(ASSET)
+        self.assertEqual(self.request('GET', '/requests/interrupted')[1]['status'], 'unresolved')
+        self.assertEqual(self.s.audit_test_asset(ASSET), before)
+        self.stop_server()
+        self.start_server()
+        self.assertEqual(self.request('GET', '/requests/interrupted')[1]['status'], 'unresolved')
+        receipt = self.transfer(key='interrupted')[1]
+        self.stop_server()
+        self.start_server()
+        self.assertEqual(self.request('GET', '/requests/interrupted')[1]['receipt'], receipt)
+        self.assertEqual(self.a.balance(ASSET)['available'], 90)
+        self.conserved()
+
+    def test_request_lookup_rejects_bad_encoding_and_overrides(self):
+        for encoded in ['', '%', '%0', '%GG', '%FF', '%C3%A9', '%20', '%00', 'a' * 129, 'raw/slash']:
+            with self.subTest(encoded=encoded):
+                self.assertEqual(self.request('GET', '/requests/' + encoded)[0], 400)
+        self.transfer(key='%2F')
+        self.assertEqual(self.request('GET', '/requests/%252F')[1]['status'], 'completed')
+        self.assertEqual(self.request('GET', '/requests/%2F')[0], 404)
+        self.assertEqual(self.request('GET', '/requests/key?sender=a')[0], 400)
+        self.assertEqual(self.request('GET', '/requests/key', raw=b'{}')[0], 400)
+
+    def test_request_lookup_does_not_confuse_direct_core_collision(self):
+        self.a.transfer('b', ASSET, 1, key='collision')
+        self.assertEqual(self.transfer('2', key='collision')[0], 409)
+        self.assertEqual(self.request('GET', '/requests/collision')[1]['status'], 'unresolved')
+        self.assertEqual(self.a.balance(ASSET)['available'], 99)
+        self.conserved()

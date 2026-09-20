@@ -5,9 +5,9 @@ import json
 import re
 from socketserver import TCPServer
 import time
-from urllib.parse import parse_qs, urlsplit
+from urllib.parse import parse_qs, unquote_to_bytes, urlsplit
 
-from common import MAX_UNITS, MODE, SandboxError, identifier
+from common import MAX_UNITS, MODE, SandboxError, identifier, stable_id
 
 MAX_BODY = 64 * 1024
 
@@ -63,6 +63,43 @@ class LocalPaymentServer(ThreadingHTTPServer):
             db.execute('''CREATE TABLE IF NOT EXISTS http_idempotency (
                 actor TEXT, key TEXT, request TEXT NOT NULL, PRIMARY KEY(actor,key))''')
         super().__init__((host, port), Handler)
+
+    def request_receipt(self, actor, key):
+        # Read the binding and committed result in one SQLite snapshot. Neither
+        # an absent result nor a bound-but-interrupted action proves failure.
+        with self.sandbox._transaction() as db:
+            binding = db.execute('SELECT request FROM http_idempotency WHERE actor=? AND key=?',
+                                 (actor, key)).fetchone()
+            if binding is None:
+                raise RequestError(404, 'not_found')
+            route, body = json.loads(binding['request'])
+            receipt = None
+            if route in ('/transfers', '/packets'):
+                kind = 'transfer' if route == '/transfers' else 'packet'
+                operation = stable_id(kind, actor, key)
+                expected = ([body['recipient'], body['asset'], int(body['amount'])] if kind == 'transfer' else
+                            [body['room'], body['asset'], int(body['total']), int(body['slots']), int(body['expiresAt'])])
+            else:
+                action = re.fullmatch(r'/packets/(packet_[a-f0-9]{64})/(claims|refunds)', route)
+                if action is None:
+                    raise RuntimeError('invalid stored fixture request')
+                if action[2] == 'claims':
+                    claim = db.execute('SELECT c.amount,p.asset FROM claims c JOIN packets p ON p.id=c.packet '
+                                       'WHERE c.packet=? AND c.account=?', (action[1], actor)).fetchone()
+                    if claim:
+                        receipt = {'mode': MODE, 'packet': action[1], 'asset': claim['asset'], 'amount': claim['amount']}
+                    return ({'mode': MODE, 'status': 'completed', 'receipt': receipt} if receipt is not None else
+                            {'mode': MODE, 'status': 'unresolved'})
+                kind, expected = 'refund', [action[1]]
+                operation = stable_id(kind, actor, action[1])
+            stored = db.execute('SELECT request,result FROM operations WHERE id=? AND actor=? AND kind=?',
+                                (operation, actor, kind)).fetchone()
+            # A fixture can also invoke the core directly. Never misidentify a
+            # different direct-core request with a colliding key as this one.
+            if stored and json.loads(stored['request']) == expected:
+                receipt = json.loads(stored['result'])
+            return ({'mode': MODE, 'status': 'completed', 'receipt': receipt} if receipt is not None else
+                    {'mode': MODE, 'status': 'unresolved'})
 
     def server_bind(self):
         # HTTPServer normally performs reverse DNS. This fixture is strictly
@@ -143,6 +180,21 @@ class Handler(BaseHTTPRequestHandler):
         if route.scheme or route.netloc or route.fragment:
             raise RequestError(400, 'invalid_request')
         if self.command == 'GET':
+            if route.path.startswith('/requests/'):
+                lengths = self.headers.get_all('Content-Length', [])
+                if (route.query or self.headers.get('Transfer-Encoding') is not None
+                        or (lengths and lengths != ['0'])):
+                    raise RequestError(400, 'invalid_request')
+                encoded = route.path[len('/requests/'):]
+                if len(encoded) > 384 or '/' in encoded or re.search(r'%(?![0-9a-fA-F]{2})', encoded):
+                    raise RequestError(400, 'invalid_request')
+                try:
+                    key = unquote_to_bytes(encoded).decode('ascii')
+                except UnicodeError:
+                    raise RequestError(400, 'invalid_request') from None
+                if not re.fullmatch(r'[\x21-\x7e]{1,128}', key):
+                    raise RequestError(400, 'invalid_request')
+                return self.server.request_receipt(actor, key)
             operation = re.fullmatch(r'/operations/((?:transfer|packet|refund)_[a-f0-9]{64})', route.path)
             if operation is not None:
                 lengths = self.headers.get_all('Content-Length', [])
