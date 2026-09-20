@@ -102,3 +102,32 @@ python3 -m unittest discover -s backend/payment-sandbox -p test_server.py -v
 ```
 
 Tests use a real ephemeral loopback socket, synthetic tokens and temporary SQLite files, with an injected server clock. This is not app integration or external-provider validation. There is no TLS because the listener is local-only; do not port-forward or proxy it publicly.
+
+## Disposable debug-UI launcher
+
+From the repository root:
+
+```sh
+python3 backend/payment-sandbox/run_local.py
+```
+
+This starts the local fixture at `http://127.0.0.1:8765`. Use `--port 8766` for another local port, or `--port 0` to choose an ephemeral port printed at startup. The only configurable argument is the port; no production mode, host override, credential file, real provider or persistent database configuration exists.
+
+The launcher explicitly creates two public test accounts:
+
+| Account | Synthetic token | Starting balance |
+| --- | --- | --- |
+| `a` | `synthetic-test-accounta` | `100000000` minimum units of `test-usdc` |
+| `b` | `synthetic-test-accountb` | `100000000` minimum units of `test-usdc` |
+
+Room `test-room` initially contains `a` and `b`. These displayed tokens are disposable fixture identifiers, not secrets. The temporary SQLite database is owned by this process. **Ctrl+C** stops the server and deletes the temporary directory; restarting creates a fresh fixture and resets balances. A normal SIGTERM also cleans up. SIGKILL or process/OS crashes cannot guarantee context-manager cleanup; this launcher is not persistent storage.
+
+The launcher supports the explicitly enabled debug client on the same machine. A physical phone's `127.0.0.1` points to the phone, not the development computer; this launcher deliberately does not open a LAN listener or production UI entry. Runtime integration must preserve the local-only boundary.
+
+Launcher checks:
+
+```sh
+python3 -m unittest discover -s backend/payment-sandbox -p test_run_local.py -v
+```
+
+Four tests cover seeded account balances, normal and exceptional temporary-file cleanup, unsupported CLI arguments, and a real subprocess with ephemeral loopback HTTP balance lookup followed by SIGINT and directory removal.
