@@ -85,6 +85,28 @@ void main() {
     when(() => room.topic).thenReturn('Normal group topic');
     expect(dataSource.getAllGroups(), [room]);
   });
+  for (final reason in ['n42_moments', 'n42_stories']) {
+    test('stripped $reason invitations are not ordinary group requests', () {
+      when(() => client.userID).thenReturn('@me:hs');
+      when(() => client.rooms).thenReturn([room]);
+      when(() => room.client).thenReturn(client);
+      when(() => room.tags).thenReturn({});
+      when(() => room.isDirectChat).thenReturn(false);
+      when(() => room.topic).thenReturn('');
+      when(() => room.membership).thenReturn(matrix.Membership.invite);
+      final member = _MockEvent();
+      when(
+        () => member.content,
+      ).thenReturn({'membership': 'invite', 'reason': reason});
+      when(
+        () => room.getState(matrix.EventTypes.RoomMember, '@me:hs'),
+      ).thenReturn(member);
+      expect(dataSource.getPendingGroupInvites(), isEmpty);
+      when(() => member.content).thenReturn({'membership': 'invite'});
+      expect(dataSource.getPendingGroupInvites(), [room]);
+    });
+  }
+
   group('getGroupAnnouncement', () {
     test('falls back to room topic when announcement state is absent', () {
       when(() => room.getState('n42.room.announcement')).thenReturn(null);

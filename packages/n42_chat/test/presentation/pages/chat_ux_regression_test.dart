@@ -246,6 +246,32 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text('Alice'), findsNothing);
         expect(find.text('Design team'), findsOneWidget);
+        tester.view.physicalSize = const Size(375, 480);
+        await tester.pumpAndSettle();
+        await tester.longPress(find.text('Design team'));
+        await tester.pumpAndSettle();
+        final sheet = find.byType(BottomSheet);
+        await tester.drag(
+          find.descendant(of: sheet, matching: find.byType(ListView)),
+          const Offset(0, -350),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('Delete Conversation').hitTestable(), findsOneWidget);
+        if (Platform.environment['N42_UX_SCREENSHOTS'] != null) {
+          RenderObject? render = tester.renderObject(find.byType(BottomSheet));
+          while (render != null && render is! RenderRepaintBoundary) {
+            render = render.parent;
+          }
+          final boundary = render! as RenderRepaintBoundary;
+          await tester.runAsync(() async {
+            final image = await boundary.toImage(pixelRatio: 2);
+            final data = await image.toByteData(format: ui.ImageByteFormat.png);
+            await File(
+              '${Platform.environment['N42_UX_SCREENSHOTS']}/menu-${brightness.name}.png',
+            ).writeAsBytes(data!.buffer.asUint8List());
+            image.dispose();
+          });
+        }
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
         await conversations.close();

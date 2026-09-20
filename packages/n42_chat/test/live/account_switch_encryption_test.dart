@@ -9,6 +9,8 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vodozemac/vodozemac.dart' as vod;
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_auth_datasource.dart';
+import 'package:n42_chat/src/data/datasources/matrix/matrix_room_datasource.dart';
+import 'package:n42_chat/src/data/datasources/matrix/message/encrypted_send_guard.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_message_datasource.dart';
 import 'package:n42_chat/src/data/datasources/local/preferences_datasource.dart';
 import 'package:n42_chat/src/data/repositories/message_repository_impl.dart';
@@ -175,6 +177,12 @@ void main() {
         expect(manager.client!.deviceID, bDevice);
         expect(manager.client!.fingerprintKey, bFingerprint);
         await expectReadable(roomId, first, 'N42 sequential retained A to B');
+        expect(
+          MatrixRoomDataSource(
+            manager,
+          ).getLastMessagePreview(manager.client!.getRoomById(roomId)!),
+          'N42 sequential retained A to B',
+        );
         print(
           'QA real manager sequential A-to-B decryption passed; identity retained',
         );
@@ -238,8 +246,41 @@ void main() {
         print(
           'QA explicit logout remains destructive only for its own session',
         );
+        await expectLater(
+          sender.sendTextMessage(
+            roomId,
+            'N42 blocked while recipient logged out',
+          ),
+          throwsA(
+            isA<EncryptedSendNotReady>().having(
+              (e) => e.recipientKeysMissing,
+              'missing recipient keys',
+              isTrue,
+            ),
+          ),
+        );
+        print(
+          'QA explicit logout prevents sending to an account with no device keys',
+        );
         await signIn(0); // Refresh cleanup credentials after explicit logout.
         expect(manager.client!.deviceID, isNot(aDevice));
+        final freshDevice = manager.client!.deviceID;
+        await switchTo(1);
+        final freshMessage = await sender.sendTextMessage(
+          roomId,
+          'N42 new inbound after explicit logout and fresh login',
+        );
+        expect(freshMessage, isNotNull);
+        await switchTo(0);
+        expect(manager.client!.deviceID, freshDevice);
+        await expectRepositoryReadable(
+          roomId,
+          freshMessage!,
+          'N42 new inbound after explicit logout and fresh login',
+        );
+        print(
+          'QA fresh login receives newly encrypted peer message without restoring old keys',
+        );
       } finally {
         messages.disposeAllTimelines();
         await manager.dispose();

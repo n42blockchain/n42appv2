@@ -852,16 +852,15 @@ class _ConversationListPageState extends State<ConversationListPage> {
       constraints: MediaQuery.of(context).size.width >= 600
           ? const BoxConstraints(maxWidth: 400)
           : null,
-      builder: (ctx) => Container(
-        decoration: BoxDecoration(
-          color: context.surfaceColor,
-          borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(AppDimensions.dialogRadius),
-          ),
+      builder: (ctx) => Material(
+        color: context.surfaceColor,
+        clipBehavior: Clip.antiAlias,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(AppDimensions.radiusXL),
         ),
         child: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: ListView(
+            shrinkWrap: true,
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(
@@ -981,7 +980,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
       leading: Icon(icon, color: iconColor),
       title: Text(
         title,
-        maxLines: 1,
+        maxLines: 2,
         overflow: TextOverflow.ellipsis,
         style: AppTextStyles.bodyLarge.copyWith(color: textColor),
       ),

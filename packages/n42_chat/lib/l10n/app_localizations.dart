@@ -10960,6 +10960,42 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Message unavailable on this device. Tap to check recovery options.'**
   String get chatMessageUnavailable;
+
+  /// No description provided for @contactStarredFriends.
+  ///
+  /// In en, this message translates to:
+  /// **'Starred friends'**
+  String get contactStarredFriends;
+
+  /// No description provided for @chatRecipientKeysMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.'**
+  String get chatRecipientKeysMissing;
+
+  /// No description provided for @chatSwitchForMessaging.
+  ///
+  /// In en, this message translates to:
+  /// **'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.'**
+  String get chatSwitchForMessaging;
+
+  /// No description provided for @aiServiceUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'AI summaries are currently unavailable. Please try again after service access is restored.'**
+  String get aiServiceUnavailable;
+
+  /// No description provided for @aiSummarizeMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Summarize {count} recent messages'**
+  String aiSummarizeMessages(int count);
+
+  /// No description provided for @groupMembershipSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{joined} joined · {invited} invited'**
+  String groupMembershipSummary(int joined, int invited);
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

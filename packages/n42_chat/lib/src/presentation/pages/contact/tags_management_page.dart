@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'tag_contacts_page.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/services/friend_details_store.dart';
 import '../../../data/datasources/local/secure_storage_datasource.dart';
@@ -365,7 +366,9 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
                     trailing: widget.selectMode
                         ? null
                         : const Icon(AppIcons.chevron, size: 20),
-                    onTap: widget.selectMode && !_isSaving
+                    onTap: _isSaving
+                        ? null
+                        : widget.selectMode
                         ? () {
                             setState(() {
                               if (_selectedTags.contains(tag.name)) {
@@ -375,7 +378,14 @@ class _TagsManagementPageState extends State<TagsManagementPage> {
                               }
                             });
                           }
-                        : null,
+                        : () async {
+                            await Navigator.of(context).push<void>(
+                              MaterialPageRoute(
+                                builder: (_) => TagContactsPage(tag: tag.name),
+                              ),
+                            );
+                            if (mounted) await _loadTags();
+                          },
                     onLongPress: widget.selectMode || _isSaving
                         ? null
                         : () => _showTagOptions(index),

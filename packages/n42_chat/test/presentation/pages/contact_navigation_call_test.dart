@@ -1,4 +1,5 @@
 import 'package:matrix/matrix.dart' as matrix;
+import 'package:n42_chat/src/presentation/blocs/contact/contact_event.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
 import 'package:n42_chat/src/data/datasources/matrix/contact_privacy_service.dart';
 import 'package:n42_chat/src/presentation/pages/contact/chat_only_friends_page.dart';
@@ -86,11 +87,73 @@ void main() {
     ).thenAnswer((_) async => true);
   });
   tearDown(() async => getIt.reset());
-  Widget app(Widget page) => MaterialApp(
+  Widget app(Widget page, {double scale = 1}) => MaterialApp(
     localizationsDelegates: S.localizationsDelegates,
     supportedLocales: S.supportedLocales,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(
+        context,
+      ).copyWith(textScaler: TextScaler.linear(scale)),
+      child: child!,
+    ),
     home: BlocProvider<ContactBloc>.value(value: contacts, child: page),
   );
+
+  testWidgets('search failure offers retry rather than an empty-result claim', (
+    tester,
+  ) async {
+    when(() => contacts.state).thenReturn(
+      const ContactState(
+        status: ContactStatus.loaded,
+        searchQuery: 'Alice',
+        searchFailed: true,
+      ),
+    );
+    await tester.pumpWidget(app(const ContactListPage()));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Alice');
+    await tester.pump();
+    expect(find.text('Retry'), findsOneWidget);
+    expect(find.text('Contact not found'), findsNothing);
+    await tester.tap(find.text('Retry'));
+    verify(() => contacts.add(const SearchContacts('Alice'))).called(2);
+  });
+
+  testWidgets('contact menu remains scrollable on short large-text screens', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(375, 480);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(app(const ContactListPage(), scale: 1.3));
+    await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.text('Alice'),
+      250,
+      scrollable: find
+          .descendant(
+            of: find.byType(CustomScrollView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+    await tester.longPress(find.text('Alice'));
+    await tester.pumpAndSettle();
+    await tester.drag(
+      find.descendant(
+        of: find.byType(BottomSheet),
+        matching: find.byType(ListView),
+      ),
+      const Offset(0, -400),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Cancel').hitTestable(), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    expect(find.byType(BottomSheet), findsNothing);
+  });
 
   testWidgets('chat-only row opens friend details and refreshes on return', (
     tester,

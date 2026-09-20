@@ -2789,5 +2789,28 @@
   "chatMessageDelivered": "Zugestellt",
   "chatMessageRead": "Gelesen",
   "chatMessageFailed": "Nicht gesendet. Zum Wiederholen tippen.",
-  "chatMessageUnavailable": "Nachricht auf diesem Gerät nicht verfügbar. Tippe hier für Wiederherstellungsoptionen."
+  "chatMessageUnavailable": "Nachricht auf diesem Gerät nicht verfügbar. Tippe hier für Wiederherstellungsoptionen.",
+  "contactStarredFriends": "Starred friends",
+  "chatRecipientKeysMissing": "This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.",
+  "chatSwitchForMessaging": "Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.",
+  "aiServiceUnavailable": "AI summaries are currently unavailable. Please try again after service access is restored.",
+  "aiSummarizeMessages": "Summarize {count} recent messages",
+  "@aiSummarizeMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "groupMembershipSummary": "{joined} joined · {invited} invited",
+  "@groupMembershipSummary": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "invited": {
+        "type": "int"
+      }
+    }
+  }
 }

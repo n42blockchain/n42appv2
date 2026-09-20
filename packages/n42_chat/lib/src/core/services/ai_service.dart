@@ -11,9 +11,9 @@ enum AiRole { system, user, assistant }
 
 /// AI 消息语气
 enum AiTone {
-  formal,       // 正式
-  casual,       // 轻松
-  playful,      // 俏皮
+  formal, // 正式
+  casual, // 轻松
+  playful, // 俏皮
   professional, // 专业
 }
 
@@ -24,10 +24,7 @@ class AiMessage {
 
   const AiMessage({required this.role, required this.content});
 
-  Map<String, String> toJson() => {
-    'role': role.name,
-    'content': content,
-  };
+  Map<String, String> toJson() => {'role': role.name, 'content': content};
 }
 
 /// AI 文生图结果
@@ -84,11 +81,7 @@ abstract class AiService {
   });
 
   /// 文本摘要
-  Future<String> summarize(
-    String text, {
-    String? language,
-    int maxLength,
-  });
+  Future<String> summarize(String text, {String? language, int maxLength});
 
   /// 消息改写
   Future<String> rewriteMessage(String text, AiTone tone);
@@ -142,7 +135,9 @@ abstract class AiService {
 /// AI 服务异常
 class AiServiceException implements Exception {
   final String message;
-  const AiServiceException(this.message);
+  final int? statusCode;
+  const AiServiceException(this.message, {this.statusCode});
+  bool get accessDenied => statusCode == 401 || statusCode == 403;
 
   @override
   String toString() => 'AiServiceException: $message';

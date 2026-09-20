@@ -2177,5 +2177,28 @@
   "chatMessageDelivered": "已送達",
   "chatMessageRead": "已讀",
   "chatMessageFailed": "未傳送，點一下重試。",
-  "chatMessageUnavailable": "此裝置暫時無法讀取這則訊息，點一下查看復原選項。"
+  "chatMessageUnavailable": "此裝置暫時無法讀取這則訊息，點一下查看復原選項。",
+  "contactStarredFriends": "星標朋友",
+  "chatRecipientKeysMissing": "對方暫無可用的加密會話。請對方登入並開啟應用程式後重試。日常換號請使用「切換帳號」，不要登出。",
+  "chatSwitchForMessaging": "需要換號？請選擇「切換帳號」以保留訊息和安全會話。登出會撤銷此裝置，可能導致收到的加密訊息無法讀取。",
+  "aiServiceUnavailable": "AI 總結服務暫不可用，請待服務恢復存取後重試。",
+  "aiSummarizeMessages": "總結最近 {count} 則訊息",
+  "@aiSummarizeMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "groupMembershipSummary": "{joined} 人已加入 · {invited} 人待接受",
+  "@groupMembershipSummary": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "invited": {
+        "type": "int"
+      }
+    }
+  }
 }

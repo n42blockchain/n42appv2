@@ -1,0 +1,21 @@
+[Unit]
+Description=N42 authenticated AI trial gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+DynamicUser=yes
+StateDirectory=n42-ai
+EnvironmentFile=/etc/n42-ai/openrouter.env
+ExecStart=/usr/bin/python3 /opt/n42-ai/server.py
+Restart=on-failure
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+UMask=0077
+MemoryMax=256M
+TasksMax=64
+
+[Install]
+WantedBy=multi-user.target

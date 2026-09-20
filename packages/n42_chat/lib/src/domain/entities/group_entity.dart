@@ -9,8 +9,10 @@ final _whitespaceRegExp = RegExp(r'\s+');
 enum GroupRole {
   /// 群主
   owner,
+
   /// 管理员
   admin,
+
   /// 普通成员
   member,
 }
@@ -19,6 +21,7 @@ enum GroupRole {
 enum MembershipStatus {
   /// 已加入
   joined,
+
   /// 已邀请（等待接受）
   invited,
 }
@@ -27,8 +30,10 @@ enum MembershipStatus {
 enum GroupType {
   /// 普通群组
   group,
+
   /// 频道（单向广播）
   channel,
+
   /// 超级群（大规模群组）
   superGroup,
 }
@@ -37,10 +42,13 @@ enum GroupType {
 enum JoinRule {
   /// 公开（任何人可加入）
   public,
+
   /// 私有（需邀请）
   invite,
+
   /// 敲门（需申请审批）
   knock,
+
   /// 受限（需满足条件）
   restricted,
 }
@@ -119,7 +127,9 @@ class GroupMember extends Equatable {
 
     final words = displayName.trim().split(_whitespaceRegExp);
     if (words.length == 1) {
-      return displayName.substring(0, displayName.length.clamp(0, 2)).toUpperCase();
+      return displayName
+          .substring(0, displayName.length.clamp(0, 2))
+          .toUpperCase();
     }
 
     return words
@@ -137,15 +147,15 @@ class GroupMember extends Equatable {
 
   @override
   List<Object?> get props => [
-        userId,
-        displayName,
-        avatarUrl,
-        role,
-        powerLevel,
-        isOnline,
-        joinedAt,
-        membershipStatus,
-      ];
+    userId,
+    displayName,
+    avatarUrl,
+    role,
+    powerLevel,
+    isOnline,
+    joinedAt,
+    membershipStatus,
+  ];
 
   GroupMember copyWith({
     String? userId,
@@ -192,6 +202,11 @@ class GroupEntity extends Equatable {
 
   /// 成员数量
   final int memberCount;
+
+  /// Pending invitations are included in memberCount but are not joined users.
+  final int invitedMemberCount;
+  int get joinedMemberCount =>
+      memberCount > invitedMemberCount ? memberCount - invitedMemberCount : 0;
 
   /// 群人数上限（null = 不限）
   final int? maxMembers;
@@ -279,7 +294,8 @@ class GroupEntity extends Equatable {
   final String? channelUsername;
 
   /// 频道链接
-  String? get channelLink => channelUsername != null ? 'https://n42.app/$channelUsername' : null;
+  String? get channelLink =>
+      channelUsername != null ? 'https://n42.app/$channelUsername' : null;
 
   /// 是否已验证（官方频道）
   final bool isVerified;
@@ -298,6 +314,7 @@ class GroupEntity extends Equatable {
     this.announcement,
     this.pinnedEventIds = const [],
     this.memberCount = 0,
+    this.invitedMemberCount = 0,
     this.maxMembers,
     this.members = const [],
     this.isEncrypted = false,
@@ -332,7 +349,9 @@ class GroupEntity extends Equatable {
   bool get isFull => maxMembers != null && memberCount >= maxMembers!;
 
   /// 容量占比（0.0~1.0），null 表示不限
-  double? get capacityRatio => (maxMembers == null || maxMembers == 0) ? null : memberCount / maxMembers!;
+  double? get capacityRatio => (maxMembers == null || maxMembers == 0)
+      ? null
+      : memberCount / maxMembers!;
 
   /// 是否有置顶消息
   bool get hasPinnedMessages => pinnedEventIds.isNotEmpty;
@@ -364,42 +383,43 @@ class GroupEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        roomId,
-        name,
-        avatarUrl,
-        topic,
-        announcement,
-        pinnedEventIds,
-        memberCount,
-        maxMembers,
-        members,
-        isEncrypted,
-        isPublic,
-        createdAt,
-        myRole,
-        canInvite,
-        canKick,
-        canChangeSettings,
-        canEditName,
-        canEditAvatar,
-        canEditDescription,
-        canChangeVisibility,
-        canManageChannels,
-        canManageBot,
-        canManageContentFilter,
-        canManageMemberLimit,
-        canManageTokenGate,
-        groupType,
-        subscriberCount,
-        joinRule,
-        membersCanSpeak,
-        showMemberList,
-        slowModeInterval,
-        channelUsername,
-        isVerified,
-        category,
-        tokenGate,
-      ];
+    roomId,
+    name,
+    avatarUrl,
+    topic,
+    announcement,
+    pinnedEventIds,
+    memberCount,
+    invitedMemberCount,
+    maxMembers,
+    members,
+    isEncrypted,
+    isPublic,
+    createdAt,
+    myRole,
+    canInvite,
+    canKick,
+    canChangeSettings,
+    canEditName,
+    canEditAvatar,
+    canEditDescription,
+    canChangeVisibility,
+    canManageChannels,
+    canManageBot,
+    canManageContentFilter,
+    canManageMemberLimit,
+    canManageTokenGate,
+    groupType,
+    subscriberCount,
+    joinRule,
+    membersCanSpeak,
+    showMemberList,
+    slowModeInterval,
+    channelUsername,
+    isVerified,
+    category,
+    tokenGate,
+  ];
 
   GroupEntity copyWith({
     String? roomId,
@@ -409,6 +429,7 @@ class GroupEntity extends Equatable {
     String? announcement,
     List<String>? pinnedEventIds,
     int? memberCount,
+    int? invitedMemberCount,
     int? maxMembers,
     bool clearMaxMembers = false,
     List<GroupMember>? members,
@@ -447,6 +468,7 @@ class GroupEntity extends Equatable {
       announcement: announcement ?? this.announcement,
       pinnedEventIds: pinnedEventIds ?? this.pinnedEventIds,
       memberCount: memberCount ?? this.memberCount,
+      invitedMemberCount: invitedMemberCount ?? this.invitedMemberCount,
       maxMembers: clearMaxMembers ? null : (maxMembers ?? this.maxMembers),
       members: members ?? this.members,
       isEncrypted: isEncrypted ?? this.isEncrypted,
@@ -464,8 +486,7 @@ class GroupEntity extends Equatable {
       canManageBot: canManageBot ?? this.canManageBot,
       canManageContentFilter:
           canManageContentFilter ?? this.canManageContentFilter,
-      canManageMemberLimit:
-          canManageMemberLimit ?? this.canManageMemberLimit,
+      canManageMemberLimit: canManageMemberLimit ?? this.canManageMemberLimit,
       canManageTokenGate: canManageTokenGate ?? this.canManageTokenGate,
       groupType: groupType ?? this.groupType,
       subscriberCount: subscriberCount ?? this.subscriberCount,

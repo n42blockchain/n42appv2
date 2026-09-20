@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 
 /// 联系人事件基类
@@ -15,7 +17,12 @@ class LoadContacts extends ContactEvent {
 
 /// 刷新联系人列表
 class RefreshContacts extends ContactEvent {
-  const RefreshContacts();
+  /// Completes after this refresh finishes, even when the snapshot is unchanged.
+  final Completer<void>? completion;
+  const RefreshContacts({this.completion});
+
+  @override
+  List<Object?> get props => [completion];
 }
 
 /// 搜索联系人
@@ -134,4 +141,3 @@ class DeleteContact extends ContactEvent {
   @override
   List<Object?> get props => [userId];
 }
-

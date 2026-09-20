@@ -5777,6 +5777,30 @@ class SZh extends S {
 
   @override
   String get chatMessageUnavailable => '此设备暂时无法读取这条消息，点击查看恢复选项。';
+
+  @override
+  String get contactStarredFriends => '星标朋友';
+
+  @override
+  String get chatRecipientKeysMissing =>
+      '对方暂无可用的加密会话。请对方登录并打开应用后重试。日常换号请使用“切换账号”，不要退出登录。';
+
+  @override
+  String get chatSwitchForMessaging =>
+      '需要换号？请选择“切换账号”以保留消息和安全会话。退出登录会撤销此设备，可能导致收到的加密消息无法读取。';
+
+  @override
+  String get aiServiceUnavailable => 'AI 总结服务暂不可用，请待服务恢复访问后重试。';
+
+  @override
+  String aiSummarizeMessages(int count) {
+    return '总结最近 $count 条消息';
+  }
+
+  @override
+  String groupMembershipSummary(int joined, int invited) {
+    return '$joined 人已加入 · $invited 人待接受';
+  }
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11553,4 +11577,28 @@ class SZhTw extends SZh {
 
   @override
   String get chatMessageUnavailable => '此裝置暫時無法讀取這則訊息，點一下查看復原選項。';
+
+  @override
+  String get contactStarredFriends => '星標朋友';
+
+  @override
+  String get chatRecipientKeysMissing =>
+      '對方暫無可用的加密會話。請對方登入並開啟應用程式後重試。日常換號請使用「切換帳號」，不要登出。';
+
+  @override
+  String get chatSwitchForMessaging =>
+      '需要換號？請選擇「切換帳號」以保留訊息和安全會話。登出會撤銷此裝置，可能導致收到的加密訊息無法讀取。';
+
+  @override
+  String get aiServiceUnavailable => 'AI 總結服務暫不可用，請待服務恢復存取後重試。';
+
+  @override
+  String aiSummarizeMessages(int count) {
+    return '總結最近 $count 則訊息';
+  }
+
+  @override
+  String groupMembershipSummary(int joined, int invited) {
+    return '$joined 人已加入 · $invited 人待接受';
+  }
 }

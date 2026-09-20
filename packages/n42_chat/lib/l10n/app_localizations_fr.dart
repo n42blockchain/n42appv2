@@ -5992,4 +5992,29 @@ class SFr extends S {
   @override
   String get chatMessageUnavailable =>
       'Message indisponible sur cet appareil. Touchez pour voir les options de récupération.';
+
+  @override
+  String get contactStarredFriends => 'Starred friends';
+
+  @override
+  String get chatRecipientKeysMissing =>
+      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+
+  @override
+  String get chatSwitchForMessaging =>
+      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+
+  @override
+  String get aiServiceUnavailable =>
+      'AI summaries are currently unavailable. Please try again after service access is restored.';
+
+  @override
+  String aiSummarizeMessages(int count) {
+    return 'Summarize $count recent messages';
+  }
+
+  @override
+  String groupMembershipSummary(int joined, int invited) {
+    return '$joined joined · $invited invited';
+  }
 }

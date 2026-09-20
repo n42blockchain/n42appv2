@@ -19,6 +19,7 @@ class AiDatasource implements AiService {
   final String _imageModel;
   final String _visionModel;
   final bool _useProxyEndpoint;
+  bool _accessDenied = false;
 
   static final _newlineRegExp = RegExp(r'[\r\n]+');
   static final _arrayRegExp = RegExp(r'\[[\s\S]*\]');
@@ -32,6 +33,7 @@ class AiDatasource implements AiService {
     String imageModel = 'dall-e-3',
     String visionModel = 'gpt-4o',
     bool useProxyEndpoint = false,
+    String? Function()? getAccessToken,
     Dio? dio,
   }) : _baseUrl = baseUrl.endsWith('/')
            ? baseUrl.substring(0, baseUrl.length - 1)
@@ -47,13 +49,42 @@ class AiDatasource implements AiService {
       'Content-Type': 'application/json',
       if (_apiKey.isNotEmpty) 'Authorization': 'Bearer $_apiKey',
     };
+    if (_useProxyEndpoint && getAccessToken != null) {
+      _dio.interceptors.add(
+        InterceptorsWrapper(
+          onRequest: (options, handler) {
+            final token = getAccessToken();
+            if (token == null || token.isEmpty) {
+              return handler.reject(
+                DioException(
+                  requestOptions: options,
+                  error: const AiServiceException('Authentication required'),
+                ),
+              );
+            }
+            options.headers['Authorization'] = 'Bearer $token';
+            handler.next(options);
+          },
+        ),
+      );
+    }
     _dio.options.connectTimeout = const Duration(seconds: 30);
     _dio.options.receiveTimeout = const Duration(minutes: 3);
   }
 
   @override
   bool get isAvailable =>
-      _baseUrl.isNotEmpty && (_apiKey.isNotEmpty || _useProxyEndpoint);
+      !_accessDenied &&
+      _baseUrl.isNotEmpty &&
+      (_apiKey.isNotEmpty || _useProxyEndpoint);
+
+  AiServiceException _serviceError(DioException error, String message) {
+    final status = error.response?.statusCode;
+    if (!_useProxyEndpoint && (status == 401 || status == 403)) {
+      _accessDenied = true;
+    }
+    return AiServiceException(message, statusCode: status);
+  }
 
   String get _chatCompletionsUrl =>
       _useProxyEndpoint ? _baseUrl : _buildChatCompletionsUrl();
@@ -82,6 +113,18 @@ class AiDatasource implements AiService {
     double temperature = 0.7,
     int maxTokens = 2048,
   }) async* {
+    // The authenticated trial gateway returns one bounded text completion.
+    if (_useProxyEndpoint) {
+      final result = await completion(
+        messages,
+        systemPrompt: systemPrompt,
+        model: model,
+        temperature: temperature,
+        maxTokens: maxTokens,
+      );
+      yield result.text;
+      return;
+    }
     _validateMessageLength(messages, systemPrompt);
 
     final allMessages = <Map<String, String>>[];
@@ -146,7 +189,7 @@ class AiDatasource implements AiService {
     } on DioException catch (e) {
       debugLog('AiDatasource: Stream completion error: ${e.message}');
       final errorMsg = _parseErrorMessage(e);
-      throw AiServiceException(errorMsg);
+      throw _serviceError(e, errorMsg);
     } catch (e) {
       if (e is AiServiceException) rethrow;
       debugLog('AiDatasource: Stream completion read error: $e');
@@ -206,7 +249,7 @@ class AiDatasource implements AiService {
     } on DioException catch (e) {
       debugLog('AiDatasource: Completion error: ${e.message}');
       final errorMsg = _parseErrorMessage(e);
-      throw AiServiceException(errorMsg);
+      throw _serviceError(e, errorMsg);
     }
   }
 
@@ -476,7 +519,8 @@ class AiDatasource implements AiService {
     if (imageBytes.isEmpty) {
       throw const AiServiceException('Image is empty');
     }
-    final instruction = prompt ??
+    final instruction =
+        prompt ??
         'Describe this image concisely. If it contains text, transcribe '
             'the text (OCR). Reply in the language of the text if any.';
     final dataUri = 'data:$mimeType;base64,${base64Encode(imageBytes)}';
@@ -511,7 +555,7 @@ class AiDatasource implements AiService {
       return content.trim();
     } on DioException catch (e) {
       debugLog('AiDatasource: Vision error: ${e.message}');
-      throw AiServiceException(_parseErrorMessage(e));
+      throw _serviceError(e, _parseErrorMessage(e));
     }
   }
 
@@ -567,13 +611,12 @@ class AiDatasource implements AiService {
       throw const AiServiceException('No usable image data in response');
     } on DioException catch (e) {
       debugLog('AiDatasource: Image generation error: ${e.message}');
-      throw AiServiceException(_parseErrorMessage(e));
+      throw _serviceError(e, _parseErrorMessage(e));
     }
   }
 
   /// OpenAI 兼容图片生成端点（`/v1/images/generations`）。
-  String get _imagesUrl =>
-      _useProxyEndpoint ? _baseUrl : _buildImagesUrl();
+  String get _imagesUrl => _useProxyEndpoint ? _baseUrl : _buildImagesUrl();
 
   String _buildImagesUrl() {
     final baseUri = Uri.tryParse(_baseUrl);

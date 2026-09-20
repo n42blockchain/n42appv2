@@ -5,10 +5,15 @@ import 'package:matrix/matrix.dart' as matrix;
 
 class EncryptedSendNotReady implements Exception {
   static const code = 'n42.encryption_not_ready';
+  static const recipientMissingCode = '$code.recipient_keys_missing';
   final bool retryable;
-  const EncryptedSendNotReady({this.retryable = false});
+  final bool recipientKeysMissing;
+  const EncryptedSendNotReady({
+    this.retryable = false,
+    this.recipientKeysMissing = false,
+  });
   @override
-  String toString() => code;
+  String toString() => recipientKeysMissing ? recipientMissingCode : code;
 }
 
 /// Establish key delivery before publishing encrypted content. Never downgrade
@@ -25,11 +30,15 @@ class EncryptedSendGuard {
         .timeout(const Duration(seconds: 30))
         .onError(
           (Object error, StackTrace stack) =>
-              throw const EncryptedSendNotReady(),
+              throw error is EncryptedSendNotReady
+                  ? error
+                  : const EncryptedSendNotReady(),
         );
     guard._preparing[room.id] = operation;
     try {
       await operation;
+    } on EncryptedSendNotReady {
+      rethrow;
     } catch (_) {
       throw const EncryptedSendNotReady();
     } finally {
@@ -92,7 +101,11 @@ class EncryptedSendGuard {
       final active = devices
           .where((d) => d.userId == id && !d.blocked)
           .toList();
-      if (active.isEmpty) throw const EncryptedSendNotReady(retryable: true);
+      if (active.isEmpty)
+        throw EncryptedSendNotReady(
+          retryable: true,
+          recipientKeysMissing: id != userId,
+        );
       if (active.any(
         (d) => !d.isValid || !d.encryptToDevice || d.curve25519Key == null,
       )) {

@@ -42,10 +42,7 @@ class _GroupListPageState extends State<GroupListPage> {
         title: S.of(context)?.commonGroupChat ?? 'Group Chat',
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.add,
-              color: context.textPrimary,
-            ),
+            icon: Icon(Icons.add, color: context.textPrimary),
             onPressed: () => _navigateToCreateGroup(),
           ),
         ],
@@ -172,19 +169,18 @@ class _GroupListPageState extends State<GroupListPage> {
           ),
         ),
         subtitle: Text(
-          S.of(context)?.commonMemberCount(group.memberCount) ??
-              '${group.memberCount} members',
-          style: TextStyle(
-            fontSize: 13,
-            color: context.textSecondary,
-          ),
+          group.invitedMemberCount > 0
+              ? S
+                    .of(context)!
+                    .groupMembershipSummary(
+                      group.joinedMemberCount,
+                      group.invitedMemberCount,
+                    )
+              : S.of(context)!.commonMemberCount(group.memberCount),
+          style: TextStyle(fontSize: 13, color: context.textSecondary),
         ),
         trailing: group.isEncrypted
-            ? Icon(
-                Icons.lock,
-                size: 16,
-                color: context.textSecondary,
-              )
+            ? Icon(Icons.lock, size: 16, color: context.textSecondary)
             : null,
         onTap: () => _navigateToChat(group.roomId),
         onLongPress: () => _showGroupOptions(group),
@@ -283,7 +279,10 @@ class _GroupListPageState extends State<GroupListPage> {
             ),
             if (group.isOwner)
               ListTile(
-                leading: const Icon(Icons.delete_outline, color: AppColors.error),
+                leading: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.error,
+                ),
                 title: Text(
                   S.of(context)?.commonDissolveGroup ?? 'Dissolve Group',
                   style: const TextStyle(color: AppColors.error),

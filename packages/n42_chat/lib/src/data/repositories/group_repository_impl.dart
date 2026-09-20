@@ -640,6 +640,14 @@ class GroupRepositoryImpl implements IGroupRepository {
         .map((u) => u.id)
         .toSet()
         .length;
+    final knownInvitedCount = knownMembers
+        .where((u) => u.membership == matrix.Membership.invite)
+        .map((u) => u.id)
+        .toSet()
+        .length;
+    final pendingCount = knownInvitedCount > invitedCount
+        ? knownInvitedCount
+        : invitedCount;
     final summaryCount = joinedCount + invitedCount;
     final memberCount = knownCount > summaryCount ? knownCount : summaryCount;
     final canonicalAliasLocalpart = extractAliasLocalpart(room.canonicalAlias);
@@ -657,6 +665,7 @@ class GroupRepositoryImpl implements IGroupRepository {
       announcement: _groupDataSource.getGroupAnnouncement(room.id),
       pinnedEventIds: pinnedEventIds,
       memberCount: memberCount,
+      invitedMemberCount: pendingCount,
       maxMembers: maxMembers,
       members:
           members?.map((u) => _mapUserToGroupMember(room.id, u)).toList() ?? [],

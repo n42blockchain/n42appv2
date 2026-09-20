@@ -37,6 +37,44 @@ void main() {
       );
     });
 
+    for (final status in [401, 403, 429, 500]) {
+      test(
+        'AI HTTP $status exposes typed failure and appropriate availability',
+        () async {
+          final options = RequestOptions(path: '/v1/chat/completions');
+          when(
+            () => mockDio.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            ),
+          ).thenThrow(
+            DioException(
+              requestOptions: options,
+              response: Response(
+                requestOptions: options,
+                statusCode: status,
+                data: {
+                  'error': {'message': 'Rejected'},
+                },
+              ),
+            ),
+          );
+          await expectLater(
+            datasource.summarize('fixture'),
+            throwsA(
+              isA<AiServiceException>().having(
+                (e) => e.statusCode,
+                'HTTP status',
+                status,
+              ),
+            ),
+          );
+          expect(datasource.isAvailable, status != 401 && status != 403);
+        },
+      );
+    }
+
     group('isAvailable', () {
       test('should return true when apiKey and baseUrl are non-empty', () {
         expect(datasource.isAvailable, isTrue);
@@ -780,8 +818,7 @@ void main() {
                 {
                   'message': {
                     'role': 'assistant',
-                    'content':
-                        '["Sounds good","I can do that","Let me check"]',
+                    'content': '["Sounds good","I can do that","Let me check"]',
                   },
                 },
               ],
@@ -803,39 +840,41 @@ void main() {
         expect(result, ['Sounds good', 'I can do that', 'Let me check']);
       });
 
-      test('should fall back to newline parsing when model returns plain text',
-          () async {
-        when(
-          () => mockDio.post<Map<String, dynamic>>(
-            any(),
-            data: any(named: 'data'),
-            options: any(named: 'options'),
-          ),
-        ).thenAnswer(
-          (_) async => Response<Map<String, dynamic>>(
-            data: {
-              'choices': [
-                {
-                  'message': {
-                    'role': 'assistant',
-                    'content': '1. Sure\n2. Give me a minute\n3. Thanks!',
+      test(
+        'should fall back to newline parsing when model returns plain text',
+        () async {
+          when(
+            () => mockDio.post<Map<String, dynamic>>(
+              any(),
+              data: any(named: 'data'),
+              options: any(named: 'options'),
+            ),
+          ).thenAnswer(
+            (_) async => Response<Map<String, dynamic>>(
+              data: {
+                'choices': [
+                  {
+                    'message': {
+                      'role': 'assistant',
+                      'content': '1. Sure\n2. Give me a minute\n3. Thanks!',
+                    },
                   },
-                },
-              ],
-              'usage': {'prompt_tokens': 10, 'completion_tokens': 8},
-              'model': 'gpt-4o-mini',
-            },
-            statusCode: 200,
-            requestOptions: RequestOptions(path: '/v1/chat/completions'),
-          ),
-        );
+                ],
+                'usage': {'prompt_tokens': 10, 'completion_tokens': 8},
+                'model': 'gpt-4o-mini',
+              },
+              statusCode: 200,
+              requestOptions: RequestOptions(path: '/v1/chat/completions'),
+            ),
+          );
 
-        final result = await datasource.suggestReplies([
-          const AiMessage(role: AiRole.assistant, content: 'Need this today'),
-        ]);
+          final result = await datasource.suggestReplies([
+            const AiMessage(role: AiRole.assistant, content: 'Need this today'),
+          ]);
 
-        expect(result, ['Sure', 'Give me a minute', 'Thanks!']);
-      });
+          expect(result, ['Sure', 'Give me a minute', 'Thanks!']);
+        },
+      );
     });
   });
 
@@ -933,10 +972,7 @@ void main() {
         ),
       );
       when(
-        () => mockDio.get<List<int>>(
-          any(),
-          options: any(named: 'options'),
-        ),
+        () => mockDio.get<List<int>>(any(), options: any(named: 'options')),
       ).thenAnswer(
         (_) async => Response<List<int>>(
           data: bytes,

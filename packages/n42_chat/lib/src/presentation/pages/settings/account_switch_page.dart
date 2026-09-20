@@ -5,6 +5,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../n42_chat.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../domain/entities/stored_account_entity.dart';
@@ -160,6 +161,9 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
                   ),
                 )
               : ListView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.paddingOf(context).bottom,
+                  ),
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(AppDimensions.spacing),
@@ -173,14 +177,13 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
                     if (_accounts.isEmpty)
                       Padding(
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 48,
+                          horizontal: AppDimensions.spacingXL,
+                          vertical: AppDimensions.spacingXL * 2,
                         ),
                         child: Text(
                           l10n.accountNoSaved,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 15,
+                          style: AppTextStyles.bodyMedium.copyWith(
                             color: context.textSecondary,
                           ),
                         ),
@@ -201,7 +204,11 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
                               ),
                               if (i != _accounts.length - 1)
                                 Padding(
-                                  padding: const EdgeInsets.only(left: 72),
+                                  padding: const EdgeInsets.only(
+                                    left:
+                                        AppDimensions.avatarSizeConversation +
+                                        AppDimensions.spacingXL,
+                                  ),
                                   child: Divider(
                                     height: 1,
                                     color: context.dividerColor,
@@ -211,9 +218,11 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
                           ],
                         ),
                       ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppDimensions.spacing),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: AppDimensions.spacing,
+                      ),
                       child: N42Button.primary(
                         text: l10n.accountAdd,
                         onPressed: !_busy ? _openAddAccount : null,
@@ -259,20 +268,19 @@ class _AccountTile extends StatelessWidget {
 
     return Semantics(
       selected: account.isCurrent,
+      liveRegion: isSwitching,
       child: ListTile(
         key: ValueKey('stored_account_${account.userId}'),
         leading: N42Avatar(
           imageUrl: account.avatarUrl,
           name: account.effectiveDisplayName,
-          size: 44,
+          size: AppDimensions.avatarSizeConversation,
         ),
         title: Text(
           account.effectiveDisplayName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 16,
-            height: 1.3,
+          style: AppTextStyles.bodyLarge.copyWith(
             color: context.textPrimary,
             fontWeight: account.isCurrent ? FontWeight.w600 : FontWeight.w500,
           ),
@@ -281,12 +289,12 @@ class _AccountTile extends StatelessWidget {
           '${account.userId}\n${account.homeserver}${account.isCurrent ? '\n${S.of(context)!.accountCurrent}' : ''}${isSwitching ? '\n${S.of(context)!.accountSwitching}' : ''}',
           maxLines: 4,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(fontSize: 12, height: 1.4, color: secondaryColor),
+          style: AppTextStyles.bodySmall.copyWith(color: secondaryColor),
         ),
         trailing: isSwitching
             ? const SizedBox(
-                width: 20,
-                height: 20,
+                width: AppDimensions.spacingL,
+                height: AppDimensions.spacingL,
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             : account.isCurrent

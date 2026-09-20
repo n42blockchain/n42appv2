@@ -5959,6 +5959,31 @@ class SPt extends S {
   @override
   String get chatMessageUnavailable =>
       'Mensagem indisponível neste dispositivo. Toca para ver as opções de recuperação.';
+
+  @override
+  String get contactStarredFriends => 'Starred friends';
+
+  @override
+  String get chatRecipientKeysMissing =>
+      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+
+  @override
+  String get chatSwitchForMessaging =>
+      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+
+  @override
+  String get aiServiceUnavailable =>
+      'AI summaries are currently unavailable. Please try again after service access is restored.';
+
+  @override
+  String aiSummarizeMessages(int count) {
+    return 'Summarize $count recent messages';
+  }
+
+  @override
+  String groupMembershipSummary(int joined, int invited) {
+    return '$joined joined · $invited invited';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11916,4 +11941,29 @@ class SPtBr extends SPt {
   @override
   String get chatMessageUnavailable =>
       'Mensagem indisponível neste dispositivo. Toque para ver as opções de recuperação.';
+
+  @override
+  String get contactStarredFriends => 'Starred friends';
+
+  @override
+  String get chatRecipientKeysMissing =>
+      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+
+  @override
+  String get chatSwitchForMessaging =>
+      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+
+  @override
+  String get aiServiceUnavailable =>
+      'AI summaries are currently unavailable. Please try again after service access is restored.';
+
+  @override
+  String aiSummarizeMessages(int count) {
+    return 'Summarize $count recent messages';
+  }
+
+  @override
+  String groupMembershipSummary(int joined, int invited) {
+    return '$joined joined · $invited invited';
+  }
 }

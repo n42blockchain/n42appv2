@@ -37,10 +37,23 @@ class ContactPrivacyService {
     return data[story ? 'hideMyStatus' : 'hideMyMoments'] == true;
   }
 
-  static bool isSocialRoom(matrix.Room room) =>
-      room.tags.containsKey(momentTag) ||
-      room.tags.containsKey(storyTag) ||
-      room.getState('n42.social.type') != null;
+  static bool isSocialRoom(matrix.Room room) {
+    if (room.tags.containsKey(momentTag) ||
+        room.tags.containsKey(storyTag) ||
+        room.getState('n42.social.type') != null)
+      return true;
+    final type = room.getState(matrix.EventTypes.RoomCreate)?.content['type'];
+    if (type == momentTag || type == storyTag) return true;
+    // Stripped invitation state lacks account-data tags and may omit custom
+    // state. The invitee's membership reason remains available before joining.
+    if (room.membership != matrix.Membership.invite) return false;
+    final me = room.client.userID;
+    if (me == null) return false;
+    final reason = room
+        .getState(matrix.EventTypes.RoomMember, me)
+        ?.content['reason'];
+    return reason == momentReason || reason == storyReason;
+  }
 
   String? owner(matrix.Room room) =>
       room.getState(matrix.EventTypes.RoomCreate)?.senderId;
@@ -324,6 +337,7 @@ class ContactPrivacyService {
     final tag = story ? storyTag : momentTag;
     final id = await client.createRoom(
       name: story ? 'My Status' : 'My Moments',
+      creationContent: {'type': tag},
       visibility: matrix.Visibility.private,
       preset: matrix.CreateRoomPreset.privateChat,
       initialState: [

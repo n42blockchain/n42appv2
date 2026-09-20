@@ -56,6 +56,8 @@ class ContactState extends Equatable {
   /// 是否正在搜索
   final bool isSearching;
 
+  final bool searchFailed;
+
   /// 是否正在全局搜索
   final bool isGlobalSearching;
 
@@ -87,6 +89,7 @@ class ContactState extends Equatable {
     this.indexLetters = const [],
     this.searchQuery = '',
     this.isSearching = false,
+    this.searchFailed = false,
     this.isGlobalSearching = false,
     this.startedChatRoomId,
     this.startedChatUserId,
@@ -117,6 +120,7 @@ class ContactState extends Equatable {
     List<String>? indexLetters,
     String? searchQuery,
     bool? isSearching,
+    bool? searchFailed,
     bool? isGlobalSearching,
     String? startedChatRoomId,
     String? startedChatUserId,
@@ -135,6 +139,7 @@ class ContactState extends Equatable {
       indexLetters: indexLetters ?? this.indexLetters,
       searchQuery: searchQuery ?? this.searchQuery,
       isSearching: isSearching ?? this.isSearching,
+      searchFailed: searchFailed ?? this.searchFailed,
       isGlobalSearching: isGlobalSearching ?? this.isGlobalSearching,
       startedChatRoomId: startedChatRoomId,
       startedChatUserId: startedChatUserId,
@@ -147,24 +152,26 @@ class ContactState extends Equatable {
 
   @override
   List<Object?> get props => [
-        status,
-        contacts,
-        filteredContacts,
-        searchResults,
-        friendRequests,
-        groupedContacts,
-        indexLetters,
-        searchQuery,
-        isSearching,
-        isGlobalSearching,
-        startedChatRoomId,
-        startedChatUserId,
-        updatedRemarkUserId,
-        updatedRemark,
-        deletedUserId,
-        errorMessage,
-      ];
+    status,
+    contacts,
+    filteredContacts,
+    searchResults,
+    friendRequests,
+    groupedContacts,
+    indexLetters,
+    searchQuery,
+    isSearching,
+    searchFailed,
+    isGlobalSearching,
+    startedChatRoomId,
+    startedChatUserId,
+    updatedRemarkUserId,
+    updatedRemark,
+    deletedUserId,
+    errorMessage,
+  ];
 
   @override
-  String toString() => 'ContactState(status: $status, contacts: ${contacts.length})';
+  String toString() =>
+      'ContactState(status: $status, contacts: ${contacts.length})';
 }

@@ -27,6 +27,7 @@ class MatrixRoomDataSource {
   // 排序缓存：避免重复排序，减少约 90% 无效排序操作
   List<matrix.Room>? _sortedRoomsCache;
   int _lastRoomsHash = 0;
+  matrix.Client? _sortedRoomsClient;
 
   // ============================================
   // 房间列表
@@ -64,6 +65,11 @@ class MatrixRoomDataSource {
   ///
   /// 优化：使用缓存和 hash 判断，避免重复排序
   List<matrix.Room> getSortedRooms() {
+    final currentClient = _client;
+    if (!identical(currentClient, _sortedRoomsClient)) {
+      invalidateSortCache();
+      _sortedRoomsClient = currentClient;
+    }
     final rooms = getJoinedRooms();
 
     // 计算当前房间列表的 hash（基于房间ID和最后消息时间）
@@ -162,7 +168,12 @@ class MatrixRoomDataSource {
     final lastEvent = room.lastEvent;
     if (lastEvent == null) return '';
 
-    return _getEventPreview(lastEvent, room);
+    // Timeline decryption can finish without replacing Room.lastEvent.
+    // Use the same received session key when mapping the conversation preview.
+    final event = lastEvent.type == matrix.EventTypes.Encrypted
+        ? room.client.encryption?.decryptRoomEventSync(lastEvent) ?? lastEvent
+        : lastEvent;
+    return _getEventPreview(event, room);
   }
 
   /// 获取最后消息时间
@@ -328,13 +339,59 @@ class MatrixRoomDataSource {
 
   /// 监听房间列表变化
   Stream<List<matrix.Room>>? get onRoomsChanged {
-    return _client?.onSync.stream.map((_) => getSortedRooms());
+    final client = _client;
+    if (client == null) return null;
+    late StreamController<List<matrix.Room>> updates;
+    final subscriptions = <String, StreamSubscription<String>>{};
+    StreamSubscription<matrix.SyncUpdate>? sync;
+    StreamSubscription<matrix.EventUpdate>? events;
+    void publish() {
+      if (updates.isClosed || !identical(client, _client)) return;
+      updates.add(getSortedRooms());
+    }
+
+    void bindRooms() {
+      if (!identical(client, _client)) return;
+      final rooms = getJoinedRooms();
+      final ids = rooms.map((r) => r.id).toSet();
+      for (final id in subscriptions.keys.toList()) {
+        if (!ids.contains(id)) unawaited(subscriptions.remove(id)!.cancel());
+      }
+      for (final room in rooms) {
+        subscriptions.putIfAbsent(
+          room.id,
+          () => room.onSessionKeyReceived.stream.listen((_) => publish()),
+        );
+      }
+    }
+
+    updates = StreamController<List<matrix.Room>>(
+      onListen: () {
+        bindRooms();
+        sync = client.onSync.stream.listen((_) {
+          bindRooms();
+          publish();
+        }, onError: updates.addError);
+        events = client.onEvent.stream.listen(
+          (_) => publish(),
+          onError: updates.addError,
+        );
+      },
+      onCancel: () async {
+        await sync?.cancel();
+        await events?.cancel();
+        for (final subscription in subscriptions.values) {
+          await subscription.cancel();
+        }
+        subscriptions.clear();
+      },
+    );
+    return updates.stream;
   }
 
-  /// 监听特定房间变化
-  Stream<matrix.Room?>? watchRoom(String roomId) {
-    return _client?.onSync.stream.map((_) => getRoomById(roomId));
-  }
+  /// Key-only updates must also reach an already open conversation header.
+  Stream<matrix.Room?>? watchRoom(String roomId) =>
+      onRoomsChanged?.map((_) => getRoomById(roomId));
 
   // ============================================
   // 辅助方法
@@ -349,10 +406,7 @@ class MatrixRoomDataSource {
         // 对于已解密的加密消息，messageType 会返回正确的类型
         // 对于未解密的消息，messageType 会返回 'm.bad.encrypted' 或类似值
         final msgType = event.messageType;
-        final body = event.body;
-        debugLog(
-          'MatrixRoomDatasource: Encrypted event - msgType=$msgType, body=$body',
-        );
+
         if (msgType == matrix.MessageTypes.Audio) {
           return '[Voice]';
         } else if (msgType == matrix.MessageTypes.Video) {

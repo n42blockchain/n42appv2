@@ -17,10 +17,13 @@ import '../../../domain/entities/conversation_entity.dart';
 import '../../blocs/chat/chat_bloc.dart';
 import '../../blocs/contact/contact_bloc.dart';
 import '../../blocs/contact/contact_event.dart';
+import '../../blocs/contact/contact_state.dart';
 import '../../blocs/conversation/conversation_bloc.dart';
 import '../../blocs/conversation/conversation_event.dart';
 import '../../blocs/conversation/conversation_state.dart';
 import '../../blocs/group/group_bloc.dart';
+import '../../blocs/group/group_event.dart';
+import '../../blocs/group/group_state.dart';
 import '../../blocs/moment/moment_bloc.dart';
 import '../../blocs/moment/moment_event.dart';
 import '../../blocs/transfer/transfer_bloc.dart';
@@ -65,6 +68,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
   // 各页面的 Bloc
   late ConversationBloc _conversationBloc;
   late ContactBloc _contactBloc;
+  late GroupBloc _groupBloc;
 
   // iPad 分屏模式：当前选中的会话（右侧面板内容）
   ConversationEntity? _selectedConversation;
@@ -76,7 +80,8 @@ class _ChatMainPageState extends State<ChatMainPage> {
     super.initState();
     _pageController = PageController();
     _conversationBloc = getIt<ConversationBloc>();
-    _contactBloc = getIt<ContactBloc>();
+    _contactBloc = getIt<ContactBloc>()..add(const LoadContacts());
+    _groupBloc = getIt<GroupBloc>()..add(const LoadGroups());
 
     // 启动链上事件推送轮询服务
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -96,6 +101,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
     _pageController.dispose();
     _conversationBloc.close();
     _contactBloc.close();
+    _groupBloc.close();
     _splitChatBloc?.close();
     super.dispose();
   }
@@ -409,9 +415,12 @@ class _ChatMainPageState extends State<ChatMainPage> {
                     contactBloc: _contactBloc,
                   ),
                 ),
-                const KeyedSubtree(
-                  key: ValueKey<String>('chat_content_contacts'),
-                  child: _ContactTabContent(),
+                KeyedSubtree(
+                  key: const ValueKey<String>('chat_content_contacts'),
+                  child: ContactListPage(
+                    showAppBar: false,
+                    groupBloc: _groupBloc,
+                  ),
                 ),
                 const KeyedSubtree(
                   key: ValueKey<String>('chat_content_discover'),
@@ -506,7 +515,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                         selectedConversation: _selectedConversation,
                         onConversationTap: _onConversationSelectedForSplit,
                       ),
-                      const _ContactTabContent(),
+                      ContactListPage(showAppBar: false, groupBloc: _groupBloc),
                       const _DiscoverTabContent(),
                       const _ProfileTabContent(),
                     ],
@@ -602,13 +611,25 @@ class _ChatMainPageState extends State<ChatMainPage> {
                     unselectedColor: unselectedColor,
                     badge: totalUnread,
                   ),
-                  _buildTabItem(
-                    index: 1,
-                    icon: Icons.contacts_outlined,
-                    activeIcon: Icons.contacts,
-                    label: l10n?.commonContacts ?? 'Contacts',
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
+                  BlocBuilder<ContactBloc, ContactState>(
+                    bloc: _contactBloc,
+                    builder: (context, contactState) =>
+                        BlocBuilder<GroupBloc, GroupState>(
+                          bloc: _groupBloc,
+                          builder: (context, groupState) => _buildTabItem(
+                            index: 1,
+                            icon: Icons.contacts_outlined,
+                            activeIcon: Icons.contacts,
+                            label: l10n?.commonContacts ?? 'Contacts',
+                            selectedColor: selectedColor,
+                            unselectedColor: unselectedColor,
+                            badge:
+                                contactState.friendRequests
+                                    .where((r) => !r.isOutgoing)
+                                    .length +
+                                groupState.invites.length,
+                          ),
+                        ),
                   ),
                   _buildTabItem(
                     index: 2,
@@ -844,16 +865,6 @@ class _ChatTabContentSplit extends StatelessWidget {
         showAppBar: false,
       ),
     );
-  }
-}
-
-/// 通讯录 Tab 内容
-class _ContactTabContent extends StatelessWidget {
-  const _ContactTabContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return const ContactListPage(showAppBar: false);
   }
 }
 

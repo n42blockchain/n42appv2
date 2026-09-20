@@ -13,6 +13,9 @@ import '../../../core/utils/debug_log.dart';
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final IContactRepository _contactRepository;
 
+  int _localSearchVersion = 0;
+  int _globalSearchVersion = 0;
+
   StreamSubscription<List<ContactEntity>>? _contactsSubscription;
   StreamSubscription<Map<String, bool>>? _onlineStatusSubscription;
 
@@ -82,18 +85,19 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     RefreshContacts event,
     Emitter<ContactState> emit,
   ) async {
-    debugLog('ContactBloc: RefreshContacts triggered');
-    if (state.status == ContactStatus.initial) {
-      add(const LoadContacts());
-      return;
-    }
-
     try {
-      await _refreshContactSnapshot(emit);
+      if (state.status == ContactStatus.initial) {
+        await _onLoadContacts(const LoadContacts(), emit);
+      } else {
+        await _refreshContactSnapshot(emit);
+      }
     } catch (e) {
       emit(
         state.copyWith(status: ContactStatus.error, errorMessage: e.toString()),
       );
+    } finally {
+      final completion = event.completion;
+      if (completion != null && !completion.isCompleted) completion.complete();
     }
   }
 
@@ -135,7 +139,16 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
             : state.filteredContacts,
         friendRequests: requests ?? state.friendRequests,
         groupedContacts: grouped,
-        indexLetters: grouped.keys.toList()..sort(),
+        indexLetters: grouped.keys.toList()
+          ..sort(
+            (a, b) => a == b
+                ? 0
+                : a == '☆'
+                ? -1
+                : b == '☆'
+                ? 1
+                : a.compareTo(b),
+          ),
       ),
     );
   }
@@ -144,30 +157,30 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     SearchContacts event,
     Emitter<ContactState> emit,
   ) async {
-    if (event.query.trim().isEmpty) {
-      emit(
-        state.copyWith(
-          filteredContacts: state.contacts,
-          searchQuery: '',
-          isSearching: false,
-        ),
-      );
+    final version = ++_localSearchVersion;
+    ++_globalSearchVersion;
+    final query = event.query.trim();
+    if (query.isEmpty) {
+      _onClearSearch(const ClearSearch(), emit);
       return;
     }
-
-    emit(state.copyWith(isSearching: true, searchQuery: event.query));
-
+    emit(
+      state.copyWith(
+        isSearching: true,
+        searchFailed: false,
+        searchQuery: query,
+        filteredContacts: [],
+        searchResults: [],
+        isGlobalSearching: false,
+      ),
+    );
     try {
-      final results = await _contactRepository.searchContacts(event.query);
-      emit(
-        state.copyWith(
-          filteredContacts: results,
-          searchQuery: event.query,
-          isSearching: false,
-        ),
-      );
-    } catch (e) {
-      emit(state.copyWith(isSearching: false));
+      final results = await _contactRepository.searchContacts(query);
+      if (emit.isDone || version != _localSearchVersion) return;
+      emit(state.copyWith(filteredContacts: results, isSearching: false));
+    } catch (_) {
+      if (emit.isDone || version != _localSearchVersion) return;
+      emit(state.copyWith(isSearching: false, searchFailed: true));
     }
   }
 
@@ -175,6 +188,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     SearchUsers event,
     Emitter<ContactState> emit,
   ) async {
+    final version = ++_globalSearchVersion;
     if (event.query.trim().isEmpty) {
       emit(state.copyWith(searchResults: [], isGlobalSearching: false));
       return;
@@ -187,18 +201,23 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         event.query,
         limit: event.limit,
       );
+      if (emit.isDone || version != _globalSearchVersion) return;
       emit(state.copyWith(searchResults: results, isGlobalSearching: false));
     } catch (e) {
+      if (emit.isDone || version != _globalSearchVersion) return;
       emit(state.copyWith(isGlobalSearching: false));
     }
   }
 
   void _onClearSearch(ClearSearch event, Emitter<ContactState> emit) {
+    ++_localSearchVersion;
+    ++_globalSearchVersion;
     emit(
       state.copyWith(
         filteredContacts: state.contacts,
         searchResults: [],
         searchQuery: '',
+        searchFailed: false,
         isSearching: false,
         isGlobalSearching: false,
       ),
@@ -411,7 +430,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     final grouped = <String, List<ContactEntity>>{};
 
     for (final contact in contacts) {
-      final letter = contact.indexLetter;
+      final letter = contact.isStarred ? '☆' : contact.indexLetter;
       if (!grouped.containsKey(letter)) {
         grouped[letter] = [];
       }

@@ -124,9 +124,15 @@ extension _ChatPageAiFeaturesMethods on _ChatPageState {
         .catchError((Object e) {
           if (mounted) {
             setState(() => _isAiSummarizing = false);
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Summarize failed: $e')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  e is AiServiceException && e.accessDenied
+                      ? S.of(context)!.aiServiceUnavailable
+                      : S.of(context)!.aiSummarizeError,
+                ),
+              ),
+            );
           }
         });
   }

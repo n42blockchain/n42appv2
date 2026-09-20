@@ -46,5 +46,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Family'), findsOneWidget);
     expect(find.text('2 Contacts'), findsOneWidget);
+    await tester.tap(find.text('Family'));
+    await tester.pumpAndSettle();
+    expect(find.text('A'), findsWidgets);
+    expect(find.text('B'), findsWidgets);
+    expect(tester.takeException(), isNull);
   });
 }

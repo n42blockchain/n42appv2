@@ -606,6 +606,9 @@ Future<void> _registerServices(N42ChatConfig config) async {
         baseUrl: config.aiBaseUrl,
         defaultModel: config.aiModel,
         useProxyEndpoint: config.aiUseProxyEndpoint,
+        getAccessToken: config.aiUseProxyEndpoint
+            ? () => MatrixClientManager.instance.client?.accessToken
+            : null,
       ),
       dispose: (service) => service.dispose(),
     );

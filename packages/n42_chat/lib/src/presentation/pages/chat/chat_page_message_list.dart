@@ -26,7 +26,12 @@ extension _ChatPageMessageListMethods on _ChatPageState {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(
-                encryptionFailure
+                state.error?.contains(
+                          EncryptedSendNotReady.recipientMissingCode,
+                        ) ==
+                        true
+                    ? S.of(context)!.chatRecipientKeysMissing
+                    : encryptionFailure
                     ? (S.of(context)?.chatEncryptionNotReady ??
                           'Secure connection is not ready. Message not sent. Check connection and device verification, then retry.')
                     : state.error?.contains(DirectFriendshipNotReady.code) ==
@@ -111,12 +116,27 @@ extension _ChatPageMessageListMethods on _ChatPageState {
               return Column(
                 children: [
                   _buildEncryptionNotice(),
-                  if (isGroup && aiAvailable) ...[
+                  if (isGroup &&
+                      aiAvailable &&
+                      state.messages
+                              .where(
+                                (m) =>
+                                    m.type == MessageType.text &&
+                                    !m.isSelfDestructing &&
+                                    m.content.trim().isNotEmpty,
+                              )
+                              .length >
+                          1) ...[
                     if (_aiSummaryResult != null || _isAiSummarizing)
                       AiSummaryBubble(
                         summary: _aiSummaryResult ?? '',
                         messageCount: state.messages
-                            .where((m) => m.type == MessageType.text)
+                            .where(
+                              (m) =>
+                                  m.type == MessageType.text &&
+                                  !m.isSelfDestructing &&
+                                  m.content.trim().isNotEmpty,
+                            )
                             .take(50)
                             .length,
                         isLoading: _isAiSummarizing,
@@ -127,7 +147,12 @@ extension _ChatPageMessageListMethods on _ChatPageState {
                     else
                       AiSummarizeButton(
                         unreadCount: state.messages
-                            .where((m) => m.type == MessageType.text)
+                            .where(
+                              (m) =>
+                                  m.type == MessageType.text &&
+                                  !m.isSelfDestructing &&
+                                  m.content.trim().isNotEmpty,
+                            )
                             .take(50)
                             .length,
                         onTap: _summarizeRecentMessages,

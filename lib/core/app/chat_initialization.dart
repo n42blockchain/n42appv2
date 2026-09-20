@@ -94,14 +94,9 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       const envGiphyApiKey = String.fromEnvironment('GIPHY_API_KEY');
       const envTenorApiKey = String.fromEnvironment('TENOR_API_KEY');
       const envFiatRampApiKey = String.fromEnvironment('FIATRAMP_API_KEY');
-      const envAiApiKey = String.fromEnvironment('AI_API_KEY');
-      const envAiBaseUrl = String.fromEnvironment(
-        'AI_BASE_URL',
-        defaultValue: 'https://api.groq.com/openai',
-      );
-      const envAiModel = String.fromEnvironment(
-        'AI_MODEL',
-        defaultValue: 'llama-3.3-70b-versatile',
+      const envAiProxyUrl = String.fromEnvironment(
+        'AI_PROXY_URL',
+        defaultValue: 'https://m.si46.world/n42/ai/v1/chat/completions',
       );
       const envDebankApiKey = String.fromEnvironment('DEBANK_API_KEY');
       const envAlchemyApiKey = String.fromEnvironment('ALCHEMY_API_KEY');
@@ -139,7 +134,6 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
       final directGiphyApiKey = normalizedEnv(envGiphyApiKey);
       final directTenorApiKey = normalizedEnv(envTenorApiKey);
       final directFiatRampApiKey = normalizedEnv(envFiatRampApiKey);
-      final directAiApiKey = normalizedEnv(envAiApiKey);
       final directDebankApiKey = normalizedEnv(envDebankApiKey);
       final directAlchemyApiKey = normalizedEnv(envAlchemyApiKey);
       final directLocalLlmModelUrl = normalizedEnv(envLocalLlmModelUrl);
@@ -253,10 +247,10 @@ mixin ChatInitializationMixin<T extends ConsumerStatefulWidget>
           fiatRampApiKey: directFiatRampApiKey,
           fiatRampProvider: 'moonpay',
           googleTranslateApiKey: directGoogleTranslateApiKey,
-          aiApiKey: directAiApiKey,
-          aiBaseUrl: envAiBaseUrl,
-          aiModel: envAiModel,
-          aiUseProxyEndpoint: false,
+          aiApiKey: null,
+          aiBaseUrl: envAiProxyUrl,
+          aiModel: 'openrouter/free',
+          aiUseProxyEndpoint: envAiProxyUrl.isNotEmpty,
           localLlmModelUrl: directLocalLlmModelUrl,
           localLlmHuggingFaceToken: directLocalLlmHfToken,
           googleSpeechApiKey: directGoogleSpeechApiKey,

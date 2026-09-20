@@ -7,7 +7,7 @@ part of 'chat_bloc.dart';
 extension ChatBlocSendHandlers on ChatBloc {
   String _sendFailure(Object error, String fallback) =>
       error is EncryptedSendNotReady
-      ? EncryptedSendNotReady.code
+      ? error.toString()
       : error is DirectFriendshipNotReady
       ? DirectFriendshipNotReady.code
       : fallback;

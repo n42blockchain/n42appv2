@@ -311,6 +311,33 @@ void main() {
     },
   );
   test(
+    'recipient without published device keys gets an actionable failure',
+    () async {
+      when(() => room.getUserDeviceKeys()).thenAnswer((_) async => []);
+      // Keep self out of this fixture's membership requirement so the missing
+      // peer is the first explicit readiness failure.
+      final self = _Device();
+      when(() => self.userId).thenReturn('@me:hs');
+      when(() => self.deviceId).thenReturn('ME');
+      when(() => self.blocked).thenReturn(false);
+      when(() => self.isValid).thenReturn(true);
+      when(() => self.encryptToDevice).thenReturn(true);
+      when(() => self.curve25519Key).thenReturn('self-key');
+      when(() => room.getUserDeviceKeys()).thenAnswer((_) async => [self]);
+      await expectLater(
+        EncryptedSendGuard.prepare(room),
+        throwsA(
+          isA<EncryptedSendNotReady>().having(
+            (e) => e.recipientKeysMissing,
+            'missing recipient',
+            isTrue,
+          ),
+        ),
+      );
+      verifyNever(() => keys.prepareOutboundGroupSession(any()));
+    },
+  );
+  test(
     'unverified recipient device stops new ciphertext from being sent',
     () async {
       when(() => peer.encryptToDevice).thenReturn(false);

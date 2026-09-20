@@ -516,14 +516,15 @@ class SettingsPage extends StatelessWidget {
     showDialog<void>(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        scrollable: true,
         title: Text(S.of(context)?.commonLogout ?? 'Log Out'),
         content: Text(
-          '${S.of(context)?.commonLogoutConfirm ?? 'Are you sure you want to log out?'}'
+          '${S.of(context)!.chatSwitchForMessaging}'
           '\n\n${S.of(context)?.chatLogoutKeyWarning ?? 'Back up your encryption keys before logging out, or you may lose access to encrypted messages.'}',
         ),
         actions: [
           if (onAccounts != null || getIt.isRegistered<IAuthRepository>())
-            TextButton(
+            FilledButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
                 _navigateToAccounts(context);

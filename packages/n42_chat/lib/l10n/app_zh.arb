@@ -2177,5 +2177,28 @@
   "chatMessageDelivered": "已送达",
   "chatMessageRead": "已读",
   "chatMessageFailed": "未发送，点击重试。",
-  "chatMessageUnavailable": "此设备暂时无法读取这条消息，点击查看恢复选项。"
+  "chatMessageUnavailable": "此设备暂时无法读取这条消息，点击查看恢复选项。",
+  "contactStarredFriends": "星标朋友",
+  "chatRecipientKeysMissing": "对方暂无可用的加密会话。请对方登录并打开应用后重试。日常换号请使用“切换账号”，不要退出登录。",
+  "chatSwitchForMessaging": "需要换号？请选择“切换账号”以保留消息和安全会话。退出登录会撤销此设备，可能导致收到的加密消息无法读取。",
+  "aiServiceUnavailable": "AI 总结服务暂不可用，请待服务恢复访问后重试。",
+  "aiSummarizeMessages": "总结最近 {count} 条消息",
+  "@aiSummarizeMessages": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "groupMembershipSummary": "{joined} 人已加入 · {invited} 人待接受",
+  "@groupMembershipSummary": {
+    "placeholders": {
+      "joined": {
+        "type": "int"
+      },
+      "invited": {
+        "type": "int"
+      }
+    }
+  }
 }
