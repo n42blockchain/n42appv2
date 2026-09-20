@@ -55,3 +55,39 @@ unknown-outcome recovery across restarts, real-fund safety, native device accept
 or testnet acceptance is claimed. Session clearing cannot undo an accepted
 simulated operation. Release/default entry gating remains owned by the existing
 client and host; this change adds no route or deployment capability.
+
+## Follow-up — read-only original-result lookup
+
+Added **Check original result** for the active account's saved unconfirmed
+operation. It calls `LocalPaymentClient.recoverRequest(originalKey)` through
+`GET /requests?key=<encoded>`; mocks assert the query key. It does not POST or create another request key. Both lookup and retry obey the existing busy
+state. Only a confirmed receipt matching the saved operation clears pending state:
+
+- Create: packet receipt type, asset, total, slots, absolute expiry, and room when
+  supplied by the receipt must match the original snapshot.
+- Claim: the returned packet must match the original packet, with no ID indicating
+  another operation type.
+- Refund: the receipt must be a refund type; any supplied packet association must
+  match. The current refund protocol can omit packet ID, so association then
+  depends on the authenticated account's authoritative original-key lookup, not
+  on inferring packet identity from the refund ID. A pasted packet has no known
+  asset before the authoritative response; the form's unrelated asset is not used
+  to claim an independent asset binding.
+
+Unresolved results, HTTP 404, lookup errors and mismatched receipts leave the saved
+request/key intact. They do not mark the operation failed. Switching accounts
+invalidates late lookup responses without removing the original account's pending
+snapshot. After successful recovery, balance refresh errors preserve the receipt
+and direct the user to GET-only refresh, never a repeat money action.
+
+Validation: **18 widget tests passed** (the prior 8 plus 10 lookup cases), with
+**no issues** in focused Dart analysis. Added tests cover create/claim/refund lookup
+without a second POST, unresolved/404 followed by same-key retry, stale lookup after
+account switching, all saved create terms, claim/refund packet mismatches and a
+recovered receipt followed by failed balance refresh. Logs:
+`/tmp/n42-packet-lab-recovery-tests-20260920.log` and
+`/tmp/n42-packet-lab-recovery-analyze-20260920.log`.
+
+This adds lookup for page-memory snapshots only. It does not add persistence or
+recovery after page disposal/restart. Verification still uses HTTP mocks, not a
+network service, blockchain or testnet.

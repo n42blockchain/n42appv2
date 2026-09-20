@@ -322,4 +322,262 @@ void main() {
       expect(await client.balance('test-usdc'), BigInt.from(80));
     },
   );
+  for (final action in ['create', 'claim', 'refund']) {
+    testWidgets(
+      '$action lookup completes original operation without another POST',
+      (tester) async {
+        final calls = <http.Request>[];
+        late http.Request original;
+        await open(tester, (request) async {
+          calls.add(request);
+          if (request.method == 'POST') {
+            original = request;
+            throw http.ClientException('lost acknowledgement');
+          }
+          if (request.url.path == '/requests') {
+            expect(
+              request.url.queryParameters['key'],
+              original.headers['Idempotency-Key'],
+            );
+            return http.Response(
+              jsonEncode({
+                'mode': 'localSimulation',
+                'status': 'completed',
+                'receipt': jsonDecode(response(original).body),
+              }),
+              200,
+            );
+          }
+          return response(request);
+        });
+        if (action == 'create') {
+          await fill(tester);
+        } else {
+          await enter(tester, 'id', packetId);
+        }
+        await tap(tester, action);
+        await tester.pumpAndSettle();
+        await tap(tester, 'lookup');
+        await tester.pumpAndSettle();
+        await reveal(
+          tester,
+          find.text('Simulated $action receipt — synthetic funds only'),
+        );
+        expect(
+          find.text('Simulated $action receipt — synthetic funds only'),
+          findsOneWidget,
+        );
+        expect(key('retry'), findsNothing);
+        expect(calls.map((r) => r.method), ['POST', 'GET', 'GET']);
+      },
+    );
+  }
+
+  for (final status in [200, 404]) {
+    testWidgets('unresolved lookup HTTP $status retains original retry key', (
+      tester,
+    ) async {
+      final posts = <http.Request>[];
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          posts.add(request);
+          if (posts.length == 1) throw http.ClientException('offline');
+          return response(request);
+        }
+        if (request.url.path == '/requests') {
+          return http.Response(
+            jsonEncode(
+              status == 200
+                  ? {'mode': 'localSimulation', 'status': 'unresolved'}
+                  : {
+                      'mode': 'localSimulation',
+                      'error': {'code': 'not_found'},
+                    },
+            ),
+            status,
+          );
+        }
+        return response(request);
+      });
+      await fill(tester);
+      await tap(tester, 'create');
+      await tester.pumpAndSettle();
+      await tap(tester, 'lookup');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('retry'));
+      expect(key('retry'), findsOneWidget);
+      await tap(tester, 'retry');
+      await tester.pumpAndSettle();
+      expect(posts, hasLength(2));
+      expect(
+        posts[0].headers['Idempotency-Key'],
+        posts[1].headers['Idempotency-Key'],
+      );
+      expect(posts[0].body, posts[1].body);
+    });
+  }
+
+  testWidgets('late original-result lookup cannot populate another account', (
+    tester,
+  ) async {
+    final lookup = Completer<http.Response>();
+    late http.Request original;
+    await open(tester, (request) async {
+      if (request.method == 'POST') {
+        original = request;
+        throw http.ClientException('offline');
+      }
+      return lookup.future;
+    });
+    await fill(tester);
+    await tap(tester, 'create');
+    await tester.pumpAndSettle();
+    await tap(tester, 'lookup');
+    await enter(tester, 'token', 'synthetic-test-accountb');
+    await tap(tester, 'activate');
+    lookup.complete(
+      http.Response(
+        jsonEncode({
+          'mode': 'localSimulation',
+          'status': 'completed',
+          'receipt': jsonDecode(response(original).body),
+        }),
+        200,
+      ),
+    );
+    await tester.pumpAndSettle();
+    await reveal(tester, key('balance'));
+    expect(find.text('Synthetic balance: not loaded'), findsOneWidget);
+    expect(
+      find.text('Simulated create receipt — synthetic funds only'),
+      findsNothing,
+    );
+    await enter(tester, 'token', 'synthetic-test-accounta');
+    await tap(tester, 'activate');
+    await reveal(tester, key('retry'));
+    expect(key('retry'), findsOneWidget);
+  });
+
+  testWidgets('create lookup rejects every mismatched saved term', (
+    tester,
+  ) async {
+    late http.Request original;
+    String changed = 'asset';
+    var posts = 0;
+    await open(tester, (request) async {
+      if (request.method == 'POST') {
+        posts++;
+        original = request;
+        throw http.ClientException('offline');
+      }
+      final result =
+          jsonDecode(response(original).body) as Map<String, dynamic>;
+      result[changed] = changed == 'asset' || changed == 'room'
+          ? 'different'
+          : '1';
+      return http.Response(
+        jsonEncode({
+          'mode': 'localSimulation',
+          'status': 'completed',
+          'receipt': result,
+        }),
+        200,
+      );
+    });
+    await fill(tester);
+    await tap(tester, 'create');
+    await tester.pumpAndSettle();
+    for (final field in ['asset', 'room', 'total', 'slots', 'expiresAt']) {
+      changed = field;
+      await tap(tester, 'lookup');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('error'));
+      expect(
+        find.text(
+          'Original receipt does not match the saved operation. The request remains pending.',
+        ),
+        findsOneWidget,
+      );
+    }
+    expect(posts, 1);
+  });
+
+  for (final action in ['claim', 'refund']) {
+    testWidgets('$action lookup refuses a different packet association', (
+      tester,
+    ) async {
+      late http.Request original;
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          original = request;
+          throw http.ClientException('offline');
+        }
+        final result =
+            jsonDecode(response(original).body) as Map<String, dynamic>;
+        result['packet'] = 'packet_${'c' * 64}';
+        return http.Response(
+          jsonEncode({
+            'mode': 'localSimulation',
+            'status': 'completed',
+            'receipt': result,
+          }),
+          200,
+        );
+      });
+      await enter(tester, 'id', packetId);
+      await tap(tester, action);
+      await tester.pumpAndSettle();
+      await tap(tester, 'lookup');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('error'));
+      expect(
+        find.text(
+          'Original receipt does not match the saved operation. The request remains pending.',
+        ),
+        findsOneWidget,
+      );
+    });
+  }
+
+  testWidgets(
+    'recovered receipt survives failed balance refresh without another money action',
+    (tester) async {
+      late http.Request original;
+      final methods = <String>[];
+      await open(tester, (request) async {
+        methods.add(request.method);
+        if (request.method == 'POST') {
+          original = request;
+          throw http.ClientException('offline');
+        }
+        if (request.url.path == '/requests') {
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'status': 'completed',
+              'receipt': jsonDecode(response(original).body),
+            }),
+            200,
+          );
+        }
+        throw http.ClientException('balance unavailable');
+      });
+      await enter(tester, 'id', packetId);
+      await tap(tester, 'claim');
+      await tester.pumpAndSettle();
+      await tap(tester, 'lookup');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('error'));
+      expect(
+        find.text(
+          'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.',
+        ),
+        findsOneWidget,
+      );
+      await tap(tester, 'refresh');
+      await tester.pumpAndSettle();
+      expect(methods, ['POST', 'GET', 'GET', 'GET']);
+      expect(key('retry'), findsNothing);
+    },
+  );
 }

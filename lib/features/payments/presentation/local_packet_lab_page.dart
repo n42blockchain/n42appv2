@@ -223,28 +223,104 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
         ),
       };
       if (!_current(generation)) return;
-      setState(() {
-        _attempts.remove(account);
-        _receipt = receipt;
-        _receiptOperation = attempt.operation;
-        _receiptPacket = attempt.operation == _Operation.create
-            ? receipt['id'] as String
-            : attempt.packet;
-        _asset.text = receipt['asset'] as String;
-        if (attempt.operation == _Operation.create) {
-          _packet.text = receipt['id'] as String;
-        }
-      });
-      final asset = receipt['asset'] as String;
-      final balance = await widget.client.balance(asset);
-      if (!_current(generation)) return;
-      setState(() => _balance = '$balance base units ($asset)');
+      await _complete(account, generation, attempt, receipt);
     } catch (_) {
       if (!_current(generation)) return;
       setState(() {
         _error = _receipt != null
             ? 'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.'
             : 'No confirmed simulation receipt. Retry the same operation; its inputs and request key are retained.';
+      });
+    } finally {
+      if (_current(generation)) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _complete(
+    String account,
+    int generation,
+    _Attempt attempt,
+    Map<String, dynamic> receipt,
+  ) async {
+    if (!_current(generation)) return;
+    setState(() {
+      _attempts.remove(account);
+      _receipt = receipt;
+      _receiptOperation = attempt.operation;
+      _receiptPacket = attempt.operation == _Operation.create
+          ? receipt['id'] as String
+          : attempt.packet;
+      _asset.text = receipt['asset'] as String;
+      if (attempt.operation == _Operation.create) {
+        _packet.text = receipt['id'] as String;
+      }
+    });
+    final asset = receipt['asset'] as String;
+    final balance = await widget.client.balance(asset);
+    if (_current(generation)) {
+      setState(() => _balance = '$balance base units ($asset)');
+    }
+  }
+
+  bool _matchesAttempt(_Attempt attempt, Map<String, dynamic> receipt) {
+    final id = receipt['id'];
+    return switch (attempt.operation) {
+      _Operation.create =>
+        id is String &&
+            id.startsWith('packet_') &&
+            receipt['asset'] == attempt.asset &&
+            receipt['total'] == attempt.total.toString() &&
+            receipt['slots'] == attempt.slots.toString() &&
+            receipt['expiresAt'] ==
+                (attempt.expiresAt!.millisecondsSinceEpoch ~/ 1000)
+                    .toString() &&
+            (!receipt.containsKey('room') || receipt['room'] == attempt.room),
+      _Operation.claim =>
+        !receipt.containsKey('id') && receipt['packet'] == attempt.packet,
+      // Refund receipts have no packet field in the local protocol. The
+      // authenticated original request key supplies that association.
+      _Operation.refund =>
+        id is String &&
+            id.startsWith('refund_') &&
+            (!receipt.containsKey('packet') ||
+                receipt['packet'] == attempt.packet),
+    };
+  }
+
+  Future<void> _checkOriginal() async {
+    final attempt = _pending;
+    if (_account == null || _busy || attempt == null) return;
+    final account = _account!;
+    final generation = _generation;
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final result = await widget.client.recoverRequest(attempt.key);
+      if (!_current(generation)) return;
+      if (!result.isCompleted) {
+        setState(
+          () => _error =
+              'Original result is unresolved. The saved request and key are unchanged.',
+        );
+        return;
+      }
+      final receipt = result.receipt!;
+      if (!_matchesAttempt(attempt, receipt)) {
+        setState(
+          () => _error =
+              'Original receipt does not match the saved operation. The request remains pending.',
+        );
+        return;
+      }
+      await _complete(account, generation, attempt, receipt);
+    } catch (_) {
+      if (!_current(generation)) return;
+      setState(() {
+        _error = _receipt != null
+            ? 'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.'
+            : 'Original result is not confirmed. The saved request and key are unchanged.';
       });
     } finally {
       if (_current(generation)) setState(() => _busy = false);
@@ -348,6 +424,11 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             ),
             const Text(
               'Only the exact saved request can be retried. Other money actions are locked until a confirmed receipt.',
+            ),
+            OutlinedButton(
+              key: const ValueKey('packet_lookup'),
+              onPressed: _busy ? null : _checkOriginal,
+              child: const Text('Check original result'),
             ),
             FilledButton(
               key: const ValueKey('packet_retry'),
