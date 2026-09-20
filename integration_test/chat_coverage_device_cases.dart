@@ -244,7 +244,6 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
       for (final value in [
         ' https://hs.test ',
         'device_fixture',
-        'fixture@example.org',
         'FixturePass123!',
         'FixturePass123!',
       ].indexed) {
@@ -269,7 +268,7 @@ void registerChatCoverageDeviceCases(DeviceCapture capture) {
           homeserver: 'https://hs.test',
           username: 'device_fixture',
           password: 'FixturePass123!',
-          email: 'fixture@example.org',
+          email: null,
           registrationToken: any(named: 'registrationToken'),
         ),
       ).called(1);
