@@ -65,6 +65,32 @@ final class LocalPaymentClient {
     return _units(result['available']);
   }
 
+  /// Queries an already known local receipt; this is not chain confirmation.
+  Future<Map<String, dynamic>> operation(String id) async {
+    if (!RegExp(r'^(transfer|packet|refund)_[a-f0-9]{64}$').hasMatch(id)) {
+      throw ArgumentError('Invalid local operation identifier');
+    }
+    final receipt = await _request('GET', '/operations/$id');
+    if (receipt['id'] != id ||
+        receipt['asset'] is! String ||
+        (receipt['asset'] as String).isEmpty) {
+      throw const LocalPaymentException('invalid_response');
+    }
+    if (id.startsWith('packet_')) {
+      _units(receipt['total']);
+      _units(receipt['slots']);
+      _units(receipt['expiresAt']);
+    } else {
+      _units(receipt['amount']);
+      if (id.startsWith('transfer_') &&
+          (receipt['recipient'] is! String ||
+              (receipt['recipient'] as String).isEmpty)) {
+        throw const LocalPaymentException('invalid_response');
+      }
+    }
+    return receipt;
+  }
+
   Future<Map<String, dynamic>> transfer({
     required String recipient,
     required String asset,

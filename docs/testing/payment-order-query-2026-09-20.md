@@ -27,3 +27,7 @@ python3 -m unittest discover -s backend/payment-sandbox -p test_server.py -v
 建议英文标题：`feat: query actor-scoped local payment receipts`。
 
 保留仅 loopback、仅 localSimulation 及无真实资金边界。重启持久性针对同一 SQLite 文件；临时启动器退出删除账本后自然无法查询旧操作。Flutter client 接入由主代理独立完成。
+
+## Client integration
+
+LocalPaymentClient.operation validates known operation IDs, receipt identity, asset and integer amounts. Five new client tests plus existing transport/protocol tests passed (19 total). Actual Dart/Python protocol also verifies own receipt lookup and cross-account 404. Targeted analysis has no errors/warnings (one pre-existing style info). Logs: `/tmp/n42-payment-operations-client.log`, `/tmp/n42-payment-order-protocol.log`.

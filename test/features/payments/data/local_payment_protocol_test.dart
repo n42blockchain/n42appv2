@@ -80,6 +80,7 @@ server.server_close()
         key: 'transfer-one',
       );
       expect(replay, first);
+      expect(await client.operation(first['id'] as String), first);
       final packet = await client.createPacket(
         room: 'room',
         asset: 'test-usdc',
@@ -90,6 +91,16 @@ server.server_close()
       );
       expect(await client.balance('test-usdc'), BigInt.from(30));
       client.activateTestAccount('synthetic-test-accountb');
+      await expectLater(
+        client.operation(first['id'] as String),
+        throwsA(
+          isA<LocalPaymentException>().having(
+            (e) => e.code,
+            'code',
+            'not_found',
+          ),
+        ),
+      );
       final claim = await client.claim(
         packet['id'] as String,
         key: 'claim-one',
