@@ -8,7 +8,6 @@ import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/chat_lock_service.dart';
 import '../../../core/services/on_chain_notification_service.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_dimensions.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../core/theme/app_text_styles.dart';
@@ -29,6 +28,7 @@ import '../../blocs/moment/moment_event.dart';
 import '../../blocs/transfer/transfer_bloc.dart';
 import '../chat/chat_lock_page.dart';
 import '../../widgets/common/chat_account_title.dart';
+import '../../widgets/common/chat_navigation_bar.dart';
 import '../chat/chat_page.dart';
 import '../contact/add_friend_page.dart';
 import '../contact/contact_list_page.dart';
@@ -361,6 +361,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
             key: const ValueKey<String>('chat_main_page'),
             backgroundColor: context.pageBackground,
             appBar: AppBar(
+              toolbarHeight: ChatAccountTitle.toolbarHeight(context),
               backgroundColor: bgColor,
               elevation: 0,
               scrolledUnderElevation: 0,
@@ -458,6 +459,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
               children: [
                 // 左侧面板的 AppBar
                 AppBar(
+                  toolbarHeight: ChatAccountTitle.toolbarHeight(context),
                   backgroundColor: bgColor,
                   elevation: 0,
                   scrolledUnderElevation: 0,
@@ -572,197 +574,19 @@ class _ChatMainPageState extends State<ChatMainPage> {
   }
 
   Widget _buildBottomNavigationBar(int totalUnread) {
-    final bgColor = context.surfaceColor;
-    const selectedColor = AppColors.primary;
-    final unselectedColor = context.textSecondary;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.07),
-            blurRadius: 10,
-            offset: const Offset(0, -2),
-          ),
-        ],
-        border: Border(
-          top: BorderSide(
-            color: context.dividerColor.withValues(alpha: 0.6),
-            width: 0.5,
-          ),
-        ),
-      ),
-      child: SafeArea(
-        child: SizedBox(
-          height: 60,
-          child: Builder(
-            builder: (ctx) {
-              final l10n = S.of(ctx);
-              return Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildTabItem(
-                    index: 0,
-                    icon: Icons.chat_bubble_outline,
-                    activeIcon: Icons.chat_bubble,
-                    label: l10n?.commonMessages ?? 'Messages',
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                    badge: totalUnread,
-                  ),
-                  BlocBuilder<ContactBloc, ContactState>(
-                    bloc: _contactBloc,
-                    builder: (context, contactState) =>
-                        BlocBuilder<GroupBloc, GroupState>(
-                          bloc: _groupBloc,
-                          builder: (context, groupState) => _buildTabItem(
-                            index: 1,
-                            icon: Icons.contacts_outlined,
-                            activeIcon: Icons.contacts,
-                            label: l10n?.commonContacts ?? 'Contacts',
-                            selectedColor: selectedColor,
-                            unselectedColor: unselectedColor,
-                            badge:
-                                contactState.friendRequests
-                                    .where((r) => !r.isOutgoing)
-                                    .length +
-                                groupState.invites.length,
-                          ),
-                        ),
-                  ),
-                  _buildTabItem(
-                    index: 2,
-                    icon: Icons.explore_outlined,
-                    activeIcon: Icons.explore,
-                    label: l10n?.commonDiscover ?? 'Discover',
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                  _buildTabItem(
-                    index: 3,
-                    icon: Icons.person_outline,
-                    activeIcon: Icons.person,
-                    label: l10n?.commonMe ?? 'Me',
-                    selectedColor: selectedColor,
-                    unselectedColor: unselectedColor,
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTabItem({
-    required int index,
-    required IconData icon,
-    required IconData activeIcon,
-    required String label,
-    required Color selectedColor,
-    required Color unselectedColor,
-    int badge = 0,
-  }) {
-    final isSelected = _currentIndex == index;
-    final color = isSelected ? selectedColor : unselectedColor;
-
-    return Expanded(
-      child: InkWell(
-        key: ValueKey<String>('chat_tab_$index'),
-        onTap: () => _onTabTapped(index),
-        splashColor: selectedColor.withValues(alpha: 0.10),
-        highlightColor: selectedColor.withValues(alpha: 0.05),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Stack(
-              alignment: Alignment.center,
-              clipBehavior: Clip.none,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  curve: Curves.easeInOut,
-                  width: isSelected ? 44 : 0,
-                  height: isSelected ? 28 : 0,
-                  decoration: BoxDecoration(
-                    color: selectedColor.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Icon(
-                      isSelected ? activeIcon : icon,
-                      color: color,
-                      size: AppDimensions.iconSizeBottomNav,
-                    ),
-                    if (badge > 0)
-                      Positioned(
-                        right: -10,
-                        top: -6,
-                        child: _buildBadge(badge),
-                      ),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 3),
-            // 限制 maxLines 防止长翻译撑破 tab 高度。
-            AnimatedDefaultTextStyle(
-              duration: const Duration(milliseconds: 200),
-              style: AppTextStyles.captionSmall.copyWith(
-                color: color,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-              child: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  /// 构建未读徽章（微信风格：无白边）
-  Widget _buildBadge(int count) {
-    String displayText;
-    if (count > 999) {
-      displayText = '...';
-    } else if (count > 99) {
-      displayText = '99+';
-    } else {
-      displayText = '$count';
-    }
-
-    double minWidth;
-    if (displayText.length > 2) {
-      minWidth = 24;
-    } else if (displayText.length > 1) {
-      minWidth = 20;
-    } else {
-      minWidth = 16;
-    }
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-      constraints: BoxConstraints(minWidth: minWidth, minHeight: 16),
-      decoration: BoxDecoration(
-        color: AppColors.badge,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Center(
-        child: Text(
-          displayText,
-          maxLines: 1,
-          overflow: TextOverflow.clip,
-          style: AppTextStyles.captionSmall.copyWith(
-            color: Colors.white,
-            fontSize: 10,
-            fontWeight: FontWeight.w600,
-            height: 1.0,
-          ),
+    return BlocBuilder<ContactBloc, ContactState>(
+      bloc: _contactBloc,
+      builder: (context, contactState) => BlocBuilder<GroupBloc, GroupState>(
+        bloc: _groupBloc,
+        builder: (context, groupState) => ChatNavigationBar(
+          selectedIndex: _currentIndex,
+          unreadCount: totalUnread,
+          pendingContactCount:
+              contactState.friendRequests
+                  .where((request) => !request.isOutgoing)
+                  .length +
+              groupState.invites.length,
+          onSelected: _onTabTapped,
         ),
       ),
     );

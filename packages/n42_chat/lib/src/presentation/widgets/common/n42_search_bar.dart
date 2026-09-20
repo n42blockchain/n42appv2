@@ -84,7 +84,8 @@ class _N42SearchBarState extends State<N42SearchBar> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? TextEditingController(text: widget.initialValue);
+    _controller =
+        widget.controller ?? TextEditingController(text: widget.initialValue);
     _focusNode = widget.focusNode ?? FocusNode();
     _showClear = _controller.text.isNotEmpty;
 
@@ -93,13 +94,31 @@ class _N42SearchBarState extends State<N42SearchBar> {
   }
 
   @override
+  void didUpdateWidget(covariant N42SearchBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.controller != widget.controller) {
+      _controller.removeListener(_onTextChanged);
+      final value = _controller.value;
+      if (oldWidget.controller == null) _controller.dispose();
+      _controller = widget.controller ?? TextEditingController.fromValue(value);
+      _controller.addListener(_onTextChanged);
+      _showClear = _controller.text.isNotEmpty;
+    }
+    if (oldWidget.focusNode != widget.focusNode) {
+      _focusNode.removeListener(_onFocusChanged);
+      if (oldWidget.focusNode == null) _focusNode.dispose();
+      _focusNode = widget.focusNode ?? FocusNode();
+      _focusNode.addListener(_onFocusChanged);
+      _isFocused = _focusNode.hasFocus;
+    }
+  }
+
+  @override
   void dispose() {
-    if (widget.controller == null) {
-      _controller.dispose();
-    }
-    if (widget.focusNode == null) {
-      _focusNode.dispose();
-    }
+    _controller.removeListener(_onTextChanged);
+    _focusNode.removeListener(_onFocusChanged);
+    if (widget.controller == null) _controller.dispose();
+    if (widget.focusNode == null) _focusNode.dispose();
     super.dispose();
   }
 
@@ -131,45 +150,54 @@ class _N42SearchBarState extends State<N42SearchBar> {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
     final bgColor = widget.backgroundColor ?? AppColors.inputBgOf(isDark);
-    final tertiary = context.textTertiary;
+    final tertiary = context.textSupporting;
 
+    final radius = BorderRadius.circular(AppDimensions.radiusXL);
     return Row(
       children: [
         Expanded(
-          child: GestureDetector(
-            onTap: widget.onTap,
-            child: Container(
-              height: AppDimensions.searchBarHeight,
-              decoration: BoxDecoration(
-                color: bgColor,
-                borderRadius: BorderRadius.circular(
-                  AppDimensions.searchBarHeight / 2,
-                ),
+          child: Material(
+            color: bgColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: radius,
+              side: BorderSide(
+                color: _isFocused
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
+              ),
+            ),
+            clipBehavior: Clip.antiAlias,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(
+                minHeight: AppDimensions.buttonHeight,
               ),
               child: widget.onTap != null
-                  ? _buildReadOnlySearch(tertiary)
+                  ? Semantics(
+                      button: true,
+                      enabled: widget.enabled,
+                      child: InkWell(
+                        onTap: widget.enabled ? widget.onTap : null,
+                        child: Padding(
+                          padding: const EdgeInsets.all(AppDimensions.spacingM),
+                          child: _buildReadOnlySearch(tertiary),
+                        ),
+                      ),
+                    )
                   : _buildEditableSearch(tertiary),
             ),
           ),
         ),
         if (widget.showCancelButton && _isFocused) ...[
-          const SizedBox(width: AppDimensions.spacingM),
-          // 用 InkWell 包以提供 44px 触摸目标 + ripple 反馈
-          InkWell(
-            onTap: _onCancel,
-            borderRadius: BorderRadius.circular(AppDimensions.radiusS),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.spacingS,
-                vertical: AppDimensions.spacingS,
-              ),
-              child: Text(
-                S.of(context)?.commonCancel ?? 'Cancel',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: context.textPrimary,
-                ),
+          const SizedBox(width: AppDimensions.spacingXS),
+          TextButton(
+            onPressed: widget.enabled ? _onCancel : null,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(
+                AppDimensions.buttonHeight,
+                AppDimensions.buttonHeight,
               ),
             ),
+            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
           ),
         ],
       ],
@@ -179,10 +207,14 @@ class _N42SearchBarState extends State<N42SearchBar> {
   Widget _buildReadOnlySearch(Color iconColor) {
     final hint = widget.hintText ?? S.of(context)?.commonSearch ?? 'Search';
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Icon(AppIcons.search, size: 18, color: iconColor),
-        const SizedBox(width: 6),
+        Icon(
+          AppIcons.search,
+          size: AppDimensions.iconSizeSmall,
+          color: iconColor,
+        ),
+        const SizedBox(width: AppDimensions.spacingS),
         // Flexible 防止超长 hintText 撑破搜索栏
         Flexible(
           child: Text(
@@ -205,40 +237,49 @@ class _N42SearchBarState extends State<N42SearchBar> {
       autofocus: widget.autofocus,
       textInputAction: TextInputAction.search,
       onSubmitted: widget.onSubmitted,
-      style: AppTextStyles.bodyMedium.copyWith(
-        color: context.textPrimary,
-      ),
-      cursorColor: AppColors.primary,
+      style: AppTextStyles.bodyMedium.copyWith(color: context.textPrimary),
+      cursorColor: Theme.of(context).colorScheme.primary,
       decoration: InputDecoration(
         hintText: hint,
         hintStyle: AppTextStyles.bodyMedium.copyWith(color: iconColor),
-        prefixIcon: Icon(AppIcons.search, size: 18, color: iconColor),
+        prefixIcon: Icon(
+          AppIcons.search,
+          size: AppDimensions.iconSizeSmall,
+          color: iconColor,
+        ),
         prefixIconConstraints: const BoxConstraints(
-          minWidth: 36,
-          minHeight: 36,
+          minWidth: AppDimensions.buttonHeight,
+          minHeight: AppDimensions.buttonHeight,
         ),
         suffixIcon: _showClear
             ? IconButton(
-                onPressed: _onClear,
-                icon: Icon(Icons.cancel, size: 18, color: iconColor),
+                tooltip: S.of(context)?.commonClear ?? 'Clear',
+                onPressed: widget.enabled ? _onClear : null,
+                icon: Icon(
+                  Icons.cancel,
+                  size: AppDimensions.iconSizeSmall,
+                  color: iconColor,
+                ),
                 padding: EdgeInsets.zero,
                 constraints: const BoxConstraints(
-                  minWidth: 36,
-                  minHeight: 36,
+                  minWidth: AppDimensions.buttonHeight,
+                  minHeight: AppDimensions.buttonHeight,
                 ),
                 splashRadius: 18,
               )
             : null,
         suffixIconConstraints: const BoxConstraints(
-          minWidth: 36,
-          minHeight: 36,
+          minWidth: AppDimensions.buttonHeight,
+          minHeight: AppDimensions.buttonHeight,
         ),
         filled: false,
         border: InputBorder.none,
         enabledBorder: InputBorder.none,
         focusedBorder: InputBorder.none,
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: AppDimensions.spacingM,
+        ),
       ),
     );
   }
@@ -267,4 +308,3 @@ class N42SearchBarContainer extends StatelessWidget {
     );
   }
 }
-

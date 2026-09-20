@@ -5801,6 +5801,17 @@ class SZh extends S {
   String groupMembershipSummary(int joined, int invited) {
     return '$joined 人已加入 · $invited 人待接受';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count 条待处理申请';
+  }
+
+  @override
+  String get chatDraftLabel => '草稿';
+
+  @override
+  String get contactIndexLabel => '联系人索引';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11601,4 +11612,15 @@ class SZhTw extends SZh {
   String groupMembershipSummary(int joined, int invited) {
     return '$joined 人已加入 · $invited 人待接受';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count 則待處理申請';
+  }
+
+  @override
+  String get chatDraftLabel => '草稿';
+
+  @override
+  String get contactIndexLabel => '聯絡人索引';
 }

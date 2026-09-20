@@ -2790,11 +2790,11 @@
   "chatMessageRead": "Lida",
   "chatMessageFailed": "Não enviada. Toca para tentar novamente.",
   "chatMessageUnavailable": "Mensagem indisponível neste dispositivo. Toca para ver as opções de recuperação.",
-  "contactStarredFriends": "Starred friends",
-  "chatRecipientKeysMissing": "This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.",
-  "chatSwitchForMessaging": "Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.",
-  "aiServiceUnavailable": "AI summaries are currently unavailable. Please try again after service access is restored.",
-  "aiSummarizeMessages": "Summarize {count} recent messages",
+  "contactStarredFriends": "Contactos favoritos",
+  "chatRecipientKeysMissing": "Este contacto não tem uma sessão encriptada disponível. Peça-lhe para iniciar sessão e abrir a aplicação e tente novamente. Para mudar de conta, use «Mudar de conta» em vez de terminar sessão.",
+  "chatSwitchForMessaging": "Quer mudar de conta? Use «Mudar de conta» para manter as mensagens e sessões seguras. Terminar sessão revoga este dispositivo e pode impedir a leitura de mensagens encriptadas recebidas.",
+  "aiServiceUnavailable": "Os resumos de IA estão indisponíveis. Tente novamente quando o acesso ao serviço for restabelecido.",
+  "aiSummarizeMessages": "Resumir {count} mensagens recentes",
   "@aiSummarizeMessages": {
     "placeholders": {
       "count": {
@@ -2802,7 +2802,7 @@
       }
     }
   },
-  "groupMembershipSummary": "{joined} joined · {invited} invited",
+  "groupMembershipSummary": "{joined} participantes · {invited} convidados",
   "@groupMembershipSummary": {
     "placeholders": {
       "joined": {
@@ -2812,5 +2812,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} pedidos pendentes",
+  "chatDraftLabel": "Rascunho",
+  "contactIndexLabel": "Índice de contactos"
 }

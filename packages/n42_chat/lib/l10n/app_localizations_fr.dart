@@ -5994,27 +5994,38 @@ class SFr extends S {
       'Message indisponible sur cet appareil. Touchez pour voir les options de récupération.';
 
   @override
-  String get contactStarredFriends => 'Starred friends';
+  String get contactStarredFriends => 'Contacts favoris';
 
   @override
   String get chatRecipientKeysMissing =>
-      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+      'Ce contact n’a aucune session chiffrée disponible. Demandez-lui de se connecter et d’ouvrir l’application, puis réessayez. Pour changer de compte, utilisez « Changer de compte » sans vous déconnecter.';
 
   @override
   String get chatSwitchForMessaging =>
-      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+      'Vous changez de compte ? Utilisez « Changer de compte » pour conserver vos messages et sessions sécurisées. La déconnexion révoque cet appareil et peut rendre les messages chiffrés entrants illisibles.';
 
   @override
   String get aiServiceUnavailable =>
-      'AI summaries are currently unavailable. Please try again after service access is restored.';
+      'Les résumés IA sont actuellement indisponibles. Réessayez lorsque l’accès au service sera rétabli.';
 
   @override
   String aiSummarizeMessages(int count) {
-    return 'Summarize $count recent messages';
+    return 'Résumer les $count derniers messages';
   }
 
   @override
   String groupMembershipSummary(int joined, int invited) {
-    return '$joined joined · $invited invited';
+    return '$joined ont rejoint · $invited invités';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count demandes en attente';
+  }
+
+  @override
+  String get chatDraftLabel => 'Brouillon';
+
+  @override
+  String get contactIndexLabel => 'Index des contacts';
 }

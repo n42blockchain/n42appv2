@@ -2827,5 +2827,15 @@
         "type": "int"
       }
     }
+  },
+  "contactPendingCount": "{count} pending requests",
+  "chatDraftLabel": "Draft",
+  "contactIndexLabel": "Contact index",
+  "@contactPendingCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

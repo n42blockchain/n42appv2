@@ -2812,5 +2812,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} pending requests",
+  "chatDraftLabel": "Draft",
+  "contactIndexLabel": "Contact index"
 }

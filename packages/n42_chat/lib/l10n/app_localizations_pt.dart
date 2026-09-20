@@ -5961,29 +5961,40 @@ class SPt extends S {
       'Mensagem indisponível neste dispositivo. Toca para ver as opções de recuperação.';
 
   @override
-  String get contactStarredFriends => 'Starred friends';
+  String get contactStarredFriends => 'Contactos favoritos';
 
   @override
   String get chatRecipientKeysMissing =>
-      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+      'Este contacto não tem uma sessão encriptada disponível. Peça-lhe para iniciar sessão e abrir a aplicação e tente novamente. Para mudar de conta, use «Mudar de conta» em vez de terminar sessão.';
 
   @override
   String get chatSwitchForMessaging =>
-      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+      'Quer mudar de conta? Use «Mudar de conta» para manter as mensagens e sessões seguras. Terminar sessão revoga este dispositivo e pode impedir a leitura de mensagens encriptadas recebidas.';
 
   @override
   String get aiServiceUnavailable =>
-      'AI summaries are currently unavailable. Please try again after service access is restored.';
+      'Os resumos de IA estão indisponíveis. Tente novamente quando o acesso ao serviço for restabelecido.';
 
   @override
   String aiSummarizeMessages(int count) {
-    return 'Summarize $count recent messages';
+    return 'Resumir $count mensagens recentes';
   }
 
   @override
   String groupMembershipSummary(int joined, int invited) {
-    return '$joined joined · $invited invited';
+    return '$joined participantes · $invited convidados';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count pedidos pendentes';
+  }
+
+  @override
+  String get chatDraftLabel => 'Rascunho';
+
+  @override
+  String get contactIndexLabel => 'Índice de contactos';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11943,27 +11954,38 @@ class SPtBr extends SPt {
       'Mensagem indisponível neste dispositivo. Toque para ver as opções de recuperação.';
 
   @override
-  String get contactStarredFriends => 'Starred friends';
+  String get contactStarredFriends => 'Contatos favoritos';
 
   @override
   String get chatRecipientKeysMissing =>
-      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+      'Este contato não tem uma sessão criptografada disponível. Peça que entre na conta e abra o aplicativo e tente novamente. Para trocar de conta, use «Trocar de conta» em vez de sair.';
 
   @override
   String get chatSwitchForMessaging =>
-      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+      'Quer trocar de conta? Use «Trocar de conta» para manter as mensagens e sessões seguras. Sair revoga este dispositivo e pode impedir a leitura de novas mensagens criptografadas.';
 
   @override
   String get aiServiceUnavailable =>
-      'AI summaries are currently unavailable. Please try again after service access is restored.';
+      'Os resumos de IA estão indisponíveis. Tente novamente quando o acesso ao serviço for restabelecido.';
 
   @override
   String aiSummarizeMessages(int count) {
-    return 'Summarize $count recent messages';
+    return 'Resumir $count mensagens recentes';
   }
 
   @override
   String groupMembershipSummary(int joined, int invited) {
-    return '$joined joined · $invited invited';
+    return '$joined participantes · $invited convidados';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count solicitações pendentes';
+  }
+
+  @override
+  String get chatDraftLabel => 'Rascunho';
+
+  @override
+  String get contactIndexLabel => 'Índice de contatos';
 }

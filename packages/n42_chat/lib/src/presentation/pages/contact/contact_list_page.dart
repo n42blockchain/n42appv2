@@ -1,3 +1,4 @@
+import '../../widgets/common/contact_index_bar.dart';
 import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
 import '../../widgets/common/friend_request_card.dart';
 import '../../../core/theme/app_dimensions.dart';
@@ -52,6 +53,7 @@ class ContactListPage extends StatefulWidget {
 class _ContactListPageState extends State<ContactListPage> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _searchController = TextEditingController();
+  final FocusNode _searchFocusNode = FocusNode();
   final Map<String, GlobalKey> _letterKeys = {};
 
   late final GroupBloc _groupBloc;
@@ -68,6 +70,7 @@ class _ContactListPageState extends State<ContactListPage> {
   void dispose() {
     _scrollController.dispose();
     _searchController.dispose();
+    _searchFocusNode.dispose();
     if (widget.groupBloc == null) _groupBloc.close();
     super.dispose();
   }
@@ -183,56 +186,16 @@ class _ContactListPageState extends State<ContactListPage> {
   }
 
   Widget _buildSearchBar(bool isDark) {
-    return Container(
-      color: context.surfaceColor,
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Container(
-        constraints: const BoxConstraints(
-          minHeight: AppDimensions.buttonHeight,
-        ),
-        decoration: BoxDecoration(
-          color: AppColors.inputBgOf(isDark),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: TextField(
-          controller: _searchController,
-          onChanged: (query) {
-            setState(() {});
-            _onSearchChanged(query);
-          },
-          cursorColor: AppColors.primary,
-          style: TextStyle(
-            fontSize: 15,
-            height: 1.3,
-            color: context.textPrimary,
-          ),
-          decoration: InputDecoration(
-            hintText: S.of(context)?.commonSearch ?? 'Search',
-            hintStyle: TextStyle(
-              fontSize: 15,
-              height: 1.3,
-              color: context.textTertiary,
-            ),
-            suffixIcon: _searchController.text.isEmpty
-                ? null
-                : IconButton(
-                    tooltip: S.of(context)?.commonClear ?? 'Clear',
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      _searchController.clear();
-                      setState(() {});
-                      _onSearchChanged('');
-                    },
-                  ),
-            prefixIcon: Icon(
-              AppIcons.search,
-              size: 20,
-              color: context.textTertiary,
-            ),
-            border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(vertical: 8),
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppDimensions.spacing,
+        vertical: AppDimensions.spacingS,
+      ),
+      child: N42SearchBar(
+        controller: _searchController,
+        focusNode: _searchFocusNode,
+        showCancelButton: false,
+        onChanged: _onSearchChanged,
       ),
     );
   }
@@ -318,10 +281,16 @@ class _ContactListPageState extends State<ContactListPage> {
                     final contacts = state.groupedContacts[letter]!;
                     return Column(
                       children: [
-                        ContactTile(
-                          contact: contacts[index],
-                          onTap: () => _onContactTap(contacts[index]),
-                          onLongPress: () => _showContactMenu(contacts[index]),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            right: AppDimensions.buttonHeight,
+                          ),
+                          child: ContactTile(
+                            contact: contacts[index],
+                            onTap: () => _onContactTap(contacts[index]),
+                            onLongPress: () =>
+                                _showContactMenu(contacts[index]),
+                          ),
                         ),
                         if (index < contacts.length - 1)
                           Padding(
@@ -347,20 +316,18 @@ class _ContactListPageState extends State<ContactListPage> {
 
         // 右侧字母索引条
         Positioned(
-          right: 2,
-          width: 20,
+          right: 0,
+          width: AppDimensions.buttonHeight,
           top: 0,
-          bottom: 50,
+          bottom: AppDimensions.spacingXL,
           child: Center(
-            child: SizedBox(
-              width: 20,
-              height: fullIndexLetters.length * 16.0 + 8,
-              child: _WeChatIndexBar(
+            child: SizedBox.expand(
+              child: ContactIndexBar(
                 letters: fullIndexLetters,
                 onLetterTap: (letter) {
                   if (letter == '🔍') {
                     _searchController.clear();
-                    FocusScope.of(context).unfocus();
+                    _searchFocusNode.requestFocus();
                   } else if (letter == '☆' && !_letterKeys.containsKey('☆')) {
                     // 滚动到顶部
                     _scrollController.animateTo(
@@ -457,6 +424,7 @@ class _ContactListPageState extends State<ContactListPage> {
 
     return Container(
       color: surfaceColor,
+      padding: const EdgeInsets.only(right: AppDimensions.buttonHeight),
       child: Column(
         children: [
           // 新的朋友
@@ -1391,150 +1359,6 @@ class _EnterpriseContactPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-/// 微信风格字母索引条
-class _WeChatIndexBar extends StatefulWidget {
-  final List<String> letters;
-  final ValueChanged<String> onLetterTap;
-
-  const _WeChatIndexBar({required this.letters, required this.onLetterTap});
-
-  @override
-  State<_WeChatIndexBar> createState() => _WeChatIndexBarState();
-}
-
-class _WeChatIndexBarState extends State<_WeChatIndexBar> {
-  String? _currentLetter;
-  bool _isDragging = false;
-
-  void _onVerticalDragStart(DragStartDetails details) {
-    setState(() {
-      _isDragging = true;
-    });
-    _updateLetter(details.localPosition);
-  }
-
-  void _onVerticalDragUpdate(DragUpdateDetails details) {
-    _updateLetter(details.localPosition);
-  }
-
-  void _onVerticalDragEnd(DragEndDetails details) {
-    setState(() {
-      _isDragging = false;
-      _currentLetter = null;
-    });
-  }
-
-  void _updateLetter(Offset position) {
-    if (widget.letters.isEmpty) return;
-
-    final box = context.findRenderObject() as RenderBox;
-    final itemHeight = (box.size.height - 8) / widget.letters.length;
-    if (itemHeight <= 0) return;
-    final index = ((position.dy - 4) / itemHeight).floor();
-
-    if (index >= 0 && index < widget.letters.length) {
-      final letter = widget.letters[index];
-      if (letter != _currentLetter) {
-        setState(() {
-          _currentLetter = letter;
-        });
-        widget.onLetterTap(letter);
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final isDark = context.isDarkMode;
-
-    if (widget.letters.isEmpty) return const SizedBox.shrink();
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // 字母指示器气泡
-        if (_isDragging && _currentLetter != null)
-          Positioned(
-            right: 40,
-            top: 0,
-            bottom: 0,
-            child: Center(
-              child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                alignment: Alignment.center,
-                child: Text(
-                  _currentLetter!,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-        // 索引条
-        GestureDetector(
-          onVerticalDragStart: _onVerticalDragStart,
-          onVerticalDragUpdate: _onVerticalDragUpdate,
-          onVerticalDragEnd: _onVerticalDragEnd,
-          child: Container(
-            width: 20,
-            padding: const EdgeInsets.symmetric(vertical: 4),
-            decoration: BoxDecoration(
-              color: _isDragging
-                  ? (isDark
-                        ? Colors.white.withValues(alpha: 0.1)
-                        : Colors.black.withValues(alpha: 0.05))
-                  : Colors.transparent,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: widget.letters.map((letter) {
-                final isActive = letter == _currentLetter;
-                return Expanded(
-                  child: GestureDetector(
-                    onTap: () => widget.onLetterTap(letter),
-                    child: Container(
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: isActive
-                            ? AppColors.primary
-                            : Colors.transparent,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        letter,
-                        textScaler: TextScaler.noScaling,
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: isActive
-                              ? FontWeight.bold
-                              : FontWeight.w500,
-                          color: isActive
-                              ? Colors.white
-                              : context.textSecondary,
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 // ==================== 子页面组件 ====================

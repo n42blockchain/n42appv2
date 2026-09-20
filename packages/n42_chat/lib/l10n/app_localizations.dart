@@ -10996,6 +10996,24 @@ abstract class S {
   /// In en, this message translates to:
   /// **'{joined} joined · {invited} invited'**
   String groupMembershipSummary(int joined, int invited);
+
+  /// No description provided for @contactPendingCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} pending requests'**
+  String contactPendingCount(int count);
+
+  /// No description provided for @chatDraftLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Draft'**
+  String get chatDraftLabel;
+
+  /// No description provided for @contactIndexLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact index'**
+  String get contactIndexLabel;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

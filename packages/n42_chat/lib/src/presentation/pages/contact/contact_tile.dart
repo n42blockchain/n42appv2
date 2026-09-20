@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../domain/entities/contact_entity.dart';
 import '../../widgets/common/common_widgets.dart';
 
@@ -30,7 +32,10 @@ class ContactTile extends StatelessWidget {
         onTap: onTap,
         onLongPress: onLongPress,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.spacing,
+            vertical: AppDimensions.spacingM,
+          ),
           child: Row(
             children: [
               // 头像
@@ -39,7 +44,7 @@ class ContactTile extends StatelessWidget {
                   N42Avatar(
                     imageUrl: contact.avatarUrl,
                     name: contact.effectiveDisplayName,
-                    size: 44,
+                    size: AppDimensions.avatarSizeConversation,
                   ),
                   // 在线状态指示器
                   if (showOnlineStatus && contact.isOnline)
@@ -62,7 +67,7 @@ class ContactTile extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.spacingM),
 
               // 名称和状态
               Expanded(
@@ -72,8 +77,7 @@ class ContactTile extends StatelessWidget {
                     // 显示名称
                     Text(
                       contact.effectiveDisplayName,
-                      style: TextStyle(
-                        fontSize: 16,
+                      style: AppTextStyles.bodyLarge.copyWith(
                         fontWeight: FontWeight.w500,
                         color: context.textPrimary,
                       ),
@@ -85,14 +89,13 @@ class ContactTile extends StatelessWidget {
                     if (contact.statusMessage?.isNotEmpty == true ||
                         (!contact.isOnline &&
                             contact.formattedLastActive.isNotEmpty))
-                      const SizedBox(height: 4),
+                      const SizedBox(height: AppDimensions.spacingXS),
 
                     if (contact.statusMessage?.isNotEmpty == true)
                       Text(
                         contact.statusMessage!,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: context.textSecondary,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: context.textSupporting,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -101,9 +104,8 @@ class ContactTile extends StatelessWidget {
                         contact.formattedLastActive.isNotEmpty)
                       Text(
                         contact.formattedLastActive,
-                        style: TextStyle(
-                          fontSize: 13,
-                          color: context.textSecondary,
+                        style: AppTextStyles.bodySmall.copyWith(
+                          color: context.textSupporting,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -114,8 +116,12 @@ class ContactTile extends StatelessWidget {
 
               if (contact.isStarred)
                 const Padding(
-                  padding: EdgeInsets.only(right: 8),
-                  child: Icon(Icons.star, size: 18, color: Colors.orange),
+                  padding: EdgeInsets.only(right: AppDimensions.spacingS),
+                  child: Icon(
+                    Icons.star,
+                    size: AppDimensions.iconSizeSmall,
+                    color: AppColors.warning,
+                  ),
                 ),
               // 右侧附加内容
               ?trailing,
@@ -153,19 +159,24 @@ class SimpleContactTile extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppDimensions.spacing,
+            vertical: AppDimensions.spacingM,
+          ),
           child: Row(
             children: [
               N42Avatar(
                 imageUrl: contact.avatarUrl,
                 name: contact.effectiveDisplayName,
-                size: 40,
+                size: AppDimensions.avatarSizeChat,
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: AppDimensions.spacingM),
               Expanded(
                 child: Text(
                   contact.effectiveDisplayName,
-                  style: TextStyle(fontSize: 15, color: context.textPrimary),
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    color: context.textPrimary,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),

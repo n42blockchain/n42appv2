@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_text_styles.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/services/remark_service.dart';
@@ -80,9 +83,15 @@ class ConversationTile extends StatelessWidget {
     final isDark = context.isDarkMode;
     final Color bgColor;
     if (isSelected) {
-      bgColor = isDark ? const Color(0xFF2A3A50) : const Color(0xFFE3EFFD);
+      bgColor = Color.alphaBlend(
+        Theme.of(context).colorScheme.primary.withValues(alpha: .12),
+        context.surfaceColor,
+      );
     } else if (conversation.isPinned) {
-      bgColor = isDark ? const Color(0xFF252525) : const Color(0xFFF5F5F5);
+      bgColor = Color.alphaBlend(
+        Theme.of(context).colorScheme.primary.withValues(alpha: .04),
+        context.surfaceColor,
+      );
     } else {
       bgColor = context.surfaceColor;
     }
@@ -105,13 +114,18 @@ class ConversationTile extends StatelessWidget {
                 onLongPress: onLongPress,
                 child: ExcludeSemantics(
                   child: Container(
-                    height: 76,
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    constraints: const BoxConstraints(
+                      minHeight: AppDimensions.conversationItemHeight,
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppDimensions.spacing,
+                      vertical: AppDimensions.spacingM,
+                    ),
                     child: Row(
                       children: [
                         // 头像（带未读红点）
                         _buildAvatar(isDark),
-                        const SizedBox(width: 14),
+                        const SizedBox(width: AppDimensions.spacingM),
 
                         // 内容
                         Expanded(child: _buildContent(context, isDark)),
@@ -147,16 +161,16 @@ class ConversationTile extends StatelessWidget {
         key: ValueKey('group_${conversation.id}_$avatarKey'),
         memberAvatars: conversation.memberAvatarUrls!,
         memberNames: conversation.memberNames,
-        size: 50,
-        borderRadius: 12,
+        size: AppDimensions.avatarSizeConversation,
+        borderRadius: AppDimensions.radiusL,
       );
     } else {
       // 私聊或两人群聊：使用普通头像
       avatarWidget = N42Avatar(
         imageUrl: conversation.avatarUrl,
         name: conversation.name,
-        size: 50,
-        borderRadius: 12,
+        size: AppDimensions.avatarSizeConversation,
+        borderRadius: AppDimensions.radiusL,
       );
     }
 
@@ -268,10 +282,10 @@ class ConversationTile extends StatelessWidget {
                       displayName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 16,
-                        height: 1.3,
-                        fontWeight: FontWeight.w500,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: conversation.unreadCount > 0
+                            ? FontWeight.w600
+                            : FontWeight.w500,
                         color: context.textPrimary,
                       ),
                     ),
@@ -291,7 +305,7 @@ class ConversationTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 12,
                   height: 1.3,
-                  color: AppColors.textTertiaryOf(isDark),
+                  color: context.textSupporting,
                 ),
               ),
           ],
@@ -304,14 +318,12 @@ class ConversationTile extends StatelessWidget {
           children: [
             // 草稿标识
             if (conversation.draft != null && conversation.draft!.isNotEmpty)
-              const Text(
-                '[草稿] ',
+              Text(
+                '${S.of(context)?.chatDraftLabel ?? 'Draft'} ',
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: TextStyle(
-                  fontSize: 13,
-                  height: 1.3,
-                  color: AppColors.error,
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: Theme.of(context).colorScheme.error,
                 ),
               ),
 
@@ -324,7 +336,7 @@ class ConversationTile extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 13,
                   height: 1.3,
-                  color: AppColors.textSecondaryOf(isDark),
+                  color: context.textSupporting,
                 ),
               ),
             ),

@@ -62,10 +62,7 @@ class N42EmptyState extends StatelessWidget {
   }
 
   /// 无搜索结果
-  factory N42EmptyState.noSearchResult({
-    String? title,
-    String? description,
-  }) {
+  factory N42EmptyState.noSearchResult({String? title, String? description}) {
     return N42EmptyState(
       icon: Icons.search_off,
       title: title ?? 'No search results',
@@ -108,49 +105,62 @@ class N42EmptyState extends StatelessWidget {
     final textPrimary = context.textPrimary;
     final textSecondary = context.textSecondary;
 
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimensions.spacingXXL),
-        // 限宽防止文案过长在大屏拉成单行 / 过短居中失衡
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 320),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _buildIcon(context),
-              if (title != null) ...[
-                const SizedBox(height: AppDimensions.spacing),
-                Text(
-                  title!,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.headlineMedium.copyWith(
-                    color: textPrimary,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: constraints.hasBoundedHeight
+                  ? constraints.maxHeight
+                  : 0,
+            ),
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.spacingXXL),
+                // 限宽防止文案过长在大屏拉成单行 / 过短居中失衡
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 320),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildIcon(context),
+                      if (title != null) ...[
+                        const SizedBox(height: AppDimensions.spacing),
+                        Text(
+                          title!,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.headlineMedium.copyWith(
+                            color: textPrimary,
+                          ),
+                        ),
+                      ],
+                      if (description != null) ...[
+                        const SizedBox(height: AppDimensions.spacingS),
+                        Text(
+                          description!,
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: textSecondary,
+                          ),
+                        ),
+                      ],
+                      if (buttonText != null && onButtonPressed != null) ...[
+                        const SizedBox(height: AppDimensions.spacingXL),
+                        N42Button.primary(
+                          text: buttonText!,
+                          onPressed: onButtonPressed,
+                          expanded: false,
+                          size: N42ButtonSize.medium,
+                        ),
+                      ],
+                    ],
                   ),
                 ),
-              ],
-              if (description != null) ...[
-                const SizedBox(height: AppDimensions.spacingS),
-                Text(
-                  description!,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: textSecondary,
-                  ),
-                ),
-              ],
-              if (buttonText != null && onButtonPressed != null) ...[
-                const SizedBox(height: AppDimensions.spacingXL),
-                N42Button.primary(
-                  text: buttonText!,
-                  onPressed: onButtonPressed,
-                  expanded: false,
-                  size: N42ButtonSize.medium,
-                ),
-              ],
-            ],
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -180,11 +190,7 @@ class N42Loading extends StatelessWidget {
   /// 大小
   final double size;
 
-  const N42Loading({
-    super.key,
-    this.message,
-    this.size = 32,
-  });
+  const N42Loading({super.key, this.message, this.size = 32});
 
   @override
   Widget build(BuildContext context) {
@@ -211,4 +217,3 @@ class N42Loading extends StatelessWidget {
     );
   }
 }
-

@@ -31,6 +31,10 @@ extension ContextExtension on BuildContext {
       isDarkMode ? AppColors.textPrimaryDark : AppColors.textPrimary;
 
   /// 次文字颜色（自动深浅）
+  /// Supporting text remains readable on both light and dark surfaces.
+  Color get textSupporting =>
+      Color.alphaBlend(textPrimary.withValues(alpha: .72), surfaceColor);
+
   Color get textSecondary =>
       isDarkMode ? AppColors.textSecondaryDark : AppColors.textSecondary;
 
@@ -158,13 +162,23 @@ extension ContextExtension on BuildContext {
   }
 
   /// 显示错误SnackBar
-  void showErrorSnackBar(String message, {Duration duration = const Duration(seconds: 3)}) {
+  void showErrorSnackBar(
+    String message, {
+    Duration duration = const Duration(seconds: 3),
+  }) {
     showSnackBar(message, duration: duration, backgroundColor: AppColors.error);
   }
 
   /// 显示成功SnackBar
-  void showSuccessSnackBar(String message, {Duration duration = const Duration(seconds: 2)}) {
-    showSnackBar(message, duration: duration, backgroundColor: AppColors.success);
+  void showSuccessSnackBar(
+    String message, {
+    Duration duration = const Duration(seconds: 2),
+  }) {
+    showSnackBar(
+      message,
+      duration: duration,
+      backgroundColor: AppColors.success,
+    );
   }
 
   /// 清除所有 SnackBar

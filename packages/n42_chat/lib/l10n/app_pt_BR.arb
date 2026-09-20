@@ -2790,11 +2790,11 @@
   "chatMessageRead": "Lida",
   "chatMessageFailed": "Não enviada. Toque para tentar novamente.",
   "chatMessageUnavailable": "Mensagem indisponível neste dispositivo. Toque para ver as opções de recuperação.",
-  "contactStarredFriends": "Starred friends",
-  "chatRecipientKeysMissing": "This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.",
-  "chatSwitchForMessaging": "Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.",
-  "aiServiceUnavailable": "AI summaries are currently unavailable. Please try again after service access is restored.",
-  "aiSummarizeMessages": "Summarize {count} recent messages",
+  "contactStarredFriends": "Contatos favoritos",
+  "chatRecipientKeysMissing": "Este contato não tem uma sessão criptografada disponível. Peça que entre na conta e abra o aplicativo e tente novamente. Para trocar de conta, use «Trocar de conta» em vez de sair.",
+  "chatSwitchForMessaging": "Quer trocar de conta? Use «Trocar de conta» para manter as mensagens e sessões seguras. Sair revoga este dispositivo e pode impedir a leitura de novas mensagens criptografadas.",
+  "aiServiceUnavailable": "Os resumos de IA estão indisponíveis. Tente novamente quando o acesso ao serviço for restabelecido.",
+  "aiSummarizeMessages": "Resumir {count} mensagens recentes",
   "@aiSummarizeMessages": {
     "placeholders": {
       "count": {
@@ -2802,7 +2802,7 @@
       }
     }
   },
-  "groupMembershipSummary": "{joined} joined · {invited} invited",
+  "groupMembershipSummary": "{joined} participantes · {invited} convidados",
   "@groupMembershipSummary": {
     "placeholders": {
       "joined": {
@@ -2812,5 +2812,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} solicitações pendentes",
+  "chatDraftLabel": "Rascunho",
+  "contactIndexLabel": "Índice de contatos"
 }

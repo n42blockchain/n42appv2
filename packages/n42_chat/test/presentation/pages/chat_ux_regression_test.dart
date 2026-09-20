@@ -346,8 +346,13 @@ void main() {
         app(
           BlocProvider<AuthBloc>.value(
             value: auth,
-            child: Scaffold(
-              appBar: AppBar(title: const ChatAccountTitle(title: 'Messages')),
+            child: Builder(
+              builder: (context) => Scaffold(
+                appBar: AppBar(
+                  toolbarHeight: ChatAccountTitle.toolbarHeight(context),
+                  title: const ChatAccountTitle(title: 'Messages'),
+                ),
+              ),
             ),
           ),
         ),

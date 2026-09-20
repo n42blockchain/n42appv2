@@ -1,3 +1,5 @@
+import '../../../packages/n42_chat/test/presentation/pages/chat_ui_completion_test.dart'
+    as completion;
 import 'package:flutter_test/flutter_test.dart';
 import '../../../packages/n42_chat/test/presentation/pages/chat_ux_regression_test.dart'
     as ux;
@@ -13,6 +15,7 @@ import '../../../packages/n42_chat/test/unit/datasources/ai_proxy_auth_test.dart
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  group('Chat UI completion', completion.main);
   group('Chat interaction flows', ux.main);
   group('Chat attachment access', media.main);
   group('Contact search and refresh', contacts.main);

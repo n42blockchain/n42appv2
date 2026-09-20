@@ -569,48 +569,15 @@ class _ConversationListPageState extends State<ConversationListPage> {
   }
 
   Widget _buildSearchBar(bool isDark) {
-    final hintColor = context.textTertiary;
-    return Container(
-      color: context.surfaceColor,
+    return Padding(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppDimensions.listItemPadding,
+        horizontal: AppDimensions.spacing,
         vertical: AppDimensions.spacingS,
       ),
-      child: Semantics(
+      child: N42SearchBar(
         key: const ValueKey<String>('chat_global_search_open'),
-        button: true,
-        label: S.of(context)?.commonSearch ?? 'Search',
-        child: GestureDetector(
-          onTap: widget.onSearchTap ?? _navigateToSearch,
-          child: Container(
-            height: AppDimensions.searchBarHeight + 4,
-            decoration: BoxDecoration(
-              color: AppColors.inputBgOf(isDark),
-              borderRadius: BorderRadius.circular(
-                (AppDimensions.searchBarHeight + 4) / 2,
-              ),
-              border: Border.all(
-                color: context.dividerColor.withValues(alpha: 0.6),
-                width: 0.5,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(AppIcons.search, size: 18, color: hintColor),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: Text(
-                    S.of(context)?.commonSearch ?? 'Search',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.bodyMedium.copyWith(color: hintColor),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+        showCancelButton: false,
+        onTap: widget.onSearchTap ?? _navigateToSearch,
       ),
     );
   }

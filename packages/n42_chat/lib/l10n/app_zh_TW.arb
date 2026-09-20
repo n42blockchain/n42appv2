@@ -2200,5 +2200,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} 則待處理申請",
+  "chatDraftLabel": "草稿",
+  "contactIndexLabel": "聯絡人索引"
 }

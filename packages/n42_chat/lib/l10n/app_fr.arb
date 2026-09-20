@@ -2790,11 +2790,11 @@
   "chatMessageRead": "Lu",
   "chatMessageFailed": "Non envoyé. Touchez pour réessayer.",
   "chatMessageUnavailable": "Message indisponible sur cet appareil. Touchez pour voir les options de récupération.",
-  "contactStarredFriends": "Starred friends",
-  "chatRecipientKeysMissing": "This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.",
-  "chatSwitchForMessaging": "Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.",
-  "aiServiceUnavailable": "AI summaries are currently unavailable. Please try again after service access is restored.",
-  "aiSummarizeMessages": "Summarize {count} recent messages",
+  "contactStarredFriends": "Contacts favoris",
+  "chatRecipientKeysMissing": "Ce contact n’a aucune session chiffrée disponible. Demandez-lui de se connecter et d’ouvrir l’application, puis réessayez. Pour changer de compte, utilisez « Changer de compte » sans vous déconnecter.",
+  "chatSwitchForMessaging": "Vous changez de compte ? Utilisez « Changer de compte » pour conserver vos messages et sessions sécurisées. La déconnexion révoque cet appareil et peut rendre les messages chiffrés entrants illisibles.",
+  "aiServiceUnavailable": "Les résumés IA sont actuellement indisponibles. Réessayez lorsque l’accès au service sera rétabli.",
+  "aiSummarizeMessages": "Résumer les {count} derniers messages",
   "@aiSummarizeMessages": {
     "placeholders": {
       "count": {
@@ -2802,7 +2802,7 @@
       }
     }
   },
-  "groupMembershipSummary": "{joined} joined · {invited} invited",
+  "groupMembershipSummary": "{joined} ont rejoint · {invited} invités",
   "@groupMembershipSummary": {
     "placeholders": {
       "joined": {
@@ -2812,5 +2812,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} demandes en attente",
+  "chatDraftLabel": "Brouillon",
+  "contactIndexLabel": "Index des contacts"
 }

@@ -5981,4 +5981,15 @@ class SRu extends S {
   String groupMembershipSummary(int joined, int invited) {
     return '$joined joined · $invited invited';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count pending requests';
+  }
+
+  @override
+  String get chatDraftLabel => 'Draft';
+
+  @override
+  String get contactIndexLabel => 'Contact index';
 }

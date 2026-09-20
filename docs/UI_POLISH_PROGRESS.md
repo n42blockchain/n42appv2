@@ -78,3 +78,7 @@
 - `like_burst` 飘心 1400ms、动画几何魔数：装饰性，豁免。
 
 **验证**：`flutter analyze lib/features/live lib/core/design_system` → No issues；`flutter test test/features/live` → 11/11；`dart format` 已过。**未做**真机/双主题人工验证（需后续）。
+
+## Chat / contacts / account switching — 2026-09-20
+
+The approved three-area UI plan is implemented, including shared search/navigation, full accessible contact index, 48-point composer actions, dynamic text layouts and explicit account cards/errors. See [completion report and light/dark previews](testing/chat-ui-completion-2026-09-20/README.md) for implementation and test evidence. Native feedback-device acceptance remains pending.

@@ -5976,27 +5976,38 @@ class SDe extends S {
       'Nachricht auf diesem Gerät nicht verfügbar. Tippe hier für Wiederherstellungsoptionen.';
 
   @override
-  String get contactStarredFriends => 'Starred friends';
+  String get contactStarredFriends => 'Markierte Kontakte';
 
   @override
   String get chatRecipientKeysMissing =>
-      'This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.';
+      'Dieser Kontakt hat keine verfügbare verschlüsselte Sitzung. Bitte ihn, sich anzumelden und die App zu öffnen, und versuche es erneut. Nutze beim Kontowechsel „Konto wechseln“, statt dich abzumelden.';
 
   @override
   String get chatSwitchForMessaging =>
-      'Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.';
+      'Konto wechseln? Mit „Konto wechseln“ bleiben Nachrichten und sichere Sitzungen erhalten. Beim Abmelden wird dieses Gerät abgemeldet; eingehende verschlüsselte Nachrichten können dadurch unlesbar werden.';
 
   @override
   String get aiServiceUnavailable =>
-      'AI summaries are currently unavailable. Please try again after service access is restored.';
+      'KI-Zusammenfassungen sind derzeit nicht verfügbar. Versuche es erneut, sobald der Dienst wieder erreichbar ist.';
 
   @override
   String aiSummarizeMessages(int count) {
-    return 'Summarize $count recent messages';
+    return '$count letzte Nachrichten zusammenfassen';
   }
 
   @override
   String groupMembershipSummary(int joined, int invited) {
-    return '$joined joined · $invited invited';
+    return '$joined beigetreten · $invited eingeladen';
   }
+
+  @override
+  String contactPendingCount(int count) {
+    return '$count offene Anfragen';
+  }
+
+  @override
+  String get chatDraftLabel => 'Entwurf';
+
+  @override
+  String get contactIndexLabel => 'Kontaktindex';
 }

@@ -2790,11 +2790,11 @@
   "chatMessageRead": "Leído",
   "chatMessageFailed": "No enviado. Toca para reintentar.",
   "chatMessageUnavailable": "Mensaje no disponible en este dispositivo. Toca para ver las opciones de recuperación.",
-  "contactStarredFriends": "Starred friends",
-  "chatRecipientKeysMissing": "This friend has no available encrypted session. Ask them to sign in and open the app, then retry. Use Switch Account instead of logging out when changing accounts.",
-  "chatSwitchForMessaging": "Changing accounts? Use Switch Account to keep your messages and secure sessions. Logging out revokes this device and can make incoming encrypted messages unavailable.",
-  "aiServiceUnavailable": "AI summaries are currently unavailable. Please try again after service access is restored.",
-  "aiSummarizeMessages": "Summarize {count} recent messages",
+  "contactStarredFriends": "Contactos destacados",
+  "chatRecipientKeysMissing": "Este contacto no tiene ninguna sesión cifrada disponible. Pídele que inicie sesión y abra la aplicación; después, inténtalo de nuevo. Usa «Cambiar cuenta» en lugar de cerrar sesión para cambiar de cuenta.",
+  "chatSwitchForMessaging": "¿Quieres cambiar de cuenta? Usa «Cambiar cuenta» para conservar los mensajes y las sesiones seguras. Cerrar sesión revoca este dispositivo y puede impedir leer los mensajes cifrados entrantes.",
+  "aiServiceUnavailable": "Los resúmenes con IA no están disponibles actualmente. Inténtalo de nuevo cuando se restablezca el servicio.",
+  "aiSummarizeMessages": "Resumir {count} mensajes recientes",
   "@aiSummarizeMessages": {
     "placeholders": {
       "count": {
@@ -2802,7 +2802,7 @@
       }
     }
   },
-  "groupMembershipSummary": "{joined} joined · {invited} invited",
+  "groupMembershipSummary": "{joined} se han unido · {invited} invitados",
   "@groupMembershipSummary": {
     "placeholders": {
       "joined": {
@@ -2812,5 +2812,8 @@
         "type": "int"
       }
     }
-  }
+  },
+  "contactPendingCount": "{count} solicitudes pendientes",
+  "chatDraftLabel": "Borrador",
+  "contactIndexLabel": "Índice de contactos"
 }

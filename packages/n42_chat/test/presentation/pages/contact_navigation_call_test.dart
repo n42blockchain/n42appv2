@@ -1,3 +1,8 @@
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'chat_ux_regression_test.dart' as review;
+import 'package:n42_chat/src/presentation/widgets/common/chat_navigation_bar.dart';
+import 'package:n42_chat/src/domain/entities/group_entity.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:n42_chat/src/presentation/blocs/contact/contact_event.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
@@ -35,6 +40,20 @@ class _Calls extends Mock implements CallManager {}
 class _Launcher extends Mock implements ContactCallService {}
 
 void main() {
+  setUpAll(() async {
+    if (Platform.environment['N42_UX_SCREENSHOTS'] == null) return;
+    for (final entry in {
+      'UXReview': '/System/Library/Fonts/Supplemental/Arial.ttf',
+      'MaterialIcons':
+          '/opt/homebrew/share/flutter/bin/cache/artifacts/material_fonts/MaterialIcons-Regular.otf',
+    }.entries) {
+      final loader = FontLoader(entry.key);
+      loader.addFont(
+        File(entry.value).readAsBytes().then(ByteData.sublistView),
+      );
+      await loader.load();
+    }
+  });
   const friend = ContactEntity(
     userId: '@alice:hs',
     displayName: 'Alice',
@@ -98,6 +117,69 @@ void main() {
     ),
     home: BlocProvider<ContactBloc>.value(value: contacts, child: page),
   );
+
+  for (final brightness in Brightness.values) {
+    testWidgets(
+      'contact directory and navigation share visible pending counts ${brightness.name}',
+      (tester) async {
+        tester.view.physicalSize = const Size(375, 812);
+        tester.view.devicePixelRatio = 1;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        when(() => contacts.state).thenReturn(
+          ContactState(
+            status: ContactStatus.loaded,
+            contacts: const [friend],
+            groupedContacts: const {
+              'A': [friend],
+            },
+            indexLetters: const ['A'],
+            friendRequests: const [
+              FriendRequest(id: 'incoming', userId: '@bob:hs', userName: 'Bob'),
+            ],
+          ),
+        );
+        final groups = getIt<GroupBloc>();
+        when(() => groups.state).thenReturn(
+          GroupState(
+            status: GroupStatus.loaded,
+            invites: List.generate(
+              2,
+              (i) => GroupEntity(roomId: 'invite$i', name: 'Team $i'),
+            ),
+          ),
+        );
+        final key = GlobalKey();
+        await tester.pumpWidget(
+          review.app(
+            BlocProvider<ContactBloc>.value(
+              value: contacts,
+              child: RepaintBoundary(
+                key: key,
+                child: Scaffold(
+                  appBar: AppBar(title: const Text('Contacts')),
+                  body: const ContactListPage(showAppBar: false),
+                  bottomNavigationBar: ChatNavigationBar(
+                    selectedIndex: 1,
+                    pendingContactCount: 3,
+                    onSelected: (_) {},
+                  ),
+                ),
+              ),
+            ),
+            brightness: brightness,
+            scale: 1,
+          ),
+        );
+        await tester.pumpAndSettle();
+        expect(find.text('1'), findsOneWidget);
+        expect(find.text('2'), findsOneWidget);
+        expect(find.text('3'), findsOneWidget);
+        await review.capture(tester, key, 'contacts-${brightness.name}');
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('search failure offers retry rather than an empty-result claim', (
     tester,

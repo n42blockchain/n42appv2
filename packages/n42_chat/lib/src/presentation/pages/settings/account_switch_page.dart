@@ -145,106 +145,125 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
               if (!_busy) Navigator.of(context).pop();
             },
           ),
-          body: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : _loadFailed
-              ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(l10n?.commonLoadFailed ?? 'Failed to load'),
-                      TextButton(
-                        onPressed: _loadAccounts,
-                        child: Text(l10n?.commonRetry ?? 'Retry'),
-                      ),
-                    ],
-                  ),
-                )
-              : ListView(
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.paddingOf(context).bottom,
-                  ),
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(AppDimensions.spacing),
-                      child: Text(
-                        l10n!.accountSessionsHint,
-                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: context.textSecondary,
-                        ),
+          body: Column(
+            children: [
+              if (_switchError != null)
+                Padding(
+                  padding: const EdgeInsets.all(AppDimensions.spacing),
+                  child: Semantics(
+                    liveRegion: true,
+                    child: Text(
+                      _switchError!,
+                      maxLines: 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.bodySmall.copyWith(
+                        color: Theme.of(context).colorScheme.error,
                       ),
                     ),
-                    if (_accounts.isEmpty)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppDimensions.spacingXL,
-                          vertical: AppDimensions.spacingXL * 2,
-                        ),
-                        child: Text(
-                          l10n.accountNoSaved,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: context.textSecondary,
-                          ),
-                        ),
-                      )
-                    else
-                      Material(
-                        color: context.surfaceColor,
-                        child: Column(
-                          children: [
-                            for (var i = 0; i < _accounts.length; i++) ...[
-                              _AccountTile(
-                                account: _accounts[i],
-                                isSwitching:
-                                    _switchingUserId == _accounts[i].userId,
-                                onTap: _busy || _accounts[i].isCurrent
-                                    ? null
-                                    : () => _switchAccount(_accounts[i]),
-                              ),
-                              if (i != _accounts.length - 1)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    left:
-                                        AppDimensions.avatarSizeConversation +
-                                        AppDimensions.spacingXL,
-                                  ),
-                                  child: Divider(
-                                    height: 1,
-                                    color: context.dividerColor,
-                                  ),
-                                ),
-                            ],
-                          ],
-                        ),
-                      ),
-                    const SizedBox(height: AppDimensions.spacing),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: AppDimensions.spacing,
-                      ),
-                      child: N42Button.primary(
-                        text: l10n.accountAdd,
-                        onPressed: !_busy ? _openAddAccount : null,
-                      ),
-                    ),
-                    if (_switchError != null)
-                      Padding(
-                        padding: const EdgeInsets.all(AppDimensions.spacing),
-                        child: Semantics(
-                          liveRegion: true,
-                          child: Text(
-                            _switchError!,
-                            style: Theme.of(context).textTheme.bodyMedium
-                                ?.copyWith(
-                                  color: Theme.of(context).colorScheme.error,
-                                ),
-                          ),
-                        ),
-                      ),
-                    const SizedBox(height: AppDimensions.spacingXL),
-                  ],
+                  ),
                 ),
+              Expanded(
+                child: _isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : _loadFailed
+                    ? N42EmptyState(
+                        icon: Icons.cloud_off_outlined,
+                        title: l10n?.commonLoadFailed ?? 'Failed to load',
+                        buttonText: l10n?.commonRetry ?? 'Retry',
+                        onButtonPressed: _loadAccounts,
+                      )
+                    : ListView(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.paddingOf(context).bottom,
+                        ),
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(
+                              AppDimensions.spacing,
+                            ),
+                            child: Text(
+                              l10n!.accountSessionsHint,
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: context.textSupporting),
+                            ),
+                          ),
+                          if (_accounts.isEmpty)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.spacingXL,
+                                vertical: AppDimensions.spacingXL * 2,
+                              ),
+                              child: Text(
+                                l10n.accountNoSaved,
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: context.textSupporting,
+                                ),
+                              ),
+                            )
+                          else
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: AppDimensions.spacing,
+                              ),
+                              child: Column(
+                                children: [
+                                  for (final account in _accounts)
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: AppDimensions.spacingS,
+                                      ),
+                                      child: Material(
+                                        color: account.isCurrent
+                                            ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
+                                                  .withValues(alpha: .08)
+                                            : context.surfaceColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            AppDimensions.radiusXL,
+                                          ),
+                                          side: BorderSide(
+                                            color: account.isCurrent
+                                                ? Theme.of(context)
+                                                      .colorScheme
+                                                      .primary
+                                                      .withValues(alpha: .4)
+                                                : context.dividerColor,
+                                          ),
+                                        ),
+                                        clipBehavior: Clip.antiAlias,
+                                        child: _AccountTile(
+                                          account: account,
+                                          isSwitching:
+                                              _switchingUserId ==
+                                              account.userId,
+                                          onTap: _busy || account.isCurrent
+                                              ? null
+                                              : () => _switchAccount(account),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          const SizedBox(height: AppDimensions.spacing),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppDimensions.spacing,
+                            ),
+                            child: N42Button.primary(
+                              text: l10n.accountAdd,
+                              onPressed: !_busy ? _openAddAccount : null,
+                            ),
+                          ),
+                          const SizedBox(height: AppDimensions.spacingXL),
+                        ],
+                      ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -264,13 +283,15 @@ class _AccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final secondaryColor = context.textSecondary;
+    final secondaryColor = context.textSupporting;
 
     return Semantics(
       selected: account.isCurrent,
       liveRegion: isSwitching,
       child: ListTile(
         key: ValueKey('stored_account_${account.userId}'),
+        contentPadding: const EdgeInsets.all(AppDimensions.spacingM),
+        minVerticalPadding: AppDimensions.spacingM,
         leading: N42Avatar(
           imageUrl: account.avatarUrl,
           name: account.effectiveDisplayName,
@@ -285,11 +306,35 @@ class _AccountTile extends StatelessWidget {
             fontWeight: account.isCurrent ? FontWeight.w600 : FontWeight.w500,
           ),
         ),
-        subtitle: Text(
-          '${account.userId}\n${account.homeserver}${account.isCurrent ? '\n${S.of(context)!.accountCurrent}' : ''}${isSwitching ? '\n${S.of(context)!.accountSwitching}' : ''}',
-          maxLines: 4,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.bodySmall.copyWith(color: secondaryColor),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              account.userId,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.bodySmall.copyWith(color: secondaryColor),
+            ),
+            Text(
+              account.homeserver,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: AppTextStyles.caption.copyWith(color: secondaryColor),
+            ),
+            if (account.isCurrent || isSwitching)
+              Padding(
+                padding: const EdgeInsets.only(top: AppDimensions.spacingXS),
+                child: Text(
+                  isSwitching
+                      ? S.of(context)!.accountSwitching
+                      : S.of(context)!.accountCurrent,
+                  style: AppTextStyles.caption.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+          ],
         ),
         trailing: isSwitching
             ? const SizedBox(

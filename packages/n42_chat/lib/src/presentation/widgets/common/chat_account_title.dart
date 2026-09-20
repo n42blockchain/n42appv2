@@ -12,6 +12,18 @@ class ChatAccountTitle extends StatelessWidget {
   final String title;
   const ChatAccountTitle({super.key, required this.title});
 
+  static double toolbarHeight(BuildContext context) {
+    final scale = MediaQuery.textScalerOf(context);
+    final text = Theme.of(context).textTheme;
+    final title = text.titleMedium;
+    final identity = text.labelSmall;
+    return (scale.scale(title?.fontSize ?? 16) * (title?.height ?? 1.3) +
+            scale.scale(identity?.fontSize ?? 11) * (identity?.height ?? 1.3) +
+            AppDimensions.spacingS)
+        .clamp(kToolbarHeight, double.infinity)
+        .toDouble();
+  }
+
   @override
   Widget build(BuildContext context) {
     final auth = context.read<AuthBloc?>();
@@ -61,7 +73,7 @@ class ChatAccountTitle extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: Theme.of(context).textTheme.labelSmall
-                                ?.copyWith(color: context.textSecondary),
+                                ?.copyWith(color: context.textSupporting),
                           ),
                       ],
                     ),

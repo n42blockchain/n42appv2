@@ -8,6 +8,8 @@ import '../../../core/extensions/context_extension.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/services/voice_service.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_text_styles.dart';
 import '../../../core/utils/a11y_l10n.dart';
 import 'slash_command_picker.dart';
 import 'scheduled_send_picker.dart';
@@ -577,11 +579,12 @@ class ChatInputBarState extends State<ChatInputBar> {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: context.inputBarColor,
-        border: Border(
-          top: BorderSide(color: context.dividerColor, width: 0.5),
+    return Material(
+      color: context.inputBarColor,
+      shape: Border(
+        top: BorderSide(
+          color: context.dividerColor,
+          width: AppDimensions.dividerThickness,
         ),
       ),
       child: SafeArea(
@@ -608,7 +611,10 @@ class ChatInputBarState extends State<ChatInputBar> {
                   : const SizedBox.shrink(),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.spacingXS,
+                vertical: AppDimensions.spacingS,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -681,8 +687,8 @@ class ChatInputBarState extends State<ChatInputBar> {
 
   Widget _buildFormattingBar() {
     return Container(
-      height: 40,
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      height: AppDimensions.buttonHeight,
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacingXS),
       decoration: BoxDecoration(
         color: context.surfaceColor,
         border: Border(
@@ -706,9 +712,8 @@ class ChatInputBarState extends State<ChatInputBar> {
         borderRadius: BorderRadius.circular(8),
         onTap: () => _applyMarkdownFormat(action.prefix, action.suffix),
         child: Container(
-          width: 40,
-          height: 32,
-          margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          width: AppDimensions.buttonHeight,
+          height: AppDimensions.buttonHeight,
           alignment: Alignment.center,
           child: action.icon != null
               ? Icon(action.icon, size: 18)
@@ -778,9 +783,10 @@ class ChatInputBarState extends State<ChatInputBar> {
       excludeSemantics: true,
       child: InkWell(
         onTap: effectiveCallback,
-        borderRadius: BorderRadius.circular(6),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+        child: SizedBox(
+          width: AppDimensions.buttonHeight,
+          height: AppDimensions.buttonHeight,
           child: Icon(
             icon,
             size: 22,
@@ -795,10 +801,10 @@ class ChatInputBarState extends State<ChatInputBar> {
 
   Widget _buildTextField(bool isDark) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 4),
+      margin: const EdgeInsets.symmetric(horizontal: AppDimensions.spacingXS),
       decoration: BoxDecoration(
         color: context.surfaceColor,
-        borderRadius: BorderRadius.circular(22),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusXL),
         border: Border.all(
           color: isDark
               ? Colors.white.withValues(alpha: 0.06)
@@ -814,20 +820,19 @@ class ChatInputBarState extends State<ChatInputBar> {
         minLines: 1,
         textInputAction: TextInputAction.send,
         onSubmitted: (_) => _sendMessage(),
-        style: TextStyle(fontSize: 16, color: context.textPrimary),
+        style: AppTextStyles.bodyLarge.copyWith(color: context.textPrimary),
         decoration: InputDecoration(
           hintText:
               widget.hintText ??
               S.of(context)?.commonSendMessage ??
               'Send message',
-          hintStyle: const TextStyle(
-            fontSize: 16,
-            color: AppColors.textTertiary,
+          hintStyle: AppTextStyles.bodyLarge.copyWith(
+            color: context.textTertiary,
           ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 10,
+            horizontal: AppDimensions.spacingM,
+            vertical: AppDimensions.spacingM,
           ),
           isDense: true,
         ),
@@ -930,9 +935,10 @@ class ChatInputBarState extends State<ChatInputBar> {
             : null,
         child: InkWell(
           onTap: widget.enabled ? _sendMessage : null,
-          borderRadius: BorderRadius.circular(6),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 5),
+          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
+          child: SizedBox(
+            width: AppDimensions.buttonHeight,
+            height: AppDimensions.buttonHeight,
             child: Icon(
               Icons.send,
               size: 22,
