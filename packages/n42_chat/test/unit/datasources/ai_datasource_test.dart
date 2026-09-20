@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:image/image.dart' as img;
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -1055,7 +1056,7 @@ void main() {
       );
 
       final text = await datasource.describeImage(
-        Uint8List.fromList([1, 2, 3]),
+        Uint8List.fromList(img.encodePng(img.Image(width: 2, height: 2))),
       );
       expect(text, 'A cat wearing sunglasses.');
     });
@@ -1075,7 +1076,9 @@ void main() {
         ),
       );
       expect(
-        () => datasource.describeImage(Uint8List.fromList([1])),
+        () => datasource.describeImage(
+          Uint8List.fromList(img.encodePng(img.Image(width: 2, height: 2))),
+        ),
         throwsA(isA<AiServiceException>()),
       );
     });

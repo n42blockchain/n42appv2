@@ -59,6 +59,18 @@ void main() {
   }
 
   testWidgets(
+    'stalled GIF request ends with retry instead of an endless spinner',
+    (tester) async {
+      await mount(tester);
+      await tester.pump(const Duration(seconds: 21));
+      expect(find.byType(CircularProgressIndicator), findsNothing);
+      expect(find.text('Retry'), findsOneWidget);
+      source.requests.first.$3.complete(_empty);
+      await tester.pump();
+    },
+  );
+
+  testWidgets(
     'typing a query while trending is pending starts the latest search',
     (tester) async {
       await mount(tester);

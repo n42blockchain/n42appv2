@@ -1,3 +1,4 @@
+import '../../../core/utils/payment_request_uri.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,6 +41,7 @@ class _TransferPageState extends State<TransferPage> {
 
   TokenInfo? _selectedToken;
   bool _isAddressValid = false;
+  String? _scanError;
   WalletUserInfo? _recipientInfo;
 
   bool get _isPaymentRequestMode => widget.paymentRequest != null;
@@ -162,7 +164,8 @@ class _TransferPageState extends State<TransferPage> {
 
     return BlocConsumer<TransferBloc, TransferState>(
       listener: (context, state) {
-        if (state.status == TransferBlocStatus.addressValidated) {
+        if (state.status == TransferBlocStatus.addressValidated &&
+            state.validatedAddress == _addressController.text.trim()) {
           setState(() {
             _isAddressValid = state.isAddressValid!;
             _recipientInfo = state.userInfo;
@@ -327,6 +330,7 @@ class _TransferPageState extends State<TransferPage> {
               controller: _addressController,
               readOnly: _isPaymentRequestMode,
               decoration: InputDecoration(
+                errorText: _scanError,
                 hintText:
                     S.of(context)?.transferEnterOrPasteAddress ??
                     'Enter or paste wallet address',
@@ -335,14 +339,9 @@ class _TransferPageState extends State<TransferPage> {
                   horizontal: 16,
                   vertical: 14,
                 ),
-                hintStyle: TextStyle(
-                  color: context.textSecondary,
-                ),
+                hintStyle: TextStyle(color: context.textSecondary),
               ),
-              style: TextStyle(
-                fontSize: 14,
-                color: context.textPrimary,
-              ),
+              style: TextStyle(fontSize: 14, color: context.textPrimary),
               onChanged: (value) {
                 _validateAddress(value.trim());
               },
@@ -364,10 +363,52 @@ class _TransferPageState extends State<TransferPage> {
             IconButton(
               icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
               tooltip: S.of(context)?.commonScan ?? 'Scan',
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const ScanQRPage()),
+              onPressed: () async {
+                final raw = await Navigator.of(context).push<String>(
+                  MaterialPageRoute<String>(
+                    builder: (_) => const ScanQRPage(returnRawValue: true),
+                  ),
                 );
+                if (!mounted || raw == null || raw.isEmpty) return;
+                final payment = PaymentRequestUri.tryParse(raw);
+                final tokens = context.read<TransferBloc>().state.tokens;
+                TokenInfo? requestedToken;
+                if (payment != null && payment.token.isNotEmpty) {
+                  final matches = tokens
+                      .where(
+                        (t) =>
+                            t.symbol.toLowerCase() ==
+                            payment.token.toLowerCase(),
+                      )
+                      .toList();
+                  if (matches.length == 1) requestedToken = matches.single;
+                }
+                // This form has no chain selector. Do not silently lose a
+                // requested network or send a payment using another asset.
+                if (payment?.chain != null ||
+                    (payment != null &&
+                        payment.token.isNotEmpty &&
+                        requestedToken == null) ||
+                    (payment == null && Uri.tryParse(raw)?.hasScheme == true)) {
+                  setState(() {
+                    _scanError = S.of(context)!.transferEnterValidAddress;
+                  });
+                  return;
+                }
+                final address = payment?.receiverAddress ?? raw.trim();
+                setState(() {
+                  _scanError = null;
+                  _isAddressValid = false;
+                  _recipientInfo = null;
+                  if (requestedToken != null) _selectedToken = requestedToken;
+                });
+                _addressController.text = address;
+                _validateAddress(address);
+                // Scanning only fills fields; payment still requires confirmation.
+                if (payment != null) {
+                  _amountController.text = payment.amount;
+                  _memoController.text = payment.memo ?? '';
+                }
               },
             ),
           ],
@@ -403,7 +444,8 @@ class _TransferPageState extends State<TransferPage> {
                 ),
                 if (_isAddressValid)
                   Text(
-                    S.of(context)?.transferAddressVerified ?? 'Address verified',
+                    S.of(context)?.transferAddressVerified ??
+                        'Address verified',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -436,126 +478,129 @@ class _TransferPageState extends State<TransferPage> {
         color: context.surfaceColor,
         borderRadius: BorderRadius.circular(12),
       ),
-      child: Column(
-        children: visibleTokens.map((token) {
-          final isSelected = _selectedToken?.symbol == token.symbol;
-          final balance = balances[token.symbol] ?? '0';
+      constraints: const BoxConstraints(maxHeight: 240),
+      child: SingleChildScrollView(
+        child: Column(
+          children: visibleTokens.map((token) {
+            final isSelected = _selectedToken?.symbol == token.symbol;
+            final balance = balances[token.symbol] ?? '0';
 
-          return InkWell(
-            onTap: _isPaymentRequestMode
-                ? null
-                : () {
-                    setState(() {
-                      _selectedToken = token;
-                    });
-                  },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? AppColors.primary.withValues(alpha: 0.1)
-                    : Colors.transparent,
-                border: Border(
-                  bottom: BorderSide(
-                    color: context.dividerColor,
-                    width: 0.5,
+            return InkWell(
+              onTap: _isPaymentRequestMode
+                  ? null
+                  : () {
+                      setState(() {
+                        _selectedToken = token;
+                      });
+                    },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? AppColors.primary.withValues(alpha: 0.1)
+                      : Colors.transparent,
+                  border: Border(
+                    bottom: BorderSide(color: context.dividerColor, width: 0.5),
                   ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  // 代币图标
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: context.pageBackground,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        token.symbol.substring(
-                          0,
-                          token.symbol.length.clamp(0, 2),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.primary,
+                child: Row(
+                  children: [
+                    // 代币图标
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: context.pageBackground,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          token.symbol.substring(
+                            0,
+                            token.symbol.length.clamp(0, 2),
+                          ),
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  // 代币信息
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    const SizedBox(width: 12),
+                    // 代币信息
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            token.symbol,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 16,
+                              height: 1.3,
+                              fontWeight: FontWeight.w500,
+                              color: context.textPrimary,
+                            ),
+                          ),
+                          Text(
+                            token.name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              height: 1.3,
+                              color: context.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // 余额
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          token.symbol,
+                          balance,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             height: 1.3,
                             fontWeight: FontWeight.w500,
                             color: context.textPrimary,
                           ),
                         ),
                         Text(
-                          token.name,
+                          S.of(context)?.transferAvailable ?? 'Available',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 12,
+                            fontSize: 11,
                             height: 1.3,
                             color: context.textSecondary,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  // 余额
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        balance,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 14,
-                          height: 1.3,
-                          fontWeight: FontWeight.w500,
-                          color: context.textPrimary,
-                        ),
+                    const SizedBox(width: 8),
+                    // 选中标记
+                    if (isSelected)
+                      const Icon(
+                        Icons.check_circle,
+                        color: AppColors.primary,
+                        size: 20,
                       ),
-                      Text(
-                        S.of(context)?.transferAvailable ?? 'Available',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 11,
-                          height: 1.3,
-                          color: context.textSecondary,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 8),
-                  // 选中标记
-                  if (isSelected)
-                    const Icon(
-                      Icons.check_circle,
-                      color: AppColors.primary,
-                      size: 20,
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          );
-        }).toList(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
@@ -615,13 +660,15 @@ class _TransferPageState extends State<TransferPage> {
             children: [
               Expanded(
                 child: Text(
-                  '${S.of(context)?.transferAvailableBalance ?? 'Available balance'}: $balance ${_selectedToken?.symbol ?? ''}',
+                  S
+                      .of(context)!
+                      .transferAvailableBalance(
+                        balance,
+                        _selectedToken?.symbol ?? '',
+                      ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: context.textSecondary,
-                  ),
+                  style: TextStyle(fontSize: 13, color: context.textSecondary),
                 ),
               ),
               if (!_isPaymentRequestMode) ...[
@@ -653,14 +700,9 @@ class _TransferPageState extends State<TransferPage> {
           hintText: S.of(context)?.transferAddMemoHint ?? 'Add memo',
           border: InputBorder.none,
           contentPadding: const EdgeInsets.all(16),
-          hintStyle: TextStyle(
-            color: context.textSecondary,
-          ),
+          hintStyle: TextStyle(color: context.textSecondary),
         ),
-        style: TextStyle(
-          fontSize: 14,
-          color: context.textPrimary,
-        ),
+        style: TextStyle(fontSize: 14, color: context.textPrimary),
         maxLines: 2,
       ),
     );

@@ -1,5 +1,7 @@
 package ai.n42.www
 
+import android.content.Intent
+import android.provider.CalendarContract
 import android.view.WindowManager
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -62,6 +64,28 @@ class MainActivity: FlutterFragmentActivity() {
                     result.success(socialAuthConfig())
                 } else {
                     result.notImplemented()
+                }
+            }
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "n42.chat/calendar")
+            .setMethodCallHandler { call, result ->
+                if (call.method != "addEvent") { result.notImplemented(); return@setMethodCallHandler }
+                val args = call.arguments as? Map<*, *>
+                val title = args?.get("title") as? String
+                val start = (args?.get("starts_at") as? Number)?.toLong()
+                if (title == null || start == null) {
+                    result.error("invalid_event", "Invalid calendar event", null)
+                    return@setMethodCallHandler
+                }
+                val intent = Intent(Intent.ACTION_INSERT).setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.Events.TITLE, title)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, start)
+                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, (args?.get("ends_at") as? Number)?.toLong() ?: start + 3600000)
+                    .putExtra(CalendarContract.Events.EVENT_LOCATION, args?.get("location") as? String)
+                    .putExtra(CalendarContract.Events.DESCRIPTION, args?.get("description") as? String)
+                try { startActivity(intent); result.success(true) }
+                catch (_: android.content.ActivityNotFoundException) {
+                    result.error("unavailable", "No calendar app is installed", null)
                 }
             }
 

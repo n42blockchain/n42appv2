@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
@@ -6,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
@@ -588,9 +586,7 @@ class MessageItem extends StatelessWidget {
               url: urlMatch.group(0)!,
               previewService: getIt<UrlPreviewService>(),
             ),
-          if (urlMatch != null &&
-              showLinkPreview &&
-              aiServiceAvailable())
+          if (urlMatch != null && showLinkPreview && aiServiceAvailable())
             AiLinkSummaryWrapper(url: urlMatch.group(0)!),
         ],
       );
@@ -926,9 +922,27 @@ class MessageItem extends StatelessWidget {
     const double size = 120;
 
     Widget fallback() => Text(
-          message.content.isNotEmpty ? message.content : '🙂',
-          style: const TextStyle(fontSize: 40),
+      message.content.isNotEmpty ? message.content : '🙂',
+      style: const TextStyle(fontSize: 40),
+    );
+
+    if (url.startsWith('asset:')) {
+      final path = url.substring(6);
+      if (RegExp(
+        r'^assets/stickers/openmoji/[A-Za-z0-9_-]+\.svg$',
+      ).hasMatch(path)) {
+        return SizedBox(
+          width: size,
+          height: size,
+          child: SvgPicture.asset(path),
         );
+      }
+      if (RegExp(
+        r'^assets/stickers/lottie/[A-Za-z0-9_-]+\.json$',
+      ).hasMatch(path)) {
+        return SizedBox(width: size, height: size, child: Lottie.asset(path));
+      }
+    }
 
     // 无有效媒体 URL（未上传/解析失败）时回退显示 body 文本
     if (!url.startsWith('http')) {
@@ -944,7 +958,8 @@ class MessageItem extends StatelessWidget {
     );
 
     final lower = url.toLowerCase();
-    final isLottie = mimeType.contains('lottie') ||
+    final isLottie =
+        mimeType.contains('lottie') ||
         mimeType.contains('json') ||
         lower.endsWith('.json');
     final isSvg = mimeType.contains('svg') || lower.endsWith('.svg');
@@ -959,26 +974,26 @@ class MessageItem extends StatelessWidget {
           // 视频贴纸（WebM/MP4，对齐 Telegram；iOS WebM 受限见 VideoStickerView）
           ? VideoStickerView(url: url, headers: headers)
           : isLottie
-              ? Lottie.network(
-                  url,
-                  headers: headers,
-                  fit: BoxFit.contain,
-                  repeat: true,
-                  errorBuilder: (_, _, _) => fallback(),
-                )
-              : isSvg
-                  ? SvgPicture.network(
-                      url,
-                      headers: headers,
-                      fit: BoxFit.contain,
-                      placeholderBuilder: (_) => fallback(),
-                    )
-                  : Image.network(
-                      url,
-                      fit: BoxFit.contain,
-                      headers: headers,
-                      errorBuilder: (_, _, _) => fallback(),
-                    ),
+          ? Lottie.network(
+              url,
+              headers: headers,
+              fit: BoxFit.contain,
+              repeat: true,
+              errorBuilder: (_, _, _) => fallback(),
+            )
+          : isSvg
+          ? SvgPicture.network(
+              url,
+              headers: headers,
+              fit: BoxFit.contain,
+              placeholderBuilder: (_) => fallback(),
+            )
+          : Image.network(
+              url,
+              fit: BoxFit.contain,
+              headers: headers,
+              errorBuilder: (_, _, _) => fallback(),
+            ),
     );
   }
 
@@ -1363,59 +1378,59 @@ class MessageItem extends StatelessWidget {
       label: A11yL10n.of(context).file(filename),
       excludeSemantics: true,
       child: Container(
-      width: 200,
-      padding: const EdgeInsets.all(12),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: AppColors.primary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(4),
+        width: 200,
+        padding: const EdgeInsets.all(12),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Icon(
+                Icons.insert_drive_file,
+                color: AppColors.primary,
+              ),
             ),
-            child: const Icon(
-              Icons.insert_drive_file,
-              color: AppColors.primary,
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  filename,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontSize: 14,
-                    height: 1.35,
-                    color: message.isFromMe
-                        ? AppColors.sentText(isDark)
-                        : (isDark
-                              ? AppColors.textPrimaryDark
-                              : AppColors.messageTextReceived),
-                  ),
-                ),
-                if (size != null)
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    _formatFileSize(size),
-                    maxLines: 1,
+                    filename,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                      fontSize: 12,
-                      height: 1.3,
+                      fontSize: 14,
+                      height: 1.35,
                       color: message.isFromMe
-                          ? AppColors.textSecondary
-                          : AppColors.textSecondary,
+                          ? AppColors.sentText(isDark)
+                          : (isDark
+                                ? AppColors.textPrimaryDark
+                                : AppColors.messageTextReceived),
                     ),
                   ),
-              ],
+                  if (size != null)
+                    Text(
+                      _formatFileSize(size),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.3,
+                        color: message.isFromMe
+                            ? AppColors.textSecondary
+                            : AppColors.textSecondary,
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -1437,126 +1452,126 @@ class MessageItem extends StatelessWidget {
       label: A11yL10n.of(context).location(locationName),
       excludeSemantics: true,
       child: SizedBox(
-      width: 220,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // 地图预览区域 - OSM 静态瓦片
-          Container(
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Color(0xFFE8EEF0),
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-            ),
-            clipBehavior: Clip.antiAlias,
-            child: Stack(
-              children: [
-                // OSM 瓦片地图
-                if (latitude != null && longitude != null)
-                  Positioned.fill(
-                    child: Image.network(
-                      _osmTileUrl(latitude, longitude, 15),
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, e, st) => const Center(
-                        child: Icon(
-                          Icons.map,
-                          size: 32,
-                          color: Color(0xFFB0BEC5),
+        width: 220,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // 地图预览区域 - OSM 静态瓦片
+            Container(
+              height: 100,
+              decoration: const BoxDecoration(
+                color: Color(0xFFE8EEF0),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: Stack(
+                children: [
+                  // OSM 瓦片地图
+                  if (latitude != null && longitude != null)
+                    Positioned.fill(
+                      child: Image.network(
+                        _osmTileUrl(latitude, longitude, 15),
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, e, st) => const Center(
+                          child: Icon(
+                            Icons.map,
+                            size: 32,
+                            color: Color(0xFFB0BEC5),
+                          ),
                         ),
                       ),
                     ),
+                  // 中心位置标记
+                  Center(
+                    child: Icon(
+                      Icons.location_on,
+                      color: AppColors.primary,
+                      size: 28,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
                   ),
-                // 中心位置标记
-                Center(
-                  child: Icon(
-                    Icons.location_on,
-                    color: AppColors.primary,
-                    size: 28,
-                    shadows: [
-                      Shadow(
-                        color: Colors.black.withValues(alpha: 0.3),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          // 位置信息区域
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: message.isFromMe
-                  ? AppColors.messageSent
-                  : (isDark
-                        ? AppColors.messageReceivedDark
-                        : AppColors.messageReceived),
-              borderRadius: const BorderRadius.vertical(
-                bottom: Radius.circular(8),
+                ],
               ),
             ),
-            child: Row(
-              children: [
-                // 位置图标
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.location_on,
-                    color: AppColors.primary,
-                    size: 20,
-                  ),
+            // 位置信息区域
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: message.isFromMe
+                    ? AppColors.messageSent
+                    : (isDark
+                          ? AppColors.messageReceivedDark
+                          : AppColors.messageReceived),
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(8),
                 ),
-                const SizedBox(width: 10),
-                // 位置文字
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        locationName,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontSize: 14,
-                          height: 1.3,
-                          fontWeight: FontWeight.w500,
-                          color: message.isFromMe
-                              ? AppColors.sentText(isDark)
-                              : (isDark
-                                    ? AppColors.textPrimaryDark
-                                    : AppColors.messageTextReceived),
-                        ),
-                      ),
-                      if (latitude != null && longitude != null)
+              ),
+              child: Row(
+                children: [
+                  // 位置图标
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.location_on,
+                      color: AppColors.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  // 位置文字
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Text(
-                          '${latitude.toStringAsFixed(4)}, ${longitude.toStringAsFixed(4)}',
-                          maxLines: 1,
+                          locationName,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            fontSize: 11,
+                            fontSize: 14,
                             height: 1.3,
+                            fontWeight: FontWeight.w500,
                             color: message.isFromMe
-                                ? AppColors.sentText(
-                                    isDark,
-                                  ).withValues(alpha: 0.7)
-                                : AppColors.textSecondary,
+                                ? AppColors.sentText(isDark)
+                                : (isDark
+                                      ? AppColors.textPrimaryDark
+                                      : AppColors.messageTextReceived),
                           ),
                         ),
-                    ],
+                        if (latitude != null && longitude != null)
+                          Text(
+                            '${latitude.toStringAsFixed(4)}, ${longitude.toStringAsFixed(4)}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 11,
+                              height: 1.3,
+                              color: message.isFromMe
+                                  ? AppColors.sentText(
+                                      isDark,
+                                    ).withValues(alpha: 0.7)
+                                  : AppColors.textSecondary,
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        ),
       ),
     );
   }
@@ -1576,53 +1591,53 @@ class MessageItem extends StatelessWidget {
       ].where((e) => e.isNotEmpty).join(', '),
       excludeSemantics: true,
       child: Container(
-      constraints: const BoxConstraints(maxWidth: 260),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Color(0xFFFF6B9D), Color(0xFFFF9A56)],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
+        constraints: const BoxConstraints(maxWidth: 260),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFFF6B9D), Color(0xFFFF9A56)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(14),
         ),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Row(
-            children: [
-              const Text('💝', style: TextStyle(fontSize: 20)),
-              const SizedBox(width: 8),
-              Text(
-                'Tip · $amount $token',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                const Text('💝', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 8),
+                Text(
+                  'Tip · $amount $token',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
                 ),
+              ],
+            ),
+            if (note.isNotEmpty) ...[
+              const SizedBox(height: 6),
+              Text(
+                note,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(color: Colors.white, fontSize: 13),
               ),
             ],
-          ),
-          if (note.isNotEmpty) ...[
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
-              note,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: Colors.white, fontSize: 13),
+              confirmed ? 'On-chain ✓' : 'Sent',
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.85),
+                fontSize: 11,
+              ),
             ),
           ],
-          const SizedBox(height: 4),
-          Text(
-            confirmed ? 'On-chain ✓' : 'Sent',
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.85),
-              fontSize: 11,
-            ),
-          ),
-        ],
-      ),
+        ),
       ),
     );
   }
@@ -1730,95 +1745,95 @@ class MessageItem extends StatelessWidget {
       label: A11yL10n.of(context).music(title, artist),
       excludeSemantics: true,
       child: GestureDetector(
-      onTap: () {
-        if (url != null && url.isNotEmpty) {
-          onTap?.call();
-        }
-      },
-      child: Container(
-        width: 240,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: message.isFromMe
-              ? AppColors.messageSent
-              : (isDark
-                    ? AppColors.messageReceivedDark
-                    : AppColors.messageReceived),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          children: [
-            // 专辑封面
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: AppColors.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: cover != null && cover.isNotEmpty
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        cover,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => const Icon(
-                          Icons.music_note,
-                          size: 24,
-                          color: AppColors.primary,
+        onTap: () {
+          if (url != null && url.isNotEmpty) {
+            onTap?.call();
+          }
+        },
+        child: Container(
+          width: 240,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: message.isFromMe
+                ? AppColors.messageSent
+                : (isDark
+                      ? AppColors.messageReceivedDark
+                      : AppColors.messageReceived),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              // 专辑封面
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: cover != null && cover.isNotEmpty
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          cover,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, _, _) => const Icon(
+                            Icons.music_note,
+                            size: 24,
+                            color: AppColors.primary,
+                          ),
                         ),
+                      )
+                    : const Icon(
+                        Icons.music_note,
+                        size: 24,
+                        color: AppColors.primary,
                       ),
-                    )
-                  : const Icon(
-                      Icons.music_note,
-                      size: 24,
-                      color: AppColors.primary,
-                    ),
-            ),
-            const SizedBox(width: 12),
-            // 歌曲信息
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      height: 1.3,
-                      fontWeight: FontWeight.w500,
-                      color: message.isFromMe
-                          ? AppColors.sentText(isDark)
-                          : context.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    artist,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 12,
-                      height: 1.3,
-                      color: message.isFromMe
-                          ? AppColors.sentText(isDark).withValues(alpha: 0.7)
-                          : context.textSecondary,
-                    ),
-                  ),
-                ],
               ),
-            ),
-            // 播放图标
-            const Icon(
-              Icons.play_circle_filled,
-              size: 32,
-              color: AppColors.primary,
-            ),
-          ],
+              const SizedBox(width: 12),
+              // 歌曲信息
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 14,
+                        height: 1.3,
+                        fontWeight: FontWeight.w500,
+                        color: message.isFromMe
+                            ? AppColors.sentText(isDark)
+                            : context.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      artist,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        fontSize: 12,
+                        height: 1.3,
+                        color: message.isFromMe
+                            ? AppColors.sentText(isDark).withValues(alpha: 0.7)
+                            : context.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // 播放图标
+              const Icon(
+                Icons.play_circle_filled,
+                size: 32,
+                color: AppColors.primary,
+              ),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -1905,48 +1920,47 @@ class MessageItem extends StatelessWidget {
             label: A11yL10n.of(context).addToCalendar,
             excludeSemantics: true,
             child: GestureDetector(
-            onTap: () => _shareEventIcs(context, data),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.calendar_today,
-                    size: 14, color: AppColors.primary),
-                SizedBox(width: 4),
-                Text(
-                  'Add to calendar',
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
+              onTap: () => _addCalendarEvent(context, data),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(
+                    Icons.calendar_today,
+                    size: 14,
                     color: AppColors.primary,
                   ),
-                ),
-              ],
+                  SizedBox(width: 4),
+                  Text(
+                    A11yL10n.of(context).addToCalendar,
+                    style: const TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _shareEventIcs(
+  Future<void> _addCalendarEvent(
     BuildContext context,
     EventMessageData data,
   ) async {
     try {
-      await SharePlus.instance.share(
-        ShareParams(
-          files: [
-            XFile.fromData(
-              Uint8List.fromList(utf8.encode(data.toIcs())),
-              mimeType: 'text/calendar',
-              name: 'event.ics',
-            ),
-          ],
-        ),
-      );
+      await const MethodChannel(
+        'n42.chat/calendar',
+      ).invokeMethod<bool>('addEvent', data.toContent());
     } catch (_) {
-      // 分享失败静默（用户取消等）
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(S.of(context)!.commonFailedToSave)),
+        );
+      }
     }
   }
 
@@ -2028,7 +2042,11 @@ class MessageItem extends StatelessWidget {
                     S.of(context)?.chatEnded ?? 'Ended',
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(fontSize: 10, height: 1.3, color: context.textTertiary),
+                    style: TextStyle(
+                      fontSize: 10,
+                      height: 1.3,
+                      color: context.textTertiary,
+                    ),
                   ),
                 ),
             ],
@@ -2092,110 +2110,118 @@ class MessageItem extends StatelessWidget {
               label: A11yL10n.of(context).pollOption(optionText, voteCount),
               excludeSemantics: true,
               child: GestureDetector(
-              onTap: canChangeVote
-                  ? () => onPollVote?.call(
-                      message.id,
-                      optionId,
-                      myVotes,
-                      maxSelections,
-                    )
-                  : null,
-              child: Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: switch (quizState) {
-                    QuizOptionState.correct =>
-                      AppColors.success.withValues(alpha: 0.12),
-                    QuizOptionState.wrongPicked =>
-                      AppColors.error.withValues(alpha: 0.12),
-                    _ => isSelected
-                        ? AppColors.primary.withValues(alpha: 0.1)
-                        : AppColors.inputBgOf(isDark),
-                  },
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
+                onTap: canChangeVote
+                    ? () => onPollVote?.call(
+                        message.id,
+                        optionId,
+                        myVotes,
+                        maxSelections,
+                      )
+                    : null,
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
                     color: switch (quizState) {
-                      QuizOptionState.correct => AppColors.success,
-                      QuizOptionState.wrongPicked => AppColors.error,
-                      _ => isSelected
-                          ? AppColors.primary
-                          : Colors.transparent,
+                      QuizOptionState.correct => AppColors.success.withValues(
+                        alpha: 0.12,
+                      ),
+                      QuizOptionState.wrongPicked => AppColors.error.withValues(
+                        alpha: 0.12,
+                      ),
+                      _ =>
+                        isSelected
+                            ? AppColors.primary.withValues(alpha: 0.1)
+                            : AppColors.inputBgOf(isDark),
                     },
-                    width: 1.5,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: switch (quizState) {
+                        QuizOptionState.correct => AppColors.success,
+                        QuizOptionState.wrongPicked => AppColors.error,
+                        _ =>
+                          isSelected ? AppColors.primary : Colors.transparent,
+                      },
+                      width: 1.5,
+                    ),
                   ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            optionText,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 14,
-                              height: 1.35,
-                              color: context.textPrimary,
-                              fontWeight: isSelected
-                                  ? FontWeight.w600
-                                  : FontWeight.normal,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              optionText,
+                              maxLines: 3,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 14,
+                                height: 1.35,
+                                color: context.textPrimary,
+                                fontWeight: isSelected
+                                    ? FontWeight.w600
+                                    : FontWeight.normal,
+                              ),
                             ),
                           ),
-                        ),
-                        if (quizState == QuizOptionState.correct)
-                          const Icon(Icons.check_circle,
-                              size: 18, color: AppColors.success)
-                        else if (quizState == QuizOptionState.wrongPicked)
-                          const Icon(Icons.cancel,
-                              size: 18, color: AppColors.error)
-                        else if (isSelected)
-                          const Icon(
-                            Icons.check_circle,
-                            size: 18,
-                            color: AppColors.primary,
+                          if (quizState == QuizOptionState.correct)
+                            const Icon(
+                              Icons.check_circle,
+                              size: 18,
+                              color: AppColors.success,
+                            )
+                          else if (quizState == QuizOptionState.wrongPicked)
+                            const Icon(
+                              Icons.cancel,
+                              size: 18,
+                              color: AppColors.error,
+                            )
+                          else if (isSelected)
+                            const Icon(
+                              Icons.check_circle,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
+                        ],
+                      ),
+                      if (totalVoters > 0) ...[
+                        const SizedBox(height: 6),
+                        // 投票进度条
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(2),
+                          child: LinearProgressIndicator(
+                            value: percentage / 100,
+                            backgroundColor: isDark
+                                ? Colors.grey[700]
+                                : Colors.grey[300],
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                              isSelected ? AppColors.primary : Colors.grey,
+                            ),
+                            minHeight: 4,
                           ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          S
+                                  .of(context)
+                                  ?.chatPollVotesFormat(
+                                    voteCount,
+                                    percentage.toStringAsFixed(0),
+                                  ) ??
+                              '$voteCount votes (${percentage.toStringAsFixed(0)}%)',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            height: 1.3,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
                       ],
-                    ),
-                    if (totalVoters > 0) ...[
-                      const SizedBox(height: 6),
-                      // 投票进度条
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(2),
-                        child: LinearProgressIndicator(
-                          value: percentage / 100,
-                          backgroundColor: isDark
-                              ? Colors.grey[700]
-                              : Colors.grey[300],
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            isSelected ? AppColors.primary : Colors.grey,
-                          ),
-                          minHeight: 4,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        S
-                                .of(context)
-                                ?.chatPollVotesFormat(
-                                  voteCount,
-                                  percentage.toStringAsFixed(0),
-                                ) ??
-                            '$voteCount votes (${percentage.toStringAsFixed(0)}%)',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          height: 1.3,
-                          color: AppColors.textSecondary,
-                        ),
-                      ),
                     ],
-                  ],
+                  ),
                 ),
-              ),
               ),
             );
           }),
@@ -2214,8 +2240,11 @@ class MessageItem extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.lightbulb_outline,
-                      size: 14, color: AppColors.info),
+                  const Icon(
+                    Icons.lightbulb_outline,
+                    size: 14,
+                    color: AppColors.info,
+                  ),
                   const SizedBox(width: 6),
                   Expanded(
                     child: Text(
@@ -2255,18 +2284,18 @@ class MessageItem extends StatelessWidget {
                   label: S.of(context)?.chatEndPollButton ?? 'End Poll',
                   excludeSemantics: true,
                   child: GestureDetector(
-                  onTap: () => onEndPoll?.call(message.id),
-                  child: Text(
-                    S.of(context)?.chatEndPollButton ?? 'End Poll',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 11,
-                      height: 1.3,
-                      color: AppColors.error,
+                    onTap: () => onEndPoll?.call(message.id),
+                    child: Text(
+                      S.of(context)?.chatEndPollButton ?? 'End Poll',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 11,
+                        height: 1.3,
+                        color: AppColors.error,
+                      ),
                     ),
                   ),
-                ),
                 ),
             ],
           ),
@@ -2376,37 +2405,40 @@ class MessageItem extends StatelessWidget {
               label: S.of(context)?.chatCallBack ?? '回拨',
               excludeSemantics: true,
               child: GestureDetector(
-              onTap: () => onCallBack?.call(message),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      isVideo ? Icons.videocam : Icons.phone,
-                      size: 14,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      S.of(context)?.chatCallBack ?? '回拨',
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        height: 1.3,
+                onTap: () => onCallBack?.call(message),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isVideo ? Icons.videocam : Icons.phone,
+                        size: 14,
                         color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      Text(
+                        S.of(context)?.chatCallBack ?? '回拨',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          height: 1.3,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             ),
           ],
         ],

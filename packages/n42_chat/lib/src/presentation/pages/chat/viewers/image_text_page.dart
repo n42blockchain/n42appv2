@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../../core/di/injection.dart';
+import '../../../../core/services/ai_service.dart';
 import '../../../../core/services/image_text_recognition_service.dart';
 import '../../../../core/services/image_text_session_service.dart';
 import '../../../../core/services/image_translation_coordinator.dart';
@@ -104,7 +105,7 @@ class _ImageTextPageState extends State<ImageTextPage> {
     } catch (error) {
       if (!mounted) return;
       setState(() {
-        _error = '$error';
+        _error = ImageTextL10n.of(context).recognitionFailed;
         _loading = false;
       });
     }
@@ -139,7 +140,12 @@ class _ImageTextPageState extends State<ImageTextPage> {
           return;
         }
       }
-      if (mounted) setState(() => _error = '$error');
+      if (mounted)
+        setState(
+          () => _error = ImageTextL10n.of(
+            context,
+          ).aiFailure(error is AiServiceException ? error.statusCode : null),
+        );
     }
   }
 
@@ -199,44 +205,47 @@ class _ImageTextPageState extends State<ImageTextPage> {
   @override
   Widget build(BuildContext context) {
     final strings = ImageTextL10n.of(context);
-    return Scaffold(
-      backgroundColor: const Color(0xFF111111),
-      appBar: AppBar(
+    return Theme(
+      data: ThemeData.dark(useMaterial3: true),
+      child: Scaffold(
         backgroundColor: const Color(0xFF111111),
-        foregroundColor: Colors.white,
-        title: Text(
-          _mode == ImageTextMode.extract
-              ? strings.extractText
-              : strings.translateImage,
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF111111),
+          foregroundColor: Colors.white,
+          title: Text(
+            _mode == ImageTextMode.extract
+                ? strings.extractText
+                : strings.translateImage,
+          ),
+          actions: [
+            if (_document != null && !_document!.isEmpty)
+              PopupMenuButton<String>(
+                tooltip: strings.targetLanguage,
+                icon: const Icon(Icons.language),
+                initialValue: _targetLanguage,
+                onSelected: (value) {
+                  setState(() {
+                    _targetLanguage = value;
+                    _translation = null;
+                  });
+                  _translate();
+                },
+                itemBuilder: (_) => _languages.entries
+                    .map(
+                      (entry) => PopupMenuItem(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      ),
+                    )
+                    .toList(),
+              ),
+          ],
         ),
-        actions: [
-          if (_document != null && !_document!.isEmpty)
-            PopupMenuButton<String>(
-              tooltip: strings.targetLanguage,
-              icon: const Icon(Icons.language),
-              initialValue: _targetLanguage,
-              onSelected: (value) {
-                setState(() {
-                  _targetLanguage = value;
-                  _translation = null;
-                });
-                _translate();
-              },
-              itemBuilder: (_) => _languages.entries
-                  .map(
-                    (entry) => PopupMenuItem(
-                      value: entry.key,
-                      child: Text(entry.value),
-                    ),
-                  )
-                  .toList(),
-            ),
-        ],
+        body: _buildBody(strings),
+        bottomNavigationBar: _document == null || _document!.isEmpty
+            ? null
+            : _buildActions(strings),
       ),
-      body: _buildBody(strings),
-      bottomNavigationBar: _document == null || _document!.isEmpty
-          ? null
-          : _buildActions(strings),
     );
   }
 
@@ -269,8 +278,10 @@ class _ImageTextPageState extends State<ImageTextPage> {
           flex: 3,
           child: Padding(
             padding: const EdgeInsets.all(12),
-            child: LayoutBuilder(
-              builder: (context, constraints) => _ImageOverlay(
+            child: InteractiveViewer(
+              minScale: 1,
+              maxScale: 6,
+              child: _ImageOverlay(
                 bytes: _bytes!,
                 imageSize: document.pixelSize,
                 document: document,
@@ -392,6 +403,7 @@ class _ImageTextPageState extends State<ImageTextPage> {
         child: Row(
           children: [
             TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.white),
               onPressed: () => setState(() {
                 final all = _document!.blocks.map((block) => block.id).toSet();
                 _selectedIds = _selectedIds.length == all.length ? {} : all;
@@ -407,16 +419,21 @@ class _ImageTextPageState extends State<ImageTextPage> {
               onPressed: _selectedText.isEmpty ? null : _copy,
               tooltip: strings.copy,
               icon: const Icon(Icons.copy_outlined),
+              color: Colors.white,
+              disabledColor: Colors.white38,
             ),
             IconButton(
               onPressed: _selectedText.isEmpty ? null : _share,
               tooltip: strings.share,
               icon: const Icon(Icons.share_outlined),
+              color: Colors.white,
+              disabledColor: Colors.white38,
             ),
             if (widget.onForwardText != null ||
                 widget.onFavoriteText != null ||
                 widget.onSearchText != null)
               PopupMenuButton<String>(
+                iconColor: Colors.white,
                 enabled: _selectedText.isNotEmpty,
                 onSelected: (value) {
                   final text = _selectedText;

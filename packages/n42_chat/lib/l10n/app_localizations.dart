@@ -7472,7 +7472,7 @@ abstract class S {
   /// No description provided for @chatAutoFaceBlur.
   ///
   /// In en, this message translates to:
-  /// **'Auto face blur'**
+  /// **'Blur faces in photos'**
   String get chatAutoFaceBlur;
 
   /// No description provided for @chatAutoFaceBlurDesc.

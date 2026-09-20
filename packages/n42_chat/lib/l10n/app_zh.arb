@@ -1423,7 +1423,7 @@
   "chatViewOnceViewed": "已查看",
   "chatViewOnceExpired": "已過期",
   "chatViewOnceTap": "點擊查看",
-  "chatAutoFaceBlur": "自動模糊人臉",
+  "chatAutoFaceBlur": "发送照片模糊人脸",
   "chatAutoFaceBlurDesc": "發送照片時自動模糊人臉",
   "threadReplyInThread": "在線程中回覆",
   "threadReplies": "{count} 條回覆",

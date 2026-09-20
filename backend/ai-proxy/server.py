@@ -1,4 +1,6 @@
-"""Authenticated, text-only OpenRouter gateway. No third-party dependencies."""
+"""Authenticated, bounded text/image OpenRouter gateway. No third-party dependencies."""
+import base64
+import binascii
 import datetime
 import http.server
 import json
@@ -8,7 +10,7 @@ import threading
 import urllib.error
 import urllib.request
 
-MAX_BODY = 256 * 1024
+MAX_BODY = 3 * 1024 * 1024
 MAX_RESPONSE = 1024 * 1024
 
 
@@ -18,8 +20,8 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 class Gateway:
-    def __init__(self, key, database, homeserver, upstream, user_daily=10,
-                 total_daily=40, minute_limit=15):
+    def __init__(self, key, database, homeserver, upstream, user_daily=40,
+                 total_daily=50, minute_limit=15):
         self.key, self.database = key, database
         self.homeserver, self.upstream = homeserver.rstrip('/'), upstream
         self.user_daily, self.total_daily = user_daily, total_daily
@@ -68,7 +70,7 @@ class Gateway:
             return 429, {'error': {'message': 'Please retry later'}}
         try:
             if not self.reserve(user):
-                return 429, {'error': {'message': 'AI trial quota reached'}}
+                return 429, {'error': {'code': 'daily_or_rate_limit', 'message': 'Free AI quota reached. Please try again later.'}}
             # Enforce a free model and no training/data collection, regardless of caller input.
             result = self.request(self.upstream, self.key, {
                 'model': 'openrouter/free', 'messages': payload['messages'],
@@ -95,13 +97,44 @@ def valid_payload(body):
     if not isinstance(messages, list) or not 1 <= len(messages) <= 200:
         return False
     total = 0
+    images = 0
     for message in messages:
         if not isinstance(message, dict) or message.get('role') not in ('system', 'user', 'assistant'):
             return False
         content = message.get('content')
-        if not isinstance(content, str):
+        if isinstance(content, str):
+            total += len(content)
+        elif isinstance(content, list) and message['role'] == 'user' and 1 <= len(content) <= 4:
+            for part in content:
+                if not isinstance(part, dict):
+                    return False
+                if part.get('type') == 'text' and isinstance(part.get('text'), str):
+                    total += len(part['text'])
+                elif part.get('type') == 'image_url' and isinstance(part.get('image_url'), dict):
+                    url = part['image_url'].get('url', '')
+                    if not isinstance(url, str) or ',' not in url:
+                        return False
+                    header, encoded = url.split(',', 1)
+                    if header not in ('data:image/png;base64', 'data:image/jpeg;base64', 'data:image/webp;base64'):
+                        return False
+                    try:
+                        image = base64.b64decode(encoded, validate=True)
+                    except (ValueError, binascii.Error):
+                        return False
+                    if not 0 < len(image) <= 2 * 1024 * 1024:
+                        return False
+                    valid_image = (image.startswith(b'\x89PNG\r\n\x1a\n') if 'image/png' in header
+                                   else image.startswith(b'\xff\xd8\xff') if 'image/jpeg' in header
+                                   else image.startswith(b'RIFF') and image[8:12] == b'WEBP')
+                    if not valid_image:
+                        return False
+                    images += 1
+                    if images > 1:
+                        return False
+                else:
+                    return False
+        else:
             return False
-        total += len(content)
     tokens = body.get('max_tokens', 1024)
     return 0 < total <= 128000 and type(tokens) is int and tokens > 0
 
@@ -137,7 +170,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 return self.reply(413, {'error': {'message': 'Invalid request size'}})
             body = json.loads(self.rfile.read(length))
             if not valid_payload(body):
-                return self.reply(400, {'error': {'message': 'Text completion required'}})
+                return self.reply(400, {'error': {'message': 'Invalid text or image completion'}})
         except (ValueError, OSError):
             return self.reply(400, {'error': {'message': 'Invalid request'}})
         status, result = self.server.gateway.complete(auth[7:].strip(), body)

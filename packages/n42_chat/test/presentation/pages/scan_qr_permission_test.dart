@@ -310,7 +310,8 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('scan_gallery_button')));
       await tester.pumpAndSettle();
       expect(camera.starts, 2);
-      expect(find.byType(SnackBar), findsOneWidget);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.textContaining('Failed to select image'), findsOneWidget);
       expect(
         tester
             .widget<TextButton>(

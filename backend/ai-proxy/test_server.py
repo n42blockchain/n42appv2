@@ -1,3 +1,4 @@
+import base64
 import concurrent.futures
 import tempfile
 import unittest
@@ -11,7 +12,7 @@ class GatewayTests(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
         self.gateway = Gateway('server-secret', self.tmp.name + '/quota.db',
-                               'https://matrix.example', 'https://ai.example')
+                               'https://matrix.example', 'https://ai.example', user_daily=10, total_daily=40)
         self.payload = {'messages': [{'role': 'user', 'content': 'Synthetic test'}]}
 
     def test_enforces_free_model_and_replaces_credentials(self):
@@ -33,7 +34,7 @@ class GatewayTests(unittest.TestCase):
         with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
             allowed = list(pool.map(lambda _: self.gateway.reserve('@a:example'), range(20)))
         self.assertEqual(sum(allowed), 10)
-        again = Gateway('secret', self.gateway.database, '', '')
+        again = Gateway('secret', self.gateway.database, '', '', user_daily=10)
         self.assertFalse(again.reserve('@a:example'))
 
     def test_global_quota_cannot_be_bypassed_by_accounts(self):
@@ -46,6 +47,20 @@ class GatewayTests(unittest.TestCase):
         status, response = self.gateway.complete('token', self.payload)
         self.assertEqual(status, 503)
         self.assertNotIn('secret', str(response))
+
+    def test_inline_image_validation(self):
+        image = 'data:image/png;base64,' + base64.b64encode(b'\x89PNG\r\n\x1a\nfixture').decode()
+        def payload(url):
+            return {'messages': [{'role': 'user', 'content': [
+                {'type': 'text', 'text': 'Describe'},
+                {'type': 'image_url', 'image_url': {'url': url}}]}]}
+        self.assertTrue(valid_payload(payload(image)))
+        self.assertFalse(valid_payload(payload('https://private.example/image.png')))
+        self.assertFalse(valid_payload(payload('data:image/png;base64,broken')))
+        self.assertFalse(valid_payload(payload('data:image/png;base64,' + base64.b64encode(b'not an image').decode())))
+        duplicate = payload(image)
+        duplicate['messages'][0]['content'].append(duplicate['messages'][0]['content'][1])
+        self.assertFalse(valid_payload(duplicate))
 
     def test_rejects_streaming_images_and_oversize_text(self):
         self.assertTrue(valid_payload(self.payload))

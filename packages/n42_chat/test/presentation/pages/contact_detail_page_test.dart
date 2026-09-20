@@ -84,6 +84,86 @@ void main() {
   });
 
   testWidgets(
+    'shared card resolves existing friendship before contacts hydrate',
+    (tester) async {
+      final repository = MockContactRepository();
+      when(
+        () => repository.getContactById(userId),
+      ).thenAnswer((_) async => contact);
+      when(() => mockContactBloc.state).thenReturn(const ContactState());
+      getIt.registerSingleton<IContactRepository>(repository);
+      addTearDown(() async {
+        await getIt.unregister<IContactRepository>();
+      });
+      await tester.pumpWidget(
+        _buildTestWidget(
+          const ContactDetailPage(userId: userId, displayName: 'Alice'),
+          contactBloc: mockContactBloc,
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.byKey(const ValueKey('contact_relationship_action')),
+        findsNothing,
+      );
+      verify(() => repository.getContactById(userId)).called(1);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final deleted in [false, true]) {
+    testWidgets(
+      'late relationship lookup respects bloc update (deleted: $deleted)',
+      (tester) async {
+        final repository = MockContactRepository();
+        final lookup = Completer<ContactEntity?>();
+        when(
+          () => repository.getContactById(userId),
+        ).thenAnswer((_) => lookup.future);
+        when(
+          () => repository.getPendingFriendRequests(),
+        ).thenAnswer((_) async => []);
+        when(() => mockContactBloc.state).thenReturn(const ContactState());
+        getIt.registerSingleton<IContactRepository>(repository);
+        addTearDown(() async => getIt.unregister<IContactRepository>());
+        await tester.pumpWidget(
+          _buildTestWidget(
+            const ContactDetailPage(userId: userId, displayName: 'Alice'),
+            contactBloc: mockContactBloc,
+          ),
+        );
+        await tester.pump();
+        final updated = deleted
+            ? const ContactState(
+                status: ContactStatus.deleted,
+                deletedUserId: userId,
+              )
+            : const ContactState(
+                status: ContactStatus.loaded,
+                contacts: [contact],
+              );
+        when(() => mockContactBloc.state).thenReturn(updated);
+        contactStateController.add(updated);
+        await tester.pump();
+        // Return the opposite relationship after the newer Bloc update.
+        lookup.complete(deleted ? contact : contact.copyWith(isFriend: false));
+        await tester.pumpAndSettle();
+        expect(
+          find.text('Add to Contacts'),
+          deleted ? findsOneWidget : findsNothing,
+        );
+        if (!deleted) {
+          final label = S
+              .of(tester.element(find.byType(ContactDetailPage)))!
+              .commonSendMessage;
+          expect(find.text(label), findsOneWidget);
+        }
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
+  testWidgets(
     'standalone relationship failure offers retry and resolves existing friend',
     (tester) async {
       final repository = MockContactRepository();

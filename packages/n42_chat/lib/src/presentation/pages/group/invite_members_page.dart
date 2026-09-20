@@ -183,9 +183,18 @@ class _InviteMembersPageState extends State<InviteMembersPage> {
                     );
                   }
 
-                  final contacts = _isSearching
-                      ? state.filteredContacts
-                      : state.contacts;
+                  final existing = context
+                      .read<GroupBloc>()
+                      .state
+                      .members
+                      .map((member) => member.userId)
+                      .toSet();
+                  final contacts =
+                      (_isSearching ? state.filteredContacts : state.contacts)
+                          .where(
+                            (contact) => !existing.contains(contact.userId),
+                          )
+                          .toList();
 
                   if (contacts.isEmpty) {
                     return N42EmptyState.noSearchResult();

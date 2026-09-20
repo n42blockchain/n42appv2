@@ -27,7 +27,9 @@ import '../../helpers/bloc_message_helper.dart';
 ///
 /// 微信风格的登录界面
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final String? initialUsername;
+  final String? initialHomeserver;
+  const LoginPage({super.key, this.initialUsername, this.initialHomeserver});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -55,6 +57,10 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
+    _usernameController.text = widget.initialUsername ?? '';
+    if (widget.initialHomeserver != null) {
+      _homeserverController.text = widget.initialHomeserver!;
+    }
     _checkBiometricAvailability();
   }
 

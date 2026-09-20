@@ -141,6 +141,7 @@ import '../../../core/utils/debug_log.dart';
 import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/image_text_l10n.dart';
 import '../../../core/utils/video_note_utils.dart';
+import '../../../core/utils/optional_video_thumbnail.dart';
 import 'whiteboard_page.dart';
 
 part 'chat_page_app_bar.dart';

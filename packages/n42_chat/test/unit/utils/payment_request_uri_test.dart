@@ -2,6 +2,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/core/utils/payment_request_uri.dart';
 
 void main() {
+  test('accepts the payment QR emitted by the host wallet bridge', () {
+    final value = PaymentRequestUri.tryParse(
+      'n42://pay?address=0xABC&amount=0.11&token=ETH&memo=Lunch',
+    );
+    expect(value?.receiverAddress, '0xABC');
+    expect(value?.amount, '0.11');
+    expect(value?.token, 'ETH');
+    expect(value?.memo, 'Lunch');
+    expect(PaymentRequestUri.tryParse('n42://profile?address=0xABC'), isNull);
+    expect(PaymentRequestUri.tryParse('n42://pay?to=0xABC'), isNull);
+  });
   group('encode/parse round-trip', () {
     test('full data round-trips', () {
       const data = PaymentRequestData(

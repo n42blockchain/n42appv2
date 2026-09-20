@@ -74,12 +74,13 @@ class PaymentRequestUri {
       return null;
     }
 
-    if (uri.scheme.toLowerCase() != scheme || !_hasExpectedRoute(uri)) {
+    final protocol = uri.scheme.toLowerCase();
+    if ((protocol != scheme && protocol != 'n42') || !_hasExpectedRoute(uri)) {
       return null;
     }
 
     final params = uri.queryParameters;
-    final to = (params['to'] ?? '').trim();
+    final to = (params[protocol == 'n42' ? 'address' : 'to'] ?? '').trim();
     if (to.isEmpty) return null;
 
     return PaymentRequestData(

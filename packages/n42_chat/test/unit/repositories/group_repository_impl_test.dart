@@ -1,3 +1,6 @@
+import 'package:n42_chat/src/core/services/room_join_service.dart';
+import 'package:n42_chat/src/domain/repositories/contact_repository.dart';
+import 'package:n42_chat/src/domain/entities/contact_entity.dart';
 // Tests for GroupRepositoryImpl — group creation, member management.
 
 import 'dart:typed_data';
@@ -22,6 +25,10 @@ class MockRoom extends Mock implements matrix.Room {}
 class MockUser extends Mock implements matrix.User {}
 
 class MockEvent extends Mock implements matrix.Event {}
+
+class MockContacts extends Mock implements IContactRepository {}
+
+class MockJoin extends Mock implements RoomJoinService {}
 
 void main() {
   late GroupRepositoryImpl repository;
@@ -86,6 +93,7 @@ void main() {
     ).thenReturn(false);
 
     when(() => mockRoom.id).thenReturn(testRoomId);
+    when(() => mockRoom.getParticipants(any())).thenReturn([]);
     when(() => mockRoom.getLocalizedDisplayname()).thenReturn('Announcements');
     when(() => mockRoom.topic).thenReturn('Read-only updates');
     when(() => mockRoom.canonicalAlias).thenReturn(canonicalAlias);
@@ -111,6 +119,56 @@ void main() {
     if (powerLevels != null) {
       when(() => mockPowerLevelsEvent.content).thenReturn(powerLevels);
     }
+  }
+
+  for (final scenario in [
+    'friend',
+    'stranger',
+    'blocked',
+    'lookupFailure',
+    'joinFailure',
+  ]) {
+    test('invitation policy: $scenario', () async {
+      stubBaseRoom(joinRules: matrix.JoinRules.invite);
+      final contacts = MockContacts();
+      final join = MockJoin();
+      final invitation = MockEvent();
+      when(() => mockGroupDS.getPendingGroupInvites()).thenReturn([mockRoom]);
+      when(() => mockRoom.membership).thenReturn(matrix.Membership.invite);
+      when(
+        () => mockRoom.getState(matrix.EventTypes.RoomMember, '@me:matrix.org'),
+      ).thenReturn(invitation);
+      when(() => invitation.senderId).thenReturn('@friend:matrix.org');
+      when(() => invitation.content).thenReturn({'membership': 'invite'});
+      when(() => contacts.getContactById('@friend:matrix.org')).thenAnswer((
+        _,
+      ) async {
+        if (scenario == 'lookupFailure') throw StateError('offline');
+        return ContactEntity(
+          userId: '@friend:matrix.org',
+          displayName: 'Friend',
+          isFriend: scenario != 'stranger',
+          isBlocked: scenario == 'blocked',
+        );
+      });
+      when(() => join.join(testRoomId)).thenAnswer((_) async {
+        if (scenario == 'joinFailure') throw StateError('admission denied');
+        return testRoomId;
+      });
+      final repo = GroupRepositoryImpl(
+        mockGroupDS,
+        mockClientMgr,
+        contactRepository: contacts,
+        roomJoinService: join,
+      );
+      final invites = await repo.getPendingGroupInvites();
+      expect(invites, scenario == 'friend' ? isEmpty : hasLength(1));
+      if (scenario == 'friend' || scenario == 'joinFailure') {
+        verify(() => join.join(testRoomId)).called(1);
+      } else {
+        verifyNever(() => join.join(any()));
+      }
+    });
   }
 
   group('createGroup', () {

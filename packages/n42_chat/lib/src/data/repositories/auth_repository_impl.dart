@@ -1,4 +1,5 @@
 import '../../core/encryption/local_room_key_store.dart';
+import '../../core/encryption/token_device_session.dart';
 import 'dart:typed_data';
 import 'dart:async';
 
@@ -237,7 +238,13 @@ class AuthRepositoryImpl implements IAuthRepository {
       return AuthResult.success(user);
     } catch (e) {
       authLog('Token login failed - $e');
-      return AuthResult.failure('会话恢复失败', type: AuthErrorType.tokenExpired);
+      if (e is MatrixException) return _handleMatrixError(e);
+      return AuthResult.failure(
+        '会话恢复失败',
+        type: e is SessionReauthenticationRequired
+            ? AuthErrorType.tokenExpired
+            : AuthErrorType.unknown,
+      );
     }
   }
 
@@ -342,8 +349,12 @@ class AuthRepositoryImpl implements IAuthRepository {
       // 停止同步
       _authDataSource.clientManager.stopSync();
 
-      // 登出
+      // A revoked device must not remain a selectable saved session.
+      final loggedOutUserId = _authDataSource.clientManager.userId;
       await _authDataSource.logout();
+      if (loggedOutUserId != null) {
+        await _secureStorage.removeAccount(loggedOutUserId);
+      }
 
       // 清除保存的会话
       await _secureStorage.clearSession();

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'direct_chat_send_guard.dart';
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
@@ -321,15 +322,40 @@ class MatrixMessageSender {
         return await room.sendTextEvent(emojiChar);
       }
 
+      var mediaUrl = url;
+      var effectiveMimeType = mimeType;
+      if (url.startsWith('asset:')) {
+        final path = url.substring(6);
+        if (!RegExp(
+          r'^assets/stickers/(openmoji|lottie)/[A-Za-z0-9_-]+\.(svg|json)$',
+        ).hasMatch(path)) {
+          throw const FormatException('Unsupported bundled sticker');
+        }
+        effectiveMimeType = path.endsWith('.svg')
+            ? 'image/svg+xml'
+            : 'application/lottie+json';
+        final data = await rootBundle.load(path);
+        final client = room.client;
+        final uploaded = await client.uploadContent(
+          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
+          filename: path.split('/').last,
+          contentType: effectiveMimeType,
+        );
+        if (!identical(_client, client)) throw StateError('Account changed');
+        mediaUrl = uploaded.toString();
+      }
+
       // 构建贴纸消息内容 (使用 m.sticker 事件类型)
-      final info = <String, dynamic>{'mimetype': mimeType ?? 'image/png'};
+      final info = <String, dynamic>{
+        'mimetype': effectiveMimeType ?? 'image/png',
+      };
       if (width != null) info['w'] = width;
       if (height != null) info['h'] = height;
       if (size != null) info['size'] = size;
 
       final content = <String, dynamic>{
         'body': name ?? emoji ?? 'sticker',
-        'url': url,
+        'url': mediaUrl,
         'info': info,
         // 添加自定义字段标识贴纸来源
         'org.n42.sticker': {

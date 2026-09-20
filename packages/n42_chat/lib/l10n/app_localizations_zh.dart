@@ -3948,7 +3948,7 @@ class SZh extends S {
   String get chatViewOnceTap => '點擊查看';
 
   @override
-  String get chatAutoFaceBlur => '自動模糊人臉';
+  String get chatAutoFaceBlur => '发送照片模糊人脸';
 
   @override
   String get chatAutoFaceBlurDesc => '發送照片時自動模糊人臉';
@@ -9758,7 +9758,7 @@ class SZhTw extends SZh {
   String get chatViewOnceTap => '點擊查看';
 
   @override
-  String get chatAutoFaceBlur => '自動模糊人臉';
+  String get chatAutoFaceBlur => '傳送照片模糊人臉';
 
   @override
   String get chatAutoFaceBlurDesc => '發送照片時自動模糊人臉';

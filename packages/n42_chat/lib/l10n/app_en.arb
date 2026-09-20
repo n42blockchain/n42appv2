@@ -1910,7 +1910,7 @@
   "chatViewOnceViewed": "Viewed",
   "chatViewOnceExpired": "Expired",
   "chatViewOnceTap": "Tap to view",
-  "chatAutoFaceBlur": "Auto face blur",
+  "chatAutoFaceBlur": "Blur faces in photos",
   "chatAutoFaceBlurDesc": "Automatically blur faces when sending photos",
   "threadReplyInThread": "Reply in thread",
   "threadReplies": "{count} replies",

@@ -25,6 +25,9 @@ abstract class IGroupRepository {
   /// 获取群成员列表
   Future<List<GroupMember>> getGroupMembers(String roomId);
 
+  /// Updates only the authenticated member’s profile in this room.
+  Future<void> setMyGroupNickname(String roomId, String nickname);
+
   // ============================================
   // 群聊创建
   // ============================================

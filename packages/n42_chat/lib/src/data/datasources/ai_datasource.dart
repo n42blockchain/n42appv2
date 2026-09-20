@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:image/image.dart' as img;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
@@ -356,6 +358,12 @@ class AiDatasource implements AiService {
   }
 
   String _parseErrorMessage(DioException e) {
+    if (e.response?.statusCode == 413)
+      return 'Image is too large. Please choose a smaller image.';
+    if (e.response?.statusCode == 429)
+      return 'Free AI is temporarily at capacity. Please try again later.';
+    if (e.response?.statusCode == 503)
+      return 'AI is temporarily unavailable. Please try again later.';
     if (e.response?.data != null) {
       try {
         final data = e.response!.data;
@@ -523,7 +531,8 @@ class AiDatasource implements AiService {
         prompt ??
         'Describe this image concisely. If it contains text, transcribe '
             'the text (OCR). Reply in the language of the text if any.';
-    final dataUri = 'data:$mimeType;base64,${base64Encode(imageBytes)}';
+    final prepared = await compute(_prepareVisionImage, imageBytes);
+    final dataUri = 'data:image/jpeg;base64,${base64Encode(prepared)}';
     try {
       final response = await _dio.post<Map<String, dynamic>>(
         _chatCompletionsUrl,
@@ -662,4 +671,22 @@ class AiDatasource implements AiService {
   void dispose() {
     _dio.close();
   }
+}
+
+Uint8List _prepareVisionImage(Uint8List bytes) {
+  final decoded = img.decodeImage(bytes);
+  if (decoded == null) throw const AiServiceException('Unable to read image');
+  final oriented = img.bakeOrientation(decoded);
+  final resized = oriented.width > 1280 || oriented.height > 1280
+      ? img.copyResize(
+          oriented,
+          width: oriented.width >= oriented.height ? 1280 : null,
+          height: oriented.height > oriented.width ? 1280 : null,
+        )
+      : oriented;
+  final encoded = Uint8List.fromList(img.encodeJpg(resized, quality: 82));
+  if (encoded.length > 2 * 1024 * 1024) {
+    throw const AiServiceException('Image is too large');
+  }
+  return encoded;
 }

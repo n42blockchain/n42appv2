@@ -1,3 +1,5 @@
+import '../../blocs/group/group_bloc.dart';
+import '../group/group_members_page.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -87,6 +89,8 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   // 群名称（可编辑）
   late String _groupName;
+  String? _announcement;
+  String? _myNickname;
 
   final ChatLockService _chatLockService = ChatLockService();
 
@@ -101,6 +105,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         ? ConversationNotificationMode.muted
         : ConversationNotificationMode.allMessages;
     _groupName = widget.conversation.name;
+    if (widget.conversation.isGroup) unawaited(_loadGroupMetadata());
 
     _loadNotificationModeStatus();
     // 加载强提醒状态
@@ -121,6 +126,31 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
         setState(() {});
       }
     });
+  }
+
+  Future<void> _loadGroupMetadata() async {
+    if (!getIt.isRegistered<IGroupRepository>()) return;
+    try {
+      final group = await getIt<IGroupRepository>().getGroup(
+        widget.conversation.id,
+      );
+      final members = await getIt<IGroupRepository>().getGroupMembers(
+        widget.conversation.id,
+      );
+      final ownId = getIt.isRegistered<MatrixClientManager>()
+          ? getIt<MatrixClientManager>().userId
+          : null;
+      if (!mounted) return;
+      setState(() {
+        _announcement = group?.announcement;
+        _myNickname = members
+            .where((m) => m.userId == ownId)
+            .firstOrNull
+            ?.displayName;
+      });
+    } catch (_) {
+      /* Existing details remain usable while metadata is unavailable. */
+    }
   }
 
   /// 加载强提醒状态
@@ -795,6 +825,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     title:
                         S.of(context)?.commonGroupAnnouncement ??
                         'Group Announcement',
+                    value: _announcement,
                     textColor: textColor,
                     secondaryTextColor: secondaryTextColor,
                     onTap: () => _showGroupAnnouncementDialog(),
@@ -813,6 +844,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                     title:
                         S.of(context)?.chatMyNicknameInGroup ??
                         'My Nickname in Group',
+                    value: _myNickname,
                     textColor: textColor,
                     secondaryTextColor: secondaryTextColor,
                     onTap: () => _showEditNicknameDialog(),
@@ -1149,51 +1181,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   /// 从群中移除成员
   void _removeMemberFromGroup() {
-    if (widget.onRemoveMember != null) {
-      // 显示选择成员的对话框
-      _showRemoveMemberDialog();
-    } else {
-      debugLog('Remove member from group');
-    }
-  }
-
-  /// 显示移除成员的对话框
-  void _showRemoveMemberDialog() {
-    final names = widget.conversation.memberNames ?? [];
-    final ids = widget.conversation.memberIds ?? [];
-
-    if (ids.isEmpty) return;
-
-    showDialog<void>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(S.of(context)?.chatRemoveFromGroup ?? 'Remove from Group'),
-        content: SizedBox(
-          width: double.maxFinite,
-          height: 300,
-          child: ListView.builder(
-            itemCount: ids.length,
-            itemBuilder: (context, index) {
-              final name = names.length > index ? names[index] : ids[index];
-              return ListTile(
-                title: Text(name),
-                onTap: () {
-                  Navigator.of(ctx).pop();
-                  widget.onRemoveMember?.call(ids[index]);
-                },
-              );
-            },
-          ),
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => BlocProvider(
+          create: (_) => GroupBloc(getIt<IGroupRepository>()),
+          child: GroupMembersPage(roomId: widget.conversation.id),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(S.of(context)?.commonCancel ?? 'Cancel'),
-          ),
-        ],
       ),
     );
   }
+
+  /// 显示移除成员的对话框
 
   Widget _buildAddButton({
     required IconData icon,
@@ -1336,7 +1334,18 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
 
   /// 显示群公告对话框
   void _showGroupAnnouncementDialog() async {
-    final controller = TextEditingController();
+    try {
+      final group = await getIt<IGroupRepository>().getGroup(
+        widget.conversation.id,
+      );
+      if (!mounted) return;
+      _announcement = group?.announcement ?? _announcement;
+    } catch (_) {
+      if (mounted) context.showErrorSnackBar(S.of(context)!.commonLoadFailed);
+      return;
+    }
+    if (!mounted) return;
+    final controller = TextEditingController(text: _announcement);
     final canEdit = widget.canChangeSettings;
 
     try {
@@ -1362,8 +1371,10 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                   ),
                 )
               : Text(
-                  S.of(context)?.chatGroupAnnouncementEmpty ??
-                      'No announcement',
+                  _announcement?.isNotEmpty == true
+                      ? _announcement!
+                      : (S.of(context)?.chatGroupAnnouncementEmpty ??
+                            'No announcement'),
                   style: TextStyle(color: context.textPrimary),
                 ),
           actions: [
@@ -1387,6 +1398,7 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
                       announcement,
                     );
                     if (mounted) {
+                      setState(() => _announcement = announcement);
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(S.of(context)?.commonSave ?? 'Saved'),
@@ -1421,14 +1433,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
   void _openGroupSettings() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (_) => GroupSettingsPage(roomId: widget.conversation.id),
+        builder: (_) => BlocProvider(
+          create: (_) => GroupBloc(getIt<IGroupRepository>()),
+          child: GroupSettingsPage(roomId: widget.conversation.id),
+        ),
       ),
     );
   }
 
   /// 显示编辑群昵称对话框
   void _showEditNicknameDialog() async {
-    final controller = TextEditingController();
+    final controller = TextEditingController(text: _myNickname);
 
     String? newNickname;
     try {
@@ -1473,7 +1488,17 @@ class _ChatDetailPageState extends State<ChatDetailPage> {
     }
 
     if (newNickname != null && newNickname.isNotEmpty && mounted) {
-      // 群昵称功能需要 Matrix state event 支持，暂存本地
+      try {
+        await getIt<IGroupRepository>().setMyGroupNickname(
+          widget.conversation.id,
+          newNickname,
+        );
+        if (!mounted) return;
+        setState(() => _myNickname = newNickname);
+      } catch (_) {
+        if (mounted) context.showErrorSnackBar(S.of(context)!.chatUpdateFailed);
+        return;
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(S.of(context)?.chatGroupNameUpdated ?? 'Updated'),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/services/voip/call_notification_service.dart';
@@ -49,6 +50,29 @@ void main() {
     await done.future;
     await Future<void>.delayed(Duration.zero);
   }
+
+  test(
+    'Android acceptance silences only the connected call without ending it',
+    () async {
+      debugDefaultTargetPlatformOverride = TargetPlatform.android;
+      addTearDown(() {
+        debugDefaultTargetPlatformOverride = null;
+      });
+      final service = CallNotificationService();
+      await service.setCallConnected('answered-call');
+      expect(callkitCalls.map((c) => c.method), [
+        'hideCallkitIncoming',
+        'callConnected',
+      ]);
+      expect(callkitCalls.first.arguments['id'], 'answered-call');
+      expect(
+        callkitCalls.any(
+          (c) => c.method == 'endAllCalls' || c.method == 'endCall',
+        ),
+        isFalse,
+      );
+    },
+  );
 
   test('system hangup emits an end action for the active call', () async {
     final service = CallNotificationService();

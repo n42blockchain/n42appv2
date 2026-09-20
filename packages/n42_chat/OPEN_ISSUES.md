@@ -55,6 +55,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### OFFICE-001 Collaborative tasks and calendar synchronization remain incomplete
 
+- September 20: event message action opens the native iOS EventKit/Android calendar editor instead of sharing an ICS attachment. Native save/cancel and permission acceptance remain to be checked on feedback phones; this does not implement shared calendar synchronization.
+
 - Severity: M
 - Updated: 2026-09-12
 - Evidence: `lib/src/core/services/reminder_service.dart`, `chat_page_message_actions.dart`, `favorite_list_page.dart`
@@ -119,6 +121,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### MSG-001 Recent real-homeserver smoke does not cover several advanced message features
 
+- September 20 / 2696 media and payment feedback: bundled sticker upload now sends mxc media with matching SVG/Lottie MIME; legacy asset messages render locally. Plain/unknown-language code uses text rendering because HighlightView rejects null languages (reproduced by widget tests). GIF requests time out with retry; provider/device availability is still unverified. Gallery video thumbnails are reused with plugin fallbacks; native capture/playback acceptance remains open. Image/OCR controls use dark surfaces and contrasting icons. Transfer scanner accepts raw addresses and host-generated n42://pay as well as n42pay://pay, selects the requested supported token, and rejects network-bearing requests the current form cannot safely honor. EIP-681 chain/contract routing remains unsupported here. Missing peer wallet addresses can be entered and validated; automatic verified peer-wallet discovery is still absent. Red packets are explicitly local demo records, not on-chain payments, and no longer check real CNY funds. Native media/payment acceptance remains required. Review follow-up: optional PhotoManager thumbnail errors now fall through to the file extractor rather than aborting video send; four focused tests pass.
+
 - Severity: M
 - Added: 2026-03-20
 - Evidence: `tool/live_message_smoke.dart`
@@ -142,6 +146,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 - Next step: add an authenticated backend endpoint that starts/stops LiveKit Egress jobs and surface its status back into the client.
 
 ### CALL-004 Exact per-app system ringtone playback is still constrained by CallKit/plugin limits
+
+- September 20 HarmonyOS feedback: on Android, connection now hides the current incoming CallKit notification/sound before marking the call connected, without ending the call. Method-channel ordering and no-hangup tests pass; the reported HarmonyOS device is not connected and ringing/vibration acceptance remains open.
 
 - Severity: M
 - Added: 2026-03-21
@@ -225,6 +231,13 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-009 TestFlight registration, friendship and historical-key acceptance
 
+- September 20 feedback: build 2692 was confirmed; the actual workflow is explicit logout/relogin, not retained-session switching. A read-only device-key check found xian07 had one published device and xian01 had none. Missing recipient keys now have a specific actionable error, without bypassing verification or sending plaintext. Conversation previews synchronously retry available keys, refresh on key events and invalidate room caches across account identity changes. The extended live SDK test passed preview agreement, retained-device bidirectional messages/history/restart and missing-peer-key rejection after logout. A second live run also confirmed a fresh device after explicit logout/relogin receives a newly encrypted peer message without restoring old keys; both disposable accounts were deactivated in each run. Feedback-phone/native acceptance remains open; old overwritten keys are not reconstructed.
+
+
+- September 19 / build 2026072692 acceptance: the user confirms the other ten items in the eleven-item report passed; only encrypted-message readability remains failing. The precise current switch-versus-logout workflow and whether newly received messages fail are awaiting clarification.
+- Reproduced and repaired a separate durable-key regression with the production server and Matrix 6.2.0: A→B, B→A, switch back, send another A→B event using the same outbound session, restart/switch, reread the first A→B event. Before the repair this consistently failed with first-known index 1 versus message index 0. Matrix 6.x compares received room keys only against its memory cache, so a newly shared later-index key can overwrite an earlier durable key after reopening a device. SessionPreservingClient loads durable inbound sessions before the first sync for each encryption identity; local snapshot restoration no longer empties that cache. Disk failures stop sync until retry. No trust policy or plaintext downgrade was introduced.
+- The extended real-server test passes after repair, including application message-repository reads, retained identities, client restart, failed-login rollback and logout isolation. All disposable accounts were deactivated. A separate deterministic regression proves an initial-yield subscription gap could drop a key-arrival update; message-list and single-message observers now subscribe before yielding. 66 focused tests pass. Native feedback-device acceptance remains OPEN; build 2692 does not include these changes. Keys already overwritten cannot be promised recoverable without an existing earlier copy. Initial sync now loads all stored inbound sessions; large-history startup performance is unmeasured.
+
 - September 19 UX update: search now previews a user's profile rather than creating/opening a pending room. Profiles expose incoming requests, disable repeated outgoing requests and offer relationship-load retry when opened without a contacts provider. Requests are grouped by direction; accepted/rejected entries are removed immediately while refresh completes. Chat filters include muted unread messages; attachment grids scroll at large text sizes; failed-message retry has a larger touch target; undecryptable messages explain that this device cannot read the message and offer recovery options without claiming recoverability. The call return banner shares the existing call lifecycle. Synthetic/widget checks do not establish friend acceptance, restored keys or calls on the feedback phones.
 
 - September 18 / build 2026072690 / Downloads/2.mov: the recording uses explicit logout to alternate dxx/dxx01 on one iPhone. A matching live SDK test reproduced the asymmetry: a sender retains its own key, but a recipient who was logged out before sending starts a new device without that key. The previous concurrent-device logout test did not cover this sequence. This explicit-logout acceptance remains OPEN; do not describe account switching as fixing every logout/re-login case or weaken E2EE/forward another account's history keys to hide it.
@@ -291,6 +304,11 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-003 AI smart replies and webhook automation were not live-tested end to end
 
+- September 20 image follow-up: gateway and nginx now accept a bounded inline image; client compresses to JPEG at 1280 pixels. OCR remote translation batches all recognized blocks into one consented request. Seven backend tests and client compression/batching tests pass. Deployed synthetic vision request reached upstream but returned HTTP 429 (gateway daily usage was 26, below its limit of 50); temporary test account deactivated. Successful live vision and quota-reset acceptance remain open. Do not claim free AI is unlimited or reset stored quota to bypass the provider.
+
+- September 20: replaced the failing Groq path in the host with an authenticated OpenRouter free-model gateway. Deployed gateway synthetic Chinese-summary smoke passed with a disposable Matrix account; invalid authentication was rejected, account deactivated. Six backend tests cover credential replacement, persistent/concurrent quotas and sanitized failures; a client test checks tokens change across accounts and logout prevents requests. Free routing can return an empty result at low output budgets (observed gateway 503); 1,024-token smoke succeeded. Native summary/smart-reply UI and webhook paths remain unverified. Text proxy emits one completed chunk; image generation is unsupported by this trial gateway.
+
+
 - Severity: M
 - Added: 2026-03-21
 - Current state: the new AI smart reply suggestions, extensible bot command registry, and webhook automation paths were unit/analyze verified only. They were not exercised against the shared real homeserver or a real external webhook endpoint in this round.
@@ -318,6 +336,15 @@ This file tracks unresolved issues intentionally left open during recent agent w
 - Next step: run a real multi-device or multi-account smoke covering group voice join, group video join, screen share, and the JWT endpoint contract.
 
 ### QA-005 Multi-account switching and persisted notification settings were not live-tested end to end
+
+- September 20 / build 2696 feedback: explicit logout removes its revoked saved-account entry; missing/expired encryption identities open prefilled reauthentication, while transient restore failures remain retryable. A live Flutter/Matrix SDK test now uses the real AuthRepositoryImpl (including logout, password login and stored-account switching), verifies incoming peer history after relogin and fresh messages, and deactivates both temporary accounts. Native secure-storage persistence, feedback-phone switching and push remain unverified. Review follow-up: a delayed contact lookup now prefers newer Bloc relationship state and cannot undo explicit deletion; two asynchronous race tests cover both orders. Friend invitations now autojoin only after confirming the inviter is an existing unblocked friend; strangers and failed joins remain pending. Five invitation-policy unit cases pass. Group member add excludes joined/invited users; remove/settings own their GroupBloc; announcement readback and room nickname persistence are implemented but require native acceptance.
+
+- September 20 UI completion: shared search/controller lifecycle, accessible responsive navigation/index, 48-point composer targets, expanding conversation rows, active-account cards and persistent switch errors are implemented. Small-screen/large-text, contrast, semantics and light/dark widget fixtures are covered; native VoiceOver/TalkBack and feedback-phone acceptance remain unverified.
+
+- September 20 feedback UI: tag rows open their contact list and profiles; starred contacts are grouped once at the star index. Bottom Contacts badge shares the contacts-page GroupBloc and combines incoming requests with ordinary group invitations. Internal social invitations are filtered using room markers/invite reasons, never room names. Group totals distinguish joined and invited members; ordinary invitations initially required acceptance; see the September 20 build 2696 policy update above. Native badge clearing, internal invitation filtering and group count acceptance remain open.
+
+
+- September 19 second UX pass: contact searches discard stale results after changed/cleared input, distinguish errors from empty results and offer retry. Pull-to-refresh waits for the specific refresh completion, including unchanged snapshots; it retains cached contacts. Contact/conversation menus scroll on short screens and use a Material surface for visible press feedback. Account rows now use the existing typography/spacing tokens and respect bottom safe-area padding. Ninety targeted tests pass, including asynchronous search ordering, pending refresh, retry, short-screen menu access and light/dark fixtures. These checks do not establish native push or feedback-device acceptance.
 
 - September 19 UX update: the chat header exposes the active identity and account selector. The chooser serializes switching/add-account actions, blocks UI switching during a call, and retains a retry/re-authentication explanation after failure. Chat and profile roots are keyed by account identity to discard the preceding account's page state. Narrow-screen, 130% text and light/dark widget checks pass. Native push registration, OS process restart and the feedback phones remain unverified; the earlier synthetic SDK acceptance in QA-009 is not native UI acceptance.
 
@@ -351,6 +378,9 @@ This file tracks unresolved issues intentionally left open during recent agent w
 - Verification: real widget routes cover direct settings, privacy/account hubs, multi-hop auth propagation, save/reopen, failures, slider commits, logout confirmation, and Arabic narrow-screen layout. Live account mutation is still outside this verification (QA-005).
 
 ### QA-006 Direct UI literals still need module-by-module translation review
+
+- September 20: six feedback labels plus pending-request count, draft and contact-index labels have English, Simplified/Traditional Chinese, German, French, Spanish, Italian, Portuguese and Brazilian Portuguese translations. Other locales retain explicit English fallbacks pending translation review. Localization code was regenerated.
+
 
 - September 19 UX update: new interaction labels are translated in English, Simplified/Traditional Chinese, German, French, Spanish, Italian, Portuguese and Brazilian Portuguese. The remaining catalogs explicitly use English fallback for these new labels, keeping key parity; linguistic review/translation for those locales remains open.
 

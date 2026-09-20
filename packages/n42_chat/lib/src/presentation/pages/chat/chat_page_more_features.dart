@@ -60,10 +60,7 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
                     _openLocationPicker();
                   },
                 ),
-                Divider(
-                  height: 1,
-                  color: context.dividerColor,
-                ),
+                Divider(height: 1, color: context.dividerColor),
                 // 共享实时位置
                 ListTile(
                   leading: Container(
@@ -253,26 +250,29 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     final roomId = chatBloc.state.roomId ?? '';
     final walletBridge = getIt<IWalletBridge>();
 
-    // 余额校验
-    try {
-      final balance = await walletBridge.getBalance(token);
-      final balanceNum = double.tryParse(balance) ?? 0;
-      final amountNum = double.tryParse(amount) ?? 0;
-      if (balanceNum < amountNum) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                l10n?.redPacketInsufficientBalance ?? 'Insufficient balance',
+    // Demo packets are records, so real wallet balances do not apply.
+    if (!getIt<IRedPacketService>().isDemo) {
+      try {
+        final balance = await walletBridge.getBalance(token);
+        final balanceNum = double.tryParse(balance) ?? 0;
+        final amountNum = double.tryParse(amount) ?? 0;
+        if (balanceNum < amountNum) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  l10n?.redPacketInsufficientBalance ?? 'Insufficient balance',
+                ),
+                backgroundColor: AppColors.error,
               ),
-              backgroundColor: AppColors.error,
-            ),
-          );
+            );
+          }
+          return false;
         }
+      } catch (e) {
+        debugLog('Red packet balance check failed: $e');
         return false;
       }
-    } catch (e) {
-      debugLog('Red packet balance check failed: $e');
     }
 
     // 创建红包
@@ -379,23 +379,69 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     );
   }
 
+  Future<String?> _requestRecipientWalletAddress() async {
+    final controller = TextEditingController();
+    final bridge = getIt<IWalletBridge>();
+    final formKey = GlobalKey<FormState>();
+    try {
+      return await showDialog<String>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            title: Text(S.of(context)!.transferEnterValidAddress),
+            content: Form(
+              key: formKey,
+              child: TextFormField(
+                controller: controller,
+                autofocus: true,
+                validator: (value) =>
+                    bridge.isValidAddress((value ?? '').trim())
+                    ? null
+                    : S.of(context)!.transferEnterValidAddress,
+                decoration: InputDecoration(
+                  hintText: S.of(context)!.transferEnterValidAddress,
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: Text(S.of(context)!.commonCancel),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final address = controller.text.trim();
+                  if (formKey.currentState?.validate() != true) return;
+                  if (dialogContext.mounted)
+                    Navigator.pop(dialogContext, address);
+                },
+                child: Text(S.of(context)!.commonConfirm),
+              ),
+            ],
+          );
+        },
+      );
+    } finally {
+      controller.dispose();
+    }
+  }
+
   /// 打赏：经钱包桥真实转账 + 发 n42.tip 渐变气泡（回填链上 txHash）
   Future<void> _sendTip() async {
     String? toAddress;
     if (widget.conversation.isDirect &&
         widget.conversation.directUserId != null) {
       try {
-        final contact = await getIt<IContactRepository>()
-            .getContactById(widget.conversation.directUserId!);
+        final contact = await getIt<IContactRepository>().getContactById(
+          widget.conversation.directUserId!,
+        );
         toAddress = contact?.walletAddress;
       } catch (_) {}
     }
     if (!mounted) return;
     if (toAddress == null || toAddress.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Recipient has no wallet address')),
-      );
-      return;
+      toAddress = await _requestRecipientWalletAddress();
+      if (!mounted || toAddress == null) return;
     }
 
     final amountC = TextEditingController();
@@ -456,8 +502,9 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Tip failed: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Tip failed: $e')));
       }
       return;
     }
@@ -469,15 +516,17 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
       return;
     }
 
-    context.read<ChatBloc>().add(SendCustomMessage(
-          content: note,
-          type: MessageType.tip,
-          metadata: MessageMetadata(
-            amount: amount,
-            token: token,
-            txHash: result.transactionHash,
-          ),
-        ));
+    context.read<ChatBloc>().add(
+      SendCustomMessage(
+        content: note,
+        type: MessageType.tip,
+        metadata: MessageMetadata(
+          amount: amount,
+          token: token,
+          txHash: result.transactionHash,
+        ),
+      ),
+    );
   }
 
   /// 赠送 NFT：解析接收方地址 → 选择 NFT → 钱包桥转移 → 发聊天通知
@@ -486,17 +535,16 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
     if (widget.conversation.isDirect &&
         widget.conversation.directUserId != null) {
       try {
-        final contact = await getIt<IContactRepository>()
-            .getContactById(widget.conversation.directUserId!);
+        final contact = await getIt<IContactRepository>().getContactById(
+          widget.conversation.directUserId!,
+        );
         toAddress = contact?.walletAddress;
       } catch (_) {}
     }
     if (!mounted) return;
     if (toAddress == null || toAddress.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Recipient has no wallet address')),
-      );
-      return;
+      toAddress = await _requestRecipientWalletAddress();
+      if (!mounted || toAddress == null) return;
     }
 
     final contractC = TextEditingController();
@@ -512,8 +560,7 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
           children: [
             TextField(
               controller: contractC,
-              decoration:
-                  const InputDecoration(labelText: 'Contract address'),
+              decoration: const InputDecoration(labelText: 'Contract address'),
             ),
             TextField(
               controller: tokenIdC,
@@ -570,8 +617,9 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
       );
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('NFT gift failed: $e')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('NFT gift failed: $e')));
       }
       return;
     }
@@ -607,10 +655,8 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
         color: AppColors.primary,
         title: 'AI Assistant',
         subtitle: 'Describe a task, open the right mini app',
-        onTap: () => MiniAppAgentSheet.show(
-          context,
-          roomId: widget.conversation.id,
-        ),
+        onTap: () =>
+            MiniAppAgentSheet.show(context, roomId: widget.conversation.id),
       ),
       PaymentCommerceAction(
         icon: Icons.card_giftcard_outlined,

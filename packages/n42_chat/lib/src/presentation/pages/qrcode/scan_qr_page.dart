@@ -18,7 +18,8 @@ import '../../../core/utils/debug_log.dart';
 
 /// Scan QR page
 class ScanQRPage extends StatefulWidget {
-  const ScanQRPage({super.key});
+  final bool returnRawValue;
+  const ScanQRPage({super.key, this.returnRawValue = false});
 
   @override
   State<ScanQRPage> createState() => _ScanQRPageState();
@@ -34,6 +35,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   bool _isCheckingPermission = true;
   bool _torchEnabled = false;
   String? _permissionError;
+  String? _scanError;
   bool _permissionCheckInFlight = false;
   Timer? _resumeTimer;
   Future<void> _cameraLifecycle = Future<void>.value();
@@ -210,12 +212,20 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   Future<void> _processQRCode(String data, {bool fromGallery = false}) async {
     if (_isProcessing || (_isPickingImage && !fromGallery)) return;
     var completedWithExit = false;
-    setState(() => _isProcessing = true);
+    setState(() {
+      _isProcessing = true;
+      _scanError = null;
+    });
 
     await _setCameraRunning(false);
 
     try {
       if (!mounted) return;
+      if (widget.returnRawValue) {
+        completedWithExit = true;
+        Navigator.of(context).pop(data.trim());
+        return;
+      }
       // 收款二维码（商户收款码）：识别后展示金额确认并发起付款
       final payment = PaymentRequestUri.tryParse(data);
       if (payment != null) {
@@ -416,9 +426,7 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
 
   void _showError(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.error),
-      );
+      setState(() => _scanError = message);
     }
   }
 
@@ -493,7 +501,24 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
             ),
         ],
       ),
-      body: _buildBody(screenSize, scanSize),
+      body: Column(
+        children: [
+          if (_scanError != null)
+            Semantics(
+              liveRegion: true,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                color: Colors.black,
+                child: Text(
+                  _scanError!,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+          Expanded(child: _buildBody(screenSize, scanSize)),
+        ],
+      ),
     );
   }
 

@@ -546,7 +546,7 @@ class MatrixClientManager {
     try {
       await initialize(clientName: targetName, forceReinit: true);
       if (_client == null || !matches(_client!)) {
-        throw StateError(
+        throw SessionReauthenticationRequired(
           'Stored encryption session does not match the account',
         );
       }

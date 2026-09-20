@@ -1,3 +1,5 @@
+import EventKit
+import EventKitUI
 import Flutter
 import ActivityKit
 import CoreImage
@@ -7,6 +9,7 @@ import flutter_webrtc
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  private var calendarHandler: N42CalendarHandler?
   private var mlsHandler: N42MlsHandler?
   private var screenProtectionHandler: ScreenProtectionHandler?
   private var videoBeautyHandler: N42VideoBeautyHandler?
@@ -96,6 +99,7 @@ import flutter_webrtc
       self.handleSystemIntegration(call, result: result)
     }
 
+    calendarHandler = N42CalendarHandler(messenger: messenger)
     mlsHandler = N42MlsHandler(binaryMessenger: messenger)
 
     // iOS 截屏 / 录屏防护（对应 Android FLAG_SECURE）：注册
@@ -404,5 +408,61 @@ private final class N42VideoBeautyProcessor: NSObject, ExternalVideoProcessingDe
 
   private static func unit(_ value: Any?) -> Double {
     min(1, max(0, (value as? NSNumber)?.doubleValue ?? 0))
+  }
+}
+
+
+/// Presents the system event editor; the user chooses whether to save.
+private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate {
+  private let store = EKEventStore()
+  private var pending: FlutterResult?
+  init(messenger: FlutterBinaryMessenger) {
+    super.init()
+    FlutterMethodChannel(name: "n42.chat/calendar", binaryMessenger: messenger)
+      .setMethodCallHandler { [weak self] call, result in
+        guard call.method == "addEvent", let self else {
+          result(FlutterMethodNotImplemented); return
+        }
+        guard self.pending == nil, let args = call.arguments as? [String: Any],
+              let title = args["title"] as? String,
+              let start = args["starts_at"] as? NSNumber else {
+          result(FlutterError(code: "invalid_event", message: "Calendar editor unavailable", details: nil)); return
+        }
+        self.pending = result
+        let present = { [weak self] in
+          guard let self else { return }
+          DispatchQueue.main.async {
+            guard let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene })
+                    .first(where: { $0.activationState == .foregroundActive }),
+                  var presenter = scene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
+              self.finish(false); return
+            }
+            while let top = presenter.presentedViewController { presenter = top }
+            let event = EKEvent(eventStore: self.store)
+            event.title = title
+            event.startDate = Date(timeIntervalSince1970: start.doubleValue / 1000)
+            let end = (args["ends_at"] as? NSNumber)?.doubleValue ?? (start.doubleValue + 3600000)
+            event.endDate = Date(timeIntervalSince1970: max(end, start.doubleValue) / 1000)
+            event.location = args["location"] as? String
+            event.notes = args["description"] as? String
+            let editor = EKEventEditViewController()
+            editor.eventStore = self.store
+            editor.event = event
+            editor.editViewDelegate = self
+            presenter.present(editor, animated: true)
+          }
+        }
+        if #available(iOS 17.0, *) {
+          present()
+        } else {
+          self.store.requestAccess(to: .event) { [weak self] granted, _ in
+            if granted { present() } else { DispatchQueue.main.async { self?.finish(false) } }
+          }
+        }
+      }
+  }
+  private func finish(_ saved: Bool) { let result = pending; pending = nil; result?(saved) }
+  func eventEditViewController(_ controller: EKEventEditViewController, didCompleteWith action: EKEventEditViewAction) {
+    controller.dismiss(animated: true) { self.finish(action == .saved) }
   }
 }

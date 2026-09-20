@@ -4032,7 +4032,7 @@ class SEn extends S {
   String get chatViewOnceTap => 'Tap to view';
 
   @override
-  String get chatAutoFaceBlur => 'Auto face blur';
+  String get chatAutoFaceBlur => 'Blur faces in photos';
 
   @override
   String get chatAutoFaceBlurDesc =>

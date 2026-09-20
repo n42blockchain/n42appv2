@@ -36,6 +36,58 @@ void main() {
   });
 
   test(
+    'room nickname preserves membership and avatar in its state event',
+    () async {
+      final event = _MockEvent();
+      when(() => room.client).thenReturn(client);
+      when(() => room.membership).thenReturn(matrix.Membership.join);
+      when(() => client.userID).thenReturn('@me:hs');
+      when(
+        () => room.getState(matrix.EventTypes.RoomMember, '@me:hs'),
+      ).thenReturn(event);
+      when(() => event.content).thenReturn({
+        'membership': 'join',
+        'avatar_url': 'mxc://hs/avatar',
+        'displayname': 'Old',
+      });
+      when(
+        () => client.setRoomStateWithKey(
+          roomId,
+          matrix.EventTypes.RoomMember,
+          '@me:hs',
+          any(),
+        ),
+      ).thenAnswer((call) async {
+        expect(call.positionalArguments[3], {
+          'membership': 'join',
+          'avatar_url': 'mxc://hs/avatar',
+          'displayname': 'New',
+        });
+        return 'event';
+      });
+      await dataSource.setMyGroupNickname(roomId, ' New ');
+      verify(
+        () => client.setRoomStateWithKey(
+          roomId,
+          matrix.EventTypes.RoomMember,
+          '@me:hs',
+          any(),
+        ),
+      ).called(1);
+    },
+  );
+
+  test('room nickname rejects a non-joined session', () async {
+    when(() => room.client).thenReturn(client);
+    when(() => room.membership).thenReturn(matrix.Membership.invite);
+    when(() => client.userID).thenReturn('@me:hs');
+    await expectLater(
+      dataSource.setMyGroupNickname(roomId, 'New'),
+      throwsStateError,
+    );
+  });
+
+  test(
     'group creation includes avatar and all invites before room sync',
     () async {
       when(() => client.getRoomById(roomId)).thenReturn(null);

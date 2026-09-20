@@ -313,7 +313,17 @@ class MatrixGroupDataSource {
 
   /// 批量邀请用户加入群
   Future<void> inviteUsers(String roomId, List<String> userIds) async {
-    for (final userId in userIds) {
+    final room = _getRequiredRoom(roomId);
+    final members = await room.requestParticipants();
+    final existing = members
+        .where(
+          (member) =>
+              member.membership == matrix.Membership.join ||
+              member.membership == matrix.Membership.invite,
+        )
+        .map((member) => member.id)
+        .toSet();
+    for (final userId in userIds.toSet().difference(existing)) {
       await inviteUser(roomId, userId);
     }
   }
@@ -518,6 +528,22 @@ class MatrixGroupDataSource {
       return null;
     }
     return getGroupTopic(roomId);
+  }
+
+  Future<void> setMyGroupNickname(String roomId, String nickname) async {
+    final room = _getRequiredRoom(roomId);
+    final userId = room.client.userID;
+    if (userId == null || room.membership != matrix.Membership.join) {
+      throw StateError('An active joined session is required');
+    }
+    final member = room.getState(matrix.EventTypes.RoomMember, userId);
+    if (member == null) throw StateError('Own membership is unavailable');
+    await room.client.setRoomStateWithKey(
+      roomId,
+      matrix.EventTypes.RoomMember,
+      userId,
+      {...member.content, 'displayname': nickname.trim()},
+    );
   }
 
   /// 设置群公告

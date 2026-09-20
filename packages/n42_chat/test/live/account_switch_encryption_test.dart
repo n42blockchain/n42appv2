@@ -1,3 +1,4 @@
+import 'package:n42_chat/src/data/repositories/auth_repository_impl.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -60,6 +61,7 @@ void main() {
       final manager = MatrixClientManager.instance;
       await manager.initialize(databasePath: dir.path);
       final auth = MatrixAuthDataSource(clientManager: manager);
+      final authRepository = AuthRepositoryImpl(authDataSource: auth);
       // Keep the same repository across accounts, as application DI does.
       final messages = MessageRepositoryImpl(
         MatrixMessageDataSource(manager),
@@ -81,24 +83,23 @@ void main() {
       }
 
       Future<void> signIn(int i) async {
-        final result = await auth.loginWithPassword(
+        final result = await authRepository.login(
           homeserver: 'https://m.si46.world',
           username: accounts[i]['user_id'] as String,
           password: accounts[i]['password'] as String,
         );
-        accounts[i]['access_token'] = result.accessToken;
-        accounts[i]['device_id'] = result.deviceId;
+        expect(result.success, isTrue, reason: result.errorMessage);
+        accounts[i]['access_token'] = manager.client!.accessToken;
+        accounts[i]['device_id'] = manager.client!.deviceID;
         stateFile.writeAsStringSync(jsonEncode(state));
         await manager.client!.firstSyncReceived;
       }
 
       Future<void> switchTo(int i) async {
-        await auth.loginWithToken(
-          homeserver: 'https://m.si46.world',
-          accessToken: accounts[i]['access_token'] as String,
-          userId: accounts[i]['user_id'] as String,
-          deviceId: accounts[i]['device_id'] as String,
+        final result = await authRepository.switchStoredAccount(
+          accounts[i]['user_id'] as String,
         );
+        expect(result.success, isTrue, reason: result.errorMessage);
         await manager.client!.firstSyncReceived;
         expect(manager.userId, accounts[i]['user_id']);
       }
@@ -134,9 +135,14 @@ void main() {
       }
 
       try {
-        await switchTo(
-          0,
-        ); // A fresh, server-issued token without prior device keys.
+        final initial = await authRepository.loginWithToken(
+          homeserver: 'https://m.si46.world',
+          accessToken: accounts[0]['access_token'] as String,
+          userId: accounts[0]['user_id'] as String,
+          deviceId: accounts[0]['device_id'] as String,
+        );
+        expect(initial.success, isTrue, reason: initial.errorMessage);
+        await manager.client!.firstSyncReceived;
         final aDevice = manager.client!.deviceID;
         final aFingerprint = manager.client!.fingerprintKey;
         final contacts = MatrixContactDataSource(manager);
@@ -239,7 +245,7 @@ void main() {
           'QA failed new-account login restores previous device and identity',
         );
         await switchTo(0);
-        await auth.logout();
+        await authRepository.logout();
         expect(manager.isLoggedIn, isFalse);
         await switchTo(1);
         await expectReadable(roomId, first, 'N42 sequential retained A to B');
@@ -263,6 +269,14 @@ void main() {
           'QA explicit logout prevents sending to an account with no device keys',
         );
         await signIn(0); // Refresh cleanup credentials after explicit logout.
+        await expectRepositoryReadable(
+          roomId,
+          second,
+          'N42 sequential retained B to A',
+        );
+        print(
+          'QA inbound peer history remains readable after explicit logout and password login',
+        );
         expect(manager.client!.deviceID, isNot(aDevice));
         final freshDevice = manager.client!.deviceID;
         await switchTo(1);
@@ -282,6 +296,7 @@ void main() {
           'QA fresh login receives newly encrypted peer message without restoring old keys',
         );
       } finally {
+        authRepository.dispose();
         messages.disposeAllTimelines();
         await manager.dispose();
       }

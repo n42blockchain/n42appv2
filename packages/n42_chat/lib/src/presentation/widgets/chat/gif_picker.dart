@@ -156,13 +156,19 @@ class _GifPickerState extends State<GifPicker> {
     });
     try {
       final result = query.isEmpty
-          ? await service.getTrendingGifs(offset: _offset, cursor: cursor)
-          : await service.searchGifs(
-              query: query,
-              offset: _offset,
-              cursor: cursor,
-              lang: Localizations.maybeLocaleOf(context)?.languageCode ?? 'en',
-            );
+          ? await service
+                .getTrendingGifs(offset: _offset, cursor: cursor)
+                .timeout(const Duration(seconds: 20))
+          : await service
+                .searchGifs(
+                  query: query,
+                  offset: _offset,
+                  cursor: cursor,
+                  lang:
+                      Localizations.maybeLocaleOf(context)?.languageCode ??
+                      'en',
+                )
+                .timeout(const Duration(seconds: 20));
       if (!mounted || generation != _generation) return;
       setState(() {
         _isLoading = false;

@@ -1,6 +1,6 @@
 # N42 AI trial gateway
 
-Text summaries use `https://m.si46.world/n42/ai/v1/chat/completions`.
+Text summaries and image descriptions use `https://m.si46.world/n42/ai/v1/chat/completions`.
 The mobile app sends its current Matrix access token. The gateway validates it
 against the fixed homeserver and replaces it with the server-only OpenRouter key.
 The app never receives the provider key. Account switching resolves the current
@@ -10,10 +10,14 @@ token for every request.
 
 - Only `openrouter/free`; caller-selected paid models are ignored.
 - Provider data collection is denied; no fallback to training-permitted providers.
-- 10 requests per user/day, 40 total/day, 15 total/minute, four upstream requests
+- 40 requests per user/day, 50 total/day, 15 total/minute, four upstream requests
   in flight. UTC windows. SQLite reservations survive restart and failed upstream
   attempts count toward the quota. Local synthetic tests also consume quota.
-- Text only, at most 128,000 characters and 2,048 output tokens. No image generation.
+- At most 128,000 text characters and 2,048 output tokens. One inline JPEG, PNG,
+  or WebP up to 2 MiB per request; remote image URLs are rejected. The app resizes
+  images to 1,280 pixels and compresses to JPEG before upload. No image generation.
+- Image translation batches recognized text into one request after user consent,
+  rather than spending one request per OCR block. Upstream free limits still apply.
 - Streaming UI receives a single completed text chunk in proxy mode.
 - No prompt/token logging. SQLite stores user ID and time bucket only and removes
   previous days on the next reservation. Key validity is controlled by OpenRouter.
@@ -36,7 +40,7 @@ Do not scale to multiple instances without a shared quota store.
 
 ## Validation (2026-09-20)
 
-`python3 -m unittest discover -s backend/ai-proxy -v`: six tests passed.
+`python3 -m unittest discover -s backend/ai-proxy -v`: seven tests passed.
 Direct OpenRouter and deployed gateway both returned HTTP 200 Chinese summaries
 using synthetic text. Invalid Matrix credentials returned 401. Disposable Matrix
 accounts were deactivated. A 160-token free-router attempt returned an empty/failing

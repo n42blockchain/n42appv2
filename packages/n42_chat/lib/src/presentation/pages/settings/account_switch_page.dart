@@ -72,14 +72,17 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
     return true;
   }
 
-  Future<void> _openAddAccount() async {
+  Future<void> _openAddAccount([StoredAccountEntity? account]) async {
     if (!_canChangeAccount()) return;
     setState(() => _addingAccount = true);
     final result = await Navigator.of(context).push<bool>(
       MaterialPageRoute<bool>(
         builder: (_) => BlocProvider.value(
           value: context.read<AuthBloc>(),
-          child: const LoginPage(),
+          child: LoginPage(
+            initialUsername: account?.userId,
+            initialHomeserver: account?.homeserver,
+          ),
         ),
       ),
     );
@@ -128,10 +131,19 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
         }
 
         if (_switchingUserId != null && state.status == AuthStatus.error) {
+          final failedAccount = _accounts
+              .where((a) => a.userId == _switchingUserId)
+              .firstOrNull;
           setState(() {
             _switchingUserId = null;
             _switchError = S.of(context)!.accountSwitchFailed;
           });
+          if (state.errorType == AuthErrorType.tokenExpired &&
+              failedAccount != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (mounted) _openAddAccount(failedAccount);
+            });
+          }
         }
       },
       child: PopScope(

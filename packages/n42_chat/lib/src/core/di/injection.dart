@@ -450,6 +450,7 @@ Future<void> _registerServices(N42ChatConfig config) async {
     () => ImageTranslationCoordinator(
       onDevice: getIt<OnDeviceTranslationService>(),
       remote: getIt<ITranslationService>(),
+      batchAi: getIt.isRegistered<AiService>() ? getIt<AiService>() : null,
     ),
   );
 
@@ -902,6 +903,7 @@ void _registerRepositories() {
     () => GroupRepositoryImpl(
       getIt<MatrixGroupDataSource>(),
       getIt<MatrixClientManager>(),
+      contactRepository: getIt<IContactRepository>(),
       walletBridge: getIt<IWalletBridge>(),
       messageDataSource: getIt<MatrixMessageDataSource>(),
       roomJoinService: getIt<RoomJoinService>(),

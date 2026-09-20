@@ -12,6 +12,8 @@ import '../../../domain/entities/red_packet_entity.dart';
 /// Lucky 红包使用二倍均值随机算法，Normal 红包等额拆分。
 /// 24h 自动过期机制。
 class LocalRedPacketService extends IRedPacketService {
+  @override
+  bool get isDemo => true;
   static const _storageKey = 'n42_red_packets';
   final _random = Random();
 
@@ -144,10 +146,13 @@ class LocalRedPacketService extends IRedPacketService {
       list = list.where((rp) => rp.roomId == roomId).toList();
     }
     if (userId != null) {
-      list = list.where((rp) =>
-        rp.senderId == userId ||
-        rp.claims.any((c) => c.userId == userId),
-      ).toList();
+      list = list
+          .where(
+            (rp) =>
+                rp.senderId == userId ||
+                rp.claims.any((c) => c.userId == userId),
+          )
+          .toList();
     }
 
     // 按创建时间倒序
@@ -163,10 +168,12 @@ class LocalRedPacketService extends IRedPacketService {
     if (raw == null) return {};
 
     final map = json.decode(raw) as Map<String, dynamic>;
-    return map.map((key, value) => MapEntry(
-      key,
-      RedPacketEntity.fromJson(value as Map<String, dynamic>),
-    ));
+    return map.map(
+      (key, value) => MapEntry(
+        key,
+        RedPacketEntity.fromJson(value as Map<String, dynamic>),
+      ),
+    );
   }
 
   Future<void> _saveRedPacket(RedPacketEntity redPacket) async {

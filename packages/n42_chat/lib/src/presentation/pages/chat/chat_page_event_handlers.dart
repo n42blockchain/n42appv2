@@ -994,6 +994,18 @@ extension _ChatPageEventHandlersMethods on _ChatPageState {
       debugLog('Failed to get contacts: $e');
     }
 
+    try {
+      final members = await getIt<IGroupRepository>().getGroupMembers(
+        widget.conversation.id,
+      );
+      final existing = members.map((m) => m.userId).toSet();
+      contacts = contacts.where((c) => !existing.contains(c.userId)).toList();
+    } catch (_) {
+      if (mounted) context.showErrorSnackBar(S.of(context)!.commonLoadFailed);
+      return;
+    }
+    if (!mounted) return;
+
     if (contacts.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

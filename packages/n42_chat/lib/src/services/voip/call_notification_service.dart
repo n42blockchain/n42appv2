@@ -5,6 +5,7 @@ library;
 
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 import 'package:flutter_callkit_incoming/entities/android_params.dart';
 import 'package:flutter_callkit_incoming/entities/call_event.dart' as callkit;
@@ -309,6 +310,13 @@ class CallNotificationService {
 
   /// 更新通话状态为已连接
   Future<void> setCallConnected(String callId) async {
+    // Android's connected event only updates the ongoing notification; it does
+    // not stop the incoming sound/vibrator when answered from the Flutter UI.
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      await FlutterCallkitIncoming.hideCallkitIncoming(
+        CallKitParams(id: callId),
+      );
+    }
     await FlutterCallkitIncoming.setCallConnected(callId);
     debugLog('CallNotificationService: Call $callId connected');
   }

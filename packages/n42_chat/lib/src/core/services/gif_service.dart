@@ -109,7 +109,10 @@ class CompositeGifService implements GifService {
       final token = cursor.substring(separator + 1);
       try {
         return wrap(
-          await fetch(providers[index], token.isEmpty ? null : token),
+          await fetch(
+            providers[index],
+            token.isEmpty ? null : token,
+          ).timeout(const Duration(seconds: 8)),
           index,
         );
       } catch (_) {
@@ -122,7 +125,10 @@ class CompositeGifService implements GifService {
       final provider = providers[index];
       if (!provider.isAvailable) continue;
       try {
-        final result = await fetch(provider, null);
+        final result = await fetch(
+          provider,
+          null,
+        ).timeout(const Duration(seconds: 8));
         if (result.isError) continue;
         if (result.gifs.isNotEmpty) return wrap(result, index);
         emptySuccess = result;

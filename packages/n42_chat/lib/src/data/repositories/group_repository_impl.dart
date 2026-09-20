@@ -1,3 +1,4 @@
+import '../../domain/repositories/contact_repository.dart';
 import 'dart:typed_data';
 import 'dart:async';
 
@@ -27,6 +28,7 @@ class GroupRepositoryImpl implements IGroupRepository {
   final MatrixGroupDataSource _groupDataSource;
   final MatrixClientManager _clientManager;
   final IWalletBridge? _walletBridge;
+  final IContactRepository? _contactRepository;
   final MatrixMessageDataSource? _messageDataSource;
   late final RoomJoinService _roomJoinService;
 
@@ -34,9 +36,11 @@ class GroupRepositoryImpl implements IGroupRepository {
     this._groupDataSource,
     this._clientManager, {
     IWalletBridge? walletBridge,
+    IContactRepository? contactRepository,
     MatrixMessageDataSource? messageDataSource,
     RoomJoinService? roomJoinService,
-  }) : _walletBridge = walletBridge,
+  }) : _contactRepository = contactRepository,
+       _walletBridge = walletBridge,
        _messageDataSource = messageDataSource {
     _roomJoinService =
         roomJoinService ??
@@ -87,6 +91,10 @@ class GroupRepositoryImpl implements IGroupRepository {
     final users = await _groupDataSource.getGroupMembers(roomId);
     return users.map((user) => _mapUserToGroupMember(roomId, user)).toList();
   }
+
+  @override
+  Future<void> setMyGroupNickname(String roomId, String nickname) =>
+      _groupDataSource.setMyGroupNickname(roomId, nickname);
 
   @override
   Future<String> createGroup({
@@ -208,7 +216,42 @@ class GroupRepositoryImpl implements IGroupRepository {
   @override
   Future<List<GroupEntity>> getPendingGroupInvites() async {
     final rooms = _groupDataSource.getPendingGroupInvites();
-    return rooms.map(_mapRoomToGroupEntity).toList();
+    final client = _clientManager.client;
+    final userId = client?.userID;
+    final pending = <GroupEntity>[];
+    for (final room in rooms) {
+      final invitation = userId == null
+          ? null
+          : room.getState(matrix.EventTypes.RoomMember, userId);
+      final inviter = invitation?.senderId;
+      var joined = false;
+      if (_contactRepository != null &&
+          inviter != null &&
+          inviter != userId &&
+          invitation?.content['membership'] == 'invite') {
+        try {
+          final contact = await _contactRepository.getContactById(inviter);
+          if (!identical(client, _clientManager.client) ||
+              client?.userID != userId) {
+            throw StateError('Account changed during group invitation review');
+          }
+          if (contact?.isFriend == true &&
+              contact?.isBlocked != true &&
+              room.membership == matrix.Membership.invite) {
+            await _roomJoinService.join(room.id);
+            joined = true;
+          }
+        } catch (_) {
+          // A failed relationship lookup/admission remains a visible invitation.
+        }
+      }
+      if (!identical(client, _clientManager.client) ||
+          client?.userID != userId) {
+        throw StateError('Account changed during group invitation review');
+      }
+      if (!joined) pending.add(_mapRoomToGroupEntity(room));
+    }
+    return pending;
   }
 
   @override

@@ -32,13 +32,43 @@ class CodeBlockMessageWidget extends StatelessWidget {
     'md': 'markdown',
   };
 
-  /// flutter_highlight 默认注册的常用语言子集（不在内则传 null 走自动检测，避免抛错）
+  /// Explicitly supported highlighting languages; other content renders as plain text.
   static const Set<String> _known = {
-    'dart', 'javascript', 'typescript', 'python', 'java', 'kotlin', 'swift',
-    'go', 'rust', 'cpp', 'c', 'csharp', 'php', 'ruby', 'bash', 'json', 'yaml',
-    'xml', 'html', 'css', 'scss', 'sql', 'markdown', 'objectivec', 'scala',
-    'lua', 'perl', 'r', 'matlab', 'dockerfile', 'ini', 'makefile', 'graphql',
-    'solidity', 'plaintext',
+    'dart',
+    'javascript',
+    'typescript',
+    'python',
+    'java',
+    'kotlin',
+    'swift',
+    'go',
+    'rust',
+    'cpp',
+    'c',
+    'csharp',
+    'php',
+    'ruby',
+    'bash',
+    'json',
+    'yaml',
+    'xml',
+    'html',
+    'css',
+    'scss',
+    'sql',
+    'markdown',
+    'objectivec',
+    'scala',
+    'lua',
+    'perl',
+    'r',
+    'matlab',
+    'dockerfile',
+    'ini',
+    'makefile',
+    'graphql',
+    'solidity',
+    'plaintext',
   };
 
   /// 从 body 解析 (language, code)
@@ -55,7 +85,7 @@ class CodeBlockMessageWidget extends StatelessWidget {
     return (language: 'plaintext', code: raw);
   }
 
-  /// 仅对已注册语言着色，未知语言返回 null（HighlightView 自动检测、不抛错）
+  /// Null means render plain text: HighlightView rejects null languages.
   static String? _highlightLang(String lang) =>
       (lang == 'plaintext' || !_known.contains(lang)) ? null : lang;
 
@@ -64,6 +94,7 @@ class CodeBlockMessageWidget extends StatelessWidget {
     final parsed = parse(raw);
     final lines = parsed.code.split('\n');
     const codeStyle = TextStyle(
+      color: Colors.white,
       fontFamily: 'monospace',
       fontSize: 12.5,
       height: 1.45,
@@ -102,28 +133,30 @@ class CodeBlockMessageWidget extends StatelessWidget {
                   label: A11yL10n.of(context).copyCode,
                   excludeSemantics: true,
                   child: InkWell(
-                  borderRadius: BorderRadius.circular(6),
-                  onTap: () => _copy(context, parsed.code),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(Icons.copy_rounded,
+                    borderRadius: BorderRadius.circular(6),
+                    onTap: () => _copy(context, parsed.code),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.copy_rounded,
                             size: 14,
-                            color: Colors.white.withValues(alpha: 0.6)),
-                        const SizedBox(width: 3),
-                        Text(
-                          'Copy',
-                          style: TextStyle(
                             color: Colors.white.withValues(alpha: 0.6),
-                            fontSize: 11,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 3),
+                          Text(
+                            'Copy',
+                            style: TextStyle(
+                              color: Colors.white.withValues(alpha: 0.6),
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 ),
               ],
             ),
@@ -156,13 +189,18 @@ class CodeBlockMessageWidget extends StatelessWidget {
                   Expanded(
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: HighlightView(
-                        parsed.code,
-                        language: _highlightLang(parsed.language),
-                        theme: atomOneDarkTheme,
-                        padding: const EdgeInsets.fromLTRB(0, 10, 12, 10),
-                        textStyle: codeStyle,
-                      ),
+                      child: _highlightLang(parsed.language) == null
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 12, 10),
+                              child: Text(parsed.code, style: codeStyle),
+                            )
+                          : HighlightView(
+                              parsed.code,
+                              language: _highlightLang(parsed.language),
+                              theme: atomOneDarkTheme,
+                              padding: const EdgeInsets.fromLTRB(0, 10, 12, 10),
+                              textStyle: codeStyle,
+                            ),
                     ),
                   ),
                 ],

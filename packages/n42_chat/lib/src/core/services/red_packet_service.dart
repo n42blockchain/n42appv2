@@ -5,6 +5,8 @@ import '../../domain/entities/red_packet_entity.dart';
 /// 管理红包的创建、领取、状态查询和历史记录。
 /// 当前使用本地实现作为过渡方案，最终需要后端/智能合约支持。
 abstract class IRedPacketService {
+  bool get isDemo => false;
+
   /// 创建红包
   Future<RedPacketEntity> createRedPacket({
     required String roomId,

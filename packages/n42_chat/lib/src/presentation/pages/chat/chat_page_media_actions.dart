@@ -105,7 +105,12 @@ extension _ChatPageMediaActionsMethods on _ChatPageState {
             : file.path.split(Platform.pathSeparator).last;
         final media = XFile(file.path, name: name);
         if (asset.type == AssetType.video) {
-          await _sendVideo(media);
+          await _sendVideo(
+            media,
+            suppliedThumbnail: await loadOptionalVideoThumbnail(
+              () => asset.thumbnailDataWithSize(const ThumbnailSize(400, 400)),
+            ),
+          );
         } else {
           await _sendImage(media);
         }
@@ -454,7 +459,11 @@ extension _ChatPageMediaActionsMethods on _ChatPageState {
     }
   }
 
-  Future<void> _sendVideo(XFile video, {DateTime? scheduledAt}) async {
+  Future<void> _sendVideo(
+    XFile video, {
+    DateTime? scheduledAt,
+    Uint8List? suppliedThumbnail,
+  }) async {
     try {
       debugLog('=== _sendVideo start ===');
       debugLog('Video path: ${video.path}');
@@ -577,30 +586,22 @@ extension _ChatPageMediaActionsMethods on _ChatPageState {
         return;
       }
 
-      // 生成视频缩略图（第一帧）
-      Uint8List? thumbnailBytes;
-      try {
-        debugLog('Generating video thumbnail...');
-        final thumbnailPath = await VideoThumbnail.thumbnailFile(
-          video: video.path,
-          thumbnailPath: (await Directory.systemTemp.createTemp()).path,
-          imageFormat: ImageFormat.JPEG,
-          maxHeight: 320,
-          quality: 75,
-        );
-
-        if (thumbnailPath != null) {
-          final thumbnailFile = File(thumbnailPath);
-          if (await thumbnailFile.exists()) {
-            thumbnailBytes = await thumbnailFile.readAsBytes();
-            debugLog('Thumbnail generated: ${thumbnailBytes.length} bytes');
-            // 清理临时文件
-            await thumbnailFile.delete();
+      Uint8List? thumbnailBytes = suppliedThumbnail;
+      if (thumbnailBytes == null || thumbnailBytes.isEmpty) {
+        for (final time in [0, 500]) {
+          try {
+            thumbnailBytes = await VideoThumbnail.thumbnailData(
+              video: video.path,
+              imageFormat: ImageFormat.JPEG,
+              maxHeight: 400,
+              quality: 82,
+              timeMs: time,
+            );
+            if (thumbnailBytes != null && thumbnailBytes.isNotEmpty) break;
+          } catch (_) {
+            debugLog('Video preview extraction unavailable');
           }
         }
-      } catch (e) {
-        debugLog('Failed to generate thumbnail: $e');
-        // 缩略图生成失败不阻止视频发送
       }
 
       debugLog('Final filename: $filename');

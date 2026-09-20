@@ -191,6 +191,8 @@ void main() {
       ),
     ).thenAnswer((_) async => response());
     when(auth.logout).thenAnswer((_) async {});
+    when(() => manager.userId).thenReturn(session['userId']);
+    when(() => storage.removeAccount(any())).thenAnswer((_) async {});
     repository = AuthRepositoryImpl(
       authDataSource: auth,
       secureStorage: storage,
@@ -305,6 +307,18 @@ void main() {
       expect((await tokenLogin()).success, isTrue);
     },
   );
+  test('temporary token restoration failure remains retryable', () async {
+    when(
+      () => auth.loginWithToken(
+        homeserver: any(named: 'homeserver'),
+        accessToken: any(named: 'accessToken'),
+        userId: any(named: 'userId'),
+        deviceId: any(named: 'deviceId'),
+      ),
+    ).thenThrow(TimeoutException('offline'));
+    expect((await tokenLogin()).errorType, AuthErrorType.unknown);
+    verifyNever(() => storage.removeAccount(any()));
+  });
   test(
     'restore uses saved token while holding its own authentication lock',
     () async {
@@ -381,6 +395,7 @@ void main() {
         await repository.logout();
         expect(await event, isFalse);
         verify(storage.clearSession).called(1);
+        verify(() => storage.removeAccount(session['userId']!)).called(1);
         if (biometric) {
           verifyNever(storage.clearCredentials);
         } else {

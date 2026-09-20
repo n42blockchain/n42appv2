@@ -11,6 +11,16 @@ class ImageTextL10n {
 
   bool get _zh => _languageCode == 'zh';
 
+  String aiFailure(int? statusCode) => statusCode == 429
+      ? (_zh
+            ? '免费 AI 当前繁忙或额度已用完，请稍后重试。'
+            : 'Free AI is busy or its quota has been reached. Please try again later.')
+      : (_zh
+            ? '图片 AI 暂时不可用，请稍后重试。'
+            : 'Image AI is temporarily unavailable. Please try again later.');
+  String get recognitionFailed => _zh
+      ? '无法识别这张图片，请重试或选择更清晰的图片。'
+      : 'Could not read this image. Retry or choose a clearer image.';
   String get extractText => _zh ? '提取文字' : 'Extract text';
   String get translateImage => _zh ? '翻译图片' : 'Translate image';
   String get recognizing => _zh ? '正在识别图片文字…' : 'Recognizing text…';

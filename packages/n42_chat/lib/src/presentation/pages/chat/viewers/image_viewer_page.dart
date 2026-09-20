@@ -193,7 +193,7 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
       backgroundColor: Colors.black,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.black.withValues(alpha: .65),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
         actions: [
@@ -209,14 +209,14 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
                         strokeWidth: 2,
                       ),
                     )
-                  : const Icon(Icons.download),
+                  : const Icon(Icons.download, color: Colors.white),
               onPressed: _isSaving ? null : _saveImage,
               tooltip: 'Save',
             ),
           // 分享按钮
           if (!protected)
             IconButton(
-              icon: const Icon(Icons.share),
+              icon: const Icon(Icons.share, color: Colors.white),
               onPressed: _shareImage,
               tooltip: 'Share',
             ),
@@ -291,38 +291,6 @@ class _ImageViewerPageState extends State<ImageViewerPage> {
                         Text(
                           'AI describe / OCR',
                           style: TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (!protected)
-                  PopupMenuItem(
-                    value: 'save',
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.download,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 12),
-                        Text(
-                          S.of(context)?.chatSaveToGallery ?? 'Save to Gallery',
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                      ],
-                    ),
-                  ),
-                if (!protected)
-                  PopupMenuItem(
-                    value: 'share',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.share, color: Colors.white, size: 20),
-                        const SizedBox(width: 12),
-                        Text(
-                          S.of(context)?.commonShare ?? 'Share',
-                          style: const TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -421,13 +389,13 @@ class _AiDescribeSheetState extends State<_AiDescribeSheet> {
     } on AiServiceException catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = e.message;
+        _error = ImageTextL10n.of(context).aiFailure(e.statusCode);
         _loading = false;
       });
     } catch (e) {
       if (!mounted) return;
       setState(() {
-        _error = '$e';
+        _error = ImageTextL10n.of(context).aiFailure(null);
         _loading = false;
       });
     }
