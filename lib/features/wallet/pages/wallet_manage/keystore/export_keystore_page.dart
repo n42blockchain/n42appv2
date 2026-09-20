@@ -212,9 +212,11 @@ class _ClipboardCountdownHint extends StatelessWidget {
           color: textColor,
         ),
         SizedBox(width: AppSpacing.space2),
-        Text(
-          S.of(context).g_ui_clipboard_clear(seconds),
-          style: AppTypography.caption.copyWith(color: textColor),
+        Expanded(
+          child: Text(
+            S.of(context).g_ui_clipboard_clear(seconds),
+            style: AppTypography.caption.copyWith(color: textColor),
+          ),
         ),
       ],
     );
