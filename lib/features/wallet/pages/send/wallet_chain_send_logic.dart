@@ -373,6 +373,10 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
       }
       transferValue = valueBi;
     } else {
+      if (valueBi > coinModel.balance) {
+        _setAmountError(S.of(context).g_key_47);
+        return;
+      }
       transferValue = valueBi;
     }
     amountErrorMessage = '';
