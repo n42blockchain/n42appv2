@@ -6,7 +6,7 @@
 
 | ID | 任务 | 当前状态 | 验收标准 / 证据 |
 | --- | --- | --- | --- |
-| PAY-01 | 欧美及海外法币转账、红包、USDT/USDC 渠道与架构设计 | 设计草案完成，未接入生产 | [设计方案](payments-red-packets-overseas-2026-09-20.md)。确认运营主体、供应商消费者场景准入后进入实施；当前不进行真实资金交易。 |
+| PAY-01 | 欧美及海外法币转账、红包、USDT/USDC 渠道与架构设计 | 设计完成，基础代码及本地模拟已分项提交，未接入生产 | [设计方案](payments-red-packets-overseas-2026-09-20.md)。确认运营主体、供应商消费者场景准入后进入实施；当前不进行真实资金交易。 |
 | UX-01 | 依据欧美常用产品参考，对聊天、联系人和账号切换继续细调 | 本轮微调已验收并集成 | 在已完成 UI 方案基础上修补具体缺口，保留现有功能；窄屏、交互及无障碍针对性验证，由主代理审阅后集成。[执行记录](../testing/ui-polish-2026-09-20.md) |
 | COV-01 | 主程序 CI 口径测试覆盖率达到 70% | 实测 46.60%，目标尚未达成 | `flutter test --coverage --concurrency=4 --machine` 全套通过；`scripts/quality_gate.py coverage coverage/lcov.info --threshold 70` 通过；同时报告 hit/found、统计文件范围及口径限制。[执行记录](../testing/main-coverage-70-2026-09-20.md) |
 | QA-01 | 2696 遗留问题与最新反馈真机验收 | 部分等待反馈设备 / 外部渠道 | [修复与边界](../testing/chat-feedback-2696-2026-09-20/README.md)。Chat `OPEN_ISSUES.md` 为未解决缺陷的唯一台账，本表不替代它。 |
@@ -38,3 +38,5 @@
 
 - 注册 fixture 修复后 `test/quality/chat_device_fixture_contract_test.dart` 18 项通过；未重新全量运行。
 - 已独立提交：UI `e07045d10`、网络测试 `1d87470d0`、防钓鱼 `24405a5df`、安全存储 `08d92581a`、注册 fixture `68707bb2b`、支付设计 `06cfd630e`。版本号由现有提交钩子逐次递增，不表示已发布安装包。
+
+- 支付实施已拆成独立任务：[实施清单](payment-implementation-tasks.md)。P01–P08 和 P10a 已提交，剩余界面、签名、公共测试网及供应商沙盒按依赖推进。人工负责外部账号/签约；本地模拟不等于外部沙盒。
