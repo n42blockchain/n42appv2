@@ -25,6 +25,8 @@ final class LocalPaymentClient {
     if (timeout <= Duration.zero) throw ArgumentError('Invalid timeout');
   }
 
+  static final BigInt maxLocalUnits = BigInt.parse('9000000000000000');
+
   final Uri _endpoint;
   final http.Client _transport;
   final bool enabled;
@@ -83,7 +85,9 @@ final class LocalPaymentClient {
     required DateTime expiresAt,
     required String key,
   }) {
-    if (slots <= 0 || expiresAt.millisecondsSinceEpoch < 0) {
+    if (slots <= 0 ||
+        BigInt.from(slots) > maxLocalUnits ||
+        expiresAt.millisecondsSinceEpoch < 0) {
       throw ArgumentError('Invalid packet terms');
     }
     return _request(
@@ -256,11 +260,17 @@ final class LocalPaymentClient {
     if (value is! String || !RegExp(r'^(0|[1-9][0-9]*)$').hasMatch(value)) {
       throw const LocalPaymentException('invalid_response');
     }
-    return BigInt.parse(value);
+    final units = BigInt.parse(value);
+    if (units > maxLocalUnits) {
+      throw const LocalPaymentException('invalid_response');
+    }
+    return units;
   }
 
   static String _positive(BigInt value) {
-    if (value <= BigInt.zero) throw ArgumentError('Amount must be positive');
+    if (value <= BigInt.zero || value > maxLocalUnits) {
+      throw ArgumentError('Amount exceeds local simulation bounds');
+    }
     return value.toString();
   }
 }

@@ -76,10 +76,10 @@ void main() {
         expect(jsonDecode(request.body), {
           'recipient': 'b',
           'asset': 'test-asset',
-          'amount': '9007199254740993',
+          'amount': '9000000000000000',
         });
         return response({
-          'amount': '9007199254740993',
+          'amount': '9000000000000000',
           'asset': 'test-asset',
           'recipient': 'b',
           'id': 'transfer_${'a' * 64}',
@@ -88,10 +88,10 @@ void main() {
       final receipt = await c.transfer(
         recipient: 'b',
         asset: 'test-asset',
-        amount: BigInt.parse('9007199254740993'),
+        amount: BigInt.parse('9000000000000000'),
         key: 'transfer-1',
       );
-      expect(receipt['amount'], '9007199254740993');
+      expect(receipt['amount'], '9000000000000000');
       expect(() => receipt['amount'] = '1', throwsUnsupportedError);
     },
   );
@@ -258,4 +258,25 @@ void main() {
       throwsA(code('invalid_response')),
     );
   });
+  test(
+    'local amount upper bound rejects requests and responses beyond server limit',
+    () async {
+      var calls = 0;
+      final c = client((_) {
+        calls++;
+        return response({'asset': 'a', 'available': '9000000000000001'});
+      })..activateTestAccount('synthetic-test-accounta');
+      expect(
+        () => c.transfer(
+          recipient: 'b',
+          asset: 'a',
+          amount: BigInt.parse('9000000000000001'),
+          key: 'k',
+        ),
+        throwsArgumentError,
+      );
+      expect(calls, 0);
+      await expectLater(c.balance('a'), throwsA(code('invalid_response')));
+    },
+  );
 }

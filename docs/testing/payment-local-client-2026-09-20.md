@@ -22,3 +22,7 @@ The protocol test requires Python 3 (already required by the CI quality gate) an
 ## Receipt format review
 
 Post-measurement review tightened action receipts to transfer/packet/refund plus 64 lowercase hex characters. A malformed packet ID is rejected before the UI could accept an unusable packet. 13 client/protocol tests passed after the change; `/tmp/n42-payment-receipt-tests.log`. This follow-up was not included in the preceding full coverage trace.
+
+## Local protocol amount limit
+
+Aligned request and response validation with the local SQLite fixture cap of 9,000,000,000,000,000 minor units. The generic PaymentAmount domain retains arbitrary-precision BigInt; this cap only applies to the local simulation protocol. 14 client/protocol tests passed, including the maximum allowed value and one-unit overflow rejection before network dispatch. Targeted analysis: no errors/warnings, one style info. Logs: `/tmp/n42-payment-limits-tests.log`, `/tmp/n42-payment-final-analyze.log`. This follow-up was not included in the earlier full coverage measurement.
