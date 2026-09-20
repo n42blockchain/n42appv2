@@ -1,3 +1,4 @@
+import 'package:n42_wallet/features/payments/presentation/local_payment_lab_host.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/utils/app_logger.dart';
 import 'package:n42_wallet/features/browser/pages/browser_page.dart';
@@ -81,6 +82,17 @@ class _AboutAppState extends State<AboutApp> {
           child: Column(
             children: [
               _buildVersion(),
+              if (LocalPaymentLabHost.isEnabled)
+                ListTile(
+                  leading: const Icon(Icons.science_outlined),
+                  title: const Text('Local payment lab'),
+                  subtitle: const Text('Synthetic test funds only'),
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const LocalPaymentLabHost(),
+                    ),
+                  ),
+                ),
               SizedBox(height: AppSpacing.space6),
               _buildWebsiteSection(),
               SizedBox(height: AppSpacing.space8),
