@@ -1,0 +1,325 @@
+import 'dart:async';
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
+import 'package:n42_wallet/features/payments/data/local_payment_client.dart';
+import 'package:n42_wallet/features/payments/presentation/local_packet_lab_page.dart';
+
+final packetId = 'packet_${'a' * 64}';
+Finder key(String name) => find.byKey(ValueKey('packet_$name'));
+
+http.Response response(http.Request request) {
+  final body = request.method == 'POST'
+      ? jsonDecode(request.body) as Map<String, dynamic>
+      : <String, dynamic>{};
+  return http.Response(
+    jsonEncode({
+      'mode': 'localSimulation',
+      'asset': 'test-usdc',
+      if (request.method == 'GET') 'available': '80',
+      if (request.url.path == '/packets') ...{'id': packetId, ...body},
+      if (request.url.path.endsWith('/claims')) ...{
+        'packet': packetId,
+        'amount': '10',
+      },
+      if (request.url.path.endsWith('/refunds')) ...{
+        'id': 'refund_${'b' * 64}',
+        'amount': '20',
+      },
+    }),
+    200,
+  );
+}
+
+Future<void> reveal(WidgetTester tester, Finder finder) async {
+  if (finder.evaluate().isEmpty) {
+    await tester.drag(find.byType(ListView), const Offset(0, 5000));
+    await tester.pump();
+    await tester.scrollUntilVisible(
+      finder,
+      180,
+      scrollable: find
+          .descendant(
+            of: find.byType(ListView),
+            matching: find.byType(Scrollable),
+          )
+          .first,
+    );
+  } else {
+    await tester.ensureVisible(finder);
+  }
+  await tester.pump();
+}
+
+Future<void> enter(WidgetTester tester, String name, String value) async {
+  await reveal(tester, key(name));
+  await tester.enterText(key(name), value);
+  await tester.pump();
+}
+
+Future<void> tap(WidgetTester tester, String name) async {
+  await reveal(tester, key(name));
+  await tester.tap(key(name));
+  await tester.pump();
+}
+
+Future<LocalPaymentClient> open(
+  WidgetTester tester,
+  Future<http.Response> Function(http.Request) handler, {
+  double scale = 1,
+  bool enabled = true,
+}) async {
+  final transport = MockClient(handler);
+  addTearDown(transport.close);
+  final client = LocalPaymentClient(
+    endpoint: Uri.parse('http://127.0.0.1:8765'),
+    transport: transport,
+    enabled: enabled,
+  );
+  await tester.pumpWidget(
+    MaterialApp(
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(
+          context,
+        ).copyWith(textScaler: TextScaler.linear(scale)),
+        child: child!,
+      ),
+      home: LocalPacketLabPage(client: client),
+    ),
+  );
+  await enter(tester, 'token', 'synthetic-test-accounta');
+  await tap(tester, 'activate');
+  return client;
+}
+
+Future<void> fill(WidgetTester tester) async {
+  await enter(tester, 'asset', 'test-usdc');
+  await enter(tester, 'room', 'test-room');
+  await enter(tester, 'total', '30');
+  await enter(tester, 'slots', '3');
+  await enter(tester, 'minutes', '60');
+}
+
+void main() {
+  testWidgets(
+    'creation serializes taps and shows simulated ID and refreshed balance',
+    (tester) async {
+      final pending = Completer<http.Response>();
+      final calls = <http.Request>[];
+      await open(tester, (request) async {
+        calls.add(request);
+        return request.method == 'POST' ? pending.future : response(request);
+      });
+      await fill(tester);
+      await reveal(tester, key('create'));
+      final create = tester.widget<FilledButton>(key('create')).onPressed!;
+      create();
+      create();
+      await tester.pump();
+      expect(calls, hasLength(1));
+      expect(tester.widget<FilledButton>(key('create')).onPressed, isNull);
+      final body = jsonDecode(calls.single.body) as Map<String, dynamic>;
+      expect(body['total'], '30');
+      expect(body['slots'], '3');
+      expect(body['room'], 'test-room');
+      expect(
+        int.parse(body['expiresAt'] as String),
+        greaterThan(DateTime.now().millisecondsSinceEpoch ~/ 1000),
+      );
+      pending.complete(response(calls.single));
+      await tester.pumpAndSettle();
+      await reveal(
+        tester,
+        find.text('Simulated create receipt — synthetic funds only'),
+      );
+      expect(
+        find.text('Simulated create receipt — synthetic funds only'),
+        findsOneWidget,
+      );
+      await reveal(tester, key('id'));
+      expect(tester.widget<TextField>(key('id')).controller!.text, packetId);
+      await reveal(tester, key('balance'));
+      expect(
+        find.text('Synthetic balance: 80 base units (test-usdc)'),
+        findsOneWidget,
+      );
+      expect(calls.map((r) => r.method), ['POST', 'GET']);
+    },
+  );
+
+  testWidgets(
+    'uncertain creation locks edits and retries exact body, expiry and key',
+    (tester) async {
+      final calls = <http.Request>[];
+      await open(tester, (request) async {
+        calls.add(request);
+        if (calls.length == 1) throw http.ClientException('offline');
+        return response(request);
+      });
+      await fill(tester);
+      await tap(tester, 'create');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('total'));
+      expect(tester.widget<TextField>(key('total')).enabled, isFalse);
+      await reveal(tester, key('create'));
+      expect(tester.widget<FilledButton>(key('create')).onPressed, isNull);
+      await tap(tester, 'retry');
+      await tester.pumpAndSettle();
+      expect(calls[0].body, calls[1].body);
+      expect(
+        calls[0].headers['Idempotency-Key'],
+        calls[1].headers['Idempotency-Key'],
+      );
+      expect(calls.map((r) => r.method), ['POST', 'POST', 'GET']);
+    },
+  );
+
+  for (final action in ['claim', 'refund']) {
+    testWidgets(
+      '$action failure preserves key, success refreshes only simulation asset',
+      (tester) async {
+        final calls = <http.Request>[];
+        await open(tester, (request) async {
+          calls.add(request);
+          if (calls.length == 1) throw http.ClientException('offline');
+          return response(request);
+        });
+        await enter(tester, 'id', packetId);
+        await tap(tester, action);
+        await tester.pumpAndSettle();
+        await tap(tester, 'retry');
+        await tester.pumpAndSettle();
+        expect(
+          calls[0].url.path,
+          '/packets/$packetId/${action == 'claim' ? 'claims' : 'refunds'}',
+        );
+        expect(
+          calls[0].headers['Idempotency-Key'],
+          calls[1].headers['Idempotency-Key'],
+        );
+        expect(calls[2].url.queryParameters['asset'], 'test-usdc');
+        await reveal(
+          tester,
+          find.text('Simulated $action receipt — synthetic funds only'),
+        );
+        expect(find.text('Packet: $packetId'), findsOneWidget);
+      },
+    );
+  }
+
+  testWidgets(
+    'switching discards late receipt and restores unresolved original request on return',
+    (tester) async {
+      final pending = Completer<http.Response>();
+      final calls = <http.Request>[];
+      await open(tester, (request) async {
+        calls.add(request);
+        return calls.length == 1 ? pending.future : response(request);
+      });
+      await fill(tester);
+      await tap(tester, 'create');
+      await enter(tester, 'token', 'synthetic-test-accountb');
+      await tap(tester, 'activate');
+      pending.complete(response(calls.first));
+      await tester.pumpAndSettle();
+      await reveal(tester, key('balance'));
+      expect(find.text('Synthetic balance: not loaded'), findsOneWidget);
+      expect(
+        find.text('Simulated create receipt — synthetic funds only'),
+        findsNothing,
+      );
+      await enter(tester, 'token', 'synthetic-test-accounta');
+      await tap(tester, 'activate');
+      await tap(tester, 'retry');
+      await tester.pumpAndSettle();
+      expect(
+        calls[0].headers['Idempotency-Key'],
+        calls[1].headers['Idempotency-Key'],
+      );
+      expect(calls[0].body, calls[1].body);
+      expect(
+        calls[1].headers['Authorization'],
+        'Bearer synthetic-test-accounta',
+      );
+    },
+  );
+
+  testWidgets(
+    'confirmed operation with failed balance refresh directs GET retry only',
+    (tester) async {
+      final methods = <String>[];
+      await open(tester, (request) async {
+        methods.add(request.method);
+        if (request.method == 'GET') throw http.ClientException('offline');
+        return response(request);
+      });
+      await enter(tester, 'id', packetId);
+      await tap(tester, 'claim');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('error'));
+      expect(
+        find.text(
+          'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.',
+        ),
+        findsOneWidget,
+      );
+      await tap(tester, 'refresh');
+      await tester.pumpAndSettle();
+      expect(methods, ['POST', 'GET', 'GET']);
+      expect(key('retry'), findsNothing);
+    },
+  );
+
+  testWidgets('narrow large text supports validation without dispatch', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(320, 568);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    var calls = 0;
+    await open(tester, (request) async {
+      calls++;
+      return response(request);
+    }, scale: 2);
+    await fill(tester);
+    for (final invalid in ['0', '1.5', '31', '9000000000000001']) {
+      await enter(tester, 'total', invalid);
+      await tap(tester, 'create');
+      await reveal(tester, key('error'));
+      expect(find.textContaining('positive whole base units'), findsOneWidget);
+    }
+    await enter(tester, 'id', '../bad');
+    await tap(tester, 'claim');
+    await reveal(tester, key('error'));
+    expect(find.textContaining('Paste a local packet ID'), findsOneWidget);
+    expect(calls, 0);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets(
+    'disabled client makes no request and disposal does not close caller client',
+    (tester) async {
+      var calls = 0;
+      await open(tester, (request) async {
+        calls++;
+        return response(request);
+      }, enabled: false);
+      await reveal(tester, key('error'));
+      expect(
+        find.text(
+          'Activate an enabled local client with a synthetic-test account token.',
+        ),
+        findsOneWidget,
+      );
+      expect(calls, 0);
+      final client = await open(tester, (request) async => response(request));
+      await tester.pumpWidget(const SizedBox());
+      client.activateTestAccount('synthetic-test-accountb');
+      expect(await client.balance('test-usdc'), BigInt.from(80));
+    },
+  );
+}
