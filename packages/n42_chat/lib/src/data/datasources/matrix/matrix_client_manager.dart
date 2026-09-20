@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import '../../../core/encryption/account_session_index.dart';
+import '../../../core/encryption/session_preserving_client.dart';
 import '../../../core/encryption/token_device_session.dart';
 
 import 'package:flutter/foundation.dart';
@@ -226,7 +227,7 @@ class MatrixClientManager {
       );
 
       // 创建客户端（端到端加密由 flutter_vodozemac 自动支持）
-      _client = Client(
+      _client = SessionPreservingClient(
         clientName,
         database: database,
         httpClient: _managedHttpClient,

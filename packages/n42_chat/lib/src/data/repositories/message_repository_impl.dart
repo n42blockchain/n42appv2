@@ -206,9 +206,6 @@ class MessageRepositoryImpl implements IMessageRepository {
 
     _requestMissingTimelineKeys(room, timeline);
 
-    // 初始消息
-    yield _getMessagesFromTimeline(timeline, room);
-
     final updates = StreamController<matrix.SyncUpdate?>();
     final timelineUpdates = _timelineUpdateControllers[roomId];
     final timelineSubscription = timelineUpdates?.stream.listen(
@@ -217,6 +214,9 @@ class MessageRepositoryImpl implements IMessageRepository {
     final syncSubscription = _client?.onSync.stream.listen(updates.add);
 
     try {
+      // Subscribe before yielding: key delivery can occur while the consumer
+      // pauses after the first encrypted placeholder. Buffer that update.
+      yield _getMessagesFromTimeline(timeline, room);
       await for (final sync in updates.stream) {
         if (!_isCurrentTimeline(roomId, timeline)) break;
         // Matrix 协议中 limited=true 表示 sync 存在时间线缺口（如通话期间大量
@@ -239,7 +239,9 @@ class MessageRepositoryImpl implements IMessageRepository {
     } finally {
       await timelineSubscription?.cancel();
       await syncSubscription?.cancel();
-      await updates.close();
+      // A first-only consumer can cancel before updates.stream is listened to.
+      // Closing an unlistened single-subscription controller must not block it.
+      unawaited(updates.close());
     }
   }
 
@@ -251,11 +253,6 @@ class MessageRepositoryImpl implements IMessageRepository {
     final timeline = await _getOrCreateTimeline(roomId);
     if (timeline == null) return;
 
-    final initialMessage = _findMessageInTimeline(timeline, room, messageId);
-    if (initialMessage != null) {
-      yield initialMessage;
-    }
-
     final updates = StreamController<void>();
     final timelineUpdates = _timelineUpdateControllers[roomId];
     final timelineSubscription = timelineUpdates?.stream.listen(updates.add);
@@ -264,6 +261,8 @@ class MessageRepositoryImpl implements IMessageRepository {
     );
 
     try {
+      final initialMessage = _findMessageInTimeline(timeline, room, messageId);
+      if (initialMessage != null) yield initialMessage;
       await for (final _ in updates.stream) {
         if (!_isCurrentTimeline(roomId, timeline)) break;
         _requestMissingTimelineKeys(room, timeline);
@@ -279,7 +278,9 @@ class MessageRepositoryImpl implements IMessageRepository {
     } finally {
       await timelineSubscription?.cancel();
       await syncSubscription?.cancel();
-      await updates.close();
+      // A first-only consumer can cancel before updates.stream is listened to.
+      // Closing an unlistened single-subscription controller must not block it.
+      unawaited(updates.close());
     }
   }
 

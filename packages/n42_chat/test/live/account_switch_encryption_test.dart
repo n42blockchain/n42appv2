@@ -9,6 +9,9 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:vodozemac/vodozemac.dart' as vod;
 import 'package:n42_chat/src/data/datasources/matrix/matrix_client_manager.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_auth_datasource.dart';
+import 'package:n42_chat/src/data/datasources/matrix/matrix_message_datasource.dart';
+import 'package:n42_chat/src/data/datasources/local/preferences_datasource.dart';
+import 'package:n42_chat/src/data/repositories/message_repository_impl.dart';
 import 'package:n42_chat/src/data/datasources/matrix/matrix_contact_datasource.dart';
 import 'package:n42_chat/src/data/datasources/matrix/message/matrix_message_sender.dart';
 import 'package:n42_chat/src/data/datasources/matrix/message/matrix_media_uploader.dart';
@@ -55,6 +58,26 @@ void main() {
       final manager = MatrixClientManager.instance;
       await manager.initialize(databasePath: dir.path);
       final auth = MatrixAuthDataSource(clientManager: manager);
+      // Keep the same repository across accounts, as application DI does.
+      final messages = MessageRepositoryImpl(
+        MatrixMessageDataSource(manager),
+        manager,
+        PreferencesDataSource(),
+      );
+      Future<void> expectRepositoryReadable(
+        String roomId,
+        String eventId,
+        String body,
+      ) async {
+        final visible = await messages
+            .watchMessages(roomId)
+            .firstWhere(
+              (items) => items.any((m) => m.id == eventId && m.content == body),
+            )
+            .timeout(const Duration(seconds: 25));
+        expect(visible.singleWhere((m) => m.id == eventId).content, body);
+      }
+
       Future<void> signIn(int i) async {
         final result = await auth.loginWithPassword(
           homeserver: 'https://m.si46.world',
@@ -87,6 +110,9 @@ void main() {
             .getRoomById(roomId)!
             .getTimeline();
         try {
+          if (!timeline.events.any((e) => e.eventId == eventId)) {
+            await timeline.requestHistory(historyCount: 50);
+          }
           for (var i = 0; i < 80; i++) {
             if (timeline.events.any(
               (e) => e.eventId == eventId && e.body == body,
@@ -94,7 +120,12 @@ void main() {
               return;
             await Future<void>.delayed(const Duration(milliseconds: 250));
           }
-          fail('Recipient did not decrypt the account-switch fixture');
+          final matches = timeline.events.where((e) => e.eventId == eventId);
+          fail(
+            'Unreadable fixture: $body; matches=${matches.length}; '
+            'types=${matches.map((e) => e.messageType).toList()}; '
+            'errors=${matches.map((e) => e.body).toList()}',
+          );
         } finally {
           timeline.cancelSubscriptions();
         }
@@ -136,9 +167,14 @@ void main() {
         );
         expect(first, isNotNull);
         await switchTo(1);
+        await expectRepositoryReadable(
+          roomId,
+          first!,
+          'N42 sequential retained A to B',
+        );
         expect(manager.client!.deviceID, bDevice);
         expect(manager.client!.fingerprintKey, bFingerprint);
-        await expectReadable(roomId, first!, 'N42 sequential retained A to B');
+        await expectReadable(roomId, first, 'N42 sequential retained A to B');
         print(
           'QA real manager sequential A-to-B decryption passed; identity retained',
         );
@@ -148,10 +184,27 @@ void main() {
         );
         expect(second, isNotNull);
         await switchTo(0);
-        await expectReadable(roomId, second!, 'N42 sequential retained B to A');
+        await expectRepositoryReadable(
+          roomId,
+          second!,
+          'N42 sequential retained B to A',
+        );
+        await expectReadable(roomId, second, 'N42 sequential retained B to A');
         print(
           'QA real manager sequential B-to-A decryption passed; identity retained',
         );
+        // Reuse the outbound session and cached repository after another switch.
+        final third = await sender.sendTextMessage(
+          roomId,
+          'N42 retained session second message',
+        );
+        await switchTo(1);
+        await expectRepositoryReadable(
+          roomId,
+          third!,
+          'N42 retained session second message',
+        );
+        await switchTo(0);
         await manager.dispose();
         await manager.initialize(databasePath: dir.path);
         expect(manager.userId, accounts[0]['user_id']);
@@ -188,6 +241,7 @@ void main() {
         await signIn(0); // Refresh cleanup credentials after explicit logout.
         expect(manager.client!.deviceID, isNot(aDevice));
       } finally {
+        messages.disposeAllTimelines();
         await manager.dispose();
       }
     },

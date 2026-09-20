@@ -471,6 +471,172 @@ void main() {
         ).called(2);
       },
     );
+    test(
+      'retains key updates while the first message emission is paused',
+      () async {
+        final callbackReady = Completer<void>();
+        late void Function() timelineOnUpdate;
+        var isEncrypted = true;
+        final encryptedMessage = MessageEntity(
+          id: testEventId,
+          roomId: testRoomId,
+          senderId: '@alice:matrix.org',
+          senderName: 'Alice',
+          content: 'The sender has not sent us the session key.',
+          timestamp: DateTime(2026, 1, 1),
+          type: MessageType.encrypted,
+          status: MessageStatus.sent,
+        );
+        final decryptedMessage = MessageEntity(
+          id: testEventId,
+          roomId: testRoomId,
+          senderId: '@alice:matrix.org',
+          senderName: 'Alice',
+          content: 'Recovered message',
+          timestamp: DateTime(2026, 1, 1),
+          type: MessageType.text,
+          status: MessageStatus.sent,
+        );
+
+        when(
+          () => mockRoom.getTimeline(onUpdate: any(named: 'onUpdate')),
+        ).thenAnswer((invocation) async {
+          timelineOnUpdate =
+              invocation.namedArguments[#onUpdate] as void Function();
+          if (!callbackReady.isCompleted) callbackReady.complete();
+          return mockTimeline;
+        });
+        when(() => mockEvent.eventId).thenReturn(testEventId);
+        when(() => mockEvent.type).thenAnswer(
+          (_) => isEncrypted
+              ? matrix.EventTypes.Encrypted
+              : matrix.EventTypes.Message,
+        );
+        when(() => mockEvent.messageType).thenAnswer(
+          (_) => isEncrypted
+              ? matrix.MessageTypes.BadEncrypted
+              : matrix.MessageTypes.Text,
+        );
+        when(() => mockEvent.content).thenAnswer(
+          (_) => isEncrypted
+              ? <String, dynamic>{
+                  'can_request_session': true,
+                  'session_id': 'session-1',
+                  'sender_key': 'sender-key-1',
+                }
+              : <String, dynamic>{
+                  'msgtype': matrix.MessageTypes.Text,
+                  'body': 'Recovered message',
+                },
+        );
+        when(() => mockTimeline.events).thenReturn(<matrix.Event>[mockEvent]);
+        when(
+          () => mockMsgDS.mapEventToMessage(mockEvent, mockRoom),
+        ).thenAnswer((_) => isEncrypted ? encryptedMessage : decryptedMessage);
+
+        final iterator = StreamIterator(repository.watchMessages(testRoomId));
+        addTearDown(iterator.cancel);
+        expect(await iterator.moveNext(), isTrue);
+        expect(iterator.current.single.content, contains('session key'));
+        // The consumer has not requested another emission yet. Key delivery
+        // must still be observed while async* is suspended at its first yield.
+        isEncrypted = false;
+        timelineOnUpdate();
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        expect(
+          await iterator.moveNext().timeout(const Duration(seconds: 2)),
+          isTrue,
+        );
+        expect(iterator.current.single.content, 'Recovered message');
+        verify(
+          () => mockMsgDS.mapEventToMessage(mockEvent, mockRoom),
+        ).called(2);
+      },
+    );
+    test(
+      'retains key updates while the single message emission is paused',
+      () async {
+        final callbackReady = Completer<void>();
+        late void Function() timelineOnUpdate;
+        var isEncrypted = true;
+        final encryptedMessage = MessageEntity(
+          id: testEventId,
+          roomId: testRoomId,
+          senderId: '@alice:matrix.org',
+          senderName: 'Alice',
+          content: 'The sender has not sent us the session key.',
+          timestamp: DateTime(2026, 1, 1),
+          type: MessageType.encrypted,
+          status: MessageStatus.sent,
+        );
+        final decryptedMessage = MessageEntity(
+          id: testEventId,
+          roomId: testRoomId,
+          senderId: '@alice:matrix.org',
+          senderName: 'Alice',
+          content: 'Recovered message',
+          timestamp: DateTime(2026, 1, 1),
+          type: MessageType.text,
+          status: MessageStatus.sent,
+        );
+
+        when(
+          () => mockRoom.getTimeline(onUpdate: any(named: 'onUpdate')),
+        ).thenAnswer((invocation) async {
+          timelineOnUpdate =
+              invocation.namedArguments[#onUpdate] as void Function();
+          if (!callbackReady.isCompleted) callbackReady.complete();
+          return mockTimeline;
+        });
+        when(() => mockEvent.eventId).thenReturn(testEventId);
+        when(() => mockEvent.type).thenAnswer(
+          (_) => isEncrypted
+              ? matrix.EventTypes.Encrypted
+              : matrix.EventTypes.Message,
+        );
+        when(() => mockEvent.messageType).thenAnswer(
+          (_) => isEncrypted
+              ? matrix.MessageTypes.BadEncrypted
+              : matrix.MessageTypes.Text,
+        );
+        when(() => mockEvent.content).thenAnswer(
+          (_) => isEncrypted
+              ? <String, dynamic>{
+                  'can_request_session': true,
+                  'session_id': 'session-1',
+                  'sender_key': 'sender-key-1',
+                }
+              : <String, dynamic>{
+                  'msgtype': matrix.MessageTypes.Text,
+                  'body': 'Recovered message',
+                },
+        );
+        when(() => mockTimeline.events).thenReturn(<matrix.Event>[mockEvent]);
+        when(
+          () => mockMsgDS.mapEventToMessage(mockEvent, mockRoom),
+        ).thenAnswer((_) => isEncrypted ? encryptedMessage : decryptedMessage);
+
+        final iterator = StreamIterator(
+          repository.watchMessage(testRoomId, testEventId),
+        );
+        addTearDown(iterator.cancel);
+        expect(await iterator.moveNext(), isTrue);
+        expect(iterator.current!.content, contains('session key'));
+        // The consumer has not requested another emission yet. Key delivery
+        // must still be observed while async* is suspended at its first yield.
+        isEncrypted = false;
+        timelineOnUpdate();
+        await Future<void>.delayed(const Duration(milliseconds: 10));
+        expect(
+          await iterator.moveNext().timeout(const Duration(seconds: 2)),
+          isTrue,
+        );
+        expect(iterator.current!.content, 'Recovered message');
+        verify(
+          () => mockMsgDS.mapEventToMessage(mockEvent, mockRoom),
+        ).called(2);
+      },
+    );
   });
 
   group('getMessages', () {

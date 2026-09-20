@@ -121,7 +121,15 @@ class LocalRoomKeyStore {
       );
     }
     if (sessions.isNotEmpty) {
-      client.encryption?.keyManager.clearInboundGroupSessions();
+      // Loading missing sessions does not require clearing existing ratchets.
+      // Clearing them lets a later re-shared key replace an earlier disk key.
+      for (final session in sessions) {
+        if (_scope(client) != scope) throw StateError('Account changed');
+        await client.encryption?.keyManager.loadInboundGroupSession(
+          session.roomId,
+          session.sessionId,
+        );
+      }
       // Login can load encrypted timeline events before local keys are restored.
       // Notify even for an already stored session so cached failures retry.
       for (final session in sessions) {
