@@ -312,4 +312,182 @@ void main() {
       expect(await client.balance('test-usdc'), BigInt.one);
     },
   );
+  testWidgets(
+    'check original result reads only and clears matching pending transfer',
+    (tester) async {
+      final requests = <http.Request>[];
+      late http.Request original;
+      await open(tester, (request) async {
+        requests.add(request);
+        if (request.method == 'POST') {
+          original = request;
+          throw http.ClientException('response lost');
+        }
+        if (request.url.pathSegments.first == 'requests') {
+          expect(
+            request.url.queryParameters['key'],
+            original.headers['Idempotency-Key'],
+          );
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'status': 'completed',
+              'receipt': jsonDecode(receipt(original).body),
+            }),
+            200,
+          );
+        }
+        throw http.ClientException('balance unavailable');
+      });
+      await activate(tester);
+      await tap(tester, 'transfer');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('amount'));
+      expect(tester.widget<TextField>(key('amount')).enabled, isFalse);
+      await tap(tester, 'recover');
+      await tester.pumpAndSettle();
+      expect(requests.where((r) => r.method == 'POST'), hasLength(1));
+      expect(key('recover'), findsNothing);
+      await reveal(tester, key('error'));
+      expect(find.textContaining('balance refresh failed'), findsOneWidget);
+      await tap(tester, 'refresh');
+      await tester.pumpAndSettle();
+      expect(requests.where((r) => r.method == 'POST'), hasLength(1));
+    },
+  );
+
+  for (final recovery in ['unresolved', 'not_found', 'mismatch']) {
+    testWidgets('recovery $recovery keeps locked original key for retry', (
+      tester,
+    ) async {
+      final posts = <http.Request>[];
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          posts.add(request);
+          throw http.ClientException('unknown result');
+        }
+        if (recovery == 'not_found')
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'error': {'code': 'not_found'},
+            }),
+            404,
+          );
+        if (recovery == 'mismatch')
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'status': 'completed',
+              'receipt': {
+                ...jsonDecode(receipt(posts.first).body)
+                    as Map<String, dynamic>,
+                'recipient': 'different',
+              },
+            }),
+            200,
+          );
+        return http.Response(
+          jsonEncode({'mode': 'localSimulation', 'status': 'unresolved'}),
+          200,
+        );
+      });
+      await activate(tester);
+      await tap(tester, 'transfer');
+      await tester.pumpAndSettle();
+      await tap(tester, 'recover');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('recipient'));
+      expect(tester.widget<TextField>(key('recipient')).enabled, isFalse);
+      await tap(tester, 'transfer');
+      await tester.pumpAndSettle();
+      expect(posts, hasLength(2));
+      expect(
+        posts[1].headers['Idempotency-Key'],
+        posts[0].headers['Idempotency-Key'],
+      );
+      expect(posts[1].body, posts[0].body);
+      expect(
+        find.text('Simulated transfer receipt — synthetic funds only'),
+        findsNothing,
+      );
+    });
+  }
+
+  testWidgets(
+    'switch back restores pending snapshot and ignores stale recovery',
+    (tester) async {
+      final stale = Completer<http.Response>();
+      final posts = <http.Request>[];
+      final checks = <http.Request>[];
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          posts.add(request);
+          throw http.ClientException('unknown');
+        }
+        if (request.url.pathSegments.first == 'requests') {
+          checks.add(request);
+          if (checks.length == 1) return stale.future;
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'status': 'completed',
+              'receipt': jsonDecode(receipt(posts.first).body),
+            }),
+            200,
+          );
+        }
+        return balance('100');
+      });
+      await activate(tester);
+      await tap(tester, 'transfer');
+      await tester.pumpAndSettle();
+      await tap(tester, 'recover');
+      await enter(tester, 'token', tokenB);
+      await tap(tester, 'activate');
+      await tester.pumpAndSettle();
+      expect(key('recover'), findsNothing);
+      await enter(tester, 'token', tokenA);
+      await tap(tester, 'activate');
+      await tester.pumpAndSettle();
+      stale.complete(
+        http.Response(
+          jsonEncode({
+            'mode': 'localSimulation',
+            'status': 'completed',
+            'receipt': jsonDecode(receipt(posts.first).body),
+          }),
+          200,
+        ),
+      );
+      await tester.pumpAndSettle();
+      await reveal(tester, key('amount'));
+      expect(tester.widget<TextField>(key('amount')).controller!.text, '25');
+      expect(tester.widget<TextField>(key('amount')).enabled, isFalse);
+      await tap(tester, 'recover');
+      await tester.pumpAndSettle();
+      expect(checks, hasLength(2));
+      expect(checks[0].url, checks[1].url);
+      expect(posts, hasLength(1));
+      expect(key('recover'), findsNothing);
+    },
+  );
+
+  testWidgets('replacing client clears all retained pending requests', (
+    tester,
+  ) async {
+    await open(tester, (_) async => throw http.ClientException('unknown'));
+    await activate(tester);
+    await tap(tester, 'transfer');
+    await tester.pumpAndSettle();
+    var requests = 0;
+    await open(tester, (_) async {
+      requests++;
+      return balance('100');
+    });
+    await activate(tester);
+    expect(requests, 0);
+    expect(tester.widget<TextField>(key('amount')).enabled, isTrue);
+    expect(key('recover'), findsNothing);
+  });
 }

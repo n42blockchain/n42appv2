@@ -15,6 +15,14 @@ class LocalPaymentLabPage extends StatefulWidget {
   State<LocalPaymentLabPage> createState() => _LocalPaymentLabPageState();
 }
 
+final class _TransferAttempt {
+  const _TransferAttempt(this.key, this.asset, this.recipient, this.amount);
+  final String key;
+  final String asset;
+  final String recipient;
+  final BigInt amount;
+}
+
 class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   final _token = TextEditingController();
   final _asset = TextEditingController();
@@ -27,8 +35,9 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   BigInt? _balance;
   String? _balanceAsset;
   Map<String, dynamic>? _receipt;
-  String? _attemptKey;
-  List<String>? _attemptFields;
+  String? _activeToken;
+  final Map<String, _TransferAttempt> _pending = {};
+  _TransferAttempt? get _attempt => _pending[_activeToken];
 
   @override
   void initState() {
@@ -43,6 +52,11 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     if (oldWidget.client != widget.client) {
       oldWidget.client.clearAccount();
       widget.client.clearAccount();
+      _pending.clear();
+      _token.clear();
+      _asset.clear();
+      _recipient.clear();
+      _amount.clear();
       _clearSession();
     }
   }
@@ -55,13 +69,13 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     _balance = null;
     _balanceAsset = null;
     _receipt = null;
-    _attemptKey = null;
-    _attemptFields = null;
+    _activeToken = null;
   }
 
   @override
   void dispose() {
     _generation++;
+    _pending.clear();
     widget.client.clearAccount();
     for (final controller in [_token, _asset, _recipient, _amount]) {
       controller.dispose();
@@ -75,8 +89,16 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     widget.client.clearAccount();
     setState(_clearSession);
     try {
-      widget.client.activateTestAccount(_token.text.trim());
-      setState(() => _active = true);
+      final token = _token.text.trim();
+      widget.client.activateTestAccount(token);
+      setState(() {
+        _active = true;
+        _activeToken = token;
+        final attempt = _attempt;
+        _recipient.text = attempt?.recipient ?? '';
+        _amount.text = attempt?.amount.toString() ?? '';
+        if (attempt != null) _asset.text = attempt.asset;
+      });
       if (_asset.text.trim().isNotEmpty) await _refresh();
     } catch (error) {
       if (mounted) setState(() => _error = _explain(error));
@@ -132,19 +154,20 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
       });
       return;
     }
-    final fields = [asset, recipient, amount.toString()];
-    if (_attemptFields == null ||
-        List.generate(
-          3,
-          (index) => _attemptFields![index] != fields[index],
-        ).any((changed) => changed)) {
-      final random = Random.secure();
-      _attemptKey = List.generate(
-        16,
-        (_) => random.nextInt(256).toRadixString(16).padLeft(2, '0'),
-      ).join();
-      _attemptFields = fields;
-    }
+    final token = _activeToken!;
+    final attempt =
+        _attempt ??
+        _TransferAttempt(
+          List.generate(
+            16,
+            (_) =>
+                Random.secure().nextInt(256).toRadixString(16).padLeft(2, '0'),
+          ).join(),
+          asset,
+          recipient,
+          amount,
+        );
+    _pending[token] = attempt;
     final generation = _generation;
     setState(() {
       _busy = true;
@@ -155,16 +178,15 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     });
     try {
       final receipt = await widget.client.transfer(
-        recipient: recipient,
-        asset: asset,
-        amount: amount,
-        key: _attemptKey!,
+        recipient: attempt.recipient,
+        asset: attempt.asset,
+        amount: attempt.amount,
+        key: attempt.key,
       );
       if (!_isCurrent(generation)) return;
       setState(() {
         _receipt = receipt;
-        _attemptKey = null;
-        _attemptFields = null;
+        _pending.remove(token);
       });
       // The receipt remains visible if the subsequent balance refresh fails.
       final balance = await widget.client.balance(asset);
@@ -181,6 +203,57 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
               : 'Simulated transfer completed; balance refresh failed. Use Refresh synthetic balance.';
         });
       }
+    } finally {
+      if (_isCurrent(generation)) setState(() => _busy = false);
+    }
+  }
+
+  Future<void> _recover() async {
+    final attempt = _attempt;
+    if (!_active || _busy || attempt == null) return;
+    final generation = _generation;
+    final token = _activeToken!;
+    setState(() {
+      _busy = true;
+      _error = null;
+    });
+    try {
+      final result = await widget.client.recoverRequest(attempt.key);
+      if (!_isCurrent(generation)) return;
+      final receipt = result.receipt;
+      if (receipt == null) {
+        setState(
+          () => _error =
+              'Original result is still unknown. Keep the original request key.',
+        );
+        return;
+      }
+      if (receipt['id'] is! String ||
+          !(receipt['id'] as String).startsWith('transfer_') ||
+          receipt['recipient'] != attempt.recipient ||
+          receipt['asset'] != attempt.asset ||
+          receipt['amount'] != attempt.amount.toString()) {
+        throw const LocalPaymentException('invalid_response');
+      }
+      setState(() {
+        _receipt = receipt;
+        _pending.remove(token);
+      });
+      final balance = await widget.client.balance(attempt.asset);
+      if (!_isCurrent(generation)) return;
+      setState(() {
+        _balance = balance;
+        _balanceAsset = attempt.asset;
+      });
+    } catch (error) {
+      if (!_isCurrent(generation)) return;
+      setState(() {
+        _error = _receipt != null
+            ? 'Simulated transfer completed; balance refresh failed. Use Refresh synthetic balance.'
+            : error is LocalPaymentException && error.code == 'not_found'
+            ? 'Original request is not visible yet. Its result is unknown; keep the original request key.'
+            : _explain(error);
+      });
     } finally {
       if (_isCurrent(generation)) setState(() => _busy = false);
     }
@@ -209,7 +282,8 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
 
   @override
   Widget build(BuildContext context) {
-    final canEdit = _active && !_busy;
+    final canOperate = _active && !_busy;
+    final canEdit = canOperate && _attempt == null;
     return Scaffold(
       appBar: AppBar(title: const Text('Local payment lab')),
       body: SafeArea(
@@ -268,7 +342,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
             const SizedBox(height: 8),
             OutlinedButton(
               key: const ValueKey('lab_refresh'),
-              onPressed: canEdit ? _refresh : null,
+              onPressed: canOperate ? _refresh : null,
               child: const Text('Refresh synthetic balance'),
             ),
             Text(
@@ -300,8 +374,27 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
             const SizedBox(height: 16),
             FilledButton(
               key: const ValueKey('lab_transfer'),
-              onPressed: canEdit ? _transfer : null,
-              child: Text(_busy ? 'Working…' : 'Send simulated transfer'),
+              onPressed: canOperate ? _transfer : null,
+              child: Text(
+                _busy
+                    ? 'Working…'
+                    : _attempt != null
+                    ? 'Retry original transfer'
+                    : 'Send simulated transfer',
+              ),
+            ),
+            if (_attempt != null) ...[
+              const Text(
+                'Original result may be unknown. Inputs are locked to preserve the original request.',
+              ),
+              OutlinedButton(
+                key: const ValueKey('lab_recover'),
+                onPressed: canOperate ? _recover : null,
+                child: const Text('Check original result'),
+              ),
+            ],
+            const Text(
+              'Pending requests are kept only while this page remains open. Leaving or restarting discards recovery keys; verify the original request before sending again.',
             ),
             if (_busy) const LinearProgressIndicator(),
             if (_error != null)
