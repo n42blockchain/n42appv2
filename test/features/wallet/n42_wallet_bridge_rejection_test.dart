@@ -46,7 +46,16 @@ void main() {
     },
   );
 
-  for (final amount in ['0', '-1', '', 'not-an-amount']) {
+  for (final amount in [
+    '0',
+    '-1',
+    '',
+    'not-an-amount',
+    'NaN',
+    'Infinity',
+    '-Infinity',
+    '1e9999',
+  ]) {
     test(
       'connected wallet rejects invalid amount "$amount" before dispatch',
       () async {

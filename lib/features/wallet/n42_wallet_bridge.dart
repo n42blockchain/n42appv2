@@ -191,7 +191,7 @@ class N42WalletBridge implements IWalletBridge {
       }
 
       final value = double.tryParse(amount) ?? 0.0;
-      if (value <= 0) {
+      if (!value.isFinite || value <= 0) {
         return TransferResult.failure('Invalid transfer amount');
       }
 
