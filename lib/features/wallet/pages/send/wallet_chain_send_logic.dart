@@ -457,6 +457,11 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
     if (!mounted) return;
     if (errorMessage != '') return setState(() => load = Load.finish);
 
+    // The asynchronous estimate can raise the fee after the initial amount
+    // check. Revalidate exact amount + refreshed fee before confirmation.
+    amountCheck();
+    if (amountErrorMessage != '') return setState(() => load = Load.finish);
+
     final uBalance = _isContract
         ? (chainModel?.balance ?? BigInt.zero)
         : coinModel.balance;

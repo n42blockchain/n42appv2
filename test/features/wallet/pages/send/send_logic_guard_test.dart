@@ -364,4 +364,49 @@ void main() {
     expect(state.addressChecks, 0);
     expect(state.estimates, 0);
   });
+
+  testWidgets('increased fee is revalidated before native confirmation', (
+    tester,
+  ) async {
+    final state = await mount(tester, balance: BigInt.from(10000000));
+    state.valueTextEditingController.text = '9';
+    state.estimatedFee = BigInt.from(2000000);
+    final operation = state.sendTransaction();
+    await tester.pumpAndSettle();
+    final confirmed = state.confirmationRecord != null;
+    if (confirmed) {
+      await tester.tap(find.text('Cancel'));
+      await tester.pumpAndSettle();
+    }
+    await operation;
+    expect(
+      confirmed,
+      isFalse,
+      reason: 'Amount plus refreshed fee exceeds native balance',
+    );
+    expect(state.addressChecks, 1);
+    expect(state.estimates, 1);
+    expect(state.signatures, 0);
+    expect(state.amountErrorMessage, isNotEmpty);
+    expect(state.load, Load.finish);
+  });
+
+  testWidgets('amount plus refreshed fee exactly at balance can be confirmed', (
+    tester,
+  ) async {
+    final state = await mount(tester, balance: BigInt.from(10000000));
+    state.valueTextEditingController.text = '8';
+    state.estimatedFee = BigInt.from(2000000);
+    final operation = state.sendTransaction();
+    await tester.pumpAndSettle();
+    expect(find.text('Confirm ETH'), findsOneWidget);
+    expect(state.confirmationRecord!.price, BigInt.from(8000000));
+    expect(state.confirmationRecord!.gasPrice, BigInt.from(2000000));
+    expect(state.amountErrorMessage, isEmpty);
+    await tester.tap(find.text('Cancel'));
+    await tester.pumpAndSettle();
+    await operation;
+    expect(state.signatures, 0);
+    expect(state.load, Load.finish);
+  });
 }

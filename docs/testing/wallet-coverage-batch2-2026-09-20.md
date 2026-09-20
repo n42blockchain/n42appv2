@@ -47,7 +47,25 @@ Suggested independent commit: `fix: reject token amounts above wallet balance` (
 
 ## C. Native fee refresh revalidation
 
-Code review identified a second candidate: the amount is validated against the old fee before asynchronous estimation; after estimation the code checks only fee alone against native balance, not amount plus the refreshed fee. A dedicated failing reproduction and fix will be recorded here after the token-balance change is separately committed by the coordinating agent.
+The token-balance fix was separately committed as `cc4ef4a61` before this second fix was made.
+
+### Reproduced defect
+
+The amount was validated against the old fee before asynchronous estimation; afterward the code checked only fee alone against native balance. With native balance 10, send amount 9, old fee 0, and refreshed fee 2 (all represented in exact six-decimal units), production code opened the confirmation route despite the 11-unit total exceeding the balance. The test expected no confirmation and failed, then canceled the route without signing.
+
+Before-fix evidence: `/tmp/n42-wallet-fee-refresh-before.log` (one expected regression failure).
+
+### Fix and verification
+
+After estimation returns successfully, the send flow reruns the existing precise `amountCheck` and returns with `Load.finish` when it reports an error. This checks amount plus the refreshed fee before building the confirmation record. No new floating-point conversion is introduced.
+
+Two regressions verify the increased-fee rejection and the exact boundary (amount 8 + refreshed fee 2 = balance 10 remains confirmable). The rejected case asserts one address lookup and one estimate, no confirmation, zero signing calls, an amount error, and released busy state. The valid boundary is explicitly canceled after checking the exact amount and fee on the record.
+
+Command: `flutter test --no-pub test/features/wallet/pages/send/send_logic_guard_test.dart --reporter expanded`.
+
+Result: **15 send tests passed** (`/tmp/n42-wallet-fee-refresh-after.log`). Targeted production/test analysis found no issues (`/tmp/n42-wallet-fee-refresh-analyze.log`).
+
+Suggested independent commit: `fix: recheck send balance after fee refresh` (production source, two added regression cases, and this report update). The worker made no commit.
 
 ## Integration notes
 
