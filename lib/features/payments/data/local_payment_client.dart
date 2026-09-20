@@ -91,6 +91,55 @@ final class LocalPaymentClient {
     return receipt;
   }
 
+  /// Resolves an original idempotency key without submitting another payment.
+  /// Unresolved/404 are not proof of failure; retry only the original request.
+  Future<LocalPaymentRequestResult> recoverRequest(String key) async {
+    if (!RegExp(r'^[\x21-\x7e]{1,128}$').hasMatch(key)) {
+      throw ArgumentError('Invalid idempotency key');
+    }
+    final result = await _request(
+      'GET',
+      '/requests',
+      pathSegments: ['requests', key],
+    );
+    if (result['status'] == 'unresolved' && !result.containsKey('receipt')) {
+      return const LocalPaymentRequestResult._(null);
+    }
+    final receipt = result['receipt'];
+    if (result['status'] != 'completed' ||
+        receipt is! Map<String, dynamic> ||
+        receipt['mode'] != 'localSimulation' ||
+        receipt['asset'] is! String ||
+        (receipt['asset'] as String).isEmpty) {
+      throw const LocalPaymentException('invalid_response');
+    }
+    final id = receipt['id'];
+    if (id is String &&
+        RegExp(r'^(transfer|packet|refund)_[a-f0-9]{64}$').hasMatch(id)) {
+      if (id.startsWith('packet_')) {
+        _units(receipt['total']);
+        _units(receipt['slots']);
+        _units(receipt['expiresAt']);
+      } else {
+        _units(receipt['amount']);
+        if (id.startsWith('transfer_') &&
+            (receipt['recipient'] is! String ||
+                (receipt['recipient'] as String).isEmpty)) {
+          throw const LocalPaymentException('invalid_response');
+        }
+      }
+    } else if (!receipt.containsKey('id') &&
+        receipt['packet'] is String &&
+        RegExp(
+          r'^packet_[a-f0-9]{64}$',
+        ).hasMatch(receipt['packet'] as String)) {
+      _units(receipt['amount']);
+    } else {
+      throw const LocalPaymentException('invalid_response');
+    }
+    return LocalPaymentRequestResult._(Map.unmodifiable(receipt));
+  }
+
   Future<Map<String, dynamic>> transfer({
     required String recipient,
     required String asset,
@@ -158,6 +207,7 @@ final class LocalPaymentClient {
     String path, {
     String? key,
     Map<String, String>? query,
+    List<String>? pathSegments,
     Map<String, dynamic>? body,
   }) async {
     _requireEnabled();
@@ -167,7 +217,9 @@ final class LocalPaymentClient {
     final request =
         http.Request(
             method,
-            _endpoint.replace(path: path, queryParameters: query),
+            pathSegments == null
+                ? _endpoint.replace(path: path, queryParameters: query)
+                : _endpoint.replace(pathSegments: pathSegments),
           )
           ..followRedirects = false
           ..headers['Authorization'] = 'Bearer $token';
@@ -306,4 +358,11 @@ final class LocalPaymentException implements Exception {
   final String code;
   @override
   String toString() => 'LocalPaymentException: $code';
+}
+
+/// The local ledger either has a receipt or still has no definitive result.
+final class LocalPaymentRequestResult {
+  const LocalPaymentRequestResult._(this.receipt);
+  final Map<String, dynamic>? receipt;
+  bool get isCompleted => receipt != null;
 }
