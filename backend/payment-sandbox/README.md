@@ -1,0 +1,47 @@
+# Local payment simulation
+
+Python standard-library fixtures for **synthetic funds only**. This is not a Nium API emulator, provider adapter, public server, production payment service, or blockchain testnet. No HTTP listener, credentials, networking, payment signing, or real currency is used. Production mode is rejected; no fallback into simulation exists.
+
+## Run
+
+```sh
+python3 -m unittest discover -s backend/payment-sandbox -p 'test_*.py' -v
+```
+
+From this directory, a local fixture can be created explicitly:
+
+```python
+from sandbox import Sandbox
+
+asset = 'test-fiat:USD:minor-2'
+sandbox = Sandbox('/tmp/n42-local-payment-test.sqlite',
+                  mode='localSimulation', assets=[asset])
+sandbox.seed_test_funds('test-alice', asset, 1000, key='fixture-1')
+alice = sandbox.account('test-alice')
+alice.transfer('test-bob', asset, 100, key='example-transfer')
+```
+
+Every receipt and balance identifies `mode=localSimulation`. Assets are opaque allowlisted identifiers supplied by the fixture owner; `USD`, `USDC`, and other display symbols do not resolve automatically. All amounts are integer minor units, rejecting floats, strings, booleans, negatives, zero, and values above 9,000,000,000,000,000. Total synthetic issuance per asset is capped at that same limit, below signed SQLite 64-bit maximum.
+
+## Boundaries and semantics
+
+- `Sandbox` is the privileged **local fixture owner**, able to seed test funds and set test membership. `account(id)` establishes a trusted test principal, not authentication. Account-facing operations do not accept sender overrides or arbitrary account balance queries. Never expose these Python objects directly to untrusted clients. A later API must derive principals and membership from verified server-side identity.
+- `seed_test_funds` is the only issuance path, explicit and idempotent. Transfers use an actor-scoped idempotency key; same parameters replay the original receipt, changed parameters reject. Different actors cannot debit each other's funds.
+- Packet creation atomically reserves funds from the owner's available balance. Equal shares must divide exactly, and slots cannot exceed the member snapshot. This version includes the sender in the snapshot; the sender may claim one share while still a member.
+- Claims require both creation-time snapshot inclusion and current membership. A claimant receives at most one share. Repeated successful claims return the original receipt even after expiry or departure, without moving funds again.
+- At `now >= expires_at`, new claims are denied. Only the owner can explicitly invoke the local refund fixture; it credits the exact unclaimed remainder once in the original asset. There is no scheduler or automatic wall-clock refund worker yet.
+- `now` is an explicit trusted test timestamp for deterministic scenarios, not a client-controlled timestamp contract. A future service must use its own clock.
+- SQLite `BEGIN IMMEDIATE` serializes each money operation, including balance changes, idempotency record and paired ledger entries. Process restart retains committed data; errors roll back. Concurrent fixtures sharing a local file do not overspend or overclaim. No guarantees are made for network-mounted SQLite or distributed multi-region deployments.
+- `audit_test_asset` is a privileged fixture check of available + reserved = seeded supply, with zero-sum paired ledger postings including the synthetic issuance bucket. It is not external-provider reconciliation.
+
+## Module / commit order
+
+Each stage can be separately committed and tested. `Account` wrappers import action modules only when called, so the ledger stage can run independently before later action files land.
+
+1. **P04** `common.py`, `sandbox.py`, `account.py`, `test_support.py`, `test_ledger.py`, `.gitignore`, README: account-scoped balances, configured assets, seed issuance, paired ledger and transaction foundation. Run `python3 -m unittest discover -s backend/payment-sandbox -p test_ledger.py -v`.
+2. **P05** `transfers.py`, `test_transfers.py`: idempotent atomic transfers and concurrency tests.
+3. **P06** `packet_reservations.py`, `test_packet_reservations.py`: exact equal-share reservation and snapshot.
+4. **P07** `packet_claims.py`, `test_packet_claims.py`: current + snapshot membership and once-only concurrent claims.
+5. **P08** `packet_refunds.py`, `test_packet_refunds.py`: expiry boundary, unclaimed refund and replay.
+
+For P05–P08, run unittest discovery with that stage's test filename; later stages depend on previous stages. Append the consolidated evidence document after all stages. No app integration or real-provider capability is implied by these modules.
