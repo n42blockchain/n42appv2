@@ -34,3 +34,7 @@ python3 -m unittest discover -s backend/payment-sandbox -p test_server.py -v
 ## Client evidence
 
 recoverRequest returns either unresolved or a validated immutable local receipt, never treats missing results as a failed payment, and does not resubmit. Five new client tests cover reserved-character keys, malformed/foreign nested receipts, unresolved state, claim receipts and account switching. Combined payment data suite: 24 passed; real Dart/Python protocol queried the original key containing `/`, `?`, `%`, `+`, `#` and returned the correct receipt. Logs: `/tmp/n42-payment-recovery-all-client.log`, `/tmp/n42-payment-recovery-analyze.log`.
+
+## URL canonicalization follow-up
+
+Dart normalizes dot-only path segments: keys `.` and `..` were not preserved by the original path-shaped endpoint. The client now uses `GET /requests?key=...`; the server strictly validates its single query key and retains the original path endpoint for compatibility. 15 HTTP tests and 24 client/protocol tests passed, including a real Dart/Python request key of `..`, reserved characters and cross-account rejection. Logs: `/tmp/n42-payment-dot-key-server.log`, `/tmp/n42-payment-dot-key-client.log`.

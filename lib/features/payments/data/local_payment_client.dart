@@ -97,11 +97,7 @@ final class LocalPaymentClient {
     if (!RegExp(r'^[\x21-\x7e]{1,128}$').hasMatch(key)) {
       throw ArgumentError('Invalid idempotency key');
     }
-    final result = await _request(
-      'GET',
-      '/requests',
-      pathSegments: ['requests', key],
-    );
+    final result = await _request('GET', '/requests', query: {'key': key});
     if (result['status'] == 'unresolved' && !result.containsKey('receipt')) {
       return const LocalPaymentRequestResult._(null);
     }
@@ -207,7 +203,6 @@ final class LocalPaymentClient {
     String path, {
     String? key,
     Map<String, String>? query,
-    List<String>? pathSegments,
     Map<String, dynamic>? body,
   }) async {
     _requireEnabled();
@@ -217,9 +212,7 @@ final class LocalPaymentClient {
     final request =
         http.Request(
             method,
-            pathSegments == null
-                ? _endpoint.replace(path: path, queryParameters: query)
-                : _endpoint.replace(pathSegments: pathSegments),
+            _endpoint.replace(path: path, queryParameters: query),
           )
           ..followRedirects = false
           ..headers['Authorization'] = 'Bearer $token';

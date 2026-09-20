@@ -180,6 +180,21 @@ class Handler(BaseHTTPRequestHandler):
         if route.scheme or route.netloc or route.fragment:
             raise RequestError(400, 'invalid_request')
         if self.command == 'GET':
+            if route.path == '/requests':
+                lengths = self.headers.get_all('Content-Length', [])
+                if (self.headers.get('Transfer-Encoding') is not None
+                        or (lengths and lengths != ['0']) or len(route.query) > 512
+                        or re.search(r'%(?![0-9a-fA-F]{2})', route.query)):
+                    raise RequestError(400, 'invalid_request')
+                try:
+                    query = parse_qs(route.query, keep_blank_values=True,
+                                     strict_parsing=True, errors='strict', max_num_fields=1)
+                except (ValueError, UnicodeError):
+                    raise RequestError(400, 'invalid_request') from None
+                if (set(query) != {'key'} or len(query['key']) != 1
+                        or not re.fullmatch(r'[\x21-\x7e]{1,128}', query['key'][0])):
+                    raise RequestError(400, 'invalid_request')
+                return self.server.request_receipt(actor, query['key'][0])
             if route.path.startswith('/requests/'):
                 lengths = self.headers.get_all('Content-Length', [])
                 if (route.query or self.headers.get('Transfer-Encoding') is not None

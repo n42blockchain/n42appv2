@@ -71,16 +71,16 @@ server.server_close()
         recipient: 'b',
         asset: 'test-usdc',
         amount: BigInt.from(10),
-        key: 'transfer/one?%+#',
+        key: '..',
       );
       final replay = await client.transfer(
         recipient: 'b',
         asset: 'test-usdc',
         amount: BigInt.from(10),
-        key: 'transfer/one?%+#',
+        key: '..',
       );
       expect(replay, first);
-      expect((await client.recoverRequest('transfer/one?%+#')).receipt, first);
+      expect((await client.recoverRequest('..')).receipt, first);
       expect(await client.operation(first['id'] as String), first);
       final packet = await client.createPacket(
         room: 'room',

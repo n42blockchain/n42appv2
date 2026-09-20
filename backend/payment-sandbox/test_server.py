@@ -235,3 +235,13 @@ class HttpTests(Fixture):
         self.assertEqual(self.request('GET', '/requests/collision')[1]['status'], 'unresolved')
         self.assertEqual(self.a.balance(ASSET)['available'], 99)
         self.conserved()
+
+    def test_query_key_preserves_dot_segments_and_reserved_characters(self):
+        for key in ['.', '..', '/a?b%+#']:
+            receipt = self.transfer(key=key)[1]
+            path = '/requests?' + urlencode({'key': key})
+            self.assertEqual(self.request('GET', path)[1]['receipt'], receipt)
+            self.assertEqual(self.request('GET', path, token='synthetic-test-bob00000')[0], 404)
+        for query in ['', 'key=', 'key=%', 'key=%FF', 'key=a&key=b', 'key=a&sender=b']:
+            self.assertEqual(self.request('GET', '/requests?' + query)[0], 400)
+        self.conserved()

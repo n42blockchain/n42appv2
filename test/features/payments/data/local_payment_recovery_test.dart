@@ -26,8 +26,9 @@ void main() {
     const key = 'original/a?b%#';
     final c = client((r) {
       expect(r.method, 'GET');
-      expect(r.url.pathSegments, ['requests', key]);
-      expect(r.url.query, isEmpty);
+      expect(r.url.path, '/requests');
+      expect(r.url.queryParameters, {'key': key});
+
       return response({'status': 'completed', 'receipt': receipt});
     });
     final result = await c.recoverRequest(key);
