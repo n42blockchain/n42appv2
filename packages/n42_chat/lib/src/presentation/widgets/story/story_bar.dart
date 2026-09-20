@@ -1,3 +1,6 @@
+import 'dart:math' as math;
+import '../../../core/theme/app_dimensions.dart';
+import '../../../core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../l10n/app_localizations.dart';
@@ -75,22 +78,34 @@ class StoryBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final labelHeight =
+        MediaQuery.textScalerOf(
+          context,
+        ).scale(AppTextStyles.captionSmall.fontSize!) *
+        AppTextStyles.captionSmall.height!;
+    final itemHeight =
+        avatarSize +
+        10 +
+        6 +
+        labelHeight.ceilToDouble() +
+        AppDimensions.spacingXS;
+    final effectiveHeight = math.max(
+      height,
+      itemHeight + AppDimensions.spacingS * 2,
+    );
     return Container(
-      height: height,
+      height: effectiveHeight,
       decoration: BoxDecoration(
         color: context.surfaceColor,
         border: Border(
-          bottom: BorderSide(
-            color: context.dividerColor,
-            width: 0.5,
-          ),
+          bottom: BorderSide(color: context.dividerColor, width: 0.5),
         ),
       ),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.symmetric(
           horizontal: horizontalPadding,
-          vertical: (height - (avatarSize + 10) - 24) / 2, // +10 = ring空间, 24 = 间距6 + 文本高度~18
+          vertical: (effectiveHeight - itemHeight) / 2,
         ),
         itemCount: userStories.length + 1, // +1 for "My Story"
         itemBuilder: (context, index) {
@@ -177,8 +192,7 @@ class StoryBar extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 11,
+              style: AppTextStyles.captionSmall.copyWith(
                 color: context.textSecondary,
               ),
             ),
@@ -218,8 +232,9 @@ class StoryBar extends StatelessWidget {
                 color: userStory.hasUnviewed
                     ? context.textPrimary
                     : context.textSecondary,
-                fontWeight:
-                    userStory.hasUnviewed ? FontWeight.w500 : FontWeight.normal,
+                fontWeight: userStory.hasUnviewed
+                    ? FontWeight.w500
+                    : FontWeight.normal,
               ),
             ),
           ),
@@ -248,11 +263,7 @@ class _MyStoryAvatar extends StatelessWidget {
   final String? name;
   final double size;
 
-  const _MyStoryAvatar({
-    this.imageUrl,
-    this.name,
-    required this.size,
-  });
+  const _MyStoryAvatar({this.imageUrl, this.name, required this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -261,10 +272,7 @@ class _MyStoryAvatar extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        border: Border.all(
-          color: context.dividerColor,
-          width: 2,
-        ),
+        border: Border.all(color: context.dividerColor, width: 2),
       ),
       child: ClipOval(
         child: imageUrl != null && imageUrl!.isNotEmpty
@@ -312,8 +320,7 @@ class _MyStoryAvatar extends StatelessWidget {
   static final RegExp _whitespacePattern = RegExp(r'\s+');
 
   String _getInitials(String name) {
-    final cleanName =
-        name.replaceAll(_nonWordCjkPattern, '').trim();
+    final cleanName = name.replaceAll(_nonWordCjkPattern, '').trim();
     if (cleanName.isEmpty) return '';
 
     final parts = cleanName.split(_whitespacePattern);

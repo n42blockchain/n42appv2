@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import '../../../../l10n/app_localizations.dart';
+import '../../../core/theme/app_dimensions.dart';
 
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
@@ -314,16 +316,16 @@ class MessageBubble extends StatelessWidget {
       button: true,
       label: A11yL10n.of(context).failedToSendTapResend,
       excludeSemantics: true,
-      child: GestureDetector(
-        onTap: onResend,
-        child: Container(
-          width: 20,
-          height: 20,
-          decoration: const BoxDecoration(
-            color: AppColors.error,
-            shape: BoxShape.circle,
-          ),
-          child: const Icon(Icons.priority_high, size: 14, color: Colors.white),
+      child: IconButton(
+        tooltip: S.of(context)?.chatMessageFailed ?? 'Not sent. Tap to retry.',
+        onPressed: onResend,
+        constraints: const BoxConstraints(
+          minWidth: AppDimensions.buttonHeight,
+          minHeight: AppDimensions.buttonHeight,
+        ),
+        icon: Icon(
+          Icons.error_outline,
+          color: Theme.of(context).colorScheme.error,
         ),
       ),
     );

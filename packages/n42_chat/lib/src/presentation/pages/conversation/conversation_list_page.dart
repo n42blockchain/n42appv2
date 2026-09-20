@@ -33,7 +33,6 @@ import '../../blocs/transfer/transfer_bloc.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../widgets/common/sync_progress_overlay.dart';
 import '../../widgets/settings/recovery_key_reminder_dialog.dart';
-import '../../widgets/animations/fade_animation.dart';
 import '../../widgets/story/story_bar.dart';
 import '../contact/add_friend_page.dart';
 import '../group/create_group_page.dart';
@@ -45,6 +44,7 @@ import '../story/create_story_page.dart';
 import '../story/story_viewer_page.dart';
 import '../transfer/receive_page.dart';
 import 'conversation_tile.dart';
+import 'conversation_filter.dart';
 
 /// 会话列表页面（仿微信）
 class ConversationListPage extends StatefulWidget {
@@ -85,6 +85,7 @@ class _ConversationListPageState extends State<ConversationListPage> {
   StoryBloc? _storyBloc;
   // 锁定的聊天 ID 集合
   Set<String> _lockedChatIds = {};
+  ConversationFilter _filter = ConversationFilter.all;
 
   @override
   void initState() {
@@ -140,10 +141,16 @@ class _ConversationListPageState extends State<ConversationListPage> {
   }
 
   Future<void> _onRefresh() async {
-    context.read<ConversationBloc>().add(const RefreshConversations());
+    final completion = _conversationBloc.stream
+        .firstWhere((state) => !state.isRefreshing)
+        .timeout(const Duration(seconds: 30));
+    _conversationBloc.add(const RefreshConversations());
     unawaited(_loadLockedChats());
-    // 等待刷新完成
-    await Future<void>.delayed(const Duration(milliseconds: 500));
+    try {
+      await completion;
+    } on TimeoutException {
+      // The list keeps its existing data and the ongoing request can finish.
+    }
   }
 
   void _onConversationTap(ConversationEntity conversation) {
@@ -230,6 +237,8 @@ class _ConversationListPageState extends State<ConversationListPage> {
         // 搜索栏（微信风格）
         _buildSearchBar(isDark),
 
+        _buildFilters(),
+
         // Story 栏
         if (_storyBloc != null) _buildStoryBar(isDark),
 
@@ -268,12 +277,21 @@ class _ConversationListPageState extends State<ConversationListPage> {
               }
             },
             builder: (context, state) {
-              if (state.isLoading) {
+              if (state.isLoading && state.isEmpty) {
                 return N42Loading(
                   message: S.of(context)?.commonLoading ?? 'Loading...',
                 );
               }
 
+              if (state.isEmpty && state.error != null) {
+                return N42EmptyState.error(
+                  title: S.of(context)?.commonLoadFailed,
+                  description: state.error,
+                  buttonText: S.of(context)?.commonRetry,
+                  onButtonPressed: () =>
+                      _conversationBloc.add(const LoadConversations()),
+                );
+              }
               if (state.isEmpty) {
                 return N42EmptyState.noData(
                   title:
@@ -282,6 +300,8 @@ class _ConversationListPageState extends State<ConversationListPage> {
                   description:
                       S.of(context)?.conversationTapToChat ??
                       'Tap the top right to start chatting',
+                  buttonText: S.of(context)?.mainAddFriends ?? 'Add Friends',
+                  onButtonPressed: _showAddMenu,
                 );
               }
 
@@ -294,6 +314,36 @@ class _ConversationListPageState extends State<ConversationListPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildFilters() {
+    final l10n = S.of(context)!;
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing),
+      child: Row(
+        children: ConversationFilter.values
+            .map(
+              (filter) => Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  end: AppDimensions.spacingS,
+                ),
+                child: ChoiceChip(
+                  key: ValueKey('conversation_filter_${filter.name}'),
+                  label: Text(switch (filter) {
+                    ConversationFilter.all => l10n.commonAll,
+                    ConversationFilter.unread => l10n.chatFilterUnread,
+                    ConversationFilter.groups => l10n.searchGroups,
+                  }),
+                  selected: _filter == filter,
+                  onSelected: (_) => setState(() => _filter = filter),
+                  materialTapTargetSize: MaterialTapTargetSize.padded,
+                ),
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 
@@ -577,59 +627,43 @@ class _ConversationListPageState extends State<ConversationListPage> {
   }
 
   Widget _buildConversationList(ConversationState state, bool isDark) {
+    final visible = state.displayConversations.where(_filter.matches).toList();
+    final ordered = [
+      ...visible.where((item) => item.isPinned),
+      ...visible.where((item) => !item.isPinned),
+    ];
     return CustomScrollView(
+      key: ValueKey(_filter),
+      physics: const AlwaysScrollableScrollPhysics(),
       slivers: [
-        // 置顶会话
-        if (state.pinnedConversations.isNotEmpty) ...[
-          SliverToBoxAdapter(
-            child: Container(
-              color: context.surfaceColor,
-              child: Column(
-                children: state.pinnedConversations.asMap().entries.map((
-                  entry,
-                ) {
-                  return ListItemAnimation(
-                    index: entry.key,
-                    child: ConversationTile(
-                      conversation: entry.value,
-                      isSelected:
-                          widget.selectedConversationId == entry.value.id,
-                      isLocked: _lockedChatIds.contains(entry.value.id),
-                      onTap: () => _onConversationTap(entry.value),
-                      onLongPress: () =>
-                          _onConversationLongPress(context, entry.value),
-                    ),
-                  );
-                }).toList(),
-              ),
+        if (ordered.isEmpty)
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: N42EmptyState.noData(
+              title: S.of(context)!.chatFilterEmpty,
+              buttonText: S.of(context)!.commonAll,
+              onButtonPressed: () =>
+                  setState(() => _filter = ConversationFilter.all),
             ),
+          )
+        else
+          SliverList.builder(
+            itemCount: ordered.length,
+            itemBuilder: (context, index) {
+              final conversation = ordered[index];
+              return ConversationTile(
+                key: ValueKey(conversation.id),
+                conversation: conversation,
+                isSelected: widget.selectedConversationId == conversation.id,
+                isLocked: _lockedChatIds.contains(conversation.id),
+                onTap: () => _onConversationTap(conversation),
+                onLongPress: () =>
+                    _onConversationLongPress(context, conversation),
+              );
+            },
           ),
-          // 分隔
-          SliverToBoxAdapter(
-            child: Container(height: 8, color: context.pageBackground),
-          ),
-        ],
-
-        // 普通会话
-        SliverToBoxAdapter(
-          child: Container(
-            color: context.surfaceColor,
-            child: Column(
-              children: state.normalConversations.asMap().entries.map((entry) {
-                return ListItemAnimation(
-                  index: entry.key,
-                  child: ConversationTile(
-                    conversation: entry.value,
-                    isSelected: widget.selectedConversationId == entry.value.id,
-                    isLocked: _lockedChatIds.contains(entry.value.id),
-                    onTap: () => _onConversationTap(entry.value),
-                    onLongPress: () =>
-                        _onConversationLongPress(context, entry.value),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
+        const SliverToBoxAdapter(
+          child: SizedBox(height: AppDimensions.spacingXXL),
         ),
       ],
     );

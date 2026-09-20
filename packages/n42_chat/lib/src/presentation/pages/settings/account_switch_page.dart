@@ -4,7 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
+import '../../../n42_chat.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../domain/entities/stored_account_entity.dart';
 import '../../../domain/repositories/auth_repository.dart';
@@ -29,6 +30,9 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
   bool _loadFailed = false;
   String? _switchingUserId;
   int _loadVersion = 0;
+  bool _addingAccount = false;
+  String? _switchError;
+  bool get _busy => _switchingUserId != null || _addingAccount;
 
   @override
   void initState() {
@@ -56,7 +60,20 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
     }
   }
 
+  bool _canChangeAccount() {
+    if (_busy) return false;
+    if (N42Chat.callManager?.isInCall == true) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(S.of(context)?.chatInCall ?? 'In call')),
+      );
+      return false;
+    }
+    return true;
+  }
+
   Future<void> _openAddAccount() async {
+    if (!_canChangeAccount()) return;
+    setState(() => _addingAccount = true);
     final result = await Navigator.of(context).push<bool>(
       MaterialPageRoute<bool>(
         builder: (_) => BlocProvider.value(
@@ -69,6 +86,7 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
     if (!mounted) {
       return;
     }
+    setState(() => _addingAccount = false);
     if (result == true) {
       Navigator.of(context).pop(true);
       return;
@@ -77,10 +95,13 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
   }
 
   void _switchAccount(StoredAccountEntity account) {
-    if (account.isCurrent || _switchingUserId != null) {
+    if (account.isCurrent || !_canChangeAccount()) {
       return;
     }
-    setState(() => _switchingUserId = account.userId);
+    setState(() {
+      _switchingUserId = account.userId;
+      _switchError = null;
+    });
     context.read<AuthBloc>().add(
       AuthSwitchStoredAccountRequested(userId: account.userId),
     );
@@ -106,90 +127,116 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
         }
 
         if (_switchingUserId != null && state.status == AuthStatus.error) {
-          final message = state.errorMessage ?? 'Failed to switch account';
-          setState(() => _switchingUserId = null);
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(message)));
+          setState(() {
+            _switchingUserId = null;
+            _switchError = S.of(context)!.accountSwitchFailed;
+          });
         }
       },
-      child: Scaffold(
-        backgroundColor: context.pageBackground,
-        appBar: N42AppBar(
-          title: l10n?.settingsSwitchAccount ?? 'Switch Account',
-          showBackButton: true,
-          onBackPressed: () => Navigator.of(context).pop(),
-        ),
-        body: _isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : _loadFailed
-            ? Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(l10n?.commonLoadFailed ?? 'Failed to load'),
-                    TextButton(
-                      onPressed: _loadAccounts,
-                      child: Text(l10n?.commonRetry ?? 'Retry'),
-                    ),
-                  ],
-                ),
-              )
-            : ListView(
-                children: [
-                  const SizedBox(height: 16),
-                  if (_accounts.isEmpty)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 48,
+      child: PopScope(
+        canPop: !_busy,
+        child: Scaffold(
+          backgroundColor: context.pageBackground,
+          appBar: N42AppBar(
+            title: l10n?.settingsSwitchAccount ?? 'Switch Account',
+            showBackButton: true,
+            onBackPressed: () {
+              if (!_busy) Navigator.of(context).pop();
+            },
+          ),
+          body: _isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : _loadFailed
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(l10n?.commonLoadFailed ?? 'Failed to load'),
+                      TextButton(
+                        onPressed: _loadAccounts,
+                        child: Text(l10n?.commonRetry ?? 'Retry'),
                       ),
+                    ],
+                  ),
+                )
+              : ListView(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(AppDimensions.spacing),
                       child: Text(
-                        'No saved accounts yet',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 15,
+                        l10n!.accountSessionsHint,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           color: context.textSecondary,
                         ),
                       ),
-                    )
-                  else
-                    Container(
-                      color: context.surfaceColor,
-                      child: Column(
-                        children: [
-                          for (var i = 0; i < _accounts.length; i++) ...[
-                            _AccountTile(
-                              account: _accounts[i],
-                              isSwitching:
-                                  _switchingUserId == _accounts[i].userId,
-                              onTap: () => _switchAccount(_accounts[i]),
-                            ),
-                            if (i != _accounts.length - 1)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 72),
-                                child: Divider(
-                                  height: 1,
-                                  color: context.dividerColor,
-                                ),
+                    ),
+                    if (_accounts.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 48,
+                        ),
+                        child: Text(
+                          l10n.accountNoSaved,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: context.textSecondary,
+                          ),
+                        ),
+                      )
+                    else
+                      Material(
+                        color: context.surfaceColor,
+                        child: Column(
+                          children: [
+                            for (var i = 0; i < _accounts.length; i++) ...[
+                              _AccountTile(
+                                account: _accounts[i],
+                                isSwitching:
+                                    _switchingUserId == _accounts[i].userId,
+                                onTap: _busy || _accounts[i].isCurrent
+                                    ? null
+                                    : () => _switchAccount(_accounts[i]),
                               ),
+                              if (i != _accounts.length - 1)
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 72),
+                                  child: Divider(
+                                    height: 1,
+                                    color: context.dividerColor,
+                                  ),
+                                ),
+                            ],
                           ],
-                        ],
+                        ),
+                      ),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: N42Button.primary(
+                        text: l10n.accountAdd,
+                        onPressed: !_busy ? _openAddAccount : null,
                       ),
                     ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: N42Button.primary(
-                      text: l10n?.commonAdd ?? 'Add Account',
-                      onPressed: _switchingUserId == null
-                          ? _openAddAccount
-                          : null,
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-              ),
+                    if (_switchError != null)
+                      Padding(
+                        padding: const EdgeInsets.all(AppDimensions.spacing),
+                        child: Semantics(
+                          liveRegion: true,
+                          child: Text(
+                            _switchError!,
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
+                                  color: Theme.of(context).colorScheme.error,
+                                ),
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: AppDimensions.spacingXL),
+                  ],
+                ),
+        ),
       ),
     );
   }
@@ -198,7 +245,7 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
 class _AccountTile extends StatelessWidget {
   final StoredAccountEntity account;
   final bool isSwitching;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _AccountTile({
     required this.account,
@@ -210,39 +257,46 @@ class _AccountTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final secondaryColor = context.textSecondary;
 
-    return ListTile(
-      leading: N42Avatar(
-        imageUrl: account.avatarUrl,
-        name: account.effectiveDisplayName,
-        size: 44,
-      ),
-      title: Text(
-        account.effectiveDisplayName,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 16,
-          height: 1.3,
-          color: context.textPrimary,
-          fontWeight: account.isCurrent ? FontWeight.w600 : FontWeight.w500,
+    return Semantics(
+      selected: account.isCurrent,
+      child: ListTile(
+        key: ValueKey('stored_account_${account.userId}'),
+        leading: N42Avatar(
+          imageUrl: account.avatarUrl,
+          name: account.effectiveDisplayName,
+          size: 44,
         ),
+        title: Text(
+          account.effectiveDisplayName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 16,
+            height: 1.3,
+            color: context.textPrimary,
+            fontWeight: account.isCurrent ? FontWeight.w600 : FontWeight.w500,
+          ),
+        ),
+        subtitle: Text(
+          '${account.userId}\n${account.homeserver}${account.isCurrent ? '\n${S.of(context)!.accountCurrent}' : ''}${isSwitching ? '\n${S.of(context)!.accountSwitching}' : ''}',
+          maxLines: 4,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(fontSize: 12, height: 1.4, color: secondaryColor),
+        ),
+        trailing: isSwitching
+            ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              )
+            : account.isCurrent
+            ? Icon(
+                Icons.check_circle,
+                color: Theme.of(context).colorScheme.primary,
+              )
+            : const Icon(AppIcons.chevron),
+        onTap: isSwitching ? null : onTap,
       ),
-      subtitle: Text(
-        '${account.userId}\n${account.homeserver}',
-        maxLines: 2,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontSize: 12, height: 1.4, color: secondaryColor),
-      ),
-      trailing: isSwitching
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(strokeWidth: 2),
-            )
-          : account.isCurrent
-          ? const Icon(Icons.check_circle, color: AppColors.primary)
-          : const Icon(AppIcons.chevron),
-      onTap: isSwitching ? null : onTap,
     );
   }
 }

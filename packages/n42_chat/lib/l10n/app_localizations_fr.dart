@@ -5931,4 +5931,65 @@ class SFr extends S {
 
   @override
   String get settingsSwitchAccount => 'Changer de compte';
+
+  @override
+  String get chatFilterUnread => 'Non lus';
+
+  @override
+  String get chatFilterEmpty => 'Aucune conversation dans ce filtre';
+
+  @override
+  String get accountAdd => 'Ajouter un compte';
+
+  @override
+  String get accountCurrent => 'Compte actuel';
+
+  @override
+  String get accountSwitching => 'Changement de compte…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Impossible de changer de compte. Réessayez ou ajoutez le compte pour vous reconnecter.';
+
+  @override
+  String get accountSessionsHint =>
+      'Changez de compte ici pour conserver séparément les messages et la session sécurisée de chaque compte.';
+
+  @override
+  String get accountNoSaved => 'Aucun compte enregistré';
+
+  @override
+  String get contactRequestSent => 'Demande envoyée';
+
+  @override
+  String get contactRequestsIncoming => 'Demandes reçues';
+
+  @override
+  String get contactRequestsOutgoing => 'Demandes envoyées';
+
+  @override
+  String get contactRequestHint =>
+      'Vous pourrez discuter et appeler une fois la demande acceptée.';
+
+  @override
+  String get callReturnToCall => 'Revenir à l’appel';
+
+  @override
+  String get chatMessageSending => 'Envoi en cours';
+
+  @override
+  String get chatMessageSent => 'Envoyé';
+
+  @override
+  String get chatMessageDelivered => 'Distribué';
+
+  @override
+  String get chatMessageRead => 'Lu';
+
+  @override
+  String get chatMessageFailed => 'Non envoyé. Touchez pour réessayer.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Message indisponible sur cet appareil. Touchez pour voir les options de récupération.';
 }

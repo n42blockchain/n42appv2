@@ -225,6 +225,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-009 TestFlight registration, friendship and historical-key acceptance
 
+- September 19 UX update: search now previews a user's profile rather than creating/opening a pending room. Profiles expose incoming requests, disable repeated outgoing requests and offer relationship-load retry when opened without a contacts provider. Requests are grouped by direction; accepted/rejected entries are removed immediately while refresh completes. Chat filters include muted unread messages; attachment grids scroll at large text sizes; failed-message retry has a larger touch target; undecryptable messages explain that this device cannot read the message and offer recovery options without claiming recoverability. The call return banner shares the existing call lifecycle. Synthetic/widget checks do not establish friend acceptance, restored keys or calls on the feedback phones.
+
 - September 18 / build 2026072690 / Downloads/2.mov: the recording uses explicit logout to alternate dxx/dxx01 on one iPhone. A matching live SDK test reproduced the asymmetry: a sender retains its own key, but a recipient who was logged out before sending starts a new device without that key. The previous concurrent-device logout test did not cover this sequence. This explicit-logout acceptance remains OPEN; do not describe account switching as fixing every logout/re-login case or weaken E2EE/forward another account's history keys to hide it.
 - Account-switch repair: independent SDK databases are indexed by server/user/device; the existing database is registered in place. Switching restores the entire saved device identity and sync cursor rather than calling init(newToken) on another account's database. Password/SSO login gets a fresh isolated database; failed login reopens the previous session. Fresh token bootstrap checks its owner and refuses to replace an already published device identity without its private keys. Homeserver probes while adding an account are tokenless and do not mutate the active client. Settings and the logout confirmation offer a localized Switch Account entry; explicit Logout still revokes its device.
 - Live acceptance: real MatrixClientManager/AuthDataSource with native crypto/SQLite passed sequential A→B/B→A encrypted sends, unchanged device IDs/fingerprints, process-style client restart, failed-password rollback and logout isolation. Both disposable accounts were deactivated (the intentionally logged-out account required cleanup reauthentication). This uses mocked secure storage/preferences and does not prove iPhone/Android persistence. `test/live/account_switch_encryption_test.dart` is opt-in with disposable QA state; native feedback-phone acceptance remains required.
@@ -317,6 +319,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 
 ### QA-005 Multi-account switching and persisted notification settings were not live-tested end to end
 
+- September 19 UX update: the chat header exposes the active identity and account selector. The chooser serializes switching/add-account actions, blocks UI switching during a call, and retains a retry/re-authentication explanation after failure. Chat and profile roots are keyed by account identity to discard the preceding account's page state. Narrow-screen, 130% text and light/dark widget checks pass. Native push registration, OS process restart and the feedback phones remain unverified; the earlier synthetic SDK acceptance in QA-009 is not native UI acceptance.
+
 - Severity: M
 - Added: 2026-03-21
 - Current state: the recent system/account-management pass wired saved-account switching, appearance persistence, and notification settings into the real runtime and covered them with analyze plus unit tests. However the new flows were not exercised against two real Matrix accounts/devices, so there is still no live confirmation that account switching, pusher re-registration, and restored appearance/notification preferences behave correctly across a real homeserver session change.
@@ -347,6 +351,8 @@ This file tracks unresolved issues intentionally left open during recent agent w
 - Verification: real widget routes cover direct settings, privacy/account hubs, multi-hop auth propagation, save/reopen, failures, slider commits, logout confirmation, and Arabic narrow-screen layout. Live account mutation is still outside this verification (QA-005).
 
 ### QA-006 Direct UI literals still need module-by-module translation review
+
+- September 19 UX update: new interaction labels are translated in English, Simplified/Traditional Chinese, German, French, Spanish, Italian, Portuguese and Brazilian Portuguese. The remaining catalogs explicitly use English fallback for these new labels, keeping key parity; linguistic review/translation for those locales remains open.
 
 - Severity: M
 - Added: 2026-09-12

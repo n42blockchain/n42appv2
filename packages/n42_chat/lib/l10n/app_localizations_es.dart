@@ -5907,4 +5907,65 @@ class SEs extends S {
 
   @override
   String get settingsSwitchAccount => 'Cambiar de cuenta';
+
+  @override
+  String get chatFilterUnread => 'No leídos';
+
+  @override
+  String get chatFilterEmpty => 'No hay conversaciones en este filtro';
+
+  @override
+  String get accountAdd => 'Añadir cuenta';
+
+  @override
+  String get accountCurrent => 'Cuenta actual';
+
+  @override
+  String get accountSwitching => 'Cambiando de cuenta…';
+
+  @override
+  String get accountSwitchFailed =>
+      'No se pudo cambiar de cuenta. Inténtalo de nuevo o añade la cuenta para volver a iniciar sesión.';
+
+  @override
+  String get accountSessionsHint =>
+      'Cambia de cuenta aquí para mantener separados los mensajes y la sesión segura de cada cuenta.';
+
+  @override
+  String get accountNoSaved => 'Aún no hay cuentas guardadas';
+
+  @override
+  String get contactRequestSent => 'Solicitud enviada';
+
+  @override
+  String get contactRequestsIncoming => 'Solicitudes recibidas';
+
+  @override
+  String get contactRequestsOutgoing => 'Solicitudes enviadas';
+
+  @override
+  String get contactRequestHint =>
+      'Podrás chatear y llamar cuando se acepte la solicitud.';
+
+  @override
+  String get callReturnToCall => 'Volver a la llamada';
+
+  @override
+  String get chatMessageSending => 'Enviando';
+
+  @override
+  String get chatMessageSent => 'Enviado';
+
+  @override
+  String get chatMessageDelivered => 'Entregado';
+
+  @override
+  String get chatMessageRead => 'Leído';
+
+  @override
+  String get chatMessageFailed => 'No enviado. Toca para reintentar.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Mensaje no disponible en este dispositivo. Toca para ver las opciones de recuperación.';
 }

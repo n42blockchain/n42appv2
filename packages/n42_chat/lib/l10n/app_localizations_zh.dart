@@ -5720,6 +5720,63 @@ class SZh extends S {
 
   @override
   String get settingsSwitchAccount => '切换账号';
+
+  @override
+  String get chatFilterUnread => '未读';
+
+  @override
+  String get chatFilterEmpty => '此分类暂无会话';
+
+  @override
+  String get accountAdd => '添加账号';
+
+  @override
+  String get accountCurrent => '当前账号';
+
+  @override
+  String get accountSwitching => '正在切换账号…';
+
+  @override
+  String get accountSwitchFailed => '切换失败，请重试，或添加该账号重新登录。';
+
+  @override
+  String get accountSessionsHint => '在此切换账号，各账号的消息和安全会话独立保留。';
+
+  @override
+  String get accountNoSaved => '尚无已保存的账号';
+
+  @override
+  String get contactRequestSent => '申请已发送';
+
+  @override
+  String get contactRequestsIncoming => '收到的申请';
+
+  @override
+  String get contactRequestsOutgoing => '发出的申请';
+
+  @override
+  String get contactRequestHint => '申请通过后即可聊天和通话。';
+
+  @override
+  String get callReturnToCall => '返回通话';
+
+  @override
+  String get chatMessageSending => '发送中';
+
+  @override
+  String get chatMessageSent => '已发送';
+
+  @override
+  String get chatMessageDelivered => '已送达';
+
+  @override
+  String get chatMessageRead => '已读';
+
+  @override
+  String get chatMessageFailed => '未发送，点击重试。';
+
+  @override
+  String get chatMessageUnavailable => '此设备暂时无法读取这条消息，点击查看恢复选项。';
 }
 
 /// The translations for Chinese, as used in Taiwan (`zh_TW`).
@@ -11439,4 +11496,61 @@ class SZhTw extends SZh {
 
   @override
   String get settingsSwitchAccount => '切換帳號';
+
+  @override
+  String get chatFilterUnread => '未讀';
+
+  @override
+  String get chatFilterEmpty => '此分類暫無對話';
+
+  @override
+  String get accountAdd => '加入帳號';
+
+  @override
+  String get accountCurrent => '目前帳號';
+
+  @override
+  String get accountSwitching => '正在切換帳號…';
+
+  @override
+  String get accountSwitchFailed => '切換失敗，請重試，或加入該帳號重新登入。';
+
+  @override
+  String get accountSessionsHint => '在此切換帳號，各帳號的訊息與安全工作階段獨立保留。';
+
+  @override
+  String get accountNoSaved => '尚無已儲存的帳號';
+
+  @override
+  String get contactRequestSent => '申請已傳送';
+
+  @override
+  String get contactRequestsIncoming => '收到的申請';
+
+  @override
+  String get contactRequestsOutgoing => '發出的申請';
+
+  @override
+  String get contactRequestHint => '申請通過後即可聊天與通話。';
+
+  @override
+  String get callReturnToCall => '返回通話';
+
+  @override
+  String get chatMessageSending => '傳送中';
+
+  @override
+  String get chatMessageSent => '已傳送';
+
+  @override
+  String get chatMessageDelivered => '已送達';
+
+  @override
+  String get chatMessageRead => '已讀';
+
+  @override
+  String get chatMessageFailed => '未傳送，點一下重試。';
+
+  @override
+  String get chatMessageUnavailable => '此裝置暫時無法讀取這則訊息，點一下查看復原選項。';
 }

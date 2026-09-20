@@ -1,4 +1,6 @@
 import '../../../data/datasources/matrix/message/encrypted_send_guard.dart';
+import '../../widgets/common/friend_request_card.dart';
+import '../../../core/theme/app_dimensions.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -180,14 +182,19 @@ class _ContactListPageState extends State<ContactListPage> {
       color: context.surfaceColor,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Container(
-        height: 36,
+        constraints: const BoxConstraints(
+          minHeight: AppDimensions.buttonHeight,
+        ),
         decoration: BoxDecoration(
           color: AppColors.inputBgOf(isDark),
           borderRadius: BorderRadius.circular(8),
         ),
         child: TextField(
           controller: _searchController,
-          onChanged: _onSearchChanged,
+          onChanged: (query) {
+            setState(() {});
+            _onSearchChanged(query);
+          },
           cursorColor: AppColors.primary,
           style: TextStyle(
             fontSize: 15,
@@ -201,6 +208,17 @@ class _ContactListPageState extends State<ContactListPage> {
               height: 1.3,
               color: context.textTertiary,
             ),
+            suffixIcon: _searchController.text.isEmpty
+                ? null
+                : IconButton(
+                    tooltip: S.of(context)?.commonClear ?? 'Clear',
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      _searchController.clear();
+                      setState(() {});
+                      _onSearchChanged('');
+                    },
+                  ),
             prefixIcon: Icon(
               AppIcons.search,
               size: 20,
@@ -1051,7 +1069,7 @@ class _ContactListPageState extends State<ContactListPage> {
       MaterialPageRoute<void>(
         builder: (ctx) => BlocProvider.value(
           value: contactBloc,
-          child: const _FriendRequestsPage(),
+          child: const FriendRequestsPage(),
         ),
       ),
     );
@@ -1495,15 +1513,16 @@ class _WeChatIndexBarState extends State<_WeChatIndexBar> {
 // ==================== 子页面组件 ====================
 
 /// 新的朋友（好友请求）页面
-class _FriendRequestsPage extends StatefulWidget {
-  const _FriendRequestsPage();
+class FriendRequestsPage extends StatefulWidget {
+  const FriendRequestsPage();
 
   @override
-  State<_FriendRequestsPage> createState() => _FriendRequestsPageState();
+  State<FriendRequestsPage> createState() => FriendRequestsPageState();
 }
 
-class _FriendRequestsPageState extends State<_FriendRequestsPage> {
+class FriendRequestsPageState extends State<FriendRequestsPage> {
   final Set<String> _pendingActions = {};
+  final Set<String> _completedActions = {};
 
   @override
   void initState() {
@@ -1537,7 +1556,9 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final requests = state.friendRequests;
+          final requests = state.friendRequests
+              .where((r) => !_completedActions.contains(r.id))
+              .toList();
 
           if (requests.isEmpty) {
             return Center(
@@ -1566,114 +1587,53 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
             );
           }
 
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: requests.length,
-            separatorBuilder: (_, _) =>
-                Divider(height: 1, indent: 72, color: context.dividerColor),
-            itemBuilder: (context, index) {
-              final request = requests[index];
-              return _buildRequestItem(request, isDark);
-            },
+          final incoming = requests.where((r) => !r.isOutgoing).toList();
+          final outgoing = requests.where((r) => r.isOutgoing).toList();
+          return ListView(
+            children: [
+              if (incoming.isNotEmpty) ...[
+                _requestHeading(S.of(context)!.contactRequestsIncoming),
+                ...incoming.map(
+                  (request) => _buildRequestItem(request, isDark),
+                ),
+              ],
+              if (outgoing.isNotEmpty) ...[
+                _requestHeading(S.of(context)!.contactRequestsOutgoing),
+                ...outgoing.map(
+                  (request) => _buildRequestItem(request, isDark),
+                ),
+              ],
+            ],
           );
         },
       ),
     );
   }
 
-  Widget _buildRequestItem(FriendRequest request, bool isDark) {
-    // Use userId for consistent color generation, userName for display
-    final colorSource = request.userId.isNotEmpty
-        ? request.userId
-        : request.userName;
-    final displayName = request.userName == 'Unknown User'
-        ? (S.of(context)?.commonUnknownUser ?? 'Unknown User')
-        : request.userName;
-    final initial = displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
+  Widget _requestHeading(String title) => Padding(
+    padding: const EdgeInsets.all(AppDimensions.spacing),
+    child: Text(title, style: Theme.of(context).textTheme.titleSmall),
+  );
 
-    return ListTile(
-      leading: CircleAvatar(
-        radius: 24,
-        backgroundColor: _getColorFromName(colorSource),
-        backgroundImage:
-            request.userAvatarUrl != null && request.userAvatarUrl!.isNotEmpty
-            ? NetworkImage(request.userAvatarUrl!)
-            : null,
-        child: request.userAvatarUrl == null || request.userAvatarUrl!.isEmpty
-            ? Text(
-                initial,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              )
-            : null,
-      ),
-      title: Text(
-        displayName,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontWeight: FontWeight.w500,
-          height: 1.3,
-          color: context.textPrimary,
-        ),
-      ),
-      subtitle: Text(
-        request.userId,
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(
-          fontSize: 13,
-          height: 1.3,
-          color: context.textSecondary,
-        ),
-      ),
-      trailing: request.isOutgoing
-          ? Text(S.of(context)?.contactRequestPending ?? 'Awaiting acceptance')
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextButton(
-                  onPressed: _pendingActions.contains(request.id)
-                      ? null
-                      : () => _respondToRequest(request, accept: true),
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: Text(S.of(context)?.commonAccept ?? 'Accept'),
-                ),
-                const SizedBox(width: 8),
-                TextButton(
-                  onPressed: _pendingActions.contains(request.id)
-                      ? null
-                      : () => _respondToRequest(request, accept: false),
-                  style: TextButton.styleFrom(
-                    backgroundColor: AppColors.inputBgOf(isDark),
-                    foregroundColor: context.textPrimary,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  ),
-                  child: Text(S.of(context)?.commonReject ?? 'Reject'),
-                ),
-              ],
+  Widget _buildRequestItem(FriendRequest request, bool isDark) =>
+      FriendRequestCard(
+        request: request,
+        busy: _pendingActions.contains(request.id),
+        onAccept: () => _respondToRequest(request, accept: true),
+        onReject: () => _respondToRequest(request, accept: false),
+        onProfile: () => Navigator.of(context).push<void>(
+          MaterialPageRoute<void>(
+            builder: (_) => BlocProvider.value(
+              value: context.read<ContactBloc>(),
+              child: ContactDetailPage(
+                userId: request.userId,
+                displayName: request.userName,
+                avatarUrl: request.userAvatarUrl,
+              ),
             ),
-    );
-  }
+          ),
+        ),
+      );
 
   Future<void> _respondToRequest(
     FriendRequest request, {
@@ -1689,6 +1649,7 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
         await repository.rejectFriendRequest(request.id);
       }
       if (!mounted) return;
+      setState(() => _completedActions.add(request.id));
       context.read<ContactBloc>().add(const RefreshContacts());
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -1716,10 +1677,6 @@ class _FriendRequestsPageState extends State<_FriendRequestsPage> {
     } finally {
       if (mounted) setState(() => _pendingActions.remove(request.id));
     }
-  }
-
-  Color _getColorFromName(String name) {
-    return AppColorPalettes.getAvatarColor(name);
   }
 }
 

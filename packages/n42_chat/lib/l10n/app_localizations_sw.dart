@@ -5898,4 +5898,65 @@ class SSw extends S {
 
   @override
   String get settingsSwitchAccount => 'Badili akaunti';
+
+  @override
+  String get chatFilterUnread => 'Unread';
+
+  @override
+  String get chatFilterEmpty => 'No conversations in this filter';
+
+  @override
+  String get accountAdd => 'Add account';
+
+  @override
+  String get accountCurrent => 'Current account';
+
+  @override
+  String get accountSwitching => 'Switching account…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Could not switch accounts. Try again, or add the account to sign in again.';
+
+  @override
+  String get accountSessionsHint =>
+      'Switch accounts here to keep each account’s messages and secure session separate.';
+
+  @override
+  String get accountNoSaved => 'No saved accounts yet';
+
+  @override
+  String get contactRequestSent => 'Request sent';
+
+  @override
+  String get contactRequestsIncoming => 'Received requests';
+
+  @override
+  String get contactRequestsOutgoing => 'Sent requests';
+
+  @override
+  String get contactRequestHint =>
+      'You can chat and call after the request is accepted.';
+
+  @override
+  String get callReturnToCall => 'Return to call';
+
+  @override
+  String get chatMessageSending => 'Sending';
+
+  @override
+  String get chatMessageSent => 'Sent';
+
+  @override
+  String get chatMessageDelivered => 'Delivered';
+
+  @override
+  String get chatMessageRead => 'Read';
+
+  @override
+  String get chatMessageFailed => 'Not sent. Tap to retry.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Message unavailable on this device. Tap to check recovery options.';
 }

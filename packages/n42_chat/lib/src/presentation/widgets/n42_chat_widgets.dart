@@ -129,6 +129,7 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
                   // 已登录 - 显示主框架（微信风格底部Tab）
                   if (state.isAuthenticated) {
                     return ChatMainPage(
+                      key: ValueKey(state.user?.userId),
                       onBackToMain: () {
                         N42Chat.requestBackToHost(context);
                       },
@@ -533,7 +534,10 @@ class _N42ProfileEntryWidgetState extends State<_N42ProfileEntryWidget> {
 
             // 已登录 - 显示个人资料页
             if (state.isAuthenticated) {
-              return ProfilePage(showAppBar: widget.showAppBar);
+              return ProfilePage(
+                key: ValueKey(state.user?.userId),
+                showAppBar: widget.showAppBar,
+              );
             }
 
             // 未登录 - 显示欢迎页面

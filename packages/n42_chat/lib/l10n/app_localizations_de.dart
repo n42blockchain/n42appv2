@@ -5913,4 +5913,65 @@ class SDe extends S {
 
   @override
   String get settingsSwitchAccount => 'Konto wechseln';
+
+  @override
+  String get chatFilterUnread => 'Ungelesen';
+
+  @override
+  String get chatFilterEmpty => 'Keine Unterhaltungen in diesem Filter';
+
+  @override
+  String get accountAdd => 'Konto hinzufügen';
+
+  @override
+  String get accountCurrent => 'Aktuelles Konto';
+
+  @override
+  String get accountSwitching => 'Konto wird gewechselt…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Kontowechsel fehlgeschlagen. Versuche es erneut oder füge das Konto hinzu, um dich neu anzumelden.';
+
+  @override
+  String get accountSessionsHint =>
+      'Wechsle hier zwischen Konten. Nachrichten und sichere Sitzungen bleiben für jedes Konto getrennt.';
+
+  @override
+  String get accountNoSaved => 'Noch keine gespeicherten Konten';
+
+  @override
+  String get contactRequestSent => 'Anfrage gesendet';
+
+  @override
+  String get contactRequestsIncoming => 'Erhaltene Anfragen';
+
+  @override
+  String get contactRequestsOutgoing => 'Gesendete Anfragen';
+
+  @override
+  String get contactRequestHint =>
+      'Nach Annahme der Anfrage sind Chats und Anrufe möglich.';
+
+  @override
+  String get callReturnToCall => 'Zurück zum Anruf';
+
+  @override
+  String get chatMessageSending => 'Wird gesendet';
+
+  @override
+  String get chatMessageSent => 'Gesendet';
+
+  @override
+  String get chatMessageDelivered => 'Zugestellt';
+
+  @override
+  String get chatMessageRead => 'Gelesen';
+
+  @override
+  String get chatMessageFailed => 'Nicht gesendet. Zum Wiederholen tippen.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Nachricht auf diesem Gerät nicht verfügbar. Tippe hier für Wiederherstellungsoptionen.';
 }

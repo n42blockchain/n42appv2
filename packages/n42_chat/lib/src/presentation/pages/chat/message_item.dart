@@ -2284,15 +2284,10 @@ class MessageItem extends StatelessWidget {
         const SizedBox(width: 4),
         Flexible(
           child: Text(
-            '${A11yL10n.of(context).encrypted} · ${S.of(context)?.settingsRestoreKeyTitle ?? 'Restore Keys'}',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 16,
-              height: 1.3,
-              color: AppColors.textSecondary,
-              fontStyle: FontStyle.italic,
-            ),
+            S.of(context)!.chatMessageUnavailable,
+            style: Theme.of(
+              context,
+            ).textTheme.bodyMedium?.copyWith(color: context.textSecondary),
           ),
         ),
       ],

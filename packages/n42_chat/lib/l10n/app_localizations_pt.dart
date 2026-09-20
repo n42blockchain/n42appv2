@@ -5898,6 +5898,67 @@ class SPt extends S {
 
   @override
   String get settingsSwitchAccount => 'Mudar de conta';
+
+  @override
+  String get chatFilterUnread => 'Não lidas';
+
+  @override
+  String get chatFilterEmpty => 'Sem conversas neste filtro';
+
+  @override
+  String get accountAdd => 'Adicionar conta';
+
+  @override
+  String get accountCurrent => 'Conta atual';
+
+  @override
+  String get accountSwitching => 'A mudar de conta…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Não foi possível mudar de conta. Tenta novamente ou adiciona a conta para iniciar sessão de novo.';
+
+  @override
+  String get accountSessionsHint =>
+      'Muda de conta aqui para manter separadas as mensagens e a sessão segura de cada conta.';
+
+  @override
+  String get accountNoSaved => 'Ainda não há contas guardadas';
+
+  @override
+  String get contactRequestSent => 'Pedido enviado';
+
+  @override
+  String get contactRequestsIncoming => 'Pedidos recebidos';
+
+  @override
+  String get contactRequestsOutgoing => 'Pedidos enviados';
+
+  @override
+  String get contactRequestHint =>
+      'Podes conversar e ligar depois de o pedido ser aceite.';
+
+  @override
+  String get callReturnToCall => 'Voltar à chamada';
+
+  @override
+  String get chatMessageSending => 'A enviar';
+
+  @override
+  String get chatMessageSent => 'Enviada';
+
+  @override
+  String get chatMessageDelivered => 'Entregue';
+
+  @override
+  String get chatMessageRead => 'Lida';
+
+  @override
+  String get chatMessageFailed => 'Não enviada. Toca para tentar novamente.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Mensagem indisponível neste dispositivo. Toca para ver as opções de recuperação.';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -11794,4 +11855,65 @@ class SPtBr extends SPt {
 
   @override
   String get settingsSwitchAccount => 'Trocar de conta';
+
+  @override
+  String get chatFilterUnread => 'Não lidas';
+
+  @override
+  String get chatFilterEmpty => 'Nenhuma conversa neste filtro';
+
+  @override
+  String get accountAdd => 'Adicionar conta';
+
+  @override
+  String get accountCurrent => 'Conta atual';
+
+  @override
+  String get accountSwitching => 'Trocando de conta…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Não foi possível trocar de conta. Tente novamente ou adicione a conta para entrar de novo.';
+
+  @override
+  String get accountSessionsHint =>
+      'Troque de conta aqui para manter separadas as mensagens e a sessão segura de cada conta.';
+
+  @override
+  String get accountNoSaved => 'Nenhuma conta salva';
+
+  @override
+  String get contactRequestSent => 'Solicitação enviada';
+
+  @override
+  String get contactRequestsIncoming => 'Solicitações recebidas';
+
+  @override
+  String get contactRequestsOutgoing => 'Solicitações enviadas';
+
+  @override
+  String get contactRequestHint =>
+      'Você poderá conversar e ligar depois que a solicitação for aceita.';
+
+  @override
+  String get callReturnToCall => 'Voltar à chamada';
+
+  @override
+  String get chatMessageSending => 'Enviando';
+
+  @override
+  String get chatMessageSent => 'Enviada';
+
+  @override
+  String get chatMessageDelivered => 'Entregue';
+
+  @override
+  String get chatMessageRead => 'Lida';
+
+  @override
+  String get chatMessageFailed => 'Não enviada. Toque para tentar novamente.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Mensagem indisponível neste dispositivo. Toque para ver as opções de recuperação.';
 }

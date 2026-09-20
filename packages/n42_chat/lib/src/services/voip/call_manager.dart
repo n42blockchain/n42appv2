@@ -18,6 +18,8 @@ import 'livekit_service.dart';
 import 'matrix_rtc_token_service.dart';
 import 'call_notification_service.dart';
 import '../../presentation/pages/call/call_screen.dart';
+import '../../presentation/widgets/call/return_to_call_banner.dart';
+import '../../core/theme/app_dimensions.dart';
 import '../../presentation/pages/call/group_call_screen.dart';
 import '../../core/utils/debug_log.dart';
 
@@ -83,31 +85,13 @@ class CallManager {
     if (overlay == null) return;
     _returnToCallEntry = OverlayEntry(
       builder: (context) => Positioned(
-        top: MediaQuery.paddingOf(context).top + 8,
-        right: 12,
-        child: Material(
-          color: Colors.green.shade700,
-          borderRadius: BorderRadius.circular(24),
-          elevation: 6,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(24),
-            onTap: returnToActiveCall,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(Icons.call, color: Colors.white, size: 20),
-                  const SizedBox(width: 8),
-                  Text(
-                    S.of(context)?.chatInCall ?? 'In call',
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+        top:
+            MediaQuery.paddingOf(context).top +
+            AppDimensions.appBarHeight +
+            AppDimensions.spacingS,
+        left: AppDimensions.spacing,
+        right: AppDimensions.spacing,
+        child: ReturnToCallBanner(onReturn: returnToActiveCall),
       ),
     );
     overlay.insert(_returnToCallEntry!);

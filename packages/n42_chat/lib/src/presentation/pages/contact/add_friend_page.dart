@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../blocs/contact/contact_bloc.dart';
+import '../../blocs/contact/contact_event.dart';
+import 'contact_detail_page.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
@@ -6,7 +10,6 @@ import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
-import '../../../domain/repositories/contact_repository.dart';
 import '../../../integration/wallet_bridge.dart';
 import '../../widgets/common/common_widgets.dart';
 import 'phone_contacts_page.dart';
@@ -319,37 +322,38 @@ class _AddFriendPageState extends State<AddFriendPage> {
     }
   }
 
-  // ─── DM creation ──────────────────────────────────────────────────────
+  // ─── Identity preview ──────────────────────────────────────────────────────
 
-  Future<void> _startDirectChat(String userId) async {
-    var completedWithExit = false;
-    setState(() => _isLoading = true);
-
-    try {
-      final roomId = await getIt<IContactRepository>().startDirectChat(userId);
-      if (mounted) {
-        completedWithExit = true;
-        Navigator.of(context).pop(roomId);
-      }
-    } catch (e) {
-      if (!mounted) return;
-      _showError(
-        S.of(context)?.contactCreateChatFailed(e.toString()) ??
-            'Failed to create chat: $e',
-      );
-    } finally {
-      if (mounted && !completedWithExit) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
-  void _showError(String message) {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: AppColors.error),
-      );
-    }
+  Future<void> _openUserProfile(String userId) async {
+    // Preview identity and relationship before sending a request or opening chat.
+    if (_isLoading) return;
+    final result = _searchResults
+        .where((item) => item['userId'] == userId)
+        .firstOrNull;
+    await Navigator.of(context).push<void>(
+      MaterialPageRoute<void>(
+        builder: (_) {
+          final page = ContactDetailPage(
+            userId: userId,
+            displayName:
+                result?['displayName'] as String? ??
+                _web3Identity?.displayName ??
+                userId,
+            avatarUrl:
+                result?['avatarUrl'] as String? ?? _web3Identity?.avatarUrl,
+          );
+          final bloc = context.read<ContactBloc?>();
+          if (bloc != null) return BlocProvider.value(value: bloc, child: page);
+          if (getIt.isRegistered<ContactBloc>()) {
+            return BlocProvider(
+              create: (_) => getIt<ContactBloc>()..add(const LoadContacts()),
+              child: page,
+            );
+          }
+          return page;
+        },
+      ),
+    );
   }
 
   Future<void> _openPhoneContacts() async {
@@ -547,7 +551,7 @@ class _AddFriendPageState extends State<AddFriendPage> {
           isDark: isDark,
           onMessage: () {
             if (_web3Identity!.matrixUserId != null) {
-              _startDirectChat(_web3Identity!.matrixUserId!);
+              _openUserProfile(_web3Identity!.matrixUserId!);
             } else {
               // No N42 account: show info dialog
               _showWalletOnlyDialog();
@@ -600,13 +604,13 @@ class _AddFriendPageState extends State<AddFriendPage> {
         style: TextStyle(fontSize: 13, color: context.textSecondary),
       ),
       trailing: OutlinedButton(
-        onPressed: () => _startDirectChat(userId),
+        onPressed: () => _openUserProfile(userId),
         style: OutlinedButton.styleFrom(
           foregroundColor: AppColors.primary,
           side: const BorderSide(color: AppColors.primary),
           padding: const EdgeInsets.symmetric(horizontal: 16),
         ),
-        child: Text(S.of(context)?.commonChat ?? 'Chat'),
+        child: Text(S.of(context)?.addressViewProfile ?? 'Profile'),
       ),
     );
   }

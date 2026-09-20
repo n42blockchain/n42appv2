@@ -25,6 +25,7 @@ import '../../blocs/moment/moment_bloc.dart';
 import '../../blocs/moment/moment_event.dart';
 import '../../blocs/transfer/transfer_bloc.dart';
 import '../chat/chat_lock_page.dart';
+import '../../widgets/common/chat_account_title.dart';
 import '../chat/chat_page.dart';
 import '../contact/add_friend_page.dart';
 import '../contact/contact_list_page.dart';
@@ -367,12 +368,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                 tooltip: MaterialLocalizations.of(context).backButtonTooltip,
                 onPressed: _handleBack,
               ),
-              title: Text(
-                currentTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: AppTextStyles.headlineSmall.copyWith(color: textColor),
-              ),
+              title: ChatAccountTitle(title: currentTitle),
               centerTitle: true,
               actions: [
                 if (_currentIndex == 0) ...[
@@ -469,14 +465,7 @@ class _ChatMainPageState extends State<ChatMainPage> {
                     ).backButtonTooltip,
                     onPressed: _handleBack,
                   ),
-                  title: Text(
-                    currentTitle,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.headlineSmall.copyWith(
-                      color: textColor,
-                    ),
-                  ),
+                  title: ChatAccountTitle(title: currentTitle),
                   centerTitle: true,
                   actions: [
                     if (_currentIndex == 0)

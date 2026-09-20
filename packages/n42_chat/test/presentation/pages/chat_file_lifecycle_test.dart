@@ -55,9 +55,7 @@ void main() {
           const ValueKey<String>('chat_encrypted_placeholder'),
         );
         expect(placeholder, findsOneWidget);
-        final label = S
-            .of(tester.element(placeholder))!
-            .settingsRestoreKeyTitle;
+        final label = S.of(tester.element(placeholder))!.chatMessageUnavailable;
         expect(find.textContaining(label), findsOneWidget);
         await tester.tap(placeholder);
         expect(tapped, isTrue);

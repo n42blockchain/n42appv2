@@ -12,9 +12,12 @@ import 'package:n42_chat/src/core/di/injection.dart';
 import 'package:n42_chat/src/core/services/remark_service.dart';
 import 'package:n42_chat/src/data/datasources/local/preferences_datasource.dart';
 import 'package:n42_chat/src/domain/entities/contact_entity.dart';
+import 'package:n42_chat/src/domain/repositories/contact_repository.dart';
 import 'package:n42_chat/src/presentation/blocs/contact/contact_bloc.dart';
 import 'package:n42_chat/src/presentation/blocs/contact/contact_state.dart';
 import 'package:n42_chat/src/presentation/pages/contact/contact_detail_page.dart';
+
+class MockContactRepository extends Mock implements IContactRepository {}
 
 class MockContactBloc extends Mock implements ContactBloc {}
 
@@ -79,6 +82,76 @@ void main() {
       getIt.unregister<PreferencesDataSource>();
     }
   });
+
+  testWidgets(
+    'standalone relationship failure offers retry and resolves existing friend',
+    (tester) async {
+      final repository = MockContactRepository();
+      when(
+        () => repository.getContactById(userId),
+      ).thenThrow(StateError('offline'));
+      getIt.registerSingleton<IContactRepository>(repository);
+      addTearDown(() async {
+        await getIt.unregister<IContactRepository>();
+      });
+      await tester.pumpWidget(
+        _buildTestWidget(
+          const ContactDetailPage(userId: userId, displayName: 'Alice'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      final action = find.byKey(const ValueKey('contact_relationship_action'));
+      await tester.ensureVisible(action);
+      expect(find.text('Retry'), findsOneWidget);
+      when(
+        () => repository.getContactById(userId),
+      ).thenAnswer((_) async => contact);
+      await tester.tap(action);
+      await tester.pumpAndSettle();
+      expect(action, findsNothing);
+      verify(() => repository.getContactById(userId)).called(2);
+      verifyNever(() => repository.startDirectChat(any()));
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  for (final outgoing in [true, false]) {
+    testWidgets(
+      'profile shows pending request direction (outgoing: $outgoing)',
+      (tester) async {
+        when(() => mockContactBloc.state).thenReturn(
+          ContactState(
+            status: ContactStatus.loaded,
+            friendRequests: [
+              FriendRequest(
+                id: '!request:server.com',
+                userId: userId,
+                userName: 'Alice',
+                isOutgoing: outgoing,
+              ),
+            ],
+          ),
+        );
+        await tester.pumpWidget(
+          _buildTestWidget(
+            const ContactDetailPage(userId: userId, displayName: 'Alice'),
+            contactBloc: mockContactBloc,
+          ),
+        );
+        await tester.pumpAndSettle();
+        final button = find.byKey(
+          const ValueKey('contact_relationship_action'),
+        );
+        await tester.ensureVisible(button);
+        expect(tester.widget<FilledButton>(button).onPressed == null, outgoing);
+        expect(
+          find.text(outgoing ? 'Request sent' : 'New Friends'),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   for (final hasPeer in [true, false]) {
     testWidgets(

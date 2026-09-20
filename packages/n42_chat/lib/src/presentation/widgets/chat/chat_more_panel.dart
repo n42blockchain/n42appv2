@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/app_dimensions.dart';
 
 enum ChatRecentMediaAccess { available, limited, denied, unsupported }
 
@@ -895,45 +896,31 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
   }
 
   Widget _buildPage(BuildContext context, bool isDark, List<_MoreItem> items) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // 第一行
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 6, bottom: 2),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  for (int i = 0; i < 4; i++)
-                    if (i < items.length)
-                      _buildItem(context, items[i], isDark)
-                    else
-                      const SizedBox(width: 70),
-                ],
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final columns = constraints.maxWidth < 360 ? 3 : 4;
+        final style = Theme.of(context).textTheme.bodySmall!;
+        final textHeight =
+            MediaQuery.textScalerOf(context).scale(style.fontSize!) *
+                (style.height ?? 1.4) *
+                3 +
+            AppDimensions.spacingS;
+        return GridView(
+          padding: const EdgeInsets.all(AppDimensions.spacingS),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: columns,
+            mainAxisExtent:
+                AppDimensions.contactItemHeight +
+                AppDimensions.spacingS +
+                textHeight,
+            crossAxisSpacing: AppDimensions.spacingS,
+            mainAxisSpacing: AppDimensions.spacingS,
           ),
-          // 第二行
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 2, bottom: 6),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  for (int i = 4; i < 8; i++)
-                    if (i < items.length)
-                      _buildItem(context, items[i], isDark)
-                    else
-                      const SizedBox(width: 70),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+          children: items
+              .map((item) => _buildItem(context, item, isDark))
+              .toList(),
+        );
+      },
     );
   }
 
@@ -944,10 +931,12 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
     return Semantics(
       button: true,
       label: item.label,
+      enabled: item.onTap != null,
       excludeSemantics: true,
-      child: GestureDetector(
+      child: InkWell(
         onTap: item.onTap,
         onLongPress: item.onLongPress,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusL),
         child: SizedBox(
           width: 70,
           child: Column(
@@ -969,8 +958,11 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
               const SizedBox(height: 8),
               Text(
                 item.label,
-                style: TextStyle(fontSize: 11, color: context.textSecondary),
-                maxLines: 1,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodySmall?.copyWith(color: context.textSecondary),
+                textAlign: TextAlign.center,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ],

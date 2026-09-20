@@ -10846,6 +10846,120 @@ abstract class S {
   /// In en, this message translates to:
   /// **'Switch Account'**
   String get settingsSwitchAccount;
+
+  /// No description provided for @chatFilterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get chatFilterUnread;
+
+  /// No description provided for @chatFilterEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No conversations in this filter'**
+  String get chatFilterEmpty;
+
+  /// No description provided for @accountAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'Add account'**
+  String get accountAdd;
+
+  /// No description provided for @accountCurrent.
+  ///
+  /// In en, this message translates to:
+  /// **'Current account'**
+  String get accountCurrent;
+
+  /// No description provided for @accountSwitching.
+  ///
+  /// In en, this message translates to:
+  /// **'Switching account…'**
+  String get accountSwitching;
+
+  /// No description provided for @accountSwitchFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not switch accounts. Try again, or add the account to sign in again.'**
+  String get accountSwitchFailed;
+
+  /// No description provided for @accountSessionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Switch accounts here to keep each account’s messages and secure session separate.'**
+  String get accountSessionsHint;
+
+  /// No description provided for @accountNoSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved accounts yet'**
+  String get accountNoSaved;
+
+  /// No description provided for @contactRequestSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Request sent'**
+  String get contactRequestSent;
+
+  /// No description provided for @contactRequestsIncoming.
+  ///
+  /// In en, this message translates to:
+  /// **'Received requests'**
+  String get contactRequestsIncoming;
+
+  /// No description provided for @contactRequestsOutgoing.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent requests'**
+  String get contactRequestsOutgoing;
+
+  /// No description provided for @contactRequestHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You can chat and call after the request is accepted.'**
+  String get contactRequestHint;
+
+  /// No description provided for @callReturnToCall.
+  ///
+  /// In en, this message translates to:
+  /// **'Return to call'**
+  String get callReturnToCall;
+
+  /// No description provided for @chatMessageSending.
+  ///
+  /// In en, this message translates to:
+  /// **'Sending'**
+  String get chatMessageSending;
+
+  /// No description provided for @chatMessageSent.
+  ///
+  /// In en, this message translates to:
+  /// **'Sent'**
+  String get chatMessageSent;
+
+  /// No description provided for @chatMessageDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get chatMessageDelivered;
+
+  /// No description provided for @chatMessageRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get chatMessageRead;
+
+  /// No description provided for @chatMessageFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Not sent. Tap to retry.'**
+  String get chatMessageFailed;
+
+  /// No description provided for @chatMessageUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Message unavailable on this device. Tap to check recovery options.'**
+  String get chatMessageUnavailable;
 }
 
 class _SDelegate extends LocalizationsDelegate<S> {

@@ -5889,4 +5889,65 @@ class SIt extends S {
 
   @override
   String get settingsSwitchAccount => 'Cambia account';
+
+  @override
+  String get chatFilterUnread => 'Non letti';
+
+  @override
+  String get chatFilterEmpty => 'Nessuna conversazione in questo filtro';
+
+  @override
+  String get accountAdd => 'Aggiungi account';
+
+  @override
+  String get accountCurrent => 'Account attuale';
+
+  @override
+  String get accountSwitching => 'Cambio account…';
+
+  @override
+  String get accountSwitchFailed =>
+      'Impossibile cambiare account. Riprova o aggiungi l’account per accedere di nuovo.';
+
+  @override
+  String get accountSessionsHint =>
+      'Cambia account qui per mantenere separati i messaggi e la sessione sicura di ogni account.';
+
+  @override
+  String get accountNoSaved => 'Nessun account salvato';
+
+  @override
+  String get contactRequestSent => 'Richiesta inviata';
+
+  @override
+  String get contactRequestsIncoming => 'Richieste ricevute';
+
+  @override
+  String get contactRequestsOutgoing => 'Richieste inviate';
+
+  @override
+  String get contactRequestHint =>
+      'Potrai chattare e chiamare dopo che la richiesta sarà accettata.';
+
+  @override
+  String get callReturnToCall => 'Torna alla chiamata';
+
+  @override
+  String get chatMessageSending => 'Invio in corso';
+
+  @override
+  String get chatMessageSent => 'Inviato';
+
+  @override
+  String get chatMessageDelivered => 'Consegnato';
+
+  @override
+  String get chatMessageRead => 'Letto';
+
+  @override
+  String get chatMessageFailed => 'Non inviato. Tocca per riprovare.';
+
+  @override
+  String get chatMessageUnavailable =>
+      'Messaggio non disponibile su questo dispositivo. Tocca per vedere le opzioni di recupero.';
 }

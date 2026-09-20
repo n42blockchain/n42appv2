@@ -39,18 +39,28 @@ class MessageStatusIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (status) {
-      case MessageStatus.sending:
-        return _buildSending();
-      case MessageStatus.sent:
-        return _buildSent();
-      case MessageStatus.delivered:
-        return _buildDelivered();
-      case MessageStatus.read:
-        return _buildRead();
-      case MessageStatus.failed:
-        return _buildFailed();
-    }
+    final l10n = S.of(context)!;
+    final label = switch (status) {
+      MessageStatus.sending => l10n.chatMessageSending,
+      MessageStatus.sent => l10n.chatMessageSent,
+      MessageStatus.delivered => l10n.chatMessageDelivered,
+      MessageStatus.read => l10n.chatMessageRead,
+      MessageStatus.failed => l10n.chatMessageFailed,
+    };
+    return Semantics(
+      label: label,
+      excludeSemantics: true,
+      child: Tooltip(
+        message: label,
+        child: switch (status) {
+          MessageStatus.sending => _buildSending(),
+          MessageStatus.sent => _buildSent(),
+          MessageStatus.delivered => _buildDelivered(),
+          MessageStatus.read => _buildRead(),
+          MessageStatus.failed => _buildFailed(),
+        },
+      ),
+    );
   }
 
   Widget _buildSending() {
@@ -83,11 +93,7 @@ class MessageStatusIndicator extends StatelessWidget {
   }
 
   Widget _buildRead() {
-    return Icon(
-      Icons.done_all,
-      size: size,
-      color: color ?? AppColors.primary,
-    );
+    return Icon(Icons.done_all, size: size, color: color ?? AppColors.primary);
   }
 
   Widget _buildFailed() {
@@ -122,10 +128,7 @@ class MessageReadReceipt extends StatelessWidget {
     if (compact) {
       return Text(
         '$readCount/$totalCount',
-        style: const TextStyle(
-          fontSize: 11,
-          color: AppColors.textTertiary,
-        ),
+        style: const TextStyle(fontSize: 11, color: AppColors.textTertiary),
       );
     }
 
@@ -154,4 +157,3 @@ class MessageReadReceipt extends StatelessWidget {
     );
   }
 }
-

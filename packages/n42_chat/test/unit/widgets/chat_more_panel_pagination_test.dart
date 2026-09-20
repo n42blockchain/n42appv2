@@ -68,7 +68,11 @@ void main() {
     // 最多滑 10 页（远超实际页数），页面内容不再变化即停。
     for (var i = 0; i < 10; i++) {
       final before = seen.length;
-      await tester.drag(find.byType(PageView), const Offset(-400, 0));
+      await tester.fling(
+        find.byType(PageView),
+        Offset(-tester.getSize(find.byType(PageView)).width * 0.8, 0),
+        1000,
+      );
       await tester.pumpAndSettle();
       snapshot();
       if (seen.length == before) break;

@@ -29,6 +29,8 @@ import 'contact_settings_page.dart';
 import 'tags_management_page.dart';
 import 'friend_details_summary.dart';
 import 'friend_photos_page.dart';
+import 'contact_list_page.dart' show FriendRequestsPage;
+import '../../../core/theme/app_dimensions.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// 联系人详情页面（仿微信）
@@ -68,6 +70,10 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   bool _isStarred = false;
   bool _isFriend = false;
   bool _isAddingFriend = false;
+  bool _requestSent = false;
+  bool _loadingRelationship = false;
+  bool _relationshipFailed = false;
+  FriendRequest? _standaloneRequest;
   int _detailsRevision = 0;
   StreamSubscription<RemarkUpdateEvent>? _remarkSubscription;
 
@@ -164,7 +170,10 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
   void _loadContact() {
     if (!mounted) return;
     final contactBloc = _maybeContactBloc();
-    if (contactBloc == null) return;
+    if (contactBloc == null) {
+      unawaited(_loadStandaloneRelationship());
+      return;
+    }
 
     final contactState = contactBloc.state;
     if (contactState.status != ContactStatus.initial ||
@@ -174,7 +183,7 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           .firstOrNull;
       if (mounted) {
         final nextContact = _mergeRemarkIntoContact(contact);
-        final nextIsFriend = nextContact != null;
+        final nextIsFriend = nextContact?.isFriend == true;
         if (_contact != nextContact || _isFriend != nextIsFriend) {
           setState(() {
             _contact = nextContact;
@@ -183,6 +192,35 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
           });
         }
       }
+    }
+  }
+
+  Future<void> _loadStandaloneRelationship() async {
+    if (_loadingRelationship || !getIt.isRegistered<IContactRepository>())
+      return;
+    setState(() {
+      _loadingRelationship = true;
+      _relationshipFailed = false;
+    });
+    try {
+      final repository = getIt<IContactRepository>();
+      final contact = await repository.getContactById(widget.userId);
+      final requests = contact?.isFriend == true
+          ? <FriendRequest>[]
+          : await repository.getPendingFriendRequests();
+      if (!mounted) return;
+      setState(() {
+        _contact = _mergeRemarkIntoContact(contact);
+        _isFriend = contact?.isFriend == true;
+        _isStarred = contact?.isStarred ?? false;
+        _standaloneRequest = requests
+            .where((r) => r.userId == widget.userId)
+            .firstOrNull;
+      });
+    } catch (_) {
+      if (mounted) setState(() => _relationshipFailed = true);
+    } finally {
+      if (mounted) setState(() => _loadingRelationship = false);
     }
   }
 
@@ -444,6 +482,9 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
       return BlocListener<ContactBloc, ContactState>(
         listener: (context, state) {
           _loadContact();
+          setState(
+            () {},
+          ); // Request changes also update the relationship action.
           if (state.status == ContactStatus.remarkUpdated &&
               state.updatedRemarkUserId == widget.userId) {
             _handleRemarkUpdate(
@@ -592,51 +633,81 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
 
   /// 构建添加好友按钮
   Widget _buildAddFriendButton() {
+    final l10n = S.of(context)!;
+    final requests =
+        _maybeContactBloc()?.state.friendRequests ?? <FriendRequest>[];
+    final request =
+        requests.where((item) => item.userId == widget.userId).firstOrNull ??
+        _standaloneRequest;
+    final waiting = _requestSent || request?.isOutgoing == true;
+    final blocked = _contact?.isBlocked == true;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: ElevatedButton(
-        onPressed: _isAddingFriend ? null : _addFriend,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
-          foregroundColor: Colors.white,
-          padding: const EdgeInsets.symmetric(vertical: 14),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_isAddingFriend)
-              const SizedBox(
-                width: 20,
-                height: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            else
-              const Icon(Icons.person_add, size: 20),
-            const SizedBox(width: 8),
-            Text(
-              _isAddingFriend
-                  ? (S.of(context)?.contactAddingToContacts ?? 'Adding...')
-                  : (S.of(context)?.contactAddToContacts ?? 'Add to Contacts'),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
-                fontSize: 16,
-                height: 1.3,
-                fontWeight: FontWeight.w500,
+      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.spacing),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          FilledButton.icon(
+            key: const ValueKey('contact_relationship_action'),
+            onPressed:
+                _isAddingFriend || _loadingRelationship || waiting || blocked
+                ? null
+                : _relationshipFailed
+                ? _loadContact
+                : request != null
+                ? () async {
+                    final bloc = _maybeContactBloc();
+                    await Navigator.of(context).push<void>(
+                      MaterialPageRoute<void>(
+                        builder: (_) => bloc != null
+                            ? BlocProvider.value(
+                                value: bloc,
+                                child: const FriendRequestsPage(),
+                              )
+                            : BlocProvider(
+                                create: (_) =>
+                                    ContactBloc(getIt<IContactRepository>()),
+                                child: const FriendRequestsPage(),
+                              ),
+                      ),
+                    );
+                    if (mounted) _loadContact();
+                  }
+                : _addFriend,
+            icon: _isAddingFriend || _loadingRelationship
+                ? const SizedBox.square(
+                    dimension: AppDimensions.iconSizeSmall,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : Icon(waiting ? Icons.schedule : Icons.person_add_outlined),
+            label: Text(
+              _relationshipFailed
+                  ? l10n.commonRetry
+                  : waiting
+                  ? l10n.contactRequestSent
+                  : request != null
+                  ? l10n.contactNewFriends
+                  : l10n.contactAddToContacts,
+            ),
+          ),
+          if (waiting || request != null)
+            Padding(
+              padding: const EdgeInsets.only(top: AppDimensions.spacingS),
+              child: Text(
+                l10n.contactRequestHint,
+                textAlign: TextAlign.center,
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.copyWith(color: context.textSecondary),
               ),
             ),
-          ],
-        ),
+        ],
       ),
     );
   }
 
   /// 添加好友
   Future<void> _addFriend() async {
+    if (_isAddingFriend || _requestSent) return;
     setState(() {
       _isAddingFriend = true;
     });
@@ -646,8 +717,19 @@ class _ContactDetailPageState extends State<ContactDetailPage> {
       await repository.startDirectChat(widget.userId);
       final contact = await repository.getContactById(widget.userId);
       if (!mounted) return;
-      context.read<ContactBloc>().add(const RefreshContacts());
-      _loadContact();
+      setState(() {
+        _requestSent = contact?.isFriend != true;
+        if (contact?.isFriend == true) {
+          _contact = _mergeRemarkIntoContact(contact);
+          _isFriend = true;
+        }
+      });
+      final bloc = _maybeContactBloc();
+      if (bloc != null) {
+        bloc.add(const RefreshContacts());
+      } else {
+        _loadContact();
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
