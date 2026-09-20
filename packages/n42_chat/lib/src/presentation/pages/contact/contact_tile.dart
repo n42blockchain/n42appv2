@@ -150,44 +150,51 @@ class SimpleContactTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = context.isDarkMode;
 
-    return Material(
-      color: selected
-          ? (isDark
-                ? AppColors.primaryDark.withValues(alpha: 0.2)
-                : AppColors.primary.withValues(alpha: 0.1))
-          : context.surfaceColor,
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.spacing,
-            vertical: AppDimensions.spacingM,
-          ),
-          child: Row(
-            children: [
-              N42Avatar(
-                imageUrl: contact.avatarUrl,
-                name: contact.effectiveDisplayName,
-                size: AppDimensions.avatarSizeChat,
-              ),
-              const SizedBox(width: AppDimensions.spacingM),
-              Expanded(
-                child: Text(
-                  contact.effectiveDisplayName,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: context.textPrimary,
+    return Semantics(
+      label: contact.effectiveDisplayName,
+      checked: selected,
+      enabled: onTap != null,
+      onTap: onTap,
+      excludeSemantics: true,
+      child: Material(
+        color: selected
+            ? (isDark
+                  ? AppColors.primaryDark.withValues(alpha: 0.2)
+                  : AppColors.primary.withValues(alpha: 0.1))
+            : context.surfaceColor,
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppDimensions.spacing,
+              vertical: AppDimensions.spacingM,
+            ),
+            child: Row(
+              children: [
+                N42Avatar(
+                  imageUrl: contact.avatarUrl,
+                  name: contact.effectiveDisplayName,
+                  size: AppDimensions.avatarSizeChat,
+                ),
+                const SizedBox(width: AppDimensions.spacingM),
+                Expanded(
+                  child: Text(
+                    contact.effectiveDisplayName,
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: context.textPrimary,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              if (selected)
-                const Icon(
-                  Icons.check_circle,
-                  color: AppColors.primary,
-                  size: 24,
-                ),
-            ],
+                if (selected)
+                  const Icon(
+                    Icons.check_circle,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
+              ],
+            ),
           ),
         ),
       ),
