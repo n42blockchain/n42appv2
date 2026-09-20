@@ -4,7 +4,7 @@
 
 This batch adds behavior tests to the existing wallet bridge and send-screen logic. It does not copy send algorithms into tests. `send_logic_guard_test.dart` mounts the production `SendLogicMixin` in a minimal ConsumerState; only address resolution, gas estimation and signing are substituted with deterministic offline boundaries. The real amount checks, send guards, transaction-record construction, confirmation routing and cancellation handling execute.
 
-No live RPC, credentials, private keys, signing or broadcast is used. No generated files, CI gates, dependencies, or old test files were edited. Full-suite coverage was not rerun; the prior 46.5974% value is not claimed to have increased by any measured amount.
+No live RPC, credentials, private keys, signing or broadcast is used. No generated files, CI gates, dependencies, or old test files were edited by this worker. After integration, the stable full-suite measurement below was run; it includes the other concurrently completed payment/UI work as well as this batch.
 
 ## A. Wallet bridge rejection contracts
 
@@ -66,6 +66,37 @@ Command: `flutter test --no-pub test/features/wallet/pages/send/send_logic_guard
 Result: **15 send tests passed** (`/tmp/n42-wallet-fee-refresh-after.log`). Targeted production/test analysis found no issues (`/tmp/n42-wallet-fee-refresh-analyze.log`).
 
 Suggested independent commit: `fix: recheck send balance after fee refresh` (production source, two added regression cases, and this report update). The worker made no commit.
+
+## D. Integrated stable-tree full-suite measurement
+
+After the coordinating agent committed the fee fix as `707bf93b6`, all workers froze code, tests and dependencies for this run. The command used CI's descriptor limit and concurrency:
+
+```sh
+ulimit -n 4096
+flutter test --coverage --concurrency=4 --machine
+```
+
+Results:
+
+- Flutter exit code **0**; terminal machine event `done.success: true`; duration **259.1 seconds**.
+- Reporter events: **5,567 passed, 0 failed, 0 skipped, 0 errors**.
+- Coverage gate: **61,391 / 131,112 = 46.8233266%**. The unchanged **70% threshold failed**.
+- Source records: **921 `lib/` files out of 1,049 repository Dart files**; 128 files remain absent from the trace.
+- The preceding measured trace was 60,962 / 130,827 = 46.5974149%. The new result has **429 more hit lines and 285 more executable lines**, a **0.2259 percentage-point** difference. This is not a fixed-denominator comparison or an isolated effect attributable to these wallet tests. Five payment source files newly appear in LCOV.
+- Send logic: 2 / 320 previously → **95 / 324** now. Wallet bridge: 31 / 303 previously → **73 / 303** now (also includes the coordinating agent's independent non-finite-amount fix/tests).
+- At this new denominator, reaching 70% would require at least **30,388 additional hit lines**; further meaningful imports can increase that denominator again. **The 70% objective remains open.**
+
+### Reporter preamble handling
+
+This local `flutter test` invocation automatically ran dependency resolution after version-hook changes, putting **219 non-JSON dependency-status lines before the first machine event**. The original `quality_gate.py tests` invocation on that raw file failed JSON parsing; it must not be described as a direct raw-log gate pass. There were no non-JSON lines after the first event. An additional evidence file containing every original JSON event, in original order, was written without changing the raw log. The unchanged gate on that events-only file returned the 5,567-pass result above. CI separately executes `flutter pub get` before its test command; no CI parser, test selection, failure event or threshold was changed here.
+
+Evidence files:
+
+- Raw stdout: `/tmp/n42-main-coverage-batch2-final-20260920.jsonl`.
+- Raw stderr: `/tmp/n42-main-coverage-batch2-final-20260920.stderr` (empty).
+- All original machine events: `/tmp/n42-main-coverage-batch2-final-events-20260920.jsonl`.
+- Previous trace snapshot: `/tmp/n42-main-coverage-previous-20260920.info`.
+- Current full trace: `coverage/lcov.info`.
 
 ## Integration notes
 
