@@ -197,7 +197,15 @@ final class LocalPaymentClient {
       }
       _units(result['amount']);
     } else {
-      if (result['id'] is! String || (result['id'] as String).isEmpty) {
+      final prefix = path == '/packets'
+          ? 'packet'
+          : path == '/transfers'
+          ? 'transfer'
+          : 'refund';
+      if (result['id'] is! String ||
+          !RegExp(
+            '^${prefix}_[a-f0-9]{64}\$',
+          ).hasMatch(result['id'] as String)) {
         throw const LocalPaymentException('invalid_response');
       }
       if (path.endsWith('/refunds')) _units(result['amount']);

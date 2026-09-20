@@ -18,3 +18,7 @@ Success responses must identify localSimulation, use exact integer strings, and 
 - Logs: `/tmp/n42-payment-client-tests.log`, `/tmp/n42-payment-protocol-tests.log`, `/tmp/n42-payment-client-analyze.log`.
 
 The protocol test requires Python 3 (already required by the CI quality gate) and loopback socket access. Test funds and tokens are synthetic. Public testnets, payment-provider sandboxes, device UI, persistent client order recovery and production authorization are not validated by these tests. P09 remains partial until a deliberate test UI entry is wired.
+
+## Receipt format review
+
+Post-measurement review tightened action receipts to transfer/packet/refund plus 64 lowercase hex characters. A malformed packet ID is rejected before the UI could accept an unusable packet. 13 client/protocol tests passed after the change; `/tmp/n42-payment-receipt-tests.log`. This follow-up was not included in the preceding full coverage trace.

@@ -82,7 +82,7 @@ void main() {
           'amount': '9007199254740993',
           'asset': 'test-asset',
           'recipient': 'b',
-          'id': 't1',
+          'id': 'transfer_${'a' * 64}',
         });
       })..activateTestAccount('synthetic-test-accounta');
       final receipt = await c.transfer(
@@ -187,7 +187,7 @@ void main() {
         expect(body['slots'], '3');
         expect(body['expiresAt'], '100');
         return response({
-          'id': 'p',
+          'id': 'packet_${'a' * 64}',
           'asset': 'a',
           'total': '60',
           'slots': '3',
@@ -236,4 +236,26 @@ void main() {
       }
     },
   );
+  test('packet receipt must be usable by the claim endpoint', () async {
+    final c = client(
+      (_) => response({
+        'id': 'p',
+        'asset': 'a',
+        'total': '60',
+        'slots': '3',
+        'expiresAt': '100',
+      }),
+    )..activateTestAccount('synthetic-test-accounta');
+    await expectLater(
+      c.createPacket(
+        room: 'r',
+        asset: 'a',
+        total: BigInt.from(60),
+        slots: 3,
+        expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+        key: 'p',
+      ),
+      throwsA(code('invalid_response')),
+    );
+  });
 }
