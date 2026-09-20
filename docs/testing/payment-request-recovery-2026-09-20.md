@@ -38,3 +38,7 @@ recoverRequest returns either unresolved or a validated immutable local receipt,
 ## URL canonicalization follow-up
 
 Dart normalizes dot-only path segments: keys `.` and `..` were not preserved by the original path-shaped endpoint. The client now uses `GET /requests?key=...`; the server strictly validates its single query key and retains the original path endpoint for compatibility. 15 HTTP tests and 24 client/protocol tests passed, including a real Dart/Python request key of `..`, reserved characters and cross-account rejection. Logs: `/tmp/n42-payment-dot-key-server.log`, `/tmp/n42-payment-dot-key-client.log`.
+
+## Final local integration batch
+
+After the two lab UIs adopted the query endpoint, a serial integration run passed 148 Flutter payment/keystore-import tests and 35 Python local-payment tests. Targeted analysis: no errors or warnings, three style infos. Logs: `/tmp/n42-payment-batch-integration.log`, `/tmp/n42-payment-sandbox-final.log`, `/tmp/n42-payment-batch-analyze.log`. These are targeted integration results, not a fresh full-app coverage trace.
