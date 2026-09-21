@@ -28,7 +28,7 @@ s.seed_test_funds('a', 'test-usdc', 100, key='seed')
 s.set_test_members('room', ['a','b','c'])
 clock = [1]
 server = LocalPaymentServer(s, mode='localSimulation', tokens={
- 'synthetic-test-accounta':'a', 'synthetic-test-accountb':'b'}, clock=lambda:clock[0])
+ 'synthetic-test-accounta':'a', 'synthetic-test-accountb':'b', 'synthetic-test-accountc':'c'}, clock=lambda:clock[0])
 threading.Thread(target=server.serve_forever, daemon=True).start()
 print(server.server_port, flush=True)
 for line in sys.stdin:
@@ -130,6 +130,64 @@ server.server_close()
         await client.refund(packet['id'] as String, key: 'refund-one'),
         refund,
       );
+      final designated = await client.createPacket(
+        room: 'room',
+        asset: 'test-usdc',
+        total: BigInt.from(15),
+        slots: 1,
+        expiresAt: DateTime.fromMillisecondsSinceEpoch(200000),
+        key: 'designated',
+        recipient: 'b',
+      );
+      expect(designated['recipient'], 'b');
+      expect((await client.recoverRequest('designated')).receipt, designated);
+      await expectLater(
+        client.createPacket(
+          room: 'room',
+          asset: 'test-usdc',
+          total: BigInt.from(15),
+          slots: 1,
+          expiresAt: DateTime.fromMillisecondsSinceEpoch(200000),
+          key: 'designated',
+          recipient: 'c',
+        ),
+        throwsA(
+          isA<LocalPaymentException>().having(
+            (e) => e.code,
+            'code',
+            'conflict',
+          ),
+        ),
+      );
+      for (final token in [
+        'synthetic-test-accounta',
+        'synthetic-test-accountc',
+      ]) {
+        client.activateTestAccount(token);
+        await expectLater(
+          client.claim(designated['id'] as String, key: 'designated-claim'),
+          throwsA(
+            isA<LocalPaymentException>().having(
+              (e) => e.code,
+              'code',
+              'conflict',
+            ),
+          ),
+        );
+      }
+      client.activateTestAccount('synthetic-test-accountb');
+      final designatedClaim = await client.claim(
+        designated['id'] as String,
+        key: 'designated-claim',
+      );
+      expect(designatedClaim['amount'], '15');
+      expect(
+        await client.claim(designated['id'] as String, key: 'designated-claim'),
+        designatedClaim,
+      );
+      expect(await client.balance('test-usdc'), BigInt.from(45));
+      client.activateTestAccount('synthetic-test-accounta');
+      expect(await client.balance('test-usdc'), BigInt.from(55));
       client.close();
     },
     timeout: const Timeout(Duration(seconds: 30)),

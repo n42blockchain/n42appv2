@@ -28,6 +28,9 @@ final class LocalPaymentClient {
   static final BigInt maxLocalUnits = BigInt.parse('9000000000000000');
 
   final Uri _endpoint;
+
+  /// The actual validated local endpoint, for account-scoped recovery storage.
+  Uri get endpoint => _endpoint;
   final http.Client _transport;
   final bool enabled;
   final Duration timeout;
@@ -80,6 +83,7 @@ final class LocalPaymentClient {
       _units(receipt['total']);
       _units(receipt['slots']);
       _units(receipt['expiresAt']);
+      _validatePacketRecipient(receipt);
     } else {
       _units(receipt['amount']);
       if (id.startsWith('transfer_') &&
@@ -116,6 +120,7 @@ final class LocalPaymentClient {
         _units(receipt['total']);
         _units(receipt['slots']);
         _units(receipt['expiresAt']);
+        _validatePacketRecipient(receipt);
       } else {
         _units(receipt['amount']);
         if (id.startsWith('transfer_') &&
@@ -155,7 +160,12 @@ final class LocalPaymentClient {
     required int slots,
     required DateTime expiresAt,
     required String key,
+    String? recipient,
   }) {
+    if (recipient != null &&
+        (!_validDesignatedRecipient(recipient) || slots != 1)) {
+      throw ArgumentError('Invalid designated packet recipient');
+    }
     if (slots <= 0 ||
         BigInt.from(slots) > maxLocalUnits ||
         expiresAt.millisecondsSinceEpoch < 0) {
@@ -167,6 +177,7 @@ final class LocalPaymentClient {
       key: key,
       body: {
         'room': room,
+        'recipient': ?recipient,
         'asset': asset,
         'total': _positive(total),
         'slots': slots.toString(),
@@ -256,12 +267,23 @@ final class LocalPaymentClient {
     final fields = path == '/transfers'
         ? ['recipient', 'asset', 'amount']
         : path == '/packets'
-        ? ['asset', 'total', 'slots', 'expiresAt']
+        ? [
+            'asset',
+            'total',
+            'slots',
+            'expiresAt',
+            if (body.containsKey('recipient')) 'recipient',
+          ]
         : <String>[];
     for (final field in fields) {
       if (result[field] != body[field]) {
         throw const LocalPaymentException('invalid_response');
       }
+    }
+    if (path == '/packets' &&
+        !body.containsKey('recipient') &&
+        result.containsKey('recipient')) {
+      throw const LocalPaymentException('invalid_response');
     }
     if (result['asset'] is! String || (result['asset'] as String).isEmpty) {
       throw const LocalPaymentException('invalid_response');
@@ -325,6 +347,20 @@ final class LocalPaymentClient {
       if (decoded.containsKey(field)) _units(decoded[field]);
     }
     return Map.unmodifiable(decoded);
+  }
+
+  static bool _validDesignatedRecipient(dynamic value) =>
+      value is String &&
+      value.isNotEmpty &&
+      value.runes.length <= 256 &&
+      !RegExp(r'[\x00-\x1f\x7f]').hasMatch(value);
+
+  static void _validatePacketRecipient(Map<String, dynamic> receipt) {
+    if (receipt.containsKey('recipient') &&
+        (!_validDesignatedRecipient(receipt['recipient']) ||
+            receipt['slots'] != '1')) {
+      throw const LocalPaymentException('invalid_response');
+    }
   }
 
   static BigInt _units(dynamic value) {

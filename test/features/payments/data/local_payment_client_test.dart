@@ -7,7 +7,10 @@ import 'package:n42_wallet/features/payments/data/local_payment_client.dart';
 
 void main() {
   http.Response response(Map<String, dynamic> data, [int status = 200]) =>
-      http.Response(jsonEncode({'mode': 'localSimulation', ...data}), status);
+      http.Response.bytes(
+        utf8.encode(jsonEncode({'mode': 'localSimulation', ...data})),
+        status,
+      );
   LocalPaymentClient client(
     FutureOr<http.Response> Function(http.Request) handler, {
     bool enabled = true,
@@ -279,4 +282,193 @@ void main() {
       await expectLater(c.balance('a'), throwsA(code('invalid_response')));
     },
   );
+  test('endpoint getter returns the actual validated immutable URI', () {
+    final endpoint = Uri.parse('http://127.0.0.1:9876/');
+    final c = LocalPaymentClient(
+      endpoint: endpoint,
+      transport: MockClient((_) async => response({})),
+    );
+    expect(c.endpoint, same(endpoint));
+    expect(c.endpoint.port, 9876);
+  });
+
+  test('designated packet preserves recipient identity exactly', () async {
+    for (final recipient in ['b', ' b ', '收款人', '😀' * 256]) {
+      final c = client((request) {
+        final body = jsonDecode(request.body) as Map<String, dynamic>;
+        expect(body['recipient'], recipient);
+        expect(body['slots'], '1');
+        return response({'id': 'packet_${'a' * 64}', ...body});
+      })..activateTestAccount('synthetic-test-accounta');
+      final result = await c.createPacket(
+        room: 'r',
+        asset: 'a',
+        total: BigInt.one,
+        slots: 1,
+        expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+        key: 'designated',
+        recipient: recipient,
+      );
+      expect(result['recipient'], recipient);
+    }
+  });
+
+  test('invalid recipient or multiple designated slots never dispatches', () {
+    var calls = 0;
+    final c = client((_) {
+      calls++;
+      return response({});
+    })..activateTestAccount('synthetic-test-accounta');
+    for (final recipient in [
+      '',
+      'b\n',
+      'b\u0000',
+      'b\u007f',
+      'a' * 257,
+      '😀' * 257,
+    ]) {
+      expect(
+        () => c.createPacket(
+          room: 'r',
+          asset: 'a',
+          total: BigInt.one,
+          slots: 1,
+          expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+          key: 'p',
+          recipient: recipient,
+        ),
+        throwsArgumentError,
+      );
+    }
+    expect(
+      () => c.createPacket(
+        room: 'r',
+        asset: 'a',
+        total: BigInt.from(2),
+        slots: 2,
+        expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+        key: 'p',
+        recipient: 'b',
+      ),
+      throwsArgumentError,
+    );
+    expect(calls, 0);
+  });
+
+  test(
+    'designated receipt rejects missing null different or trimmed recipient',
+    () async {
+      for (final returned in [null, 'b', 'c', 1]) {
+        final c = client((request) {
+          final body = jsonDecode(request.body) as Map<String, dynamic>;
+          body['recipient'] = returned;
+          return response({'id': 'packet_${'a' * 64}', ...body});
+        })..activateTestAccount('synthetic-test-accounta');
+        await expectLater(
+          c.createPacket(
+            room: 'r',
+            asset: 'a',
+            total: BigInt.one,
+            slots: 1,
+            expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+            key: 'p',
+            recipient: ' b ',
+          ),
+          throwsA(code('invalid_response')),
+        );
+      }
+      final missing = client((request) {
+        final body = jsonDecode(request.body) as Map<String, dynamic>
+          ..remove('recipient');
+        return response({'id': 'packet_${'a' * 64}', ...body});
+      })..activateTestAccount('synthetic-test-accounta');
+      await expectLater(
+        missing.createPacket(
+          room: 'r',
+          asset: 'a',
+          total: BigInt.one,
+          slots: 1,
+          expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+          key: 'p',
+          recipient: 'b',
+        ),
+        throwsA(code('invalid_response')),
+      );
+    },
+  );
+
+  test(
+    'ordinary group packet omits recipient and refuses unexpected designation',
+    () async {
+      for (final addRecipient in [false, true]) {
+        final c = client((request) {
+          final body = jsonDecode(request.body) as Map<String, dynamic>;
+          expect(body.containsKey('recipient'), isFalse);
+          return response({
+            'id': 'packet_${'a' * 64}',
+            ...body,
+            if (addRecipient) 'recipient': 'b',
+          });
+        })..activateTestAccount('synthetic-test-accounta');
+        final result = c.createPacket(
+          room: 'r',
+          asset: 'a',
+          total: BigInt.from(3),
+          slots: 3,
+          expiresAt: DateTime.fromMillisecondsSinceEpoch(100000),
+          key: 'p',
+        );
+        if (addRecipient) {
+          await expectLater(result, throwsA(code('invalid_response')));
+        } else {
+          expect((await result).containsKey('recipient'), isFalse);
+        }
+      }
+    },
+  );
+  for (final lookup in ['operation', 'recovery']) {
+    test(
+      '$lookup validates optional packet recipient and single-slot restriction',
+      () async {
+        final id = 'packet_${'a' * 64}';
+        final cases = <Map<String, dynamic>>[
+          {},
+          {'recipient': 'b'},
+          {'recipient': null},
+          {'recipient': 1},
+          {'recipient': ''},
+          {'recipient': 'b\n'},
+          {'recipient': 'x' * 257},
+          {'recipient': 'b', 'slots': '2'},
+        ];
+        for (var index = 0; index < cases.length; index++) {
+          final receipt = {
+            'mode': 'localSimulation',
+            'id': id,
+            'asset': 'a',
+            'total': '2',
+            'slots': '1',
+            'expiresAt': '100',
+            ...cases[index],
+          };
+          final c = client((request) {
+            expect(request.method, 'GET');
+            return response(
+              lookup == 'operation'
+                  ? receipt
+                  : {'status': 'completed', 'receipt': receipt},
+            );
+          })..activateTestAccount('synthetic-test-accounta');
+          final Future<dynamic> result = lookup == 'operation'
+              ? c.operation(id)
+              : c.recoverRequest('p');
+          if (index < 2) {
+            await result;
+          } else {
+            await expectLater(result, throwsA(code('invalid_response')));
+          }
+        }
+      },
+    );
+  }
 }
