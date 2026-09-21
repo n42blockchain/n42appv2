@@ -85,7 +85,7 @@ class _LocalPaymentLabHostState extends State<LocalPaymentLabHost> {
       );
     }
     return widget.redPackets
-        ? LocalPacketLabPage(client: client)
+        ? LocalPacketLabPage(client: client, pendingStore: _pendingStore!)
         : LocalPaymentLabPage(client: client, pendingStore: _pendingStore!);
   }
 }

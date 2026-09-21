@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../data/local_payment_client.dart';
+import '../data/local_payment_pending_store.dart';
 
 enum _Operation { create, claim, refund }
 
@@ -35,9 +36,14 @@ class _Attempt {
 /// Synthetic local packet experiments only. The caller owns client/transport.
 /// Uses a dedicated client session and clears it on disposal, without closing it.
 class LocalPacketLabPage extends StatefulWidget {
-  const LocalPacketLabPage({super.key, required this.client});
+  const LocalPacketLabPage({
+    super.key,
+    required this.client,
+    required this.pendingStore,
+  });
 
   final LocalPaymentClient client;
+  final Future<LocalPaymentPendingStore> pendingStore;
 
   @override
   State<LocalPacketLabPage> createState() => _LocalPacketLabPageState();
@@ -54,7 +60,12 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   // Retain uncertain requests when switching away and back during this page's
   // lifetime. No balances or receipts are cached by account.
   final _attempts = <String, _Attempt>{};
+  final _confirmed = <String, ({String key, Map<String, dynamic> receipt})>{};
   String? _account;
+  LocalPaymentPendingScope? _scope;
+  LocalPaymentPendingStore? _store;
+  bool _journalBlocked = false;
+  bool _cleanupFailed = false;
   int _generation = 0;
   bool _busy = false;
   String? _error;
@@ -64,22 +75,37 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   String? _receiptPacket;
 
   _Attempt? get _pending => _attempts[_account];
-  bool get _canStart => _account != null && !_busy && _pending == null;
+  bool get _canStart =>
+      _account != null &&
+      !_busy &&
+      !_journalBlocked &&
+      !_cleanupFailed &&
+      _pending == null;
 
   @override
   void initState() {
     super.initState();
+    widget.pendingStore.ignore();
     widget.client.clearAccount();
   }
 
   @override
   void didUpdateWidget(covariant LocalPacketLabPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.client != widget.client) {
+    widget.pendingStore.ignore();
+    if (oldWidget.client != widget.client ||
+        oldWidget.pendingStore != widget.pendingStore) {
       oldWidget.client.clearAccount();
       widget.client.clearAccount();
+      _attempts.clear();
+      _confirmed.clear();
+      _token.clear();
+      _room.clear();
+      _asset.clear();
+      _total.clear();
+      _slots.clear();
+      _minutes.text = '60';
       _clearDisplay();
-      // Uncertain operation snapshots remain blocked/retryable for this page.
     }
   }
 
@@ -93,11 +119,17 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
     _receiptOperation = null;
     _receiptPacket = null;
     _packet.clear();
+    _scope = null;
+    _store = null;
+    _journalBlocked = false;
+    _cleanupFailed = false;
   }
 
   @override
   void dispose() {
     _generation++;
+    _attempts.clear();
+    _confirmed.clear();
     widget.client.clearAccount();
     for (final controller in [
       _token,
@@ -115,18 +147,93 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
 
   bool _current(int generation) => mounted && generation == _generation;
 
-  void _activate() {
+  Future<void> _activate() async {
     widget.client.clearAccount();
     setState(_clearDisplay);
+    final generation = _generation;
+    setState(() => _busy = true);
     try {
       final token = _token.text.trim();
       widget.client.activateTestAccount(token);
-      setState(() => _account = token);
-    } catch (_) {
-      setState(
-        () => _error =
-            'Activate an enabled local client with a synthetic-test account token.',
+      final scope = LocalPaymentPendingScope.fromAccount(
+        endpoint: widget.client.endpoint,
+        syntheticToken: token,
       );
+      final store = await widget.pendingStore.catchError((Object _) {
+        throw const LocalPaymentPendingStoreException('unavailable');
+      });
+      if (!_current(generation)) return;
+      final journal = await store.load(scope);
+      if (!_current(generation)) return;
+      if (journal.status == LocalPaymentPendingStatus.corrupt ||
+          journal.status == LocalPaymentPendingStatus.unavailable) {
+        throw LocalPaymentPendingStoreException(journal.status.name);
+      }
+      final packets = journal.entries
+          .where(
+            (entry) => entry.operation != LocalPaymentPendingOperation.transfer,
+          )
+          .toList();
+      if (packets.length > 1) {
+        throw const LocalPaymentPendingStoreException('multiple_pending');
+      }
+      _attempts.remove(token);
+      if (packets.isNotEmpty) {
+        final entry = packets.single;
+        final operation = _Operation.values.byName(entry.operation.name);
+        _attempts[token] = _Attempt(
+          operation: operation,
+          key: entry.key,
+          room: entry.parameters['room'],
+          asset: entry.parameters['asset'],
+          total: entry.parameters['total'] == null
+              ? null
+              : BigInt.parse(entry.parameters['total']!),
+          slots: int.tryParse(entry.parameters['slots'] ?? ''),
+          expiresAt: entry.parameters['expiresAt'] == null
+              ? null
+              : DateTime.fromMillisecondsSinceEpoch(
+                  int.parse(entry.parameters['expiresAt']!) * 1000,
+                  isUtc: true,
+                ),
+          packet: entry.parameters['packet'],
+        );
+      }
+      setState(() {
+        _account = token;
+        _scope = scope;
+        _store = store;
+        _busy = false;
+        final attempt = _pending;
+        final confirmed = _confirmed[token];
+        if (attempt != null && confirmed?.key == attempt.key) {
+          _showReceipt(attempt, confirmed!.receipt);
+          _cleanupFailed = true;
+        }
+        if (attempt?.operation == _Operation.create) {
+          _room.text = attempt!.room!;
+          _asset.text = attempt.asset!;
+          _total.text = attempt.total.toString();
+          _slots.text = attempt.slots.toString();
+          final remaining = attempt.expiresAt!.difference(
+            DateTime.now().toUtc(),
+          );
+          _minutes.text = ((remaining.inSeconds + 59) ~/ 60)
+              .clamp(1, 10080)
+              .toString();
+        } else if (attempt != null) {
+          _packet.text = attempt.packet!;
+        }
+      });
+    } catch (error) {
+      if (!_current(generation)) return;
+      setState(() {
+        _busy = false;
+        _journalBlocked = error is LocalPaymentPendingStoreException;
+        _error = error is LocalPaymentPendingStoreException
+            ? 'Pending journal is unavailable or ambiguous. No money action is allowed.'
+            : 'Activate an enabled local client with a synthetic-test account token.';
+      });
     }
   }
 
@@ -191,7 +298,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   }
 
   Future<void> _run(_Attempt attempt) async {
-    if (_account == null || _busy) return;
+    if (_account == null || _busy || _journalBlocked || _cleanupFailed) return;
     final account = _account!;
     final generation = _generation;
     setState(() {
@@ -204,6 +311,8 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       _receiptPacket = null;
     });
     try {
+      await _store!.save(_scope!, _entry(attempt));
+      if (!_current(generation)) return;
       final receipt = await switch (attempt.operation) {
         _Operation.create => widget.client.createPacket(
           room: attempt.room!,
@@ -224,10 +333,15 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       };
       if (!_current(generation)) return;
       await _complete(account, generation, attempt, receipt);
-    } catch (_) {
+    } catch (error) {
       if (!_current(generation)) return;
       setState(() {
-        _error = _receipt != null
+        if (error is LocalPaymentPendingStoreException && !_cleanupFailed) {
+          _journalBlocked = true;
+        }
+        _error = error is LocalPaymentPendingStoreException
+            ? _explainStore(error)
+            : _receipt != null
             ? 'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.'
             : 'No confirmed simulation receipt. Retry the same operation; its inputs and request key are retained.';
       });
@@ -244,16 +358,20 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   ) async {
     if (!_current(generation)) return;
     setState(() {
+      _showReceipt(attempt, receipt);
+      _confirmed[account] = (key: attempt.key, receipt: receipt);
+    });
+    try {
+      await _store!.remove(_scope!, attempt.key);
+    } catch (_) {
+      if (_current(generation)) setState(() => _cleanupFailed = true);
+      throw const LocalPaymentPendingStoreException('cleanup_failed');
+    }
+    if (!_current(generation)) return;
+    setState(() {
       _attempts.remove(account);
-      _receipt = receipt;
-      _receiptOperation = attempt.operation;
-      _receiptPacket = attempt.operation == _Operation.create
-          ? receipt['id'] as String
-          : attempt.packet;
-      _asset.text = receipt['asset'] as String;
-      if (attempt.operation == _Operation.create) {
-        _packet.text = receipt['id'] as String;
-      }
+      _confirmed.remove(account);
+      _cleanupFailed = false;
     });
     final asset = receipt['asset'] as String;
     final balance = await widget.client.balance(asset);
@@ -261,6 +379,35 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       setState(() => _balance = '$balance base units ($asset)');
     }
   }
+
+  void _showReceipt(_Attempt attempt, Map<String, dynamic> receipt) {
+    _receipt = receipt;
+    _receiptOperation = attempt.operation;
+    _receiptPacket = attempt.operation == _Operation.create
+        ? receipt['id'] as String
+        : attempt.packet;
+    _asset.text = receipt['asset'] as String;
+    if (attempt.operation == _Operation.create) {
+      _packet.text = receipt['id'] as String;
+    }
+  }
+
+  LocalPaymentPendingEntry _entry(_Attempt attempt) => LocalPaymentPendingEntry(
+    key: attempt.key,
+    operation: LocalPaymentPendingOperation.values.byName(
+      attempt.operation.name,
+    ),
+    parameters: attempt.operation == _Operation.create
+        ? {
+            'room': attempt.room!,
+            'asset': attempt.asset!,
+            'total': attempt.total.toString(),
+            'slots': attempt.slots.toString(),
+            'expiresAt': (attempt.expiresAt!.millisecondsSinceEpoch ~/ 1000)
+                .toString(),
+          }
+        : {'packet': attempt.packet!},
+  );
 
   bool _matchesAttempt(_Attempt attempt, Map<String, dynamic> receipt) {
     final id = receipt['id'];
@@ -274,6 +421,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             receipt['expiresAt'] ==
                 (attempt.expiresAt!.millisecondsSinceEpoch ~/ 1000)
                     .toString() &&
+            !receipt.containsKey('recipient') &&
             (!receipt.containsKey('room') || receipt['room'] == attempt.room),
       _Operation.claim =>
         !receipt.containsKey('id') && receipt['packet'] == attempt.packet,
@@ -289,7 +437,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
 
   Future<void> _checkOriginal() async {
     final attempt = _pending;
-    if (_account == null || _busy || attempt == null) return;
+    if (_account == null || _busy || _journalBlocked || attempt == null) return;
     final account = _account!;
     final generation = _generation;
     setState(() {
@@ -315,10 +463,12 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
         return;
       }
       await _complete(account, generation, attempt, receipt);
-    } catch (_) {
+    } catch (error) {
       if (!_current(generation)) return;
       setState(() {
-        _error = _receipt != null
+        _error = error is LocalPaymentPendingStoreException
+            ? _explainStore(error)
+            : _receipt != null
             ? 'Simulation operation confirmed; balance refresh failed. Use Refresh synthetic balance.'
             : 'Original result is not confirmed. The saved request and key are unchanged.';
       });
@@ -327,8 +477,13 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
     }
   }
 
+  String _explainStore(LocalPaymentPendingStoreException error) =>
+      error.code == 'cleanup_failed'
+      ? 'Operation confirmed, but its pending record could not be cleared. Do not resend. Use Check original result to retry cleanup.'
+      : 'Pending journal could not be safely loaded or saved. No packet operation was sent. Reactivate after fixing local storage.';
+
   Future<void> _refresh() async {
-    if (_account == null || _busy) return;
+    if (_account == null || _busy || _journalBlocked) return;
     final asset = _asset.text.trim();
     if (asset.isEmpty) {
       setState(() => _error = 'Enter a synthetic asset identifier.');
@@ -427,12 +582,14 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             ),
             OutlinedButton(
               key: const ValueKey('packet_lookup'),
-              onPressed: _busy ? null : _checkOriginal,
+              onPressed: _busy || _journalBlocked ? null : _checkOriginal,
               child: const Text('Check original result'),
             ),
             FilledButton(
               key: const ValueKey('packet_retry'),
-              onPressed: _busy ? null : () => _run(_pending!),
+              onPressed: _busy || _journalBlocked || _cleanupFailed
+                  ? null
+                  : () => _run(_pending!),
               child: const Text('Retry same operation'),
             ),
           ],
@@ -440,7 +597,9 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
           _field('asset', 'Synthetic asset identifier', _asset),
           OutlinedButton(
             key: const ValueKey('packet_refresh'),
-            onPressed: _account != null && !_busy ? _refresh : null,
+            onPressed: _account != null && !_busy && !_journalBlocked
+                ? _refresh
+                : null,
             child: const Text('Refresh synthetic balance'),
           ),
           Text(
