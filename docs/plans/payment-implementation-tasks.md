@@ -81,12 +81,12 @@ P10b纯解析已完成，P10c–P10e仍为后续方案；尚未完成入口接�
 
 ## 2026-09-21 接线审查
 
-P10c前置：`EvmSender`最终ERC20金额已支持`tokenValueWeiOverride`，但`getGasEstimateEthV2`参数仍从`params.amount`的double转换。接线前须让估算和签名共用精确最小单位，并验证大金额/高精度/余额边界；已由 `666e68a6f` 独立修复，并通过22项本地mock RPC/签名参数回归；没有真实广播。
+P10c前置：`EvmSender`最终ERC20金额已支持`tokenValueWeiOverride`，但`getGasEstimateEthV2`参数仍从`params.amount`的double转换。接线前须让估算和签名共用精确最小单位，并验证大金额/高精度/余额边界；已由 `16a7237b4` 独立修复，并通过22项本地mock RPC/签名参数回归；没有真实广播。
 
 - 2026-09-21：红包持久恢复 `859c16337`，29项page/host测试通过；专属收款人表单及存储兼容 `a7a86f6ae`，初次store/page组合40通过、最终UI修订后page28通过。仅本地模拟，未重发安装包或测全量覆盖率。
 - 下一步：P10c精确金额估算与发送参数接线；随后确认界面和测试网条件验证。70%覆盖率目标仍开放。
 
 ## P10c 分段结果（2026-09-21）
 
-- **P10c-1 已完成**：`666e68a6f`让EVM估算、余额校验与签名共用已解析的精确金额，非法金额在RPC前拒绝；有效override也决定成功回显。22相关测试通过、定向分析无问题。send-max原有扣费下调与raw calldata零金额保持兼容。
+- **P10c-1 已完成**：`16a7237b4`让EVM估算、余额校验与签名共用已解析的精确金额，非法金额在RPC前拒绝；有效override也决定成功回显。22相关测试通过、定向分析无问题。send-max原有扣费下调与raw calldata零金额保持兼容。
 - **P10c-2 待做**：将已选择资产/PaymentAmount.units安全映射到SendParams，并复核钱包、网络、合约及派生路径；禁止按symbol匹配或金额double往返。P10整体、确认页、真实签名和公共测试网尚未完成。

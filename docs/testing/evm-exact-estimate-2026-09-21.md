@@ -33,3 +33,7 @@ Commands and full output are stored in:
 
 - `flutter test test/features/wallet/api/sender/evm_sender_exact_amount_test.dart test/features/wallet/api/sender/evm_sender_fee_reservation_test.dart test/features/wallet/api/sender/evm_sender_chain_id_test.dart test/features/wallet/evm_msg_data_test.dart` — 22 tests passed; `/tmp/evm-exact-regression.log`.
 - `flutter analyze --no-fatal-infos lib/features/wallet/api/sender/evm_sender.dart test/features/wallet/api/sender/evm_sender_exact_amount_test.dart` — no issues; `/tmp/evm-exact-analyze.log`.
+
+## Upstream integration
+
+Rebased the unpushed fix onto colleague commit `359fff7af`; the final fix commit is `16a7237b4`. Preserved upstream native-library/build changes and the `n42_chat` path override. Its lockfile did not satisfy this release Mac's Flutter 3.44.8 SDK pins; `flutter pub get` adjusted seven SDK-related dependencies, then `flutter pub get --enforce-lockfile` passed. On the merged source all 22 focused tests passed again and targeted analysis reported no issues (`/tmp/n42-evm-upstream-regression.log`, `/tmp/n42-evm-upstream-analyze.log`). No native build or full coverage was run; these results do not validate all upstream platform changes.
