@@ -70,8 +70,13 @@ final class LocalPaymentPendingEntry {
       LocalPaymentPendingOperation.claim ||
       LocalPaymentPendingOperation.refund => {'packet'},
     };
-    if (parameters.length != fields.length ||
-        !fields.every(parameters.containsKey)) {
+    final designatedCreate =
+        operation == LocalPaymentPendingOperation.create &&
+        parameters.length == fields.length + 1 &&
+        parameters.containsKey('recipient');
+    if ((!designatedCreate && parameters.length != fields.length) ||
+        !fields.every(parameters.containsKey) ||
+        (designatedCreate && parameters['slots'] != '1')) {
       throw const LocalPaymentPendingStoreException('invalid_entry');
     }
     for (final entry in parameters.entries) {
@@ -94,7 +99,10 @@ final class LocalPaymentPendingEntry {
           throw const LocalPaymentPendingStoreException('invalid_entry');
         }
       } else if (entry.value.isEmpty ||
-          entry.value.length > 256 ||
+          (entry.key == 'recipient' &&
+                  operation == LocalPaymentPendingOperation.create
+              ? entry.value.runes.length > 256
+              : entry.value.length > 256) ||
           RegExp(r'[\x00-\x1f\x7f]').hasMatch(entry.value)) {
         throw const LocalPaymentPendingStoreException('invalid_entry');
       }

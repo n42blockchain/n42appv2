@@ -16,6 +16,7 @@ class _Attempt {
     this.total,
     this.slots,
     this.expiresAt,
+    this.recipient,
     this.packet,
   });
 
@@ -26,10 +27,11 @@ class _Attempt {
   final BigInt? total;
   final int? slots;
   final DateTime? expiresAt;
+  final String? recipient;
   final String? packet;
 
   String get summary => operation == _Operation.create
-      ? 'Create: $total base units of $asset, $slots slots, room $room, expiry ${expiresAt!.toIso8601String()}'
+      ? 'Create: $total base units of $asset, $slots slots, room $room, expiry ${expiresAt!.toIso8601String()}${recipient == null ? '' : ', designated test account $recipient'}'
       : '${operation.name}: $packet';
 }
 
@@ -56,6 +58,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   final _total = TextEditingController();
   final _slots = TextEditingController();
   final _minutes = TextEditingController(text: '60');
+  final _recipient = TextEditingController();
   final _packet = TextEditingController();
   // Retain uncertain requests when switching away and back during this page's
   // lifetime. No balances or receipts are cached by account.
@@ -105,6 +108,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       _total.clear();
       _slots.clear();
       _minutes.text = '60';
+      _recipient.clear();
       _clearDisplay();
     }
   }
@@ -138,6 +142,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
       _total,
       _slots,
       _minutes,
+      _recipient,
       _packet,
     ]) {
       controller.dispose();
@@ -196,6 +201,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
                   int.parse(entry.parameters['expiresAt']!) * 1000,
                   isUtc: true,
                 ),
+          recipient: entry.parameters['recipient'],
           packet: entry.parameters['packet'],
         );
       }
@@ -215,6 +221,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
           _asset.text = attempt.asset!;
           _total.text = attempt.total.toString();
           _slots.text = attempt.slots.toString();
+          _recipient.text = attempt.recipient ?? '';
           final remaining = attempt.expiresAt!.difference(
             DateTime.now().toUtc(),
           );
@@ -254,20 +261,25 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
   void _create() {
     if (!_canStart) return;
     final total = _positive(_total.text.trim());
-    final slots = _positive(_slots.text.trim());
+    final recipient = _recipient.text;
+    final designated = recipient.isNotEmpty;
+    final slots = designated ? BigInt.one : _positive(_slots.text.trim());
     final minutes = int.tryParse(_minutes.text.trim());
     if (_room.text.trim().isEmpty ||
         _asset.text.trim().isEmpty ||
         total == null ||
         slots == null ||
+        (designated &&
+            (recipient.runes.length > 256 ||
+                RegExp(r'[\x00-\x1f\x7f]').hasMatch(recipient))) ||
         slots > total ||
-        total % slots != BigInt.zero ||
+        total % (designated ? BigInt.one : slots) != BigInt.zero ||
         minutes == null ||
         minutes < 1 ||
         minutes > 10080) {
       setState(
         () => _error =
-            'Enter room/asset, positive whole base units and slots dividing the total, and 1–10080 expiry minutes.',
+            'Enter room/asset, positive whole base units and valid slots, 1–10080 expiry minutes, and a valid synthetic test account when designated.',
       );
       return;
     }
@@ -278,8 +290,9 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
         room: _room.text.trim(),
         asset: _asset.text.trim(),
         total: total,
-        slots: slots.toInt(),
+        slots: designated ? 1 : slots.toInt(),
         expiresAt: DateTime.now().toUtc().add(Duration(minutes: minutes)),
+        recipient: designated ? recipient : null,
       ),
     );
   }
@@ -320,6 +333,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
           total: attempt.total!,
           slots: attempt.slots!,
           expiresAt: attempt.expiresAt!,
+          recipient: attempt.recipient,
           key: attempt.key,
         ),
         _Operation.claim => widget.client.claim(
@@ -405,6 +419,7 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             'slots': attempt.slots.toString(),
             'expiresAt': (attempt.expiresAt!.millisecondsSinceEpoch ~/ 1000)
                 .toString(),
+            if (attempt.recipient != null) 'recipient': attempt.recipient!,
           }
         : {'packet': attempt.packet!},
   );
@@ -421,7 +436,9 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             receipt['expiresAt'] ==
                 (attempt.expiresAt!.millisecondsSinceEpoch ~/ 1000)
                     .toString() &&
-            !receipt.containsKey('recipient') &&
+            (attempt.recipient == null
+                ? !receipt.containsKey('recipient')
+                : receipt['recipient'] == attempt.recipient) &&
             (!receipt.containsKey('room') || receipt['room'] == attempt.room),
       _Operation.claim =>
         !receipt.containsKey('id') && receipt['packet'] == attempt.packet,
@@ -517,18 +534,20 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
     String label,
     TextEditingController controller, {
     bool numeric = false,
+    ValueChanged<String>? onChanged,
+    bool? enabled,
   }) => Padding(
     padding: const EdgeInsets.only(bottom: 12),
     child: TextField(
       key: ValueKey('packet_$name'),
       controller: controller,
-      enabled: _canStart,
+      enabled: enabled ?? _canStart,
       keyboardType: numeric ? TextInputType.number : TextInputType.text,
       autocorrect: false,
       decoration: InputDecoration(labelText: label),
-      onChanged: name == 'asset'
-          ? (_) => setState(() => _balance = null)
-          : null,
+      onChanged:
+          onChanged ??
+          (name == 'asset' ? (_) => setState(() => _balance = null) : null),
     ),
   );
 
@@ -612,8 +631,24 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
             style: Theme.of(context).textTheme.titleMedium,
           ),
           _field('room', 'Synthetic room', _room),
+          _field(
+            'recipient',
+            'Designated synthetic test account (optional; forces 1 slot)',
+            _recipient,
+            onChanged: (value) {
+              setState(() {
+                if (value.isNotEmpty) _slots.text = '1';
+              });
+            },
+          ),
           _field('total', 'Total in whole base units', _total, numeric: true),
-          _field('slots', 'Number of equal shares', _slots, numeric: true),
+          _field(
+            'slots',
+            'Number of equal shares',
+            _slots,
+            numeric: true,
+            enabled: _canStart && _recipient.text.isEmpty,
+          ),
           _field(
             'minutes',
             'Expires in minutes (1–10080)',
@@ -663,6 +698,10 @@ class _LocalPacketLabPageState extends State<LocalPacketLabPage> {
                     if (_receipt!['id'] != null)
                       SelectableText('Receipt: ${_receipt!['id']}'),
                     Text('Asset: ${_receipt!['asset']}'),
+                    if (_receipt!['recipient'] != null)
+                      SelectableText(
+                        'Designated synthetic test account: ${_receipt!['recipient']}',
+                      ),
                     Text(
                       'Amount: ${_receipt!['amount'] ?? _receipt!['total']} base units',
                     ),

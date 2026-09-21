@@ -217,6 +217,60 @@ void main() {
     },
   );
 
+  test('designated create is optional, exact, and requires one slot', () {
+    final base = {
+      'room': 'test-room',
+      'asset': 'test-usdc',
+      'total': '10',
+      'slots': '2',
+      'expiresAt': '100',
+    };
+    expect(
+      LocalPaymentPendingEntry(
+        key: 'legacy',
+        operation: LocalPaymentPendingOperation.create,
+        parameters: base,
+      ).parameters,
+      isNot(contains('recipient')),
+    );
+    final recipient = '🧪' * 256;
+    final designated = LocalPaymentPendingEntry(
+      key: 'designated',
+      operation: LocalPaymentPendingOperation.create,
+      parameters: {...base, 'slots': '1', 'recipient': recipient},
+    );
+    expect(designated.parameters['recipient'], recipient);
+    for (final invalid in ['', 'x\n', '🧪' * 257]) {
+      expect(
+        () => LocalPaymentPendingEntry(
+          key: 'bad',
+          operation: LocalPaymentPendingOperation.create,
+          parameters: {...base, 'slots': '1', 'recipient': invalid},
+        ),
+        throwsA(failure('invalid_entry')),
+      );
+    }
+    expect(
+      () => LocalPaymentPendingEntry(
+        key: 'bad-slots',
+        operation: LocalPaymentPendingOperation.create,
+        parameters: {...base, 'recipient': 'synthetic-test-recipient'},
+      ),
+      throwsA(failure('invalid_entry')),
+    );
+    expect(
+      () => LocalPaymentPendingEntry(
+        key: 'bad-operation',
+        operation: LocalPaymentPendingOperation.claim,
+        parameters: {
+          'packet': 'packet_${List.filled(64, 'a').join()}',
+          'recipient': 'synthetic-test-recipient',
+        },
+      ),
+      throwsA(failure('invalid_entry')),
+    );
+  });
+
   test('corrupt journals remain blocked instead of becoming empty', () async {
     await store.save(scope(), transfer('original'));
     final valid = preferences.getString(scope().storageKey)!;

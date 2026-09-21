@@ -144,6 +144,7 @@ void main() {
       expect(body['total'], '30');
       expect(body['slots'], '3');
       expect(body['room'], 'test-room');
+      expect(body, isNot(contains('recipient')));
       expect(
         int.parse(body['expiresAt'] as String),
         greaterThan(DateTime.now().millisecondsSinceEpoch ~/ 1000),
@@ -548,10 +549,14 @@ void main() {
 
       await open(tester, handler, preferences: preferences);
       await fill(tester);
+      const designated = ' synthetic-test-recipient ';
+      await enter(tester, 'recipient', designated);
       await tap(tester, 'create');
       await tester.pumpAndSettle();
       final originalBody = posts.single.body;
       final originalKey = posts.single.headers['Idempotency-Key'];
+      expect(jsonDecode(originalBody), containsPair('recipient', designated));
+      expect(jsonDecode(originalBody), containsPair('slots', '1'));
 
       await tester.pumpWidget(const SizedBox());
       await open(tester, handler, preferences: preferences);
@@ -559,12 +564,101 @@ void main() {
       expect(posts, hasLength(1));
       await reveal(tester, key('pending'));
       expect(key('pending'), findsOneWidget);
+      expect(find.textContaining(designated), findsWidgets);
+      await reveal(tester, key('recipient'));
+      expect(
+        tester.widget<TextField>(key('recipient')).controller!.text,
+        designated,
+      );
 
       await tap(tester, 'retry');
       await tester.pumpAndSettle();
       expect(posts, hasLength(2));
       expect(posts.last.body, originalBody);
       expect(posts.last.headers['Idempotency-Key'], originalKey);
+    },
+  );
+
+  testWidgets(
+    'designated create rejects changed or missing recipient receipt',
+    (tester) async {
+      late http.Request original;
+      var mode = 'changed';
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          original = request;
+          throw http.ClientException('offline');
+        }
+        final receipt =
+            jsonDecode(response(original).body) as Map<String, dynamic>;
+        if (mode == 'changed') {
+          receipt['recipient'] = 'synthetic-test-someone-else';
+        } else {
+          receipt.remove('recipient');
+        }
+        return http.Response(
+          jsonEncode({
+            'mode': 'localSimulation',
+            'status': 'completed',
+            'receipt': receipt,
+          }),
+          200,
+        );
+      });
+      await fill(tester);
+      await enter(tester, 'recipient', 'synthetic-test-designated-user');
+      await tap(tester, 'create');
+      await tester.pumpAndSettle();
+      for (mode in ['changed', 'missing']) {
+        await tap(tester, 'lookup');
+        await tester.pumpAndSettle();
+        await reveal(tester, key('error'));
+        expect(find.textContaining('does not match'), findsOneWidget);
+        await reveal(tester, key('retry'));
+        expect(key('retry'), findsOneWidget);
+      }
+    },
+  );
+
+  testWidgets(
+    'designated slot is visibly fixed and server rejection stays pending',
+    (tester) async {
+      final posts = <http.Request>[];
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          posts.add(request);
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'error': {'code': 'invalid_request'},
+            }),
+            400,
+          );
+        }
+        return response(request);
+      });
+      await fill(tester);
+      // A bearer token is deliberately used here: the UI must not infer that it
+      // is an account ID. The authoritative service rejects sender/self/member.
+      await enter(tester, 'recipient', 'synthetic-test-accounta');
+      await reveal(tester, key('slots'));
+      expect(tester.widget<TextField>(key('slots')).enabled, isFalse);
+      expect(tester.widget<TextField>(key('slots')).controller!.text, '1');
+      await tap(tester, 'create');
+      await tester.pumpAndSettle();
+      expect(posts, hasLength(1));
+      expect(jsonDecode(posts.single.body), containsPair('slots', '1'));
+      await reveal(tester, key('error'));
+      expect(
+        find.textContaining('No confirmed simulation receipt'),
+        findsOneWidget,
+      );
+      await reveal(tester, key('retry'));
+      expect(key('retry'), findsOneWidget);
+      expect(
+        find.text('Simulated create receipt — synthetic funds only'),
+        findsNothing,
+      );
     },
   );
 
