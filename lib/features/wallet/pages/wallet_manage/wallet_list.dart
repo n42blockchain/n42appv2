@@ -22,7 +22,11 @@ part 'wallet_list_tiles.dart';
 part 'wallet_list_actions.dart';
 
 class WalletList extends ConsumerStatefulWidget {
-  const WalletList({super.key});
+  const WalletList({super.key, this.autoOpenAddWallet = false});
+
+  /// 打开页面后自动弹出「添加钱包」弹层——供切换钱包弹层的
+  /// Add Wallet 按钮跳转过来时使用，避免二次点击。
+  final bool autoOpenAddWallet;
 
   @override
   ConsumerState<WalletList> createState() => _WalletListState();
@@ -39,6 +43,19 @@ class _WalletListState extends ConsumerState<WalletList>
   void initState() {
     super.initState();
     initData();
+    if (widget.autoOpenAddWallet) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) _openAddWalletSheet();
+      });
+    }
+  }
+
+  void _openAddWalletSheet() {
+    sheetBottom(
+      context,
+      "",
+      CreateWalletButton(onTapBack: initData),
+    );
   }
 
   Future<void> initData() async {
@@ -121,17 +138,7 @@ class _WalletListState extends ConsumerState<WalletList>
         text: S.of(context).g_key_wallet_manage,
         actions: [
           IconButton(
-            onPressed: () async {
-              sheetBottom(
-                context,
-                "",
-                CreateWalletButton(
-                  onTapBack: () {
-                    initData();
-                  },
-                ),
-              );
-            },
+            onPressed: _openAddWalletSheet,
             icon: Icon(
               Icons.add_circle_outline,
               color: AppColorTokens.of(context).brand,

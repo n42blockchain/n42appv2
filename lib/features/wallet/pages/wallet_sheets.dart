@@ -9,7 +9,6 @@ import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_flow_utils
 import 'package:n42_wallet/features/wallet/pages/wallet_backup/backup_one.dart';
 import 'package:n42_wallet/features/wallet/pages/wallet_manage/wallet_list.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/widgets/create_wallet_button.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_search_coin.dart';
 import 'package:n42_wallet/core/utils/toast_utils.dart';
 import 'package:n42_wallet/features/widgets/sheet_bottom.dart';
@@ -38,10 +37,41 @@ void showAddressSheet(
           color: AppColorTokens.of(context).border,
         ),
         _WalletAddressList(walletValue: walletValue, ref: ref),
-        CreateWalletButton(),
+        Padding(
+          padding: EdgeInsets.only(
+            top: AppSpacing.space4,
+            left: AppSpacing.space8,
+            right: AppSpacing.space8,
+          ),
+          child: _AddWalletButton(),
+        ),
       ],
     ),
   );
+}
+
+class _AddWalletButton extends StatelessWidget {
+  const _AddWalletButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppButton(
+      label: S.of(context).g_key_wallet_c32,
+      icon: Icons.add,
+      variant: AppButtonVariant.secondary,
+      onPressed: () {
+        // 先关闭当前的切换钱包弹层，再跳到 Manage Wallet 页并让它
+        // 自动弹出「添加钱包」弹层——避免两层弹层叠加导致超高。
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => const WalletList(autoOpenAddWallet: true),
+          ),
+        );
+      },
+    );
+  }
 }
 
 class _AddressSheetHeader extends StatelessWidget {
@@ -55,7 +85,7 @@ class _AddressSheetHeader extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Row(
         children: [
-          Flexible(
+          Expanded(
             child: Text(
               S.of(context).g_key_13,
               style: AppTypography.title.copyWith(
@@ -66,7 +96,6 @@ class _AddressSheetHeader extends StatelessWidget {
               maxLines: 1,
             ),
           ),
-          const Spacer(),
           // IconButton 默认 48dp 命中区（§5 触控红线）
           IconButton(
             onPressed: () {
