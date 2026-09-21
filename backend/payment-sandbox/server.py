@@ -79,6 +79,8 @@ class LocalPaymentServer(ThreadingHTTPServer):
                 operation = stable_id(kind, actor, key)
                 expected = ([body['recipient'], body['asset'], int(body['amount'])] if kind == 'transfer' else
                             [body['room'], body['asset'], int(body['total']), int(body['slots']), int(body['expiresAt'])])
+                if kind == 'packet' and 'recipient' in body:
+                    expected.append(body['recipient'])
             else:
                 action = re.fullmatch(r'/packets/(packet_[a-f0-9]{64})/(claims|refunds)', route)
                 if action is None:
@@ -244,7 +246,7 @@ class Handler(BaseHTTPRequestHandler):
         body = self._body()
         fields = ({'recipient', 'asset', 'amount'} if route.path == '/transfers' else
                   {'room', 'asset', 'total', 'slots', 'expiresAt'} if route.path == '/packets' else set())
-        if set(body) != fields:
+        if set(body) != fields and not (route.path == '/packets' and set(body) == fields | {'recipient'}):
             raise RequestError(400, 'invalid_request')
         parsed = dict(body)
         try:
@@ -266,7 +268,8 @@ class Handler(BaseHTTPRequestHandler):
                 return account.transfer(parsed['recipient'], parsed['asset'], parsed['amount'], key=key)
             if route.path == '/packets':
                 return account.create_packet(parsed['room'], parsed['asset'], parsed['total'], parsed['slots'],
-                                             expires_at=parsed['expiresAt'], now=now, key=key)
+                                             expires_at=parsed['expiresAt'], now=now, key=key,
+                                             recipient=parsed.get('recipient'))
             if match[2] == 'claims':
                 return account.claim(match[1], now=now)
             return account.refund_expired(match[1], now=now)

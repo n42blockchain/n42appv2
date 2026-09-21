@@ -155,3 +155,22 @@ The server reads its **stored route and body**, never a client-supplied sender o
 `unresolved` is deliberately not `failed`, `paid` or `confirmed`: it covers a request bound before interruption, a core rejection without a result, or an action not yet committed. Retry only the exact original request/key when appropriate. A 404 likewise does not prove that an in-flight original request cannot later arrive. This endpoint lets clients recover after losing the initial response without knowing its operation ID; it does not provide an external settlement status. Bindings and receipts survive adapter restart with the same database, while the disposable launcher still starts a fresh database after exit.
 
 Client-compatible request recovery uses `GET /requests?key=<URL-encoded-original-key>`. Unlike path segments this preserves dot-only keys. Only one `key` parameter is allowed; status and authentication rules are identical to the legacy `/requests/{encoded-key}` endpoint, which remains supported.
+
+## Designated-recipient local packets
+
+`POST /packets` additionally accepts optional `recipient` (a nonempty account
+identifier, never a sender override). Omit it for the existing equal-share group
+behavior. JSON `null`, unknown fields and alternate recipient field names are
+rejected. A designated packet requires `slots: "1"`; its recipient must differ
+from the authenticated sender and belong to the room when created. Only that
+recipient may first claim, and they must also be a current room member. Owner
+refunds and expiry use the existing rules. Replaying an already recorded claim
+returns its historical receipt without another credit, even after departure.
+
+The designation persists in SQLite and in the create receipt, and is included
+in idempotency comparison. Reusing a key with another recipient or converting it
+to/from a group packet is rejected. Startup adds a nullable recipient column to
+legacy databases under a write lock; existing packets remain group packets.
+Legacy five-field request arrays and HTTP bodies retain their representation,
+so prior request lookups and replays continue to work. All behavior remains
+synthetic local simulation, with no real-fund or production authorization.

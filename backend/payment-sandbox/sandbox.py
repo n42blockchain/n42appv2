@@ -29,7 +29,8 @@ class Sandbox:
                     id TEXT PRIMARY KEY, owner TEXT, room TEXT, asset TEXT,
                     share INTEGER NOT NULL, slots INTEGER NOT NULL,
                     remaining INTEGER NOT NULL CHECK(remaining >= 0),
-                    expires INTEGER NOT NULL, refunded INTEGER NOT NULL DEFAULT 0);
+                    expires INTEGER NOT NULL, refunded INTEGER NOT NULL DEFAULT 0,
+                    recipient TEXT);
                 CREATE TABLE IF NOT EXISTS eligible (
                     packet TEXT, account TEXT, PRIMARY KEY(packet, account));
                 CREATE TABLE IF NOT EXISTS claims (
@@ -38,6 +39,12 @@ class Sandbox:
                 CREATE TABLE IF NOT EXISTS ledger (
                     operation TEXT, bucket TEXT, asset TEXT, delta INTEGER NOT NULL);
             ''')
+            # executescript ends the initial transaction. Acquire a fresh write
+            # lock before inspecting/migrating, including concurrent restarts.
+            db.execute('BEGIN IMMEDIATE')
+            columns = {row['name'] for row in db.execute('PRAGMA table_info(packets)')}
+            if 'recipient' not in columns:
+                db.execute('ALTER TABLE packets ADD COLUMN recipient TEXT')
 
     @contextmanager
     def _transaction(self):

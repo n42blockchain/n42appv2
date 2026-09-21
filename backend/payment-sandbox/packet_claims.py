@@ -6,7 +6,7 @@ def claim(self, packet_id, *, now):
     s = self._sandbox
     with s._transaction() as db:
         packet = db.execute('SELECT * FROM packets WHERE id=?', (packet_id,)).fetchone()
-        if packet is None:
+        if packet is None or (packet['recipient'] is not None and packet['recipient'] != self._actor):
             raise SandboxError('packet unavailable')
         claim = db.execute('SELECT amount FROM claims WHERE packet=? AND account=?', (packet_id, self._actor)).fetchone()
         # A replay returns the original receipt even after departure/expiry.
