@@ -267,11 +267,11 @@ void main() {
       final amount = PaymentAmount(asset: asset(), units: BigInt.one);
       for (final selected in <CoinModel>[
         coin(service: ''),
-      coin(service: 'ftp://rpc.example'),
-      coin(service: 'https://user:secret@rpc.example'),
-      coin(service: 'https://@rpc.example'),
-      coin(service: 'https://rpc.example:not-a-port'),
-      coin(service: 'https://rpc.example/#fragment'),
+        coin(service: 'ftp://rpc.example'),
+        coin(service: 'https://user:secret@rpc.example'),
+        coin(service: 'https://@rpc.example'),
+        coin(service: 'https://rpc.example:not-a-port'),
+        coin(service: 'https://rpc.example/#fragment'),
         coin(service: 42),
       ]) {
         expect(
