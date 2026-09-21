@@ -200,20 +200,29 @@ class N42WalletBridge implements IWalletBridge {
         return TransferResult.failure('Wallet not connected');
       }
 
-      // Find CoinModel matching the token symbol
-      CoinModel? coinModel;
+      // A symbol can exist on several networks. The legacy API cannot carry
+      // enough identity to choose safely, so only an unambiguous record may
+      // reach sender/RPC/signing code.
+      final matchingCoins = <CoinModel>[];
+      final normalizedToken = token.toUpperCase();
       for (final cm in provider.coinModels) {
         final coinType = cm.coin['coinType'] as String? ?? '';
         final miniName = cm.coin['miniName'] as String? ?? '';
-        if (coinType.toUpperCase() == token.toUpperCase() ||
-            miniName.toUpperCase() == token.toUpperCase()) {
-          coinModel = cm;
-          break;
+        if (coinType.toUpperCase() == normalizedToken ||
+            miniName.toUpperCase() == normalizedToken) {
+          matchingCoins.add(cm);
         }
       }
-      if (coinModel == null) {
+      if (matchingCoins.isEmpty) {
         return TransferResult.failure('Token $token not found in wallet');
       }
+      if (matchingCoins.length > 1) {
+        return TransferResult.failure(
+          'Token $token matches multiple wallet assets; '
+          'select a network and asset explicitly',
+        );
+      }
+      final coinModel = matchingCoins.single;
 
       final addrType = coinModel.addrType;
       // 派生路径取不到时绝不能套用 ETH 路径：非 EVM 币会用一把与 fromAddress

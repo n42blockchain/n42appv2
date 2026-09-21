@@ -19,6 +19,22 @@ class _WalletSnapshot extends Fake
       addresses[coinKey];
 }
 
+CoinModel _transferCoin({
+  required String coinType,
+  required String miniName,
+  required String network,
+  BigInt? balance,
+}) => CoinModel()
+  ..coin = {
+    'coinType': coinType,
+    'miniName': miniName,
+    'name': '$miniName on $network',
+    'blockchainType': network,
+    'decimals': 6,
+  }
+  ..address = '0x1111111111111111111111111111111111111111'
+  ..balance = balance ?? BigInt.zero;
+
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   final snapshot = _WalletSnapshot();
@@ -85,6 +101,63 @@ void main() {
       );
       expect(result.success, isFalse);
       expect(result.errorMessage, 'Token USDC not found in wallet');
+    },
+  );
+
+  test(
+    'same symbol on multiple networks is rejected before transfer setup',
+    () async {
+      snapshot.walletInfoLsit.add(WalletInfo());
+      final zeroBalance = _transferCoin(
+        coinType: 'USDC',
+        miniName: 'UsDc',
+        network: 'Ethereum',
+      );
+      final funded = _transferCoin(
+        coinType: 'BNB',
+        miniName: 'USDC',
+        network: 'BinanceSmartChain',
+        balance: BigInt.from(1000000),
+      );
+
+      for (final orderedCoins in [
+        [zeroBalance, funded],
+        [funded, zeroBalance],
+      ]) {
+        snapshot.coinModels
+          ..clear()
+          ..addAll(orderedCoins);
+        final result = await bridge.requestTransfer(
+          toAddress: '0x2222222222222222222222222222222222222222',
+          amount: '1',
+          token: 'uSdC',
+        );
+
+        expect(result.success, isFalse);
+        expect(
+          result.errorMessage,
+          'Token uSdC matches multiple wallet assets; '
+          'select a network and asset explicitly',
+        );
+      }
+    },
+  );
+
+  test(
+    'one record matching both identity fields is not treated as ambiguous',
+    () async {
+      snapshot.walletInfoLsit.add(WalletInfo());
+      snapshot.coinModels.add(
+        _transferCoin(coinType: 'USDC', miniName: 'usdc', network: 'Ethereum'),
+      );
+      final result = await bridge.requestTransfer(
+        toAddress: '0x2222222222222222222222222222222222222222',
+        amount: '1',
+        token: 'UsDc',
+      );
+
+      expect(result.success, isFalse);
+      expect(result.errorMessage, 'Missing derivation path for UsDc (legacy)');
     },
   );
 
