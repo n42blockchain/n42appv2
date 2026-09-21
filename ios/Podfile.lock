@@ -180,9 +180,9 @@ PODS:
     - Flutter
   - flutter_vodozemac (0.0.1):
     - Flutter
-  - flutter_webrtc (1.4.0):
+  - flutter_webrtc (1.6.2):
     - Flutter
-    - WebRTC-SDK (= 144.7559.01)
+    - WebRTC-SDK (= 150.7871.01)
   - fluttertoast (0.0.2):
     - Flutter
   - fluwx (0.0.1):
@@ -349,10 +349,10 @@ PODS:
   - libwebp/sharpyuv (1.5.0)
   - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
-  - livekit_client (2.8.1):
+  - livekit_client (2.13.0):
     - Flutter
     - flutter_webrtc
-    - WebRTC-SDK (= 144.7559.01)
+    - WebRTC-SDK (= 150.7871.01)
   - local_auth_darwin (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -523,7 +523,7 @@ PODS:
   - web3auth_flutter (2.0.1):
     - Flutter
     - Web3Auth (~> 11.1.0)
-  - WebRTC-SDK (144.7559.01)
+  - WebRTC-SDK (150.7871.01)
   - webview_flutter_wkwebview (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -838,7 +838,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 40017d7bc8457ee295b0f41d480a80fdabc9994e
   FirebaseRemoteConfigInterop: 7e3d57ce4b1e958bb1d15403faa7178f46bbb5b7
   FirebaseSessions: acfe7eadca47cda94ac86592737204581bb1abf6
-  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
   flutter_callkit_incoming: cb8138af67cda6dd981f7101a5d709003af21502
   flutter_contacts: 2ec1d6b62ca2869c3bbb3871bd74d4e3ef157135
   flutter_facebook_auth: fe770ba7c3b26637a955662b84b33c4ab33d3a14
@@ -849,7 +849,7 @@ SPEC CHECKSUMS:
   flutter_secure_storage_darwin: acdb3f316ed05a3e68f856e0353b133eec373a23
   flutter_tts: 35ac3c7d42412733e795ea96ad2d7e05d0a75113
   flutter_vodozemac: 46015daf07988356d46784d05ab0c7afca00ff36
-  flutter_webrtc: ec91d94b484ad49cf191ef93413f64a40ffd3b4c
+  flutter_webrtc: 99283145164f482a16bf7122ef407b5d59d43158
   fluttertoast: fe6790210fdba20801685be946e3a2124b72eef5
   fluwx: 2ef787502fccb3f3596b380509001a8ea71cbbff
   FMDB: 728731dd336af3936ce00f91d9d8495f5718a0e6
@@ -876,7 +876,7 @@ SPEC CHECKSUMS:
   KeychainSwift: 0ce6a4d13f7228054d1a71bb1b500448fb2ab837
   large_file_handler: b37481e9b4972562ffcdc8f75700f47cd592bcec
   libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
-  livekit_client: a28e738fa0d6b16d780631bfe7a4ea76a9be382d
+  livekit_client: 55f2f6afa597719985fa4913f6e889eb2b7eacd8
   local_auth_darwin: c3ee6cce0a8d56be34c8ccb66ba31f7f180aaebb
   MediaPipeTasksGenAI: 076ba7032a6e9da16db9c7cf0c3b67c751c18bc1
   MediaPipeTasksGenAIC: ec35d9f431f6a6b651a0bc9f67a4ed149ffa575c
@@ -935,11 +935,11 @@ SPEC CHECKSUMS:
   WalletCoreSwiftProtobuf: a4798576a2d309511fc45f81843d348732ec571d
   Web3Auth: fa82260fa6dacdcf647b333d85a923530d045051
   web3auth_flutter: ecf03bfbcb9ebf1ed8edb24642b5dac6d6b6a980
-  WebRTC-SDK: ab9b5319e458c2bfebdc92b3600740da35d5630d
+  WebRTC-SDK: 7dc931c64c00c735a614382f1a59cf65019c3c17
   webview_flutter_wkwebview: 8ebf4fded22593026f7dbff1fbff31ea98573c8d
   WechatOpenSDK-XCFramework: ff342ae616bb86df3d236aca38059dfd4bc4a949
   YttriumWrapper: cbddb60c835ebc4232d9f57064084ab30686a18e
 
 PODFILE CHECKSUM: f337f232536bcc7c198f4125bd89f4eb1c30090e
 
-COCOAPODS: 1.17.0
+COCOAPODS: 1.16.2

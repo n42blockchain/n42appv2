@@ -21,6 +21,12 @@ analyzer:
     - "plugins/flutter_mining/example/**"
     # Pigeon schema files are code-generation input, not Dart source.
     - "packages/webview_flutter_wkwebview/pigeons/**"
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
   errors:
     # wallet package is a transitive dependency, suppress this warning
     depend_on_referenced_packages: ignore
