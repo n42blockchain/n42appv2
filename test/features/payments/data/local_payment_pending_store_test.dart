@@ -306,4 +306,19 @@ void main() {
     );
     expect((await store.load(scope())).entries, hasLength(32));
   });
+  // Each widget test gets a new FakeAsync Zone. A completed static queue tail
+  // from the preceding zone must not retain that dead scheduler.
+  for (final lifecycle in [1, 2]) {
+    testWidgets(
+      'completed journal queue releases originating Zone $lifecycle',
+      (tester) async {
+        final saved = store.save(scope(), transfer('zone-$lifecycle'));
+        await tester.pump();
+        await saved;
+        final loading = store.load(scope());
+        await tester.pump();
+        expect((await loading).entries.single.key, 'zone-$lifecycle');
+      },
+    );
+  }
 }

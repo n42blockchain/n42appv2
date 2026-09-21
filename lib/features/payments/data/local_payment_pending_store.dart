@@ -169,13 +169,28 @@ final class LocalPaymentPendingStore {
   final SharedPreferences _preferences;
   // Serialize all instances in this isolate, including reload/read/write. This
   // does not claim a cross-isolate/process lock over SharedPreferences.
-  static Future<void> _tail = Future.value();
+  static Future<void>? _tail;
   static const _maxBytes = 65536;
   static const _maxEntries = 32;
 
   Future<T> _serial<T>(Future<T> Function() action) {
-    final next = _tail.then((_) => action());
-    _tail = next.then<void>((_) {}, onError: (Object _, StackTrace __) {});
+    final previous = _tail;
+    final next = previous == null
+        ? Future<T>.sync(action)
+        : previous.then((_) => action());
+    late final Future<void> marker;
+    void release() {
+      // Only the newest queued operation may release the shared queue. Keeping
+      // an already-completed Future here also retains its originating Zone,
+      // which may no longer be driven after a widget-test/page lifecycle ends.
+      if (identical(_tail, marker)) _tail = null;
+    }
+
+    marker = next.then<void>(
+      (_) => release(),
+      onError: (Object _, StackTrace _) => release(),
+    );
+    _tail = marker;
     return next;
   }
 
