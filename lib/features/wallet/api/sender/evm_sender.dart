@@ -30,11 +30,12 @@ import 'chain_sender.dart';
 class EvmSender implements ChainSender {
   final Map<String, dynamic>? _defaultChainConfig;
   final _tokenViewApi = TokenViewApi();
-  final _trustdart = Trustdart();
+  final Trustdart _trustdart;
   final _dataUtils = DataUtils();
 
-  EvmSender({Map<String, dynamic>? chainConfig})
-    : _defaultChainConfig = chainConfig;
+  EvmSender({Map<String, dynamic>? chainConfig, Trustdart? trustdart})
+    : _defaultChainConfig = chainConfig,
+      _trustdart = trustdart ?? Trustdart();
 
   @override
   Future<SendResult> send(SendParams params) {
@@ -61,6 +62,39 @@ class EvmSender implements ChainSender {
     }
     final chainId = resolvedChainId ?? 1;
     final isContract = params.contractAddress.isNotEmpty;
+    final invalidOverride = [
+      params.valueWeiOverride,
+      params.tokenValueWeiOverride,
+    ].whereType<BigInt>().any((value) => !_isValidUint256(value));
+    if (invalidOverride) return SendResult.fail('Invalid transfer amount');
+
+    // Resolve the amount exactly once, before the first RPC. Gas estimation,
+    // balance checks, and signing must observe the same integer amount. The
+    // legacy double is consulted only when the applicable exact override is
+    // absent; callers with an override may retain a lossy/non-finite display
+    // amount without affecting transaction semantics.
+    final exactOverride = isContract
+        ? params.tokenValueWeiOverride
+        : params.valueWeiOverride;
+    final BigInt requestedValue;
+    if (exactOverride != null) {
+      requestedValue = exactOverride;
+    } else {
+      if (!params.amount.isFinite || params.amount < 0) {
+        return SendResult.fail('Invalid transfer amount');
+      }
+      try {
+        requestedValue = ethToWeiString(
+          params.amount.toString(),
+          isContract ? params.tokenDecimals : params.decimals,
+        );
+      } on FormatException {
+        return SendResult.fail('Invalid transfer amount');
+      }
+      if (!_isValidUint256(requestedValue)) {
+        return SendResult.fail('Invalid transfer amount');
+      }
+    }
     // 有 raw calldata(DEX/加速重放等)时按合约档取 gas 上限——native 档 50000
     // 对带 data 的估算可能因 cap 过低报 gas exceeds allowance。
     final hasCalldata = (params.calldata ?? '').length > 2;
@@ -142,14 +176,11 @@ class EvmSender implements ChainSender {
     }
 
     // Estimate gas
-    final effectiveDecimals = isContract
-        ? params.tokenDecimals
-        : params.decimals;
     final estimateMm = await _tokenViewApi.getGasEstimateEthV2(
       params.fromAddress,
       params.toAddress,
       gasPrice,
-      ethToWeiString(params.amount.toString(), effectiveDecimals),
+      requestedValue,
       BigInt.from(gas),
       coinType,
       contract: params.contractAddress,
@@ -177,17 +208,18 @@ class EvmSender implements ChainSender {
 
     // Calculate value and validate
     BigInt valuePrice;
-    double adjustedValue = params.amount;
+    // An exact override also owns the displayed result amount. Keeping a
+    // stale NaN/Infinity/negative legacy double here would report a malformed
+    // actualAmount after signing the correct integer value.
+    double adjustedValue = exactOverride == null
+        ? params.amount
+        : toEther(
+            requestedValue.toString(),
+            isContract ? params.tokenDecimals : params.decimals,
+          ).toDouble();
 
     if (!isContract) {
-      // 精确 wei 优先:有 override 直接用它,避免 double 往返上浮——否则合法
-      // MAX(balance-fee 的精确 BigInt 降级 double 后重建上浮几 wei)会在下面
-      // 的余额校验被误判"余额不足"而发不出(第三轮 P1;加速重放亦走此路)。
-      if (params.valueWeiOverride != null) {
-        valuePrice = params.valueWeiOverride!;
-      } else {
-        valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
-      }
+      valuePrice = requestedValue;
       // Send-max reconciliation. The caller computes the max transferable
       // amount with its own fee estimate, but this sender applies the ×1.2
       // safety buffer, so the two disagree by 0.2×fee and the balance check
@@ -206,19 +238,11 @@ class EvmSender implements ChainSender {
           params.decimals,
         ).toDouble();
       }
-      if (adjustedValue < 0 || totalGasPrice + valuePrice > chainBalance) {
+      if (totalGasPrice + valuePrice > chainBalance) {
         return SendResult.fail(S.current.g_key_wallet_m5(coinType));
       }
     } else {
-      // 合约代币金额同样优先精确 override(18 位代币 MAX 上浮同病)。
-      if (params.tokenValueWeiOverride != null) {
-        valuePrice = params.tokenValueWeiOverride!;
-      } else {
-        valuePrice = ethToWeiString(
-          params.amount.toString(),
-          params.tokenDecimals,
-        );
-      }
+      valuePrice = requestedValue;
       if (valuePrice > balance) {
         return SendResult.fail(S.current.g_key_wallet_m4);
       }
@@ -431,6 +455,11 @@ class EvmSender implements ChainSender {
   }
 
   static MessageModel _errMM() => MessageModel.error();
+
+  static final BigInt _maxUint256 = (BigInt.one << 256) - BigInt.one;
+
+  static bool _isValidUint256(BigInt value) =>
+      value >= BigInt.zero && value <= _maxUint256;
 
   /// 从完整链配置解析当前网络的 EIP-155 chain ID。
   ///
