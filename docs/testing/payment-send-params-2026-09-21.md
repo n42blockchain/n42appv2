@@ -52,3 +52,7 @@ precision conflicts, uint256 bounds, address binding, imported-key rejection,
 derivation bounds, chain-ID bounds, and RPC validation.
 
 Result: **10 tests passed**; targeted analysis found no issues and diff check passed. No RPC, key retrieval, signing, broadcasting, full-suite coverage measurement, or device acceptance was performed.
+
+## Final RPC boundary follow-up
+
+The worker added empty-user-info and invalid-port cases after its first passing report. The final combined source exposed one failure: Dart normalizes `https://@host` to an authority without `@`. The parent reproduced it, added a check against the original authority before URI parsing, and reran the complete 10-test adapter file successfully. Final targeted analysis reported no issues. Evidence: `/tmp/n42-send-params-final.log` (failure), `/tmp/n42-send-params-final-fixed.log` (10 passed), `/tmp/n42-send-params-final-analyze.log`.
