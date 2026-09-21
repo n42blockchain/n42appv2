@@ -32,3 +32,7 @@ Focused analysis also passed:
 ```sh
 flutter analyze --no-pub lib/features/wallet/n42_wallet_bridge.dart test/features/wallet/n42_wallet_bridge_rejection_test.dart
 ```
+
+## Upstream integration
+
+Rebased the unpushed fix onto colleague commit `d7b89fb0e` (wallet-list/add-wallet sheet UI). The final fix commit is `9c32edc55`. No overlap with transfer selection or dependency changes; preserved upstream UI edits. The 24 passing focused tests cover transfer behavior, not native acceptance of the upstream wallet sheets.
