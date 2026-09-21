@@ -89,4 +89,10 @@ P10c前置：`EvmSender`最终ERC20金额已支持`tokenValueWeiOverride`，但`
 ## P10c 分段结果（2026-09-21）
 
 - **P10c-1 已完成**：`16a7237b4`让EVM估算、余额校验与签名共用已解析的精确金额，非法金额在RPC前拒绝；有效override也决定成功回显。22相关测试通过、定向分析无问题。send-max原有扣费下调与raw calldata零金额保持兼容。
-- **P10c-2 待做**：将已选择资产/PaymentAmount.units安全映射到SendParams，并复核钱包、网络、合约及派生路径；禁止按symbol匹配或金额double往返。P10整体、确认页、真实签名和公共测试网尚未完成。
+- **P10c-2 纯参数适配已完成 `547a02e85`（10测试）**：将已选择资产/PaymentAmount.units安全映射到SendParams，并复核钱包、网络、合约及派生路径；禁止按symbol匹配或金额double往返。P10整体、确认页、真实签名和公共测试网尚未完成。
+
+## 2026-09-21 参数适配验收
+
+`547a02e85`重新按资产身份解析当前CoinModel，绑定expectedFromAddress，验证precision/uint256/path/index/非零地址；生成不可变allowlist配置，必须保留明确有效RPC和可由EvmSender解析的所选chain ID。native/ERC20仅设置各自exact override，不读取密钥、不调用网络。
+
+此参数结果仅交给EvmSender，不能按coinType进入可能缓存其他链sender的SenderFactory。私钥导入钱包本阶段明确不支持。P10d旧接口歧义保护、P10e签名前账户/授权复核及P11确认界面仍未完成；不能仅凭纯参数测试宣称支付入口或签名链路已接通。
