@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mocktail/mocktail.dart';
+import 'package:n42_wallet/features/payments/data/local_payment_pending_store.dart';
+
 import 'package:n42_wallet/features/payments/data/local_payment_client.dart';
 import 'package:n42_wallet/features/payments/presentation/local_payment_lab_page.dart';
+
+class MockPreferences extends Mock implements SharedPreferences {}
 
 const tokenA = 'synthetic-test-accounta';
 const tokenB = 'synthetic-test-accountb';
@@ -68,10 +74,12 @@ Future<LocalPaymentClient> open(
   Future<http.Response> Function(http.Request) handler, {
   double scale = 1,
   bool enabled = true,
+  SharedPreferences? preferences,
+  int port = 8765,
 }) async {
   final transport = MockClient(handler);
   final client = LocalPaymentClient(
-    endpoint: Uri.parse('http://127.0.0.1:8765'),
+    endpoint: Uri.parse('http://127.0.0.1:$port'),
     transport: transport,
     enabled: enabled,
   );
@@ -84,7 +92,15 @@ Future<LocalPaymentClient> open(
         ).copyWith(textScaler: TextScaler.linear(scale)),
         child: child!,
       ),
-      home: LocalPaymentLabPage(client: client),
+      home: LocalPaymentLabPage(
+        client: client,
+        pendingStore: Future.value(
+          LocalPaymentPendingStore(
+            preferences: preferences ?? await SharedPreferences.getInstance(),
+            mode: 'localSimulation',
+          ),
+        ),
+      ),
     ),
   );
   return client;
@@ -101,6 +117,7 @@ Future<void> activate(WidgetTester tester) async {
 }
 
 void main() {
+  setUp(() => SharedPreferences.setMockInitialValues({}));
   testWidgets(
     'busy transfer sends once, shows synthetic receipt and fresh balance',
     (tester) async {
@@ -473,7 +490,7 @@ void main() {
     },
   );
 
-  testWidgets('replacing client clears all retained pending requests', (
+  testWidgets('replacing client reloads persisted original pending request', (
     tester,
   ) async {
     await open(tester, (_) async => throw http.ClientException('unknown'));
@@ -485,9 +502,187 @@ void main() {
       requests++;
       return balance('100');
     });
-    await activate(tester);
-    expect(requests, 0);
-    expect(tester.widget<TextField>(key('amount')).enabled, isTrue);
-    expect(key('recover'), findsNothing);
+    await enter(tester, 'token', tokenA);
+    await tap(tester, 'activate');
+    await tester.pumpAndSettle();
+    expect(requests, 1);
+    await reveal(tester, key('amount'));
+    expect(tester.widget<TextField>(key('amount')).enabled, isFalse);
+    expect(tester.widget<TextField>(key('amount')).controller!.text, '25');
   });
+  testWidgets('page recreation recovers original durable key and parameters', (
+    tester,
+  ) async {
+    final posts = <http.Request>[];
+    Future<http.Response> handler(http.Request request) async {
+      if (request.method == 'POST') {
+        posts.add(request);
+        if (posts.length == 1) throw http.ClientException('lost response');
+        return receipt(request);
+      }
+      return balance('75');
+    }
+
+    await open(tester, handler);
+    await activate(tester);
+    await tap(tester, 'transfer');
+    await tester.pumpAndSettle();
+    await tester.pumpWidget(const SizedBox());
+    await open(tester, handler);
+    await enter(tester, 'token', tokenA);
+    await tap(tester, 'activate');
+    await tester.pumpAndSettle();
+    await reveal(tester, key('recipient'));
+    expect(tester.widget<TextField>(key('recipient')).controller!.text, 'b');
+    expect(tester.widget<TextField>(key('recipient')).enabled, isFalse);
+    await tap(tester, 'transfer');
+    await tester.pumpAndSettle();
+    expect(posts, hasLength(2));
+    expect(posts[0].body, posts[1].body);
+    expect(
+      posts[0].headers['Idempotency-Key'],
+      posts[1].headers['Idempotency-Key'],
+    );
+    final store = LocalPaymentPendingStore(
+      preferences: await SharedPreferences.getInstance(),
+      mode: 'localSimulation',
+    );
+    expect(
+      (await store.load(
+        LocalPaymentPendingScope.fromAccount(
+          endpoint: Uri.parse('http://127.0.0.1:8765'),
+          syntheticToken: tokenA,
+        ),
+      )).status,
+      LocalPaymentPendingStatus.empty,
+    );
+  });
+
+  testWidgets('failed journal save prevents POST and locks payment actions', (
+    tester,
+  ) async {
+    final preferences = MockPreferences();
+    when(() => preferences.reload()).thenAnswer((_) async {});
+    when(() => preferences.get(any())).thenReturn(null);
+    when(
+      () => preferences.setString(any(), any()),
+    ).thenAnswer((_) async => false);
+    var posts = 0;
+    await open(tester, (request) async {
+      if (request.method == 'POST') posts++;
+      return balance('100');
+    }, preferences: preferences);
+    await activate(tester);
+    await tap(tester, 'transfer');
+    await tester.pumpAndSettle();
+    expect(posts, 0);
+    expect(tester.widget<FilledButton>(key('transfer')).onPressed, isNull);
+    await reveal(tester, key('error'));
+    expect(find.textContaining('No new transfer was sent'), findsOneWidget);
+  });
+
+  for (final broken in ['corrupt', 'unavailable', 'multiple']) {
+    testWidgets('journal $broken cannot be treated as an empty account', (
+      tester,
+    ) async {
+      final preferences = await SharedPreferences.getInstance();
+      final scope = LocalPaymentPendingScope.fromAccount(
+        endpoint: Uri.parse('http://127.0.0.1:8765'),
+        syntheticToken: tokenA,
+      );
+      SharedPreferences injected = preferences;
+      if (broken == 'corrupt')
+        await preferences.setString(scope.storageKey, '{bad');
+      if (broken == 'multiple') {
+        final store = LocalPaymentPendingStore(
+          preferences: preferences,
+          mode: 'localSimulation',
+        );
+        for (final id in ['one', 'two']) {
+          await store.save(
+            scope,
+            LocalPaymentPendingEntry(
+              key: id,
+              operation: LocalPaymentPendingOperation.transfer,
+              parameters: {
+                'recipient': 'b',
+                'asset': 'test-usdc',
+                'amount': '25',
+              },
+            ),
+          );
+        }
+      }
+      if (broken == 'unavailable') {
+        final mocked = MockPreferences();
+        when(() => mocked.reload()).thenThrow(StateError('unavailable'));
+        injected = mocked;
+      }
+      var requests = 0;
+      await open(tester, (_) async {
+        requests++;
+        return balance('100');
+      }, preferences: injected);
+      await enter(tester, 'token', tokenA);
+      await tap(tester, 'activate');
+      await tester.pumpAndSettle();
+      await reveal(tester, key('transfer'));
+      expect(tester.widget<FilledButton>(key('transfer')).onPressed, isNull);
+      expect(requests, 0);
+    });
+  }
+
+  testWidgets(
+    'receipt cleanup failure preserves confirmation and forbids resend',
+    (tester) async {
+      final actual = await SharedPreferences.getInstance();
+      final preferences = MockPreferences();
+      when(() => preferences.reload()).thenAnswer((_) => actual.reload());
+      when(() => preferences.get(any())).thenAnswer(
+        (call) => actual.get(call.positionalArguments.first as String),
+      );
+      var writes = 0;
+      when(() => preferences.setString(any(), any())).thenAnswer((call) async {
+        writes++;
+        if (writes == 2) return false;
+        return actual.setString(
+          call.positionalArguments[0] as String,
+          call.positionalArguments[1] as String,
+        );
+      });
+      late http.Request original;
+      var posts = 0;
+      await open(tester, (request) async {
+        if (request.method == 'POST') {
+          posts++;
+          original = request;
+          return receipt(request);
+        }
+        if (request.url.path == '/requests')
+          return http.Response(
+            jsonEncode({
+              'mode': 'localSimulation',
+              'status': 'completed',
+              'receipt': jsonDecode(receipt(original).body),
+            }),
+            200,
+          );
+        return balance('75');
+      }, preferences: preferences);
+      await activate(tester);
+      await tap(tester, 'transfer');
+      await tester.pumpAndSettle();
+      expect(tester.widget<FilledButton>(key('transfer')).onPressed, isNull);
+      await reveal(tester, key('error'));
+      expect(
+        find.textContaining('Transfer confirmed, but its pending record'),
+        findsOneWidget,
+      );
+      await tap(tester, 'recover');
+      await tester.pumpAndSettle();
+      expect(posts, 1);
+      expect(key('recover'), findsNothing);
+      expect(writes, 3);
+    },
+  );
 }

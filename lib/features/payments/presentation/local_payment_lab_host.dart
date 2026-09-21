@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../data/local_payment_pending_store.dart';
 
 import '../data/local_payment_client.dart';
 import 'local_payment_lab_page.dart';
@@ -23,6 +25,7 @@ class LocalPaymentLabHost extends StatefulWidget {
 class _LocalPaymentLabHostState extends State<LocalPaymentLabHost> {
   http.Client? _transport;
   LocalPaymentClient? _client;
+  Future<LocalPaymentPendingStore>? _pendingStore;
 
   @override
   void initState() {
@@ -30,16 +33,26 @@ class _LocalPaymentLabHostState extends State<LocalPaymentLabHost> {
     if (LocalPaymentLabHost.isEnabled) {
       _transport = http.Client();
       try {
-        _client = LocalPaymentClient(
-          endpoint: Uri.parse(
-            const String.fromEnvironment(
-              'N42_LOCAL_PAYMENT_ENDPOINT',
-              defaultValue: 'http://127.0.0.1:8765',
-            ),
+        final endpoint = Uri.parse(
+          const String.fromEnvironment(
+            'N42_LOCAL_PAYMENT_ENDPOINT',
+            defaultValue: 'http://127.0.0.1:8765',
           ),
+        );
+        _client = LocalPaymentClient(
+          endpoint: endpoint,
           transport: _transport!,
           enabled: true,
         );
+        _pendingStore = SharedPreferences.getInstance().then(
+          (preferences) => LocalPaymentPendingStore(
+            preferences: preferences,
+            mode: 'localSimulation',
+          ),
+        );
+        // The page reports activation failure; attach an error handler now so
+        // an early platform failure is not an unhandled async exception.
+        _pendingStore!.ignore();
       } on ArgumentError {
         _transport!.close();
         _transport = null;
@@ -73,6 +86,6 @@ class _LocalPaymentLabHostState extends State<LocalPaymentLabHost> {
     }
     return widget.redPackets
         ? LocalPacketLabPage(client: client)
-        : LocalPaymentLabPage(client: client);
+        : LocalPaymentLabPage(client: client, pendingStore: _pendingStore!);
   }
 }

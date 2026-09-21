@@ -3,13 +3,19 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 import '../data/local_payment_client.dart';
+import '../data/local_payment_pending_store.dart';
 
 /// Debug-only synthetic payment UI; the caller owns [client] and its transport.
 /// This page clears its active client session on departure, but never closes it.
 class LocalPaymentLabPage extends StatefulWidget {
-  const LocalPaymentLabPage({super.key, required this.client});
+  const LocalPaymentLabPage({
+    super.key,
+    required this.client,
+    required this.pendingStore,
+  });
 
   final LocalPaymentClient client;
+  final Future<LocalPaymentPendingStore> pendingStore;
 
   @override
   State<LocalPaymentLabPage> createState() => _LocalPaymentLabPageState();
@@ -36,12 +42,19 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   String? _balanceAsset;
   Map<String, dynamic>? _receipt;
   String? _activeToken;
+  LocalPaymentPendingScope? _scope;
+  LocalPaymentPendingStore? _store;
+  bool _journalBlocked = false;
+  bool _cleanupFailed = false;
   final Map<String, _TransferAttempt> _pending = {};
+  final Map<String, ({String key, Map<String, dynamic> receipt})> _confirmed =
+      {};
   _TransferAttempt? get _attempt => _pending[_activeToken];
 
   @override
   void initState() {
     super.initState();
+    widget.pendingStore.ignore();
     // Never inherit a session activated by another surface.
     widget.client.clearAccount();
   }
@@ -49,10 +62,13 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   @override
   void didUpdateWidget(covariant LocalPaymentLabPage oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.client != widget.client) {
+    widget.pendingStore.ignore();
+    if (oldWidget.client != widget.client ||
+        oldWidget.pendingStore != widget.pendingStore) {
       oldWidget.client.clearAccount();
       widget.client.clearAccount();
       _pending.clear();
+      _confirmed.clear();
       _token.clear();
       _asset.clear();
       _recipient.clear();
@@ -70,12 +86,17 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     _balanceAsset = null;
     _receipt = null;
     _activeToken = null;
+    _scope = null;
+    _store = null;
+    _journalBlocked = false;
+    _cleanupFailed = false;
   }
 
   @override
   void dispose() {
     _generation++;
     _pending.clear();
+    _confirmed.clear();
     widget.client.clearAccount();
     for (final controller in [_token, _asset, _recipient, _amount]) {
       controller.dispose();
@@ -88,25 +109,93 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   Future<void> _activate() async {
     widget.client.clearAccount();
     setState(_clearSession);
+    final generation = _generation;
+    setState(() => _busy = true);
     try {
       final token = _token.text.trim();
       widget.client.activateTestAccount(token);
+      final scope = LocalPaymentPendingScope.fromAccount(
+        endpoint: widget.client.endpoint,
+        syntheticToken: token,
+      );
+      final store = await widget.pendingStore.catchError((Object _) {
+        throw const LocalPaymentPendingStoreException('unavailable');
+      });
+      if (!_isCurrent(generation)) return;
+      final journal = await store.load(scope);
+      if (!_isCurrent(generation)) return;
+      if (journal.status == LocalPaymentPendingStatus.corrupt ||
+          journal.status == LocalPaymentPendingStatus.unavailable) {
+        throw LocalPaymentPendingStoreException(journal.status.name);
+      }
+      final transfers = journal.entries
+          .where((e) => e.operation == LocalPaymentPendingOperation.transfer)
+          .toList();
+      if (transfers.length > 1)
+        throw const LocalPaymentPendingStoreException('multiple_pending');
+      _pending.remove(token);
+      if (transfers.isNotEmpty) {
+        final entry = transfers.single;
+        _pending[token] = _TransferAttempt(
+          entry.key,
+          entry.parameters['asset']!,
+          entry.parameters['recipient']!,
+          BigInt.parse(entry.parameters['amount']!),
+        );
+      }
       setState(() {
         _active = true;
         _activeToken = token;
+        _scope = scope;
+        _store = store;
+        _busy = false;
         final attempt = _attempt;
+        final confirmed = _confirmed[token];
+        if (attempt != null && confirmed?.key == attempt.key) {
+          _receipt = confirmed!.receipt;
+          _cleanupFailed = true;
+        }
         _recipient.text = attempt?.recipient ?? '';
         _amount.text = attempt?.amount.toString() ?? '';
         if (attempt != null) _asset.text = attempt.asset;
       });
       if (_asset.text.trim().isNotEmpty) await _refresh();
     } catch (error) {
-      if (mounted) setState(() => _error = _explain(error));
+      if (_isCurrent(generation))
+        setState(() {
+          _busy = false;
+          _journalBlocked = true;
+          _error = _explain(error);
+        });
     }
   }
 
+  Future<void> _finishReceipt(
+    Map<String, dynamic> receipt,
+    _TransferAttempt attempt,
+    String token,
+    int generation,
+  ) async {
+    setState(() {
+      _receipt = receipt;
+      _confirmed[token] = (key: attempt.key, receipt: receipt);
+    });
+    try {
+      await _store!.remove(_scope!, attempt.key);
+    } catch (_) {
+      if (_isCurrent(generation)) setState(() => _cleanupFailed = true);
+      throw const LocalPaymentPendingStoreException('cleanup_failed');
+    }
+    if (!_isCurrent(generation)) return;
+    setState(() {
+      _pending.remove(token);
+      _confirmed.remove(token);
+      _cleanupFailed = false;
+    });
+  }
+
   Future<void> _refresh() async {
-    if (!_active || _busy) return;
+    if (!_active || _busy || _journalBlocked) return;
     final asset = _asset.text.trim();
     if (asset.isEmpty) {
       setState(() => _error = 'Enter a synthetic asset identifier.');
@@ -134,7 +223,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   }
 
   Future<void> _transfer() async {
-    if (!_active || _busy) return;
+    if (!_active || _busy || _journalBlocked || _cleanupFailed) return;
     final asset = _asset.text.trim();
     final recipient = _recipient.text.trim();
     final rawAmount = _amount.text.trim();
@@ -177,6 +266,19 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
       _balanceAsset = null;
     });
     try {
+      await _store!.save(
+        _scope!,
+        LocalPaymentPendingEntry(
+          key: attempt.key,
+          operation: LocalPaymentPendingOperation.transfer,
+          parameters: {
+            'asset': attempt.asset,
+            'recipient': attempt.recipient,
+            'amount': attempt.amount.toString(),
+          },
+        ),
+      );
+      if (!_isCurrent(generation)) return;
       final receipt = await widget.client.transfer(
         recipient: attempt.recipient,
         asset: attempt.asset,
@@ -184,10 +286,8 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
         key: attempt.key,
       );
       if (!_isCurrent(generation)) return;
-      setState(() {
-        _receipt = receipt;
-        _pending.remove(token);
-      });
+      await _finishReceipt(receipt, attempt, token, generation);
+      if (!_isCurrent(generation)) return;
       // The receipt remains visible if the subsequent balance refresh fails.
       final balance = await widget.client.balance(asset);
       if (!_isCurrent(generation)) return;
@@ -198,7 +298,11 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     } catch (error) {
       if (_isCurrent(generation)) {
         setState(() {
-          _error = _receipt == null
+          if (error is LocalPaymentPendingStoreException && !_cleanupFailed)
+            _journalBlocked = true;
+          _error = error is LocalPaymentPendingStoreException
+              ? _explain(error)
+              : _receipt == null
               ? _explain(error)
               : 'Simulated transfer completed; balance refresh failed. Use Refresh synthetic balance.';
         });
@@ -210,7 +314,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
 
   Future<void> _recover() async {
     final attempt = _attempt;
-    if (!_active || _busy || attempt == null) return;
+    if (!_active || _busy || _journalBlocked || attempt == null) return;
     final generation = _generation;
     final token = _activeToken!;
     setState(() {
@@ -235,10 +339,8 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
           receipt['amount'] != attempt.amount.toString()) {
         throw const LocalPaymentException('invalid_response');
       }
-      setState(() {
-        _receipt = receipt;
-        _pending.remove(token);
-      });
+      await _finishReceipt(receipt, attempt, token, generation);
+      if (!_isCurrent(generation)) return;
       final balance = await widget.client.balance(attempt.asset);
       if (!_isCurrent(generation)) return;
       setState(() {
@@ -248,7 +350,9 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
     } catch (error) {
       if (!_isCurrent(generation)) return;
       setState(() {
-        _error = _receipt != null
+        _error = error is LocalPaymentPendingStoreException
+            ? _explain(error)
+            : _receipt != null
             ? 'Simulated transfer completed; balance refresh failed. Use Refresh synthetic balance.'
             : error is LocalPaymentException && error.code == 'not_found'
             ? 'Original request is not visible yet. Its result is unknown; keep the original request key.'
@@ -260,6 +364,14 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
   }
 
   String _explain(Object error) {
+    if (error is LocalPaymentPendingStoreException) {
+      if (error.code == 'multiple_pending') {
+        return 'Multiple pending transfers require reconciliation. New transfers are blocked.';
+      }
+      return error.code == 'cleanup_failed'
+          ? 'Transfer confirmed, but its pending record could not be cleared. Do not resend. Use Check original result to retry cleanup.'
+          : 'Pending journal could not be safely loaded or saved. No new transfer was sent. Reactivate after fixing local storage.';
+    }
     if (error is ArgumentError) return 'Use a synthetic-test account token.';
     if (error is LocalPaymentException) {
       return switch (error.code) {
@@ -282,7 +394,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
 
   @override
   Widget build(BuildContext context) {
-    final canOperate = _active && !_busy;
+    final canOperate = _active && !_busy && !_journalBlocked;
     final canEdit = canOperate && _attempt == null;
     return Scaffold(
       appBar: AppBar(title: const Text('Local payment lab')),
@@ -374,7 +486,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
             const SizedBox(height: 16),
             FilledButton(
               key: const ValueKey('lab_transfer'),
-              onPressed: canOperate ? _transfer : null,
+              onPressed: canOperate && !_cleanupFailed ? _transfer : null,
               child: Text(
                 _busy
                     ? 'Working…'
@@ -394,7 +506,7 @@ class _LocalPaymentLabPageState extends State<LocalPaymentLabPage> {
               ),
             ],
             const Text(
-              'Pending requests are kept only while this page remains open. Leaving or restarting discards recovery keys; verify the original request before sending again.',
+              'Original request keys and exact parameters are saved locally by test account and endpoint. Tokens are not stored. Reopen and activate the same test account to recover; keep the original local server ledger.',
             ),
             if (_busy) const LinearProgressIndicator(),
             if (_error != null)
