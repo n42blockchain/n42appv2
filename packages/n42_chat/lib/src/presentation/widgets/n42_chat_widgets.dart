@@ -109,53 +109,100 @@ class _N42ChatEntryWidgetState extends State<_N42ChatEntryWidget> {
       // 从而继承上方 _wrapChatPresentation 的 Theme + textScaler，字体缩放
       // 与主题在子页面同样生效。NavigatorPopHandler 把系统返回键优先转交
       // 嵌套栈；当嵌套栈已在根（无可弹）时放行给外层，弹出整个 chat 路由。
-      child: NavigatorPopHandler(
-        onPopWithResult: (_) => _nestedNavKey.currentState?.maybePop(),
-        child: Navigator(
-          key: _nestedNavKey,
-          observers: [_heroController],
-          onGenerateRoute: (settings) => MaterialPageRoute<void>(
-            settings: settings,
-            builder: (context) => BlocProvider.value(
-              value: N42Chat.authBloc,
-              child: BlocBuilder<AuthBloc, AuthState>(
-                builder: (context, state) {
-                  // 检查中或初始状态 - 显示加载
-                  if (state.status == AuthStatus.initial ||
-                      state.status == AuthStatus.checking) {
-                    return const _LoadingPage();
-                  }
+      child: BlocProvider.value(
+        value: N42Chat.authBloc,
+        child: AccountScopedNavigationBoundary(
+          authBloc: N42Chat.authBloc,
+          navigatorKey: _nestedNavKey,
+          child: NavigatorPopHandler(
+            onPopWithResult: (_) => _nestedNavKey.currentState?.maybePop(),
+            child: Navigator(
+              key: _nestedNavKey,
+              observers: [_heroController],
+              onGenerateRoute: (settings) => MaterialPageRoute<void>(
+                settings: settings,
+                builder: (context) => BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    // 检查中或初始状态 - 显示加载
+                    if (state.status == AuthStatus.initial ||
+                        state.status == AuthStatus.checking) {
+                      return const _LoadingPage();
+                    }
 
-                  // 已登录 - 显示主框架（微信风格底部Tab）
-                  if (state.isAuthenticated) {
-                    return ChatMainPage(
-                      key: ValueKey(state.user?.userId),
-                      onBackToMain: () {
-                        N42Chat.requestBackToHost(context);
-                      },
+                    // 已登录 - 显示主框架（微信风格底部Tab）
+                    if (state.isAuthenticated) {
+                      return ChatMainPage(
+                        key: ValueKey(state.user?.userId),
+                        onBackToMain: () {
+                          N42Chat.requestBackToHost(context);
+                        },
+                      );
+                    }
+
+                    // 未登录 - 显示欢迎页面
+                    return WelcomePage(
+                      onLogin: () => _navigateToLogin(context),
+                      onRegister: () => _navigateToRegister(context),
+                      onBack: () => N42Chat.requestBackToHost(context),
+                      onTermsOfService: () => _launchUrl(
+                        N42Chat._config?.termsOfServiceUrl ??
+                            'https://www.n42.ai/static/terms_of_use.html',
+                      ),
+                      onPrivacyPolicy: () => _launchUrl(
+                        N42Chat._config?.privacyPolicyUrl ??
+                            'https://www.n42.ai/static/terms_of_use.html',
+                      ),
                     );
-                  }
-
-                  // 未登录 - 显示欢迎页面
-                  return WelcomePage(
-                    onLogin: () => _navigateToLogin(context),
-                    onRegister: () => _navigateToRegister(context),
-                    onBack: () => N42Chat.requestBackToHost(context),
-                    onTermsOfService: () => _launchUrl(
-                      N42Chat._config?.termsOfServiceUrl ??
-                          'https://www.n42.ai/static/terms_of_use.html',
-                    ),
-                    onPrivacyPolicy: () => _launchUrl(
-                      N42Chat._config?.privacyPolicyUrl ??
-                          'https://www.n42.ai/static/terms_of_use.html',
-                    ),
-                  );
-                },
+                  },
+                ),
               ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+/// Owns the navigation lifetime of routes that contain account-scoped state.
+///
+/// Pushed chat routes can hold room timelines and blocs. Replacing only the
+/// root page leaves those routes alive, so switching identities must return the
+/// package navigator to its root and dispose the previous account's routes.
+class AccountScopedNavigationBoundary extends StatelessWidget {
+  final AuthBloc authBloc;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final Widget child;
+
+  const AccountScopedNavigationBoundary({
+    super.key,
+    required this.authBloc,
+    required this.navigatorKey,
+    required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<AuthBloc, AuthState>(
+      bloc: authBloc,
+      listenWhen: (previous, current) {
+        final previousUserId = previous.user?.userId;
+        final currentUserId = current.user?.userId;
+        return current.isAuthenticated &&
+            previousUserId != null &&
+            currentUserId != null &&
+            previousUserId != currentUserId;
+      },
+      listener: (context, _) {
+        // The account picker also closes itself on success. Reset after its
+        // listener has completed so the two pops cannot race and over-pop the
+        // package navigator or its host route.
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          navigatorKey.currentState?.popUntil((route) => route.isFirst);
+        });
+      },
+      child: child,
     );
   }
 }

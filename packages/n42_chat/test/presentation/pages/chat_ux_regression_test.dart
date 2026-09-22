@@ -33,6 +33,7 @@ import 'package:n42_chat/src/presentation/widgets/common/chat_account_title.dart
 import 'package:n42_chat/src/presentation/widgets/common/friend_request_card.dart';
 import 'package:n42_chat/src/presentation/widgets/call/return_to_call_banner.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/chat_more_panel.dart';
+import 'package:n42_chat/src/n42_chat.dart';
 
 class MockConversations extends MockBloc<ConversationEvent, ConversationState>
     implements ConversationBloc {}
@@ -43,6 +44,43 @@ class MockStories extends MockBloc<StoryEvent, StoryState>
 class MockAuth extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
 class MockRepository extends Mock implements IAuthRepository {}
+
+class _DisposableAccountRoute extends StatefulWidget {
+  final VoidCallback onDispose;
+  const _DisposableAccountRoute(this.onDispose);
+
+  @override
+  State<_DisposableAccountRoute> createState() =>
+      _DisposableAccountRouteState();
+}
+
+class _DisposableAccountRouteState extends State<_DisposableAccountRoute> {
+  @override
+  void dispose() {
+    widget.onDispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    body: Column(
+      children: [
+        const Text('Previous account chat'),
+        TextButton(
+          onPressed: () => Navigator.of(context).push<void>(
+            MaterialPageRoute<void>(
+              builder: (_) => BlocProvider.value(
+                value: context.read<AuthBloc>(),
+                child: const AccountSwitchPage(),
+              ),
+            ),
+          ),
+          child: const Text('Switch from old chat'),
+        ),
+      ],
+    ),
+  );
+}
 
 const active = AuthState(
   status: AuthStatus.authenticated,
@@ -331,6 +369,91 @@ void main() {
       await tester.pumpWidget(const SizedBox());
       await states.close();
       await auth.close();
+    },
+  );
+
+  testWidgets(
+    'authenticated identity change disposes pushed account-scoped routes',
+    (tester) async {
+      final auth = MockAuth();
+      final states = StreamController<AuthState>();
+      whenListen(auth, states.stream, initialState: active);
+      final repository = MockRepository();
+      when(repository.getStoredAccounts).thenAnswer((_) async => accounts);
+      getIt.registerSingleton<IAuthRepository>(repository);
+      final navigatorKey = GlobalKey<NavigatorState>();
+      var disposed = false;
+
+      await tester.pumpWidget(
+        app(
+          BlocProvider<AuthBloc>.value(
+            value: auth,
+            child: AccountScopedNavigationBoundary(
+              authBloc: auth,
+              navigatorKey: navigatorKey,
+              child: Navigator(
+                key: navigatorKey,
+                onGenerateRoute: (_) => MaterialPageRoute<void>(
+                  builder: (context) => Scaffold(
+                    body: TextButton(
+                      onPressed: () => Navigator.of(context).push<void>(
+                        MaterialPageRoute<void>(
+                          builder: (_) =>
+                              _DisposableAccountRoute(() => disposed = true),
+                        ),
+                      ),
+                      child: const Text('Open account chat'),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.tap(find.text('Open account chat'));
+      await tester.pumpAndSettle();
+      expect(find.text('Previous account chat'), findsOneWidget);
+
+      await tester.tap(find.text('Switch from old chat'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Bob'));
+      await tester.pump();
+      states.add(
+        const AuthState(
+          status: AuthStatus.error,
+          user: UserEntity(userId: '@alice:example.org', displayName: 'Alice'),
+          errorMessage: 'switch failed',
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(AccountSwitchPage), findsOneWidget);
+      expect(disposed, isFalse);
+
+      await tester.tap(find.text('Bob'));
+      await tester.pump();
+
+      states.add(
+        const AuthState(
+          status: AuthStatus.loading,
+          user: UserEntity(userId: '@alice:example.org', displayName: 'Alice'),
+        ),
+      );
+      await tester.pump();
+      expect(find.byType(AccountSwitchPage), findsOneWidget);
+
+      states.add(
+        const AuthState(
+          status: AuthStatus.authenticated,
+          user: UserEntity(userId: '@bob:example.org', displayName: 'Bob'),
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      expect(disposed, isTrue);
+      expect(find.text('Previous account chat'), findsNothing);
+      expect(find.text('Open account chat'), findsOneWidget);
+      await states.close();
     },
   );
 
