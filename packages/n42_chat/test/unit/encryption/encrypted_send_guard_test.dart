@@ -82,6 +82,7 @@ void main() {
   });
   late _Client client;
   late _Room room;
+  late _Device self;
   late _Device peer;
   late _Keys keys;
   late _Olm olm;
@@ -96,7 +97,7 @@ void main() {
     outbound = _Outbound();
     final encryption = _Encryption();
     final group = vod.GroupSession();
-    final self = _Device();
+    self = _Device();
     peer = _Device();
     final devices = [self, peer];
     for (var i = 0; i < devices.length; i++) {
@@ -338,11 +339,60 @@ void main() {
     },
   );
   test(
+    'current device does not need to receive its own outbound session',
+    () async {
+      when(() => self.encryptToDevice).thenReturn(false);
+
+      await EncryptedSendGuard.prepare(room);
+
+      final sentDevices =
+          verify(
+                () => client.sendToDeviceEncrypted(
+                  captureAny(),
+                  EventTypes.RoomKey,
+                  any(),
+                ),
+              ).captured.single
+              as List<DeviceKeys>;
+      expect(sentDevices, [peer]);
+    },
+  );
+  test('invalid current device still stops encrypted sending', () async {
+    when(() => self.isValid).thenReturn(false);
+
+    await expectLater(
+      EncryptedSendGuard.prepare(room),
+      throwsA(isA<EncryptedSendNotReady>()),
+    );
+    verifyNever(() => keys.prepareOutboundGroupSession(any()));
+  });
+  test(
     'unverified recipient device stops new ciphertext from being sent',
     () async {
       when(() => peer.encryptToDevice).thenReturn(false);
       await expectLater(
         prepareRoomForSending(client, '!room:hs'),
+        throwsA(isA<EncryptedSendNotReady>()),
+      );
+      verifyNever(() => keys.prepareOutboundGroupSession(any()));
+    },
+  );
+  test(
+    'unverified other own device stops new ciphertext from being sent',
+    () async {
+      final otherOwn = _Device();
+      when(() => otherOwn.userId).thenReturn('@me:hs');
+      when(() => otherOwn.deviceId).thenReturn('ME-OTHER');
+      when(() => otherOwn.curve25519Key).thenReturn('other-self-key');
+      when(() => otherOwn.blocked).thenReturn(false);
+      when(() => otherOwn.isValid).thenReturn(true);
+      when(() => otherOwn.encryptToDevice).thenReturn(false);
+      when(
+        () => room.getUserDeviceKeys(),
+      ).thenAnswer((_) async => [self, otherOwn, peer]);
+
+      await expectLater(
+        EncryptedSendGuard.prepare(room),
         throwsA(isA<EncryptedSendNotReady>()),
       );
       verifyNever(() => keys.prepareOutboundGroupSession(any()));

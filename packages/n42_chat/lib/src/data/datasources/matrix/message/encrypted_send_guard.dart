@@ -107,7 +107,13 @@ class EncryptedSendGuard {
           recipientKeysMissing: id != userId,
         );
       if (active.any(
-        (d) => !d.isValid || !d.encryptToDevice || d.curve25519Key == null,
+        (d) =>
+            !d.isValid ||
+            // The current device originates this session; the SDK excludes it
+            // from delivery, while every destination must pass sharing policy.
+            (!(d.userId == userId && d.deviceId == deviceId) &&
+                !d.encryptToDevice) ||
+            d.curve25519Key == null,
       )) {
         throw const EncryptedSendNotReady();
       }
