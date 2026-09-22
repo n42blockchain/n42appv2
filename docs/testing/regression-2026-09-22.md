@@ -78,7 +78,7 @@ mirror without overwriting unrelated upstream edits.
 
 ## Remaining acceptance work
 
-- GIF: pending tester network details and device-specific failure evidence.
+- GIF: tester confirms mainland China Wi-Fi; device-specific request failure evidence is still missing.
 - Repeat account switching without unexpected reauthentication, then verify
   both directions of newly sent messages on the reported phone.
 - Verify first and repeated native calendar additions, including swipe dismissal.
@@ -86,3 +86,18 @@ mirror without overwriting unrelated upstream edits.
   translation and encrypted video thumbnails on the next installed build.
 - These changes have not yet been uploaded as a new TestFlight build; latest
   uploaded version remains 2.4.8 (2026072778).
+
+## GIF network follow-up
+
+User confirms the failing device used mainland China Wi-Fi. The release host
+configuration directly calls Giphy; Tenor has no configured key. A successful
+request on the development Mac does not prove reachability on this Wi-Fi.
+Do not label the reported failure as a confirmed firewall, DNS, TLS, or quota
+issue without observing the failing request.
+
+Giphy's published integration guidance requires direct client API/media loads
+and prohibits a generic proxy:
+https://developers.giphy.com/docs/api/best-practices/
+No relay was deployed and no fallback provider was silently enabled. A provider
+change must cover both search and media delivery, with an authorized source.
+GIF remains unresolved pending device-side failure evidence.
