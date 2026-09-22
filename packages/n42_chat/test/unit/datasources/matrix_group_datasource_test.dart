@@ -13,6 +13,8 @@ class _MockRoom extends Mock implements matrix.Room {}
 
 class _MockEvent extends Mock implements matrix.Event {}
 
+class _MockUser extends Mock implements matrix.User {}
+
 void main() {
   late _MockMatrixClientManager clientManager;
   late _MockClient client;
@@ -136,6 +138,30 @@ void main() {
     expect(dataSource.getAllGroups(), isEmpty);
     when(() => room.topic).thenReturn('Normal group topic');
     expect(dataSource.getAllGroups(), [room]);
+  });
+
+  test('group members omit stale leave and ban membership records', () async {
+    final owner = _MockUser();
+    final invited = _MockUser();
+    final left = _MockUser();
+    final banned = _MockUser();
+    when(() => owner.id).thenReturn('@owner:hs');
+    when(() => owner.membership).thenReturn(matrix.Membership.join);
+    when(() => invited.id).thenReturn('@invited:hs');
+    when(() => invited.membership).thenReturn(matrix.Membership.invite);
+    when(() => left.id).thenReturn('@left:hs');
+    when(() => left.membership).thenReturn(matrix.Membership.leave);
+    when(() => banned.id).thenReturn('@banned:hs');
+    when(() => banned.membership).thenReturn(matrix.Membership.ban);
+    when(() => room.requestParticipants()).thenAnswer((_) async => []);
+    when(
+      () => room.getParticipants(),
+    ).thenReturn([owner, invited, left, banned]);
+    when(() => room.states).thenReturn({});
+
+    final members = await dataSource.getGroupMembers(roomId);
+
+    expect(members.map((user) => user.id), ['@owner:hs', '@invited:hs']);
   });
   for (final reason in ['n42_moments', 'n42_stories']) {
     test('stripped $reason invitations are not ordinary group requests', () {

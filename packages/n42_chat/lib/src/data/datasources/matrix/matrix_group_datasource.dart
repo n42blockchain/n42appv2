@@ -274,7 +274,14 @@ class MatrixGroupDataSource {
 
     await room.requestParticipants();
     // 获取所有参与者
-    final joinedUsers = room.getParticipants();
+    final activeUsers = room
+        .getParticipants()
+        .where(
+          (user) =>
+              user.membership == matrix.Membership.join ||
+              user.membership == matrix.Membership.invite,
+        )
+        .toList();
 
     // 尝试获取已邀请的成员
     final invitedUsers = <matrix.User>[];
@@ -284,15 +291,15 @@ class MatrixGroupDataSource {
         final event = entry.value;
         if (event.content['membership'] == 'invite') {
           final userId = entry.key;
-          // 检查是否已在 joinedUsers 中
-          if (!joinedUsers.any((u) => u.id == userId)) {
+          // 检查是否已在 activeUsers 中
+          if (!activeUsers.any((u) => u.id == userId)) {
             invitedUsers.add(room.unsafeGetUserFromMemoryOrFallback(userId));
           }
         }
       }
     }
 
-    return [...joinedUsers, ...invitedUsers];
+    return [...activeUsers, ...invitedUsers];
   }
 
   /// 获取群成员数量（包括已加入和已邀请的成员）
