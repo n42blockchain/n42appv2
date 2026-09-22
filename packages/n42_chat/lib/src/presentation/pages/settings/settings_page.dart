@@ -1,5 +1,6 @@
 import 'account_switch_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
@@ -9,6 +10,8 @@ import '../../../core/theme/app_icons.dart';
 import '../../../core/utils/privacy_redaction_utils.dart';
 import '../../../data/datasources/local/preferences_datasource.dart';
 import '../../../domain/entities/user_profile_entity.dart';
+import '../../blocs/auth/auth_bloc.dart';
+import '../../blocs/auth/auth_state.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../../core/services/username_service.dart';
 import '../../../domain/repositories/auth_repository.dart';
@@ -69,6 +72,30 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authBloc = SettingsNavigation.authBloc(context);
+    if (authBloc != null) {
+      return BlocBuilder<AuthBloc, AuthState>(
+        bloc: authBloc,
+        builder: (context, state) =>
+            _buildPage(context, _profileForAuthUser(state)),
+      );
+    }
+    return _buildPage(context, profile);
+  }
+
+  UserProfileEntity? _profileForAuthUser(AuthState state) {
+    final user = state.user;
+    if (user == null || user.userId == profile?.userId) return profile;
+    return UserProfileEntity(
+      userId: user.userId,
+      displayName: user.displayName,
+      avatarUrl: user.avatarUrl,
+      statusMessage: user.statusMessage,
+      avatarDecorationPreset: user.avatarDecorationPreset,
+    );
+  }
+
+  Widget _buildPage(BuildContext context, UserProfileEntity? currentProfile) {
     final isDark = context.isDarkMode;
 
     return Scaffold(
@@ -81,7 +108,8 @@ class SettingsPage extends StatelessWidget {
       body: ListView(
         children: [
           // 个人资料卡片
-          if (profile != null) _buildProfileCard(context, isDark),
+          if (currentProfile != null)
+            _buildProfileCard(context, isDark, currentProfile),
 
           const SizedBox(height: 16),
 
@@ -320,7 +348,11 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileCard(BuildContext context, bool isDark) {
+  Widget _buildProfileCard(
+    BuildContext context,
+    bool isDark,
+    UserProfileEntity currentProfile,
+  ) {
     final secondaryColor = context.textSecondary;
 
     return Container(
@@ -339,10 +371,10 @@ class SettingsPage extends StatelessWidget {
             child: Row(
               children: [
                 N42Avatar(
-                  imageUrl: profile!.avatarUrl,
-                  name: profile!.effectiveDisplayName,
+                  imageUrl: currentProfile.avatarUrl,
+                  name: currentProfile.effectiveDisplayName,
                   size: 64,
-                  decorationPreset: profile!.avatarDecorationPreset,
+                  decorationPreset: currentProfile.avatarDecorationPreset,
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -357,15 +389,15 @@ class SettingsPage extends StatelessWidget {
                       final hidePhoneNumber =
                           snapshot.data?.hidePhoneNumber ?? true;
                       final phoneNumber = hidePhoneNumber
-                          ? maskPhoneNumber(profile!.phoneNumber)
-                          : profile!.phoneNumber?.trim();
-                      final email = profile!.email?.trim();
+                          ? maskPhoneNumber(currentProfile.phoneNumber)
+                          : currentProfile.phoneNumber?.trim();
+                      final email = currentProfile.email?.trim();
 
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            profile!.effectiveDisplayName,
+                            currentProfile.effectiveDisplayName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -377,7 +409,7 @@ class SettingsPage extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            profile!.userId,
+                            currentProfile.userId,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -413,11 +445,11 @@ class SettingsPage extends StatelessWidget {
                               ),
                             ),
                           ],
-                          if (profile!.statusMessage != null &&
-                              profile!.statusMessage!.isNotEmpty) ...[
+                          if (currentProfile.statusMessage != null &&
+                              currentProfile.statusMessage!.isNotEmpty) ...[
                             const SizedBox(height: 4),
                             Text(
-                              profile!.statusMessage!,
+                              currentProfile.statusMessage!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(

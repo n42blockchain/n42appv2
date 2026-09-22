@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -406,6 +408,49 @@ void main() {
     await tapLabel(tester, 'Switch Account');
     expect(find.byType(AccountSwitchPage), findsOneWidget);
     verifyNever(() => auth.add(const AuthLogoutRequested()));
+  });
+
+  testWidgets('settings profile follows the authenticated account', (
+    tester,
+  ) async {
+    final auth = MockAuthBloc();
+    final states = StreamController<AuthState>();
+    const firstState = AuthState(
+      status: AuthStatus.authenticated,
+      user: UserEntity(userId: '@first:hs', displayName: 'First account'),
+    );
+    whenListen(auth, states.stream, initialState: firstState);
+
+    await tester.pumpWidget(
+      app(
+        BlocProvider<AuthBloc>.value(
+          value: auth,
+          child: const SettingsPage(
+            profile: UserProfileEntity(
+              userId: '@first:hs',
+              displayName: 'First account',
+              email: 'first@example.org',
+            ),
+          ),
+        ),
+      ),
+    );
+    expect(find.text('@first:hs'), findsOneWidget);
+    expect(find.text('first@example.org'), findsOneWidget);
+
+    states.add(
+      const AuthState(
+        status: AuthStatus.authenticated,
+        user: UserEntity(userId: '@second:hs', displayName: 'Second account'),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('@first:hs'), findsNothing);
+    expect(find.text('first@example.org'), findsNothing);
+    expect(find.text('@second:hs'), findsOneWidget);
+    expect(find.text('Second account'), findsOneWidget);
+    await states.close();
   });
 
   testWidgets('standalone privacy hub opens without a Profile callback', (
