@@ -53,6 +53,8 @@ class OnDeviceTranslationService {
   }
 
   Future<void> _ensureModel(TranslateLanguage language) async {
+    // ML Kit embeds English; remote model management rejects this language.
+    if (language == TranslateLanguage.english) return;
     final code = language.bcpCode;
     if (await _modelManager.isModelDownloaded(code)) return;
     final downloaded = await _modelManager.downloadModel(code);
