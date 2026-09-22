@@ -27,5 +27,12 @@ Canonical Chat commit: `6606eed4`.
 - Focused analysis: no errors or warnings; 7 pre-existing informational lint findings.
 - Tests cover current-device exemption, invalid current-device rejection,
   remote-device rejection, and other-own-device rejection.
-- Android release build and on-device reproduction: pending.
+- Android release 2.4.8 (2026072776): built successfully and installed with
+  `adb install -r` on the connected Android; app data retained.
+- Signing certificate matches previously installed release 2026072753.
+- Initial R8 run saturated the 4 GB Gradle heap; retry used a temporary 10 GB
+  heap with G1GC and completed in 202.7 seconds. Repository Gradle settings
+  were restored after the build.
+- End-to-end send reproduction after installation remains pending; this fix
+  does not establish that every cause of the screenshot error is resolved.
 - Historical message recovery is outside this correction; no claim of recovery.
