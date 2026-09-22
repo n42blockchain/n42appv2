@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/services/auto_download_policy_service.dart';
+import '../../../core/services/chat_media_bytes_resolver.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/a11y_l10n.dart';
 import '../../../core/utils/matrix_utils.dart' as mx_utils;
@@ -25,6 +26,9 @@ class ImageMessageWidget extends StatefulWidget {
 
   /// 缩略图URL
   final String? thumbnailUrl;
+  final String? encryptKey;
+  final String? encryptIv;
+  final String? encryptSha256;
 
   /// 图片宽度
   final int? width;
@@ -61,11 +65,15 @@ class ImageMessageWidget extends StatefulWidget {
 
   /// 自动下载策略服务（测试或宿主注入）
   final AutoDownloadPolicyService? autoDownloadPolicyService;
+  final ChatMediaBytesResolver? mediaBytesResolver;
 
   const ImageMessageWidget({
     super.key,
     required this.imageUrl,
     this.thumbnailUrl,
+    this.encryptKey,
+    this.encryptIv,
+    this.encryptSha256,
     this.width,
     this.height,
     this.onTap,
@@ -78,6 +86,7 @@ class ImageMessageWidget extends StatefulWidget {
     this.isViewed = false,
     this.isFromMe = false,
     this.autoDownloadPolicyService,
+    this.mediaBytesResolver,
   });
 
   @override
@@ -91,6 +100,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
   bool _shouldLoadImage = false;
   bool _autoDownloadResolved = false;
   int _policyRequest = 0;
+  Future<ChatMediaData>? _encryptedMediaFuture;
 
   @override
   void initState() {
@@ -109,12 +119,39 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
   void didUpdateWidget(covariant ImageMessageWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.imageUrl != widget.imageUrl ||
-        oldWidget.thumbnailUrl != widget.thumbnailUrl) {
+        oldWidget.thumbnailUrl != widget.thumbnailUrl ||
+        oldWidget.encryptKey != widget.encryptKey ||
+        oldWidget.encryptIv != widget.encryptIv ||
+        oldWidget.encryptSha256 != widget.encryptSha256) {
       _retryCount = 0;
       _autoDownloadResolved = false;
       _shouldLoadImage = false;
+      _encryptedMediaFuture = null;
       _resolveAutoDownloadPreference();
     }
+  }
+
+  void _prepareEncryptedMedia() {
+    if (widget.encryptKey == null ||
+        widget.encryptIv == null ||
+        widget.encryptSha256 == null) {
+      _encryptedMediaFuture = null;
+      return;
+    }
+    final resolver = widget.mediaBytesResolver ?? ChatMediaBytesResolver();
+    final mediaUrl = widget.imageUrl;
+    final encryptKey = widget.encryptKey;
+    final encryptIv = widget.encryptIv;
+    final encryptSha256 = widget.encryptSha256;
+    _encryptedMediaFuture = Future<ChatMediaData>.delayed(
+      Duration.zero,
+      () => resolver.resolve(
+        mediaUrl: mediaUrl,
+        encryptKey: encryptKey,
+        encryptIv: encryptIv,
+        encryptSha256: encryptSha256,
+      ),
+    );
   }
 
   Future<void> _resolveAutoDownloadPreference() async {
@@ -126,6 +163,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
       setState(() {
         _shouldLoadImage = shouldAutoDownload;
         _autoDownloadResolved = true;
+        if (shouldAutoDownload) _prepareEncryptedMedia();
       });
     } catch (e) {
       debugLog(
@@ -143,6 +181,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
     setState(() {
       _shouldLoadImage = true;
       _autoDownloadResolved = true;
+      _prepareEncryptedMedia();
     });
   }
 
@@ -179,6 +218,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
     if (_retryCount < _maxRetries) {
       setState(() {
         _retryCount++;
+        _prepareEncryptedMedia();
       });
     }
   }
@@ -213,6 +253,7 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
       client: MatrixClientManager.instance.client,
     );
 
+    final encryptedMediaFuture = _encryptedMediaFuture;
     Widget imageWidget = GestureDetector(
       onTap: widget.onTap,
       child: ClipRRect(
@@ -220,21 +261,48 @@ class _ImageMessageWidgetState extends State<ImageMessageWidget> {
         child: SizedBox(
           width: size.width,
           height: size.height,
-          child: CachedNetworkImage(
-            key: ValueKey('$url-$_retryCount'),
-            imageUrl: url,
-            fit: BoxFit.cover,
-            httpHeaders: headers,
-            fadeInDuration: const Duration(milliseconds: 200),
-            fadeOutDuration: const Duration(milliseconds: 200),
-            placeholder: (context, url) => _buildPlaceholder(size),
-            errorWidget: (context, url, error) {
-              debugLog(
-                'ImageMessageWidget: Failed to load image: $url, error: $error',
-              );
-              return _buildError(size, canRetry: _retryCount < _maxRetries);
-            },
-          ),
+          child: encryptedMediaFuture != null
+              ? FutureBuilder<ChatMediaData>(
+                  future: encryptedMediaFuture,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Image.memory(
+                        snapshot.data!.bytes,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) =>
+                            _buildError(
+                              size,
+                              canRetry: _retryCount < _maxRetries,
+                            ),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return _buildError(
+                        size,
+                        canRetry: _retryCount < _maxRetries,
+                      );
+                    }
+                    return _buildPlaceholder(size);
+                  },
+                )
+              : CachedNetworkImage(
+                  key: ValueKey('$url-$_retryCount'),
+                  imageUrl: url,
+                  fit: BoxFit.cover,
+                  httpHeaders: headers,
+                  fadeInDuration: const Duration(milliseconds: 200),
+                  fadeOutDuration: const Duration(milliseconds: 200),
+                  placeholder: (context, url) => _buildPlaceholder(size),
+                  errorWidget: (context, url, error) {
+                    debugLog(
+                      'ImageMessageWidget: Failed to load image: $url, error: $error',
+                    );
+                    return _buildError(
+                      size,
+                      canRetry: _retryCount < _maxRetries,
+                    );
+                  },
+                ),
         ),
       ),
     );

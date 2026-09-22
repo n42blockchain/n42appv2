@@ -465,6 +465,11 @@ class MessageMetadata extends Equatable {
   /// 缩略图URL
   final String? thumbnailUrl;
 
+  /// Encrypted thumbnail key material from info.thumbnail_file.
+  final String? thumbnailEncryptKey;
+  final String? thumbnailEncryptIv;
+  final String? thumbnailEncryptSha256;
+
   /// MIME类型
   final String? mimeType;
 
@@ -651,6 +656,9 @@ class MessageMetadata extends Equatable {
     this.mediaUrl,
     this.httpUrl,
     this.thumbnailUrl,
+    this.thumbnailEncryptKey,
+    this.thumbnailEncryptIv,
+    this.thumbnailEncryptSha256,
     this.mimeType,
     this.size,
     this.width,
@@ -726,6 +734,9 @@ class MessageMetadata extends Equatable {
     mediaUrl,
     httpUrl,
     thumbnailUrl,
+    thumbnailEncryptKey,
+    thumbnailEncryptIv,
+    thumbnailEncryptSha256,
     mimeType,
     size,
     width,
@@ -796,6 +807,9 @@ class MessageMetadata extends Equatable {
     mediaUrl: mediaUrl,
     httpUrl: httpUrl,
     thumbnailUrl: thumbnailUrl,
+    thumbnailEncryptKey: thumbnailEncryptKey,
+    thumbnailEncryptIv: thumbnailEncryptIv,
+    thumbnailEncryptSha256: thumbnailEncryptSha256,
     mimeType: mimeType,
     size: size,
     width: width,
@@ -840,6 +854,9 @@ class MessageMetadata extends Equatable {
     mediaUrl: mediaUrl,
     httpUrl: httpUrl,
     thumbnailUrl: thumbnailUrl,
+    thumbnailEncryptKey: thumbnailEncryptKey,
+    thumbnailEncryptIv: thumbnailEncryptIv,
+    thumbnailEncryptSha256: thumbnailEncryptSha256,
     mimeType: mimeType,
     size: size,
     width: width,
@@ -899,6 +916,9 @@ class MessageMetadata extends Equatable {
     mediaUrl: mediaUrl,
     httpUrl: httpUrl,
     thumbnailUrl: thumbnailUrl,
+    thumbnailEncryptKey: thumbnailEncryptKey,
+    thumbnailEncryptIv: thumbnailEncryptIv,
+    thumbnailEncryptSha256: thumbnailEncryptSha256,
     mimeType: mimeType,
     size: size,
     width: width,

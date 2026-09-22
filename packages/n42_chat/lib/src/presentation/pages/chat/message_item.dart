@@ -1216,7 +1216,13 @@ class MessageItem extends StatelessWidget {
           children: [
             // 视频缩略图或占位图
             if (thumbnailUrl != null && thumbnailUrl.isNotEmpty)
-              ImageMessageWidget(imageUrl: thumbnailUrl, onTap: onTap)
+              ImageMessageWidget(
+                imageUrl: thumbnailUrl,
+                encryptKey: metadata?.thumbnailEncryptKey,
+                encryptIv: metadata?.thumbnailEncryptIv,
+                encryptSha256: metadata?.thumbnailEncryptSha256,
+                onTap: onTap,
+              )
             else
               // 无缩略图时显示渐变背景和视频图标
               Container(

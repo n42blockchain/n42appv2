@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +7,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/core/services/auto_download_policy_service.dart';
+import 'package:n42_chat/src/core/services/chat_media_bytes_resolver.dart';
 import 'package:n42_chat/src/presentation/widgets/chat/image_message_widget.dart';
 
 class MockPolicy extends Mock implements AutoDownloadPolicyService {}
+
+class MockMediaResolver extends Mock implements ChatMediaBytesResolver {}
 
 void main() {
   late MockPolicy policy;
@@ -27,6 +31,8 @@ void main() {
     bool viewed = false,
     bool expired = false,
     VoidCallback? onTap,
+    ChatMediaBytesResolver? mediaBytesResolver,
+    String? encryptKey,
   }) async {
     await tester.pumpWidget(
       MaterialApp(
@@ -45,6 +51,10 @@ void main() {
               isExpired: expired,
               onTap: onTap,
               autoDownloadPolicyService: policy,
+              mediaBytesResolver: mediaBytesResolver,
+              encryptKey: encryptKey,
+              encryptIv: encryptKey == null ? null : 'iv',
+              encryptSha256: encryptKey == null ? null : 'hash',
             ),
           ),
         ),
@@ -66,6 +76,159 @@ void main() {
       expect(opens, 0);
     },
   );
+
+  group('encrypted thumbnails', () {
+    late MockMediaResolver resolver;
+    final pngBytes = base64Decode(
+      'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQIHWP4z8DwHwAFgAI/ScLJAAAAAElFTkSuQmCC',
+    );
+
+    setUp(() {
+      resolver = MockMediaResolver();
+    });
+
+    testWidgets('renders decrypted thumbnail bytes', (tester) async {
+      when(
+        () => resolver.resolve(
+          mediaUrl: any(named: 'mediaUrl'),
+          encryptKey: any(named: 'encryptKey'),
+          encryptIv: any(named: 'encryptIv'),
+          encryptSha256: any(named: 'encryptSha256'),
+        ),
+      ).thenAnswer(
+        (_) async => ChatMediaData(bytes: pngBytes, mimeType: 'image/png'),
+      );
+      when(
+        () => policy.shouldAutoDownload(AutoDownloadMediaType.image),
+      ).thenAnswer((_) async => true);
+
+      await show(
+        tester,
+        url: 'https://media/thumb',
+        mediaBytesResolver: resolver,
+        encryptKey: 'key',
+      );
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Image), findsOneWidget);
+      expect(find.byIcon(Icons.broken_image), findsNothing);
+      verify(
+        () => resolver.resolve(
+          mediaUrl: 'https://media/thumb',
+          encryptKey: 'key',
+          encryptIv: 'iv',
+          encryptSha256: 'hash',
+        ),
+      ).called(1);
+    });
+
+    testWidgets('disabled auto-download does not invoke resolver', (
+      tester,
+    ) async {
+      await show(
+        tester,
+        url: 'https://media/thumb',
+        mediaBytesResolver: resolver,
+        encryptKey: 'key',
+      );
+
+      expect(find.byIcon(Icons.download_for_offline_outlined), findsOneWidget);
+      verifyNever(
+        () => resolver.resolve(
+          mediaUrl: any(named: 'mediaUrl'),
+          encryptKey: any(named: 'encryptKey'),
+          encryptIv: any(named: 'encryptIv'),
+          encryptSha256: any(named: 'encryptSha256'),
+        ),
+      );
+    });
+
+    testWidgets('failed encrypted load retries through resolver', (
+      tester,
+    ) async {
+      var calls = 0;
+      when(
+        () => resolver.resolve(
+          mediaUrl: any(named: 'mediaUrl'),
+          encryptKey: any(named: 'encryptKey'),
+          encryptIv: any(named: 'encryptIv'),
+          encryptSha256: any(named: 'encryptSha256'),
+        ),
+      ).thenAnswer((_) async {
+        if (calls++ == 0) throw const ChatMediaResolveException('failed');
+        return ChatMediaData(bytes: pngBytes, mimeType: 'image/png');
+      });
+      when(
+        () => policy.shouldAutoDownload(AutoDownloadMediaType.image),
+      ).thenAnswer((_) async => true);
+
+      await show(
+        tester,
+        url: 'https://media/thumb',
+        mediaBytesResolver: resolver,
+        encryptKey: 'key',
+      );
+      await tester.pumpAndSettle();
+      await tester.tap(find.byIcon(Icons.broken_image));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(Image), findsOneWidget);
+      expect(calls, 2);
+    });
+
+    testWidgets('changing source discards old decrypted future', (
+      tester,
+    ) async {
+      final oldResult = Completer<ChatMediaData>();
+      when(
+        () => resolver.resolve(
+          mediaUrl: 'old',
+          encryptKey: any(named: 'encryptKey'),
+          encryptIv: any(named: 'encryptIv'),
+          encryptSha256: any(named: 'encryptSha256'),
+        ),
+      ).thenAnswer((_) => oldResult.future);
+      when(
+        () => resolver.resolve(
+          mediaUrl: 'new',
+          encryptKey: any(named: 'encryptKey'),
+          encryptIv: any(named: 'encryptIv'),
+          encryptSha256: any(named: 'encryptSha256'),
+        ),
+      ).thenAnswer(
+        (_) async => ChatMediaData(bytes: pngBytes, mimeType: 'image/png'),
+      );
+      when(
+        () => policy.shouldAutoDownload(AutoDownloadMediaType.image),
+      ).thenAnswer((_) async => true);
+
+      await show(
+        tester,
+        url: 'old',
+        mediaBytesResolver: resolver,
+        encryptKey: 'key',
+      );
+      await show(
+        tester,
+        url: 'new',
+        mediaBytesResolver: resolver,
+        encryptKey: 'key',
+      );
+      await tester.pumpAndSettle();
+      oldResult.complete(ChatMediaData(bytes: pngBytes, mimeType: 'image/png'));
+      await tester.pump();
+
+      verify(
+        () => resolver.resolve(
+          mediaUrl: 'new',
+          encryptKey: 'key',
+          encryptIv: 'iv',
+          encryptSha256: 'hash',
+        ),
+      ).called(1);
+      expect(tester.takeException(), isNull);
+    });
+  });
   testWidgets(
     'unresolved policy shows a placeholder without starting a download',
     (tester) async {

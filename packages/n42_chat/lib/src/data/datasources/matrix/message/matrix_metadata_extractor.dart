@@ -24,6 +24,11 @@ class MatrixMetadataExtractor {
     final mxcUrl =
         event.content['url'] as String? ?? fileContent?['url'] as String?;
     final thumbnailMxc = info?['thumbnail_url'] as String?;
+    final thumbnailFile = info?['thumbnail_file'] as Map<String, dynamic>?;
+    final thumbnailFileKey = thumbnailFile?['key'] as Map<String, dynamic>?;
+    final thumbnailFileHashes =
+        thumbnailFile?['hashes'] as Map<String, dynamic>?;
+    final thumbnailFileMxc = thumbnailFile?['url'] as String?;
     final keyMap = fileContent?['key'] as Map<String, dynamic>?;
     final hashMap = fileContent?['hashes'] as Map<String, dynamic>?;
     final encryptKey = keyMap?['k'] as String?;
@@ -81,9 +86,9 @@ class MatrixMetadataExtractor {
     if (event.messageType == matrix.MessageTypes.Video) {
       final httpUrl = _convertMxcToHttp(mxcUrl);
       final thumbnailHttpUrl = _convertMxcToHttp(
-        thumbnailMxc,
-        width: 400,
-        height: 400,
+        thumbnailFileMxc ?? thumbnailMxc,
+        width: thumbnailFileMxc == null ? 400 : null,
+        height: thumbnailFileMxc == null ? 400 : null,
       );
       debugLog(
         'Video metadata: mxcUrl=$mxcUrl, httpUrl=$httpUrl, thumbnailMxc=$thumbnailMxc, thumbnailHttpUrl=$thumbnailHttpUrl',
@@ -97,6 +102,9 @@ class MatrixMetadataExtractor {
         size: info?['size'] as int?,
         mimeType: info?['mimetype'] as String?,
         thumbnailUrl: thumbnailHttpUrl,
+        thumbnailEncryptKey: thumbnailFileKey?['k'] as String?,
+        thumbnailEncryptIv: thumbnailFile?['iv'] as String?,
+        thumbnailEncryptSha256: thumbnailFileHashes?['sha256'] as String?,
       );
     }
 

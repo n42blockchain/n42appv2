@@ -34,4 +34,45 @@ void main() {
     expect(metadata.encryptIv, 'base64-iv');
     expect(metadata.encryptSha256, 'base64-hash');
   });
+
+  test('extracts encrypted video thumbnail using the download URL', () {
+    final event = _MockEvent();
+    when(() => event.type).thenReturn(matrix.EventTypes.Message);
+    when(() => event.messageType).thenReturn(matrix.MessageTypes.Video);
+    when(() => event.content).thenReturn({
+      'msgtype': 'm.video',
+      'body': 'secret.mp4',
+      'url': 'mxc://server/video',
+      'info': {
+        'mimetype': 'video/mp4',
+        'thumbnail_file': {
+          'url': 'mxc://server/encrypted-thumbnail',
+          'key': {'k': 'thumbnail-key'},
+          'iv': 'thumbnail-iv',
+          'hashes': {'sha256': 'thumbnail-hash'},
+        },
+      },
+    });
+    final conversions = <({String? mxc, int? width, int? height})>[];
+    final extractor = MatrixMetadataExtractor(() => null, (
+      mxc, {
+      width,
+      height,
+    }) {
+      conversions.add((mxc: mxc, width: width, height: height));
+      return mxc == null ? null : 'https://media/$mxc';
+    });
+
+    final metadata = extractor.extractMetadataWithHttpUrl(event)!;
+
+    expect(metadata.thumbnailUrl, contains('encrypted-thumbnail'));
+    expect(metadata.thumbnailEncryptKey, 'thumbnail-key');
+    expect(metadata.thumbnailEncryptIv, 'thumbnail-iv');
+    expect(metadata.thumbnailEncryptSha256, 'thumbnail-hash');
+    expect(conversions.last, (
+      mxc: 'mxc://server/encrypted-thumbnail',
+      width: null,
+      height: null,
+    ));
+  });
 }
