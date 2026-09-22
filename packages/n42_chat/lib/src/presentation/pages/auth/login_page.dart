@@ -29,7 +29,13 @@ import '../../helpers/bloc_message_helper.dart';
 class LoginPage extends StatefulWidget {
   final String? initialUsername;
   final String? initialHomeserver;
-  const LoginPage({super.key, this.initialUsername, this.initialHomeserver});
+  final bool allowBiometricLogin;
+  const LoginPage({
+    super.key,
+    this.initialUsername,
+    this.initialHomeserver,
+    this.allowBiometricLogin = true,
+  });
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -65,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _checkBiometricAvailability() async {
+    if (!widget.allowBiometricLogin) return;
     final isAvailable = await _biometricService.isAvailable();
     final isEnabled = await _secureStorage.isBiometricEnabled();
     final hasCredentials = await _secureStorage.hasCredentials();

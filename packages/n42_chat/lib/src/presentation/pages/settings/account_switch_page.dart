@@ -82,6 +82,7 @@ class _AccountSwitchPageState extends State<AccountSwitchPage> {
           child: LoginPage(
             initialUsername: account?.userId,
             initialHomeserver: account?.homeserver,
+            allowBiometricLogin: false,
           ),
         ),
       ),

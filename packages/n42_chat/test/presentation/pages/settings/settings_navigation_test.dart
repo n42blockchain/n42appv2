@@ -31,6 +31,7 @@ import 'package:n42_chat/src/presentation/pages/settings/settings_page.dart';
 import 'package:n42_chat/src/presentation/pages/settings/translation_settings_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:n42_chat/src/presentation/pages/profile/profile_edit_page.dart';
+import 'package:n42_chat/src/presentation/pages/auth/login_page.dart';
 
 class MockAuthBloc extends MockBloc<AuthEvent, AuthState> implements AuthBloc {}
 
@@ -451,6 +452,35 @@ void main() {
     expect(find.text('@second:hs'), findsOneWidget);
     expect(find.text('Second account'), findsOneWidget);
     await states.close();
+  });
+
+  testWidgets('add account login does not offer current-account biometrics', (
+    tester,
+  ) async {
+    final repository = MockAuthRepository();
+    when(() => repository.getStoredAccounts()).thenAnswer((_) async => []);
+    getIt.registerSingleton<IAuthRepository>(repository);
+    final auth = MockAuthBloc();
+    when(() => auth.state).thenReturn(
+      const AuthState(
+        status: AuthStatus.authenticated,
+        user: UserEntity(userId: '@me:hs', displayName: 'Me'),
+      ),
+    );
+    await tester.pumpWidget(
+      app(
+        BlocProvider<AuthBloc>.value(
+          value: auth,
+          child: const AccountSwitchPage(),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Add account'));
+    await tester.pumpAndSettle();
+
+    final login = tester.widget<LoginPage>(find.byType(LoginPage));
+    expect(login.allowBiometricLogin, isFalse);
   });
 
   testWidgets('standalone privacy hub opens without a Profile callback', (
