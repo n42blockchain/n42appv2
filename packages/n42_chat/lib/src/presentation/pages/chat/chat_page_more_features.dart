@@ -740,6 +740,7 @@ extension _ChatPageMoreFeaturesMethods on _ChatPageState {
       backgroundColor: Colors.transparent,
       builder: (_) => ContactCardSelectSheet(
         isDark: isDark,
+        conversation: widget.conversation,
         selectContactText: selectContactText,
         searchContactHintText: searchContactHintText,
         noContactsFoundText: noContactsFoundText,

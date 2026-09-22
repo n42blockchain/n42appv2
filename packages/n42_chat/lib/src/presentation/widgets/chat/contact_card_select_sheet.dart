@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/di/injection.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../domain/entities/contact_entity.dart';
+import '../../../domain/entities/conversation_entity.dart';
 import '../../../domain/repositories/contact_repository.dart';
 import '../../../core/utils/debug_log.dart';
 
@@ -12,6 +13,7 @@ class ContactCardSelectSheet extends StatefulWidget {
   final String searchContactHintText;
   final String noContactsFoundText;
   final String? excludeUserId;
+  final ConversationEntity? conversation;
 
   const ContactCardSelectSheet({
     super.key,
@@ -20,7 +22,18 @@ class ContactCardSelectSheet extends StatefulWidget {
     required this.searchContactHintText,
     required this.noContactsFoundText,
     this.excludeUserId,
+    this.conversation,
   });
+
+  String? get excludedUserId => excludeUserId ?? conversation?.directUserId;
+
+  @visibleForTesting
+  static List<ContactEntity> filterContacts(
+    List<ContactEntity> contacts,
+    String? excludedUserId,
+  ) => excludedUserId == null
+      ? contacts
+      : contacts.where((contact) => contact.userId != excludedUserId).toList();
 
   @override
   State<ContactCardSelectSheet> createState() => _ContactCardSelectSheetState();
@@ -41,9 +54,10 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
     try {
       final contactRepository = getIt<IContactRepository>();
       final contacts = await contactRepository.getContacts();
-      final filteredContacts = widget.excludeUserId == null
-          ? contacts
-          : contacts.where((c) => c.userId != widget.excludeUserId).toList();
+      final filteredContacts = ContactCardSelectSheet.filterContacts(
+        contacts,
+        widget.excludedUserId,
+      );
       if (mounted) {
         setState(() {
           _contacts = filteredContacts;
@@ -88,9 +102,7 @@ class _ContactCardSelectSheetState extends State<ContactCardSelectSheet> {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               border: Border(
-                bottom: BorderSide(
-                  color: AppColors.dividerOf(widget.isDark),
-                ),
+                bottom: BorderSide(color: AppColors.dividerOf(widget.isDark)),
               ),
             ),
             child: Row(
