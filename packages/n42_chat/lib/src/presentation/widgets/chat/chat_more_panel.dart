@@ -126,6 +126,9 @@ class ChatMorePanel extends StatefulWidget {
   /// 定时发送回调
   final VoidCallback? onScheduledPressed;
 
+  /// 快捷回复回调
+  final VoidCallback? onQuickReplyPressed;
+
   /// 当前阅后即焚定时器（秒，null 表示关闭）
   final int? selfDestructAfter;
 
@@ -185,6 +188,7 @@ class ChatMorePanel extends StatefulWidget {
     this.onAiAssistantPressed,
     this.onSelfDestructTimerPressed,
     this.onScheduledPressed,
+    this.onQuickReplyPressed,
     this.selfDestructAfter,
     this.onMiniAppsPressed,
     this.onCodePressed,
@@ -433,6 +437,12 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
         icon: Icons.camera_alt_outlined,
         label: S.of(context)?.commonTakePhoto ?? 'Camera',
         onTap: widget.onCameraPressed,
+      ),
+      _MoreItem(
+        icon: Icons.flash_on_outlined,
+        label: 'Quick Reply',
+        onTap: widget.onQuickReplyPressed,
+        iconColor: AppColors.warning,
       ),
       _MoreItem(
         icon: Icons.location_on_outlined,

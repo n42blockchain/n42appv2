@@ -21,7 +21,7 @@ Future<void> validateFreshTokenDevice(
   final keys = await api
       .queryKeys({
         userId: [deviceId],
-      })
+      }, timeout: 10000)
       .timeout(const Duration(seconds: 20));
   if (keys.failures?.isNotEmpty == true ||
       keys.deviceKeys == null ||

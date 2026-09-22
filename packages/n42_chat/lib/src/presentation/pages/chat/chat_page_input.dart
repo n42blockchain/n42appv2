@@ -59,11 +59,9 @@ extension _ChatPageInputMethods on _ChatPageState {
       onEmojiPressed: _onEmojiPressed,
       onMorePressed: _onMorePressed,
       isMorePanelOpen: _showMorePanel,
-      onCameraPressed: () {
-        _hideMorePanel();
-        _takePhoto();
-      },
-      onQuickReplyPressed: _onQuickReplyPressed,
+      // 快捷回复、拍照快捷入口均移入"+"更多面板，输入框右侧只保留表情与附件/发送，
+      // 避免多个常驻图标挤占输入框空间（相机在更多面板里仍可用，见 _buildMorePanel）
+      showQuickReplyButton: false,
       onCommandPoll: _createPoll,
       onScheduledSend: _scheduleComposerText,
     );
@@ -489,6 +487,10 @@ extension _ChatPageInputMethods on _ChatPageState {
       onScheduledPressed: () {
         _hideMorePanel();
         _openScheduledComposerPicker();
+      },
+      onQuickReplyPressed: () {
+        _hideMorePanel();
+        _onQuickReplyPressed();
       },
       onAiAssistantPressed: () {
         _hideMorePanel();

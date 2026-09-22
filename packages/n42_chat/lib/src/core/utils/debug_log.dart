@@ -36,3 +36,4 @@ final void Function(String) prefsLog = taggedLog('Preferences');
 final void Function(String) secureLog = taggedLog('SecureStorage');
 final void Function(String) mcmLog = taggedLog('MatrixClientManager');
 final void Function(String) msgLog = taggedLog('MatrixMessageDataSource');
+final void Function(String) encGuardLog = taggedLog('EncryptedSendGuard');

@@ -236,7 +236,9 @@ class LiveKitService extends ChangeNotifier {
     bool enableE2EE = false,
     String? e2eeSharedKey,
   }) async {
-    if (_state != MeetingState.idle) {
+    if (_state == MeetingState.connecting ||
+        _state == MeetingState.connected ||
+        _state == MeetingState.reconnecting) {
       debugLog('LiveKitService: Already in a meeting');
       return false;
     }
