@@ -413,7 +413,7 @@ private final class N42VideoBeautyProcessor: NSObject, ExternalVideoProcessingDe
 
 
 /// Presents the system event editor; the user chooses whether to save.
-private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate {
+private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate, UIAdaptivePresentationControllerDelegate {
   private let store = EKEventStore()
   private var pending: FlutterResult?
   init(messenger: FlutterBinaryMessenger) {
@@ -449,6 +449,9 @@ private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate {
             editor.eventStore = self.store
             editor.event = event
             editor.editViewDelegate = self
+            // Swiping the editor closed does not necessarily call its edit delegate.
+            // Complete the Flutter request so the next event can open normally.
+            editor.presentationController?.delegate = self
             presenter.present(editor, animated: true)
           }
         }
@@ -460,6 +463,9 @@ private final class N42CalendarHandler: NSObject, EKEventEditViewDelegate {
           }
         }
       }
+  }
+  func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+    finish(false)
   }
   private func finish(_ saved: Bool) { let result = pending; pending = nil; result?(saved) }
   func eventEditViewController(_ controller: EKEventEditViewController, didCompleteWith action: EKEventEditViewAction) {
