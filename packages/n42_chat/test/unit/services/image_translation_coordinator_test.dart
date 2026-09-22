@@ -86,6 +86,32 @@ void main() {
     },
   );
 
+  for (final response in ['```json\n["hello"]\n```', '```\n["hello"]\n```']) {
+    test('accepts fenced translation JSON: $response', () async {
+      final ai = _MockAi();
+      when(
+        () => ai.completion(
+          any(),
+          systemPrompt: any(named: 'systemPrompt'),
+          maxTokens: any(named: 'maxTokens'),
+          temperature: any(named: 'temperature'),
+        ),
+      ).thenAnswer((_) async => AiCompletionResult(text: response));
+      final coordinator = ImageTranslationCoordinator(
+        onDevice: _FakeOnDeviceTranslation(error: true),
+        remote: _FakeRemoteTranslation(),
+        batchAi: ai,
+      );
+      final result = await coordinator.translate(
+        document: document,
+        targetLanguage: 'en',
+        allowRemoteFallback: true,
+      );
+      expect(result.fullText, 'hello');
+      expect(result.isOnDevice, isFalse);
+    });
+  }
+
   test(
     'rejects incomplete batch rather than assigning text to wrong blocks',
     () async {
