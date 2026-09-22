@@ -48,7 +48,7 @@ class AuthRepositoryImpl implements IAuthRepository {
   // dispose 后禁止再向已关闭的 StreamController 发送事件
   bool _isDisposed = false;
   // 认证窗口内收到的 SDK 登出状态，待流程结束后再统一处理
-  LoginState? _pendingLogoutState;
+  (LoginState, Client?)? _pendingLogoutState;
   // pokeText 同步并发计数
   int _activePokeSyncs = 0;
   static const int _maxConcurrentPokeSyncs = 3;
@@ -1420,7 +1420,11 @@ class AuthRepositoryImpl implements IAuthRepository {
     if (pending == null) {
       return;
     }
-    await _handleSdkLogout(pending);
+    if (!identical(pending.$2, _authDataSource.clientManager.client)) {
+      authLog('Ignoring logout from a replaced Matrix client');
+      return;
+    }
+    await _handleSdkLogout(pending.$1);
   }
 
   /// 后台启动同步——不阻塞认证返回，本地缓存数据立即可用。
@@ -1440,14 +1444,19 @@ class AuthRepositoryImpl implements IAuthRepository {
   /// 从而让 AuthBloc 正确导航到登录页面。
   void _startMonitoringLoginState() {
     _matrixLoginStateSubscription?.cancel();
+    final observedClient = _authDataSource.clientManager.client;
     final stream = _authDataSource.clientManager.onLoginStateChanged;
     if (stream == null) return;
     _matrixLoginStateSubscription = stream.listen((loginState) async {
+      if (!identical(observedClient, _authDataSource.clientManager.client)) {
+        authLog('Ignoring login state from a replaced Matrix client');
+        return;
+      }
       // 认证流程（login/restore）期间忽略状态变化，避免二次 init 触发误报
       if (_isAuthenticating) {
         if (loginState == LoginState.loggedOut ||
             loginState == LoginState.softLoggedOut) {
-          _pendingLogoutState = loginState;
+          _pendingLogoutState = (loginState, observedClient);
         }
         return;
       }

@@ -436,6 +436,40 @@ void main() {
     });
   }
   test(
+    'logout from replaced client cannot clear the switched account session',
+    () async {
+      final oldClient = MockClient();
+      final newClient = MockClient();
+      when(() => manager.client).thenReturn(oldClient);
+      expect((await tokenLogin()).success, isTrue);
+
+      final replacement = Completer<void>();
+      when(
+        () => auth.loginWithToken(
+          homeserver: any(named: 'homeserver'),
+          accessToken: any(named: 'accessToken'),
+          userId: any(named: 'userId'),
+          deviceId: any(named: 'deviceId'),
+        ),
+      ).thenAnswer((_) => replacement.future);
+      final switching = tokenLogin();
+      sdk.add(LoginState.loggedOut);
+      await Future<void>.delayed(Duration.zero);
+      when(() => manager.client).thenReturn(newClient);
+      replacement.complete();
+      expect((await switching).success, isTrue);
+      await Future<void>.delayed(Duration.zero);
+      verifyNever(storage.clearSession);
+
+      final loggedOut = repository.loginStateStream.firstWhere(
+        (value) => !value,
+      );
+      sdk.add(LoginState.loggedOut);
+      expect(await loggedOut, isFalse);
+      verify(storage.clearSession).called(1);
+    },
+  );
+  test(
     'background sync rejection does not turn a saved login into failure',
     () async {
       when(
