@@ -1,4 +1,3 @@
-import 'package:flutter/services.dart';
 import 'direct_chat_send_guard.dart';
 import 'dart:typed_data';
 import 'package:matrix/matrix.dart' as matrix;
@@ -334,15 +333,9 @@ class MatrixMessageSender {
         effectiveMimeType = path.endsWith('.svg')
             ? 'image/svg+xml'
             : 'application/lottie+json';
-        final data = await rootBundle.load(path);
-        final client = room.client;
-        final uploaded = await client.uploadContent(
-          data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes),
-          filename: path.split('/').last,
-          contentType: effectiveMimeType,
-        );
-        if (!identical(_client, client)) throw StateError('Account changed');
-        mediaUrl = uploaded.toString();
+        // N42 clients resolve this stable bundled asset locally. Keeping the
+        // asset URL also lets older N42 builds render the same packaged file.
+        mediaUrl = url;
       }
 
       // 构建贴纸消息内容 (使用 m.sticker 事件类型)

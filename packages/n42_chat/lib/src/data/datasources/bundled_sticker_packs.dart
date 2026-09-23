@@ -144,6 +144,19 @@ class BundledStickerPacks {
   /// 是否为内置 asset 贴纸
   static bool isAssetSticker(String url) => url.startsWith(assetScheme);
 
+  /// Resolves a stable N42 sticker identifier to a bundled asset URL.
+  static String? resolveAssetUrl(String packId, String stickerId) {
+    for (final pack in all) {
+      if (pack.id != packId) continue;
+      for (final sticker in pack.stickers) {
+        if (sticker.id == stickerId && isAssetSticker(sticker.url)) {
+          return sticker.url;
+        }
+      }
+    }
+    return null;
+  }
+
   /// 是否为 Lottie 动画贴纸
   static bool isLottie(String url) => url.toLowerCase().endsWith('.json');
 

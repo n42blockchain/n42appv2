@@ -18,55 +18,63 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   setUpAll(() => registerFallbackValue(Uint8List(0)));
   for (final kind in ['openmoji', 'lottie']) {
-    test('uploads $kind artwork and sends the correct media type', () async {
-      final manager = _Manager();
-      final client = _Client();
-      final room = _Room();
-      when(() => manager.client).thenReturn(client);
-      when(() => client.isLogged()).thenReturn(true);
-      when(() => client.getRoomById('!room:test')).thenReturn(room);
-      when(() => room.client).thenReturn(client);
-      when(() => room.encrypted).thenReturn(false);
-      when(
-        () => client.uploadContent(
-          any(),
-          filename: any(named: 'filename'),
-          contentType: any(named: 'contentType'),
-        ),
-      ).thenAnswer((_) async => Uri.parse('mxc://test/sticker'));
-      when(
-        () => room.sendEvent(any(), type: any(named: 'type')),
-      ).thenAnswer((_) async => 'event');
-      final ext = kind == 'openmoji' ? 'svg' : 'json';
-      final result = await MatrixMessageSender(manager, _Uploader())
-          .sendStickerMessage(
-            '!room:test',
-            stickerId: '1F60D',
-            packId: kind,
-            url: 'asset:assets/stickers/$kind/1F60D.$ext',
-            name: 'Heart eyes',
-          );
-      expect(result, 'event');
-      final content =
-          verify(
-                () => room.sendEvent(
-                  captureAny(),
-                  type: matrix.EventTypes.Sticker,
-                ),
-              ).captured.single
-              as Map;
-      expect(content['url'], 'mxc://test/sticker');
-      expect(
-        (content['info'] as Map)['mimetype'],
-        kind == 'openmoji' ? 'image/svg+xml' : 'application/lottie+json',
-      );
-      verify(
-        () => client.uploadContent(
-          any(),
-          filename: '1F60D.$ext',
-          contentType: any(named: 'contentType'),
-        ),
-      ).called(1);
-    });
+    test(
+      'sends $kind artwork as a bundled asset without media upload',
+      () async {
+        final manager = _Manager();
+        final client = _Client();
+        final room = _Room();
+        when(() => manager.client).thenReturn(client);
+        when(() => client.isLogged()).thenReturn(true);
+        when(() => client.getRoomById('!room:test')).thenReturn(room);
+        when(() => room.client).thenReturn(client);
+        when(() => room.encrypted).thenReturn(false);
+        when(
+          () => client.uploadContent(
+            any(),
+            filename: any(named: 'filename'),
+            contentType: any(named: 'contentType'),
+          ),
+        ).thenAnswer((_) async => Uri.parse('mxc://test/sticker'));
+        when(
+          () => room.sendEvent(any(), type: any(named: 'type')),
+        ).thenAnswer((_) async => 'event');
+        final ext = kind == 'openmoji' ? 'svg' : 'json';
+        final result = await MatrixMessageSender(manager, _Uploader())
+            .sendStickerMessage(
+              '!room:test',
+              stickerId: '1F60D',
+              packId: kind,
+              url: 'asset:assets/stickers/$kind/1F60D.$ext',
+              name: 'Heart eyes',
+            );
+        expect(result, 'event');
+        final content =
+            verify(
+                  () => room.sendEvent(
+                    captureAny(),
+                    type: matrix.EventTypes.Sticker,
+                  ),
+                ).captured.single
+                as Map;
+        expect(content['url'], 'asset:assets/stickers/$kind/1F60D.$ext');
+        expect(content['org.n42.sticker'], {
+          'pack_id': kind,
+          'sticker_id': '1F60D',
+          'emoji': null,
+        });
+        expect(
+          (content['info'] as Map)['mimetype'],
+          kind == 'openmoji' ? 'image/svg+xml' : 'application/lottie+json',
+        );
+        verifyNever(
+          () => client.uploadContent(
+            any(),
+            filename: '1F60D.$ext',
+            contentType: any(named: 'contentType'),
+          ),
+        );
+      },
+    );
   }
 }

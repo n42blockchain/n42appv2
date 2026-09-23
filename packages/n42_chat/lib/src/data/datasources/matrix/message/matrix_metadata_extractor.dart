@@ -3,6 +3,7 @@ import 'package:matrix/matrix.dart' as matrix;
 import '../../../../domain/entities/message_entity.dart';
 import '../../../../core/utils/event_message_data.dart';
 import '../../../../core/utils/debug_log.dart';
+import '../../bundled_sticker_packs.dart';
 
 /// Matrix 消息元数据提取器
 ///
@@ -37,9 +38,16 @@ class MatrixMetadataExtractor {
 
     // 贴纸信息（m.sticker 是独立 event type，无 msgtype；字段结构同图片）
     if (event.type == matrix.EventTypes.Sticker) {
+      final n42Sticker = event.content['org.n42.sticker'];
+      final packId = n42Sticker is Map ? n42Sticker['pack_id'] : null;
+      final stickerId = n42Sticker is Map ? n42Sticker['sticker_id'] : null;
+      final bundledUrl = packId is String && stickerId is String
+          ? BundledStickerPacks.resolveAssetUrl(packId, stickerId)
+          : null;
+      final resolvedUrl = bundledUrl ?? mxcUrl;
       return MessageMetadata(
-        mediaUrl: mxcUrl,
-        httpUrl: _convertMxcToHttp(mxcUrl),
+        mediaUrl: resolvedUrl,
+        httpUrl: bundledUrl ?? _convertMxcToHttp(mxcUrl),
         width: info?['w'] as int?,
         height: info?['h'] as int?,
         size: info?['size'] as int?,
