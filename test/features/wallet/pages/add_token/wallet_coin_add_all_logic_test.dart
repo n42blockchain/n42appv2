@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
+import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/pages/add_token/wallet_coin_add_all.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
-import 'package:n42_wallet/features/wallet/provider/wallet_action_provider.dart';
+import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 
 import '../../../../helpers/widget_test_helpers.dart';
@@ -41,6 +43,39 @@ class _WalletProvider extends WalletActionProvider {
     );
     walletIndex = 0;
   }
+}
+
+class _TokenViewFixtureApi extends TokenViewApi {
+  @override
+  Future<MessageModel> getChainListAll({
+    String chains = '',
+    String coins = '',
+  }) async => MessageModel()
+    ..data = [
+      {
+        'coin_name': 'ETH',
+        'fullname': 'Ethereum',
+        'unit': 'ETH',
+        'contract': '',
+        'class_name': 'Ethereum',
+        'chain_name': 'Ethereum',
+        'derivation': '[{"path":"m/44\'/60\'/0\'/0/0"}]',
+        'decimals': 18,
+        'main_net_url': 'https://rpc.example',
+        'test_net_url': '',
+        'rules': 'EVM',
+        'coins': [
+          {
+            'coin_name': 'USDT',
+            'fullname': 'Tether USD',
+            'unit': 'USDT',
+            'contract': '0x0000000000000000000000000000000000000001',
+            'decimals': 6,
+            'rules': 'ERC-20',
+          },
+        ],
+      },
+    ];
 }
 
 Future<void> _mountWithoutExternalNetwork(
@@ -154,4 +189,43 @@ void main() {
       await tester.pump(const Duration(seconds: 8));
     },
   );
+
+  testWidgets('adding a discovered token updates the selected wallet', (
+    tester,
+  ) async {
+    final wallet = _WalletProvider();
+    wallet.coinModels.add(
+      CoinModel.fromMap({
+        'coinType': 'ETH',
+        'blockchainType': 'Ethereum',
+        'miniName': 'ETH',
+        'icon': '',
+        'decimals': 18,
+      })..address = '0x1234567890abcdef',
+    );
+
+    await HttpOverrides.runZoned(
+      () => tester.pumpWidget(
+        wrapForTest(
+          WalletCoinAddAll('USDT', tokenViewApi: _TokenViewFixtureApi()),
+          overrides: [wapBridgeProvider.overrideWith((ref) => wallet)],
+        ),
+      ),
+      createHttpClient: (_) => throw StateError('Network is disabled in tests'),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Tether USD'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.add));
+    await tester.pumpAndSettle();
+
+    final added = wallet
+        .walletMap['ETH']['mainnets']['0X0000000000000000000000000000000000000001'];
+    expect(added['miniName'], 'USDT');
+    expect(added['name'], 'Tether USD');
+    expect(added['decimals'], 6);
+    expect(added['customer'], isFalse);
+    expect(find.byIcon(Icons.remove), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }

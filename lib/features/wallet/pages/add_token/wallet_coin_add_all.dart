@@ -32,7 +32,14 @@ part 'wallet_coin_add_all_network_dialog.dart';
 class WalletCoinAddAll extends ConsumerStatefulWidget {
   final String? coinType;
   final String seachStr;
-  const WalletCoinAddAll(this.seachStr, {this.coinType, super.key});
+  final TokenViewApi? tokenViewApi;
+
+  const WalletCoinAddAll(
+    this.seachStr, {
+    this.coinType,
+    this.tokenViewApi,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletCoinAddAll> createState() => _WalletCoinAddAllState();
