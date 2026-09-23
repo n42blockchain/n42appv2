@@ -9,8 +9,8 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,799 passed、0 failed、0 skipped），覆盖率为 **69,903 / 132,316 = 52.8303%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
-- Chat 插件独立分支全包复测为 **6,740 passed / 3 skipped / 0 failed**，覆盖率 **35,274 / 135,251 = 26.0804%**；建议的 70% 尚未设置为阻断门槛。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。兼容版 Chat 依赖更新后的最新完整套件通过（5,800 passed、0 failed、0 skipped），覆盖率为 **69,920 / 132,316 = 52.8432%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- Chat 插件兼容基线全包复测为 **6,742 passed / 3 skipped / 0 failed**，覆盖率 **35,400 / 135,262 = 26.1714%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
 - `swap` 当前服务端仍未见 token 级用户认证；上线前必须先追踪调用方并确定兼容的 UUID/token 验证合同。不能仅凭客户端 UUID、CORS 或公网 TLS 作为身份验证。
@@ -19,8 +19,8 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | 钱包 Chat bridge 的支付请求与 NFT 安全边界回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,799 通过、0 失败、0 跳过 | 69,903 / 132,316 = **52.8303%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
-| Chat 插件 | 独立分支全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,740 通过、0 失败、3 跳过 | 35,274 / 135,251 = **26.0804%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
+| Flutter 主应用 | 兼容版 Chat pin 更新及钱包 bridge 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,800 通过、0 失败、0 跳过 | 69,920 / 132,316 = **52.8432%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Chat 插件 | 基于 `7586c391` 的兼容提交 `c9a607c1` 全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,742 通过、0 失败、3 跳过；全包 analyze 报告 278 条既有 info、无 warning/error | 35,400 / 135,262 = **26.1714%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
 | Go `loyalty` | `go test ./...`、`go vet ./...`；覆盖奖励输入 fail-closed、授权/身份边界、`/tasks` 故障和必需配置/内部 token 长度校验 | **30.8%** 语句覆盖率；远端授权验证器 100%，`tasks` handler 89.5% | 报告/制品已接入，未设 70% 阈值 |
@@ -55,13 +55,14 @@
 - 新增 SOL SPL 发送缺少父 SOL 钱包时的 fail-closed widget 回归；定向文件 2 项通过、`dart analyze` 无 issue。`wallet_chain_send_sol_logic.dart` 定向行覆盖从原 7/223 增至 15/223；全量套件 5,787 通过、0 失败、0 跳过，69,647/132,316 = 52.6369%，70% 门禁如实失败。
 - 新增 wallet transaction sync mixin 的内存 SQLite 行为测试，覆盖本地历史分页、ETH 插入/更新、TRX 合约过滤、SOL 时间戳刷新和 BTC 确认数/净转出金额；5 项通过、单文件 analyze 无 issue，mixin 定向覆盖 158/243 行。完整套件 5,792 通过、0 失败、0 跳过，69,842/132,316 = 52.7842%；70% 门禁依旧失败，未调整阈值。
 - 扩充 `N42WalletBridge` 行为测试：支付 URI 编码与到期时间、空接收地址、EVM/N 链地址边界、NFT 参数拒绝、Aptos 与 EVM chain ID 碰撞保护，以及 token metadata 查询对无效地址/错误链 fail-closed。定向两个测试文件 31 项通过、analyze 无 issue；桥接文件定向覆盖由 80/310 升至 141/310。完整套件 5,799 通过、0 失败、0 跳过，69,903/132,316 = 52.8303%；70% 门禁依旧失败。
+- 为 Chat bridge 增加有效 transfer 到选定链 sender 的分支回归，验证 unsupported chain 返回原有错误而不发起网络/签名调用；该定向文件 22 项通过，`analyze` 无 issue。钩子同步 bump build number 后重跑最终完整主套件：5,800 通过、0 失败、0 跳过，69,920/132,316 = 52.8432%；70% 门禁依旧失败。
 
 ### ALGO 最小余额回归修复
 
 ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalance`（`BigInt`）直接传给要求 `String` 的 `toEther`，页面构建抛出 `_BigIntImpl is not a subtype of String`。经用户批准，新增成功加载最小余额的 widget 回归测试，先确认红灯复现，再将该值显式转为十进制字符串。定向测试 3 项全部通过；随后全量根套件 5,768 项通过，覆盖率 68,377/132,313 = 51.6782%。
 - 新增 Chat 全包 CI：[`.github/workflows/chat-package.yml`](../../.github/workflows/chat-package.yml)。它直接在 `packages/n42_chat` 解析依赖、运行全包测试并上传独立 LCOV；目前只报告，不做 70% 阻断。
 - 内置动画贴纸修复已在 Chat 独立仓库分支 `fix/offline-bundled-stickers-20260923` 提交 `a36d32569ee83c8c61ff92a893616744d2a91cbb`，并由 app 通过 `pubspec.yaml` 与 `pubspec_overrides.yaml` 同步 pin。后续过期状态清理修复提交 `7586c391b50c2086b033ed9626ad4c6eeeecf8c1`；app 当前 pin 到该提交，lockfile 已解析确认。双方 N42 客户端用稳定 `org.n42.sticker` pack/sticker ID 本地解析捆绑资源；发送不再上传重复媒体，未知 ID 仍保留 mxc/media fallback。定向测试覆盖发送端、接收端、未知 ID 兼容，共 5 项通过；过期状态清理的独立回归也通过。动画素材从贴纸面板的 `Animated` 包访问；GIF 搜索列表仍依赖在线 Giphy/Tenor，不等同于离线 GIF 搜索。
-- 状态清理的根因是过期/空状态在没有状态故事房间时仍调用创建逻辑，创建失败后旧 presence 文本继续显示。现在清理状态不再新建房间，仍保留 presence 类型并清除状态文本；Chat 插件定向回归和主 app 定向镜像回归通过。独立包全套 6,740 项验证已通过，主 app 新 pin 全套 5,773 项验证通过，覆盖率仍为 51.9839%，70% 门槛仍未通过。
+- 状态清理的根因是过期/空状态在没有状态故事房间时仍调用创建逻辑，创建失败后旧 presence 文本继续显示。现在清理状态不再新建房间，仍保留 presence 类型并清除状态文本；Chat 插件定向回归和主 app 定向镜像回归通过。最新兼容插件全套 6,742 项通过、3 项跳过；主 app 新 pin 全套 5,800 项通过，覆盖率为 52.8432%，70% 门槛仍未通过。
 
 ### Go / Python 服务
 
@@ -114,9 +115,11 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 
 ### 群话题与群组通话（新增，2026-09-23）
 
-用户补充的问题并提供 `~/Downloads/1.mov`。录屏中新建频道/话题后列表只出现 `General`；点击顶部“编辑”后页面内容变成空白。当前本地 Chat 包页面由 `GroupTopicsPage` 加载 `GroupBloc` 的频道列表，编辑入口进入 `GroupChannelsPage`，应分别补创建成功后刷新/列表展示测试和编辑页正常渲染测试；尚未在录屏对应账号/服务端复现，因此根因待定位。
+用户补充的问题并提供 `~/Downloads/1.mov`。源码追踪和红绿测试确认两项根因：Matrix 接受频道 state 写入后，本地房间缓存可能尚未同步，`CreateChannel` 立即重读会把旧列表发给 UI；另外“编辑”推入的新路由没有携带 `GroupBloc`，在 `GroupChannelsPage` 的 `context.read<GroupBloc>()` 触发 `ProviderNotFoundException`。已修复为创建成功后以服务端返回的 room ID 补入暂未同步的频道，并通过 `BlocProvider.value` 将现有 bloc 传入编辑路由。Widget 测试还触发 ListTile 被彩色 `Container` 遮蔽墨水反馈的 Flutter 断言，现改为 `Material`。插件提交 `c9a607c1` 已推送，app `pubspec.yaml`、`pubspec_overrides.yaml` 和 lock 均指向该兼容提交；定向 BLoC 75 项与页面导航 widget 1 项通过。兼容分支完整测试 6,742 通过、3 跳过，app 完整测试 5,800 通过。
 
-另两项是产品行为确认，不可仅凭代码断定为缺陷：群视频通话需决定发起时全员可接听/忽略，还是先选受邀成员；群语音需区分一次性群语音通话与可持续加入的语音房。当前 Chat 包已有 `startGroupVoiceCall` / `startGroupVideoCall` 逻辑，聊天更多功能页可触发二者；也有独立 Voice Room 服务、列表页和会话页。需根据用户确认验证实际可见入口和邀请投递范围，再写 UI/状态/集成测试，不重复造通话服务。
+另两项是产品行为确认，不可仅凭代码断定为缺陷：群视频通话需决定发起时全员可接听/忽略，还是先选受邀成员；群语音需区分一次性群语音通话与可持续加入的语音房。代码显示群视频方法只为当前发起者获取 MatrixRTC/LiveKit token 并加入 LiveKit 房间，没有给其他群成员广播可接听邀请的路径；群语音方法存在，但群聊 AppBar 当前没有通话入口。已向用户征求上述两项选择，收到确认前不扩展邀请与房间生命周期语义。
+
+兼容性核对曾发现 `71823b6` 所在远端分支与现有 app Chat 快照有 415 个文件差异，并缺少 app 正在调用的直播回调/美颜 API，因此没有采用；最终依赖基于当前锁定的 `7586c391`，只携带群话题回归修复。
 
 ### 内置动画表情（离线兜底）
 
