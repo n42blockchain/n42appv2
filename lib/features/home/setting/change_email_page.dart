@@ -23,14 +23,17 @@ import 'package:n42_wallet/shared/domain/entities/wallet_info.dart';
 enum _ChangeEmailStep { email, code, update }
 
 class ChangeEmailPage extends ConsumerStatefulWidget {
-  const ChangeEmailPage({super.key});
+  const ChangeEmailPage({super.key, this.api});
+
+  @visibleForTesting
+  final ChangeEmailApi? api;
 
   @override
   ConsumerState<ChangeEmailPage> createState() => _ChangeEmailPageState();
 }
 
 class _ChangeEmailPageState extends ConsumerState<ChangeEmailPage> {
-  final _api = ChangeEmailApi();
+  late final _api = widget.api ?? ChangeEmailApi();
   final _emailController = TextEditingController();
   final _codeController = TextEditingController();
   final _codeFocus = FocusNode();
