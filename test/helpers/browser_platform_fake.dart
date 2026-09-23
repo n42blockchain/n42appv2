@@ -1,6 +1,6 @@
 import 'dart:async';
-import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
 import 'package:webview_flutter_platform_interface/webview_flutter_platform_interface.dart';
 
 /// Executes the Dart browser controller against a deterministic native boundary.
@@ -21,6 +21,18 @@ class BrowserPlatformFake extends WebViewPlatform {
   PlatformNavigationDelegate createPlatformNavigationDelegate(
     PlatformNavigationDelegateCreationParams params,
   ) => BrowserNavigationFake(params);
+
+  @override
+  PlatformWebViewWidget createPlatformWebViewWidget(
+    PlatformWebViewWidgetCreationParams params,
+  ) => BrowserWebViewWidgetFake(params);
+}
+
+class BrowserWebViewWidgetFake extends PlatformWebViewWidget {
+  BrowserWebViewWidgetFake(super.params) : super.implementation();
+
+  @override
+  Widget build(BuildContext context) => const SizedBox.expand();
 }
 
 class BrowserControllerFake extends PlatformWebViewController {
