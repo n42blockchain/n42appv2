@@ -33,6 +33,7 @@ class _User extends CurrentUserNotifier {
 class _ExportRepository extends TransactionHistoryRepository {
   final started = Completer<void>();
   final resume = Completer<void>();
+  final finished = Completer<void>();
   bool fail = false;
   int exports = 0;
   TransactionHistoryScope? exportedScope;
@@ -60,12 +61,16 @@ class _ExportRepository extends TransactionHistoryRepository {
     exports++;
     exportedScope = scope;
     exportedFilter = filter;
-    await writeChunk(TransactionHistoryCsv.header);
-    started.complete();
-    await resume.future;
-    if (fail) throw StateError('export interrupted');
-    await writeChunk('"fixture-row"\r\n');
-    return 1;
+    try {
+      await writeChunk(TransactionHistoryCsv.header);
+      started.complete();
+      await resume.future;
+      if (fail) throw StateError('export interrupted');
+      await writeChunk('"fixture-row"\r\n');
+      return 1;
+    } finally {
+      finished.complete();
+    }
   }
 }
 
@@ -133,16 +138,37 @@ void main() {
     await tester.pump();
   }
 
-  Future<void> finishExport(WidgetTester tester) async {
+  Future<void> finishExport(
+    WidgetTester tester, {
+    bool pageRemainsMounted = true,
+  }) async {
     await tester.runAsync(() async {
       repository.resume.complete();
-      // File IO runs outside the widget test's fake clock. Wait until cleanup
-      // or the share call completes, then allow its final state update to run.
-      for (var i = 0; i < 100; i++) {
-        await Future<void>.delayed(const Duration(milliseconds: 10));
-        if (shared.isCompleted || directory.listSync().isEmpty) break;
-      }
+      await repository.finished.future.timeout(const Duration(seconds: 5));
     });
+
+    // A busy export renders an indeterminate progress indicator which keeps
+    // scheduling frames, so pumpAndSettle cannot be the completion signal.
+    // Alternate real I/O time and widget frames until the observable action
+    // returns or the page has been left.
+    if (pageRemainsMounted) {
+      for (var i = 0; i < 500; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+        await tester.pump();
+        if (find.byIcon(Icons.download_outlined).evaluate().isNotEmpty) break;
+      }
+      expect(find.byIcon(Icons.download_outlined), findsOneWidget);
+      await tester.pumpAndSettle();
+    } else {
+      for (var i = 0; i < 500 && directory.listSync().isNotEmpty; i++) {
+        await tester.runAsync(
+          () => Future<void>.delayed(const Duration(milliseconds: 10)),
+        );
+      }
+      await tester.pump();
+    }
     await tester.pumpAndSettle();
   }
 
@@ -212,7 +238,7 @@ void main() {
     await mount(tester);
     await startExport(tester);
     await tester.pumpWidget(const SizedBox.shrink());
-    await finishExport(tester);
+    await finishExport(tester, pageRemainsMounted: false);
     expect(directory.listSync(), isEmpty);
     expect(shared.isCompleted, isFalse);
     expect(tester.takeException(), isNull);
