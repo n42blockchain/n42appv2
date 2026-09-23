@@ -9,7 +9,7 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,787 passed、0 failed、0 skipped），覆盖率为 **69,647 / 132,316 = 52.6369%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,792 passed、0 failed、0 skipped），覆盖率为 **69,842 / 132,316 = 52.7842%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
 - Chat 插件独立分支全包复测为 **6,740 passed / 3 skipped / 0 failed**，覆盖率 **35,274 / 135,251 = 26.0804%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | SOL SPL 缺少父链时 fail-closed widget 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,787 通过、0 失败、0 跳过 | 69,647 / 132,316 = **52.6369%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | wallet transaction sync mixin 内存 SQLite 行为测试后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,792 通过、0 失败、0 跳过 | 69,842 / 132,316 = **52.7842%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 独立分支全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,740 通过、0 失败、3 跳过 | 35,274 / 135,251 = **26.0804%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -53,6 +53,7 @@
 - 为 Add Token 页增加可选 TokenView API seam（生产默认仍用线上 API），以固定完整链/代币目录覆盖真实搜索、目录解析、Trustdart 地址校验及钱包 token 写入。搜索到 USDT 并添加后断言钱包主网代币表含正确 symbol/name/decimals 与非自定义来源；定向文件 4 项通过，相关 data 解析为 144/165（87.27%）、添加逻辑为 105/304（34.54%）。完整套件 5,785 通过、0 失败、0 跳过，69,539/132,316 = 52.5552%；70% 门禁依旧失败且未改门槛。
 - 另批测试覆盖 Add Token 网络选择器从“全部网络”切换到 Ethereum 后更新活动链筛选并保留该链 USDT 搜索结果。定向文件 5 项通过、单文件 analyze 无 issue；完整套件 5,786 通过、0 失败、0 跳过，69,621/132,316 = 52.6172%；70% 门禁依旧失败且未改门槛。
 - 新增 SOL SPL 发送缺少父 SOL 钱包时的 fail-closed widget 回归；定向文件 2 项通过、`dart analyze` 无 issue。`wallet_chain_send_sol_logic.dart` 定向行覆盖从原 7/223 增至 15/223；全量套件 5,787 通过、0 失败、0 跳过，69,647/132,316 = 52.6369%，70% 门禁如实失败。
+- 新增 wallet transaction sync mixin 的内存 SQLite 行为测试，覆盖本地历史分页、ETH 插入/更新、TRX 合约过滤、SOL 时间戳刷新和 BTC 确认数/净转出金额；5 项通过、单文件 analyze 无 issue，mixin 定向覆盖 158/243 行。完整套件 5,792 通过、0 失败、0 跳过，69,842/132,316 = 52.7842%；70% 门禁依旧失败，未调整阈值。
 
 ### ALGO 最小余额回归修复
 
