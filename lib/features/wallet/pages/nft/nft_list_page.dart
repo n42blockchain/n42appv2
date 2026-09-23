@@ -29,8 +29,9 @@ part 'nft_list_page_widgets.dart';
 /// 点击任意 NFT → 进入 [NftDetailPage]。
 class NftListPage extends StatefulWidget {
   final CoinModel coinModel;
+  final SimpleHashNftApi? api;
 
-  const NftListPage(this.coinModel, {super.key});
+  const NftListPage(this.coinModel, {super.key, this.api});
 
   @override
   State<NftListPage> createState() => _NftListPageState();
@@ -41,7 +42,7 @@ enum _NftFilter { all, video, erc721, erc1155, ordinals }
 
 class _NftListPageState extends State<NftListPage> {
   late Future<List<NftModel>> _future;
-  final _api = SimpleHashNftApi();
+  late final SimpleHashNftApi _api;
   final _searchController = TextEditingController();
 
   List<NftModel> _nfts = [];
@@ -58,6 +59,7 @@ class _NftListPageState extends State<NftListPage> {
   @override
   void initState() {
     super.initState();
+    _api = widget.api ?? SimpleHashNftApi();
     _load();
     _searchController.addListener(() {
       setState(() => _query = _searchController.text.toLowerCase().trim());
