@@ -9,8 +9,8 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。Chat Git pin 更新后的完整套件通过（5,772 passed、0 failed、0 skipped），覆盖率为 **68,782 / 132,314 = 51.9839%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
-- Chat 插件已有独立全量覆盖报告和 CI 工作流，最近完整镜像测试为 **2,130 passed / 2 skipped**，覆盖率 **24,641 / 135,037 = 18.2476%**；建议的 70% 尚未设置为阻断门槛。插件独立分支新增的 5 项离线贴纸定向测试已全部通过。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。Chat 最新 Git pin 后完整套件通过（5,773 passed、0 failed、0 skipped），覆盖率为 **68,782 / 132,314 = 51.9839%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- Chat 插件独立分支全包复测为 **6,740 passed / 3 skipped / 0 failed**，覆盖率 **35,274 / 135,251 = 26.0804%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
 - `swap` 当前服务端仍未见 token 级用户认证；上线前必须先追踪调用方并确定兼容的 UUID/token 验证合同。不能仅凭客户端 UUID、CORS 或公网 TLS 作为身份验证。
@@ -19,8 +19,8 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | Chat Git pin 更新后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,772 通过、0 失败、0 跳过 | 68,782 / 132,314 = **51.9839%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
-| Chat 插件 | 新分支定向回归 5 项通过；先前完整包测试 2,130 通过、2 跳过 | 24,641 / 135,037 = **18.2476%**（完整镜像测试） | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
+| Flutter 主应用 | Chat Git pin 更新后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,773 通过、0 失败、0 跳过 | 68,782 / 132,314 = **51.9839%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Chat 插件 | 独立分支全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,740 通过、0 失败、3 跳过 | 35,274 / 135,251 = **26.0804%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
 | Go `loyalty` | `go test ./...`、`go vet ./...`；覆盖奖励输入 fail-closed、授权/身份边界、`/tasks` 故障和必需配置/内部 token 长度校验 | **30.8%** 语句覆盖率；远端授权验证器 100%，`tasks` handler 89.5% | 报告/制品已接入，未设 70% 阈值 |
@@ -46,13 +46,14 @@
 - 再追加 ENS 首页 empty/retry 与 NFT 信息卡 metadata/actions 测试，完整套件为 5,761 通过、0 失败、0 跳过，67,392/132,310 = 50.9349%；70% 门禁依旧失败。
 - 追加市场详情缺失身份 fallback 与钱包币种搜索历史/排序测试后，完整套件为 5,764 通过、0 失败、0 跳过，67,931/132,310 = 51.3423%；70% 门禁依旧失败。
 - 新增 TON 转账余额/数量与 Solana 无效配置短路测试后，完整套件为 5,767 通过、0 失败、0 跳过，68,374/132,313 = 51.6760%；70% 门禁依旧失败。
-- 新增钱包首页初始加载及邮箱更新重试异常回归后，Chat pin 更新前完整套件为 5,772 通过、0 失败、0 跳过，68,782/132,314 = 51.9839%；70% 门禁依旧失败。切换至插件独立修复分支后再次完整验证，结果和分母一致。
+- 新增钱包首页初始加载及邮箱更新重试异常回归后，前一版本完整套件为 5,772 通过、0 失败、0 跳过，68,782/132,314 = 51.9839%。切换至插件独立修复分支并追加主 app 镜像回归后，完整套件为 5,773 通过、0 失败、0 跳过，覆盖率仍为 51.9839%；70% 门禁依旧失败且未改门槛。
 
 ### ALGO 最小余额回归修复
 
 ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalance`（`BigInt`）直接传给要求 `String` 的 `toEther`，页面构建抛出 `_BigIntImpl is not a subtype of String`。经用户批准，新增成功加载最小余额的 widget 回归测试，先确认红灯复现，再将该值显式转为十进制字符串。定向测试 3 项全部通过；随后全量根套件 5,768 项通过，覆盖率 68,377/132,313 = 51.6782%。
 - 新增 Chat 全包 CI：[`.github/workflows/chat-package.yml`](../../.github/workflows/chat-package.yml)。它直接在 `packages/n42_chat` 解析依赖、运行全包测试并上传独立 LCOV；目前只报告，不做 70% 阻断。
-- 内置动画贴纸修复已在 Chat 独立仓库分支 `fix/offline-bundled-stickers-20260923` 提交 `a36d32569ee83c8c61ff92a893616744d2a91cbb`，并由 app 通过 `pubspec.yaml` 与 `pubspec_overrides.yaml` 同步 pin，lockfile 确认 `resolved-ref`。双方 N42 客户端用稳定 `org.n42.sticker` pack/sticker ID 本地解析捆绑资源；发送不再上传重复媒体，未知 ID 仍保留 mxc/media fallback。定向测试覆盖发送端、接收端、未知 ID 兼容，共 5 项通过。动画素材从贴纸面板的 `Animated` 包访问；GIF 搜索列表仍依赖在线 Giphy/Tenor，不等同于离线 GIF 搜索。
+- 内置动画贴纸修复已在 Chat 独立仓库分支 `fix/offline-bundled-stickers-20260923` 提交 `a36d32569ee83c8c61ff92a893616744d2a91cbb`，并由 app 通过 `pubspec.yaml` 与 `pubspec_overrides.yaml` 同步 pin。后续过期状态清理修复提交 `7586c391b50c2086b033ed9626ad4c6eeeecf8c1`；app 当前 pin 到该提交，lockfile 已解析确认。双方 N42 客户端用稳定 `org.n42.sticker` pack/sticker ID 本地解析捆绑资源；发送不再上传重复媒体，未知 ID 仍保留 mxc/media fallback。定向测试覆盖发送端、接收端、未知 ID 兼容，共 5 项通过；过期状态清理的独立回归也通过。动画素材从贴纸面板的 `Animated` 包访问；GIF 搜索列表仍依赖在线 Giphy/Tenor，不等同于离线 GIF 搜索。
+- 状态清理的根因是过期/空状态在没有状态故事房间时仍调用创建逻辑，创建失败后旧 presence 文本继续显示。现在清理状态不再新建房间，仍保留 presence 类型并清除状态文本；Chat 插件定向回归和主 app 定向镜像回归通过。独立包全套 6,740 项验证已通过，主 app 新 pin 全套 5,773 项验证通过，覆盖率仍为 51.9839%，70% 门槛仍未通过。
 
 ### Go / Python 服务
 
