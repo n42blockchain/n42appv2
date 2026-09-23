@@ -9,7 +9,7 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,786 passed、0 failed、0 skipped），覆盖率为 **69,621 / 132,316 = 52.6172%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,787 passed、0 failed、0 skipped），覆盖率为 **69,647 / 132,316 = 52.6369%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
 - Chat 插件独立分支全包复测为 **6,740 passed / 3 skipped / 0 failed**，覆盖率 **35,274 / 135,251 = 26.0804%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | Add Token 网络切换行为测试后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,786 通过、0 失败、0 跳过 | 69,621 / 132,316 = **52.6172%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | SOL SPL 缺少父链时 fail-closed widget 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,787 通过、0 失败、0 跳过 | 69,647 / 132,316 = **52.6369%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 独立分支全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,740 通过、0 失败、3 跳过 | 35,274 / 135,251 = **26.0804%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -52,6 +52,7 @@
 - 新增对真实 `WalletActionProvider` 的查找优先级、默认钱包删除后索引钳制、空列表删除，以及缺少 N 链派生元数据时跳过密钥读取的行为测试。定向 5 项通过；provider 钱包操作文件由基线 35/284 升至 64/284（22.54%）。完整套件 5,784 通过、0 失败、0 跳过，69,298/132,315 = 52.3735%；70% 门禁依旧失败且未改门槛。
 - 为 Add Token 页增加可选 TokenView API seam（生产默认仍用线上 API），以固定完整链/代币目录覆盖真实搜索、目录解析、Trustdart 地址校验及钱包 token 写入。搜索到 USDT 并添加后断言钱包主网代币表含正确 symbol/name/decimals 与非自定义来源；定向文件 4 项通过，相关 data 解析为 144/165（87.27%）、添加逻辑为 105/304（34.54%）。完整套件 5,785 通过、0 失败、0 跳过，69,539/132,316 = 52.5552%；70% 门禁依旧失败且未改门槛。
 - 另批测试覆盖 Add Token 网络选择器从“全部网络”切换到 Ethereum 后更新活动链筛选并保留该链 USDT 搜索结果。定向文件 5 项通过、单文件 analyze 无 issue；完整套件 5,786 通过、0 失败、0 跳过，69,621/132,316 = 52.6172%；70% 门禁依旧失败且未改门槛。
+- 新增 SOL SPL 发送缺少父 SOL 钱包时的 fail-closed widget 回归；定向文件 2 项通过、`dart analyze` 无 issue。`wallet_chain_send_sol_logic.dart` 定向行覆盖从原 7/223 增至 15/223；全量套件 5,787 通过、0 失败、0 跳过，69,647/132,316 = 52.6369%，70% 门禁如实失败。
 
 ### ALGO 最小余额回归修复
 
@@ -108,6 +109,12 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 | GIF 列表加载失败（Wi-Fi 和移动数据均失败） | GIF picker 直连 Giphy/Tenor，宿主编译配置关闭代理路径；服务把非 200、网络异常或解析失败统一映射为加载失败。蜂窝也失败说明问题不只是 Wi-Fi，但无法仅凭此区分发布包缺 API key、403/429/配额、DNS/TLS/运营商策略、API 端点和媒体 CDN。 | 从设备采集脱敏 host/path、HTTP 状态或 transport error、时间戳、DNS/TLS 结果；分别检查列表 API 和图片 CDN。不得记录 API key。 |
 | 图片预览翻译提示端侧模型不可用，稍后重试 | 页面先走 Google ML Kit 本地翻译；失败后询问是否发送已识别文字做远端 fallback，失败再显示通用 AI 错误。ML Kit 语言模型按需下载（官方文档约 30 MB/语言），目前代码首次使用才下载；第二阶段 provider 取决于构建配置，可能为 Google API、AI proxy 或 MyMemory。 | 记录平台、源/目标语言、模型下载状态及是否同意远端；远端仅收到 OCR 文本，不应上传原图。把内部错误分类为 unsupported/model-download/network/quota/upstream，而不是只显示泛化提示。 |
 | 群主有 5 个联系人并创建 3 人群后，群主添加成员列表为空；其他成员正常 | Chat 页添加成员从 `ContactBloc` 已加载列表中过滤当前成员；若该页面拿到新建/未加载的 ContactBloc 或 provider 异常，会静默保留空列表。当前逻辑没发现群主专有过滤。 | 按实际导航路径核对 ContactBloc 是否 loaded、联系人数、房间现有 member/invited IDs；补 ChatPage 层测试覆盖 5 contacts/3 members/2 available 和新建 Bloc 场景。 |
+
+### 群话题与群组通话（新增，2026-09-23）
+
+用户补充的问题并提供 `~/Downloads/1.mov`。录屏中新建频道/话题后列表只出现 `General`；点击顶部“编辑”后页面内容变成空白。当前本地 Chat 包页面由 `GroupTopicsPage` 加载 `GroupBloc` 的频道列表，编辑入口进入 `GroupChannelsPage`，应分别补创建成功后刷新/列表展示测试和编辑页正常渲染测试；尚未在录屏对应账号/服务端复现，因此根因待定位。
+
+另两项是产品行为确认，不可仅凭代码断定为缺陷：群视频通话需决定发起时全员可接听/忽略，还是先选受邀成员；群语音需区分一次性群语音通话与可持续加入的语音房。当前 Chat 包已有 `startGroupVoiceCall` / `startGroupVideoCall` 逻辑，聊天更多功能页可触发二者；也有独立 Voice Room 服务、列表页和会话页。需根据用户确认验证实际可见入口和邀请投递范围，再写 UI/状态/集成测试，不重复造通话服务。
 
 ### 内置动画表情（离线兜底）
 
