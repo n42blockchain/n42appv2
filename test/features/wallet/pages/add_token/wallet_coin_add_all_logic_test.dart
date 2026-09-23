@@ -228,4 +228,34 @@ void main() {
     expect(find.byIcon(Icons.remove), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets('network chooser updates the active chain filter', (
+    tester,
+  ) async {
+    await HttpOverrides.runZoned(
+      () => tester.pumpWidget(
+        wrapForTest(
+          WalletCoinAddAll('USDT', tokenViewApi: _TokenViewFixtureApi()),
+          overrides: [
+            wapBridgeProvider.overrideWith((ref) => _WalletProvider()),
+          ],
+        ),
+      ),
+      createHttpClient: (_) => throw StateError('Network is disabled in tests'),
+    );
+    await tester.pumpAndSettle();
+
+    final allNetworks = find.text(S.current.g_token_m_key_4).first;
+    await tester.tap(allNetworks);
+    await tester.pumpAndSettle();
+    expect(find.text('ETH'), findsOneWidget);
+    expect(find.text('Ethereum'), findsOneWidget);
+
+    await tester.tap(find.text('Ethereum'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Ethereum'), findsOneWidget);
+    expect(find.text('Tether USD'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
