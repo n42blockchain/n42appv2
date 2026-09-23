@@ -9,8 +9,8 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。当前完整套件通过（5,768 passed、0 failed、0 skipped），覆盖率为 **68,377 / 132,313 = 51.6782%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
-- Chat 插件已有独立全量覆盖报告和 CI 工作流，当前 **24,641 / 135,037 = 18.2476%**；建议的 70% 尚未设置为阻断门槛。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。最近一次完整套件（更新 Chat Git 依赖前）通过（5,772 passed、0 failed、0 skipped），覆盖率为 **68,782 / 132,314 = 51.9839%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。Chat pin 更新后的完整验证正在进行。
+- Chat 插件已有独立全量覆盖报告和 CI 工作流，最近完整镜像测试为 **2,130 passed / 2 skipped**，覆盖率 **24,641 / 135,037 = 18.2476%**；建议的 70% 尚未设置为阻断门槛。插件独立分支新增的 5 项离线贴纸定向测试已全部通过。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
 - `swap` 当前服务端仍未见 token 级用户认证；上线前必须先追踪调用方并确定兼容的 UUID/token 验证合同。不能仅凭客户端 UUID、CORS 或公网 TLS 作为身份验证。
@@ -19,8 +19,8 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,768 通过、0 失败、0 跳过 | 68,377 / 132,313 = **51.6782%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
-| Chat 插件 | 包目录下完整 `flutter test --coverage --concurrency=4`；2,127 通过、2 跳过 | 24,641 / 135,037 = **18.2476%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
+| Flutter 主应用 | Chat pin 更新前完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,772 通过、0 失败、0 跳过 | 68,782 / 132,314 = **51.9839%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过；pin 更新后复测进行中 |
+| Chat 插件 | 新分支定向回归 5 项通过；先前完整包测试 2,130 通过、2 跳过 | 24,641 / 135,037 = **18.2476%**（完整镜像测试） | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 的 malformed input、上游/存储失败、所有权冲突与 non-finite price | **31.8%** 语句覆盖率；alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界及本地 `httptest` OAuth token/userinfo 成功和异常路径 | **35.2%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
 | Go `loyalty` | `go test ./...`、`go vet ./...`；覆盖奖励输入 fail-closed、授权缺失/上游错误/身份匹配、wallet 字段变体及 `/tasks` chain/store 故障 | **28.6%** 语句覆盖率；远端授权验证器 100%，`tasks` handler 89.5% | 报告/制品已接入，未设 70% 阈值 |
@@ -46,11 +46,13 @@
 - 再追加 ENS 首页 empty/retry 与 NFT 信息卡 metadata/actions 测试，完整套件为 5,761 通过、0 失败、0 跳过，67,392/132,310 = 50.9349%；70% 门禁依旧失败。
 - 追加市场详情缺失身份 fallback 与钱包币种搜索历史/排序测试后，完整套件为 5,764 通过、0 失败、0 跳过，67,931/132,310 = 51.3423%；70% 门禁依旧失败。
 - 新增 TON 转账余额/数量与 Solana 无效配置短路测试后，完整套件为 5,767 通过、0 失败、0 跳过，68,374/132,313 = 51.6760%；70% 门禁依旧失败。
+- 新增钱包首页初始加载及邮箱更新重试异常回归后，Chat pin 更新前完整套件为 5,772 通过、0 失败、0 跳过，68,782/132,314 = 51.9839%；70% 门禁依旧失败。随后切换到插件独立修复分支并启动完整复测。
 
 ### ALGO 最小余额回归修复
 
 ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalance`（`BigInt`）直接传给要求 `String` 的 `toEther`，页面构建抛出 `_BigIntImpl is not a subtype of String`。经用户批准，新增成功加载最小余额的 widget 回归测试，先确认红灯复现，再将该值显式转为十进制字符串。定向测试 3 项全部通过；随后全量根套件 5,768 项通过，覆盖率 68,377/132,313 = 51.6782%。
 - 新增 Chat 全包 CI：[`.github/workflows/chat-package.yml`](../../.github/workflows/chat-package.yml)。它直接在 `packages/n42_chat` 解析依赖、运行全包测试并上传独立 LCOV；目前只报告，不做 70% 阻断。
+- 内置动画贴纸修复已在 Chat 独立仓库分支 `fix/offline-bundled-stickers-20260923` 提交 `a36d32569ee83c8c61ff92a893616744d2a91cbb`，并由 app 通过 `pubspec.yaml` 与 `pubspec_overrides.yaml` 同步 pin，lockfile 确认 `resolved-ref`。双方 N42 客户端用稳定 `org.n42.sticker` pack/sticker ID 本地解析捆绑资源；发送不再上传重复媒体，未知 ID 仍保留 mxc/media fallback。定向测试覆盖发送端、接收端、未知 ID 兼容，共 5 项通过。动画素材从贴纸面板的 `Animated` 包访问；GIF 搜索列表仍依赖在线 Giphy/Tenor，不等同于离线 GIF 搜索。
 
 ### Go / Python 服务
 
@@ -103,9 +105,9 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 
 ### 内置动画表情（离线兜底）
 
-插件已有 16 个 Noto Animated Emoji Lottie（Apache-2.0）和 OpenMoji SVG 表情；`packages/n42_chat/assets/stickers` 约 956 KB、52 个文件。它们目前位于贴纸入口而非 GIF 搜索结果。选择内置表情时，发送路径会上传 asset 到 Matrix media 得到 mxc；接收渲染默认请求该媒体，不按 `org.n42.sticker` 的 `pack_id/sticker_id` 解析本地资源。因此“素材随包存在”并不等于“收发双方离线本地显示”。
+插件已有 16 个 Noto Animated Emoji Lottie（Apache-2.0）和 OpenMoji SVG 表情；`packages/n42_chat/assets/stickers` 约 956 KB、52 个文件。它们已可从贴纸面板的 Animated 包访问。过去发送路径会上传 asset 到 Matrix media 得到 mxc，接收渲染默认请求该媒体，不按 `org.n42.sticker` 的 `pack_id/sticker_id` 解析本地资源，因此“素材随包存在”并不等于“收发双方离线本地显示”。本轮已修复发送和接收端协议：N42 客户端发送稳定资源 ID、不上传重复媒体；接收端命中本地包时优先直接渲染 asset，未知 ID 再回退原 mxc/媒体 URL。
 
-用户已确认仅要求双方都使用 N42 Chat。建议把 GIF 远端目录和内置动画明确分开：在表情面板加“常用/离线”内置 Lottie 组；N42 客户端发送稳定资源 ID，接收端命中本地包时直接渲染，未知 ID 再兼容 mxc/emoji fallback。远端 GIF 保留为可选搜索，失败时本地组仍能使用。既然无需兼容第三方 Matrix 客户端，N42 双端可优先走纯本地资源 ID，不上传重复媒体；旧消息和未知 ID 保留原 mxc 渲染路径。此协议变化仍待单独确认后再实现。
+用户已确认仅要求双方都使用 N42 Chat。本轮保留 GIF 远端目录为在线搜索，并由现有 Animated 贴纸包提供小体积离线常用动图；收发端现在走本地资源 ID，不上传重复媒体。未知 ID 和旧消息继续兼容 mxc/媒体路径。实现已推送到插件分支并由 app pin；真实双设备、关闭 Wi-Fi/蜂窝数据下的验收仍需 QA 安装包含该依赖的构建。注意：这提供的是贴纸面板中的离线动图，不会让在线 Giphy/Tenor GIF 搜索结果离线可用。
 
 ### 图片文字翻译选项（OCR 后仅翻译文字）
 
