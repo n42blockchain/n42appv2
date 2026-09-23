@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | 兼容版 Chat pin 更新及钱包 bridge 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,800 通过、0 失败、0 跳过 | 69,920 / 132,316 = **52.8432%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | 兼容版 Chat pin 更新及钱包 bridge、CoinPriceAlertService 回归后完整 `flutter test --no-pub --coverage --concurrency=1 --machine`；质量门计数 5,804 通过、0 失败、0 跳过 | 69,968 / 132,316 = **52.8795%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 基于 `7586c391` 的兼容提交 `c9a607c1` 全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,742 通过、0 失败、3 跳过；全包 analyze 报告 278 条既有 info、无 warning/error | 35,400 / 135,262 = **26.1714%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -63,6 +63,7 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 - 新增 Chat 全包 CI：[`.github/workflows/chat-package.yml`](../../.github/workflows/chat-package.yml)。它直接在 `packages/n42_chat` 解析依赖、运行全包测试并上传独立 LCOV；目前只报告，不做 70% 阻断。
 - 内置动画贴纸修复已在 Chat 独立仓库分支 `fix/offline-bundled-stickers-20260923` 提交 `a36d32569ee83c8c61ff92a893616744d2a91cbb`，并由 app 通过 `pubspec.yaml` 与 `pubspec_overrides.yaml` 同步 pin。后续过期状态清理修复提交 `7586c391b50c2086b033ed9626ad4c6eeeecf8c1`；app 当前 pin 到该提交，lockfile 已解析确认。双方 N42 客户端用稳定 `org.n42.sticker` pack/sticker ID 本地解析捆绑资源；发送不再上传重复媒体，未知 ID 仍保留 mxc/media fallback。定向测试覆盖发送端、接收端、未知 ID 兼容，共 5 项通过；过期状态清理的独立回归也通过。动画素材从贴纸面板的 `Animated` 包访问；GIF 搜索列表仍依赖在线 Giphy/Tenor，不等同于离线 GIF 搜索。
 - 状态清理的根因是过期/空状态在没有状态故事房间时仍调用创建逻辑，创建失败后旧 presence 文本继续显示。现在清理状态不再新建房间，仍保留 presence 类型并清除状态文本；Chat 插件定向回归和主 app 定向镜像回归通过。最新兼容插件全套 6,742 项通过、3 项跳过；主 app 新 pin 全套 5,800 项通过，覆盖率为 52.8432%，70% 门槛仍未通过。
+- 新增 `CoinPriceAlertService` 持久化回归，验证缺省状态、跨币种保存/更新、定向幂等删除以及损坏 JSON 的 fail-closed；4 项定向测试通过。后续串行主套件新鲜证据为 5,804 项通过、0 失败、0 跳过，LCOV 从 69,920/132,316 提升至 69,968/132,316（52.8795%）；运行结果 `/tmp/n42-app-tests-price-alert-batch-serial.jsonl`。70% 覆盖率门仍未通过。
 
 ### Go / Python 服务
 
