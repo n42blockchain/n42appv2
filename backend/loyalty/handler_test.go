@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"math/big"
 	"net/http"
 	"net/http/httptest"
@@ -21,11 +22,20 @@ func (f fakeAuth) Verify(context.Context, string, string) (identity, error) {
 	return identity{UUID: "user", Wallet: f.wallet}, nil
 }
 
+type rejectingAuth struct{ err error }
+
+func (f rejectingAuth) Verify(context.Context, string, string) (identity, error) {
+	return identity{}, f.err
+}
+
 type fakeChain struct {
-	checkedIn bool
-	checkIns  int
-	daily     uint64
-	accounts  map[common.Address]chainAccount
+	checkedIn  bool
+	checkIns   int
+	checkCalls int
+	awardCalls int
+	checkErr   error
+	daily      uint64
+	accounts   map[common.Address]chainAccount
 }
 
 func (f *fakeChain) Account(_ context.Context, wallet common.Address) (chainAccount, error) {
@@ -51,7 +61,8 @@ func (f *fakeChain) DailyCheckInPoints(context.Context) (uint64, error) {
 }
 
 func (f *fakeChain) CheckedInToday(context.Context, common.Address) (bool, error) {
-	return f.checkedIn, nil
+	f.checkCalls++
+	return f.checkedIn, f.checkErr
 }
 
 func (f *fakeChain) CheckIn(context.Context, common.Address, [32]byte) (common.Hash, error) {
@@ -61,6 +72,7 @@ func (f *fakeChain) CheckIn(context.Context, common.Address, [32]byte) (common.H
 }
 
 func (f *fakeChain) AwardTask(context.Context, common.Address, [32]byte, uint64, [32]byte) (common.Hash, error) {
+	f.awardCalls++
 	return common.Hash{}, nil
 }
 
@@ -75,6 +87,7 @@ func (f *fakeChain) RegisterReferral(_ context.Context, referrer, referred commo
 
 type fakeStore struct {
 	historyPoints int64
+	tasksErr      error
 	syncedWallets []string
 	historyWrites []fakeHistoryWrite
 }
@@ -89,8 +102,10 @@ func (f *fakeStore) SyncAccount(_ context.Context, wallet string, _ chainAccount
 	f.syncedWallets = append(f.syncedWallets, wallet)
 	return nil
 }
-func (f *fakeStore) Tasks(context.Context, bool) ([]taskRecord, error) { return nil, nil }
-func (f *fakeStore) Rewards(context.Context) ([]rewardRecord, error)   { return nil, nil }
+func (f *fakeStore) Tasks(context.Context, bool) ([]taskRecord, error) {
+	return nil, f.tasksErr
+}
+func (f *fakeStore) Rewards(context.Context) ([]rewardRecord, error) { return nil, nil }
 func (f *fakeStore) History(context.Context, string) ([]historyRecord, error) {
 	return nil, nil
 }
@@ -130,6 +145,51 @@ func TestTasksUsesDailyPointsConfiguredOnChain(t *testing.T) {
 	}
 	if !bytes.Contains(recorder.Body.Bytes(), []byte(`"points":25`)) {
 		t.Fatalf("daily points did not come from contract: %s", recorder.Body.String())
+	}
+}
+
+func TestTasksRejectsFailedAuthenticationBeforeCallingChain(t *testing.T) {
+	gin.SetMode(gin.TestMode)
+	chain := &fakeChain{}
+	router := newHandler(chain, &fakeStore{}, rejectingAuth{err: errUnauthorized}, "internal").router()
+	req := httptest.NewRequest(http.MethodGet, "/loyalty/v1/tasks?wallet="+testWallet, nil)
+	req.Header.Set("UUID", "user")
+	req.Header.Set("Token", "invalid")
+	recorder := httptest.NewRecorder()
+
+	router.ServeHTTP(recorder, req)
+
+	if recorder.Code != http.StatusUnauthorized {
+		t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+	}
+	if chain.checkCalls != 0 {
+		t.Fatal("unauthenticated request reached the chain")
+	}
+}
+
+func TestTasksMapsChainAndStoreFailuresToBadGateway(t *testing.T) {
+	for _, tc := range []struct {
+		name  string
+		chain *fakeChain
+		store *fakeStore
+	}{
+		{name: "chain unavailable", chain: &fakeChain{checkErr: errors.New("rpc unavailable")}, store: &fakeStore{}},
+		{name: "store unavailable", chain: &fakeChain{}, store: &fakeStore{tasksErr: errors.New("database unavailable")}},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			gin.SetMode(gin.TestMode)
+			router := newHandler(tc.chain, tc.store, fakeAuth{wallet: testWallet}, "internal").router()
+			req := httptest.NewRequest(http.MethodGet, "/loyalty/v1/tasks?wallet="+testWallet, nil)
+			req.Header.Set("UUID", "user")
+			req.Header.Set("Token", "valid")
+			recorder := httptest.NewRecorder()
+
+			router.ServeHTTP(recorder, req)
+
+			if recorder.Code != http.StatusBadGateway {
+				t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+			}
+		})
 	}
 }
 
@@ -187,6 +247,51 @@ func TestCheckInRejectsWalletNotBoundToAuthenticatedUser(t *testing.T) {
 	}
 	if chain.checkIns != 0 {
 		t.Fatal("unauthorized request reached relayer")
+	}
+}
+
+type checkInAwardMismatchChain struct {
+	fakeChain
+	awardDelta int64
+	reads      int
+}
+
+func (f *checkInAwardMismatchChain) Account(context.Context, common.Address) (chainAccount, error) {
+	f.reads++
+	total := int64(100)
+	if f.reads > 1 {
+		total += f.awardDelta
+	}
+	return chainAccount{
+		Available:   big.NewInt(total),
+		TotalEarned: big.NewInt(total),
+		TotalSpent:  big.NewInt(0),
+	}, nil
+}
+
+func TestCheckInRejectsZeroOrNegativeOnChainAward(t *testing.T) {
+	for _, delta := range []int64{0, -1} {
+		t.Run(map[int64]string{0: "zero", -1: "negative"}[delta], func(t *testing.T) {
+			gin.SetMode(gin.TestMode)
+			chain := &checkInAwardMismatchChain{awardDelta: delta}
+			store := &fakeStore{}
+			router := newHandler(chain, store, fakeAuth{wallet: testWallet}, "internal").router()
+			body, _ := json.Marshal(map[string]string{"wallet": testWallet})
+			req := httptest.NewRequest(http.MethodPost, "/loyalty/v1/check-in", bytes.NewReader(body))
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("UUID", "user")
+			req.Header.Set("Token", "token")
+			recorder := httptest.NewRecorder()
+
+			router.ServeHTTP(recorder, req)
+
+			if recorder.Code != http.StatusBadGateway {
+				t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+			}
+			if len(store.syncedWallets) != 0 || len(store.historyWrites) != 0 {
+				t.Fatalf("persisted unverified award: synced=%v history=%v", store.syncedWallets, store.historyWrites)
+			}
+		})
 	}
 }
 
@@ -255,6 +360,45 @@ func TestInternalAwardRejectsMissingToken(t *testing.T) {
 
 	if recorder.Code != http.StatusUnauthorized {
 		t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+	}
+}
+
+func TestInternalAwardRejectsInvalidPointsBeforeCallingChain(t *testing.T) {
+	for _, tc := range []struct {
+		name string
+		body string
+	}{
+		{
+			name: "zero points",
+			body: `{"wallet":"` + testWallet + `","task_id":"task-1","points":0,"request_id":"request-1"}`,
+		},
+		{
+			name: "points exceed int64 storage limit",
+			body: `{"wallet":"` + testWallet + `","task_id":"task-1","points":9223372036854775808,"request_id":"request-1"}`,
+		},
+		{
+			name: "malformed wallet",
+			body: `{"wallet":"not-an-address","task_id":"task-1","points":1,"request_id":"request-1"}`,
+		},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			gin.SetMode(gin.TestMode)
+			chain := &fakeChain{}
+			router := newHandler(chain, &fakeStore{}, fakeAuth{wallet: testWallet}, "internal").router()
+			req := httptest.NewRequest(http.MethodPost, "/loyalty/v1/internal/award-task", bytes.NewBufferString(tc.body))
+			req.Header.Set("Content-Type", "application/json")
+			req.Header.Set("X-Internal-Token", "internal")
+			recorder := httptest.NewRecorder()
+
+			router.ServeHTTP(recorder, req)
+
+			if recorder.Code != http.StatusBadRequest {
+				t.Fatalf("status=%d body=%s", recorder.Code, recorder.Body.String())
+			}
+			if chain.awardCalls != 0 {
+				t.Fatalf("invalid award reached chain: calls=%d", chain.awardCalls)
+			}
+		})
 	}
 }
 
