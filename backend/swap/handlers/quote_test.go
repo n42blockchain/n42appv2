@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"math/big"
 	"net/http"
 	"net/http/httptest"
@@ -22,16 +23,20 @@ func init() { gin.SetMode(gin.TestMode) }
 // ─── 桩 ───────────────────────────────────────────────────────────────────────
 
 type fakeStore struct {
-	insertErr error
-	order     *db.Order
-	orders    []*db.Order
+	insertErr   error
+	insertCalls int
+	order       *db.Order
+	orders      []*db.Order
 }
 
-func (f *fakeStore) InsertOrder(_, _, _, _, _, _, _, _, _, _ string) error { return f.insertErr }
-func (f *fakeStore) UpdateTxHash(_, _ string) error                        { return nil }
-func (f *fakeStore) UpdateStatus(_ string, _ int) error                    { return nil }
-func (f *fakeStore) GetOrder(_ string) (*db.Order, error)                  { return f.order, nil }
-func (f *fakeStore) ListOrders(_ string, _, _ int) ([]*db.Order, error)    { return f.orders, nil }
+func (f *fakeStore) InsertOrder(_, _, _, _, _, _, _, _, _, _ string) error {
+	f.insertCalls++
+	return f.insertErr
+}
+func (f *fakeStore) UpdateTxHash(_, _ string) error                     { return nil }
+func (f *fakeStore) UpdateStatus(_ string, _ int) error                 { return nil }
+func (f *fakeStore) GetOrder(_ string) (*db.Order, error)               { return f.order, nil }
+func (f *fakeStore) ListOrders(_ string, _, _ int) ([]*db.Order, error) { return f.orders, nil }
 func (f *fakeStore) InsertLimitOrder(_, _, _, _, _, _, _, _, _ string, _ int64) error {
 	return nil
 }
@@ -91,6 +96,58 @@ func TestQuote_MissingFields(t *testing.T) {
 	w := doPost(r, "/v1/dex/quote", `{"chain":"ETH"}`)
 	if w.Code != http.StatusBadRequest {
 		t.Errorf("status = %d, want 400", w.Code)
+	}
+}
+
+func TestQuote_MalformedJSONReturnsBadRequest(t *testing.T) {
+	r := newQuoteRouter(services.NewAggregator(), &fakeStore{})
+	if w := doPost(r, "/v1/dex/quote", `{"chain":`); w.Code != http.StatusBadRequest {
+		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
+	}
+}
+
+func TestQuote_UpstreamFailureReturnsBadGatewayWithoutSavingOrder(t *testing.T) {
+	store := &fakeStore{}
+	agg := services.NewAggregator(&stubAdapter{
+		chains: []string{"ETH"},
+		err:    errors.New("provider unavailable"),
+	})
+	r := newQuoteRouter(agg, store)
+	body := `{"chain":"ETH","token_in":"0xA","token_out":"0xB","amount_in":"1000","user_addr":"0xU"}`
+
+	w := doPost(r, "/v1/dex/quote", body)
+
+	if w.Code != http.StatusBadGateway {
+		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
+	}
+	if store.insertCalls != 0 {
+		t.Fatalf("persisted order after upstream failure: calls=%d", store.insertCalls)
+	}
+}
+
+func TestQuote_RejectsNonPositiveUpstreamOutput(t *testing.T) {
+	for _, amount := range []*big.Int{nil, big.NewInt(0), big.NewInt(-1)} {
+		name := "nil"
+		if amount != nil {
+			name = amount.String()
+		}
+		t.Run(name, func(t *testing.T) {
+			store := &fakeStore{}
+			resp := goodResp()
+			resp.AmountOutWei = amount
+			agg := services.NewAggregator(&stubAdapter{chains: []string{"ETH"}, resp: resp})
+			r := newQuoteRouter(agg, store)
+			body := `{"chain":"ETH","token_in":"0xA","token_out":"0xB","amount_in":"1000","user_addr":"0xU"}`
+
+			w := doPost(r, "/v1/dex/quote", body)
+
+			if w.Code != http.StatusBadGateway {
+				t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
+			}
+			if store.insertCalls != 0 {
+				t.Fatalf("persisted invalid quote: calls=%d", store.insertCalls)
+			}
+		})
 	}
 }
 

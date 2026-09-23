@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,21 +18,24 @@ import (
 // ─── 桩 ───────────────────────────────────────────────────────────────────────
 
 type fakeAlertStore struct {
-	upserted  []string // alert_id 序列
-	alerts    []*db.PriceAlert
-	deleteErr error
+	upserted     []string // alert_id 序列
+	alerts       []*db.PriceAlert
+	upsertErr    error
+	listErr      error
+	deleteErr    error
+	triggeredErr error
 }
 
 func (f *fakeAlertStore) UpsertPriceAlert(alertID, _, _, _, _, _ string, _ bool) error {
 	f.upserted = append(f.upserted, alertID)
-	return nil
+	return f.upsertErr
 }
 func (f *fakeAlertStore) ListPriceAlerts(_ string) ([]*db.PriceAlert, error) {
-	return f.alerts, nil
+	return f.alerts, f.listErr
 }
 func (f *fakeAlertStore) DeletePriceAlert(_, _ string) error { return f.deleteErr }
 func (f *fakeAlertStore) ListTriggeredPriceAlertsSince(_ string, _ int64) ([]*db.PriceAlert, error) {
-	return f.alerts, nil
+	return f.alerts, f.triggeredErr
 }
 
 type fakePrices map[string]float64
@@ -117,6 +121,61 @@ func TestAlertSetRejectsBadInput(t *testing.T) {
 		if len(store.upserted) != 0 {
 			t.Fatalf("case %d: bad input reached store", i)
 		}
+	}
+}
+
+func TestAlertSetRejectsNonFiniteTargetPrice(t *testing.T) {
+	for _, price := range []string{"NaN", "+Inf", "-Inf", "1e309"} {
+		t.Run(price, func(t *testing.T) {
+			store := &fakeAlertStore{}
+			r := alertRouter(store, nil)
+			body, _ := json.Marshal(models.PriceAlertReq{
+				UUID: "u1", Symbol: "BTC", CoinGeckoID: "bitcoin",
+				Direction: "above", TargetPrice: price,
+			})
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, httptest.NewRequest(http.MethodPost, "/set", bytes.NewReader(body)))
+			if w.Code != http.StatusBadRequest {
+				t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
+			}
+			if len(store.upserted) != 0 {
+				t.Fatal("non-finite price reached the store")
+			}
+		})
+	}
+}
+
+func TestAlertSetMapsOwnershipConflictAndStoreFailure(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		err    error
+		status int
+	}{
+		{name: "owned by another user", err: errors.New("alert already owned by another user"), status: http.StatusConflict},
+		{name: "database unavailable", err: errors.New("database unavailable"), status: http.StatusInternalServerError},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			store := &fakeAlertStore{upsertErr: tc.err}
+			r := alertRouter(store, nil)
+			body, _ := json.Marshal(models.PriceAlertReq{
+				UUID: "u1", AlertID: "alert-1", Symbol: "BTC", CoinGeckoID: "bitcoin",
+				Direction: "above", TargetPrice: "70000",
+			})
+			w := httptest.NewRecorder()
+			r.ServeHTTP(w, httptest.NewRequest(http.MethodPost, "/set", bytes.NewReader(body)))
+			if w.Code != tc.status {
+				t.Fatalf("status=%d body=%s, want %d", w.Code, w.Body.String(), tc.status)
+			}
+		})
+	}
+}
+
+func TestAlertTriggeredMapsStoreFailure(t *testing.T) {
+	r := alertRouter(&fakeAlertStore{triggeredErr: errors.New("database unavailable")}, nil)
+	w := httptest.NewRecorder()
+	r.ServeHTTP(w, httptest.NewRequest(http.MethodGet, "/triggered?uuid=u1&since=1700000000", nil))
+	if w.Code != http.StatusInternalServerError {
+		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
 	}
 }
 

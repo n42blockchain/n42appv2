@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -29,6 +30,34 @@ func TestCommit_MissingFields(t *testing.T) {
 	w := doPost(r, "/v1/dex/commit", `{}`)
 	if w.Code != http.StatusBadRequest {
 		t.Errorf("status = %d, want 400", w.Code)
+	}
+}
+
+func TestCommit_MalformedJSON(t *testing.T) {
+	r := newCommitRouter(&fakeStore{})
+	w := doPost(r, "/v1/dex/commit", `{"uuid":`)
+	if w.Code != http.StatusBadRequest {
+		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
+	}
+}
+
+type commitStoreWithLookupError struct {
+	handlers.DEXStore
+	err error
+}
+
+func (s commitStoreWithLookupError) GetOrder(string) (*db.Order, error) {
+	return nil, s.err
+}
+
+func TestCommit_OrderLookupFailureDoesNotStartCommit(t *testing.T) {
+	r := newCommitRouter(commitStoreWithLookupError{
+		DEXStore: &fakeStore{},
+		err:      errors.New("database unavailable"),
+	})
+	w := doPost(r, "/v1/dex/commit", `{"uuid":"user-1","order_id":"ord_abc","tx_hash":"0x123456"}`)
+	if w.Code != http.StatusNotFound {
+		t.Fatalf("status=%d body=%s", w.Code, w.Body.String())
 	}
 }
 
