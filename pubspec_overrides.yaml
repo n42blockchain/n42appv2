@@ -1,6 +1,8 @@
 dependency_overrides:
   n42_chat:
-    path: packages/n42_chat
+    git:
+      url: https://github.com/n42blockchain/n42_chat
+      ref: a36d3256
   audioplayers_darwin:
     path: packages/audioplayers_darwin
   webview_flutter_wkwebview:
