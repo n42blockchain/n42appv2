@@ -187,6 +187,40 @@ void main() {
   );
 
   test(
+    'valid transfer reaches the selected chain sender and preserves its failure',
+    () async {
+      snapshot.walletInfoLsit.add(WalletInfo());
+      snapshot.coinModels.add(
+        CoinModel()
+          ..coin = {
+            'coinType': 'UNSUPPORTED_TEST_CHAIN_947',
+            'miniName': 'TEST947',
+            'blockchainType': 'UnsupportedTestNetwork',
+            'decimals': 9,
+            'path': {'legacy': "m/44'/947'/0'/0'"},
+          }
+          ..addrType = 'legacy'
+          ..pathIndex = 2
+          ..address = 'wallet-origin',
+      );
+
+      final result = await bridge.requestTransfer(
+        toAddress: 'recipient',
+        amount: '1.5',
+        token: 'test947',
+        memo: 'offline test',
+      );
+
+      expect(result.success, isFalse);
+      expect(
+        result.errorMessage,
+        'Transfer not supported for UNSUPPORTED_TEST_CHAIN_947 '
+        '(blockchainType: UnsupportedTestNetwork)',
+      );
+    },
+  );
+
+  test(
     'balance lookup retains all decimal places and unknown assets return zero',
     () async {
       snapshot.coinModels.add(
