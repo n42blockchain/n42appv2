@@ -95,6 +95,21 @@ class BrowserControllerFake extends PlatformWebViewController {
   @override
   Future<bool> canGoForward() => forward();
   @override
+  Future<void> reload() async {
+    calls.add('reload');
+  }
+
+  @override
+  Future<void> goBack() async {
+    calls.add('back');
+  }
+
+  @override
+  Future<void> goForward() async {
+    calls.add('forward');
+  }
+
+  @override
   Future<String?> currentUrl() async => loads.lastOrNull?.toString();
 }
 

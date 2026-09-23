@@ -9,7 +9,7 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,836 passed、0 failed、0 skipped），覆盖率为 **72,827 / 132,316 = 55.0402%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,839 passed、0 failed、0 skipped），覆盖率为 **72,854 / 132,316 = 55.0606%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
 - Chat 插件兼容基线全包复测为 **6,742 passed / 3 skipped / 0 failed**，覆盖率 **35,400 / 135,262 = 26.1714%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService、token-model、Session Key、ENS、Paymaster、AA 主页/批量交易主体、私钥导入、链详情面板、BTC 家族发送与确认、Max 费率竞态、通用转账请求金额、BrowserPage 标签页回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,836 通过、0 失败、0 跳过 | 72,827 / 132,316 = **55.0402%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService、token-model、Session Key、ENS、Paymaster、AA 主页/批量交易主体、私钥导入、链详情面板、BTC 家族发送与确认、Max 费率竞态、通用转账请求金额、BrowserPage 标签页与工具栏回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,839 通过、0 失败、0 跳过 | 72,854 / 132,316 = **55.0606%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 基于 `7586c391` 的兼容提交 `c9a607c1` 全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,742 通过、0 失败、3 跳过；全包 analyze 报告 278 条既有 info、无 warning/error | 35,400 / 135,262 = **26.1714%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -79,6 +79,7 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 - 并发全量中曾观察到交易历史导出失败用例的 `pumpAndSettle` 偶发超时；单测隔离通过后，将测试等待改为 repository 完成信号、真实 I/O 让步及导出按钮恢复观察，再执行 `pumpAndSettle`。稳定性提交 `0eada31d1` 后 CI 并发度 4 全量复跑 5,832 项通过、0 失败、0 跳过；同一覆盖报告仍为 72,191/132,316 = 54.5595%。
 - 新增通用链转账页的 EIP-681 正数请求金额锁定及零金额可编辑回归；两项测试均断言不查询余额，链配置不完整时 fail-closed。定向测试与单文件 analyze 通过；完整主套件 5,834 项通过、0 失败、0 跳过，覆盖率 72,481/132,316 = 54.7787%；运行结果 `/tmp/n42-app-tests-generic-send.jsonl`。70% 门槛保持不变，仍未通过。
 - 新增真实 `BrowserPage` 标签页 widget 回归，覆盖计数器进入网格、从卡片恢复所选 URL、关闭全部后回到默认首页；WebView 使用确定性 platform fake，不访问网络。补全 fake 的 platform-widget 构建边界后，标签页文件定向覆盖 116/129 行（89.9%）、浏览器页面 44/95（46.3%）、内容/工具栏 160/216（74.1%）；定向 2 项、provider 生命周期及安全回归 46 项、analyze 均通过。完整主套件 5,836 项通过、0 失败、0 跳过，72,827/132,316 = 55.0402%；运行结果 `/tmp/n42-app-tests-browser-tabs.jsonl`，70% 门仍未通过。
+- 扩展 BrowserPage 工具栏行为回归，覆盖地址栏提交对裸域名加 HTTPS 后加载、刷新/前进/后退操作活动 WebView、加载进度呈现与资源错误后清除。定向 5 项和既有 provider 生命周期/安全回归 46 项通过；`browser_page_widgets.dart` 定向覆盖升至 183/216 行（84.7%）。完整主套件 5,839 项通过、0 失败、0 跳过，72,854/132,316 = 55.0606%；运行结果 `/tmp/n42-app-tests-browser-controls.jsonl`，70% 门仍未通过。
 
 ### Go / Python 服务
 

@@ -1,6 +1,14 @@
 import 'dart:ui' show Size;
 
-import 'package:flutter/material.dart' show Dismissible;
+import 'package:flutter/material.dart'
+    show
+        AssetImage,
+        Dismissible,
+        Image,
+        InkWell,
+        LinearProgressIndicator,
+        TextField,
+        TextInputAction;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/features/browser/api/browser_api.dart';
 import 'package:n42_wallet/features/browser/models/browser_collection_model.dart';
@@ -83,6 +91,16 @@ void main() {
     await tester.pump();
   }
 
+  Finder toolbarAssetButton(String name) {
+    final image = find.byWidgetPredicate(
+      (widget) =>
+          widget is Image &&
+          widget.image is AssetImage &&
+          (widget.image as AssetImage).assetName == 'assets/browser/$name.png',
+    );
+    return find.ancestor(of: image, matching: find.byType(InkWell)).first;
+  }
+
   testWidgets(
     'tab counter opens the tab grid and selecting a card restores it',
     (tester) async {
@@ -121,5 +139,71 @@ void main() {
     expect(browser.wvcList, hasLength(1));
     expect(browser.wInfoList.single['openUrl'], 'https://www.n42.ai');
     expect(browser.showWList, isFalse);
+  });
+
+  testWidgets(
+    'address submission normalizes a domain and loads it in the tab',
+    (tester) async {
+      await pumpBrowser(tester);
+      final controller = platform.controllers.single;
+
+      await tester.enterText(find.byType(TextField).first, 'example.org');
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pumpAndSettle();
+
+      expect(controller.loads.map((uri) => uri.toString()), [
+        firstUrl,
+        'https://example.org',
+      ]);
+      expect(browser.wInfoList.single['openUrl'], 'https://example.org');
+    },
+  );
+
+  testWidgets('refresh, back and forward controls act on the active WebView', (
+    tester,
+  ) async {
+    await pumpBrowser(tester);
+    final controller = platform.controllers.single;
+    controller.back = () async => true;
+    controller.forward = () async => true;
+    browser
+      ..canBack = true
+      ..canForward = true
+      ..notifyListeners();
+    await tester.pump();
+
+    await tester.tap(toolbarAssetButton('refresh'));
+    await tester.pumpAndSettle();
+    await tester.tap(toolbarAssetButton('arrow-left'));
+    await tester.pumpAndSettle();
+    await tester.tap(toolbarAssetButton('arrow-right'));
+    await tester.pumpAndSettle();
+
+    expect(controller.calls.where((call) => call == 'reload'), hasLength(1));
+    expect(controller.calls.where((call) => call == 'back'), hasLength(1));
+    expect(controller.calls.where((call) => call == 'forward'), hasLength(1));
+  });
+
+  testWidgets('loading progress is visible then clears on a resource error', (
+    tester,
+  ) async {
+    await pumpBrowser(tester);
+    final navigation = platform.controllers.single.navigation!;
+
+    navigation.started!(firstUrl);
+    navigation.progress!(42);
+    await tester.pump();
+
+    final progress = tester.widget<LinearProgressIndicator>(
+      find.byType(LinearProgressIndicator),
+    );
+    expect(progress.value, 0.42);
+
+    navigation.resourceError!(
+      const WebResourceError(errorCode: -1, description: 'offline'),
+    );
+    await tester.pump();
+    expect(find.byType(LinearProgressIndicator), findsNothing);
+    expect(tester.takeException(), isNull);
   });
 }
