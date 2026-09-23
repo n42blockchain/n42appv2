@@ -21,7 +21,7 @@
 |---|---|---:|---|
 | Flutter 主应用 | Chat Git pin 更新后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,772 通过、0 失败、0 跳过 | 68,782 / 132,314 = **51.9839%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 新分支定向回归 5 项通过；先前完整包测试 2,130 通过、2 跳过 | 24,641 / 135,037 = **18.2476%**（完整镜像测试） | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
-| Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 的 malformed input、上游/存储失败、所有权冲突与 non-finite price | **31.8%** 语句覆盖率；alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
+| Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界及本地 `httptest` OAuth token/userinfo 成功和异常路径 | **35.2%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
 | Go `loyalty` | `go test ./...`、`go vet ./...`；覆盖奖励输入 fail-closed、授权缺失/上游错误/身份匹配、wallet 字段变体及 `/tasks` chain/store 故障 | **28.6%** 语句覆盖率；远端授权验证器 100%，`tasks` handler 89.5% | 报告/制品已接入，未设 70% 阈值 |
 | Go `livekit-jwt` | `go test ./...`、`go vet ./...`；新增配置边界测试 | **72.8%** 语句覆盖率 | 超过建议 70%，仍只报告、不阻断 |
@@ -57,7 +57,7 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 ### Go / Python 服务
 
 - `.github/workflows/ci.yml` 的 Go matrix 为四个服务分别保存 `coverage.out` 和 `go tool cover -func` 摘要制品，并运行 `go vet`。
-- 追加 Go 请求边界测试后，各次独立本地全量/`go vet` 验证结果：`swap` 31.8%、`social-auth` 35.2%、`loyalty` 28.6%；OAuth/provider/auth-verifier 测试只连 `httptest` loopback fixture，没有实时凭据/服务；没有改动认证合同或服务运行时代码。
+- 追加 Go 请求边界测试后，各次独立本地全量/`go vet` 验证结果：`swap` 39.9%（新增 SQL mock 测试使持久化 `db` package 达到 78.4%）、`social-auth` 35.2%、`loyalty` 28.6%；OAuth/provider/auth-verifier 测试只连 `httptest` loopback fixture，没有实时凭据/服务；没有改动认证合同或服务运行时代码。
 - [`.github/workflows/backend-python.yml`](../../.github/workflows/backend-python.yml) 使用 Python 3.12 和 `coverage==7.6.1`，将 `ai-proxy` 与 `payment-sandbox` 分开测试、报告与上传；测试代码不计入分母。
 - 依赖仅用于测试；支付沙盒维持 synthetic/local 用途，没有引入真实支付端点、账户或密钥。
 
