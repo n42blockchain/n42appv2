@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService 和钱包 token-model 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,806 通过、0 失败、0 跳过 | 69,982 / 132,316 = **52.8901%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService 和钱包 token-model 回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,808 通过、0 失败、0 跳过 | 70,002 / 132,316 = **52.9052%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 基于 `7586c391` 的兼容提交 `c9a607c1` 全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,742 通过、0 失败、3 跳过；全包 analyze 报告 278 条既有 info、无 warning/error | 35,400 / 135,262 = **26.1714%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -65,6 +65,7 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 - 状态清理的根因是过期/空状态在没有状态故事房间时仍调用创建逻辑，创建失败后旧 presence 文本继续显示。现在清理状态不再新建房间，仍保留 presence 类型并清除状态文本；Chat 插件定向回归和主 app 定向镜像回归通过。最新兼容插件全套 6,742 项通过、3 项跳过；主 app 新 pin 全套 5,800 项通过，覆盖率为 52.8432%，70% 门槛仍未通过。
 - 新增 `CoinPriceAlertService` 持久化回归，验证缺省状态、跨币种保存/更新、定向幂等删除以及损坏 JSON 的 fail-closed；4 项定向测试通过。后续串行主套件新鲜证据为 5,804 项通过、0 失败、0 跳过，LCOV 从 69,920/132,316 提升至 69,968/132,316（52.8795%）；运行结果 `/tmp/n42-app-tests-price-alert-batch-serial.jsonl`。70% 覆盖率门仍未通过。
 - 随后的 provider 批次补充两项真实 token 模型/钱包状态测试：验证 token 继承其所属链账户路径与地址上下文、主网 token 添加入钱包映射且重复添加不重复呈现。定向测试与 analyze 均通过；提高进程文件句柄限制后完整套件 5,806 项通过、0 失败、0 跳过，LCOV 69,982/132,316 = 52.8901%；运行结果 `/tmp/n42-app-tests-token-batch.jsonl`。覆盖率离 CI 的 70% 仍差 17.1099 个百分点。
+- 追加 testnet token 添加与 token 移除回归，确认测试网映射路径、余额模型呈现、pin key 的定向清理和无关 pin 保留。token provider 定向测试 4 项通过、analyze 无问题；完整套件 5,808 项通过、0 失败、0 跳过，LCOV 70,002/132,316 = 52.9052%；运行结果 `/tmp/n42-app-tests-token-extra-batch.jsonl`。70% 门仍未通过。
 
 ### Go / Python 服务
 

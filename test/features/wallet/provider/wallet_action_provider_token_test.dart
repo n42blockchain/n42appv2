@@ -14,17 +14,23 @@ void main() {
 
   late WalletActionProvider wallet;
 
-  setUp(() {
-    SharedPreferences.setMockInitialValues({});
-    FlutterSecureStorage.setMockInitialValues({});
+  setUpAll(() {
     app.globalProviderContainer = ProviderContainer(
       overrides: [walletServiceProvider.overrideWithValue(null)],
     );
+  });
+
+  setUp(() {
+    SharedPreferences.setMockInitialValues({});
+    FlutterSecureStorage.setMockInitialValues({});
     wallet = WalletActionProvider();
   });
 
   tearDown(() {
     wallet.dispose();
+  });
+
+  tearDownAll(() {
     app.globalProviderContainer.dispose();
   });
 
@@ -110,4 +116,88 @@ void main() {
       expect(wallet.coinList.single.address, '0xaccount');
     },
   );
+
+  test('adding a testnet token stores it under the selected test network', () {
+    final mainChain = CoinModel()
+      ..coin = {
+        'coinType': 'ETH',
+        'miniName': 'ETH',
+        'icon': 'eth.png',
+        'isContract': false,
+      }
+      ..isTest = true;
+    wallet.walletInfoLsit.add(
+      WalletInfo()
+        ..coinInfo = {
+          'ETH': {
+            'isTest': true,
+            'baseInfo': mainChain.coin,
+            'mainnets': <String, dynamic>{},
+            'testnets': [
+              {'testnetContract': <String, dynamic>{}},
+            ],
+          },
+        },
+    );
+    wallet.walletIndex = 0;
+    wallet.coinModels.add(mainChain);
+    final token = <String, dynamic>{
+      'coinType': 'ETH',
+      'mKey': '0xTESTTOKEN',
+      'miniName': 'TEST',
+      'symbol': 'TEST',
+      'name': 'Test token',
+      'contract': '0xTESTTOKEN',
+      'isContract': true,
+      'decimals': 6,
+    };
+
+    wallet.addWalletChainToken(token);
+
+    final testTokens =
+        wallet.walletMap['ETH']['testnets'][0]['testnetContract'] as Map;
+    expect(testTokens.keys, ['0xTESTTOKEN']);
+    expect(wallet.coinList.single.isTest, isTrue);
+  });
+
+  test('removing a token clears its model and only its pin record', () {
+    final token = <String, dynamic>{
+      'coinType': 'ETH',
+      'mKey': '0xTOKEN',
+      'miniName': 'USDC',
+      'symbol': 'USDC',
+      'name': 'USD Coin',
+      'contract': '0xtoken',
+      'isContract': true,
+      'decimals': 6,
+    };
+    wallet.walletInfoLsit.add(
+      WalletInfo()
+        ..coinInfo = {
+          'ETH': {
+            'isTest': false,
+            'baseInfo': {'coinType': 'ETH', 'isContract': false},
+            'mainnets': {'0XTOKEN': token},
+          },
+        }
+        ..pinnedCoins = ['ETH_USDC', 'ETH_DAI', 'BTC'],
+    );
+    wallet.walletIndex = 0;
+    wallet.coinList.add(
+      CoinModel()
+        ..coin = {
+          'coinType': 'ETH',
+          'mKey': '0XTOKEN',
+          'miniName': 'USDC',
+          'contract': '0xTOKEN',
+          'isContract': true,
+        },
+    );
+
+    wallet.removeWalletChainToken(token, symbol: 'ETH');
+
+    expect(wallet.walletMap['ETH']['mainnets'], isEmpty);
+    expect(wallet.coinList, isEmpty);
+    expect(wallet.walletInfo.pinnedCoins, ['ETH_DAI', 'BTC']);
+  });
 }
