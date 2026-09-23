@@ -438,12 +438,13 @@ class _ChatMorePanelState extends State<ChatMorePanel> {
         label: S.of(context)?.commonTakePhoto ?? 'Camera',
         onTap: widget.onCameraPressed,
       ),
-      _MoreItem(
-        icon: Icons.flash_on_outlined,
-        label: 'Quick Reply',
-        onTap: widget.onQuickReplyPressed,
-        iconColor: AppColors.warning,
-      ),
+      if (widget.onQuickReplyPressed != null)
+        _MoreItem(
+          icon: Icons.flash_on_outlined,
+          label: 'Quick Reply',
+          onTap: widget.onQuickReplyPressed,
+          iconColor: AppColors.warning,
+        ),
       _MoreItem(
         icon: Icons.location_on_outlined,
         label: S.of(context)?.commonLocationLabel ?? 'Location',

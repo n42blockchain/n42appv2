@@ -604,7 +604,9 @@ class FirebasePushService implements IPushNotificationService {
         if (decoded.contains(roomId)) return true;
       }
     } catch (e) {
-      debugLog('FirebasePushService: hidden-chat list unreadable, clearing: $e');
+      debugLog(
+        'FirebasePushService: hidden-chat list unreadable, clearing: $e',
+      );
       try {
         await prefs.remove('n42_chat_hidden_chats');
       } catch (_) {
@@ -1605,6 +1607,11 @@ class FirebasePushService implements IPushNotificationService {
         return NotificationPermissionStatus.notDetermined;
       case AuthorizationStatus.provisional:
         return NotificationPermissionStatus.granted;
+      default:
+        // Newer firebase_messaging versions distinguish permanent denial;
+        // older supported versions do not expose that enum value. Treat any
+        // unrecognized authorization state conservatively as denied.
+        return NotificationPermissionStatus.denied;
     }
   }
 
