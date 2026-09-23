@@ -1,0 +1,71 @@
+name: Chat Package Tests
+
+on:
+  push:
+    branches: [master, main, develop]
+    paths:
+      - 'packages/n42_chat/**'
+      - '.github/workflows/chat-package.yml'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - 'packages/n42_chat/**'
+      - '.github/workflows/chat-package.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chat-package-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Chat package tests and coverage
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/n42_chat
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.44.8'
+          cache: true
+
+      - name: Resolve package dependencies
+        run: flutter pub get
+
+      - name: Test local Chat package and collect coverage
+        run: flutter test --coverage --concurrency=4 --reporter expanded
+
+      - name: Summarize Chat package coverage
+        if: always()
+        run: |
+          if [ ! -f coverage/lcov.info ]; then
+            echo 'Chat LCOV was not produced.' >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          awk -F '[:,]' '/^DA:/ { found++; if ($3 > 0) hit++ }
+            END {
+              if (found == 0) {
+                print "Chat LCOV has no executable lines.";
+                exit 1;
+              }
+              printf "Chat package line coverage: %d/%d (%.2f%%)\n", hit, found, 100*hit/found;
+              printf "Chat package line coverage: **%.2f%%** (%d/%d lines)\n", 100*hit/found, hit, found >> ENVIRON["GITHUB_STEP_SUMMARY"];
+            }' coverage/lcov.info
+
+      - name: Upload Chat package coverage artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: chat-package-lcov
+          path: packages/n42_chat/coverage/lcov.info
+          if-no-files-found: warn
+          retention-days: 14
