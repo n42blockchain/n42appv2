@@ -75,6 +75,35 @@ func TestVerifyTelegram_TamperedHash(t *testing.T) {
 	}
 }
 
+func TestVerifyTelegramRejectsTamperedIdentityFields(t *testing.T) {
+	cfg := testCfg()
+	now := strconv.FormatInt(time.Now().Unix(), 10)
+	fields := map[string]string{
+		"id":        "42",
+		"auth_date": now,
+		"username":  "alice",
+	}
+	req := &LoginSocialRequest{
+		Provider: "telegram", TelegramID: "42", TelegramAuthDate: now,
+		TelegramUsername: "mallory", TelegramHash: validTelegramHash(cfg.TelegramBotToken, fields),
+	}
+	if _, err := verifyTelegram(cfg, req); err == nil {
+		t.Fatal("a valid signature for a different username must not authenticate the request")
+	}
+}
+
+func TestVerifyTelegramRejectsMalformedSignedAuthDate(t *testing.T) {
+	cfg := testCfg()
+	fields := map[string]string{"id": "42", "auth_date": "not-a-timestamp"}
+	req := &LoginSocialRequest{
+		Provider: "telegram", TelegramID: "42", TelegramAuthDate: fields["auth_date"],
+		TelegramHash: validTelegramHash(cfg.TelegramBotToken, fields),
+	}
+	if _, err := verifyTelegram(cfg, req); err == nil {
+		t.Fatal("a correctly signed but malformed auth_date must be rejected")
+	}
+}
+
 func TestVerifyTelegram_Expired(t *testing.T) {
 	cfg := testCfg()
 	old := strconv.FormatInt(time.Now().Unix()-100000, 10) // > 24h
