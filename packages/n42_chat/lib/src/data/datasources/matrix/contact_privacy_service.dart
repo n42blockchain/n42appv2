@@ -178,17 +178,23 @@ class ContactPrivacyService {
       throw StateError('No active account');
     final presence =
         presenceType ?? (await client.getPresence(client.userID!)).presence;
-    final room = await ownRoom(story: true);
-    if (room == null) throw StateError('Status room unavailable');
-    await apply(room, story: true);
     final metadata = TimedStatusMetadata.fromJson(status);
-    await client.setRoomStateWithKey(
-      room.id,
-      'n42.user.status',
-      '',
-      metadata.isExpired ? {} : status,
+    final clearStatus = metadata.isExpired || !metadata.hasMessage;
+    final room = await ownRoom(story: true, createIfMissing: !clearStatus);
+    if (room != null) {
+      await apply(room, story: true);
+      await client.setRoomStateWithKey(
+        room.id,
+        'n42.user.status',
+        '',
+        clearStatus ? {} : status,
+      );
+    }
+    await client.setPresence(
+      client.userID!,
+      presence,
+      statusMsg: clearStatus ? null : '',
     );
-    await client.setPresence(client.userID!, presence, statusMsg: '');
   }
 
   Future<void> _separateLegacyStatuses(
@@ -303,7 +309,10 @@ class ContactPrivacyService {
     }
   }
 
-  Future<matrix.Room?> ownRoom({bool story = false}) async {
+  Future<matrix.Room?> ownRoom({
+    bool story = false,
+    bool createIfMissing = true,
+  }) async {
     final client = _client;
     if (client == null || client.userID == null) return null;
     final tag = story ? storyTag : momentTag;
@@ -313,6 +322,7 @@ class ContactPrivacyService {
           room.getState(audienceType) == null)
         return room;
     }
+    if (!createIfMissing) return null;
     if (!identical(_creationClient, client)) {
       _creationClient = client;
       _creating.clear();

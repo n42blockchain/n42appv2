@@ -581,6 +581,31 @@ void main() {
   );
 
   test(
+    'expired status clears presence without creating a story room',
+    () async {
+      await privacy.publishStatus({
+        'message': 'Working',
+        'expiresAt': DateTime.now()
+            .toUtc()
+            .subtract(const Duration(minutes: 1))
+            .toIso8601String(),
+      });
+
+      verify(
+        () => client.setPresence(
+          me,
+          matrix.PresenceType.unavailable,
+          statusMsg: null,
+        ),
+      ).called(1);
+    verifyNever(() => client.createRoom(name: any(named: 'name')));
+      verifyNever(
+        () => client.setRoomStateWithKey(any(), 'n42.user.status', '', any()),
+      );
+    },
+  );
+
+  test(
     'active legacy statuses are copied before shared-room redaction',
     () async {
       final old = room('moments', me);
