@@ -118,14 +118,80 @@ void main() {
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pump();
   });
+
+  testWidgets('does not render a screen share while this device is sharing', (
+    tester,
+  ) async {
+    final service = _ConnectedCallService(
+      testParticipants: [
+        MeetingParticipant(
+          id: 'local-user',
+          name: 'Local user',
+          isLocal: true,
+          isScreenSharing: true,
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: GroupCallScreen(liveKitService: service, roomName: 'Test group'),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Local user is sharing screen'), findsNothing);
+    expect(find.text('Local user (Me)'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
+
+  testWidgets('continues to render a remote participant screen share', (
+    tester,
+  ) async {
+    final service = _ConnectedCallService(
+      testParticipants: [
+        MeetingParticipant(id: 'local-user', name: 'Local user', isLocal: true),
+        MeetingParticipant(
+          id: 'remote-user',
+          name: 'Remote user',
+          isScreenSharing: true,
+        ),
+      ],
+    );
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: GroupCallScreen(liveKitService: service, roomName: 'Test group'),
+      ),
+    );
+    await tester.pump();
+
+    expect(find.text('Remote user is sharing screen'), findsOneWidget);
+
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pump();
+  });
 }
 
 class _ConnectedCallService extends LiveKitService {
+  _ConnectedCallService({List<MeetingParticipant>? testParticipants})
+    : testParticipants =
+          testParticipants ??
+          [
+            MeetingParticipant(
+              id: 'local-user',
+              name: 'Local user',
+              isLocal: true,
+            ),
+          ];
+
+  final List<MeetingParticipant> testParticipants;
+
   @override
   MeetingState get state => MeetingState.connected;
 
   @override
-  List<MeetingParticipant> get participants => [
-    MeetingParticipant(id: 'local-user', name: 'Local user', isLocal: true),
-  ];
+  List<MeetingParticipant> get participants => testParticipants;
 }

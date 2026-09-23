@@ -245,6 +245,12 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
   }
 
   bool get _hasScreenShare {
+    // A local screen capture includes this Flutter view. Rendering any shared
+    // track while capturing would feed the rendered track back into the capture
+    // and create an endlessly nested mirror.
+    if (_participants.any((p) => p.isLocal && p.isScreenSharing)) {
+      return false;
+    }
     return _participants.any((p) => p.isScreenSharing);
   }
 
@@ -527,6 +533,7 @@ class _GroupCallScreenState extends State<GroupCallScreen> {
             Positioned(
               top: MediaQuery.of(context).padding.top + 60,
               left: 16,
+              right: 16,
               child: Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 12,
