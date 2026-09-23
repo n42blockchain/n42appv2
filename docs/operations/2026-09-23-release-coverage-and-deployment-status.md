@@ -9,7 +9,7 @@
 
 ## 1. 执行摘要
 
-- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,829 passed、0 failed、0 skipped），覆盖率为 **72,033 / 132,316 = 54.4401%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
+- 主 Flutter CI 要求仍为 70% 行覆盖率。最新完整套件通过（5,831 passed、0 failed、0 skipped），覆盖率为 **72,049 / 132,316 = 54.4522%**；现有质量门如实失败，未降低阈值、排除生成代码或跳过测试。
 - Chat 插件兼容基线全包复测为 **6,742 passed / 3 skipped / 0 failed**，覆盖率 **35,400 / 135,262 = 26.1714%**；建议的 70% 尚未设置为阻断门槛。
 - Go 与 Python 的覆盖报告按服务分别保存，不与 Flutter LCOV 混合。LiveKit JWT 72.8%、AI Proxy 78%、Payment Sandbox 92% 已高于建议的 70%；其余服务仍不足。
 - 本轮未获得服务器 SSH 登录凭据或明确目标环境，因此没有远程登录、生产变更或部署。SSH 公钥、SSH 私钥和 HTTPS TLS 证书是不同用途的凭据。
@@ -19,7 +19,7 @@
 
 | 组件 | 本轮验证 | 新鲜覆盖率 | 门槛状态 |
 |---|---|---:|---|
-| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService、token-model、Session Key、ENS、Paymaster、AA 主页/批量交易主体、私钥导入、链详情面板与 BTC 家族发送回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,829 通过、0 失败、0 跳过 | 72,033 / 132,316 = **54.4401%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
+| Flutter 主应用 | 兼容版 Chat pin 更新、钱包 bridge、CoinPriceAlertService、token-model、Session Key、ENS、Paymaster、AA 主页/批量交易主体、私钥导入、链详情面板、BTC 家族发送与 Max 费率竞态回归后完整 `flutter test --no-pub --coverage --concurrency=4 --machine`；质量门计数 5,831 通过、0 失败、0 跳过 | 72,049 / 132,316 = **54.4522%** | `.github/workflows/ci.yml` 70% 门槛保持不变，未通过 |
 | Chat 插件 | 基于 `7586c391` 的兼容提交 `c9a607c1` 全包 `flutter test --no-pub --coverage --concurrency=2 --machine`；质量门计数 6,742 通过、0 失败、3 跳过；全包 analyze 报告 278 条既有 info、无 warning/error | 35,400 / 135,262 = **26.1714%** | 独立报告已接入 CI；建议 70% 门槛暂不阻断 |
 | Go `swap` | `go test ./...`、`go vet ./...`；另测 quote/commit/alert handler 边界和 SQL mock 持久化合同 | **39.9%** 语句覆盖率；`db` package 78.4%，alert handlers 48.1% | 报告/制品已接入，未设 70% 阈值 |
 | Go `social-auth` | `go test ./...`、`go vet ./...`；覆盖 Telegram HMAC、handler 边界、本地 `httptest` OAuth 路径及环境配置解析 | **40.8%** 语句覆盖率；OAuth exchange 88.5%、JSON provider helper 85.7% | 报告/制品已接入，未设 70% 阈值 |
@@ -74,6 +74,7 @@ ALGO 发送页此前在成功加载最小余额后，会将 `AlgoModel.minBalanc
 - 新增私钥导入页面空值/畸形输入回归，验证无效输入在原生地址派生和钱包写入前 fail-closed；仅使用非敏感无效字符串，定向 2 项通过、单文件 analyze clean。完整套件 5,824 项通过、0 失败、0 跳过，LCOV 71,671/132,316 = 54.1665%；运行结果 `/tmp/n42-app-tests-import-privatekey.jsonl`，70% 门仍未通过。
 - 新增链详情资产面板 widget 回归，验证余额信息展示、发送/收款/浏览器操作回调与可选锁定信息入口；`BTC` 类型让 ENS 展示走本地不支持分支。定向 2 项通过、单文件 analyze clean；完整套件 5,826 项通过、0 失败、0 跳过，LCOV 71,750/132,316 = 54.2262%；运行结果 `/tmp/n42-app-tests-wallet-chain-info-board.jsonl`，70% 门仍未通过。
 - 新增 BTC 家族（LTC）发送页 widget 回归：验证 DApp 收款地址/金额预填且锁定、余额展示、超余额和非数字输入错误反馈，以及超余额时点击发送不进入确认/签名路由。定向 3 项通过，单文件 analyze 无问题；`wallet_chain_send_btc_widgets.dart` 覆盖 167/223 行（74.9%），`wallet_chain_send_btc_logic.dart` 覆盖 47/117 行（40.2%）。完整套件 5,829 项通过、0 失败、0 跳过，72,033/132,316 = 54.4401%；运行结果 `/tmp/n42-app-tests-btc-send.jsonl`，70% 门仍未通过。
+- 扩展 EVM 发送逻辑 harness 覆盖 Max 行为：验证原生币先以 0 金额估算费用、Max 取余额减去最新手续费，以及报价等待期间用户改金额后异步结果不会覆盖输入。定向 17 项通过、单文件 analyze 无问题；`wallet_chain_send_logic.dart` 覆盖 109/324 行（33.6%，此前 95/324）。完整套件 5,831 项通过、0 失败、0 跳过，72,049/132,316 = 54.4522%；运行结果 `/tmp/n42-app-tests-send-max.jsonl`，70% 门仍未通过。
 
 ### Go / Python 服务
 

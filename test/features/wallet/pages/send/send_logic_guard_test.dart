@@ -47,6 +47,8 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
   Completer<bool>? estimateGate;
   int addressChecks = 0;
   int estimates = 0;
+  String? lastEstimateAmountOverride;
+  bool? lastEstimateDismissKeyboard;
   int signatures = 0;
   int dismissals = 0;
   String estimateError = '';
@@ -75,6 +77,8 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
     bool dismissKeyboard = true,
   }) async {
     estimates++;
+    lastEstimateAmountOverride = amountOverride;
+    lastEstimateDismissKeyboard = dismissKeyboard;
     if (estimateGate != null) await estimateGate!.future;
     totalGasPrice = estimatedFee ?? totalGasPrice;
     errorMessage = estimateError;
@@ -408,5 +412,38 @@ void main() {
     await operation;
     expect(state.signatures, 0);
     expect(state.load, Load.finish);
+  });
+
+  testWidgets(
+    'native Max estimates zero and fills balance minus refreshed fee',
+    (tester) async {
+      final state = await mount(tester, balance: BigInt.from(10000000));
+      state.estimatedFee = BigInt.from(1000000);
+
+      await state.maxTag();
+
+      expect(state.lastEstimateAmountOverride, '0');
+      expect(state.lastEstimateDismissKeyboard, isFalse);
+      expect(state.valueTextEditingController.text, '9');
+      expect(state.transferValue, BigInt.from(9000000));
+      expect(state.amountErrorMessage, isEmpty);
+    },
+  );
+
+  testWidgets('Max does not overwrite an amount edited during fee estimation', (
+    tester,
+  ) async {
+    final state = await mount(tester, balance: BigInt.from(10000000));
+    state.estimateGate = Completer<bool>();
+    final maxOperation = state.maxTag();
+    await tester.pump();
+
+    state.valueTextEditingController.text = '2';
+    state.estimateGate!.complete(true);
+    await maxOperation;
+
+    expect(state.valueTextEditingController.text, '2');
+    expect(state.transferValue, BigInt.zero);
+    expect(state.lastEstimateAmountOverride, '0');
   });
 }
