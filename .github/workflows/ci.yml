@@ -56,6 +56,10 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Get JMT verifier dependencies
+        working-directory: packages/n42_jmt_verify
+        run: flutter pub get
+
       - name: Check wallet and chat localization integrity
         run: |
           python3 scripts/audit_localizations.py --mode all
@@ -120,12 +124,20 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Get JMT verifier dependencies
+        working-directory: packages/n42_jmt_verify
+        run: flutter pub get
+
       - name: Run tests with coverage
         run: |
           ulimit -n 4096
           flutter test --coverage --concurrency=4 --machine > test_results.jsonl
           python3 scripts/quality_gate.py tests test_results.jsonl | tee test_output.txt
           cat test_output.txt >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Test JMT verifier package
+        working-directory: packages/n42_jmt_verify
+        run: dart test
 
       - name: Generate coverage report
         run: |
@@ -258,18 +270,38 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        module: [backend/swap, backend/social-auth, backend/loyalty, backend/livekit-jwt]
+        include:
+          - module: backend/swap
+            service: swap
+          - module: backend/social-auth
+            service: social-auth
+          - module: backend/loyalty
+            service: loyalty
+          - module: backend/livekit-jwt
+            service: livekit-jwt
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: ${{ matrix.module }}/go.mod
           cache-dependency-path: ${{ matrix.module }}/go.sum
-      - name: Test and vet
+      - name: Test, vet, and measure coverage
         working-directory: ${{ matrix.module }}
         run: |
-          go test ./...
+          go test ./... -coverprofile=coverage.out
           go vet ./...
+          go tool cover -func=coverage.out | tee coverage-summary.txt
+          cat coverage-summary.txt >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload Go coverage artifact
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: go-coverage-${{ matrix.service }}
+          path: |
+            ${{ matrix.module }}/coverage.out
+            ${{ matrix.module }}/coverage-summary.txt
+          if-no-files-found: warn
+          retention-days: 14
 
   # ============================================
   # 性能回归检测
