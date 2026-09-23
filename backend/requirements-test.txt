@@ -1,0 +1,2 @@
+# Test and coverage tooling only; runtime services have no third-party Python dependencies.
+coverage==7.6.1

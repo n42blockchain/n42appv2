@@ -1,0 +1,73 @@
+name: Backend Python Tests
+
+on:
+  push:
+    branches: [master, main, develop]
+    paths:
+      - 'backend/ai-proxy/**'
+      - 'backend/payment-sandbox/**'
+      - 'backend/requirements-test.txt'
+      - '.github/workflows/backend-python.yml'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - 'backend/ai-proxy/**'
+      - 'backend/payment-sandbox/**'
+      - 'backend/requirements-test.txt'
+      - '.github/workflows/backend-python.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: ${{ matrix.service }} tests and coverage
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: ai-proxy
+            directory: backend/ai-proxy
+          - service: payment-sandbox
+            directory: backend/payment-sandbox
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: backend/requirements-test.txt
+
+      - name: Install test tooling
+        run: python -m pip install -r backend/requirements-test.txt
+
+      - name: Run isolated unit tests with branch coverage
+        env:
+          SERVICE_DIR: ${{ matrix.directory }}
+        run: |
+          python -m coverage run --branch \
+            --source="$SERVICE_DIR" \
+            --omit="$SERVICE_DIR/test_*.py,$SERVICE_DIR/test_support.py" \
+            -m unittest discover -s "$SERVICE_DIR" -p 'test_*.py' -v
+
+      - name: Report service coverage
+        env:
+          SERVICE: ${{ matrix.service }}
+        run: |
+          python -m coverage report -m | tee "coverage-${SERVICE}.txt"
+          cat "coverage-${SERVICE}.txt" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage data
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-coverage-${{ matrix.service }}
+          path: |
+            .coverage
+            coverage-${{ matrix.service }}.txt
+          retention-days: 14
