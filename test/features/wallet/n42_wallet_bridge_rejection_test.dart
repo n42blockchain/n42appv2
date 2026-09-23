@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:n42_chat/n42_chat.dart' show NftStandard;
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/models/wallet_info.dart';
 import 'package:n42_wallet/features/wallet/n42_wallet_bridge.dart';
@@ -197,6 +198,188 @@ void main() {
       expect(await bridge.getBalance('missing'), '0');
     },
   );
+
+  group('NFT bridge request guards', () {
+    setUp(() => snapshot.walletInfoLsit.add(WalletInfo()));
+
+    test(
+      'rejects malformed contract or recipient before chain selection',
+      () async {
+        final invalidContract = await bridge.requestNftTransfer(
+          contractAddress: 'not-an-address',
+          tokenId: '1',
+          toAddress: '0x${'2' * 40}',
+          chainId: 1,
+        );
+        final invalidRecipient = await bridge.requestNftTransfer(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: '1',
+          toAddress: 'recipient',
+          chainId: 1,
+        );
+
+        expect(invalidContract.errorMessage, 'Invalid NFT transfer address');
+        expect(invalidRecipient.errorMessage, 'Invalid NFT transfer address');
+      },
+    );
+
+    test(
+      'rejects malformed token IDs and non-positive ERC-1155 amounts',
+      () async {
+        final invalidToken = await bridge.requestNftTransfer(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: '1.2',
+          toAddress: '0x${'2' * 40}',
+          chainId: 1,
+        );
+        final invalidAmount = await bridge.requestNftTransfer(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: '1',
+          toAddress: '0x${'2' * 40}',
+          chainId: 1,
+          standard: NftStandard.erc1155,
+          amount: 0,
+        );
+
+        expect(invalidToken.errorMessage, 'Invalid NFT token ID');
+        expect(invalidAmount.errorMessage, 'Invalid NFT transfer amount');
+      },
+    );
+
+    test(
+      'does not mistake a non-EVM chain ID collision for an NFT network',
+      () async {
+        snapshot.coinModels.add(
+          CoinModel()
+            ..coin = {
+              'coinType': 'APT',
+              'miniName': 'APT',
+              'blockchainType': 'Aptos',
+              'chainId': 1,
+              'decimals': 8,
+            },
+        );
+
+        final result = await bridge.requestNftTransfer(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: '1',
+          toAddress: '0x${'2' * 40}',
+          chainId: 1,
+        );
+
+        expect(result.errorMessage, 'Chain 1 not found in wallet');
+      },
+    );
+  });
+
+  test(
+    'token metadata queries fail closed for invalid addresses or wrong chain',
+    () async {
+      snapshot.walletInfoLsit.add(WalletInfo());
+      snapshot.coinModels.add(
+        CoinModel()
+          ..coin = {
+            'coinType': 'APT',
+            'miniName': 'APT',
+            'blockchainType': 'Aptos',
+            'chainId': 1,
+            'decimals': 8,
+          },
+      );
+
+      expect(
+        await bridge.getErc20Balance(
+          contractAddress: 'invalid',
+          chainId: 1,
+          ownerAddress: '0x${'2' * 40}',
+        ),
+        BigInt.zero,
+      );
+      expect(
+        await bridge.getErc721Balance(
+          contractAddress: '0x${'1' * 40}',
+          chainId: 1,
+          ownerAddress: 'invalid',
+        ),
+        0,
+      );
+      expect(
+        await bridge.getErc1155Balance(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: BigInt.one,
+          chainId: 1,
+          ownerAddress: '0x${'2' * 40}',
+        ),
+        BigInt.zero,
+      );
+      expect(
+        await bridge.getErc721TokenUri(
+          contractAddress: '0x${'1' * 40}',
+          tokenId: 1,
+          chainId: 1,
+        ),
+        isNull,
+      );
+    },
+  );
+
+  group('payment request bridge behavior', () {
+    test(
+      'builds an encoded N42 payment URI for the preferred ETH address',
+      () async {
+        snapshot.addresses['ETH'] =
+            '0x1111111111111111111111111111111111111111';
+
+        final request = await bridge.generatePaymentRequest(
+          amount: '1.25',
+          token: 'USDC',
+          memo: 'Lunch & coffee',
+        );
+        final uri = Uri.parse(request.qrCodeData);
+
+        expect(request.receiverAddress, snapshot.addresses['ETH']);
+        expect(request.amount, '1.25');
+        expect(request.token, 'USDC');
+        expect(request.memo, 'Lunch & coffee');
+        expect(uri.scheme, 'n42');
+        expect(uri.host, 'pay');
+        expect(uri.queryParameters, {
+          'address': snapshot.addresses['ETH'],
+          'amount': '1.25',
+          'token': 'USDC',
+          'memo': 'Lunch & coffee',
+        });
+        expect(request.expiresAt, isNotNull);
+        expect(
+          request.expiresAt!.isAfter(
+            request.createdAt.add(const Duration(minutes: 29)),
+          ),
+          isTrue,
+        );
+        expect(
+          request.expiresAt!.isBefore(
+            request.createdAt.add(const Duration(minutes: 31)),
+          ),
+          isTrue,
+        );
+      },
+    );
+
+    test('uses an empty receiver and omits a missing optional memo', () async {
+      final request = await bridge.generatePaymentRequest(
+        amount: '0.5',
+        token: 'ETH',
+      );
+
+      expect(request.receiverAddress, isEmpty);
+      expect(Uri.parse(request.qrCodeData).queryParameters, {
+        'address': '',
+        'amount': '0.5',
+        'token': 'ETH',
+      });
+      expect(request.memo, isNull);
+    });
+  });
 
   test(
     'supported token list skips missing identity and keeps display precision',

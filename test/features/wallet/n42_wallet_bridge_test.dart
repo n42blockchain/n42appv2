@@ -72,4 +72,16 @@ void main() {
       expect(decodeAbiString('0x01'), isNull);
     });
   });
+
+  test('validates exact EVM and supported N-chain address lengths', () {
+    final evm = N42WalletBridge();
+
+    expect(evm.isValidAddress('0x${'a' * 40}'), isTrue);
+    expect(evm.isValidAddress('0x${'a' * 39}'), isFalse);
+    expect(evm.isValidAddress('0x${'g' * 40}'), isFalse);
+    expect(evm.isValidAddress('N${'x' * 29}'), isTrue);
+    expect(evm.isValidAddress('N${'x' * 49}'), isTrue);
+    expect(evm.isValidAddress('N${'x' * 28}'), isFalse);
+    expect(evm.isValidAddress('N${'x' * 50}'), isFalse);
+  });
 }
