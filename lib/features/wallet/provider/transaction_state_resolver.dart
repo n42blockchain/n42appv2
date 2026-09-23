@@ -11,6 +11,14 @@ import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/models/btc_transaction_recode_model.dart';
 import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 
+typedef TransactionReceiptReader =
+    Future<MessageModel> Function(
+      String coinType,
+      String txHash, {
+      bool isTest,
+      String? rpc,
+    });
+
 /// 交易状态解析器 — 纯网络查询，无副作用。
 ///
 /// 返回值约定：
@@ -20,9 +28,31 @@ import 'package:n42_wallet/features/wallet/models/transation_record_model.dart';
 ///   0 = 尚未确认（仍在 pending 中）
 class TransactionStateResolver {
   final TokenViewApi _tokenViewApi;
+  final TransactionReceiptReader? _receiptReader;
 
-  TransactionStateResolver({TokenViewApi? tokenViewApi})
-    : _tokenViewApi = tokenViewApi ?? TokenViewApi();
+  TransactionStateResolver({
+    TokenViewApi? tokenViewApi,
+    TransactionReceiptReader? receiptReader,
+  }) : _tokenViewApi = tokenViewApi ?? TokenViewApi(),
+       _receiptReader = receiptReader;
+
+  Future<MessageModel> _readEvmReceipt(
+    String coinType,
+    String txHash, {
+    required bool isTest,
+    required String? rpc,
+  }) {
+    final reader = _receiptReader;
+    if (reader != null) {
+      return reader(coinType, txHash, isTest: isTest, rpc: rpc);
+    }
+    return _tokenViewApi.getTransactionReceiptEth(
+      coinType,
+      txHash,
+      isTest: isTest,
+      rpc: rpc,
+    );
+  }
 
   /// 根据区块链类型查询 [trm] 的上链状态。
   Future<int> resolveState(TransationRecordModel trm) async {
@@ -78,7 +108,7 @@ class TransactionStateResolver {
   Future<int> _resolveEth(TransationRecordModel trm) async {
     final bool isTest = trm.isTest != 0;
     final String? customRpc = _receiptRpc(trm);
-    final MessageModel mm = await _tokenViewApi.getTransactionReceiptEth(
+    final MessageModel mm = await _readEvmReceipt(
       trm.coin['coinType'],
       trm.txHash,
       isTest: isTest,
@@ -157,7 +187,7 @@ class TransactionStateResolver {
   Future<int> _resolveEvmCompatible(TransationRecordModel trm) async {
     final bool isTest = trm.isTest != 0;
     final String? customRpc = _receiptRpc(trm);
-    final MessageModel mm = await _tokenViewApi.getTransactionReceiptEth(
+    final MessageModel mm = await _readEvmReceipt(
       trm.coin['coinType'],
       trm.txHash,
       isTest: isTest,

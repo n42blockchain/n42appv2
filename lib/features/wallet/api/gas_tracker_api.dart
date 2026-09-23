@@ -6,6 +6,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/features/wallet/models/gas_estimate_model.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/chain_eip1559.dart';
@@ -18,7 +19,10 @@ import 'package:n42_wallet/features/wallet/utils/transaction/coin_gas.dart';
 class GasTrackerApi {
   static GasTrackerApi? _instance;
 
-  GasTrackerApi._();
+  GasTrackerApi._() : _rpcDio = _createRpcDio();
+
+  @visibleForTesting
+  GasTrackerApi.testing(Dio rpcDio) : _rpcDio = rpcDio;
 
   factory GasTrackerApi() {
     _instance ??= GasTrackerApi._();
@@ -27,7 +31,9 @@ class GasTrackerApi {
 
   // Dedicated Dio instance for direct RPC calls — isolated from the shared
   // circuit breaker so ETH node failures don't trip api.n42.ai requests.
-  static final Dio _rpcDio = Dio(
+  final Dio _rpcDio;
+
+  static Dio _createRpcDio() => Dio(
     BaseOptions(
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
