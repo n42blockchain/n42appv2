@@ -50,6 +50,14 @@ MINING_RPC_URL=http://dev.invalid
 
 配置并集 LCOV：[`dart-config-variants.lcov.gz`](dart-config-variants.lcov.gz)，解压后的 SHA-256：`f049ae146c794a7480bc4b977de4710933abbe90003796187966db327dfeddde`。定向 Dart analyze 无问题，`git diff --check` 通过。
 
+## Flutter 钱包发送 Max
+
+`send_logic_guard_test.dart` 新增 5 项 Max 金额回归测试，覆盖 XRP 预留余额、原生币 Max 手续费重估、异步估算期间保留用户编辑、代币全余额及手续费仍加载时不重复估算。XRP 用例先复现余额 20 XRP、手续费 1 XRP 时错误地发送 19 XRP，再验证 Max 扣除 10 XRP 预留后为 9 XRP；修复在转账额计算中应用 Ripple 预留值。
+
+`wallet_chain_send_logic.dart` 在本次完整 LCOV 中为 125 / 327 行（38.2263%），上一份主程序全量 LCOV 中为 95 / 324 行（29.3210%）。定向 `dart analyze` 无问题。
+
 ## COV-01 状态
 
-主程序最近一次全量结果仍为 2026-09-23 的 6,214 项通过、0 失败、0 跳过，63,682 / 132,331 行（48.1233%）。本批没有重跑主程序全量套件，故不把 Chat 独立仓库、配置窄测或服务端覆盖率计入主程序百分比。70% 门槛未达成，COV-01 继续开放；基线 LCOV 与说明见[前一批报告](../coverage-expansion-2026-09-23/README.md)。
+2026-09-24 后续完整主程序运行按 CI 文件句柄上限执行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`：6,224 项通过、0 失败、0 跳过，机器输出包含 `success: true` 的 `done` 事件。全量 LCOV 为 63,710 / 132,404 行、927 个文件（48.1179%）。覆盖率高价值路径持续补强，但 70% 质量门槛仍未达到，COV-01 继续开放。
+
+主程序全量 LCOV：[`main-full.lcov.gz`](main-full.lcov.gz)，解压后的 SHA-256：`ddf14e398d2747c97d5b86e02958a609ad00121459a6a7f8fc373c74a66ad3a9`；gzip 归档 SHA-256：`64a4e93f9bff41ac5f9b07606b0f9f2069c04aaa4608b5750856817014e8a279`。

@@ -425,9 +425,13 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         );
       }
     } else {
+      final reserve = _blockchainType == BlockchainType.Ripple.name
+          ? ethToWeiString('10', _decimals)
+          : BigInt.zero;
       transferValue = maxTransferableAmount(
         balance: coinModel.balance,
         fee: totalGasPrice,
+        reserve: reserve,
       );
       valueTextEditingController.text = toEther(
         transferValue.toString(),

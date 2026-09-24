@@ -51,6 +51,8 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
   int dismissals = 0;
   String estimateError = '';
   BigInt? estimatedFee;
+  String? lastEstimateAmountOverride;
+  bool? lastEstimateDismissKeyboard;
   TransationRecordModel? confirmationRecord;
 
   @override
@@ -75,6 +77,8 @@ class _SendHarnessState extends ConsumerState<_SendHarness>
     bool dismissKeyboard = true,
   }) async {
     estimates++;
+    lastEstimateAmountOverride = amountOverride;
+    lastEstimateDismissKeyboard = dismissKeyboard;
     if (estimateGate != null) await estimateGate!.future;
     totalGasPrice = estimatedFee ?? totalGasPrice;
     errorMessage = estimateError;
@@ -222,6 +226,88 @@ void main() {
     expect(state.amountErrorMessage, isEmpty);
     state.amountCheck(value: '1.000001');
     expect(state.amountErrorMessage, isNotEmpty);
+  });
+
+  testWidgets('XRP Max reserves ten coins after subtracting the fee', (
+    tester,
+  ) async {
+    final state = await mount(
+      tester,
+      blockchain: 'Ripple',
+      balance: BigInt.from(20000000),
+    );
+    state.totalGasPrice = BigInt.from(1000000);
+
+    await state.maxTag();
+
+    expect(state.transferValue, BigInt.from(9000000));
+    expect(state.valueTextEditingController.text, '9');
+    expect(state.amountErrorMessage, isEmpty);
+  });
+
+  testWidgets(
+    'native Max estimates with zero then subtracts the refreshed fee',
+    (tester) async {
+      final state = await mount(tester, balance: BigInt.from(10000000));
+      state.estimatedFee = BigInt.from(2000000);
+
+      await state.maxTag();
+
+      expect(state.lastEstimateAmountOverride, '0');
+      expect(state.lastEstimateDismissKeyboard, isFalse);
+      expect(state.transferValue, BigInt.from(8000000));
+      expect(state.valueTextEditingController.text, '8');
+      expect(state.amountErrorMessage, isEmpty);
+    },
+  );
+
+  testWidgets('native Max preserves an amount edited during fee estimation', (
+    tester,
+  ) async {
+    final state = await mount(tester, balance: BigInt.from(10000000));
+    state.estimatedFee = BigInt.from(1000000);
+    state.estimateGate = Completer<bool>();
+    final operation = state.maxTag();
+
+    expect(state.lastEstimateAmountOverride, '0');
+    state.valueTextEditingController.text = '3';
+    state.estimateGate!.complete(true);
+    await operation;
+
+    expect(state.valueTextEditingController.text, '3');
+    expect(state.amountErrorMessage, isEmpty);
+  });
+
+  testWidgets('token Max replaces stale errors with the full token balance', (
+    tester,
+  ) async {
+    final state = await mount(
+      tester,
+      contract: true,
+      balance: BigInt.from(5000000),
+    );
+    state.amountErrorMessage = 'stale invalid input';
+
+    await state.maxTag();
+
+    expect(state.lastEstimateAmountOverride, '5');
+    expect(state.transferValue, BigInt.from(5000000));
+    expect(state.valueTextEditingController.text, '5');
+    expect(state.amountErrorMessage, isEmpty);
+  });
+
+  testWidgets('Max does not start another estimate while gas is loading', (
+    tester,
+  ) async {
+    final state = await mount(tester);
+    state.gasLimitLoad = Load.loading;
+    state.valueTextEditingController.text = '2';
+
+    await state.maxTag();
+
+    expect(state.estimates, 0);
+    expect(state.valueTextEditingController.text, '2');
+    expect(state.transferValue, BigInt.zero);
   });
 
   testWidgets(

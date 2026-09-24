@@ -8,7 +8,7 @@
 | --- | --- | --- | --- |
 | PAY-01 | 欧美及海外法币转账、红包、USDT/USDC 渠道与架构设计 | 设计完成，基础代码及本地模拟已分项提交，未接入生产 | [设计方案](payments-red-packets-overseas-2026-09-20.md)。确认运营主体、供应商消费者场景准入后进入实施；当前不进行真实资金交易。 |
 | UX-01 | 依据欧美常用产品参考，对聊天、联系人和账号切换继续细调 | 本轮微调已验收并集成 | 在已完成 UI 方案基础上修补具体缺口，保留现有功能；窄屏、交互及无障碍针对性验证，由主代理审阅后集成。[执行记录](../testing/ui-polish-2026-09-20.md) |
-| COV-01 | 主程序 CI 口径测试覆盖率达到 70% | 2026-09-23 全量通过：6,214 项，0 失败、0 跳过；63,682 / 132,331 = 48.1233%。70% 质量门槛未通过，任务继续开放 | 按 CI 文件句柄上限执行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`；质量门槛实测失败（48.1233% < 70%）。详见[本轮覆盖率报告](../testing/coverage-expansion-2026-09-23/README.md)及归档 LCOV。 |
+| COV-01 | 主程序 CI 口径测试覆盖率达到 70% | 2026-09-24 全量通过：6,224 项，0 失败、0 跳过；63,710 / 132,404 = 48.1179%。70% 质量门槛未通过，任务继续开放 | 按 CI 文件句柄上限执行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`；机器输出 `done.success=true`。详见[本轮覆盖率报告](../testing/coverage-expansion-2026-09-24/README.md)及归档 LCOV。 |
 | QA-01 | 2696 遗留问题与最新反馈真机验收 | 部分等待反馈设备 / 外部渠道 | [修复与边界](../testing/chat-feedback-2696-2026-09-20/README.md)。Chat `OPEN_ISSUES.md` 为未解决缺陷的唯一台账，本表不替代它。 |
 
 ## 执行规则
@@ -61,6 +61,7 @@
 - 主程序配置按生产默认、development、代理末尾斜线和 host-only origin 四种构建配置测试；4 个配置文件按 LCOV 行并集合计 97 / 106 = 91.51%。Dart analyze 和 diff 检查通过。
 - Go `social-auth` 与 `swap` 全模块测试通过，分别验证必填配置缺失时的子进程退出码及诊断信息；覆盖率统计限制和各模块结果见本批[报告](../testing/coverage-expansion-2026-09-24/README.md)。
 - 主程序未重新执行全量测试；最新完整结果仍为 48.1233%，COV-01 的 70% 门槛继续开放。root 配置测试提交 `f9d61c3fc`，`social-auth` 测试提交 `8ceb2ceb0`，`swap` 测试提交 `d96a5c11c`；本轮未更改 Chat 依赖 pin。
+- 后续钱包发送覆盖率续跑：新加 5 项 Max 金额回归测试，先复现并修复 XRP 余额未扣 10 XRP 预留的问题。当前完整主程序套件 6,224 项通过、0 失败、0 跳过；覆盖率 63,710 / 132,404 = 48.1179%，`wallet_chain_send_logic.dart` 为 125 / 327 行（38.2263%）。70% 目标仍开放；完整报告与 LCOV 见[9 月 24 日覆盖率报告](../testing/coverage-expansion-2026-09-24/README.md)。
 
 ## 第三批与下一步
 
