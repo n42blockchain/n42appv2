@@ -39,7 +39,7 @@ class NearSender implements ChainSender {
     final totalGas = gasPrice * gasUnits;
 
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
     double adjustedAmount = params.amount;

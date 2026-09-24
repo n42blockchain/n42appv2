@@ -136,7 +136,10 @@ class CosmosSender implements ChainSender {
     );
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
-    BigInt valuePrice = ethToWeiString(params.amount.toString(), denomDecimals);
+    BigInt valuePrice = ethToWeiString(
+      params.amountDecimalString,
+      denomDecimals,
+    );
     double adjustedAmount = params.amount;
 
     if (params.contractAddress.isEmpty) {

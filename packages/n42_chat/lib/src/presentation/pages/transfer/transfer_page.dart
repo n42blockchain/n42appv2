@@ -43,6 +43,8 @@ class _TransferPageState extends State<TransferPage> {
   bool _isAddressValid = false;
   String? _scanError;
   WalletUserInfo? _recipientInfo;
+  PaymentRequestData? _scannedPayment;
+  bool _requiresManualAssetChoice = false;
 
   bool get _isPaymentRequestMode => widget.paymentRequest != null;
 
@@ -133,6 +135,24 @@ class _TransferPageState extends State<TransferPage> {
       return;
     }
 
+    if (_scannedPayment != null &&
+        (_selectedToken!.chain?.trim().isNotEmpty != true ||
+            (_selectedToken!.network != 'mainnet' &&
+                _selectedToken!.network != 'testnet') ||
+            (_selectedToken!.assetType != 'native' &&
+                _selectedToken!.assetType != 'token') ||
+            (_selectedToken!.assetType == 'token' &&
+                _selectedToken!.assetId?.trim().isNotEmpty != true))) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Choose an asset with exact chain and network identity.',
+          ),
+        ),
+      );
+      return;
+    }
+
     if (_isPaymentRequestMode) {
       final request = widget.paymentRequest!;
       context.read<TransferBloc>().add(
@@ -154,6 +174,10 @@ class _TransferPageState extends State<TransferPage> {
         amount: amount,
         token: _selectedToken!.symbol,
         memo: memo.isNotEmpty ? memo : null,
+        chain: _scannedPayment == null ? null : _selectedToken!.chain,
+        network: _scannedPayment == null ? null : _selectedToken!.network,
+        assetType: _scannedPayment == null ? null : _selectedToken!.assetType,
+        assetId: _scannedPayment == null ? null : _selectedToken!.assetId,
       ),
     );
   }
@@ -235,7 +259,7 @@ class _TransferPageState extends State<TransferPage> {
         }
         _selectedToken = matchedToken;
       }
-      if (!_isPaymentRequestMode) {
+      if (!_isPaymentRequestMode && !_requiresManualAssetChoice) {
         _selectedToken ??= tokens.first;
       }
     }
@@ -373,21 +397,32 @@ class _TransferPageState extends State<TransferPage> {
                 final payment = PaymentRequestUri.tryParse(raw);
                 final tokens = context.read<TransferBloc>().state.tokens;
                 TokenInfo? requestedToken;
-                if (payment != null && payment.token.isNotEmpty) {
+                var ambiguousLegacyPayment = false;
+                if (payment != null && payment.hasUnambiguousAsset) {
                   final matches = tokens
                       .where(
-                        (t) =>
-                            t.symbol.toLowerCase() ==
-                            payment.token.toLowerCase(),
+                        (asset) =>
+                            asset.chain == payment.chain &&
+                            asset.network == payment.network &&
+                            asset.assetType == payment.assetType &&
+                            (asset.assetType == 'native'
+                                ? asset.assetId == null &&
+                                      payment.assetId == null
+                                : PaymentRequestUri.sameAssetId(
+                                    asset.assetId,
+                                    payment.assetId,
+                                  )),
                       )
                       .toList();
-                  if (matches.length == 1) requestedToken = matches.single;
+                  if (matches.length == 1) {
+                    requestedToken = matches.single;
+                  }
+                } else if (payment?.isLegacy == true) {
+                  ambiguousLegacyPayment = true;
                 }
-                // This form has no chain selector. Do not silently lose a
-                // requested network or send a payment using another asset.
-                if (payment?.chain != null ||
-                    (payment != null &&
-                        payment.token.isNotEmpty &&
+                // Fail closed if an exact payment asset is missing locally.
+                if ((payment != null &&
+                        !payment.isLegacy &&
                         requestedToken == null) ||
                     (payment == null && Uri.tryParse(raw)?.hasScheme == true)) {
                   setState(() {
@@ -400,7 +435,15 @@ class _TransferPageState extends State<TransferPage> {
                   _scanError = null;
                   _isAddressValid = false;
                   _recipientInfo = null;
-                  if (requestedToken != null) _selectedToken = requestedToken;
+                  _scannedPayment = payment;
+                  _requiresManualAssetChoice = ambiguousLegacyPayment;
+                  if (payment != null && ambiguousLegacyPayment) {
+                    _selectedToken = null;
+                    _scanError =
+                        'This legacy QR has no exact asset identity. Choose the asset before sending.';
+                  } else if (requestedToken != null) {
+                    _selectedToken = requestedToken;
+                  }
                 });
                 _addressController.text = address;
                 _validateAddress(address);
@@ -482,15 +525,21 @@ class _TransferPageState extends State<TransferPage> {
       child: SingleChildScrollView(
         child: Column(
           children: visibleTokens.map((token) {
-            final isSelected = _selectedToken?.symbol == token.symbol;
+            final isSelected = identical(_selectedToken, token);
             final balance = balances[token.symbol] ?? '0';
 
             return InkWell(
-              onTap: _isPaymentRequestMode
+              onTap:
+                  _isPaymentRequestMode ||
+                      _scannedPayment?.hasUnambiguousAsset == true
                   ? null
                   : () {
                       setState(() {
                         _selectedToken = token;
+                        _requiresManualAssetChoice = false;
+                        if (_scanError?.startsWith('This legacy QR') == true) {
+                          _scanError = null;
+                        }
                       });
                     },
               child: Container(

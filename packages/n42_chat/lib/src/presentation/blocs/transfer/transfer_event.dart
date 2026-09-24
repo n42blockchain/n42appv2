@@ -35,6 +35,10 @@ class InitiateTransfer extends TransferEvent {
   final String amount;
   final String token;
   final String? memo;
+  final String? chain;
+  final String? network;
+  final String? assetType;
+  final String? assetId;
 
   const InitiateTransfer({
     required this.roomId,
@@ -42,10 +46,24 @@ class InitiateTransfer extends TransferEvent {
     required this.amount,
     required this.token,
     this.memo,
+    this.chain,
+    this.network,
+    this.assetType,
+    this.assetId,
   });
 
   @override
-  List<Object?> get props => [roomId, receiverAddress, amount, token, memo];
+  List<Object?> get props => [
+    roomId,
+    receiverAddress,
+    amount,
+    token,
+    memo,
+    chain,
+    network,
+    assetType,
+    assetId,
+  ];
 }
 
 /// 创建收款请求
@@ -83,7 +101,13 @@ class FulfillPaymentRequest extends TransferEvent {
   });
 
   @override
-  List<Object?> get props => [roomId, requestId, receiverAddress, amount, token];
+  List<Object?> get props => [
+    roomId,
+    requestId,
+    receiverAddress,
+    amount,
+    token,
+  ];
 }
 
 /// 验证地址
@@ -100,4 +124,3 @@ class ValidateAddress extends TransferEvent {
 class ClearTransferState extends TransferEvent {
   const ClearTransferState();
 }
-

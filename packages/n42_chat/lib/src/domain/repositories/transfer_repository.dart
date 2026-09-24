@@ -16,6 +16,22 @@ abstract class ITransferRepository {
     String? memo,
   });
 
+  /// Initiates a transfer with an exact chain/network/asset identity.
+  /// Implementations that cannot preserve the identity must fail closed.
+  Future<TransferEntity> initiateTransferExact({
+    required String roomId,
+    required String receiverAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    required String chain,
+    required String network,
+    required String assetType,
+    String? assetId,
+  }) async => throw UnsupportedError(
+    'Exact-asset transfers are not supported by this repository',
+  );
+
   /// 发送转账消息到聊天
   Future<String> sendTransferMessage({
     required String roomId,
@@ -67,10 +83,7 @@ abstract class ITransferRepository {
   Future<TransferEntity?> getTransfer(String transferId);
 
   /// 获取所有转账记录
-  Future<List<TransferEntity>> getAllTransfers({
-    int? limit,
-    int? offset,
-  });
+  Future<List<TransferEntity>> getAllTransfers({int? limit, int? offset});
 
   // ============================================
   // 钱包信息
@@ -91,4 +104,3 @@ abstract class ITransferRepository {
   /// 钱包是否已连接
   bool get isWalletConnected;
 }
-

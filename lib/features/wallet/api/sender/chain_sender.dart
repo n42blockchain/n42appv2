@@ -48,6 +48,12 @@ class SendParams {
   // 18 位代币 MAX 全额从 BigInt 降级 double 会上浮、被误判余额不足(第三轮 P1)。
   final BigInt? tokenValueWeiOverride;
 
+  /// Original display-unit decimal text for requests that must not pass through
+  /// binary floating point before a chain sender converts it to base units.
+  final String? decimalAmountOverride;
+
+  String get amountDecimalString => decimalAmountOverride ?? amount.toString();
+
   const SendParams({
     required this.coinType,
     required this.fromAddress,
@@ -74,6 +80,7 @@ class SendParams {
     this.tipOverride,
     this.valueWeiOverride,
     this.tokenValueWeiOverride,
+    this.decimalAmountOverride,
   });
 }
 

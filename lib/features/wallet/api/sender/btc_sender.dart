@@ -48,7 +48,7 @@ class BtcSender implements ChainSender {
       averageValue = getCoinGas(coinType);
     }
 
-    final valuePrice = ethToWeiString(params.amount.toString(), 8);
+    final valuePrice = ethToWeiString(params.amountDecimalString, 8);
     final bool allValue;
     final List<Map<String, dynamic>> collectedUtxos;
 
@@ -75,7 +75,7 @@ class BtcSender implements ChainSender {
       final List<Map<String, dynamic>> utxos = [];
       final mmutxo = await _getUTXO(
         coinType,
-        params.amount,
+        valuePrice,
         fromAddress,
         utxos,
         0,
@@ -194,7 +194,7 @@ class BtcSender implements ChainSender {
 
   Future<MessageModel> _getUTXO(
     String coinType,
-    double value,
+    BigInt value,
     String address,
     List<Map<String, dynamic>> utxos,
     int input2Price,
@@ -245,14 +245,14 @@ class BtcSender implements ChainSender {
   }
 
   Future<MessageModel> _calculateGasFee(
-    double value,
+    BigInt value,
     List<dynamic> unspents,
     List<Map<String, dynamic>> utxos,
     int input2Price,
     int gasFee, {
     bool isTest = false,
   }) async {
-    final int valuePriceInt = ethToWeiString(value.toString(), 8).toInt();
+    final int valuePriceInt = value.toInt();
 
     for (final item in unspents) {
       final u = item as Map<String, dynamic>;

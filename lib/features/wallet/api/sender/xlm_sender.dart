@@ -50,7 +50,7 @@ class XlmSender implements ChainSender {
 
     const int fee = 100; // base fee in stroops
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       7,
     ); // 1 XLM = 10,000,000 stroops
     double adjustedAmount = params.amount;

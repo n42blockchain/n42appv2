@@ -6,7 +6,9 @@
 import 'package:n42_wallet/features/component/enums/coin_type.dart';
 import 'package:n42_wallet/features/wallet/models/coin_config_view.dart';
 import 'package:n42_wallet/features/wallet/models/coin_model.dart';
+import 'package:n42_wallet/features/wallet/utils/chain_payment_uri.dart';
 import 'package:n42_wallet/features/wallet/utils/eip681.dart';
+import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 
 class ScanToPayResolution {
   final CoinModel coinModel;
@@ -20,14 +22,95 @@ class ScanToPayResolution {
   });
 }
 
+enum WalletPaymentScanKind {
+  plainAddress,
+  walletConnect,
+  eip681,
+  chainAware,
+  unsupported,
+}
+
+class WalletPaymentScanInput {
+  final WalletPaymentScanKind kind;
+  final Eip681Request? eip681Request;
+  final ChainPaymentRequest? chainRequest;
+  final String? walletConnectUri;
+
+  const WalletPaymentScanInput._(
+    this.kind, {
+    this.eip681Request,
+    this.chainRequest,
+    this.walletConnectUri,
+  });
+
+  const WalletPaymentScanInput.plainAddress()
+    : this._(WalletPaymentScanKind.plainAddress);
+
+  const WalletPaymentScanInput.unsupported()
+    : this._(WalletPaymentScanKind.unsupported);
+
+  const WalletPaymentScanInput.eip681(Eip681Request request)
+    : this._(WalletPaymentScanKind.eip681, eip681Request: request);
+
+  const WalletPaymentScanInput.walletConnect(String uri)
+    : this._(WalletPaymentScanKind.walletConnect, walletConnectUri: uri);
+
+  const WalletPaymentScanInput.chainAware(ChainPaymentRequest request)
+    : this._(WalletPaymentScanKind.chainAware, chainRequest: request);
+}
+
+/// Separates payment URIs from plain-address input so malformed or unsupported
+/// payment schemes can never fall through to the coin picker.
+class WalletPaymentScanParser {
+  WalletPaymentScanParser._();
+
+  static WalletPaymentScanInput parse(String raw) {
+    final value = raw.trim();
+    final walletConnectUri = normalizeWalletConnectUriString(value);
+    if (walletConnectUri != null) {
+      return WalletPaymentScanInput.walletConnect(walletConnectUri);
+    }
+    if (value.toLowerCase().startsWith(Eip681.scheme)) {
+      final request = Eip681.parse(value);
+      return request == null
+          ? const WalletPaymentScanInput.unsupported()
+          : WalletPaymentScanInput.eip681(request);
+    }
+    if (!ChainPaymentUri.isSupportedPaymentScheme(value)) {
+      return _hasUriScheme(value)
+          ? const WalletPaymentScanInput.unsupported()
+          : const WalletPaymentScanInput.plainAddress();
+    }
+    final request = ChainPaymentUri.tryParse(value);
+    return request == null
+        ? const WalletPaymentScanInput.unsupported()
+        : WalletPaymentScanInput.chainAware(request);
+  }
+
+  static bool _hasUriScheme(String value) =>
+      RegExp(r'^[A-Za-z][A-Za-z0-9+.-]*:').hasMatch(value);
+}
+
 class ScanToPayResolver {
   const ScanToPayResolver._();
 
   static ScanToPayResolution? resolve({
-    required Eip681Request request,
+    Eip681Request? request,
+    ChainPaymentRequest? chainRequest,
     required Iterable<CoinModel> coinModels,
     CoinModel? currentCoin,
   }) {
+    if ((request == null) == (chainRequest == null)) return null;
+    if (chainRequest != null) {
+      return _resolveChainPayment(chainRequest, coinModels);
+    }
+    if (request == null) return null;
+
+    if (!_isSupportedRequest(request) ||
+        _effectiveChainId(request, currentCoin) == null) {
+      return null;
+    }
+
     final recipient = request.recipient?.trim() ?? '';
     if (recipient.isEmpty) return null;
 
@@ -41,6 +124,73 @@ class ScanToPayResolver {
       recipient: recipient,
       amount: formatMinUnits(request.amount, targetCoin.config.decimals),
     );
+  }
+
+  static ScanToPayResolution? _resolveChainPayment(
+    ChainPaymentRequest request,
+    Iterable<CoinModel> coinModels,
+  ) {
+    if (!ChainPaymentUri.isValidRequest(request)) return null;
+    final isTest = request.network == ChainPaymentNetwork.testnet;
+    final candidates = coinModels.toList(growable: false);
+    final chains = candidates
+        .where(
+          (coin) =>
+              !coin.config.isContract &&
+              coin.config.mKey == request.chain &&
+              coin.isTest == isTest,
+        )
+        .toList(growable: false);
+    if (chains.length != 1) return null;
+    final chain = chains.single;
+
+    final CoinModel asset;
+    if (request.assetType == ChainPaymentAssetType.native) {
+      asset = chain;
+    } else {
+      final requestedContract = request.contract!.trim();
+      final matches = candidates
+          .where(
+            (coin) =>
+                coin.config.isContract &&
+                coin.parentChainMKey == request.chain &&
+                coin.isTest == isTest &&
+                coin.config.coinType == chain.config.coinType &&
+                coin.config.blockchainType == chain.config.blockchainType &&
+                _sameContract(
+                  coin.config.blockchainType,
+                  _contractFor(coin),
+                  requestedContract,
+                ),
+          )
+          .toList(growable: false);
+      if (matches.length != 1) return null;
+      asset = matches.single;
+    }
+
+    final amount = request.amount?.trim();
+    if (!_validDisplayAmount(amount, asset.config.decimals)) return null;
+    return ScanToPayResolution(
+      coinModel: asset,
+      recipient: request.recipient.trim(),
+      amount: amount,
+    );
+  }
+
+  static bool _validDisplayAmount(String? amount, int decimals) {
+    if (amount == null || amount.isEmpty) return true;
+    if (!RegExp(r'^\d+(?:\.\d+)?$').hasMatch(amount)) return false;
+    if (!amount.replaceAll('.', '').contains(RegExp(r'[1-9]'))) return false;
+    final decimalPoint = amount.indexOf('.');
+    if (decimalPoint == -1) return true;
+    return amount.length - decimalPoint - 1 <= decimals;
+  }
+
+  static bool _sameContract(String blockchainType, String left, String right) {
+    if (blockchainType == BlockchainType.Ethereum.name) {
+      return left.trim().toLowerCase() == right.trim().toLowerCase();
+    }
+    return left.trim() == right.trim();
   }
 
   static bool sameAsset(CoinModel a, CoinModel b) {
@@ -81,13 +231,20 @@ class ScanToPayResolver {
     final token = _normalizeAddress(request.tokenAddress);
     if (token.isEmpty) return null;
     final chainId = _effectiveChainId(request, currentCoin);
-    return _firstOrNull(
-      coinModels.where((coin) {
-        if (!coin.config.isContract) return false;
-        if (_normalizeAddress(_contractFor(coin)) != token) return false;
-        return _matchesChainId(coin, chainId);
-      }),
-    );
+    final matches = coinModels
+        .where((coin) {
+          if (!_isEvmCoin(coin)) return false;
+          if (!coin.config.isContract) return false;
+          if (_normalizeAddress(_contractFor(coin)) != token) return false;
+          return _matchesChainId(coin, chainId);
+        })
+        .toList(growable: false);
+    if (matches.length == 1) return matches.single;
+    if (currentCoin != null &&
+        matches.any((coin) => sameAsset(coin, currentCoin))) {
+      return matches.firstWhere((coin) => sameAsset(coin, currentCoin));
+    }
+    return null;
   }
 
   static CoinModel? _findNativeCoin(
@@ -103,13 +260,53 @@ class ScanToPayResolver {
       return currentCoin;
     }
 
-    return _firstOrNull(
-      coinModels.where((coin) {
-        if (coin.config.isContract) return false;
-        if (!_isEvmCoin(coin)) return false;
-        return _matchesChainId(coin, chainId);
-      }),
-    );
+    final matches = coinModels
+        .where((coin) {
+          if (coin.config.isContract) return false;
+          if (!_isEvmCoin(coin)) return false;
+          return _matchesChainId(coin, chainId);
+        })
+        .toList(growable: false);
+    if (matches.length == 1) return matches.single;
+    if (currentCoin != null &&
+        matches.any((coin) => sameAsset(coin, currentCoin))) {
+      return matches.firstWhere((coin) => sameAsset(coin, currentCoin));
+    }
+    return null;
+  }
+
+  static bool _isSupportedRequest(Eip681Request request) {
+    if (request.hasDuplicateParameters ||
+        request.hasMalformedParameters ||
+        request.hasMalformedChainId) {
+      return false;
+    }
+    if (request.chainId != null && request.chainId! <= 0) return false;
+
+    final keys = request.parameters.keys.toSet();
+    if (request.isErc20Transfer) {
+      if (!keys.contains('address') ||
+          keys.difference(const {'address', 'uint256'}).isNotEmpty) {
+        return false;
+      }
+      return _isPositiveMinUnitAmount(request.parameters['uint256']);
+    }
+
+    if (request.functionName != null ||
+        keys.difference(const {'value'}).isNotEmpty) {
+      return false;
+    }
+    return _isPositiveMinUnitAmount(request.parameters['value']);
+  }
+
+  /// Missing amount is valid; a supplied amount must be a positive integer in
+  /// base units. Rejecting it here prevents malformed input becoming a blank
+  /// send form after [formatMinUnits] returns null.
+  static bool _isPositiveMinUnitAmount(String? amount) {
+    if (amount == null) return true;
+    if (!RegExp(r'^\d+$').hasMatch(amount)) return false;
+    final value = BigInt.tryParse(amount);
+    return value != null && value > BigInt.zero;
   }
 
   static bool _isEvmCoin(CoinModel coin) =>
@@ -156,10 +353,5 @@ class ScanToPayResolver {
     if (value is num) return value.toInt();
     if (value is String) return int.tryParse(value);
     return null;
-  }
-
-  static T? _firstOrNull<T>(Iterable<T> values) {
-    final iterator = values.iterator;
-    return iterator.moveNext() ? iterator.current : null;
   }
 }

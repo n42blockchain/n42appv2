@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072816
+version: 2.4.8+2026072817
 
 environment:
   sdk: ">=3.12.2 <4.0.0"
@@ -106,8 +106,6 @@ dependencies:
   pinput: ^6.0.2
 
   # === QR Code ===
-  qr_code_scanner_plus: ^2.2.0
-
   # === Device Info ===
   device_info_plus: ^12.3.0
   package_info_plus: ^9.0.0

@@ -12,6 +12,7 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/api/coin_wallet_ops.dart';
 import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/features/wallet/utils/eip681.dart';
+import 'package:n42_wallet/features/wallet/utils/chain_payment_uri.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_display.dart';
 import 'package:n42_wallet/features/widgets/app_bar_widget.dart';
 import 'package:n42_wallet/features/widgets/image_network.dart';
@@ -60,53 +61,149 @@ String buildReceiveQrData({
   int erc20Decimals = 18,
   int nativeDecimals = 18,
   int? chainId,
+  String chainMKey = '',
+  bool isTest = false,
 }) {
   final trimmed = amount.trim();
-  if (trimmed.isEmpty) return address;
-
-  // M2 v2: EVM 上的 ERC-20（稳定币）金额请求 → 标准 EIP-681 transfer。
-  if (blockchainType == 'Ethereum' &&
-      erc20Contract != null &&
-      erc20Contract.isNotEmpty) {
-    try {
-      final units = decimalStringToBigInt(trimmed, erc20Decimals);
-      return Eip681.buildErc20Transfer(
-        token: erc20Contract,
-        recipient: address,
-        amount: units.toString(),
-        chainId: chainId,
-      );
-    } catch (_) {
-      // 转换失败则回退到下方原生/通用格式。
-    }
+  final contract = erc20Contract?.trim();
+  final isToken = contract != null && contract.isNotEmpty;
+  final decimals = isToken ? erc20Decimals : nativeDecimals;
+  if (address.trim().isEmpty ||
+      (trimmed.isNotEmpty && !_isValidReceiveAmount(trimmed, decimals))) {
+    return '';
   }
 
-  // EIP-681 的 value 必须是最小单位，不能直接把用户输入的 6 写成
-  // `value=6`，否则付款方会被解析为 6 wei 而非 6 个原生币。
-  if (blockchainType == 'Ethereum') {
+  // EIP-681 carries the EVM chain ID and contract even when amount is open.
+  if (blockchainType == 'Ethereum' && chainId != null && chainId > 0) {
     try {
+      if (isToken) {
+        final units = trimmed.isEmpty
+            ? null
+            : decimalStringToBigInt(trimmed, decimals).toString();
+        return Eip681.buildErc20Transfer(
+          token: contract,
+          recipient: address,
+          amount: units,
+          chainId: chainId,
+        );
+      }
+      final units = trimmed.isEmpty
+          ? null
+          : decimalStringToBigInt(trimmed, decimals).toString();
       return Eip681.buildNative(
         recipient: address,
         chainId: chainId,
-        amountWei: decimalStringToBigInt(trimmed, nativeDecimals).toString(),
+        amountWei: units,
       );
     } catch (_) {
-      return address;
+      return '';
     }
   }
 
-  final prefix = switch (blockchainType) {
-    'Bitcoin' => 'bitcoin:$address?amount=',
-    'Solana' => 'solana:$address?amount=',
-    'TheOpenNetwork' => 'ton:transfer/$address?amount=',
-    'Tron' => 'tron:$address?amount=',
-    'Ripple' => 'xrpl:$address?amount=',
-    'Cosmos' => 'cosmos:$address?amount=',
-    'Near' => 'near:$address?amount=',
-    _ => '$address?amount=',
-  };
-  return '$prefix$trimmed';
+  final mKey = chainMKey.trim().isEmpty
+      ? _canonicalReceiveChainKey(blockchainType)
+      : chainMKey.trim();
+
+  // Keep interoperable public URIs when they identify this canonical mainnet
+  // asset. Testnets and tokens without a standard token identifier use N42 v1.
+  if (!isToken) {
+    final query = <String, String>{};
+    if (trimmed.isNotEmpty) query['amount'] = trimmed;
+    if (blockchainType == 'Bitcoin' && mKey == 'BTC') {
+      if (isTest) query['tb'] = address;
+      return Uri(
+        scheme: 'bitcoin',
+        path: isTest ? '' : address,
+        queryParameters: query.isEmpty ? null : query,
+      ).toString();
+    }
+    if (!isTest) {
+      if (blockchainType == 'TheOpenNetwork' && mKey == 'TON') {
+        return _buildReceiveSchemeUri('ton', 'transfer/$address', query);
+      }
+      if (blockchainType == 'Tron' && mKey == 'TRX') {
+        return _buildReceiveSchemeUri('tron', address, query);
+      }
+      if (blockchainType == 'Ripple' && mKey == 'XRP') {
+        return _buildReceiveSchemeUri('xrpl', address, query);
+      }
+      if (blockchainType == 'Cosmos' && mKey == 'ATOM') {
+        return _buildReceiveSchemeUri('cosmos', address, query);
+      }
+      if (blockchainType == 'Near' && mKey == 'NEAR') {
+        return _buildReceiveSchemeUri('near', address, query);
+      }
+    }
+  }
+
+  // Solana Pay identifies SPL tokens by mint and expresses amounts in user
+  // units. Its URI does not identify a cluster, so only mainnet uses it.
+  if (!isTest && blockchainType == 'Solana' && mKey == 'SOL') {
+    final query = <String, String>{};
+    if (trimmed.isNotEmpty) query['amount'] = trimmed;
+    if (isToken) query['spl-token'] = contract;
+    return _buildReceiveSchemeUri('solana', address, query);
+  }
+
+  if (mKey.isEmpty) return '';
+  try {
+    return ChainPaymentUri.encode(
+      ChainPaymentRequest(
+        chain: mKey,
+        network: isTest
+            ? ChainPaymentNetwork.testnet
+            : ChainPaymentNetwork.mainnet,
+        assetType: isToken
+            ? ChainPaymentAssetType.token
+            : ChainPaymentAssetType.native,
+        recipient: address,
+        contract: isToken ? contract : null,
+        amount: trimmed.isEmpty ? null : trimmed,
+      ),
+    );
+  } on ArgumentError {
+    return '';
+  }
 }
+
+bool _isValidReceiveAmount(String amount, int decimals) {
+  if (!RegExp(r'^\d+(?:\.\d+)?$').hasMatch(amount)) return false;
+  if (!amount.replaceAll('.', '').contains(RegExp(r'[1-9]'))) return false;
+  final decimalPoint = amount.indexOf('.');
+  return decimalPoint == -1 || amount.length - decimalPoint - 1 <= decimals;
+}
+
+String? receiveQrTokenContract({
+  required String mainnetContract,
+  required String testnetContract,
+  required bool isTest,
+}) {
+  final contract = (isTest ? testnetContract : mainnetContract).trim();
+  return contract.isEmpty ? null : contract;
+}
+
+String _canonicalReceiveChainKey(String blockchainType) =>
+    switch (blockchainType) {
+      'Ethereum' => '', // EVM always needs its configured chain ID or N42 mKey.
+      'Bitcoin' => 'BTC',
+      'Solana' => 'SOL',
+      'TheOpenNetwork' => 'TON',
+      'Tron' => 'TRX',
+      'Ripple' => 'XRP',
+      'Cosmos' => 'ATOM',
+      'Near' => 'NEAR',
+      _ => '',
+    };
+
+String _buildReceiveSchemeUri(
+  String scheme,
+  String path,
+  Map<String, String> parameters,
+) => Uri(
+  scheme: scheme,
+  path: path,
+  queryParameters: parameters.isEmpty ? null : parameters,
+).toString();
 
 // ─── Widget ───────────────────────────────────────────────────────────────────
 
@@ -184,7 +281,7 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
     // 否则仅 addressType 有值的链通过筛选后会渲染空地址二维码。
     final chainAddr = _extractAddress(chainModel);
     address = chainAddr.isNotEmpty ? chainAddr : _extractAddress(dm);
-    qrData = address;
+    qrData = _buildCurrentQrData();
   }
 
   static String _extractAddress(CoinModel coin) {
@@ -213,17 +310,32 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
   }
 
   void _onAmountChanged() {
+    setState(() => qrData = _buildCurrentQrData());
+  }
+
+  String _buildCurrentQrData() {
     final token = _selectedTokenModel;
-    final newData = buildReceiveQrData(
+    final tokenContract = token == null
+        ? null
+        : receiveQrTokenContract(
+            mainnetContract: token.config.contract,
+            testnetContract: token.config.contractTest,
+            isTest: _selectedChainModel.isTest,
+          );
+    if (token != null && tokenContract == null) return '';
+    return buildReceiveQrData(
       address: address,
       blockchainType: blockchainType,
       amount: amountCtrl.text,
-      erc20Contract: token?.config.contract,
+      erc20Contract: tokenContract,
       erc20Decimals: token?.config.decimals ?? 18,
       nativeDecimals: _selectedChainModel.config.decimals,
-      chainId: _selectedChainModel.config.chainId,
+      chainId: _selectedChainModel.isTest
+          ? _selectedChainModel.config.chainIdTest
+          : _selectedChainModel.config.chainId,
+      chainMKey: _selectedChainModel.config.mKey,
+      isTest: _selectedChainModel.isTest,
     );
-    setState(() => qrData = newData);
   }
 
   /// 切换到另一条链接收

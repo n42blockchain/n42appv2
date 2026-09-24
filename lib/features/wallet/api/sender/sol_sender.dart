@@ -40,14 +40,19 @@ class SolSender implements ChainSender {
 
   Future<SendResult> _send(SendParams params) async {
     final isContract = params.contractAddress.isNotEmpty;
-    if (!params.amount.isFinite || params.amount <= 0) {
+    final exactOverride = isContract
+        ? params.tokenValueWeiOverride
+        : params.valueWeiOverride;
+    if ((exactOverride == null &&
+            (!params.amount.isFinite || params.amount <= 0)) ||
+        (exactOverride != null && exactOverride <= BigInt.zero)) {
       return const SendResult.fail('Invalid transfer amount');
     }
     var valuePrice = isContract
         ? params.tokenValueWeiOverride ??
-              ethToWeiString(params.amount.toString(), params.tokenDecimals)
+              ethToWeiString(params.amountDecimalString, params.tokenDecimals)
         : params.valueWeiOverride ??
-              ethToWeiString(params.amount.toString(), params.decimals);
+              ethToWeiString(params.amountDecimalString, params.decimals);
     if (valuePrice <= BigInt.zero ||
         valuePrice > (BigInt.one << 64) - BigInt.one) {
       return const SendResult.fail('Invalid transfer amount');

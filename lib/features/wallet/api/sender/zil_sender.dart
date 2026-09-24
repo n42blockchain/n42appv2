@@ -60,7 +60,7 @@ class ZilSender implements ChainSender {
     final totalGasPrice = gasPrice * BigInt.from(gas);
 
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
     double adjustedAmount = params.amount;

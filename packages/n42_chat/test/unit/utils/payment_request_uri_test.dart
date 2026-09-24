@@ -2,6 +2,35 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_chat/src/core/utils/payment_request_uri.dart';
 
 void main() {
+  test('amount precision rejects values the sender would truncate', () {
+    expect(
+      PaymentRequestUri.isPositiveAmountForDecimals('1.000001', 6),
+      isTrue,
+    );
+    expect(
+      PaymentRequestUri.isPositiveAmountForDecimals('1.0000001', 6),
+      isFalse,
+    );
+    expect(PaymentRequestUri.isPositiveAmountForDecimals('0', 18), isFalse);
+  });
+
+  test(
+    'asset identity compares EVM addresses without changing other chains',
+    () {
+      expect(
+        PaymentRequestUri.sameAssetId(
+          '0xAbcdef0123456789abcdef0123456789abcdef01',
+          '0xabcdef0123456789ABCDEF0123456789ABCDEF01',
+        ),
+        isTrue,
+      );
+      expect(
+        PaymentRequestUri.sameAssetId('MintAbc123', 'mintabc123'),
+        isFalse,
+      );
+    },
+  );
+
   test('accepts the payment QR emitted by the host wallet bridge', () {
     final value = PaymentRequestUri.tryParse(
       'n42://pay?address=0xABC&amount=0.11&token=ETH&memo=Lunch',
@@ -14,6 +43,32 @@ void main() {
     expect(PaymentRequestUri.tryParse('n42://pay?to=0xABC'), isNull);
   });
   group('encode/parse round-trip', () {
+    test(
+      'versioned format includes exact chain, network, and asset identity',
+      () {
+        const data = PaymentRequestData(
+          receiverAddress: '0xABC123',
+          amount: '12.5',
+          token: 'USDT',
+          memo: 'invoice 42',
+          chain: 'ethereum',
+          network: 'mainnet',
+          assetType: 'token',
+          assetId: '0xTokenContract',
+        );
+
+        final encoded = PaymentRequestUri.encode(data);
+        expect(encoded, startsWith('n42pay://v1/pay?'));
+        final parsed = PaymentRequestUri.tryParse(encoded);
+        expect(parsed?.chain, 'ethereum');
+        expect(parsed?.network, 'mainnet');
+        expect(parsed?.assetType, 'token');
+        expect(parsed?.assetId, '0xTokenContract');
+        expect(parsed?.isLegacy, isFalse);
+        expect(parsed?.token, 'USDT');
+      },
+    );
+
     test('full data round-trips', () {
       const data = PaymentRequestData(
         receiverAddress: ' 0xABC123 ',
@@ -53,6 +108,32 @@ void main() {
   });
 
   group('tryParse', () {
+    test('rejects incomplete or invalid versioned asset identity', () {
+      for (final raw in [
+        'n42pay://v1/pay?to=0x1&chain=eth&network=mainnet&type=token',
+        'n42pay://v1/pay?to=0x1&chain=eth&network=mainnet&type=native&contract=0xc',
+        'n42pay://v1/pay?to=0x1&chain=eth&network=testnet&type=token',
+        'n42pay://v1/pay?to=0x1&chain=eth&network=mainnet&type=alien',
+        'n42pay://v1/pay?to=0x1&chain=eth&network=mainnet&type=native&to=0x2',
+        'n42pay://v1/pay?to=0x1&chain=eth&network=mainnet&type=native&amount=-1',
+        'n42pay://v2/pay?to=0x1&chain=eth&network=mainnet&type=native',
+      ]) {
+        expect(PaymentRequestUri.tryParse(raw), isNull, reason: raw);
+      }
+    });
+
+    test('keeps legacy payloads readable and marks their asset ambiguous', () {
+      final legacy = PaymentRequestUri.tryParse(
+        'n42pay://pay?to=0x1&token=USDT&chain=ethereum',
+      );
+      expect(legacy?.isLegacy, isTrue);
+      expect(legacy?.hasUnambiguousAsset, isFalse);
+      expect(
+        PaymentRequestUri.tryParse('n42://pay?address=0x1')?.isLegacy,
+        isTrue,
+      );
+    });
+
     test('returns null for non-payment scheme', () {
       expect(PaymentRequestUri.tryParse('https://example.com'), isNull);
       expect(PaymentRequestUri.tryParse('n42chat://user/@a:b'), isNull);

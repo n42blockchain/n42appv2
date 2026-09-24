@@ -48,6 +48,23 @@ abstract class IWalletBridge {
     String? memo,
   });
 
+  /// Exact-asset transfer entry point for versioned payment requests.
+  ///
+  /// Integrations must override this method before accepting v1 payment QRs;
+  /// the default fails closed instead of dropping chain/token identity.
+  Future<TransferResult> requestTransferExact({
+    required String toAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    required String chain,
+    required String network,
+    required String assetType,
+    String? assetId,
+  }) async => TransferResult.failure(
+    'Exact-asset transfers are not supported by this wallet integration',
+  );
+
   /// 生成收款请求
   ///
   /// [amount] 请求金额
@@ -82,7 +99,9 @@ abstract class IWalletBridge {
   Future<String?> getEnsAvatar(String ensName) async => null;
 
   /// 批量反向解析 ENS 域名
-  Future<Map<String, String?>> batchLookupEnsNames(List<String> addresses) async {
+  Future<Map<String, String?>> batchLookupEnsNames(
+    List<String> addresses,
+  ) async {
     final futures = addresses.map((addr) async {
       return MapEntry(addr, await lookupEnsName(addr));
     });
@@ -178,24 +197,19 @@ class TransferResult {
   });
 
   /// 创建成功结果
-  factory TransferResult.success(String txHash) => TransferResult(
-        success: true,
-        transactionHash: txHash,
-      );
+  factory TransferResult.success(String txHash) =>
+      TransferResult(success: true, transactionHash: txHash);
 
   /// 创建失败结果
-  factory TransferResult.failure(String error, {String? code}) => TransferResult(
-        success: false,
-        errorMessage: error,
-        errorCode: code,
-      );
+  factory TransferResult.failure(String error, {String? code}) =>
+      TransferResult(success: false, errorMessage: error, errorCode: code);
 
   /// 创建取消结果
   factory TransferResult.cancelled() => const TransferResult(
-        success: false,
-        errorMessage: 'User cancelled',
-        errorCode: 'CANCELLED',
-      );
+    success: false,
+    errorMessage: 'User cancelled',
+    errorCode: 'CANCELLED',
+  );
 }
 
 /// 收款请求
@@ -265,6 +279,21 @@ class TokenInfo {
   /// 是否是原生代币
   final bool isNative;
 
+  /// Stable internal chain identity used by versioned payment requests.
+  final String? chain;
+
+  /// `mainnet` or `testnet` for the exact network represented by this asset.
+  final String? network;
+
+  /// `native` or `token`.
+  final String? assetType;
+
+  /// Network-specific contract or mint; null for native assets.
+  final String? assetId;
+
+  /// Receive address for this exact chain and network.
+  final String? receiverAddress;
+
   const TokenInfo({
     required this.symbol,
     required this.name,
@@ -272,6 +301,11 @@ class TokenInfo {
     this.contractAddress,
     this.iconUrl,
     this.isNative = false,
+    this.chain,
+    this.network,
+    this.assetType,
+    this.assetId,
+    this.receiverAddress,
   });
 }
 
@@ -356,4 +390,3 @@ class NoOpWalletBridge extends IWalletBridge {
   @override
   Future<WalletUserInfo?> getUserInfoByAddress(String address) async => null;
 }
-

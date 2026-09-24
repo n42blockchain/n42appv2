@@ -150,6 +150,7 @@ extension WalletActionProviderToken on WalletActionProvider {
     Map<String, dynamic> token,
   ) {
     CoinModel cm = CoinModel.fromMap(token);
+    cm.parentChainMKey = mainChain.config.mKey;
     cm.mainCoinIcon = mainChain.config.icon;
     cm.privateKey = mainChain.privateKey;
     cm.pathIndex = mainChain.pathIndex;

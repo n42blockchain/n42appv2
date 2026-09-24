@@ -37,7 +37,7 @@ class SuiSender implements ChainSender {
     final totalGas = gasPrice * gasLimit;
 
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
     double adjustedAmount = params.amount;

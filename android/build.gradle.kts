@@ -9,6 +9,9 @@ allprojects {
         // ✅ TrustWallet 私有仓库 (需要 GitHub 认证)
         maven {
             url = uri("https://maven.pkg.github.com/trustwallet/wallet-core")
+            content {
+                includeGroup("com.trustwallet")
+            }
             val props = java.util.Properties()
             val localPropertiesFile = rootProject.file("local.properties")
             if (localPropertiesFile.exists()) {

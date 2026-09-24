@@ -53,6 +53,11 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
 
   void _onChanged() => setState(() {});
 
+  String? get _selectedReceiveAddress =>
+      _selectedToken?.receiverAddress?.trim().isNotEmpty == true
+      ? _selectedToken!.receiverAddress!.trim()
+      : null;
+
   Future<void> _load() async {
     try {
       final bridge = getIt<IWalletBridge>();
@@ -72,14 +77,33 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
   }
 
   String? get _qrData {
-    final addr = _walletAddress;
-    if (addr == null || addr.isEmpty) return null;
+    final asset = _selectedToken;
+    final addr = _selectedReceiveAddress;
+    final amount = _amountController.text.trim();
+    if (addr == null ||
+        asset?.chain?.trim().isNotEmpty != true ||
+        (asset?.network != 'mainnet' && asset?.network != 'testnet') ||
+        (asset?.assetType != 'native' && asset?.assetType != 'token') ||
+        (asset?.assetType == 'token' &&
+            asset?.assetId?.trim().isNotEmpty != true) ||
+        (amount.isNotEmpty &&
+            (asset == null ||
+                !PaymentRequestUri.isPositiveAmountForDecimals(
+                  amount,
+                  asset.decimals,
+                )))) {
+      return null;
+    }
     return PaymentRequestUri.encode(
       PaymentRequestData(
         receiverAddress: addr,
         amount: _amountController.text.trim(),
-        token: _selectedToken?.symbol ?? '',
+        token: asset!.symbol,
         memo: _memoController.text.trim(),
+        chain: asset.chain,
+        network: asset.network,
+        assetType: asset.assetType,
+        assetId: asset.assetId,
       ),
     );
   }
@@ -121,30 +145,31 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _walletAddress == null
-              ? Center(
-                  child: N42EmptyState(
-                    icon: Icons.account_balance_wallet_outlined,
-                    title: l10n?.transferWalletNotConnected ??
-                        'Wallet Not Connected',
-                    description: l10n?.transferPleaseConnectWallet ??
-                        'Please connect your wallet first',
+          ? Center(
+              child: N42EmptyState(
+                icon: Icons.account_balance_wallet_outlined,
+                title:
+                    l10n?.transferWalletNotConnected ?? 'Wallet Not Connected',
+                description:
+                    l10n?.transferPleaseConnectWallet ??
+                    'Please connect your wallet first',
+              ),
+            )
+          : SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  _buildQrCard(l10n),
+                  const SizedBox(height: 24),
+                  _buildForm(l10n),
+                  const SizedBox(height: 24),
+                  N42Button(
+                    text: l10n?.commonShare ?? 'Share',
+                    onPressed: _shareQr,
                   ),
-                )
-              : SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
-                  child: Column(
-                    children: [
-                      _buildQrCard(l10n),
-                      const SizedBox(height: 24),
-                      _buildForm(l10n),
-                      const SizedBox(height: 24),
-                      N42Button(
-                        text: l10n?.commonShare ?? 'Share',
-                        onPressed: _shareQr,
-                      ),
-                    ],
-                  ),
-                ),
+                ],
+              ),
+            ),
     );
   }
 
@@ -188,7 +213,13 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
             else
               const SizedBox(
                 height: 220,
-                child: Center(child: CircularProgressIndicator()),
+                child: Center(
+                  child: Text(
+                    'Exact chain and asset identity is unavailable for this wallet.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.black87),
+                  ),
+                ),
               ),
             const SizedBox(height: 16),
             Text(
@@ -197,14 +228,15 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
                   : (l10n?.transferScanQrToPayMe ?? 'Scan QR code to pay me'),
               style: TextStyle(
                 fontSize: amount.isNotEmpty ? 22 : 14,
-                fontWeight:
-                    amount.isNotEmpty ? FontWeight.w700 : FontWeight.w400,
+                fontWeight: amount.isNotEmpty
+                    ? FontWeight.w700
+                    : FontWeight.w400,
                 color: Colors.black87,
               ),
             ),
             const SizedBox(height: 4),
             Text(
-              _shortAddress(_walletAddress!),
+              _shortAddress(_selectedReceiveAddress ?? _walletAddress!),
               style: const TextStyle(
                 fontSize: 12,
                 fontFamily: 'monospace',
@@ -234,10 +266,12 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
               border: const OutlineInputBorder(),
             ),
             items: _tokens
-                .map((token) => DropdownMenuItem(
-                      value: token,
-                      child: Text('${token.symbol} - ${token.name}'),
-                    ))
+                .map(
+                  (token) => DropdownMenuItem(
+                    value: token,
+                    child: Text('${token.symbol} - ${token.name}'),
+                  ),
+                )
                 .toList(),
             onChanged: (value) => setState(() => _selectedToken = value),
           ),
@@ -265,7 +299,7 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
             children: [
               Expanded(
                 child: Text(
-                  _walletAddress!,
+                  _selectedReceiveAddress ?? _walletAddress!,
                   style: TextStyle(
                     fontSize: 12,
                     fontFamily: 'monospace',
@@ -276,7 +310,11 @@ class _MerchantQrPageState extends State<MerchantQrPage> {
               IconButton(
                 icon: const Icon(Icons.copy, size: 18),
                 onPressed: () {
-                  Clipboard.setData(ClipboardData(text: _walletAddress!));
+                  Clipboard.setData(
+                    ClipboardData(
+                      text: _selectedReceiveAddress ?? _walletAddress!,
+                    ),
+                  );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(

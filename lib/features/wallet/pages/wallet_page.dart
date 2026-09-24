@@ -32,14 +32,12 @@ import 'package:n42_wallet/features/wallet/models/coin_model.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
 import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/utils/feature_address_utils.dart';
-import 'package:n42_wallet/features/wallet/utils/eip681.dart';
 import 'package:n42_wallet/features/wallet/widgets/feature_entry_cards.dart';
 import 'package:n42_wallet/features/wallet/widgets/wallet_board.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wallet_connect_page.dart';
 import 'package:n42_wallet/features/wallet_connect/pages/wc_session_list_page.dart';
 import 'package:n42_wallet/features/wallet_connect/presentation/providers/wallet_connect_providers.dart';
 import 'package:n42_wallet/features/widgets/dialog_widget/tips_dialog_7.dart';
-import 'package:n42_wallet/shared/utils/wallet_connect_uri.dart';
 import 'package:n42_wallet/features/widgets/loading.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/core/utils/responsive_utils.dart';
@@ -304,9 +302,10 @@ class _WalletPageState extends ConsumerState<WalletPage> {
     );
     if (!mounted || scanned == null || scanned.trim().isEmpty) return;
 
-    // WalletConnect 配对码要走 WC 会话流程，不能被当作收款地址塞进发送页。
-    final wcUri = normalizeWalletConnectUriString(scanned);
-    if (wcUri != null) {
+    final scan = WalletPaymentScanParser.parse(scanned);
+    // WalletConnect 配对码走单独会话流程，不能当作收款地址处理。
+    if (scan.kind == WalletPaymentScanKind.walletConnect) {
+      final wcUri = scan.walletConnectUri!;
       final wcp = ref.read(wcpBridgeProvider);
       await wcp.connectInit();
       if (!mounted) return;
@@ -314,20 +313,25 @@ class _WalletPageState extends ConsumerState<WalletPage> {
       return;
     }
 
-    final request = Eip681.parse(scanned);
-    if (request == null) {
-      showSearchCoinSheet(
-        context,
-        0,
-        toAddress: Eip681.resolveRecipient(scanned),
-      );
+    if (scan.kind == WalletPaymentScanKind.unsupported) {
+      ToastUtils.show(S.of(context).g_key_scan_pay_unsupported);
       return;
     }
 
-    final resolution = ScanToPayResolver.resolve(
-      request: request,
-      coinModels: _scanToPayCandidates(waValue),
-    );
+    if (scan.kind == WalletPaymentScanKind.plainAddress) {
+      showSearchCoinSheet(context, 0, toAddress: scanned);
+      return;
+    }
+
+    final resolution = scan.kind == WalletPaymentScanKind.eip681
+        ? ScanToPayResolver.resolve(
+            request: scan.eip681Request,
+            coinModels: _scanToPayCandidates(waValue),
+          )
+        : ScanToPayResolver.resolve(
+            chainRequest: scan.chainRequest,
+            coinModels: _scanToPayCandidates(waValue),
+          );
     if (resolution == null) {
       ToastUtils.show(S.of(context).g_key_scan_pay_unsupported);
       return;

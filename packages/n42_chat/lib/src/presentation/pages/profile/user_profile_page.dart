@@ -16,6 +16,7 @@ import '../../blocs/contact/contact_event.dart';
 import '../../blocs/contact/contact_state.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../../n42_chat.dart';
+import '../../../core/utils/social_scan_payload_parser.dart';
 
 typedef UserProfileChatStartedCallback =
     Future<void> Function(String roomId, BuildContext context);
@@ -210,18 +211,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: Icon(
-                      AppIcons.back,
-                      color: context.textPrimary,
-                    ),
+                    icon: Icon(AppIcons.back, color: context.textPrimary),
                     onPressed: () => Navigator.pop(context),
                   ),
                   const Spacer(),
                   IconButton(
-                    icon: Icon(
-                      Icons.more_horiz,
-                      color: context.textPrimary,
-                    ),
+                    icon: Icon(Icons.more_horiz, color: context.textPrimary),
                     onPressed: _showMoreOptions,
                   ),
                 ],
@@ -355,10 +350,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   const SizedBox(height: 8),
                   Text(
                     contact.statusMessage!,
-                    style: TextStyle(
-                      fontSize: 15,
-                      color: context.textPrimary,
-                    ),
+                    style: TextStyle(fontSize: 15, color: context.textPrimary),
                   ),
                 ],
               ),
@@ -385,21 +377,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Widget _buildInfoTile(
-    String label,
-    String value, {
-    Color? statusColor,
-  }) {
+  Widget _buildInfoTile(String label, String value, {Color? statusColor}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: 15,
-              color: context.textSecondary,
-            ),
+            style: TextStyle(fontSize: 15, color: context.textSecondary),
           ),
           const Spacer(),
           if (statusColor != null)
@@ -414,10 +399,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
           Text(
             value,
-            style: TextStyle(
-              fontSize: 15,
-              color: context.textPrimary,
-            ),
+            style: TextStyle(fontSize: 15, color: context.textPrimary),
           ),
         ],
       ),
@@ -465,18 +447,11 @@ class _UserProfilePageState extends State<UserProfilePage> {
           // 设置备注
           ListTile(
             title: Text(S.of(context)?.commonSetRemark ?? 'Set remark'),
-            trailing: Icon(
-              AppIcons.chevron,
-              color: context.textSecondary,
-            ),
+            trailing: Icon(AppIcons.chevron, color: context.textSecondary),
             onTap: _setRemark,
           ),
 
-          Divider(
-            height: 1,
-            indent: 16,
-            color: context.dividerColor,
-          ),
+          Divider(height: 1, indent: 16, color: context.dividerColor),
 
           // 加入黑名单
           ListTile(
@@ -487,26 +462,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   : (S.of(context)?.profileAddToBlacklist ??
                         'Add to Blacklist'),
             ),
-            trailing: Icon(
-              AppIcons.chevron,
-              color: context.textSecondary,
-            ),
+            trailing: Icon(AppIcons.chevron, color: context.textSecondary),
             onTap: _toggleBlock,
           ),
 
-          Divider(
-            height: 1,
-            indent: 16,
-            color: context.dividerColor,
-          ),
+          Divider(height: 1, indent: 16, color: context.dividerColor),
 
           // 举报
           ListTile(
             title: Text(S.of(context)?.commonReport ?? 'Report'),
-            trailing: Icon(
-              AppIcons.chevron,
-              color: context.textSecondary,
-            ),
+            trailing: Icon(AppIcons.chevron, color: context.textSecondary),
             onTap: _report,
           ),
         ],
@@ -616,9 +581,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
           backgroundColor: context.surfaceColor,
           title: Text(
             S.of(context)?.reportTitle ?? 'Report',
-            style: TextStyle(
-              color: context.textPrimary,
-            ),
+            style: TextStyle(color: context.textPrimary),
           ),
           content: RadioGroup<String>(
             groupValue: selectedReason,
@@ -635,9 +598,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   (reason) => RadioListTile<String>(
                     title: Text(
                       reason,
-                      style: TextStyle(
-                        color: context.textPrimary,
-                      ),
+                      style: TextStyle(color: context.textPrimary),
                     ),
                     value: reason,
                     activeColor: AppColors.primary,
@@ -649,16 +610,12 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 TextField(
                   controller: descController,
                   maxLines: 2,
-                  style: TextStyle(
-                    color: context.textPrimary,
-                  ),
+                  style: TextStyle(color: context.textPrimary),
                   decoration: InputDecoration(
                     hintText:
                         S.of(context)?.reportDescription ??
                         'Additional description (optional)',
-                    hintStyle: TextStyle(
-                      color: context.textSecondary,
-                    ),
+                    hintStyle: TextStyle(color: context.textSecondary),
                     border: const OutlineInputBorder(),
                   ),
                 ),
@@ -844,7 +801,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
 
     await showResolvedShareableLinkQrPage(
       context,
-      resolveLink: () async => 'n42chat://user/${contact.userId}',
+      resolveLink: () async => buildMatrixUserPermalink(contact.userId),
       presentation: ShareableLinkPresentation(
         entityName: contact.effectiveDisplayName,
         linkLabel: contact.userId,

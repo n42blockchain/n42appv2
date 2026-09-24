@@ -26,6 +26,11 @@ class CoinModel {
   /// 用户手动置顶标记（运行时状态，不序列化）
   bool isPinned = false;
 
+  /// Parent chain identity for runtime token candidates used by QR resolution.
+  /// Token config `mKey` is normally the token contract, so the parent chain
+  /// must be carried separately when matching a chain-aware payment request.
+  String? parentChainMKey;
+
   dynamic other;
 
   CoinModel();

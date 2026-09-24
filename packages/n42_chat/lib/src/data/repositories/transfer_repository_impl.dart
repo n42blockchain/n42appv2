@@ -29,6 +29,47 @@ class TransferRepositoryImpl implements ITransferRepository {
     required String amount,
     required String token,
     String? memo,
+  }) => _initiateTransfer(
+    roomId: roomId,
+    receiverAddress: receiverAddress,
+    amount: amount,
+    token: token,
+    memo: memo,
+  );
+
+  @override
+  Future<TransferEntity> initiateTransferExact({
+    required String roomId,
+    required String receiverAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    required String chain,
+    required String network,
+    required String assetType,
+    String? assetId,
+  }) => _initiateTransfer(
+    roomId: roomId,
+    receiverAddress: receiverAddress,
+    amount: amount,
+    token: token,
+    memo: memo,
+    chain: chain,
+    network: network,
+    assetType: assetType,
+    assetId: assetId,
+  );
+
+  Future<TransferEntity> _initiateTransfer({
+    required String roomId,
+    required String receiverAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    String? chain,
+    String? network,
+    String? assetType,
+    String? assetId,
   }) async {
     if (!_walletBridge.isWalletConnected) {
       throw Exception('钱包未连接');
@@ -58,12 +99,23 @@ class TransferRepositoryImpl implements ITransferRepository {
     _transfersCache[transferId] = transfer;
 
     // 发起转账
-    final result = await _walletBridge.requestTransfer(
-      toAddress: receiverAddress,
-      amount: amount,
-      token: token,
-      memo: memo,
-    );
+    final result = chain == null
+        ? await _walletBridge.requestTransfer(
+            toAddress: receiverAddress,
+            amount: amount,
+            token: token,
+            memo: memo,
+          )
+        : await _walletBridge.requestTransferExact(
+            toAddress: receiverAddress,
+            amount: amount,
+            token: token,
+            memo: memo,
+            chain: chain,
+            network: network!,
+            assetType: assetType!,
+            assetId: assetId,
+          );
 
     // 更新转账状态
     TransferEntity updatedTransfer;

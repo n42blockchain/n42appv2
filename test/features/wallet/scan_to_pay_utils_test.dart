@@ -79,6 +79,48 @@ void main() {
     expect(resolution?.amount, '2.5');
   });
 
+  test('EIP-681 ERC-20 request never resolves a non-EVM token', () {
+    const contract = '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48';
+    final nonEvmToken = CoinModel.fromMap({
+      'coinType': 'SOL',
+      'blockchainType': 'Solana',
+      'miniName': 'USDC',
+      'decimals': 6,
+      'isContract': true,
+      'chainId': 1,
+      'contract': contract,
+    });
+    final request = Eip681.parse(
+      'ethereum:$contract@1/transfer?address=0xRecipient&uint256=1000000',
+    )!;
+
+    expect(
+      ScanToPayResolver.resolve(request: request, coinModels: [nonEvmToken]),
+      isNull,
+    );
+  });
+
+  test(
+    'unknown URI schemes fail closed instead of entering address picker',
+    () {
+      expect(
+        WalletPaymentScanParser.parse('litecoin:ltc1qexample').kind,
+        WalletPaymentScanKind.unsupported,
+      );
+    },
+  );
+
+  test(
+    'WalletConnect code is routed separately from payment and addresses',
+    () {
+      const wcUri = 'wc:topic@2?relay-protocol=irn&symKey=key';
+      final result = WalletPaymentScanParser.parse(wcUri);
+
+      expect(result.kind, WalletPaymentScanKind.walletConnect);
+      expect(result.walletConnectUri, wcUri);
+    },
+  );
+
   test('resolves native request by requested chain id', () {
     final eth = native(coinType: 'ETH', chainId: 1);
     final polygon = native(coinType: 'MATIC', chainId: 137);
@@ -129,6 +171,18 @@ void main() {
 
     expect(resolution?.coinModel, same(polygon));
     expect(resolution?.amount, '1');
+  });
+
+  test('absent chain id fails closed without a selected network context', () {
+    final eth = native(coinType: 'ETH', chainId: 1);
+    final request = Eip681.parse(
+      'ethereum:0xRecipient?value=1000000000000000000',
+    )!;
+
+    expect(
+      ScanToPayResolver.resolve(request: request, coinModels: [eth]),
+      isNull,
+    );
   });
 
   test(

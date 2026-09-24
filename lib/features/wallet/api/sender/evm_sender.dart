@@ -85,7 +85,7 @@ class EvmSender implements ChainSender {
       }
       try {
         requestedValue = ethToWeiString(
-          params.amount.toString(),
+          params.amountDecimalString,
           isContract ? params.tokenDecimals : params.decimals,
         );
       } on FormatException {

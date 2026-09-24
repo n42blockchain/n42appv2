@@ -48,7 +48,7 @@ class HbarSender implements ChainSender {
 
       // 1 HBAR = 1e8 tinybars
       BigInt valuePrice = ethToWeiString(
-        params.amount.toString(),
+        params.amountDecimalString,
         params.decimals,
       );
       double adjustedAmount = params.amount;

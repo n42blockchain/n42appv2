@@ -64,6 +64,7 @@ export 'src/integration/wallet_bridge.dart';
 // ============================================
 export 'src/integration/bridge/bridge.dart';
 export 'src/core/utils/bridge_detection_utils.dart';
+export 'src/core/utils/payment_request_uri.dart' show PaymentRequestUri;
 
 // ============================================
 // 推送通知导出

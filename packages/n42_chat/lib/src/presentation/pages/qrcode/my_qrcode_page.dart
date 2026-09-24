@@ -16,6 +16,7 @@ import '../../../domain/repositories/auth_repository.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../widgets/common/common_widgets.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/social_scan_payload_parser.dart';
 
 enum _QRCodeStyle { n42, classic, ocean, berry }
 
@@ -74,7 +75,7 @@ class _MyQRCodePageState extends State<MyQRCodePage> {
 
   String get _qrData {
     if (_userId == null) return '';
-    return 'n42chat://user/$_userId';
+    return buildMatrixUserPermalink(_userId!);
   }
 
   void _copyUserId() {

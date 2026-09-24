@@ -55,7 +55,7 @@ class VetSender implements ChainSender {
     // VTHO cost = gasLimit * gasPriceCoef. At coef=0, minimal cost from energy.
     // For native VET transfer, no explicit fee from VET balance (paid in VTHO).
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
     double adjustedAmount = params.amount;

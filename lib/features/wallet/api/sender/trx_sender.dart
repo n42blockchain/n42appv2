@@ -74,7 +74,7 @@ class TrxSender implements ChainSender {
     double adjustedAmount = params.amount;
 
     if (!isContract) {
-      valuePrice = ethToWeiString(params.amount.toString(), params.decimals);
+      valuePrice = ethToWeiString(params.amountDecimalString, params.decimals);
       if (valuePrice == chainBalance && params.sendMax) {
         if (totalGasPrice >= valuePrice) {
           return SendResult.fail(S.current.g_key_wallet_m5('TRX'));
@@ -91,7 +91,7 @@ class TrxSender implements ChainSender {
       }
     } else {
       valuePrice = ethToWeiString(
-        params.amount.toString(),
+        params.amountDecimalString,
         params.tokenDecimals,
       );
       if (valuePrice > tokenBalance) {

@@ -14,7 +14,7 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
   final IWalletBridge _walletBridge;
 
   TransferBloc(this._transferRepository, this._walletBridge)
-      : super(const TransferState.initial()) {
+    : super(const TransferState.initial()) {
     on<LoadWalletInfo>(_onLoadWalletInfo);
     on<LoadTokens>(_onLoadTokens);
     on<LoadTokenBalance>(_onLoadTokenBalance);
@@ -44,18 +44,22 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
         }
       }
 
-      emit(state.copyWith(
-        status: TransferBlocStatus.walletLoaded,
-        isWalletConnected: isConnected,
-        walletAddress: walletAddress,
-        tokens: tokens,
-        balances: balances,
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.walletLoaded,
+          isWalletConnected: isConnected,
+          walletAddress: walletAddress,
+          tokens: tokens,
+          balances: balances,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: TransferBlocStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -72,10 +76,12 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       final tokens = await _transferRepository.getSupportedTokens();
       emit(state.copyWith(tokens: tokens));
     } catch (e) {
-      emit(state.copyWith(
-        status: TransferBlocStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -98,41 +104,64 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     InitiateTransfer event,
     Emitter<TransferState> emit,
   ) async {
-    emit(state.copyWith(
-      status: TransferBlocStatus.processing,
-      processingMessage: BlocMessageKeys.transferProcessing,
-    ));
+    emit(
+      state.copyWith(
+        status: TransferBlocStatus.processing,
+        processingMessage: BlocMessageKeys.transferProcessing,
+      ),
+    );
 
     try {
-      final transfer = await _transferRepository.initiateTransfer(
-        roomId: event.roomId,
-        receiverAddress: event.receiverAddress,
-        amount: event.amount,
-        token: event.token,
-        memo: event.memo,
-      );
+      final transfer = event.chain == null
+          ? await _transferRepository.initiateTransfer(
+              roomId: event.roomId,
+              receiverAddress: event.receiverAddress,
+              amount: event.amount,
+              token: event.token,
+              memo: event.memo,
+            )
+          : await _transferRepository.initiateTransferExact(
+              roomId: event.roomId,
+              receiverAddress: event.receiverAddress,
+              amount: event.amount,
+              token: event.token,
+              memo: event.memo,
+              chain: event.chain!,
+              network: event.network!,
+              assetType: event.assetType!,
+              assetId: event.assetId,
+            );
 
       if (transfer.isSuccess) {
-        emit(state.copyWith(
-          status: TransferBlocStatus.success,
-          lastTransfer: transfer,
-        ));
+        emit(
+          state.copyWith(
+            status: TransferBlocStatus.success,
+            lastTransfer: transfer,
+          ),
+        );
       } else if (transfer.status == TransferStatus.cancelled) {
-        emit(state.copyWith(
-          status: TransferBlocStatus.failure,
-          errorMessage: BlocMessageKeys.transferCancelled,
-        ));
+        emit(
+          state.copyWith(
+            status: TransferBlocStatus.failure,
+            errorMessage: BlocMessageKeys.transferCancelled,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          status: TransferBlocStatus.failure,
-          errorMessage: transfer.failureReason ?? BlocMessageKeys.transferFailed,
-        ));
+        emit(
+          state.copyWith(
+            status: TransferBlocStatus.failure,
+            errorMessage:
+                transfer.failureReason ?? BlocMessageKeys.transferFailed,
+          ),
+        );
       }
     } catch (e) {
-      emit(state.copyWith(
-        status: TransferBlocStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -140,10 +169,12 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     CreatePaymentRequest event,
     Emitter<TransferState> emit,
   ) async {
-    emit(state.copyWith(
-      status: TransferBlocStatus.processing,
-      processingMessage: BlocMessageKeys.paymentProcessing,
-    ));
+    emit(
+      state.copyWith(
+        status: TransferBlocStatus.processing,
+        processingMessage: BlocMessageKeys.paymentProcessing,
+      ),
+    );
 
     try {
       final request = await _transferRepository.createPaymentRequest(
@@ -158,15 +189,19 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
         request: request,
       );
 
-      emit(state.copyWith(
-        status: TransferBlocStatus.paymentCreated,
-        paymentRequest: request,
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.paymentCreated,
+          paymentRequest: request,
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        status: TransferBlocStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -174,10 +209,12 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
     FulfillPaymentRequest event,
     Emitter<TransferState> emit,
   ) async {
-    emit(state.copyWith(
-      status: TransferBlocStatus.processing,
-      processingMessage: BlocMessageKeys.paymentProcessing,
-    ));
+    emit(
+      state.copyWith(
+        status: TransferBlocStatus.processing,
+        processingMessage: BlocMessageKeys.paymentProcessing,
+      ),
+    );
 
     try {
       final transfer = await _transferRepository.fulfillPaymentRequest(
@@ -189,21 +226,28 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       );
 
       if (transfer.isSuccess) {
-        emit(state.copyWith(
-          status: TransferBlocStatus.success,
-          lastTransfer: transfer,
-        ));
+        emit(
+          state.copyWith(
+            status: TransferBlocStatus.success,
+            lastTransfer: transfer,
+          ),
+        );
       } else {
-        emit(state.copyWith(
-          status: TransferBlocStatus.failure,
-          errorMessage: transfer.failureReason ?? BlocMessageKeys.paymentFailed,
-        ));
+        emit(
+          state.copyWith(
+            status: TransferBlocStatus.failure,
+            errorMessage:
+                transfer.failureReason ?? BlocMessageKeys.paymentFailed,
+          ),
+        );
       }
     } catch (e) {
-      emit(state.copyWith(
-        status: TransferBlocStatus.failure,
-        errorMessage: e.toString(),
-      ));
+      emit(
+        state.copyWith(
+          status: TransferBlocStatus.failure,
+          errorMessage: e.toString(),
+        ),
+      );
     }
   }
 
@@ -218,12 +262,14 @@ class TransferBloc extends Bloc<TransferEvent, TransferState> {
       userInfo = await _walletBridge.getUserInfoByAddress(event.address);
     }
 
-    emit(state.copyWith(
-      status: TransferBlocStatus.addressValidated,
-      validatedAddress: event.address,
-      isAddressValid: isValid,
-      userInfo: userInfo,
-    ));
+    emit(
+      state.copyWith(
+        status: TransferBlocStatus.addressValidated,
+        validatedAddress: event.address,
+        isAddressValid: isValid,
+        userInfo: userInfo,
+      ),
+    );
   }
 
   void _onClearTransferState(

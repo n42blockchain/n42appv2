@@ -64,7 +64,7 @@ class AdaSender implements ChainSender {
     // Estimated fee (174000 lovelace minimum fee)
     const int estimatedFee = 174000;
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     ); // decimals=6 for ADA
     double adjustedAmount = params.amount;

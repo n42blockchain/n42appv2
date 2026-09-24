@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matrix/matrix.dart' as matrix;
 import 'package:mocktail/mocktail.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/core/di/injection.dart';
 import 'package:n42_chat/src/core/theme/app_icons.dart';
@@ -10,6 +11,7 @@ import 'package:n42_chat/src/domain/entities/avatar_decoration_preset.dart';
 import 'package:n42_chat/src/domain/entities/user_entity.dart';
 import 'package:n42_chat/src/domain/repositories/auth_repository.dart';
 import 'package:n42_chat/src/presentation/pages/qrcode/my_qrcode_page.dart';
+import 'package:n42_chat/src/core/utils/social_scan_payload_parser.dart';
 
 class MockMatrixClientManager extends Mock implements MatrixClientManager {
   @override
@@ -206,6 +208,32 @@ void main() {
 
       expect(find.text('Alice'), findsOneWidget);
       expect(find.byIcon(Icons.sports_esports), findsOneWidget);
+    });
+
+    testWidgets('personal QR contains a standard Matrix permalink', (
+      tester,
+    ) async {
+      tester.view.physicalSize = const Size(1080, 1920);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      when(() => mockAuthRepository.getCurrentUserProfile()).thenAnswer(
+        (_) async => const UserEntity(
+          userId: '@alice:example.org',
+          displayName: 'Alice',
+          avatarUrl: null,
+          avatarDecorationPreset: AvatarDecorationPreset.none,
+        ),
+      );
+
+      await tester.pumpWidget(buildTestWidget(const MyQRCodePage()));
+      await tester.pump();
+
+      expect(find.byType(QrImageView), findsOneWidget);
+      expect(
+        buildMatrixUserPermalink('@alice:example.org'),
+        'https://matrix.to/#/%40alice%3Aexample.org',
+      );
     });
   });
 }

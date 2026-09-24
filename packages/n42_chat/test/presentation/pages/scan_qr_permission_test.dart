@@ -7,6 +7,49 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker_platform_interface/image_picker_platform_interface.dart';
 import 'package:n42_chat/l10n/app_localizations.dart';
 import 'package:n42_chat/src/presentation/pages/qrcode/scan_qr_page.dart';
+import 'package:n42_chat/src/core/di/injection.dart';
+import 'package:n42_chat/src/integration/wallet_bridge.dart';
+
+class _Wallet extends NoOpWalletBridge {
+  int exactTransferCalls = 0;
+  String? requestedChain;
+  String? requestedNetwork;
+  String? requestedAssetType;
+  String? requestedAssetId;
+
+  @override
+  Future<List<TokenInfo>> getSupportedTokens() async => const [
+    TokenInfo(
+      symbol: 'ETH',
+      name: 'Ethereum',
+      decimals: 18,
+      chain: 'ethereum',
+      network: 'mainnet',
+      assetType: 'native',
+      receiverAddress: '0xreceiver',
+      isNative: true,
+    ),
+  ];
+
+  @override
+  Future<TransferResult> requestTransferExact({
+    required String toAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    required String chain,
+    required String network,
+    required String assetType,
+    String? assetId,
+  }) async {
+    exactTransferCalls++;
+    requestedChain = chain;
+    requestedNetwork = network;
+    requestedAssetType = assetType;
+    requestedAssetId = assetId;
+    return TransferResult.failure('captured exact request');
+  }
+}
 
 class _Gallery extends ImagePickerPlatform {
   int calls = 0;
@@ -273,6 +316,15 @@ void main() {
   testWidgets(
     'gallery payment QR uses confirmation and resumes after cancellation',
     (tester) async {
+      if (getIt.isRegistered<IWalletBridge>()) {
+        await getIt.unregister<IWalletBridge>();
+      }
+      getIt.registerSingleton<IWalletBridge>(_Wallet());
+      addTearDown(() async {
+        if (getIt.isRegistered<IWalletBridge>()) {
+          await getIt.unregister<IWalletBridge>();
+        }
+      });
       permission = 1;
       gallery.image = XFile('/test/qr.png');
       camera.capture = const BarcodeCapture(
@@ -285,6 +337,9 @@ void main() {
       await tester.tap(find.byKey(const ValueKey('scan_gallery_button')));
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 400));
+      await tester.tap(find.text('Ethereum (ETH)'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 500));
       expect(find.text('1 ETH'), findsOneWidget);
       expect(camera.starts, 1);
       Navigator.of(tester.element(find.text('1 ETH'))).pop();
@@ -293,6 +348,50 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('exact payment QR confirms the resolved wallet asset', (
+    tester,
+  ) async {
+    if (getIt.isRegistered<IWalletBridge>()) {
+      await getIt.unregister<IWalletBridge>();
+    }
+    final wallet = _Wallet();
+    getIt.registerSingleton<IWalletBridge>(wallet);
+    addTearDown(() async {
+      if (getIt.isRegistered<IWalletBridge>()) {
+        await getIt.unregister<IWalletBridge>();
+      }
+    });
+    permission = 1;
+    gallery.image = XFile('/test/qr.png');
+    camera.capture = const BarcodeCapture(
+      barcodes: [
+        Barcode(
+          rawValue:
+              'n42pay://v1/pay?to=test-address&chain=ethereum&network=mainnet'
+              '&type=native&amount=1&token=USDC',
+        ),
+      ],
+    );
+    await open(tester);
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('scan_gallery_button')));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 400));
+
+    expect(find.text('1 ETH'), findsOneWidget);
+    expect(find.text('Ethereum (ETH)'), findsOneWidget);
+    expect(find.text('ethereum · mainnet · native'), findsOneWidget);
+    await tester.tap(find.byKey(const ValueKey('qr_payment_confirm')));
+    await tester.pumpAndSettle();
+
+    expect(wallet.exactTransferCalls, 1);
+    expect(wallet.requestedChain, 'ethereum');
+    expect(wallet.requestedNetwork, 'mainnet');
+    expect(wallet.requestedAssetType, 'native');
+    expect(wallet.requestedAssetId, isNull);
+    expect(tester.takeException(), isNull);
+  });
 
   for (final stage in ['picker', 'decoder']) {
     testWidgets('$stage failure restores camera and allows retry', (

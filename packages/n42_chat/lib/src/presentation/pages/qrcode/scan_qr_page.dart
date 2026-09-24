@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:async';
 
 import '../../../../l10n/app_localizations.dart';
@@ -11,15 +12,23 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/social_scan_payload_parser.dart';
 import '../../../core/utils/payment_request_uri.dart';
 import '../../../domain/repositories/contact_repository.dart';
+import '../../../domain/repositories/group_repository.dart';
 import '../../../integration/wallet_bridge.dart';
 import '../../helpers/mini_app_launcher_helper.dart';
 import 'my_qrcode_page.dart';
 import '../../../core/utils/debug_log.dart';
 
 /// Scan QR page
+typedef SocialExternalLauncher = Future<bool> Function(Uri uri);
+
 class ScanQRPage extends StatefulWidget {
   final bool returnRawValue;
-  const ScanQRPage({super.key, this.returnRawValue = false});
+  final SocialExternalLauncher? launchExternalUrl;
+  const ScanQRPage({
+    super.key,
+    this.returnRawValue = false,
+    this.launchExternalUrl,
+  });
 
   @override
   State<ScanQRPage> createState() => _ScanQRPageState();
@@ -39,8 +48,6 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
   bool _permissionCheckInFlight = false;
   Timer? _resumeTimer;
   Future<void> _cameraLifecycle = Future<void>.value();
-
-  static final RegExp _positiveAmountRegExp = RegExp(r'^\d+(?:\.\d+)?$');
 
   @override
   void initState() {
@@ -243,6 +250,17 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
         case SocialScanPayloadType.matrixUser:
           completedWithExit = await _startChatWithUser(payload.userId!);
           break;
+        case SocialScanPayloadType.matrixRoom:
+          completedWithExit = await _confirmAndJoinMatrixRoom(
+            payload.roomIdOrAlias!,
+          );
+          break;
+        case SocialScanPayloadType.whatsappContact:
+          completedWithExit = await _confirmAndOpenWhatsApp(
+            payload.whatsappNumber!,
+            payload.externalUri!,
+          );
+          break;
         case SocialScanPayloadType.miniApp:
           await MiniAppLauncherHelper.openApp<void>(
             context,
@@ -268,7 +286,62 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
 
   /// 处理扫到的收款二维码：确认金额后通过钱包桥发起付款。
   /// 返回 true 表示已离开扫码页（无需重启扫描）。
-  Future<bool> _handlePaymentUri(PaymentRequestData payment) async {
+  Future<bool> _handlePaymentUri(PaymentRequestData request) async {
+    var payment = request;
+    final wallet = getIt<IWalletBridge>();
+    TokenInfo? selectedAsset;
+    if (!payment.hasUnambiguousAsset) {
+      selectedAsset = await _choosePaymentAsset(payment.token);
+      if (selectedAsset == null) return false;
+      if (!mounted) return false;
+    } else {
+      final assets = await wallet.getSupportedTokens();
+      if (!mounted) return false;
+      final matches = assets.where((asset) {
+        if (asset.chain != payment.chain ||
+            asset.network != payment.network ||
+            asset.assetType != payment.assetType) {
+          return false;
+        }
+        return payment.assetType == 'native'
+            ? asset.assetId == null && payment.assetId == null
+            : PaymentRequestUri.sameAssetId(asset.assetId, payment.assetId);
+      }).toList();
+      if (matches.length != 1) {
+        _showError('This payment QR does not match exactly one wallet asset.');
+        return false;
+      }
+      selectedAsset = matches.single;
+    }
+
+    final asset = selectedAsset;
+    if (asset.chain?.trim().isNotEmpty != true ||
+        (asset.network != 'mainnet' && asset.network != 'testnet') ||
+        (asset.assetType != 'native' && asset.assetType != 'token') ||
+        (asset.assetType == 'token' &&
+            asset.assetId?.trim().isNotEmpty != true)) {
+      _showError('This wallet has not provided exact asset identity.');
+      return false;
+    }
+    if (payment.hasAmount &&
+        !PaymentRequestUri.isPositiveAmountForDecimals(
+          payment.amount,
+          asset.decimals,
+        )) {
+      _showError('The requested amount exceeds the selected asset precision.');
+      return false;
+    }
+    payment = PaymentRequestData(
+      receiverAddress: payment.receiverAddress,
+      amount: payment.amount,
+      token: asset.symbol,
+      memo: payment.memo,
+      chain: asset.chain,
+      network: asset.network,
+      assetType: asset.assetType,
+      assetId: asset.assetId,
+    );
+
     final amountController = TextEditingController(
       text: payment.hasAmount ? payment.amount.trim() : '',
     );
@@ -303,6 +376,16 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
                           fontSize: 22,
                           fontWeight: FontWeight.w700,
                         ),
+                      ),
+                      Text(
+                        '${asset.name} (${asset.symbol})',
+                        key: const ValueKey('qr_payment_asset_name'),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
+                      ),
+                      SelectableText(
+                        '${asset.chain} · ${asset.network} · '
+                        '${asset.assetType == 'native' ? 'native' : asset.assetId}',
+                        key: const ValueKey('qr_payment_asset_identity'),
                       ),
                       const SizedBox(height: 8),
                       Text(
@@ -345,17 +428,19 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton(
+                              key: const ValueKey('qr_payment_confirm'),
                               onPressed: () {
                                 final amount = payment.hasAmount
                                     ? payment.amount.trim()
                                     : amountController.text.trim();
-                                if (!_isPositiveAmount(amount)) {
+                                if (!PaymentRequestUri.isPositiveAmountForDecimals(
+                                  amount,
+                                  asset.decimals,
+                                )) {
                                   setSheetState(() {
                                     amountError =
-                                        S
-                                            .of(ctx)
-                                            ?.transferPleaseEnterValidAmount ??
-                                        'Please enter a valid amount';
+                                        'Enter a positive amount with '
+                                        'up to ${asset.decimals} decimal places.';
                                   });
                                   return;
                                 }
@@ -381,11 +466,15 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
     if (amountToPay == null) return false;
 
     try {
-      final result = await getIt<IWalletBridge>().requestTransfer(
+      final result = await wallet.requestTransferExact(
         toAddress: payment.receiverAddress,
         amount: amountToPay,
         token: payment.token,
         memo: payment.memo,
+        chain: payment.chain!,
+        network: payment.network!,
+        assetType: payment.assetType!,
+        assetId: payment.assetId,
       );
       if (!mounted) return true;
       if (result.success) {
@@ -400,14 +489,151 @@ class _ScanQRPageState extends State<ScanQRPage> with WidgetsBindingObserver {
     return false;
   }
 
-  static bool _isPositiveAmount(String amount) {
-    final normalized = amount.trim();
-    if (!_positiveAmountRegExp.hasMatch(normalized)) return false;
-    return normalized.replaceAll('.', '').contains(RegExp(r'[1-9]'));
+  Future<TokenInfo?> _choosePaymentAsset(String displayHint) async {
+    final wallet = getIt<IWalletBridge>();
+    final tokens = await wallet.getSupportedTokens();
+    final exactAssets = tokens.where((asset) {
+      if (asset.chain?.trim().isEmpty != false ||
+          (asset.network != 'mainnet' && asset.network != 'testnet') ||
+          (asset.assetType != 'native' && asset.assetType != 'token')) {
+        return false;
+      }
+      return asset.assetType != 'token' ||
+          asset.assetId?.trim().isNotEmpty == true;
+    }).toList();
+    if (!mounted || exactAssets.isEmpty) {
+      if (mounted) {
+        _showError('No exact wallet asset is available for this request.');
+      }
+      return null;
+    }
+    return showModalBottomSheet<TokenInfo>(
+      context: context,
+      backgroundColor: context.surfaceColor,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              child: Text(
+                displayHint.isEmpty
+                    ? 'Choose the payment asset'
+                    : 'Choose an asset (QR label: $displayHint)',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+            Flexible(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: exactAssets.length,
+                itemBuilder: (context, index) {
+                  final asset = exactAssets[index];
+                  final identity =
+                      '${asset.chain} · ${asset.network} · '
+                      '${asset.assetType == 'native' ? 'native' : asset.assetId}';
+                  return ListTile(
+                    title: Text('${asset.name} (${asset.symbol})'),
+                    subtitle: Text(identity),
+                    onTap: () => Navigator.of(ctx).pop(asset),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<bool> _confirmAndJoinMatrixRoom(String roomIdOrAlias) async {
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Join Matrix room?'),
+        content: SelectableText(roomIdOrAlias),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(S.of(ctx)?.commonCancel ?? 'Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Join'),
+          ),
+        ],
+      ),
+    );
+    if (accepted != true) return false;
+    try {
+      final roomId = await getIt<IGroupRepository>().joinGroupByAlias(
+        roomIdOrAlias,
+      );
+      if (!mounted) return true;
+      Navigator.of(context).pop({'roomId': roomId});
+      return true;
+    } catch (e) {
+      if (!mounted) return false;
+      _showError('Could not join Matrix room: $e');
+      return false;
+    }
+  }
+
+  Future<bool> _confirmAndOpenWhatsApp(String number, Uri uri) async {
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Open WhatsApp?'),
+        content: Text('Continue to WhatsApp with +$number?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: Text(S.of(ctx)?.commonCancel ?? 'Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+    if (accepted != true) return false;
+    final launched =
+        await (widget.launchExternalUrl?.call(uri) ??
+            launchUrl(uri, mode: LaunchMode.externalApplication));
+    if (!mounted) return true;
+    if (!launched) {
+      _showError('Could not open WhatsApp.');
+      return false;
+    }
+    Navigator.of(context).pop();
+    return true;
   }
 
   Future<bool> _startChatWithUser(String userId) async {
     try {
+      final accepted = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Start a Matrix chat?'),
+          content: SelectableText(userId),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(S.of(ctx)?.commonCancel ?? 'Cancel'),
+            ),
+            FilledButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Start chat'),
+            ),
+          ],
+        ),
+      );
+      if (accepted != true) return false;
       final roomId = await getIt<IContactRepository>().startDirectChat(userId);
 
       if (mounted) {

@@ -25,6 +25,7 @@ import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/api/token_view_api.dart';
 import 'package:n42_wallet/features/wallet/utils/chain/wallet_chain_registry.dart'
     show getPathWithIndex;
+import 'package:n42_wallet/features/wallet/utils/decimal_amount.dart';
 import 'package:n42_wallet/shared/domain/entities/message_model.dart';
 import 'package:n42_wallet/main.dart' show globalProviderContainer;
 import 'package:n42_wallet/core/providers/service_providers.dart';
@@ -94,7 +95,20 @@ String? decodeAbiString(String raw) {
 /// N42 钱包桥接实现
 ///
 /// 将主应用的钱包功能桥接到 n42_chat 插件
+typedef WalletBridgeSenderResolver =
+    ChainSender Function(String coinType, {Map<String, dynamic>? chainConfig});
+
 class N42WalletBridge implements IWalletBridge {
+  N42WalletBridge({WalletBridgeSenderResolver? senderResolver})
+    : _senderResolver = senderResolver ?? _defaultSenderResolver;
+
+  final WalletBridgeSenderResolver _senderResolver;
+
+  static ChainSender _defaultSenderResolver(
+    String coinType, {
+    Map<String, dynamic>? chainConfig,
+  }) => SenderFactory.instance.getSender(coinType, chainConfig: chainConfig);
+
   WalletActionProvider? get _provider {
     try {
       return globalWapAdapter;
@@ -137,20 +151,27 @@ class N42WalletBridge implements IWalletBridge {
 
     final tokens = <TokenInfo>[];
 
-    for (final coinModel in provider.coinModels) {
+    for (final coinModel in _walletPaymentCoinModels(provider)) {
       final coinType = coinModel.coin['coinType'] as String?;
       final miniName = coinModel.coin['miniName'] as String?;
       final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
       final icon = coinModel.coin['icon'] as String?;
+      final isContract = coinModel.config.isContract;
+      final assetId = isContract ? _paymentContractFor(coinModel) : null;
 
-      if (coinType != null) {
+      if (coinType != null && (!isContract || assetId?.isNotEmpty == true)) {
         tokens.add(
           TokenInfo(
             symbol: miniName ?? coinType,
             name: coinModel.coin['name'] as String? ?? coinType,
             decimals: decimals,
             iconUrl: icon,
-            isNative: coinModel.coin['isContract'] != true,
+            isNative: !isContract,
+            chain: coinModel.parentChainMKey ?? coinModel.config.mKey,
+            network: coinModel.isTest ? 'testnet' : 'mainnet',
+            assetType: isContract ? 'token' : 'native',
+            assetId: assetId,
+            receiverAddress: coinModel.address?.toString(),
           ),
         );
       }
@@ -184,15 +205,47 @@ class N42WalletBridge implements IWalletBridge {
     required String amount,
     required String token,
     String? memo,
+  }) => _requestTransfer(
+    toAddress: toAddress,
+    amount: amount,
+    token: token,
+    memo: memo,
+  );
+
+  @override
+  Future<TransferResult> requestTransferExact({
+    required String toAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    required String chain,
+    required String network,
+    required String assetType,
+    String? assetId,
+  }) => _requestTransfer(
+    toAddress: toAddress,
+    amount: amount,
+    token: token,
+    memo: memo,
+    chain: chain,
+    network: network,
+    assetType: assetType,
+    assetId: assetId,
+  );
+
+  Future<TransferResult> _requestTransfer({
+    required String toAddress,
+    required String amount,
+    required String token,
+    String? memo,
+    String? chain,
+    String? network,
+    String? assetType,
+    String? assetId,
   }) async {
     try {
       if (!isWalletConnected) {
         return TransferResult.failure('Wallet not connected');
-      }
-
-      final value = double.tryParse(amount) ?? 0.0;
-      if (!value.isFinite || value <= 0) {
-        return TransferResult.failure('Invalid transfer amount');
       }
 
       final provider = _provider;
@@ -200,16 +253,64 @@ class N42WalletBridge implements IWalletBridge {
         return TransferResult.failure('Wallet not connected');
       }
 
-      // A symbol can exist on several networks. The legacy API cannot carry
-      // enough identity to choose safely, so only an unambiguous record may
-      // reach sender/RPC/signing code.
+      final hasPaymentIdentity =
+          chain != null ||
+          network != null ||
+          assetType != null ||
+          assetId != null;
+      if (hasPaymentIdentity &&
+          (chain == null ||
+              chain.isEmpty ||
+              (network != 'mainnet' && network != 'testnet') ||
+              (assetType != 'native' && assetType != 'token') ||
+              (assetType == 'token' && (assetId == null || assetId.isEmpty)) ||
+              (assetType == 'native' && assetId != null))) {
+        return TransferResult.failure('Incomplete payment asset identity');
+      }
+
+      final parsedAmount = double.tryParse(amount);
+      if (!hasPaymentIdentity &&
+          (parsedAmount == null ||
+              !parsedAmount.isFinite ||
+              parsedAmount <= 0)) {
+        return TransferResult.failure('Invalid transfer amount');
+      }
+      if (hasPaymentIdentity &&
+          (parsedAmount == null || !parsedAmount.isFinite)) {
+        return TransferResult.failure('Invalid transfer amount');
+      }
+      final value = parsedAmount ?? 0.0;
+
+      // Versioned QR requests match the exact chain/network/contract. Legacy
+      // bridge calls remain safe only when their display symbol is unique.
       final matchingCoins = <CoinModel>[];
       final normalizedToken = token.toUpperCase();
-      for (final cm in provider.coinModels) {
+      for (final cm in _walletPaymentCoinModels(provider)) {
         final coinType = cm.coin['coinType'] as String? ?? '';
         final miniName = cm.coin['miniName'] as String? ?? '';
-        if (coinType.toUpperCase() == normalizedToken ||
-            miniName.toUpperCase() == normalizedToken) {
+        final matchesAsset =
+            !hasPaymentIdentity ||
+            switch (assetType) {
+              'native' => !cm.config.isContract,
+              'token' =>
+                cm.config.isContract &&
+                    PaymentRequestUri.sameAssetId(
+                      _paymentContractFor(cm),
+                      assetId,
+                    ),
+              _ => false,
+            };
+        final matchesChain =
+            !hasPaymentIdentity ||
+            (cm.parentChainMKey ?? cm.config.mKey) == chain;
+        final matchesNetwork =
+            !hasPaymentIdentity || cm.isTest == (network == 'testnet');
+        if (matchesAsset &&
+            matchesChain &&
+            matchesNetwork &&
+            (hasPaymentIdentity ||
+                coinType.toUpperCase() == normalizedToken ||
+                miniName.toUpperCase() == normalizedToken)) {
           matchingCoins.add(cm);
         }
       }
@@ -223,6 +324,19 @@ class N42WalletBridge implements IWalletBridge {
         );
       }
       final coinModel = matchingCoins.single;
+      final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
+      if (hasPaymentIdentity &&
+          !PaymentRequestUri.isPositiveAmountForDecimals(amount, decimals)) {
+        return TransferResult.failure(
+          'Transfer amount exceeds the selected asset precision',
+        );
+      }
+      final exactAmountUnits = hasPaymentIdentity
+          ? decimalStringToBigInt(amount.trim(), decimals)
+          : null;
+      if (exactAmountUnits != null && exactAmountUnits <= BigInt.zero) {
+        return TransferResult.failure('Invalid transfer amount');
+      }
 
       final addrType = coinModel.addrType;
       // 派生路径取不到时绝不能套用 ETH 路径：非 EVM 币会用一把与 fromAddress
@@ -234,17 +348,23 @@ class N42WalletBridge implements IWalletBridge {
         );
       }
       final path = getPathWithIndex(basePath, coinModel.pathIndex);
-      final decimals = resolveWalletBridgeTokenDecimals(coinModel.coin);
       final coinType = coinModel.config.coinType.isNotEmpty
           ? coinModel.config.coinType
           : token;
       final contractAddress = coinModel.config.isContract
-          ? coinModel.config.contract
+          ? _paymentContractFor(coinModel)
           : '';
+      if (coinModel.config.isContract && contractAddress.isEmpty) {
+        return TransferResult.failure(
+          'Token contract is unavailable for the selected network',
+        );
+      }
 
-      final result = await SenderFactory.instance
-          .getSender(coinType, chainConfig: coinModel.coin)
-          .send(
+      final supportsExactIntegerOverride =
+          coinModel.config.blockchainType == BlockchainType.Ethereum.name ||
+          coinModel.config.blockchainType == BlockchainType.Solana.name;
+      final result =
+          await _senderResolver(coinType, chainConfig: coinModel.coin).send(
             SendParams(
               coinType: coinType,
               fromAddress: coinModel.address.toString(),
@@ -258,6 +378,15 @@ class N42WalletBridge implements IWalletBridge {
               memo: memo,
               privateKey: coinModel.privateKey,
               chainConfig: coinModel.coin,
+              decimalAmountOverride: hasPaymentIdentity ? amount.trim() : null,
+              valueWeiOverride:
+                  supportsExactIntegerOverride && assetType == 'native'
+                  ? exactAmountUnits
+                  : null,
+              tokenValueWeiOverride:
+                  supportsExactIntegerOverride && assetType == 'token'
+                  ? exactAmountUnits
+                  : null,
             ),
           );
 
@@ -795,3 +924,24 @@ class N42WalletBridge implements IWalletBridge {
     return chainId == 0 ? null : chainId;
   }
 }
+
+Iterable<CoinModel> _walletPaymentCoinModels(
+  WalletActionProvider provider,
+) sync* {
+  for (final chain in provider.coinModels) {
+    yield chain;
+    for (final token in chain.tokens.values) {
+      if (token is Map<String, dynamic>) {
+        yield provider.buildTokenCoinModel(chain, token);
+      } else if (token is Map) {
+        yield provider.buildTokenCoinModel(
+          chain,
+          Map<String, dynamic>.from(token),
+        );
+      }
+    }
+  }
+}
+
+String _paymentContractFor(CoinModel coin) =>
+    coin.isTest ? coin.config.contractTest : coin.config.contract;

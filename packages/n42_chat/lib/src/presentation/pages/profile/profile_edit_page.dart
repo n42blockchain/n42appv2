@@ -22,6 +22,7 @@ import 'profile_ringtone_select_page.dart';
 
 import 'n42_bean_page.dart';
 import '../../../core/utils/debug_log.dart';
+import '../../../core/utils/social_scan_payload_parser.dart';
 
 /// 个人资料编辑页面
 ///
@@ -309,9 +310,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   Widget _buildSection({required List<Widget> children}) {
     return Container(
-      decoration: BoxDecoration(
-        color: context.surfaceColor,
-      ),
+      decoration: BoxDecoration(color: context.surfaceColor),
       child: Column(children: children),
     );
   }
@@ -383,10 +382,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   Widget _buildDivider() {
     return Padding(
       padding: const EdgeInsets.only(left: 16),
-      child: Divider(
-        height: 1,
-        color: context.dividerColor,
-      ),
+      child: Divider(height: 1, color: context.dividerColor),
     );
   }
 
@@ -664,8 +660,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   ),
                   IconButton(
                     icon: const Icon(AppIcons.close),
-                    tooltip:
-                        MaterialLocalizations.of(context).closeButtonTooltip,
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).closeButtonTooltip,
                     onPressed: () => Navigator.pop(context),
                   ),
                 ],
@@ -960,7 +957,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: QrImageView(
-                  data: 'n42chat://user/$userId',
+                  data: buildMatrixUserPermalink(userId),
                   version: QrVersions.auto,
                   size: 200,
                 ),

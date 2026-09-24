@@ -56,7 +56,7 @@ class EgldSender implements ChainSender {
     final totalGas = BigInt.from(gasLimit) * BigInt.from(gasPrice);
 
     BigInt valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
     double adjustedAmount = params.amount;

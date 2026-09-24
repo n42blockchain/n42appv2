@@ -7,6 +7,7 @@ import '../../../../l10n/app_localizations.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../integration/wallet_bridge.dart';
+import '../../../core/utils/payment_request_uri.dart';
 import '../../blocs/transfer/transfer_bloc.dart';
 import '../../blocs/transfer/transfer_event.dart';
 import '../../blocs/transfer/transfer_state.dart';
@@ -18,10 +19,7 @@ import 'merchant_qr_page.dart';
 class ReceivePage extends StatefulWidget {
   final String? roomId;
 
-  const ReceivePage({
-    super.key,
-    this.roomId,
-  });
+  const ReceivePage({super.key, this.roomId});
 
   @override
   State<ReceivePage> createState() => _ReceivePageState();
@@ -53,25 +51,36 @@ class _ReceivePageState extends State<ReceivePage> {
 
     if (amount.isEmpty || double.tryParse(amount) == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)?.transferPleaseEnterValidAmount ?? 'Please enter a valid amount')),
+        SnackBar(
+          content: Text(
+            S.of(context)?.transferPleaseEnterValidAmount ??
+                'Please enter a valid amount',
+          ),
+        ),
       );
       return;
     }
 
     if (_selectedToken == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(S.of(context)?.transferPleaseSelectToken ?? 'Please select a token')),
+        SnackBar(
+          content: Text(
+            S.of(context)?.transferPleaseSelectToken ?? 'Please select a token',
+          ),
+        ),
       );
       return;
     }
 
     if (widget.roomId != null) {
-      context.read<TransferBloc>().add(CreatePaymentRequest(
-            roomId: widget.roomId!,
-            amount: amount,
-            token: _selectedToken!.symbol,
-            memo: memo.isNotEmpty ? memo : null,
-          ));
+      context.read<TransferBloc>().add(
+        CreatePaymentRequest(
+          roomId: widget.roomId!,
+          amount: amount,
+          token: _selectedToken!.symbol,
+          memo: memo.isNotEmpty ? memo : null,
+        ),
+      );
     }
   }
 
@@ -81,9 +90,12 @@ class _ReceivePageState extends State<ReceivePage> {
       listener: (context, state) {
         if (state.status == TransferBlocStatus.paymentCreated) {
           Navigator.pop(context, state.paymentRequest!);
-        } else if (state.status == TransferBlocStatus.failure && state.errorMessage != null) {
+        } else if (state.status == TransferBlocStatus.failure &&
+            state.errorMessage != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(resolveBlocMessage(context, state.errorMessage!))),
+            SnackBar(
+              content: Text(resolveBlocMessage(context, state.errorMessage!)),
+            ),
           );
         }
       },
@@ -128,23 +140,33 @@ class _ReceivePageState extends State<ReceivePage> {
       return Center(
         child: N42EmptyState(
           icon: Icons.account_balance_wallet_outlined,
-          title: S.of(context)?.transferWalletNotConnected ?? 'Wallet Not Connected',
-          description: S.of(context)?.transferPleaseConnectWallet ?? 'Please connect your wallet first',
+          title:
+              S.of(context)?.transferWalletNotConnected ??
+              'Wallet Not Connected',
+          description:
+              S.of(context)?.transferPleaseConnectWallet ??
+              'Please connect your wallet first',
         ),
       );
     }
+
+    final selectedToken = _selectedToken;
+    final receiveAddress =
+        selectedToken?.receiverAddress?.trim().isNotEmpty == true
+        ? selectedToken!.receiverAddress!.trim()
+        : walletAddress;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
         children: [
           // 收款二维码
-          _buildQRCode(walletAddress),
+          _buildQRCode(selectedToken),
 
           const SizedBox(height: 24),
 
           // 钱包地址
-          _buildAddressSection(walletAddress),
+          _buildAddressSection(receiveAddress),
 
           const SizedBox(height: 32),
 
@@ -155,9 +177,7 @@ class _ReceivePageState extends State<ReceivePage> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute<void>(
-                  builder: (_) => const MerchantQrPage(),
-                ),
+                MaterialPageRoute<void>(builder: (_) => const MerchantQrPage()),
               );
             },
           ),
@@ -167,7 +187,9 @@ class _ReceivePageState extends State<ReceivePage> {
             const SizedBox(height: 16),
             if (!_showRequestForm) ...[
               N42Button(
-                text: S.of(context)?.transferSendPaymentRequest ?? 'Send Payment Request',
+                text:
+                    S.of(context)?.transferSendPaymentRequest ??
+                    'Send Payment Request',
                 type: N42ButtonType.secondary,
                 onPressed: () {
                   setState(() {
@@ -184,7 +206,8 @@ class _ReceivePageState extends State<ReceivePage> {
     );
   }
 
-  Widget _buildQRCode(String walletAddress) {
+  Widget _buildQRCode(TokenInfo? asset) {
+    final data = _receiveQrData(asset);
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
@@ -200,15 +223,30 @@ class _ReceivePageState extends State<ReceivePage> {
       ),
       child: Column(
         children: [
-          QrImageView(
-            data: walletAddress,
-            version: QrVersions.auto,
-            size: 200,
-            backgroundColor: Colors.white,
-            errorStateBuilder: (ctx, error) => Center(
-              child: Text(S.of(context)?.transferQrCodeGenerateFailed ?? 'QR code generation failed'),
+          if (data != null)
+            QrImageView(
+              data: data,
+              version: QrVersions.auto,
+              size: 200,
+              backgroundColor: Colors.white,
+              errorStateBuilder: (ctx, error) => Center(
+                child: Text(
+                  S.of(context)?.transferQrCodeGenerateFailed ??
+                      'QR code generation failed',
+                ),
+              ),
+            )
+          else
+            const SizedBox(
+              height: 200,
+              width: 200,
+              child: Center(
+                child: Text(
+                  'Exact chain and asset identity is unavailable.',
+                  textAlign: TextAlign.center,
+                ),
+              ),
             ),
-          ),
           const SizedBox(height: 16),
           Text(
             S.of(context)?.transferScanQrToPayMe ?? 'Scan QR code to pay me',
@@ -218,6 +256,28 @@ class _ReceivePageState extends State<ReceivePage> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  String? _receiveQrData(TokenInfo? asset) {
+    if (asset == null ||
+        asset.receiverAddress?.trim().isNotEmpty != true ||
+        asset.chain?.trim().isNotEmpty != true ||
+        (asset.network != 'mainnet' && asset.network != 'testnet') ||
+        (asset.assetType != 'native' && asset.assetType != 'token') ||
+        (asset.assetType == 'token' &&
+            asset.assetId?.trim().isNotEmpty != true)) {
+      return null;
+    }
+    return PaymentRequestUri.encode(
+      PaymentRequestData(
+        receiverAddress: asset.receiverAddress!.trim(),
+        token: asset.symbol,
+        chain: asset.chain,
+        network: asset.network,
+        assetType: asset.assetType,
+        assetId: asset.assetId,
       ),
     );
   }
@@ -234,10 +294,7 @@ class _ReceivePageState extends State<ReceivePage> {
         children: [
           Text(
             S.of(context)?.transferMyWalletAddress ?? 'My Wallet Address',
-            style: TextStyle(
-              fontSize: 13,
-              color: context.textSecondary,
-            ),
+            style: TextStyle(fontSize: 13, color: context.textSecondary),
           ),
           const SizedBox(height: 8),
           Row(
@@ -257,7 +314,11 @@ class _ReceivePageState extends State<ReceivePage> {
                 onPressed: () {
                   Clipboard.setData(ClipboardData(text: walletAddress));
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(S.of(context)?.commonAddressCopied ?? 'Address copied')),
+                    SnackBar(
+                      content: Text(
+                        S.of(context)?.commonAddressCopied ?? 'Address copied',
+                      ),
+                    ),
                   );
                 },
               ),
@@ -279,7 +340,8 @@ class _ReceivePageState extends State<ReceivePage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context)?.transferCreatePaymentRequest ?? 'Create Payment Request',
+            S.of(context)?.transferCreatePaymentRequest ??
+                'Create Payment Request',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -328,7 +390,8 @@ class _ReceivePageState extends State<ReceivePage> {
           TextField(
             controller: _memoController,
             decoration: InputDecoration(
-              labelText: S.of(context)?.transferMemoOptional ?? 'Memo (optional)',
+              labelText:
+                  S.of(context)?.transferMemoOptional ?? 'Memo (optional)',
               border: const OutlineInputBorder(),
             ),
           ),
@@ -363,4 +426,3 @@ class _ReceivePageState extends State<ReceivePage> {
     );
   }
 }
-

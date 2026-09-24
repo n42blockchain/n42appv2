@@ -14,12 +14,18 @@ class Eip681Request {
 
   /// 查询参数（如 value / address / uint256）。
   final Map<String, String> parameters;
+  final bool hasDuplicateParameters;
+  final bool hasMalformedParameters;
+  final bool hasMalformedChainId;
 
   const Eip681Request({
     required this.targetAddress,
     this.chainId,
     this.functionName,
     this.parameters = const {},
+    this.hasDuplicateParameters = false,
+    this.hasMalformedParameters = false,
+    this.hasMalformedChainId = false,
   });
 
   /// 是否 ERC-20 transfer 请求。
@@ -63,12 +69,13 @@ class Eip681 {
   static String buildErc20Transfer({
     required String token,
     required String recipient,
-    required String amount,
+    String? amount,
     int? chainId,
   }) {
     final buf = StringBuffer(scheme)..write(token);
     if (chainId != null) buf.write('@$chainId');
-    buf.write('/transfer?address=$recipient&uint256=$amount');
+    buf.write('/transfer?address=$recipient');
+    if (amount != null && amount.isNotEmpty) buf.write('&uint256=$amount');
     return buf.toString();
   }
 
@@ -84,10 +91,15 @@ class Eip681 {
     // 切出查询参数。
     String head = s;
     Map<String, String> params = const {};
+    var hasDuplicateParameters = false;
+    var hasMalformedParameters = false;
     final qIdx = s.indexOf('?');
     if (qIdx >= 0) {
       head = s.substring(0, qIdx);
-      params = _parseParams(s.substring(qIdx + 1));
+      final parsed = _parseParams(s.substring(qIdx + 1));
+      params = parsed.parameters;
+      hasDuplicateParameters = parsed.hasDuplicateParameters;
+      hasMalformedParameters = parsed.hasMalformedParameters;
     }
 
     // head = <target>[@chainId][/function]
@@ -99,9 +111,12 @@ class Eip681 {
     }
 
     int? chainId;
+    var hasMalformedChainId = false;
     final atIdx = head.indexOf('@');
     if (atIdx >= 0) {
-      chainId = int.tryParse(head.substring(atIdx + 1));
+      final chainIdText = head.substring(atIdx + 1);
+      chainId = int.tryParse(chainIdText);
+      hasMalformedChainId = chainId == null || chainId <= 0;
       head = head.substring(0, atIdx);
     }
 
@@ -113,6 +128,9 @@ class Eip681 {
       chainId: chainId,
       functionName: (function != null && function.isEmpty) ? null : function,
       parameters: params,
+      hasDuplicateParameters: hasDuplicateParameters,
+      hasMalformedParameters: hasMalformedParameters,
+      hasMalformedChainId: hasMalformedChainId,
     );
   }
 
@@ -124,20 +142,32 @@ class Eip681 {
     return (r != null && r.isNotEmpty) ? r : scanned;
   }
 
-  static Map<String, String> _parseParams(String query) {
+  static _ParsedParams _parseParams(String query) {
     final map = <String, String>{};
+    var hasDuplicateParameters = false;
+    var hasMalformedParameters = false;
     for (final pair in query.split('&')) {
       if (pair.isEmpty) continue;
       final eq = pair.indexOf('=');
+      String key;
+      String value;
       if (eq < 0) {
-        map[_safeDecode(pair)] = '';
+        key = _safeDecode(pair);
+        value = '';
       } else {
-        map[_safeDecode(pair.substring(0, eq))] = _safeDecode(
-          pair.substring(eq + 1),
-        );
+        key = _safeDecode(pair.substring(0, eq));
+        value = _safeDecode(pair.substring(eq + 1));
       }
+      if (key.isEmpty) hasMalformedParameters = true;
+      if (map.containsKey(key)) hasDuplicateParameters = true;
+      map[key] = value;
+      if (_containsMalformedEscape(pair)) hasMalformedParameters = true;
     }
-    return map;
+    return _ParsedParams(
+      map,
+      hasDuplicateParameters: hasDuplicateParameters,
+      hasMalformedParameters: hasMalformedParameters,
+    );
   }
 
   /// 安全 URL 解码：扫码等不可信输入遇畸形 `%` 序列时回退原文，绝不抛。
@@ -148,4 +178,34 @@ class Eip681 {
       return s;
     }
   }
+
+  static bool _containsMalformedEscape(String value) {
+    for (var i = 0; i < value.length; i++) {
+      if (value.codeUnitAt(i) != 0x25) continue;
+      if (i + 2 >= value.length ||
+          !_isHex(value.codeUnitAt(i + 1)) ||
+          !_isHex(value.codeUnitAt(i + 2))) {
+        return true;
+      }
+      i += 2;
+    }
+    return false;
+  }
+
+  static bool _isHex(int value) =>
+      (value >= 0x30 && value <= 0x39) ||
+      (value >= 0x41 && value <= 0x46) ||
+      (value >= 0x61 && value <= 0x66);
+}
+
+class _ParsedParams {
+  final Map<String, String> parameters;
+  final bool hasDuplicateParameters;
+  final bool hasMalformedParameters;
+
+  const _ParsedParams(
+    this.parameters, {
+    required this.hasDuplicateParameters,
+    required this.hasMalformedParameters,
+  });
 }

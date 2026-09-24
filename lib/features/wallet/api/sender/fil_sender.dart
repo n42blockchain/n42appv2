@@ -44,7 +44,7 @@ class FilSender implements ChainSender {
     final nonce = mmNonce.data.toString();
 
     final valuePrice = ethToWeiString(
-      params.amount.toString(),
+      params.amountDecimalString,
       params.decimals,
     );
 
