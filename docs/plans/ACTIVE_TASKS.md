@@ -55,6 +55,13 @@
 - 配置与服务端模块测试/覆盖结果、LCOV 归档及口径说明见[覆盖率扩展报告](../testing/coverage-expansion-2026-09-23/README.md)。
 - Chat 后续归档完整性续跑：真实 SQLite 导出/导入测试发现并修复 Unicode 字节编码损坏；服务覆盖 120/121 行（99.1736%），全量 6,592 通过、1 条凭据条件跳过。提交 `38af33fc`；主程序 pin 未变。[补充报告与 LCOV](../testing/coverage-expansion-chat-archive-2026-09-23/README.md)。
 
+## 覆盖率续跑（2026-09-24）
+
+- Chat 正式审计仓全量 6,593 项通过、1 项实时媒体凭据条件跳过；原始覆盖率 33,395 / 133,072 = 25.0954%，非生成 `lib/src` 诊断口径 39.7518%，Chat 核心路径诊断口径 28.19%。新增消息 Markdown 链接协议安全测试 1 项，提交 `942a4ed1`；主程序 Chat pin 未变。
+- 主程序配置按生产默认、development、代理末尾斜线和 host-only origin 四种构建配置测试；4 个配置文件按 LCOV 行并集合计 97 / 106 = 91.51%。Dart analyze 和 diff 检查通过。
+- Go `social-auth` 与 `swap` 全模块测试通过，分别验证必填配置缺失时的子进程退出码及诊断信息；覆盖率统计限制和各模块结果见本批[报告](../testing/coverage-expansion-2026-09-24/README.md)。
+- 主程序未重新执行全量测试；最新完整结果仍为 48.1233%，COV-01 的 70% 门槛继续开放。root 配置测试提交 `f9d61c3fc`，`social-auth` 测试提交 `8ceb2ceb0`，`swap` 测试提交 `d96a5c11c`；本轮未更改 Chat 依赖 pin。
+
 ## 第三批与下一步
 
 - Keystore 导出新增8项交互测试，修复倒计时文字窄屏溢出，提交 `354eedad1`；风险确认/取消/复制/定时和离页清理均验证。

@@ -1,0 +1,87 @@
+{
+  "date": "2026-09-24",
+  "commits": {
+    "app_config_tests": "f9d61c3fc",
+    "social_auth_config_tests": "8ceb2ceb0",
+    "swap_config_tests": "d96a5c11c",
+    "chat_link_security_test": "942a4ed1"
+  },
+  "chat": {
+    "repository": "../n42_chat_audit_20260912",
+    "branch": "fix/chat-entry-audit-20260912",
+    "base_commit": "38af33fc",
+    "test_commit": "942a4ed1",
+    "test_command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --reporter expanded",
+    "tests_passed": 6593,
+    "tests_skipped": 1,
+    "tests_failed": 0,
+    "skipped_test": "test/live/live_media_smoke_test.dart (live credentials required)",
+    "raw_lcov": {
+      "hit": 33395,
+      "found": 133072,
+      "files": 648,
+      "percent": 25.0954
+    },
+    "non_generated_lib_src_diagnostic": {
+      "hit": 32065,
+      "found": 80663,
+      "files": 621,
+      "percent": 39.7518
+    },
+    "chat_core_paths_diagnostic": {
+      "hit": 5434,
+      "found": 19279,
+      "percent": 28.19
+    },
+    "new_focused_link_security_test_passed": 1,
+    "lcov_sha256": "d45b3e28c50e46877d999a95a282d485855908c8ee2406801507b3b4d27ac38a"
+  },
+  "dart_config": {
+    "runs": [
+      {"variant": "production default", "tests_passed": 56, "tests_failed": 0},
+      {"variant": "ENV=development", "tests_passed": 56, "tests_failed": 0},
+      {"variant": "PROXY_BASE_URL trailing slash", "tests_passed": 1, "tests_failed": 0},
+      {"variant": "host-only PROXY_BASE_URL", "tests_passed": 1, "tests_failed": 0}
+    ],
+    "source_lines_union": {
+      "lib/core/config/app_config.dart": {"hit": 20, "found": 21, "percent": 95.2381},
+      "lib/core/config/rpc_config.dart": {"hit": 12, "found": 13, "percent": 92.3077},
+      "lib/core/config/api_keys_config.dart": {"hit": 4, "found": 5, "percent": 80.0},
+      "lib/core/config/proxy_config.dart": {"hit": 61, "found": 67, "percent": 91.0448},
+      "total": {"hit": 97, "found": 106, "percent": 91.5094}
+    },
+    "lcov_union_sha256": "f049ae146c794a7480bc4b977de4710933abbe90003796187966db327dfeddde",
+    "dart_analyze": "passed"
+  },
+  "backend_go": {
+    "social-auth": {
+      "tests": "passed",
+      "total_statement_coverage_percent": 18.4,
+      "functions": {"loadConfig": 100, "envOr": 100, "mustEnv": 75},
+      "fatal_env_subprocess_asserts_exit_code_and_diagnostic": true
+    },
+    "swap": {
+      "tests": "passed",
+      "total_statement_coverage_percent": 34.3,
+      "root_package_coverage_percent": 59.2,
+      "functions": {"getEnv": 100, "mustEnv": 75},
+      "fatal_env_subprocess_asserts_exit_code_and_diagnostic": true
+    },
+    "note": "Fatal branches execute in child processes and are not included in parent Go coverage profiles."
+  },
+  "main_app": {
+    "latest_full_run_date": "2026-09-23",
+    "tests_passed": 6214,
+    "tests_skipped": 0,
+    "tests_failed": 0,
+    "lcov": {"hit": 63682, "found": 132331, "files": 927, "percent": 48.1233},
+    "quality_gate_70_percent": false,
+    "rerun_in_this_batch": false
+  },
+  "artifacts": {
+    "chat_lcov": "chat-full.lcov.gz",
+    "dart_config_lcov_union": "dart-config-variants.lcov.gz",
+    "chat_lcov_raw_sha256": "d45b3e28c50e46877d999a95a282d485855908c8ee2406801507b3b4d27ac38a",
+    "dart_config_lcov_union_raw_sha256": "f049ae146c794a7480bc4b977de4710933abbe90003796187966db327dfeddde"
+  }
+}
