@@ -111,9 +111,16 @@ class ProxyConfig {
     final uri = Uri.tryParse(url);
     final baseUri = Uri.tryParse(_normalizedBaseUrl);
     if (uri == null || baseUri == null) return false;
+    final basePath = baseUri.path.endsWith('/')
+        ? baseUri.path.substring(0, baseUri.path.length - 1)
+        : baseUri.path;
+    final pathMatches =
+        basePath.isEmpty ||
+        uri.path == basePath ||
+        uri.path.startsWith('$basePath/');
     return uri.host == baseUri.host &&
         uri.scheme == baseUri.scheme &&
-        uri.path.startsWith(baseUri.path);
+        pathMatches;
   }
 
   static Map<String, String> mergeAuthHeaders(
