@@ -208,7 +208,8 @@ extension _WalletCoinAddAllData on _WalletCoinAddAllState {
 
   Future<void> getChainList() async {
     updateView(() => load = Load.loading);
-    final coinsData = await TokenViewApi().getChainListAll();
+    final coinsData = await (widget.tokenViewApi ?? TokenViewApi())
+        .getChainListAll();
     if (coinsData.error) {
       ToastUtils.show(coinsData.data);
     } else {

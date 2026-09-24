@@ -60,7 +60,7 @@ Expected: RED under the temporary legacy fallback; GREEN after restoring current
 Run: `dart format --output=none --set-exit-if-changed test/features/wallet/provider/wallet_action_provider_account_isolation_test.dart && dart analyze test/features/wallet/provider/wallet_action_provider_account_isolation_test.dart && flutter test --no-pub test/features/wallet/provider/wallet_action_provider_account_isolation_test.dart`
 Expected: formatter unchanged, analyzer clean, and every account-isolation assertion passes.
 
-- [ ] **Step 4: Commit.** Commit the test and this plan with subject `test: cover account-scoped wallet persistence`.
+- [x] **Step 4: Commit.** Committed as `test: cover account-scoped wallet persistence` (`12219ce30`).
 
 ### Task 2: Cross-chain asset discovery interactions
 
@@ -73,7 +73,7 @@ Expected: formatter unchanged, analyzer clean, and every account-isolation asser
 - Consumes: `WalletCoinAddAll`, `TokenViewApi.getChainListAll`, `WalletActionProvider.walletMap`, and the localized network picker/search UI.
 - Produces: An optional `TokenViewApi` constructor injection used by tests; the default remains `TokenViewApi()` in production. Tests exercise real response parsing, token search, and selected-chain filtering.
 
-- [ ] **Step 1: Write widget tests against the intended injected API.** Return synthetic Ethereum and Solana chain rows, each with a `USDC` contract token. Assert the page shows both `USDC` results on the all-networks view, selecting Solana leaves only the Solana result, and an API error leaves the page out of loading state and displays the returned error. Assert no add/remove provider mutation occurs in these search-only scenarios.
+- [x] **Step 1: Write widget tests against the intended injected API.** Added synthetic Ethereum and Solana chain rows, each with a `USDC` contract token. The page shows both results before selecting Solana and one afterward; the API error path finishes loading and displays the returned error. Search-only scenarios leave the fake wallet map empty.
 
 ```dart
 await tester.pumpWidget(wrapForTest(
@@ -86,14 +86,14 @@ expect(find.text('USDC'), findsNWidgets(2));
 expect(fakeApi.calls, 1);
 ```
 
-- [ ] **Step 2: Run the new focused suite before implementation.** Confirm the test cannot compile because `WalletCoinAddAll` does not yet accept a `TokenViewApi` injection; this identifies the missing test seam.
+- [x] **Step 2: Run the new focused suite before implementation.** The test failed to compile because `WalletCoinAddAll` did not accept the `tokenViewApi` named parameter.
 
 Run: `flutter test --no-pub test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart`
 Expected: RED with the missing named constructor parameter, before any production edit.
 
-- [ ] **Step 3: Add the smallest injection seam.** Add optional `TokenViewApi? tokenViewApi` to `WalletCoinAddAll`; keep the existing call sites source-compatible; have state use `widget.tokenViewApi ?? TokenViewApi()` for `getChainList`. Do not change filtering, parsing, mutation, or error behavior to satisfy tests.
+- [x] **Step 3: Add the smallest injection seam.** Added optional `TokenViewApi? tokenViewApi`; existing call sites remain source-compatible, and data loading uses the injected API or creates the same default API. Filtering, parsing, mutation, and error behavior are unchanged.
 
-- [ ] **Step 4: Run formatting, analysis, and the focused widget suite.**
+- [x] **Step 4: Run formatting, analysis, and the focused widget suite.** Formatting and focused analysis passed with no issues; both interaction tests passed.
 
 Run: `dart format --output=none --set-exit-if-changed lib/features/wallet/pages/add_token/wallet_coin_add_all.dart test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart && dart analyze lib/features/wallet/pages/add_token/wallet_coin_add_all.dart test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart && flutter test --no-pub test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart`
 Expected: formatter unchanged, analyzer clean, and search/network/error assertions pass without external HTTP.
