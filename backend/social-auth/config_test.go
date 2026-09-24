@@ -94,8 +94,13 @@ func TestLoadConfigMissingRequiredVariableExits(t *testing.T) {
 				}
 			}
 			output, err := cmd.CombinedOutput()
-			if err == nil || !strings.Contains(string(output), missing) {
-				t.Fatalf("subprocess error=%v output=%q, want required-variable failure", err, output)
+			exitErr, ok := err.(*exec.ExitError)
+			if !ok || exitErr.ExitCode() != 1 {
+				t.Fatalf("subprocess error=%v output=%q, want exit status 1", err, output)
+			}
+			wantDiagnostic := "required env var \"" + missing + "\" is not set"
+			if !strings.Contains(string(output), wantDiagnostic) {
+				t.Fatalf("subprocess output=%q, want diagnostic %q", output, wantDiagnostic)
 			}
 		})
 	}
