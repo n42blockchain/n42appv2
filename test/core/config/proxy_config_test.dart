@@ -96,6 +96,14 @@ void main() {
         expect(entry.value.build(), '$base${entry.value.path}');
       });
     }
+
+    test('normalizes a trailing slash in the configured base URL', () {
+      final normalizedBase = ProxyConfig.baseUrl.replaceFirst(
+        RegExp(r'/+$'),
+        '',
+      );
+      expect(ProxyConfig.marketBase, '$normalizedBase/v1/market');
+    });
   });
 
   group('ProxyConfig.isProxyUrl', () {
@@ -104,6 +112,19 @@ void main() {
         ProxyConfig.isProxyUrl('${ProxyConfig.baseUrl}/v1/market/chart'),
         isTrue,
       );
+    });
+
+    test('host-only base matches only URLs on that exact origin', () {
+      final base = Uri.parse(ProxyConfig.baseUrl);
+      final basePath = base.path.replaceFirst(RegExp(r'/+$'), '');
+      final routePath = basePath.isEmpty ? '/v1/market' : '$basePath/v1/market';
+      final proxyRoute = base.replace(path: routePath).toString();
+      final otherHost = base
+          .replace(host: 'other.example', path: routePath)
+          .toString();
+
+      expect(ProxyConfig.isProxyUrl(proxyRoute), isTrue);
+      expect(ProxyConfig.isProxyUrl(otherHost), isFalse);
     });
 
     test('rejects non-proxy URLs', () {

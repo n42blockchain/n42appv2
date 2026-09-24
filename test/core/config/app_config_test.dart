@@ -3,6 +3,7 @@
 // Apache License 2.0 and MIT License.
 // See LICENSE file in the project root for full license information.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:n42_wallet/core/config/app_config.dart';
 
@@ -42,10 +43,14 @@ void main() {
     // ── API URL helpers ─────────────────────────────────────────────────
 
     group('getApiUrlOnline', () {
-      test('returns main URL when isOnline is true', () {
-        // AppConfig.isOnline is const true
+      test('returns URL for the selected environment', () {
         final url = AppConfig.getApiUrlOnline('marketHost');
-        expect(url, contains('api.n42.ai'));
+        expect(
+          url,
+          AppConfig.isOnline
+              ? 'https://api.n42.ai/market/v1'
+              : 'https://5.78.28.90:9398/v1',
+        );
       });
 
       test('returns string for non-map entries', () {
@@ -57,6 +62,28 @@ void main() {
         final url = AppConfig.getApiUrlOnline('nonExistentKey');
         expect(url, '');
       });
+    });
+
+    test('ID Hub CAIP-2 chain follows the selected environment', () {
+      expect(
+        AppConfig.idHubChainCaip2,
+        AppConfig.isOnline
+            ? AppConfig.idHubMainnetChainCaip2
+            : AppConfig.idHubTestnetChainCaip2,
+      );
+    });
+
+    test('swap entry points are hidden only on iOS', () {
+      final previousPlatform = debugDefaultTargetPlatformOverride;
+      try {
+        debugDefaultTargetPlatformOverride = TargetPlatform.iOS;
+        expect(AppConfig.swapFeatureEnabled, isFalse);
+
+        debugDefaultTargetPlatformOverride = TargetPlatform.android;
+        expect(AppConfig.swapFeatureEnabled, isTrue);
+      } finally {
+        debugDefaultTargetPlatformOverride = previousPlatform;
+      }
     });
 
     // ── API URL map ──────────────────────────────────────────────────────
