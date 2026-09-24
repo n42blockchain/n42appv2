@@ -32,7 +32,7 @@ type Config struct {
 func loadConfig() *Config {
 	cfg := &Config{
 		Port:                 envOr("PORT", "8090"),
-		MatrixHomeserver:     strings.TrimRight(mustEnv("MATRIX_HOMESERVER"), "/"),
+		MatrixHomeserver:     strings.TrimRight(strings.TrimSpace(mustEnv("MATRIX_HOMESERVER")), "/"),
 		MatrixSharedSecret:   mustEnv("MATRIX_SHARED_SECRET"),
 		MatrixPasswordSecret: mustEnv("MATRIX_PASSWORD_SECRET"),
 		DiscordClientID:      os.Getenv("DISCORD_CLIENT_ID"),
@@ -44,7 +44,7 @@ func loadConfig() *Config {
 		CORSOrigins:          map[string]bool{},
 	}
 	if v := os.Getenv("TELEGRAM_AUTH_TTL_SECONDS"); v != "" {
-		if d, err := time.ParseDuration(v + "s"); err == nil {
+		if d, err := time.ParseDuration(v + "s"); err == nil && d > 0 {
 			cfg.TelegramAuthTTL = d
 		}
 	}
