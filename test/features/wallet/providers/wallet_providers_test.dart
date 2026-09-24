@@ -6,7 +6,21 @@
 // Author: Jiang Yiwei
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:n42_wallet/core/app/app_globals.dart';
+import 'package:n42_wallet/core/providers/core_providers.dart';
+import 'package:n42_wallet/core/storage/sp_util.dart';
+import 'package:n42_wallet/shared/domain/entities/user_info.dart';
 import 'package:n42_wallet/features/wallet/presentation/providers/wallet_providers.dart';
+
+class _WalletStorage extends SPUtil {
+  _WalletStorage(this.walletInfo);
+
+  final Map<String, dynamic> walletInfo;
+
+  @override
+  Future<Map<String, dynamic>?> getWalletInfo() async => walletInfo;
+}
 
 void main() {
   // Initialize Flutter binding for tests
@@ -142,5 +156,34 @@ void main() {
       expect(wallet.mnemonic, 'word1 word2 word3');
       expect(wallet.faceBinding, true);
     });
+
+    test(
+      'authenticated account does not inherit the default wallet list',
+      () async {
+        final previousUser = AppGlobals.userInfo;
+        AppGlobals.userInfo = UserInfo(uuid: 'new-account');
+        final container = ProviderContainer(
+          overrides: [
+            spUtilProvider.overrideWithValue(
+              _WalletStorage({
+                'AstranetWallet': {
+                  'wallet': [
+                    {'walletName': 'Previous account wallet'},
+                  ],
+                },
+              }),
+            ),
+          ],
+        );
+        addTearDown(() {
+          container.dispose();
+          AppGlobals.userInfo = previousUser;
+        });
+
+        final wallets = await container.read(walletListProvider.future);
+
+        expect(wallets, isEmpty);
+      },
+    );
   });
 }

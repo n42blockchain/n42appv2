@@ -23,16 +23,10 @@ extension WalletActionProviderWallet on WalletActionProvider {
         _loadWalletList(walletUser);
         await _restoreMnemonics();
       } else {
-        final walletDefault = walletAll["AstranetWallet"];
-        if (walletDefault != null) {
-          _loadWalletList(walletDefault);
-          await _restoreMnemonics();
-          walletAll[userUUID] = walletDefault;
-          walletAll.remove("AstranetWallet");
-          await SPUtil().setWalletInfo(walletAll);
-        } else {
-          await createWallet();
-        }
+        // Authenticated accounts must only load wallets stored under their own
+        // UUID. Copying the anonymous wallet here leaks one account's assets
+        // into the next account registered on the same device.
+        await createWallet();
       }
     }
     _load = Load.finish;

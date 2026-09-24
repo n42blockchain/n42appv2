@@ -95,6 +95,8 @@ class AppGlobals {
         .read(currentUserProvider.notifier)
         .setUser(SharedUserInfo.fromLegacyUserInfo(info));
     globalProviderContainer.invalidate(walletListProvider);
+    globalProviderContainer.invalidate(selectedWalletIndexProvider);
+    globalProviderContainer.invalidate(miningWalletIndexProvider);
     globalWapAdapter.initWallet(shouldInitCoinInfo: true);
     globalWcpInstance.cleanDataLogout();
   }
@@ -109,6 +111,8 @@ class AppGlobals {
       userInfo = null;
       globalProviderContainer.read(currentUserProvider.notifier).clearUser();
       globalProviderContainer.invalidate(walletListProvider);
+      globalProviderContainer.invalidate(selectedWalletIndexProvider);
+      globalProviderContainer.invalidate(miningWalletIndexProvider);
       globalWapAdapter.initWallet();
       globalWcpInstance.cleanDataLogout();
     } catch (err) {

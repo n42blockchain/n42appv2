@@ -198,9 +198,6 @@ class WalletListNotifier extends AsyncNotifier<List<WalletInfoData>> {
     // Get user's wallet data
     Map<String, dynamic>? walletUser = walletAll[userUUID];
 
-    // Fallback to default wallet if user wallet not found
-    walletUser ??= walletAll['AstranetWallet'];
-
     if (walletUser == null) {
       return [];
     }
@@ -318,7 +315,7 @@ abstract class _WalletIndexNotifier extends StateNotifier<int> {
     final walletAll = await spUtil.getWalletInfo();
     if (walletAll == null) return null;
     final userUUID = AppGlobals.userInfo?.uuid ?? 'AstranetWallet';
-    return walletAll[userUUID] ?? walletAll['AstranetWallet'];
+    return walletAll[userUUID];
   }
 }
 
