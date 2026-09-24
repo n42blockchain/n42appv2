@@ -4,7 +4,10 @@
     "app_config_tests": "f9d61c3fc",
     "social_auth_config_tests": "8ceb2ceb0",
     "swap_config_tests": "d96a5c11c",
-    "chat_link_security_test": "942a4ed1"
+    "chat_link_security_test": "942a4ed1",
+    "wallet_account_isolation_test": "12219ce30",
+    "wallet_asset_discovery": "69527a526",
+    "mnemonic_import_validation": "e80a463ce"
   },
   "chat": {
     "repository": "../n42_chat_audit_20260912",
@@ -72,13 +75,13 @@
   "main_app": {
     "latest_full_run_date": "2026-09-24",
     "test_command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine",
-    "tests_passed": 5772,
+    "tests_passed": 5780,
     "tests_skipped": 0,
     "tests_failed": 0,
-    "machine_success_events": 6231,
-    "machine_hidden_success_events": 459,
+    "machine_success_events": 6242,
+    "machine_hidden_success_events": 462,
     "machine_done_success": true,
-    "lcov": {"hit": 63837, "found": 132408, "files": 927, "percent": 48.2123},
+    "lcov": {"hit": 64779, "found": 132409, "files": 927, "percent": 48.9234},
     "quality_gate_70_percent": false,
     "rerun_in_this_batch": true,
     "wallet_chain_send_logic": {"hit": 125, "found": 327, "percent": 38.2263},
@@ -88,14 +91,26 @@
       "secure_storage_failure_blocks_navigation": true,
       "duplicate_in_flight_save_writes": 1
     },
+    "wallet_coverage_rounds": {
+      "focused_tests_passed": 8,
+      "account_isolation": {"test_count": 1, "wallet_action_provider_wallet": {"hit": 63, "found": 282, "percent": 22.3404}},
+      "asset_discovery": {
+        "test_count": 2,
+        "wallet_coin_add_all": {"hit": 145, "found": 153, "percent": 94.7712},
+        "wallet_coin_add_all_data": {"hit": 121, "found": 165, "percent": 73.3333},
+        "wallet_coin_add_all_logic": {"hit": 25, "found": 304, "percent": 8.2237}
+      },
+      "mnemonic_import": {"test_count": 5, "import_one": {"hit": 133, "found": 144, "percent": 92.3611}},
+      "all_wallets_remain_local_and_synthetic": true
+    },
     "previous_full_run": {
-      "date": "2026-09-24 pre-wallet-backup batch",
-      "tests_passed": 5766,
+      "date": "2026-09-24 pre-wallet-asset-and-import batch",
+      "tests_passed": 5772,
       "tests_skipped": 0,
       "tests_failed": 0,
-      "machine_success_events": 6224,
-      "machine_hidden_success_events": 458,
-      "lcov": {"hit": 63710, "found": 132404, "files": 927, "percent": 48.1179}
+      "machine_success_events": 6231,
+      "machine_hidden_success_events": 459,
+      "lcov": {"hit": 63837, "found": 132408, "files": 927, "percent": 48.2123}
     },
     "earlier_full_run": {
       "date": "2026-09-23",
@@ -113,7 +128,7 @@
     "chat_lcov_raw_sha256": "d45b3e28c50e46877d999a95a282d485855908c8ee2406801507b3b4d27ac38a",
     "dart_config_lcov_union_raw_sha256": "f049ae146c794a7480bc4b977de4710933abbe90003796187966db327dfeddde",
     "main_lcov": "main-full.lcov.gz",
-    "main_lcov_raw_sha256": "d7205fda685b81d3a6afdd70ef104a155af6bcbee029e27ff2f792c83b6295ae",
-    "main_lcov_gzip_sha256": "d83b1b061d82f7093208ae1e67d94501963f2814b3a7becc443150d91f3ce967"
+    "main_lcov_raw_sha256": "39b34f14c0e7d16317952768334701b7c9cb76dedc6b4508be03f43f9e4dd22b",
+    "main_lcov_gzip_sha256": "dfc897896f17d9d086b3ab8563a5b94edacb6ec8613e33d3114f971599c829c3"
   }
 }

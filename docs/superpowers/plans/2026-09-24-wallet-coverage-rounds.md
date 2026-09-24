@@ -138,11 +138,11 @@ setState(() => inputMW = words.join(' ').toLowerCase());
 Run: `dart format --output=none --set-exit-if-changed lib/features/wallet/pages/create_wallet/import/import_one.dart test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart && dart analyze lib/features/wallet/pages/create_wallet/import/import_one.dart test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart && flutter test --no-pub test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart`
 Expected: formatter unchanged, analyzer clean, and the import suite passes.
 
-- [ ] **Step 5: Commit.** Commit the normalization change and interaction suite with subject `test: cover mnemonic import validation`.
+- [x] **Step 5: Commit.** Committed as `test: cover mnemonic import validation` (`e80a463ce`).
 
 ### Final coverage measurement
 
-- [ ] Run `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine` after all three commits; require `done.success=true`, zero visible failures/skips, and record hidden events separately from visible tests.
-- [ ] Measure raw LCOV totals and per-file deltas for all touched wallet sources; gzip the exact `coverage/lcov.info`; verify decompression equality and raw/archive SHA-256 values.
-- [ ] Update `docs/testing/coverage-expansion-2026-09-24/README.md`, `summary.json`, and the COV-01 row plus a new entry in `docs/plans/ACTIVE_TASKS.md`. Keep the 70% task open unless the measured original CI denominator reaches the threshold.
-- [ ] Commit only the report, archive, and plan updates with an English subject after a fresh whole-branch review.
+- [x] Run `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine` after all three commits. `done.success=true`; all 5,780 visible tests and 462 hidden events passed, with no visible failures or skips.
+- [x] Measure raw LCOV totals and per-file deltas for all touched wallet sources; gzip the exact `coverage/lcov.info`; verify decompression equality and raw/archive SHA-256 values. Measured 64,779 / 132,409 lines (48.9234%) across 927 files.
+- [x] Update the coverage README, `summary.json`, and COV-01 row plus a new entry in `docs/plans/ACTIVE_TASKS.md`. The 70% task remains open.
+- [x] Fresh whole-branch review completed with no Critical, Important, or Minor findings. Commit the report, archive, `ACTIVE_TASKS.md`, and plan checklist separately using an English subject.

@@ -64,8 +64,24 @@ RED 测试发现 `saveWalletInfo` 扩展方法会捕获并吞掉安全存储错�
 
 `backup_three.dart` 在最新全量 LCOV 中为 101 / 111 行（90.9910%）。生产代码未使用真实钱包、助记词、密码或密钥。Dart analyze 无问题。
 
+## Flutter 钱包资产与助记词导入
+
+本轮分三次独立提交，新增 8 项真实页面/Provider 路径测试，测试数据和平台通道均为合成内容。
+
+- 账户隔离：通过真实 `WalletActionProvider.getWalletInfo()` 和模拟安全存储，验证新登录账户创建自己的 `Account1`，且 `AstranetWallet` 旧记录保留。临时恢复旧匿名钱包迁移逻辑时测试按预期失败，恢复隔离实现后通过。
+- 资产发现：两个 widget 测试覆盖 Ethereum/Solana 合成 USDC 结果、搜索及所选网络筛选，以及 API 错误提示并结束 loading。`WalletCoinAddAll` 增加可选 `TokenViewApi` 注入；生产调用仍使用默认 API，没有发出网络请求。
+- 助记词导入：五个 widget 测试覆盖空剪贴板启动、空格/tab/换行规范化、无效词组、重复钱包拒绝、进入密码设置页和等待校验时离页。手动输入和剪贴板文本现在共用任意连续空白折叠逻辑。
+
+| 文件 | 上轮覆盖 | 本轮覆盖 | 本轮行数变化 |
+| --- | ---: | ---: | ---: |
+| `wallet_action_provider_wallet.dart` | 27 / 282 (9.5745%) | 63 / 282 (22.3404%) | +36 |
+| `wallet_coin_add_all.dart` | 0 / 153 (0%) | 145 / 153 (94.7712%) | +145 |
+| `wallet_coin_add_all_data.dart` | 0 / 164 (0%) | 121 / 165 (73.3333%) | +121（增加 1 行） |
+| `wallet_coin_add_all_logic.dart` | 0 / 304 (0%) | 25 / 304 (8.2237%) | +25 |
+| `import_one.dart` | 0 / 144 (0%) | 133 / 144 (92.3611%) | +133 |
+
 ## COV-01 状态
 
-2026-09-24 钱包备份确认补测后，按 CI 文件句柄上限完整运行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`：5,772 个可见测试通过、0 失败、0 跳过；另有 459 个隐藏加载/设置事件通过，共 6,231 个成功的 machine `testDone` 事件，`done.success=true`。同日上一轮为 5,766 个可见测试和 458 个隐藏事件。全量 LCOV 为 63,837 / 132,408 行、927 个文件（48.2123%）；较上一轮的 48.1179% 提高 0.0944 个百分点。70% 质量门槛仍未达到，COV-01 继续开放。
+钱包资产、导入交互提交后，按 CI 文件句柄上限完整运行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`：5,780 个可见测试通过、0 失败、0 跳过；另有 462 个隐藏加载/设置事件通过，共 6,242 个成功的 machine `testDone` 事件，`done.success=true`。较上一轮新增 8 个可见测试和 3 个隐藏事件。全量 LCOV 为 64,779 / 132,409 行、927 个文件（48.9234%）；相比上轮的 48.2123% 提高 0.7111 个百分点。原始分母保留，70% 质量门槛仍未达到，COV-01 继续开放。
 
-主程序全量 LCOV：[`main-full.lcov.gz`](main-full.lcov.gz)，解压后的 SHA-256：`d7205fda685b81d3a6afdd70ef104a155af6bcbee029e27ff2f792c83b6295ae`；gzip 归档 SHA-256：`d83b1b061d82f7093208ae1e67d94501963f2814b3a7becc443150d91f3ce967`。
+主程序全量 LCOV：[`main-full.lcov.gz`](main-full.lcov.gz)，解压后的 SHA-256：`39b34f14c0e7d16317952768334701b7c9cb76dedc6b4508be03f43f9e4dd22b`；gzip 归档 SHA-256：`dfc897896f17d9d086b3ab8563a5b94edacb6ec8613e33d3114f971599c829c3`。归档已验证与 `coverage/lcov.info` 字节一致。
