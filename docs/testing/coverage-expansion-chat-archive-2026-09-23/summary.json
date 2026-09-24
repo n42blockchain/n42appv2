@@ -1,0 +1,21 @@
+{
+  "date": "2026-09-23",
+  "chat_commit": "38af33fc",
+  "tests_passed": 6592,
+  "tests_skipped": 1,
+  "tests_failed": 0,
+  "raw_lcov": {
+    "hit": 33391,
+    "found": 133072,
+    "files": 648,
+    "percent": 25.0924
+  },
+  "archive_integrity_service": {
+    "hit": 120,
+    "found": 121,
+    "percent": 99.1736
+  },
+  "lcov_sha256": "7b7bdeb958b30aa9d3338a4e70580febede2b810439f2868e107a194b4f16e46",
+  "command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --reporter expanded",
+  "targeted_test": "flutter test --no-pub test/unit/services/archive_integrity_service_test.dart --reporter expanded"
+}
