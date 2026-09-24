@@ -434,6 +434,7 @@ class _N42AppV2State extends ConsumerState<N42AppV2>
             SystemChannels.textInput.invokeMethod('TextInput.hide');
           },
           child: MaterialApp(
+            debugShowCheckedModeBanner: false,
             locale: locale,
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,

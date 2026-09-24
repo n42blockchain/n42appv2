@@ -8,6 +8,7 @@ import '../../../core/di/injection.dart';
 import '../../../core/extensions/context_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_icons.dart';
+import '../../../core/utils/platform_utils.dart';
 import '../../../domain/entities/avatar_decoration_preset.dart';
 import '../../../data/datasources/matrix/matrix_client_manager.dart';
 import '../../../domain/entities/user_entity.dart';
@@ -243,16 +244,22 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
               ),
-              _buildDivider(context),
-              _buildMenuItem(
-                context,
-                icon: Icons.account_balance_outlined,
-                iconColor: const Color(0xFF2ECC71),
-                title: 'Buy / Sell crypto',
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(builder: (_) => const FiatRampPage()),
+              // Fiat on/off-ramp is hidden on iOS: the app does not offer
+              // buying or selling crypto there (App Review Guideline 2.1).
+              if (!PlatformUtils.isIOS) ...[
+                _buildDivider(context),
+                _buildMenuItem(
+                  context,
+                  icon: Icons.account_balance_outlined,
+                  iconColor: const Color(0xFF2ECC71),
+                  title: 'Buy / Sell crypto',
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => const FiatRampPage(),
+                    ),
+                  ),
                 ),
-              ),
+              ],
               _buildDivider(context),
               _buildMenuItem(
                 context,

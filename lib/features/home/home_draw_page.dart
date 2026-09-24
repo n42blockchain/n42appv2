@@ -183,34 +183,36 @@ class _HomeDrawPageState extends ConsumerState<HomeDrawPage>
                     SizedBox(height: AppSpacing.space4),
                     // 其他分组
                     _sectionTitle(S.of(context).s_key_10),
-                    _menuItem(
-                      "assets/home/tabbar/earn.png",
-                      S.of(context).g_key_loyalty_title,
-                      automationKey: const ValueKey<String>('drawer_loyalty'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                LoyaltyHomePage(walletAddress: walletAddress),
-                          ),
-                        );
-                      },
-                    ),
-                    _menuItem(
-                      "assets/home/money.png",
-                      S.of(context).g_key_airdrop_title,
-                      automationKey: const ValueKey<String>('drawer_airdrop'),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                AirdropHomePage(walletAddress: walletAddress),
-                          ),
-                        );
-                      },
-                    ),
+                    if (AppConfig.pointsAirdropEnabled) ...[
+                      _menuItem(
+                        "assets/home/tabbar/earn.png",
+                        S.of(context).g_key_loyalty_title,
+                        automationKey: const ValueKey<String>('drawer_loyalty'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  LoyaltyHomePage(walletAddress: walletAddress),
+                            ),
+                          );
+                        },
+                      ),
+                      _menuItem(
+                        "assets/home/money.png",
+                        S.of(context).g_key_airdrop_title,
+                        automationKey: const ValueKey<String>('drawer_airdrop'),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  AirdropHomePage(walletAddress: walletAddress),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
                     _menuItem(
                       "assets/home/tabbar/news.png",
                       S.of(context).g_browser_key11,
