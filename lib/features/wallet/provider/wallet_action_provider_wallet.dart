@@ -483,42 +483,62 @@ extension WalletActionProviderWallet on WalletActionProvider {
     bool isNewWallet = false,
   }) async {
     try {
-      final sPUtils = SPUtil();
-      Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
-      if (walletAll == null) {
-        await sPUtils.setWalletInfo({
-          userUUID: {
-            "index": 0,
-            "miningIndex": 0,
-            "wallet": [newWalletInfo.toJson()],
-          },
-        });
-      } else {
-        final userWallets = walletAll[userUUID];
-        if (userWallets == null) {
-          walletAll[userUUID] = {
-            "index": 0,
-            "miningIndex": 0,
-            "wallet": [newWalletInfo.toJson()],
-          };
-        } else {
-          if (isNewWallet) {
-            (userWallets['wallet'] as List).add(newWalletInfo.toJson());
-          } else {
-            userWallets['wallet'][wIndex] = newWalletInfo.toJson();
-          }
-          userWallets['index'] = wIndex;
-          userWallets['miningIndex'] = walletMiningIndex;
-          walletAll[userUUID] = userWallets;
-        }
-        await sPUtils.setWalletInfo(walletAll);
-      }
-      await refreshWalletListNotifier();
+      await saveWalletInfoOrThrow(
+        newWalletInfo,
+        wIndex,
+        isNewWallet: isNewWallet,
+      );
     } catch (e) {
       if (kDebugMode) {
         debugPrint("saveWalletInfo error: $e");
       }
     }
+  }
+
+  /// Saves a wallet record and propagates storage failures to callers that
+  /// need to keep the user on the current flow until sensitive data is saved.
+  Future<void> saveWalletInfoOrThrow(
+    WalletInfo newWalletInfo,
+    int wIndex, {
+    bool isNewWallet = false,
+  }) => _writeWalletInfo(newWalletInfo, wIndex, isNewWallet: isNewWallet);
+
+  Future<void> _writeWalletInfo(
+    WalletInfo newWalletInfo,
+    int wIndex, {
+    required bool isNewWallet,
+  }) async {
+    final sPUtils = SPUtil();
+    Map<String, dynamic>? walletAll = await sPUtils.getWalletInfo();
+    if (walletAll == null) {
+      await sPUtils.setWalletInfo({
+        userUUID: {
+          "index": 0,
+          "miningIndex": 0,
+          "wallet": [newWalletInfo.toJson()],
+        },
+      });
+    } else {
+      final userWallets = walletAll[userUUID];
+      if (userWallets == null) {
+        walletAll[userUUID] = {
+          "index": 0,
+          "miningIndex": 0,
+          "wallet": [newWalletInfo.toJson()],
+        };
+      } else {
+        if (isNewWallet) {
+          (userWallets['wallet'] as List).add(newWalletInfo.toJson());
+        } else {
+          userWallets['wallet'][wIndex] = newWalletInfo.toJson();
+        }
+        userWallets['index'] = wIndex;
+        userWallets['miningIndex'] = walletMiningIndex;
+        walletAll[userUUID] = userWallets;
+      }
+      await sPUtils.setWalletInfo(walletAll);
+    }
+    await refreshWalletListNotifier();
   }
 
   //保存钱包数据

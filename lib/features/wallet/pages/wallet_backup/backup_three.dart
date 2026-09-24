@@ -126,7 +126,7 @@ class _BackupThreeState extends ConsumerState<BackupThree> {
     var completedWithExit = false;
     try {
       final wap = ref.read(wapBridgeProvider);
-      await wap.saveWalletInfo(widget.walletInfo, widget.walletIndex);
+      await wap.saveWalletInfoOrThrow(widget.walletInfo, widget.walletIndex);
       if (!mounted) return;
       if (widget.walletIndex == wap.walletIndex) {
         ref.read(wapBridgeProvider).initWallet();

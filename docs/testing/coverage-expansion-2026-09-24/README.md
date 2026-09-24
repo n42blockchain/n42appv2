@@ -56,8 +56,16 @@ MINING_RPC_URL=http://dev.invalid
 
 `wallet_chain_send_logic.dart` 在本次完整 LCOV 中为 125 / 327 行（38.2263%），上一份主程序全量 LCOV 中为 95 / 324 行（29.3210%）。定向 `dart analyze` 无问题。
 
+## Flutter 钱包备份确认
+
+`backup_three_interaction_test.dart` 新增 6 项测试（5 项真实页面交互测试和 1 项旧入口兼容测试），使用全内存安全存储平台和合成钱包数据：空密码、无效密码和不匹配确认都不会写入；安全存储写入失败时页面保持打开、退出 loading 并允许重试；保存等待期间的重复点击只写入一次；成功时确认合成密码确实写入后才退出；旧 `saveWalletInfo` 在存储失败时仍按兼容契约吞错。
+
+RED 测试发现 `saveWalletInfo` 扩展方法会捕获并吞掉安全存储错误，导致页面将失败写入当作成功并退出。新增 `saveWalletInfoOrThrow` 共用原写入逻辑但向调用方传递错误，备份确认页改用该严格入口；其他现有调用仍保留原有吞错兼容行为。失败后可恢复重试的回归测试 RED→GREEN。
+
+`backup_three.dart` 在最新全量 LCOV 中为 101 / 111 行（90.9910%）。生产代码未使用真实钱包、助记词、密码或密钥。Dart analyze 无问题。
+
 ## COV-01 状态
 
-2026-09-24 后续完整主程序运行按 CI 文件句柄上限执行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`：6,224 项通过、0 失败、0 跳过，机器输出包含 `success: true` 的 `done` 事件。全量 LCOV 为 63,710 / 132,404 行、927 个文件（48.1179%）。覆盖率高价值路径持续补强，但 70% 质量门槛仍未达到，COV-01 继续开放。
+2026-09-24 钱包备份确认补测后，按 CI 文件句柄上限完整运行 `ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine`：5,772 个可见测试通过、0 失败、0 跳过；另有 459 个隐藏加载/设置事件通过，共 6,231 个成功的 machine `testDone` 事件，`done.success=true`。同日上一轮为 5,766 个可见测试和 458 个隐藏事件。全量 LCOV 为 63,837 / 132,408 行、927 个文件（48.2123%）；较上一轮的 48.1179% 提高 0.0944 个百分点。70% 质量门槛仍未达到，COV-01 继续开放。
 
-主程序全量 LCOV：[`main-full.lcov.gz`](main-full.lcov.gz)，解压后的 SHA-256：`ddf14e398d2747c97d5b86e02958a609ad00121459a6a7f8fc373c74a66ad3a9`；gzip 归档 SHA-256：`64a4e93f9bff41ac5f9b07606b0f9f2069c04aaa4608b5750856817014e8a279`。
+主程序全量 LCOV：[`main-full.lcov.gz`](main-full.lcov.gz)，解压后的 SHA-256：`d7205fda685b81d3a6afdd70ef104a155af6bcbee029e27ff2f792c83b6295ae`；gzip 归档 SHA-256：`d83b1b061d82f7093208ae1e67d94501963f2814b3a7becc443150d91f3ce967`。

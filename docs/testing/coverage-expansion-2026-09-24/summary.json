@@ -72,19 +72,38 @@
   "main_app": {
     "latest_full_run_date": "2026-09-24",
     "test_command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine",
-    "tests_passed": 6224,
+    "tests_passed": 5772,
     "tests_skipped": 0,
     "tests_failed": 0,
+    "machine_success_events": 6231,
+    "machine_hidden_success_events": 459,
     "machine_done_success": true,
-    "lcov": {"hit": 63710, "found": 132404, "files": 927, "percent": 48.1179},
+    "lcov": {"hit": 63837, "found": 132408, "files": 927, "percent": 48.2123},
     "quality_gate_70_percent": false,
     "rerun_in_this_batch": true,
     "wallet_chain_send_logic": {"hit": 125, "found": 327, "percent": 38.2263},
+    "wallet_backup_confirmation": {
+      "focused_tests_passed": 6,
+      "backup_three_lines": {"hit": 101, "found": 111, "percent": 90.991},
+      "secure_storage_failure_blocks_navigation": true,
+      "duplicate_in_flight_save_writes": 1
+    },
     "previous_full_run": {
-      "date": "2026-09-23",
-      "tests_passed": 6214,
+      "date": "2026-09-24 pre-wallet-backup batch",
+      "tests_passed": 5766,
       "tests_skipped": 0,
       "tests_failed": 0,
+      "machine_success_events": 6224,
+      "machine_hidden_success_events": 458,
+      "lcov": {"hit": 63710, "found": 132404, "files": 927, "percent": 48.1179}
+    },
+    "earlier_full_run": {
+      "date": "2026-09-23",
+      "tests_passed": 5756,
+      "tests_skipped": 0,
+      "tests_failed": 0,
+      "machine_success_events": 6214,
+      "machine_hidden_success_events": 458,
       "lcov": {"hit": 63682, "found": 132331, "files": 927, "percent": 48.1233}
     }
   },
@@ -94,7 +113,7 @@
     "chat_lcov_raw_sha256": "d45b3e28c50e46877d999a95a282d485855908c8ee2406801507b3b4d27ac38a",
     "dart_config_lcov_union_raw_sha256": "f049ae146c794a7480bc4b977de4710933abbe90003796187966db327dfeddde",
     "main_lcov": "main-full.lcov.gz",
-    "main_lcov_raw_sha256": "ddf14e398d2747c97d5b86e02958a609ad00121459a6a7f8fc373c74a66ad3a9",
-    "main_lcov_gzip_sha256": "64a4e93f9bff41ac5f9b07606b0f9f2069c04aaa4608b5750856817014e8a279"
+    "main_lcov_raw_sha256": "d7205fda685b81d3a6afdd70ef104a155af6bcbee029e27ff2f792c83b6295ae",
+    "main_lcov_gzip_sha256": "d83b1b061d82f7093208ae1e67d94501963f2814b3a7becc443150d91f3ce967"
   }
 }
