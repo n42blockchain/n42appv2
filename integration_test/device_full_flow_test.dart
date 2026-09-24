@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:n42_wallet/main.dart' as app;
+import 'package:n42_wallet/core/config/app_config.dart';
 import 'package:n42_wallet/core/config/proxy_config.dart';
 import 'package:n42_wallet/core/providers/service_providers.dart';
 import 'package:n42_wallet/features/identity/pages/id_hub_sign_page.dart';
@@ -354,8 +355,7 @@ Future<void> _exerciseDrawer(WidgetTester tester) async {
     'drawer_address_book',
     'drawer_security',
     'drawer_settings',
-    'drawer_loyalty',
-    'drawer_airdrop',
+    if (AppConfig.pointsAirdropEnabled) ...['drawer_loyalty', 'drawer_airdrop'],
     'drawer_browser',
     'drawer_about',
   ]) {

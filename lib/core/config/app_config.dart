@@ -53,6 +53,12 @@ class AppConfig {
   static bool get swapFeatureEnabled =>
       kIsWeb || defaultTargetPlatform != TargetPlatform.iOS;
 
+  /// Whether Points (loyalty) and Airdrops entry points are shown.
+  /// Removed from iOS builds after App Store review (Guideline 2.1);
+  /// Android keeps them.
+  static bool get pointsAirdropEnabled =>
+      kIsWeb || defaultTargetPlatform != TargetPlatform.iOS;
+
   /// Production environment flag.
   /// Use `--dart-define=ENV=development` to switch to test endpoints.
   static const bool isOnline =
