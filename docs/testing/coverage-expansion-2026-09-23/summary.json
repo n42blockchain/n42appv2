@@ -1,0 +1,78 @@
+{
+  "date": "2026-09-23",
+  "chat": {
+    "commit": "8d735268e76d28cd3e44aef5532223f084e211f0",
+    "tests_passed": 6585,
+    "tests_skipped": 1,
+    "tests_failed": 0,
+    "raw_lcov": {
+      "hit": 33271,
+      "found": 133071,
+      "files": 648,
+      "percent": 25.0024
+    },
+    "non_generated_lib_src_diagnostic": {
+      "hit": 31941,
+      "found": 80662,
+      "files": 621,
+      "percent": 39.5986
+    },
+    "lcov_sha256": "c80d99e5ef13ff5879ce1e92961c857c05e518a0242315c63467d2cc7304df77"
+  },
+  "dart_config": {
+    "tests_passed": 274,
+    "tests_failed": 0,
+    "source_files": {
+      "lib/core/config/app_config.dart": {
+        "hit": 17,
+        "found": 21
+      },
+      "lib/core/config/rpc_config.dart": {
+        "hit": 12,
+        "found": 13
+      },
+      "lib/core/config/api_keys_config.dart": {
+        "hit": 4,
+        "found": 5
+      },
+      "lib/core/config/proxy_config.dart": {
+        "hit": 60,
+        "found": 67
+      }
+    },
+    "defines": [
+      "BTC_TESTNET_RPC=http://test.invalid",
+      "BTC_MAINNET_RPC=http://main.invalid",
+      "MINING_WS_URL=ws://dev.invalid",
+      "MINING_RPC_URL=http://dev.invalid"
+    ],
+    "lcov_sha256": "e6b528b8589e5c47cf01b023e112a1677dc466bb3586c17a738c7f4ff8cb1cf8"
+  },
+  "backend": {
+    "go": {
+      "livekit-jwt": "72.8% total; config.loadConfig 100%",
+      "loyalty": "22.1% total; config.loadConfig/env 100%",
+      "social-auth": "18.4% total; config.loadConfig/envOr 100%, mustEnv 75%",
+      "swap": "34.3% aggregate; root package 59.2%, router CORS/setupRouter 100%, getEnv 100%, mustEnv 75%"
+    },
+    "python": {
+      "ai-proxy": "95% server.py statements; 19 tests passed",
+      "payment-sandbox": "96% statements, 47 tests passed"
+    }
+  },
+  "main_app": {
+    "commit": "be7d520ec",
+    "tests_passed": 6214,
+    "tests_skipped": 0,
+    "tests_failed": 0,
+    "lcov": {
+      "hit": 63682,
+      "found": 132331,
+      "files": 927,
+      "percent": 48.1233
+    },
+    "quality_gate_70_percent": false,
+    "lcov_sha256": "fc3abbbfc40795fecd77e076a585da4f508fdbcdf6b7ab4d5aa8c69aec057e45",
+    "test_command": "ulimit -n 4096; flutter test --no-pub --coverage --concurrency=4 --machine"
+  }
+}
