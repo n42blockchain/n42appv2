@@ -235,4 +235,55 @@ void main() {
     final sameInstant = DateTime.parse('2026-09-20T08:00:00-04:00');
     expect(() => prepare(expiresAt: sameInstant), throwsStateError);
   });
+
+  test('signing review rejects a changed active account or auth account', () {
+    final intent = prepare();
+    void review({String active = recipient, String authorized = recipient}) =>
+        intent.validateForSigning(
+          preparedForAddress: recipient,
+          activeAddress: active,
+          authorizedAddress: authorized,
+          tokenBalance: BigInt.from(1250000),
+          nativeFeeBalance: BigInt.from(100),
+          quotedFee: BigInt.from(100),
+          now: now,
+        );
+
+    review();
+    expect(() => review(active: '0x${'2' * 40}'), throwsStateError);
+    expect(() => review(authorized: '0x${'2' * 40}'), throwsStateError);
+  });
+
+  test(
+    'signing review rejects changed balances, quote, and expired intent',
+    () {
+      final intent = prepare();
+      void review({
+        BigInt? tokenBalance,
+        BigInt? nativeFeeBalance,
+        BigInt? quotedFee,
+        DateTime? at,
+      }) => intent.validateForSigning(
+        preparedForAddress: recipient,
+        activeAddress: recipient.toUpperCase(),
+        authorizedAddress: recipient,
+        tokenBalance: tokenBalance ?? BigInt.from(1250000),
+        nativeFeeBalance: nativeFeeBalance ?? BigInt.from(100),
+        quotedFee: quotedFee ?? BigInt.from(100),
+        now: at ?? now,
+      );
+
+      review();
+      expect(
+        () => review(tokenBalance: BigInt.from(1249999)),
+        throwsStateError,
+      );
+      expect(() => review(nativeFeeBalance: BigInt.from(99)), throwsStateError);
+      expect(() => review(quotedFee: BigInt.from(101)), throwsStateError);
+      expect(
+        () => review(at: now.add(const Duration(minutes: 1))),
+        throwsStateError,
+      );
+    },
+  );
 }

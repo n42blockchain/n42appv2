@@ -111,4 +111,61 @@ final class PaymentTransferIntent {
 
   /// An ERC-20 transfer attaches no native currency to the contract call.
   BigInt get value => BigInt.zero;
+
+  /// Rechecks the review state immediately before a signer is invoked.
+  ///
+  /// The confirmation screen must pass the displayed account and the account
+  /// returned by device authorization separately. Current balances and fee
+  /// data must be fetched again by the caller; any changed fee requires a new
+  /// review. This guard does not itself perform device authorization or sign.
+  void validateForSigning({
+    required String preparedForAddress,
+    required String activeAddress,
+    required String authorizedAddress,
+    required BigInt tokenBalance,
+    required BigInt nativeFeeBalance,
+    required BigInt quotedFee,
+    required DateTime now,
+  }) {
+    final prepared = _canonicalNonzeroAddress(
+      preparedForAddress,
+      'preparedForAddress',
+    );
+    final active = _canonicalNonzeroAddress(activeAddress, 'activeAddress');
+    final authorized = _canonicalNonzeroAddress(
+      authorizedAddress,
+      'authorizedAddress',
+    );
+    if (prepared != active || prepared != authorized) {
+      throw StateError('Active wallet or device authorization changed');
+    }
+    if (tokenBalance.isNegative ||
+        nativeFeeBalance.isNegative ||
+        quotedFee.isNegative) {
+      throw ArgumentError('Balances and fee must not be negative');
+    }
+    if (tokenBalance < amount.units) {
+      throw StateError('Insufficient token balance at signing time');
+    }
+    if (nativeFeeBalance < quotedFee) {
+      throw StateError('Insufficient native balance for fee at signing time');
+    }
+    if (quotedFee != this.quotedFee) {
+      throw StateError('Fee quote changed; review the transfer again');
+    }
+    if (!expiresAt.isAfter(now)) {
+      throw StateError('Fee quote has expired');
+    }
+  }
+
+  static String _canonicalNonzeroAddress(String value, String name) {
+    final match = _addressPattern.matchAsPrefix(value);
+    if (match == null || match.end != value.length) {
+      throw ArgumentError.value(value, name, 'Expected a 20-byte EVM address');
+    }
+    if (BigInt.parse(value.substring(2), radix: 16) == BigInt.zero) {
+      throw ArgumentError.value(value, name, 'Address must not be zero');
+    }
+    return value.toLowerCase();
+  }
 }
