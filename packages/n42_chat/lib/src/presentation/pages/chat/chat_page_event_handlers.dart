@@ -1031,6 +1031,25 @@ extension _ChatPageEventHandlersMethods on _ChatPageState {
       try {
         final groupRepository = getIt<IGroupRepository>();
         await groupRepository.inviteUsers(widget.conversation.id, selectedIds);
+
+        if (mounted) {
+          setState(
+            () => _groupMemberCountOverride =
+                _groupMemberCount + selectedIds.length,
+          );
+        }
+
+        try {
+          final group = await groupRepository.getGroup(widget.conversation.id);
+          if (mounted &&
+              group != null &&
+              group.memberCount > _groupMemberCount) {
+            setState(() => _groupMemberCountOverride = group.memberCount);
+          }
+        } catch (e) {
+          debugLog('Failed to refresh group member count: $e');
+        }
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(

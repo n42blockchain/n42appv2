@@ -275,8 +275,14 @@ class _WalletBaseSendState extends State<WalletBaseSend> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              _buildAddressLabel(S.of(context).g_key_75, from),
-                              _buildAddressLabel(S.of(context).g_key_38, to),
+                              _buildAddressLabel(
+                                S.of(context).g_wallet_sender_address,
+                                from,
+                              ),
+                              _buildAddressLabel(
+                                S.of(context).g_wallet_receiver_address,
+                                to,
+                              ),
                               tapLabelWidget(S.of(context).g_key_44, price),
                               tapLabelWidget(
                                 S.of(context).g_key_t_16,

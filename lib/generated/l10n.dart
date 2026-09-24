@@ -1769,9 +1769,9 @@ class S {
     return Intl.message('Instagram', name: 'g_key_m_19', desc: '', args: []);
   }
 
-  /// `Complete`
+  /// `Completed`
   String get g_key_t_1 {
-    return Intl.message('Complete', name: 'g_key_t_1', desc: '', args: []);
+    return Intl.message('Completed', name: 'g_key_t_1', desc: '', args: []);
   }
 
   /// `Pending`
@@ -12973,6 +12973,46 @@ class S {
     return Intl.message(
       'Saved prices',
       name: 'g_wallet_prices_cached',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price`
+  String get g_wallet_coin_unit_price {
+    return Intl.message(
+      'Price',
+      name: 'g_wallet_coin_unit_price',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Total value`
+  String get g_wallet_coin_total_value {
+    return Intl.message(
+      'Total value',
+      name: 'g_wallet_coin_total_value',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `From address`
+  String get g_wallet_sender_address {
+    return Intl.message(
+      'From address',
+      name: 'g_wallet_sender_address',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `To address`
+  String get g_wallet_receiver_address {
+    return Intl.message(
+      'To address',
+      name: 'g_wallet_receiver_address',
       desc: '',
       args: [],
     );

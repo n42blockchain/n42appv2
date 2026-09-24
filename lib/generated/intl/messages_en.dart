@@ -2279,7 +2279,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_key_stake_you_receive": MessageLookupByLibrary.simpleMessage(
       "You will receive",
     ),
-    "g_key_t_1": MessageLookupByLibrary.simpleMessage("Complete"),
+    "g_key_t_1": MessageLookupByLibrary.simpleMessage("Completed"),
     "g_key_t_15": MessageLookupByLibrary.simpleMessage("Gas price"),
     "g_key_t_16": MessageLookupByLibrary.simpleMessage("Max gas fee"),
     "g_key_t_17": MessageLookupByLibrary.simpleMessage("Max fee per gas"),
@@ -3395,6 +3395,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Balance could not be refreshed",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Total value",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Price"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD Wallet · Mnemonic",
     ),
@@ -3415,6 +3419,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Prices unavailable",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "To address",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "From address",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage("Unpin token"),
     "g_wc_connection_lost": MessageLookupByLibrary.simpleMessage(

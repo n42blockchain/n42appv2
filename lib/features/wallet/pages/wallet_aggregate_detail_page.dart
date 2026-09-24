@@ -258,8 +258,11 @@ class _NetworkBalance extends StatelessWidget {
                       if (current == null || token == null) return;
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) =>
-                              WalletReceiveQr(current, tokenCoinModel: token),
+                          builder: (_) => WalletReceiveQr(
+                            current,
+                            tokenCoinModel: token,
+                            allowChainSelection: false,
+                          ),
                         ),
                       );
                     },

@@ -59,7 +59,7 @@ class WalletChainInfoBoard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: AppSpacing.space2),
             child: Text(
-              marketValueStr ?? "",
+              '${S.of(context).g_wallet_coin_unit_price}: ${marketValueStr ?? ""}',
               style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
               ),
@@ -69,7 +69,7 @@ class WalletChainInfoBoard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(top: AppSpacing.space2),
             child: Text(
-              balanceDollarStr ?? "",
+              '${S.of(context).g_wallet_coin_total_value}: ${balanceDollarStr ?? ""}',
               style: AppTypography.body.copyWith(
                 color: AppColorTokens.of(context).textPrimary,
               ),

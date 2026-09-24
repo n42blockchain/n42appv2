@@ -7,7 +7,6 @@ import 'package:n42_wallet/features/wallet/services/ens_service.dart';
 import 'package:n42_wallet/features/wallet/widgets/ens_address_field.dart';
 import 'package:n42_wallet/features/widgets/container_widget.dart';
 import 'package:n42_wallet/features/widgets/text_field_widget.dart';
-import 'package:n42_wallet/features/utils/data_utils.dart';
 import 'package:n42_wallet/generated/l10n.dart';
 import 'package:n42_wallet/presentation/themes/theme_adapter.dart';
 
@@ -52,7 +51,10 @@ class SendToWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(S.of(context).g_key_38, style: _labelStyle(context)),
+          Text(
+            S.of(context).g_wallet_receiver_address,
+            style: _labelStyle(context),
+          ),
           SizedBox(height: AppSpacing.space4),
           textFieldStyle2(
             context,
@@ -306,19 +308,28 @@ class _OwnerAddressRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final addr = DataUtils().addressFarmat(coinModel.address.toString());
+    final addr = coinModel.address?.toString().trim() ?? '';
     return Container(
       padding: EdgeInsets.symmetric(
         vertical: AppSpacing.space4,
         horizontal: AppSpacing.space8,
       ),
-      child: Text(
-        addr,
-        style: AppTypography.body.copyWith(
-          color: AppColorTokens.of(context).textSubtitle,
-        ),
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            S.of(context).g_wallet_sender_address,
+            style: AppTypography.caption.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
+          ),
+          SelectableText(
+            addr,
+            style: AppTypography.body.copyWith(
+              color: AppColorTokens.of(context).textSubtitle,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -65,7 +65,7 @@ mixin _XrpSendWidgetsMixin on _XrpSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context).g_key_38,
+            S.of(context).g_wallet_receiver_address,
             style: AppTypography.body.copyWith(
               color: _themeColor(AppThemeKeys.mainTextColor.name),
             ),

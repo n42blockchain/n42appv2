@@ -295,6 +295,11 @@ class _ChatPageState extends State<_ChatPageContent> {
   String? _smartReplyAnchorMessageId;
   String? _dismissedSmartReplyAnchorMessageId;
 
+  int? _groupMemberCountOverride;
+
+  int get _groupMemberCount =>
+      _groupMemberCountOverride ?? widget.conversation.memberCount;
+
   // 缓存解析后的背景装饰：resolveDecoration 对图片背景会做同步 existsSync，
   // 若在每次 build（尤其键盘动画每帧）都调用会有 IO jank。只在背景 key 变化
   // 时（_loadBackground）重算一次。
@@ -1119,10 +1124,8 @@ class _ChatPageState extends State<_ChatPageContent> {
       final name = widget.conversation.name;
       // 如果群名为空或为默认值，显示成员数
       if (name.isEmpty || name == 'Empty Chat' || name == 'empty chat') {
-        return S
-                .of(context)
-                ?.chatGroupChatCount(widget.conversation.memberCount) ??
-            'Group Chat(${widget.conversation.memberCount})';
+        return S.of(context)?.chatGroupChatCount(_groupMemberCount) ??
+            'Group Chat($_groupMemberCount)';
       }
       return name;
     }

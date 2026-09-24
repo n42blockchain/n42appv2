@@ -110,7 +110,9 @@ class _NftDetailPageState extends State<NftDetailPage> {
   void _handleReceive() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (_) => WalletReceiveQr(coinModel)),
+      MaterialPageRoute(
+        builder: (_) => WalletReceiveQr(coinModel, allowChainSelection: false),
+      ),
     );
   }
 

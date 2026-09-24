@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -111,7 +113,13 @@ String buildReceiveQrData({
 class WalletReceiveQr extends ConsumerStatefulWidget {
   final CoinModel chainCoinModel;
   final CoinModel? tokenCoinModel;
-  const WalletReceiveQr(this.chainCoinModel, {this.tokenCoinModel, super.key});
+  final bool allowChainSelection;
+  const WalletReceiveQr(
+    this.chainCoinModel, {
+    this.tokenCoinModel,
+    this.allowChainSelection = true,
+    super.key,
+  });
 
   @override
   ConsumerState<WalletReceiveQr> createState() => _WalletReceiveQrState();
@@ -250,25 +258,107 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
 
   /// 分享收款链接（地址文本 / payment URI）
   Future<void> shareLink() async {
+    if (qrData.trim().isEmpty) return;
+
     final amount = amountCtrl.text.trim();
     final s = S.of(context);
-    final shareText = amount.isEmpty
-        ? '${s.g_key_33} $symbol\n$address'
-        : '${s.g_key_receive_request_line(amount, symbol, network)}\n'
-              '${s.g_key_address}: $address\n'
-              '${s.g_key_receive_payment_request}: $qrData';
+    final shareText = [
+      '${s.g_key_33} $symbol',
+      '${s.g_key_address}: $address',
+      if (amount.isNotEmpty) ...[
+        s.g_key_receive_request_line(amount, symbol, network),
+        '${s.g_key_receive_payment_request}: $qrData',
+      ],
+    ].join('\n');
+    final qrImage = await _buildQrImage(
+      title: '${s.g_key_33} $symbol',
+      addressLabel: s.g_key_address,
+      requestLine: amount.isEmpty
+          ? null
+          : s.g_key_receive_request_line(amount, symbol, network),
+    );
     if (!mounted) return;
     await SharePlus.instance.share(
       ShareParams(
         text: shareText,
         subject: '${S.of(context).g_key_33} $symbol',
+        files: [
+          XFile.fromData(
+            qrImage,
+            mimeType: 'image/png',
+            name: 'receive_${symbol.toLowerCase()}.png',
+          ),
+        ],
+        fileNameOverrides: ['receive_${symbol.toLowerCase()}.png'],
       ),
     );
   }
 
-  // ─── 链品牌色 ───────────────────────────────────────────────────────────────
+  Future<Uint8List> _buildQrImage({
+    required String title,
+    required String addressLabel,
+    String? requestLine,
+  }) async {
+    const width = 1024;
+    const height = 1500;
+    const qrAreaSize = 900.0;
+    const quietZone = 96.0;
+    final painter = QrPainter(
+      data: qrData,
+      version: QrVersions.auto,
+      gapless: true,
+    );
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+    final bounds = ui.Rect.fromLTWH(0, 0, width.toDouble(), height.toDouble());
+    canvas.drawRect(bounds, ui.Paint()..color = Colors.white);
+    canvas.save();
+    canvas.translate((width - qrAreaSize) / 2 + quietZone, 120 + quietZone);
+    painter.paint(
+      canvas,
+      ui.Size(qrAreaSize - quietZone * 2, qrAreaSize - quietZone * 2),
+    );
+    canvas.restore();
 
-  Color get chainColor => _kChainColors[coinType] ?? const Color(0xFF6B7280);
+    var textTop = 40.0;
+    void paintText(
+      String text, {
+      required double fontSize,
+      FontWeight fontWeight = FontWeight.normal,
+      bool centered = false,
+    }) {
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: text,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+          ),
+        ),
+        textDirection: TextDirection.ltr,
+        textAlign: centered ? TextAlign.center : TextAlign.left,
+      )..layout(maxWidth: width - 96);
+      textPainter.paint(
+        canvas,
+        Offset(centered ? (width - textPainter.width) / 2 : 48, textTop),
+      );
+      textTop += textPainter.height + 18;
+      textPainter.dispose();
+    }
+
+    paintText(title, fontSize: 42, fontWeight: FontWeight.w600, centered: true);
+    textTop = 1050;
+    paintText(addressLabel, fontSize: 28, fontWeight: FontWeight.w600);
+    paintText(address, fontSize: 28);
+    if (requestLine != null) paintText(requestLine, fontSize: 26);
+
+    final image = await recorder.endRecording().toImage(width, height);
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    image.dispose();
+    if (data == null) throw StateError('Could not encode receive QR image');
+    return data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  }
 
   // ─── Build ──────────────────────────────────────────────────────────────────
 
@@ -288,17 +378,14 @@ class _WalletReceiveQrState extends ConsumerState<WalletReceiveQr> {
           padding: EdgeInsets.symmetric(vertical: AppSpacing.space6),
           child: Column(
             children: [
-              // ── 链选择器（不进截图）
-              buildChainSelector(waValue.coinModels, blueColor, mainText),
-              SizedBox(height: AppSpacing.space6),
+              if (widget.allowChainSelection) ...[
+                // ── 链选择器（不进截图）
+                buildChainSelector(waValue.coinModels, blueColor, mainText),
+                SizedBox(height: AppSpacing.space6),
+              ],
 
               // ── QR 卡片
-              buildQrCard(
-                bgColor: bgColor,
-                mainText: mainText,
-                blueColor: blueColor,
-                chainColor: chainColor,
-              ),
+              buildQrCard(bgColor: bgColor, mainText: mainText),
 
               // ── 交互区
               buildInteractionArea(mainText: mainText, blueColor: blueColor),

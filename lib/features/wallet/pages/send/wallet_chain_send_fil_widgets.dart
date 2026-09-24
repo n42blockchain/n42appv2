@@ -58,7 +58,7 @@ mixin _FilSendWidgetsMixin on _FilSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context).g_key_38,
+            S.of(context).g_wallet_receiver_address,
             style: AppTypography.body.copyWith(color: mainText),
           ),
           Container(

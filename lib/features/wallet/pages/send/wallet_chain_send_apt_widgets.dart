@@ -14,7 +14,7 @@ mixin _AptSendWidgetsMixin on _AptSendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context).g_key_38,
+            S.of(context).g_wallet_receiver_address,
             style: AppTypography.body.copyWith(
               color: AppColorTokens.of(context).textPrimary,
             ),

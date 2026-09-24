@@ -29,7 +29,7 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            S.of(context).g_key_75,
+            S.of(context).g_wallet_sender_address,
             style: AppTypography.caption.copyWith(color: _subText),
           ),
           SizedBox(height: AppSpacing.space2),
@@ -100,7 +100,10 @@ mixin _AASendWidgetsMixin on _AASendLogicMixin {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(S.of(context).g_key_38, style: _sectionTitleStyle()),
+        Text(
+          S.of(context).g_wallet_receiver_address,
+          style: _sectionTitleStyle(),
+        ),
         SizedBox(height: AppSpacing.space4),
         TextField(
           controller: toController,

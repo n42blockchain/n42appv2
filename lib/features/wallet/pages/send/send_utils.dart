@@ -254,11 +254,6 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
     if (mounted) setState(() => _entries = list);
   }
 
-  String _formatAddress(String addr) {
-    if (addr.length <= 10) return addr;
-    return '${addr.substring(0, 6)}...${addr.substring(addr.length - 4)}';
-  }
-
   @override
   Widget build(BuildContext context) {
     if (_entries.isEmpty) return const SizedBox.shrink();
@@ -273,14 +268,32 @@ class _RecentAddressBarState extends State<RecentAddressBar> {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: _entries.map((entry) {
-            final label = (entry.name?.isNotEmpty == true)
-                ? entry.name!
-                : _formatAddress(entry.address);
+            final name = entry.name?.trim() ?? '';
             return Padding(
               padding: EdgeInsets.only(right: ScreenUtil().setWidth(8)),
-              child: ActionChip(
-                label: Text(label, style: AppTypography.caption),
-                onPressed: () => widget.onSelected(entry.address),
+              child: Tooltip(
+                message: entry.address,
+                child: ActionChip(
+                  label: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: ScreenUtil().setWidth(520),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (name.isNotEmpty)
+                          Text(name, style: AppTypography.caption),
+                        Text(
+                          entry.address,
+                          style: AppTypography.caption,
+                          softWrap: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                  onPressed: () => widget.onSelected(entry.address),
+                ),
               ),
             );
           }).toList(),

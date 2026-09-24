@@ -215,6 +215,7 @@ mixin WalletChainInfoXrpActionsMixin<T extends ConsumerStatefulWidget>
         builder: (context) => WalletReceiveQr(
           chainCoinModel ?? coinModel,
           tokenCoinModel: chainCoinModel == null ? null : coinModel,
+          allowChainSelection: false,
         ),
       ),
     );

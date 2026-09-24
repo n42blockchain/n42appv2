@@ -257,7 +257,10 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         if (idx < 0) {
           await Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WalletReceiveQr(coinInfo)),
+            MaterialPageRoute(
+              builder: (context) =>
+                  WalletReceiveQr(coinInfo, allowChainSelection: false),
+            ),
           );
           return;
         }
@@ -265,14 +268,20 @@ class _WalletSearchCoinState extends ConsumerState<WalletSearchCoin> {
         await Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>
-                WalletReceiveQr(chainCoin, tokenCoinModel: coinInfo),
+            builder: (context) => WalletReceiveQr(
+              chainCoin,
+              tokenCoinModel: coinInfo,
+              allowChainSelection: false,
+            ),
           ),
         );
       } else {
         await Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => WalletReceiveQr(coinInfo)),
+          MaterialPageRoute(
+            builder: (context) =>
+                WalletReceiveQr(coinInfo, allowChainSelection: false),
+          ),
         );
       }
     }

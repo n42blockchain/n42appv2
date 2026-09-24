@@ -154,6 +154,7 @@ class _WalletChainInfoState extends ConsumerState<WalletChainInfo>
         builder: (context) => WalletReceiveQr(
           _chainCoinModel ?? widget.coinModel,
           tokenCoinModel: _chainCoinModel == null ? null : widget.coinModel,
+          allowChainSelection: false,
         ),
       ),
     );

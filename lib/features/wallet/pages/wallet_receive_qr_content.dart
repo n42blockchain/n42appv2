@@ -70,12 +70,7 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
     );
   }
 
-  Widget buildQrCard({
-    required Color bgColor,
-    required Color mainText,
-    required Color blueColor,
-    required Color chainColor,
-  }) {
+  Widget buildQrCard({required Color bgColor, required Color mainText}) {
     return Container(
       color: bgColor,
       padding: EdgeInsets.symmetric(
@@ -97,34 +92,13 @@ extension _WalletReceiveQrContent on _WalletReceiveQrState {
               SizedBox(width: AppSpacing.space4),
               Expanded(
                 child: Text(
-                  network,
+                  coinType,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: AppTypography.title.copyWith(color: mainText),
                 ),
               ),
             ],
-          ),
-          SizedBox(height: AppSpacing.space4),
-
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSpacing.space8,
-              vertical: AppSpacing.space2,
-            ),
-            decoration: BoxDecoration(
-              color: chainColor.withValues(alpha: 0.12),
-              border: Border.all(color: chainColor, width: 1.2),
-              borderRadius: AppRadius.brPill,
-            ),
-            child: Text(
-              coinType,
-              style: AppTypography.caption.copyWith(
-                color: chainColor,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0.4,
-              ),
-            ),
           ),
           SizedBox(height: AppSpacing.space12),
 
