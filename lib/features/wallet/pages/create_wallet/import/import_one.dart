@@ -26,7 +26,7 @@ class _ImportOneState extends ConsumerState<ImportOne>
   String errorMessage = "";
 
   void checkInput(String value) {
-    final words = value.trim().split(" ").where((w) => w.trim().isNotEmpty);
+    final words = value.trim().split(RegExp(r'\s+')).where((w) => w.isNotEmpty);
     setState(() {
       inputMW = words.join(" ").toLowerCase();
     });

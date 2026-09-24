@@ -98,20 +98,19 @@ Expected: RED with the missing named constructor parameter, before any productio
 Run: `dart format --output=none --set-exit-if-changed lib/features/wallet/pages/add_token/wallet_coin_add_all.dart test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart && dart analyze lib/features/wallet/pages/add_token/wallet_coin_add_all.dart test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart && flutter test --no-pub test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart`
 Expected: formatter unchanged, analyzer clean, and search/network/error assertions pass without external HTTP.
 
-- [ ] **Step 5: Commit.** `git add lib/features/wallet/pages/add_token/wallet_coin_add_all.dart test/features/wallet/pages/add_token/wallet_coin_add_all_interaction_test.dart && git commit -m "test: cover cross-chain asset discovery"`.
+- [x] **Step 5: Commit.** Committed as `test: cover cross-chain asset discovery` (`69527a526`).
 
 ### Task 3: Mnemonic import validation
 
 **Files:**
 - Modify: `lib/features/wallet/pages/create_wallet/import/import_one.dart`
 - Create: `test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart`
-- Read/Exercise: `lib/features/wallet/pages/create_wallet/import/import_one.dart`
 
 **Interfaces:**
 - Consumes: `ImportOne`, the `trustdart` `checkMnemonic` method channel, clipboard platform channel, `WalletActionProvider.findWallet`, and `wrapForTest`.
 - Produces: Widget tests for normalized manual input, synthetic clipboard import, invalid-phrase refusal, duplicate-wallet refusal, and late validation after route disposal.
 
-- [ ] **Step 1: Write tests first using only synthetic phrase text.** Mock clipboard get/set and `trustdart.checkMnemonic`; capture every validation request; use a fake wallet lookup that can return a synthetic existing wallet. Include tabs and newlines in manual and clipboard text. Assert all whitespace is collapsed and text is lowercased before validation, invalid phrases remain on the page, duplicate phrases are refused without opening `CreatePassword`, clipboard text is normalized before display, and a delayed result after pop causes no framework exception.
+- [x] **Step 1: Write tests first using only synthetic phrase text.** Mock clipboard reads and `trustdart.checkMnemonic`; include tabs and newlines in manual and clipboard input. Cover canonicalization, invalid and duplicate refusal, successful handoff to `CreatePassword`, and delayed validation after leaving the page.
 
 ```dart
 const rawPhrase = 'Synthetic\tTEST\nphrase';
@@ -122,24 +121,24 @@ expect(validationRequests.single, 'synthetic test phrase');
 expect(find.byType(ImportOne), findsOneWidget);
 ```
 
-- [ ] **Step 2: Run the focused suite.**
+- [x] **Step 2: Run the focused suite.** Manual and clipboard tests failed because literal-space splitting preserved tabs/newlines. The initial duplicate fixture also showed that `findWallet` is an extension method and cannot be overridden; the test now seeds the real provider wallet list with a synthetic existing entry.
 
 Run: `flutter test --no-pub test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart`
 Expected: The initial newline/tab normalization assertion fails because the current implementation splits on literal spaces only; after replacing that split with `RegExp(r'\s+')`, all input, refusal, clipboard, and disposal assertions pass with platform calls mocked in memory.
 
-- [ ] **Step 3: Normalize every whitespace run before mnemonic validation.** Replace `value.trim().split(" ")` in `checkInput` with `value.trim().split(RegExp(r'\s+'))`, discard empty tokens, then join with one ASCII space and lowercase. This keeps manual entry and clipboard entry on the same canonicalization path.
+- [x] **Step 3: Normalize every whitespace run before mnemonic validation.** Replaced literal-space splitting with `RegExp(r'\s+')`, discarded empty tokens, then joined with one ASCII space and lowercased. Manual entry and clipboard now share this canonicalization path.
 
 ```dart
 final words = value.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty);
 setState(() => inputMW = words.join(' ').toLowerCase());
 ```
 
-- [ ] **Step 4: Run formatting and focused analysis.**
+- [x] **Step 4: Run formatting and focused analysis.** Formatting and focused analysis passed; all five widget interaction tests passed.
 
 Run: `dart format --output=none --set-exit-if-changed lib/features/wallet/pages/create_wallet/import/import_one.dart test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart && dart analyze lib/features/wallet/pages/create_wallet/import/import_one.dart test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart && flutter test --no-pub test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart`
 Expected: formatter unchanged, analyzer clean, and the import suite passes.
 
-- [ ] **Step 5: Commit.** `git add lib/features/wallet/pages/create_wallet/import/import_one.dart test/features/wallet/pages/create_wallet/import/import_one_interaction_test.dart && git commit -m "test: cover mnemonic import validation"`.
+- [ ] **Step 5: Commit.** Commit the normalization change and interaction suite with subject `test: cover mnemonic import validation`.
 
 ### Final coverage measurement
 
