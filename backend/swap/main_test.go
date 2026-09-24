@@ -33,7 +33,12 @@ func TestMustEnvMissingValueExitsProcess(t *testing.T) {
 	cmd := exec.Command(os.Args[0], "-test.run=^TestMustEnvMissingValueExitsProcess$")
 	cmd.Env = []string{"N42_SWAP_TEST_FATAL_CHILD=1"}
 	output, err := cmd.CombinedOutput()
-	if err == nil || !strings.Contains(string(output), "N42_SWAP_TEST_REQUIRED_MISSING") {
-		t.Fatalf("child error=%v output=%q, want missing-variable exit", err, output)
+	exitErr, ok := err.(*exec.ExitError)
+	if !ok || exitErr.ExitCode() != 1 {
+		t.Fatalf("child error=%v output=%q, want exit status 1", err, output)
+	}
+	wantDiagnostic := `required env var "N42_SWAP_TEST_REQUIRED_MISSING" is not set`
+	if !strings.Contains(string(output), wantDiagnostic) {
+		t.Fatalf("child output=%q, want diagnostic %q", output, wantDiagnostic)
 	}
 }
