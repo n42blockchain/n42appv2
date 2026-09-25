@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -299,7 +301,7 @@ mixin SendLogicMixin<T extends StatefulWidget> on State<T> {
         if (_blockchainType == BlockchainType.Ethereum.name && !_isContract) {
           final note = noteTextEditingController.text.trim();
           if (note.isNotEmpty) {
-            final noteHex = bytesToHex(note.codeUnits);
+            final noteHex = bytesToHex(utf8.encode(note));
             gas = gas + BigInt.from(noteHex.length * 8);
           }
         }
