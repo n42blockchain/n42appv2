@@ -56,6 +56,12 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
+      - name: Resolve and analyze the standalone JMT verifier
+        working-directory: packages/n42_jmt_verify
+        run: |
+          dart pub get
+          dart analyze
+
       - name: Check wallet and chat localization integrity
         run: |
           python3 scripts/audit_localizations.py --mode all
@@ -119,6 +125,12 @@ jobs:
 
       - name: Get dependencies
         run: flutter pub get
+
+      - name: Resolve and test the standalone JMT verifier
+        working-directory: packages/n42_jmt_verify
+        run: |
+          dart pub get
+          dart test
 
       - name: Run tests with coverage
         run: |

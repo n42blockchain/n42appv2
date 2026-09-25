@@ -15,6 +15,9 @@ analyzer:
     - "lib/generated/**"
     - "**.g.dart"
     - "**.freezed.dart"
+    # This repository directory is a local mirror only; production resolves
+    # n42_chat from the Git dependency in pubspec.yaml.
+    - "packages/n42_chat/**"
     # Nested Flutter example/test projects with their own pubspec — should not
     # be analyzed by the host project (would error on their own imports).
     - "packages/webview_flutter_wkwebview/example/**"
