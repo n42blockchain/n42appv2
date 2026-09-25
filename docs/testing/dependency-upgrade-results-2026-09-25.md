@@ -53,6 +53,8 @@ The root baseline's 5,831 tests included 13 aggregators importing the Chat cache
 
 ## Native builds and linking
 
+The verified APK and unsigned iOS Release artifacts were built from version `2.4.8+2026072838`. Commit `5f4aa5c62` automatically advanced the manifest to `2.4.8+2026072839`; the documentation clarification commit advances it again to `2.4.8+2026072840`. Those commit-hook changes only update the build number and were not followed by another native build. The validated artifacts therefore remain build `2026072838`, not the later manifest build numbers.
+
 | Command | Final result | Evidence |
 | --- | --- | --- |
 | `flutter build apk --debug` with complete Homebrew JDK 21 | PASS after localization generation, 62.67 seconds | `430`; earlier final-graph pass `401` |
