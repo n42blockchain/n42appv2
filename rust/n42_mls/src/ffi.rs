@@ -235,8 +235,7 @@ pub unsafe extern "C" fn n42_mls_process_commit(
     commit_len: usize,
 ) -> i32 {
     let h = handle_mut!(handle);
-    let (Some(gid), Some(commit)) =
-        (as_str(gid_ptr, gid_len), as_slice(commit_ptr, commit_len))
+    let (Some(gid), Some(commit)) = (as_str(gid_ptr, gid_len), as_slice(commit_ptr, commit_len))
     else {
         return N42_ERR_UTF8;
     };
@@ -387,10 +386,7 @@ mod tests {
 
             // alice 建群 + 加 bob
             let gid = b"room";
-            assert_eq!(
-                n42_mls_create_group(alice, gid.as_ptr(), gid.len()),
-                N42_OK
-            );
+            assert_eq!(n42_mls_create_group(alice, gid.as_ptr(), gid.len()), N42_OK);
             let mut commit = N42Buf::empty();
             let mut welcome = N42Buf::empty();
             assert_eq!(
@@ -420,7 +416,14 @@ mod tests {
             let msg = b"ffi hello";
             let mut ct = N42Buf::empty();
             assert_eq!(
-                n42_mls_encrypt(alice, gid.as_ptr(), gid.len(), msg.as_ptr(), msg.len(), &mut ct),
+                n42_mls_encrypt(
+                    alice,
+                    gid.as_ptr(),
+                    gid.len(),
+                    msg.as_ptr(),
+                    msg.len(),
+                    &mut ct
+                ),
                 N42_OK
             );
             let mut pt = N42Buf::empty();

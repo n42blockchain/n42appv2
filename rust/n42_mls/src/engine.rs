@@ -1,4 +1,4 @@
-//! 真实 MLS（RFC 9420）引擎，基于 OpenMLS 0.8。
+//! 真实 MLS（RFC 9420）引擎，基于 OpenMLS 0.9。
 //!
 //! 一个 [`MlsEngine`] 代表一个本地用户（持有签名密钥 + 凭证 + 该用户参与的群）。
 //! 与 `n42_chat` 的 `FfiMlsProtocol`（MethodChannel `n42.chat/mls`）契约一一对应：
@@ -170,13 +170,11 @@ impl MlsEngine {
     }
 
     /// 移除成员（按叶子索引）。返回 commit_bytes。
-    pub fn remove_members(
-        &mut self,
-        group_id: &str,
-        leaf_indices: &[u32],
-    ) -> Result<Vec<u8>> {
-        let leaves: Vec<LeafNodeIndex> =
-            leaf_indices.iter().map(|i| LeafNodeIndex::new(*i)).collect();
+    pub fn remove_members(&mut self, group_id: &str, leaf_indices: &[u32]) -> Result<Vec<u8>> {
+        let leaves: Vec<LeafNodeIndex> = leaf_indices
+            .iter()
+            .map(|i| LeafNodeIndex::new(*i))
+            .collect();
         let group = self
             .groups
             .get_mut(group_id)

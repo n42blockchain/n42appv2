@@ -246,6 +246,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
 - `rust/n42_mls/Cargo.toml`
 - `rust/n42_mls/Cargo.lock`
 - Rust call sites and tests under `rust/n42_mls/src/` only when required by an API migration.
+- Tracked Android MLS libraries under `android/app/src/main/jniLibs/` and the tracked `ios/N42Mls.xcframework/` libraries and generated headers. These are linked by the app and must be regenerated with the upgraded crate. This is the controller-approved production scope correction.
 
 ### Steps
 
@@ -253,11 +254,13 @@ The Chat notification implementation is inspected from the Git-resolved package 
 2. Migrate API changes in the MLS engine/FFI/JNI boundary while preserving RFC 9420 behavior and the C/Android ABI.
 3. Run `cargo update`, normalize the existing and changed Rust sources with `cargo fmt --all`, then run `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings` from `rust/n42_mls/`.
 4. Review `cargo tree` and the complete lockfile diff for duplicate crypto versions, prereleases, and unintended removals.
+5. Run the existing `scripts/build_mls_android.sh` and `scripts/build_mls_ios.sh` packaging paths to refresh the tracked Android and iOS MLS binaries. Verify architectures, exported C/JNI symbols, and changed artifact hashes; record complete build output. A successful Cargo source check alone does not update the native libraries bundled by the app.
 
 ### Acceptance
 
 - The crate passes all four Rust checks with the pinned toolchain and produces the existing FFI crate types.
 - MLS behavior, FFI symbols, and Android JNI integration remain compatible; blocked cross-target checks are listed separately.
+- The tracked Android and iOS MLS binaries used by the app contain the upgraded crate and retain the expected architectures and exported ABI.
 
 ## Task 9 — Upgrade Chrome extension dependencies and add crypto vectors
 
