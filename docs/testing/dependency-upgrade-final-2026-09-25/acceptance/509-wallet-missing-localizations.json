@@ -1,0 +1,146 @@
+{
+  "ar": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "bn": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "cs": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "de": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "es_ES": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "fr": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "hi": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "id": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "it": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "ja": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "ko": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "mr": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "pl": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "pt": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "pt_BR": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "qps": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "ru": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "sw": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "ta": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "te": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "tr": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "uk": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "ur": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  },
+  "vi": {
+    "g_wallet_coin_total_value": "Total value",
+    "g_wallet_coin_unit_price": "Price",
+    "g_wallet_receiver_address": "To address",
+    "g_wallet_sender_address": "From address"
+  }
+}

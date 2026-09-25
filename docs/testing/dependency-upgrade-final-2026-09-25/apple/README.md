@@ -18,4 +18,4 @@ Both `pod install --deployment --no-repo-update` checks pass (iOS: 69 Podfile de
 
 The requested macOS `xcodebuild` fails before compilation: Xcode 27 accepts deployment targets 12.0–27.0, while this project remains at 10.15. Direct project build also reports missing ephemeral Flutter input/output file lists. The 10.15 target was retained. The ignored iOS Firebase plist was copied locally from the existing checkout for the no-sign build and was not staged.
 
-All numbered command outputs, including failures and final exit codes, are preserved as matching `.log.gz` files here. The full task report is in `.superpowers/sdd/2026-09-25-full-dependency-upgrade/task-6-report.md`.
+All numbered command outputs, including failures and final exit codes, are preserved as matching `.log.gz` files here. The full task report is in [Task 6 report](task-6-report.md).

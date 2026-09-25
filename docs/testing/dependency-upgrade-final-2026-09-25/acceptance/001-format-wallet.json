@@ -1,0 +1,12 @@
+{
+  "label": "001-format-wallet",
+  "command": [
+    "dart",
+    "format",
+    "lib/features/wallet/pages/wallet_manage/wallet_list.dart"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.32
+}

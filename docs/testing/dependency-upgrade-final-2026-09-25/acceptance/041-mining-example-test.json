@@ -1,0 +1,14 @@
+{
+  "label": "041-mining-example-test",
+  "command": [
+    "flutter",
+    "test",
+    "test/",
+    "--reporter",
+    "expanded"
+  ],
+  "cwd": "plugins/flutter_mining/example",
+  "environment": {},
+  "exit": 0,
+  "seconds": 1.83
+}

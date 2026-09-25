@@ -3541,6 +3541,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "بیلنس تازہ نہیں ہو سکا",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage("کل قدر"),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("قیمت"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD والیٹ · نیمونک",
     ),
@@ -3563,6 +3565,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "قیمتیں دستیاب نہیں",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "وصول کنندہ کا پتہ",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "بھیجنے والے کا پتہ",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "ٹوکن کی پننگ ختم کریں",

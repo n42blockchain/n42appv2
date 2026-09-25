@@ -1,0 +1,14 @@
+{
+  "label": "201-fmt",
+  "command": [
+    "cargo",
+    "fmt",
+    "--check"
+  ],
+  "cwd": "rust/n42_mls",
+  "environment": {
+    "ANDROID_NDK_HOME": "/Users/jieliu/Library/Android/sdk/ndk/27.1.12297006"
+  },
+  "exit": 0,
+  "seconds": 0.15
+}

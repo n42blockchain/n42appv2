@@ -3486,6 +3486,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Bakiye yenilenemedi",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Toplam Değer",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Fiyat"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD Cüzdan · Anımsatıcı",
     ),
@@ -3506,6 +3510,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Fiyatlar mevcut değil",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Alıcı adresi",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Gönderen adresi",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Token sabitini kaldır",

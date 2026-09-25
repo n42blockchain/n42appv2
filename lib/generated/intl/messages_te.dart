@@ -3671,6 +3671,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "బ్యాలెన్స్ నింపబడలేదు",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "మొత్తం విలువ",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("ధర"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD వాలెట్ · మెమోనిక్",
     ),
@@ -3693,6 +3697,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "ధరలు అందుబాటులో లేవు",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "గ్రహీత చిరునామా",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "పంపినవారి చిరునామా",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "టోకెన్ పిన్ తీసివేయి",

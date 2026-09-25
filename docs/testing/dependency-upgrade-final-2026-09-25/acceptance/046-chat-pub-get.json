@@ -1,0 +1,12 @@
+{
+  "label": "046-chat-pub-get",
+  "command": [
+    "flutter",
+    "pub",
+    "get"
+  ],
+  "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task10-unqjgf7d",
+  "environment": {},
+  "exit": 0,
+  "seconds": 3.64
+}

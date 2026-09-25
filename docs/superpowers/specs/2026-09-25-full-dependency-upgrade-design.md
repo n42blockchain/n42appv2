@@ -12,7 +12,7 @@ Upgrade production dependency graphs across the N42 app repository to current st
 - All four Go modules under `backend/`.
 - Rust MLS crate at `rust/n42_mls`.
 - Chrome extension production and development npm dependency graphs.
-- Update direct constraints/manifests and lockfiles as required; refresh transitive lockfile versions to the latest stable versions that resolve. Use no prereleases.
+- Update direct constraints/manifests and lockfiles as required; refresh transitive lockfile versions to the latest stable versions that resolve. Introduce no prereleases. Retain and explicitly report inherited upstream-only pins when no stable compatible alternative exists (ML Kit segmentation beta6 and MediaPipe's TensorFlowLite nightly).
 - Major migrations may change application call sites and generated outputs when needed. Preserve behavior and focus on compatibility, security, wallet cryptography, encrypted storage, authentication, Chat, and native plugin paths.
 - Keep Flutter/Dart, Go, Rust, Node, and Java versions pinned to their existing CI/project versions. Update build plugins and platform library versions, not these language/runtime toolchains.
 - Remove the `n42_chat` path override from the checked-in `pubspec_overrides.yaml`; `n42_chat` must resolve from the Git SHA declared in `pubspec.yaml`, and `pubspec.lock` must record that Git source.
@@ -35,7 +35,7 @@ Keep each ecosystem's changes and verification results separately reviewable. If
 
 - Every in-scope manifest and lockfile resolves reproducibly from a fresh dependency install using the pinned toolchains.
 - Every upgraded direct dependency is on a stable release and its major-version migration is represented in source/configuration where required.
-- Flutter: `flutter analyze --no-fatal-infos`; full `flutter test --coverage`; coverage remains at or above the repository's 70% gate; debug Android APK build; iOS and macOS no-code-sign builds when required local configuration is available.
+- Flutter: `flutter analyze --no-fatal-infos`; full `flutter test --coverage`; run the unchanged 70% coverage gate and report its result; the user explicitly deferred raising the captured 49.13% baseline, so that known coverage gap is excluded from this dependency-upgrade task's pass criteria; debug Android APK build; iOS and macOS no-code-sign builds when required local configuration is available.
 - Android and Apple native dependency resolution completes from the checked-in manifests/lockfiles. Platform build failures caused by absent signing/Firebase configuration are reported as blocked, not passed.
 - Each Go module: `go test ./...` and `go vet ./...`.
 - Rust: `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings`.

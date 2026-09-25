@@ -1,0 +1,13 @@
+{
+  "label": "100-go-version",
+  "command": [
+    "go",
+    "version"
+  ],
+  "cwd": ".",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.06
+}

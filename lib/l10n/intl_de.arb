@@ -1728,5 +1728,9 @@
   "g_ui_coins_load_failed": "Laden der Coins fehlgeschlagen. Bitte versuchen Sie es erneut.",
   "g_ui_mpc_no_phrase": "Kein Seed-Phrasen-Code erforderlich",
   "g_ui_mpc_intro": "Melden Sie sich mit Ihrem sozialen Konto an, um eine sichere MPC-Wallet zu erstellen. Ihr privater Schlüssel wird in verschlüsselte Teile aufgeteilt – kein Seed-Phrasen-Code, den man verlieren könnte.",
-  "g_ui_mpc_security": "Bereitgestellt durch MPC-TSS. Ihr Schlüssel wird in 3 verschlüsselte Teile aufgeteilt, die sich auf Ihrem Gerät, unseren Servern und einer Wiederherstellungs-Back-up befinden."
+  "g_ui_mpc_security": "Bereitgestellt durch MPC-TSS. Ihr Schlüssel wird in 3 verschlüsselte Teile aufgeteilt, die sich auf Ihrem Gerät, unseren Servern und einer Wiederherstellungs-Back-up befinden.",
+  "g_wallet_coin_total_value": "Gesamtwert",
+  "g_wallet_coin_unit_price": "Preis",
+  "g_wallet_receiver_address": "Empfängeradresse",
+  "g_wallet_sender_address": "Absenderadresse"
 }

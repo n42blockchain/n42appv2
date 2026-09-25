@@ -1,0 +1,10 @@
+{
+  "baseline_commit": "dee63931f",
+  "baseline_chat_source": "/private/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-localization-baseline-ortsy347/packages/n42_chat/lib/l10n/app_en.arb",
+  "baseline_source_kind": "tracked mirror exported from baseline commit, no package config",
+  "final_chat_source": "/Users/jieliu/.pub-cache/git/n42_chat-3cc19c12a7c9bbf2031270acca8e3922730b55a5/lib/l10n/app_en.arb",
+  "final_source_kind": "resolved exact Git SHA via root .dart_tool/package_config.json",
+  "entries_equal": true,
+  "unexpected_english_identical_count": 667,
+  "locale_count": 23
+}

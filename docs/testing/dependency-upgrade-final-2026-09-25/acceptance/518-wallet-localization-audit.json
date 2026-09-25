@@ -1,0 +1,13 @@
+{
+  "label": "518-wallet-localization-audit",
+  "command": [
+    "python3",
+    "scripts/audit_localizations.py",
+    "--mode",
+    "wallet"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.17
+}

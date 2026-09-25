@@ -1,0 +1,12 @@
+{
+  "label": "010-toolchains",
+  "command": [
+    "sh",
+    "-c",
+    "flutter --version; dart --version; xcodebuild -version; pod --version"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 2.62
+}

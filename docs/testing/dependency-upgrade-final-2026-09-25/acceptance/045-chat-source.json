@@ -1,0 +1,11 @@
+{
+  "sha": "3cc19c12a7c9bbf2031270acca8e3922730b55a5",
+  "source": "/Users/jieliu/.pub-cache/git/n42_chat-3cc19c12a7c9bbf2031270acca8e3922730b55a5",
+  "export": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task10-unqjgf7d",
+  "method": "git archive exact verified revision; cache read-only",
+  "path_overrides": {
+    "audioplayers_darwin": "/Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-dependency-upgrade-20260925/packages/audioplayers_darwin",
+    "webview_flutter_wkwebview": "/Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-dependency-upgrade-20260925/packages/webview_flutter_wkwebview",
+    "flutter_mining": "/Users/jieliu/Documents/n42/.tmp-worktrees/n42appv2-dependency-upgrade-20260925/plugins/flutter_mining"
+  }
+}

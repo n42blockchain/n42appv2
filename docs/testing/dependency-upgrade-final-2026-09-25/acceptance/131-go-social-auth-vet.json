@@ -1,0 +1,14 @@
+{
+  "label": "131-go-social-auth-vet",
+  "command": [
+    "go",
+    "vet",
+    "./..."
+  ],
+  "cwd": "backend/social-auth",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.16
+}

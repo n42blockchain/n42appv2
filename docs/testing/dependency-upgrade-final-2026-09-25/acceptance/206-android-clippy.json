@@ -1,0 +1,20 @@
+{
+  "label": "206-android-clippy",
+  "command": [
+    "cargo",
+    "clippy",
+    "--target",
+    "aarch64-linux-android",
+    "--all-targets",
+    "--locked",
+    "--",
+    "-D",
+    "warnings"
+  ],
+  "cwd": "rust/n42_mls",
+  "environment": {
+    "ANDROID_NDK_HOME": "/Users/jieliu/Library/Android/sdk/ndk/27.1.12297006"
+  },
+  "exit": 0,
+  "seconds": 0.33
+}

@@ -1,0 +1,13 @@
+{
+  "label": "420-macos-pod-deployment",
+  "command": [
+    "pod",
+    "install",
+    "--deployment",
+    "--no-repo-update"
+  ],
+  "cwd": "macos",
+  "environment": {},
+  "exit": 0,
+  "seconds": 3.43
+}

@@ -1,0 +1,13 @@
+{
+  "label": "421-macos-release",
+  "command": [
+    "flutter",
+    "build",
+    "macos",
+    "--release"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 1,
+  "seconds": 16.2
+}

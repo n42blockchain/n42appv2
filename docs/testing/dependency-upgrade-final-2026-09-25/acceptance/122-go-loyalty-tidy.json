@@ -1,0 +1,14 @@
+{
+  "label": "122-go-loyalty-tidy",
+  "command": [
+    "go",
+    "mod",
+    "tidy"
+  ],
+  "cwd": "backend/loyalty",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.09
+}

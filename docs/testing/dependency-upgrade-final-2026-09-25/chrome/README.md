@@ -20,3 +20,9 @@ Final verification (all exit 0):
 | `npm audit --omit=dev --audit-level=moderate` | 0 production vulnerabilities | `40-final-production-audit.log.gz` |
 
 Earlier numbered logs preserve the initial TypeScript 6 config errors and preceding upgrade attempts. npm's full install summary reports 11 development-side vulnerabilities; the production audit has none.
+
+Full migration details: [Task 9 report](task-9-report.md).
+
+Task 10 final acceptance subsequently applied compatible transitive security updates and reduced the development audit to 9 vulnerable package nodes; production remains zero. See [final audit and upstream constraints](../acceptance/chrome-development-audit.md) and the numbered acceptance logs.
+
+Final independent review then identified `vite-plugin-web-extension` as unused. Task 10 removed it through npm, removing its entire vulnerable runner graph. Acceptance checks `325`–`331` all pass, with both full and production audits at **zero**. Earlier 11/9-node results remain historical evidence.

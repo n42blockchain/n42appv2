@@ -3536,6 +3536,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Saldo tidak dapat diperbarui",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Nilai Total",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Harga"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Dompet HD · Mnemonik",
     ),
@@ -3556,6 +3560,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Harga tidak tersedia",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Alamat penerima",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Alamat pengirim",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Lepas sematan token",

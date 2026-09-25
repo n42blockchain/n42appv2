@@ -3715,6 +3715,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Le solde n\'a pas pu être actualisé",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Valeur totale",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Prix"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Portefeuille HD · Mnémonique",
     ),
@@ -3737,6 +3741,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Prix indisponibles",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Adresse du destinataire",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Adresse de l’expéditeur",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Désépingler le jeton",

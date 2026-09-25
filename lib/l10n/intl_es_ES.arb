@@ -1721,5 +1721,9 @@
   "g_ui_coins_load_failed": "Error al cargar las monedas. Por favor, inténtalo de nuevo.",
   "g_ui_mpc_no_phrase": "No se necesita frase semilla",
   "g_ui_mpc_intro": "Inicia sesión con tu cuenta social para crear una cartera segura con MPC. Tu clave privada se divide en fragmentos cifrados — no necesitas una frase semilla que puedas perder.",
-  "g_ui_mpc_security": "Funciona con MPC-TSS. Tu clave se divide en 3 fragmentos cifrados distribuidos en tu dispositivo, nuestros servidores y una copia de seguridad de recuperación."
+  "g_ui_mpc_security": "Funciona con MPC-TSS. Tu clave se divide en 3 fragmentos cifrados distribuidos en tu dispositivo, nuestros servidores y una copia de seguridad de recuperación.",
+  "g_wallet_coin_total_value": "Valor total",
+  "g_wallet_coin_unit_price": "Precio",
+  "g_wallet_receiver_address": "Dirección del destinatario",
+  "g_wallet_sender_address": "Dirección del remitente"
 }

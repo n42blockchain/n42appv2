@@ -3665,6 +3665,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "L\'saldio non può essere aggiornato",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Valore totale",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Prezzo"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Wallet HD · Mnemonico",
     ),
@@ -3685,6 +3689,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Prezzi non disponibili",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Indirizzo del destinatario",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Indirizzo del mittente",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Rimuovi token dai fissati",

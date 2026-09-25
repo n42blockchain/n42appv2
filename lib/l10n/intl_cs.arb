@@ -1721,5 +1721,9 @@
   "g_ui_coins_load_failed": "Načtení mincí selhalo. Zkuste to prosím znovu.",
   "g_ui_mpc_no_phrase": "Není potřeba záložní fráze",
   "g_ui_mpc_intro": "Přihlaste se pomocí svého sociálního účtu, abyste vytvořili bezpečnou peněženku MPC. Vaše soukromý klíč je rozdělen na šifrované části — nemusíte se bát ztráty záložní fráze.",
-  "g_ui_mpc_security": "Používá MPC-TSS. Váš klíč je rozdělen na 3 šifrované části umístěné na vašem zařízení, na našich servery a na záložním záložním kopii."
+  "g_ui_mpc_security": "Používá MPC-TSS. Váš klíč je rozdělen na 3 šifrované části umístěné na vašem zařízení, na našich servery a na záložním záložním kopii.",
+  "g_wallet_coin_total_value": "Celková hodnota",
+  "g_wallet_coin_unit_price": "Cena",
+  "g_wallet_receiver_address": "Adresa příjemce",
+  "g_wallet_sender_address": "Adresa odesílatele"
 }

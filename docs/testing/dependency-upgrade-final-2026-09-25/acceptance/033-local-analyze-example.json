@@ -1,0 +1,12 @@
+{
+  "label": "033-local-analyze-example",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": "packages/webview_flutter_wkwebview/example",
+  "environment": {},
+  "exit": 0,
+  "seconds": 1.22
+}

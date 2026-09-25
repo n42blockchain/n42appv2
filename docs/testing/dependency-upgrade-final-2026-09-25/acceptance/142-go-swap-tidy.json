@@ -1,0 +1,14 @@
+{
+  "label": "142-go-swap-tidy",
+  "command": [
+    "go",
+    "mod",
+    "tidy"
+  ],
+  "cwd": "backend/swap",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.07
+}

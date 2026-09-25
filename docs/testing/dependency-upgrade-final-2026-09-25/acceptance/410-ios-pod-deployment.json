@@ -1,0 +1,13 @@
+{
+  "label": "410-ios-pod-deployment",
+  "command": [
+    "pod",
+    "install",
+    "--deployment",
+    "--no-repo-update"
+  ],
+  "cwd": "ios",
+  "environment": {},
+  "exit": 0,
+  "seconds": 7.05
+}

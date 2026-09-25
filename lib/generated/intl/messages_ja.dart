@@ -2818,6 +2818,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "残高の更新に失敗しました",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage("合計値"),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("価格"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HDウォレット · ニーモニック",
     ),
@@ -2835,6 +2837,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "価格が利用できません",
     ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "送信先アドレス",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage("送信元アドレス"),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "トークンのピン留めを解除",
     ),

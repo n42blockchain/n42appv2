@@ -1,0 +1,13 @@
+{
+  "label": "513-localization-audit-fixed",
+  "command": [
+    "python3",
+    "scripts/audit_localizations.py",
+    "--mode",
+    "all"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 1,
+  "seconds": 0.3
+}

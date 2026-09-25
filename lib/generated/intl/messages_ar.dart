@@ -3426,6 +3426,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "تعذّر تحديث الرصيد",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "القيمة الإجمالية",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("السعر"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "محفظة HD · عبارة استرجاع",
     ),
@@ -3446,6 +3450,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "الأسعار غير متاحة",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "عنوان المستلم",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "عنوان المرسل",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "إلغاء تثبيت الرمز",

@@ -1,0 +1,12 @@
+{
+  "label": "027-local-analyze-audioplayers_darwin",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": "packages/audioplayers_darwin",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.91
+}

@@ -1,0 +1,13 @@
+{
+  "label": "020-local-pub-flutter_mining",
+  "command": [
+    "flutter",
+    "pub",
+    "get",
+    "--enforce-lockfile"
+  ],
+  "cwd": "plugins/flutter_mining",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.59
+}

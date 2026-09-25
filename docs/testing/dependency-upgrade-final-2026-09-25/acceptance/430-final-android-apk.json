@@ -1,0 +1,16 @@
+{
+  "label": "430-final-android-apk",
+  "command": [
+    "flutter",
+    "build",
+    "apk",
+    "--debug"
+  ],
+  "cwd": ".",
+  "environment": {
+    "JAVA_HOME": "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home",
+    "PATH": "/opt/homebrew/opt/openjdk@21/libexec/openjdk.jdk/Contents/Home/bin:/Users/jieliu/.local/bin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/usr/local/go/bin:/opt/homebrew/bin:/Users/jieliu/Library/Application Support/pear/bin:/Users/jieliu/.codex/packages/standalone/releases/0.156.1-aarch64-apple-darwin/codex-path:/Users/jieliu/.codex/tmp/arg0/codex-arg04D5HXH:/Users/jieliu/.bun/bin:/Users/jieliu/.local/bin:/Users/jieliu/.nvm/versions/node/v24.19.0/bin:/Users/jieliu/.cargo/bin:/Users/jieliu/.foundry/bin:/Users/jieliu/.sp1/bin"
+  },
+  "exit": 0,
+  "seconds": 62.67
+}

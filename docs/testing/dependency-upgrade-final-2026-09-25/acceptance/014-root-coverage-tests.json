@@ -1,0 +1,12 @@
+{
+  "label": "014-root-coverage-tests",
+  "command": [
+    "sh",
+    "-c",
+    "ulimit -n 4096; flutter test --coverage --concurrency=4"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 292.01
+}

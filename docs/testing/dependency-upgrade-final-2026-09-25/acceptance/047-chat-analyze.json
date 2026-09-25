@@ -1,0 +1,12 @@
+{
+  "label": "047-chat-analyze",
+  "command": [
+    "flutter",
+    "analyze",
+    "--no-fatal-infos"
+  ],
+  "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task10-unqjgf7d",
+  "environment": {},
+  "exit": 0,
+  "seconds": 20.3
+}

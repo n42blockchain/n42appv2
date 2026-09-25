@@ -1,0 +1,15 @@
+{
+  "label": "110-go-livekit-jwt-test",
+  "command": [
+    "go",
+    "test",
+    "-count=1",
+    "./..."
+  ],
+  "cwd": "backend/livekit-jwt",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 3.12
+}

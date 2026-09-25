@@ -1,0 +1,12 @@
+{
+  "label": "512-intl-utils-generate",
+  "command": [
+    "dart",
+    "run",
+    "intl_utils:generate"
+  ],
+  "cwd": ".",
+  "environment": {},
+  "exit": 0,
+  "seconds": 5.35
+}

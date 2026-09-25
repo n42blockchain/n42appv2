@@ -1,0 +1,13 @@
+{
+  "label": "032-local-pub-example",
+  "command": [
+    "flutter",
+    "pub",
+    "get",
+    "--enforce-lockfile"
+  ],
+  "cwd": "packages/webview_flutter_wkwebview/example",
+  "environment": {},
+  "exit": 0,
+  "seconds": 0.51
+}

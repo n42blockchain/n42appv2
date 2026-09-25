@@ -3625,6 +3625,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Баланс не може бути оновлений",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Загальна вартість",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Ціна"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "HD-гаманець · Мнемоніка",
     ),
@@ -3647,6 +3651,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Ціни недоступні",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Адреса одержувача",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Адреса відправника",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Відкріпити монету",

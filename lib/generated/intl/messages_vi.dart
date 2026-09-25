@@ -3483,6 +3483,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "g_wallet_balance_warning": MessageLookupByLibrary.simpleMessage(
       "Số dư không thể làm mới",
     ),
+    "g_wallet_coin_total_value": MessageLookupByLibrary.simpleMessage(
+      "Tổng giá trị",
+    ),
+    "g_wallet_coin_unit_price": MessageLookupByLibrary.simpleMessage("Giá"),
     "g_wallet_group_hd": MessageLookupByLibrary.simpleMessage(
       "Ví HD · Cụm từ ghi nhớ",
     ),
@@ -3503,6 +3507,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "g_wallet_prices_unavailable": MessageLookupByLibrary.simpleMessage(
       "Giá không khả dụng",
+    ),
+    "g_wallet_receiver_address": MessageLookupByLibrary.simpleMessage(
+      "Địa chỉ người nhận",
+    ),
+    "g_wallet_sender_address": MessageLookupByLibrary.simpleMessage(
+      "Địa chỉ người gửi",
     ),
     "g_wallet_unpin_token": MessageLookupByLibrary.simpleMessage(
       "Bỏ ghim token",

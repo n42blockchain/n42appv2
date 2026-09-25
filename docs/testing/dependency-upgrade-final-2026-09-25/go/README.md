@@ -1,6 +1,6 @@
 # Go dependency upgrade evidence
 
-All commands used local Go 1.26.5 with `GOTOOLCHAIN=local`. The numbered `.log.gz` files contain the command output, including the transient parallel Git cache failure and successful serial retry. Full decisions and results are in `.superpowers/sdd/2026-09-25-full-dependency-upgrade/task-7-report.md` in the worktree ledger.
+All commands used local Go 1.26.5 with `GOTOOLCHAIN=local`. The numbered `.log.gz` files contain the command output, including the transient parallel Git cache failure and successful serial retry. Full decisions and results are in [Task 7 report](task-7-report.md).
 
 | Module | Direct dependencies after upgrade | Declared Go | Tests | Vet | Tidy diff |
 | --- | --- | --- | --- | --- | --- |

@@ -1,0 +1,14 @@
+{
+  "label": "121-go-loyalty-vet",
+  "command": [
+    "go",
+    "vet",
+    "./..."
+  ],
+  "cwd": "backend/loyalty",
+  "environment": {
+    "GOTOOLCHAIN": "local"
+  },
+  "exit": 0,
+  "seconds": 0.36
+}
