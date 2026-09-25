@@ -1,0 +1,17 @@
+{
+  "base_commit": "8769143cc",
+  "check": "YAML parse and focused CI condition/order inspection",
+  "exit": 0,
+  "root_step_id": "root_tests",
+  "coverage_condition": "${{ always() && steps.root_tests.outcome == 'success' }}",
+  "order": [
+    "root tests",
+    "Chat tests",
+    "coverage gate"
+  ],
+  "coverage_threshold": 70,
+  "chat_failure_masked": false,
+  "coverage_failure_masked": false,
+  "semantics": "Coverage gate runs after successful root coverage tests even when later Chat checks fail; skipped when root coverage tests fail or never run. Chat failure still fails the job.",
+  "full_suite_rerun": false
+}

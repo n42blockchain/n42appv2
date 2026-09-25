@@ -152,6 +152,7 @@ jobs:
           flutter test packages/webview_flutter_wkwebview/test/
 
       - name: Run tests with coverage
+        id: root_tests
         run: |
           ulimit -n 4096
           flutter test test/ --coverage --concurrency=4 --machine > test_results.jsonl
@@ -207,6 +208,7 @@ jobs:
           flutter test test/ --concurrency=4
 
       - name: Generate coverage report
+        if: ${{ always() && steps.root_tests.outcome == 'success' }}
         run: |
           # 安装 lcov
           sudo apt-get update
