@@ -14,16 +14,21 @@
  */
 
 import * as secp from '@noble/secp256k1';
-import { keccak_256 } from '@noble/hashes/sha3';
+import { keccak_256 } from '@noble/hashes/sha3.js';
+import { sha256 } from '@noble/hashes/sha2.js';
+import { hmac } from '@noble/hashes/hmac.js';
 import { HDKey } from '@scure/bip32';
 import { generateMnemonic, mnemonicToSeedSync, validateMnemonic } from '@scure/bip39';
-import { wordlist } from '@scure/bip39/wordlists/english';
-import { bytesToHex, hexToBytes } from '@noble/hashes/utils';
+import { wordlist } from '@scure/bip39/wordlists/english.js';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
 import { hashTypedData } from 'viem';
 
 const STORAGE_KEY = 'n42_keyring_encrypted';
 const AUTO_LOCK_MS = 5 * 60 * 1000; // 5 minutes
 const ETH_DERIVATION_PATH = "m/44'/60'/0'/0";
+
+secp.hashes.sha256 = sha256;
+secp.hashes.hmacSha256 = (key, message) => hmac(sha256, key, message);
 
 interface KeyringState {
   mnemonic: string;
@@ -79,7 +84,7 @@ export async function unlock(password: string): Promise<boolean> {
     const encrypted = stored[STORAGE_KEY];
     if (!encrypted) throw new Error('No vault found');
 
-    const decrypted = await _decrypt(encrypted, password);
+    const decrypted = await _decrypt(encrypted as string, password);
     _state = JSON.parse(decrypted);
     _hdKey = HDKey.fromMasterSeed(mnemonicToSeedSync(_state!.mnemonic));
     _resetLockTimer();
@@ -126,11 +131,11 @@ export function signHash(accountIndex: number, hash: Uint8List): Uint8List {
   const child = _hdKey.derive(`${ETH_DERIVATION_PATH}/${accountIndex}`);
   if (!child.privateKey) throw new Error('Key derivation failed');
 
-  const sig = secp.sign(hash, child.privateKey);
+  const sig = secp.sign(hash, child.privateKey, { prehash: false, format: 'recovered' });
   // Return 65-byte signature: r (32) + s (32) + v (1)
   const result = new Uint8Array(65);
-  result.set(sig.toCompactRawBytes());
-  result[64] = sig.recovery + 27;
+  result.set(sig.subarray(1));
+  result[64] = sig[0] + 27;
   return result;
 }
 
@@ -190,7 +195,7 @@ function _deriveAddress(index: number): string {
   if (!child.publicKey) throw new Error('Key derivation failed');
 
   // Uncompressed public key (65 bytes) → drop first byte → keccak256 → last 20 bytes
-  const pubUncompressed = secp.ProjectivePoint.fromHex(child.publicKey).toRawBytes(false);
+  const pubUncompressed = secp.Point.fromBytes(child.publicKey).toBytes(false);
   const hash = keccak_256(pubUncompressed.slice(1));
   const address = hash.slice(-20);
   return '0x' + bytesToHex(address);
