@@ -41,6 +41,7 @@ Keep each ecosystem's changes and verification results separately reviewable. If
 - Rust: `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings`.
 - Chrome extension: clean install from lockfile, `npm run lint`, `npm run type-check`, `npm run build`, and production dependency audit.
 - No new analyzer, test, build, or security-audit failures relative to the captured baseline. Existing failures must be identified by exact command and kept distinct from upgrade regressions.
+- Fix the 24 Flutter analyzer errors reported as the current baseline before closing the upgrade: capture the exact error list first, correct each root cause, and finish with zero analyzer errors across the repository. If the fresh baseline count differs, fix the current complete error set rather than relying on the old count.
 - Final report lists upgraded package groups, migration notes, commands/results, skipped or blocked packages, and any remaining environment limitations.
 
 ## Initial inventory
