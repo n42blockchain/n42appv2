@@ -150,7 +150,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
    - `cd packages/n42_jmt_verify && dart pub get && dart test`
    - `flutter test packages/webview_flutter_wkwebview/test/`
    - `flutter analyze --no-fatal-infos`
-7. The 13 listed root Chat test aggregators import test files from the local Chat mirror; they do not test the resolved Git package. Remove those mirror-backed aggregators from the root app test suite and run the Chat package's own tests from a disposable checkout/export at the exact Git `resolved-ref`. Update the existing CI test job to run both suites without editing the pub cache or `packages/n42_chat` mirror; if the exact Git SHA's own tests are blocked, record the precise blocker.
+7. The 13 listed root Chat test aggregators import test files from the local Chat mirror; they do not test the resolved Git package. Remove those mirror-backed aggregators from the root app test suite and run the Chat package's own `flutter analyze --no-fatal-infos` and tests from a disposable checkout/export at the exact Git `resolved-ref`. Update the existing CI test job to run both suites without editing the pub cache or `packages/n42_chat` mirror; if the exact Git SHA's own checks are blocked, record the precise blocker.
 8. Review `pubspec.lock` source/version changes and inspect all dependency overrides after resolution.
 
 ### Acceptance
