@@ -2,6 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["chrome", "node"],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
@@ -13,11 +14,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "outDir": "dist",
-    "baseUrl": ".",
     "paths": {
-      "@shared/*": ["src/shared/*"],
-      "@background/*": ["src/background/*"],
-      "@popup/*": ["src/popup/*"]
+      "@shared/*": ["./src/shared/*"],
+      "@background/*": ["./src/background/*"],
+      "@popup/*": ["./src/popup/*"]
     }
   },
   "include": ["src"],
