@@ -29,6 +29,7 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
 - Keep `blake3_dart` at its exact pinned version unless source and publisher review justifies a safe change. Repair its package resolution/API integration without silently widening its constraint.
 - Do not fabricate Firebase, signing, repository, or private Maven credentials. Report builds blocked by missing local configuration as blocked.
 - Capture the reported analyzer baseline before changing code. Fix every analyzer error in the fresh baseline and finish with zero repository-wide analyzer errors; do not treat baseline errors as acceptable residuals.
+- Keep the existing 70% coverage threshold unchanged. The captured 49.13% coverage result is a known baseline gap that the user has deferred to a later task; report the final result, but do not expand this dependency-upgrade scope with broad coverage work.
 - Leave any dependency pinned only with a recorded compatibility/security reason, exact affected package, and required follow-up. Do not add CI jobs unless a dependency migration makes them necessary.
 - Use short English Conventional Commit subjects if commits are later requested. This execution plan does not authorize pushing or publishing.
 
@@ -58,8 +59,8 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
    - `flutter analyze --no-fatal-infos`
    - `flutter test --coverage --concurrency=4`
    - `python3 scripts/quality_gate.py coverage coverage/lcov.info --threshold 70`
-   - Save each exit status and complete output. List all 24 reported analyzer errors by file, line, code, and shared root cause; confirm whether the fresh count is still 24.
-4. Capture native baseline: run `./gradlew :app:dependencies` from `android/`, `flutter build apk --debug`, `pod outdated` from both `ios/` and `macos/`, and `xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner`. Run `flutter build ios --no-codesign --release` and `flutter build macos --no-codesign --release` where local toolchain/config permits. Save credential, CDN, missing-podspec, or architecture blockers without fabricating local configuration.
+   - Save each exit status and complete output. List every fresh analyzer error by file, line, code, and root cause; compare it with the historical count of 24.
+4. Capture native baseline: run `./gradlew :app:dependencies` from `android/` after the Flutter build materializes its ignored wrapper, `flutter build apk --debug`, `pod outdated` from both `ios/` and `macos/`, and `xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner`. Run `flutter build ios --no-codesign --release`; for macOS use `xcodebuild -project macos/Runner.xcodeproj -scheme Runner -configuration Release CODE_SIGNING_ALLOWED=NO build` after CocoaPods integration is available. Save credential, CDN, missing-podspec, or architecture blockers without fabricating local configuration.
 5. In each of `backend/livekit-jwt`, `backend/loyalty`, `backend/social-auth`, and `backend/swap`, capture `go list -m -u all`, `go test ./...`, and `go vet ./...`.
 6. In `rust/n42_mls`, capture `cargo tree`, `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings`.
 7. In `chrome-extension`, capture `npm ci`, `npm outdated --json`, `npm audit --omit=dev`, `npm run lint`, `npm run type-check`, and `npm run build`. Note that no extension test script exists at baseline.
@@ -96,6 +97,7 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
 
 - `packages/n42_jmt_verify/pubspec.yaml`
 - `packages/n42_jmt_verify/lib/src/blake3_hash.dart`
+- `.github/workflows/ci.yml`
 - Any additional file explicitly reported by the fresh baseline analyzer output.
 
 The Chat notification implementation is inspected from the Git-resolved package cache only; never edit that cache or `packages/n42_chat`, which is a mirror.
@@ -104,9 +106,9 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 1. Reconcile the analyzer's exact output with the saved Task 1 error inventory. Group duplicate diagnostics by their actual root cause; do not assume the historic count or historic diagnosis is still current.
 2. If the error is in Chat's Firebase Messaging permission mapping, check the declared Git pin and compatible upstream revisions for a stable fix. Update the root Git SHA only when the revision is compatible and contains the required fix; otherwise do not patch the cache or mirror. If the current Git source has no compatible fixed revision, report this explicitly as the constraint preventing full completion.
-3. Repair the `n42_jmt_verify` BLAKE3 dependency/export/API issue. Confirm package ownership and the exact package source; keep `blake3_dart` pinned at `1.0.0` unless a documented source review supports changing it. Preserve the public `n42_jmt_verify` exports.
-4. Add/update focused tests for each in-repository error root, including the BLAKE3 empty-input/known vectors. For a Chat Git SHA migration, run the package's available tests through the app dependency graph without modifying the external package.
-5. Run `flutter test packages/n42_jmt_verify/test` and the relevant root tests, then `flutter analyze --no-fatal-infos` across the full repository.
+3. Resolve the standalone package in its own context with `cd packages/n42_jmt_verify && dart pub get`; run its existing BLAKE3/JMT vector suite with `dart test` and inspect why the root recursive analyzer lacked its package config. Do not widen or upgrade the exact `blake3_dart: 1.0.0` constraint unless source/publisher review supports that separately.
+4. Update the existing `analyze` and `test` jobs in `.github/workflows/ci.yml` to run the standalone package's `dart pub get`/`dart test` before repository-wide analysis and tests. This adds steps to current jobs, not new jobs, so clean CI checkouts reproduce package resolution and do not regain the analyzer errors.
+5. Run the package checks (`cd packages/n42_jmt_verify && dart analyze && dart test`), then `flutter analyze --no-fatal-infos` across the full repository.
 
 ### Acceptance
 
@@ -136,7 +138,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
    - `flutter test test/`
    - `flutter test plugins/flutter_mining/test/`
    - `flutter test plugins/flutter_mining/example/test/`
-   - `flutter test packages/n42_jmt_verify/test/`
+   - `cd packages/n42_jmt_verify && dart pub get && dart test`
    - `flutter test packages/webview_flutter_wkwebview/test/`
    - `flutter analyze --no-fatal-infos`
 7. Review `pubspec.lock` source/version changes and inspect all dependency overrides after resolution.
@@ -164,7 +166,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 ### Steps
 
-1. Record resolved Gradle and Maven graphs with `./gradlew :app:dependencies` and the mining plugin's Gradle dependency report before edits.
+1. Use the ignored Gradle wrapper materialized by the baseline Flutter build (do not track or hand-edit ignored wrapper files) and record resolved Gradle/Maven graphs with `./gradlew :app:dependencies` and the mining plugin's Gradle dependency report before edits.
 2. Upgrade the Gradle wrapper, AGP, Kotlin Gradle plugin, Google Services plugin, and direct Maven artifacts in the app/mining project to latest stable versions compatible with Java 21 and compile/target SDK 36. Preserve required TrustWallet credentials/repository filtering and document any private artifact whose newest version cannot be inspected.
 3. Migrate Gradle/Kotlin DSL or plugin API changes in the files above; keep Java 21 and the Android SDK/toolchain targets fixed.
 4. Resolve and build with `flutter build apk --debug`; run Android unit/plugin tests available in the repo, including `plugins/flutter_mining/android` tests. Capture the resolved graph after the changes.
@@ -191,7 +193,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
 1. Retry CocoaPods metadata resolution after the baseline capture. Run `pod outdated` separately in `ios/` and `macos/`; record whether the earlier CDN HTTP/2 error and missing local Flutter podspec are resolved.
 2. Upgrade direct pinned pods (including TrustWalletCore and Google MLKit subspecs) and all lockfile-resolved pods to latest stable compatible releases. Keep the iOS/macOS deployment targets and SQLCipher linking behavior unchanged unless a required migration has a dedicated regression test.
 3. Resolve Swift packages with `xcodebuild -resolvePackageDependencies` for the Runner workspace and inspect both checked-in `Package.resolved` files for matching stable revisions.
-4. Build with `flutter build ios --no-codesign --release` and `flutter build macos --no-codesign --release` when the local Xcode/SDK and project configuration permit. Record missing Firebase/signing files, pod metadata, or unsupported simulator slices as blockers with exact command output.
+4. Build with `flutter build ios --no-codesign --release` and `xcodebuild -project macos/Runner.xcodeproj -scheme Runner -configuration Release CODE_SIGNING_ALLOWED=NO build` when the local Xcode/SDK and project configuration permit. Record missing Firebase/signing files, pod metadata, or unsupported simulator slices as blockers with exact command output.
 
 ### Acceptance
 
@@ -239,7 +241,7 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 1. Upgrade `openmls`, `openmls_rust_crypto`, `openmls_basic_credential`, `openmls_traits`, `tls_codec`, and target-specific `jni` to latest stable releases compatible with the pinned Rust 1.97.1 toolchain.
 2. Migrate API changes in the MLS engine/FFI/JNI boundary while preserving RFC 9420 behavior and the C/Android ABI.
-3. Run `cargo update`, then `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings` from `rust/n42_mls/`.
+3. Run `cargo update`, normalize the existing and changed Rust sources with `cargo fmt --all`, then run `cargo fmt --check`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings` from `rust/n42_mls/`.
 4. Review `cargo tree` and the complete lockfile diff for duplicate crypto versions, prereleases, and unintended removals.
 
 ### Acceptance
@@ -253,13 +255,14 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 - `chrome-extension/package.json`
 - `chrome-extension/package-lock.json`
+- `chrome-extension/eslint.config.js`
 - `chrome-extension/src/background/keyring.test.ts`
 - `chrome-extension/src/background/keyring.ts` only for required dependency API migrations
 - `chrome-extension/vitest.config.ts` and `chrome-extension/src/test/setup.ts` if needed for Chrome API/WebCrypto mocks
 
 ### Steps
 
-1. Upgrade all production and development dependencies in `package.json` to current stable releases, including React/ReactDOM, Noble, Scure, viem, Zustand, Vite, TypeScript, and Chrome/React type packages. Keep Node 24.19.0 pinned and migrate React 19 and crypto API changes where required.
+1. Upgrade all production and development dependencies in `package.json` to current stable releases, including React/ReactDOM, Noble, Scure, viem, Zustand, Vite, TypeScript, and Chrome/React type packages. Add the missing `eslint`, `typescript-eslint`, and `eslint-plugin-react-hooks` development tools, create a flat ESLint config for TypeScript/TSX, and update the lint script to the installed ESLint CLI. Validate with Node 20, the existing CI Node pin; do not upgrade the Node toolchain. Migrate React 19 and crypto API changes where required.
 2. Add Vitest as a dev dependency and a `test` script; write deterministic keyring vectors using the standard `test test test test test test test test test test test junk` mnemonic. Verify derived address `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`, account index derivation, personal-message/raw-hash signing shape, lock behavior, and wrong-password unlock rejection with mocked `chrome.storage.local`.
 3. Run `npm install` to write the package lock, then `npm ci` from a clean install.
 4. Run `npm test`, `npm run lint`, `npm run type-check`, `npm run build`, and `npm audit --omit=dev --audit-level=moderate`.
@@ -288,8 +291,9 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 ### Acceptance
 
-- Full-repository Flutter analysis has zero errors; Flutter full-suite coverage meets the existing 70% gate.
-- All in-scope tests, static checks, and builds pass, or have an exact environment/upstream blocker recorded. No known baseline failure is relabeled as an accepted blocker.
+- Full-repository Flutter analysis has zero errors.
+- Run and report the existing coverage gate without changing its 70% threshold. The user explicitly deferred raising the 49.13% baseline during this dependency-upgrade task, so this known coverage gap is excluded from this task's pass criteria and must remain visible in the results report.
+- All in-scope tests, static checks, and builds pass, or have an exact environment/upstream blocker recorded. The explicitly deferred coverage gap remains separately reported; no other known baseline failure is ignored or relabeled as an accepted blocker.
 - All dependency graphs install reproducibly with the pinned toolchains; no prereleases, secret files, or unreviewed package-source changes are present.
 - The final report clearly separates passed checks, baseline fixes, upgrade regressions resolved, and blocked checks.
 
@@ -298,5 +302,6 @@ The Chat notification implementation is inspected from the Git-resolved package 
 - Every in-scope ecosystem has a dedicated manifest/lockfile list and explicit verification commands.
 - The Chat source correction is sequenced before version upgrades and is verified against the Git SHA, not the mirror.
 - The user's added zero-error analyzer requirement is a separate planned task with focused root-cause tests and a final full analysis gate.
+- The existing 70% coverage gate remains unchanged; its 49.13% baseline failure is explicitly deferred per the user's instruction and is reported separately from dependency-upgrade acceptance.
 - High-risk review items map to concrete checks: source resolution (Task 2), crypto vectors (Task 9), analyzer zero (Tasks 3 and 10), platform linking/builds (Tasks 5–6), and lockfile/audit review (Tasks 1 and 10).
 - No implementation or dependency file is changed by this plan-writing step.
