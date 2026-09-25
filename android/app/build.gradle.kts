@@ -39,6 +39,9 @@ fun escapeResValue(value: String): String {
 
 android {
     namespace = "ai.n42.www"
+    buildFeatures {
+        resValues = true
+    }
     // Google Play requires API 36 for new mobile submissions from 2026-08-31.
     compileSdk = 36
     ndkVersion = flutter.ndkVersion
@@ -48,10 +51,6 @@ android {
         isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
-    }
-
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
     }
 
     sourceSets {
@@ -149,6 +148,12 @@ android {
 
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_21)
+    }
+}
+
 dependencies {
     // n42_chat image OCR: the Flutter package includes Latin by default;
     // bundle the additional scripts used by chat image extraction.
@@ -157,25 +162,25 @@ dependencies {
     implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
     implementation("com.google.mlkit:text-recognition-korean:16.0.1")
     // ✅ 加入 desugar_jdk_libs，解决 flutter_local_notifications 的需求
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
-    implementation("com.trustwallet:wallet-core:4.7.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("com.google.android.material:material:1.9.0")
-    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
+    implementation("com.trustwallet:wallet-core:4.8.4")
+    implementation("androidx.appcompat:appcompat:1.8.0")
+    implementation("com.google.android.material:material:1.14.0")
+    implementation("com.squareup.okhttp3:okhttp:5.4.0")
     // Passkey / Credential Manager API
-    implementation("androidx.credentials:credentials:1.5.0")
-    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("androidx.credentials:credentials:1.6.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
     // compileOnly：仅供编译期使用，运行时由 flutter_mining 插件的 mobile-sdk-release.aar 提供，避免 duplicate class 冲突
     compileOnly(files("libs/mobile-sdk-android.aar"))
     // compileOnly：仅供编译期，运行时由 flutter_mining 插件的 evm-module 提供
     compileOnly(files("libs/evm.aar"))
     // MediaPipe LLM Inference — 本地 Gemma 推理（可选，未安装时 LocalLlmHandler 走 fallback）
-    implementation("com.google.mediapipe:tasks-genai:0.10.22")
+    implementation("com.google.mediapipe:tasks-genai:0.10.35")
     // Chat virtual background publisher frame injection.
-    implementation("io.github.webrtc-sdk:android:144.7559.01")
+    implementation("io.github.webrtc-sdk:android:150.7871.01")
     implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
     // Kotlin Coroutines（LocalLlmHandler 异步推理）
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }
 
 flutter {

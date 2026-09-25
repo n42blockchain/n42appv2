@@ -1,0 +1,11 @@
+Task 5 status: DONE
+Flutter 3.44.8 / Dart 3.12.2
+Successful Flutter/Gradle JDK: Homebrew OpenJDK 21.0.10
+Android compileSdk 36; targetSdk 36; Java/Kotlin bytecode 21
+Gradle 8.14.4; AGP 8.13.2; KGP 2.4.20; Foojay 1.0.0; Google Services 4.5.0
+App direct libraries: desugar_jdk_libs 2.1.5; wallet-core 4.8.4; appcompat 1.8.0; material 1.14.0; okhttp 5.4.0; credentials 1.6.0; tasks-genai 0.10.35; webrtc 150.7871.01; coroutines 1.11.0; text script modules 16.0.1; segmentation-selfie 16.0.0-beta6
+Debug APK: build/app/outputs/flutter-apk/app-debug.apk
+Debug APK bytes: 790145616
+Debug APK SHA256: 2f6bf02cb6a617137e45f9c8d6f7d4412faba74a3bf1b318d7750ff5f84ab1d3
+Tests: mining assembleDebug passed; mining testDebugUnitTest 1 passed, 0 failed; app testDebugUnitTest NO-SOURCE
+Caps: Gradle 9 blocked by latest video_thumbnail 0.5.6 jcenter(); OkHttp 5.5.0 requires compileSdk 37

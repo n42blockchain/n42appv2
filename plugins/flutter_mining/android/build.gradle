@@ -2,14 +2,14 @@ group = "mining.ai.n42.www.flutter_mining"
 version = "1.0-SNAPSHOT"
 
 buildscript {
-    ext.kotlin_version = "2.2.20"
+    ext.kotlin_version = "2.4.20"
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:8.11.1")
+        classpath("com.android.tools.build:gradle:8.13.2")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
     }
 }
@@ -50,4 +50,6 @@ dependencies {
     // 通过子项目模块引用 AAR，避免 "Direct local .aar file dependencies are not supported" 构建错误
     implementation project(':mobile-sdk-module')
     implementation project(':evm-module')
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:2.4.20'
+    testImplementation 'org.mockito:mockito-core:5.24.0'
 }
