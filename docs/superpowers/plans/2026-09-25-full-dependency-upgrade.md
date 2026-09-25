@@ -99,6 +99,7 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
 - `packages/n42_jmt_verify/pubspec.yaml`
 - `packages/n42_jmt_verify/lib/src/blake3_hash.dart`
 - `lib/features/wallet/n42_wallet_bridge.dart` and its focused wallet bridge tests if the current Git Chat API incompatibility is confirmed.
+- `analysis_options.yaml` to exclude the checked-in `packages/n42_chat` cache mirror from host-app analysis; it is not the production Chat source.
 - `.github/workflows/ci.yml`
 - Any additional file explicitly reported by the fresh baseline analyzer output.
 
@@ -109,13 +110,15 @@ The Chat notification implementation is inspected from the Git-resolved package 
 1. Reconcile the analyzer's exact output with the saved Task 1 error inventory. Group duplicate diagnostics by their actual root cause; do not assume the historic count or historic diagnosis is still current.
 2. If the error is in Chat's Firebase Messaging permission mapping, check the declared Git pin and compatible upstream revisions for a stable fix. Update the root Git SHA only when the revision is compatible and contains the required fix; otherwise do not patch the cache or mirror. If the current Git source has no compatible fixed revision, report this explicitly as the constraint preventing full completion.
 3. The app wallet bridge currently calls `PaymentRequestUri.sameAssetId` and `isPositiveAmountForDecimals`; inspect whether those APIs exist in the resolved Git SHA. If absent, keep the behavior in app-owned helpers (with focused tests) or migrate the call sites to an equivalent public Git API; do not restore the mirror override or edit the Git cache/mirror.
-4. Resolve the standalone package in its own context with `cd packages/n42_jmt_verify && dart pub get`; run its existing BLAKE3/JMT vector suite with `dart test` and inspect why the root recursive analyzer lacked its package config. Do not widen or upgrade the exact `blake3_dart: 1.0.0` constraint unless source/publisher review supports that separately.
-5. Update the existing `analyze` and `test` jobs in `.github/workflows/ci.yml` to run the standalone package's `dart pub get`/`dart test` before repository-wide analysis and tests. This adds steps to current jobs, not new jobs, so clean CI checkouts reproduce package resolution and do not regain the analyzer errors.
-6. Run the package checks (`cd packages/n42_jmt_verify && dart analyze && dart test`), relevant wallet bridge tests, then `flutter analyze --no-fatal-infos` across the full repository.
+4. Add the checked-in Chat cache mirror (`packages/n42_chat/**`) to host analyzer exclusions in `analysis_options.yaml`. It is not the production dependency; Task 4 separately analyzes/tests a disposable copy of the exact locked Git source.
+5. Resolve the standalone package in its own context with `cd packages/n42_jmt_verify && dart pub get`; run its existing BLAKE3/JMT vector suite with `dart test` and inspect why the root recursive analyzer lacked its package config. Do not widen or upgrade the exact `blake3_dart: 1.0.0` constraint unless source/publisher review supports that separately.
+6. Update the existing `analyze` and `test` jobs in `.github/workflows/ci.yml` to run the standalone package's `dart pub get`/`dart test` before repository-wide analysis and tests. This adds steps to current jobs, not new jobs, so clean CI checkouts reproduce package resolution and do not regain the analyzer errors.
+7. Run the package checks (`cd packages/n42_jmt_verify && dart analyze && dart test`), relevant wallet bridge tests, then `flutter analyze --no-fatal-infos` across the full repository.
 
 ### Acceptance
 
 - Every error in the fresh baseline is resolved at its root; full-repository analysis reports zero errors. If a Chat Git dependency source blocks this, stop claiming completion and provide the exact upstream SHA/API blocker for a user decision.
+- Host analysis excludes the local Chat cache mirror by design; the exact locked Git source receives its own clean-checkout analysis/test evidence in Task 4.
 - Production wallet bridge checks compile against the declared Git source without depending on helper APIs that exist only in the local mirror.
 - BLAKE3 vectors and existing JMT proof verification remain correct; notification status behavior remains explicit for every current enum state.
 - `blake3_dart` is not silently upgraded or widened.
