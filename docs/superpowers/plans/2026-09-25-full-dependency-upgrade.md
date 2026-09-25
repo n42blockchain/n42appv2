@@ -29,6 +29,7 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
 - Keep `blake3_dart` at its exact pinned version unless source and publisher review justifies a safe change. Repair its package resolution/API integration without silently widening its constraint.
 - Do not fabricate Firebase, signing, repository, or private Maven credentials. Report builds blocked by missing local configuration as blocked.
 - Capture the reported analyzer baseline before changing code. Fix every analyzer error in the fresh baseline and finish with zero repository-wide analyzer errors; do not treat baseline errors as acceptable residuals.
+- Check production call sites against the resolved `n42_chat` Git source. Never use the local `packages/n42_chat` mirror as the API authority for the production dependency.
 - Keep the existing 70% coverage threshold unchanged. The captured 49.13% coverage result is a known baseline gap that the user has deferred to a later task; report the final result, but do not expand this dependency-upgrade scope with broad coverage work.
 - Leave any dependency pinned only with a recorded compatibility/security reason, exact affected package, and required follow-up. Do not add CI jobs unless a dependency migration makes them necessary.
 - Use short English Conventional Commit subjects if commits are later requested. This execution plan does not authorize pushing or publishing.
@@ -97,6 +98,7 @@ Flutter/Dart, CocoaPods, Swift Package Manager, Gradle/AGP/Kotlin, Go modules, C
 
 - `packages/n42_jmt_verify/pubspec.yaml`
 - `packages/n42_jmt_verify/lib/src/blake3_hash.dart`
+- `lib/features/wallet/n42_wallet_bridge.dart` and its focused wallet bridge tests if the current Git Chat API incompatibility is confirmed.
 - `.github/workflows/ci.yml`
 - Any additional file explicitly reported by the fresh baseline analyzer output.
 
@@ -106,13 +108,15 @@ The Chat notification implementation is inspected from the Git-resolved package 
 
 1. Reconcile the analyzer's exact output with the saved Task 1 error inventory. Group duplicate diagnostics by their actual root cause; do not assume the historic count or historic diagnosis is still current.
 2. If the error is in Chat's Firebase Messaging permission mapping, check the declared Git pin and compatible upstream revisions for a stable fix. Update the root Git SHA only when the revision is compatible and contains the required fix; otherwise do not patch the cache or mirror. If the current Git source has no compatible fixed revision, report this explicitly as the constraint preventing full completion.
-3. Resolve the standalone package in its own context with `cd packages/n42_jmt_verify && dart pub get`; run its existing BLAKE3/JMT vector suite with `dart test` and inspect why the root recursive analyzer lacked its package config. Do not widen or upgrade the exact `blake3_dart: 1.0.0` constraint unless source/publisher review supports that separately.
-4. Update the existing `analyze` and `test` jobs in `.github/workflows/ci.yml` to run the standalone package's `dart pub get`/`dart test` before repository-wide analysis and tests. This adds steps to current jobs, not new jobs, so clean CI checkouts reproduce package resolution and do not regain the analyzer errors.
-5. Run the package checks (`cd packages/n42_jmt_verify && dart analyze && dart test`), then `flutter analyze --no-fatal-infos` across the full repository.
+3. The app wallet bridge currently calls `PaymentRequestUri.sameAssetId` and `isPositiveAmountForDecimals`; inspect whether those APIs exist in the resolved Git SHA. If absent, keep the behavior in app-owned helpers (with focused tests) or migrate the call sites to an equivalent public Git API; do not restore the mirror override or edit the Git cache/mirror.
+4. Resolve the standalone package in its own context with `cd packages/n42_jmt_verify && dart pub get`; run its existing BLAKE3/JMT vector suite with `dart test` and inspect why the root recursive analyzer lacked its package config. Do not widen or upgrade the exact `blake3_dart: 1.0.0` constraint unless source/publisher review supports that separately.
+5. Update the existing `analyze` and `test` jobs in `.github/workflows/ci.yml` to run the standalone package's `dart pub get`/`dart test` before repository-wide analysis and tests. This adds steps to current jobs, not new jobs, so clean CI checkouts reproduce package resolution and do not regain the analyzer errors.
+6. Run the package checks (`cd packages/n42_jmt_verify && dart analyze && dart test`), relevant wallet bridge tests, then `flutter analyze --no-fatal-infos` across the full repository.
 
 ### Acceptance
 
 - Every error in the fresh baseline is resolved at its root; full-repository analysis reports zero errors. If a Chat Git dependency source blocks this, stop claiming completion and provide the exact upstream SHA/API blocker for a user decision.
+- Production wallet bridge checks compile against the declared Git source without depending on helper APIs that exist only in the local mirror.
 - BLAKE3 vectors and existing JMT proof verification remain correct; notification status behavior remains explicit for every current enum state.
 - `blake3_dart` is not silently upgraded or widened.
 
