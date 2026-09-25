@@ -1,0 +1,88 @@
+{
+  "status": "DONE_WITH_CONCERNS",
+  "toolchain": {
+    "flutter": "3.44.8",
+    "dart": "3.12.2"
+  },
+  "root_tests": {
+    "exit": 0,
+    "passed": 4803,
+    "failed": 0,
+    "log": "root-app-tests-compatible.log"
+  },
+  "root_analysis": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 35,
+    "log": "firebase-compatible-analyze.log"
+  },
+  "mining_tests": {
+    "exit": 0,
+    "passed": 3,
+    "log": "mining-test.log"
+  },
+  "mining_example_tests": {
+    "exit": 0,
+    "passed": 1,
+    "cwd": "plugins/flutter_mining/example",
+    "log": "mining-example-test.log"
+  },
+  "jmt_tests": {
+    "exit": 0,
+    "passed": 13,
+    "log": "jmt-test.log"
+  },
+  "webview_tests": {
+    "exit": 0,
+    "passed": 154,
+    "log": "final-webview-formatted-test.log"
+  },
+  "web3auth_tests": {
+    "exit": 0,
+    "passed": 10,
+    "log": "web3auth-last-test.log"
+  },
+  "chat_analysis": {
+    "exit": 0,
+    "errors": 0,
+    "warnings": 0,
+    "infos": 279,
+    "log": "chat-analyze.log"
+  },
+  "chat_tests": {
+    "exit": 1,
+    "passed": 6736,
+    "skipped": 3,
+    "failed": 1,
+    "log": "chat-test.log",
+    "failure": "matrix_contact_datasource_test.dart: expired timed status clears status message without forcing online presence; _MockClient.accountData returns Null instead of Map<String, BasicEvent>"
+  },
+  "chat_sha": "3cc19c12a7c9bbf2031270acca8e3922730b55a5",
+  "firebase_compatibility": {
+    "messaging": "16.5.0",
+    "platform_interface": "4.9.3",
+    "first_incompatible_interface": "4.10.0",
+    "notification_compile_blocker": "resolved",
+    "prior_4_9_2_enum_attribution": "incorrect; official SHA-verified archive and local cached types.dart both omit deniedPermanently"
+  },
+  "clean_resolution_exits": {
+    "clean-root-compatible": 0,
+    "clean-mining": 0,
+    "clean-mining-example": 0,
+    "clean-audio": 0,
+    "clean-webview": 0,
+    "clean-webview-example": 0,
+    "clean-jmt": 0
+  },
+  "coverage": {
+    "threshold_unchanged": 70,
+    "baseline_percent": 49.133,
+    "expansion": "deferred by user; not rerun in Task 4"
+  },
+  "non_acceptance_runs": [
+    "root-app-tests (interrupted while WebView sources were changing; raw process exit 0 does not mean pass)",
+    "root-app-tests-final (user paused at 1815 passed, 39 failed; terminated with no final marker)",
+    "mining-example-root-command (wrong package context; passed when run in example package)"
+  ]
+}

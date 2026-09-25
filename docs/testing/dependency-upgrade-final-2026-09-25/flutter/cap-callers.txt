@@ -1,0 +1,151 @@
+
+## build_runner
+
+
+## cached_network_image
+
+lib/features/widgets/image_network.dart:5:import 'package:cached_network_image/cached_network_image.dart';
+lib/features/wallet/pages/nft/nft_list_page.dart:6:import 'package:cached_network_image/cached_network_image.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/media/media_gallery_page.dart:3:import 'package:cached_network_image/cached_network_image.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/media/media_preview_page.dart:4:import 'package:cached_network_image/cached_network_image.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/widgets/common/n42_avatar.dart:1:import 'package:cached_network_image/cached_network_image.dart';
+
+## chewie
+
+lib/features/widgets/video_play_safe.dart:6:import 'package:chewie/chewie.dart';
+lib/features/wallet/pages/nft/nft_detail_page.dart:6:import 'package:chewie/chewie.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/chat/viewers/video_player_page.dart:9:import 'package:chewie/chewie.dart';
+
+## device_info_plus
+
+lib/features/utils/device_info_util.dart:6:import 'package:device_info_plus/device_info_plus.dart';
+
+## equatable
+
+lib/shared/domain/entities/wallet_info.dart:8:import 'package:equatable/equatable.dart';
+lib/features/auth/domain/entities/auth_entity.dart:8:import 'package:equatable/equatable.dart';
+lib/features/browser/domain/entities/browser_entity.dart:8:import 'package:equatable/equatable.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/helpers/chat_mention_helper.dart:1:import 'package:equatable/equatable.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/domain/entities/mini_app_entity.dart:1:import 'package:equatable/equatable.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/domain/entities/privacy_settings_entity.dart:1:import 'package:equatable/equatable.dart';
+
+## file_picker
+
+lib/features/mining_v2/pages/key_management/file_import.dart:3:import 'package:file_picker/file_picker.dart';
+lib/features/home/widgets/nav_select_image.dart:7:import 'package:file_picker/file_picker.dart';
+lib/features/wallet/pages/batch_transfer/csv_import_page.dart:7:import 'package:file_picker/file_picker.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/widgets/story/story_music_picker.dart:4:import 'package:file_picker/file_picker.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/widgets/chat/music_select_sheet.dart:1:import 'package:file_picker/file_picker.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/chat/chat_page.dart:7:import 'package:file_picker/file_picker.dart';
+
+## flutter_callkit_incoming
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/services/voip/incoming_call_ringtone_preference.dart:3:import 'package:flutter_callkit_incoming/entities/android_params.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/services/voip/call_notification_service.dart:10:import 'package:flutter_callkit_incoming/entities/android_params.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/notifications/firebase_push_service.dart:8:import 'package:flutter_callkit_incoming/entities/call_kit_params.dart';
+
+## flutter_secure_storage
+
+lib/main.dart:64:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+lib/core/storage/secure_preferences.dart:11:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+lib/core/security/secure_storage.dart:4:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/chat_lock_service.dart:6:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/totp_2fa_store.dart:1:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/encryption/local_room_key_store.dart:4:import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+## flutter_vodozemac
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/matrix/matrix_client_manager.dart:8:import 'package:flutter_vodozemac/flutter_vodozemac.dart' as vodozemac;
+
+## freezed
+
+
+## go_router
+
+lib/features/live/presentation/router/live_router.dart:1:import 'package:go_router/go_router.dart';
+lib/features/live/presentation/pages/live_room_page.dart:5:import 'package:go_router/go_router.dart';
+lib/features/live/presentation/pages/live_app.dart:3:import 'package:go_router/go_router.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/n42_chat.dart:7:import 'package:go_router/go_router.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/router/app_router.dart:3:import 'package:go_router/go_router.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/auth/login_page.dart:4:import 'package:go_router/go_router.dart';
+
+## google_mlkit_face_detection
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/utils/face_blur_util.dart:5:import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+
+## google_mlkit_text_recognition
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/mlkit_image_text_recognition_service.dart:5:import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+
+## google_mlkit_translation
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/on_device_translation_service.dart:2:import 'package:google_mlkit_translation/google_mlkit_translation.dart';
+
+## intl
+
+lib/features/utils/regular.dart:1:import 'package:intl/intl.dart';
+lib/features/wallet/widgets/wallet_search_coin.dart:29:import 'package:intl/intl.dart';
+lib/features/mining_v1/pages/summary_page.dart:24:import 'package:intl/intl.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/media/media_gallery_page.dart:5:import 'package:intl/intl.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/l10n/app_localizations_en.dart:2:import 'package:intl/intl.dart' as intl;
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/utils/date_utils.dart:1:import 'package:intl/intl.dart';
+
+## intl_utils
+
+
+## mockito
+
+
+## package_info_plus
+
+lib/features/home/setting/about_app.dart:14:import 'package:package_info_plus/package_info_plus.dart';
+lib/features/home/home_page.dart:27:import 'package:package_info_plus/package_info_plus.dart';
+
+## permission_handler
+
+lib/features/component/pages/scan_page.dart:8:import 'package:permission_handler/permission_handler.dart';
+lib/features/utils/app_push_utils.dart:27:import 'package:permission_handler/permission_handler.dart';
+lib/features/mining_v1/utils/mining_cache_utils.dart:9:import 'package:permission_handler/permission_handler.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/services/voip/webrtc_service.dart:12:import 'package:permission_handler/permission_handler.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/voice_service.dart:9:import 'package:permission_handler/permission_handler.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/widgets/chat/chat_input_bar.dart:4:import 'package:permission_handler/permission_handler.dart';
+
+## pro_image_editor
+
+lib/features/component/pages/image_crop_page.dart:4:import 'package:pro_image_editor/pro_image_editor.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/media/media_editor_page.dart:4:import 'package:pro_image_editor/pro_image_editor.dart';
+
+## share_plus
+
+lib/features/component/pages/setting_share.dart:23:import 'package:share_plus/share_plus.dart';
+lib/features/mining_v1/pages/share_mining.dart:9:import 'package:share_plus/share_plus.dart';
+lib/features/mining_v2/pages/share_mining.dart:7:import 'package:share_plus/share_plus.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/widgets/common/shareable_link_actions.dart:7:import 'package:share_plus/share_plus.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/core/services/chat_export_service.dart:6:import 'package:share_plus/share_plus.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/presentation/pages/qrcode/my_qrcode_page.dart:7:import 'package:share_plus/share_plus.dart';
+
+## sqflite_common_ffi
+
+
+## sqlcipher_flutter_libs
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/local/archive_database.dart:11:import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/local/media_metadata_database.dart:9:import 'package:sqlcipher_flutter_libs/sqlcipher_flutter_libs.dart';
+
+## sqlite3
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/local/media_metadata_database.dart:10:import 'package:sqlite3/open.dart';
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/local/archive_database.dart:12:import 'package:sqlite3/open.dart';
+
+## vodozemac
+
+/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-chat-task4-st1vy_0v/lib/src/data/datasources/matrix/matrix_client_manager.dart:11:import 'package:vodozemac/vodozemac.dart' as vod;
+
+## webview_flutter_wkwebview
+
+lib/features/browser/provider/browser_provider.dart:24:import 'package:webview_flutter_wkwebview/webview_flutter_wkwebview.dart';
+
+## xml
+
+lib/features/news/api/news_api.dart:5:import 'package:xml/xml.dart' as xml;
+lib/core/market/crypto_news_service.dart:11:import 'package:xml/xml.dart' as xml;

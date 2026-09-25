@@ -1,0 +1,29 @@
+[
+  {
+    "version": "4.9.2",
+    "archive_url": "https://pub.dev/api/archives/firebase_messaging_platform_interface-4.9.2.tar.gz",
+    "registry_archive_sha256": "4d144cb42b9a5a42855596be2d7682d32c50169f42e7df2cb3278ecf935e7d63",
+    "downloaded_sha256": "4d144cb42b9a5a42855596be2d7682d32c50169f42e7df2cb3278ecf935e7d63",
+    "sha256_matches": true,
+    "deniedPermanently_present": false,
+    "cached_types_match_archive": true
+  },
+  {
+    "version": "4.9.3",
+    "archive_url": "https://pub.dev/api/archives/firebase_messaging_platform_interface-4.9.3.tar.gz",
+    "registry_archive_sha256": "e5fbb62bd23a27c983825277877ac91fdfdb6bfb31c6e5399700963ae586e339",
+    "downloaded_sha256": "e5fbb62bd23a27c983825277877ac91fdfdb6bfb31c6e5399700963ae586e339",
+    "sha256_matches": true,
+    "deniedPermanently_present": false,
+    "cached_types_match_archive": true
+  },
+  {
+    "version": "4.10.0",
+    "archive_url": "https://pub.dev/api/archives/firebase_messaging_platform_interface-4.10.0.tar.gz",
+    "registry_archive_sha256": "f9707e185b8ce1155d58e7e29348245072d99981f899fa8d3214abb2652c4ccb",
+    "downloaded_sha256": "f9707e185b8ce1155d58e7e29348245072d99981f899fa8d3214abb2652c4ccb",
+    "sha256_matches": true,
+    "deniedPermanently_present": true,
+    "cached_types_match_archive": true
+  }
+]

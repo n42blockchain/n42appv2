@@ -124,7 +124,20 @@ jobs:
           cache: true
 
       - name: Get dependencies
-        run: flutter pub get
+        id: dependencies
+        run: |
+          flutter pub get --enforce-lockfile
+          python3 - <<'PY_OVERRIDES'
+          import json, pathlib
+          from urllib.parse import urljoin, urlparse, unquote
+          config = pathlib.Path('.dart_tool/package_config.json').resolve()
+          packages = {p['name']: p for p in json.loads(config.read_text())['packages']}
+          for name in ['audioplayers_darwin', 'webview_flutter_wkwebview', 'flutter_mining']:
+              actual = pathlib.Path(unquote(urlparse(urljoin(config.as_uri(), packages[name]['rootUri'])).path)).resolve()
+              expected = pathlib.Path('plugins/flutter_mining' if name == 'flutter_mining' else f'packages/{name}').resolve()
+              assert actual == expected, (name, actual, expected)
+              print(f'{name}: {actual}')
+          PY_OVERRIDES
 
       - name: Resolve and test the standalone JMT verifier
         working-directory: packages/n42_jmt_verify
@@ -132,12 +145,66 @@ jobs:
           dart pub get
           dart test
 
+      - name: Test active local plugins
+        run: |
+          flutter test plugins/flutter_mining/test/
+          (cd plugins/flutter_mining/example && flutter pub get && flutter test test/)
+          flutter test packages/webview_flutter_wkwebview/test/
+
       - name: Run tests with coverage
         run: |
           ulimit -n 4096
-          flutter test --coverage --concurrency=4 --machine > test_results.jsonl
+          flutter test test/ --coverage --concurrency=4 --machine > test_results.jsonl
           python3 scripts/quality_gate.py tests test_results.jsonl | tee test_output.txt
           cat test_output.txt >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Export the resolved Chat Git revision
+        id: chat_export
+        if: ${{ always() && steps.dependencies.outcome == 'success' }}
+        run: |
+          python3 - <<'PY_CHAT'
+          import io, json, os, pathlib, re, subprocess, tarfile, tempfile
+          config_path = pathlib.Path('.dart_tool/package_config.json').resolve()
+          config = json.loads(config_path.read_text())
+          chat = next(p for p in config['packages'] if p['name'] == 'n42_chat')
+          from urllib.parse import urljoin, urlparse, unquote
+          source = pathlib.Path(unquote(urlparse(urljoin(config_path.as_uri(), chat['rootUri'])).path))
+          lock = pathlib.Path('pubspec.lock').read_text()
+          block = re.search(r'^  n42_chat:\n(.*?)(?=^  \w+:)', lock, re.M | re.S).group(1)
+          assert re.search(r'^    source: git$', block, re.M), 'Chat must resolve from Git'
+          revision = re.search(r'resolved-ref: ["\']?([0-9a-f]{40})', block).group(1)
+          declared = re.search(r'ref: ([0-9a-f]{40})', pathlib.Path('pubspec.yaml').read_text()).group(1)
+          assert revision == declared, (revision, declared)
+          checkout = subprocess.check_output(['git', '-C', str(source), 'rev-parse', 'HEAD'], text=True).strip()
+          assert checkout == revision, (checkout, revision)
+          target = pathlib.Path(tempfile.mkdtemp(prefix='n42-chat-', dir=os.environ['RUNNER_TEMP']))
+          archive = subprocess.check_output(['git', '-C', str(source), 'archive', revision])
+          with tarfile.open(fileobj=io.BytesIO(archive)) as files:
+              files.extractall(target, filter='data')
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'CHAT_TEST_ROOT={target}\n')
+          print(f'Chat checks use Git {revision} exported to {target}')
+          PY_CHAT
+
+      - name: Resolve the Chat package dependencies
+        id: chat_dependencies
+        if: ${{ always() && steps.chat_export.outcome == 'success' }}
+        run: |
+          cd "$CHAT_TEST_ROOT"
+          flutter pub get
+
+      - name: Analyze the resolved Chat package
+        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        run: |
+          cd "$CHAT_TEST_ROOT"
+          flutter analyze --no-fatal-infos
+
+      - name: Test the resolved Chat package
+        if: ${{ always() && steps.chat_dependencies.outcome == 'success' }}
+        run: |
+          cd "$CHAT_TEST_ROOT"
+          ulimit -n 4096
+          flutter test test/ --concurrency=4
 
       - name: Generate coverage report
         run: |
