@@ -4,6 +4,51 @@ This is an executable handoff for the next operator or coding model, including
 Sol. Use the existing macOS desktop session, Xcode account and signing keys.
 Never print passwords, private keys, `.env` contents or encoded Dart defines.
 
+## Coding-agent start here
+
+Follow this sequence for a user-requested TestFlight build. The sections below
+contain the exact signing, build, IPA inspection, upload, and evidence commands.
+
+1. Use the exact source commit selected for release in a clean worktree. Record
+   `git rev-parse HEAD`, the branch, `git status --short`, and the
+   `version: name+build` from `pubspec.yaml`. Do not build with uncommitted app,
+   dependency, or native-platform inputs. A documentation-only worktree change
+   is acceptable if it is recorded and does not change build inputs. Confirm the
+   intended build number has not already been uploaded in App Store Connect; the
+   latest repository release record is only a hint, not authoritative App Store
+   Connect state.
+2. Check Xcode, the iOS SDK, signing identity/private-key access, workspace,
+   export settings, and the private release-define file. In a linked worktree,
+   ignored local files such as `.env` are not copied automatically. Pass the
+   existing local file by absolute path with
+   `bash build_release.sh ipa --dart-define-from-file /ABSOLUTE/PATH/TO/PRIVATE-FILE`;
+   do not copy it into the worktree or print its contents. If `.env` is already
+   present in the selected worktree, `bash scripts/prepare_ios_release.sh`
+   loads it automatically. The ignored `ios/Runner/GoogleService-Info.plist`
+   is also not copied into a new worktree; copy the existing local plist into
+   the matching iOS path for the build and leave it untracked.
+3. Run the build in the visible desktop Terminal session using the protected
+   command/log wrapper below. `build_release.sh ipa` preserves the committed
+   version and build number, enforces the lockfile, and creates the archive and
+   IPA. Stop on a nonzero exit or if the build number has changed.
+4. Validate the newly generated IPA, not an artifact left from an earlier run.
+   Require matching app and notification-extension bundle IDs, versions and
+   build numbers, strict signature verification, expected entitlements, and a
+   recorded size and SHA-256 before upload.
+5. Upload the same verified archive through Xcode in desktop Terminal. Do not
+   rebuild between validation and upload. Require exit `0` plus
+   `Upload succeeded`, `Uploaded Runner`, and `EXPORT SUCCEEDED`. Record Apple
+   processing, compliance, and tester availability separately; upload success
+   alone does not prove testers can install the build.
+6. Add a dated release record with the selected source commit, dependency
+   reference, version/build, IPA size/checksum, signature/version checks,
+   upload output, and remaining acceptance gaps. Keep credentials and raw
+   private logs out of Git. Do not push unless the user explicitly requested it.
+
+If any preflight, source, signing, version, or upload result is ambiguous, stop
+before upload and report the exact check and output. Never retry a possibly
+accepted build number with a newly labeled IPA.
+
 For WebRTC / ML Kit dependency failures on another Mac, first follow
 [iOS dependency troubleshooting](IOS_DEPENDENCY_TROUBLESHOOTING.md).
 

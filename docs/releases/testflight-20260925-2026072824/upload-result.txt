@@ -1,0 +1,13 @@
+TestFlight upload result — build 2026072824
+
+Command: xcodebuild -exportArchive (destination=upload; existing desktop Xcode account)
+Exit code: 0
+Markers: Upload succeeded; Uploaded Runner; EXPORT SUCCEEDED
+App Store Connect: package uploaded; processing started
+Tester availability: not verified
+
+Non-blocking export warnings:
+- No matching dSYM was available for WebRTC.framework.
+- No matching dSYM was available for flutter_vodozemac.framework.
+
+Raw build and upload logs remain in the local temporary directory and are not committed.

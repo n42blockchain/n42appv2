@@ -1,0 +1,42 @@
+{
+  "source_commit": "9371b823e4f9cc72b9e7737fb6ed738530b7519c",
+  "artifact": "build/ios/ipa/N42Wallet.ipa",
+  "bytes": 162885986,
+  "sha256": "3cc0d1e0ef696a2001c7b97979e1f9e36a676af3873079a4f0509a53af47ebe0",
+  "app_store_version": "2.4.8",
+  "build_number": "2026072824",
+  "code_signature": "codesign --verify --deep --strict passed",
+  "bundles": {
+    "ai.n42.www": {
+      "version": "2.4.8",
+      "build": "2026072824",
+      "device_families": [
+        1,
+        2
+      ],
+      "team_id": "CFRXH38L48",
+      "get_task_allow": false,
+      "aps_environment": "production",
+      "application_groups": [
+        "group.ai.n42.wallet"
+      ],
+      "keychain_groups": [
+        "CFRXH38L48.ai.n42.www",
+        "CFRXH38L48.ai.n42.www.ios"
+      ]
+    },
+    "ai.n42.www.NotificationExtension": {
+      "version": "2.4.8",
+      "build": "2026072824",
+      "device_families": [
+        1,
+        2
+      ],
+      "team_id": "CFRXH38L48",
+      "get_task_allow": false,
+      "aps_environment": null,
+      "application_groups": [],
+      "keychain_groups": []
+    }
+  }
+}
