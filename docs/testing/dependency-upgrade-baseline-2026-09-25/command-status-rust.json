@@ -1,0 +1,69 @@
+{
+  "cargo-check-all-targets": {
+    "command": [
+      "cargo",
+      "check",
+      "--all-targets"
+    ],
+    "cwd": "rust/n42_mls",
+    "duration_seconds": 6.12,
+    "exit_code": 0,
+    "log": "logs/cargo-check-all-targets.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "cargo-clippy-all-targets": {
+    "command": [
+      "cargo",
+      "clippy",
+      "--all-targets",
+      "--",
+      "-D",
+      "warnings"
+    ],
+    "cwd": "rust/n42_mls",
+    "duration_seconds": 0.63,
+    "exit_code": 0,
+    "log": "logs/cargo-clippy-all-targets.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "cargo-fmt-check": {
+    "command": [
+      "cargo",
+      "fmt",
+      "--check"
+    ],
+    "cwd": "rust/n42_mls",
+    "duration_seconds": 0.25,
+    "exit_code": 1,
+    "log": "logs/cargo-fmt-check.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "cargo-test-all-targets": {
+    "command": [
+      "cargo",
+      "test",
+      "--all-targets"
+    ],
+    "cwd": "rust/n42_mls",
+    "duration_seconds": 15.16,
+    "exit_code": 0,
+    "log": "logs/cargo-test-all-targets.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 900
+  },
+  "cargo-tree": {
+    "command": [
+      "cargo",
+      "tree"
+    ],
+    "cwd": "rust/n42_mls",
+    "duration_seconds": 0.62,
+    "exit_code": 0,
+    "log": "logs/cargo-tree.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  }
+}

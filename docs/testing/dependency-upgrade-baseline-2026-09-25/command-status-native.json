@@ -1,0 +1,101 @@
+{
+  "android-gradle-dependencies": {
+    "command": [
+      "./gradlew",
+      ":app:dependencies"
+    ],
+    "cwd": "android",
+    "duration_seconds": 0.0,
+    "exit_code": 127,
+    "log": "logs/android-gradle-dependencies.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "flutter-build-apk-debug": {
+    "command": [
+      "flutter",
+      "build",
+      "apk",
+      "--debug"
+    ],
+    "cwd": ".",
+    "duration_seconds": 2.93,
+    "exit_code": 1,
+    "log": "logs/flutter-build-apk-debug.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 1200
+  },
+  "flutter-build-ios-release": {
+    "command": [
+      "flutter",
+      "build",
+      "ios",
+      "--no-codesign",
+      "--release"
+    ],
+    "cwd": ".",
+    "duration_seconds": 273.08,
+    "effective_result": "incomplete; ignore reported process exit 0",
+    "exit_code": 0,
+    "interruption_reason": "no Xcode output for >2 minutes; manually terminated via SIGTERM after 273.08 seconds",
+    "log": "logs/flutter-build-ios-release.log.gz",
+    "manually_interrupted": true,
+    "timed_out": false,
+    "timeout_seconds": 1200
+  },
+  "flutter-build-macos-release": {
+    "command": [
+      "flutter",
+      "build",
+      "macos",
+      "--no-codesign",
+      "--release"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.2,
+    "exit_code": 64,
+    "log": "logs/flutter-build-macos-release.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 1200
+  },
+  "ios-pod-outdated": {
+    "command": [
+      "pod",
+      "outdated"
+    ],
+    "cwd": "ios",
+    "duration_seconds": 0.89,
+    "exit_code": 1,
+    "log": "logs/ios-pod-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "ios-spm-resolve": {
+    "command": [
+      "xcodebuild",
+      "-resolvePackageDependencies",
+      "-workspace",
+      "ios/Runner.xcworkspace",
+      "-scheme",
+      "Runner"
+    ],
+    "cwd": ".",
+    "duration_seconds": 42.56,
+    "exit_code": 0,
+    "log": "logs/ios-spm-resolve.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 300
+  },
+  "macos-pod-outdated": {
+    "command": [
+      "pod",
+      "outdated"
+    ],
+    "cwd": "macos",
+    "duration_seconds": 0.47,
+    "exit_code": 1,
+    "log": "logs/macos-pod-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  }
+}

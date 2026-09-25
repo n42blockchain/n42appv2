@@ -1,0 +1,292 @@
+{
+  "cargo-version": {
+    "command": [
+      "cargo",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.08,
+    "exit_code": 0,
+    "log": "logs/cargo-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "dart-version": {
+    "command": [
+      "dart",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.14,
+    "exit_code": 0,
+    "log": "logs/dart-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "flutter-analyze": {
+    "command": [
+      "flutter",
+      "analyze",
+      "--no-fatal-infos"
+    ],
+    "cwd": ".",
+    "duration_seconds": 25.48,
+    "exit_code": 1,
+    "log": "logs/flutter-analyze.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 900
+  },
+  "flutter-coverage-gate": {
+    "command": [
+      "python3",
+      "scripts/quality_gate.py",
+      "coverage",
+      "coverage/lcov.info",
+      "--threshold",
+      "70"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.08,
+    "exit_code": 1,
+    "log": "logs/flutter-coverage-gate.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "flutter-coverage-gate-fd4096": {
+    "command": [
+      "python3",
+      "scripts/quality_gate.py",
+      "coverage",
+      "coverage/lcov.info",
+      "--threshold",
+      "70"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.24,
+    "exit_code": 1,
+    "log": "logs/flutter-coverage-gate-fd4096.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "flutter-pub-deps-json": {
+    "command": [
+      "flutter",
+      "pub",
+      "deps",
+      "--json"
+    ],
+    "cwd": ".",
+    "duration_seconds": 1.03,
+    "exit_code": 0,
+    "log": "logs/flutter-pub-deps-json.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "flutter-pub-outdated-json": {
+    "command": [
+      "flutter",
+      "pub",
+      "outdated",
+      "--json"
+    ],
+    "cwd": ".",
+    "duration_seconds": 4.9,
+    "exit_code": 0,
+    "log": "logs/flutter-pub-outdated-json.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 240
+  },
+  "flutter-test-coverage": {
+    "command": [
+      "flutter",
+      "test",
+      "--coverage",
+      "--concurrency=4"
+    ],
+    "cwd": ".",
+    "duration_seconds": 297.83,
+    "effective_result": "incomplete; ignore reported process exit 0",
+    "exit_code": 0,
+    "interruption_reason": "stalled after file descriptor exhaustion at 3,882 tests; manually terminated via SIGTERM",
+    "log": "logs/flutter-test-coverage.log.gz",
+    "manually_interrupted": true,
+    "timed_out": false,
+    "timeout_seconds": 1800
+  },
+  "flutter-test-coverage-fd4096": {
+    "command": [
+      "flutter",
+      "test",
+      "--coverage",
+      "--concurrency=4"
+    ],
+    "cwd": ".",
+    "duration_seconds": 317.55,
+    "exit_code": 0,
+    "log": "logs/flutter-test-coverage-fd4096.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 1800
+  },
+  "flutter-version": {
+    "command": [
+      "flutter",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.24,
+    "exit_code": 0,
+    "log": "logs/flutter-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "git-branch": {
+    "command": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.02,
+    "exit_code": 0,
+    "log": "logs/git-branch.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "git-head": {
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.02,
+    "exit_code": 0,
+    "log": "logs/git-head.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "git-status-at-start": {
+    "command": [
+      "git",
+      "status",
+      "--short"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.08,
+    "exit_code": 0,
+    "log": "logs/git-status-at-start.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "git-tracked-pubspecs": {
+    "command": [
+      "git",
+      "ls-files",
+      "pubspec.yaml",
+      "pubspec.lock",
+      "pubspec_overrides.yaml"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.02,
+    "exit_code": 0,
+    "log": "logs/git-tracked-pubspecs.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 30
+  },
+  "go-version": {
+    "command": [
+      "go",
+      "version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.04,
+    "exit_code": 0,
+    "log": "logs/go-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "gradle-version": {
+    "command": [
+      "gradle",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.0,
+    "exit_code": 127,
+    "log": "logs/gradle-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "java-version": {
+    "command": [
+      "java",
+      "-version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.13,
+    "exit_code": 0,
+    "log": "logs/java-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "node-version": {
+    "command": [
+      "node",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.04,
+    "exit_code": 0,
+    "log": "logs/node-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "npm-version": {
+    "command": [
+      "npm",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.18,
+    "exit_code": 0,
+    "log": "logs/npm-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "pod-version": {
+    "command": [
+      "pod",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.8,
+    "exit_code": 0,
+    "log": "logs/pod-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "rustc-version": {
+    "command": [
+      "rustc",
+      "--version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.12,
+    "exit_code": 0,
+    "log": "logs/rustc-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "xcodebuild-version": {
+    "command": [
+      "xcodebuild",
+      "-version"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.14,
+    "exit_code": 0,
+    "log": "logs/xcodebuild-version.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  }
+}

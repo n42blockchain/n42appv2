@@ -1,0 +1,31 @@
+android/settings.gradle.kts:21:     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
+android/settings.gradle.kts:22:     id("com.android.application") version "8.11.1" apply false
+android/settings.gradle.kts:23:     id("org.jetbrains.kotlin.android") version "2.2.20" apply false
+android/settings.gradle.kts:24:     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+android/settings.gradle.kts:42:             if (android is com.android.build.gradle.LibraryExtension) {
+android/build.gradle.kts:2:     id("com.google.gms.google-services") version "4.4.3" apply false
+android/app/build.gradle.kts:4:     id("com.android.application")
+android/app/build.gradle.kts:5:     id("kotlin-android")
+android/app/build.gradle.kts:7:     id("dev.flutter.flutter-gradle-plugin")
+android/app/build.gradle.kts:8:     id("com.google.gms.google-services")
+android/app/build.gradle.kts:155:     implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
+android/app/build.gradle.kts:156:     implementation("com.google.mlkit:text-recognition-devanagari:16.0.1")
+android/app/build.gradle.kts:157:     implementation("com.google.mlkit:text-recognition-japanese:16.0.1")
+android/app/build.gradle.kts:158:     implementation("com.google.mlkit:text-recognition-korean:16.0.1")
+android/app/build.gradle.kts:160:     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+android/app/build.gradle.kts:161:     implementation("com.trustwallet:wallet-core:4.7.0")
+android/app/build.gradle.kts:162:     implementation("androidx.appcompat:appcompat:1.6.1")
+android/app/build.gradle.kts:163:     implementation("com.google.android.material:material:1.9.0")
+android/app/build.gradle.kts:164:     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+android/app/build.gradle.kts:166:     implementation("androidx.credentials:credentials:1.5.0")
+android/app/build.gradle.kts:167:     implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+android/app/build.gradle.kts:173:     implementation("com.google.mediapipe:tasks-genai:0.10.22")
+android/app/build.gradle.kts:175:     implementation("io.github.webrtc-sdk:android:144.7559.01")
+android/app/build.gradle.kts:176:     implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
+android/app/build.gradle.kts:178:     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.1")
+android/gradle/wrapper/gradle-wrapper.properties:5: distributionUrl=https\://services.gradle.org/distributions/gradle-8.14-all.zip
+plugins/flutter_mining/android/build.gradle:2: version = "1.0-SNAPSHOT"
+plugins/flutter_mining/android/build.gradle:5:     ext.kotlin_version = "2.2.20"
+plugins/flutter_mining/android/build.gradle:12:         classpath("com.android.tools.build:gradle:8.11.1")
+plugins/flutter_mining/android/build.gradle:13:         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+plugins/flutter_mining/android/build.gradle:24: apply plugin: "com.android.library"

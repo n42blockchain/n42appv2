@@ -1,0 +1,166 @@
+{
+  "go-livekit-jwt-outdated": {
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "-u",
+      "all"
+    ],
+    "cwd": "backend/livekit-jwt",
+    "duration_seconds": 10.2,
+    "exit_code": 0,
+    "log": "logs/go-livekit-jwt-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "go-livekit-jwt-test": {
+    "command": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "cwd": "backend/livekit-jwt",
+    "duration_seconds": 11.49,
+    "exit_code": 0,
+    "log": "logs/go-livekit-jwt-test.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-livekit-jwt-vet": {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "cwd": "backend/livekit-jwt",
+    "duration_seconds": 0.94,
+    "exit_code": 0,
+    "log": "logs/go-livekit-jwt-vet.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-loyalty-outdated": {
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "-u",
+      "all"
+    ],
+    "cwd": "backend/loyalty",
+    "duration_seconds": 16.93,
+    "exit_code": 1,
+    "log": "logs/go-loyalty-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "go-loyalty-test": {
+    "command": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "cwd": "backend/loyalty",
+    "duration_seconds": 1.7,
+    "exit_code": 0,
+    "log": "logs/go-loyalty-test.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-loyalty-vet": {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "cwd": "backend/loyalty",
+    "duration_seconds": 0.34,
+    "exit_code": 0,
+    "log": "logs/go-loyalty-vet.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-social-auth-outdated": {
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "-u",
+      "all"
+    ],
+    "cwd": "backend/social-auth",
+    "duration_seconds": 0.01,
+    "exit_code": 0,
+    "log": "logs/go-social-auth-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "go-social-auth-test": {
+    "command": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "cwd": "backend/social-auth",
+    "duration_seconds": 0.73,
+    "exit_code": 0,
+    "log": "logs/go-social-auth-test.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-social-auth-vet": {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "cwd": "backend/social-auth",
+    "duration_seconds": 0.19,
+    "exit_code": 0,
+    "log": "logs/go-social-auth-vet.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-swap-outdated": {
+    "command": [
+      "go",
+      "list",
+      "-m",
+      "-u",
+      "all"
+    ],
+    "cwd": "backend/swap",
+    "duration_seconds": 10.65,
+    "exit_code": 0,
+    "log": "logs/go-swap-outdated.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 120
+  },
+  "go-swap-test": {
+    "command": [
+      "go",
+      "test",
+      "./..."
+    ],
+    "cwd": "backend/swap",
+    "duration_seconds": 6.93,
+    "exit_code": 0,
+    "log": "logs/go-swap-test.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "go-swap-vet": {
+    "command": [
+      "go",
+      "vet",
+      "./..."
+    ],
+    "cwd": "backend/swap",
+    "duration_seconds": 0.39,
+    "exit_code": 0,
+    "log": "logs/go-swap-vet.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  }
+}

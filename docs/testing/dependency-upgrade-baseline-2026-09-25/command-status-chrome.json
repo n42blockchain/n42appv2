@@ -1,0 +1,79 @@
+{
+  "chrome-npm-audit-production": {
+    "command": [
+      "npm",
+      "audit",
+      "--omit=dev"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.57,
+    "exit_code": 1,
+    "log": "logs/chrome-npm-audit-production.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "chrome-npm-build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 4.07,
+    "exit_code": 0,
+    "log": "logs/chrome-npm-build.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "chrome-npm-ci": {
+    "command": [
+      "npm",
+      "ci"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 9.53,
+    "exit_code": 0,
+    "log": "logs/chrome-npm-ci.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "chrome-npm-lint": {
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.3,
+    "exit_code": 127,
+    "log": "logs/chrome-npm-lint.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 300
+  },
+  "chrome-npm-outdated-json": {
+    "command": [
+      "npm",
+      "outdated",
+      "--json"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 1.1,
+    "exit_code": 1,
+    "log": "logs/chrome-npm-outdated-json.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "chrome-npm-type-check": {
+    "command": [
+      "npm",
+      "run",
+      "type-check"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 1.72,
+    "exit_code": 0,
+    "log": "logs/chrome-npm-type-check.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 300
+  }
+}
