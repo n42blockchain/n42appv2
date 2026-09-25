@@ -9,3 +9,5 @@ Debug APK bytes: 790145616
 Debug APK SHA256: 2f6bf02cb6a617137e45f9c8d6f7d4412faba74a3bf1b318d7750ff5f84ab1d3
 Tests: mining assembleDebug passed; mining testDebugUnitTest 1 passed, 0 failed; app testDebugUnitTest NO-SOURCE
 Caps: Gradle 9 blocked by latest video_thumbnail 0.5.6 jcenter(); OkHttp 5.5.0 requires compileSdk 37
+Follow-up: mining example Kotlin target migrated to compilerOptions JVM_21; focused example APK blocked at existing missing :mobile-sdk-module inclusion before app script compilation (see report/log).
+Supported mining validation: root android project with Homebrew OpenJDK 21; assembleDebug + testDebugUnitTest passed (1 test).
