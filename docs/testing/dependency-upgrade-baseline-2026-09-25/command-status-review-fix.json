@@ -1,0 +1,151 @@
+{
+  "chrome-node20-npm-audit-production": {
+    "command": [
+      "npm",
+      "audit",
+      "--omit=dev"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.53,
+    "exit_code": 1,
+    "log": "logs/chrome-node20-npm-audit-production.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "chrome-node20-npm-build": {
+    "command": [
+      "npm",
+      "run",
+      "build"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 3.52,
+    "exit_code": 0,
+    "log": "logs/chrome-node20-npm-build.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "chrome-node20-npm-ci": {
+    "command": [
+      "npm",
+      "ci"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 4.93,
+    "exit_code": 0,
+    "log": "logs/chrome-node20-npm-ci.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 600
+  },
+  "chrome-node20-npm-lint": {
+    "command": [
+      "npm",
+      "run",
+      "lint"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.14,
+    "exit_code": 127,
+    "log": "logs/chrome-node20-npm-lint.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 300
+  },
+  "chrome-node20-npm-outdated-json": {
+    "command": [
+      "npm",
+      "outdated",
+      "--json"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.6,
+    "exit_code": 1,
+    "log": "logs/chrome-node20-npm-outdated-json.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "chrome-node20-npm-type-check": {
+    "command": [
+      "npm",
+      "run",
+      "type-check"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 1.54,
+    "exit_code": 0,
+    "log": "logs/chrome-node20-npm-type-check.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 300
+  },
+  "chrome-node20-path": {
+    "command": [
+      "sh",
+      "-c",
+      "command -v node; command -v npm; node --version; npm --version"
+    ],
+    "cwd": "chrome-extension",
+    "duration_seconds": 0.2,
+    "exit_code": 0,
+    "log": "logs/chrome-node20-path.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 30
+  },
+  "jmt-temp-pub-deps-json": {
+    "command": [
+      "dart",
+      "pub",
+      "deps",
+      "--json"
+    ],
+    "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-jmt-baseline-0kc_ytlu",
+    "duration_seconds": 0.25,
+    "exit_code": 0,
+    "log": "logs/jmt-temp-pub-deps-json.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 60
+  },
+  "jmt-temp-pub-get": {
+    "command": [
+      "dart",
+      "pub",
+      "get"
+    ],
+    "cwd": "/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-jmt-baseline-0kc_ytlu",
+    "duration_seconds": 0.52,
+    "exit_code": 0,
+    "log": "logs/jmt-temp-pub-get.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  },
+  "jmt-tracked-lock": {
+    "command": [
+      "git",
+      "ls-files",
+      "packages/n42_jmt_verify/pubspec.lock"
+    ],
+    "cwd": ".",
+    "duration_seconds": 0.02,
+    "exit_code": 0,
+    "log": "logs/jmt-tracked-lock.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 30
+  },
+  "macos-xcodebuild-release-no-codesign": {
+    "command": [
+      "xcodebuild",
+      "-project",
+      "macos/Runner.xcodeproj",
+      "-scheme",
+      "Runner",
+      "-configuration",
+      "Release",
+      "CODE_SIGNING_ALLOWED=NO",
+      "build"
+    ],
+    "cwd": ".",
+    "duration_seconds": 3.13,
+    "exit_code": 65,
+    "log": "logs/macos-xcodebuild-release-no-codesign.log.gz",
+    "timed_out": false,
+    "timeout_seconds": 180
+  }
+}

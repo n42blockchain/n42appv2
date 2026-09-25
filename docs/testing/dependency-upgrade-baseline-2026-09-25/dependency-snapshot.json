@@ -525,7 +525,7 @@
       "- web3auth_flutter (from `.symlinks/plugins/web3auth_flutter/ios`)",
       "- webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/darwin`)"
     ],
-    "lockfile": "../../../../ios/Podfile.lock"
+    "lockfile": "../../../ios/Podfile.lock"
   },
   "macos": {
     "locked_pod_entry_count": 95,
@@ -573,12 +573,13 @@
       "- wakelock_plus (from `Flutter/ephemeral/.symlinks/plugins/wakelock_plus/macos`)",
       "- webview_flutter_wkwebview (from `Flutter/ephemeral/.symlinks/plugins/webview_flutter_wkwebview/darwin`)"
     ],
-    "lockfile": "../../../../macos/Podfile.lock"
+    "lockfile": "../../../macos/Podfile.lock"
   },
   "android": {
     "declarations_file": "android-declarations.txt",
     "resolved_graph_available": true,
     "resolved_graph_log": "logs/android-gradle-dependencies-jdk21.log.gz",
     "reason": "Initial wrapper was absent and global Gradle unavailable; Flutter build generated ignored wrapper; process-local JDK 21 override produced graph. APK remains blocked by missing google-services.json"
-  }
+  },
+  "local_package_graphs": "standalone-package-graphs.json"
 }

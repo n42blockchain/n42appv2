@@ -1,6 +1,6 @@
 # Full dependency upgrade baseline — 2026-09-25
 
-Captured on branch `codex/dependency-upgrade-20260925` at `dee63931f419ff4d7b038f85dfbe5cf8556a5b9b` before dependency or source upgrades. The worktree was clean before the artifact directory was created; `logs/git-status-at-start.log.gz` therefore shows this new artifact directory as untracked. Full command output is preserved byte-for-byte in gzip-compressed files under `logs/`; structured exit statuses are in `command-status*.json`. Commands that failed are baseline findings, not upgrade regressions.
+Captured on branch `codex/dependency-upgrade-20260925` at `dee63931f419ff4d7b038f85dfbe5cf8556a5b9b` before dependency or source upgrades. The worktree was clean before the artifact directory was created; `logs/git-status-at-start.log.gz` is empty and confirms that clean start state. Git does not report an empty artifact directory as untracked. Full command output is preserved byte-for-byte in gzip-compressed files under `logs/`; structured exit statuses are in `command-status*.json`. Commands that failed are baseline findings, not upgrade regressions.
 
 ## Toolchain
 
@@ -15,7 +15,7 @@ Captured on branch `codex/dependency-upgrade-20260925` at `dee63931f419ff4d7b038
 | Xcode | 27.0 (27A266a) |
 | Global Gradle | Unavailable (`gradle` not found) |
 
-The toolchain values above are the versions actually active in this checkout. See individual version logs for complete output. CI pins Flutter 3.44.8 and Java 21; local Java 25 differs from CI.
+The toolchain values above are the versions actually active in this checkout. See individual version logs for complete output. CI pins Flutter 3.44.8 and Java 21; local Java 25 differs from CI. `.github/workflows/hig-audit.yml:25` pins Node 20 for the extension audit, while the first host baseline used Node 25.8.1. A second Chrome baseline used the installed Node 20.20.0 and npm 10.8.2 through a temporary PATH; no repository toolchain pin changed.
 
 ## Dependency graph snapshot
 
@@ -27,13 +27,14 @@ The toolchain values above are the versions actually active in this checkout. Se
 - Android: version declarations and a resolved Gradle graph are captured. The initial `android/gradlew` was absent and global `gradle` is not installed. Flutter generated an ignored wrapper; a process-local JDK 21 override then let `:app:dependencies` pass. The initial APK build fails on invalid local `org.gradle.java.home`; the JDK 21 retry reaches Google Services processing and fails because `android/app/google-services.json` is absent.
 - Go module manifest requirements (direct / indirect): `livekit-jwt` 1/63, `loyalty` 3/49, `social-auth` 0/0, `swap` 5/48. Each module update query, test, and vet has a full log. The `loyalty` update query fails while looking up an unavailable upstream repository.
 - Rust MLS: 175 locked Cargo packages; direct requirements are preserved verbatim in `dependency-snapshot.json`, with the resolved tree in `logs/cargo-tree.log.gz`.
-- Chrome extension: 333 locked npm packages (26 non-dev, 307 dev). Direct production and development requirements are in `dependency-snapshot.json`. There is no `test` script in the baseline package manifest.
+- Chrome extension: 333 locked npm packages (26 non-dev, 307 dev). Direct production and development requirements are in `dependency-snapshot.json`. There is no `test` script in the baseline package manifest. The Node 20 audit rerun is described below.
+- Standalone local packages: `standalone-package-graphs.json` contains each direct declaration and the full resolved or locked dependency list. `n42_jmt_verify` has no tracked lock; a temporary pubspec copy resolved 49 packages (1 direct, 1 dev, 46 transitive, 1 root) and its illustrative lock is `jmt-temp-resolved-pubspec.lock`. `plugins/flutter_mining/example` has a tracked lock with 37 packages (3 direct main, 3 direct dev, 31 transitive). No dependency resolution files were left in the JMT package.
 
 ## Static analysis and Flutter coverage
 
 - `flutter analyze --no-fatal-infos` exits 1 with 301 total issues and **23 errors**, not the earlier reported 24. All 23 are in the standalone `packages/n42_jmt_verify` package: 3 in `lib/src/blake3_hash.dart`, 20 in `test/jmt_verify_test.dart`. The root Flutter package graph does not include `n42_jmt_verify` or `blake3_dart`, and this package has no local `.dart_tool/package_config.json`; recursive root analysis cannot resolve its imports. The undefined symbols are downstream of those missing imports. The separate package needs dependency resolution and package-scoped analysis during implementation.
 - First `flutter test --coverage --concurrency=4` reached 3,882 tests, then stopped making progress after `Too many open files` under the shell soft file descriptor limit of 256. I sent SIGTERM after about 298 seconds. Flutter reported process exit 0 while shutting down, but the log has no normal completion marker and no `coverage/lcov.info`; this run is **incomplete**. Its quality gate exits 1 because the LCOV file does not exist. Three orphaned Dart test subprocesses from this interrupted run were later terminated by their original process group ID; the successful retry had already completed.
-- The exact test command was rerun with only the process file descriptor soft limit raised to 4,096. It exited 0 with `+5831: All tests passed!`. The required coverage gate still exits 1: **65,259 / 132,821 lines = 49.133043720496005%**, below the 70% threshold. This is a pre-upgrade coverage deficit.
+- The exact test command was rerun with only the process file descriptor soft limit raised to 4,096. It exited 0 with `+5831: All tests passed!`. The required coverage gate still exits 1: **65,259 / 132,821 lines = 49.133043720496005%**, below the 70% threshold. This is a pre-upgrade coverage deficit. The user chose to retain the 70% gate and record the 49.13% failure as baseline for this round; broad coverage expansion is deferred.
 
 ### Analyzer error inventory
 
@@ -71,11 +72,12 @@ The machine-readable inventory is in `analyzer-errors.json`; the full analyzer o
 - Apple: Initial iOS and macOS `pod outdated` both exit 1 because the Flutter or FlutterMacOS podspec has not been fetched. `xcodebuild -resolvePackageDependencies` succeeds. The no-code-sign iOS release build resolved pods and reached `Running Xcode build...`; after more than two minutes without further output it was manually stopped at 273.08 seconds. Its recorded process exit 0 is **not** a build pass. The exact generated changes to `ios/Podfile.lock` and `ios/Runner.xcodeproj/project.pbxproj` were saved in `native-build-generated-changes.patch.gz` and then restored. The post-install iOS `pod outdated` succeeds. `flutter build macos --no-codesign --release` exits 64 because this Flutter command does not support `--no-codesign`; supported `flutter build macos --release` exits 1 because CocoaPods reports its specs repository too old, with an `ffi` extension warning. No signing configuration was fabricated.
 - Go: All four `go test ./...` and `go vet ./...` commands pass. `go list -m -u all` succeeds in `livekit-jwt`, `social-auth`, and `swap`; `loyalty` exits 1 because GitHub returns repository not found for `github.com/tyler-smith/go-bip39` while Go loads retractions.
 - Rust: `cargo tree`, `cargo test --all-targets`, `cargo check --all-targets`, and `cargo clippy --all-targets -- -D warnings` pass. `cargo fmt --check` exits 1 on existing formatting differences in the MLS source; the complete diff is in its log.
-- Chrome: `npm ci`, `npm run type-check`, and `npm run build` pass. `npm outdated --json` exits 1 for outdated packages. `npm audit --omit=dev` exits 1 with two `ws` advisories (one moderate, one high) through `viem`. `npm run lint` exits 127 because the configured `eslint` executable is not installed. No extension test script exists.
+- Chrome: On host Node 25, `npm ci`, `npm run type-check`, and `npm run build` pass. `npm outdated --json` exits 1 for outdated packages. `npm audit --omit=dev` exits 1 with two `ws` advisories (one moderate, one high) through `viem`. `npm run lint` exits 127 because the configured `eslint` executable is not installed. Under CI-pinned Node 20.20.0/npm 10.8.2, the same six commands return **0, 1, 1, 127, 0, 0** in that order; the Node path/version log confirms the runtime. No extension test script exists.
+- Supported macOS no-code-sign attempt: `xcodebuild -project macos/Runner.xcodeproj -scheme Runner -configuration Release CODE_SIGNING_ALLOWED=NO build` exits 65 in 3.13 seconds. Xcode 27 rejects the project deployment target 10.15 (supported range 12.0–27.0.x) and cannot load generated CocoaPods/Flutter `.xcfilelist` inputs. The complete command output is in `logs/macos-xcodebuild-release-no-codesign.log.gz`.
 
 ## Command ledger
 
-Exit codes are raw process statuses. The `Result` column supersedes a raw 0 where a process was manually interrupted. Each log is complete up to the recorded end or interruption.
+Exit codes are raw process statuses. The `Result` column supersedes a raw 0 where a process was manually interrupted. Each compressed log preserves complete output up to the recorded end or interruption.
 
 | Command | Working directory | Exit | Result | Seconds | Log |
 | --- | --- | ---: | --- | ---: | --- |
@@ -87,6 +89,13 @@ Exit codes are raw process statuses. The `Result` column supersedes a raw 0 wher
 | `cargo test --all-targets` | `rust/n42_mls` | 0 | pass | 15.16 | [cargo-test-all-targets](logs/cargo-test-all-targets.log.gz) |
 | `cargo tree` | `rust/n42_mls` | 0 | pass | 0.62 | [cargo-tree](logs/cargo-tree.log.gz) |
 | `cargo --version` | `.` | 0 | pass | 0.08 | [cargo-version](logs/cargo-version.log.gz) |
+| `npm audit --omit=dev` | `chrome-extension` | 1 | failure | 0.53 | [chrome-node20-npm-audit-production](logs/chrome-node20-npm-audit-production.log.gz) |
+| `npm run build` | `chrome-extension` | 0 | pass | 3.52 | [chrome-node20-npm-build](logs/chrome-node20-npm-build.log.gz) |
+| `npm ci` | `chrome-extension` | 0 | pass | 4.93 | [chrome-node20-npm-ci](logs/chrome-node20-npm-ci.log.gz) |
+| `npm run lint` | `chrome-extension` | 127 | failure | 0.14 | [chrome-node20-npm-lint](logs/chrome-node20-npm-lint.log.gz) |
+| `npm outdated --json` | `chrome-extension` | 1 | failure | 0.6 | [chrome-node20-npm-outdated-json](logs/chrome-node20-npm-outdated-json.log.gz) |
+| `npm run type-check` | `chrome-extension` | 0 | pass | 1.54 | [chrome-node20-npm-type-check](logs/chrome-node20-npm-type-check.log.gz) |
+| `sh -c command -v node; command -v npm; node --version; npm --version` | `chrome-extension` | 0 | pass | 0.2 | [chrome-node20-path](logs/chrome-node20-path.log.gz) |
 | `npm audit --omit=dev` | `chrome-extension` | 1 | failure | 0.57 | [chrome-npm-audit-production](logs/chrome-npm-audit-production.log.gz) |
 | `npm run build` | `chrome-extension` | 0 | pass | 4.07 | [chrome-npm-build](logs/chrome-npm-build.log.gz) |
 | `npm ci` | `chrome-extension` | 0 | pass | 9.53 | [chrome-npm-ci](logs/chrome-npm-ci.log.gz) |
@@ -129,7 +138,11 @@ Exit codes are raw process statuses. The `Result` column supersedes a raw 0 wher
 | `pod outdated` | `ios` | 0 | pass | 41.74 | [ios-pod-outdated-after-install](logs/ios-pod-outdated-after-install.log.gz) |
 | `xcodebuild -resolvePackageDependencies -workspace ios/Runner.xcworkspace -scheme Runner` | `.` | 0 | pass | 42.56 | [ios-spm-resolve](logs/ios-spm-resolve.log.gz) |
 | `java -version` | `.` | 0 | pass | 0.13 | [java-version](logs/java-version.log.gz) |
+| `dart pub deps --json` | `/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-jmt-baseline-0kc_ytlu` | 0 | pass | 0.25 | [jmt-temp-pub-deps-json](logs/jmt-temp-pub-deps-json.log.gz) |
+| `dart pub get` | `/var/folders/r2/0gk88kcx027fmpjqycsnr3380000gn/T/n42-jmt-baseline-0kc_ytlu` | 0 | pass | 0.52 | [jmt-temp-pub-get](logs/jmt-temp-pub-get.log.gz) |
+| `git ls-files packages/n42_jmt_verify/pubspec.lock` | `.` | 0 | pass | 0.02 | [jmt-tracked-lock](logs/jmt-tracked-lock.log.gz) |
 | `pod outdated` | `macos` | 1 | failure | 0.47 | [macos-pod-outdated](logs/macos-pod-outdated.log.gz) |
+| `xcodebuild -project macos/Runner.xcodeproj -scheme Runner -configuration Release CODE_SIGNING_ALLOWED=NO build` | `.` | 65 | failure | 3.13 | [macos-xcodebuild-release-no-codesign](logs/macos-xcodebuild-release-no-codesign.log.gz) |
 | `node --version` | `.` | 0 | pass | 0.04 | [node-version](logs/node-version.log.gz) |
 | `npm --version` | `.` | 0 | pass | 0.18 | [npm-version](logs/npm-version.log.gz) |
 | `pod --version` | `.` | 0 | pass | 0.8 | [pod-version](logs/pod-version.log.gz) |
@@ -138,5 +151,5 @@ Exit codes are raw process statuses. The `Result` column supersedes a raw 0 wher
 
 ## Environment and change control
 
-- No dependency manifest, source file, lockfile, or Chat mirror change is retained by this task. The iOS build generated tracked changes; their patch was captured and those two files were restored. The baseline artifacts are the only files staged for this task (apart from any mandatory commit-hook version bump); an unrelated plan document is modified by another worker and must be excluded from this commit.
+- No dependency manifest, source file, lockfile, or Chat mirror change is retained by this task. The JMT lock is explicitly labeled as a temporary resolution artifact and was never written into the package directory. The iOS build generated tracked changes; their patch was captured and those two files were restored. The baseline artifacts are the only files staged for this task (apart from any mandatory commit-hook version bump); an unrelated plan document is modified by another worker and must be excluded from this commit.
 - No real signing files, Firebase plist, or credentials were created. The baseline logs describe environment blockers exactly. This baseline establishes failures that subsequent upgrade work must distinguish from new regressions.
