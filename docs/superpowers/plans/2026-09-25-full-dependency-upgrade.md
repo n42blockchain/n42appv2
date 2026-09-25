@@ -125,6 +125,8 @@ The Chat notification implementation is inspected from the Git-resolved package 
 - `packages/n42_jmt_verify/pubspec.yaml`
 - `packages/audioplayers_darwin/pubspec.yaml`
 - `packages/webview_flutter_wkwebview/pubspec.yaml`, `packages/webview_flutter_wkwebview/example/pubspec.yaml`
+- `.github/workflows/ci.yml` (existing test job only if required to split app and Chat package tests)
+- Root Chat test aggregators that import `packages/n42_chat/test/`: `test/features/chat/chat_account_switch_regression_test.dart`, `chat_contact_picker_polish_test.dart`, `chat_contact_selection_a11y_test.dart`, `chat_contacts_groups_regression_test.dart`, `chat_favorites_email_regression_test.dart`, `chat_feedback_2687_regression_test.dart`, `chat_feedback_2696_regression_test.dart`, `chat_local_history_regression_test.dart`, `chat_room_admission_regression_test.dart`, `chat_search_regression_test.dart`, `chat_storage_expression_regression_test.dart`, `chat_testflight_feedback_regression_test.dart`, and `chat_ux_regression_test.dart`.
 - Generated outputs only when produced by the repository's existing generator commands.
 
 ### Steps
@@ -135,13 +137,14 @@ The Chat notification implementation is inspected from the Git-resolved package 
 4. Upgrade `n42_jmt_verify`, `audioplayers_darwin`, and `webview_flutter_wkwebview` manifests and their actual plugin sources as compatible. Keep `blake3_dart` exactly pinned under Task 3's security constraint.
 5. Regenerate generated code only with `flutter pub run intl_utils:generate` or `flutter pub run build_runner build --delete-conflicting-outputs` when a changed dependency requires it. Never hand-edit generated outputs.
 6. Run the affected package suites:
-   - `flutter test test/`
+   - `flutter test test/` for app-owned tests, with the Chat test aggregation separated from the cache mirror.
    - `flutter test plugins/flutter_mining/test/`
    - `flutter test plugins/flutter_mining/example/test/`
    - `cd packages/n42_jmt_verify && dart pub get && dart test`
    - `flutter test packages/webview_flutter_wkwebview/test/`
    - `flutter analyze --no-fatal-infos`
-7. Review `pubspec.lock` source/version changes and inspect all dependency overrides after resolution.
+7. The 13 listed root Chat test aggregators import test files from the local Chat mirror; they do not test the resolved Git package. Remove those mirror-backed aggregators from the root app test suite and run the Chat package's own tests from a disposable checkout/export at the exact Git `resolved-ref`. Update the existing CI test job to run both suites without editing the pub cache or `packages/n42_chat` mirror; if the exact Git SHA's own tests are blocked, record the precise blocker.
+8. Review `pubspec.lock` source/version changes and inspect all dependency overrides after resolution.
 
 ### Acceptance
 
