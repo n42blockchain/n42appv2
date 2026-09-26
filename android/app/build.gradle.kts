@@ -159,6 +159,7 @@ configurations.configureEach {
 }
 
 dependencies {
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:2.4.20")
     // n42_chat image OCR: the Flutter package includes Latin by default;
     // bundle the additional scripts used by chat image extraction.
     implementation("com.google.mlkit:text-recognition-chinese:16.0.1")

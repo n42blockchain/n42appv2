@@ -126,6 +126,20 @@ class WebSocketService : Service() {
 
         val currentId = ++connectionId
         val request = Request.Builder().url(url).build()
+        val callbacks = VerificationConnectionCallbacks(
+            postToMain = { callback -> handler.post(callback) },
+            isCurrent = { currentId == connectionId },
+            onUnavailable = {
+                stopWebSocket(manual = true)
+                stopSelf()
+            },
+            onDisconnected = {
+                ws = null
+                if (!manualClose && !manuallyClosed.get()) {
+                    handler.postDelayed(reconnectRunnable, reconnectDelay)
+                }
+            },
+        )
 
         ws = client.newWebSocket(
             request,
@@ -134,20 +148,7 @@ class WebSocketService : Service() {
                 privateKey,
                 manuallyClosed,
                 mobileSdkRuntime,
-                onMobileSdkUnavailable = {
-                    if (currentId == connectionId) {
-                        stopWebSocket(manual = true)
-                        stopSelf()
-                    }
-                },
-                onDisconnected = {
-                    if (currentId == connectionId) {
-                        ws = null
-                        if (!manualClose && !manuallyClosed.get()) {
-                            handler.postDelayed(reconnectRunnable, reconnectDelay)
-                        }
-                    }
-                }
+                callbacks,
             )
         )
     }

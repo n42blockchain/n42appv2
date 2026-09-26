@@ -13,20 +13,17 @@ import java.util.concurrent.atomic.AtomicBoolean
 import mining.ai.n42.www.flutter_mining.MobileSdkRuntime
 import mining.ai.n42.www.flutter_mining.MobileSdkUnavailableException
 
-class MyWebSocketListener(
+internal class MyWebSocketListener(
     private val validatorPubkey: String,
     private val validatorPrivateKey: String,
 
     // ⭐ 关键：由 Manager 传入，用于区分主动/被动断开
     private val manuallyClosed: AtomicBoolean,
     private val mobileSdkRuntime: MobileSdkRuntime,
-    private val onMobileSdkUnavailable: () -> Unit,
-
-    private val onDisconnected: () -> Unit
+    private val connectionCallbacks: VerificationConnectionCallbacks,
 ) : WebSocketListener() {
 
     private val mainHandler = Handler(Looper.getMainLooper())
-    private val disconnectedOnce = AtomicBoolean(false)
     private var tCount = 1
 
     override fun onOpen(webSocket: WebSocket, response: Response) {
@@ -94,7 +91,7 @@ class MyWebSocketListener(
                 manuallyClosed.set(true)
                 Log.e("WebSocket", "Mobile SDK unavailable", e)
                 sendToFlutter(e.message ?: "Mobile verification unavailable")
-                notifyUnavailableOnce()
+                connectionCallbacks.unavailable()
             } catch (e: Exception) {
                 Log.e("WebSocket", "verify failed", e)
             }
@@ -110,7 +107,7 @@ class MyWebSocketListener(
         }
 
         sendToFlutter("onFailure")
-        notifyDisconnectedOnce()
+        connectionCallbacks.disconnected()
     }
 
     override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
@@ -122,7 +119,7 @@ class MyWebSocketListener(
         }
 
         sendToFlutter("onClosed")
-        notifyDisconnectedOnce()
+        connectionCallbacks.disconnected()
     }
 
     // ================= helpers =================
@@ -130,18 +127,6 @@ class MyWebSocketListener(
     private fun sendToFlutter(message: String) {
         mainHandler.post {
             WebSocketEventChannelHandler.send(message)
-        }
-    }
-
-    private fun notifyDisconnectedOnce() {
-        if (disconnectedOnce.compareAndSet(false, true)) {
-            mainHandler.post { onDisconnected() }
-        }
-    }
-
-    private fun notifyUnavailableOnce() {
-        if (disconnectedOnce.compareAndSet(false, true)) {
-            mainHandler.post { onMobileSdkUnavailable() }
         }
     }
 }
