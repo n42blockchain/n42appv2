@@ -42,8 +42,7 @@ android {
     buildFeatures {
         resValues = true
     }
-    // Google Play requires API 36 for new mobile submissions from 2026-08-31.
-    compileSdk = 36
+    compileSdk = 37
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
@@ -61,7 +60,7 @@ android {
         applicationId = "ai.n42.www"
         // web3auth_flutter 要求 minSdk 26 (Android 8.0)
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         // 多 DEX 支持
@@ -130,7 +129,6 @@ android {
             )
             ndk {
                 debugSymbolLevel = "FULL"
-                abiFilters += listOf("armeabi-v7a", "arm64-v8a", "x86_64", "x86")
             }
         }
 
@@ -166,7 +164,7 @@ dependencies {
     implementation("com.trustwallet:wallet-core:4.8.4")
     implementation("androidx.appcompat:appcompat:1.8.0")
     implementation("com.google.android.material:material:1.14.0")
-    implementation("com.squareup.okhttp3:okhttp:5.4.0")
+    implementation("com.squareup.okhttp3:okhttp:5.5.0")
     // Passkey / Credential Manager API
     implementation("androidx.credentials:credentials:1.6.0")
     implementation("androidx.credentials:credentials-play-services-auth:1.6.0")
@@ -179,6 +177,9 @@ dependencies {
     // Chat virtual background publisher frame injection.
     implementation("io.github.webrtc-sdk:android:150.7871.01")
     implementation("com.google.mlkit:segmentation-selfie:16.0.0-beta6")
+    // Both sqflite_sqlcipher's JNI bridge and sqlite3's Dart FFI hook use this AAR.
+    implementation("net.zetetic:sqlcipher-android:4.19.0@aar")
+    implementation("androidx.sqlite:sqlite:2.7.1")
     // Kotlin Coroutines（LocalLlmHandler 异步推理）
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }

@@ -1,0 +1,14 @@
+{
+  "LICENSE": "221e05dbf346f12fece8660d87f168ac16941a6ca4d0a94c851422510afbf06c",
+  "android/build.gradle": "487bef6e2a18052e3db1ca5b0902e94c2b8495fc7d2b902aff30c225c473bcc3",
+  "android/gradle.properties": "034fd3f15ac7a699cf7393150e318cd3e0afb51826b0decc69a548db53fa1116",
+  "android/gradle/wrapper/gradle-wrapper.properties": "923daf2f5c4b114d2b1f9552943825b501e7ab78f40a8d66e41d183490d32ec3",
+  "android/settings.gradle": "3e10f09066b4bf55a12b7df0e2a5cbac0974864bf357778612a4aa98067c0733",
+  "android/src/main/AndroidManifest.xml": "fa5ffd85754c0cc3bda41fb7c7d3148939dfb3ccb2486566fe4188513aa7521d",
+  "android/src/main/java/xyz/justsoft/video_thumbnail/VideoThumbnailPlugin.java": "0e7ac30ae4ca1fe3f5e54eace2b3487adc2cc4f397a2e107828e5ce4d3824d1a",
+  "ios/Classes/VideoThumbnailPlugin.h": "b984b9140f33fa1a80c1a8474decf8ed184c925e6e82e1fa46ff088a9774a3ec",
+  "ios/Classes/VideoThumbnailPlugin.m": "667df7c0c1eb6a97427b9784eb37cc8575c69b0969176b3a75f2af9491b29b76",
+  "ios/video_thumbnail.podspec": "3ee1569f831ff64099f9b9445f50832e931a3fd749176682017ddef6d859d063",
+  "lib/video_thumbnail.dart": "debd52595400e39284fcafd5d1617aded125b67038109e3358eacaed8c74a80f",
+  "pubspec.yaml": "ae2dd8242286e89f2681cd7eacc2646bd291fff05c12d6df0ee26011cb177d1a"
+}

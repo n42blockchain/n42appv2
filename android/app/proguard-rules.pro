@@ -30,6 +30,10 @@
 -keep class org.web3j.** { *; }
 -dontwarn org.web3j.**
 
+# Web3Auth's web3j 4.8.8-android brings SLF4J 1.7.30 without a logger binding.
+# SLF4J handles this optional class by using its no-operation logger.
+-dontwarn org.slf4j.impl.StaticLoggerBinder
+
 # ==================== OkHttp ====================
 -dontwarn okhttp3.**
 -dontwarn okio.**

@@ -1,0 +1,2 @@
+# Preserve published source bytes, including upstream whitespace.
+* -whitespace

@@ -2,7 +2,7 @@ name: n42_wallet
 description: "N42 Wallet - Enterprise cryptocurrency wallet application"
 publish_to: 'none'
 
-version: 2.4.8+2026072852
+version: 2.4.8+2026072853
 
 environment:
   sdk: ">=3.13.4 <4.0.0"
@@ -167,6 +167,12 @@ dependencies:
   flutter_background: ^1.3.1
 
 dependency_overrides:
+  # Cargokit 0.8.1 parses AGP 9.4's android-37.0 SDK string as an integer.
+  flutter_vodozemac:
+    path: packages/flutter_vodozemac
+  # Gradle 9 removed jcenter(); retain the published 0.5.6 runtime with Maven Central.
+  video_thumbnail:
+    path: packages/video_thumbnail
   # The published 5.0.0 source caps XML 6; this pristine runtime accepts XML 7.
   simple_html_css:
     path: packages/simple_html_css

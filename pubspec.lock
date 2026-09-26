@@ -1239,10 +1239,9 @@ packages:
   flutter_vodozemac:
     dependency: "direct main"
     description:
-      name: flutter_vodozemac
-      sha256: "209e7661da113a5f889ae55d574c48f245145def64df9a9fcac04d147e6f9d4e"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/flutter_vodozemac"
+      relative: true
+    source: path
     version: "0.8.1"
   flutter_web_plugins:
     dependency: transitive
@@ -3241,12 +3240,11 @@ packages:
     source: hosted
     version: "2.4.0"
   video_thumbnail:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: video_thumbnail
-      sha256: "181a0c205b353918954a881f53a3441476b9e301641688a581e0c13f00dc588b"
-      url: "https://pub.dev"
-    source: hosted
+      path: "packages/video_thumbnail"
+      relative: true
+    source: path
     version: "0.5.6"
   vm_service:
     dependency: transitive

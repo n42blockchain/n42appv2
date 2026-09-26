@@ -1,4 +1,8 @@
 dependency_overrides:
+  flutter_vodozemac:
+    path: packages/flutter_vodozemac
+  video_thumbnail:
+    path: packages/video_thumbnail
   simple_html_css:
     path: packages/simple_html_css
   fl_chart:
