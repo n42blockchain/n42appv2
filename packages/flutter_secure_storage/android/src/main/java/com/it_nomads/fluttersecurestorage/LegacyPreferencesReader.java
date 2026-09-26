@@ -3,7 +3,6 @@
 package com.it_nomads.fluttersecurestorage;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -27,7 +26,11 @@ final class LegacyPreferencesReader {
     private static final String V9_GCM_KEY = "VGhpcyBpcyB0aGUga2V5IGZvcihBIHNlY3XyZZBzdG9yYWdlIEFFUyBLZXkK";
 
     static Map<String, String> read(Context context, String file, String prefix) throws Exception {
-        Map<String, ?> all = context.getSharedPreferences(file, 0).getAll();
+        StrictPreferencesSnapshot data = StrictPreferencesSnapshot.read(context, file);
+        StrictPreferencesSnapshot namespaced = StrictPreferencesSnapshot.read(context, "FlutterSecureStorageConfiguration:" + file);
+        StrictPreferencesSnapshot global = StrictPreferencesSnapshot.read(context, "FlutterSecureStorageConfiguration");
+        StrictPreferencesSnapshot wrapped = StrictPreferencesSnapshot.read(context, "FlutterSecureKeyStorage");
+        Map<String, ?> all = data.values;
         Map<String, Object> esp = new TreeMap<>();
         Map<String, String> raw = new TreeMap<>();
         String onDiskPrefix = prefix + "_";
@@ -43,11 +46,12 @@ final class LegacyPreferencesReader {
                 esp.put(key, e.getValue());
             }
         }
-        Map<String, String> result = LegacyEncryptedPreferences.read(context, file, onDiskPrefix, esp);
+        Map<String, String> result = LegacyEncryptedPreferences.read(context, file, onDiskPrefix, esp, data);
         if (raw.isEmpty()) return result;
-        NamespacedConfigSource markers = new NamespacedConfigSource(context, file);
-        String keyAlgorithm = markers.getString("FlutterSecureSAlgorithmKey", (String) all.getOrDefault("FlutterSecureSAlgorithmKey", null));
-        String storageAlgorithm = markers.getString("FlutterSecureSAlgorithmStorage", (String) all.getOrDefault("FlutterSecureSAlgorithmStorage", null));
+        String keyAlgorithm = namespaced.string("FlutterSecureSAlgorithmKey",
+            global.string("FlutterSecureSAlgorithmKey", data.string("FlutterSecureSAlgorithmKey", null)));
+        String storageAlgorithm = namespaced.string("FlutterSecureSAlgorithmStorage",
+            global.string("FlutterSecureSAlgorithmStorage", data.string("FlutterSecureSAlgorithmStorage", null)));
         if (keyAlgorithm == null) keyAlgorithm = "RSA_ECB_PKCS1Padding";
         if (storageAlgorithm == null) storageAlgorithm = "AES_CBC_PKCS7Padding";
         boolean oaep = keyAlgorithm.equals("RSA_ECB_OAEPwithSHA_256andMGF1Padding");
@@ -59,9 +63,8 @@ final class LegacyPreferencesReader {
         KeyStore keys = KeyStore.getInstance("AndroidKeyStore"); keys.load(null);
         Key privateKey = keys.getKey(alias, null);
         if (!(privateKey instanceof PrivateKey)) throw new SecurityException("Legacy RSA key is missing");
-        SharedPreferences wrapped = context.getSharedPreferences("FlutterSecureKeyStorage", 0);
-        String encodedKey = wrapped.getString(gcm ? GCM_KEY : CBC_KEY, null);
-        if (gcm && encodedKey == null) encodedKey = wrapped.getString(V9_GCM_KEY, null);
+        String encodedKey = wrapped.string(gcm ? GCM_KEY : CBC_KEY, null);
+        if (gcm && encodedKey == null) encodedKey = wrapped.string(V9_GCM_KEY, null);
         if (encodedKey == null) throw new SecurityException("Legacy wrapped key is missing");
         Cipher rsa = Cipher.getInstance(oaep ? "RSA/ECB/OAEPPadding" : "RSA/ECB/PKCS1Padding",
             "AndroidKeyStoreBCWorkaround");

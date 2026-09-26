@@ -16,7 +16,6 @@
 package com.it_nomads.fluttersecurestorage;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.util.Base64;
 import com.google.crypto.tink.Aead;
 import com.google.crypto.tink.DeterministicAead;
@@ -25,7 +24,7 @@ import com.google.crypto.tink.RegistryConfiguration;
 import com.google.crypto.tink.aead.AeadConfig;
 import com.google.crypto.tink.daead.DeterministicAeadConfig;
 import com.google.crypto.tink.integration.android.AndroidKeystoreKmsClient;
-import com.google.crypto.tink.integration.android.SharedPrefKeysetReader;
+import com.google.crypto.tink.BinaryKeysetReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
@@ -42,12 +41,24 @@ final class LegacyEncryptedPreferences {
         return key.equals(KEY_KEYSET) || key.equals(VALUE_KEYSET);
     }
 
+    private static byte[] decodeKeyset(String encoded) throws Exception {
+        if (encoded == null || encoded.isEmpty() || encoded.length() % 2 != 0)
+            throw new SecurityException("Invalid legacy keyset encoding");
+        byte[] bytes = new byte[encoded.length() / 2];
+        for (int i = 0; i < bytes.length; i++) {
+            int high = Character.digit(encoded.charAt(2 * i), 16);
+            int low = Character.digit(encoded.charAt(2 * i + 1), 16);
+            if (high < 0 || low < 0) throw new SecurityException("Invalid legacy keyset hex");
+            bytes[i] = (byte) ((high << 4) | low);
+        }
+        return bytes;
+    }
+
     static Map<String, String> read(Context context, String file, String prefix,
-                                    Map<String, ?> encryptedEntries) throws Exception {
+                                    Map<String, ?> encryptedEntries, StrictPreferencesSnapshot prefs) throws Exception {
         Map<String, String> values = new TreeMap<>();
         if (encryptedEntries.isEmpty()) return values;
-        SharedPreferences prefs = context.getSharedPreferences(file, Context.MODE_PRIVATE);
-        if (!prefs.contains(KEY_KEYSET) || !prefs.contains(VALUE_KEYSET))
+        if (!prefs.values.containsKey(KEY_KEYSET) || !prefs.values.containsKey(VALUE_KEYSET))
             throw new SecurityException("Legacy ESP keyset is missing");
         KeyStore keys = KeyStore.getInstance("AndroidKeyStore");
         keys.load(null);
@@ -58,10 +69,10 @@ final class LegacyEncryptedPreferences {
         // Unlike AndroidKeysetManager.Builder, these APIs never generate/persist a keyset.
         Aead master = new AndroidKeystoreKmsClient().getAead("android-keystore://" + MASTER_ALIAS);
         DeterministicAead keyAead = KeysetHandle.read(
-            new SharedPrefKeysetReader(context, KEY_KEYSET, file), master)
+            BinaryKeysetReader.withBytes(decodeKeyset(prefs.string(KEY_KEYSET, null))), master)
             .getPrimitive(RegistryConfiguration.get(), DeterministicAead.class);
         Aead valueAead = KeysetHandle.read(
-            new SharedPrefKeysetReader(context, VALUE_KEYSET, file), master)
+            BinaryKeysetReader.withBytes(decodeKeyset(prefs.string(VALUE_KEYSET, null))), master)
             .getPrimitive(RegistryConfiguration.get(), Aead.class);
         for (Map.Entry<String, ?> entry : encryptedEntries.entrySet()) {
             String encryptedKey = entry.getKey();

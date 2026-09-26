@@ -61,3 +61,14 @@ python3 tools/secure_storage_migration/upstream_diff.py
 Inspect a patch with `gzip -dc <file>.patch.gz`. Validate it against the maintained
 files by piping the decompressed bytes to `git apply --reverse --check` from the
 repository root. Unified-diff context whitespace is preserved inside gzip.
+
+Review persistence regressions (after building maintained APKs):
+
+```sh
+python3 tools/secure_storage_migration/run_persistence_suite.py
+```
+
+This suite reproduces a real completion commit permission failure and checks other
+FlutterEngine access, repair, deletion and restart. Fresh processes exercise XML
+corruption/truncation, missing journal state, unreadable files and `.bak` ambiguity;
+all denied operations preserve file bytes and aliases. Repairs occur before retry.

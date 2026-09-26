@@ -10,6 +10,8 @@ The dedicated Android API 36 arm64 emulator passed **40 native stage invocations
 (including fixture seeding), plus recovery from one deliberately terminated import
 process. Real published v9.2.4 ESP and RSA/CBC data and published v10.3.4 RSA-OAEP/GCM
 data remain readable after a direct APK upgrade to the maintained v11.2.0 plugin.
+Review fix round 1 also passed **42 focused persistence/corruption stages** and
+reran the original 40-stage native suite with interruption recovery.
 The upstream secure-storage Dart suite passed **92/92**; Facebook desktop API/CRUD
 compatibility passed **2/2**. Both package analyzers report no issues.
 
@@ -53,18 +55,32 @@ application keys without creating or replacing them. Missing keys, invalid input
 unsupported ciphers and conflicting ESP/raw values return errors. Both prefixes in
 the shared file migrate independently; no file-wide completion shortcut is used.
 
-Only after the source is readable does the adapter initialize a separate v11 data
+Only after the source is readable and an in-progress journal record is durably
+committed does the adapter initialize a separate v11 data
 file, wrapped-key file, config and Keystore namespace. It writes and reads back each
 value, durably flushes destination data/config/keys, reopens with a fresh upstream
 cipher and compares the entire imported map, then commits that destination's
-completion record. Interrupted destinations remain behind the gate and are rebuilt
-idempotently. Original encrypted files and aliases remain untouched.
+completion record. Only destinations with a valid in-progress journal state can
+be rebuilt after interruption. Missing state with existing destination files or
+aliases fails closed. Original encrypted files and aliases remain untouched.
 
 Completion lives separately in `n42_secure_v11_migration` and survives both delete
 and deleteAll. Retained original ciphertext is never reimported after completion.
 Completed destinations also require their existing data, config, wrapped-key and
 Keystore artifacts; a missing destination key fails before upstream can regenerate
-it. `resetOnError=false` is enforced natively even when a caller sends true.
+it. Every operation reads the journal from strict disk XML, never a cached boolean.
+Journal writes rebuild the validated disk map, force a new revision nonce, require
+`commit()==true`, and verify exact disk readback. Failed persistence remains blocked
+across engines in the process until verification and persistence succeed.
+
+Legacy source/config/wrapped keys and ESP keysets are read directly from validated
+XML snapshots. Malformed, truncated or unreadable XML is an error. Any `.bak` is
+preserved and rejected before Android can rename/delete it. Managed destination
+data/config/wrapped keys and journal are also validated before initialization or
+CRUD. Repair must supply known-good bytes; no automatic empty-store fallback or
+backup repair occurs. This addresses [AOSP SharedPreferences loading and commit
+semantics](https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/master/core/java/android/app/SharedPreferencesImpl.java).
+`resetOnError=false` is enforced natively even when a caller sends true.
 
 The upstream `checkUpgradeStatus` diagnostic inspects the resolved destination; it
 is not an end-to-end legacy import health check. Actual access always runs the gate.
@@ -108,15 +124,43 @@ instrumentation APK, with no production test channel or fault switch.
 The fixture's merged manifest has no `android:process` or `isolatedProcess` flags.
 Final host merged-manifest confirmation is still required in Task14: this queue
 supports multiple engines/isolates in one process, not independent Android
-processes. OS power loss, physical/OEM devices, actual disk-full/fsync failures,
+processes. Successful SharedPreferences commit/readback is the persistence boundary;
+the adapter cannot certify OEM filesystem or hardware behavior after power loss.
+A real directory-permission failure is tested specifically at completion commit.
+OS power loss, physical/OEM devices, actual disk-full/fsync failures,
 biometric prompts, whole-app backup rollback, and real desktop OAuth/Keychain were
 not exercised. The scoped managed stores use non-biometric RSA/OAEP, as their
 historical app configurations do.
+
+## Review fix round 1 evidence
+
+Base for the review fixes: `d12983a9b7cef94a15f6da8d6f040c85ae7da663`.
+
+- Real completion persistence failure: the instrumentation context changes only
+  this fixture's preferences-directory permissions immediately before the actual
+  Android editor commit. The commit errors after updating memory to completion=true.
+  Another real FlutterEngine cannot read/write/delete/deleteAll; denied operations
+  leave disk bytes and aliases unchanged. Restored permissions permit retry, read
+  and delete; a fresh process confirms no resurrection.
+- Fresh-process malformed and truncated XML cases cover source data, source config
+  and wrapped keys, completion journal after credential deletion, and completed
+  destination data/config/wrapped keys. Every read/readAll/containsKey/write/delete/
+  deleteAll returns an error without changing file bytes or aliases. Original bytes
+  are restored **before** a new-process retry.
+- Missing journal after deletion fails closed; restoring its known-good bytes
+  retains deletion. Source, journal and destination `.bak` files remain byte-exact
+  on denied access. Unreadable source/journal files error and recover after restoring
+  permissions; the original bytes are then compared.
+- New behavior RED logs: `review-red-completion-esp-completion.log` and
+  `review-red-source-esp-malformed.log`. Final GREEN: `review-persistence-suite.log`,
+  `persistence-results.json`, `review-native-suite.log`, `native-results.json`,
+  `review-secure-dart-test.log`. `iteration-notes.md` records parser iteration failure.
 
 ## Reproduction and artifacts
 
 ```sh
 python3 tools/secure_storage_migration/run_suite.py
+python3 tools/secure_storage_migration/run_persistence_suite.py
 python3 tools/secure_storage_migration/upstream_diff.py
 ```
 
@@ -129,7 +173,7 @@ SDK37 host toolchain.
 
 Local raw evidence is under `tools/secure_storage_migration/logs/`. The tracked
 compressed bundle is [secure-storage-logs.tar.gz](secure-storage-logs.tar.gz).
-Bundle SHA256: `3838ac9f21bc91a9508cbc72c49394523993a4cba1e02370d6f2f84ec5138be9`.
+Bundle SHA256: `3f9a503c5bfb2776ffcce0f21c7cdcece5760e791a9232c88180f67d19883a55`.
 Key entries: `final-native-suite.log`, `native-results.json`, `apk-provenance.json`,
 `upgrade-*-*-engines.log`, `upgrade-*-*-verify-initial.log`,
 `upgrade-*-*-verify-restart.log`, `missing-*-*-missingLegacyKey.log`,

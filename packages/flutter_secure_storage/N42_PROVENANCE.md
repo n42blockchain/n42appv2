@@ -26,7 +26,10 @@ metadata or SDK notices were removed.
 - `N42StorageMigration` probes before initializing upstream ciphers, isolates each
   destination, imports and verifies every string, flushes keys/config/data, reopens
   with a fresh cipher and verifies the full map, then commits a separate completion
-  record. Completed destinations require existing data/config/wrapped-key/Keystore
+  record. A disk-validated in-progress record precedes any destination creation.
+  Journal writes force a changed revision and require successful commit plus disk
+  readback; a process-wide failed-persistence guard blocks cached completion. Missing
+  state with destination artifacts fails closed. Completed destinations require existing data/config/wrapped-key/Keystore
   artifacts. Reset-on-error is disabled; completion survives delete/deleteAll.
 - `NativeOperationQueue` serializes migration and CRUD across Flutter engines and
   isolates in one Android process. It advances once on terminal completion.
@@ -37,9 +40,16 @@ metadata or SDK notices were removed.
   data fails closed. There is no newly designed encryption format.
 - `LegacyEncryptedPreferences` derives string decoding from published 10.3.4's
   AndroidX `crypto/EncryptedSharedPreferences.java`. It uses Tink's existing
-  `SharedPrefKeysetReader` and existing Keystore AEAD, never a keyset/master-key
+  `BinaryKeysetReader` over strictly validated XML snapshot bytes and existing
+  Keystore AEAD, never Android SharedPreferences loading or a keyset/master-key
   builder. The original AndroidX copyright and Apache-2.0 header are retained;
   the full license is in `THIRD_PARTY_LICENSES/AndroidX-Apache-2.0.txt`.
+
+- `StrictPreferencesSnapshot` parses disk XML without modifying it. It rejects
+  malformed/unreadable files, duplicate keys, unsupported types and any `.bak`
+  before Android can silently substitute an empty map or rename a backup. Legacy
+  config/wrapped keys also use these snapshots. Managed destination and journal
+  snapshots are checked before every operation; repair requires known-good bytes.
 
 Legacy reference archive: https://pub.dev/api/archives/flutter_secure_storage-10.3.4.tar.gz
 
