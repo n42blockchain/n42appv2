@@ -13,20 +13,20 @@ import java.util.Map;
 public class NamespacedConfigSource {
     // Legacy global config name (used for backwards compatibility fallback reads only)
     private static final String LEGACY_GLOBAL_CONFIG_NAME = "FlutterSecureStorageConfiguration";
-    
+
     private final SharedPreferences namespacedConfig;
     private final SharedPreferences legacyConfig;
-    
+
     public NamespacedConfigSource(Context context, String sharedPreferencesName) {
         String namespacedName = getNamespacedConfigPrefsName(sharedPreferencesName);
         this.namespacedConfig = context.getSharedPreferences(namespacedName, Context.MODE_PRIVATE);
         this.legacyConfig = context.getSharedPreferences(LEGACY_GLOBAL_CONFIG_NAME, Context.MODE_PRIVATE);
     }
-    
+
     /**
      * Returns the namespaced config SharedPreferences name for a given sharedPreferencesName.
      * Config markers (algorithm and migration flags) are now isolated per namespace.
-     * 
+     *
      * @param sharedPreferencesName The namespace identifier
      * @return Namespaced config prefs name
      */
@@ -34,7 +34,7 @@ public class NamespacedConfigSource {
         // Use a delimiter to avoid collisions with legacy global name
         return "FlutterSecureStorageConfiguration:" + sharedPreferencesName;
     }
-    
+
     /**
      * Reads a string value with fallback: namespaced first, then legacy global.
      */
@@ -45,7 +45,7 @@ public class NamespacedConfigSource {
         }
         return legacyConfig.getString(key, defaultValue);
     }
-    
+
     /**
      * Reads a boolean value with fallback: namespaced first, then legacy global.
      */
@@ -56,14 +56,14 @@ public class NamespacedConfigSource {
         }
         return legacyConfig.getBoolean(key, defaultValue);
     }
-    
+
     /**
      * Returns an editor for the namespaced config (writes always go to namespaced).
      */
     public SharedPreferences.Editor edit() {
         return namespacedConfig.edit();
     }
-    
+
     /**
      * Checks if a key exists in either namespaced or legacy config.
      */

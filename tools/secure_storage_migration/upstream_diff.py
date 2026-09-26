@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Recreate review patches from verified official archives, without modifying cache/source."""
 import difflib
+import gzip
 import hashlib
 import io
 from pathlib import Path
@@ -41,7 +42,10 @@ for package, version, expected in PACKAGES:
                 fromfile=f'a/packages/{package}/{name}' if name in original else '/dev/null',
                 tofile=f'b/packages/{package}/{name}'))
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f'{package}-n42.patch'
-    path.write_text(''.join(line if line.endswith('\n') else line + '\n\\ No newline at end of file\n'
-                            for line in chunks))
+    path = OUT / f'{package}-n42.patch.gz'
+    patch = ''.join(line if line.endswith('\n') else line + '\n\\ No newline at end of file\n'
+                    for line in chunks).encode()
+    compressed = gzip.compress(patch, mtime=0)
+    assert gzip.decompress(compressed) == patch
+    path.write_bytes(compressed)
     print(f'{path.name}: {len(chunks)} lines; SHA256 {hashlib.sha256(path.read_bytes()).hexdigest()}')

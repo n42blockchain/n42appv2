@@ -848,7 +848,7 @@ public class FlutterSecureStorage {
             // Step 3: Update algorithm markers to current
             Log.d(TAG, "Step 3/6: Updating algorithm markers to current...");
             updateAlgorithmMarkers(configSource);
-            
+
             // Step 4: Get NEW biometric cipher (requires authentication)
             // Will create fresh biometric AES key in KeyStore
             Log.d(TAG, "Step 4/6: Getting current biometric cipher...");

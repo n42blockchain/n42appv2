@@ -12,7 +12,9 @@ does not invent privacy declarations. The Apple release audit is a separate gate
 Changes: raise the flutter_secure_storage constraint from ^10.3.1 to ^11.2.0 only
 after tests against the real maintained 11.2.0 Dart implementation pass; add focused
 login/read/logout/cancellation compatibility tests. Flutter 3.47 adds analyzer
-exclusions for platform/build directories. OAuth/native source is unchanged.
+exclusions for platform/build directories. Trailing whitespace is removed from
+`pubspec.yaml` and `macos/Classes/FacebookAuthDesktopPlugin.swift`; OAuth/native
+behavior is unchanged. Original upstream hashes remain recorded without alteration.
 
 Tests exercise the published login flow with a simulated platform redirect and
 HTTP profile response. They use flutter_secure_storage's upstream test backend,

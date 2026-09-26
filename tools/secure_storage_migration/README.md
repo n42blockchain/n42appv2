@@ -51,8 +51,13 @@ records final stage results. The checked-in report includes a compressed log
 bundle. A crash result in `kill-during-import.log` is the expected interruption;
 the following verification must pass. Retained RED logs remain separately named.
 
-Recreate patches against the two official package archives:
+Recreate losslessly compressed `.patch.gz` review patches against the two official
+package archives (the generator verifies archive hashes and gzip round trips):
 
 ```sh
 python3 tools/secure_storage_migration/upstream_diff.py
 ```
+
+Inspect a patch with `gzip -dc <file>.patch.gz`. Validate it against the maintained
+files by piping the decompressed bytes to `git apply --reverse --check` from the
+repository root. Unified-diff context whitespace is preserved inside gzip.

@@ -15,6 +15,9 @@ metadata or SDK notices were removed.
 - Remove the monorepo-only `resolution: workspace` from pubspec for a Git subpath
   dependency. Dependency versions and the public Dart API are otherwise upstream.
 - Flutter 3.47's analyzer setup adds platform/build directory exclusions.
+- Remove imported trailing whitespace from `FlutterSecureStorage.java` and
+  `NamespacedConfigSource.java`. These cosmetic deltas are included in the upstream
+  review patch; original upstream hashes remain recorded without alteration.
 - `FlutterSecureStoragePlugin` routes native operations through one process-wide
   asynchronous queue, uses the three managed migration mappings, waits for durable
   mutations, and lets in-flight work finish after an engine detaches.

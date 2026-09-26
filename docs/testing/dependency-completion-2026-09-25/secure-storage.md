@@ -140,8 +140,11 @@ The bundle separately retains the real unpatched11 ESP RED, destination-key
 regeneration RED, and the test-injection XML-ordering failure.
 
 Review the small changes against pristine official runtime:
-[secure-storage patch](flutter_secure_storage-n42.patch) and
-[Facebook desktop patch](facebook_auth_desktop-n42.patch).
+[secure-storage patch](flutter_secure_storage-n42.patch.gz) and
+[Facebook desktop patch](facebook_auth_desktop-n42.patch.gz).
+The patches use lossless gzip compression to preserve unified-diff context.
+Use `gzip -dc <file>.patch.gz` to inspect them. They include the documented cosmetic
+trailing-whitespace cleanup of imported Java, Swift and pubspec files.
 Each package includes a LICENSE, N42_PROVENANCE.md and UPSTREAM_SHA256.json.
 The AndroidX-derived ESP reader keeps its original Apache-2.0 copyright/header
 and full license. Facebook's published macOS Swift file and podspec are retained;
