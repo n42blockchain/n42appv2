@@ -20,13 +20,13 @@ if [ -e "$prefetch_dir" ]; then
   exit 3
 fi
 if [ "$(shasum -a 256 "$go_bin" | awk '{print $1}')" != 2ebc27dd4e38e9b86a9f41df0307785f4f7e2997e4be761a7b4af04b41a0de57 ] ||
-   [ "$(shasum -a 256 "$source_dir/go.mod" | awk '{print $1}')" != 4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df7161b238cc99b8dd02 ] ||
-   [ "$(shasum -a 256 "$source_dir/go.sum" | awk '{print $1}')" != 0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599 ]; then
+   [ "$(shasum -a 256 "$source_dir/go.mod" | awk '{print $1}')" != 1a98bf2ee961c11b4e77cc8a6ff3026bfdcdf950ab14270af402d6889ebfec1b ] ||
+   [ "$(shasum -a 256 "$source_dir/go.sum" | awk '{print $1}')" != 6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0 ]; then
   echo "unreviewed Go/source input" >&2
   exit 4
 fi
-if [ "$(shasum -a 256 "$recipe_dir/android/generated/go.mod.template" | awk '{print $1}')" != 9ad07b22d3153642defe0f1fc4b8be25854f07931832e48876d686eaf6a00cf4 ] ||
-   [ "$(shasum -a 256 "$recipe_dir/android/generated/go.sum" | awk '{print $1}')" != f3d9b4bb3a72b0e241e8f90700e72fe6368e44df1a4b6ca4b2ab92cd825311ec ]; then
+if [ "$(shasum -a 256 "$recipe_dir/android/generated/go.mod.template" | awk '{print $1}')" != 73f3d67e6bb00113eb59353d376ac90d7194b9c930453ddba1a1d4459068a57e ] ||
+   [ "$(shasum -a 256 "$recipe_dir/android/generated/go.sum" | awk '{print $1}')" != 2ae35fbba78a593eda6ef02a49b02e4eb1b39841a9150a81d8a0de07b33ac424 ]; then
   echo "unreviewed generated graph template" >&2
   exit 4
 fi
@@ -64,7 +64,7 @@ if ! (cd "$source_dir" && "$go_bin" mod download all > "$prefetch_dir/source-dow
   echo "public module fetch failed; see separate graph logs" >&2
   exit 6
 fi
-if [ "$(shasum -a 256 "$source_dir/go.sum" | awk '{print $1}')" != 0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599 ]; then
+if [ "$(shasum -a 256 "$source_dir/go.sum" | awk '{print $1}')" != 6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0 ]; then
   echo "source module sum changed during fetch" >&2
   exit 7
 fi

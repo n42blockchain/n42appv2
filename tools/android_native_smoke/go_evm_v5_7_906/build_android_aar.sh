@@ -37,10 +37,10 @@ check_hash() {
 check_hash "$go_bin" 2ebc27dd4e38e9b86a9f41df0307785f4f7e2997e4be761a7b4af04b41a0de57
 check_hash "$tool_bin/gomobile" fbc873fa18751c39c7bdef9eb73abffbcfe321527129fbb980f71bb77de92b43
 check_hash "$tool_bin/gobind" 7f4343e4acc6767ab73d8f580d24125533b432fd8494868f5649dc01761bae30
-check_hash "$source_dir/go.mod" 4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df7161b238cc99b8dd02
-check_hash "$source_dir/go.sum" 0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599
-check_hash "$recipe_dir/android/generated/go.mod.template" 9ad07b22d3153642defe0f1fc4b8be25854f07931832e48876d686eaf6a00cf4
-check_hash "$recipe_dir/android/generated/go.sum" f3d9b4bb3a72b0e241e8f90700e72fe6368e44df1a4b6ca4b2ab92cd825311ec
+check_hash "$source_dir/go.mod" 1a98bf2ee961c11b4e77cc8a6ff3026bfdcdf950ab14270af402d6889ebfec1b
+check_hash "$source_dir/go.sum" 6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0
+check_hash "$recipe_dir/android/generated/go.mod.template" 73f3d67e6bb00113eb59353d376ac90d7194b9c930453ddba1a1d4459068a57e
+check_hash "$recipe_dir/android/generated/go.sum" 2ae35fbba78a593eda6ef02a49b02e4eb1b39841a9150a81d8a0de07b33ac424
 ndk="$android_sdk/ndk/28.2.13676358"
 clang="$ndk/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang"
 if [ ! -f "$ndk/source.properties" ] ||
@@ -80,8 +80,8 @@ export PATH="$tool_bin:$(dirname "$go_bin"):$jdk/bin:$PATH"
 
 echo "utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)" > "$run_dir/inputs.txt"
 echo "source_dir=$source_dir" >> "$run_dir/inputs.txt"
-echo "source_go_mod_sha256=4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df7161b238cc99b8dd02" >> "$run_dir/inputs.txt"
-echo "source_go_sum_sha256=0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599" >> "$run_dir/inputs.txt"
+echo "source_go_mod_sha256=1a98bf2ee961c11b4e77cc8a6ff3026bfdcdf950ab14270af402d6889ebfec1b" >> "$run_dir/inputs.txt"
+echo "source_go_sum_sha256=6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0" >> "$run_dir/inputs.txt"
 echo "gomobile_sha256=fbc873fa18751c39c7bdef9eb73abffbcfe321527129fbb980f71bb77de92b43" >> "$run_dir/inputs.txt"
 echo "gobind_sha256=7f4343e4acc6767ab73d8f580d24125533b432fd8494868f5649dc01761bae30" >> "$run_dir/inputs.txt"
 echo "offline=GOPROXY=off GOSUMDB=off" >> "$run_dir/inputs.txt"

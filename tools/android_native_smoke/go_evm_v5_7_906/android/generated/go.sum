@@ -68,8 +68,6 @@ github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymF
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
-github.com/erigontech/fastkeccak v0.1.0 h1:ByCXbDJTuT1YuDm3XntT0+Tp0ofdImfm+E5K8afYcdM=
-github.com/erigontech/fastkeccak v0.1.0/go.mod h1:CwJFJVKFVWpQyKSfRrQyY56IqV16sR5xnQoFThGHiZA=
 github.com/erigontech/mdbx-go v0.41.0 h1:9rWAGl08WFa06R2Bo+DdZY1HLCEipZJQUiUKq+I8Zbw=
 github.com/erigontech/mdbx-go v0.41.0/go.mod h1:Ps2n0MMTlU+BgecMWznc/Z7oGJWDJX/EQk+gUCTSaRo=
 github.com/erigontech/secp256k1 v1.3.0 h1:lf/lNUBtgZ21yJjn1sYNkYnEy4bkZIcxvcEdlrHs14I=

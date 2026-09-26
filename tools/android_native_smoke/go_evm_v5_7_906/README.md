@@ -48,9 +48,13 @@ release acceptance follows from this patch.
 `prepare_android_source.sh` adds only the reviewed Android source and module
 changes to a fresh output of `prepare_source.sh`. It pins Go 1.26's mobile tool
 directive and its related `x/*` versions, `cilium/ebpf` 0.22.0, and exact
-`go.mod`/`go.sum` hashes. It patches only artificial unsafe array bounds for
-32-bit ARM, the Android x86_64 BLST `sigaction` initializer, and anet's private
-Go zone-cache linknames. The exact upstream anet 0.0.5 and BLST 0.3.17 module
+`go.mod`/`go.sum` hashes. It patches artificial unsafe array bounds for 32-bit
+ARM, the Android x86_64 BLST `sigaction` initializer, and anet's private Go
+zone-cache linknames. It replaces the four commitment key calls to fastkeccak
+with the already selected `x/crypto/sha3.NewLegacyKeccak256` and removes the
+fastkeccak module from both build graphs. The fixed key vectors cover the
+account/storage boundary and Keccak rate boundary. The exact upstream anet
+0.0.5 and BLST 0.3.17 module
 ZIP hashes are checked before extraction; the reviewed anet copy contains only
 the root Go source and legal/module files, excluding its unrelated bundled AAR.
 BLST's `blst.tgo` template and generated `blst.go` have the same one-line fix.

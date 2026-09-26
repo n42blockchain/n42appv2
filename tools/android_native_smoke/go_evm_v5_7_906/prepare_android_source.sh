@@ -31,9 +31,10 @@ check_hash() {
   fi
 }
 
-check_hash "$android_dir/source.patch" b361f61f99200d0b79d5006ba6d85a856835ad6ea27100a8d370edacc6a480b1
+check_hash "$android_dir/source.patch" 453bba81aa9e5c68f40371889c818e1e33a367c0b33d51b672eefa927629d648
 check_hash "$android_dir/anet.patch" 6b407c16b7331eed340da232061ba646bae9d9670c50eb8f031bd5a21e4a82c0
 check_hash "$android_dir/blst.patch" 4fa2f6dd25dd8f30135a6d732acdd49fb9ee021d1dcfcc1981249a27d4c912c0
+check_hash "$android_dir/tests/lib/commitment/keys_nibbles_keccak_portable_test.go" e18aa22e96f363944e55b14cbfbe217a2aaf092868c95c69ccc0d2c587641e96
 check_hash "$android_dir/tests/lib/mmap/mmap_portable_test.go" b2cc21b513e8e0722e31195621486c793cd425d290460c9e702d63d9c9f96ffb
 check_hash "$android_dir/tests/lib/recsplit/eliasfano16/serialization_portable_test.go" 6bbda7cf0173e1e5ad5813af1ae57a904c28d5d90caf284a287f941046cbcec3
 check_hash "$android_dir/tests/lib/recsplit/golomb_portable_test.go" 45de50b794364a9be10b906aa543dd6b425cfa8291ec63f103297cc922af2b63
@@ -79,7 +80,7 @@ if ! (cd "$output_dir/third_party/anet" && patch --dry-run -p1 < "$android_dir/a
   exit 9
 fi
 
-for member in lib/mmap/mmap_portable_test.go lib/recsplit/eliasfano16/serialization_portable_test.go lib/recsplit/golomb_portable_test.go; do
+for member in lib/commitment/keys_nibbles_keccak_portable_test.go lib/mmap/mmap_portable_test.go lib/recsplit/eliasfano16/serialization_portable_test.go lib/recsplit/golomb_portable_test.go; do
   if [ -e "$output_dir/$member" ] ||
      ! cp "$android_dir/tests/$member" "$output_dir/$member"; then
     echo "could not install Android source test: $member" >&2
@@ -91,10 +92,10 @@ if [ -e "$output_dir/third_party/anet/zone_portable_test.go" ] ||
   echo "could not install numeric IPv6 zone test" >&2
   exit 10
 fi
-check_hash "$output_dir/go.mod" 4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df7161b238cc99b8dd02
-check_hash "$output_dir/go.sum" 0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599
+check_hash "$output_dir/go.mod" 1a98bf2ee961c11b4e77cc8a6ff3026bfdcdf950ab14270af402d6889ebfec1b
+check_hash "$output_dir/go.sum" 6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0
 echo "android_source=prepared"
-echo "go_mod_sha256=4639b00890c7a3a4f74760f7d94241cb093eb3e9bc06df7161b238cc99b8dd02"
-echo "go_sum_sha256=0cddda5969568083ac76e023426edb81107ae6ad598587867786a52b7a56d599"
+echo "go_mod_sha256=1a98bf2ee961c11b4e77cc8a6ff3026bfdcdf950ab14270af402d6889ebfec1b"
+echo "go_sum_sha256=6dedcc331228891ee79297521297697020263b3710f59f9b0c775ab3cec3b7b0"
 echo "anet_module_zip_sha256=5d6e471ccaa553e0cac56e17f8e44499f99ca1a1e37d80d5fdb3c64d4d50d02a"
 echo "blst_module_zip_sha256=898d1f5c9ba35fd1b045bfd28bf61f55a978ad6089091109df5f43d2e47eed2b"
