@@ -360,8 +360,42 @@ Files: root/local package pubspec and locks, Android Gradle/SDK configuration, A
 ### Task 15: Chat baseline/API acceptance closure and final audit
 
 Files: Chat wallet bridge/token/payment URI integration and tests, Chat ARBs/generated localization, host bridge and localization audit evidence, final report.
+- [ ] Close observed DEP-002 CallKit background callback regression: verify the deployed Matrix push gateway contract, propagate verifiable recipient-account provenance through supported pusher data and background route retention, and test account switches and early callbacks. If the gateway cannot carry this information, preserve fail-closed behavior and record the concrete deployment blocker; do not label all callback paths passing.
 - [ ] Close exact-asset QR API mismatch using additive chain/network/asset identity and requestTransferExact semantics; test wrong-chain/token precision cases and preserve old bridge compatibility.
 - [ ] Fix real Chat localization gaps in source without blanket allowlisting or marking untranslated English as passing; regenerate and run audits.
 - [ ] Re-pin any final reviewed Chat SHA, rerun root/local/Chat suites, four Go checks, Rust checks, Chrome audits and final native builds on final source.
 - [ ] Re-query outdated graphs, classify each remaining non-latest dependency with concrete upstream constraints, preserve unchanged deferred coverage gate, and write current results linked to evidence.
-- [ ] Independent whole-branch review, small commits/pushes, then integrate the reviewed continuation and clean managed worktrees when authorized integration remains applicable.
+- [ ] Review this phase and continue small commits/pushes. Final whole-branch review, integration and cleanup must include the subsequently added release and points-purchase requirements in Tasks16–17.
+
+
+### Task 16: Current Google Play and Apple App Store release acceptance
+
+User addition on 2026-09-26: the completed upgrade must meet current Google Play and Apple App Store distribution requirements. This extends final acceptance; a successful debug build or TestFlight upload alone is insufficient.
+
+Files: release compliance evidence under docs/testing/dependency-completion-2026-09-25/, affected release/native/privacy/permission configuration, focused tests, and existing release handoff documentation.
+- [ ] Audit current official requirements with source URLs, retrieval dates, effective dates and applicability to this wallet/chat app. Recheck at final acceptance. Distinguish current requirements from announced future deadlines.
+- [ ] Verify final release artifacts: required target API/Apple SDK, supported architectures, signed package/bundle configuration, complete native-library 16 KB ELF and ZIP alignment, and actual 16 KB runtime behavior. Inspect every bundled native dependency, not only app CMake flags. Preserve existing wallet cryptography and compatibility.
+- [ ] Audit actual app and third-party data collection against privacy manifests, required-reason API declarations, SDK signature rules, permission prompts, Data Safety/App Privacy declarations, privacy policy and account/data deletion paths. Never invent declarations or claim unverified backend deletion.
+- [ ] Check chat/UGC reporting, blocking and moderation/support flows; digital purchases, subscriptions and wallet/crypto/financial-feature requirements; regional applicability; age rating and developer/account verification requirements. Resolve code defects through small tested changes. Record console, service and organizational evidence separately.
+- [ ] Verify release builds and applicable device flows against the final dependency graph. Keep the Google Play/App Store checklist explicit: passed, failed, not applicable with rationale, or awaiting specific evidence. Do not label compilation or an upload as store approval.
+- [ ] Update repeatable release documentation so another model can rerun the checks and identify required console evidence. Complete independent review of compliance-related code changes before integration/release claims.
+
+Initial official references checked on 2026-09-26:
+- Google Play target API requirement: https://support.google.com/googleplay/android-developer/answer/11926878?hl=en-gb (mobile submissions target API 36+ from 2026-08-31).
+- Apple minimum SDK: https://developer.apple.com/news/?id=ueeok6yw (iOS/iPadOS 26 SDK+ from 2026-04-28).
+- Android 16 KB requirements and verification: https://developer.android.com/guide/practices/page-sizes (recheck current enforcement dates; do not reuse historical deadlines).
+- Apple privacy manifests: https://developer.apple.com/documentation/BundleResources/privacy-manifest-files.
+
+
+### Task 17: Complete closed-loop points purchasing, consumption and refunds
+
+User selected on 2026-09-26: complete purchase, fulfillment, consumption and refund handling before the North America release; do not merely disable unfinished chargeable features. Both purchased and validator reward points are app-use-only, nontransferable, nonwithdrawable and nonconvertible to fiat/on-chain tokens. This is a separate architecture/design workstream within the release objective. Task16 remains the final release gate after this implementation.
+
+- [ ] Establish a reviewed design and execution plan based on existing contracts/loyalty, backend/loyalty and Flutter loyalty services. Do not create a second ledger or infer SKU quantities from product identifiers.
+- [ ] Obtain server-owned SKU-to-points mapping, supported consumption features/rules and existing service contracts. Clarify refund treatment after partial/full point consumption in the written design. No credentials in source or conversation.
+- [ ] Verify current official Apple/Google purchase/account-binding/receipt/notification/acknowledgement and refund contracts. Preserve US/Canada native IAP baseline; no unrequested alternative-billing feature.
+- [ ] Implement authenticated server verification, durable/idempotent fulfillment and chain/DB reconciliation. Reject wrong account, product, environment and signatures. Client-controlled quantities or internal award tokens are prohibited.
+- [ ] Implement actual allowed consumption and refund reconciliation, including already-consumed points, with no transfer/cash-out/asset-conversion path. Retain ledger/account isolation and recoverable errors.
+- [ ] Connect app lifecycle purchase handling, pending/retry/restart/restoration, balance/consumption UI and truthful subscription/entitlement state. Complete/consume store transactions only after durable fulfillment, according to each platform contract.
+- [ ] Cover duplicate callbacks/notifications, chain-success/index-failure, process death, cancellation/pending, invalid receipts, partial/full refunds and cross-account attempts. Run real platform sandbox checks with configured services; never equate mock tests with store verification.
+- [ ] Independently review small implementation groups, retain deployment/console evidence requirements, and include all changes in final repository and release acceptance. Deployment, contract upgrades or store submission requiring an irreversible external action remain separate final authorization steps; prepare concrete reviewed artifacts first.
