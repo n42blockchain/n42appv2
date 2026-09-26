@@ -408,12 +408,14 @@ User reconfirmed this queue and requested separate commits and pushes for each i
 | --- | --- | --- | --- |
 | 0 | Host Dart graph and Reown persistence integration (14A) | Independent review of commits `134d0c9ab` and `1be87c4e8`, fix findings, push each reviewed commit separately | Reviewed, tested and pushed; heartbeat follow-up included |
 | 1 | Android native dependencies and build acceptance (14B) | Resolve final Gradle/Maven graph, build artifacts, verify SQLCipher/native ABI and applicable device regressions; record unresolved vendor evidence | Reviewed, tested and pushed; final integrated runtime checks remain |
-| 2 | iOS/macOS native dependencies and build acceptance (14C) | Resolve Apple locks and deployment floors, unsigned builds, SQLCipher/native linkage and regression evidence | In progress |
-| 3 | Chrome extension upgrade (14D) | Clean install, crypto vectors, tests, lint, types, build, full and production dependency audits | Queued |
-| 4 | Remaining compatibility repairs (15) | Background-call account provenance, exact-asset QR bridge, localization repairs and focused regression acceptance | Queued |
+| 2 | iOS/macOS native dependencies and build acceptance (14C) | Resolve Apple locks and deployment floors, unsigned builds, SQLCipher/native linkage and regression evidence | Reviewed and pushed through d326a06d2; release/device limits recorded |
+| 3 | Chrome extension upgrade (14D) | Clean install, crypto vectors, tests, lint, types, build, full and production dependency audits | Reviewed and pushed through c777a0f04; browser runtime unverified |
+| 4 | Remaining compatibility repairs (15) | Background-call account provenance, exact-asset QR bridge, localization repairs and focused regression acceptance | Background-call repair in progress in official Chat |
 | 5 | Whole-repository final dependency and security audit (15–16) | Final-source app/Chat/local/Go/Rust/Chrome/native verification, current dependency/vulnerability inventory, evidence for every version cap or unresolved risk | Queued |
 | 6 | Free verify points and unplanned paid-flow cleanup (17) | Preserve earned display/history and account isolation; remove unsupported charging paths and unused dependencies; no invented products or consumption | Source audit complete; implementation queued |
 | 7 | Store release acceptance for US/Canada (16) | Final artifacts, privacy/permissions, deletion and UGC flows, free-points behavior, console and organizational evidence; recheck current official policies | Queued; depends on code and release evidence |
 | 8 | Final integration and merge (15–17) | Independently reviewed small commits pushed, final branch checks and conflict resolution; preserve applicable release gates and report external blockers explicitly | Queued; dependent on preceding acceptance |
 
 Commit subjects must be English. Push only reviewed, verified items to the existing continuation branch; do not force-push or include unrelated workspace changes. Keep tightly coupled dependency migrations atomic. Coverage improvement remains deferred by the user: the unchanged 70% gate is failing at 49.25%, not passed. Store release and free-points cleanup acceptance remain open under Tasks 16–17 and must not be inferred from successful builds.
+
+Execution ordering note: final Chat localization repair follows the QR, deletion, UGC and free-points exposure changes that add user-facing strings, so the combined final catalog is generated and audited together. Existing translation acceptance and the coverage gate are unchanged.
