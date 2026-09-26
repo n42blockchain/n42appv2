@@ -60,8 +60,7 @@ cp "$N42_RECIPE_DIR/Cargo.lock" "$N42_SOURCE/Cargo.lock"
 export ANDROID_NDK_HOME="$N42_NDK_DIR"
 export LIBCLANG_PATH="$N42_LIBCLANG_DIR"
 export CARGO_TARGET_DIR="$N42_SDK_WORKDIR/target"
-export CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS='-C link-arg=-Wl,-z,max-page-size=16384 -C link-arg=-Wl,-z,common-page-size=16384'
-export CARGO_TARGET_X86_64_LINUX_ANDROID_RUSTFLAGS="$CARGO_TARGET_AARCH64_LINUX_ANDROID_RUSTFLAGS"
+source "$N42_RECIPE_DIR/build_flags.sh"
 (
   cd "$N42_SOURCE"
   cargo +1.97.1 fetch --locked
@@ -70,4 +69,6 @@ export CARGO_TARGET_X86_64_LINUX_ANDROID_RUSTFLAGS="$CARGO_TARGET_AARCH64_LINUX_
 )
 python3 "$N42_RECIPE_DIR/repack_aar.py" "$N42_OFFICIAL_AAR" \
   "$N42_SDK_WORKDIR/jni" "$N42_SDK_WORKDIR/mobile-sdk-maintained.aar"
+python3 "$N42_RECIPE_DIR/../../../scripts/audit_android_native.py" \
+  "$N42_SDK_WORKDIR/mobile-sdk-maintained.aar" > "$N42_SDK_WORKDIR/elf-audit.json"
 shasum -a 256 "$N42_SDK_WORKDIR/mobile-sdk-maintained.aar"
