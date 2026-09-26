@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inspect 64-bit ELF load alignment in an Android APK/AAB (not a device test)."""
+"""Inspect 64-bit ELF LOAD and GNU_RELRO alignment (not a device test)."""
 
 import argparse
 import json
@@ -17,15 +17,21 @@ def aligned_elf(data):
     if size < 56 or not count or offset + size * count > len(data):
         raise ValueError('Invalid ELF program header table')
     loads = []
+    relro = []
     for index in range(count):
         header = offset + size * index
-        if struct.unpack_from('<I', data, header)[0] == 1:
+        segment_type = struct.unpack_from('<I', data, header)[0]
+        if segment_type == 1:
             file_offset, address = struct.unpack_from('<QQ', data, header + 8)
             alignment = struct.unpack_from('<Q', data, header + 48)[0]
             loads.append(alignment >= 16384 and (address - file_offset) % 16384 == 0)
+        elif segment_type == 0x6474e552:
+            address = struct.unpack_from('<Q', data, header + 16)[0]
+            memory_size = struct.unpack_from('<Q', data, header + 40)[0]
+            relro.append((address + memory_size) % 16384 == 0)
     if not loads:
         raise ValueError('ELF has no load segments')
-    return all(loads)
+    return all(loads) and all(relro)
 
 
 def audit(path):
@@ -39,7 +45,7 @@ def audit(path):
     return {'artifact': str(path), 'libraries_checked': len(result),
             'unaligned_libraries': [name for name, valid in result.items() if not valid],
             'passed': all(result.values()),
-            'scope': 'ELF load segments only; ZIP alignment and 16 KB device execution require separate verification'}
+            'scope': 'ELF LOAD and GNU_RELRO only; ZIP alignment and 16 KB device execution require separate verification'}
 
 
 def main():
