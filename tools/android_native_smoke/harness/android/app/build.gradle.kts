@@ -71,5 +71,6 @@ dependencies {
     }
     implementation("org.java-websocket:Java-WebSocket:1.6.0")
     implementation("com.google.protobuf:protobuf-javalite:4.36.2")
+    implementation("com.google.mediapipe:tasks-genai:0.10.35")
     implementation("com.android.billingclient:billing:9.1.0")
 }

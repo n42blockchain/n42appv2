@@ -27,7 +27,12 @@ SQLCipher 4.19, and that `sqlcipher_export` migrates the plaintext source.
 It also opens an actual `MatrixSdkDatabase` without a key and performs a
 Megolm encrypt/decrypt roundtrip through Vodozemac. The verification run
 also checks Bouncy Castle 1.86, Web3j signing, recovery, Keccak, BIP39 and
-BIP32 vectors, Torus address derivation, and a historical CallKit JSON value.
+BIP32 vectors, Torus address derivation, MediaPipe protobuf lite
+serialization, a local WebSocket handshake/echo, and a historical CallKit JSON
+value. The BIP39 fixture is from
+[Trezor's published vectors](https://github.com/trezor/python-mnemonic/blob/master/vectors.json);
+the BIP32 `m/0H` private key is decoded from
+[BIP32 test vector 1](https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki).
 `--no-uninstall` is
 required: Flutter otherwise removes the seed app and its private fixture.
 

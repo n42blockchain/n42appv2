@@ -44,6 +44,15 @@ void main() {
       final migratedPath = p.join(directory, 'native_smoke_migrated.db');
 
       if (phase == 'seed') {
+        final seedProbe = raw.sqlite3.openInMemory();
+        try {
+          expect(
+            seedProbe.select('PRAGMA cipher_version;').single.values.single,
+            startsWith('4.10.'),
+          );
+        } finally {
+          seedProbe.close();
+        }
         await cipher.deleteDatabase(oldPath);
         await plain.deleteDatabase(plainPath);
         await cipher.deleteDatabase(migratedPath);
